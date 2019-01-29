@@ -23,7 +23,7 @@ namespace TestGraphic.Win
     /// </summary>
     public partial class MainWindow : Window
     {
-        SFEngine m_Engine;
+        Engine m_Engine;
         RenderWindow m_RenderWindow;
 
 
@@ -31,7 +31,7 @@ namespace TestGraphic.Win
         {
             InitializeComponent();
 
-            m_Engine = new SFEngine();
+            m_Engine = new Engine();
             m_Engine.StartEngineWithGraphic();
         }
 

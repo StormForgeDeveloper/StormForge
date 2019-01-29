@@ -30,7 +30,7 @@ namespace TestNet.WinSharp
 
         public static MainWindow Instance { get; private set; }
 
-        SFEngine m_Engine = null;
+        Engine m_Engine = null;
 
 
 
@@ -40,7 +40,7 @@ namespace TestNet.WinSharp
 
             Instance = this;
 
-            m_Engine = new SFEngine();
+            m_Engine = new Engine();
             m_Engine.StartEngine();
 
 

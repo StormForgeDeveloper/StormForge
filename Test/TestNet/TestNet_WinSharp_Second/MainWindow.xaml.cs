@@ -29,7 +29,7 @@ namespace TestNet.WinSharp
         static readonly string RegistryKeyName = @"SOFTWARE\StormForge\SecondTest";
 
         public static MainWindow Instance { get; private set; }
-        SFEngine m_Engine = null;
+        Engine m_Engine = null;
 
         public MainWindow()
         {
@@ -37,7 +37,7 @@ namespace TestNet.WinSharp
 
             Instance = this;
 
-            m_Engine = new SFEngine();
+            m_Engine = new Engine();
             m_Engine.StartEngine();
 
 
