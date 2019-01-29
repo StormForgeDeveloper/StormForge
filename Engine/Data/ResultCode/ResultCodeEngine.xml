@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ResultCodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="SFResultCode.xsd"
+             Facility="Engine"
+             IDTable="false"
+             >
+
+  
+  <ResultCodeItem Severity="Error" CodeName="INITIALIZATION_FAILED" Desc="Engine initialization is failed"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_CONFIG" Desc="Invalid configuration"/>
+  <ResultCodeItem Severity="Error" CodeName="CONNECTION_FAILED" Desc="Connection failed"/>
+  <ResultCodeItem Severity="Error" CodeName="CONNECTION_LOST" Desc="Connectionlost"/>
+
+  
+</ResultCodes>
+

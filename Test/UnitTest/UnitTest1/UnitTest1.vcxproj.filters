@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{7519def6-d501-4d86-b473-4488140bcee9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Texture">
+      <UniqueIdentifier>{a436b98d-ccc5-4572-80cd-94ffe478efb6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="data">
+      <UniqueIdentifier>{b84e66be-b413-4ecb-ae10-a816860205de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Container">
+      <UniqueIdentifier>{717f7a5b-9c5c-4d16-aac1-abb43258ab39}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Asset">
+      <UniqueIdentifier>{ee537f0e-6560-4e1c-921e-0ec53c078a17}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Thread">
+      <UniqueIdentifier>{42339f29-84b3-44c3-9c40-cf6370b6aabf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Algorithm">
+      <UniqueIdentifier>{3202842a-66ab-4c0f-8b0a-965b972cbd4d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Algorithm\Matching">
+      <UniqueIdentifier>{3e6d8ae1-3df3-415f-ab7a-761441edf79d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Math">
+      <UniqueIdentifier>{3a2defa1-be96-42ec-bdcd-282ac4c2b4ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Math\3D">
+      <UniqueIdentifier>{ba2f997a-360e-49d9-b99c-795dfd0dae4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\FBX">
+      <UniqueIdentifier>{b51db752-f966-40cb-8a4a-79130d40f5c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Tong">
+      <UniqueIdentifier>{a13a3b32-0215-4d4b-a71b-507e4dad033c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Memory">
+      <UniqueIdentifier>{1e69b5df-0375-475c-a358-ef269d18fc12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Test\Variable">
+      <UniqueIdentifier>{e261f0b4-d060-462d-ba91-28610b2d6111}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="UnitTest1PCH.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Container\UnitTest_ConcurrentContainerTest.h">
+      <Filter>Test\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Container\UnitTest_HashTableTest.h">
+      <Filter>Test\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Container\UnitTest_AVLTreeTest.h">
+      <Filter>Test\Container</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\SFTestBase.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Thread\SFSystemSynchronizeTest.h">
+      <Filter>Test\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Thread\SFThreadTest.h">
+      <Filter>Test\Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Algorithm\UnitTest_Algorithm.h">
+      <Filter>Test\Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Algorithm\Matching\SFSphericalShellManager.h">
+      <Filter>Test\Algorithm\Matching</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Math\UnitTest_Math.h">
+      <Filter>Test\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\FBX\UnitTest_FBX.h">
+      <Filter>Test\FBX</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\TongScript\UnitTest_TongScript.h">
+      <Filter>Test\Tong</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Memory\UnitTest_Memory.h">
+      <Filter>Test\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\Variable\UnitTest_Variable.h">
+      <Filter>Test\Variable</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="UnitTest1PCH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3rdParties\src\gtest\gtest-1.7.0\src\gtest-all.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest1.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest_NetMessageWindow.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest_Zookeeper.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="UnitTest_ServerConfig.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Texture\UnitTest_TexturePng.cpp">
+      <Filter>Test\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Container\UnitTest_QueueTest.cpp">
+      <Filter>Test\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Container\UnitTest_CircularBuffer.cpp">
+      <Filter>Test\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Texture\UnitTest_TextureJpg.cpp">
+      <Filter>Test\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Texture\UnitTest_TextureTGA.cpp">
+      <Filter>Test\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Asset\UnitTest_Asset.cpp">
+      <Filter>Test\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Container\UnitTest_AVLTreeTest_DualMapPerformance.cpp">
+      <Filter>Test\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Container\UnitTest_AVLTreeTest_SortedMap.cpp">
+      <Filter>Test\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Container\UnitTest_ConcurrentContainerTest.cpp">
+      <Filter>Test\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Container\UnitTest_HashTable2Test.cpp">
+      <Filter>Test\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Container\UnitTest_HashTableTest.cpp">
+      <Filter>Test\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Container\UnitTest_AVLTreeTest_DualMap.cpp">
+      <Filter>Test\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\SFTestBase.cpp">
+      <Filter>Test</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Container\UnitTest_AVLTreeTest_SortedMapPerformance.cpp">
+      <Filter>Test\Container</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Thread\SFSystemSynchronizeTest.cpp">
+      <Filter>Test\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Thread\SFThreadTest.cpp">
+      <Filter>Test\Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Algorithm\Matching\UnitTest_Algorithm_MatchingPreferance.cpp">
+      <Filter>Test\Algorithm\Matching</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Algorithm\Matching\UnitTest_Algorithm_MatchingRanking.cpp">
+      <Filter>Test\Algorithm\Matching</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Algorithm\Matching\UnitTest_Algorithm_MatchingQueue.cpp">
+      <Filter>Test\Algorithm\Matching</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Algorithm\Matching\SFSphericalShellManager.cpp">
+      <Filter>Test\Algorithm\Matching</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Math\3D\UnitTest_Math3D_Vector.cpp">
+      <Filter>Test\Math\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Math\3D\UnitTest_Math3D_Matrix.cpp">
+      <Filter>Test\Math\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Math\3D\UnitTest_Math3D_Quaternion.cpp">
+      <Filter>Test\Math\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\FBX\UnitTest_FBX.cpp">
+      <Filter>Test\FBX</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\TongScript\UnitTest_TongScript_Bytecode.cpp">
+      <Filter>Test\Tong</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Memory\UnitTest_Memory_CircularHeap.cpp">
+      <Filter>Test\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Memory\UnitTest_Memory_Heap.cpp">
+      <Filter>Test\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Memory\UnitTest_Memory_StackHeap.cpp">
+      <Filter>Test\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Variable\UnitTest_Variable_Table.cpp">
+      <Filter>Test\Variable</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\TongScript\UnitTest_TongScript_Compile.cpp">
+      <Filter>Test\Tong</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\TongScript\UnitTest_TongScript_FileFormat.cpp">
+      <Filter>Test\Tong</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="ServerConfig_StressTest.xml">
+      <Filter>Test</Filter>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\testImage.png">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\testImage.jpg">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\testImage24.tga">
+      <Filter>data</Filter>
+    </Image>
+    <Image Include="data\testImage32.tga">
+      <Filter>data</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NodeTypeDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://blue3k.com/1_0"
+           xsi:noNamespaceSchemaLocation="../schemas/TongScriptNodeDefinitionSchema.xsd"
+           >
+
+
+  <NodeTypeInfo Name="Interface" IsAbstract="true" Category="Interface" NodeType="" Icon="func_16.png" Description="">
+    <Property Name="Name" Type="String" Default="" />
+    <Property Name="Start" Type="Signal" Socket="Output" AllowMultipleOutput="false" />
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="Function" Base="Interface" Icon="Sce.Atf.Resources.func_16.png" Description="Function interface">
+  </NodeTypeInfo>
+
+
+  <!-- Control nodes -->
+
+  <NodeTypeInfo Name="Event" IsAbstract="true" Base="Interface" Category="Event" Icon="alphabet.speech-balloon-green-a-icon_16.png" Description="">
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="NamedEvent" Base="Event" Icon="arithmetic.Add-icon_16.png" Description="Named event">
+  </NodeTypeInfo>
+
+
+
+</NodeTypeDefinitions>

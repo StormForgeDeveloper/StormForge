@@ -1,0 +1,168 @@
+////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) 2016 Kyungkun Ko
+// 
+// Author : KyungKun Ko
+//
+// Description : texture format 
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma once
+
+#include "SFTypedefs.h"
+
+namespace SF
+{
+
+	////////////////////////////////////////////////////////////////////
+	//
+	//	supported texture formats
+	//
+
+	enum class TextureFormat : uint32_t
+	{
+		INVALID,                          // Invalid
+		
+		R8_UNORM,
+		R8_SNORM,
+		R8G8_UNORM,
+		R8G8_SNORM,
+		R8G8B8_UNORM,
+		R8G8B8_SNORM,
+		B8G8R8_UINT,
+		B8G8R8_SINT,
+		B8G8R8_SRGB,
+		R8G8B8A8_UNORM,
+		R8G8B8A8_SNORM,
+		A8B8G8R8_UNORM_PACK32,
+		A8B8G8R8_SNORM_PACK32,
+		R16_UNORM,
+		R16_SNORM,
+		R16_SFLOAT,
+		R16G16_SFLOAT,
+		R16G16B16_SFLOAT,
+		R16G16B16A16_SFLOAT,
+		R32_UINT,
+		R32_SINT,
+		R32_SFLOAT,
+		R32G32_UINT,
+		R32G32_SINT,
+		R32G32_SFLOAT,
+		R32G32B32_UINT,
+		R32G32B32_SINT,
+		R32G32B32_SFLOAT,
+		R32G32B32A32_UINT,
+		R32G32B32A32_SINT,
+		R32G32B32A32_SFLOAT,
+		R64_UINT,
+		R64_SINT,
+		R64_SFLOAT,
+		R64G64_UINT,
+		R64G64_SINT,
+		R64G64_SFLOAT,
+		R64G64B64_UINT,
+		R64G64B64_SINT,
+		R64G64B64_SFLOAT,
+		R64G64B64A64_UINT,
+		R64G64B64A64_SINT,
+		R64G64B64A64_SFLOAT,
+		D16_UNORM,
+		X8_D24_UNORM_PACK32,
+		D32_SFLOAT,
+		S8_UINT,
+		D16_UNORM_S8_UINT,
+		D24_UNORM_S8_UINT,
+		D32_SFLOAT_S8_UINT,
+		BC1_RGB_UNORM_BLOCK,
+		BC1_RGB_SRGB_BLOCK,
+		BC1_RGBA_UNORM_BLOCK,
+		BC1_RGBA_SRGB_BLOCK,
+		BC2_UNORM_BLOCK,
+		BC2_SRGB_BLOCK,
+		BC3_UNORM_BLOCK,
+		BC3_SRGB_BLOCK,
+		BC4_UNORM_BLOCK,
+		BC4_SNORM_BLOCK,
+		BC5_UNORM_BLOCK,
+		BC5_SNORM_BLOCK,
+		BC6H_UFLOAT_BLOCK,
+		BC6H_SFLOAT_BLOCK,
+		BC7_UNORM_BLOCK,
+		BC7_SRGB_BLOCK,
+		ETC2_R8G8B8_UNORM_BLOCK,
+		ETC2_R8G8B8_SRGB_BLOCK,
+		ETC2_R8G8B8A1_UNORM_BLOCK,
+		ETC2_R8G8B8A1_SRGB_BLOCK,
+		ETC2_R8G8B8A8_UNORM_BLOCK,
+		ETC2_R8G8B8A8_SRGB_BLOCK,
+		EAC_R11_UNORM_BLOCK,
+		EAC_R11_SNORM_BLOCK,
+		EAC_R11G11_UNORM_BLOCK,
+		EAC_R11G11_SNORM_BLOCK,
+		ASTC_4x4_UNORM_BLOCK,
+		ASTC_4x4_SRGB_BLOCK,
+		ASTC_5x4_UNORM_BLOCK,
+		ASTC_5x4_SRGB_BLOCK,
+		ASTC_5x5_UNORM_BLOCK,
+		ASTC_5x5_SRGB_BLOCK,
+		ASTC_6x5_UNORM_BLOCK,
+		ASTC_6x5_SRGB_BLOCK,
+		ASTC_6x6_UNORM_BLOCK,
+		ASTC_6x6_SRGB_BLOCK,
+		ASTC_8x5_UNORM_BLOCK,
+		ASTC_8x5_SRGB_BLOCK,
+		ASTC_8x6_UNORM_BLOCK,
+		ASTC_8x6_SRGB_BLOCK,
+		ASTC_8x8_UNORM_BLOCK,
+		ASTC_8x8_SRGB_BLOCK,
+		ASTC_10x5_UNORM_BLOCK,
+		ASTC_10x5_SRGB_BLOCK,
+		ASTC_10x6_UNORM_BLOCK,
+		ASTC_10x6_SRGB_BLOCK,
+		ASTC_10x8_UNORM_BLOCK,
+		ASTC_10x8_SRGB_BLOCK,
+		ASTC_10x10_UNORM_BLOCK,
+		ASTC_10x10_SRGB_BLOCK,
+		ASTC_12x10_UNORM_BLOCK,
+		ASTC_12x10_SRGB_BLOCK,
+		ASTC_12x12_UNORM_BLOCK,
+		ASTC_12x12_SRGB_BLOCK,
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+		PVRTC1_2BPP_UNORM_BLOCK_IMG,
+		PVRTC1_4BPP_UNORM_BLOCK_IMG,
+		PVRTC2_2BPP_UNORM_BLOCK_IMG,
+		PVRTC2_4BPP_UNORM_BLOCK_IMG,
+		PVRTC1_2BPP_SRGB_BLOCK_IMG,
+		PVRTC1_4BPP_SRGB_BLOCK_IMG,
+		PVRTC2_2BPP_SRGB_BLOCK_IMG,
+		PVRTC2_4BPP_SRGB_BLOCK_IMG,
+#endif
+		Max
+	};
+
+
+
+	// Texture usage
+	enum class TextureUsage
+	{
+		Transient,	// Updated frequently from CPU
+		Static,		// Load once
+		CPURead,	// Read frequently from CPU.
+	};
+
+
+	// Texture initialization parameter block
+	struct TextureInitParameter
+	{
+		TextureFormat Format;
+		int Width;
+		int Height;
+		int FaceCount;
+		bool UseMipmap;
+		TextureUsage Usage;
+	};
+
+}
+

@@ -1,0 +1,249 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8A152877-25E1-4621-B27F-8410964A0064}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>UnitTest1</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>NotSet</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\windows\Compile.props" />
+    <Import Project="..\..\..\build\windows\UnitTest.props" />
+    <Import Project="..\..\..\build\windows\LinkEngine.props" />
+    <Import Project="..\..\..\build\windows\EngineTool.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\windows\Compile.props" />
+    <Import Project="..\..\..\build\windows\UnitTest.props" />
+    <Import Project="..\..\..\build\windows\LinkEngine.props" />
+    <Import Project="..\..\..\build\windows\EngineTool.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\windows\Compile.props" />
+    <Import Project="..\..\..\build\windows\UnitTest.props" />
+    <Import Project="..\..\..\build\windows\LinkEngine.props" />
+    <Import Project="..\..\..\build\windows\EngineTool.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\build\windows\Compile.props" />
+    <Import Project="..\..\..\build\windows\UnitTest.props" />
+    <Import Project="..\..\..\build\windows\LinkEngine.props" />
+    <Import Project="..\..\..\build\windows\EngineTool.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Test\Algorithm\Matching\SFSphericalShellManager.h" />
+    <ClInclude Include="Test\Algorithm\UnitTest_Algorithm.h" />
+    <ClInclude Include="Test\Container\UnitTest_AVLTreeTest.h" />
+    <ClInclude Include="Test\Container\UnitTest_ConcurrentContainerTest.h" />
+    <ClInclude Include="Test\Container\UnitTest_HashTableTest.h" />
+    <ClInclude Include="Test\FBX\UnitTest_FBX.h" />
+    <ClInclude Include="Test\Math\UnitTest_Math.h" />
+    <ClInclude Include="Test\Memory\UnitTest_Memory.h" />
+    <ClInclude Include="Test\SFTestBase.h" />
+    <ClInclude Include="Test\Thread\SFSystemSynchronizeTest.h" />
+    <ClInclude Include="Test\Thread\SFThreadTest.h" />
+    <ClInclude Include="Test\TongScript\UnitTest_TongScript.h" />
+    <ClInclude Include="Test\Variable\UnitTest_Variable.h" />
+    <ClInclude Include="UnitTest1PCH.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\3rdParties\src\gtest\gtest-1.7.0\src\gtest-all.cc">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Test\Algorithm\Matching\SFSphericalShellManager.cpp" />
+    <ClCompile Include="Test\Algorithm\Matching\UnitTest_Algorithm_MatchingPreferance.cpp" />
+    <ClCompile Include="Test\Algorithm\Matching\UnitTest_Algorithm_MatchingQueue.cpp" />
+    <ClCompile Include="Test\Algorithm\Matching\UnitTest_Algorithm_MatchingRanking.cpp" />
+    <ClCompile Include="Test\Asset\UnitTest_Asset.cpp" />
+    <ClCompile Include="Test\Container\UnitTest_AVLTreeTest_DualMap.cpp" />
+    <ClCompile Include="Test\Container\UnitTest_AVLTreeTest_DualMapPerformance.cpp" />
+    <ClCompile Include="Test\Container\UnitTest_AVLTreeTest_SortedMapPerformance.cpp" />
+    <ClCompile Include="Test\Container\UnitTest_AVLTreeTest_SortedMap.cpp" />
+    <ClCompile Include="Test\Container\UnitTest_CircularBuffer.cpp" />
+    <ClCompile Include="Test\Container\UnitTest_ConcurrentContainerTest.cpp" />
+    <ClCompile Include="Test\Container\UnitTest_HashTable2Test.cpp" />
+    <ClCompile Include="Test\Container\UnitTest_HashTableTest.cpp" />
+    <ClCompile Include="Test\Container\UnitTest_QueueTest.cpp" />
+    <ClCompile Include="Test\FBX\UnitTest_FBX.cpp" />
+    <ClCompile Include="Test\Math\3D\UnitTest_Math3D_Matrix.cpp" />
+    <ClCompile Include="Test\Math\3D\UnitTest_Math3D_Quaternion.cpp" />
+    <ClCompile Include="Test\Math\3D\UnitTest_Math3D_Vector.cpp" />
+    <ClCompile Include="Test\Memory\UnitTest_Memory_CircularHeap.cpp" />
+    <ClCompile Include="Test\Memory\UnitTest_Memory_Heap.cpp" />
+    <ClCompile Include="Test\Memory\UnitTest_Memory_StackHeap.cpp" />
+    <ClCompile Include="Test\SFTestBase.cpp" />
+    <ClCompile Include="Test\Texture\UnitTest_TextureJpg.cpp" />
+    <ClCompile Include="Test\Texture\UnitTest_TexturePng.cpp" />
+    <ClCompile Include="Test\Texture\UnitTest_TextureTGA.cpp" />
+    <ClCompile Include="Test\Thread\SFSystemSynchronizeTest.cpp" />
+    <ClCompile Include="Test\Thread\SFThreadTest.cpp" />
+    <ClCompile Include="Test\TongScript\UnitTest_TongScript_Bytecode.cpp" />
+    <ClCompile Include="Test\TongScript\UnitTest_TongScript_Compile.cpp" />
+    <ClCompile Include="Test\TongScript\UnitTest_TongScript_FileFormat.cpp" />
+    <ClCompile Include="Test\Variable\UnitTest_Variable_Table.cpp" />
+    <ClCompile Include="UnitTest1PCH.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="UnitTest1.cpp" />
+    <ClCompile Include="UnitTest_NetMessageWindow.cpp" />
+    <ClCompile Include="UnitTest_ServerConfig.cpp" />
+    <ClCompile Include="UnitTest_Zookeeper.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Engine\Src\CoreBase\SFCoreBase.Win.vcxproj">
+      <Project>{758fa598-b851-4848-bec0-e039edbd2e5e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Engine\Src\Protocol\SFProtocol.Win.vcxproj">
+      <Project>{a670f5b5-d452-4ee5-8531-c1cde3342484}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Engine\Src\SFEngineTool\SFEngineTool.Win.vcxproj">
+      <Project>{5554dd42-b106-4f4b-93e6-cefae0600422}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Engine\Src\SFEngine\SFEngine.Win.vcxproj">
+      <Project>{1ac5e64d-18e3-4521-805d-e083933ac19c}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="ServerConfig_StressTest.xml">
+      <DeploymentContent>true</DeploymentContent>
+      <SubType>Designer</SubType>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="data\testImage.jpg" />
+    <Image Include="data\testImage.png" />
+    <Image Include="data\testImage24.tga" />
+    <Image Include="data\testImage32.tga" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

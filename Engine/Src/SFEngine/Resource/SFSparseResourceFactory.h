@@ -1,0 +1,36 @@
+////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) 2016 Kyungkun Ko
+// 
+// Author : KyungKun Ko
+//
+// Description : Sparse resource factory
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma once
+
+#include "Object/SFSharedObject.h"
+#include "Object/SFSharedPointer.h"
+
+namespace SF
+{
+
+	////////////////////////////////////////////////////////////////////
+	//
+	//	Sparse Resource Factory
+	//
+	class SparseResourceFactory
+	{
+	public:
+		SparseResourceFactory();
+		virtual ~SparseResourceFactory();
+
+
+	};
+	
+
+
+}
+

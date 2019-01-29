@@ -1,0 +1,38 @@
+////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) 2016 Kyungkun Ko
+// 
+// Author : KyungKun Ko
+//
+// Description : Resource Factory
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+#include "SFEnginePCH.h"
+#include "Resource/SFResource.h"
+#include "Resource/SFResourceFactory.h"
+
+
+namespace SF
+{
+
+	////////////////////////////////////////////////////////////////////
+	//
+	//	Resource Manager
+	//
+
+	ResourceFactory::ResourceFactory()
+	{
+
+	}
+
+	ResourceFactory::~ResourceFactory()
+	{
+
+	}
+
+
+
+}
+

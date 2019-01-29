@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ResultCodes xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="SFResultCode.xsd"
+             Facility="SF"
+             UseFacilityName="false"
+             IDTable="true"
+             >
+
+
+  <ResultCodeItem Severity="Error" CodeName="INVALID_BYTE_SEQUENCE" Desc="Invalid byte sequence. usually casued by invalid data stream"/>
+  <ResultCodeItem Severity="Error" CodeName="DUPLICATE_COMPONENT" Desc="You can not register same name or type component"/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_INITIALIZED" Desc="Called without initialization."/>
+  <ResultCodeItem Severity="Error" CodeName="VERSION_NOT_AVAIL" Desc="The version not available or miss match with system."/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_CLUSTERMASTER" Desc="Invalid Cluster Master server"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_STATE" Desc="The version not available or miss match with system."/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_STR_FORMAT" Desc="Invalid string format."/>
+  <ResultCodeItem Severity="Error" CodeName="DUPLICATED_SERVERID" Desc="ServerID is duplicated."/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_ENTITY" Desc="Invalid entity"/>
+  <ResultCodeItem Severity="Error" CodeName="DUPLICATED_ENTITY" Desc="Invalid duplicated entity"/>
+  <ResultCodeItem Severity="Error" CodeName="DUPLICATED_ENTITYID" Desc="Invalid duplicated entity"/>
+  <ResultCodeItem Severity="Error" CodeName="DUPLICATED_ACCOUNTID" Desc="Duplicated Account ID"/>
+  <ResultCodeItem Severity="Error" CodeName="DUPLICATED_PLAYERID" Desc="Duplicated Player ID"/>
+  <ResultCodeItem Severity="Error" CodeName="DUPLICATED_NAME" Desc="Duplicated name"/>
+  <ResultCodeItem Severity="Error" CodeName="DUPLICATED_ID" Desc="Duplicated ID"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_ACCOUNTID" Desc="Invalid duplicated entity"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_TICKET" Desc="Invalid ticket"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_PLAYERID" Desc="Invalid player ID"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_VALUE" Desc="Invalid value"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_CLASS" Desc="Invalid class value"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_DIFFICULTY" Desc="Invalid Difficulty"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_REGISTRATION" Desc="Invalid registration to play"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_CHANNELID" Desc="Invalid Channel ID"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_INSTANCEID" Desc="Invalid Zone instance ID"/>
+  <ResultCodeItem Severity="Error" CodeName="DUPLICATED_COMPONENT" Desc="Duplicated component"/>
+  <ResultCodeItem Severity="Error" CodeName="MAX_FRIEND" Desc="Maximum friend"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_PLAYER_COUNT" Desc="Invalid player count for service"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_PLAYER_LEVEL" Desc="Invalid player level"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_PLAYER_NICK" Desc="Invalid player nick"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_NOTIFICATIONID" Desc="Invalid Notification ID"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_RANKING_RANGE" Desc="Invalid Ranking range"/>
+  <ResultCodeItem Severity="Error" CodeName="TARGET_MAX_FRIEND" Desc="Target Maximum friend"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_STR_DATA" Desc="Invalid string data."/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_AUTORIZED" Desc="Not authorized"/>
+  <ResultCodeItem Severity="Error" CodeName="NO_PERMITION" Desc="No permition"/>
+  <ResultCodeItem Severity="Error" CodeName="NO_FILE_OR_DIR" Desc="No file or directory"/>
+  <ResultCodeItem Severity="Error" CodeName="NO_SUCH_PROCESS" Desc="No such process"/>
+  <ResultCodeItem Severity="Error" CodeName="INTERRUPTED_SYSCALL" Desc="Interrupted system call"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_ERROR" Desc="I/O error"/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_DEVICE" Desc="No such device or address"/>
+  <ResultCodeItem Severity="Error" CodeName="TOO_MANY_ARGLIST" Desc="Arg list too long"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_EXEC_FROMAT" Desc="Exec format error"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_FILE_HANDLE" Desc="Bad file number"/>
+  <ResultCodeItem Severity="Error" CodeName="NO_CHILD_PROCESS" Desc="No child process"/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_BLOCK" Desc="Block device required"/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_EXIST" Desc="Not exist"/>
+  <ResultCodeItem Severity="Error" CodeName="BUSY" Desc="Busy"/>
+  <ResultCodeItem Severity="Error" CodeName="FILE_EXISTS" Desc="File exists"/>
+  <ResultCodeItem Severity="Error" CodeName="CROSS_LINK" Desc="Cross-device link"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_DEVICE" Desc="No such device"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_DIRECTORY" Desc="Not a directory"/>
+  <ResultCodeItem Severity="Error" CodeName="DIRECTORY" Desc="Is a directory"/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_ENOUGH_FILE_TABLE" Desc="File table overflow"/>
+  <ResultCodeItem Severity="Error" CodeName="TOO_MANY_OPENED_FILE" Desc="Too many open files"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_TYPEWRITER" Desc="Not a typewriter"/>
+  <ResultCodeItem Severity="Error" CodeName="BUSY_FILE" Desc="Text file busy"/>
+  <ResultCodeItem Severity="Error" CodeName="TOO_BIG_FILE" Desc="File too large"/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_ENOUGH_SPACE" Desc="No space left on device"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_SEEK" Desc="Illegal seek"/>
+  <ResultCodeItem Severity="Error" CodeName="READ_ONLY" Desc="Read-only file system"/>
+  <ResultCodeItem Severity="Error" CodeName="TOO_MANY_LINK" Desc="Too many links"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_PIPE" Desc="Broken pipe"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_MATH_DOMAIN" Desc="Math argument out of domain of func"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_NUMERIC" Desc="Math result not representable"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_PASSWORD" Desc="Invalid password"/>
+  <ResultCodeItem Severity="Error" CodeName="ALREADY_IN_FRIEND" Desc="Target already in friends list"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_THREAD" Desc="Thread is wrong, running on wrong thread?"/>
+  <ResultCodeItem Severity="Error" CodeName="ALREADY_EXIST" Desc="Requested object already exist"/>
+
+  <!-- IO realted, includes network -->
+  <ResultCodeItem Severity="Success" CodeName="IO_PROCESSED_SEQUENCE" Desc="Network sequence already processed"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_PROTOCOL_VERSION_MISMATCH" Desc="The version not available or miss match with system."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NOTINITIALIZED" Desc="Network is not initialized"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_INVALID_NETCLASS" Desc="The version not available or miss match with system."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NOT_ENOUGH_WINDOWSPACE" Desc="Not enough space in sliding window"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_IO_ABORTED" Desc="Network IO aborted"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_IO_SEND_FAIL" Desc="Network IO send failed"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_IO_RECV_FAIL" Desc="Network IO recv failed"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_SEND_FAIL" Desc="Network send failed"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_RECV_FAIL" Desc="Network recv failed"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_INVALID_SEQUENCE" Desc="Network Message sequence is invalid"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_BADPACKET_SIZE" Desc="Network Message not expected bad packet size"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_CONNECTION_CLOSED" Desc="Network connection closed"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NOT_CONNECTED" Desc="Network connection is never made"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_INVALID_CID" Desc="Network connection ID is invalid"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_CONNECTION_TIMEOUT" Desc="Network Connection timeout"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_CONNECTION_FAIL" Desc="Network connection is failed"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_BADPACKET_TOOBIG" Desc="Too big packet data"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_BADPACKET_NOTEXPECTED" Desc="Network Message not expected bad packet"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_INVALID_MESSAGE_CHECKSUM" Desc="Checksum value of the message is invalid"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_INVALID_MESSAGE_ENCRYPTION" Desc="Message encryption is invalid"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_INVALID_CONNECTION_STATE" Desc="Invalid connection state"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_SEQUENCE_OVERFLOW" Desc="Too big sequence id"/>
+
+  <ResultCodeItem Severity="Error" CodeName="IO_WOULDBLOCK" Desc="A non-blocking socket operation could not be completed immediately."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_INPROGRESS" Desc="A blocking operation is currently executing."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_ALREADY" Desc="An operation was attempted on a non-blocking socket that already had an operation in progress."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NOTSOCK" Desc="An operation was attempted on something that is not a socket."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_DESTADDRREQ" Desc="A required address was omitted from an operation on a socket."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NETDOWN" Desc="A socket operation encountered a dead network."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NETUNREACH" Desc="A socket operation was attempted to an unreachable network."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NETRESET" Desc="The connection has been broken due to keep-alive activity detecting a failure while the operation was in progress."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_CONNABORTED" Desc="An established connection was aborted by the software in your host machine."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_CONNRESET" Desc="An existing connection was forcibly closed by the remote host."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NOBUFS" Desc="An operation on a socket could not be performed because the system lacked sufficient buffer space or because a queue was full."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_ISCONN" Desc="A connect request was made on an already connected socket."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NOTCONN" Desc="A request to send or receive data was disallowed because the socket is not connected and (when sending on a datagram socket using a sendto call) no address was supplied."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_SHUTDOWN" Desc="A request to send or receive data was disallowed because the socket had already been shut down in that direction with a previous shutdown call."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_TOOMANYREFS" Desc="Too many references to some kernel object."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_TIMEDOUT" Desc="A connection attempt failed because the connected party did not properly respond after a period of time, or established connection failed because connected host has failed to respond."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_CONNECTION_REFUSSED" Desc="No connection could be made because the target machine actively refused it."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_LOOP" Desc="Cannot translate name."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NAMETOOLONG" Desc="Name component or name was too long."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_HOSTDOWN" Desc="A socket operation failed because the destination host was down."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_HOSTUNREACH" Desc="A socket operation was attempted to an unreachable host."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NOTEMPTY" Desc="Cannot remove a directory that is not empty."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_PROCLIM" Desc="A Windows Sockets implementation may have a limit on the number of applications that may use it simultaneously."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_SYSNOTREADY" Desc="WSAStartup cannot function at this time because the underlying system it uses to provide network services is currently unavailable."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_VERNOTSUPPORTED" Desc="The Windows Sockets version requested is not supported."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NOTINITIALISED" Desc="Either the application has not called WSAStartup, or WSAStartup failed."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_DISCON" Desc="Returned by WSARecv or WSARecvFrom to indicate the remote party has initiated a graceful shutdown sequence."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_SYSCALLFAILURE" Desc="A system call has failed."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_HOST_NOT_FOUND" Desc="Host not found."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_TRY_AGAIN" Desc="Try again"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_IO_PENDING" Desc="IOPending"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_SECURE_HOST_NOT_FOUND" Desc="No such host is known securely."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_PROTO" Desc="Protocol error"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_PROTOTYPE" Desc="Protocol wrong type for socket."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NOPROTOOPT" Desc="Protocol not available"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_NONET" Desc="Machine is not on the network"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_OPNOTSUPP" Desc="Operation not supported on socket"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_BADFLAGS" Desc="An invalid value was provided for the ai_flags member of the pHints parameter."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_FAMILY" Desc="Bad network family"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_INVALID_SERVICE" Desc="The pServiceName parameter is not supported for the specified ai_socktype member of the pHints parameter."/>
+  <ResultCodeItem Severity="Error" CodeName="IO_INVALID_ADDRESS" Desc="Invalid network address"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_ADDRINUSE" Desc="Address in use"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_BADPACKET" Desc="Network Message not expected packet data"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_DISCONNECTED" Desc="Disconnected"/>
+
+  <!-- ZooKeeper -->
+  <ResultCodeItem Severity="Error" CodeName="ZK_SYSTEM" Desc="Zookeeper System and server-side errors."/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZRUNTIMEINCONSISTENCY" Desc="Zookeeper  A runtime inconsistency was found"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZDATAINCONSISTENCY" Desc="Zookeeper A data inconsistency was found"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZCONNECTIONLOSS" Desc="Zookeeper Connection to the server has been lost"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZMARSHALLINGERROR" Desc="Zookeeper Error while marshalling or unmarshalling data"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZUNIMPLEMENTED" Desc="Zookeeper Operation is unimplemented"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZOPERATIONTIMEOUT" Desc="Zookeeper Operation timeout"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZBADARGUMENTS" Desc="Zookeeper Invalid arguments"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZINVALIDSTATE" Desc="Zookeeper Invliad zhandle state"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZAPIERROR" Desc="Zookeeper API errors."/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZNONODE" Desc="Zookeeper Node does not exist"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZNOAUTH" Desc="Zookeeper Not authenticated"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZBADVERSION" Desc="Zookeeper Version conflict"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZNOCHILDRENFOREPHEMERALS" Desc="Zookeeper Ephemeral nodes may not have children"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZNODEEXISTS" Desc="Zookeeper The node already exists"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZNOTEMPTY" Desc="Zookeeper The node has children"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZSESSIONEXPIRED" Desc="Zookeeper The session has been expired by the server"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZINVALIDCALLBACK" Desc="Zookeeper Invalid callback specified"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZINVALIDACL" Desc="Zookeeper Invalid ACL specified"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZAUTHFAILED" Desc="Zookeeper Client authentication failed"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZCLOSING" Desc="Zookeeper ZooKeeper is closing"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZNOTHING" Desc="Zookeeper (not error) no server responses to process"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZSESSIONMOVED" Desc="Zookeeper session moved to another server, so operation is ignored"/>
+  
+  <ResultCodeItem Severity="Error" CodeName="END_OF_STREAM" Desc="End of stream"/>
+  <ResultCodeItem Severity="Error" CodeName="END_OF_FILE" Desc="End of file"/>
+  <ResultCodeItem Severity="Error" CodeName="OUT_OF_RESERVED_MEMORY" Desc="Out of reserved memory"/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_OPENED" Desc="The object not initialized or opened"/>
+  <ResultCodeItem Severity="Success" CodeName="CANCELED" Desc="Operation is canceled"/>
+
+  <ResultCodeItem Severity="Error" CodeName="NOT_SUPPORTED" Desc="Operation is not supported"/>
+  <ResultCodeItem Severity="Error" CodeName="NOT_SUPPORTED_FORMAT" Desc="Format is not supported"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_FORMAT" Desc="Format is not valid"/>
+  <ResultCodeItem Severity="Error" CodeName="INVALID_FILE" Desc="Failed to open file"/>
+  
+  <!-- Script -->
+  <ResultCodeItem Severity="Error" CodeName="VARIABLE_NOT_FOUND" Desc="Specific variable not found"/>
+  <ResultCodeItem Severity="Error" CodeName="FUNCTION_NOT_FOUND" Desc="Specific function not found"/>
+  <ResultCodeItem Severity="Error" CodeName="OBJECT_NOT_FOUND" Desc="Specific object not found"/>
+  
+</ResultCodes>
+

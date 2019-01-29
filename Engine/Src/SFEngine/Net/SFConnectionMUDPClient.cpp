@@ -1,0 +1,504 @@
+////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) 2016 Kyungkun Ko
+// 
+// Author : KyungKun Ko
+//
+// Description : Connection implementations
+//	
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#include "SFEnginePCH.h"
+#include "Thread/SFThread.h"
+#include "SFAssert.h"
+#include "Util/SFTimeUtil.h"
+#include "ResultCode/SFResultCodeEngine.h"
+#include "ResultCode/SFResultCodeLibrary.h"
+#include "Util/SFLog.h"
+#include "String/SFToString.h"
+#include "String/SFHasher32.h"
+#include "Protocol/SFProtocol.h"
+
+#include "Net/SFConnectionMUDP.h"
+#include "Net/SFNetDef.h"
+#include "Net/SFNetSvrDef.h"
+#include "Net/SFNetCtrl.h"
+#include "Net/SFNetConst.h"
+#include "Net/SFNetCtrl.h"
+#include "Net/SFNetToString.h"
+
+
+
+
+
+namespace SF {
+namespace Net {
+
+
+	
+
+	////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Client Mobile UDP Network connection class
+	//
+
+	std::atomic<uint64_t> ConnectionMUDPClient::stm_CIDGen(0);
+
+	ConnectionMUDPClient::MyNetSocketIOAdapter::MyNetSocketIOAdapter(ConnectionMUDPClient &owner)
+		: SocketIOUDP(owner.GetHeap())
+		, m_Owner(owner)
+	{
+		SetUserSocketID(m_Owner.GetCID());
+	}
+
+	Result ConnectionMUDPClient::MyNetSocketIOAdapter::OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer)
+	{
+		Result hr = ResultCode::SUCCESS;
+
+		if (pIOBuffer != nullptr && pIOBuffer->Operation != IOBUFFER_OPERATION::OP_UDPREAD)
+		{
+			netErr(ResultCode::UNEXPECTED);
+		}
+
+
+		// Pending recv count and registered status should be checked together so that we can prevent infinit pending recv
+		// And PendingRecv should be decreased after new pending is happened
+		if (GetIsIORegistered())
+		{
+
+			if (hrRes)
+			{
+				netChkPtr(pIOBuffer);
+
+				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->buffer)))
+					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
+
+				m_Owner.PendingRecv();
+			}
+			else
+			{
+				// TODO: need to mark close connection
+				m_Owner.Disconnect("Recv failed");
+			}
+		}
+
+	Proc_End:
+
+		// decrease should be happened at last, and always
+		if (NetSystem::IsProactorSystem())
+			DecPendingRecvCount();
+
+		if (pIOBuffer != nullptr)
+		{
+			pIOBuffer->SetPendingFalse();
+			Util::SafeDelete(pIOBuffer);
+		}
+
+
+		return hr;
+
+	}
+
+	Result ConnectionMUDPClient::MyNetSocketIOAdapter::OnWriteReady()
+	{
+		// We will not need this feature
+		//if (m_Owner.GetEventHandler())
+		//	return m_Owner.GetEventHandler()->OnNetSendReadyMessage(&m_Owner);
+		//// process directly
+		//else
+			return ProcessSendQueue();
+	}
+
+	// Send message to connection with network device
+	Result ConnectionMUDPClient::MyNetSocketIOAdapter::WriteBuffer(IOBUFFER_WRITE *pSendBuffer)
+	{
+		auto result = SocketIOUDP::WriteBuffer(pSendBuffer);
+		switch ((uint32_t)result)
+		{
+		case (uint32_t)ResultCode::IO_TRY_AGAIN:
+		case (uint32_t)ResultCode::IO_CONNABORTED:
+		case (uint32_t)ResultCode::IO_CONNRESET:
+		case (uint32_t)ResultCode::IO_NETRESET:
+		case (uint32_t)ResultCode::IO_NOTCONN:
+		case (uint32_t)ResultCode::IO_NOTSOCK:
+		case (uint32_t)ResultCode::IO_SHUTDOWN:
+		case (uint32_t)ResultCode::INVALID_PIPE:
+			// Send fail by connection close
+			// Need to close connection
+			result = ResultCode::IO_CONNECTION_CLOSED;
+			m_Owner.Disconnect("SendBufferUDP is failed");
+			break;
+		}
+
+		return result;
+	}
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	MyNetSocketIOManager
+	//
+
+	ConnectionMUDPClient::MyNetSocketIOManager::MyNetSocketIOManager(ConnectionMUDPClient& owner)
+		: m_Owner(owner)
+		, m_PendingFree(owner.GetHeap())
+	{
+	}
+
+	void ConnectionMUDPClient::MyNetSocketIOManager::Init()
+	{
+		FreeCurrentHandler();
+		FlushFreedHandlers();
+
+		//m_BindAddr = bindAddr;
+
+		// Connect will allocate one
+		//NewIOHandler();
+	}
+
+	Result ConnectionMUDPClient::MyNetSocketIOManager::NewIOHandler()
+	{
+		Result hr;
+		SockType socketType = SockType::DataGram;
+		SockFamily socketFamily = m_Owner.GetLocalInfo().PeerAddress.SocketFamily;
+		sockaddr_storage bindAddr;
+
+		auto socket = Service::NetSystem->Socket(socketFamily, socketType);
+		if (socket == INVALID_SOCKET)
+		{
+			SFLog(Net, Error, "Failed to Open Client Socket {0:X8}", GetLastNetSystemResult());
+			netErr(ResultCode::UNEXPECTED);
+		}
+
+		netChk(Service::NetSystem->SetupCommonSocketOptions(socketType, socketFamily, socket));
+
+		bindAddr = (sockaddr_storage)m_Owner.GetLocalInfo().PeerAddress;
+		if (bind(socket, (sockaddr*)&bindAddr, (unsigned)Net::GetSockAddrSize(bindAddr)) == SOCKET_ERROR)
+		{
+			SFLog(Net, Error, "Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
+			netErr(ResultCode::UNEXPECTED);
+		}
+
+		FreeCurrentHandler();
+
+
+		if (m_ActiveAdapter == nullptr)
+		{
+			netMem(m_ActiveAdapter = new(m_Owner.GetHeap()) MyNetSocketIOAdapter(m_Owner));
+			m_ActiveAdapter->SetSocket(socketFamily, socketType, socket);
+			socket = INVALID_SOCKET;
+			netChk(Service::NetSystem->RegisterSocket(m_ActiveAdapter));
+
+			m_Owner.SetNetIOHandler(m_ActiveAdapter);
+		}
+
+		netChk(m_Owner.PendingRecv());
+
+
+	Proc_End:
+
+		if (socket != INVALID_SOCKET)
+			Service::NetSystem->CloseSocket(socket);
+
+		return hr;
+	}
+
+
+	void ConnectionMUDPClient::MyNetSocketIOManager::FreeCurrentHandler()
+	{
+		if (m_ActiveAdapter != nullptr)
+		{
+			m_ActiveAdapter->CloseSocket();
+
+			if (!m_PendingFree.Enqueue(m_ActiveAdapter))
+			{
+				Assert(false);
+				// ?
+			}
+
+			m_ActiveAdapter = nullptr;
+			m_Owner.SetNetIOHandler(nullptr);
+		}
+	}
+
+	void ConnectionMUDPClient::MyNetSocketIOManager::FlushFreedHandlers()
+	{
+		if (m_PendingFreeCache != nullptr)
+		{
+			if (m_PendingFreeCache->CanDelete())
+			{
+				IHeap::Delete(m_PendingFreeCache);
+				m_PendingFreeCache = nullptr;
+			}
+			else
+			{
+				return;
+			}
+		}
+
+		auto itemCount = m_PendingFree.size();
+		for (size_t iItem = 0; iItem < itemCount; iItem++)
+		{
+			if (!m_PendingFree.Dequeue(m_PendingFreeCache))
+				break;
+
+			if (m_PendingFreeCache != nullptr)
+			{
+				if (m_PendingFreeCache->CanDelete())
+				{
+					IHeap::Delete(m_PendingFreeCache);
+					m_PendingFreeCache = nullptr;
+				}
+				else
+				{
+					break;
+				}
+			}
+		}
+	}
+
+	bool ConnectionMUDPClient::MyNetSocketIOManager::ValidateNetIOAdapter()
+	{
+		Result hr;
+
+		if (m_ActiveAdapter != nullptr)
+		{
+			if (!m_ActiveAdapter->GetLastResult())
+				FreeCurrentHandler();
+		}
+
+		FlushFreedHandlers();
+
+		// Create new one if not exists
+		if(m_ActiveAdapter == nullptr)
+			NewIOHandler();
+
+	//Proc_End:
+
+		return m_ActiveAdapter != nullptr;
+	}
+
+	bool ConnectionMUDPClient::MyNetSocketIOManager::CanDelete()
+	{
+		FlushFreedHandlers();
+
+		// If there is something pending we need to wait
+		if (m_PendingFreeCache != nullptr)
+			return false;
+
+		if (m_PendingFree.size() > 0)
+			return false;
+
+		// check 
+		if (m_ActiveAdapter != nullptr)
+			return m_ActiveAdapter->CanDelete();
+
+		return true;
+	}
+
+	void ConnectionMUDPClient::MyNetSocketIOManager::Dispose()
+	{
+		FreeCurrentHandler();
+		FlushFreedHandlers();
+	}
+
+
+
+
+	// Constructor
+	ConnectionMUDPClient::ConnectionMUDPClient(IHeap& heap)
+		: ConnectionMUDP(heap, nullptr)
+		, m_NetIOAdapterManager(*this)
+		, m_ReliableSyncTime()
+	{
+		// We can't set tick here. There is a small chance that tick update finished before this object's reference count got increased
+		//SetTickGroup(EngineTaskTick::AsyncTick);
+
+		SetNetCtrlAction(NetCtrlCode_SyncReliable, &m_HandleSyncReliableClient);
+		SetNetCtrlAction(NetCtrlCode_TimeSyncRtn, &m_HandleTimeSyncRtn);
+
+		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
+		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartBit);
+		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
+
+		auto newCID = stm_CIDGen.fetch_add(1, std::memory_order_relaxed) + 1;
+		if(newCID == 0)
+			newCID = stm_CIDGen.fetch_add(1, std::memory_order_relaxed) + 1;
+		SetCID(newCID);
+	}
+
+	ConnectionMUDPClient::~ConnectionMUDPClient()
+	{
+	}
+
+	bool ConnectionMUDPClient::CanDelete()
+	{
+		return m_NetIOAdapterManager.CanDelete();
+	}
+
+	void ConnectionMUDPClient::Dispose()
+	{
+		ClearQueues();
+
+		super::Dispose();
+
+		m_NetIOAdapterManager.Dispose();
+	}
+
+	// Initialize connection
+	Result ConnectionMUDPClient::InitConnection(const PeerInfo &local, const PeerInfo &remote)
+	{
+		m_NetIOAdapterManager.Init();
+
+		return Connection::InitConnection(local, remote);
+	}
+
+	// Connect to remote. InitConnection + Connect 
+	// Local address will be auto detected
+	Result ConnectionMUDPClient::Connect(PeerInfo local, const PeerInfo& remote)
+	{
+		Result hr = ResultCode::SUCCESS;
+		//SOCKET socket = INVALID_SOCKET;
+		//sockaddr_storage bindAddr;
+
+
+		// detect local address
+		if (StrUtil::IsNullOrEmpty(local.PeerAddress.Address))
+		{
+            local.PeerAddress.SocketFamily = remote.PeerAddress.SocketFamily;
+			// Use Any address, so that it can support multiple nat devices
+//			if (remote.PeerAddress.SocketFamily == SockFamily::IPV4)
+//				Net::GetLocalAddressIPv4(local.PeerAddress);
+//			else
+//				Net::GetLocalAddressIPv6(local.PeerAddress);
+		}
+
+		m_ReliableSyncTime = Util::Time.GetTimeMs();
+
+
+		//socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SockType::DataGram);
+		//if (socket == INVALID_SOCKET)
+		//{
+		//	SFLog(Net, Error, "Failed to Open Client Socket {0:X8}", GetLastNetSystemResult());
+		//	netErr(ResultCode::UNEXPECTED);
+		//}
+
+		//netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::DataGram, local.PeerAddress.SocketFamily, socket));
+
+		//bindAddr = (sockaddr_storage)local.PeerAddress;
+		////if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)
+  //      if (bind(socket, (sockaddr*)&bindAddr, (unsigned)local.PeerAddress.GetSockAddrSize()) == SOCKET_ERROR)
+		//{
+		//	SFLog(Net, Error, "Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
+		//	netErr(ResultCode::UNEXPECTED);
+		//}
+		//local.PeerAddress = bindAddr;
+
+
+		netChk(InitConnection(local, remote));
+		SFLog(Net, Custom3, "Initialize connection CID:{0}, Addr:{1}", GetCID(), remote.PeerAddress);
+		//socket = INVALID_SOCKET;
+
+
+		m_NetIOAdapterManager.FreeCurrentHandler();
+		netChk(m_NetIOAdapterManager.NewIOHandler());
+		//netChk(Service::NetSystem->RegisterSocket(SockType::DataGram, &m_NetIOAdapter));
+
+		netChk(PendingRecv());
+
+
+	Proc_End:
+
+		//if (socket != INVALID_SOCKET)
+		//	Service::NetSystem->CloseSocket(socket);
+
+		return hr;
+	}
+
+	// Close connection
+	Result ConnectionMUDPClient::CloseConnection(const char* reason)
+	{
+		m_NetIOAdapterManager.FreeCurrentHandler();
+		m_NetIOAdapterManager.FlushFreedHandlers();
+
+		return ConnectionMUDP::CloseConnection(reason);
+	}
+
+
+
+	Result ConnectionMUDPClient::ProcSendReliable()
+	{
+		Result hr;
+
+		//MutexScopeLock localLock(m_SendReliableWindow.GetLock());
+
+		hr = ProcSendReliableQueue();
+		if (!(hr))
+		{
+			SFLog(Net, Info, "Process Recv Guaranted queue failed {0:X8}", hr);
+		}
+
+		hr = ProcReliableSendRetry();
+		if (!(hr))
+		{
+			SFLog(Net, Info, "Process message window failed {0:X8}", hr);
+		}
+
+		if (Util::TimeSince(m_ReliableSyncTime) > Const::RELIABLE_SYNC_POLLING_TIME)
+		{
+			m_ReliableSyncTime = Util::Time.GetTimeMs();
+			netChk(SendSync(m_RecvReliableWindow.GetBaseSequence(), m_RecvReliableWindow.GetSyncMask()));
+		}
+
+	Proc_End:
+
+		return ResultCode::SUCCESS;
+	}
+
+
+
+	Result ConnectionMUDPClient::EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer)
+	{
+		auto pActiveIO = m_NetIOAdapterManager.GetActiveNetIOAdapter();
+		if (pActiveIO != nullptr)
+			return pActiveIO->EnqueueBuffer(pSendBuffer);
+		else
+			return ResultCode::UNEXPECTED;
+	}
+
+
+	// Pending recv New one
+	Result ConnectionMUDPClient::PendingRecv()
+	{
+		auto pActiveIO = m_NetIOAdapterManager.GetActiveNetIOAdapter();
+		if (pActiveIO != nullptr)
+			return pActiveIO->PendingRecv();
+		else
+			return ResultCode::UNEXPECTED;
+	}
+
+
+	Result ConnectionMUDPClient::TickUpdate()
+	{
+		// Except some special state, we need to keep validate net io
+		switch (GetConnectionState())
+		{
+		case ConnectionState::NONE:
+		case ConnectionState::DISCONNECTING:
+		case ConnectionState::DISCONNECTED:
+		case ConnectionState::SLEEP:
+			break;
+		default:
+			m_NetIOAdapterManager.ValidateNetIOAdapter();
+		}
+
+		return super::TickUpdate();
+	}
+
+
+
+} // namespace Net
+} // namespace SF
+
+

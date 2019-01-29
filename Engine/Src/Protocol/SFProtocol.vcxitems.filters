@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Message">
+      <UniqueIdentifier>{71018c43-0706-49a7-96a3-006a6c49bb26}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Policy">
+      <UniqueIdentifier>{65fd2844-d50a-4458-8b21-26fed9316c2c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\Message\GameMsgClass.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\Message\GameMsgDebug.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\Message\LoginMsgClass.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\Message\LoginMsgDebug.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\Message\LoginMsgParsing.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\Message\GameMsgParsing.h">
+      <Filter>Message</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\Policy\LoginNetPolicy.h">
+      <Filter>Policy</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\Policy\GameNetPolicy.h">
+      <Filter>Policy</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SFProtocolPCH.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\SFGenericMessageClass.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\SFProtocolHelper.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\SFProtocol.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Protocol\SFProtocolHelper.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Protocol\Message\GameMsgClass.cpp">
+      <Filter>Message</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Protocol\Message\GameMsgDebug.cpp">
+      <Filter>Message</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Protocol\Message\LoginMsgClass.cpp">
+      <Filter>Message</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Protocol\Message\LoginMsgDebug.cpp">
+      <Filter>Message</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Protocol\Message\LoginMsgParsing.cpp">
+      <Filter>Message</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Protocol\Message\GameMsgParsing.cpp">
+      <Filter>Message</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Protocol\Policy\LoginNetPolicy.cpp">
+      <Filter>Policy</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Protocol\Policy\GameNetPolicy.cpp">
+      <Filter>Policy</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Protocol\SFGenericMessageClass.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Protocol\SFProtocol.cpp" />
+  </ItemGroup>
+</Project>

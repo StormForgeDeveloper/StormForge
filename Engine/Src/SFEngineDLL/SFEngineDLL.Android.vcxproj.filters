@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Java\JniUtil.h">
+      <Filter>Java</Filter>
+    </ClInclude>
+    <ClInclude Include="SharpCPP\SFCSUtil.h">
+      <Filter>SharpCPP</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Java\JniObject.cpp">
+      <Filter>Java</Filter>
+    </ClCompile>
+    <ClCompile Include="Java\JniUtil.cpp">
+      <Filter>Java</Filter>
+    </ClCompile>
+    <ClCompile Include="Java\JniConnection.cpp">
+      <Filter>Java</Filter>
+    </ClCompile>
+    <ClCompile Include="Java\JniEngine.cpp">
+      <Filter>Java</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSZooKeeper.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSConnection.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSConnectionGroup.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSEngine.Android.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSEngine.IOS.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSEngine.Win.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSFixedString.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSNetMessageIDGame.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSNetMessageIDLogin.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSNetSendMessageGame.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSNetSendMessageLogin.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSObject.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSServerConfig.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSUtil.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+    <ClCompile Include="SharpCPP\SFCSTimeUtil.cpp">
+      <Filter>SharpCPP</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Java">
+      <UniqueIdentifier>{fd78d603-ec61-4c96-af88-bcfb89e288c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SharpCPP">
+      <UniqueIdentifier>{9d8d53d5-6f56-4306-8981-efb965e1fec2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

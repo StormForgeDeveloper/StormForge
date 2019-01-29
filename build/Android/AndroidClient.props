@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <OutDir>$(SolutionDir)bin/Android/$(Platform)$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)Intermediate/Android/$(ProjectName)/$(Platform)$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile />
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)bin/lib/Android/$(Platform)$(Configuration);$(SolutionDir)bin/lib/Android/openssl/$(Platform)/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LibraryDependencies>GLESv1_CM;GLESv2;EGL;Curl_Android;devIL_Android;freetype_Android;Iconv_Android;jasper_Android;jpeg_Android;JsonCPP_Android;lcms_Android;libmng_Android;libpng_Android;libtiff_Android;libXML_Android;crypto;ssl;tinyxml_Android;ZLib_Android;SFCoreBase_Android;SFEngine_Android;SFProtocol_Android;m;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

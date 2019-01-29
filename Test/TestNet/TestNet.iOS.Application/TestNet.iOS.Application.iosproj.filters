@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="TestNet.iOS">
+      <UniqueIdentifier>{28720cf2-fc26-46af-a025-ffc054a2109f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TestNet.iOS\Images.xcassets">
+      <UniqueIdentifier>{b1c89515-b3c7-4ed1-a2ba-ee64c04ed62d}</UniqueIdentifier>
+      <Extensions>TestNet.iOS\Images.xcassets\*</Extensions>
+    </Filter>
+    <Filter Include="TestNet.iOS\Images.xcassets\AppIcon.appiconset">
+      <UniqueIdentifier>{d0b73103-682f-4f84-8954-0314887cdcc5}</UniqueIdentifier>
+      <Extensions>TestNet.iOS\Images.xcassets\AppIcon.appiconset\*</Extensions>
+    </Filter>
+    <Filter Include="TestNet.iOS\Supporting Files">
+      <UniqueIdentifier>{b35b69bc-afd9-4765-982b-bb3e5f3b9e80}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="TestNet.iOS\AppDelegate.mm">
+      <Filter>TestNet.iOS</Filter>
+    </ClCompile>
+    <ClCompile Include="TestNet.iOS\GameViewController.mm">
+      <Filter>TestNet.iOS</Filter>
+    </ClCompile>
+    <ClCompile Include="TestNet.iOS\main.mm">
+      <Filter>TestNet.iOS\Supporting Files</Filter>
+    </ClCompile>
+    <ClInclude Include="TestNet.iOS\AppDelegate.h">
+      <Filter>TestNet.iOS</Filter>
+    </ClInclude>
+    <ClInclude Include="TestNet.iOS\GameViewController.h">
+      <Filter>TestNet.iOS</Filter>
+    </ClInclude>
+    <Content Include="TestNet.iOS\Base.lproj\Main.storyboard">
+      <Filter>TestNet.iOS</Filter>
+    </Content>
+    <Content Include="TestNet.iOS\Images.xcassets\AppIcon.appiconset\Contents.json">
+      <Filter>TestNet.iOS\Images.xcassets\AppIcon.appiconset</Filter>
+    </Content>
+    <InfoPlist Include="TestNet.iOS\Info.plist">
+      <Filter>TestNet.iOS\Supporting Files</Filter>
+    </InfoPlist>
+  </ItemGroup>
+</Project>

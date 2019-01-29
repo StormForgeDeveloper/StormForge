@@ -1,0 +1,793 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Protocols xmlns="http://www.StormForge.com/XMLProtocol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.StormForge.com/XMLProtocol ProtocolDef.xsd">
+	<ProtocolGroup Name="Game" GenParameterContext="false" IsMobile="true" GenCSharp="true" Desc="Game Server Protocol. Interface the game client can call to the server.">
+    <!-- ===================================================  Login ========================================================= -->
+    
+    <C2SEvent Name="HeartBit" Reliable="true" Crypto="No" Trace="Debug1" Desc="Client heart bit">
+    </C2SEvent>
+
+    <Command Name="JoinGameServer" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player connected from a login server and moved to game server">
+      <Cmd>
+        <Params Type="AccountID" Name="AccID" Desc="AccountID of the player"/>
+        <Params Type="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+        <Params Type="uint64" Name="LoginEntityUID" Desc="Login entity ID which you would get from login server"/>
+      </Cmd>
+      <Res>
+        <Params Type="String" Name="NickName" Desc="Nickname of the player"/>
+        <Params Type="GameInsUID" Name="GameUID" Desc="Game instance UID. If the player is in a game, this value will have player's game instance id"/>
+        <Params Type="PartyUID" Name="PartyUID" Desc="PartyUID. If the player is in a party"/>
+        <Params Type="AccountID" Name="PartyLeaderID" Desc="PlayerID, for now, PlayerID is same to AccountID"/>
+        <Params Type="MatchingQueueTicket" Name="MatchingTicket" Desc="Matching queue ticket"/>
+      </Res>
+    </Command>
+
+    <Command Name="GetComplitionState" Reliable="true" Crypto="No" Trace="Debug1" Desc="player complition statues">
+      <Cmd>
+      </Cmd>
+      <Res>
+        <Params Type="String" Name="ComplitionState" Desc="Complition state string"/>
+      </Res>
+    </Command>
+
+    <Command Name="SetComplitionState" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player complition state">
+      <Cmd>
+        <Params Type="String" Name="ComplitionState" Desc="Complition state to set"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <!-- ===================================================  Push notification ================================================== -->
+    <Command Name="RegisterGCM" Reliable="true" Crypto="No" Trace="Debug1" Desc="Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time">
+      <Cmd>
+		<Params Type="String" Name="GCMRegisteredID" Desc="Google notification ID"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+    
+    <Command Name="UnregisterGCM" Reliable="true" Crypto="No" Trace="Debug1" Desc="Unregister Google notification service ID">
+      <Cmd>
+		<Params Type="String" Name="GCMRegisteredID" Desc="ID to unregister"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+    
+    <!-- ===================================================  Freind ================================================== -->
+    <Command Name="InviteFriend" Reliable="true" Crypto="No" Trace="Debug1" Desc="Invite friend">
+      <Cmd>
+		    <Params Type="AccountID" Name="FriendID" Desc="PlayerID to invite"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <Command Name="AcceptFriendRequest" Reliable="true" Crypto="No" Trace="Debug1" Desc="Accept friend request">
+      <Cmd>
+        <Params Type="AccountID" Name="InviterID" Desc="Inviter PlayerID"/>
+        <Params Type="FacebookUID" Name="InviterFacebookUID" Desc="Inviter player ID"/>
+      </Cmd>
+      <Res>
+        <Params Type="FriendInformation" Name="NewFriend" Desc="FriendInformation of the player"/>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="FriendRequestAccepted" Reliable="true" Crypto="No" Trace="Debug1" Desc="Notification for friend request is accepted">
+      <Params Type="FriendInformation" Name="Accepter" Desc="Accepted player's information"/>
+    </S2CEvent>
+
+    <Command Name="RemoveFriend" Reliable="true" Crypto="No" Trace="Debug1" Desc="Remove friden form the friend list">
+      <Cmd>
+    		<Params Type="AccountID" Name="FriendID" Desc="Friend player ID"/>
+      </Cmd>
+      <Res>
+        <Params Type="AccountID" Name="FriendID" Desc="Removed friend player ID"/>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="FriendRemoved" Reliable="true" Crypto="No" Trace="Debug1" Desc="Friend removed">
+      <Params Type="AccountID" Name="FriendID" Desc="friend player ID"/>
+    </S2CEvent>
+
+    <Command Name="GetFriendList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get friend list">
+      <Cmd>
+        <Params Type="uint16" Name="StartIndex" Desc="Friend list start index"/>
+        <Params Type="uint16" Name="Count" Desc="Maximum friend list to query"/>
+      </Cmd>
+      <Res>
+        <Params Type="uint16" Name="MaxFriendSlot" Desc="Maximum friend list"/>
+        <Params Type="uint16" Name="TotalNumberOfFriends" Desc="Maximum friend list"/>
+        <Params Type="uint16" Name="StartIndex" Desc="Friend list start index"/>
+        <Params Type="FriendInformation" IsArray="true" Name="FriendList" Desc="Friend list"/>
+      </Res>
+    </Command>
+
+
+    <!-- =================================================== Notify ================================================== -->
+
+    <Command Name="GetNotificationList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Query notification list">
+      <Cmd>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <Command Name="DeleteNotification" Reliable="true" Crypto="No" Trace="Debug1" Desc="Delete notification">
+      <Cmd>
+        <Params Type="uint32" Name="NotificationID" Desc="Notification ID to delete"/>
+      </Cmd>
+      <Res>
+        <Params Type="uint32" Name="NotificationID" Desc="Deleted Notification ID"/>
+      </Res>
+    </Command>
+
+    <Command Name="SetNotificationRead" Reliable="true" Crypto="No" Trace="Debug1" Desc="Set notification is read">
+      <Cmd>
+        <Params Type="uint32" Name="NotificationID" Desc="Notification ID to set read"/>
+      </Cmd>
+      <Res>
+        <Params Type="uint32" Name="NotificationID" Desc="Notification ID to set read"/>
+      </Res>
+    </Command>
+
+    <Command Name="AcceptNotification" Reliable="true" Crypto="No" Trace="Debug1" Desc="Accept notification">
+      <Cmd>
+        <Params Type="uint32" Name="NotificationID" Desc="Notification ID to accept"/>
+      </Cmd>
+      <Res>
+        <Params Type="uint32" Name="NotificationID" Desc="Accepted Notification ID"/>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="Notify" Reliable="true" Crypto="No" Trace="Debug1" Desc="Notify new notification">
+      <Params Type="uint32" Name="NotificationID" Desc="Notification ID"/>
+      <Params Type="uint32" Name="NotificationType" Desc="Notification type"/>
+      <Params Type="uint64" Name="MessageParam0" Desc="Message parameter 0"/>
+      <Params Type="uint64" Name="MessageParam1" Desc="Message parameter 1"/>
+      <Params Type="String" Name="MessageText" Desc="Message text"/>
+      <Params Type="uint8" Name="IsRead" Desc="Notification is read?"/>
+      <Params Type="uint64" Name="TimeStamp" Desc="Issued UTC sec"/>
+    </S2CEvent>
+
+    <!-- =================================================== Player information ================================================== -->
+
+    <Command Name="FindPlayerByEMail" Reliable="true" Crypto="No" Trace="Debug1" Desc="Query playerID list">
+      <Cmd>
+        <Params Type="String" Name="PlayerEMail" Desc="Player email to find"/>
+      </Cmd>
+      <Res>
+        <Params Type="PlayerInformation" Name="Player" Desc="Player information if found"/>
+      </Res>
+    </Command>
+
+    <Command Name="FindPlayerByPlayerID" Reliable="true" Crypto="No" Trace="Debug1" Desc="Query playerID list">
+      <Cmd>
+        <Params Type="AccountID" Name="PlayerID" Desc="Player ID to find"/>
+      </Cmd>
+      <Res>
+        <Params Type="PlayerInformation" Name="Player" Desc="Player information if found"/>
+      </Res>
+    </Command>
+
+    <Command Name="RequestPlayerStatusUpdate" Reliable="true" Crypto="No" Trace="Debug1" Desc="*Request Player Status Update">
+      <Cmd>
+        <Params Type="AccountID" Name="TargetPlayerID" IsArray="true" Desc="PlayerIDs to request"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="NotifyPlayerStatusUpdated" Reliable="true" Crypto="No" Trace="Debug1" Desc="*Notify Player Status Updated">
+      <Params Type="AccountID" Name="PlayerID" Desc="Player ID"/>
+      <Params Type="uint32" Name="LatestActiveTime" Desc="Latest active time of the player(32bit UTC sec)"/>
+      <Params Type="uint8" Name="IsInGame" Desc="TRUE if the player is in a game"/>
+    </S2CEvent>
+
+    <Command Name="GetRankingList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get Ranking lise">
+      <Cmd>
+        <Params Type="uint8" Name="RankingType"/>
+        <Params Type="uint8" Name="BaseRanking" Desc="Base ranking to query, 0 based ranking order"/>
+        <Params Type="uint8" Name="Count" Desc="Number of playerinformation to query"/>
+      </Cmd>
+      <Res>
+        <Params Type="TotalRankingPlayerInformation" Name="Ranking" IsArray="true"/>
+      </Res>
+    </Command>
+
+    <!-- ===================================================  Player game info update ================================================== -->
+
+    <Command Name="GetUserGamePlayerInfo" Reliable="true" Crypto="No" Trace="Debug1" Desc="Game user game play information">
+      <Cmd>
+      </Cmd>
+      <Res>
+        <Params Type="int16" Name="Level"/>
+        <Params Type="int64" Name="Exp"/>
+        <Params Type="int64" Name="GameMoney"/>
+        <Params Type="int64" Name="Gem"/>
+        <Params Type="int16" Name="Stamina"/>
+        <Params Type="uint32" Name="LastUpdateTime"/>
+        <Params Type="int32" Name="TotalPlayed"/>
+        <Params Type="int32" Name="WinPlaySC"/>
+        <Params Type="int32" Name="WinPlaySM"/>
+        <Params Type="int32" Name="WinPlaySS"/>
+        <Params Type="int32" Name="LosePlaySC"/>
+        <Params Type="int32" Name="LosePlaySM"/>
+        <Params Type="int32" Name="LosePlaySS"/>
+        <Params Type="int32" Name="WinPlayNC"/>
+        <Params Type="int32" Name="WinPlayNM"/>
+        <Params Type="int32" Name="WinPlayNS"/>
+        <Params Type="int32" Name="LosePlayNC"/>
+        <Params Type="int32" Name="LosePlayNM"/>
+        <Params Type="int32" Name="LosePlayNS"/>
+        <Params Type="int32" Name="WeeklyWin"/>
+        <Params Type="int32" Name="WeeklyLose"/>
+      </Res>
+    </Command>
+
+    <Command Name="GetGamePlayerInfo" Reliable="true" Crypto="No" Trace="Debug1" Desc="Game game play information">
+      <Cmd>
+        <Params Type="AccountID" Name="PlayerID" Desc="Game playerID to get"/>
+      </Cmd>
+      <Res>
+        <Params Type="AccountID" Name="PlayerID" Desc="Game player ID"/>
+        <Params Type="int16" Name="Level" Desc="Player lever"/>
+        <Params Type="int32" Name="TotalPlayed" Desc="Total play time"/>
+        <Params Type="int32" Name="WinPlaySC" Desc=""/>
+        <Params Type="int32" Name="WinPlaySM"/>
+        <Params Type="int32" Name="WinPlaySS"/>
+        <Params Type="int32" Name="LosePlaySC"/>
+        <Params Type="int32" Name="LosePlaySM"/>
+        <Params Type="int32" Name="LosePlaySS"/>
+        <Params Type="int32" Name="WinPlayNC"/>
+        <Params Type="int32" Name="WinPlayNM"/>
+        <Params Type="int32" Name="WinPlayNS"/>
+        <Params Type="int32" Name="LosePlayNC"/>
+        <Params Type="int32" Name="LosePlayNM"/>
+        <Params Type="int32" Name="LosePlayNS"/>
+        <Params Type="int32" Name="WeeklyWin"/>
+        <Params Type="int32" Name="WeeklyLose"/>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="LevelUp" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player level up event">
+      <Params Type="uint64" Name="CurrentTotalExp" Desc="Current total exp of the player"/>
+      <Params Type="uint32" Name="CurrentLevel" Desc="Current level"/>
+    </S2CEvent>
+
+    <!-- ===================================================  NickName ================================================== -->
+    <Command Name="SetNickName" Reliable="true" Crypto="No" Trace="Debug1" Desc="Change NickName">
+      <Cmd>
+    		<Params Type="String" Name="NickName" Desc="Nickname to change"/>
+        <Params Type="uint8" Name="IsCostFree" Desc="CostFree"/>
+      </Cmd>
+      <Res>
+        <Params Type="uint64" Name="TotalGem" Desc="Total after cost is consumed"/>
+        <Params Type="uint64" Name="TotalGameMoney" Desc="Total after cost is consumed"/>
+      </Res>
+    </Command>
+	
+	
+    <!-- ===================================================  Party ================================================== -->
+
+    <Command Name="CreateParty" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create Party">
+      <Cmd>
+      </Cmd>
+      <Res>
+        <Params Type="PartyUID" Name="PartyUID" Desc="Created Party UID"/>
+      </Res>
+    </Command>
+
+    <Command Name="JoinParty" Reliable="true" Crypto="No" Trace="Debug1" Desc="Join party">
+      <Cmd>
+        <Params Type="PartyUID" Name="PartyUID" Desc="Party ID to join"/>
+        <Params Type="AccountID" Name="InviterID" Desc="Party inviter ID"/>
+      </Cmd>
+      <Res>
+        <Params Type="PartyUID" Name="PartyUID" Desc="Party UID"/>
+        <Params Type="AccountID" Name="PartyLeaderID" Desc="Party leader ID"/>
+        <Params Type="uint8" Name="ChatHistoryData" IsArray="true" Desc="Chatting history of the party"/>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="PartyPlayerJoined" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player Joined event">
+      <Params Type="PartyUID" Name="PartyUID" Desc="Party UID"/>
+      <Params Type="PlayerInformation" Name="JoinedPlayer" Desc="Joind player information"/>
+    </S2CEvent>
+
+    <S2CEvent Name="PartyLeaderChanged" Reliable="true" Crypto="No" Trace="Debug1" Desc="Party leader changed event">
+      <Params Type="PartyUID" Name="PartyUID" Desc="Party UID"/>
+      <Params Type="AccountID" Name="NewLeaderID" Desc="New leader ID"/>
+    </S2CEvent>
+
+
+    <Command Name="LeaveParty" Reliable="true" Crypto="No" Trace="Debug1" Desc="Leave party command">
+      <Cmd>
+        <Params Type="PartyUID" Name="PartyUID" Desc="PartyID to leave"/>
+        <Params Type="AccountID" Name="PlayerID" Desc="Player ID to leave"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="PartyPlayerLeft" Reliable="true" Crypto="No" Trace="Debug1" Desc="Party Player left event">
+      <Params Type="PartyUID" Name="PartyUID" Desc="Party ID"/>
+      <Params Type="AccountID" Name="LeftPlayerID" Desc="Left Player ID"/>
+    </S2CEvent>
+
+
+    <Command Name="PartyKickPlayer" Reliable="true" Crypto="No" Trace="Debug1" Desc="Kick player from the party">
+      <Cmd>
+        <Params Type="PartyUID" Name="PartyUID" Desc="PartyUID"/>
+        <Params Type="AccountID" Name="PlayerID" Desc="PlayerID of the player"/>
+        <Params Type="AccountID" Name="PlayerToKick" Desc="Player To Kick"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="PartyPlayerKicked" Reliable="true" Crypto="No" Trace="Debug1" Desc="Party Player kicked message">
+      <Params Type="PartyUID" Name="PartyUID" Desc="Party UID"/>
+      <Params Type="AccountID" Name="KickedPlayerID" Desc="Kicked player ID"/>
+    </S2CEvent>
+
+    <Command Name="PartyInvite" Reliable="true" Crypto="No" Trace="Debug1" Desc="Invite a player to the party">
+      <Cmd>
+        <Params Type="AccountID" Name="InviteTargetID" Desc="Invite target player ID"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="PartyInviteRequested" Reliable="true" Crypto="No" Trace="Debug1" Desc="Party invite requested">
+      <Params Type="AccountID" Name="InviterID" Desc="Party inviter"/>
+      <Params Type="String" Name="InviterName" Desc="Party inviter name"/>
+      <Params Type="PartyUID" Name="PartyToJoinUID" Desc="Party UID to join"/>
+    </S2CEvent>
+
+    
+
+
+    <Command Name="PartyQuickChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Send Party quick chat message">
+      <Cmd>
+        <Params Type="uint32" Name="QuickChatID" Desc="My quick chat message ID"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="PartyQuickChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Party Chatting message event">
+      <Params Type="AccountID" Name="SenderID" Desc="Message sender"/>
+      <Params Type="uint32" Name="QuickChatID" Desc="My quick chat message ID"/>
+    </S2CEvent>
+
+
+    <Command Name="PartyChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Party chatting">
+      <Cmd>
+        <Params Type="String" Name="ChatMessage" Desc="My message"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="PartyChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Party Chatting message event">
+      <Params Type="AccountID" Name="SenderID" Desc="Message sender"/>
+      <Params Type="String" Name="SenderName" Desc="Message sender name"/>
+      <Params Type="String" Name="ChatMessage" Desc="Message text"/>
+    </S2CEvent>
+
+    	
+    
+    <!-- ===================================================  Game instance ================================================== -->
+	<Command Name="JoinGame" Reliable="true" Crypto="No" Trace="Debug1" Desc="Join to a game">
+		<Cmd>
+			<Params Type="AccountID" Name="PlayerID" Desc="Player ID of the player"/>
+			<Params Type="AuthTicket" Name="Ticket" Desc="Login session ID"/>
+      <Params Type="GameInsUID" Name="InsUID" Desc="Game instance ID to join"/>
+    </Cmd>
+		<Res>
+			<Params Type="GameInsUID" Name="InsUID" Desc="Game instance ID"/>
+      <Params Type="uint32" Name="TimeStamp" Desc="Time stamp in UTC"/>
+			<Params Type="GameStateID" Name="GameState" Desc="Game state"/>
+      <Params Type="uint8" Name="Day" Desc="Game Day"/>
+      <Params Type="uint8" Name="MaxPlayer" Desc="Max player of the game"/>
+      <Params Type="uint8" Name="PlayerIndex" Desc="Player index in the game"/>
+      <Params Type="uint8" Name="PlayerCharacter" Desc="Player character in the game"/>
+      <Params Type="uint8" Name="Role" Desc="Role of the player"/>
+			<Params Type="uint8" Name="Dead" Desc="TRUE if the player is dead"/>
+      <Params Type="uint8" Name="ChatHistoryData" IsArray="true" Desc="Game chatting history"/>
+      <Params Type="uint8" Name="GameLogData" IsArray="true" Desc="Game history log"/>
+    </Res>
+	</Command>
+
+
+  <S2CEvent Name="PlayerJoined" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player Joined in the game">
+		<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance UID"/>
+		<Params Type="PlayerInformation" Name="JoinedPlayer" Desc="Joined player information"/>
+		<Params Type="uint8" Name="JoinedPlayerRole" Desc="Joinged player role"/>
+		<Params Type="uint8" Name="JoinedPlayerDead" Desc="Joined player dead status"/>
+    <Params Type="uint8" Name="JoinedPlayerIndex" Desc="Joined player index"/>
+    <Params Type="uint8" Name="JoinedPlayerCharacter" Desc="Joined player character"/>
+  </S2CEvent>
+
+	<Command Name="LeaveGame" Reliable="true" Crypto="No" Trace="Debug1" Desc="Leave Game">
+		<Cmd>
+			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID to leave"/>
+			<Params Type="AccountID" Name="PlayerID" Desc="Player id of the player"/>
+			<Params Type="AuthTicket" Name="Ticket" Desc="Login session ID of the player"/>
+		</Cmd>
+		<Res>
+		</Res>
+	</Command>
+	
+	<S2CEvent Name="PlayerLeft" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player left event">
+		<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+		<Params Type="AccountID" Name="LeftPlayerID" Desc="Left player ID"/>
+	</S2CEvent>
+
+	<Command Name="KickPlayer" Reliable="true" Crypto="No" Trace="Debug1" Desc="Kick player">
+		<Cmd>
+			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+			<Params Type="AccountID" Name="PlayerID" Desc="PlayerID of the player"/>
+			<Params Type="AccountID" Name="PlayerToKick" Desc="Player ID to kick from the game"/>
+		</Cmd>
+		<Res>
+		</Res>
+	</Command>
+
+	<S2CEvent Name="PlayerKicked" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player kicked">
+		<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+		<Params Type="AccountID" Name="KickedPlayerID" Desc="Kicked player ID"/>
+	</S2CEvent>
+
+	
+	<Command Name="AssignRole" Reliable="true" Crypto="No" Trace="Debug1" Desc="Assign role + Game state reset">
+		<Cmd>
+			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+			<Params Type="AccountID" Name="PlayerID" Desc="PlayerID of the player"/>
+			<Params Type="AuthTicket" Name="Ticket" Desc="Login sessionID of the player"/>
+		</Cmd>
+      <Res>
+      </Res>
+	</Command>
+		
+	<S2CEvent Name="RoleAssigned" Reliable="true" Crypto="No" Trace="Debug1" Desc="Role assigned event">
+		<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+		<Params Type="AccountID" Name="PlayerID" Desc="Player id of the player"/>
+		<Params Type="uint8" Name="Role" Desc="Role of the player"/>
+	</S2CEvent>
+
+	<Command Name="ChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Send chatting message to the game">
+	<Cmd>
+		<Params Type="String" Name="ChatMessage" Desc="chatting message"/>
+		<Params Type="uint8" Name="Role" Desc="Role of the player"/>
+	</Cmd>
+	<Res>
+	</Res>
+	</Command>
+
+	<S2CEvent Name="ChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Chatting message event ">
+		<Params Type="AccountID" Name="SenderID" Desc="sender player ID"/>
+		<Params Type="uint8" Name="Role" Desc="Role of the sender"/>
+		<Params Type="String" Name="SenderName" Desc="NickName of the player"/>
+		<Params Type="String" Name="ChatMessage" Desc="Chatting message"/>
+	</S2CEvent>
+
+	<Command Name="AdvanceGame" Reliable="true" Crypto="No" Trace="Debug1" Desc="Advance game">
+		<Cmd>
+			<Params Type="GameInsUID" Name="GameInsUID" Desc="Advance game state"/>
+			<Params Type="AccountID" Name="PlayerID" Desc="Player id of the player" />
+			<Params Type="AuthTicket" Name="Ticket" Desc="Login session ID of the player"/>
+		</Cmd>
+		<Res>
+		</Res>
+	</Command>
+
+  <S2CEvent Name="GameAdvanced" Reliable="true" Crypto="No" Trace="Debug1" Desc="The game state is advanced">
+		<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+    <Params Type="uint32" Name="TimeStamp" Desc="Time stamp in UTC"/>
+		<Params Type="GameStateID" Name="GameState" Desc="Game state ID"/>
+    <Params Type="uint8" Name="Day" Desc="Day of the game"/>
+   </S2CEvent>
+
+    <S2CEvent Name="GameEnded" Reliable="true" Crypto="No" Trace="Debug1" Desc="Game is ended">
+      <Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+      <Params Type="GameWinner" Name="Winner" Desc="Winner of the game"/>
+      <Params Type="uint32" Name="GainedExp" Desc="Gained Experience of the game"/>
+      <Params Type="uint32" Name="GainedGameMoney" Desc="Gained game money"/>
+    </S2CEvent>
+
+
+    <Command Name="VoteGameAdvance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Vote game advance">
+      <Cmd>
+        <Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+        <Params Type="AccountID" Name="PlayerID" Desc="PlayerID of the player"/>
+        <Params Type="AuthTicket" Name="Ticket" Desc="Login session ID of the player"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="GameAdvanceVoted" Reliable="true" Crypto="No" Trace="Debug1" Desc="GameAdvance is Voted">
+      <Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+      <Params Type="AccountID" Name="Voter" Desc="Voter id"/>
+    </S2CEvent>
+
+
+    <Command Name="Vote" Reliable="true" Crypto="No" Trace="Debug1" Desc="Vote">
+		<Cmd>
+			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+			<Params Type="AccountID" Name="PlayerID" Desc="PlayerID of the player"/>
+			<Params Type="AuthTicket" Name="Ticket" Desc="Login session ID of the player"/>
+			<Params Type="AccountID" Name="VoteTarget" Desc="Vote Target"/>
+			<Params Type="uint32" Name="ActionSerial" Desc="Action serial, used for player voting order"/>
+		</Cmd>
+		<Res>
+		</Res>
+	</Command>
+
+	<S2CEvent Name="Voted" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player Voted">
+		<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+		<Params Type="AccountID" Name="Voter" Desc="Voter ID"/>
+		<Params Type="AccountID" Name="VotedTarget" Desc="Voted player ID"/>
+	</S2CEvent>
+
+    <S2CEvent Name="VoteEnd" Reliable="true" Crypto="No" Trace="Debug1" Desc="Vote is ended">
+      <Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+      <Params Type="AccountID" IsArray="true" Name="Voted" Desc="Selected player list" />
+    </S2CEvent>
+
+    <S2CEvent Name="PlayerKilled" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player Killed">
+		<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+		<Params Type="AccountID" Name="KilledPlayer" Desc="Killed Player ID"/>
+		<Params Type="PlayerKilledReason" Name="Reason" Desc="Player killed reason"/>
+    </S2CEvent>
+
+	<S2CEvent Name="PlayerRevealed" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player Voted">
+		<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance ID"/>
+		<Params Type="AccountID" Name="RevealedPlayerID" Desc="Revealed player ID"/>
+		<Params Type="uint8" Name="Role" Desc="Role player role"/>
+		<Params Type="PlayerRevealedReason" Name="Reason" Desc="Rlayer revealed reason"/>
+	</S2CEvent>
+
+    <Command Name="GamePlayAgain" Reliable="true" Crypto="No" Trace="Debug1" Desc="Play again with the current players">
+      <Cmd>
+      </Cmd>
+      <Res>
+        <Params Type="uint64" Name="TotalGem" Desc="Total after cost is consumed"/>
+        <Params Type="uint64" Name="TotalGameMoney" Desc="Total after cost is consumed"/>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="GamePlayAgain" Reliable="true" Crypto="No" Trace="Debug1" Desc="Somebody pressed play again. Only one of PartyUID and GameInsUID can have a value">
+      <Params Type="PartyUID" Name="PartyUID" Desc="Party ID"/>
+      <Params Type="AccountID" Name="LeadPlayer" Desc="Player who pressed replay"/>
+    </S2CEvent>
+
+
+    <Command Name="GameRevealPlayer" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player. reveal a player">
+      <Cmd>
+        <Params Type="AccountID" Name="TargetPlayerID" IsArray="true"/>
+      </Cmd>
+      <Res>
+        <Params Type="AccountID" Name="RevealedPlayerID" IsArray="true"/>
+        <Params Type="uint8" Name="RevealedRole" IsArray="true"/>
+        <Params Type="uint64" Name="TotalGem" Desc="Total after cost is consumed"/>
+        <Params Type="uint64" Name="TotalGameMoney" Desc="Total after cost is consumed"/>
+      </Res>
+    </Command>
+
+    <Command Name="GamePlayerRevive" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player. revive himself">
+      <Cmd>
+      </Cmd>
+      <Res>
+        <Params Type="uint64" Name="TotalGem" Desc="Total after cost is consumed"/>
+        <Params Type="uint64" Name="TotalGameMoney" Desc="Total after cost is consumed"/>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="GamePlayerRevived" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player is revived">
+      <Params Type="AccountID" Name="RevivedPlayerID" Desc="Player who is revived"/>
+    </S2CEvent>
+
+    <Command Name="GamePlayerResetRank" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player. reset ranking">
+      <Cmd>
+      </Cmd>
+      <Res>
+        <Params Type="uint64" Name="TotalGem" Desc="Total after cost is consumed"/>
+        <Params Type="uint64" Name="TotalGameMoney" Desc="Total after cost is consumed"/>
+      </Res>
+    </Command>
+
+    
+    <!-- ===================================================  Game matching  ================================================== -->
+
+    <Command Name="RequestGameMatch" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request Game match">
+      <Cmd>
+        <Params Type="uint8" Name="NumPlayer" Desc="Request game match"/>
+        <Params Type="uint8" Name="RequestRole" Desc="Request special role"/>
+      </Cmd>
+      <Res>
+        <Params Type="uint64" Name="TotalGem" Desc="Total after cost is consumed"/>
+        <Params Type="uint64" Name="TotalGameMoney" Desc="Total after cost is consumed"/>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="GameMatched" Reliable="true" Crypto="No" Trace="Debug1" Desc="Game matched">
+      <Params Type="GameInsUID" Name="InsUID" Desc="Matched game instance ID"/>
+      <Params Type="uint32" Name="TimeStamp" Desc="Time stamp in UTC"/>
+      <Params Type="GameStateID" Name="GameState" Desc="Game state"/>
+      <Params Type="uint8" Name="Day" Desc="Game Day"/>
+      <Params Type="uint8" Name="MaxPlayer" Desc="Max player of the game"/>
+      <Params Type="uint8" Name="PlayerIndex" Desc="Player index in the game"/>
+      <Params Type="uint8" Name="PlayerCharacter" Desc="Player character in the game"/>
+      <Params Type="uint8" Name="Role" Desc="Role of the player"/>
+      <Params Type="uint8" Name="Dead" Desc="TRUE if the player is dead"/>
+      <Params Type="uint8" Name="ChatHistoryData" IsArray="true" Desc="Game chatting history"/>
+      <Params Type="uint8" Name="GameLogData" IsArray="true" Desc="Game history log"/>
+      <Params Type="uint32" Name="Stamina"/>
+      <Params Type="uint64" Name="TotalGem" Desc="Game gem"/>
+      <Params Type="uint64" Name="TotalGameMoney" Desc="Game money"/>
+    </S2CEvent>
+
+    <S2CEvent Name="GameMatchFailed" Reliable="true" Crypto="No" Trace="Debug1" Desc="Game match failed">
+      <Params Type="Result" Name="FailedReason" Desc="Match failed reason"/>
+    </S2CEvent>
+
+    <S2CEvent Name="GameMatchingStarted" Reliable="true" Crypto="No" Trace="Debug1" Desc="Game matching started">
+    </S2CEvent>
+
+    <Command Name="CancelGameMatch" Reliable="true" Crypto="No" Trace="Debug1" Desc="Cancel Game match">
+      <Cmd>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="GameMatchingCanceled" Reliable="true" Crypto="No" Trace="Debug1" Desc="game matching canceled">
+    </S2CEvent>
+
+    <!-- ===================================================  Shop & Item ================================================== -->
+
+    <Command Name="BuyShopItemPrepare" Reliable="true" Crypto="No" Trace="Debug1" Desc="Buy shop item prepare">
+      <Cmd>
+        <Params Type="uint32" Name="ShopItemID" Desc="Shop table id"/>
+      </Cmd>
+      <Res>
+        <Params Type="uint32" Name="ShopItemID" Desc="Shop table id"/>
+        <Params Type="String" Name="PurchaseID" Desc="Purchase ID"/>
+      </Res>
+    </Command>
+
+    <Command Name="BuyShopItem" Reliable="true" Crypto="No" Trace="Debug1" Desc="Buy shop item">
+      <Cmd>
+        <Params Type="uint32" Name="ShopItemID" Desc="Shop table id"/>
+        <Params Type="String" Name="Platform"/>
+        <Params Type="String" Name="PackageName"/>
+        <Params Type="String" Name="PurchaseTransactionID" Desc="IOS transaction ID"/>
+        <Params Type="uint8" Name="PurchaseToken" IsArray="true"/>
+      </Cmd>
+      <Res>
+        <Params Type="uint32" Name="ShopItemID" Desc="Shop table id"/>
+      </Res>
+    </Command>
+
+    <!-- ===================================================  Chat channel ================================================== -->
+
+    <Command Name="CreateOrJoinChatChannel" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create or Join Chat channel">
+      <Cmd>
+        <Params Type="String" Name="ChannelName"/>
+        <Params Type="String" Name="Passcode"/>
+      </Cmd>
+      <Res>
+        <Params Type="EntityUID" Name="ChatUID" Desc="Created/Joined Chat channel UID"/>
+      </Res>
+    </Command>
+
+    <Command Name="JoinChatChannel" Reliable="true" Crypto="No" Trace="Debug1" Desc="Join">
+      <Cmd>
+        <Params Type="EntityUID" Name="ChatUID" Desc="ChatChannel UID to join"/>
+        <Params Type="AccountID" Name="InviterID" Desc="Party inviter ID"/>
+      </Cmd>
+      <Res>
+        <Params Type="EntityUID" Name="PartyUID" Desc="ChatChannel UID"/>
+        <Params Type="AccountID" Name="PartyLeaderID" Desc="Party leader ID"/>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="ChatChannelPlayerJoined" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player Joined event">
+      <Params Type="EntityUID" Name="ChatUID" Desc="ChatChannel UID"/>
+      <Params Type="PlayerInformation" Name="JoinedPlayer" Desc="Joind player information"/>
+    </S2CEvent>
+
+    <S2CEvent Name="ChatChannelLeaderChanged" Reliable="true" Crypto="No" Trace="Debug1" Desc="ChatChannel leader changed event">
+      <Params Type="EntityUID" Name="ChatUID" Desc="ChatChannel UID"/>
+      <Params Type="AccountID" Name="NewLeaderID" Desc="New leader ID"/>
+    </S2CEvent>
+
+
+    <Command Name="LeaveChatChannel" Reliable="true" Crypto="No" Trace="Debug1" Desc="Leave ChatChannel command">
+      <Cmd>
+        <Params Type="EntityUID" Name="ChatUID" Desc="ChatChannel to leave"/>
+        <Params Type="AccountID" Name="PlayerID" Desc="Player ID to leave"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="ChatChannelPlayerLeft" Reliable="true" Crypto="No" Trace="Debug1" Desc="ChatChannel Player left event">
+      <Params Type="EntityUID" Name="ChatUID" Desc="ChatChannel ID"/>
+      <Params Type="AccountID" Name="LeftPlayerID" Desc="Left Player ID"/>
+    </S2CEvent>
+
+
+    <Command Name="ChatChannelKickPlayer" Reliable="true" Crypto="No" Trace="Debug1" Desc="Kick player from the ChatChannel">
+      <Cmd>
+        <Params Type="EntityUID" Name="ChatUID" Desc="PartyUID"/>
+        <Params Type="AccountID" Name="PlayerID" Desc="PlayerID of the player"/>
+        <Params Type="AccountID" Name="PlayerToKick" Desc="Player To Kick"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="ChatChannelPlayerKicked" Reliable="true" Crypto="No" Trace="Debug1" Desc="ChatChannel Player kicked message">
+      <Params Type="EntityUID" Name="ChatUID" Desc="ChatChannel UID"/>
+      <Params Type="AccountID" Name="KickedPlayerID" Desc="Kicked player ID"/>
+    </S2CEvent>
+
+    <Command Name="ChatChannelChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Party chatting">
+      <Cmd>
+        <Params Type="EntityUID" Name="ChatUID" Desc="ChatChannel UID"/>
+        <Params Type="String" Name="ChatMessage" Desc="My message"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <S2CEvent Name="ChatChannelChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="ChatChannel Chatting message event">
+      <Params Type="AccountID" Name="SenderID" Desc="Message sender"/>
+      <Params Type="String" Name="SenderName" Desc="Message sender name"/>
+      <Params Type="String" Name="ChatMessage" Desc="Message text"/>
+    </S2CEvent>
+
+
+
+
+    <!-- ===================================================  Give Stamina ================================================== -->
+
+    <Command Name="GiveStamina" Reliable="true" Crypto="No" Trace="Debug1" Desc="Give my stamina to other player">
+      <Cmd>
+        <Params Type="AccountID" Name="TargetPlayer" Desc="Player ID to give"/>
+      </Cmd>
+      <Res>
+        <Params Type="AccountID" Name="TargetPlayer" Desc="Player ID to give"/>
+        <Params Type="uint64" Name="TimeStamp" Desc="Time since stamina sent"/>
+      </Res>
+    </Command>
+
+    
+
+    <!-- ===================================================  Debug ================================================== -->
+
+    <Command Name="SetPresetGameConfigID" Reliable="true" Crypto="No" Trace="Debug1" Desc="For debug, Change configue preset">
+      <Cmd>
+        <Params Type="uint32" Name="PresetID" Desc="Configuation preset id"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    <Command Name="GainGameResource" Reliable="true" Crypto="No" Trace="Debug1" Desc="For Debug">
+      <Cmd>
+        <Params Type="int32" Name="Resource"/>
+        <Params Type="int32" Name="Value"/>
+      </Cmd>
+      <Res>
+      </Res>
+    </Command>
+
+    
+
+  </ProtocolGroup>
+</Protocols>

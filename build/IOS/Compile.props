@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_PropertySheetDisplayName>Compile</_PropertySheetDisplayName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>__IOS__;HAVE_CONFIG_H;CURL_STATICLIB;NOMINMAX;HAVE_STDDEF_H=1;HAVE_SYS_TYPES_H=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalOptions>
+      </AdditionalOptions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <CppLanguageStandard>c++14</CppLanguageStandard>
+      <CLanguageStandard>c11</CLanguageStandard>
+      <AdditionalIncludeDirectories>./;$(SolutionDir)3rdParties/src/openssl\openssl-1.1.0f\inc32;$(SolutionDir)3rdParties\src\libiconv\libiconv-1.14\include;$(SolutionDir)3rdParties\src\lcms\lcms2-2.7\include;$(SolutionDir)3rdParties\src\freetype\freetype-2.5.5\include;$(SolutionDir)3rdParties\src\DevIL\devil-1.7.8\include;$(SolutionDir)3rdParties\src\jpeg\jpeg-9a;$(SolutionDir)3rdParties/src/libxml/libxml2/include;$(SolutionDir)Engine/src/CoreBase;$(SolutionDir)Engine/src/SFEngine;$(SolutionDir)Engine/src/CoreBase/Platform/Android;$(SolutionDir)Engine/Src/Protocol;$(SolutionDir)3rdParties/src/zlib/zlib-1.2.8;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AddModuleNamesToAssembly>..\..\bin\lib</AddModuleNamesToAssembly>
+      <LibraryDependencies>m;atomic;%(LibraryDependencies)</LibraryDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

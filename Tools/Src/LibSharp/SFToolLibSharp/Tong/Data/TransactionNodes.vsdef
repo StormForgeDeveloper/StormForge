@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NodeTypeDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://blue3k.com/1_0"
+           xsi:noNamespaceSchemaLocation="../schemas/TongScriptNodeDefinitionSchema.xsd"
+           >
+
+
+  <EnumTypeInfo Name="Result" Description="Result enumeration">
+    <Value>SUCCESS</Value>
+    <Value>UNEXPECTED</Value>
+  </EnumTypeInfo>
+
+
+  <!-- Basic types -->
+
+  <NodeTypeInfo Name="TransactionStart" IsAbstract="true" Base="TaskStart" Category="Transaction" NodeType="" Icon="alphabet.speech-balloon-orange-t-icon_16.png" Description="Game client request">
+    <Property Name="RollbackOnFailure" Type="Boolean" Default="true"/>
+    <Property Name="TimeOut" Type="Decimal" Default="-1"/>
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="Transaction" IsAbstract="true" Base="Task" Category="Transaction" NodeType="" Icon="alphabet.speech-balloon-orange-t-icon_16.png" Description="Game client request">
+    <Property Name="RollbackOnFailure" Type="Boolean" Default="true"/>
+    <Property Name="TimeOut" Type="Decimal" Default="-1"/>
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="TransactionFinishBase" IsAbstract="true" base="TaskFinish" Category="Transaction" NodeType="VisualScriptTransactionFinish" Description="Base transaction finish">
+    <Property Name="Finish" Type="Signal" AllowMultipleInput="true" Socket="Input" />
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="TransactionError" Base="TransactionFinishBase" Description="Base transaction finish">
+    <Property Name="Result" Type="Enum" TypeName="Result" Default="UNEXPECTED" AllowMultipleInput="true" Socket="Input" />
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="TransactionEnd" Base="TransactionFinishBase" Description="Base transaction finish">
+    <Property Name="Result" Type="Enum" TypeName="Result" Default="SUCCESS" AllowMultipleInput="true" Socket="Input" />
+  </NodeTypeInfo>
+
+  <!--<NodeTypeInfo Name="SubTransaction" Base="Transaction" Category="Transaction" IsAbstract="true" Icon="alphabet.speech-balloon-orange-t-icon_16.png" Description="Open sub transaction">
+    <Property Name="Successed" Type="Signal" AllowMultipleOutput="true" Socket="Output" />
+    <Property Name="Failed" Type="Signal" AllowMultipleOutput="true" Socket="Output" />
+  </NodeTypeInfo>-->
+
+  
+  <NodeTypeInfo Name="DBTransaction" Base="Transaction" Category="Transaction" IsAbstract="true" Icon="alphabet.speech-balloon-orange-t-icon_16.png" Description="Open sub transaction">
+    <Property Name="ListResult" Type="Object" AllowMultipleOutput="true" Socket="Output" />
+  </NodeTypeInfo>
+
+
+</NodeTypeDefinitions>

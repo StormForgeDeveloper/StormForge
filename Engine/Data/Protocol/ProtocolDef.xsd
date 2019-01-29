@@ -1,0 +1,280 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.StormForge.com/XMLProtocol" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://www.StormForge.com/XMLProtocol" targetNamespace="http://www.StormForge.com/XMLProtocol" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="Protocols">
+		<xs:annotation>
+			<xs:documentation>root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ProtocolGroup" maxOccurs="unbounded">
+					<xs:annotation>
+						<xs:documentation>Protocol Group</xs:documentation>
+					</xs:annotation>
+					<xs:complexType>
+						<xs:sequence>
+							<xs:choice minOccurs="0" maxOccurs="unbounded">
+								<xs:element name="Command" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Command</xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="MessageBase">
+												<xs:all>
+													<xs:element name="Cmd">
+														<xs:annotation>
+															<xs:documentation>Command parts</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Params" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+													<xs:element name="Res">
+														<xs:annotation>
+															<xs:documentation>Resule of command</xs:documentation>
+														</xs:annotation>
+														<xs:complexType>
+															<xs:sequence>
+																<xs:element name="Params" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+															</xs:sequence>
+														</xs:complexType>
+													</xs:element>
+												</xs:all>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="C2SEvent" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Client to Server Event </xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="MessageBase">
+												<xs:sequence>
+													<xs:element name="Params" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+												</xs:sequence>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+								<xs:element name="S2CEvent" minOccurs="0">
+									<xs:annotation>
+										<xs:documentation>Server to client Event </xs:documentation>
+									</xs:annotation>
+									<xs:complexType>
+										<xs:complexContent>
+											<xs:extension base="MessageBase">
+												<xs:sequence>
+													<xs:element name="Params" type="Parameter" minOccurs="0" maxOccurs="unbounded"/>
+												</xs:sequence>
+											</xs:extension>
+										</xs:complexContent>
+									</xs:complexType>
+								</xs:element>
+							</xs:choice>
+						</xs:sequence>
+						<xs:attribute name="Name" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>Protocol Name</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="GenParameterContext" type="xs:boolean" use="optional" default="true">
+							<xs:annotation>
+								<xs:documentation>No default context parameter</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="GenParameterRouteContext" type="xs:boolean" use="optional" default="false">
+							<xs:annotation>
+								<xs:documentation>Description</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="IsMobile" type="xs:boolean" use="optional" default="false"/>
+						<xs:attribute name="IsServer" type="xs:boolean" use="optional" default="false">
+							<xs:annotation>
+								<xs:documentation>Is server policy</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+            <xs:attribute name="GenParameterRouteHopCount" type="xs:boolean" use="optional" default="false"/>
+
+            <xs:attribute name="GenNet" type="xs:boolean" use="optional" default="false">
+							<xs:annotation>
+								<xs:documentation>Generate Net Policy</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="GenCSharp" type="xs:boolean" use="optional" default="false">
+							<xs:annotation>
+								<xs:documentation>Generate CSharp</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+						<xs:attribute name="Desc" type="xs:string" use="required">
+							<xs:annotation>
+								<xs:documentation>Description</xs:documentation>
+							</xs:annotation>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="Parameter">
+		<xs:annotation>
+			<xs:documentation>Message parameter</xs:documentation>
+		</xs:annotation>
+		<xs:attribute name="Name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Name of Parameter</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Type" use="required">
+			<xs:annotation>
+				<xs:documentation>Type of parameter</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="intptr"/>
+          <xs:enumeration value="String"/>
+					<xs:enumeration value="int8"/>
+					<xs:enumeration value="uint8"/>
+					<xs:enumeration value="int16"/>
+					<xs:enumeration value="uint16"/>
+					<xs:enumeration value="int32"/>
+					<xs:enumeration value="uint32"/>
+					<xs:enumeration value="int64"/>
+					<xs:enumeration value="uint64"/>
+					<xs:enumeration value="uint8"/>
+					<xs:enumeration value="WORD"/>
+					<xs:enumeration value="DWORD"/>
+					<xs:enumeration value="QWORD"/>
+					<xs:enumeration value="FLOAT"/>
+					<xs:enumeration value="TransactionID"/>
+          <xs:enumeration value="ClusterID"/>
+					<xs:enumeration value="AccountID"/>
+          <xs:enumeration value="PlayerID"/>
+          <xs:enumeration value="FacebookUID"/>
+          <xs:enumeration value="AuthTicket"/>
+					<xs:enumeration value="GameInsID"/>
+					<xs:enumeration value="GameInsUID"/>
+          <xs:enumeration value="PartyUID"/>
+
+          <xs:enumeration value="NotificationType"/>
+
+          <xs:enumeration value="RankingType"/>
+          <xs:enumeration value="PlayerRole"/>
+          <xs:enumeration value="GameStateID"/>
+          <xs:enumeration value="GameWinner"/>
+          <xs:enumeration value="PlayerKilledReason"/>
+          <xs:enumeration value="PlayerRevealedReason"/>
+          
+          <xs:enumeration value="ClusterType"/>
+          <xs:enumeration value="ClusterMembership"/>
+          <xs:enumeration value="ServiceStatus"/>
+
+          <xs:enumeration value="GameID"/>
+
+          <xs:enumeration value="MatchingPlayerInformation"/>
+          <xs:enumeration value="MatchingQueueTicket"/>
+          <xs:enumeration value="LocalUID"/>
+
+          <xs:enumeration value="Vector2"/>
+					<xs:enumeration value="Vector3"/>
+					<xs:enumeration value="Result"/>
+          <xs:enumeration value="NetClass"/>
+					<xs:enumeration value="NetAddress"/>
+					<xs:enumeration value="EntityID"/>
+					<xs:enumeration value="EntityUID"/>
+					<xs:enumeration value="ServerID"/>
+					<xs:enumeration value="RouteContext"/>
+          <xs:enumeration value="ServiceInformation"/>
+          <xs:enumeration value="PlayerInformation"/>
+          <xs:enumeration value="RankingPlayerInformation"/>
+          <xs:enumeration value="FriendInformation"/>
+          <xs:enumeration value="ServerFriendInformation"/>
+          <xs:enumeration value="TotalRankingPlayerInformation"/>
+          <xs:enumeration value="PerformanceCounterInfo"/>
+          <xs:enumeration value="PerformanceCounterInstanceInfo"/>
+
+        </xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="IsArray" type="xs:boolean" use="optional">
+			<xs:annotation>
+				<xs:documentation>TRUE for Array parameter</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Desc" type="xs:string" use="optional">
+			<xs:annotation>
+				<xs:documentation>Description</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="MessageBase">
+		<xs:attribute name="Name" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Message Name</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+		<xs:attribute name="Reliable" type="xs:boolean" use="required"/>
+		<xs:attribute name="Crypto" use="required">
+			<xs:annotation>
+				<xs:documentation>Encryption method</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="No"/>
+					<xs:enumeration value="Mask"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Trace" use="required">
+			<xs:annotation>
+				<xs:documentation>Debug trace channel</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:whiteSpace value="preserve"/>
+					<xs:enumeration value="Debug"/>
+					<xs:enumeration value="Debug1"/>
+					<xs:enumeration value="Debug2"/>
+					<xs:enumeration value="Debug3"/>
+          <xs:enumeration value="Debug4"/>
+          <xs:enumeration value="Debug5"/>
+          <xs:enumeration value="Debug6"/>
+					<xs:enumeration value=""/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+    <xs:attribute name="Usage" use="optional" default="None">
+      <xs:annotation>
+        <xs:documentation>Message usage</xs:documentation>
+      </xs:annotation>
+      <xs:simpleType>
+        <xs:restriction base="xs:string">
+          <xs:enumeration value="None"/>
+          <xs:enumeration value="ClusterDataRead"/>
+          <xs:enumeration value="ClusterDataWrite"/>
+          <xs:enumeration value="ClusterStatusRead"/>
+          <xs:enumeration value="ClusterStatusWrite"/>
+        </xs:restriction>
+      </xs:simpleType>
+    </xs:attribute>
+    <xs:attribute name="Checksum" use="optional" default="NONE">
+			<xs:annotation>
+				<xs:documentation>Checksum type</xs:documentation>
+			</xs:annotation>
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="NONE"/>
+					<xs:enumeration value="CRC32"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+		<xs:attribute name="Desc" type="xs:string" use="required">
+			<xs:annotation>
+				<xs:documentation>Description</xs:documentation>
+			</xs:annotation>
+		</xs:attribute>
+	</xs:complexType>
+</xs:schema>

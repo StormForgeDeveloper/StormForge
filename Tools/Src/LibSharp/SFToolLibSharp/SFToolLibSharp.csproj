@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4B5D5C7A-8B72-4C1F-BDAA-FA252BB8BE92}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SFTool</RootNamespace>
+    <AssemblyName>SFToolLibSharp</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>..\..\..\bin\Win\x64Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>..\..\..\bin\Win\x64Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.CSharp">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.5\Microsoft.CSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssetDB\AssetRef.cs" />
+    <Compile Include="AssetDB\Asset\AssetXML.cs" />
+    <Compile Include="AssetProcessor\AssetBuildContext.cs" />
+    <Compile Include="AssetProcessor\AssetProcessor.cs" />
+    <Compile Include="AssetProcessor\AssetProcessorPipeline.cs" />
+    <Compile Include="AssetDB\AssetDBObject.cs" />
+    <Compile Include="AssetProcessor\AssetFilter.cs" />
+    <Compile Include="AssetDB\Asset\AssetData.cs" />
+    <Compile Include="AssetDB\AssetDataBase.cs" />
+    <Compile Include="AssetDB\AssetGraphNode.cs" />
+    <Compile Include="AssetDB\Asset.cs" />
+    <Compile Include="AssetDB\Asset\AssetC.cs" />
+    <Compile Include="AssetDB\Asset\AssetCPP.cs" />
+    <Compile Include="AssetDB\Asset\AssetCS.cs" />
+    <Compile Include="AssetDB\Asset\AssetExe.cs" />
+    <Compile Include="AssetDB\Asset\AssetH.cs" />
+    <Compile Include="AssetDB\Asset\AssetFile.cs" />
+    <Compile Include="AssetDB\Asset\AssetLib.cs" />
+    <Compile Include="AssetDB\Asset\AssetObj.cs" />
+    <Compile Include="AssetDB\Asset\AssetVCCSProject.cs" />
+    <Compile Include="AssetDB\Asset\AssetVCProject.cs" />
+    <Compile Include="AssetDB\Asset\AssetVCSolution.cs" />
+    <Compile Include="AssetProcessor\Processor\AssetProcessorCPP.cs" />
+    <Compile Include="AssetProcessor\Processor\AssetProcessorExe.cs" />
+    <Compile Include="AssetProcessor\Processor\AssetProcessorLib.cs" />
+    <Compile Include="BuildTargets.cs" />
+    <Compile Include="FileUtil.cs" />
+    <Compile Include="PathTool.cs" />
+    <Compile Include="ResultCode\ResultCodeExporterH.cs" />
+    <Compile Include="ResultCode\ResultCodeExporterSharp.cs" />
+    <Compile Include="ResultCode\ResultCodeProcessor.cs" />
+    <Compile Include="ResultCode\ResultCodeSchemaExt.cs" />
+    <Compile Include="ResultCode\SFResultCodeFacilitySchema.cs" />
+    <Compile Include="ResultCode\SFResultCodeSchema.cs" />
+    <Compile Include="Schema\SFBuildProcessorSchema.cs" />
+    <Compile Include="Tong\CategoryUniqueIdValidator.cs" />
+    <Compile Include="Tong\DocVersionTransforms\TongScriptMigrator.cs" />
+    <Compile Include="Tong\Expression\DynamicDomNode.cs" />
+    <Compile Include="Tong\Expression\Expression.cs" />
+    <Compile Include="Tong\Expression\ExpressionCommands.cs" />
+    <Compile Include="Tong\Expression\ExpressionDlg.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tong\Expression\ExpressionDlg.Designer.cs">
+      <DependentUpon>ExpressionDlg.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tong\Expression\ExpressionManager.cs" />
+    <Compile Include="Tong\MissingScriptNode.cs" />
+    <Compile Include="Tong\schemas\TongScriptNodeDefinitionSchema.cs">
+      <DependentUpon>TongScriptNodeDefinitionSchema.xsd</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="Tong\schemas\TongScriptNodeDefinitionSchemaExt.cs" />
+    <Compile Include="Tong\schemas\TongScriptTypeManager.cs" />
+    <Compile Include="Tong\schemas\TongScriptTypes.cs" />
+    <Compile Include="Tong\ScriptAnnotation.cs" />
+    <Compile Include="Tong\ScriptDocument.cs" />
+    <Compile Include="Tong\ScriptGroup.cs" />
+    <Compile Include="Tong\ScriptGroupReference.cs" />
+    <Compile Include="Tong\ScriptGroupSocket.cs" />
+    <Compile Include="Tong\ScriptLayerFolder.cs" />
+    <Compile Include="Tong\ScriptNode.cs" />
+    <Compile Include="Tong\ScriptNodeConnection.cs" />
+    <Compile Include="Tong\ScriptNodeDefinitionManager.cs" />
+    <Compile Include="Tong\ScriptNodeElementInfo.cs" />
+    <Compile Include="Tong\ScriptNodeElementType.cs" />
+    <Compile Include="Tong\ScriptNodeLinkCache.cs" />
+    <Compile Include="Tong\ScriptNodeProperties.cs" />
+    <Compile Include="Tong\ScriptNodeRef.cs" />
+    <Compile Include="Tong\ScriptNodeReference.cs" />
+    <Compile Include="Tong\ScriptNodeSocket.cs" />
+    <Compile Include="Tong\ScriptPrototype.cs" />
+    <Compile Include="Tong\ScriptPrototypeFolder.cs" />
+    <Compile Include="Tong\ScriptReader.cs" />
+    <Compile Include="Tong\ScriptRenderer.cs" />
+    <Compile Include="Tong\ScriptTemplate.cs" />
+    <Compile Include="Tong\ScriptTemplateFolder.cs" />
+    <Compile Include="Tong\ScriptValidator.cs" />
+    <Compile Include="Tong\ScriptWriter.cs" />
+    <Compile Include="Tong\StringHashRule.cs" />
+    <Compile Include="Tong\TongScript.cs" />
+    <Compile Include="Tong\TongScriptObjectTable.cs" />
+    <Compile Include="ToolSetting.cs" />
+    <Compile Include="ToolApplication.cs" />
+    <Compile Include="ToolSettingValue.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="AppConfig.cs" />
+    <Compile Include="ToolDebug.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Atgi\Atf.Atgi.csproj">
+      <Project>{d1fa9a85-9359-4725-a50f-8a67a77d700c}</Project>
+      <Name>Atf.Atgi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Core\Atf.Core.csproj">
+      <Project>{9d1835b6-d1c2-44ba-bae1-05c6ec442d2f}</Project>
+      <Name>Atf.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Gui.WinForms\Atf.Gui.WinForms.csproj">
+      <Project>{7c36a258-9102-420d-b80a-5eb5717644b6}</Project>
+      <Name>Atf.Gui.WinForms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Gui\Atf.Gui.csproj">
+      <Project>{4765c2a7-f989-40db-bc12-fcd67025b93f}</Project>
+      <Name>Atf.Gui</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.IronPython\Atf.IronPython.csproj">
+      <Project>{7f794c24-7a8d-4d21-b443-f03509669f89}</Project>
+      <Name>Atf.IronPython</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Perforce\Atf.Perforce.csproj">
+      <Project>{c7a306e0-32ae-4053-8882-e1a1e702c139}</Project>
+      <Name>Atf.Perforce</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\Engine\Src\CoreSharp\CoreSharp.csproj">
+      <Project>{de89b4bf-feb7-4fee-ab5f-85d286295bd7}</Project>
+      <Name>CoreSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Tong\Data\buildPipelineNodes.vsdef">
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tong\Data\ControlNodes.vsdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tong\Data\GameRequest.vsdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tong\Data\InterfaceNodes.vsdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tong\Data\ListNodes.vsdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tong\Data\mathNodes.vsdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tong\Data\ObjectNodes.vsdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tong\Data\StateNodes.vsdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tong\Data\TransactionNodes.vsdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Tong\Data\TaskNodes.vsdef">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Tong\schemas\GenSchemaDef.bat" />
+    <Content Include="Tong\schemas\TongScriptNodeDefinitionSchema.xsd">
+      <Generator>XSDGenVS</Generator>
+      <CustomToolNamespace>CS,TongScriptSchema</CustomToolNamespace>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tong\DocVersionTransforms\downgrades\" />
+    <Folder Include="Tong\DocVersionTransforms\upgrades\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Tong\Expression\ExpressionDlg.resx">
+      <DependentUpon>ExpressionDlg.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

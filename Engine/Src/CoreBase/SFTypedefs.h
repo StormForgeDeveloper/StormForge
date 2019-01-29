@@ -1,0 +1,735 @@
+////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) 2016 Kyungkun Ko
+// 
+// Author : KyungKun Ko
+//
+// Description : Base type definitions. 
+//	
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma once
+
+
+// Decide target architecture
+// See https://sourceforge.net/p/predef/wiki/Architectures/
+#if __x86_64__ || __ppc64__ || __LP64__ || _WIN64 || _M_ARM64 || _M_X64 || _M_AMD64 || __aarch64__
+	#define X64	true
+#else
+	#define X32	true
+#endif
+
+
+// define sse flagss
+#if defined(__x86_64__) || defined(_M_X64) || defined(_M_IX86) || defined(__i386__)
+	#define SF_SIMD_SSE
+	#define SF_SIMD_SSE42
+	#define SF_SIMD_AVX
+#elif defined(__arm__ ) || defined(_M_ARM)
+// TODO: detect ARM8 only
+	#define SF_SIMD_NEON
+#elif defined(__powerpc__ ) || defined(_M_PPC)
+	#define SF_SIMD_SSE
+	#define SF_SIMD_SSE42
+	#define SF_SIMD_AVX
+#elif defined(__mips__ )
+	#define SF_SIMD_SSE
+	#define SF_SIMD_SSE42
+	#define SF_SIMD_AVX
+#else
+#endif
+
+
+
+#define SF_PLATFORM_WINDOWS		1
+#define SF_PLATFORM_LINUX		2
+#define SF_PLATFORM_ANDROID		3
+#define SF_PLATFORM_IOS			4
+
+
+// Decide platform
+#if __IOS__
+
+#define SF_PLATFORM SF_PLATFORM_IOS
+
+#elif defined(_WIN32) || defined(_WIN64)
+
+#define SF_PLATFORM SF_PLATFORM_WINDOWS
+
+//#elif __GNUC__
+#elif __ANDROID__
+
+#define SF_PLATFORM SF_PLATFORM_ANDROID
+
+#else // All others are Linux
+
+#define SF_PLATFORM SF_PLATFORM_LINUX
+
+#endif
+
+
+
+
+//////////////////////////////////////////////////
+//
+//  Common headers
+//
+
+#include <thread>
+#include <mutex>
+#include <chrono>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <limits.h>
+#include <stddef.h>
+#include <stdarg.h>
+#include <errno.h>
+#include <float.h>
+#include <iostream>
+#include <string>
+#include <string.h>
+
+#include <limits>
+#include <limits.h>
+#include <ctime>
+#include <iomanip>
+
+#include <time.h>
+#include <memory.h>
+#include <math.h>
+#include <memory>
+#include <algorithm>
+#include <array>
+#include <unordered_map>
+#include <unordered_set>
+
+#include <vector>
+#include <list>
+#include <queue>
+#include <assert.h>
+#include <atomic>
+
+#include <functional>
+#include <condition_variable>
+
+
+
+
+//////////////////////////////////////////////////
+//
+//  Windows headers
+//
+
+
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+
+#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS      // some CString constructors will be explicit
+
+#ifndef VC_EXTRALEAN
+#define VC_EXTRALEAN            // Exclude rarely-used stuff from Windows headers
+#endif
+
+#ifndef _USE_MATH_DEFINES
+#define _USE_MATH_DEFINES
+#endif
+
+#ifdef _USE_32BIT_TIME_T
+#error "Do not use 32bit time_t definition"
+#endif
+
+#ifndef NOMINMAX
+#define NOMINMAX
+#endif 
+
+#define WIN32_LEAN_AND_MEAN
+
+#include <SDKDDKVer.h>
+#include <crtdbg.h>
+#include <SDKDDKVer.h>
+//#include <Winnt.h>
+#include <windows.h>
+#include <stdint.h>
+
+#include <psapi.h>
+#include <DbgHelp.h>
+
+#include <crtdbg.h>
+#include <tchar.h>
+//#include <atltrace.h>
+#include <mbstring.h>
+//#include <atlcore.h>
+//#include <cstringt.h>
+#include <winsock2.h>
+#include <Mswsock.h>
+#include <Ws2tcpip.h>
+#include <BaseTsd.h>
+#include <wmsdkidl.h>
+#include <shlwapi.h>
+#include <intrin.h>
+#include <emmintrin.h>
+#include <concurrent_queue.h>
+#include <concurrent_unordered_map.h>
+#include <stdint.h>
+#include <sys/types.h>
+#include <malloc.h>
+
+#define timegm _mkgmtime
+
+#define INVALID_NATIVE_HANDLE_VALUE INVALID_HANDLE_VALUE
+
+typedef HWND NativeWindow;
+typedef unsigned int uint;
+
+#if !X32
+#define HAVE_VULKAN 1
+#endif
+
+
+
+
+//////////////////////////////////////////////////
+//
+//  Linux headers
+//
+
+
+#elif SF_PLATFORM == SF_PLATFORM_LINUX
+
+#include <pthread.h>
+#include <sys/resource.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/syscall.h>
+#include <sys/stat.h>
+#include <execinfo.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <libgen.h>
+#include <errno.h>
+#include <signal.h>
+#include <sys/socket.h>
+//#include <linux/in.h>
+//#include <linux/in6.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <stdint.h>
+#include <semaphore.h>
+#include <my_global.h>
+#include <malloc.h>
+#include <aio.h>
+
+typedef long long LONGLONG;
+typedef unsigned long long ULONGLONG;
+typedef const char* LPCSTR;
+typedef char* LPSTR;
+typedef const wchar_t* LPCWSTR;
+typedef wchar_t* LPWSTR;
+typedef void* PVOID;
+typedef wchar_t WCHAR;
+
+typedef unsigned int uint;
+typedef int INT;
+
+typedef short SHORT;
+typedef unsigned int DWORD;
+typedef unsigned short WORD;
+
+
+// Additional alise type
+typedef int8_t				SBYTE;
+typedef SBYTE				*PSBYTE;
+
+
+typedef intptr_t HANDLE;
+typedef HANDLE HMODULE;
+
+typedef intptr_t NativeWindow;
+
+#define INVALID_NATIVE_HANDLE_VALUE NativeHandle(-1)
+
+#define __forceinline __attribute__((always_inline))
+
+#define TRUE (1)
+#define FALSE (0)
+
+
+
+#define IN
+#define OUT
+
+#define SOCKET int
+
+
+
+#define MAX_PATH 512
+
+//#define HAVE_EGL 0
+//#define HAVE_GLES 0
+
+#define HAVE_VULKAN 0
+
+
+
+
+
+//////////////////////////////////////////////////
+//
+//  Android headers
+//
+
+
+#elif SF_PLATFORM == SF_PLATFORM_ANDROID
+
+
+#include <pthread.h>
+#include <time.h>
+#include <semaphore.h>
+#include <assert.h>
+#include <malloc.h>
+
+#include <sys/resource.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/syscall.h>
+#include <sys/stat.h>
+
+#include <unistd.h>
+#include <fcntl.h>
+#include <libgen.h>
+#include <errno.h>
+#include <signal.h>
+#include <sys/socket.h>
+#include <linux/in6.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netinet/tcp.h>
+#include <stdint.h>
+#include <unwind.h>
+#include <dlfcn.h>
+#include <android/log.h>
+#include <android/native_window.h>
+
+
+#if __ANDROID_API__ < 23
+time_t timegm_Internal(struct tm * a_tm);
+#define timegm timegm_Internal
+#endif
+
+
+typedef int64_t LONGLONG;
+typedef uint64_t ULONGLONG;
+typedef const char* LPCSTR;
+typedef char* LPSTR;
+typedef const wchar_t* LPCWSTR;
+typedef wchar_t* LPWSTR;
+typedef void* PVOID;
+typedef wchar_t WCHAR;
+
+typedef unsigned int uint;
+typedef int INT;
+
+typedef short SHORT;
+typedef unsigned int DWORD;
+typedef unsigned short WORD;
+
+
+// Additional alise type
+typedef int8_t				SBYTE;
+typedef SBYTE				*PSBYTE;
+
+
+typedef intptr_t HANDLE;
+typedef HANDLE HMODULE;
+
+typedef struct ANativeWindow* NativeWindow;
+
+#define INVALID_NATIVE_HANDLE_VALUE NativeHandle(-1)
+
+#define __forceinline __attribute__((always_inline))
+
+#define TRUE (1)
+#define FALSE (0)
+
+
+
+#define IN
+#define OUT
+
+#define SOCKET int
+#define INVALID_SOCKET (-1)
+
+
+#define MAX_PATH 512
+
+
+#define EPOLL 1
+
+#define HAVE_EGL 1
+#define HAVE_GLES 1
+#define HAVE_VULKAN 1
+
+
+
+
+
+//////////////////////////////////////////////////
+//
+//  IOS headers
+//
+
+
+#elif SF_PLATFORM == SF_PLATFORM_IOS
+
+
+#include <pthread.h>
+#include <time.h>
+#include <semaphore.h>
+#include <assert.h>
+
+#include <sys/resource.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <sys/syscall.h>
+#include <sys/stat.h>
+
+#include <unistd.h>
+#include <fcntl.h>
+#include <libgen.h>
+#include <errno.h>
+#include <signal.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netinet/tcp.h>
+#include <stdint.h>
+#include <dlfcn.h>
+
+
+
+
+typedef int64_t LONGLONG;
+typedef uint64_t ULONGLONG;
+typedef const char* LPCSTR;
+typedef char* LPSTR;
+typedef const wchar_t* LPCWSTR;
+typedef wchar_t* LPWSTR;
+typedef void* PVOID;
+typedef wchar_t WCHAR;
+
+typedef unsigned int uint;
+typedef int INT;
+
+typedef short SHORT;
+typedef unsigned int DWORD;
+typedef unsigned short WORD;
+
+
+// Additional alise type
+typedef int8_t				SBYTE;
+typedef SBYTE				*PSBYTE;
+
+
+typedef void* HANDLE;
+typedef HANDLE HMODULE;
+
+typedef struct ANativeWindow* NativeWindow;
+
+#define INVALID_NATIVE_HANDLE_VALUE NativeHandle(-1)
+
+
+
+#define IN
+#define OUT
+
+#define SOCKET int
+#define INVALID_SOCKET (-1)
+
+#define TRUE 1
+#define FALSE 0
+
+
+#define MAX_PATH 512
+
+
+#define KQUEUE 1
+
+
+#define HAVE_EGL 0
+#define HAVE_GLES 1
+//#define HAVE_VULKAN 1
+
+
+#else
+
+#ifndef SWIG
+#error "Not supported platform"
+#endif
+
+#endif
+
+
+
+
+
+//////////////////////////////////////////////////
+//
+//  Common types
+//
+
+
+
+// Additional alias type
+typedef int8_t				SBYTE;
+typedef SBYTE				*PSBYTE;
+
+typedef HANDLE				NativeHandle;
+
+
+// Thread synchronize counter type
+#if defined(X64)
+
+// System sync counter type
+typedef uint64_t	CounterType;
+typedef int64_t	SignedCounterType;
+
+// System atomic integer type
+typedef uint64_t	SysUInt;
+typedef int64_t	SysInt;
+
+#else
+
+// System sync counter type
+typedef uint32_t	CounterType;
+typedef int32_t	SignedCounterType;
+
+// System atomic integer type
+typedef int		SysInt;
+typedef unsigned int		SysUInt;
+
+
+
+#endif
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//	Keywords
+//
+
+
+
+#if __GNUC__ || SF_PLATFORM == SF_PLATFORM_IOS
+
+#define FORCEINLINE __attribute__((always_inline))
+//#define STDCALL __attribute__((stdcall))
+#define STDCALL 
+#define FASTCALL __attribute__((fastcall))
+#define TEMPLATE_EXTERN
+
+// disable unreferenced label warnning (Proc_End)
+#define DO_PRAGMA(x) _Pragma (#x)
+#define COMPILETIME_TODO(x) DO_PRAGMA(message ("TODO - " #x))
+#define COMPILETIME_MESSAGE(x) DO_PRAGMA(message ("Message - " #x))
+#define COMPILETIME_WARNING(x) DO_PRAGMA(message ("Warning - " #x))
+
+#define DLL_IMPORT __attribute__((visibility("default")))
+#define SFDLL_EXPORT __attribute__((visibility("default"))) extern "C"
+#define SYSTEMAPI 
+
+#else
+
+#define FORCEINLINE __forceinline
+#define STDCALL __stdcall
+#define FASTCALL __fastcall
+#define TEMPLATE_EXTERN extern
+
+// disable unreferenced label warnning (Proc_End)
+#pragma warning( disable : 4102 )
+#pragma warning( disable : 4996 )
+
+#define DO_PRAGMA(x) __pragma(#x)
+#define COMPILETIME_TODO(x) DO_PRAGMA(comment ("TODO - " #x))
+#define COMPILETIME_MESSAGE(x) DO_PRAGMA(comment ("Message - " #x))
+#define COMPILETIME_WARNING(x) DO_PRAGMA(comment ("Warning - " #x))
+
+#define SFDLL_IMPORT extern "C" __declspec(dllimport)
+#define SFDLL_EXPORT extern "C" __declspec(dllexport)
+#define SYSTEMAPI APIENTRY
+
+
+
+
+#endif
+
+
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
+//	common SF types
+//
+
+#include "SFResult.h"
+
+namespace SF {
+
+
+
+
+	typedef std::chrono::steady_clock ClockType;
+	typedef std::chrono::duration<uint> DurationSec;
+	typedef std::chrono::time_point<ClockType, DurationSec> TimeStampSec;
+
+	typedef std::chrono::duration<uint, std::milli> DurationMS;
+	typedef std::chrono::time_point<ClockType, DurationMS> TimeStampMS;
+	typedef std::chrono::system_clock::time_point SystemTimeStampMS;
+
+	typedef std::chrono::duration<uint64_t, std::micro> DurationMicro;
+	typedef std::chrono::time_point<ClockType, DurationMicro> TimeStampMicro;
+
+
+	extern const TimeStampMS TimeStampMS_Zero;
+	extern const DurationMS  DurationMS_Zero;
+
+
+	typedef std::thread::id ThreadID;
+	typedef std::thread::native_handle_type			ThreadHandle;
+
+
+	struct uint128_t
+	{
+		uint64_t Low;
+		uint64_t High;
+	};
+
+
+
+
+	// Network class definition
+	enum class NetClass : uint32_t
+	{
+		Unknown,
+		Client,
+		Server,
+		//Entity,
+		Login,
+		GameInstance,
+		GameMaster,
+		Game,
+		Max
+	};
+
+#pragma pack(push)
+#pragma pack(4)
+
+
+	////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Network Address information
+	//
+
+
+	enum class SockFamily : uint8_t
+	{
+		None = 0,
+		IPV4,// = AF_INET,
+		IPV6,// = AF_INET6
+	};
+
+	enum class SockType
+	{
+		Stream,// = SOCK_STREAM,       // TCP
+		DataGram,// = SOCK_DGRAM,     // UDP
+	};
+
+
+	////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Network Address information
+	//
+
+	struct NetAddress
+	{
+		enum {
+			MAX_NETNAME = 70,
+		};
+		char Address[MAX_NETNAME] = "";
+		uint16_t Port = 0;
+		SockFamily SocketFamily = SockFamily::None;
+
+		inline NetAddress() : Port(0){}
+		NetAddress(SockFamily sockFamily, const char* strAdr, uint16_t port = 0);
+		NetAddress(const char* strAdr, uint16_t port = 0);
+		NetAddress(const sockaddr_in& sockAddr);
+		NetAddress(const sockaddr_in6& sockAddr);
+		NetAddress(const sockaddr_storage& sockAddr);
+		//NetAddress(int);
+
+		explicit operator sockaddr_in() const;
+		explicit operator sockaddr_in6() const;
+		explicit operator sockaddr_storage() const;
+        
+        // sizeof(sockaddr_in) for IPV4, and sizeof(sockaddr_in6) for IPV6 socket
+        size_t GetSockAddrSize() const;
+
+		NetAddress& operator = (const sockaddr_in& sockAddr);
+		NetAddress& operator = (const sockaddr_in6& sockAddr);
+		NetAddress& operator = (const sockaddr_storage& sockAddr);
+		NetAddress& operator = (const NetAddress& src);
+
+		bool operator == (const NetAddress& op) const;
+	};
+
+
+
+#pragma pack(pop)
+
+
+
+	template <typename T, std::size_t N>
+	constexpr std::size_t countof(T const (&)[N]) noexcept	{ return N; }
+
+	#define ContainerPtrFromMember(ContainerTypeT, member, memberPtr) ((ContainerTypeT*)((uint8_t*)(memberPtr) - offsetof(ContainerTypeT,member)))
+
+
+#ifndef SWIG
+
+	template<class ... ArgTypes>
+	inline void unused(ArgTypes...) {}
+
+#endif
+
+
+
+	Result GetLastResultCode();
+
+
+	template <typename DataType>
+	constexpr DataType DefaultValue() { return DataType(nullptr); }
+
+	template<> constexpr char DefaultValue<char>() { return 0; }
+	template<> constexpr int64_t DefaultValue<int64_t>() { return 0; }
+	template<> constexpr uint64_t DefaultValue<uint64_t>() { return 0; }
+	template<> constexpr int32_t DefaultValue<int32_t>() { return 0; }
+	template<> constexpr uint32_t DefaultValue<uint32_t>() { return 0; }
+	template<> constexpr int16_t DefaultValue<int16_t>() { return 0; }
+	template<> constexpr uint16_t DefaultValue<uint16_t>() { return 0; }
+	template<> constexpr int8_t DefaultValue<int8_t>() { return 0; }
+	template<> constexpr uint8_t DefaultValue<uint8_t>() { return 0; }
+	template<> constexpr float DefaultValue<float>() { return 0; }
+	template<> constexpr double DefaultValue<double>() { return 0; }
+
+	template<> inline NetAddress DefaultValue<NetAddress>() { return NetAddress(); }
+};
+
+
+#include "SFTypedefs.inl"
+#include "ResultCode/SFResultCodeSystem.h"
+
+
+

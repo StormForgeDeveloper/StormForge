@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<_p0:Tong xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Tong="http://www.blue3k.com/" xmlns:_p0="Tong">
+	<_p0:module xsi:type="_p0:sampleGameGetRankingList" name="sampleGameGetRankingList" label="sampleGameGetRankingList" x="-32" y="448" />
+	<_p0:module xsi:type="_p0:sampleGameGetRankingListResult" name="sampleGameGetRankingListResult" label="sampleGameGetRankingListResult" x="1856" y="384" />
+	<_p0:module xsi:type="_p0:If" name="If" label="If" x="352" y="704" />
+	<_p0:module xsi:type="_p0:&lt;=" name="&lt;=" label="&lt;=" x="224" y="704" />
+	<_p0:module xsi:type="_p0:TransactionError" name="TransactionError" label="TransactionError" x="672" y="736" />
+	<_p0:module xsi:type="_p0:sampleDBGetRankingList" name="sampleDBGetRankingList" label="sampleDBGetRankingList" x="960" y="448" />
+	<_p0:module xsi:type="_p0:WaitAll" name="WaitAll" label="WaitAll" x="672" y="448" />
+	<_p0:module xsi:type="_p0:&lt;" name="&lt;" label="&lt;" x="288" y="576" />
+	<_p0:module xsi:type="_p0:If" name="If_1" label="If" x="448" y="576" />
+	<_p0:module xsi:type="_p0:TransactionError" name="TransactionError_1" label="TransactionError" x="1216" y="736" />
+	<_p0:module xsi:type="_p0:ListForeach" name="ListForeach" label="ListForeach" x="1184" y="512" />
+	<_p0:module xsi:type="_p0:ListAppend" name="ListAppend" label="ListAppend" x="1568" y="544" />
+	<_p0:module xsi:type="_p0:CloneAs" name="CloneAs" label="CloneAs" x="1408" y="576" TargetType="GameFriendInfo" />
+	<_p0:module xsi:type="_p0:ObjectGetOrCreate" name="ObjectGetOrCreate" label="ResultObjectList" x="1408" y="352" />
+	<_p0:connection outputModule="sampleGameGetRankingList" outputPin="Start" inputModule="If_1" inputPin="Activate" />
+	<_p0:connection outputModule="If_1" outputPin="True" inputModule="WaitAll" inputPin="Start" />
+	<_p0:connection outputModule="If" outputPin="True" inputModule="WaitAll" inputPin="Start" />
+	<_p0:connection outputModule="If_1" outputPin="False" inputModule="TransactionError" inputPin="Finish" />
+	<_p0:connection outputModule="If" outputPin="False" inputModule="TransactionError" inputPin="Finish" />
+	<_p0:connection outputModule="sampleGameGetRankingList" outputPin="StartRank" inputModule="&lt;" inputPin="a" />
+	<_p0:connection outputModule="sampleGameGetRankingList" outputPin="Count" inputModule="&lt;=" inputPin="a" />
+	<_p0:connection outputModule="&lt;=" outputPin="Result" inputModule="If" inputPin="Condition" />
+	<_p0:connection outputModule="&lt;" outputPin="Result" inputModule="If_1" inputPin="Condition" />
+	<_p0:connection outputModule="sampleGameGetRankingList" outputPin="Start" inputModule="If" inputPin="Activate" />
+	<_p0:connection outputModule="WaitAll" outputPin="Successed" inputModule="sampleDBGetRankingList" inputPin="Start" />
+	<_p0:connection outputModule="WaitAll" outputPin="Failed" inputModule="TransactionError" inputPin="Finish" />
+	<_p0:connection outputModule="sampleGameGetRankingList" outputPin="StartRank" inputModule="sampleDBGetRankingList" inputPin="StartRank" />
+	<_p0:connection outputModule="sampleGameGetRankingList" outputPin="Count" inputModule="sampleDBGetRankingList" inputPin="Count" />
+	<_p0:connection outputModule="sampleDBGetRankingList" outputPin="ListResult" inputModule="ListForeach" inputPin="ListPtr" />
+	<_p0:connection outputModule="sampleDBGetRankingList" outputPin="Successed" inputModule="ListForeach" inputPin="Activate" />
+	<_p0:connection outputModule="sampleDBGetRankingList" outputPin="Failed" inputModule="TransactionError_1" inputPin="Finish" />
+	<_p0:connection outputModule="ListForeach" outputPin="CurrentItem" inputModule="CloneAs" inputPin="Source" />
+	<_p0:connection outputModule="CloneAs" outputPin="Value" inputModule="ListAppend" inputPin="Item" />
+	<_p0:connection outputModule="ListForeach" outputPin="LoopTick" inputModule="ListAppend" inputPin="Activate" />
+	<_p0:connection outputModule="ObjectGetOrCreate" outputPin="Value" inputModule="ListAppend" inputPin="ListPtr" />
+	<_p0:connection outputModule="ListForeach" outputPin="Finished" inputModule="sampleGameGetRankingListResult" inputPin="Finish" />
+	<_p0:connection outputModule="ObjectGetOrCreate" outputPin="Value" inputModule="sampleGameGetRankingListResult" inputPin="RankingList" />
+	<_p0:prototypeFolder />
+	<_p0:templateFolder name="_TemplateRoot_" />
+</_p0:Tong>

@@ -1,0 +1,37 @@
+////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) 2016 Kyungkun Ko
+// 
+// Author : KyungKun Ko
+//
+// Description : Resource Factory
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+#pragma once
+
+#include "Object/SFSharedObject.h"
+
+
+namespace SF
+{
+
+	////////////////////////////////////////////////////////////////////
+	//
+	//	Resource Manager
+	//
+	class ResourceFactory
+	{
+	public:
+		ResourceFactory();
+		virtual ~ResourceFactory();
+
+		// Create resource
+		ResourcePtr CreateResource(FixedString resType);
+	};
+	
+
+
+}
+

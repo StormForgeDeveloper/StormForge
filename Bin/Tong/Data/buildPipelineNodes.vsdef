@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NodeTypeDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://blue3k.com/1_0"
+           xsi:noNamespaceSchemaLocation="../schemas/TongScriptNodeDefinitionSchema.xsd"
+           >
+
+  <!-- build pipeline nodes -->
+
+  <NodeTypeInfo Name="BuildPipelineBase" IsAbstract="true" Category="Build Pipeline" Icon="alphabet.speech-balloon-green-a-icon_16.png" Description="abstract base">
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="AssetFile" IsAbstract="true" Base="BuildPipelineBase" Icon="arithmetic.Add-icon_16.png" Description="Import asset from asset source file">
+    <Property Name="Input" Type="File" Socket="Input" />
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="AssetImporter" IsAbstract="true" Base="BuildPipelineBase" Icon="arithmetic.Add-icon_16.png" Description="Import asset from asset source file">
+    <Property Name="Input" Type="File" Socket="Input" />
+    <Property Name="Output" Type="Asset" Socket="Output" />
+    <Property Name="AssetName" Type="String" />
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="AssetExporter" IsAbstract="true" Base="BuildPipelineBase" Icon="arithmetic.Add-icon_16.png" Description="Export asset data into file. Each file format will have different exporter">
+    <Property Name="Input" Type="Asset" AllowMultipleInput="true" Socket="Input" />
+    <Property Name="Output" Type="File" Socket="Output" />
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="AssetPackage" IsAbstract="true" Base="BuildPipelineBase" Icon="arithmetic.Add-icon_16.png" Description="Asset package. All asset should have assigned asset package as the last stage of import.">
+    <Property Name="Input" Type="Asset" AllowMultipleInput="true" Socket="Input" />
+    <Property Name="Output" Type="File" Socket="Output" />
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="AssetProcessor" IsAbstract="true" Base="BuildPipelineBase" Icon="arithmetic.Add-icon_16.png" Description="Asset processor. take asset as data and export as data. Each asset processor has at least one input and output each. ex) type or format change, combine two asset, and so on">
+    <Property Name="Input" Type="Asset" Socket="Input" />
+    <Property Name="Output" Type="Asset" Socket="Output" />
+  </NodeTypeInfo>
+
+
+
+</NodeTypeDefinitions>

@@ -1,0 +1,7 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <LocalLibPath>/work/StormForge/lib/libSFEngine.Linux.a</LocalLibPath>
+  <ObjPaths>C:\work\StormForge\Engine\Src\SFEngine\obj\x64\Debug\</ObjPaths>
+  <Configuration>Debug</Configuration>
+  <Platform>x64</Platform>
+</Project>

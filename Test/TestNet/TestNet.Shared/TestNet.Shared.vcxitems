@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Label="Globals">
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <ItemsProjectGuid>{82c91c93-2d51-4380-ba6e-f343d98d9ba5}</ItemsProjectGuid>
+    <ItemsSccProjectName />
+    <ItemsSccAuxPath />
+    <ItemsSccLocalPath />
+    <ItemsSccProvider />
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ProjectCapability Include="SourceItemsFromImports" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Cube.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)TestNetNative.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Cube.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)TestNetNative.h" />
+  </ItemGroup>
+</Project>

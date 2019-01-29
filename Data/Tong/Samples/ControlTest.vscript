@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<_p0:Tong xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Tong="http://www.blue3k.com/" xmlns:_p0="Tong">
+	<_p0:module xsi:type="_p0:CallFunction" name="CallFunction" label="CallFunction" x="224" y="864" FunctionToCall="TestIf" />
+	<_p0:module xsi:type="_p0:If" name="If" label="If" x="320" y="-160" />
+	<_p0:module xsi:type="_p0:For" name="For" label="For" x="320" y="192" />
+	<_p0:module xsi:type="_p0:While" name="While" label="While" x="448" y="480" />
+	<_p0:module xsi:type="_p0:Numeric" name="Numeric_3" label="a" x="352" y="-320" Value="10" />
+	<_p0:module xsi:type="_p0:Numeric" name="Numeric_4" label="b" x="352" y="-256" Value="11" />
+	<_p0:module xsi:type="_p0:SetNumeric" name="SetNumeric_2" label="SetNumeric" x="704" y="-224" />
+	<_p0:module xsi:type="_p0:Sub" name="Sub" label="Sub" x="544" y="-320" />
+	<_p0:module xsi:type="_p0:Numeric" name="Numeric_8" label="c" x="352" />
+	<_p0:module xsi:type="_p0:SetNumeric" name="SetNumeric_4" label="SetNumeric" x="704" y="-64" />
+	<_p0:module xsi:type="_p0:Mul" name="Mul" label="Mul" x="544" y="-128" />
+	<_p0:module xsi:type="_p0:Function" name="Function" label="TestIf" x="32" y="-192" />
+	<_p0:module xsi:type="_p0:Bool" name="Bool" label="Condition" x="160" y="-128" />
+	<_p0:module xsi:type="_p0:Function" name="Function_1" label="TestFor" x="32" y="192" />
+	<_p0:module xsi:type="_p0:Numeric" name="Numeric" label="Increase" x="480" y="288" Value="3" />
+	<_p0:module xsi:type="_p0:Numeric" name="Numeric_1" label="Sum" x="608" y="352" />
+	<_p0:module xsi:type="_p0:Numeric" name="Numeric_2" label="Index" x="160" y="256" />
+	<_p0:module xsi:type="_p0:Numeric" name="Numeric_5" label="Count" x="160" y="320" Value="100" />
+	<_p0:module xsi:type="_p0:Sum" name="Sum" label="Sum" x="608" y="160" />
+	<_p0:module xsi:type="_p0:SetNumeric" name="SetNumeric" label="SetNumeric" x="768" y="256" />
+	<_p0:module xsi:type="_p0:Function" name="Function_2" label="TestWhile" x="32" y="480" />
+	<_p0:module xsi:type="_p0:&lt;" name="&lt;" label="&lt;" x="288" y="544" />
+	<_p0:module xsi:type="_p0:Numeric" name="Numeric_6" label="Index" x="160" y="608" />
+	<_p0:module xsi:type="_p0:Numeric" name="Numeric_7" label="Count" x="160" y="672" Value="100" />
+	<_p0:module xsi:type="_p0:Sum" name="Sum_1" label="Sum" x="576" y="640" />
+	<_p0:module xsi:type="_p0:SetNumeric" name="SetNumeric_1" label="SetNumeric" x="768" y="544" />
+	<_p0:module xsi:type="_p0:Numeric" name="Numeric_9" label="Increase" x="384" y="704" Value="3" />
+	<_p0:module xsi:type="_p0:Function" name="Function_3" label="TestCallFunction" x="32" y="864" />
+	<_p0:connection outputModule="Numeric_3" outputPin="Value" inputModule="Sub" inputPin="a" />
+	<_p0:connection outputModule="Numeric_4" outputPin="Value" inputModule="Sub" inputPin="b" />
+	<_p0:connection outputModule="Numeric_8" outputPin="Value" inputModule="SetNumeric_4" inputPin="To" />
+	<_p0:connection outputModule="Mul" outputPin="Output" inputModule="SetNumeric_4" inputPin="Value" />
+	<_p0:connection outputModule="Numeric_3" outputPin="Value" inputModule="Mul" inputPin="a" />
+	<_p0:connection outputModule="Numeric_4" outputPin="Value" inputModule="Mul" inputPin="b" />
+	<_p0:connection outputModule="Numeric_8" outputPin="Value" inputModule="SetNumeric_2" inputPin="To" />
+	<_p0:connection outputModule="If" outputPin="True" inputModule="SetNumeric_2" inputPin="Activate" />
+	<_p0:connection outputModule="If" outputPin="False" inputModule="SetNumeric_4" inputPin="Activate" />
+	<_p0:connection outputModule="Function" outputPin="Start" inputModule="If" inputPin="Activate" />
+	<_p0:connection outputModule="Bool" outputPin="Value" inputModule="If" inputPin="Condition" />
+	<_p0:connection outputModule="Sub" outputPin="Output" inputModule="SetNumeric_2" inputPin="Value" />
+	<_p0:connection outputModule="Numeric_2" outputPin="Value" inputModule="For" inputPin="StartIndex" />
+	<_p0:connection outputModule="Numeric_5" outputPin="Value" inputModule="For" inputPin="Count" />
+	<_p0:connection outputModule="For" outputPin="LoopTick" inputModule="SetNumeric" inputPin="Activate" />
+	<_p0:connection outputModule="Numeric_1" outputPin="Value" inputModule="SetNumeric" inputPin="To" />
+	<_p0:connection outputModule="Numeric_1" outputPin="Value" inputModule="Sum" inputPin="b" />
+	<_p0:connection outputModule="Sum" outputPin="Output" inputModule="SetNumeric" inputPin="Value" />
+	<_p0:connection outputModule="Numeric" outputPin="Value" inputModule="Sum" inputPin="a" />
+	<_p0:connection outputModule="Function_1" outputPin="Start" inputModule="For" inputPin="Activate" />
+	<_p0:connection outputModule="Function_2" outputPin="Start" inputModule="While" inputPin="Activate" />
+	<_p0:connection outputModule="Numeric_6" outputPin="Value" inputModule="&lt;" inputPin="a" />
+	<_p0:connection outputModule="Numeric_7" outputPin="Value" inputModule="&lt;" inputPin="b" />
+	<_p0:connection outputModule="&lt;" outputPin="Result" inputModule="While" inputPin="Condition" />
+	<_p0:connection outputModule="Sum_1" outputPin="Output" inputModule="SetNumeric_1" inputPin="Value" />
+	<_p0:connection outputModule="Numeric_9" outputPin="Value" inputModule="Sum_1" inputPin="a" />
+	<_p0:connection outputModule="While" outputPin="LoopTick" inputModule="SetNumeric_1" inputPin="Activate" />
+	<_p0:connection outputModule="Numeric_6" outputPin="Value" inputModule="SetNumeric_1" inputPin="To" />
+	<_p0:connection outputModule="Numeric_6" outputPin="Value" inputModule="Sum_1" inputPin="b" />
+	<_p0:connection outputModule="Function_3" outputPin="Start" inputModule="CallFunction" inputPin="Activate" />
+	<_p0:prototypeFolder />
+	<_p0:templateFolder name="_TemplateRoot_" />
+</_p0:Tong>

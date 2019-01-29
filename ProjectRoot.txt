@@ -1,0 +1,2 @@
+Dummy file to mark project root
+All resource path will be calculated based on this file

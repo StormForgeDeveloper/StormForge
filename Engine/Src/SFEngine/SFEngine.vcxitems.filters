@@ -1,0 +1,791 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SFEngine.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFGraphicDevice.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFGraphicDeviceGLES.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFDeviceResource.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFDeviceTexture.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFRenderCommand.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFRenderThread.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFResource.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFResourceFactory.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFResourceManager.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFTexture.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFVertexBuffer.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFSparseResourceFactory.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Application\Android\AndroidAppTasks.cpp">
+      <Filter>Application\Android</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Application\Android\AndroidApp.cpp">
+      <Filter>Application\Android</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Application\Win\WindowsAppTasks.cpp">
+      <Filter>Application\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Application\Win\WindowsApp.cpp">
+      <Filter>Application\Win</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SFEngine.Android.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SFEngine.IOS.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)SFEngine.Win.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Application\IOS\IOSApp.cpp">
+      <Filter>Application\IOS</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Application\IOS\IOSAppTasks.cpp">
+      <Filter>Application\IOS</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFGraphicDeviceGLES_EGL.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFGraphicDeviceVulkan.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanLibrary.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanDebug.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanSystem.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanLogicalDevice.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanPhysicalDevice.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFRenderTargetChain.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFRenderCommands.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFRenderTargetChainVulkan.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanTexture.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanRenderPass.cpp">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFRenderPipeline.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFRenderPipelineStage.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Graphics\SFRenderItem.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Types\SFEngineTypedefs.cpp">
+      <Filter>Types</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ZooKeeper\SFZooKeeper.cpp">
+      <Filter>ZooKeeper</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ServerConfig\SFServerConfigXML.cpp">
+      <Filter>ServerConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ServerConfig\SFServerConfigZooKeeper.cpp">
+      <Filter>ServerConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ServerConfig\SFServerConfig.cpp">
+      <Filter>ServerConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Component\SFConnectionManagerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Exporter\SFAssetExporter.cpp">
+      <Filter>Asset\Exporter</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporter.cpp">
+      <Filter>Asset\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterTexture.cpp">
+      <Filter>Asset\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterTexturePNG.cpp">
+      <Filter>Asset\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Package\SFAssetPackage.cpp">
+      <Filter>Asset\Package</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterBinary.cpp">
+      <Filter>Asset\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFRawBinary.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFTextureFormatDescription.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterTextureJPG.cpp">
+      <Filter>Asset\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterTextureTGA.cpp">
+      <Filter>Asset\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImportContext.cpp">
+      <Filter>Asset\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterFactory.cpp">
+      <Filter>Asset\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Package\SFAssetPackageSerializer.cpp">
+      <Filter>Asset\Package</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Application\SFApplicationBase.cpp">
+      <Filter>Application</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EngineObject\SFEngineObject.cpp">
+      <Filter>EngineObject</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EngineObject\SFEngineObjectManager.cpp">
+      <Filter>EngineObject</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EngineObject\SFEngineTask.cpp">
+      <Filter>EngineObject</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EngineObject\SFEngineTaskManager.cpp">
+      <Filter>EngineObject</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EngineObject\SFEngineTasks.cpp">
+      <Filter>EngineObject</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)ServerConfig\SFEnum.cpp">
+      <Filter>ServerConfig</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)EngineObject\SFRenderTask.cpp">
+      <Filter>EngineObject</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Serializer\SFAssetSerializerTexture.cpp">
+      <Filter>Asset\Serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Serializer\SFAssetSerializer.cpp">
+      <Filter>Asset\Serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Serializer\SFAssetSerializerFactory.cpp">
+      <Filter>Asset\Serializer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Service\SFEngineService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporter3DAssetFBX.cpp">
+      <Filter>Asset\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporter3DAsset.cpp">
+      <Filter>Asset\Importer</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFAnimation.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFDeviceMesh.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFMesh.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SceneGraph\SFSceneNodeComponent.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SceneGraph\SFSceneNode.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SceneGraph\SFScene.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SceneGraph\SFSceneNodeComponentMesh.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SceneGraph\SFSceneNodeComponentSkeletalMesh.cpp">
+      <Filter>SceneGraph</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFIndexBuffer.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Resource\SFGraphicBuffer.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnection.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionAction.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionActions.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionGroup.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionManager.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionManagerTask.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionMUDP.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionMUDPClient.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionPeerTCP.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionTasks.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionTCP.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionUDP.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFConnectionUDPBase.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFLoopbackConnection.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFMessage.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFMessageWindow.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetCtrl.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetDef.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetRawUDP.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetServerMUDP.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetServerPeerTCP.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetServerTCP.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetServerUDP.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetSvrDef.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetSystem.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetSystem_EPOLL.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetSystem_KQUEUE.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetSystem_Linux.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetSystem_WinIOCP.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetToString.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetUtil.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetSocket.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)String\SFToStringEngineTypes.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SFEngine.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFGraphicDevice.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFGraphicDeviceGLES.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFDeviceResource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFDeviceTexture.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFRenderCommand.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFRenderThread.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFResource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFResourceFactory.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFResourceManager.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFTexture.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFVertexBuffer.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFSparseResourceFactory.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Application\Android\AndroidAppTasks.h">
+      <Filter>Application\Android</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Application\Android\AndroidApp.h">
+      <Filter>Application\Android</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Application\Win\WindowsAppTasks.h">
+      <Filter>Application\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Application\Win\WindowsApp.h">
+      <Filter>Application\Win</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Application\IOS\IOSApp.h">
+      <Filter>Application\IOS</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Application\IOS\IOSAppTasks.h">
+      <Filter>Application\IOS</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFGraphicDeviceGLES_EGL.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFGraphicDeviceVulkan.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanLibrary.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanDebug.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanPhysicalDevice.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanSystem.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanLogicalDevice.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFRenderTargetChain.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFRenderCommands.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFRenderTargetChainVulkan.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanTexture.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\Vulkan\SFVulkanRenderPass.h">
+      <Filter>Graphics\Vulkan</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFRenderPipeline.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFRenderPipelineStage.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Graphics\SFRenderItem.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResultCode\SFResultCodeEngine.h">
+      <Filter>ResultCode</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Types\SFEngineTypedefs.h">
+      <Filter>Types</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ZooKeeper\SFZooKeeper.h">
+      <Filter>ZooKeeper</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ServerConfig\SFServerConfig.h">
+      <Filter>ServerConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ServerConfig\SFServerConfigXML.h">
+      <Filter>ServerConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ServerConfig\SFServerConfigZooKeeper.h">
+      <Filter>ServerConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ServerConfig\SFEnum.h">
+      <Filter>ServerConfig</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Component\SFConnectionManagerComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SFEnginePCH.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Exporter\SFAssetExporter.h">
+      <Filter>Asset\Exporter</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporter.h">
+      <Filter>Asset\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterTexture.h">
+      <Filter>Asset\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterTexturePNG.h">
+      <Filter>Asset\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Package\SFAssetPackage.h">
+      <Filter>Asset\Package</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterBinary.h">
+      <Filter>Asset\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFRawBinary.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFTextureFormat.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFTextureFormatDescription.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterTextureJPG.h">
+      <Filter>Asset\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterTextureTGA.h">
+      <Filter>Asset\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImportContext.h">
+      <Filter>Asset\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFConnectionManagerService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFResourceManagerService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFNetSystemService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFEngineServices.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFEngineService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporterFactory.h">
+      <Filter>Asset\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFIAssetImporterFactory.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Package\SFAssetPackageSerializer.h">
+      <Filter>Asset\Package</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Application\SFApplicationBase.h">
+      <Filter>Application</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EngineObject\SFEngineObject.h">
+      <Filter>EngineObject</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EngineObject\SFEngineObjectManager.h">
+      <Filter>EngineObject</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EngineObject\SFEngineTaskManager.h">
+      <Filter>EngineObject</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EngineObject\SFEngineTask.h">
+      <Filter>EngineObject</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EngineObject\SFEngineTasks.h">
+      <Filter>EngineObject</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFIGraphicDevice.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)EngineObject\SFRenderTask.h">
+      <Filter>EngineObject</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Serializer\SFAssetSerializer.h">
+      <Filter>Asset\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Serializer\SFAssetSerializerTexture.h">
+      <Filter>Asset\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Serializer\SFAssetSerializerFactory.h">
+      <Filter>Asset\Serializer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFIAssetSerializerFactory.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporter3DAssetFBX.h">
+      <Filter>Asset\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Asset\Importer\SFAssetImporter3DAsset.h">
+      <Filter>Asset\Importer</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFAnimation.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFDeviceMesh.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFMesh.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SceneGraph\SFSceneNodeComponent.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SceneGraph\SFSceneNode.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SceneGraph\SFScene.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SceneGraph\SFSceneNodeComponentMesh.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SceneGraph\SFSceneNodeComponentSkeletalMesh.h">
+      <Filter>SceneGraph</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFIndexBuffer.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Resource\SFGraphicBuffer.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnection.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnection.inl">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionAction.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionActions.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionGroup.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionManager.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionManager.inl">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionManagerTask.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionMUDP.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionTasks.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionTCP.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionUDP.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFConnectionUDPBase.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFLoopbackConnection.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFMessage.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFMessage.inl">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFMessageWindow.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFMessageWindow.inl">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetConst.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetCtrl.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetCtrl.inl">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetCtrlIDs.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetDef.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetDef.inl">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetRawUDP.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetServerPeerTCP.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetServerTCP.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetServerUDP.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetSvrDef.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetSystem.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetSystem_EPOLL.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetSystem_KQUEUE.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetSystem_Linux.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetSystem_Linux.inl">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetSystem_WinIOCP.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetSystem_WinIOCP.inl">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetToString.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetUtil.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetSocket.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFToStringEngineTypes.h">
+      <Filter>String</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Net">
+      <UniqueIdentifier>{49594bb5-5a55-4cda-aa27-9f28867b22a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{79a40f3f-7579-40bc-a002-13dab770294e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Service">
+      <UniqueIdentifier>{56c383f6-0e57-47b0-b674-80298fd85bef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application">
+      <UniqueIdentifier>{d2ece07e-26eb-4370-a622-b37ff1e1a007}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Android">
+      <UniqueIdentifier>{d3ba96fe-ab00-4277-986c-4b1b3ee77f63}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\Win">
+      <UniqueIdentifier>{7490d413-ba02-4ac0-9ab1-82f49ac44ba9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Application\IOS">
+      <UniqueIdentifier>{63a54fa1-121e-4d04-8831-5774234706d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{f97a12ab-b819-4e18-817b-fb0e2ffeab9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Vulkan">
+      <UniqueIdentifier>{be854a1e-440f-4b1f-bd09-46c43e51a767}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="EngineObject">
+      <UniqueIdentifier>{3d218f8d-c601-4ba8-8523-71695da7ef2d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResultCode">
+      <UniqueIdentifier>{d20231d1-0078-46f3-8530-bbfc3e9a4aa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Types">
+      <UniqueIdentifier>{5226d3cd-5479-41ec-9c04-008e47fc6248}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="String">
+      <UniqueIdentifier>{6089506d-0c9b-41e5-a582-1282fc11707f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ZooKeeper">
+      <UniqueIdentifier>{1667a386-6087-4e92-b31f-8ed349f35802}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ServerConfig">
+      <UniqueIdentifier>{9166fc6a-9b09-4aff-bc95-102d5958e0ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{bd9c5bcf-b530-4c00-9e02-3e119c3ee1b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Image">
+      <UniqueIdentifier>{06d96a2d-2313-40be-b2e6-8895a4373fe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset">
+      <UniqueIdentifier>{b062a4fd-6be2-4394-a71b-9c98c51a7793}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Exporter">
+      <UniqueIdentifier>{14ecfb04-c2f5-40fd-ae3d-f1edd2bf1e52}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Importer">
+      <UniqueIdentifier>{547b0739-afd6-45d5-bdcc-fb6f322b801f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Package">
+      <UniqueIdentifier>{584877b4-b9da-43b3-88f4-96c3ce6b7256}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Asset\Serializer">
+      <UniqueIdentifier>{53bd08b8-7589-48c5-9a92-afd730902afc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneGraph">
+      <UniqueIdentifier>{cfb5fa3f-698e-4ba7-8735-05a459e9d050}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Types\SFEngineTypedefs.inl">
+      <Filter>Types</Filter>
+    </None>
+  </ItemGroup>
+</Project>

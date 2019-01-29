@@ -1,0 +1,413 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 47;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		F733BBF21F1BF91800AD676B /* libiconv.2.4.0.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F733BBF11F1BF91800AD676B /* libiconv.2.4.0.tbd */; };
+		F733BBF41F1BF92200AD676B /* libxml2.2.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F733BBF31F1BF92200AD676B /* libxml2.2.tbd */; };
+		F74387031F1B5468001A533A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F74387021F1B5468001A533A /* main.m */; };
+		F74387061F1B5468001A533A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F74387051F1B5468001A533A /* AppDelegate.m */; };
+		F74387091F1B5468001A533A /* ViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = F74387081F1B5468001A533A /* ViewController.mm */; };
+		F743870C1F1B5468001A533A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F743870A1F1B5468001A533A /* Main.storyboard */; };
+		F743870E1F1B5469001A533A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F743870D1F1B5469001A533A /* Assets.xcassets */; };
+		F74387111F1B5469001A533A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F743870F1F1B5469001A533A /* LaunchScreen.storyboard */; };
+		F743871B1F1B5D53001A533A /* TestNetNative.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F74387191F1B5D53001A533A /* TestNetNative.cpp */; };
+		F74387201F1B6C80001A533A /* libpthread.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F743871F1F1B6C80001A533A /* libpthread.tbd */; };
+		F74387221F1B6CB6001A533A /* libSFEngine.IOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F74387211F1B6CB6001A533A /* libSFEngine.IOS.a */; };
+		F74387251F1B6CD6001A533A /* libstdc++.tbd in Frameworks */ = {isa = PBXBuildFile; fileRef = F743871D1F1B69DE001A533A /* libstdc++.tbd */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		F733BBF11F1BF91800AD676B /* libiconv.2.4.0.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libiconv.2.4.0.tbd; path = usr/lib/libiconv.2.4.0.tbd; sourceTree = SDKROOT; };
+		F733BBF31F1BF92200AD676B /* libxml2.2.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libxml2.2.tbd; path = usr/lib/libxml2.2.tbd; sourceTree = SDKROOT; };
+		F74386FE1F1B5468001A533A /* TestNet.IOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TestNet.IOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F74387021F1B5468001A533A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		F74387041F1B5468001A533A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		F74387051F1B5468001A533A /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		F74387071F1B5468001A533A /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		F74387081F1B5468001A533A /* ViewController.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = ViewController.mm; sourceTree = "<group>"; };
+		F743870B1F1B5468001A533A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		F743870D1F1B5469001A533A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		F74387101F1B5469001A533A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F74387121F1B5469001A533A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		F74387191F1B5D53001A533A /* TestNetNative.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = TestNetNative.cpp; path = ../../TestNet.Shared/TestNetNative.cpp; sourceTree = "<group>"; };
+		F743871A1F1B5D53001A533A /* TestNetNative.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = TestNetNative.h; path = ../../TestNet.Shared/TestNetNative.h; sourceTree = "<group>"; };
+		F743871D1F1B69DE001A533A /* libstdc++.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.tbd"; path = "usr/lib/libstdc++.tbd"; sourceTree = SDKROOT; };
+		F743871F1F1B6C80001A533A /* libpthread.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libpthread.tbd; path = usr/lib/libpthread.tbd; sourceTree = SDKROOT; };
+		F74387211F1B6CB6001A533A /* libSFEngine.IOS.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libSFEngine.IOS.a; path = "../../../../../../Library/Developer/Xcode/DerivedData/StormForge.IOS-hgukgborchhefcfebutjadpnzcsk/Build/Products/Debug-iphoneos/libSFEngine.IOS.a"; sourceTree = "<group>"; };
+		F74387231F1B6CC3001A533A /* libstdc++.6.0.9.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = "libstdc++.6.0.9.tbd"; path = "usr/lib/libstdc++.6.0.9.tbd"; sourceTree = SDKROOT; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		F74386FB1F1B5468001A533A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F733BBF41F1BF92200AD676B /* libxml2.2.tbd in Frameworks */,
+				F733BBF21F1BF91800AD676B /* libiconv.2.4.0.tbd in Frameworks */,
+				F74387251F1B6CD6001A533A /* libstdc++.tbd in Frameworks */,
+				F74387221F1B6CB6001A533A /* libSFEngine.IOS.a in Frameworks */,
+				F74387201F1B6C80001A533A /* libpthread.tbd in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		F74386F51F1B5467001A533A = {
+			isa = PBXGroup;
+			children = (
+				F74387001F1B5468001A533A /* TestNet.IOS */,
+				F74386FF1F1B5468001A533A /* Products */,
+				F743871C1F1B69DE001A533A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F74386FF1F1B5468001A533A /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F74386FE1F1B5468001A533A /* TestNet.IOS.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		F74387001F1B5468001A533A /* TestNet.IOS */ = {
+			isa = PBXGroup;
+			children = (
+				F74387181F1B5D40001A533A /* TestNet */,
+				F74387041F1B5468001A533A /* AppDelegate.h */,
+				F74387051F1B5468001A533A /* AppDelegate.m */,
+				F74387071F1B5468001A533A /* ViewController.h */,
+				F74387081F1B5468001A533A /* ViewController.mm */,
+				F743870A1F1B5468001A533A /* Main.storyboard */,
+				F743870D1F1B5469001A533A /* Assets.xcassets */,
+				F743870F1F1B5469001A533A /* LaunchScreen.storyboard */,
+				F74387121F1B5469001A533A /* Info.plist */,
+				F74387011F1B5468001A533A /* Supporting Files */,
+			);
+			path = TestNet.IOS;
+			sourceTree = "<group>";
+		};
+		F74387011F1B5468001A533A /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				F74387021F1B5468001A533A /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		F74387181F1B5D40001A533A /* TestNet */ = {
+			isa = PBXGroup;
+			children = (
+				F74387191F1B5D53001A533A /* TestNetNative.cpp */,
+				F743871A1F1B5D53001A533A /* TestNetNative.h */,
+			);
+			name = TestNet;
+			sourceTree = "<group>";
+		};
+		F743871C1F1B69DE001A533A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F733BBF31F1BF92200AD676B /* libxml2.2.tbd */,
+				F733BBF11F1BF91800AD676B /* libiconv.2.4.0.tbd */,
+				F74387231F1B6CC3001A533A /* libstdc++.6.0.9.tbd */,
+				F74387211F1B6CB6001A533A /* libSFEngine.IOS.a */,
+				F743871F1F1B6C80001A533A /* libpthread.tbd */,
+				F743871D1F1B69DE001A533A /* libstdc++.tbd */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		F74386FD1F1B5468001A533A /* TestNet.IOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F74387151F1B5469001A533A /* Build configuration list for PBXNativeTarget "TestNet.IOS" */;
+			buildPhases = (
+				F74386FA1F1B5468001A533A /* Sources */,
+				F74386FB1F1B5468001A533A /* Frameworks */,
+				F74386FC1F1B5468001A533A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = TestNet.IOS;
+			productName = TestNet.IOS;
+			productReference = F74386FE1F1B5468001A533A /* TestNet.IOS.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		F74386F61F1B5468001A533A /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0830;
+				ORGANIZATIONNAME = "KyungKun Ko";
+				TargetAttributes = {
+					F74386FD1F1B5468001A533A = {
+						CreatedOnToolsVersion = 8.3.3;
+						DevelopmentTeam = PLQKLRGVJ7;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = F74386F91F1B5468001A533A /* Build configuration list for PBXProject "TestNet.IOS" */;
+			compatibilityVersion = "Xcode 6.3";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = F74386F51F1B5467001A533A;
+			productRefGroup = F74386FF1F1B5468001A533A /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				F74386FD1F1B5468001A533A /* TestNet.IOS */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		F74386FC1F1B5468001A533A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F74387111F1B5469001A533A /* LaunchScreen.storyboard in Resources */,
+				F743870E1F1B5469001A533A /* Assets.xcassets in Resources */,
+				F743870C1F1B5468001A533A /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		F74386FA1F1B5468001A533A /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F743871B1F1B5D53001A533A /* TestNetNative.cpp in Sources */,
+				F74387091F1B5468001A533A /* ViewController.mm in Sources */,
+				F74387061F1B5468001A533A /* AppDelegate.m in Sources */,
+				F74387031F1B5468001A533A /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		F743870A1F1B5468001A533A /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F743870B1F1B5468001A533A /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		F743870F1F1B5469001A533A /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F74387101F1B5469001A533A /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		F74387131F1B5469001A533A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		F74387141F1B5469001A533A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		F74387161F1B5469001A533A /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				DEVELOPMENT_TEAM = PLQKLRGVJ7;
+				GCC_C_LANGUAGE_STANDARD = c11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HAVE_CONFIG_H,
+					CURL_STATICLIB,
+					"HAVE_SYS_TYPES_H=1",
+					"HAVE_STDDEF_H=1",
+					"$(inherited)",
+					__IOS__,
+				);
+				HEADER_SEARCH_PATHS = (
+					../../../Engine/Src/Protocol,
+					../../../Engine/Src/CoreBase,
+					../../../Engine/Src/SFEngine,
+					"../../../3rdParties/src/openssl/openssl-1.0.2a/inc32",
+					"../../../3rdParties/src/freetype/freetype-2.5.5/include",
+					"../../../3rdParties/src/lcms/lcms2-2.7/include",
+					"../../../3rdParties/src/jpeg/jpeg-9a",
+					"../../../3rdParties/src/DevIL/devil-1.7.8/include",
+					"../../../3rdParties/src/zlib/zlib-1.2.8",
+					usr/include/libxml2,
+				);
+				INFOPLIST_FILE = TestNet.IOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sf.TestNet-IOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = build;
+				SYSTEM_HEADER_SEARCH_PATHS = /usr/include/libxml2;
+			};
+			name = Debug;
+		};
+		F74387171F1B5469001A533A /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_CXX_LANGUAGE_STANDARD = "c++14";
+				DEVELOPMENT_TEAM = PLQKLRGVJ7;
+				GCC_C_LANGUAGE_STANDARD = c11;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					HAVE_CONFIG_H,
+					CURL_STATICLIB,
+					"HAVE_SYS_TYPES_H=1",
+					"HAVE_STDDEF_H=1",
+					__IOS__,
+				);
+				HEADER_SEARCH_PATHS = (
+					../../../Engine/Src/Protocol,
+					../../../Engine/Src/CoreBase,
+					../../../Engine/Src/SFEngine,
+					"../../../3rdParties/src/openssl/openssl-1.0.2a/inc32",
+					"../../../3rdParties/src/freetype/freetype-2.5.5/include",
+					"../../../3rdParties/src/lcms/lcms2-2.7/include",
+					"../../../3rdParties/src/jpeg/jpeg-9a",
+					"../../../3rdParties/src/DevIL/devil-1.7.8/include",
+					"../../../3rdParties/src/zlib/zlib-1.2.8",
+					usr/include/libxml2,
+				);
+				INFOPLIST_FILE = TestNet.IOS/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				LIBRARY_SEARCH_PATHS = "";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.sf.TestNet-IOS";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SYMROOT = build;
+				SYSTEM_HEADER_SEARCH_PATHS = /usr/include/libxml2;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		F74386F91F1B5468001A533A /* Build configuration list for PBXProject "TestNet.IOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F74387131F1B5469001A533A /* Debug */,
+				F74387141F1B5469001A533A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F74387151F1B5469001A533A /* Build configuration list for PBXNativeTarget "TestNet.IOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F74387161F1B5469001A533A /* Debug */,
+				F74387171F1B5469001A533A /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = F74386F61F1B5468001A533A /* Project object */;
+}

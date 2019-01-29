@@ -1,0 +1,38 @@
+////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) 2013 Kyungkun Ko
+// 
+// Author : KyungKun Ko
+//
+// Description : Thread
+//
+////////////////////////////////////////////////////////////////////////////////
+
+
+//////////////////////////////////////////////////////////////////////////////////
+//
+//	thread
+//
+
+
+namespace SF {
+
+	ThreadHandle Thread::GetThread()
+	{
+		return std::thread::native_handle();
+	}
+
+	ThreadID Thread::GetThreadID()
+	{
+		return std::thread::get_id();
+	}
+
+	Thread::PRIORITY Thread::GetPriority()
+	{
+		return m_threadPriority;
+	}
+
+
+
+
+}

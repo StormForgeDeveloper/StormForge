@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+  <xs:simpleType name="Severity" final="restriction" >
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Success" />
+      <xs:enumeration value="Informational" />
+      <xs:enumeration value="Warning" />
+      <xs:enumeration value="Error" />
+    </xs:restriction>
+  </xs:simpleType>
+  
+  
+	<xs:element name="ResultCodes">
+		<xs:complexType>
+			<xs:sequence>
+        <xs:element name="ResultCodeItem" minOccurs="1" maxOccurs="unbounded">
+          <xs:complexType>
+            <xs:attribute name="Severity" type="Severity" use="required" />
+            <xs:attribute name="CodeName" type="xs:string" use="required"/>
+            <xs:attribute name="Desc" type="xs:string" use="required"/>
+          </xs:complexType>
+        </xs:element>
+      </xs:sequence>
+      <xs:attribute name="Facility" type="xs:string" use="required" />
+      <xs:attribute name="Custom" type="xs:boolean" use="optional" default="true" />
+      <xs:attribute name="UseFacilityName" type="xs:boolean" use="optional" default="true" />
+      <xs:attribute name="IDTable" type="xs:boolean" use="optional" default="false" />
+    </xs:complexType>
+	</xs:element>
+
+</xs:schema>
