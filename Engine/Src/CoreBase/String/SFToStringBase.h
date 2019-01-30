@@ -2,7 +2,7 @@
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
-// Author : MadK
+// Author: Kyungkun Ko
 //
 // Description : Base type ToString implementation
 //	
