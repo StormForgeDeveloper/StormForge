@@ -290,9 +290,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetRawUDP.cpp">
       <Filter>Net</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetServerMUDP.cpp">
-      <Filter>Net</Filter>
-    </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetServerPeerTCP.cpp">
       <Filter>Net</Filter>
     </ClCompile>

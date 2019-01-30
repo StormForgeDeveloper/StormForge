@@ -86,7 +86,6 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetCtrl.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetDef.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetRawUDP.cpp" />
-    <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetServerMUDP.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetServerPeerTCP.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetServerTCP.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Net\SFNetServerUDP.cpp" />
