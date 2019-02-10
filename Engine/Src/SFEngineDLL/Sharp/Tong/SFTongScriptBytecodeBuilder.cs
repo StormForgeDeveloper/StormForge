@@ -174,6 +174,12 @@ namespace SF.Tong.Compiler
             NativeAppendLoadF(NativeHandle, value);
         }
 
+        public void AppendLoadString(string value)
+        {
+            throw new Exception("TODO: Not supported yet");
+            //NativeAppendLoadI(NativeHandle, value);
+        }
+
         public void AppendLoad(string path)
         {
             NativeAppendLoad(NativeHandle, path);

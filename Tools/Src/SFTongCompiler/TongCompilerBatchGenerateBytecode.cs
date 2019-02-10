@@ -36,10 +36,30 @@ namespace SFTongCompiler
     {
         public override int Priority => 3;
 
+        delegate void delByteCodeHandler(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks);
+        private Dictionary<string, delByteCodeHandler> m_ByteCodeGen = new Dictionary<string, delByteCodeHandler>();
+
+        delegate void delNodeHandler(TongCompilerContext.DocumentContext docContext, ScriptNode scriptNode);
+        private Dictionary<string, delNodeHandler> m_NodeHandler = new Dictionary<string, delNodeHandler>();
+
+        static TongCompilerBatchGenerateBytecode()
+        {
+        }
+
+
         [ImportingConstructor]
         public TongCompilerBatchGenerateBytecode(IBatchTaskManager manager)
             : base(manager)
         {
+            m_ByteCodeGen.Add("boolean", BuildByteCode_AppendBooleanPin);
+            m_ByteCodeGen.Add("decimal", BuildByteCode_AppendDecimalPin);
+            m_ByteCodeGen.Add("float", BuildByteCode_AppendFloatPin);
+            m_ByteCodeGen.Add("double", BuildByteCode_AppendDoublePin);
+            m_ByteCodeGen.Add("int", BuildByteCode_AppendIntPin);
+
+            m_NodeHandler.Add("Interface", CompileInterface);
+            m_NodeHandler.Add("TaskStart", CompileTask);
+
         }
 
         /// <summary>
@@ -72,15 +92,23 @@ namespace SFTongCompiler
             // Find interface nodes
             foreach(var obj in scriptObjectMap)
             {
+                delNodeHandler nodeHandler = null;
                 var nodeDefInfo = obj.Value.DomNode.Type.GetTag<SF.Tong.Schema.NodeTypeInfo>();
-                if (nodeDefInfo.IsA("Interface"))
+                var curNodeDefInfo = nodeDefInfo;
+                // Search hierarchy for the handler
+                for (; curNodeDefInfo != null; curNodeDefInfo = curNodeDefInfo.Parent)
                 {
-                    CompileInterface(docContext, obj.Value);
+                    if (m_NodeHandler.TryGetValue(curNodeDefInfo.Name, out nodeHandler))
+                        break;
                 }
-                else if (nodeDefInfo.IsA("TaskStart"))
+
+                if (nodeHandler != null)
+                    nodeHandler(docContext, obj.Value);
+                else
                 {
-                    CompileTask(docContext, obj.Value);
+                    throw new Exception("Don't know how to handle:" + nodeDefInfo.Name);
                 }
+
             }
         }
 
@@ -97,20 +125,89 @@ namespace SFTongCompiler
             return res;
         }
 
-        void BuildByteCode_AppendValue(SF.Tong.Compiler.BytecodeBuilder byteCode, DomNode node, AttributeInfo attrInfo)
+
+        void BuildByteCode_AppendBooleanPin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
         {
-            //attrInfo.Name
         }
 
-        // DFS based bytecode gen
-        void BuildByteCode(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin input)
+        void BuildByteCode_AppendFloatPin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
         {
-            var allLink = linkCache.ToThis.Where(con => con.InputPin == input).ToList();
-            if (allLink.Count == 0) // if nothing linked just take constant
+        }
+
+        void BuildByteCode_AppendDoublePin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        {
+        }
+
+        void BuildByteCode_AppendDecimalPin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        {
+        }
+
+        void BuildByteCode_AppendIntPin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        {
+        }
+
+        void BuildByteCode_AppendPropertyValueLoad(SF.Tong.Compiler.BytecodeBuilder byteCode, DomNode node, ICircuitPin inputPin)
+        {
+            var attrInfo = node.Type.GetAttributeInfo(inputPin.Name.ToString());
+            var value = node.GetAttribute(attrInfo);
+            if(value == null)
+            {
+                byteCode.AppendLoadI(0);
+                return;
+            }
+
+            switch(attrInfo.Type.Name)
+            {
+                case "boolean":
+                    byteCode.AppendLoadI((bool)value ? 1 : 0);
+                    break;
+                case "decimal":
+                    decimal decVal = (decimal)value;
+                    if((decVal - (Int64)decVal) != 0)
+                        byteCode.AppendLoadF((float)decVal);
+                    else
+                        byteCode.AppendLoadI((int)decVal);
+                    break;
+                case "double":
+                    double dblVal = (double)value;
+                    if ((dblVal - (Int64)dblVal) != 0)
+                        byteCode.AppendLoadF((float)dblVal);
+                    else
+                        byteCode.AppendLoadI((int)dblVal);
+                    break;
+                case "float":
+                    float fltVal = (float)value;
+                    if ((fltVal - (Int64)fltVal) != 0)
+                        byteCode.AppendLoadF(fltVal);
+                    else
+                        byteCode.AppendLoadI((int)fltVal);
+                    break;
+                case "int":
+                    byteCode.AppendLoadI((int)value);
+                    break;
+                case "string":
+                    byteCode.AppendLoadString((string)value);
+                    break;
+                default:
+                    throw new Exception("Not supported load bytecode type:" + attrInfo.Type.Name);
+            }
+        }
+
+        // DFS traversal based bytecode gen
+        void BuildByteCode(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        {
+            if (samePinLinks == null || samePinLinks.Count == 0) // if nothing linked just take constant
             {
                 var node = linkCache.As<ScriptNode>();
-                var attrInfo = node.DomNode.Type.GetAttributeInfo(input.Name.ToString());
-                BuildByteCode_AppendValue(byteCode, node.DomNode, attrInfo);
+                BuildByteCode_AppendPropertyValueLoad(byteCode, node.DomNode, inputPin);
+            }
+            else
+            {
+                delByteCodeHandler byteCodeHandler;
+                if (!m_ByteCodeGen.TryGetValue(inputPin.TypeName.ToString(), out byteCodeHandler))
+                    throw new Exception("Bytecode handler not found for :" + inputPin.TypeName.ToString());
+
+                byteCodeHandler(byteCode, linkCache, inputPin, samePinLinks);
             }
             // 
         }
@@ -119,20 +216,30 @@ namespace SFTongCompiler
         void BuildByteCode(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNode node, ICircuitPin inputPin)
         {
             var linkCache = node.As<ScriptNodeLinkCache>();
+            // create a copy of links
+            var allLinks = new List<ScriptNodeConnection>(linkCache.ToThis);
             // 
-            foreach(var input in node.AllInputPins)
+            foreach (var input in node.AllInputPins)
             {
+                var samePinLinks = allLinks.Where(con => con.InputPin == input).ToList();
+ 
+                // remove from processed pins
+                if(samePinLinks != null)
+                {
+                    foreach (var inputProcessing in samePinLinks)
+                        allLinks.Remove(inputProcessing);
+                }
+
                 var propertyType = ToPropertyType(input.TypeName);
-                // we only accept one signal for regular bytecode generation
-                // Other special case is task and state which works in different way
+                // we are handling this node, so other input signal has no meaning
                 if (propertyType == PropertyType.Signal)
                 {
-                    Outputs.WriteLine(OutputMessageType.Warning, "Multiple input signal type for {0}, ignoring", node.Id);
+                    //Outputs.WriteLine(OutputMessageType.Warning, "Multiple input signal type for {0}, ignoring", node.Id);
                     continue;
                 }
 
-                // build bytecode for the input
-                BuildByteCode(byteCode, linkCache, input);
+                // build bytecode for the input DFS traversal
+                BuildByteCode(byteCode, linkCache, input, samePinLinks);
             }
         }
 
