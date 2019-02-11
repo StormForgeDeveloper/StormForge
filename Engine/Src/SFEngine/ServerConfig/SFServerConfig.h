@@ -248,6 +248,7 @@ namespace SF
 		struct GameCluster
 		{
 			GameID GameClusterID;
+			String GameClusterIDName;
 
 			DynamicArray<DBCluster*> DBClusters;
 			DynamicArray<ModuleServer*> ModuleServers;
@@ -255,7 +256,8 @@ namespace SF
 			DynamicArray<GameInstanceServer*> GameInstanceServers;
 
 			GameCluster(IHeap& heap)
-				: DBClusters(heap)
+				: GameClusterIDName(heap)
+				, DBClusters(heap)
 				, ModuleServers(heap)
 				, GameServers(heap)
 				, GameInstanceServers(heap)
@@ -287,6 +289,9 @@ namespace SF
 				}
 				GameInstanceServers.Clear();
 			}
+
+			void SetGameClusterID(const char* gameID);
+			void SetGameClusterID(GameID gameID);
 
 			const DBCluster* FindDBCluster(const char* serverName) const;
 			const GenericServer* FindGenericServer(const char* serverName) const;

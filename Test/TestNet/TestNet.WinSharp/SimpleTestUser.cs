@@ -245,7 +245,7 @@ namespace TestNet.WinSharp
             var result = message.GetValue<Result>("Result");
             if (result.IsFailed)
             {
-                PrintStatus("Login failed {0}", result);
+                PrintStatus("Update Score failed {0:8X}", result);
                 return;
             }
 

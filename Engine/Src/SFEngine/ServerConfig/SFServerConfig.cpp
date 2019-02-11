@@ -19,6 +19,20 @@
 namespace SF
 {
 
+
+	void ServerConfig::GameCluster::SetGameClusterID(const char* gameID)
+	{
+		GameClusterIDName = gameID;
+		GameClusterID = Service::StringDB->AddNGetString32(gameID);
+	}
+
+	void ServerConfig::GameCluster::SetGameClusterID(GameID gameID)
+	{
+		GameClusterIDName = Service::StringDB->GetString(gameID);
+		GameClusterID = gameID;
+	}
+
+
 	const ServerConfig::DBCluster* ServerConfig::GameCluster::FindDBCluster(const char* serverName) const
 	{
 		for (auto& itDB : DBClusters)

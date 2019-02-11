@@ -438,7 +438,7 @@ namespace SF
 			return result;
 
 		pGameCluster = new(GetHeap()) ServerConfig::GameCluster(GetHeap());
-		pGameCluster->GameClusterID = Service::StringDB->AddNGetString32( gameClusterID );
+		pGameCluster->SetGameClusterID( gameClusterID );
 
 		result = ParseGameCluster(clusterValue, pGameCluster);
 		if (!result)
@@ -976,7 +976,7 @@ namespace SF
 		for (auto& itItem : m_Config.GetGameClusters())
 		{
 			String childPath;
-			childPath.Format("{0}/{1}", rootPath, itItem->GameClusterID);
+			childPath.Format("{0}/{1}", rootPath, itItem->GameClusterIDName);
 
 			result = StoreGameCluster(childPath, itItem);
 			if (!result)

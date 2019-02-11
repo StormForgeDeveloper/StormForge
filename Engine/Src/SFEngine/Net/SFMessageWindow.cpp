@@ -52,8 +52,7 @@ namespace Net {
 	MsgWindow::~MsgWindow()
 	{
 		ClearWindow();
-		// delete[] m_pMsgWnd;
-		GetSystemHeap().Delete(m_pMsgWnd);
+		delete[] m_pMsgWnd;
 	}
 
 
@@ -106,8 +105,7 @@ namespace Net {
 	RecvMsgWindow::~RecvMsgWindow()
 	{
 		ClearWindow();
-		//delete[] m_pMsgWnd;
-		GetSystemHeap().Delete(m_pMsgWnd);
+		delete[] m_pMsgWnd;
 	}
 
 	// Add message

@@ -313,7 +313,7 @@ namespace SF
 	{
 		pGameCluster = new(GetHeap()) ServerConfig::GameCluster(GetHeap());
 
-		pGameCluster->GameClusterID = Service::StringDB->AddNGetString32( (const char*)xmlGetProp(pNode, (xmlChar*)"GameID") );
+		pGameCluster->SetGameClusterID( (const char*)xmlGetProp(pNode, (xmlChar*)"GameID") );
 
 		Result result;
 		// Loop all child nodes

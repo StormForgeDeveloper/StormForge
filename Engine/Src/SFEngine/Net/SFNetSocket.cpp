@@ -473,7 +473,7 @@ namespace Net {
 		hr = Recv(pRecvBuffer);
 		if (!(hr) && hr != Result(ResultCode::IO_IO_PENDING) && hr != Result(ResultCode::IO_TRY_AGAIN))
 		{
-			SFLog(Net, Warning, "Pending Recv failed, CID:{0}, pending:{1}, hr:{2}", GetUserSocketID(), GetPendingRecvCount(), hr);
+			SFLog(Net, Debug3, "Pending Recv failed, CID:{0}, pending:{1}, hr:{2}", GetUserSocketID(), GetPendingRecvCount(), hr);
 			//Assert(false);
 			// Failed, release pending flag
 			pRecvBuffer->SetPendingFalse();
