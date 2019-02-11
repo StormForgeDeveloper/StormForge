@@ -80,17 +80,17 @@ namespace SF
 		}
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBComlition(int rc, const void *data)
+	void ZooKeeperWatcher::ZKWatcherCBComplition(int rc, const void *data)
 	{
 		auto pTask = (ZooKeeperTask*)data;
 		TaskOperator().StartWorking(pTask);
 		pTask->ZKResult = ZooKeeper::ToResult(rc);
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnComlition(*pTask);
+		pTask->ZKWatcher.OnComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBStatComlition(int rc, const Stat *stat, const void *data)
+	void ZooKeeperWatcher::ZKWatcherCBStatComplition(int rc, const Stat *stat, const void *data)
 	{
 		auto pTask = (StatTask*)data;
 		TaskOperator().StartWorking(pTask);
@@ -98,11 +98,11 @@ namespace SF
 		if(stat != nullptr)
 			*pTask->ResultStat = *stat;
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnStatComlition(*pTask);
+		pTask->ZKWatcher.OnStatComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBDataComlition(int rc, const char *value, int value_len, const Stat *stat, const void *data)
+	void ZooKeeperWatcher::ZKWatcherCBDataComplition(int rc, const char *value, int value_len, const Stat *stat, const void *data)
 	{
 		auto pTask = (DataTask*)data;
 		TaskOperator().StartWorking(pTask);
@@ -110,11 +110,11 @@ namespace SF
 		pTask->ResultData.resize(value_len);
 		memcpy(pTask->ResultData.data(), value, value_len);
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnDataComlition(*pTask);
+		pTask->ZKWatcher.OnDataComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBStringsComlition(int rc, const String_vector *strings, const void *data)
+	void ZooKeeperWatcher::ZKWatcherCBStringsComplition(int rc, const String_vector *strings, const void *data)
 	{
 		auto pTask = (StringsTask*)data;
 		TaskOperator().StartWorking(pTask);
@@ -128,11 +128,11 @@ namespace SF
 			}
 		}
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnStringsComlition(*pTask);
+		pTask->ZKWatcher.OnStringsComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBStringsStatComlition(int rc, const String_vector *strings, const Stat *stat, const void *data)
+	void ZooKeeperWatcher::ZKWatcherCBStringsStatComplition(int rc, const String_vector *strings, const Stat *stat, const void *data)
 	{
 		auto pTask = (StringsStatTask*)data;
 		TaskOperator().StartWorking(pTask);
@@ -147,22 +147,22 @@ namespace SF
 		}
 		*pTask->ResultStat = *stat;
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnStringsStatComlition(*pTask);
+		pTask->ZKWatcher.OnStringsStatComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBStringComlition(int rc, const char *value, const void *data)
+	void ZooKeeperWatcher::ZKWatcherCBStringComplition(int rc, const char *value, const void *data)
 	{
 		auto pTask = (StringTask*)data;
 		TaskOperator().StartWorking(pTask);
 		pTask->ZKResult = ZooKeeper::ToResult(rc);
 		pTask->ResultString = value;
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnStringComlition(*pTask);
+		pTask->ZKWatcher.OnStringComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	//void ZooKeeperWatcher::ZKWatcherCBACLComlition(int rc, ACL_vector *acl, Stat *stat, const void *data)
+	//void ZooKeeperWatcher::ZKWatcherCBACLComplition(int rc, ACL_vector *acl, Stat *stat, const void *data)
 	//{
 	//	auto pTask = (ACLTask*)data;
 	//	TaskOperator().StartWorking(pTask);
@@ -173,7 +173,7 @@ namespace SF
 	//		memcpy(pTask->ResultACL.data(), acl->data, sizeof(ACL)*acl->count);
 	//	}
 	//	TaskOperator().Finished(pTask);
-	//	pTask->ZKWatcher.OnACLComlition(*pTask);
+	//	pTask->ZKWatcher.OnACLComplition(*pTask);
 	//	SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	//}
 
@@ -189,31 +189,31 @@ namespace SF
 		return m_EventQueue.Enqueue(eventOut.Composited);
 	}
 
-	void ZooKeeperWatcher::OnComlition(ZooKeeperTask& pTask)
+	void ZooKeeperWatcher::OnComplition(ZooKeeperTask& pTask)
 	{
 	}
 
-	void ZooKeeperWatcher::OnStatComlition(StatTask& pTask)
+	void ZooKeeperWatcher::OnStatComplition(StatTask& pTask)
 	{
 	}
 
-	void ZooKeeperWatcher::OnDataComlition(DataTask& pTask)
+	void ZooKeeperWatcher::OnDataComplition(DataTask& pTask)
 	{
 	}
 
-	void ZooKeeperWatcher::OnStringsComlition(StringsTask& pTask)
+	void ZooKeeperWatcher::OnStringsComplition(StringsTask& pTask)
 	{
 	}
 
-	void ZooKeeperWatcher::OnStringsStatComlition(StringsStatTask& pTask)
+	void ZooKeeperWatcher::OnStringsStatComplition(StringsStatTask& pTask)
 	{
 	}
 
-	void ZooKeeperWatcher::OnStringComlition(StringTask& pTask)
+	void ZooKeeperWatcher::OnStringComplition(StringTask& pTask)
 	{
 	}
 
-	//void ZooKeeperWatcher::OnACLComlition(ACLTask& pTask)
+	//void ZooKeeperWatcher::OnACLComplition(ACLTask& pTask)
 	//{
 	//}
 
@@ -513,7 +513,7 @@ namespace SF
 		SharedPointerT<StringTask> pTask = new(m_Heap) StringTask(m_Heap, GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
-		auto zkResult = zoo_acreate(m_ZKHandle, path, (const char*)valueData, valueSize, acl, flags, ZooKeeperWatcher::ZKWatcherCBStringComlition, *pTask);
+		auto zkResult = zoo_acreate(m_ZKHandle, path, (const char*)valueData, valueSize, acl, flags, ZooKeeperWatcher::ZKWatcherCBStringComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
 		return std::forward<SharedPointerT<StringTask>>(pTask);
@@ -536,7 +536,7 @@ namespace SF
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		Json::FastWriter writer;
 		auto valueBuffer = std::forward<std::string>(writer.write(value));
-		auto zkResult = zoo_acreate(m_ZKHandle, path, (const char*)valueBuffer.data(), (int)valueBuffer.size(), acl, flags, ZooKeeperWatcher::ZKWatcherCBStringComlition, *pTask);
+		auto zkResult = zoo_acreate(m_ZKHandle, path, (const char*)valueBuffer.data(), (int)valueBuffer.size(), acl, flags, ZooKeeperWatcher::ZKWatcherCBStringComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
 		return std::forward<SharedPointerT<StringTask>>(pTask);
@@ -566,7 +566,7 @@ namespace SF
 		SharedPointerT<ZooKeeperTask> pTask = new(m_Heap) ZooKeeperTask(GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
-		auto zkResult = zoo_adelete(m_ZKHandle, path, version, ZooKeeperWatcher::ZKWatcherCBComlition, *pTask);
+		auto zkResult = zoo_adelete(m_ZKHandle, path, version, ZooKeeperWatcher::ZKWatcherCBComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if(zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
 		return std::forward<SharedPointerT<ZooKeeper::ZooKeeperTask>>(pTask);
@@ -621,9 +621,9 @@ namespace SF
 
 		AddWatcher(watcher);
 		if (watcher == nullptr)
-			zkResult = zoo_aexists(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBStatComlition, *pTask);
+			zkResult = zoo_aexists(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBStatComplition, *pTask);
 		else
-			zkResult = zoo_awexists(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBStatComlition, *pTask);
+			zkResult = zoo_awexists(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBStatComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
 		return std::forward<SharedPointerT<ZooKeeper::StatTask>>(pTask);
@@ -681,9 +681,9 @@ namespace SF
 
 		AddWatcher(watcher);
 		if (watcher == nullptr)
-			zkResult = zoo_aget(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBDataComlition, *pTask);
+			zkResult = zoo_aget(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBDataComplition, *pTask);
 		else
-			zkResult = zoo_awget(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBDataComlition, *pTask);
+			zkResult = zoo_awget(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBDataComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
 		return std::forward<SharedPointerT<ZooKeeper::DataTask>>(pTask);
@@ -730,7 +730,7 @@ namespace SF
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		int zkResult = 0;
-		zkResult = zoo_aset(m_ZKHandle, path, (char*)valueBuffer.data(), (int)valueBuffer.size(), version, ZooKeeperWatcher::ZKWatcherCBStatComlition, *pTask);
+		zkResult = zoo_aset(m_ZKHandle, path, (char*)valueBuffer.data(), (int)valueBuffer.size(), version, ZooKeeperWatcher::ZKWatcherCBStatComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
 		return std::forward<SharedPointerT<ZooKeeper::StatTask>>(pTask);
@@ -750,7 +750,7 @@ namespace SF
 		int zkResult = 0;
 		Json::FastWriter writer;
 		auto valueBuffer = std::forward<std::string>(writer.write(value));
-		zkResult = zoo_aset(m_ZKHandle, path, (char*)valueBuffer.data(), (int)valueBuffer.size(), version, ZooKeeperWatcher::ZKWatcherCBStatComlition, *pTask);
+		zkResult = zoo_aset(m_ZKHandle, path, (char*)valueBuffer.data(), (int)valueBuffer.size(), version, ZooKeeperWatcher::ZKWatcherCBStatComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
 		return std::forward<SharedPointerT<ZooKeeper::StatTask>>(pTask);
@@ -792,9 +792,9 @@ namespace SF
 
 		AddWatcher(watcher);
 		if (watcher == nullptr)
-			zkResult = zoo_aget_children(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBStringsComlition, *pTask);
+			zkResult = zoo_aget_children(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBStringsComplition, *pTask);
 		else
-			zkResult = zoo_awget_children(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBStringsComlition, *pTask);
+			zkResult = zoo_awget_children(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBStringsComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
 		return std::forward<SharedPointerT<ZooKeeper::StringsTask>>(pTask);
@@ -815,9 +815,9 @@ namespace SF
 
 		AddWatcher(watcher);
 		if (watcher == nullptr)
-			zkResult = zoo_aget_children2(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBStringsStatComlition, *pTask);
+			zkResult = zoo_aget_children2(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBStringsStatComplition, *pTask);
 		else
-			zkResult = zoo_awget_children2(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBStringsStatComlition, *pTask);
+			zkResult = zoo_awget_children2(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBStringsStatComplition, *pTask);
 
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));

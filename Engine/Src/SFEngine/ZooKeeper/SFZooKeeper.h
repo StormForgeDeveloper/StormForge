@@ -183,13 +183,13 @@ namespace SF
 		void SetZKInstance(ZooKeeper* pZKInstance) { m_ZKInstance = pZKInstance; }
 
 		static void ZKWatcherCB(zhandle_t *zkHandle, int type, int state, const char *path, void*v);
-		static void ZKWatcherCBComlition(int rc, const void *data);
-		static void ZKWatcherCBStatComlition(int rc, const Stat *stat, const void *data);
-		static void ZKWatcherCBDataComlition(int rc, const char *value, int value_len, const Stat *stat, const void *data);
-		static void ZKWatcherCBStringsComlition(int rc, const String_vector *strings, const void *data);
-		static void ZKWatcherCBStringsStatComlition(int rc, const String_vector *strings, const Stat *stat, const void *data);
-		static void ZKWatcherCBStringComlition(int rc, const char *value, const void *data);
-		//static void ZKWatcherCBACLComlition(int rc, ACL_vector *acl, Stat *stat, const void *data);
+		static void ZKWatcherCBComplition(int rc, const void *data);
+		static void ZKWatcherCBStatComplition(int rc, const Stat *stat, const void *data);
+		static void ZKWatcherCBDataComplition(int rc, const char *value, int value_len, const Stat *stat, const void *data);
+		static void ZKWatcherCBStringsComplition(int rc, const String_vector *strings, const void *data);
+		static void ZKWatcherCBStringsStatComplition(int rc, const String_vector *strings, const Stat *stat, const void *data);
+		static void ZKWatcherCBStringComplition(int rc, const char *value, const void *data);
+		//static void ZKWatcherCBACLComplition(int rc, ACL_vector *acl, Stat *stat, const void *data);
 
 		friend class ZooKeeper;
 
@@ -212,13 +212,13 @@ namespace SF
 		//
 
 		virtual Result OnNewEvent(const ZKEvent& eventOut);
-		virtual void OnComlition(ZooKeeperTask& pTask);
-		virtual void OnStatComlition(StatTask& pTask);
-		virtual void OnDataComlition(DataTask& pTask);
-		virtual void OnStringsComlition(StringsTask& pTask);
-		virtual void OnStringsStatComlition(StringsStatTask& pTask);
-		virtual void OnStringComlition(StringTask& pTask);
-		//virtual void OnACLComlition(ACLTask& pTask);
+		virtual void OnComplition(ZooKeeperTask& pTask);
+		virtual void OnStatComplition(StatTask& pTask);
+		virtual void OnDataComplition(DataTask& pTask);
+		virtual void OnStringsComplition(StringsTask& pTask);
+		virtual void OnStringsStatComplition(StringsStatTask& pTask);
+		virtual void OnStringComplition(StringTask& pTask);
+		//virtual void OnACLComplition(ACLTask& pTask);
 	};
 
 

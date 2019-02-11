@@ -95,6 +95,7 @@ namespace Net {
 	{
 		// We will share the write queue in net system for UDP
 		//m_MySocketIOAdapter.SetWriteQueue(new WriteBufferQueue);
+		SetSocketIO(&m_MySocketIOAdapter);
 	}
 
 	ServerUDPBase::~ServerUDPBase()

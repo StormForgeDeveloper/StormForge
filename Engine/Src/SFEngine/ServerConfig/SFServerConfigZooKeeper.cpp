@@ -832,7 +832,8 @@ namespace SF
 			result = m_zkInstance.DeleteTree(nodePath);
 		String outPath;
 		result = m_zkInstance.Create(nodePath, Json::Value(Json::objectValue), nullptr, 0, outPath);
-		if (!result) return result;
+		if (!result)
+			return result;
 
 		String rootPath;
 		rootPath.Format("{0}/{1}", nodePath, "DBCluster");

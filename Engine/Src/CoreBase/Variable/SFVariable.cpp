@@ -936,7 +936,16 @@ namespace SF
 	Result VariableFixedString32::ToString(ToStringContext& context) const
 	{
 		auto pStr = Service::StringDB->GetString(m_Value);
-		return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		if (pStr != nullptr)
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		else
+		{
+			auto oldRadix = context.Radix;
+			context.Radix = 16;
+			auto result = _IToA(context, (uint32_t)m_Value);
+			context.Radix = oldRadix;
+			return result;
+		}
 	}
 
 	Variable* VariableFixedString32::Clone(Array<uint8_t>& buffer) const
@@ -965,7 +974,16 @@ namespace SF
 	Result VariableFixedString::ToString(ToStringContext& context) const
 	{
 		auto pStr = Service::StringDB->GetString(m_Value);
-		return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		if (pStr != nullptr)
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		else
+		{
+			auto oldRadix = context.Radix;
+			context.Radix = 16;
+			auto result = _IToA(context, (uint64_t)m_Value);
+			context.Radix = oldRadix;
+			return result;
+		}
 	}
 
 	Variable* VariableFixedString::Clone(Array<uint8_t>& buffer) const

@@ -64,6 +64,8 @@ namespace SF
 
 		Heap m_Heap;
 
+		SF::CriticalSection m_LockForStringWrite;
+
 		DualSortedMap<uint32_t, const StringItem*> m_StringMap32;
 		DualSortedMap<uint64_t, const StringItem*> m_StringMap64;
 
