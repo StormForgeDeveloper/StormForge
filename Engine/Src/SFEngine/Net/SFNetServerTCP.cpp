@@ -178,6 +178,7 @@ namespace Net {
 	{
 		// ServerTCP listen only for accept
 		//SetWriteQueue(new WriteBufferQueue);
+		SetSocketIO(&m_MySocketIOAdapter);
 	}
 
 	ServerTCP::~ServerTCP()

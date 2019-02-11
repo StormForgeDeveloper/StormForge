@@ -119,8 +119,13 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 
-		if (pIOBuffer != nullptr && pIOBuffer->CID != GetCID())
-			netErr(ResultCode::INVALID_ARG);
+		if (pIOBuffer == nullptr)
+		{
+			netErr(ResultCode::UNEXPECTED);
+		}
+
+		//if (pIOBuffer->CID != GetCID()) // We don't initialize CID any more. skip it
+		//	netErr(ResultCode::INVALID_ARG);
 
 		if (pIOBuffer != nullptr && pIOBuffer->Operation != IOBUFFER_OPERATION::OP_TCPREAD)
 		{
