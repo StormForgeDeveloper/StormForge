@@ -178,7 +178,7 @@ namespace SF {
 		if (src != nullptr)
 			strLen = (int)strlen(src);
 
-		if (startIndex >= strLen)
+		if (startIndex >= static_cast<int>(strLen))
 			return;
 
 		if (size <= 0)

@@ -70,7 +70,7 @@ namespace SF {
 		template<class ValueType>
 		ValueType PopValue()
 		{
-			Variable* pVariable = GetFront();
+			Variable* pVariable = GetFromFront();
 			if (pVariable == nullptr)
 				return DefaultValue<ValueType>();
 

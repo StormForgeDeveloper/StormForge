@@ -38,54 +38,54 @@ namespace SF
 
 			const ScriptOpcodeInfo* ScriptBytecode_OpCodeTable[] =
 			{
-				{ Impl::ScriptOpcodeInfoNoOp::GetInstance() },
-				{ Impl::ScriptOpcodeInfoLabel::GetInstance() },
-				{ Impl::ScriptOpcodeInfoExit::GetInstance() },
+				Impl::ScriptOpcodeInfoNoOp::GetInstance(),
+				Impl::ScriptOpcodeInfoLabel::GetInstance(),
+				Impl::ScriptOpcodeInfoExit::GetInstance(),
 
 				// Arithmetic
 				// Pop two values from stack, operate them, and store result to stack
-				{ Impl::ScriptOpcodeInfoAdd::GetInstance() },
-				{ Impl::ScriptOpcodeInfoSub::GetInstance() },
-				{ Impl::ScriptOpcodeInfoMul::GetInstance() },
-				{ Impl::ScriptOpcodeInfoDiv::GetInstance() },
+				Impl::ScriptOpcodeInfoAdd::GetInstance(),
+				Impl::ScriptOpcodeInfoSub::GetInstance(),
+				Impl::ScriptOpcodeInfoMul::GetInstance(),
+				Impl::ScriptOpcodeInfoDiv::GetInstance(),
 
-				{ Impl::ScriptOpcodeInfoAddI::GetInstance() },
-				{ Impl::ScriptOpcodeInfoSubI::GetInstance() },
-				{ Impl::ScriptOpcodeInfoMulI::GetInstance() },
-				{ Impl::ScriptOpcodeInfoDivI::GetInstance() },
+				Impl::ScriptOpcodeInfoAddI::GetInstance(),
+				Impl::ScriptOpcodeInfoSubI::GetInstance(),
+				Impl::ScriptOpcodeInfoMulI::GetInstance(),
+				Impl::ScriptOpcodeInfoDivI::GetInstance(),
 
-				{ Impl::ScriptOpcodeInfoAddF::GetInstance() },
-				{ Impl::ScriptOpcodeInfoSubF::GetInstance() },
-				{ Impl::ScriptOpcodeInfoMulF::GetInstance() },
-				{ Impl::ScriptOpcodeInfoDivF::GetInstance() },
+				Impl::ScriptOpcodeInfoAddF::GetInstance(),
+				Impl::ScriptOpcodeInfoSubF::GetInstance(),
+				Impl::ScriptOpcodeInfoMulF::GetInstance(),
+				Impl::ScriptOpcodeInfoDivF::GetInstance(),
 
 				// compare values and store bool result to stack
-				{ Impl::ScriptOpcodeInfoCmpEqual::GetInstance() },
-				{ Impl::ScriptOpcodeInfoCmpGreater::GetInstance() },
-				{ Impl::ScriptOpcodeInfoCmpLess::GetInstance() },
-				{ Impl::ScriptOpcodeInfoCmpGreaterOrEqual::GetInstance() },
-				{ Impl::ScriptOpcodeInfoCmpLessOrEqual::GetInstance() },
+				Impl::ScriptOpcodeInfoCmpEqual::GetInstance(),
+				Impl::ScriptOpcodeInfoCmpGreater::GetInstance(),
+				Impl::ScriptOpcodeInfoCmpLess::GetInstance(),
+				Impl::ScriptOpcodeInfoCmpGreaterOrEqual::GetInstance(),
+				Impl::ScriptOpcodeInfoCmpLessOrEqual::GetInstance(),
 
 				// control
-				{ Impl::ScriptOpcodeInfoJump::GetInstance() },
-				{ Impl::ScriptOpcodeInfoJumpFalse::GetInstance() },
-				{ Impl::ScriptOpcodeInfoYieldFrame::GetInstance() },
+				Impl::ScriptOpcodeInfoJump::GetInstance(),
+				Impl::ScriptOpcodeInfoJumpFalse::GetInstance(),
+				Impl::ScriptOpcodeInfoYieldFrame::GetInstance(),
 
 
 				// Store value to variable
-				{ Impl::ScriptOpcodeInfoStoreToContext::GetInstance() },
-				{ Impl::ScriptOpcodeInfoStore::GetInstance() },
+				Impl::ScriptOpcodeInfoStoreToContext::GetInstance(),
+				Impl::ScriptOpcodeInfoStore::GetInstance(),
 
 				// Load value from variable
-				{ Impl::ScriptOpcodeInfoLoad::GetInstance() },
-				{ Impl::ScriptOpcodeInfoLoadI::GetInstance() },
-				{ Impl::ScriptOpcodeInfoLoadF::GetInstance() },
+				Impl::ScriptOpcodeInfoLoad::GetInstance(),
+				Impl::ScriptOpcodeInfoLoadI::GetInstance(),
+				Impl::ScriptOpcodeInfoLoadF::GetInstance(),
 
 				// Move value to variable
-				{ Impl::ScriptOpcodeInfoMoveToContext::GetInstance() },
-				{ Impl::ScriptOpcodeInfoMoveToEnvironment::GetInstance() },
+				Impl::ScriptOpcodeInfoMoveToContext::GetInstance(),
+				Impl::ScriptOpcodeInfoMoveToEnvironment::GetInstance(),
 
-				{ Impl::ScriptOpcodeInfoCall::GetInstance() },
+				Impl::ScriptOpcodeInfoCall::GetInstance(),
 			};
 
 		}

@@ -46,7 +46,7 @@ namespace SF {
 	// Push/Pop variable
 	Result VariableStack::Push(const Variable& variable)
 	{
-		auto varSize = variable.GetVariableSize();
+		//auto varSize = variable.GetVariableSize();
 		auto pVar = variable.Clone(**m_Heap);
 		return m_Vairables.push_back(pVar);
 	}
@@ -56,7 +56,7 @@ namespace SF {
 		if (offset < 0)
 			return nullptr;
 
-		if (m_Vairables.size() <= offset)
+		if (m_Vairables.size() <= static_cast<size_t>(offset))
 			return nullptr;
 
 		return m_Vairables[m_Vairables.size() - (1 + offset)];
@@ -65,7 +65,7 @@ namespace SF {
 	Result VariableStack::Pop(size_t count)
 	{
 		int iCount = (int)count;
-		for (; m_Vairables.size() >= iCount && iCount > 0; iCount--)
+		for (; static_cast<int>(m_Vairables.size()) >= iCount && iCount > 0; iCount--)
 		{
 			auto pVar = m_Vairables.pop_back();
 			delete pVar;

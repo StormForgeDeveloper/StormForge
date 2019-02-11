@@ -180,7 +180,7 @@ namespace SF
 	static String _dummy;
 	String& PathString::operator[](int iIndex)
 	{
-		if (iIndex < 0 || iIndex >= m_DecomposedPath.size())
+		if (iIndex < 0 || iIndex >= static_cast<int>(m_DecomposedPath.size()))
 		{
 			Assert(false);
 			return _dummy;
@@ -191,7 +191,7 @@ namespace SF
 
 	const String& PathString::operator[](int iIndex) const
 	{
-		if (iIndex < 0 || iIndex >= m_DecomposedPath.size())
+		if (iIndex < 0 || iIndex >= static_cast<int>(m_DecomposedPath.size()))
 		{
 			Assert(false);
 			return _dummy;
@@ -206,7 +206,7 @@ namespace SF
 		if (m_DecomposedPath.size() != src.m_DecomposedPath.size())
 			return false;
 
-		for(int iChunk = 0; iChunk < src.m_DecomposedPath.size(); iChunk++)
+		for(size_t iChunk = 0; iChunk < src.m_DecomposedPath.size(); iChunk++)
 		{
 			if (m_DecomposedPath[iChunk] != src[iChunk])
 				return false;
@@ -220,7 +220,7 @@ namespace SF
 		if (m_DecomposedPath.size() != src.m_DecomposedPath.size())
 			return true;
 
-		for (int iChunk = 0; iChunk < src.m_DecomposedPath.size(); iChunk++)
+		for (size_t iChunk = 0; iChunk < src.m_DecomposedPath.size(); iChunk++)
 		{
 			if (m_DecomposedPath[iChunk] != src[iChunk])
 				return true;

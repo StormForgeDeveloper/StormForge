@@ -60,7 +60,7 @@ namespace SF {
 
 		if (newPos > (int64_t)GetSize()) newPos = GetSize();
 		if (newPos < 0) newPos = 0;
-		m_Position = newPos;
+		m_Position = static_cast<size_t>(newPos);
 
 		return m_Position;
 	}

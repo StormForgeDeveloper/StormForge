@@ -362,7 +362,7 @@ namespace SF {
 		Array<DataType>& Array<DataType>::operator = (const Array<DataType>& src)
 		{
 			resize(src.size());
-			for (int iItem = 0; iItem < src.size(); iItem++)
+			for (size_t iItem = 0; iItem < src.size(); iItem++)
 				m_pDataPtr[iItem] = src[iItem];
 			return *this;
 		}

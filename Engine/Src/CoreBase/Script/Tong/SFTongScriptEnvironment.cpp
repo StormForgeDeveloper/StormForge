@@ -75,10 +75,10 @@ namespace SF
 			{
 				auto pCheckEnv = pCurEnv;
 				int checkIndex = checkStartIndex;
-				for (; checkIndex >= 0; checkIndex--, pCurEnv = pCurEnv->GetParent())
+				for (; checkIndex >= 0; checkIndex--, pCheckEnv = pCheckEnv->GetParent())
 				{
 					auto& checkPath = objectPath[checkIndex];
-					if (pCurEnv->GetName() != checkPath)
+					if (pCheckEnv->GetName() != checkPath)
 						break;
 				}
 

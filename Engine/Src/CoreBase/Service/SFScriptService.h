@@ -106,7 +106,7 @@ namespace SF
 			if (pVariable == nullptr)
 			{
 				VariableBox boxedValue = Boxing(value);
-				return SetVariable(boxedValue.GetVariable());
+				return SetVariable(*boxedValue.GetVariable());
 			}
 			else
 			{

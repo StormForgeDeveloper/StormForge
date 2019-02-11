@@ -122,6 +122,22 @@ namespace SF {
 	{
 	}
 
+	static void* SystemAllignedAlloc(size_t size, size_t alignment)
+	{
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+		return _aligned_malloc(size, alignment);
+#elif SF_PLATFORM == SF_PLATFORM_ANDROID
+		return memalign(alignment, size);
+#elif SF_PLATFORM == SF_PLATFORM_IOS
+		void* pPtr = nullptr;
+		if (posix_memalign(&pPtr, alignment, size) != 0)
+			return nullptr;
+		return pPtr;
+#else
+		return aligned_alloc(alignment, size);
+#endif
+	}
+
 	MemBlockHdr* STDMemoryManager::AllocInternal(size_t size, size_t alignment)
 	{
 		if (alignment == 0)
@@ -135,18 +151,7 @@ namespace SF {
 		m_AllocatedDRAM.fetch_add(size, std::memory_order_relaxed);
 
 		MemBlockHdr* pMemBlock;
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS
-		pMemBlock = (MemBlockHdr*)_aligned_malloc(allocSize, alignment);
-#elif SF_PLATFORM == SF_PLATFORM_ANDROID
-		pMemBlock = (MemBlockHdr*)memalign(alignment, allocSize);
-#elif SF_PLATFORM == SF_PLATFORM_IOS
-		void* pPtr = nullptr;
-		if (posix_memalign(&pPtr, alignment, allocSize) != 0)
-			return nullptr;
-		pMemBlock = (MemBlockHdr*)pPtr;
-#else
-		pMemBlock = (MemBlockHdr*)aligned_alloc(alignment, allocSize);
-#endif
+		pMemBlock = (MemBlockHdr*)SystemAllignedAlloc(allocSize, alignment);
 
 		pMemBlock->Init(this, (uint32_t)size, (uint32_t)spaceForHeader);
 		//memset(pMemBlock, 0, sizeof(MemBlockHdr));
@@ -194,7 +199,7 @@ namespace SF {
 		auto remain = ((int64_t)newPtr) % alignment;
 		if (remain != 0)
 		{
-			auto newPtr2 = malloc(newSize, alignment);
+			auto newPtr2 = SystemAllignedAlloc(allocSize, alignment);
 			memcpy(newPtr, newPtr2, newSize);
 			free(newPtr);
 			newPtr = newPtr2;

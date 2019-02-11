@@ -87,7 +87,7 @@ namespace SF {
 		while (offset > 0)
 		{
 			auto readSize = Util::Min(offset, (int64_t)sizeof(decompressBuffer));
-			Read(decompressBuffer, readSize);
+			Read(decompressBuffer, static_cast<size_t>(readSize));
 			offset -= readSize;
 		}
 		return GetPosition();

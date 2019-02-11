@@ -31,7 +31,7 @@ namespace SF
 	//	Stack memory allocator
 	//
 
-	template< size_t BufferSize, size_t alignment = SF_ALIGN_DOUBLE >
+	template< size_t BufferSize, size_t DefaultAlignment = SF_ALIGN_DOUBLE >
 	class StackHeap : public IHeap
 	{
 	public:
@@ -45,7 +45,7 @@ namespace SF
 #pragma pack(pop)
 
 		// header size
-		static const size_t HEADER_SIZE = AlignUp(sizeof(MemoryChunkHeader), alignment);
+		static const size_t HEADER_SIZE = AlignUp(sizeof(MemoryChunkHeader), DefaultAlignment);
 
 
 		// stack position

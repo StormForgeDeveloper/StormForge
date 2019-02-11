@@ -80,7 +80,7 @@ namespace SF
 				return ResultCode::INVALID_POINTER;
 
 
-			while (m_BytecodeContext.CurrentPosition < pByteCode->size())
+			while (m_BytecodeContext.CurrentPosition < static_cast<int>(pByteCode->size()))
 			{
 				auto opCode = (*pByteCode)[m_BytecodeContext.CurrentPosition];
 				if (opCode < 0 || opCode > (int)SrciptBytecodeOpCode::Max)

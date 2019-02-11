@@ -201,7 +201,7 @@ namespace SF
 		if (pFound == pNode)
 		{
 			// This node need to be removed
-			ReferenceAccessPoint *pParentPointer = nullptr;
+			//ReferenceAccessPoint *pParentPointer = nullptr;
 			MapNode* replacedChild = nullptr;
 			if (pFound->ListNode.pNext == nullptr)
 			{

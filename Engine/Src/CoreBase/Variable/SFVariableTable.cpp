@@ -123,7 +123,8 @@ namespace SF {
 			pBuffer = new(GetHeap()) uint8_t[varSize];
 		}
 
-		pVariable = variable.Clone(ExternalBufferArray<uint8_t>(varSize, varSize, reinterpret_cast<uint8_t*>(pBuffer)));
+		Array<uint8_t> tempBuff(varSize, reinterpret_cast<uint8_t*>(pBuffer));
+		pVariable = variable.Clone(tempBuff);
 		return m_VairableTable.Insert(name, pVariable);
 	}
 

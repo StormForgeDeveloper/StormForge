@@ -20,8 +20,8 @@ namespace SF {
 	//   // allocate from the buffer first
 	//
 
-	template< size_t BufferSize, size_t alignment >
-	StackHeap<BufferSize, alignment>::StackHeap(FixedString name, IHeap& overflowHeap)
+	template< size_t BufferSize, size_t DefaultAlignment >
+	StackHeap<BufferSize, DefaultAlignment>::StackHeap(FixedString name, IHeap& overflowHeap)
 		: IHeap(name, &overflowHeap)
 	{
 		// Because of the chunk header uses 32bit integer, the limit will be maximum of int32. Actually it's uint32_t, but it's not a big deal
@@ -31,13 +31,13 @@ namespace SF {
 		memset(pChunk, 0, sizeof(MemoryChunkHeader));
 	}
 
-	template< size_t BufferSize, size_t alignment >
-	StackHeap<BufferSize, alignment>::~StackHeap()
+	template< size_t BufferSize, size_t DefaultAlignment >
+	StackHeap<BufferSize, DefaultAlignment>::~StackHeap()
 	{
 	}
 
-	template< size_t BufferSize, size_t alignment >
-	inline bool StackHeap<BufferSize, alignment>::GetIsInStaticBuffer(void* pPtr)
+	template< size_t BufferSize, size_t DefaultAlignment >
+	inline bool StackHeap<BufferSize, DefaultAlignment>::GetIsInStaticBuffer(void* pPtr)
 	{
 		intptr_t ptr = (intptr_t)pPtr;
 		intptr_t staticBuffer = (intptr_t)m_AllocationBuffer;
@@ -45,17 +45,18 @@ namespace SF {
 	}
 
 	// Get free memory size in static buffer
-	template< size_t BufferSize, size_t alignment >
-	inline size_t StackHeap<BufferSize, alignment>::GetFreeMemorySize()
+	template< size_t BufferSize, size_t DefaultAlignment >
+	inline size_t StackHeap<BufferSize, DefaultAlignment>::GetFreeMemorySize()
 	{
 		return BufferSize - m_AllocatePosition;
 	}
 
 
 	// Allocate 
-	template< size_t BufferSize, size_t alignment >
-	MemBlockHdr* StackHeap<BufferSize, alignment>::AllocInternal(size_t size, size_t alignment)
+	template< size_t BufferSize, size_t DefaultAlignment >
+	MemBlockHdr* StackHeap<BufferSize, DefaultAlignment>::AllocInternal(size_t size, size_t alignment)
 	{
+		alignment = std::max(alignment, DefaultAlignment);
 		MemoryChunkHeader *pChunk = nullptr;
 		intptr_t allocationSize = (intptr_t)AlignUp(size, alignment);
 		intptr_t remainSize = BufferSize - m_AllocatePosition;
@@ -106,16 +107,16 @@ namespace SF {
 	}
 
 	// Reallocate
-	template< size_t BufferSize, size_t alignment >
-	MemBlockHdr* StackHeap<BufferSize, alignment>::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment)
+	template< size_t BufferSize, size_t DefaultAlignment >
+	MemBlockHdr* StackHeap<BufferSize, DefaultAlignment>::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment)
 	{
 		assert(0);
 		return nullptr;
 	}
 
 	// Free
-	template< size_t BufferSize, size_t alignment >
-	void StackHeap<BufferSize, alignment>::FreeInternal(MemBlockHdr* pPtr)
+	template< size_t BufferSize, size_t DefaultAlignment >
+	void StackHeap<BufferSize, DefaultAlignment>::FreeInternal(MemBlockHdr* pPtr)
 	{
 		if (pPtr == nullptr) // null free
 			return ;
@@ -153,8 +154,8 @@ namespace SF {
 	}
 
 	// Validate allocated chunks for debug
-	template< size_t BufferSize, size_t alignment >
-	Result StackHeap<BufferSize, alignment>::ValidateAllocatedChunks()
+	template< size_t BufferSize, size_t DefaultAlignment >
+	Result StackHeap<BufferSize, DefaultAlignment>::ValidateAllocatedChunks()
 	{
 		MemoryChunkHeader* pChunk = nullptr;
 

@@ -412,7 +412,7 @@ namespace Net {
 			for (uint iThread = 0; iThread < netThreadCount; iThread++)
 			{
 				auto pNewWorker = new(Service::NetSystem->GetHeap()) EPOLLWorker(true);
-				m_WorkerTCP.Append(pNewWorker);
+				m_WorkerTCP.push_back(pNewWorker);
 
 				pNewWorker->Start();
 			}
@@ -421,7 +421,7 @@ namespace Net {
 			for (uint iThread = 0; iThread < netThreadCount; iThread++)
 			{
 				auto pNewWorker = new(Service::NetSystem->GetHeap()) EPOLLWorker(false, hEPollUDP);
-				m_WorkerUDP.Append(pNewWorker);
+				m_WorkerUDP.push_back(pNewWorker);
 
 				pNewWorker->Start();
 			}

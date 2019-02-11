@@ -120,7 +120,7 @@ namespace SF {
 		template<class ValueType>
 		ValueType GetValue(FixedString name)
 		{
-			Variable* pVariable = GetValue(name);
+			Variable* pVariable = GetVariable(name);
 			if (pVariable == nullptr)
 				return DefaultValue<ValueType>();
 
