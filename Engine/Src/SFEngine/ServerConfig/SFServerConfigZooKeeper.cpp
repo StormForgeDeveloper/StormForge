@@ -162,46 +162,46 @@ namespace SF
 		Result result;
 
 
-		switch (Hash32(moduleName))
+		switch (Crc32C(moduleName))
 		{
-		case "ModMatchingQueue_Game_8x1"_hash32:
-		case "ModMatchingQueue_Game_8x2"_hash32:
-		case "ModMatchingQueue_Game_8x3"_hash32:
-		case "ModMatchingQueue_Game_8x4"_hash32:
-		case "ModMatchingQueue_Game_8x5"_hash32:
-		case "ModMatchingQueue_Game_8x6"_hash32:
-		case "ModMatchingQueue_Game_8x7"_hash32:
-		case "ModMatchingQueue_Game_8x1S"_hash32:
-		case "ModMatchingQueue_Game_8x1W"_hash32:
-		case "ModMatchingQueue_Game_4x1"_hash32:
-		case "ModMatchingQueue_Game_4x2"_hash32:
-		case "ModMatchingQueue_Game_4x3"_hash32:
-		case "ModMatchingQueue_Game_4x1S"_hash32:
-		case "ModMatchingQueue_Game_4x1W"_hash32:
-		case "ModGamePartyManager"_hash32:
-		case "ModMonitoring"_hash32:
-		case "ModRanking"_hash32:
+		case "ModMatchingQueue_Game_8x1"_crc:
+		case "ModMatchingQueue_Game_8x2"_crc:
+		case "ModMatchingQueue_Game_8x3"_crc:
+		case "ModMatchingQueue_Game_8x4"_crc:
+		case "ModMatchingQueue_Game_8x5"_crc:
+		case "ModMatchingQueue_Game_8x6"_crc:
+		case "ModMatchingQueue_Game_8x7"_crc:
+		case "ModMatchingQueue_Game_8x1S"_crc:
+		case "ModMatchingQueue_Game_8x1W"_crc:
+		case "ModMatchingQueue_Game_4x1"_crc:
+		case "ModMatchingQueue_Game_4x2"_crc:
+		case "ModMatchingQueue_Game_4x3"_crc:
+		case "ModMatchingQueue_Game_4x1S"_crc:
+		case "ModMatchingQueue_Game_4x1W"_crc:
+		case "ModGamePartyManager"_crc:
+		case "ModMonitoring"_crc:
+		case "ModRanking"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModule(GetHeap());
 			pServerModule = pModule;
 		}
 			break;
 
-		case "ModMatching_Game_8"_hash32:
+		case "ModMatching_Game_8"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModuleMatching_8(GetHeap());
 			pModule->UseBot = itemValue.get("UseBot",Json::Value(false)).asBool();
 			pServerModule = pModule;
 		}
 			break;
-		case "ModMatching_Game_4"_hash32:
+		case "ModMatching_Game_4"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModuleMatching_4(GetHeap());
 			pModule->UseBot = itemValue.get("UseBot", Json::Value(false)).asBool();
 			pServerModule = pModule;
 		}
 			break;
-		case "ModPurchaseValidateGoogle"_hash32:
+		case "ModPurchaseValidateGoogle"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModuleGooglePurchaseValidate(GetHeap());
 			auto Account = itemValue.get("Account", Json::Value(""));
@@ -214,7 +214,7 @@ namespace SF
 			pServerModule = pModule;
 		}
 			break;
-		case "ModPurchaseValidateIOS"_hash32:
+		case "ModPurchaseValidateIOS"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModuleIOSPurchaseValidate(GetHeap());
 			auto URL = itemValue.get("URL", Json::Value(""));
@@ -225,28 +225,28 @@ namespace SF
 			pServerModule = pModule;
 		}
 			break;
-		case "ModLogin"_hash32:
+		case "ModLogin"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ParseNetPublic(itemValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pServerModule = pModule;
 		}
 			break;
-		case "ModGameInstanceManager"_hash32:
+		case "ModGameInstanceManager"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ParseNetPublic(itemValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pServerModule = pModule;
 		}
 		break;
-		case "ModGame"_hash32:
+		case "ModGame"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ParseNetPublic(itemValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pServerModule = pModule;
 		}
 			break;
-		case "NetPrivate"_hash32:
+		case "NetPrivate"_crc:
 			break;
 		default:
 			assert(false);
@@ -632,32 +632,32 @@ namespace SF
 	{
 		Json::Value itemValue(Json::objectValue);
 
-		switch (Hash32((const char*)pServerModule->ModuleName))
+		switch (Crc32C((const char*)pServerModule->ModuleName))
 		{
-		case "ModMatchingQueue_Game_8x1"_hash32:
-		case "ModMatchingQueue_Game_8x2"_hash32:
-		case "ModMatchingQueue_Game_8x3"_hash32:
-		case "ModMatchingQueue_Game_8x4"_hash32:
-		case "ModMatchingQueue_Game_8x5"_hash32:
-		case "ModMatchingQueue_Game_8x6"_hash32:
-		case "ModMatchingQueue_Game_8x7"_hash32:
-		case "ModMatchingQueue_Game_8x1S"_hash32:
-		case "ModMatchingQueue_Game_8x1W"_hash32:
-		case "ModMatchingQueue_Game_4x1"_hash32:
-		case "ModMatchingQueue_Game_4x2"_hash32:
-		case "ModMatchingQueue_Game_4x3"_hash32:
-		case "ModMatchingQueue_Game_4x1S"_hash32:
-		case "ModMatchingQueue_Game_4x1W"_hash32:
-		case "ModGamePartyManager"_hash32:
+		case "ModMatchingQueue_Game_8x1"_crc:
+		case "ModMatchingQueue_Game_8x2"_crc:
+		case "ModMatchingQueue_Game_8x3"_crc:
+		case "ModMatchingQueue_Game_8x4"_crc:
+		case "ModMatchingQueue_Game_8x5"_crc:
+		case "ModMatchingQueue_Game_8x6"_crc:
+		case "ModMatchingQueue_Game_8x7"_crc:
+		case "ModMatchingQueue_Game_8x1S"_crc:
+		case "ModMatchingQueue_Game_8x1W"_crc:
+		case "ModMatchingQueue_Game_4x1"_crc:
+		case "ModMatchingQueue_Game_4x2"_crc:
+		case "ModMatchingQueue_Game_4x3"_crc:
+		case "ModMatchingQueue_Game_4x1S"_crc:
+		case "ModMatchingQueue_Game_4x1W"_crc:
+		case "ModGamePartyManager"_crc:
 			break;
 
-		case "ModMatching_Game_8"_hash32:
+		case "ModMatching_Game_8"_crc:
 			itemValue["UseBot"] = Json::Value(((ServerConfig::ServerModuleMatching_8*)pServerModule)->UseBot);
 			break;
-		case "ModMatching_Game_4"_hash32:
+		case "ModMatching_Game_4"_crc:
 			itemValue["UseBot"] = Json::Value(((ServerConfig::ServerModuleMatching_4*)pServerModule)->UseBot);
 			break;
-		case "ModPurchaseValidateGoogle"_hash32:
+		case "ModPurchaseValidateGoogle"_crc:
 		{
 			auto pModule = static_cast<const ServerConfig::ServerModuleGooglePurchaseValidate*>(pServerModule);
 			itemValue["Account"] = ToJsonSafeString(pModule->Account);
@@ -665,30 +665,30 @@ namespace SF
 			itemValue["AuthScopes"] = ToJsonSafeString(pModule->AuthScopes);
 		}
 		break;
-		case "ModPurchaseValidateIOS"_hash32:
+		case "ModPurchaseValidateIOS"_crc:
 		{
 			auto pModule = static_cast<const ServerConfig::ServerModuleIOSPurchaseValidate*>(pServerModule);
 			itemValue["URL"] = ToJsonSafeString(pModule->URL);
 			itemValue["AltURL"] = ToJsonSafeString(pModule->AltURL);
 		}
 		break;
-		case "ModMonitoring"_hash32:
+		case "ModMonitoring"_crc:
 			break;
-		case "ModLogin"_hash32:
+		case "ModLogin"_crc:
 		{
 			auto pModule = static_cast<const ServerConfig::ServerModulePublicService*>(pServerModule);
 			itemValue["NetPublic"] = ToJsonNetPublic(pModule->PublicNet);
 		}
 		break;
-		case "ModRanking"_hash32:
+		case "ModRanking"_crc:
 			break;
-		case "ModGame"_hash32:
+		case "ModGame"_crc:
 		{
 			auto pModule = static_cast<const ServerConfig::ServerModulePublicService*>(pServerModule);
 			itemValue["NetPublic"] = ToJsonNetPublic(pModule->PublicNet);
 		}
 		break;
-		case "NetPrivate"_hash32:
+		case "NetPrivate"_crc:
 			break;
 		default:
 			assert(false);
@@ -703,9 +703,9 @@ namespace SF
 	{
 		Json::Value itemValue(Json::objectValue);
 
-		switch (Hash32((const char*)pServerComponent->ComponentName))
+		switch (Crc32C((const char*)pServerComponent->ComponentName))
 		{
-		case "ComponentGoogle"_hash32:
+		case "ComponentGoogle"_crc:
 		{
 			auto pComponent = static_cast<const ServerConfig::ServerComponentGoogle*>(pServerComponent);
 			itemValue["Account"] = ToJsonSafeString(pComponent->Account);
@@ -713,15 +713,15 @@ namespace SF
 			itemValue["AuthScopes"] = ToJsonSafeString(pComponent->AuthScopes);
 		}
 		break;
-		case "ComponentIOS"_hash32:
+		case "ComponentIOS"_crc:
 		{
 			auto pComponent = static_cast<const ServerConfig::ServerComponentIOS*>(pServerComponent);
 			itemValue["URL"] = ToJsonSafeString(pComponent->URL);
 			itemValue["AltURL"] = ToJsonSafeString(pComponent->AltURL);
 		}
 		break;
-		case "NetPrivate"_hash32:
-		case "NetPublic"_hash32:
+		case "NetPrivate"_crc:
+		case "NetPublic"_crc:
 			break;
 		default:
 			assert(false);

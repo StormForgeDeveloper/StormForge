@@ -31,13 +31,13 @@ TEST_F(VariableTest, Table)
 	VariableTable table(GetHeap());
 
 	auto boxedInt = Boxing(10);
-	table.SetVariable("testInt", *boxedInt.GetVariable());
+	table.SetVariable("testInt"_crc, *boxedInt.GetVariable());
 
 	auto boxedFloat = Boxing(10.f);
-	table.SetVariable("testFloat", *boxedFloat.GetVariable());
+	table.SetVariable("testFloat"_crc, *boxedFloat.GetVariable());
 
 	auto boxedDouble = Boxing(10.);
-	table.SetVariable("testDouble", *boxedDouble.GetVariable());
+	table.SetVariable("testDouble"_crc, *boxedDouble.GetVariable());
 
 	EXPECT_EQ(boxedInt.GetVariable()->GetValue<int>(), table.GetValue<int>("testInt"));
 	EXPECT_EQ(boxedFloat.GetVariable()->GetValue<float>(), table.GetValue<float>("testFloat"));
@@ -51,19 +51,19 @@ TEST_F(VariableTest, Table2)
 	VariableTable table(GetHeap());
 
 	auto boxedInt = Boxing(10);
-	table.SetVariable("testInt", *boxedInt.GetVariable());
-	table.SetVariable("testInt", *boxedInt.GetVariable());
+	table.SetVariable("testInt"_crc, *boxedInt.GetVariable());
+	table.SetVariable("testInt"_crc, *boxedInt.GetVariable());
 
 	auto boxedFloat = Boxing(10.f);
-	table.SetVariable("testFloat", *boxedFloat.GetVariable());
-	table.SetVariable("testFloat", *boxedFloat.GetVariable());
+	table.SetVariable("testFloat"_crc, *boxedFloat.GetVariable());
+	table.SetVariable("testFloat"_crc, *boxedFloat.GetVariable());
 
 	auto boxedDouble = Boxing(10.);
-	table.SetVariable("testDouble", *boxedDouble.GetVariable());
-	table.SetVariable("testDouble", *boxedDouble.GetVariable());
+	table.SetVariable("testDouble"_crc, *boxedDouble.GetVariable());
+	table.SetVariable("testDouble"_crc, *boxedDouble.GetVariable());
 
-	EXPECT_EQ(boxedInt.GetVariable()->GetValue<int>(), table.GetValue<int>("testInt"));
-	EXPECT_EQ(boxedFloat.GetVariable()->GetValue<float>(), table.GetValue<float>("testFloat"));
-	EXPECT_EQ(boxedDouble.GetVariable()->GetValue<double>(), table.GetValue<double>("testDouble"));
+	EXPECT_EQ(boxedInt.GetVariable()->GetValue<int>(), table.GetValue<int>("testInt"_crc));
+	EXPECT_EQ(boxedFloat.GetVariable()->GetValue<float>(), table.GetValue<float>("testFloat"_crc));
+	EXPECT_EQ(boxedDouble.GetVariable()->GetValue<double>(), table.GetValue<double>("testDouble"_crc));
 }
 

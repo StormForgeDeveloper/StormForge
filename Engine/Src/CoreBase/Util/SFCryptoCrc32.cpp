@@ -19,6 +19,9 @@
 
 
 namespace SF {
+
+	constexpr uint32_t Hasher_Crc32::stm_CRC32Table[8][256];
+
 namespace Util {
 	
 

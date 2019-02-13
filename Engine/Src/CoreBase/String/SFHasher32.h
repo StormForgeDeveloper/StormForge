@@ -275,15 +275,11 @@ namespace SF {
 
 
 
-	inline uint32_t Hash32(const char* s) {
+	inline uint32_t Crc32(const char* s) {
 		return s == nullptr ? 0 : Hasher_Crc32().Crc32(0, (uint8_t*)s, strlen(s));
 	}
 
-	constexpr uint32_t operator "" _crc(const char* s, size_t sz) {
-		return Hasher_Crc32().Hash(s);
-	}
-
-	constexpr uint32_t operator "" _hash32(const char* s, size_t sz) {
+	constexpr uint32_t operator "" _crc32(const char* s, size_t sz) {
 		return Hasher_Crc32().Hash(s);
 	}
 

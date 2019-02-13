@@ -109,6 +109,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)String\SFFixedString32.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)String\SFFixedStringDB.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)String\SFHasher32.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFHasher32C.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)String\SFHasher64.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)String\SFPathString.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)String\SFString.h" />

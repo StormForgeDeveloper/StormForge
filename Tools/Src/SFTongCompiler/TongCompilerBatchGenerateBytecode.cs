@@ -103,7 +103,9 @@ namespace SFTongCompiler
                 }
 
                 if (nodeHandler != null)
+                {
                     nodeHandler(docContext, obj.Value);
+                }
                 else
                 {
                     throw new Exception("Don't know how to handle:" + nodeDefInfo.Name);
@@ -128,6 +130,12 @@ namespace SFTongCompiler
 
         void BuildByteCode_AppendBooleanPin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
         {
+            if(samePinLinks.Count != 1)
+                throw new Exception("Invalid link count for " + inputPin.Name);
+
+            var connection = samePinLinks[0];
+            var outElement = connection.OutputElement;
+            var outLinkCache = outElement.As<ScriptNodeLinkCache>();
         }
 
         void BuildByteCode_AppendFloatPin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)

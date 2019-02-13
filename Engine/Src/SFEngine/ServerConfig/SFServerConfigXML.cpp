@@ -54,10 +54,10 @@ namespace SF
 	bool ServerConfigXML::ParseXMLBool(const char* value)
 	{
 		if (value == nullptr) return false;
-		switch (Hash32(value))
+		switch (Crc32C(value))
 		{
-		case "true"_hash32:
-		case "1"_hash32:
+		case "true"_crc:
+		case "1"_crc:
 			return true;
 		}
 
@@ -175,48 +175,48 @@ namespace SF
 	{
 		Result result;
 
-		switch (Hash32((const char*)pNode->name))
+		switch (Crc32C((const char*)pNode->name))
 		{
-		case "ModMatchingQueue_Game_8x1"_hash32:
-		case "ModMatchingQueue_Game_8x2"_hash32:
-		case "ModMatchingQueue_Game_8x3"_hash32:
-		case "ModMatchingQueue_Game_8x4"_hash32:
-		case "ModMatchingQueue_Game_8x5"_hash32:
-		case "ModMatchingQueue_Game_8x6"_hash32:
-		case "ModMatchingQueue_Game_8x7"_hash32:
-		case "ModMatchingQueue_Game_8x1S"_hash32:
-		case "ModMatchingQueue_Game_8x1W"_hash32:
-		case "ModMatchingQueue_Game_4x1"_hash32:
-		case "ModMatchingQueue_Game_4x2"_hash32:
-		case "ModMatchingQueue_Game_4x3"_hash32:
-		case "ModMatchingQueue_Game_4x1S"_hash32:
-		case "ModMatchingQueue_Game_4x1W"_hash32:
-		case "ModGamePartyManager"_hash32:
-		case "ModMonitoring"_hash32:
-		case "ModRanking"_hash32:
+		case "ModMatchingQueue_Game_8x1"_crc:
+		case "ModMatchingQueue_Game_8x2"_crc:
+		case "ModMatchingQueue_Game_8x3"_crc:
+		case "ModMatchingQueue_Game_8x4"_crc:
+		case "ModMatchingQueue_Game_8x5"_crc:
+		case "ModMatchingQueue_Game_8x6"_crc:
+		case "ModMatchingQueue_Game_8x7"_crc:
+		case "ModMatchingQueue_Game_8x1S"_crc:
+		case "ModMatchingQueue_Game_8x1W"_crc:
+		case "ModMatchingQueue_Game_4x1"_crc:
+		case "ModMatchingQueue_Game_4x2"_crc:
+		case "ModMatchingQueue_Game_4x3"_crc:
+		case "ModMatchingQueue_Game_4x1S"_crc:
+		case "ModMatchingQueue_Game_4x1W"_crc:
+		case "ModGamePartyManager"_crc:
+		case "ModMonitoring"_crc:
+		case "ModRanking"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModule(GetHeap());
 			break;
 
-		case "ModMatching_Game_8"_hash32:
+		case "ModMatching_Game_8"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModuleMatching_8(GetHeap());
 			((ServerConfig::ServerModuleMatching_8*)pServerModule)->UseBot = ParseXMLBool((const char*)xmlGetProp(pNode, (xmlChar*)"UseBot"));
 			break;
-		case "ModMatching_Game_4"_hash32:
+		case "ModMatching_Game_4"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModuleMatching_4(GetHeap());
 			((ServerConfig::ServerModuleMatching_4*)pServerModule)->UseBot = ParseXMLBool((const char*)xmlGetProp(pNode, (xmlChar*)"UseBot"));
 			break;
-		case "ModPurchaseValidateGoogle"_hash32:
+		case "ModPurchaseValidateGoogle"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModuleGooglePurchaseValidate(GetHeap());
 			((ServerConfig::ServerModuleGooglePurchaseValidate*)pServerModule)->Account = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"Account"));
 			((ServerConfig::ServerModuleGooglePurchaseValidate*)pServerModule)->P12KeyFile = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"P12KeyFile"));
 			((ServerConfig::ServerModuleGooglePurchaseValidate*)pServerModule)->AuthScopes = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"AuthScopes"));
 			break;
-		case "ModPurchaseValidateIOS"_hash32:
+		case "ModPurchaseValidateIOS"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModuleIOSPurchaseValidate(GetHeap());
 			((ServerConfig::ServerModuleIOSPurchaseValidate*)pServerModule)->URL = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"URL"));
 			((ServerConfig::ServerModuleIOSPurchaseValidate*)pServerModule)->AltURL = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"AltURL"));
 			break;
-		case "ModLogin"_hash32:
+		case "ModLogin"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ForeachElement(pNode->children, [&](xmlNode* pChild)
 			{
@@ -226,7 +226,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			});
 			break;
-		case "ModGame"_hash32:
+		case "ModGame"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ForeachElement(pNode->children, [&](xmlNode* pChild)
 			{
@@ -236,7 +236,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			});
 			break;
-		case "NetPrivate"_hash32:
+		case "NetPrivate"_crc:
 			// Skip these They are not module
 			return ResultCode::SUCCESS;
 		default:
@@ -261,21 +261,21 @@ namespace SF
 
 	Result ServerConfigXML::ParseXMLServerComponent(xmlNode* pNode, ServerConfig::ServerComponent* &pServerComponent)
 	{
-		switch (Hash32((const char*)pNode->name))
+		switch (Crc32C((const char*)pNode->name))
 		{
-		case "ComponentGoogle"_hash32:
+		case "ComponentGoogle"_crc:
 			pServerComponent = new(GetHeap()) ServerConfig::ServerComponentGoogle(GetHeap());
 			((ServerConfig::ServerComponentGoogle*)pServerComponent)->Account = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"Account"));
 			((ServerConfig::ServerComponentGoogle*)pServerComponent)->P12KeyFile = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"P12KeyFile"));
 			((ServerConfig::ServerComponentGoogle*)pServerComponent)->AuthScopes = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"AuthScopes"));
 			break;
-		case "ComponentIOS"_hash32:
+		case "ComponentIOS"_crc:
 			pServerComponent = new(GetHeap()) ServerConfig::ServerComponentIOS(GetHeap());
 			((ServerConfig::ServerComponentIOS*)pServerComponent)->URL = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"URL"));
 			((ServerConfig::ServerComponentIOS*)pServerComponent)->AltURL = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"AltURL"));
 			break;
-		case "NetPrivate"_hash32:
-		case "NetPublic"_hash32:
+		case "NetPrivate"_crc:
+		case "NetPublic"_crc:
 			break;
 		default:
 			return ResultCode::NOT_IMPLEMENTED;
@@ -321,10 +321,10 @@ namespace SF
 		{
 			SFLog(System, Info, "Element, name: {0}\n", (const char*)pChild->name);
 
-			switch (Hash32((const char*)pChild->name))
+			switch (Crc32C((const char*)pChild->name))
 			{
-			case "GameDB"_hash32:
-			case "GameTransactionLogDB"_hash32:
+			case "GameDB"_crc:
+			case "GameTransactionLogDB"_crc:
 			{
 				ServerConfig::DBCluster *pDBCluster = nullptr;
 				result = ParseXMLDBCluster(pChild, pDBCluster);
@@ -336,7 +336,7 @@ namespace SF
 				}
 			}
 				break;
-			case "ModuleServer"_hash32:
+			case "ModuleServer"_crc:
 			{
 				ServerConfig::ModuleServer* pModuleServer = nullptr;
 				result = ParseXMLModuleServer(pChild, pModuleServer);
@@ -347,7 +347,7 @@ namespace SF
 				}
 			}
 			break;
-			case "Game"_hash32:
+			case "Game"_crc:
 			{
 				ServerConfig::GameServer* pServer = nullptr;
 				result = ParseXMLGameServer(pChild, pServer);
@@ -358,7 +358,7 @@ namespace SF
 				}
 			}
 			break;
-			case "GameInstance"_hash32:
+			case "GameInstance"_crc:
 			{
 				ServerConfig::GameInstanceServer* pServer = nullptr;
 				result = ParseXMLGameInstanceServer(pChild, pServer);
@@ -388,9 +388,9 @@ namespace SF
 
 			SFLog(System, Info, "Element, name: {0}\n", (const char*)pCurNode->name);
 
-			switch (Hash32((const char*)pCurNode->name))
+			switch (Crc32C((const char*)pCurNode->name))
 			{
-			case "DBInstances"_hash32:
+			case "DBInstances"_crc:
 			{
 				ServerConfig::DBInstance* pDBInstance = nullptr;
 				result = ParseXMLDBInstance(pCurNode, pDBInstance);
@@ -398,10 +398,10 @@ namespace SF
 					m_Config.GetDBInstances().push_back(pDBInstance);
 			}
 			break;
-			case "TableDB"_hash32:
-			case "AccountDB"_hash32:
-			case "LoginSessionDB"_hash32:
-			case "RankingDB"_hash32:
+			case "TableDB"_crc:
+			case "AccountDB"_crc:
+			case "LoginSessionDB"_crc:
+			case "RankingDB"_crc:
 			{
 				ServerConfig::DBCluster* pDBCluster = nullptr;
 				result = ParseXMLDBCluster(pCurNode, pDBCluster);
@@ -412,15 +412,15 @@ namespace SF
 				}
 			}
 			break;
-			case "EntityServer"_hash32: // Sore as a module server
-			case "ModuleServer"_hash32:
+			case "EntityServer"_crc: // Sore as a module server
+			case "ModuleServer"_crc:
 			{
 				ServerConfig::ModuleServer* pModuleServer = nullptr;
 				result = ParseXMLModuleServer(pCurNode, pModuleServer);
 				m_Config.GetServers().push_back(pModuleServer);
 			}
 			break;
-			case "GameCluster"_hash32:
+			case "GameCluster"_crc:
 			{
 				ServerConfig::GameCluster* pGameCluster = nullptr;
 				result = ParseXMLGameCluster(pCurNode, pGameCluster);
@@ -571,43 +571,43 @@ namespace SF
 	//	auto newNode = xmlNewNode(nullptr, reinterpret_cast<const xmlChar*>((const char*)pServerModule->ModuleName));
 	//	if (newNode == nullptr) return nullptr;
 
-	//	switch (Hash32(pServerModule->ModuleName))
+	//	switch (Crc32C(pServerModule->ModuleName))
 	//	{
-	//	case "ModMatchingQueue_Game_8x1"_hash32:	
-	//	case "ModMatchingQueue_Game_8x2"_hash32:	
-	//	case "ModMatchingQueue_Game_8x3"_hash32:	
-	//	case "ModMatchingQueue_Game_8x4"_hash32:	
-	//	case "ModMatchingQueue_Game_8x5"_hash32:	
-	//	case "ModMatchingQueue_Game_8x6"_hash32:	
-	//	case "ModMatchingQueue_Game_8x7"_hash32:	
-	//	case "ModMatchingQueue_Game_8x1S"_hash32:	
-	//	case "ModMatchingQueue_Game_8x1W"_hash32:	
-	//	case "ModMatchingQueue_Game_4x1"_hash32:	
-	//	case "ModMatchingQueue_Game_4x2"_hash32:	
-	//	case "ModMatchingQueue_Game_4x3"_hash32:	
-	//	case "ModMatchingQueue_Game_4x1S"_hash32:	
-	//	case "ModMatchingQueue_Game_4x1W"_hash32:	
-	//	case "ModGamePartyManager"_hash32:
-	//	case "ModMonitoring"_hash32:
-	//	case "ModRanking"_hash32:
+	//	case "ModMatchingQueue_Game_8x1"_crc:	
+	//	case "ModMatchingQueue_Game_8x2"_crc:	
+	//	case "ModMatchingQueue_Game_8x3"_crc:	
+	//	case "ModMatchingQueue_Game_8x4"_crc:	
+	//	case "ModMatchingQueue_Game_8x5"_crc:	
+	//	case "ModMatchingQueue_Game_8x6"_crc:	
+	//	case "ModMatchingQueue_Game_8x7"_crc:	
+	//	case "ModMatchingQueue_Game_8x1S"_crc:	
+	//	case "ModMatchingQueue_Game_8x1W"_crc:	
+	//	case "ModMatchingQueue_Game_4x1"_crc:	
+	//	case "ModMatchingQueue_Game_4x2"_crc:	
+	//	case "ModMatchingQueue_Game_4x3"_crc:	
+	//	case "ModMatchingQueue_Game_4x1S"_crc:	
+	//	case "ModMatchingQueue_Game_4x1W"_crc:	
+	//	case "ModGamePartyManager"_crc:
+	//	case "ModMonitoring"_crc:
+	//	case "ModRanking"_crc:
 	//		// The don't have things
 	//		break;
-	//	case "NetPrivate"_hash32:
+	//	case "NetPrivate"_crc:
 	//		// ignore
 	//		break;
-	//	case "ModMatching_Game_8"_hash32:
+	//	case "ModMatching_Game_8"_crc:
 	//	{
 	//		auto pModule = static_cast<const ServerConfig::ServerModuleMatching_8*>(pServerModule);
 	//		xmlNewProp(newNode, (const xmlChar*)"UseBot", reinterpret_cast<const xmlChar*>(pModule->UseBot ? "true" : "false"));
 	//	}
 	//	break;
-	//	case "ModMatching_Game_4"_hash32:
+	//	case "ModMatching_Game_4"_crc:
 	//	{
 	//		auto pModule = static_cast<const ServerConfig::ServerModuleMatching_4*>(pServerModule);
 	//		xmlNewProp(newNode, (const xmlChar*)"UseBot", reinterpret_cast<const xmlChar*>(pModule->UseBot ? "true" : "false"));
 	//	}
 	//		break;
-	//	case "ModPurchaseValidateGoogle"_hash32:
+	//	case "ModPurchaseValidateGoogle"_crc:
 	//	{
 	//		auto pModule = static_cast<const ServerConfig::ServerModuleGooglePurchaseValidate*>(pServerModule);
 	//		xmlNewProp(newNode, (const xmlChar*)"Account", reinterpret_cast<const xmlChar*>((const char*)pModule->Account));
@@ -615,20 +615,20 @@ namespace SF
 	//		xmlNewProp(newNode, (const xmlChar*)"AuthScopes", reinterpret_cast<const xmlChar*>((const char*)pModule->AuthScopes));
 	//	}
 	//		break;
-	//	case "ModPurchaseValidateIOS"_hash32:
+	//	case "ModPurchaseValidateIOS"_crc:
 	//	{
 	//		auto pModule = static_cast<const ServerConfig::ServerModuleIOSPurchaseValidate*>(pServerModule);
 	//		xmlNewProp(newNode, (const xmlChar*)"URL", reinterpret_cast<const xmlChar*>((const char*)pModule->URL));
 	//		xmlNewProp(newNode, (const xmlChar*)"AltURL", reinterpret_cast<const xmlChar*>((const char*)pModule->AltURL));
 	//	}
 	//		break;
-	//	case "ModLogin"_hash32:
+	//	case "ModLogin"_crc:
 	//	{
 	//		auto pModule = static_cast<const ServerConfig::ServerModulePublicService*>(pServerModule);
 	//		ToXMLNetPublic(newNode, pModule->PublicNet);
 	//	}
 	//	break;
-	//	case "ModGame"_hash32:
+	//	case "ModGame"_crc:
 	//	{
 	//		auto pModule = static_cast<const ServerConfig::ServerModulePublicService*>(pServerModule);
 	//		ToXMLNetPublic(newNode, pModule->PublicNet);
@@ -646,9 +646,9 @@ namespace SF
 	//	auto newNode = xmlNewNode(nullptr, reinterpret_cast<const xmlChar*>((const char*)pServerComponent->ComponentName));
 	//	if (newNode == nullptr) return nullptr;
 
-	//	switch (Hash32(pServerComponent->ComponentName))
+	//	switch (Crc32C(pServerComponent->ComponentName))
 	//	{
-	//	case "ComponentGoogle"_hash32:
+	//	case "ComponentGoogle"_crc:
 	//		{
 	//			auto pComponent = static_cast<const ServerConfig::ServerComponentGoogle*>(pServerComponent);
 	//			xmlNewProp(newNode, (const xmlChar*)"Account", reinterpret_cast<const xmlChar*>((const char*)pComponent->Account));
@@ -656,7 +656,7 @@ namespace SF
 	//			xmlNewProp(newNode, (const xmlChar*)"AuthScopes", reinterpret_cast<const xmlChar*>((const char*)pComponent->AuthScopes));
 	//		}
 	//		break;
-	//	case "ComponentIOS"_hash32:
+	//	case "ComponentIOS"_crc:
 	//		{
 	//			auto pComponent = static_cast<const ServerConfig::ServerComponentIOS*>(pServerComponent);
 	//			xmlNewProp(newNode, (const xmlChar*)"URL", reinterpret_cast<const xmlChar*>((const char*)pComponent->URL));

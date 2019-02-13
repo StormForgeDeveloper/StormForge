@@ -9,10 +9,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "CoreBasePCH.h"
-#include <stdint.h>
-#include <assert.h>
-#include <fstream>
-#include <algorithm>
 
 #include "String/SFHasher32.h"
 #include "String/SFHasher64.h"
@@ -176,7 +172,7 @@ namespace SF
 	// Add string to both 32 and 64 hash
 	void FixedStringDB::AddString(const char* str)
 	{
-		uint32_t hash32Value = Hash32(str);
+		uint32_t hash32Value = Crc32C(str);
 		uint64_t hash64Value = Hash64(str);
 
 		const StringItem* pStrItem = nullptr;
@@ -196,7 +192,7 @@ namespace SF
 	uint32_t FixedStringDB::AddNGetString32(const char* str)
 	{
 		uint64_t hash64Value = Hash64(str);
-		uint32_t hash32Value = Hash32(str);
+		uint32_t hash32Value = Crc32C(str);
 
 		const StringItem* pStrItem = nullptr;
 		if (m_StringMap64.Find(hash64Value, pStrItem))
@@ -216,7 +212,7 @@ namespace SF
 	uint64_t FixedStringDB::AddNGetString(const char* str)
 	{
 		uint64_t hash64Value = Hash64(str);
-		uint32_t hash32Value = Hash32(str);
+		uint32_t hash32Value = Crc32C(str);
 
 		const StringItem* pStrItem = nullptr;
 		if (m_StringMap64.Find(hash64Value, pStrItem))

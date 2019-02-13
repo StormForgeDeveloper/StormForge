@@ -11,7 +11,7 @@
 #pragma  once
 
 #include <stdint.h>
-#include "SFHasher32.h"
+#include "SFHasher32C.h"
 
 
 namespace SF
@@ -36,8 +36,8 @@ namespace SF
 
 		}
 
-		constexpr FixedString32(const char* text)
-			: m_Crc(Hasher_Crc32().Hash(text))
+		FixedString32(const char* text)
+			: m_Crc(Hasher_Crc32C().Hash(text))
 		{
 
 		}

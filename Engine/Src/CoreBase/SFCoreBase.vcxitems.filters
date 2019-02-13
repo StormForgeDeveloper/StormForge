@@ -649,6 +649,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Variable\SFVariableStack.h">
       <Filter>Variable</Filter>
     </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFHasher32C.h">
+      <Filter>String</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Service">
