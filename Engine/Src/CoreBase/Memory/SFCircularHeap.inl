@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2013 Kyungkun Ko
 // 
@@ -144,9 +144,9 @@ namespace SF {
 			//	return;
 			//}
 			//pChunk->ChunkType = ChunkTypes::Free;
+			pChunk->pHeap = nullptr;
 			if (m_FreePosition != ((intptr_t)pChunk - (intptr_t)m_AllocationBuffer))
 			{
-				pChunk->pHeap = nullptr;
 				// If this memory isn't exist in the free position, we should leave it for later
 				return;
 			}
