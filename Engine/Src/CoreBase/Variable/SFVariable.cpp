@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -251,7 +251,7 @@ namespace SF
 	{
 		context.Radix = 16;
 
-		return SF::_IToA(context, m_Value);
+		return SF::_IToA(context, (uint32_t)m_Value);
 	}
 
 	Variable* VariableResult::Clone(Array<uint8_t>& buffer) const
