@@ -45,6 +45,7 @@ namespace TestNet.WinSharp
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.JoinGameServerRes, 0, HandleJoinGameServerRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDLogin.DataTestRes, 0, HandleDataTestRes);
 
+            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.GetFriendListRes, 0, HandleGetFriendListRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.RequestGameMatchRes, 0, HandleRequestGameMatchRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.GameMatchedS2CEvt, 0, HandleGameMatchedS2CEvt);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.GameMatchFailedS2CEvt, 0, HandleGameMatchFailedS2CEvt);
@@ -288,7 +289,9 @@ namespace TestNet.WinSharp
                 m_ConnectionLogin = null;
             }
 
-            m_Game.RequestGameMatchCmd(4, (byte)PlayerRole.None);
+            m_Game.GetFriendListCmd(0,20);
+            //m_Game.GetNotificationListCmd();
+            //m_Game.RequestGameMatchCmd(4, (byte)PlayerRole.None);
         }
 
         void HandleRequestGameMatchRes(SFMessage message)
@@ -300,6 +303,17 @@ namespace TestNet.WinSharp
                 return;
             }
             
+        }
+
+        void HandleGetFriendListRes(SFMessage message)
+        {
+            var result = message.GetValue<Result>("Result");
+            if (result.IsFailed)
+            {
+                PrintStatus("Game friend list failed {0}", result);
+                return;
+            }
+
         }
 
         void HandleGameMatchedS2CEvt(SFMessage message)
