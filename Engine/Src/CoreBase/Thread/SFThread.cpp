@@ -157,19 +157,21 @@ namespace SF {
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 
-		THREADNAME_INFO info;
-		info.dwType = 0x1000;
-		info.szName = threadName;
-		info.dwThreadID = ::GetThreadId(native_handle());
-		info.dwFlags = 0;
-#pragma warning(push)  
-#pragma warning(disable: 6320 6322)  
-		__try {
-			RaiseException(MS_VC_EXCEPTION, 0, sizeof(info) / sizeof(ULONG_PTR), (ULONG_PTR*)&info);
-		}
-		__except (EXCEPTION_EXECUTE_HANDLER) {
-		}
-#pragma warning(pop)  
+		typedef HRESULT(_stdcall *TSetThreadDescription)(HANDLE hThread, PCWSTR threadName);
+		wchar_t threadNameBuffer[512];
+
+		static HMODULE hKernel = LoadLibraryA("Kernel32.dll");
+		if (hKernel == nullptr)
+			return;
+
+		static auto pSetThreadDescription = (TSetThreadDescription)GetProcAddress(hKernel, "SetThreadDescription");
+		if (pSetThreadDescription == nullptr)
+			return;
+
+		StrUtil::UTF8ToWCS(threadName, threadNameBuffer);
+
+		auto nativeHandle = thread::native_handle();
+		pSetThreadDescription((HANDLE)nativeHandle, threadNameBuffer);
 #else
 		pthread_setname_np(native_handle(), threadName);
 #endif
