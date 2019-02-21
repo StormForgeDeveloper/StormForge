@@ -62,7 +62,10 @@ namespace SF
 				auto zkInstance = zkWatcher->GetZKInstance();
 				for (auto itRegistered : zkInstance->GetRegisteredWatchers())
 				{
-					itRegistered->OnNewEvent(evt);
+					if (itRegistered != zkWatcher && itRegistered->m_State.exchange(std::memory_order_consume) != state)
+					{
+						itRegistered->OnNewEvent(evt);
+					}
 				}
 			}
 			else
@@ -284,6 +287,8 @@ namespace SF
 
 	void ZooKeeper::Close()
 	{
+		MutexScopeLock lock(m_handleLock);
+
 		if (m_ZKHandle != nullptr)
 			zookeeper_close(m_ZKHandle);
 		m_ZKHandle = nullptr;
@@ -291,6 +296,8 @@ namespace SF
 
 	Result ZooKeeper::Connect(const char* connectionString)
 	{
+		MutexScopeLock lock(m_handleLock);
+
 		Close();
 
 		zoo_set_debug_level((ZooLogLevel)m_LogLevel);

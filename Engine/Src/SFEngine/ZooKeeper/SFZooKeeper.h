@@ -262,6 +262,9 @@ namespace SF
 
 		IHeap& m_Heap;
 
+		// ZK handle lock
+		CriticalSection m_handleLock;
+
 		// ZooKeeper handle
 		zhandle_t* m_ZKHandle = nullptr;
 
