@@ -207,6 +207,7 @@ namespace Net {
 
 	void ConnectionMUDPClient::MyNetSocketIOManager::FreeCurrentHandler()
 	{
+		MutexScopeLock lock(m_ManagerLock);
 		if (m_ActiveAdapter != nullptr)
 		{
 			m_ActiveAdapter->CloseSocket();
@@ -224,6 +225,8 @@ namespace Net {
 
 	void ConnectionMUDPClient::MyNetSocketIOManager::FlushFreedHandlers()
 	{
+		MutexScopeLock lock(m_ManagerLock);
+
 		if (m_PendingFreeCache != nullptr)
 		{
 			if (m_PendingFreeCache->CanDelete())
@@ -238,17 +241,18 @@ namespace Net {
 		}
 
 		auto itemCount = m_PendingFree.size();
+		MyNetSocketIOAdapter* pPendingItem = nullptr;
 		for (size_t iItem = 0; iItem < itemCount; iItem++)
 		{
-			if (!m_PendingFree.Dequeue(m_PendingFreeCache))
+			if (!m_PendingFree.Dequeue(pPendingItem))
 				break;
 
-			if (m_PendingFreeCache != nullptr)
+			if (pPendingItem != nullptr)
 			{
-				if (m_PendingFreeCache->CanDelete())
+				if (pPendingItem->CanDelete())
 				{
-					IHeap::Delete(m_PendingFreeCache);
-					m_PendingFreeCache = nullptr;
+					IHeap::Delete(pPendingItem);
+					pPendingItem = nullptr;
 				}
 				else
 				{
@@ -261,6 +265,8 @@ namespace Net {
 	bool ConnectionMUDPClient::MyNetSocketIOManager::ValidateNetIOAdapter()
 	{
 		Result hr;
+
+		MutexScopeLock lock(m_ManagerLock);
 
 		if (m_ActiveAdapter != nullptr)
 		{

@@ -170,6 +170,9 @@ namespace Net {
 			// Pending free items
 			CircularPageQueue<MyNetSocketIOAdapter*> m_PendingFree;
 
+			// There is a crash when you try to close connection on multiple thread
+			CriticalSection m_ManagerLock;
+
 			MyNetSocketIOAdapter* m_PendingFreeCache = nullptr;
 
 			MyNetSocketIOAdapter* m_ActiveAdapter = nullptr;
