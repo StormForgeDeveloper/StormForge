@@ -158,19 +158,31 @@ namespace SF {
 		inline Result Array<DataType>::insert(int index, const DataType& NewData)
 		{
 			Result hr = ResultCode::SUCCESS;
-			if (size() == GetAllocatedSize())
+			auto newSize = index + 1;
+			while (size() == GetAllocatedSize() || newSize >= GetAllocatedSize())
 			{
 				hr = IncreaseSize();
 				if (!(hr)) return hr;
 			}
 
-			Assert(size() <  GetAllocatedSize());
-
-			for (int iIdx = (int)m_Size; iIdx > index; iIdx--)
+			if (index < m_Size)
 			{
-				m_pDataPtr[iIdx] = m_pDataPtr[iIdx - 1];
+				for (int iIdx = (int)m_Size; iIdx > index; iIdx--)
+				{
+					m_pDataPtr[iIdx] = std::forward<DataType>(m_pDataPtr[iIdx - 1]);
+				}
+
+				m_Size++;
 			}
-			m_Size++;
+			else
+			{
+				for (int iIdx = (int)m_Size; iIdx < index; iIdx++)
+				{
+					m_pDataPtr[iIdx] = DefaultValue<DataType>();
+				}
+
+				m_Size = index + 1;
+			}
 
 			m_pDataPtr[index] = NewData;
 

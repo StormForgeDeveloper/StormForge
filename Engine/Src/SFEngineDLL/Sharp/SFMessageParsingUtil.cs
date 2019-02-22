@@ -348,9 +348,12 @@ namespace SF
             unsafe
             {
                 IntPtr pCur = source;
-                var dataSize = destination.Length > 0 ? Marshal.SizeOf(destination[0]) : 0;
+                int dataSize = 1;
                 for (int iIndex = 0; iIndex < length; iIndex++, pCur = new IntPtr(pCur.ToInt64() + dataSize))
+                {
                     destination[iIndex] = (DataType)Marshal.PtrToStructure(pCur, typeof(DataType));
+                    dataSize = Marshal.SizeOf(destination[iIndex]);
+                }
             }
         }
 
