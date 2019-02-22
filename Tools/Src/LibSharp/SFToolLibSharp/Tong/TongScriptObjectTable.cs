@@ -148,13 +148,13 @@ namespace SF.Tong
             if (linkCache == null)
                 throw new System.Exception("We need ScriptNodeLinkCache adaptable for nodes");
 
-            linkCache.FromThis.Add(connection);
+            linkCache.NewConnectionFromThis(connection);
 
             var linkCacheTo = connection.InputElement.As<ScriptNodeLinkCache>();
             if (linkCacheTo == null)
                 throw new System.Exception("We need ScriptNodeLinkCache adaptable for nodes");
 
-            linkCacheTo.ToThis.Add(connection);
+            linkCacheTo.NewConnectionToThis(connection);
         }
 
         void RemoveConnection(ScriptNodeConnection connection)

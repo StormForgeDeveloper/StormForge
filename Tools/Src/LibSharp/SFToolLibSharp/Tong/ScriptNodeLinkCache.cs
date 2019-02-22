@@ -26,6 +26,15 @@ namespace SF.Tong
         public List<ScriptNodeConnection> FromThis => m_From;
         public List<ScriptNodeConnection> ToThis => m_To;
 
+        public void NewConnectionFromThis(ScriptNodeConnection connection)
+        {
+            FromThis.Add(connection);
+        }
+
+        public void NewConnectionToThis(ScriptNodeConnection connection)
+        {
+            ToThis.Add(connection);
+        }
 
         /// <summary>
         /// Performs initialization when the adapter is connected to the circuit's DomNode</summary>
