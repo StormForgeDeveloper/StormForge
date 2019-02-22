@@ -35,6 +35,9 @@ namespace SF
 	{
 	private:
 
+		// Render command queue
+		CircularBuffer<20 * 1024 * 1024> m_RenderCommandQueue;
+
 		// Native window
 		NativeWindow m_NativeWindow;
 
@@ -102,6 +105,8 @@ namespace SF
 
 		// Get component dependency list
 		const Array<FixedString>& GetComponentDependencies() { return m_ComponentDependency; }
+
+		virtual CircularBuffer<20 * 1024 * 1024>* GetRenderCommandQueue() override { return &m_RenderCommandQueue; }
 
 		// Accessors for windows view information
 		virtual NativeWindow GetNativeWindow() override { return m_NativeWindow; }

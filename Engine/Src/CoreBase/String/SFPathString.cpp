@@ -208,7 +208,7 @@ namespace SF
 
 		for(size_t iChunk = 0; iChunk < src.m_DecomposedPath.size(); iChunk++)
 		{
-			if (m_DecomposedPath[iChunk] != src[iChunk])
+			if (m_DecomposedPath[static_cast<int>(iChunk)] != src[static_cast<int>(iChunk)])
 				return false;
 		}
 
@@ -222,7 +222,7 @@ namespace SF
 
 		for (size_t iChunk = 0; iChunk < src.m_DecomposedPath.size(); iChunk++)
 		{
-			if (m_DecomposedPath[iChunk] != src[iChunk])
+			if (m_DecomposedPath[static_cast<int>(iChunk)] != src[static_cast<int>(iChunk)])
 				return true;
 		}
 

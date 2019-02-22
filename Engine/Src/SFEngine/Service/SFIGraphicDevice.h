@@ -42,14 +42,15 @@ namespace SF
 	{
 	protected:
 
-		// Render command queue
-		CircularBuffer<20 * 1024 * 1024> m_RenderCommandQueue;
+		//// Render command queue
+		//CircularBuffer<20 * 1024 * 1024> m_RenderCommandQueue;
 
 
 	public:
 		IGraphicDevice() {}
 		virtual ~IGraphicDevice() {}
 
+		virtual CircularBuffer<20 * 1024 * 1024>* GetRenderCommandQueue() { return nullptr; }
 
 		virtual IHeap& GetHeap() { return GetSystemHeap(); }
 
@@ -86,14 +87,18 @@ namespace SF
 		template<class CommandType>
 		TaskPtr RequestCommandTask()
 		{
-			auto pBuffer = m_RenderCommandQueue.Reserve(sizeof(CommandType));
+			auto pRenderCommandQueue = GetRenderCommandQueue();
+			if (pRenderCommandQueue == nullptr)
+				return;
+
+			auto pBuffer = pRenderCommandQueue->Reserve(sizeof(CommandType));
 			auto pCmd = new(pBuffer) CommandType();
 			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer);
 
 			TaskPtr pTask = new(GetHeap()) CommandNotificationTask;
 			pCmd->SetNotificationTask(pTask);
 
-			m_RenderCommandQueue.SetReadyForRead(pBuffer);
+			pRenderCommandQueue->SetReadyForRead(pBuffer);
 			return std::forward<TaskPtr>(pTask);
 		}
 
@@ -101,14 +106,18 @@ namespace SF
 		template<class CommandType, class ...ArgTypes>
 		TaskPtr RequestCommandTask(ArgTypes... args)
 		{
-			auto pBuffer = m_RenderCommandQueue.Reserve(sizeof(CommandType));
+			auto pRenderCommandQueue = GetRenderCommandQueue();
+			if (pRenderCommandQueue == nullptr)
+				return;
+
+			auto pBuffer = pRenderCommandQueue->Reserve(sizeof(CommandType));
 			auto pCmd = new(pBuffer) CommandType(args...);
 			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer);
 
 			TaskPtr pTask = new(GetHeap()) CommandNotificationTask;
 			pCmd->SetNotificationTask(pTask);
 
-			m_RenderCommandQueue.SetReadyForRead(pBuffer);
+			pRenderCommandQueue->SetReadyForRead(pBuffer);
 			return std::forward<TaskPtr>(pTask);
 		}
 
@@ -116,21 +125,29 @@ namespace SF
 		template<class CommandType>
 		Result RequestCommand()
 		{
-			auto pBuffer = m_RenderCommandQueue.Reserve(sizeof(CommandType));
+			auto pRenderCommandQueue = GetRenderCommandQueue();
+			if (pRenderCommandQueue == nullptr)
+				return;
+
+			auto pBuffer = pRenderCommandQueue->Reserve(sizeof(CommandType));
 			auto pCmd = new(pBuffer) CommandType();
 			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer);
-			return m_RenderCommandQueue.SetReadyForRead(pBuffer);
+			return pRenderCommandQueue->SetReadyForRead(pBuffer);
 		}
 
 		// request command with arg
 		template<class CommandType, class ...ArgTypes>
 		Result RequestCommand(ArgTypes... args)
 		{
-			auto pBuffer = m_RenderCommandQueue.Reserve(sizeof(CommandType));
+			auto pRenderCommandQueue = GetRenderCommandQueue();
+			if (pRenderCommandQueue == nullptr)
+				return ResultCode::SUCCESS_FALSE;
+
+			auto pBuffer = pRenderCommandQueue->Reserve(sizeof(CommandType));
 			auto pCmd = new(pBuffer) CommandType(args...);
 			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer);
 			unused(pCmd);
-			return m_RenderCommandQueue.SetReadyForRead(pBuffer);
+			return pRenderCommandQueue->SetReadyForRead(pBuffer);
 		}
 
 
