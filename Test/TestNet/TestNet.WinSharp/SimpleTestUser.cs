@@ -290,10 +290,10 @@ namespace TestNet.WinSharp
                 m_ConnectionLogin = null;
             }
 
-            m_Game.GetFriendListCmd(0,20);
+            //m_Game.GetFriendListCmd(0,20);
             //m_Game.GetNotificationListCmd();
             //m_Game.RequestGameMatchCmd(4, (byte)PlayerRole.None);
-            //m_Game.CreatePartyCmd();
+            m_Game.CreatePartyCmd();
         }
 
         void HandleRequestGameMatchRes(SFMessage message)
@@ -315,7 +315,7 @@ namespace TestNet.WinSharp
                 PrintStatus("CreateParty has failed {0}", result);
                 return;
             }
-
+            PrintStatus("PartyCreated {0}", message.GetValue<UInt64>("PartyUID"));
         }
 
 
