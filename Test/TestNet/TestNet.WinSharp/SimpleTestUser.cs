@@ -315,6 +315,7 @@ namespace TestNet.WinSharp
                 PrintStatus("CreateParty has failed {0}", result);
                 return;
             }
+
             PrintStatus("PartyCreated {0}", message.GetValue<UInt64>("PartyUID"));
         }
 
@@ -328,6 +329,12 @@ namespace TestNet.WinSharp
                 return;
             }
 
+            PrintStatus("Friend list");
+            var friendList = message.GetValue<FriendInformation[]>("FriendList");
+            foreach(var friend in friendList)
+            {
+                PrintStatus("    {0}:{1}", friend.PlayerID, friend.NickName);
+            }
         }
 
         void HandleGameMatchedS2CEvt(SFMessage message)
