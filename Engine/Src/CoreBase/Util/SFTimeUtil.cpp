@@ -194,7 +194,8 @@ namespace SF {
 			TimeStampMS ulNewTime = Time.GetTimeMs() + TimerDuration;
 
 			m_ulTimeToExpire = ulNewTime;
-			if (m_ulTimeToExpire.time_since_epoch().count() == 0) m_ulTimeToExpire = Time.GetTimeMs();
+			if (m_ulTimeToExpire.time_since_epoch().count() == 0)
+				m_ulTimeToExpire = Time.GetTimeMs();
 
 			return ResultCode::SUCCESS;
 		}

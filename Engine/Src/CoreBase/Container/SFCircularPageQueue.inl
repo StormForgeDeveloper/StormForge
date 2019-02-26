@@ -111,6 +111,12 @@ namespace SF {
 
 			if (!cleanUp)
 			{
+				// TODO: need to find a way to wait efficiently
+				for(int iTry = 0; iTry < 10 && m_NumberOfItemsPerPage != pPage->Header.WriteCounter.load(std::memory_order_acquire); iTry++)
+					Sleep(1);
+				for (int iTry = 0; iTry < 10 && m_NumberOfItemsPerPage != pPage->Header.ReadCounter.load(std::memory_order_acquire); iTry++)
+					Sleep(1);
+
 				Assert(m_NumberOfItemsPerPage == pPage->Header.WriteCounter.load(std::memory_order_acquire));
 				Assert(m_NumberOfItemsPerPage == pPage->Header.ReadCounter.load(std::memory_order_acquire));
 			}
