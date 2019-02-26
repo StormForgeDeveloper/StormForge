@@ -166,13 +166,13 @@ namespace SF.Tong
             if (linkCache == null)
                 throw new System.Exception("We need ScriptNodeLinkCache adaptable for nodes");
 
-            linkCache.FromThis.Remove(connection);
+            linkCache.FromThisNode.Remove(connection);
 
             var linkCacheTo = connection.InputElement.As<ScriptNodeLinkCache>();
             if (linkCacheTo == null)
                 throw new System.Exception("We need ScriptNodeLinkCache adaptable for nodes");
 
-            linkCacheTo.ToThis.Remove(connection);
+            linkCacheTo.ToThisNode.Remove(connection);
         }
 
         // 

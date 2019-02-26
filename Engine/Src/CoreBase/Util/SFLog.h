@@ -98,7 +98,7 @@ namespace Log {
 		// Reserve write buffer
 		virtual void* ReserveWriteBuffer() override;
 		virtual void ReleaseWriteBuffer(void* block, size_t messageSize) override;
-
+		virtual size_t WriteTimeTag(void* pLogItem) override;
 
 		// Flush log queue
 		virtual void Flush() override;
@@ -150,7 +150,7 @@ namespace Log {
 
 #define SFLog(mainChannel,subChannel, ...) \
 		do{\
-			auto pLogService = ::SF::Service::LogModule;\
+			auto* pLogService = *::SF::Service::LogModule;\
 			if( (pLogService != nullptr) )\
 			{\
 				auto mainChannelMask = pLogService->ToChannelMask(::SF::LogMainChannels::mainChannel);\
@@ -162,7 +162,9 @@ namespace Log {
 					block->Data.MainChannel = ::SF::LogMainChannels::mainChannel;\
 					block->Data.SubChannel = ::SF::LogSubChannels::subChannel;\
 					block->Data.ChannelMask = subChannelMask; \
-					auto messageSize = SF::StrUtil::Format(block->Data.LogBuff, __VA_ARGS__) - 1; \
+					auto messageSize = pLogService->WriteTimeTag(&block->Data); if(messageSize > 0) messageSize--; \
+					auto remainBuffSize = static_cast<int>(sizeof(block->Data.LogBuff) - messageSize);\
+					messageSize += SF::StrUtil::Format(block->Data.LogBuff + messageSize, remainBuffSize, __VA_ARGS__) - 1; \
 					pLogService->ReleaseWriteBuffer(block, messageSize); \
 				}\
 			}\

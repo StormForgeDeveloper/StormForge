@@ -117,7 +117,7 @@ namespace SFTongCompiler
 
         IList<ScriptNodeConnection> GetSignalOutputs(ScriptNodeLinkCache link)
         {
-            return link.FromThis.Where(x => x.OutputPin.TypeName == "Signal").ToList();
+            return link.FromThisNode.Where(x => x.OutputPin.TypeName == "Signal").ToList();
         }
 
         PropertyType ToPropertyType(NameString typeName)
@@ -225,7 +225,7 @@ namespace SFTongCompiler
         {
             var linkCache = node.As<ScriptNodeLinkCache>();
             // create a copy of links
-            var allLinks = new List<ScriptNodeConnection>(linkCache.ToThis);
+            var allLinks = new List<ScriptNodeConnection>(linkCache.ToThisNode);
             // 
             foreach (var input in node.AllInputPins)
             {
@@ -272,7 +272,7 @@ namespace SFTongCompiler
         void CompileTask(TongCompilerContext.DocumentContext docContext, ScriptNode interfaceNode)
         {
             var linkCache = interfaceNode.As<ScriptNodeLinkCache>();
-            foreach (var connection in linkCache.FromThis)
+            foreach (var connection in linkCache.FromThisNode)
             {
 
             }

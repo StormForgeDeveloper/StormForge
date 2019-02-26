@@ -248,7 +248,7 @@ namespace SF {
 		// Reserve write buffer
 		virtual void* ReserveWriteBuffer() { return nullptr; }
 		virtual void ReleaseWriteBuffer(void* block, size_t messageSize) {}
-
+		virtual size_t WriteTimeTag(void* pLogItem) { unused(pLogItem); return 0; }
 
 		// Flush log queue
 		virtual void Flush() {}

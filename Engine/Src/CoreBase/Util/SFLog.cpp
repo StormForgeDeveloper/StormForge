@@ -205,6 +205,32 @@ namespace Log {
 		m_LogSpinBuffer.Write_Unlock(pWriteBuffer);
 	}
 
+	size_t LogModule::WriteTimeTag(void* pLogItemBuff)
+	{
+		static const char* MainChannelNames[] =
+		{
+			"System",
+			"Net",
+			"IO",
+			"ThirdParty",
+			"Engine",
+			"DB",
+			"Protocol",
+			"Svr",
+			"Editor",
+			"Game",
+
+			"Custom",
+		};
+
+		auto pLogItem = (LogItem*)pLogItemBuff;
+
+		std::time_t logTime = std::chrono::system_clock::to_time_t(pLogItem->TimeStamp);
+		auto tm = std::localtime(&logTime);
+		pLogItem->LogStringSize = StrUtil::Format(pLogItem->LogBuff, "{0}:{1}:{2} {3}", tm->tm_hour, tm->tm_min, tm->tm_sec, MainChannelNames[(int)pLogItem->MainChannel]);
+		
+		return pLogItem->LogStringSize;
+	}
 
 	// Flush log queue
 	void LogModule::Flush()

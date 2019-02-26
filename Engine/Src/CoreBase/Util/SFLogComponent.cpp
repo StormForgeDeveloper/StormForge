@@ -27,22 +27,6 @@ namespace SF {
 	constexpr FixedString LogOutputConsoleComponent::TypeName;
 
 
-	static const char* MainChannelNames[] =
-	{
-		"System",
-		"Net",
-		"IO",
-		"ThirdParty",
-		"Engine",
-		"DB",
-		"Protocol",
-		"Svr",
-		"Editor",
-		"Game",
-
-		"Custom",
-	};
-
 
 
 	LogOutputConsoleComponent::LogOutputConsoleComponent(const LogChannelMask& logMask)
@@ -76,8 +60,6 @@ namespace SF {
 	{
 		if (logMessage == nullptr) return;
 
-		const char* channelName = MainChannelNames[std::min((uint)logMessage->MainChannel, (uint)LogMainChannelType::Max - 1)];
-
 #if SF_PLATFORM == SF_PLATFORM_ANDROID
 		android_LogPriority logPriority = ANDROID_LOG_INFO;
 		switch (logMessage->SubChannel)
@@ -101,17 +83,9 @@ namespace SF {
 			return;
 
 		DWORD dwWriten = 0;
-		char strTimeLine[256];
-
-		std::time_t logTime = std::chrono::system_clock::to_time_t(logMessage->TimeStamp);
-		auto tm = std::localtime(&logTime);
-		auto sizeTimeLine = StrUtil::Format(strTimeLine, "{0}:{1}:{2} {3}", tm->tm_hour, tm->tm_min, tm->tm_sec, channelName);
-
-		WriteConsoleA(m_hConsole, strTimeLine, (DWORD)sizeTimeLine, &dwWriten, nullptr);
 		WriteConsoleA(m_hConsole, logMessage->LogBuff, (DWORD)logMessage->LogStringSize, &dwWriten, nullptr);
 #else
-		std::time_t logTime = std::chrono::system_clock::to_time_t(logMessage->TimeStamp);
-		std::cout << std::put_time(std::localtime(&logTime), "%F %T") << ":(" << channelName << ":" << (int)logMessage->SubChannel << "): " << logMessage->LogBuff << "\r\n";
+		std::cout << logMessage->LogBuff << "\r\n";
 #endif
 	}
 
@@ -227,8 +201,6 @@ namespace SF {
 		if (logMessage == nullptr) return;
 		if (!m_File.IsOpened()) return;
 
-		const char* channelName = MainChannelNames[std::min((uint)logMessage->MainChannel, (uint)LogMainChannelType::Max - 1)];
-
 		auto logTime = std::chrono::system_clock::to_time_t(logMessage->TimeStamp);
 		auto timeStruct = std::localtime(&logTime);
 		if (m_OpenNewFileHourly && m_LogFileCreatedHour != timeStruct->tm_hour)
@@ -240,9 +212,6 @@ namespace SF {
 		}
 
 		size_t writen;
-		char timeStampString[256];
-		size_t stringSize = StrUtil::Format(timeStampString, "{0}:{1}/{2}:{3:X8}>{4}: ", timeStruct->tm_hour, timeStruct->tm_min, timeStruct->tm_sec, Util::Time.GetTimeMs().time_since_epoch().count(), channelName);
-		m_File.Write((uint8_t*)timeStampString, stringSize - 1, writen);
 		m_File.Write((uint8_t*)logMessage->LogBuff, logMessage->LogStringSize, writen);
 	}
 
