@@ -100,8 +100,8 @@ namespace SF
     {
         // Server Reference year is 2014
         const int UTCReferenceYear = 2014;
-        static uint m_TimeOffset = 0;
-        static public uint TimeOffset { get { return m_TimeOffset; } set { m_TimeOffset = value; } }
+        static ulong m_TimeOffset = 0;
+        static public ulong TimeOffset { get { return m_TimeOffset; } set { m_TimeOffset = value; } }
 
         static public DateTime ToDateTime(uint Time)
         {
@@ -109,23 +109,27 @@ namespace SF
 			return origin.AddSeconds(Time);
         }
 
-		static public uint FromDateTime(DateTime date)
+		static public ulong FromDateTime(DateTime date)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
             TimeSpan diff = date.ToUniversalTime() - origin;
-			return (uint)diff.TotalSeconds;
+			return (ulong)diff.TotalSeconds;
         }
 
-        static public uint NowRaw()
+        static public ulong NowRaw()
         {
 			return TimeUTC.FromDateTime(DateTime.UtcNow);
         }
 
-        static public uint Now()
+        static public ulong Now()
         {
             return NowRaw() - m_TimeOffset;
         }
 
+        static public void UpdateTimeOffset()
+        {
+            m_TimeOffset = NativeGetTimeOffset();
+        }
 
         #region Native interfaces
 
