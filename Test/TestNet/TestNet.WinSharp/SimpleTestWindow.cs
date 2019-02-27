@@ -81,7 +81,7 @@ namespace TestNet.WinSharp
             //m_Login.UpdateMyScoreCmd((ulong)rand.Next() % 5000, RankingType.World, 10);
             ulong score = (ulong)rand.Next() % 5000;
             PrintStatus("UpdateMyScoreCmd score:{0}", score);
-            m_NetTestUser.m_Login.UpdateMyScoreCmd(score, RankingType.World, 10);
+            m_NetTestUser.m_Login.UpdateMyScoreCmd(0, score, RankingType.World, 10);
         }
 
         public void btnMatching_Click(object sender, RoutedEventArgs e)
@@ -107,9 +107,9 @@ namespace TestNet.WinSharp
             {
                 data[iData] = (byte)iData;
             }
-            m_NetTestUser.m_Login.DataTestCmd(data);
+            m_NetTestUser.m_Login.DataTestCmd(0, data);
 
-            m_NetTestUser.m_Login.DebugPrintALLRankingCmd("RankData");
+            m_NetTestUser.m_Login.DebugPrintALLRankingCmd(0, "RankData");
 
         }
 

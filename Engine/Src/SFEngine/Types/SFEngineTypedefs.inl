@@ -31,7 +31,6 @@ namespace SF {
 	TransactionID::TransactionID(const TransactionID& transID)
 		: ID(transID.ID)
 	{
-		assert(transID.ID != 0);
 	}
 
 	TransactionID::TransactionID(EntityID entityID, uint32_t transID)
@@ -43,7 +42,6 @@ namespace SF {
 	TransactionID::TransactionID(Context context)
 		:ID(context)
 	{
-		assert(ID != 0);
 	}
 
 	bool TransactionID::IsValid() const

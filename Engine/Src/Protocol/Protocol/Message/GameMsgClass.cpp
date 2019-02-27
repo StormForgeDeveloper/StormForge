@@ -119,7 +119,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_AccID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Ticket, pCur, iMsgSize, sizeof(AuthTicket) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_LoginEntityUID, pCur, iMsgSize, sizeof(uint64_t) ) );
@@ -163,7 +163,7 @@ namespace SF
 
 			}; // Result JoinGameServerCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* JoinGameServerCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			MessageData* JoinGameServerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -171,7 +171,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(AuthTicket)
 					+ sizeof(uint64_t));
@@ -181,7 +181,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InAccID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InTicket, sizeof(AuthTicket));
 				Protocol::PackParamCopy( pMsgData, &InLoginEntityUID, sizeof(uint64_t));
@@ -196,7 +196,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* JoinGameServerCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // MessageData* JoinGameServerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
 
 
@@ -223,7 +223,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfNickName, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_NickName, pCur, iMsgSize, sizeof(char)*uiSizeOfNickName ) );
@@ -274,7 +274,7 @@ namespace SF
 
 			}; // Result JoinGameServerRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* JoinGameServerRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
+			MessageData* JoinGameServerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -283,7 +283,7 @@ namespace SF
 
 				uint16_t __uiInNickNameLength = InNickName ? (uint16_t)(strlen(InNickName)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInNickNameLength 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
@@ -295,7 +295,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &__uiInNickNameLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InNickName ? InNickName : "", __uiInNickNameLength );
@@ -314,7 +314,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* JoinGameServerRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
+			}; // MessageData* JoinGameServerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
 
 
 
@@ -341,7 +341,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 
 
 			Proc_End:
@@ -379,7 +379,7 @@ namespace SF
 
 			}; // Result GetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetComplitionStateCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			MessageData* GetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -387,14 +387,14 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetComplitionStateCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 
 
 			Proc_End:
@@ -406,7 +406,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetComplitionStateCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			}; // MessageData* GetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
 
 
@@ -433,7 +433,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfComplitionState, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_ComplitionState, pCur, iMsgSize, sizeof(char)*uiSizeOfComplitionState ) );
@@ -476,7 +476,7 @@ namespace SF
 
 			}; // Result GetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetComplitionStateRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const char* InComplitionState )
+			MessageData* GetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -485,7 +485,7 @@ namespace SF
 
 				uint16_t __uiInComplitionStateLength = InComplitionState ? (uint16_t)(strlen(InComplitionState)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInComplitionStateLength 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -493,7 +493,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &__uiInComplitionStateLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InComplitionState ? InComplitionState : "", __uiInComplitionStateLength );
@@ -508,7 +508,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetComplitionStateRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const char* InComplitionState )
+			}; // MessageData* GetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
 
 
 
@@ -536,7 +536,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfComplitionState, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_ComplitionState, pCur, iMsgSize, sizeof(char)*uiSizeOfComplitionState ) );
 
@@ -577,7 +577,7 @@ namespace SF
 
 			}; // Result SetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* SetComplitionStateCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InComplitionState )
+			MessageData* SetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InComplitionState )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -586,14 +586,14 @@ namespace SF
 
 				uint16_t __uiInComplitionStateLength = InComplitionState ? (uint16_t)(strlen(InComplitionState)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInComplitionStateLength 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetComplitionStateCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInComplitionStateLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InComplitionState ? InComplitionState : "", __uiInComplitionStateLength );
 
@@ -607,7 +607,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* SetComplitionStateCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InComplitionState )
+			}; // MessageData* SetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InComplitionState )
 
 
 
@@ -633,7 +633,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -673,7 +673,7 @@ namespace SF
 
 			}; // Result SetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* SetComplitionStateRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* SetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -681,7 +681,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -689,7 +689,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -702,7 +702,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* SetComplitionStateRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* SetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -730,7 +730,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfGCMRegisteredID, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_GCMRegisteredID, pCur, iMsgSize, sizeof(char)*uiSizeOfGCMRegisteredID ) );
 
@@ -771,7 +771,7 @@ namespace SF
 
 			}; // Result RegisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* RegisterGCMCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InGCMRegisteredID )
+			MessageData* RegisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -780,14 +780,14 @@ namespace SF
 
 				uint16_t __uiInGCMRegisteredIDLength = InGCMRegisteredID ? (uint16_t)(strlen(InGCMRegisteredID)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInGCMRegisteredIDLength 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RegisterGCMCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInGCMRegisteredIDLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InGCMRegisteredID ? InGCMRegisteredID : "", __uiInGCMRegisteredIDLength );
 
@@ -801,7 +801,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* RegisterGCMCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InGCMRegisteredID )
+			}; // MessageData* RegisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 
 
 
@@ -827,7 +827,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -867,7 +867,7 @@ namespace SF
 
 			}; // Result RegisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* RegisterGCMRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* RegisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -875,7 +875,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -883,7 +883,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -896,7 +896,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* RegisterGCMRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* RegisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -924,7 +924,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfGCMRegisteredID, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_GCMRegisteredID, pCur, iMsgSize, sizeof(char)*uiSizeOfGCMRegisteredID ) );
 
@@ -965,7 +965,7 @@ namespace SF
 
 			}; // Result UnregisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* UnregisterGCMCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InGCMRegisteredID )
+			MessageData* UnregisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -974,14 +974,14 @@ namespace SF
 
 				uint16_t __uiInGCMRegisteredIDLength = InGCMRegisteredID ? (uint16_t)(strlen(InGCMRegisteredID)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInGCMRegisteredIDLength 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::UnregisterGCMCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInGCMRegisteredIDLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InGCMRegisteredID ? InGCMRegisteredID : "", __uiInGCMRegisteredIDLength );
 
@@ -995,7 +995,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* UnregisterGCMCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InGCMRegisteredID )
+			}; // MessageData* UnregisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 
 
 
@@ -1021,7 +1021,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -1061,7 +1061,7 @@ namespace SF
 
 			}; // Result UnregisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* UnregisterGCMRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* UnregisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1069,7 +1069,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -1077,7 +1077,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -1090,7 +1090,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* UnregisterGCMRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* UnregisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -1117,7 +1117,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_FriendID, pCur, iMsgSize, sizeof(AccountID) ) );
 
 
@@ -1157,7 +1157,7 @@ namespace SF
 
 			}; // Result InviteFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* InviteFriendCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InFriendID )
+			MessageData* InviteFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1165,7 +1165,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
 
 
@@ -1173,7 +1173,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InFriendID, sizeof(AccountID));
 
 
@@ -1186,7 +1186,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* InviteFriendCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InFriendID )
+			}; // MessageData* InviteFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
 
 
 
@@ -1212,7 +1212,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -1252,7 +1252,7 @@ namespace SF
 
 			}; // Result InviteFriendRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* InviteFriendRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* InviteFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1260,7 +1260,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -1268,7 +1268,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -1281,7 +1281,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* InviteFriendRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* InviteFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -1308,7 +1308,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_InviterID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_InviterFacebookUID, pCur, iMsgSize, sizeof(FacebookUID) ) );
 
@@ -1350,7 +1350,7 @@ namespace SF
 
 			}; // Result AcceptFriendRequestCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* AcceptFriendRequestCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID )
+			MessageData* AcceptFriendRequestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1358,7 +1358,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(FacebookUID));
 
@@ -1367,7 +1367,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InInviterID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InInviterFacebookUID, sizeof(FacebookUID));
 
@@ -1381,7 +1381,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* AcceptFriendRequestCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID )
+			}; // MessageData* AcceptFriendRequestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID )
 
 
 
@@ -1407,7 +1407,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_NewFriend, pCur, iMsgSize, sizeof(FriendInformation) ) );
 
@@ -1449,7 +1449,7 @@ namespace SF
 
 			}; // Result AcceptFriendRequestRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* AcceptFriendRequestRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
+			MessageData* AcceptFriendRequestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1457,7 +1457,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(FriendInformation));
 
@@ -1466,7 +1466,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InNewFriend, sizeof(FriendInformation));
 
@@ -1480,7 +1480,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* AcceptFriendRequestRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
+			}; // MessageData* AcceptFriendRequestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
 
 
 
@@ -1599,7 +1599,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_FriendID, pCur, iMsgSize, sizeof(AccountID) ) );
 
 
@@ -1639,7 +1639,7 @@ namespace SF
 
 			}; // Result RemoveFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* RemoveFriendCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InFriendID )
+			MessageData* RemoveFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1647,7 +1647,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
 
 
@@ -1655,7 +1655,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InFriendID, sizeof(AccountID));
 
 
@@ -1668,7 +1668,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* RemoveFriendCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InFriendID )
+			}; // MessageData* RemoveFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
 
 
 
@@ -1694,7 +1694,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_FriendID, pCur, iMsgSize, sizeof(AccountID) ) );
 
@@ -1736,7 +1736,7 @@ namespace SF
 
 			}; // Result RemoveFriendRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* RemoveFriendRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const AccountID &InFriendID )
+			MessageData* RemoveFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1744,7 +1744,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(AccountID));
 
@@ -1753,7 +1753,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InFriendID, sizeof(AccountID));
 
@@ -1767,7 +1767,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* RemoveFriendRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const AccountID &InFriendID )
+			}; // MessageData* RemoveFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
 
 
 
@@ -1886,7 +1886,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_StartIndex, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Count, pCur, iMsgSize, sizeof(uint16_t) ) );
 
@@ -1928,7 +1928,7 @@ namespace SF
 
 			}; // Result GetFriendListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetFriendListCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
+			MessageData* GetFriendListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1936,7 +1936,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint16_t)
 					+ sizeof(uint16_t));
 
@@ -1945,7 +1945,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InStartIndex, sizeof(uint16_t));
 				Protocol::PackParamCopy( pMsgData, &InCount, sizeof(uint16_t));
 
@@ -1959,7 +1959,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetFriendListCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
+			}; // MessageData* GetFriendListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
 
 
 
@@ -1986,7 +1986,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_MaxFriendSlot, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalNumberOfFriends, pCur, iMsgSize, sizeof(uint16_t) ) );
@@ -2036,7 +2036,7 @@ namespace SF
 
 			}; // Result GetFriendListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetFriendListRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
+			MessageData* GetFriendListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -2044,7 +2044,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint16_t)
 					+ sizeof(uint16_t)
@@ -2057,7 +2057,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InMaxFriendSlot, sizeof(uint16_t));
 				Protocol::PackParamCopy( pMsgData, &InTotalNumberOfFriends, sizeof(uint16_t));
@@ -2075,7 +2075,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetFriendListRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
+			}; // MessageData* GetFriendListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
 
 
 
@@ -2102,7 +2102,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 
 
 			Proc_End:
@@ -2140,7 +2140,7 @@ namespace SF
 
 			}; // Result GetNotificationListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetNotificationListCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			MessageData* GetNotificationListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -2148,14 +2148,14 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetNotificationListCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 
 
 			Proc_End:
@@ -2167,7 +2167,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetNotificationListCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			}; // MessageData* GetNotificationListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
 
 
@@ -2193,7 +2193,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -2233,7 +2233,7 @@ namespace SF
 
 			}; // Result GetNotificationListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetNotificationListRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* GetNotificationListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -2241,7 +2241,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -2249,7 +2249,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -2262,7 +2262,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetNotificationListRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* GetNotificationListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -2289,7 +2289,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_NotificationID, pCur, iMsgSize, sizeof(uint32_t) ) );
 
 
@@ -2329,7 +2329,7 @@ namespace SF
 
 			}; // Result DeleteNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* DeleteNotificationCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InNotificationID )
+			MessageData* DeleteNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -2337,7 +2337,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint32_t));
 
 
@@ -2345,7 +2345,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InNotificationID, sizeof(uint32_t));
 
 
@@ -2358,7 +2358,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* DeleteNotificationCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InNotificationID )
+			}; // MessageData* DeleteNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
 
 
@@ -2384,7 +2384,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_NotificationID, pCur, iMsgSize, sizeof(uint32_t) ) );
 
@@ -2426,7 +2426,7 @@ namespace SF
 
 			}; // Result DeleteNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* DeleteNotificationRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			MessageData* DeleteNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -2434,7 +2434,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint32_t));
 
@@ -2443,7 +2443,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InNotificationID, sizeof(uint32_t));
 
@@ -2457,7 +2457,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* DeleteNotificationRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			}; // MessageData* DeleteNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
 
 
@@ -2484,7 +2484,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_NotificationID, pCur, iMsgSize, sizeof(uint32_t) ) );
 
 
@@ -2524,7 +2524,7 @@ namespace SF
 
 			}; // Result SetNotificationReadCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* SetNotificationReadCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InNotificationID )
+			MessageData* SetNotificationReadCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -2532,7 +2532,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint32_t));
 
 
@@ -2540,7 +2540,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InNotificationID, sizeof(uint32_t));
 
 
@@ -2553,7 +2553,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* SetNotificationReadCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InNotificationID )
+			}; // MessageData* SetNotificationReadCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
 
 
@@ -2579,7 +2579,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_NotificationID, pCur, iMsgSize, sizeof(uint32_t) ) );
 
@@ -2621,7 +2621,7 @@ namespace SF
 
 			}; // Result SetNotificationReadRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* SetNotificationReadRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			MessageData* SetNotificationReadRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -2629,7 +2629,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint32_t));
 
@@ -2638,7 +2638,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InNotificationID, sizeof(uint32_t));
 
@@ -2652,7 +2652,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* SetNotificationReadRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			}; // MessageData* SetNotificationReadRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
 
 
@@ -2679,7 +2679,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_NotificationID, pCur, iMsgSize, sizeof(uint32_t) ) );
 
 
@@ -2719,7 +2719,7 @@ namespace SF
 
 			}; // Result AcceptNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* AcceptNotificationCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InNotificationID )
+			MessageData* AcceptNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -2727,7 +2727,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint32_t));
 
 
@@ -2735,7 +2735,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InNotificationID, sizeof(uint32_t));
 
 
@@ -2748,7 +2748,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* AcceptNotificationCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InNotificationID )
+			}; // MessageData* AcceptNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
 
 
@@ -2774,7 +2774,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_NotificationID, pCur, iMsgSize, sizeof(uint32_t) ) );
 
@@ -2816,7 +2816,7 @@ namespace SF
 
 			}; // Result AcceptNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* AcceptNotificationRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			MessageData* AcceptNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -2824,7 +2824,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint32_t));
 
@@ -2833,7 +2833,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InNotificationID, sizeof(uint32_t));
 
@@ -2847,7 +2847,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* AcceptNotificationRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
+			}; // MessageData* AcceptNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
 
 
@@ -2994,7 +2994,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfPlayerEMail, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_PlayerEMail, pCur, iMsgSize, sizeof(char)*uiSizeOfPlayerEMail ) );
 
@@ -3035,7 +3035,7 @@ namespace SF
 
 			}; // Result FindPlayerByEMailCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* FindPlayerByEMailCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InPlayerEMail )
+			MessageData* FindPlayerByEMailCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InPlayerEMail )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -3044,14 +3044,14 @@ namespace SF
 
 				uint16_t __uiInPlayerEMailLength = InPlayerEMail ? (uint16_t)(strlen(InPlayerEMail)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInPlayerEMailLength 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByEMailCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInPlayerEMailLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InPlayerEMail ? InPlayerEMail : "", __uiInPlayerEMailLength );
 
@@ -3065,7 +3065,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* FindPlayerByEMailCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InPlayerEMail )
+			}; // MessageData* FindPlayerByEMailCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InPlayerEMail )
 
 
 
@@ -3091,7 +3091,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Player, pCur, iMsgSize, sizeof(PlayerInformation) ) );
 
@@ -3133,7 +3133,7 @@ namespace SF
 
 			}; // Result FindPlayerByEMailRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* FindPlayerByEMailRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
+			MessageData* FindPlayerByEMailRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -3141,7 +3141,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(PlayerInformation));
 
@@ -3150,7 +3150,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InPlayer, sizeof(PlayerInformation));
 
@@ -3164,7 +3164,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* FindPlayerByEMailRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
+			}; // MessageData* FindPlayerByEMailRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 
 
 
@@ -3191,7 +3191,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 
 
@@ -3231,7 +3231,7 @@ namespace SF
 
 			}; // Result FindPlayerByPlayerIDCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* FindPlayerByPlayerIDCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InPlayerID )
+			MessageData* FindPlayerByPlayerIDCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -3239,7 +3239,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
 
 
@@ -3247,7 +3247,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 
 
@@ -3260,7 +3260,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* FindPlayerByPlayerIDCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InPlayerID )
+			}; // MessageData* FindPlayerByPlayerIDCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 
 
 
@@ -3286,7 +3286,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Player, pCur, iMsgSize, sizeof(PlayerInformation) ) );
 
@@ -3328,7 +3328,7 @@ namespace SF
 
 			}; // Result FindPlayerByPlayerIDRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* FindPlayerByPlayerIDRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
+			MessageData* FindPlayerByPlayerIDRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -3336,7 +3336,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(PlayerInformation));
 
@@ -3345,7 +3345,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InPlayer, sizeof(PlayerInformation));
 
@@ -3359,7 +3359,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* FindPlayerByPlayerIDRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
+			}; // MessageData* FindPlayerByPlayerIDRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 
 
 
@@ -3387,7 +3387,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &numberofTargetPlayerID, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( pTargetPlayerID, pCur, iMsgSize, sizeof(AccountID)*numberofTargetPlayerID ) );
 				m_TargetPlayerID.SetLinkedBuffer(numberofTargetPlayerID, numberofTargetPlayerID, pTargetPlayerID);
@@ -3429,7 +3429,7 @@ namespace SF
 
 			}; // Result RequestPlayerStatusUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* RequestPlayerStatusUpdateCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Array<AccountID>& InTargetPlayerID )
+			MessageData* RequestPlayerStatusUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -3437,7 +3437,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID)*InTargetPlayerID.size() + sizeof(uint16_t));
 
 
@@ -3446,7 +3446,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &numberOfInTargetPlayerID, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InTargetPlayerID.data(), (INT)(sizeof(AccountID)*InTargetPlayerID.size())); 
 
@@ -3460,7 +3460,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* RequestPlayerStatusUpdateCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Array<AccountID>& InTargetPlayerID )
+			}; // MessageData* RequestPlayerStatusUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 
 
 
@@ -3486,7 +3486,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -3526,7 +3526,7 @@ namespace SF
 
 			}; // Result RequestPlayerStatusUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* RequestPlayerStatusUpdateRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* RequestPlayerStatusUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -3534,7 +3534,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -3542,7 +3542,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -3555,7 +3555,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* RequestPlayerStatusUpdateRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* RequestPlayerStatusUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -3682,7 +3682,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_RankingType, pCur, iMsgSize, sizeof(uint8_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_BaseRanking, pCur, iMsgSize, sizeof(uint8_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Count, pCur, iMsgSize, sizeof(uint8_t) ) );
@@ -3726,7 +3726,7 @@ namespace SF
 
 			}; // Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetRankingListCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -3734,7 +3734,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint8_t)
 					+ sizeof(uint8_t)
 					+ sizeof(uint8_t));
@@ -3744,7 +3744,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InRankingType, sizeof(uint8_t));
 				Protocol::PackParamCopy( pMsgData, &InBaseRanking, sizeof(uint8_t));
 				Protocol::PackParamCopy( pMsgData, &InCount, sizeof(uint8_t));
@@ -3759,7 +3759,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetRankingListCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			}; // MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 
 
 
@@ -3786,7 +3786,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &numberofRanking, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( pRanking, pCur, iMsgSize, sizeof(TotalRankingPlayerInformation)*numberofRanking ) );
@@ -3830,7 +3830,7 @@ namespace SF
 
 			}; // Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetRankingListRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -3838,7 +3838,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(TotalRankingPlayerInformation)*InRanking.size() + sizeof(uint16_t));
 
@@ -3848,7 +3848,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &numberOfInRanking, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InRanking.data(), (INT)(sizeof(TotalRankingPlayerInformation)*InRanking.size())); 
@@ -3863,7 +3863,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetRankingListRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			}; // MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
 
 
@@ -3890,7 +3890,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 
 
 			Proc_End:
@@ -3928,7 +3928,7 @@ namespace SF
 
 			}; // Result GetUserGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetUserGamePlayerInfoCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			MessageData* GetUserGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -3936,14 +3936,14 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetUserGamePlayerInfoCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 
 
 			Proc_End:
@@ -3955,7 +3955,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetUserGamePlayerInfoCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			}; // MessageData* GetUserGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
 
 
@@ -3981,7 +3981,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Level, pCur, iMsgSize, sizeof(int16_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Exp, pCur, iMsgSize, sizeof(int64_t) ) );
@@ -4063,7 +4063,7 @@ namespace SF
 
 			}; // Result GetUserGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const int16_t &InLevel, const int64_t &InExp, const int64_t &InGameMoney, const int64_t &InGem, const int16_t &InStamina, const uint32_t &InLastUpdateTime, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
+			MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const int16_t &InLevel, const int64_t &InExp, const int64_t &InGameMoney, const int64_t &InGem, const int16_t &InStamina, const uint32_t &InLastUpdateTime, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -4071,7 +4071,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(int16_t)
 					+ sizeof(int64_t)
@@ -4100,7 +4100,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InLevel, sizeof(int16_t));
 				Protocol::PackParamCopy( pMsgData, &InExp, sizeof(int64_t));
@@ -4134,7 +4134,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const int16_t &InLevel, const int64_t &InExp, const int64_t &InGameMoney, const int64_t &InGem, const int16_t &InStamina, const uint32_t &InLastUpdateTime, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
+			}; // MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const int16_t &InLevel, const int64_t &InExp, const int64_t &InGameMoney, const int64_t &InGem, const int16_t &InStamina, const uint32_t &InLastUpdateTime, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
 
 
 
@@ -4161,7 +4161,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 
 
@@ -4201,7 +4201,7 @@ namespace SF
 
 			}; // Result GetGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetGamePlayerInfoCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InPlayerID )
+			MessageData* GetGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -4209,7 +4209,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
 
 
@@ -4217,7 +4217,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 
 
@@ -4230,7 +4230,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetGamePlayerInfoCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InPlayerID )
+			}; // MessageData* GetGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 
 
 
@@ -4256,7 +4256,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Level, pCur, iMsgSize, sizeof(int16_t) ) );
@@ -4330,7 +4330,7 @@ namespace SF
 
 			}; // Result GetGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const int16_t &InLevel, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
+			MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const int16_t &InLevel, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -4338,7 +4338,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(AccountID)
 					+ sizeof(int16_t)
@@ -4363,7 +4363,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InLevel, sizeof(int16_t));
@@ -4393,7 +4393,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const int16_t &InLevel, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
+			}; // MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const int16_t &InLevel, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
 
 
 
@@ -4517,7 +4517,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfNickName, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_NickName, pCur, iMsgSize, sizeof(char)*uiSizeOfNickName ) );
 				protocolChk( Protocol::StreamParamCopy( &m_IsCostFree, pCur, iMsgSize, sizeof(uint8_t) ) );
@@ -4560,7 +4560,7 @@ namespace SF
 
 			}; // Result SetNickNameCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* SetNickNameCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
+			MessageData* SetNickNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -4569,7 +4569,7 @@ namespace SF
 
 				uint16_t __uiInNickNameLength = InNickName ? (uint16_t)(strlen(InNickName)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInNickNameLength 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint8_t));
 
 
@@ -4577,7 +4577,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInNickNameLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InNickName ? InNickName : "", __uiInNickNameLength );
 				Protocol::PackParamCopy( pMsgData, &InIsCostFree, sizeof(uint8_t));
@@ -4592,7 +4592,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* SetNickNameCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
+			}; // MessageData* SetNickNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
 
 
 
@@ -4618,7 +4618,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalGem, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalGameMoney, pCur, iMsgSize, sizeof(uint64_t) ) );
@@ -4662,7 +4662,7 @@ namespace SF
 
 			}; // Result SetNickNameRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* SetNickNameRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			MessageData* SetNickNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -4670,7 +4670,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t)
 					+ sizeof(uint64_t));
@@ -4680,7 +4680,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InTotalGem, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InTotalGameMoney, sizeof(uint64_t));
@@ -4695,7 +4695,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* SetNickNameRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			}; // MessageData* SetNickNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 
 
@@ -4722,7 +4722,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 
 
 			Proc_End:
@@ -4760,7 +4760,7 @@ namespace SF
 
 			}; // Result CreatePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CreatePartyCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			MessageData* CreatePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -4768,14 +4768,14 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreatePartyCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 
 
 			Proc_End:
@@ -4787,7 +4787,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* CreatePartyCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			}; // MessageData* CreatePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
 
 
@@ -4813,7 +4813,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PartyUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 
@@ -4855,7 +4855,7 @@ namespace SF
 
 			}; // Result CreatePartyRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CreatePartyRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
+			MessageData* CreatePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -4863,7 +4863,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t));
 
@@ -4872,7 +4872,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InPartyUID, sizeof(uint64_t));
 
@@ -4886,7 +4886,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* CreatePartyRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
+			}; // MessageData* CreatePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
 
 
 
@@ -4913,7 +4913,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PartyUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_InviterID, pCur, iMsgSize, sizeof(AccountID) ) );
 
@@ -4955,7 +4955,7 @@ namespace SF
 
 			}; // Result JoinPartyCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* JoinPartyCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
+			MessageData* JoinPartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -4963,7 +4963,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
 
@@ -4972,7 +4972,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPartyUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InInviterID, sizeof(AccountID));
 
@@ -4986,7 +4986,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* JoinPartyCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
+			}; // MessageData* JoinPartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
 
 
 
@@ -5013,7 +5013,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PartyUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PartyLeaderID, pCur, iMsgSize, sizeof(AccountID) ) );
@@ -5061,7 +5061,7 @@ namespace SF
 
 			}; // Result JoinPartyRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* JoinPartyRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
+			MessageData* JoinPartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -5069,7 +5069,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
@@ -5081,7 +5081,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InPartyUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPartyLeaderID, sizeof(AccountID));
@@ -5098,7 +5098,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* JoinPartyRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
+			}; // MessageData* JoinPartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
 
 
 
@@ -5317,7 +5317,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PartyUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 
@@ -5359,7 +5359,7 @@ namespace SF
 
 			}; // Result LeavePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* LeavePartyCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
+			MessageData* LeavePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -5367,7 +5367,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
 
@@ -5376,7 +5376,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPartyUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 
@@ -5390,7 +5390,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* LeavePartyCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
+			}; // MessageData* LeavePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
 
 
 
@@ -5416,7 +5416,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -5456,7 +5456,7 @@ namespace SF
 
 			}; // Result LeavePartyRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* LeavePartyRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* LeavePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -5464,7 +5464,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -5472,7 +5472,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -5485,7 +5485,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* LeavePartyRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* LeavePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -5608,7 +5608,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PartyUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerToKick, pCur, iMsgSize, sizeof(AccountID) ) );
@@ -5652,7 +5652,7 @@ namespace SF
 
 			}; // Result PartyKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* PartyKickPlayerCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
+			MessageData* PartyKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -5660,7 +5660,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(AccountID));
@@ -5670,7 +5670,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPartyUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InPlayerToKick, sizeof(AccountID));
@@ -5685,7 +5685,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* PartyKickPlayerCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
+			}; // MessageData* PartyKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 
 
 
@@ -5711,7 +5711,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -5751,7 +5751,7 @@ namespace SF
 
 			}; // Result PartyKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* PartyKickPlayerRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* PartyKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -5759,7 +5759,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -5767,7 +5767,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -5780,7 +5780,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* PartyKickPlayerRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* PartyKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -5903,7 +5903,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_InviteTargetID, pCur, iMsgSize, sizeof(AccountID) ) );
 
 
@@ -5943,7 +5943,7 @@ namespace SF
 
 			}; // Result PartyInviteCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* PartyInviteCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InInviteTargetID )
+			MessageData* PartyInviteCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -5951,7 +5951,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
 
 
@@ -5959,7 +5959,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InInviteTargetID, sizeof(AccountID));
 
 
@@ -5972,7 +5972,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* PartyInviteCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InInviteTargetID )
+			}; // MessageData* PartyInviteCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
 
 
 
@@ -5998,7 +5998,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -6038,7 +6038,7 @@ namespace SF
 
 			}; // Result PartyInviteRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* PartyInviteRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* PartyInviteRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -6046,7 +6046,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -6054,7 +6054,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -6067,7 +6067,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* PartyInviteRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* PartyInviteRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -6197,7 +6197,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_QuickChatID, pCur, iMsgSize, sizeof(uint32_t) ) );
 
 
@@ -6237,7 +6237,7 @@ namespace SF
 
 			}; // Result PartyQuickChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* PartyQuickChatMessageCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InQuickChatID )
+			MessageData* PartyQuickChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -6245,7 +6245,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint32_t));
 
 
@@ -6253,7 +6253,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InQuickChatID, sizeof(uint32_t));
 
 
@@ -6266,7 +6266,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* PartyQuickChatMessageCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InQuickChatID )
+			}; // MessageData* PartyQuickChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
 
 
 
@@ -6292,7 +6292,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -6332,7 +6332,7 @@ namespace SF
 
 			}; // Result PartyQuickChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* PartyQuickChatMessageRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* PartyQuickChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -6340,7 +6340,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -6348,7 +6348,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -6361,7 +6361,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* PartyQuickChatMessageRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* PartyQuickChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -6485,7 +6485,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfChatMessage, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_ChatMessage, pCur, iMsgSize, sizeof(char)*uiSizeOfChatMessage ) );
 
@@ -6526,7 +6526,7 @@ namespace SF
 
 			}; // Result PartyChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* PartyChatMessageCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InChatMessage )
+			MessageData* PartyChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -6535,14 +6535,14 @@ namespace SF
 
 				uint16_t __uiInChatMessageLength = InChatMessage ? (uint16_t)(strlen(InChatMessage)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInChatMessageLength 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyChatMessageCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInChatMessageLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InChatMessage ? InChatMessage : "", __uiInChatMessageLength );
 
@@ -6556,7 +6556,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* PartyChatMessageCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InChatMessage )
+			}; // MessageData* PartyChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage )
 
 
 
@@ -6582,7 +6582,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -6622,7 +6622,7 @@ namespace SF
 
 			}; // Result PartyChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* PartyChatMessageRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* PartyChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -6630,7 +6630,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -6638,7 +6638,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -6651,7 +6651,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* PartyChatMessageRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* PartyChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -6784,7 +6784,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Ticket, pCur, iMsgSize, sizeof(AuthTicket) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_InsUID, pCur, iMsgSize, sizeof(uint64_t) ) );
@@ -6828,7 +6828,7 @@ namespace SF
 
 			}; // Result JoinGameCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* JoinGameCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID )
+			MessageData* JoinGameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -6836,7 +6836,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(AuthTicket)
 					+ sizeof(uint64_t));
@@ -6846,7 +6846,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InTicket, sizeof(AuthTicket));
 				Protocol::PackParamCopy( pMsgData, &InInsUID, sizeof(uint64_t));
@@ -6861,7 +6861,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* JoinGameCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID )
+			}; // MessageData* JoinGameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID )
 
 
 
@@ -6889,7 +6889,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_InsUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TimeStamp, pCur, iMsgSize, sizeof(uint32_t) ) );
@@ -6955,7 +6955,7 @@ namespace SF
 
 			}; // Result JoinGameRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* JoinGameRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData )
+			MessageData* JoinGameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -6963,7 +6963,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t)
 					+ sizeof(uint32_t)
@@ -6984,7 +6984,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InInsUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InTimeStamp, sizeof(uint32_t));
@@ -7010,7 +7010,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* JoinGameRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData )
+			}; // MessageData* JoinGameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData )
 
 
 
@@ -7149,7 +7149,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameInsUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Ticket, pCur, iMsgSize, sizeof(AuthTicket) ) );
@@ -7193,7 +7193,7 @@ namespace SF
 
 			}; // Result LeaveGameCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* LeaveGameCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
+			MessageData* LeaveGameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -7201,7 +7201,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(AuthTicket));
@@ -7211,7 +7211,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InGameInsUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InTicket, sizeof(AuthTicket));
@@ -7226,7 +7226,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* LeaveGameCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
+			}; // MessageData* LeaveGameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 
 
 
@@ -7252,7 +7252,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -7292,7 +7292,7 @@ namespace SF
 
 			}; // Result LeaveGameRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* LeaveGameRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* LeaveGameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -7300,7 +7300,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -7308,7 +7308,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -7321,7 +7321,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* LeaveGameRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* LeaveGameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -7444,7 +7444,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameInsUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerToKick, pCur, iMsgSize, sizeof(AccountID) ) );
@@ -7488,7 +7488,7 @@ namespace SF
 
 			}; // Result KickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* KickPlayerCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
+			MessageData* KickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -7496,7 +7496,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(AccountID));
@@ -7506,7 +7506,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InGameInsUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InPlayerToKick, sizeof(AccountID));
@@ -7521,7 +7521,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* KickPlayerCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
+			}; // MessageData* KickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 
 
 
@@ -7547,7 +7547,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -7587,7 +7587,7 @@ namespace SF
 
 			}; // Result KickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* KickPlayerRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* KickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -7595,7 +7595,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -7603,7 +7603,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -7616,7 +7616,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* KickPlayerRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* KickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -7739,7 +7739,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameInsUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Ticket, pCur, iMsgSize, sizeof(AuthTicket) ) );
@@ -7783,7 +7783,7 @@ namespace SF
 
 			}; // Result AssignRoleCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* AssignRoleCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
+			MessageData* AssignRoleCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -7791,7 +7791,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(AuthTicket));
@@ -7801,7 +7801,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InGameInsUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InTicket, sizeof(AuthTicket));
@@ -7816,7 +7816,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* AssignRoleCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
+			}; // MessageData* AssignRoleCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 
 
 
@@ -7842,7 +7842,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -7882,7 +7882,7 @@ namespace SF
 
 			}; // Result AssignRoleRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* AssignRoleRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* AssignRoleRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -7890,7 +7890,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -7898,7 +7898,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -7911,7 +7911,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* AssignRoleRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* AssignRoleRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -8039,7 +8039,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfChatMessage, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_ChatMessage, pCur, iMsgSize, sizeof(char)*uiSizeOfChatMessage ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Role, pCur, iMsgSize, sizeof(uint8_t) ) );
@@ -8082,7 +8082,7 @@ namespace SF
 
 			}; // Result ChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* ChatMessageCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InChatMessage, const uint8_t &InRole )
+			MessageData* ChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage, const uint8_t &InRole )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -8091,7 +8091,7 @@ namespace SF
 
 				uint16_t __uiInChatMessageLength = InChatMessage ? (uint16_t)(strlen(InChatMessage)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInChatMessageLength 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint8_t));
 
 
@@ -8099,7 +8099,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInChatMessageLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InChatMessage ? InChatMessage : "", __uiInChatMessageLength );
 				Protocol::PackParamCopy( pMsgData, &InRole, sizeof(uint8_t));
@@ -8114,7 +8114,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* ChatMessageCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InChatMessage, const uint8_t &InRole )
+			}; // MessageData* ChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage, const uint8_t &InRole )
 
 
 
@@ -8140,7 +8140,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -8180,7 +8180,7 @@ namespace SF
 
 			}; // Result ChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* ChatMessageRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* ChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -8188,7 +8188,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -8196,7 +8196,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -8209,7 +8209,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* ChatMessageRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* ChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -8346,7 +8346,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameInsUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Ticket, pCur, iMsgSize, sizeof(AuthTicket) ) );
@@ -8390,7 +8390,7 @@ namespace SF
 
 			}; // Result AdvanceGameCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* AdvanceGameCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
+			MessageData* AdvanceGameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -8398,7 +8398,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(AuthTicket));
@@ -8408,7 +8408,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InGameInsUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InTicket, sizeof(AuthTicket));
@@ -8423,7 +8423,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* AdvanceGameCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
+			}; // MessageData* AdvanceGameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 
 
 
@@ -8449,7 +8449,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -8489,7 +8489,7 @@ namespace SF
 
 			}; // Result AdvanceGameRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* AdvanceGameRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* AdvanceGameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -8497,7 +8497,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -8505,7 +8505,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -8518,7 +8518,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* AdvanceGameRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* AdvanceGameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -8753,7 +8753,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameInsUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Ticket, pCur, iMsgSize, sizeof(AuthTicket) ) );
@@ -8797,7 +8797,7 @@ namespace SF
 
 			}; // Result VoteGameAdvanceCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* VoteGameAdvanceCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
+			MessageData* VoteGameAdvanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -8805,7 +8805,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(AuthTicket));
@@ -8815,7 +8815,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InGameInsUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InTicket, sizeof(AuthTicket));
@@ -8830,7 +8830,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* VoteGameAdvanceCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
+			}; // MessageData* VoteGameAdvanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 
 
 
@@ -8856,7 +8856,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -8896,7 +8896,7 @@ namespace SF
 
 			}; // Result VoteGameAdvanceRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* VoteGameAdvanceRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* VoteGameAdvanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -8904,7 +8904,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -8912,7 +8912,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -8925,7 +8925,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* VoteGameAdvanceRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* VoteGameAdvanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -9048,7 +9048,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameInsUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Ticket, pCur, iMsgSize, sizeof(AuthTicket) ) );
@@ -9096,7 +9096,7 @@ namespace SF
 
 			}; // Result VoteCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* VoteCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial )
+			MessageData* VoteCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -9104,7 +9104,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(AuthTicket)
@@ -9116,7 +9116,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InGameInsUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InTicket, sizeof(AuthTicket));
@@ -9133,7 +9133,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* VoteCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial )
+			}; // MessageData* VoteCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial )
 
 
 
@@ -9159,7 +9159,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -9199,7 +9199,7 @@ namespace SF
 
 			}; // Result VoteRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* VoteRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* VoteRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -9207,7 +9207,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -9215,7 +9215,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -9228,7 +9228,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* VoteRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* VoteRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -9660,7 +9660,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 
 
 			Proc_End:
@@ -9698,7 +9698,7 @@ namespace SF
 
 			}; // Result GamePlayAgainCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GamePlayAgainCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			MessageData* GamePlayAgainCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -9706,14 +9706,14 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayAgainCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 
 
 			Proc_End:
@@ -9725,7 +9725,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GamePlayAgainCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			}; // MessageData* GamePlayAgainCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
 
 
@@ -9751,7 +9751,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalGem, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalGameMoney, pCur, iMsgSize, sizeof(uint64_t) ) );
@@ -9795,7 +9795,7 @@ namespace SF
 
 			}; // Result GamePlayAgainRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GamePlayAgainRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			MessageData* GamePlayAgainRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -9803,7 +9803,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t)
 					+ sizeof(uint64_t));
@@ -9813,7 +9813,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InTotalGem, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InTotalGameMoney, sizeof(uint64_t));
@@ -9828,7 +9828,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GamePlayAgainRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			}; // MessageData* GamePlayAgainRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 
 
@@ -9952,7 +9952,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &numberofTargetPlayerID, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( pTargetPlayerID, pCur, iMsgSize, sizeof(AccountID)*numberofTargetPlayerID ) );
 				m_TargetPlayerID.SetLinkedBuffer(numberofTargetPlayerID, numberofTargetPlayerID, pTargetPlayerID);
@@ -9994,7 +9994,7 @@ namespace SF
 
 			}; // Result GameRevealPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GameRevealPlayerCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Array<AccountID>& InTargetPlayerID )
+			MessageData* GameRevealPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -10002,7 +10002,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID)*InTargetPlayerID.size() + sizeof(uint16_t));
 
 
@@ -10011,7 +10011,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &numberOfInTargetPlayerID, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InTargetPlayerID.data(), (INT)(sizeof(AccountID)*InTargetPlayerID.size())); 
 
@@ -10025,7 +10025,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GameRevealPlayerCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Array<AccountID>& InTargetPlayerID )
+			}; // MessageData* GameRevealPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 
 
 
@@ -10053,7 +10053,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &numberofRevealedPlayerID, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( pRevealedPlayerID, pCur, iMsgSize, sizeof(AccountID)*numberofRevealedPlayerID ) );
@@ -10105,7 +10105,7 @@ namespace SF
 
 			}; // Result GameRevealPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GameRevealPlayerRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const Array<AccountID>& InRevealedPlayerID, const Array<uint8_t>& InRevealedRole, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			MessageData* GameRevealPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<AccountID>& InRevealedPlayerID, const Array<uint8_t>& InRevealedRole, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -10113,7 +10113,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(AccountID)*InRevealedPlayerID.size() + sizeof(uint16_t)
 					+ sizeof(uint8_t)*InRevealedRole.size() + sizeof(uint16_t)
@@ -10127,7 +10127,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &numberOfInRevealedPlayerID, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InRevealedPlayerID.data(), (INT)(sizeof(AccountID)*InRevealedPlayerID.size())); 
@@ -10146,7 +10146,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GameRevealPlayerRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const Array<AccountID>& InRevealedPlayerID, const Array<uint8_t>& InRevealedRole, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			}; // MessageData* GameRevealPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<AccountID>& InRevealedPlayerID, const Array<uint8_t>& InRevealedRole, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 
 
@@ -10173,7 +10173,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 
 
 			Proc_End:
@@ -10211,7 +10211,7 @@ namespace SF
 
 			}; // Result GamePlayerReviveCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GamePlayerReviveCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			MessageData* GamePlayerReviveCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -10219,14 +10219,14 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayerReviveCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 
 
 			Proc_End:
@@ -10238,7 +10238,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GamePlayerReviveCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			}; // MessageData* GamePlayerReviveCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
 
 
@@ -10264,7 +10264,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalGem, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalGameMoney, pCur, iMsgSize, sizeof(uint64_t) ) );
@@ -10308,7 +10308,7 @@ namespace SF
 
 			}; // Result GamePlayerReviveRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GamePlayerReviveRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			MessageData* GamePlayerReviveRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -10316,7 +10316,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t)
 					+ sizeof(uint64_t));
@@ -10326,7 +10326,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InTotalGem, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InTotalGameMoney, sizeof(uint64_t));
@@ -10341,7 +10341,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GamePlayerReviveRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			}; // MessageData* GamePlayerReviveRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 
 
@@ -10460,7 +10460,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 
 
 			Proc_End:
@@ -10498,7 +10498,7 @@ namespace SF
 
 			}; // Result GamePlayerResetRankCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GamePlayerResetRankCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			MessageData* GamePlayerResetRankCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -10506,14 +10506,14 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayerResetRankCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 
 
 			Proc_End:
@@ -10525,7 +10525,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GamePlayerResetRankCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			}; // MessageData* GamePlayerResetRankCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
 
 
@@ -10551,7 +10551,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalGem, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalGameMoney, pCur, iMsgSize, sizeof(uint64_t) ) );
@@ -10595,7 +10595,7 @@ namespace SF
 
 			}; // Result GamePlayerResetRankRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GamePlayerResetRankRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			MessageData* GamePlayerResetRankRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -10603,7 +10603,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t)
 					+ sizeof(uint64_t));
@@ -10613,7 +10613,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InTotalGem, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InTotalGameMoney, sizeof(uint64_t));
@@ -10628,7 +10628,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GamePlayerResetRankRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			}; // MessageData* GamePlayerResetRankRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 
 
@@ -10655,7 +10655,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_NumPlayer, pCur, iMsgSize, sizeof(uint8_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_RequestRole, pCur, iMsgSize, sizeof(uint8_t) ) );
 
@@ -10697,7 +10697,7 @@ namespace SF
 
 			}; // Result RequestGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* RequestGameMatchCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
+			MessageData* RequestGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -10705,7 +10705,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint8_t)
 					+ sizeof(uint8_t));
 
@@ -10714,7 +10714,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InNumPlayer, sizeof(uint8_t));
 				Protocol::PackParamCopy( pMsgData, &InRequestRole, sizeof(uint8_t));
 
@@ -10728,7 +10728,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* RequestGameMatchCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
+			}; // MessageData* RequestGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 
 
 
@@ -10754,7 +10754,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalGem, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TotalGameMoney, pCur, iMsgSize, sizeof(uint64_t) ) );
@@ -10798,7 +10798,7 @@ namespace SF
 
 			}; // Result RequestGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* RequestGameMatchRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			MessageData* RequestGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -10806,7 +10806,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t)
 					+ sizeof(uint64_t));
@@ -10816,7 +10816,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InTotalGem, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InTotalGameMoney, sizeof(uint64_t));
@@ -10831,7 +10831,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* RequestGameMatchRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
+			}; // MessageData* RequestGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
 
 
@@ -11184,7 +11184,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 
 
 			Proc_End:
@@ -11222,7 +11222,7 @@ namespace SF
 
 			}; // Result CancelGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CancelGameMatchCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			MessageData* CancelGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -11230,14 +11230,14 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CancelGameMatchCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 
 
 			Proc_End:
@@ -11249,7 +11249,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* CancelGameMatchCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID )
+			}; // MessageData* CancelGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
 
 
@@ -11275,7 +11275,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -11315,7 +11315,7 @@ namespace SF
 
 			}; // Result CancelGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CancelGameMatchRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* CancelGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -11323,7 +11323,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -11331,7 +11331,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -11344,7 +11344,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* CancelGameMatchRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* CancelGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -11451,7 +11451,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_ShopItemID, pCur, iMsgSize, sizeof(uint32_t) ) );
 
 
@@ -11491,7 +11491,7 @@ namespace SF
 
 			}; // Result BuyShopItemPrepareCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* BuyShopItemPrepareCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InShopItemID )
+			MessageData* BuyShopItemPrepareCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -11499,7 +11499,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint32_t));
 
 
@@ -11507,7 +11507,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InShopItemID, sizeof(uint32_t));
 
 
@@ -11520,7 +11520,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* BuyShopItemPrepareCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InShopItemID )
+			}; // MessageData* BuyShopItemPrepareCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID )
 
 
 
@@ -11547,7 +11547,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_ShopItemID, pCur, iMsgSize, sizeof(uint32_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfPurchaseID, pCur, iMsgSize, sizeof(uint16_t) ) );
@@ -11592,7 +11592,7 @@ namespace SF
 
 			}; // Result BuyShopItemPrepareRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* BuyShopItemPrepareRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
+			MessageData* BuyShopItemPrepareRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -11601,7 +11601,7 @@ namespace SF
 
 				uint16_t __uiInPurchaseIDLength = InPurchaseID ? (uint16_t)(strlen(InPurchaseID)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInPurchaseIDLength 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint32_t));
 
@@ -11610,7 +11610,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InShopItemID, sizeof(uint32_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInPurchaseIDLength, sizeof(uint16_t) );
@@ -11626,7 +11626,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* BuyShopItemPrepareRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
+			}; // MessageData* BuyShopItemPrepareRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 
 
 
@@ -11657,7 +11657,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_ShopItemID, pCur, iMsgSize, sizeof(uint32_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfPlatform, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_Platform, pCur, iMsgSize, sizeof(char)*uiSizeOfPlatform ) );
@@ -11710,7 +11710,7 @@ namespace SF
 
 			}; // Result BuyShopItemCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* BuyShopItemCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
+			MessageData* BuyShopItemCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -11721,7 +11721,7 @@ namespace SF
 				uint16_t __uiInPackageNameLength = InPackageName ? (uint16_t)(strlen(InPackageName)+1) : 1;
 				uint16_t __uiInPurchaseTransactionIDLength = InPurchaseTransactionID ? (uint16_t)(strlen(InPurchaseTransactionID)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInPlatformLength + sizeof(uint16_t) + __uiInPackageNameLength + sizeof(uint16_t) + __uiInPurchaseTransactionIDLength 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint32_t)
 					+ sizeof(uint8_t)*InPurchaseToken.size() + sizeof(uint16_t));
 
@@ -11731,7 +11731,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InShopItemID, sizeof(uint32_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInPlatformLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InPlatform ? InPlatform : "", __uiInPlatformLength );
@@ -11752,7 +11752,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* BuyShopItemCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
+			}; // MessageData* BuyShopItemCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
 
 
 
@@ -11778,7 +11778,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_ShopItemID, pCur, iMsgSize, sizeof(uint32_t) ) );
 
@@ -11820,7 +11820,7 @@ namespace SF
 
 			}; // Result BuyShopItemRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* BuyShopItemRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
+			MessageData* BuyShopItemRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -11828,7 +11828,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint32_t));
 
@@ -11837,7 +11837,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InShopItemID, sizeof(uint32_t));
 
@@ -11851,7 +11851,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* BuyShopItemRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
+			}; // MessageData* BuyShopItemRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
 
 
 
@@ -11880,7 +11880,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfChannelName, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_ChannelName, pCur, iMsgSize, sizeof(char)*uiSizeOfChannelName ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfPasscode, pCur, iMsgSize, sizeof(uint16_t) ) );
@@ -11924,7 +11924,7 @@ namespace SF
 
 			}; // Result CreateOrJoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CreateOrJoinChatChannelCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InChannelName, const char* InPasscode )
+			MessageData* CreateOrJoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -11934,14 +11934,14 @@ namespace SF
 				uint16_t __uiInChannelNameLength = InChannelName ? (uint16_t)(strlen(InChannelName)+1) : 1;
 				uint16_t __uiInPasscodeLength = InPasscode ? (uint16_t)(strlen(InPasscode)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInChannelNameLength + sizeof(uint16_t) + __uiInPasscodeLength 
-					+ sizeof(TransactionID));
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateOrJoinChatChannelCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInChannelNameLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InChannelName ? InChannelName : "", __uiInChannelNameLength );
 				Protocol::PackParamCopy( pMsgData, &__uiInPasscodeLength, sizeof(uint16_t) );
@@ -11957,7 +11957,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* CreateOrJoinChatChannelCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InChannelName, const char* InPasscode )
+			}; // MessageData* CreateOrJoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 
 
 
@@ -11983,7 +11983,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_ChatUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 
@@ -12025,7 +12025,7 @@ namespace SF
 
 			}; // Result CreateOrJoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+			MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -12033,7 +12033,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t));
 
@@ -12042,7 +12042,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InChatUID, sizeof(uint64_t));
 
@@ -12056,7 +12056,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+			}; // MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
 
 
 
@@ -12083,7 +12083,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_ChatUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_InviterID, pCur, iMsgSize, sizeof(AccountID) ) );
 
@@ -12125,7 +12125,7 @@ namespace SF
 
 			}; // Result JoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
+			MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -12133,7 +12133,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
 
@@ -12142,7 +12142,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InChatUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InInviterID, sizeof(AccountID));
 
@@ -12156,7 +12156,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
+			}; // MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
 
 
 
@@ -12182,7 +12182,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PartyUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PartyLeaderID, pCur, iMsgSize, sizeof(AccountID) ) );
@@ -12226,7 +12226,7 @@ namespace SF
 
 			}; // Result JoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
+			MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -12234,7 +12234,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
@@ -12244,7 +12244,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InPartyUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPartyLeaderID, sizeof(AccountID));
@@ -12259,7 +12259,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
+			}; // MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
 
 
 
@@ -12478,7 +12478,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_ChatUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 
@@ -12520,7 +12520,7 @@ namespace SF
 
 			}; // Result LeaveChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* LeaveChatChannelCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
+			MessageData* LeaveChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -12528,7 +12528,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
 
@@ -12537,7 +12537,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InChatUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 
@@ -12551,7 +12551,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* LeaveChatChannelCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
+			}; // MessageData* LeaveChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
 
 
 
@@ -12577,7 +12577,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -12617,7 +12617,7 @@ namespace SF
 
 			}; // Result LeaveChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* LeaveChatChannelRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* LeaveChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -12625,7 +12625,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -12633,7 +12633,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -12646,7 +12646,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* LeaveChatChannelRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* LeaveChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -12769,7 +12769,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_ChatUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PlayerToKick, pCur, iMsgSize, sizeof(AccountID) ) );
@@ -12813,7 +12813,7 @@ namespace SF
 
 			}; // Result ChatChannelKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* ChatChannelKickPlayerCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
+			MessageData* ChatChannelKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -12821,7 +12821,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(AccountID)
 					+ sizeof(AccountID));
@@ -12831,7 +12831,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InChatUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InPlayerToKick, sizeof(AccountID));
@@ -12846,7 +12846,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* ChatChannelKickPlayerCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
+			}; // MessageData* ChatChannelKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 
 
 
@@ -12872,7 +12872,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -12912,7 +12912,7 @@ namespace SF
 
 			}; // Result ChatChannelKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* ChatChannelKickPlayerRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* ChatChannelKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -12920,7 +12920,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -12928,7 +12928,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -12941,7 +12941,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* ChatChannelKickPlayerRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* ChatChannelKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -13065,7 +13065,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_ChatUID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfChatMessage, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_ChatMessage, pCur, iMsgSize, sizeof(char)*uiSizeOfChatMessage ) );
@@ -13108,7 +13108,7 @@ namespace SF
 
 			}; // Result ChatChannelChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
+			MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -13117,7 +13117,7 @@ namespace SF
 
 				uint16_t __uiInChatMessageLength = InChatMessage ? (uint16_t)(strlen(InChatMessage)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInChatMessageLength 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t));
 
 
@@ -13125,7 +13125,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InChatUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInChatMessageLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InChatMessage ? InChatMessage : "", __uiInChatMessageLength );
@@ -13140,7 +13140,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
+			}; // MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
 
 
 
@@ -13166,7 +13166,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -13206,7 +13206,7 @@ namespace SF
 
 			}; // Result ChatChannelChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* ChatChannelChatMessageRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* ChatChannelChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -13214,7 +13214,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -13222,7 +13222,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -13235,7 +13235,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* ChatChannelChatMessageRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* ChatChannelChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -13368,7 +13368,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TargetPlayer, pCur, iMsgSize, sizeof(AccountID) ) );
 
 
@@ -13408,7 +13408,7 @@ namespace SF
 
 			}; // Result GiveStaminaCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GiveStaminaCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InTargetPlayer )
+			MessageData* GiveStaminaCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InTargetPlayer )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -13416,7 +13416,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(AccountID));
 
 
@@ -13424,7 +13424,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InTargetPlayer, sizeof(AccountID));
 
 
@@ -13437,7 +13437,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GiveStaminaCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InTargetPlayer )
+			}; // MessageData* GiveStaminaCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InTargetPlayer )
 
 
 
@@ -13463,7 +13463,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TargetPlayer, pCur, iMsgSize, sizeof(AccountID) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_TimeStamp, pCur, iMsgSize, sizeof(uint64_t) ) );
@@ -13507,7 +13507,7 @@ namespace SF
 
 			}; // Result GiveStaminaRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GiveStaminaRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp )
+			MessageData* GiveStaminaRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -13515,7 +13515,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(AccountID)
 					+ sizeof(uint64_t));
@@ -13525,7 +13525,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InTargetPlayer, sizeof(AccountID));
 				Protocol::PackParamCopy( pMsgData, &InTimeStamp, sizeof(uint64_t));
@@ -13540,7 +13540,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GiveStaminaRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp )
+			}; // MessageData* GiveStaminaRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp )
 
 
 
@@ -13567,7 +13567,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_PresetID, pCur, iMsgSize, sizeof(uint32_t) ) );
 
 
@@ -13607,7 +13607,7 @@ namespace SF
 
 			}; // Result SetPresetGameConfigIDCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* SetPresetGameConfigIDCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InPresetID )
+			MessageData* SetPresetGameConfigIDCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InPresetID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -13615,7 +13615,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(uint32_t));
 
 
@@ -13623,7 +13623,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InPresetID, sizeof(uint32_t));
 
 
@@ -13636,7 +13636,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* SetPresetGameConfigIDCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InPresetID )
+			}; // MessageData* SetPresetGameConfigIDCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InPresetID )
 
 
 
@@ -13662,7 +13662,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -13702,7 +13702,7 @@ namespace SF
 
 			}; // Result SetPresetGameConfigIDRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* SetPresetGameConfigIDRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* SetPresetGameConfigIDRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -13710,7 +13710,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -13718,7 +13718,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -13731,7 +13731,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* SetPresetGameConfigIDRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* SetPresetGameConfigIDRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -13758,7 +13758,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Resource, pCur, iMsgSize, sizeof(int32_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Value, pCur, iMsgSize, sizeof(int32_t) ) );
 
@@ -13800,7 +13800,7 @@ namespace SF
 
 			}; // Result GainGameResourceCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GainGameResourceCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const int32_t &InResource, const int32_t &InValue )
+			MessageData* GainGameResourceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const int32_t &InResource, const int32_t &InValue )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -13808,7 +13808,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(int32_t)
 					+ sizeof(int32_t));
 
@@ -13817,7 +13817,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResource, sizeof(int32_t));
 				Protocol::PackParamCopy( pMsgData, &InValue, sizeof(int32_t));
 
@@ -13831,7 +13831,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GainGameResourceCmd::Create( IHeap& memHeap, const TransactionID &InTransactionID, const int32_t &InResource, const int32_t &InValue )
+			}; // MessageData* GainGameResourceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const int32_t &InResource, const int32_t &InValue )
 
 
 
@@ -13857,7 +13857,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(TransactionID) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -13897,7 +13897,7 @@ namespace SF
 
 			}; // Result GainGameResourceRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GainGameResourceRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			MessageData* GainGameResourceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -13905,7 +13905,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(TransactionID)
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -13913,7 +13913,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(TransactionID));
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -13926,7 +13926,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GainGameResourceRes::Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult )
+			}; // MessageData* GainGameResourceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 

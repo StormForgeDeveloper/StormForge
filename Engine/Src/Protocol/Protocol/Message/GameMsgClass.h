@@ -39,7 +39,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -85,7 +85,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				AccountID m_AccID;
 				AuthTicket m_Ticket;
 				uint64_t m_LoginEntityUID;
@@ -99,7 +99,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AccountID& GetAccID() const	{ return m_AccID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
@@ -110,7 +110,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 
 			}; // class JoinGameServerCmd : public MessageBase
 
@@ -133,7 +133,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				const char* m_NickName;
 				uint64_t m_GameUID;
@@ -152,7 +152,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const char* GetNickName() const	{ return m_NickName; };
 				const uint64_t& GetGameUID() const	{ return m_GameUID; };
@@ -166,7 +166,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket );
 
 			}; // class JoinGameServerRes : public MessageBase
 
@@ -190,7 +190,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 			public:
 				GetComplitionStateCmd()
 					{}
@@ -201,7 +201,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
 
@@ -209,7 +209,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class GetComplitionStateCmd : public MessageBase
 
@@ -232,7 +232,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				const char* m_ComplitionState;
 			public:
@@ -247,7 +247,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const char* GetComplitionState() const	{ return m_ComplitionState; };
 
@@ -257,7 +257,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const char* InComplitionState );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState );
 
 			}; // class GetComplitionStateRes : public MessageBase
 
@@ -281,7 +281,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				const char* m_ComplitionState;
 			public:
 				SetComplitionStateCmd()
@@ -295,7 +295,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetComplitionState() const	{ return m_ComplitionState; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -304,7 +304,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InComplitionState );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InComplitionState );
 
 			}; // class SetComplitionStateCmd : public MessageBase
 
@@ -327,7 +327,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				SetComplitionStateRes()
@@ -339,7 +339,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -348,7 +348,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class SetComplitionStateRes : public MessageBase
 
@@ -372,7 +372,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				const char* m_GCMRegisteredID;
 			public:
 				RegisterGCMCmd()
@@ -386,7 +386,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetGCMRegisteredID() const	{ return m_GCMRegisteredID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -395,7 +395,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InGCMRegisteredID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID );
 
 			}; // class RegisterGCMCmd : public MessageBase
 
@@ -418,7 +418,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				RegisterGCMRes()
@@ -430,7 +430,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -439,7 +439,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class RegisterGCMRes : public MessageBase
 
@@ -463,7 +463,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				const char* m_GCMRegisteredID;
 			public:
 				UnregisterGCMCmd()
@@ -477,7 +477,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetGCMRegisteredID() const	{ return m_GCMRegisteredID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -486,7 +486,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InGCMRegisteredID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID );
 
 			}; // class UnregisterGCMCmd : public MessageBase
 
@@ -509,7 +509,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				UnregisterGCMRes()
@@ -521,7 +521,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -530,7 +530,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class UnregisterGCMRes : public MessageBase
 
@@ -554,7 +554,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				AccountID m_FriendID;
 			public:
 				InviteFriendCmd()
@@ -566,7 +566,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AccountID& GetFriendID() const	{ return m_FriendID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -575,7 +575,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InFriendID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID );
 
 			}; // class InviteFriendCmd : public MessageBase
 
@@ -598,7 +598,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				InviteFriendRes()
@@ -610,7 +610,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -619,7 +619,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class InviteFriendRes : public MessageBase
 
@@ -643,7 +643,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				AccountID m_InviterID;
 				FacebookUID m_InviterFacebookUID;
 			public:
@@ -656,7 +656,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AccountID& GetInviterID() const	{ return m_InviterID; };
 				const FacebookUID& GetInviterFacebookUID() const	{ return m_InviterFacebookUID; };
 
@@ -666,7 +666,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID );
 
 			}; // class AcceptFriendRequestCmd : public MessageBase
 
@@ -689,7 +689,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				FriendInformation m_NewFriend;
 			public:
@@ -702,7 +702,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const FriendInformation& GetNewFriend() const	{ return m_NewFriend; };
 
@@ -712,7 +712,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend );
 
 			}; // class AcceptFriendRequestRes : public MessageBase
 
@@ -732,7 +732,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -780,7 +780,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				AccountID m_FriendID;
 			public:
 				RemoveFriendCmd()
@@ -792,7 +792,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AccountID& GetFriendID() const	{ return m_FriendID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -801,7 +801,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InFriendID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID );
 
 			}; // class RemoveFriendCmd : public MessageBase
 
@@ -824,7 +824,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				AccountID m_FriendID;
 			public:
@@ -837,7 +837,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const AccountID& GetFriendID() const	{ return m_FriendID; };
 
@@ -847,7 +847,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const AccountID &InFriendID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID );
 
 			}; // class RemoveFriendRes : public MessageBase
 
@@ -867,7 +867,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -915,7 +915,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint16_t m_StartIndex;
 				uint16_t m_Count;
 			public:
@@ -928,7 +928,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint16_t& GetStartIndex() const	{ return m_StartIndex; };
 				const uint16_t& GetCount() const	{ return m_Count; };
 
@@ -938,7 +938,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount );
 
 			}; // class GetFriendListCmd : public MessageBase
 
@@ -961,7 +961,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint16_t m_MaxFriendSlot;
 				uint16_t m_TotalNumberOfFriends;
@@ -977,7 +977,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint16_t& GetMaxFriendSlot() const	{ return m_MaxFriendSlot; };
 				const uint16_t& GetTotalNumberOfFriends() const	{ return m_TotalNumberOfFriends; };
@@ -990,7 +990,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList );
 
 			}; // class GetFriendListRes : public MessageBase
 
@@ -1014,7 +1014,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 			public:
 				GetNotificationListCmd()
 					{}
@@ -1025,7 +1025,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
 
@@ -1033,7 +1033,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class GetNotificationListCmd : public MessageBase
 
@@ -1056,7 +1056,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				GetNotificationListRes()
@@ -1068,7 +1068,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -1077,7 +1077,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class GetNotificationListRes : public MessageBase
 
@@ -1101,7 +1101,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint32_t m_NotificationID;
 			public:
 				DeleteNotificationCmd()
@@ -1113,7 +1113,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetNotificationID() const	{ return m_NotificationID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -1122,7 +1122,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InNotificationID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 
 			}; // class DeleteNotificationCmd : public MessageBase
 
@@ -1145,7 +1145,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint32_t m_NotificationID;
 			public:
@@ -1158,7 +1158,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint32_t& GetNotificationID() const	{ return m_NotificationID; };
 
@@ -1168,7 +1168,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 
 			}; // class DeleteNotificationRes : public MessageBase
 
@@ -1192,7 +1192,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint32_t m_NotificationID;
 			public:
 				SetNotificationReadCmd()
@@ -1204,7 +1204,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetNotificationID() const	{ return m_NotificationID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -1213,7 +1213,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InNotificationID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 
 			}; // class SetNotificationReadCmd : public MessageBase
 
@@ -1236,7 +1236,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint32_t m_NotificationID;
 			public:
@@ -1249,7 +1249,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint32_t& GetNotificationID() const	{ return m_NotificationID; };
 
@@ -1259,7 +1259,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 
 			}; // class SetNotificationReadRes : public MessageBase
 
@@ -1283,7 +1283,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint32_t m_NotificationID;
 			public:
 				AcceptNotificationCmd()
@@ -1295,7 +1295,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetNotificationID() const	{ return m_NotificationID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -1304,7 +1304,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InNotificationID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 
 			}; // class AcceptNotificationCmd : public MessageBase
 
@@ -1327,7 +1327,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint32_t m_NotificationID;
 			public:
@@ -1340,7 +1340,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint32_t& GetNotificationID() const	{ return m_NotificationID; };
 
@@ -1350,7 +1350,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 
 			}; // class AcceptNotificationRes : public MessageBase
 
@@ -1370,7 +1370,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -1432,7 +1432,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				const char* m_PlayerEMail;
 			public:
 				FindPlayerByEMailCmd()
@@ -1446,7 +1446,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetPlayerEMail() const	{ return m_PlayerEMail; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -1455,7 +1455,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InPlayerEMail );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InPlayerEMail );
 
 			}; // class FindPlayerByEMailCmd : public MessageBase
 
@@ -1478,7 +1478,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				PlayerInformation m_Player;
 			public:
@@ -1491,7 +1491,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const PlayerInformation& GetPlayer() const	{ return m_Player; };
 
@@ -1501,7 +1501,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
 
 			}; // class FindPlayerByEMailRes : public MessageBase
 
@@ -1524,7 +1524,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				AccountID m_PlayerID;
 			public:
 				FindPlayerByPlayerIDCmd()
@@ -1536,7 +1536,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -1545,7 +1545,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InPlayerID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID );
 
 			}; // class FindPlayerByPlayerIDCmd : public MessageBase
 
@@ -1568,7 +1568,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				PlayerInformation m_Player;
 			public:
@@ -1581,7 +1581,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const PlayerInformation& GetPlayer() const	{ return m_Player; };
 
@@ -1591,7 +1591,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
 
 			}; // class FindPlayerByPlayerIDRes : public MessageBase
 
@@ -1615,7 +1615,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				ExternalBufferArray<AccountID> m_TargetPlayerID;
 			public:
 				RequestPlayerStatusUpdateCmd()
@@ -1627,7 +1627,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Array<AccountID>& GetTargetPlayerID() const	{ return m_TargetPlayerID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -1636,7 +1636,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Array<AccountID>& InTargetPlayerID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID );
 
 			}; // class RequestPlayerStatusUpdateCmd : public MessageBase
 
@@ -1659,7 +1659,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				RequestPlayerStatusUpdateRes()
@@ -1671,7 +1671,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -1680,7 +1680,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class RequestPlayerStatusUpdateRes : public MessageBase
 
@@ -1699,7 +1699,7 @@ namespace SF
 					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -1751,7 +1751,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint8_t m_RankingType;
 				uint8_t m_BaseRanking;
 				uint8_t m_Count;
@@ -1765,7 +1765,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint8_t& GetRankingType() const	{ return m_RankingType; };
 				const uint8_t& GetBaseRanking() const	{ return m_BaseRanking; };
 				const uint8_t& GetCount() const	{ return m_Count; };
@@ -1776,7 +1776,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
 
 			}; // class GetRankingListCmd : public MessageBase
 
@@ -1799,7 +1799,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				ExternalBufferArray<TotalRankingPlayerInformation> m_Ranking;
 			public:
@@ -1812,7 +1812,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const Array<TotalRankingPlayerInformation>& GetRanking() const	{ return m_Ranking; };
 
@@ -1822,7 +1822,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 
 			}; // class GetRankingListRes : public MessageBase
 
@@ -1846,7 +1846,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 			public:
 				GetUserGamePlayerInfoCmd()
 					{}
@@ -1857,7 +1857,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
 
@@ -1865,7 +1865,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class GetUserGamePlayerInfoCmd : public MessageBase
 
@@ -1888,7 +1888,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				int16_t m_Level;
 				int64_t m_Exp;
@@ -1921,7 +1921,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const int16_t& GetLevel() const	{ return m_Level; };
 				const int64_t& GetExp() const	{ return m_Exp; };
@@ -1951,7 +1951,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const int16_t &InLevel, const int64_t &InExp, const int64_t &InGameMoney, const int64_t &InGem, const int16_t &InStamina, const uint32_t &InLastUpdateTime, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const int16_t &InLevel, const int64_t &InExp, const int64_t &InGameMoney, const int64_t &InGem, const int16_t &InStamina, const uint32_t &InLastUpdateTime, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose );
 
 			}; // class GetUserGamePlayerInfoRes : public MessageBase
 
@@ -1974,7 +1974,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				AccountID m_PlayerID;
 			public:
 				GetGamePlayerInfoCmd()
@@ -1986,7 +1986,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -1995,7 +1995,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InPlayerID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID );
 
 			}; // class GetGamePlayerInfoCmd : public MessageBase
 
@@ -2017,7 +2017,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				AccountID m_PlayerID;
 				int16_t m_Level;
@@ -2046,7 +2046,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const int16_t& GetLevel() const	{ return m_Level; };
@@ -2072,7 +2072,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const int16_t &InLevel, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const int16_t &InLevel, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose );
 
 			}; // class GetGamePlayerInfoRes : public MessageBase
 
@@ -2092,7 +2092,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -2142,7 +2142,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				const char* m_NickName;
 				uint8_t m_IsCostFree;
 			public:
@@ -2157,7 +2157,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetNickName() const	{ return m_NickName; };
 				const uint8_t& GetIsCostFree() const	{ return m_IsCostFree; };
 
@@ -2167,7 +2167,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree );
 
 			}; // class SetNickNameCmd : public MessageBase
 
@@ -2190,7 +2190,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint64_t m_TotalGem;
 				uint64_t m_TotalGameMoney;
@@ -2204,7 +2204,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetTotalGem() const	{ return m_TotalGem; };
 				const uint64_t& GetTotalGameMoney() const	{ return m_TotalGameMoney; };
@@ -2215,7 +2215,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 
 			}; // class SetNickNameRes : public MessageBase
 
@@ -2239,7 +2239,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 			public:
 				CreatePartyCmd()
 					{}
@@ -2250,7 +2250,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
 
@@ -2258,7 +2258,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class CreatePartyCmd : public MessageBase
 
@@ -2281,7 +2281,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint64_t m_PartyUID;
 			public:
@@ -2294,7 +2294,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPartyUID() const	{ return m_PartyUID; };
 
@@ -2304,7 +2304,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID );
 
 			}; // class CreatePartyRes : public MessageBase
 
@@ -2328,7 +2328,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_PartyUID;
 				AccountID m_InviterID;
 			public:
@@ -2341,7 +2341,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPartyUID() const	{ return m_PartyUID; };
 				const AccountID& GetInviterID() const	{ return m_InviterID; };
 
@@ -2351,7 +2351,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID );
 
 			}; // class JoinPartyCmd : public MessageBase
 
@@ -2374,7 +2374,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint64_t m_PartyUID;
 				AccountID m_PartyLeaderID;
@@ -2389,7 +2389,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPartyUID() const	{ return m_PartyUID; };
 				const AccountID& GetPartyLeaderID() const	{ return m_PartyLeaderID; };
@@ -2401,7 +2401,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData );
 
 			}; // class JoinPartyRes : public MessageBase
 
@@ -2421,7 +2421,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -2467,7 +2467,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -2516,7 +2516,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_PartyUID;
 				AccountID m_PlayerID;
 			public:
@@ -2529,7 +2529,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPartyUID() const	{ return m_PartyUID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 
@@ -2539,7 +2539,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID );
 
 			}; // class LeavePartyCmd : public MessageBase
 
@@ -2562,7 +2562,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				LeavePartyRes()
@@ -2574,7 +2574,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -2583,7 +2583,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class LeavePartyRes : public MessageBase
 
@@ -2603,7 +2603,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -2652,7 +2652,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_PartyUID;
 				AccountID m_PlayerID;
 				AccountID m_PlayerToKick;
@@ -2666,7 +2666,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPartyUID() const	{ return m_PartyUID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const AccountID& GetPlayerToKick() const	{ return m_PlayerToKick; };
@@ -2677,7 +2677,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 
 			}; // class PartyKickPlayerCmd : public MessageBase
 
@@ -2700,7 +2700,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				PartyKickPlayerRes()
@@ -2712,7 +2712,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -2721,7 +2721,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class PartyKickPlayerRes : public MessageBase
 
@@ -2741,7 +2741,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -2791,7 +2791,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				AccountID m_InviteTargetID;
 			public:
 				PartyInviteCmd()
@@ -2803,7 +2803,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AccountID& GetInviteTargetID() const	{ return m_InviteTargetID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -2812,7 +2812,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InInviteTargetID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviteTargetID );
 
 			}; // class PartyInviteCmd : public MessageBase
 
@@ -2835,7 +2835,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				PartyInviteRes()
@@ -2847,7 +2847,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -2856,7 +2856,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class PartyInviteRes : public MessageBase
 
@@ -2876,7 +2876,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -2930,7 +2930,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint32_t m_QuickChatID;
 			public:
 				PartyQuickChatMessageCmd()
@@ -2942,7 +2942,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetQuickChatID() const	{ return m_QuickChatID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -2951,7 +2951,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InQuickChatID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InQuickChatID );
 
 			}; // class PartyQuickChatMessageCmd : public MessageBase
 
@@ -2974,7 +2974,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				PartyQuickChatMessageRes()
@@ -2986,7 +2986,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -2995,7 +2995,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class PartyQuickChatMessageRes : public MessageBase
 
@@ -3015,7 +3015,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -3065,7 +3065,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				const char* m_ChatMessage;
 			public:
 				PartyChatMessageCmd()
@@ -3079,7 +3079,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetChatMessage() const	{ return m_ChatMessage; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -3088,7 +3088,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage );
 
 			}; // class PartyChatMessageCmd : public MessageBase
 
@@ -3111,7 +3111,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				PartyChatMessageRes()
@@ -3123,7 +3123,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -3132,7 +3132,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class PartyChatMessageRes : public MessageBase
 
@@ -3152,7 +3152,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -3207,7 +3207,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				AccountID m_PlayerID;
 				AuthTicket m_Ticket;
 				uint64_t m_InsUID;
@@ -3221,7 +3221,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const uint64_t& GetInsUID() const	{ return m_InsUID; };
@@ -3232,7 +3232,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID );
 
 			}; // class JoinGameCmd : public MessageBase
 
@@ -3255,7 +3255,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint64_t m_InsUID;
 				uint32_t m_TimeStamp;
@@ -3278,7 +3278,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetInsUID() const	{ return m_InsUID; };
 				const uint32_t& GetTimeStamp() const	{ return m_TimeStamp; };
@@ -3298,7 +3298,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData );
 
 			}; // class JoinGameRes : public MessageBase
 
@@ -3318,7 +3318,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -3375,7 +3375,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_GameInsUID;
 				AccountID m_PlayerID;
 				AuthTicket m_Ticket;
@@ -3389,7 +3389,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
@@ -3400,7 +3400,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
 
 			}; // class LeaveGameCmd : public MessageBase
 
@@ -3423,7 +3423,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				LeaveGameRes()
@@ -3435,7 +3435,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -3444,7 +3444,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class LeaveGameRes : public MessageBase
 
@@ -3464,7 +3464,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -3513,7 +3513,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_GameInsUID;
 				AccountID m_PlayerID;
 				AccountID m_PlayerToKick;
@@ -3527,7 +3527,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const AccountID& GetPlayerToKick() const	{ return m_PlayerToKick; };
@@ -3538,7 +3538,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 
 			}; // class KickPlayerCmd : public MessageBase
 
@@ -3561,7 +3561,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				KickPlayerRes()
@@ -3573,7 +3573,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -3582,7 +3582,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class KickPlayerRes : public MessageBase
 
@@ -3602,7 +3602,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -3651,7 +3651,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_GameInsUID;
 				AccountID m_PlayerID;
 				AuthTicket m_Ticket;
@@ -3665,7 +3665,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
@@ -3676,7 +3676,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
 
 			}; // class AssignRoleCmd : public MessageBase
 
@@ -3699,7 +3699,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				AssignRoleRes()
@@ -3711,7 +3711,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -3720,7 +3720,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class AssignRoleRes : public MessageBase
 
@@ -3739,7 +3739,7 @@ namespace SF
 					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -3791,7 +3791,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				const char* m_ChatMessage;
 				uint8_t m_Role;
 			public:
@@ -3806,7 +3806,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetChatMessage() const	{ return m_ChatMessage; };
 				const uint8_t& GetRole() const	{ return m_Role; };
 
@@ -3816,7 +3816,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InChatMessage, const uint8_t &InRole );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage, const uint8_t &InRole );
 
 			}; // class ChatMessageCmd : public MessageBase
 
@@ -3839,7 +3839,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				ChatMessageRes()
@@ -3851,7 +3851,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -3860,7 +3860,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class ChatMessageRes : public MessageBase
 
@@ -3880,7 +3880,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -3937,7 +3937,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_GameInsUID;
 				AccountID m_PlayerID;
 				AuthTicket m_Ticket;
@@ -3951,7 +3951,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
@@ -3962,7 +3962,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
 
 			}; // class AdvanceGameCmd : public MessageBase
 
@@ -3985,7 +3985,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				AdvanceGameRes()
@@ -3997,7 +3997,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -4006,7 +4006,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class AdvanceGameRes : public MessageBase
 
@@ -4026,7 +4026,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -4076,7 +4076,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -4129,7 +4129,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_GameInsUID;
 				AccountID m_PlayerID;
 				AuthTicket m_Ticket;
@@ -4143,7 +4143,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
@@ -4154,7 +4154,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
 
 			}; // class VoteGameAdvanceCmd : public MessageBase
 
@@ -4177,7 +4177,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				VoteGameAdvanceRes()
@@ -4189,7 +4189,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -4198,7 +4198,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class VoteGameAdvanceRes : public MessageBase
 
@@ -4218,7 +4218,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -4267,7 +4267,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_GameInsUID;
 				AccountID m_PlayerID;
 				AuthTicket m_Ticket;
@@ -4283,7 +4283,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
@@ -4296,7 +4296,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial );
 
 			}; // class VoteCmd : public MessageBase
 
@@ -4319,7 +4319,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				VoteRes()
@@ -4331,7 +4331,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -4340,7 +4340,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class VoteRes : public MessageBase
 
@@ -4360,7 +4360,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -4408,7 +4408,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -4454,7 +4454,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -4502,7 +4502,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -4556,7 +4556,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 			public:
 				GamePlayAgainCmd()
 					{}
@@ -4567,7 +4567,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
 
@@ -4575,7 +4575,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class GamePlayAgainCmd : public MessageBase
 
@@ -4598,7 +4598,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint64_t m_TotalGem;
 				uint64_t m_TotalGameMoney;
@@ -4612,7 +4612,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetTotalGem() const	{ return m_TotalGem; };
 				const uint64_t& GetTotalGameMoney() const	{ return m_TotalGameMoney; };
@@ -4623,7 +4623,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 
 			}; // class GamePlayAgainRes : public MessageBase
 
@@ -4643,7 +4643,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -4693,7 +4693,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				ExternalBufferArray<AccountID> m_TargetPlayerID;
 			public:
 				GameRevealPlayerCmd()
@@ -4705,7 +4705,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Array<AccountID>& GetTargetPlayerID() const	{ return m_TargetPlayerID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -4714,7 +4714,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Array<AccountID>& InTargetPlayerID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID );
 
 			}; // class GameRevealPlayerCmd : public MessageBase
 
@@ -4737,7 +4737,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				ExternalBufferArray<AccountID> m_RevealedPlayerID;
 				ExternalBufferArray<uint8_t> m_RevealedRole;
@@ -4753,7 +4753,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const Array<AccountID>& GetRevealedPlayerID() const	{ return m_RevealedPlayerID; };
 				const Array<uint8_t>& GetRevealedRole() const	{ return m_RevealedRole; };
@@ -4766,7 +4766,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const Array<AccountID>& InRevealedPlayerID, const Array<uint8_t>& InRevealedRole, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<AccountID>& InRevealedPlayerID, const Array<uint8_t>& InRevealedRole, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 
 			}; // class GameRevealPlayerRes : public MessageBase
 
@@ -4790,7 +4790,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 			public:
 				GamePlayerReviveCmd()
 					{}
@@ -4801,7 +4801,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
 
@@ -4809,7 +4809,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class GamePlayerReviveCmd : public MessageBase
 
@@ -4832,7 +4832,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint64_t m_TotalGem;
 				uint64_t m_TotalGameMoney;
@@ -4846,7 +4846,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetTotalGem() const	{ return m_TotalGem; };
 				const uint64_t& GetTotalGameMoney() const	{ return m_TotalGameMoney; };
@@ -4857,7 +4857,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 
 			}; // class GamePlayerReviveRes : public MessageBase
 
@@ -4877,7 +4877,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -4925,7 +4925,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 			public:
 				GamePlayerResetRankCmd()
 					{}
@@ -4936,7 +4936,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
 
@@ -4944,7 +4944,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class GamePlayerResetRankCmd : public MessageBase
 
@@ -4967,7 +4967,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint64_t m_TotalGem;
 				uint64_t m_TotalGameMoney;
@@ -4981,7 +4981,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetTotalGem() const	{ return m_TotalGem; };
 				const uint64_t& GetTotalGameMoney() const	{ return m_TotalGameMoney; };
@@ -4992,7 +4992,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 
 			}; // class GamePlayerResetRankRes : public MessageBase
 
@@ -5016,7 +5016,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint8_t m_NumPlayer;
 				uint8_t m_RequestRole;
 			public:
@@ -5029,7 +5029,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint8_t& GetNumPlayer() const	{ return m_NumPlayer; };
 				const uint8_t& GetRequestRole() const	{ return m_RequestRole; };
 
@@ -5039,7 +5039,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
 
 			}; // class RequestGameMatchCmd : public MessageBase
 
@@ -5062,7 +5062,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint64_t m_TotalGem;
 				uint64_t m_TotalGameMoney;
@@ -5076,7 +5076,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetTotalGem() const	{ return m_TotalGem; };
 				const uint64_t& GetTotalGameMoney() const	{ return m_TotalGameMoney; };
@@ -5087,7 +5087,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 
 			}; // class RequestGameMatchRes : public MessageBase
 
@@ -5107,7 +5107,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -5177,7 +5177,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -5221,7 +5221,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -5267,7 +5267,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 			public:
 				CancelGameMatchCmd()
 					{}
@@ -5278,7 +5278,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
 
@@ -5286,7 +5286,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class CancelGameMatchCmd : public MessageBase
 
@@ -5309,7 +5309,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				CancelGameMatchRes()
@@ -5321,7 +5321,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -5330,7 +5330,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class CancelGameMatchRes : public MessageBase
 
@@ -5350,7 +5350,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -5396,7 +5396,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint32_t m_ShopItemID;
 			public:
 				BuyShopItemPrepareCmd()
@@ -5408,7 +5408,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetShopItemID() const	{ return m_ShopItemID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -5417,7 +5417,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InShopItemID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID );
 
 			}; // class BuyShopItemPrepareCmd : public MessageBase
 
@@ -5440,7 +5440,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint32_t m_ShopItemID;
 				const char* m_PurchaseID;
@@ -5456,7 +5456,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint32_t& GetShopItemID() const	{ return m_ShopItemID; };
 				const char* GetPurchaseID() const	{ return m_PurchaseID; };
@@ -5467,7 +5467,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID );
 
 			}; // class BuyShopItemPrepareRes : public MessageBase
 
@@ -5491,7 +5491,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint32_t m_ShopItemID;
 				const char* m_Platform;
 				const char* m_PackageName;
@@ -5513,7 +5513,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetShopItemID() const	{ return m_ShopItemID; };
 				const char* GetPlatform() const	{ return m_Platform; };
 				const char* GetPackageName() const	{ return m_PackageName; };
@@ -5526,7 +5526,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken );
 
 			}; // class BuyShopItemCmd : public MessageBase
 
@@ -5549,7 +5549,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint32_t m_ShopItemID;
 			public:
@@ -5562,7 +5562,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint32_t& GetShopItemID() const	{ return m_ShopItemID; };
 
@@ -5572,7 +5572,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint32_t &InShopItemID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID );
 
 			}; // class BuyShopItemRes : public MessageBase
 
@@ -5596,7 +5596,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				const char* m_ChannelName;
 				const char* m_Passcode;
 			public:
@@ -5613,7 +5613,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetChannelName() const	{ return m_ChannelName; };
 				const char* GetPasscode() const	{ return m_Passcode; };
 
@@ -5623,7 +5623,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const char* InChannelName, const char* InPasscode );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode );
 
 			}; // class CreateOrJoinChatChannelCmd : public MessageBase
 
@@ -5646,7 +5646,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint64_t m_ChatUID;
 			public:
@@ -5659,7 +5659,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
 
@@ -5669,7 +5669,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InChatUID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID );
 
 			}; // class CreateOrJoinChatChannelRes : public MessageBase
 
@@ -5693,7 +5693,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_ChatUID;
 				AccountID m_InviterID;
 			public:
@@ -5706,7 +5706,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
 				const AccountID& GetInviterID() const	{ return m_InviterID; };
 
@@ -5716,7 +5716,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID );
 
 			}; // class JoinChatChannelCmd : public MessageBase
 
@@ -5739,7 +5739,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				uint64_t m_PartyUID;
 				AccountID m_PartyLeaderID;
@@ -5753,7 +5753,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPartyUID() const	{ return m_PartyUID; };
 				const AccountID& GetPartyLeaderID() const	{ return m_PartyLeaderID; };
@@ -5764,7 +5764,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID );
 
 			}; // class JoinChatChannelRes : public MessageBase
 
@@ -5784,7 +5784,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -5830,7 +5830,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -5879,7 +5879,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_ChatUID;
 				AccountID m_PlayerID;
 			public:
@@ -5892,7 +5892,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 
@@ -5902,7 +5902,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID );
 
 			}; // class LeaveChatChannelCmd : public MessageBase
 
@@ -5925,7 +5925,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				LeaveChatChannelRes()
@@ -5937,7 +5937,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -5946,7 +5946,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class LeaveChatChannelRes : public MessageBase
 
@@ -5966,7 +5966,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -6015,7 +6015,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_ChatUID;
 				AccountID m_PlayerID;
 				AccountID m_PlayerToKick;
@@ -6029,7 +6029,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const AccountID& GetPlayerToKick() const	{ return m_PlayerToKick; };
@@ -6040,7 +6040,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 
 			}; // class ChatChannelKickPlayerCmd : public MessageBase
 
@@ -6063,7 +6063,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				ChatChannelKickPlayerRes()
@@ -6075,7 +6075,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -6084,7 +6084,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class ChatChannelKickPlayerRes : public MessageBase
 
@@ -6104,7 +6104,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -6154,7 +6154,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint64_t m_ChatUID;
 				const char* m_ChatMessage;
 			public:
@@ -6169,7 +6169,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
 				const char* GetChatMessage() const	{ return m_ChatMessage; };
 
@@ -6179,7 +6179,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage );
 
 			}; // class ChatChannelChatMessageCmd : public MessageBase
 
@@ -6202,7 +6202,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				ChatChannelChatMessageRes()
@@ -6214,7 +6214,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -6223,7 +6223,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class ChatChannelChatMessageRes : public MessageBase
 
@@ -6243,7 +6243,7 @@ namespace SF
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetPlayerID() { return 0; }
-				TransactionID GetTransactionID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -6299,7 +6299,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				AccountID m_TargetPlayer;
 			public:
 				GiveStaminaCmd()
@@ -6311,7 +6311,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AccountID& GetTargetPlayer() const	{ return m_TargetPlayer; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -6320,7 +6320,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const AccountID &InTargetPlayer );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InTargetPlayer );
 
 			}; // class GiveStaminaCmd : public MessageBase
 
@@ -6343,7 +6343,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 				AccountID m_TargetPlayer;
 				uint64_t m_TimeStamp;
@@ -6357,7 +6357,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const AccountID& GetTargetPlayer() const	{ return m_TargetPlayer; };
 				const uint64_t& GetTimeStamp() const	{ return m_TimeStamp; };
@@ -6368,7 +6368,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp );
 
 			}; // class GiveStaminaRes : public MessageBase
 
@@ -6392,7 +6392,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				uint32_t m_PresetID;
 			public:
 				SetPresetGameConfigIDCmd()
@@ -6404,7 +6404,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetPresetID() const	{ return m_PresetID; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -6413,7 +6413,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const uint32_t &InPresetID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InPresetID );
 
 			}; // class SetPresetGameConfigIDCmd : public MessageBase
 
@@ -6436,7 +6436,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				SetPresetGameConfigIDRes()
@@ -6448,7 +6448,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -6457,7 +6457,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class SetPresetGameConfigIDRes : public MessageBase
 
@@ -6481,7 +6481,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				int32_t m_Resource;
 				int32_t m_Value;
 			public:
@@ -6494,7 +6494,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const int32_t& GetResource() const	{ return m_Resource; };
 				const int32_t& GetValue() const	{ return m_Value; };
 
@@ -6504,7 +6504,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const int32_t &InResource, const int32_t &InValue );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const int32_t &InResource, const int32_t &InValue );
 
 			}; // class GainGameResourceCmd : public MessageBase
 
@@ -6527,7 +6527,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				TransactionID m_TransactionID;
+				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
 				GainGameResourceRes()
@@ -6539,7 +6539,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const TransactionID& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
 				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
@@ -6548,7 +6548,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const TransactionID &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class GainGameResourceRes : public MessageBase
 

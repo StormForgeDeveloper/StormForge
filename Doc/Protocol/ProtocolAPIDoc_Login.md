@@ -19,7 +19,9 @@ Login request
 
 1. Command interface
 
-        Result LoginCmd(const uint32_t &InGameID, const char* InID, const char* InPassword)
+        Result LoginCmd(const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGameID: GameID type. Game ID, Conspiracy will be accepted
 
@@ -31,6 +33,8 @@ Login request
 
 C++: Cast message to LoginRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -50,7 +54,9 @@ Login request with Facebook UID
 
 1. Command interface
 
-        Result LoginByFacebookCmd(const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken)
+        Result LoginByFacebookCmd(const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGameID: GameID type. Game ID, Conspiracy will be accepted
 
@@ -66,6 +72,8 @@ Login request with Facebook UID
 
 C++: Cast message to LoginByFacebookRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -85,7 +93,9 @@ Login request
 
 1. Command interface
 
-        Result CreateRandomUserCmd(const uint32_t &InGameID, const char* InCellPhone)
+        Result CreateRandomUserCmd(const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGameID: GameID type. Game ID, Conspiracy will be accepted
 
@@ -95,6 +105,8 @@ Login request
 
 C++: Cast message to CreateRandomUserRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -114,7 +126,9 @@ Update my score and Get Ranking list
 
 1. Command interface
 
-        Result UpdateMyScoreCmd(const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount)
+        Result UpdateMyScoreCmd(const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInRankingScore: uint64 type. 
 
@@ -127,6 +141,8 @@ Update my score and Get Ranking list
 C++: Cast message to UpdateMyScoreRes to access values
 
 
+		- OutTransactionID: TransactionID type. 
+
 		- OutResult: Result type. 
 
 		- OutRanking: TotalRankingPlayerInformation type. 
@@ -137,7 +153,9 @@ Get Ranking lise
 
 1. Command interface
 
-        Result GetRankingListCmd(const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount)
+        Result GetRankingListCmd(const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInRankingType: RankingType type. 
 
@@ -150,6 +168,8 @@ Get Ranking lise
 C++: Cast message to GetRankingListRes to access values
 
 
+		- OutTransactionID: TransactionID type. 
+
 		- OutResult: Result type. 
 
 		- OutRanking: TotalRankingPlayerInformation type. 
@@ -160,7 +180,9 @@ For network test
 
 1. Command interface
 
-        Result DataTestCmd(const Array<uint8_t>& InTestData)
+        Result DataTestCmd(const uint64_t &InTransactionID, const Array<uint8_t>& InTestData)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInTestData: uint8 type. 
 
@@ -168,6 +190,8 @@ For network test
 
 C++: Cast message to DataTestRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -185,7 +209,9 @@ Write All!! User Score and Ranking list
 
 1. Command interface
 
-        Result DebugPrintALLRankingCmd(const char* InFileName)
+        Result DebugPrintALLRankingCmd(const uint64_t &InTransactionID, const char* InFileName)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInFileName: String type. 
 
@@ -193,6 +219,8 @@ Write All!! User Score and Ranking list
 
 C++: Cast message to DebugPrintALLRankingRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 

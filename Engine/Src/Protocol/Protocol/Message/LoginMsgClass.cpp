@@ -41,6 +41,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameID, pCur, iMsgSize, sizeof(uint32_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfID, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_ID, pCur, iMsgSize, sizeof(char)*uiSizeOfID ) );
@@ -62,6 +63,7 @@ namespace SF
 				LoginCmd parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GameID", parser.GetGameID());
 				variableBuilder.SetVariable("ID", parser.GetID());
 				variableBuilder.SetVariable("Password", parser.GetPassword());
@@ -85,7 +87,7 @@ namespace SF
 
 			}; // Result LoginCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* LoginCmd::Create( IHeap& memHeap, const uint32_t &InGameID, const char* InID, const char* InPassword )
+			MessageData* LoginCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -95,6 +97,7 @@ namespace SF
 				uint16_t __uiInIDLength = InID ? (uint16_t)(strlen(InID)+1) : 1;
 				uint16_t __uiInPasswordLength = InPassword ? (uint16_t)(strlen(InPassword)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInIDLength + sizeof(uint16_t) + __uiInPasswordLength 
+					+ sizeof(uint64_t)
 					+ sizeof(uint32_t));
 
 
@@ -102,6 +105,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InGameID, sizeof(uint32_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInIDLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InID ? InID : "", __uiInIDLength );
@@ -118,7 +122,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* LoginCmd::Create( IHeap& memHeap, const uint32_t &InGameID, const char* InID, const char* InPassword )
+			}; // MessageData* LoginCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 
 
 
@@ -126,8 +130,8 @@ namespace SF
 			{
  				LoginCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Login:{0}:{1} , GameID:{2}, ID:{3,60}, Password:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetGameID(), parser.GetID(), parser.GetPassword()); 
+				SFLog(Net, Debug1, "Login:{0}:{1} , TransactionID:{2}, GameID:{3}, ID:{4,60}, Password:{5,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGameID(), parser.GetID(), parser.GetPassword()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginCmd::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -144,6 +148,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameServerAddr, pCur, iMsgSize, sizeof(NetAddress) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameServerAddrIPV4, pCur, iMsgSize, sizeof(NetAddress) ) );
@@ -166,6 +171,7 @@ namespace SF
 				LoginRes parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("GameServerAddr", parser.GetGameServerAddr());
 				variableBuilder.SetVariable("GameServerAddrIPV4", parser.GetGameServerAddrIPV4());
@@ -192,7 +198,7 @@ namespace SF
 
 			}; // Result LoginRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* LoginRes::Create( IHeap& memHeap, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -200,6 +206,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(NetAddress)
 					+ sizeof(NetAddress)
@@ -212,6 +219,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InGameServerAddr, sizeof(NetAddress));
 				Protocol::PackParamCopy( pMsgData, &InGameServerAddrIPV4, sizeof(NetAddress));
@@ -229,7 +237,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* LoginRes::Create( IHeap& memHeap, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
 
 
@@ -237,8 +245,8 @@ namespace SF
 			{
  				LoginRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Login:{0}:{1} , Result:{2:X8}, GameServerAddr:{3}, GameServerAddrIPV4:{4}, AccID:{5}, Ticket:{6}, LoginEntityUID:{7}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
+				SFLog(Net, Debug1, "Login:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginRes::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -259,6 +267,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameID, pCur, iMsgSize, sizeof(uint32_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_UID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfFaceBookName, pCur, iMsgSize, sizeof(uint16_t) ) );
@@ -283,6 +292,7 @@ namespace SF
 				LoginByFacebookCmd parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GameID", parser.GetGameID());
 				variableBuilder.SetVariable("UID", parser.GetUID());
 				variableBuilder.SetVariable("FaceBookName", parser.GetFaceBookName());
@@ -308,7 +318,7 @@ namespace SF
 
 			}; // Result LoginByFacebookCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* LoginByFacebookCmd::Create( IHeap& memHeap, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
+			MessageData* LoginByFacebookCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -319,6 +329,7 @@ namespace SF
 				uint16_t __uiInEMailLength = InEMail ? (uint16_t)(strlen(InEMail)+1) : 1;
 				uint16_t __uiInFacebookTokenLength = InFacebookToken ? (uint16_t)(strlen(InFacebookToken)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInFaceBookNameLength + sizeof(uint16_t) + __uiInEMailLength + sizeof(uint16_t) + __uiInFacebookTokenLength 
+					+ sizeof(uint64_t)
 					+ sizeof(uint32_t)
 					+ sizeof(uint64_t));
 
@@ -327,6 +338,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InGameID, sizeof(uint32_t));
 				Protocol::PackParamCopy( pMsgData, &InUID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInFaceBookNameLength, sizeof(uint16_t) );
@@ -346,7 +358,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* LoginByFacebookCmd::Create( IHeap& memHeap, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
+			}; // MessageData* LoginByFacebookCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 
 
 
@@ -354,8 +366,8 @@ namespace SF
 			{
  				LoginByFacebookCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "LoginByFacebook:{0}:{1} , GameID:{2}, UID:{3}, FaceBookName:{4,60}, EMail:{5,60}, FacebookToken:{6,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetGameID(), parser.GetUID(), parser.GetFaceBookName(), parser.GetEMail(), parser.GetFacebookToken()); 
+				SFLog(Net, Debug1, "LoginByFacebook:{0}:{1} , TransactionID:{2}, GameID:{3}, UID:{4}, FaceBookName:{5,60}, EMail:{6,60}, FacebookToken:{7,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGameID(), parser.GetUID(), parser.GetFaceBookName(), parser.GetEMail(), parser.GetFacebookToken()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginByFacebookCmd::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -372,6 +384,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameServerAddr, pCur, iMsgSize, sizeof(NetAddress) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameServerAddrIPV4, pCur, iMsgSize, sizeof(NetAddress) ) );
@@ -394,6 +407,7 @@ namespace SF
 				LoginByFacebookRes parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("GameServerAddr", parser.GetGameServerAddr());
 				variableBuilder.SetVariable("GameServerAddrIPV4", parser.GetGameServerAddrIPV4());
@@ -420,7 +434,7 @@ namespace SF
 
 			}; // Result LoginByFacebookRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -428,6 +442,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(NetAddress)
 					+ sizeof(NetAddress)
@@ -440,6 +455,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InGameServerAddr, sizeof(NetAddress));
 				Protocol::PackParamCopy( pMsgData, &InGameServerAddrIPV4, sizeof(NetAddress));
@@ -457,7 +473,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
 
 
@@ -465,8 +481,8 @@ namespace SF
 			{
  				LoginByFacebookRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "LoginByFacebook:{0}:{1} , Result:{2:X8}, GameServerAddr:{3}, GameServerAddrIPV4:{4}, AccID:{5}, Ticket:{6}, LoginEntityUID:{7}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
+				SFLog(Net, Debug1, "LoginByFacebook:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginByFacebookRes::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -485,6 +501,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameID, pCur, iMsgSize, sizeof(uint32_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfCellPhone, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_CellPhone, pCur, iMsgSize, sizeof(char)*uiSizeOfCellPhone ) );
@@ -504,6 +521,7 @@ namespace SF
 				CreateRandomUserCmd parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GameID", parser.GetGameID());
 				variableBuilder.SetVariable("CellPhone", parser.GetCellPhone());
 
@@ -526,7 +544,7 @@ namespace SF
 
 			}; // Result CreateRandomUserCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CreateRandomUserCmd::Create( IHeap& memHeap, const uint32_t &InGameID, const char* InCellPhone )
+			MessageData* CreateRandomUserCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -535,6 +553,7 @@ namespace SF
 
 				uint16_t __uiInCellPhoneLength = InCellPhone ? (uint16_t)(strlen(InCellPhone)+1) : 1;
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInCellPhoneLength 
+					+ sizeof(uint64_t)
 					+ sizeof(uint32_t));
 
 
@@ -542,6 +561,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InGameID, sizeof(uint32_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInCellPhoneLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InCellPhone ? InCellPhone : "", __uiInCellPhoneLength );
@@ -556,7 +576,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* CreateRandomUserCmd::Create( IHeap& memHeap, const uint32_t &InGameID, const char* InCellPhone )
+			}; // MessageData* CreateRandomUserCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 
 
 
@@ -564,8 +584,8 @@ namespace SF
 			{
  				CreateRandomUserCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateRandomUser:{0}:{1} , GameID:{2}, CellPhone:{3,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetGameID(), parser.GetCellPhone()); 
+				SFLog(Net, Debug1, "CreateRandomUser:{0}:{1} , TransactionID:{2}, GameID:{3}, CellPhone:{4,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGameID(), parser.GetCellPhone()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateRandomUserCmd::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -582,6 +602,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameServerAddr, pCur, iMsgSize, sizeof(NetAddress) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_GameServerAddrIPV4, pCur, iMsgSize, sizeof(NetAddress) ) );
@@ -604,6 +625,7 @@ namespace SF
 				CreateRandomUserRes parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("GameServerAddr", parser.GetGameServerAddr());
 				variableBuilder.SetVariable("GameServerAddrIPV4", parser.GetGameServerAddrIPV4());
@@ -630,7 +652,7 @@ namespace SF
 
 			}; // Result CreateRandomUserRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -638,6 +660,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(NetAddress)
 					+ sizeof(NetAddress)
@@ -650,6 +673,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InGameServerAddr, sizeof(NetAddress));
 				Protocol::PackParamCopy( pMsgData, &InGameServerAddrIPV4, sizeof(NetAddress));
@@ -667,7 +691,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
 
 
@@ -675,8 +699,8 @@ namespace SF
 			{
  				CreateRandomUserRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateRandomUser:{0}:{1} , Result:{2:X8}, GameServerAddr:{3}, GameServerAddrIPV4:{4}, AccID:{5}, Ticket:{6}, LoginEntityUID:{7}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
+				SFLog(Net, Debug1, "CreateRandomUser:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateRandomUserRes::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -694,6 +718,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_RankingScore, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_RankingType, pCur, iMsgSize, sizeof(RankingType) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Count, pCur, iMsgSize, sizeof(uint16_t) ) );
@@ -713,6 +738,7 @@ namespace SF
 				UpdateMyScoreCmd parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("RankingScore", parser.GetRankingScore());
 				variableBuilder.SetVariable("RankingType", (int)parser.GetRankingType());
 				variableBuilder.SetVariable("Count", parser.GetCount());
@@ -736,7 +762,7 @@ namespace SF
 
 			}; // Result UpdateMyScoreCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* UpdateMyScoreCmd::Create( IHeap& memHeap, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
+			MessageData* UpdateMyScoreCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -744,6 +770,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ sizeof(uint64_t)
 					+ sizeof(uint64_t)
 					+ sizeof(RankingType)
 					+ sizeof(uint16_t));
@@ -753,6 +780,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InRankingScore, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InRankingType, sizeof(RankingType));
 				Protocol::PackParamCopy( pMsgData, &InCount, sizeof(uint16_t));
@@ -767,7 +795,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* UpdateMyScoreCmd::Create( IHeap& memHeap, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
+			}; // MessageData* UpdateMyScoreCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 
 
 
@@ -775,8 +803,8 @@ namespace SF
 			{
  				UpdateMyScoreCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "UpdateMyScore:{0}:{1} , RankingScore:{2}, RankingType:{3}, Count:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetRankingScore(), (int)parser.GetRankingType(), parser.GetCount()); 
+				SFLog(Net, Debug1, "UpdateMyScore:{0}:{1} , TransactionID:{2}, RankingScore:{3}, RankingType:{4}, Count:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetRankingScore(), (int)parser.GetRankingType(), parser.GetCount()); 
 				return ResultCode::SUCCESS;
 			}; // Result UpdateMyScoreCmd::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -794,6 +822,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &numberofRanking, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( pRanking, pCur, iMsgSize, sizeof(TotalRankingPlayerInformation)*numberofRanking ) );
@@ -814,6 +843,7 @@ namespace SF
 				UpdateMyScoreRes parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("Ranking", parser.GetRanking());
 
@@ -836,7 +866,7 @@ namespace SF
 
 			}; // Result UpdateMyScoreRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* UpdateMyScoreRes::Create( IHeap& memHeap, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			MessageData* UpdateMyScoreRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -844,6 +874,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(TotalRankingPlayerInformation)*InRanking.size() + sizeof(uint16_t));
 
@@ -853,6 +884,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &numberOfInRanking, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InRanking.data(), (INT)(sizeof(TotalRankingPlayerInformation)*InRanking.size())); 
@@ -867,7 +899,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* UpdateMyScoreRes::Create( IHeap& memHeap, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			}; // MessageData* UpdateMyScoreRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
 
 
@@ -875,8 +907,8 @@ namespace SF
 			{
  				UpdateMyScoreRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "UpdateMyScore:{0}:{1} , Result:{2:X8}, Ranking:{3,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetResult(), parser.GetRanking()); 
+				SFLog(Net, Debug1, "UpdateMyScore:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Ranking:{4,30}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetRanking()); 
 				return ResultCode::SUCCESS;
 			}; // Result UpdateMyScoreRes::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -894,6 +926,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_RankingType, pCur, iMsgSize, sizeof(RankingType) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_BaseRanking, pCur, iMsgSize, sizeof(uint8_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Count, pCur, iMsgSize, sizeof(uint8_t) ) );
@@ -913,6 +946,7 @@ namespace SF
 				GetRankingListCmd parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("RankingType", (int)parser.GetRankingType());
 				variableBuilder.SetVariable("BaseRanking", parser.GetBaseRanking());
 				variableBuilder.SetVariable("Count", parser.GetCount());
@@ -936,7 +970,7 @@ namespace SF
 
 			}; // Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetRankingListCmd::Create( IHeap& memHeap, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -944,6 +978,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ sizeof(uint64_t)
 					+ sizeof(RankingType)
 					+ sizeof(uint8_t)
 					+ sizeof(uint8_t));
@@ -953,6 +988,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InRankingType, sizeof(RankingType));
 				Protocol::PackParamCopy( pMsgData, &InBaseRanking, sizeof(uint8_t));
 				Protocol::PackParamCopy( pMsgData, &InCount, sizeof(uint8_t));
@@ -967,7 +1003,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetRankingListCmd::Create( IHeap& memHeap, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			}; // MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 
 
 
@@ -975,8 +1011,8 @@ namespace SF
 			{
  				GetRankingListCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetRankingList:{0}:{1} , RankingType:{2}, BaseRanking:{3}, Count:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, (int)parser.GetRankingType(), parser.GetBaseRanking(), parser.GetCount()); 
+				SFLog(Net, Debug1, "GetRankingList:{0}:{1} , TransactionID:{2}, RankingType:{3}, BaseRanking:{4}, Count:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), (int)parser.GetRankingType(), parser.GetBaseRanking(), parser.GetCount()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetRankingListCmd::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -994,6 +1030,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &numberofRanking, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( pRanking, pCur, iMsgSize, sizeof(TotalRankingPlayerInformation)*numberofRanking ) );
@@ -1014,6 +1051,7 @@ namespace SF
 				GetRankingListRes parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("Ranking", parser.GetRanking());
 
@@ -1036,7 +1074,7 @@ namespace SF
 
 			}; // Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetRankingListRes::Create( IHeap& memHeap, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1044,6 +1082,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(TotalRankingPlayerInformation)*InRanking.size() + sizeof(uint16_t));
 
@@ -1053,6 +1092,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &numberOfInRanking, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InRanking.data(), (INT)(sizeof(TotalRankingPlayerInformation)*InRanking.size())); 
@@ -1067,7 +1107,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* GetRankingListRes::Create( IHeap& memHeap, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			}; // MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
 
 
@@ -1075,8 +1115,8 @@ namespace SF
 			{
  				GetRankingListRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetRankingList:{0}:{1} , Result:{2:X8}, Ranking:{3,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetResult(), parser.GetRanking()); 
+				SFLog(Net, Debug1, "GetRankingList:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Ranking:{4,30}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetRanking()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetRankingListRes::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -1095,6 +1135,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &numberofTestData, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( pTestData, pCur, iMsgSize, sizeof(uint8_t)*numberofTestData ) );
 				m_TestData.SetLinkedBuffer(numberofTestData, numberofTestData, pTestData);
@@ -1114,6 +1155,7 @@ namespace SF
 				DataTestCmd parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("TestData", parser.GetTestData());
 
 
@@ -1135,7 +1177,7 @@ namespace SF
 
 			}; // Result DataTestCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* DataTestCmd::Create( IHeap& memHeap, const Array<uint8_t>& InTestData )
+			MessageData* DataTestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1143,6 +1185,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ sizeof(uint64_t)
 					+ sizeof(uint8_t)*InTestData.size() + sizeof(uint16_t));
 
 
@@ -1151,6 +1194,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &numberOfInTestData, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InTestData.data(), (INT)(sizeof(uint8_t)*InTestData.size())); 
 
@@ -1164,7 +1208,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* DataTestCmd::Create( IHeap& memHeap, const Array<uint8_t>& InTestData )
+			}; // MessageData* DataTestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
 
 
 
@@ -1172,8 +1216,8 @@ namespace SF
 			{
  				DataTestCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DataTest:{0}:{1} , TestData:{2,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTestData()); 
+				SFLog(Net, Debug1, "DataTest:{0}:{1} , TransactionID:{2}, TestData:{3,30}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTestData()); 
 				return ResultCode::SUCCESS;
 			}; // Result DataTestCmd::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -1191,6 +1235,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &numberofTestData, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( pTestData, pCur, iMsgSize, sizeof(uint8_t)*numberofTestData ) );
@@ -1211,6 +1256,7 @@ namespace SF
 				DataTestRes parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("TestData", parser.GetTestData());
 
@@ -1233,7 +1279,7 @@ namespace SF
 
 			}; // Result DataTestRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* DataTestRes::Create( IHeap& memHeap, const Result &InResult, const Array<uint8_t>& InTestData )
+			MessageData* DataTestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1241,6 +1287,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ sizeof(uint64_t)
 					+ sizeof(Result)
 					+ sizeof(uint8_t)*InTestData.size() + sizeof(uint16_t));
 
@@ -1250,6 +1297,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &numberOfInTestData, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InTestData.data(), (INT)(sizeof(uint8_t)*InTestData.size())); 
@@ -1264,7 +1312,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* DataTestRes::Create( IHeap& memHeap, const Result &InResult, const Array<uint8_t>& InTestData )
+			}; // MessageData* DataTestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 
 
 
@@ -1272,8 +1320,8 @@ namespace SF
 			{
  				DataTestRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DataTest:{0}:{1} , Result:{2:X8}, TestData:{3,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetResult(), parser.GetTestData()); 
+				SFLog(Net, Debug1, "DataTest:{0}:{1} , TransactionID:{2}, Result:{3:X8}, TestData:{4,30}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetTestData()); 
 				return ResultCode::SUCCESS;
 			}; // Result DataTestRes::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -1372,6 +1420,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &uiSizeOfFileName, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( m_FileName, pCur, iMsgSize, sizeof(char)*uiSizeOfFileName ) );
 
@@ -1390,6 +1439,7 @@ namespace SF
 				DebugPrintALLRankingCmd parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("FileName", parser.GetFileName());
 
 
@@ -1411,7 +1461,7 @@ namespace SF
 
 			}; // Result DebugPrintALLRankingCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* DebugPrintALLRankingCmd::Create( IHeap& memHeap, const char* InFileName )
+			MessageData* DebugPrintALLRankingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InFileName )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1419,13 +1469,15 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				uint16_t __uiInFileNameLength = InFileName ? (uint16_t)(strlen(InFileName)+1) : 1;
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInFileNameLength );
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInFileNameLength 
+					+ sizeof(uint64_t));
 
 
 				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DebugPrintALLRankingCmd::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &__uiInFileNameLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InFileName ? InFileName : "", __uiInFileNameLength );
 
@@ -1439,7 +1491,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* DebugPrintALLRankingCmd::Create( IHeap& memHeap, const char* InFileName )
+			}; // MessageData* DebugPrintALLRankingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InFileName )
 
 
 
@@ -1447,8 +1499,8 @@ namespace SF
 			{
  				DebugPrintALLRankingCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DebugPrintALLRanking:{0}:{1} , FileName:{2,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetFileName()); 
+				SFLog(Net, Debug1, "DebugPrintALLRanking:{0}:{1} , TransactionID:{2}, FileName:{3,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetFileName()); 
 				return ResultCode::SUCCESS;
 			}; // Result DebugPrintALLRankingCmd::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 
@@ -1465,6 +1517,7 @@ namespace SF
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				pCur = pIMsg->GetMessageData();
 
+				protocolChk( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 
 
@@ -1482,6 +1535,7 @@ namespace SF
 				DebugPrintALLRankingRes parser;
 				protocolChk(parser.ParseMessage(*pIMsg));
 
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 
@@ -1503,7 +1557,7 @@ namespace SF
 
 			}; // Result DebugPrintALLRankingRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* DebugPrintALLRankingRes::Create( IHeap& memHeap, const Result &InResult )
+			MessageData* DebugPrintALLRankingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -1511,6 +1565,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ sizeof(uint64_t)
 					+ sizeof(Result));
 
 
@@ -1518,6 +1573,7 @@ namespace SF
 
 				pMsgData = pNewMsg->GetMessageData();
 
+				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 
 
@@ -1530,7 +1586,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* DebugPrintALLRankingRes::Create( IHeap& memHeap, const Result &InResult )
+			}; // MessageData* DebugPrintALLRankingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
@@ -1538,8 +1594,8 @@ namespace SF
 			{
  				DebugPrintALLRankingRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DebugPrintALLRanking:{0}:{1} , Result:{2:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetResult()); 
+				SFLog(Net, Debug1, "DebugPrintALLRanking:{0}:{1} , TransactionID:{2}, Result:{3:X8}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
 			}; // Result DebugPrintALLRankingRes::TraceOut(const char* prefix, MessageDataPtr& pMsg)
 

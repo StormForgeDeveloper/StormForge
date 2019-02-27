@@ -61,10 +61,8 @@
     <CustomBuild Include="..\..\..\Engine\Data\Protocol\ProtocolDef.xsd">
       <Filter>SchemaBuild</Filter>
     </CustomBuild>
-  </ItemGroup>
-  <ItemGroup>
-    <Xsd Include="SchemaBuild\SFResultCodeFacilitySchema.xsd">
+    <CustomBuild Include="SchemaBuild\SFResultCodeFacilitySchema.xsd">
       <Filter>SchemaBuild</Filter>
-    </Xsd>
+    </CustomBuild>
   </ItemGroup>
 </Project>

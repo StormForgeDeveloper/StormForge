@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Protocols xmlns="http://www.StormForge.com/XMLProtocol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.StormForge.com/XMLProtocol ProtocolDef.xsd">
-	<ProtocolGroup Name="Login" GenParameterContext="false" IsMobile="true" GenCSharp="true" Desc="Game">
+	<ProtocolGroup Name="Login" GenParameterContext="true" IsMobile="true" GenCSharp="true" Desc="Game">
 	
     <!-- ===================================================  Login ========================================================= -->
     <Command Name="Login" Reliable="true" Crypto="No" Trace="Debug1" Desc="Login request">

@@ -123,7 +123,7 @@ namespace TestNet.WinSharp
                     if (conEvent.HResult.IsSucceeded)
                     {
                         m_Login = new SF.Net.SendMessageLogin(m_ConnectionLogin);
-                        m_Login.CreateRandomUserCmd(FixedString32.HashString(m_GameID), m_LoginID);
+                        m_Login.CreateRandomUserCmd(0, FixedString32.HashString(m_GameID), m_LoginID);
 
                         if (mLoginConnectedAction != null)
                             mLoginConnectedAction(this);
@@ -198,7 +198,7 @@ namespace TestNet.WinSharp
             m_LoginEntityID = message.GetValue<UInt64>("LoginEntityUID");
 
             Random rand = new Random();
-            m_Login.UpdateMyScoreCmd((ulong)rand.Next() % 5000, RankingType.World, 10);
+            m_Login.UpdateMyScoreCmd(0, (ulong)rand.Next() % 5000, RankingType.World, 10);
         }
 
         public void SaveRankData(string FileName)
@@ -207,7 +207,7 @@ namespace TestNet.WinSharp
                 return;
 
             PrintStatus("Request Save Rank Data!!");
-            m_Login.DebugPrintALLRankingCmd(FileName);
+            m_Login.DebugPrintALLRankingCmd(0, FileName);
         }
 
         void HandleScoreRes(SFMessage message)

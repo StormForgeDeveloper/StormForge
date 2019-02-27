@@ -33,7 +33,7 @@ const UINT TEST_COUNT = 4000000 * TestScale;
 
 MessageDataPtr NewMessage(IHeap& memoryManager, UINT sequenceID)
 {
-	Message::MessageData* pResult = Message::Login::LoginCmd::Create(memoryManager, FixedString32("Conspiracy"), "11", "11");
+	Message::MessageData* pResult = Message::Login::LoginCmd::Create(memoryManager, 0, FixedString32("Conspiracy"), "11", "11");
 	pResult->AssignSequence(sequenceID);
 
 	return MessageDataPtr(pResult);

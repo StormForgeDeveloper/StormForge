@@ -431,7 +431,7 @@ namespace TestNet.WinSharp
 
                                    for (int tk = 0; tk < 10; tk++)
                                    {
-                                       var result = user.m_Login.DataTestCmd(mTestSendData);
+                                       var result = user.m_Login.DataTestCmd(0, mTestSendData);
                                        if (result == 0)
                                        {
                                            mMainStatus.m_TenKBSendCount++;
@@ -527,7 +527,7 @@ namespace TestNet.WinSharp
 
                 for (int tk = 0; tk < 10; tk++)
                 {
-                    var result = user.m_Login.DataTestCmd(mTestSendData);
+                    var result = user.m_Login.DataTestCmd(0, mTestSendData);
                     if (result == 0)
                     {
                         mMainStatus.m_TenKBSendCount++;

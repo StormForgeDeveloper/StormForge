@@ -224,9 +224,9 @@
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>
-    <Xsd Include="SchemaBuild\SFResultCodeFacilitySchema.xsd">
+    <CustomBuild Include="SchemaBuild\SFResultCodeFacilitySchema.xsd">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </Xsd>
+    </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
