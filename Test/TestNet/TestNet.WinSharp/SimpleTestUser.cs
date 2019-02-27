@@ -16,6 +16,7 @@ namespace TestNet.WinSharp
 
         SFConnection m_ConnectionLogin;
         SFConnection m_ConnectionGame;
+        DateTime m_GameHeartBitTime = DateTime.Now;
 
         public SF.Net.SendMessageGame m_Game;
         public SF.Net.SendMessageLogin m_Login;
@@ -178,6 +179,13 @@ namespace TestNet.WinSharp
                     result = m_ConnectionGame.DequeueEvent(out conEvent);
                 }
                 m_ConnectionGame.UpdateMessageQueue();
+
+
+                if(m_ConnectionGame != null && m_ConnectionGame.State == SFConnection.ConnectionState.CONNECTED && (DateTime.Now - m_GameHeartBitTime).Seconds > 10)
+                {
+                    m_GameHeartBitTime = DateTime.Now;
+                    m_Game.HeartBitC2SEvt();
+                }
             }
 
 

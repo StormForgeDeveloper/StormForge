@@ -199,7 +199,8 @@ namespace Net {
 
 
 		// poke send network only when there is something to send
-		if (GetConnection()->GetEventHandler() != nullptr && (pConnUDP->GetSendGuaQueue().size() > 0 || sendReliableWindow.GetMsgCount() > 0))
+		// Actually send proc also handles recv window
+		if (GetConnection()->GetEventHandler() != nullptr /*&& (pConnUDP->GetSendGuaQueue().size() > 0 || sendReliableWindow.GetMsgCount() > 0)*/)
 		{
 			pConnUDP->SetSendSyncThisTick(true);
 			hrTem = GetConnection()->GetEventHandler()->OnNetSyncMessage(pConnUDP);
@@ -207,6 +208,11 @@ namespace Net {
 			{
 				netChk(hrTem);
 			}
+		}
+		else
+		{
+			// Threading problem
+			//pConnUDP->UpdateSendQueue();
 		}
 
 	Proc_End:
