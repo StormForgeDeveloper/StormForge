@@ -47,7 +47,8 @@ namespace SF
 		    EVT_DISCONNECTED,
 		    EVT_STATE_CHANGE,
 		    EVT_ADDRESS_REMAPPED,
-	    };
+            EVT_TIMESYNC_RESULT,
+        };
 
 
         public struct Event

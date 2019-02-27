@@ -164,6 +164,8 @@ namespace Net {
 	void Connection::OnTimeSyncRtn(DurationMS roundTripTime)
 	{
 		m_RoundTripDelay = roundTripTime;
+
+		EnqueueConnectionEvent(ConnectionEvent(ConnectionEvent::EVT_TIMESYNC_RESULT, ResultCode::SUCCESS));
 	}
 
 
