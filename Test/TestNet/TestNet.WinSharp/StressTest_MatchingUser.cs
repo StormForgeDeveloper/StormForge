@@ -268,7 +268,7 @@ namespace TestNet.WinSharp
 
                         PrintStatus(0, "JoinGameServerCmd {1}", conEvent.HResult, m_LoginID);
                         m_Game = new SF.Net.SendMessageGame(m_ConnectionGame);
-                        m_Game.JoinGameServerCmd(m_AccountID, m_LoginTicket, m_LoginEntityID);
+                        m_Game.JoinGameServerCmd(0, m_AccountID, m_LoginTicket, m_LoginEntityID);
                     }
                     else
                     {
@@ -403,7 +403,7 @@ namespace TestNet.WinSharp
             {
                 PrintStatus(1, "Already has JoinedGame!! = {0} ID = {1} And LeaveGameCMD!!", m_JoinedGameUID, m_LoginID);
                 m_MatchedInfo = new MatchedInfo(m_JoinedGameUID);
-                m_Game.LeaveGameCmd(m_JoinedGameUID, m_AccountID, m_LoginTicket);
+                m_Game.LeaveGameCmd(0, m_JoinedGameUID, m_AccountID, m_LoginTicket);
             }         
         }
         void HandleGameMatchRes(SFMessage message)

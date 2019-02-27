@@ -1,6 +1,6 @@
 ﻿***
  
- CopyRight (c) 2018 StormForge
+ CopyRight (c) 2019 StormForge
  
  Description : Login Message Protocol API Document
 

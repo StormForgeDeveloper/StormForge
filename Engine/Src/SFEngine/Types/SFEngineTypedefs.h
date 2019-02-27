@@ -283,6 +283,8 @@ namespace SF {
 
 		inline TransactionID& operator = (const TransactionID& transID);
 
+		inline operator uint64_t() const { return ID; }
+
 		inline bool operator != (const TransactionID& src) const;
 		inline bool operator == (const TransactionID& src) const;
 

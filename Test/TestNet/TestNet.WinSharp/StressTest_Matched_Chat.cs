@@ -314,7 +314,7 @@ namespace TestNet.WinSharp
                         PrintStatus(1, "Send JoinGameServerCmd ID = {0}",m_LoginID);
 
                         m_Game = new SF.Net.SendMessageGame(m_ConnectionGame);
-                        m_Game.JoinGameServerCmd(m_AccountID, m_LoginTicket, m_LoginEntityID);
+                        m_Game.JoinGameServerCmd(0, m_AccountID, m_LoginTicket, m_LoginEntityID);
                     }
                     else
                     {
@@ -441,7 +441,7 @@ namespace TestNet.WinSharp
                 {
                     NextState = eTesterState.PARTY_MATCING;
 
-                    if (m_Game.CreatePartyCmd() != 0)
+                    if (m_Game.CreatePartyCmd(0) != 0)
                         return;
 
                     PrintStatus(1, "Create PartyCmd ID = {0}", m_LoginID);
@@ -466,7 +466,7 @@ namespace TestNet.WinSharp
                 else
                 {
                     PrintStatus(1, "Already has PartyJoined!! = {0} ID = {1} And LeavePartyCmd!!", m_PartyUID, m_LoginID);
-                    m_Game.LeavePartyCmd(m_PartyUID, m_AccountID);
+                    m_Game.LeavePartyCmd(0, m_PartyUID, m_AccountID);
                 }
             }
         }
@@ -645,7 +645,7 @@ namespace TestNet.WinSharp
 
             PrintStatus(1, "HandlePartyInviteRequestedS2CEvt InviterID = {0} PartyID ={1}", InInviterID, InPartyUID);
         
-            m_Game.JoinPartyCmd(InPartyUID, InInviterID);
+            m_Game.JoinPartyCmd(0, InPartyUID, InInviterID);
             PrintStatus(1, "JoinPartyCmd InviterID = {0} PartyID ={1} ID = {2}", InInviterID, InPartyUID, m_LoginID);
         }
 

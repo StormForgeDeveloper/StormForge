@@ -539,7 +539,7 @@ namespace TestNet.WinSharp
                             {
                                 for (int s = 0; s < 10; s++)
                                 {
-                                    user.m_Game.ChatMessageCmd("Test Message", 0);
+                                    user.m_Game.ChatMessageCmd(0, "Test Message", 0);
                                     PrintStatus(1, "Sent ChatMessage UserID = {0}", user.m_LoginID);
                                 }
                             }
@@ -552,7 +552,7 @@ namespace TestNet.WinSharp
                     (StressTest_MatchingUser user) =>
                     {
                         PrintStatus(1, "RequestGameMatchCmd UserID = {0}", user.m_LoginID);
-                        user.m_Game.RequestGameMatchCmd(4, (byte)PlayerRole.None);
+                        user.m_Game.RequestGameMatchCmd(0, 4, (byte)PlayerRole.None);
 
                         mTestGroupStatus[user.GroupID].mGameMatchSendCount++;
                         mMainStatus.mGameMatchSendCount++;

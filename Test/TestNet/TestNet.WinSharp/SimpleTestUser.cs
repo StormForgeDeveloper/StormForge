@@ -143,7 +143,7 @@ namespace TestNet.WinSharp
                     if (conEvent.HResult.IsSucceeded)
                     {
                         m_Game = new SF.Net.SendMessageGame(m_ConnectionGame);
-                        m_Game.JoinGameServerCmd(m_AccountID, m_LoginTicket, m_LoginEntityID);
+                        m_Game.JoinGameServerCmd(0, m_AccountID, m_LoginTicket, m_LoginEntityID);
                     }
                     break;
                 case SFConnection.EventTypes.EVT_DISCONNECTED:
@@ -301,7 +301,7 @@ namespace TestNet.WinSharp
             //m_Game.GetFriendListCmd(0,20);
             //m_Game.GetNotificationListCmd();
             //m_Game.RequestGameMatchCmd(4, (byte)PlayerRole.None);
-            m_Game.CreatePartyCmd();
+            m_Game.CreatePartyCmd(0);
         }
 
         void HandleRequestGameMatchRes(SFMessage message)

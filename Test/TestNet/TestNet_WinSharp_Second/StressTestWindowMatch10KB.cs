@@ -494,7 +494,7 @@ namespace TestNet.WinSharp
                 //}
                 if (bSingleSpeedCheck)
                 {
-                    if (SentUser.m_Game.PartyChatMessageCmd(mTestSend1KBData[scc]) == 0)
+                    if (SentUser.m_Game.PartyChatMessageCmd(0, mTestSend1KBData[scc]) == 0)
                     {
                         mPartyOneKBChatSendCount++;
                         mPartyChatSendTime[SenderID].Add(DateTime.Now);
@@ -505,7 +505,7 @@ namespace TestNet.WinSharp
                 }
                 else
                 {
-                    if (SentUser.m_Game.PartyChatMessageCmd(mTestSend1KBData[scc]) == 0)
+                    if (SentUser.m_Game.PartyChatMessageCmd(0, mTestSend1KBData[scc]) == 0)
                     {
                         mPartyOneKBChatSendCount++;
                         mPartyChatSendTime[SenderID].Add(DateTime.Now);
@@ -530,7 +530,7 @@ namespace TestNet.WinSharp
                 //-- Send Chat Message..
                 for (int scc = 0; scc < SendChatRepeatCount; scc++)
                 {
-                    if (mTestMatchedChatUsers[j].m_Game.PartyChatMessageCmd(mTestSend1KBData[scc]) == 0)
+                    if (mTestMatchedChatUsers[j].m_Game.PartyChatMessageCmd(0, mTestSend1KBData[scc]) == 0)
                     {
                         mPartyOneKBChatSendCount++;
                         mPartyChatSendTime[SenderID].Add(DateTime.Now);
@@ -668,7 +668,7 @@ namespace TestNet.WinSharp
                 ulong PartyUID = mTestMatchedChatUsers[i].m_PartyUID;
                 if (PartyUID == 0)
                 {
-                    PartyBoss.m_Game.PartyInviteCmd(UserAccountID);
+                    PartyBoss.m_Game.PartyInviteCmd(0, UserAccountID);
                     PrintStatus(1, "Send PartyInviteCmd TargetID = {0}", UserAccountID);
                 }
                 else

@@ -89,7 +89,7 @@ namespace TestNet.WinSharp
             if (m_NetTestUser.m_Game == null)
                 return;
 
-            m_NetTestUser.m_Game.RequestGameMatchCmd(4, (byte)PlayerRole.None);
+            m_NetTestUser.m_Game.RequestGameMatchCmd(0, 4, (byte)PlayerRole.None);
         }
 
         public void OnClearLog(object sender, RoutedEventArgs e)

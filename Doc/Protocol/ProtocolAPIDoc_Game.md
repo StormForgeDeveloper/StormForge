@@ -1,6 +1,6 @@
 ﻿***
  
- CopyRight (c) 2018 StormForge
+ CopyRight (c) 2019 StormForge
  
  Description : Game Message Protocol API Document
 
@@ -25,7 +25,9 @@ Player connected from a login server and moved to game server
 
 1. Command interface
 
-        Result JoinGameServerCmd(const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID)
+        Result JoinGameServerCmd(const TransactionID &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInAccID: AccountID type. AccountID of the player
 
@@ -37,6 +39,8 @@ Player connected from a login server and moved to game server
 
 C++: Cast message to JoinGameServerRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -56,12 +60,16 @@ player complition statues
 
 1. Command interface
 
-        Result GetComplitionStateCmd()
+        Result GetComplitionStateCmd(const TransactionID &InTransactionID)
+
+		- OutInTransactionID: TransactionID type. 
 
 2. Result interface
 
 C++: Cast message to GetComplitionStateRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -73,7 +81,9 @@ Player complition state
 
 1. Command interface
 
-        Result SetComplitionStateCmd(const char* InComplitionState)
+        Result SetComplitionStateCmd(const TransactionID &InTransactionID, const char* InComplitionState)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInComplitionState: String type. Complition state to set
 
@@ -81,6 +91,8 @@ Player complition state
 
 C++: Cast message to SetComplitionStateRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -90,7 +102,9 @@ Register Google notification service ID, after this, the player will get notific
 
 1. Command interface
 
-        Result RegisterGCMCmd(const char* InGCMRegisteredID)
+        Result RegisterGCMCmd(const TransactionID &InTransactionID, const char* InGCMRegisteredID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGCMRegisteredID: String type. Google notification ID
 
@@ -98,6 +112,8 @@ Register Google notification service ID, after this, the player will get notific
 
 C++: Cast message to RegisterGCMRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -107,7 +123,9 @@ Unregister Google notification service ID
 
 1. Command interface
 
-        Result UnregisterGCMCmd(const char* InGCMRegisteredID)
+        Result UnregisterGCMCmd(const TransactionID &InTransactionID, const char* InGCMRegisteredID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGCMRegisteredID: String type. ID to unregister
 
@@ -115,6 +133,8 @@ Unregister Google notification service ID
 
 C++: Cast message to UnregisterGCMRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -124,7 +144,9 @@ Invite friend
 
 1. Command interface
 
-        Result InviteFriendCmd(const AccountID &InFriendID)
+        Result InviteFriendCmd(const TransactionID &InTransactionID, const AccountID &InFriendID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInFriendID: AccountID type. PlayerID to invite
 
@@ -132,6 +154,8 @@ Invite friend
 
 C++: Cast message to InviteFriendRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -141,7 +165,9 @@ Accept friend request
 
 1. Command interface
 
-        Result AcceptFriendRequestCmd(const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID)
+        Result AcceptFriendRequestCmd(const TransactionID &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInInviterID: AccountID type. Inviter PlayerID
 
@@ -151,6 +177,8 @@ Accept friend request
 
 C++: Cast message to AcceptFriendRequestRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -170,7 +198,9 @@ Remove friden form the friend list
 
 1. Command interface
 
-        Result RemoveFriendCmd(const AccountID &InFriendID)
+        Result RemoveFriendCmd(const TransactionID &InTransactionID, const AccountID &InFriendID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInFriendID: AccountID type. Friend player ID
 
@@ -178,6 +208,8 @@ Remove friden form the friend list
 
 C++: Cast message to RemoveFriendRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -197,7 +229,9 @@ Get friend list
 
 1. Command interface
 
-        Result GetFriendListCmd(const uint16_t &InStartIndex, const uint16_t &InCount)
+        Result GetFriendListCmd(const TransactionID &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInStartIndex: uint16 type. Friend list start index
 
@@ -207,6 +241,8 @@ Get friend list
 
 C++: Cast message to GetFriendListRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -224,12 +260,16 @@ Query notification list
 
 1. Command interface
 
-        Result GetNotificationListCmd()
+        Result GetNotificationListCmd(const TransactionID &InTransactionID)
+
+		- OutInTransactionID: TransactionID type. 
 
 2. Result interface
 
 C++: Cast message to GetNotificationListRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -239,7 +279,9 @@ Delete notification
 
 1. Command interface
 
-        Result DeleteNotificationCmd(const uint32_t &InNotificationID)
+        Result DeleteNotificationCmd(const TransactionID &InTransactionID, const uint32_t &InNotificationID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInNotificationID: uint32 type. Notification ID to delete
 
@@ -247,6 +289,8 @@ Delete notification
 
 C++: Cast message to DeleteNotificationRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -258,7 +302,9 @@ Set notification is read
 
 1. Command interface
 
-        Result SetNotificationReadCmd(const uint32_t &InNotificationID)
+        Result SetNotificationReadCmd(const TransactionID &InTransactionID, const uint32_t &InNotificationID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInNotificationID: uint32 type. Notification ID to set read
 
@@ -266,6 +312,8 @@ Set notification is read
 
 C++: Cast message to SetNotificationReadRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -277,7 +325,9 @@ Accept notification
 
 1. Command interface
 
-        Result AcceptNotificationCmd(const uint32_t &InNotificationID)
+        Result AcceptNotificationCmd(const TransactionID &InTransactionID, const uint32_t &InNotificationID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInNotificationID: uint32 type. Notification ID to accept
 
@@ -285,6 +335,8 @@ Accept notification
 
 C++: Cast message to AcceptNotificationRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -316,7 +368,9 @@ Query playerID list
 
 1. Command interface
 
-        Result FindPlayerByEMailCmd(const char* InPlayerEMail)
+        Result FindPlayerByEMailCmd(const TransactionID &InTransactionID, const char* InPlayerEMail)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInPlayerEMail: String type. Player email to find
 
@@ -324,6 +378,8 @@ Query playerID list
 
 C++: Cast message to FindPlayerByEMailRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -335,7 +391,9 @@ Query playerID list
 
 1. Command interface
 
-        Result FindPlayerByPlayerIDCmd(const AccountID &InPlayerID)
+        Result FindPlayerByPlayerIDCmd(const TransactionID &InTransactionID, const AccountID &InPlayerID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInPlayerID: AccountID type. Player ID to find
 
@@ -343,6 +401,8 @@ Query playerID list
 
 C++: Cast message to FindPlayerByPlayerIDRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -354,7 +414,9 @@ C++: Cast message to FindPlayerByPlayerIDRes to access values
 
 1. Command interface
 
-        Result RequestPlayerStatusUpdateCmd(const Array<AccountID>& InTargetPlayerID)
+        Result RequestPlayerStatusUpdateCmd(const TransactionID &InTransactionID, const Array<AccountID>& InTargetPlayerID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInTargetPlayerID: AccountID type. PlayerIDs to request
 
@@ -362,6 +424,8 @@ C++: Cast message to FindPlayerByPlayerIDRes to access values
 
 C++: Cast message to RequestPlayerStatusUpdateRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -383,7 +447,9 @@ Get Ranking lise
 
 1. Command interface
 
-        Result GetRankingListCmd(const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount)
+        Result GetRankingListCmd(const TransactionID &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInRankingType: uint8 type. 
 
@@ -396,6 +462,8 @@ Get Ranking lise
 C++: Cast message to GetRankingListRes to access values
 
 
+		- OutTransactionID: TransactionID type. 
+
 		- OutResult: Result type. 
 
 		- OutRanking: TotalRankingPlayerInformation type. 
@@ -406,12 +474,16 @@ Game user game play information
 
 1. Command interface
 
-        Result GetUserGamePlayerInfoCmd()
+        Result GetUserGamePlayerInfoCmd(const TransactionID &InTransactionID)
+
+		- OutInTransactionID: TransactionID type. 
 
 2. Result interface
 
 C++: Cast message to GetUserGamePlayerInfoRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -463,7 +535,9 @@ Game game play information
 
 1. Command interface
 
-        Result GetGamePlayerInfoCmd(const AccountID &InPlayerID)
+        Result GetGamePlayerInfoCmd(const TransactionID &InTransactionID, const AccountID &InPlayerID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInPlayerID: AccountID type. Game playerID to get
 
@@ -471,6 +545,8 @@ Game game play information
 
 C++: Cast message to GetGamePlayerInfoRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -524,7 +600,9 @@ Change NickName
 
 1. Command interface
 
-        Result SetNickNameCmd(const char* InNickName, const uint8_t &InIsCostFree)
+        Result SetNickNameCmd(const TransactionID &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInNickName: String type. Nickname to change
 
@@ -534,6 +612,8 @@ Change NickName
 
 C++: Cast message to SetNickNameRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -547,12 +627,16 @@ Create Party
 
 1. Command interface
 
-        Result CreatePartyCmd()
+        Result CreatePartyCmd(const TransactionID &InTransactionID)
+
+		- OutInTransactionID: TransactionID type. 
 
 2. Result interface
 
 C++: Cast message to CreatePartyRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -564,7 +648,9 @@ Join party
 
 1. Command interface
 
-        Result JoinPartyCmd(const uint64_t &InPartyUID, const AccountID &InInviterID)
+        Result JoinPartyCmd(const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInPartyUID: PartyUID type. Party ID to join
 
@@ -574,6 +660,8 @@ Join party
 
 C++: Cast message to JoinPartyRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -609,7 +697,9 @@ Leave party command
 
 1. Command interface
 
-        Result LeavePartyCmd(const uint64_t &InPartyUID, const AccountID &InPlayerID)
+        Result LeavePartyCmd(const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInPartyUID: PartyUID type. PartyID to leave
 
@@ -619,6 +709,8 @@ Leave party command
 
 C++: Cast message to LeavePartyRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -638,7 +730,9 @@ Kick player from the party
 
 1. Command interface
 
-        Result PartyKickPlayerCmd(const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
+        Result PartyKickPlayerCmd(const TransactionID &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInPartyUID: PartyUID type. PartyUID
 
@@ -650,6 +744,8 @@ Kick player from the party
 
 C++: Cast message to PartyKickPlayerRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -669,7 +765,9 @@ Invite a player to the party
 
 1. Command interface
 
-        Result PartyInviteCmd(const AccountID &InInviteTargetID)
+        Result PartyInviteCmd(const TransactionID &InTransactionID, const AccountID &InInviteTargetID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInInviteTargetID: AccountID type. Invite target player ID
 
@@ -677,6 +775,8 @@ Invite a player to the party
 
 C++: Cast message to PartyInviteRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -698,7 +798,9 @@ Send Party quick chat message
 
 1. Command interface
 
-        Result PartyQuickChatMessageCmd(const uint32_t &InQuickChatID)
+        Result PartyQuickChatMessageCmd(const TransactionID &InTransactionID, const uint32_t &InQuickChatID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInQuickChatID: uint32 type. My quick chat message ID
 
@@ -706,6 +808,8 @@ Send Party quick chat message
 
 C++: Cast message to PartyQuickChatMessageRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -725,7 +829,9 @@ Party chatting
 
 1. Command interface
 
-        Result PartyChatMessageCmd(const char* InChatMessage)
+        Result PartyChatMessageCmd(const TransactionID &InTransactionID, const char* InChatMessage)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInChatMessage: String type. My message
 
@@ -733,6 +839,8 @@ Party chatting
 
 C++: Cast message to PartyChatMessageRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -754,7 +862,9 @@ Join to a game
 
 1. Command interface
 
-        Result JoinGameCmd(const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID)
+        Result JoinGameCmd(const TransactionID &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInPlayerID: AccountID type. Player ID of the player
 
@@ -766,6 +876,8 @@ Join to a game
 
 C++: Cast message to JoinGameRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -815,7 +927,9 @@ Leave Game
 
 1. Command interface
 
-        Result LeaveGameCmd(const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket)
+        Result LeaveGameCmd(const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGameInsUID: GameInsUID type. Game instance ID to leave
 
@@ -827,6 +941,8 @@ Leave Game
 
 C++: Cast message to LeaveGameRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -846,7 +962,9 @@ Kick player
 
 1. Command interface
 
-        Result KickPlayerCmd(const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
+        Result KickPlayerCmd(const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGameInsUID: GameInsUID type. Game instance ID
 
@@ -858,6 +976,8 @@ Kick player
 
 C++: Cast message to KickPlayerRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -877,7 +997,9 @@ Assign role + Game state reset
 
 1. Command interface
 
-        Result AssignRoleCmd(const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket)
+        Result AssignRoleCmd(const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGameInsUID: GameInsUID type. Game instance ID
 
@@ -889,6 +1011,8 @@ Assign role + Game state reset
 
 C++: Cast message to AssignRoleRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -910,7 +1034,9 @@ Send chatting message to the game
 
 1. Command interface
 
-        Result ChatMessageCmd(const char* InChatMessage, const uint8_t &InRole)
+        Result ChatMessageCmd(const TransactionID &InTransactionID, const char* InChatMessage, const uint8_t &InRole)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInChatMessage: String type. chatting message
 
@@ -920,6 +1046,8 @@ Send chatting message to the game
 
 C++: Cast message to ChatMessageRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -943,7 +1071,9 @@ Advance game
 
 1. Command interface
 
-        Result AdvanceGameCmd(const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket)
+        Result AdvanceGameCmd(const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGameInsUID: GameInsUID type. Advance game state
 
@@ -955,6 +1085,8 @@ Advance game
 
 C++: Cast message to AdvanceGameRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -992,7 +1124,9 @@ Vote game advance
 
 1. Command interface
 
-        Result VoteGameAdvanceCmd(const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket)
+        Result VoteGameAdvanceCmd(const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGameInsUID: GameInsUID type. Game instance ID
 
@@ -1004,6 +1138,8 @@ Vote game advance
 
 C++: Cast message to VoteGameAdvanceRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1023,7 +1159,9 @@ Vote
 
 1. Command interface
 
-        Result VoteCmd(const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial)
+        Result VoteCmd(const TransactionID &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInGameInsUID: GameInsUID type. Game instance ID
 
@@ -1039,6 +1177,8 @@ Vote
 
 C++: Cast message to VoteRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1096,12 +1236,16 @@ Play again with the current players
 
 1. Command interface
 
-        Result GamePlayAgainCmd()
+        Result GamePlayAgainCmd(const TransactionID &InTransactionID)
+
+		- OutInTransactionID: TransactionID type. 
 
 2. Result interface
 
 C++: Cast message to GamePlayAgainRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1125,7 +1269,9 @@ Player. reveal a player
 
 1. Command interface
 
-        Result GameRevealPlayerCmd(const Array<AccountID>& InTargetPlayerID)
+        Result GameRevealPlayerCmd(const TransactionID &InTransactionID, const Array<AccountID>& InTargetPlayerID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInTargetPlayerID: AccountID type. 
 
@@ -1133,6 +1279,8 @@ Player. reveal a player
 
 C++: Cast message to GameRevealPlayerRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1150,12 +1298,16 @@ Player. revive himself
 
 1. Command interface
 
-        Result GamePlayerReviveCmd()
+        Result GamePlayerReviveCmd(const TransactionID &InTransactionID)
+
+		- OutInTransactionID: TransactionID type. 
 
 2. Result interface
 
 C++: Cast message to GamePlayerReviveRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1177,12 +1329,16 @@ Player. reset ranking
 
 1. Command interface
 
-        Result GamePlayerResetRankCmd()
+        Result GamePlayerResetRankCmd(const TransactionID &InTransactionID)
+
+		- OutInTransactionID: TransactionID type. 
 
 2. Result interface
 
 C++: Cast message to GamePlayerResetRankRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1196,7 +1352,9 @@ Request Game match
 
 1. Command interface
 
-        Result RequestGameMatchCmd(const uint8_t &InNumPlayer, const uint8_t &InRequestRole)
+        Result RequestGameMatchCmd(const TransactionID &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInNumPlayer: uint8 type. Request game match
 
@@ -1206,6 +1364,8 @@ Request Game match
 
 C++: Cast message to RequestGameMatchRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1267,12 +1427,16 @@ Cancel Game match
 
 1. Command interface
 
-        Result CancelGameMatchCmd()
+        Result CancelGameMatchCmd(const TransactionID &InTransactionID)
+
+		- OutInTransactionID: TransactionID type. 
 
 2. Result interface
 
 C++: Cast message to CancelGameMatchRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1288,7 +1452,9 @@ Buy shop item prepare
 
 1. Command interface
 
-        Result BuyShopItemPrepareCmd(const uint32_t &InShopItemID)
+        Result BuyShopItemPrepareCmd(const TransactionID &InTransactionID, const uint32_t &InShopItemID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInShopItemID: uint32 type. Shop table id
 
@@ -1296,6 +1462,8 @@ Buy shop item prepare
 
 C++: Cast message to BuyShopItemPrepareRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1309,7 +1477,9 @@ Buy shop item
 
 1. Command interface
 
-        Result BuyShopItemCmd(const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken)
+        Result BuyShopItemCmd(const TransactionID &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInShopItemID: uint32 type. Shop table id
 
@@ -1326,6 +1496,8 @@ Buy shop item
 C++: Cast message to BuyShopItemRes to access values
 
 
+		- OutTransactionID: TransactionID type. 
+
 		- OutResult: Result type. 
 
 		- OutShopItemID: uint32 type. Shop table id
@@ -1336,7 +1508,9 @@ Create or Join Chat channel
 
 1. Command interface
 
-        Result CreateOrJoinChatChannelCmd(const char* InChannelName, const char* InPasscode)
+        Result CreateOrJoinChatChannelCmd(const TransactionID &InTransactionID, const char* InChannelName, const char* InPasscode)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInChannelName: String type. 
 
@@ -1346,6 +1520,8 @@ Create or Join Chat channel
 
 C++: Cast message to CreateOrJoinChatChannelRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1357,7 +1533,9 @@ Join
 
 1. Command interface
 
-        Result JoinChatChannelCmd(const uint64_t &InChatUID, const AccountID &InInviterID)
+        Result JoinChatChannelCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInChatUID: EntityUID type. ChatChannel UID to join
 
@@ -1367,6 +1545,8 @@ Join
 
 C++: Cast message to JoinChatChannelRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1400,7 +1580,9 @@ Leave ChatChannel command
 
 1. Command interface
 
-        Result LeaveChatChannelCmd(const uint64_t &InChatUID, const AccountID &InPlayerID)
+        Result LeaveChatChannelCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInChatUID: EntityUID type. ChatChannel to leave
 
@@ -1410,6 +1592,8 @@ Leave ChatChannel command
 
 C++: Cast message to LeaveChatChannelRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1429,7 +1613,9 @@ Kick player from the ChatChannel
 
 1. Command interface
 
-        Result ChatChannelKickPlayerCmd(const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
+        Result ChatChannelKickPlayerCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInChatUID: EntityUID type. PartyUID
 
@@ -1441,6 +1627,8 @@ Kick player from the ChatChannel
 
 C++: Cast message to ChatChannelKickPlayerRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1460,7 +1648,9 @@ Party chatting
 
 1. Command interface
 
-        Result ChatChannelChatMessageCmd(const uint64_t &InChatUID, const char* InChatMessage)
+        Result ChatChannelChatMessageCmd(const TransactionID &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInChatUID: EntityUID type. ChatChannel UID
 
@@ -1470,6 +1660,8 @@ Party chatting
 
 C++: Cast message to ChatChannelChatMessageRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1491,7 +1683,9 @@ Give my stamina to other player
 
 1. Command interface
 
-        Result GiveStaminaCmd(const AccountID &InTargetPlayer)
+        Result GiveStaminaCmd(const TransactionID &InTransactionID, const AccountID &InTargetPlayer)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInTargetPlayer: AccountID type. Player ID to give
 
@@ -1499,6 +1693,8 @@ Give my stamina to other player
 
 C++: Cast message to GiveStaminaRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1512,7 +1708,9 @@ For debug, Change configue preset
 
 1. Command interface
 
-        Result SetPresetGameConfigIDCmd(const uint32_t &InPresetID)
+        Result SetPresetGameConfigIDCmd(const TransactionID &InTransactionID, const uint32_t &InPresetID)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInPresetID: uint32 type. Configuation preset id
 
@@ -1520,6 +1718,8 @@ For debug, Change configue preset
 
 C++: Cast message to SetPresetGameConfigIDRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 
@@ -1529,7 +1729,9 @@ For Debug
 
 1. Command interface
 
-        Result GainGameResourceCmd(const int32_t &InResource, const int32_t &InValue)
+        Result GainGameResourceCmd(const TransactionID &InTransactionID, const int32_t &InResource, const int32_t &InValue)
+
+		- OutInTransactionID: TransactionID type. 
 
 		- OutInResource: int32 type. 
 
@@ -1539,6 +1741,8 @@ For Debug
 
 C++: Cast message to GainGameResourceRes to access values
 
+
+		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
 

@@ -437,7 +437,7 @@ namespace TestNet.WinSharp
                                 // Send 1KB Chat Repeat 10
                                 for (int scc = 0; scc < SendChatRepeatCount; scc++)
                                 {
-                                    if (mPartyBoss.m_Game.PartyChatMessageCmd(mTestSend1KBData[scc]) == 0)
+                                    if (mPartyBoss.m_Game.PartyChatMessageCmd(0, mTestSend1KBData[scc]) == 0)
                                     {
                                         mPartyOneKBChatSendCount++;
 
@@ -544,7 +544,7 @@ namespace TestNet.WinSharp
                 ulong PartyUID = mTestMatchedChatUsers[i].m_PartyUID;
                 if (PartyUID == 0)
                 {
-                    PartyBoss.m_Game.PartyInviteCmd(UserAccountID);
+                    PartyBoss.m_Game.PartyInviteCmd(0, UserAccountID);
                     PrintStatus(1, "Send PartyInviteCmd TargetID = {0}", UserAccountID);
                 }
                 else

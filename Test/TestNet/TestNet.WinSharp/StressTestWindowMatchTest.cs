@@ -402,7 +402,7 @@ namespace TestNet.WinSharp
             {
                 StressTest_MatchingUser user = TestUsers[i];
                 PrintStatus(0, "Send RequestGameMatchCmd ID = {0}", user.m_LoginID);
-                user.m_Game.RequestGameMatchCmd(4, (byte)PlayerRole.None);
+                user.m_Game.RequestGameMatchCmd(0, 4, (byte)PlayerRole.None);
 
                 mTestGroupStatus[user.GroupID].mGameMatchSendCount++;
                 mMainStatus.mGameMatchSendCount++;                
@@ -496,7 +496,7 @@ namespace TestNet.WinSharp
                             return;
 
                         PrintStatus(0, "Send RequestGameMatchCmd ID = {0}", user.m_LoginID);
-                        user.m_Game.RequestGameMatchCmd(4, (byte)PlayerRole.None);
+                        user.m_Game.RequestGameMatchCmd(0, 4, (byte)PlayerRole.None);
 
                         mTestGroupStatus[user.GroupID].mGameMatchSendCount++;
 
