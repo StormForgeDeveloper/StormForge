@@ -141,19 +141,19 @@
     <EmbeddedResource Include="Resources\speaker_32.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\ATF\Framework\Atf.Core\Atf.Core.csproj">
+    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Core\Atf.Core.csproj">
       <Project>{9D1835B6-D1C2-44BA-BAE1-05C6EC442D2F}</Project>
       <Name>Atf.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ATF\Framework\Atf.Gui.WinForms\Atf.Gui.WinForms.csproj">
+    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Gui.WinForms\Atf.Gui.WinForms.csproj">
       <Project>{7C36A258-9102-420D-B80A-5EB5717644B6}</Project>
       <Name>Atf.Gui.WinForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ATF\Framework\Atf.Gui\Atf.Gui.csproj">
+    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Gui\Atf.Gui.csproj">
       <Project>{4765C2A7-F989-40DB-BC12-FCD67025B93F}</Project>
       <Name>Atf.Gui</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\ATF\Framework\Atf.IronPython\Atf.IronPython.csproj">
+    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.IronPython\Atf.IronPython.csproj">
       <Project>{7F794C24-7A8D-4D21-B443-F03509669F89}</Project>
       <Name>Atf.IronPython</Name>
     </ProjectReference>

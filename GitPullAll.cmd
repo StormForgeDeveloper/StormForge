@@ -1,5 +1,5 @@
 
-cd %~dp0\ATF
+cd %~dp0\..\ATF
 git pull
 
 cd %~dp0\..\StormForge3rdParties

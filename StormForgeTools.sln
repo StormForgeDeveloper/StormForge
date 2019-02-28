@@ -18,25 +18,25 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CoreSharp", "Engine\Src\Cor
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ATF", "ATF", "{2F71C0B2-A1CE-43CB-A37D-61268AC3CAF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Atgi", "ATF\Framework\Atf.Atgi\Atf.Atgi.csproj", "{D1FA9A85-9359-4725-A50F-8A67A77D700C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Atgi", "..\ATF\Framework\Atf.Atgi\Atf.Atgi.csproj", "{D1FA9A85-9359-4725-A50F-8A67A77D700C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Collada", "ATF\Framework\Atf.Collada\Atf.Collada.csproj", "{6F80048B-E81F-4E06-9438-26C23487777C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Collada", "..\ATF\Framework\Atf.Collada\Atf.Collada.csproj", "{6F80048B-E81F-4E06-9438-26C23487777C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Core", "ATF\Framework\Atf.Core\Atf.Core.csproj", "{9D1835B6-D1C2-44BA-BAE1-05C6EC442D2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Core", "..\ATF\Framework\Atf.Core\Atf.Core.csproj", "{9D1835B6-D1C2-44BA-BAE1-05C6EC442D2F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Gui", "ATF\Framework\Atf.Gui\Atf.Gui.csproj", "{4765C2A7-F989-40DB-BC12-FCD67025B93F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Gui", "..\ATF\Framework\Atf.Gui\Atf.Gui.csproj", "{4765C2A7-F989-40DB-BC12-FCD67025B93F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Gui.WinForms", "ATF\Framework\Atf.Gui.WinForms\Atf.Gui.WinForms.csproj", "{7C36A258-9102-420D-B80A-5EB5717644B6}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Gui.WinForms", "..\ATF\Framework\Atf.Gui.WinForms\Atf.Gui.WinForms.csproj", "{7C36A258-9102-420D-B80A-5EB5717644B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.IronPython", "ATF\Framework\Atf.IronPython\Atf.IronPython.csproj", "{7F794C24-7A8D-4D21-B443-F03509669F89}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.IronPython", "..\ATF\Framework\Atf.IronPython\Atf.IronPython.csproj", "{7F794C24-7A8D-4D21-B443-F03509669F89}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Perforce", "ATF\Framework\Atf.Perforce\Atf.Perforce.csproj", "{C7A306E0-32AE-4053-8882-E1A1E702C139}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Perforce", "..\ATF\Framework\Atf.Perforce\Atf.Perforce.csproj", "{C7A306E0-32AE-4053-8882-E1A1E702C139}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Subversion", "ATF\Framework\Atf.Subversion\Atf.Subversion.csproj", "{AD8B5500-D8E2-4609-BECA-C405EA22B1AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Subversion", "..\ATF\Framework\Atf.Subversion\Atf.Subversion.csproj", "{AD8B5500-D8E2-4609-BECA-C405EA22B1AE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.SyntaxEditorControl", "ATF\Framework\Atf.SyntaxEditorControl\Atf.SyntaxEditorControl.csproj", "{D1A78912-9AD2-4555-8560-B251A4D751DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.SyntaxEditorControl", "..\ATF\Framework\Atf.SyntaxEditorControl\Atf.SyntaxEditorControl.csproj", "{D1A78912-9AD2-4555-8560-B251A4D751DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Gui.OpenGL", "ATF\Framework\Atf.Gui.OpenGL\Atf.Gui.OpenGL.csproj", "{52D35323-1AA1-4205-A1B0-26C5E5E8D543}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Atf.Gui.OpenGL", "..\ATF\Framework\Atf.Gui.OpenGL\Atf.Gui.OpenGL.csproj", "{52D35323-1AA1-4205-A1B0-26C5E5E8D543}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StormForgeVS", "Tools\Src\StormForgeVS\StormForgeVS.csproj", "{CB6AD4A7-9ED1-42AD-B94E-C0658A70B5E9}"
 EndProject

@@ -152,27 +152,27 @@
     <Compile Include="ToolDebug.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Atgi\Atf.Atgi.csproj">
+    <ProjectReference Include="..\..\..\..\..\ATF\Framework\Atf.Atgi\Atf.Atgi.csproj">
       <Project>{d1fa9a85-9359-4725-a50f-8a67a77d700c}</Project>
       <Name>Atf.Atgi</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Core\Atf.Core.csproj">
+    <ProjectReference Include="..\..\..\..\..\ATF\Framework\Atf.Core\Atf.Core.csproj">
       <Project>{9d1835b6-d1c2-44ba-bae1-05c6ec442d2f}</Project>
       <Name>Atf.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Gui.WinForms\Atf.Gui.WinForms.csproj">
+    <ProjectReference Include="..\..\..\..\..\ATF\Framework\Atf.Gui.WinForms\Atf.Gui.WinForms.csproj">
       <Project>{7c36a258-9102-420d-b80a-5eb5717644b6}</Project>
       <Name>Atf.Gui.WinForms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Gui\Atf.Gui.csproj">
+    <ProjectReference Include="..\..\..\..\..\ATF\Framework\Atf.Gui\Atf.Gui.csproj">
       <Project>{4765c2a7-f989-40db-bc12-fcd67025b93f}</Project>
       <Name>Atf.Gui</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.IronPython\Atf.IronPython.csproj">
+    <ProjectReference Include="..\..\..\..\..\ATF\Framework\Atf.IronPython\Atf.IronPython.csproj">
       <Project>{7f794c24-7a8d-4d21-b443-f03509669f89}</Project>
       <Name>Atf.IronPython</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\ATF\Framework\Atf.Perforce\Atf.Perforce.csproj">
+    <ProjectReference Include="..\..\..\..\..\ATF\Framework\Atf.Perforce\Atf.Perforce.csproj">
       <Project>{c7a306e0-32ae-4053-8882-e1a1e702c139}</Project>
       <Name>Atf.Perforce</Name>
     </ProjectReference>
