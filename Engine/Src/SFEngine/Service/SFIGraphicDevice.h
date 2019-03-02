@@ -17,7 +17,7 @@
 #include "Memory/SFMemoryManager.h"
 #include "String/SFFixedStringDB.h"
 #include "Task/SFTask.h"
-#include "Container/SFCircularBuffer.h"
+#include "Container/SFCircularBufferQueue.h"
 #include "Resource/SFTextureFormat.h"
 
 
@@ -50,7 +50,7 @@ namespace SF
 		IGraphicDevice() {}
 		virtual ~IGraphicDevice() {}
 
-		virtual CircularBuffer<20 * 1024 * 1024>* GetRenderCommandQueue() { return nullptr; }
+		virtual StaticCircularBufferQueue<20 * 1024 * 1024>* GetRenderCommandQueue() { return nullptr; }
 
 		virtual IHeap& GetHeap() { return GetSystemHeap(); }
 
@@ -91,14 +91,14 @@ namespace SF
 			if (pRenderCommandQueue == nullptr)
 				return;
 
-			auto pBuffer = pRenderCommandQueue->Reserve(sizeof(CommandType));
-			auto pCmd = new(pBuffer) CommandType();
-			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer);
+			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
+			auto pCmd = new(pBuffer->GetDataPtr()) CommandType();
+			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer->GetDataPtr());
 
 			TaskPtr pTask = new(GetHeap()) CommandNotificationTask;
 			pCmd->SetNotificationTask(pTask);
 
-			pRenderCommandQueue->SetReadyForRead(pBuffer);
+			pRenderCommandQueue->ReleaseWrite(pBuffer);
 			return std::forward<TaskPtr>(pTask);
 		}
 
@@ -110,14 +110,14 @@ namespace SF
 			if (pRenderCommandQueue == nullptr)
 				return;
 
-			auto pBuffer = pRenderCommandQueue->Reserve(sizeof(CommandType));
-			auto pCmd = new(pBuffer) CommandType(args...);
-			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer);
+			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
+			auto pCmd = new(pBuffer->GetDataPtr()) CommandType(args...);
+			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer->GetDataPtr());
 
 			TaskPtr pTask = new(GetHeap()) CommandNotificationTask;
 			pCmd->SetNotificationTask(pTask);
 
-			pRenderCommandQueue->SetReadyForRead(pBuffer);
+			pRenderCommandQueue->ReleaseWrite(pBuffer);
 			return std::forward<TaskPtr>(pTask);
 		}
 
@@ -129,9 +129,9 @@ namespace SF
 			if (pRenderCommandQueue == nullptr)
 				return;
 
-			auto pBuffer = pRenderCommandQueue->Reserve(sizeof(CommandType));
-			auto pCmd = new(pBuffer) CommandType();
-			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer);
+			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
+			auto pCmd = new(pBuffer->GetDataPtr()) CommandType();
+			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer->GetDataPtr());
 			return pRenderCommandQueue->SetReadyForRead(pBuffer);
 		}
 
@@ -143,11 +143,11 @@ namespace SF
 			if (pRenderCommandQueue == nullptr)
 				return ResultCode::SUCCESS_FALSE;
 
-			auto pBuffer = pRenderCommandQueue->Reserve(sizeof(CommandType));
-			auto pCmd = new(pBuffer) CommandType(args...);
-			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer);
+			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
+			auto pCmd = new(pBuffer->GetDataPtr()) CommandType(args...);
+			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer->GetDataPtr());
 			unused(pCmd);
-			return pRenderCommandQueue->SetReadyForRead(pBuffer);
+			return pRenderCommandQueue->ReleaseWrite(pBuffer);
 		}
 
 

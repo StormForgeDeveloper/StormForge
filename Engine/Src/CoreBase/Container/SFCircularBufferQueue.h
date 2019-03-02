@@ -12,6 +12,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
+#include "Memory/SFIMemoryManager.h"
 #include "Thread/SFSynchronization.h"
 #include "Thread/SFSystemSynchronization.h"
 
@@ -24,7 +25,7 @@ namespace SF
 	//	- Queue style buffer allocator
 	// 
 
-	class CircularBuffer
+	class CircularBufferQueue
 	{
 	public:
 
@@ -32,6 +33,8 @@ namespace SF
 		{
 			Free,
 			Reserved,
+			Filled,
+			Reading,
 			Dummy,		// marked as dummy space
 		};
 
@@ -69,8 +72,8 @@ namespace SF
 	public:
 
 		// Constructor/Destructor
-		CircularBuffer(IHeap& heap, size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);
-		~CircularBuffer();
+		CircularBufferQueue(IHeap& heap, size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);
+		~CircularBufferQueue();
 
 		// Empty check
 		bool IsEmpty();
@@ -79,10 +82,14 @@ namespace SF
 		void Clear();
 
 		// Reserve buffer. The pointer it returns is reserved for writing, after done writing, Call SetReadyForRead to mark the buffer is ready for read
-		BufferItem* Allocate(size_t bufferSize);
+		BufferItem* AllocateWrite(size_t bufferSize);
 
 		// mark the buffer for read
-		Result Free(BufferItem* pBuffer);
+		Result ReleaseWrite(BufferItem* pBuffer);
+
+		BufferItem* DequeueRead();
+
+		Result ReleaseRead(BufferItem* pBuffer);
 
 		// get buffer item size
 		size_t GetBufferItemSize(BufferItem* pBufferItem);
@@ -109,13 +116,13 @@ namespace SF
 
 	// Circular buffer with static size
 	template<size_t BufferSize>
-	class StaticCircularBuffer : public CircularBuffer
+	class StaticCircularBufferQueue : public CircularBufferQueue
 	{
 	private:
 		uint8_t m_StaticBuffer[BufferSize];
 
 	public:
-		StaticCircularBuffer() : CircularBuffer(GetSystemHeap(), BufferSize, m_StaticBuffer) {}
+		StaticCircularBufferQueue() : CircularBufferQueue(GetSystemHeap(), BufferSize, m_StaticBuffer) {}
 	};
 
 

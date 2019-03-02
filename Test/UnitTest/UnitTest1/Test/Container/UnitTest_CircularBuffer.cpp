@@ -26,6 +26,7 @@
 #include "Util/SFLog.h"
 
 #include "Container/SFCircularBuffer.h"
+#include "Container/SFCircularBufferQueue.h"
 
 
 
@@ -48,42 +49,43 @@ GTEST_TEST(Container, CircularBufferSimple)
 {
 	Heap testHeap("test", GetSystemHeap());
 	constexpr size_t TestBufferSize = 256;
-	CircularBuffer<TestBufferSize> circularBuffer;
+	StaticCircularBufferQueue<TestBufferSize> circularBuffer;
 	size_t allocSize = 99;
 
 	EXPECT_TRUE(circularBuffer.IsEmpty());
 
-	auto pBuffer = circularBuffer.Reserve(10 * 1024);
+	auto pBuffer = circularBuffer.AllocateWrite(10 * 1024);
 	GTEST_ASSERT_EQ(nullptr, pBuffer);
+	EXPECT_NE(ResultCode::SUCCESS, circularBuffer.ReleaseWrite(pBuffer));
 
 	for (int iTry = 0; iTry < 10; iTry++)
 	{
 		uint8_t fillPattern = 0xC7;
-		pBuffer = circularBuffer.Reserve(allocSize);
+		pBuffer = circularBuffer.AllocateWrite(allocSize);
 		GTEST_ASSERT_NE(nullptr, pBuffer);
 
-		memset(pBuffer, fillPattern, allocSize);
+		memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
 
-		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.SetReadyForRead(pBuffer));
+		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseWrite(pBuffer));
 
-		auto pReadItem = circularBuffer.TakeBufferForRead();
+		auto pReadItem = circularBuffer.DequeueRead();
 		GTEST_ASSERT_NE(nullptr, pReadItem);
 
-		EXPECT_EQ(CircularBuffer<TestBufferSize>::ItemState::Reading, pReadItem->State);
+		EXPECT_EQ(StaticCircularBufferQueue<TestBufferSize>::ItemState::Reading, pReadItem->State);
 		GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 		GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
 		auto pData = (uint8_t*)pReadItem->GetDataPtr();
 
-		EXPECT_GE(circularBuffer.GetBufferSize(pReadItem), allocSize);
+		EXPECT_GE(circularBuffer.GetBufferItemSize(pReadItem), allocSize);
 
-		EXPECT_EQ(pBuffer, pData);
+		EXPECT_EQ(pBuffer->GetDataPtr(), pData);
 		for (int iData = 0; iData < allocSize; iData++)
 		{
 			EXPECT_EQ(fillPattern, pData[iData]);
 		}
 
-		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.FreeReadBuffer(pReadItem));
+		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseRead(pReadItem));
 	}
 
 
@@ -95,7 +97,7 @@ GTEST_TEST(Container, CircularBufferSimple2)
 {
 	Heap testHeap("test", GetSystemHeap());
 	constexpr size_t TestBufferSize = 256;
-	CircularBuffer<TestBufferSize> circularBuffer;
+	StaticCircularBufferQueue<TestBufferSize> circularBuffer;
 
 	EXPECT_TRUE(circularBuffer.IsEmpty());
 
@@ -104,13 +106,13 @@ GTEST_TEST(Container, CircularBufferSimple2)
 	for (int iTry = 0; ; iTry++, enqueuedCount++)
 	{
 		uint8_t fillPattern = iTry + 1;
-		auto pBuffer = circularBuffer.Reserve(allocSize);
+		auto pBuffer = circularBuffer.AllocateWrite(allocSize);
 		if (pBuffer == nullptr)
 			break;
 
-		memset(pBuffer, fillPattern, allocSize);
+		memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
 
-		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.SetReadyForRead(pBuffer));
+		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseWrite(pBuffer));
 	}
 
 
@@ -118,14 +120,14 @@ GTEST_TEST(Container, CircularBufferSimple2)
 	{
 		uint8_t fillPattern = iTry + 1;
 
-		auto pReadItem = circularBuffer.TakeBufferForRead();
+		auto pReadItem = circularBuffer.DequeueRead();
 		GTEST_ASSERT_NE(nullptr, pReadItem);
 
-		EXPECT_EQ(CircularBuffer<TestBufferSize>::ItemState::Reading, pReadItem->State);
+		EXPECT_EQ(StaticCircularBufferQueue<TestBufferSize>::ItemState::Reading, pReadItem->State);
 		GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 		GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-		EXPECT_GE(circularBuffer.GetBufferSize(pReadItem), allocSize);
+		EXPECT_GE(circularBuffer.GetBufferItemSize(pReadItem), allocSize);
 
 		auto pData = (uint8_t*)pReadItem->GetDataPtr();
 		for (int iData = 0; iData < allocSize; iData++)
@@ -133,7 +135,7 @@ GTEST_TEST(Container, CircularBufferSimple2)
 			EXPECT_EQ(fillPattern, pData[iData]);
 		}
 
-		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.FreeReadBuffer(pReadItem));
+		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseRead(pReadItem));
 	}
 
 
@@ -146,7 +148,7 @@ GTEST_TEST(Container, CircularBufferFull)
 	Heap testHeap("test", GetSystemHeap());
 	constexpr size_t TestBufferSize = 256;
 	constexpr size_t TestDataCount = 1000000;
-	CircularBuffer<TestBufferSize> circularBuffer;
+	StaticCircularBufferQueue<TestBufferSize> circularBuffer;
 
 	EXPECT_TRUE(circularBuffer.IsEmpty());
 
@@ -157,29 +159,29 @@ GTEST_TEST(Container, CircularBufferFull)
 		auto opRan = Util::Random.Rand();
 
 		size_t allocSize = Util::Random.Rand(20, 128);
-		auto pBuffer = circularBuffer.Reserve(allocSize);
+		auto pBuffer = circularBuffer.AllocateWrite(allocSize);
 		if (pBuffer != nullptr)
 		{
 			allocSize = AlignUp(allocSize, 8);
-			auto newAllocSize = circularBuffer.GetBufferSize((CircularBuffer<TestBufferSize>::BufferItem*)((intptr_t)pBuffer - sizeof(CircularBuffer<TestBufferSize>::BufferItem)));
+			auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
 			EXPECT_EQ(allocSize, newAllocSize);
 			uint8_t fillPattern = (uint8_t)allocSize;
-			memset(pBuffer, fillPattern, allocSize);
+			memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
 
-			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.SetReadyForRead(pBuffer));
+			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseWrite(pBuffer));
 			enqueuedCount++;
 		}
 
 		if (enqueuedCount > processedCount && ((opRan % 100) > 40))
 		{
-			auto pReadItem = circularBuffer.TakeBufferForRead();
+			auto pReadItem = circularBuffer.DequeueRead();
 			GTEST_ASSERT_NE(nullptr, pReadItem);
 
-			EXPECT_EQ(CircularBuffer<TestBufferSize>::ItemState::Reading, pReadItem->State);
+			EXPECT_EQ(StaticCircularBufferQueue<TestBufferSize>::ItemState::Reading, pReadItem->State);
 			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-			size_t allocSize = circularBuffer.GetBufferSize(pReadItem);
+			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
 			uint8_t fillPattern = (uint8_t)allocSize;
 
 			auto pData = (uint8_t*)pReadItem->GetDataPtr();
@@ -188,7 +190,7 @@ GTEST_TEST(Container, CircularBufferFull)
 				EXPECT_EQ(fillPattern, pData[iData]);
 			}
 
-			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.FreeReadBuffer(pReadItem));
+			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseRead(pReadItem));
 			processedCount++;
 		}
 	}
@@ -203,7 +205,7 @@ GTEST_TEST(Container, CircularBufferEmpty)
 	Heap testHeap("test", GetSystemHeap());
 	constexpr size_t TestBufferSize = 256;
 	constexpr size_t TestDataCount = 1000000;
-	CircularBuffer<TestBufferSize> circularBuffer;
+	StaticCircularBufferQueue<TestBufferSize> circularBuffer;
 
 	EXPECT_TRUE(circularBuffer.IsEmpty());
 
@@ -212,29 +214,29 @@ GTEST_TEST(Container, CircularBufferEmpty)
 	for (int iTest = 0; iTest < TestDataCount; iTest++)
 	{
 		size_t allocSize = 120;// Util::Random.Rand(20, 128);
-		auto pBuffer = circularBuffer.Reserve(allocSize);
+		auto pBuffer = circularBuffer.AllocateWrite(allocSize);
 		if (pBuffer != nullptr)
 		{
 			allocSize = AlignUp(allocSize, 8);
-			auto newAllocSize = circularBuffer.GetBufferSize((CircularBuffer<TestBufferSize>::BufferItem*)((intptr_t)pBuffer - sizeof(CircularBuffer<TestBufferSize>::BufferItem)));
+			auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
 			EXPECT_EQ(allocSize, newAllocSize);
 			uint8_t fillPattern = (uint8_t)allocSize;
-			memset(pBuffer, fillPattern, allocSize);
+			memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
 
-			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.SetReadyForRead(pBuffer));
+			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseWrite(pBuffer));
 			enqueuedCount++;
 		}
 
 		if (enqueuedCount > processedCount)
 		{
-			auto pReadItem = circularBuffer.TakeBufferForRead();
+			auto pReadItem = circularBuffer.DequeueRead();
 			GTEST_ASSERT_NE(nullptr, pReadItem);
 
-			EXPECT_EQ(CircularBuffer<TestBufferSize>::ItemState::Reading, pReadItem->State);
+			EXPECT_EQ(StaticCircularBufferQueue<TestBufferSize>::ItemState::Reading, pReadItem->State);
 			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-			size_t allocSize = circularBuffer.GetBufferSize(pReadItem);
+			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
 			uint8_t fillPattern = (uint8_t)allocSize;
 
 			auto pData = (uint8_t*)pReadItem->GetDataPtr();
@@ -243,7 +245,7 @@ GTEST_TEST(Container, CircularBufferEmpty)
 				EXPECT_EQ(fillPattern, pData[iData]);
 			}
 
-			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.FreeReadBuffer(pReadItem));
+			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseRead(pReadItem));
 			processedCount++;
 		}
 	}
@@ -257,7 +259,7 @@ GTEST_TEST(Container, CircularBufferEmptyRand)
 	Heap testHeap("test", GetSystemHeap());
 	constexpr size_t TestBufferSize = 256;
 	constexpr size_t TestDataCount = 1000000;
-	CircularBuffer<TestBufferSize> circularBuffer;
+	StaticCircularBufferQueue<TestBufferSize> circularBuffer;
 
 	EXPECT_TRUE(circularBuffer.IsEmpty());
 
@@ -266,29 +268,29 @@ GTEST_TEST(Container, CircularBufferEmptyRand)
 	for (int iTest = 0; iTest < TestDataCount; iTest++)
 	{
 		size_t allocSize = Util::Random.Rand(20, 128);
-		auto pBuffer = circularBuffer.Reserve(allocSize);
+		auto pBuffer = circularBuffer.AllocateWrite(allocSize);
 		if (pBuffer != nullptr)
 		{
 			allocSize = AlignUp(allocSize, 8);
-			auto newAllocSize = circularBuffer.GetBufferSize((CircularBuffer<TestBufferSize>::BufferItem*)((intptr_t)pBuffer - sizeof(CircularBuffer<TestBufferSize>::BufferItem)));
+			auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
 			EXPECT_EQ(allocSize, newAllocSize);
 			uint8_t fillPattern = (uint8_t)allocSize;
-			memset(pBuffer, fillPattern, allocSize);
+			memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
 
-			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.SetReadyForRead(pBuffer));
+			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseWrite(pBuffer));
 			enqueuedCount++;
 		}
 
 		if (enqueuedCount > processedCount)
 		{
-			auto pReadItem = circularBuffer.TakeBufferForRead();
+			auto pReadItem = circularBuffer.DequeueRead();
 			GTEST_ASSERT_NE(nullptr, pReadItem);
 
-			EXPECT_EQ(CircularBuffer<TestBufferSize>::ItemState::Reading, pReadItem->State);
+			EXPECT_EQ(StaticCircularBufferQueue<TestBufferSize>::ItemState::Reading, pReadItem->State);
 			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-			size_t allocSize = circularBuffer.GetBufferSize(pReadItem);
+			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
 			uint8_t fillPattern = (uint8_t)allocSize;
 
 			auto pData = (uint8_t*)pReadItem->GetDataPtr();
@@ -297,7 +299,7 @@ GTEST_TEST(Container, CircularBufferEmptyRand)
 				EXPECT_EQ(fillPattern, pData[iData]);
 			}
 
-			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.FreeReadBuffer(pReadItem));
+			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseRead(pReadItem));
 			processedCount++;
 		}
 	}
@@ -309,7 +311,7 @@ GTEST_TEST(Container, CircularBufferEmptyRand)
 template<size_t TestBufferSize>
 void Container_CircularBuffer_ThreadTest(size_t testDataCount, int allocSizeStart, int allocSizeEnd, int ReadThreadCount, int WriteThreadCount)
 {
-	typedef CircularBuffer<TestBufferSize> CircularBufferTestT;
+	typedef StaticCircularBufferQueue<TestBufferSize> CircularBufferTestT;
 
 	Heap testHeap("test", GetSystemHeap());
 	CircularBufferTestT circularBuffer;
@@ -332,7 +334,7 @@ void Container_CircularBuffer_ThreadTest(size_t testDataCount, int allocSizeStar
 			while (enqueuedCount.load(std::memory_order_relaxed) < TestDataCount)
 			{
 				size_t allocSize = Util::Random.Rand(allocSizeStart, allocSizeEnd);
-				auto pBuffer = circularBuffer.Reserve(allocSize);
+				auto pBuffer = circularBuffer.AllocateWrite(allocSize);
 				if (pBuffer == nullptr)
 				{
 					// wait a bit and try again
@@ -340,12 +342,12 @@ void Container_CircularBuffer_ThreadTest(size_t testDataCount, int allocSizeStar
 					continue;
 				}
 
-				auto newAllocSize = circularBuffer.GetBufferSize((CircularBufferTestT::BufferItem*)((intptr_t)pBuffer - sizeof(CircularBufferTestT::BufferItem)));
+				auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
 				allocSize = newAllocSize;
 				uint8_t fillPattern = (uint8_t)allocSize;
-				memset(pBuffer, fillPattern, allocSize);
+				memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
 
-				EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.SetReadyForRead(pBuffer));
+				EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseWrite(pBuffer));
 
 				enqueuedCount.fetch_add(1, std::memory_order_relaxed);
 			}
@@ -364,7 +366,7 @@ void Container_CircularBuffer_ThreadTest(size_t testDataCount, int allocSizeStar
 
 			while (processedCount.load(std::memory_order_relaxed) < TestDataCount)
 			{
-				auto pReadItem = circularBuffer.TakeBufferForRead();
+				auto pReadItem = circularBuffer.DequeueRead();
 				if (pReadItem == nullptr)
 				{
 					Sleep(0);
@@ -375,7 +377,7 @@ void Container_CircularBuffer_ThreadTest(size_t testDataCount, int allocSizeStar
 				GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 				GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-				size_t allocSize = circularBuffer.GetBufferSize(pReadItem);
+				size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
 				uint8_t fillPattern = (uint8_t)allocSize;
 
 				auto pData = (uint8_t*)pReadItem->GetDataPtr();
@@ -384,7 +386,7 @@ void Container_CircularBuffer_ThreadTest(size_t testDataCount, int allocSizeStar
 					EXPECT_EQ(fillPattern, pData[iData]);
 				}
 
-				EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.FreeReadBuffer(pReadItem));
+				EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseRead(pReadItem));
 
 				processedCount.fetch_add(1, std::memory_order_relaxed);
 			}

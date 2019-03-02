@@ -21,6 +21,7 @@
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)Component\SFUnhandledExceptionHandlerComponent.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularBuffer.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularBufferQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularPageQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFContainerTrait.h" />
@@ -140,6 +141,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)Component\SFUnhandledExceptionHandlerComponent.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFCircularBuffer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFCircularBufferQueue.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFStackPool.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOAdapter.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort.cpp" />
@@ -298,9 +301,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="$(MSBuildThisFileDirectory)Container\SFCircularBuffer.inl">
-      <FileType>Document</FileType>
-    </None>
     <None Include="$(MSBuildThisFileDirectory)Container\SFPageQueue.inl">
       <FileType>Document</FileType>
     </None>

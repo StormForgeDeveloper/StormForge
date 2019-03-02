@@ -42,6 +42,15 @@ namespace SFTongCompiler
         public List<DocumentContext> DocumentContexts { get; } = new List<DocumentContext>();
 
 
+        public class BytecodeGenContext
+        {
+            public HashSet<ScriptNode> VisitedNodes { get; } = new HashSet<ScriptNode>();
+            public List<ScriptNode> TraversalStack { get; } = new List<ScriptNode>();
+            public SF.Tong.Compiler.BytecodeBuilder Builder { get; } = new SF.Tong.Compiler.BytecodeBuilder();
+        }
+
+
+
         [ImportingConstructor]
         public TongCompilerContext()
         {

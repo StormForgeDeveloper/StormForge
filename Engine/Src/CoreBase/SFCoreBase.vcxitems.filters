@@ -716,9 +716,6 @@
     <None Include="$(MSBuildThisFileDirectory)Memory\SFCircularHeap.inl">
       <Filter>Memory</Filter>
     </None>
-    <None Include="$(MSBuildThisFileDirectory)Container\SFCircularBuffer.inl">
-      <Filter>Container</Filter>
-    </None>
     <None Include="$(MSBuildThisFileDirectory)Thread\SFSystemSynchronize_linux.inl">
       <Filter>Thread</Filter>
     </None>
@@ -740,5 +737,6 @@
     <None Include="$(MSBuildThisFileDirectory)Memory\SFStackHeap.inl">
       <Filter>Memory</Filter>
     </None>
+    <None Include="$(MSBuildThisFileDirectory)Container\SFCircularBuffer.inl" />
   </ItemGroup>
 </Project>

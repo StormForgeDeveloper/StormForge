@@ -63,14 +63,14 @@ namespace SF
 
 		while (true)
 		{
-			auto pBufferItem = m_RenderCommandQueue.TakeBufferForRead();
+			auto pBufferItem = m_RenderCommandQueue.DequeueRead();
 			if (pBufferItem == nullptr)
 				break;
 
 			auto pCmd = (RenderCommand*)pBufferItem->GetDataPtr();
 			pCmd->~RenderCommand();
 
-			m_RenderCommandQueue.FreeReadBuffer(pBufferItem);
+			m_RenderCommandQueue.ReleaseRead(pBufferItem);
 		}
 
 		m_RenderCommandQueue.Clear();
@@ -167,7 +167,7 @@ namespace SF
 		auto waitingFrameIndex = m_DrawingFrameIndex.load(std::memory_order_consume) + 2;
 		do {
 
-			auto pBufferItem = m_RenderCommandQueue.TakeBufferForRead();
+			auto pBufferItem = m_RenderCommandQueue.DequeueRead();
 			if (pBufferItem == nullptr)
 			{
 				// No Command to wait
@@ -200,7 +200,7 @@ namespace SF
 					pCmd->RunCommand(this);
 				}
 
-				m_RenderCommandQueue.FreeReadBuffer(pBufferItem);
+				m_RenderCommandQueue.ReleaseRead(pBufferItem);
 
 				auto curFrameIndex = m_DrawingFrameIndex.load(std::memory_order_consume);
 				if (curFrameIndex >= waitingFrameIndex)

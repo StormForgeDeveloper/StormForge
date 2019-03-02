@@ -27,6 +27,7 @@ using SF.Tong;
 using SF.Tong.Schema;
 using SF.Tool;
 
+using BytecodeGenContext = SFTongCompiler.TongCompilerContext.BytecodeGenContext;
 
 namespace SFTongCompiler
 {
@@ -36,7 +37,7 @@ namespace SFTongCompiler
     {
         public override int Priority => 3;
 
-        delegate void delByteCodeHandler(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks);
+        delegate void delByteCodeHandler(BytecodeGenContext context, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks);
         private Dictionary<string, delByteCodeHandler> m_ByteCodeGen = new Dictionary<string, delByteCodeHandler>();
 
         delegate void delNodeHandler(TongCompilerContext.DocumentContext docContext, ScriptNode scriptNode);
@@ -128,7 +129,7 @@ namespace SFTongCompiler
         }
 
 
-        void BuildByteCode_AppendBooleanPin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        void BuildByteCode_AppendBooleanPin(BytecodeGenContext byteCodeContext, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
         {
             if(samePinLinks.Count != 1)
                 throw new Exception("Invalid link count for " + inputPin.Name);
@@ -138,63 +139,63 @@ namespace SFTongCompiler
             var outLinkCache = outElement.As<ScriptNodeLinkCache>();
         }
 
-        void BuildByteCode_AppendFloatPin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        void BuildByteCode_AppendFloatPin(BytecodeGenContext byteCodeContext, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
         {
         }
 
-        void BuildByteCode_AppendDoublePin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        void BuildByteCode_AppendDoublePin(BytecodeGenContext byteCodeContext, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
         {
         }
 
-        void BuildByteCode_AppendDecimalPin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        void BuildByteCode_AppendDecimalPin(BytecodeGenContext byteCodeContext, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
         {
         }
 
-        void BuildByteCode_AppendIntPin(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        void BuildByteCode_AppendIntPin(BytecodeGenContext byteCodeContext, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
         {
         }
 
-        void BuildByteCode_AppendPropertyValueLoad(SF.Tong.Compiler.BytecodeBuilder byteCode, DomNode node, ICircuitPin inputPin)
+        void BuildByteCode_AppendPropertyValueLoad(BytecodeGenContext byteCodeContext, DomNode node, ICircuitPin inputPin)
         {
             var attrInfo = node.Type.GetAttributeInfo(inputPin.Name.ToString());
             var value = node.GetAttribute(attrInfo);
             if(value == null)
             {
-                byteCode.AppendLoadI(0);
+                byteCodeContext.Builder.AppendLoadI(0);
                 return;
             }
 
             switch(attrInfo.Type.Name)
             {
                 case "boolean":
-                    byteCode.AppendLoadI((bool)value ? 1 : 0);
+                    byteCodeContext.Builder.AppendLoadI((bool)value ? 1 : 0);
                     break;
                 case "decimal":
                     decimal decVal = (decimal)value;
                     if((decVal - (Int64)decVal) != 0)
-                        byteCode.AppendLoadF((float)decVal);
+                        byteCodeContext.Builder.AppendLoadF((float)decVal);
                     else
-                        byteCode.AppendLoadI((int)decVal);
+                        byteCodeContext.Builder.AppendLoadI((int)decVal);
                     break;
                 case "double":
                     double dblVal = (double)value;
                     if ((dblVal - (Int64)dblVal) != 0)
-                        byteCode.AppendLoadF((float)dblVal);
+                        byteCodeContext.Builder.AppendLoadF((float)dblVal);
                     else
-                        byteCode.AppendLoadI((int)dblVal);
+                        byteCodeContext.Builder.AppendLoadI((int)dblVal);
                     break;
                 case "float":
                     float fltVal = (float)value;
                     if ((fltVal - (Int64)fltVal) != 0)
-                        byteCode.AppendLoadF(fltVal);
+                        byteCodeContext.Builder.AppendLoadF(fltVal);
                     else
-                        byteCode.AppendLoadI((int)fltVal);
+                        byteCodeContext.Builder.AppendLoadI((int)fltVal);
                     break;
                 case "int":
-                    byteCode.AppendLoadI((int)value);
+                    byteCodeContext.Builder.AppendLoadI((int)value);
                     break;
                 case "string":
-                    byteCode.AppendLoadString((string)value);
+                    byteCodeContext.Builder.AppendLoadString((string)value);
                     break;
                 default:
                     throw new Exception("Not supported load bytecode type:" + attrInfo.Type.Name);
@@ -202,12 +203,12 @@ namespace SFTongCompiler
         }
 
         // DFS traversal based bytecode gen
-        void BuildByteCode(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        void BuildByteCode(BytecodeGenContext byteCodeContext, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
         {
             if (samePinLinks == null || samePinLinks.Count == 0) // if nothing linked just take constant
             {
                 var node = linkCache.As<ScriptNode>();
-                BuildByteCode_AppendPropertyValueLoad(byteCode, node.DomNode, inputPin);
+                BuildByteCode_AppendPropertyValueLoad(byteCodeContext, node.DomNode, inputPin);
             }
             else
             {
@@ -215,14 +216,15 @@ namespace SFTongCompiler
                 if (!m_ByteCodeGen.TryGetValue(inputPin.TypeName.ToString(), out byteCodeHandler))
                     throw new Exception("Bytecode handler not found for :" + inputPin.TypeName.ToString());
 
-                byteCodeHandler(byteCode, linkCache, inputPin, samePinLinks);
+                byteCodeHandler(byteCodeContext, linkCache, inputPin, samePinLinks);
             }
             // 
         }
 
         // bytecode gen for all inputs of the node
-        void BuildByteCode(SF.Tong.Compiler.BytecodeBuilder byteCode, ScriptNode node, ICircuitPin inputPin)
+        void BuildByteCodeForInput(BytecodeGenContext byteCodeContext, ScriptNodeConnection inputConn)
         {
+            var node = inputConn.InputElement.As<ScriptNode>();
             var linkCache = node.As<ScriptNodeLinkCache>();
             // create a copy of links
             var allLinks = new List<ScriptNodeConnection>(linkCache.ToThisNode);
@@ -247,7 +249,7 @@ namespace SFTongCompiler
                 }
 
                 // build bytecode for the input DFS traversal
-                BuildByteCode(byteCode, linkCache, input, samePinLinks);
+                BuildByteCode(byteCodeContext, linkCache, input, samePinLinks);
             }
         }
 
@@ -263,10 +265,10 @@ namespace SFTongCompiler
             if (signalConnections.Count > 1)
                 return;
 
-            var byteCode = new SF.Tong.Compiler.BytecodeBuilder();
-            BuildByteCode(byteCode, signalConnections[0].InputElement.As<ScriptNode>(), signalConnections[0].InputPin);
+            BytecodeGenContext byteCodeGenContext = new BytecodeGenContext();
+            BuildByteCodeForInput(byteCodeGenContext, signalConnections[0]);
 
-            docContext.CompiledInterfaces.Add(new object());
+            docContext.CompiledInterfaces.Add(byteCodeGenContext.Builder);
         }
 
         void CompileTask(TongCompilerContext.DocumentContext docContext, ScriptNode interfaceNode)
