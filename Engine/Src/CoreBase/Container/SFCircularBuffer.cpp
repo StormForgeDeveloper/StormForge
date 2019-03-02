@@ -180,7 +180,7 @@ namespace SF
 		if (pBuffer->NextPos == 0)
 		{
 			if ((uintptr_t)pBuffer != startPos)
-				memset(pBuffer + 1, 0xFF, endPos - (uintptr_t)pBuffer - (uintptr_t)sizeof(BufferItem));
+				memset(pBuffer + 1, 0xFF, endPos - (uintptr_t)(pBuffer + 1));
 			else
 			{
 				// Possible broken
@@ -189,7 +189,7 @@ namespace SF
 		}
 		else
 		{
-			memset(pBuffer + 1, 0xFF, pBuffer->NextPos - ((uintptr_t)pBuffer - startPos) - (uintptr_t)sizeof(BufferItem));
+			memset(pBuffer + 1, 0xFF, pBuffer->NextPos - ((uintptr_t)(pBuffer + 1) - startPos));
 		}
 #endif
 
@@ -197,7 +197,7 @@ namespace SF
 		auto expectedState = ItemState::Reserved;
 		while (!pBuffer->State.compare_exchange_weak(expectedState, ItemState::Free, std::memory_order_release, std::memory_order_acquire))
 		{
-			if (expectedState != ItemState::Free)
+			if (expectedState != ItemState::Reserved && expectedState != ItemState::Dummy)
 			{
 				// Broken?
 				assert(false);
@@ -206,24 +206,24 @@ namespace SF
 		}
 
 
-		// And we have to take care of tail position, and this should be rigorously synchronous way
-		BufferItem* expectedTail = m_TailPos.load(std::memory_order_acquire);
-		BufferItem* nextTail = nullptr;
-		//VCMUTEXLOCK scopeLock(m_HeadLock);
-		do
-		{
-			if (expectedTail == m_HeadPos.load(std::memory_order_relaxed)) // empty
-				return ResultCode::SUCCESS;
 
+		MutexScopeLock ticketScope(m_HeadLock);
+		// And we have to take care of tail position, and this should be rigorously synchronous way
+		BufferItem* curTail = m_TailPos.load(std::memory_order_relaxed);
+		auto pHead = m_HeadPos.load(std::memory_order_relaxed);
+		while (curTail != pHead)
+		{
 			// if the item state isn't free. it means somebody working on it. leave that free to other thread
-			auto tailState = expectedTail->State.load(std::memory_order_relaxed);
-			if (tailState != ItemState::Free || tailState != ItemState::Dummy)
+			auto tailState = curTail->State.load(std::memory_order_relaxed);
+			if (tailState != ItemState::Free && tailState != ItemState::Dummy)
 				break;
 
-			nextTail = reinterpret_cast<BufferItem*>(startPos + expectedTail->NextPos);
+			BufferItem* nextTail = reinterpret_cast<BufferItem*>(startPos + curTail->NextPos);
 			assert((uintptr_t)nextTail >= startPos && (uintptr_t)nextTail < endPos);
-		} while (!m_TailPos.compare_exchange_weak(expectedTail, nextTail, std::memory_order_seq_cst, std::memory_order_acquire));
 
+			curTail = nextTail;
+		}
+		m_TailPos.store(curTail, std::memory_order_relaxed);
 
 		return ResultCode::SUCCESS;
 	}
