@@ -45,6 +45,8 @@ namespace SF
 		};
 #pragma pack(pop)
 
+		using Item = BufferItem;
+
 	private:
 
 		// buffer size

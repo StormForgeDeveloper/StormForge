@@ -156,6 +156,7 @@
     <ClInclude Include="Test\Algorithm\Matching\SFSphericalShellManager.h" />
     <ClInclude Include="Test\Algorithm\UnitTest_Algorithm.h" />
     <ClInclude Include="Test\Container\UnitTest_AVLTreeTest.h" />
+    <ClInclude Include="Test\Container\UnitTest_CircularBuffer.h" />
     <ClInclude Include="Test\Container\UnitTest_ConcurrentContainerTest.h" />
     <ClInclude Include="Test\Container\UnitTest_HashTableTest.h" />
     <ClInclude Include="Test\FBX\UnitTest_FBX.h" />
@@ -169,11 +170,8 @@
     <ClInclude Include="UnitTest1PCH.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\3rdParties\src\gtest\gtest-1.7.0\src\gtest-all.cc">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    <ClCompile Include="..\..\..\3rdParties\src\gtest\googletest\src\gtest-all.cc">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Test\Algorithm\Matching\SFSphericalShellManager.cpp" />
     <ClCompile Include="Test\Algorithm\Matching\UnitTest_Algorithm_MatchingPreferance.cpp" />
