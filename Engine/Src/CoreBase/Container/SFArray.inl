@@ -21,21 +21,21 @@ namespace SF {
 		// Static buffer
 		template< class DataType >
 		Array<DataType>::Array()
-			: m_Heap(GetSystemHeap())
+			: m_Heap(&GetSystemHeap())
 		{
 		}
 
 		// Static buffer
 		template< class DataType >
 		constexpr Array<DataType>::Array(size_t allocatedSize, const DataType *pDataPtr)
-			: m_Heap(*(IHeap*)nullptr)
+			: m_Heap(nullptr)
 		{
 			SetBuffPtr(allocatedSize, pDataPtr);
 		}
 
 		template< class DataType >
 		Array<DataType>::Array(IHeap& heap)
-			: m_Heap(heap)
+			: m_Heap(&heap)
 		{
 		}
 

@@ -203,7 +203,7 @@ namespace SFTongCompiler
         }
 
         // DFS traversal based bytecode gen
-        void BuildByteCode(BytecodeGenContext byteCodeContext, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
+        void BuildByteCodeForNode(BytecodeGenContext byteCodeContext, ScriptNodeLinkCache linkCache, ICircuitPin inputPin, IList<ScriptNodeConnection> samePinLinks)
         {
             if (samePinLinks == null || samePinLinks.Count == 0) // if nothing linked just take constant
             {
@@ -226,6 +226,7 @@ namespace SFTongCompiler
         {
             var node = inputConn.InputElement.As<ScriptNode>();
             var linkCache = node.As<ScriptNodeLinkCache>();
+
             // create a copy of links
             var allLinks = new List<ScriptNodeConnection>(linkCache.ToThisNode);
             // 
@@ -249,7 +250,7 @@ namespace SFTongCompiler
                 }
 
                 // build bytecode for the input DFS traversal
-                BuildByteCode(byteCodeContext, linkCache, input, samePinLinks);
+                BuildByteCodeForNode(byteCodeContext, linkCache, input, samePinLinks);
             }
         }
 

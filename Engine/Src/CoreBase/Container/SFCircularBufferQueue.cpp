@@ -30,7 +30,7 @@ namespace SF
 		m_HeadPos = (reinterpret_cast<BufferItem*>(m_Buffer));
 
 		static_assert(sizeof(std::atomic<uint64_t>) == sizeof(uint64_t), "My assumption has broken!");
-		memset(m_Buffer, 0, sizeof(m_Buffer));
+		memset(m_Buffer, 0, m_BufferSize);
 	}
 
 	CircularBufferQueue::~CircularBufferQueue()
@@ -44,7 +44,7 @@ namespace SF
 	void CircularBufferQueue::Clear()
 	{
 		m_TailPos = m_HeadPos = 0;
-		memset(m_Buffer, 0, sizeof(m_Buffer));
+		memset(m_Buffer, 0, m_BufferSize);
 	}
 
 	bool CircularBufferQueue::IsEmpty()
@@ -171,8 +171,8 @@ namespace SF
 		if (pBuffer == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		auto startPos = (uintptr_t)m_Buffer;
-		auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
+		//auto startPos = (uintptr_t)m_Buffer;
+		//auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
 
 		// Flip the state to free
 		auto expectedState = ItemState::Reserved;
@@ -199,8 +199,8 @@ namespace SF
 		if (pHead == nullptr)
 			return nullptr;
 
-		auto startPos = (uintptr_t)m_Buffer;
-		auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
+		//auto startPos = (uintptr_t)m_Buffer;
+		//auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
 
 		auto pTail = m_TailPos.load(std::memory_order_relaxed);
 		if (pTail == pHead) // queue is empty

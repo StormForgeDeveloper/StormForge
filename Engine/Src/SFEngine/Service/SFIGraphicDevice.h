@@ -89,7 +89,7 @@ namespace SF
 		{
 			auto pRenderCommandQueue = GetRenderCommandQueue();
 			if (pRenderCommandQueue == nullptr)
-				return;
+				return nullptr;
 
 			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
 			auto pCmd = new(pBuffer->GetDataPtr()) CommandType();
@@ -108,7 +108,7 @@ namespace SF
 		{
 			auto pRenderCommandQueue = GetRenderCommandQueue();
 			if (pRenderCommandQueue == nullptr)
-				return;
+				return nullptr;
 
 			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
 			auto pCmd = new(pBuffer->GetDataPtr()) CommandType(args...);
@@ -127,12 +127,12 @@ namespace SF
 		{
 			auto pRenderCommandQueue = GetRenderCommandQueue();
 			if (pRenderCommandQueue == nullptr)
-				return;
+				return ResultCode::SUCCESS_FALSE;
 
 			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
 			auto pCmd = new(pBuffer->GetDataPtr()) CommandType();
 			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer->GetDataPtr());
-			return pRenderCommandQueue->SetReadyForRead(pBuffer);
+			return pRenderCommandQueue->ReleaseWrite(pBuffer);
 		}
 
 		// request command with arg
