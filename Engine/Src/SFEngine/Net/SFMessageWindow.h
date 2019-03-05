@@ -204,6 +204,8 @@ namespace Net {
 		// Release message by message mask
 		Result ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask );
 
+
+		void SlideWindow();
 	};
 
 	class SendMsgWindowMT

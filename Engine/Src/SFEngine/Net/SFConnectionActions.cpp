@@ -189,8 +189,16 @@ namespace Net {
 			netErr(ResultCode::IO_BADPACKET_SIZE);
 
 		hrTem = sendReliableWindow.ReleaseMsg(pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
-		SFLog(Net, Custom10, "NetCtrl Recv SendReliableMask : CID:{0}:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
-			GetCID(), sendReliableWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask, hrTem);
+		if (hrTem)
+		{
+			SFLog(Net, Custom10, "NetCtrl Recv SendReliableMask : CID:{0}:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
+				GetCID(), sendReliableWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask, hrTem);
+		}
+		else
+		{
+			SFLog(Net, Debug, "NetCtrl Recv Failed SendReliableMask : CID:{0}:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
+				GetCID(), sendReliableWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask, hrTem);
+		}
 
 		if (hrTem == Result(ResultCode::UNEXPECTED))
 			CloseConnection("Unexpected send window sequence");
@@ -216,6 +224,7 @@ namespace Net {
 		}
 
 	Proc_End:
+
 		return hr;
 	}
 

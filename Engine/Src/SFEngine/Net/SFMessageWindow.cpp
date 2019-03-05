@@ -372,11 +372,25 @@ namespace Net {
 	}
 
 
+	void SendMsgWindow::SlideWindow()
+	{
+		// Slide window
+		for (INT iMsg = 0; m_pMsgWnd[m_uiWndBaseIndex].state == MSGSTATE_CANFREE && iMsg < GetWindowSize(); iMsg++)
+		{
+			m_uiBaseSequence++;
+			m_pMsgWnd[m_uiWndBaseIndex].state = MSGSTATE_FREE;
+			m_uiMsgCount--;
+			m_uiWndBaseIndex = (m_uiWndBaseIndex + 1) % GetWindowSize();
+		}
+	}
+
+
 	// Release message sequence and slide window if can
 	Result SendMsgWindow::ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask )
 	{
 		Result hr = ResultCode::SUCCESS;
 		INT iIdx;
+		const uint32_t MaxMaskBits = 64;
 
 		MutexScopeLock localLock(m_Lock);
 
@@ -386,11 +400,6 @@ namespace Net {
 		uint uiCurBit = 0, uiSyncMaskCur = 1;
 
 		iIdx = Message::SequenceDifference(uiSequenceBase, m_uiBaseSequence);
-
-		if( iIdx >= GetWindowSize() )
-		{
-			netErr( ResultCode::IO_INVALID_SEQUENCE ); // Out of range
-		}
 
 		if(  iIdx < 0 )
 		{
@@ -410,14 +419,21 @@ namespace Net {
 		else if (iIdx > 0)
 		{
 			// Using other variable is common, but I used uiCurBit because it need to be increased anyway.
-			for (; uiCurBit < (uint)iIdx; uiCurBit++)
+			auto maxIdx = std::min(static_cast<uint32_t>(iIdx), MaxMaskBits);
+			for (; uiCurBit < maxIdx; uiCurBit++)
 			{
 				ReleaseMessage(uiCurBit);
+			}
+
+			if (iIdx >= GetWindowSize())
+			{
+				SlideWindow();
+				return hr;// netErr(ResultCode::IO_INVALID_SEQUENCE); // Out of range // ignore out of range
 			}
 		}
 
 		// At this point iIdx will have offset from local base sequence
-		for (; uiCurBit < 64; uiCurBit++, uiSyncMaskCur <<= 1, iIdx++)
+		for (; uiCurBit < MaxMaskBits; uiCurBit++, uiSyncMaskCur <<= 1, iIdx++)
 		{
 			if ((uiMsgMask & uiSyncMaskCur) == 0) continue;
 
@@ -425,16 +441,7 @@ namespace Net {
 
 		}
 
-		// Slide window
-		for (INT iMsg = 0; m_pMsgWnd[m_uiWndBaseIndex].state == MSGSTATE_CANFREE && iMsg < GetWindowSize(); iMsg++)
-		{
-			m_uiBaseSequence++;
-			m_pMsgWnd[ m_uiWndBaseIndex ].state = MSGSTATE_FREE;
-			m_uiMsgCount--;
-			m_uiWndBaseIndex = (m_uiWndBaseIndex+1)%GetWindowSize();
-			hr = ResultCode::SUCCESS_FALSE;
-		}
-
+		SlideWindow();
 
 	Proc_End:
 
