@@ -99,12 +99,12 @@
     <ClInclude Include="Test\Variable\UnitTest_Variable.h">
       <Filter>Test\Variable</Filter>
     </ClInclude>
+    <ClInclude Include="Test\Container\UnitTest_CircularBuffer.h">
+      <Filter>Test\Container</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest1PCH.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\3rdParties\src\gtest\gtest-1.7.0\src\gtest-all.cc">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="UnitTest1.cpp">
@@ -211,6 +211,9 @@
     </ClCompile>
     <ClCompile Include="Test\TongScript\UnitTest_TongScript_FileFormat.cpp">
       <Filter>Test\Tong</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\3rdParties\src\gtest\googletest\src\gtest-all.cc">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

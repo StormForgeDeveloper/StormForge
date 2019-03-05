@@ -233,7 +233,7 @@ namespace SF {
 			bool m_PreserveDataOnResize = true;
 
 			// Heap for memory management
-			IHeap& m_Heap;
+			IHeap* m_Heap = nullptr;
 
 		protected:
 			// Update Data pointer
@@ -250,7 +250,7 @@ namespace SF {
 
 			template<size_t dataCount>
 			constexpr Array(const DataType pDataPtr[dataCount])
-				: m_Heap(*(IHeap*)nullptr)
+				: m_Heap(nullptr)
 			{
 				SetBuffPtr(dataCount, pDataPtr);
 			}
@@ -258,7 +258,7 @@ namespace SF {
 			Array(IHeap& heap);
 			virtual ~Array();
 
-			IHeap& GetHeap() { return m_Heap; }
+			IHeap& GetHeap() { return *m_Heap; }
 
 			// Get Size
 			inline size_t size() const;

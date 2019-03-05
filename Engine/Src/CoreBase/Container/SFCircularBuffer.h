@@ -45,6 +45,8 @@ namespace SF
 		};
 #pragma pack(pop)
 
+		using Item = BufferItem;
+
 	private:
 
 		// buffer size
@@ -87,23 +89,6 @@ namespace SF
 		// get buffer item size
 		size_t GetBufferItemSize(BufferItem* pBufferItem);
 
-		// Iterate readable items. the item passed to the functor will be freed
-		template<class FunctorT>
-		void ForeachReadableItems(FunctorT func)
-		{
-			BufferItem* pBufferItem = nullptr;
-
-			while (true)
-			{
-				pBufferItem = DequeueRead();
-				if (pBufferItem == nullptr)
-					return; // nothing left for now
-
-				func(pBufferItem->GetDataPtr());
-
-				ReleaseRead(pBufferItem);
-			}
-		}
 	};
 
 

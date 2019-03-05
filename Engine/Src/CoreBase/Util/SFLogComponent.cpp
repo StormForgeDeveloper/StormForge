@@ -77,7 +77,7 @@ namespace SF {
 			break;
 		};
 
-		__android_log_print(logPriority, "StormForge", "%s: %s", channelName, logMessage->LogBuff);
+		__android_log_print(logPriority, "StormForge", "%s", logMessage->LogBuff);
 #elif SF_PLATFORM == SF_PLATFORM_WINDOWS
 		if (m_hConsole == INVALID_NATIVE_HANDLE_VALUE)
 			return;

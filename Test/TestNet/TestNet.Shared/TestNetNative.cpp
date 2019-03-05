@@ -96,7 +96,7 @@ void TestNetNative::RequestRanking()
 	if (m_pConnection->IsDisposed() || m_pConnection->GetConnectionState() != Net::ConnectionState::CONNECTED)
 		return;
 
-	MessageDataPtr pMsg = Message::Login::UpdateMyScoreCmd::Create(Service::NetSystem->GetHeap(), Util::Random.Rand(0, 5000), RankingType::World, 10);
+	MessageDataPtr pMsg = Message::Login::UpdateMyScoreCmd::Create(Service::NetSystem->GetHeap(), 0, Util::Random.Rand(0, 5000), RankingType::World, 10);
 
 	m_pConnection->Send(pMsg);
 }
@@ -133,7 +133,7 @@ void TestNetNative::HandleMessageHack(Message::MessageBase * pMsgBase)
 
 			SFLog(Game, Info, "Logged in");
 
-			MessageDataPtr pMsg = Message::Login::UpdateMyScoreCmd::Create(Service::NetSystem->GetHeap(), Util::Random.Rand(0, 5000), RankingType::World, 10);
+			MessageDataPtr pMsg = Message::Login::UpdateMyScoreCmd::Create(Service::NetSystem->GetHeap(), 0, Util::Random.Rand(0, 5000), RankingType::World, 10);
 			pCon->Send(pMsg);
 		}
 
@@ -177,7 +177,7 @@ Result TestNetNative::OnTick(EngineTaskTick tick)
 			break;
 		case Net::ConnectionEvent::EVT_CONNECTION_RESULT:
 			SFLog(Game, Error, "Connection Result {0:X8}", conEvent.Components.hr);
-			pMsg = Message::Login::CreateRandomUserCmd::Create(Service::NetSystem->GetHeap(), FixedString32("MyTownHero"), "testMyID");
+			pMsg = Message::Login::CreateRandomUserCmd::Create(Service::NetSystem->GetHeap(), 0, FixedString32("MyTownHero"), "testMyID");
 			pCon->Send(pMsg);
 			break;
 		case Net::ConnectionEvent::EVT_DISCONNECTED:

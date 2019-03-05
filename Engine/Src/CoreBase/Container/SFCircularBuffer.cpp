@@ -30,7 +30,7 @@ namespace SF
 		m_HeadPos = (reinterpret_cast<BufferItem*>(m_Buffer));
 
 		static_assert(sizeof(std::atomic<uint64_t>) == sizeof(uint64_t), "My assumption has broken!");
-		memset(m_Buffer, 0, sizeof(m_Buffer));
+		memset(m_Buffer, 0, m_BufferSize);
 	}
 
 	CircularBuffer::~CircularBuffer()
@@ -44,7 +44,7 @@ namespace SF
 	void CircularBuffer::Clear()
 	{
 		m_TailPos = m_HeadPos = 0;
-		memset(m_Buffer, 0, sizeof(m_Buffer));
+		memset(m_Buffer, 0, m_BufferSize);
 	}
 
 	bool CircularBuffer::IsEmpty()

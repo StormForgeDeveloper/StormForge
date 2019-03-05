@@ -4,7 +4,7 @@
 #include "UnitTest1PCH.h"
 #include <gtest/gtest.h>
 #include "SFTestBase.h"
-
+#include "Service/SFService.h"
 
 
 
@@ -19,7 +19,18 @@
 //./foo_test --gtest_filter=FooTest.*-FooTest.Bar Runs everything in test case FooTest except 
 
 
+void MyTestBase::SetUp()
+{
+}
 
+// TearDown() is invoked immediately after a test finishes.  Here we
+void MyTestBase::TearDown()
+{
+	StopAllThread();
+
+	SF::Service::LogModule->Flush();
+
+}
 
 
 

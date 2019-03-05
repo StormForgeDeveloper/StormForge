@@ -12,6 +12,7 @@
       <PrecompiledHeaderFile>$(ProjectName)PCH.h</PrecompiledHeaderFile>
       <PreprocessorDefinitions>HAVE_CONFIG_H;CURL_STATICLIB;NOMINMAX;NOCRYPT;HAVE_STDDEF_H=1;HAVE_STDINT_H=1;HAVE_SYS_TYPES_H=1;_ENABLE_ATOMIC_ALIGNMENT_FIX;_VARIADIC_MAX=10;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <FloatingPointModel>Fast</FloatingPointModel>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link />
     <Link>

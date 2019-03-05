@@ -21,6 +21,7 @@
 #include "Util/SFTimeUtil.h"
 #include "Util/SFRandom.h"
 #include "Math/SF3DMath.h"
+#include "SFEngine.h"
 
 
 
@@ -67,7 +68,7 @@ public:
 		std::for_each(m_Threads.begin(), m_Threads.end(), [](SF::Thread* pThread)
 		{
 			if (pThread) pThread->Stop(true);
-			SF::IHeap::Delete(pThread);
+			delete pThread;
 		});
 		m_Threads.clear();
 	}
@@ -76,15 +77,10 @@ public:
 	SF::IHeap& GetHeap() { return m_Heap; }
 
 	// Remember that SetUp() is run immediately before a test starts.
-	virtual void SetUp()
-	{
-	}
+	virtual void SetUp();
 
 	// TearDown() is invoked immediately after a test finishes.  Here we
-	virtual void TearDown()
-	{
-		StopAllThread();
-	}
+	virtual void TearDown();
 };
 
 

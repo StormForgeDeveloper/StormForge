@@ -28,6 +28,7 @@
 #include "Container/SFCircularBuffer.h"
 #include "Container/SFCircularBufferQueue.h"
 
+#include "UnitTest_CircularBuffer.h"
 
 
 using ::testing::EmptyTestEventListener;
@@ -45,7 +46,7 @@ using namespace ::SF;
 
 
 
-GTEST_TEST(Container, CircularBufferSimple)
+TEST_F(CircularBufferTest, CircularBufferQueueSimple)
 {
 	Heap testHeap("test", GetSystemHeap());
 	constexpr size_t TestBufferSize = 256;
@@ -93,7 +94,7 @@ GTEST_TEST(Container, CircularBufferSimple)
 }
 
 
-GTEST_TEST(Container, CircularBufferSimple2)
+TEST_F(CircularBufferTest, CircularBufferQueueSimple2)
 {
 	Heap testHeap("test", GetSystemHeap());
 	constexpr size_t TestBufferSize = 256;
@@ -138,12 +139,10 @@ GTEST_TEST(Container, CircularBufferSimple2)
 		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseRead(pReadItem));
 	}
 
-
-	Engine::GetEngineComponent<Log::LogModule>()->Flush();
 }
 
 
-GTEST_TEST(Container, CircularBufferFull)
+TEST_F(CircularBufferTest, CircularBufferQueueFull)
 {
 	Heap testHeap("test", GetSystemHeap());
 	constexpr size_t TestBufferSize = 256;
@@ -200,7 +199,7 @@ GTEST_TEST(Container, CircularBufferFull)
 
 
 
-GTEST_TEST(Container, CircularBufferEmpty)
+TEST_F(CircularBufferTest, CircularBufferQueueEmpty)
 {
 	Heap testHeap("test", GetSystemHeap());
 	constexpr size_t TestBufferSize = 256;
@@ -254,7 +253,7 @@ GTEST_TEST(Container, CircularBufferEmpty)
 }
 
 
-GTEST_TEST(Container, CircularBufferEmptyRand)
+TEST_F(CircularBufferTest, CircularBufferQueueEmptyRand)
 {
 	Heap testHeap("test", GetSystemHeap());
 	constexpr size_t TestBufferSize = 256;
@@ -309,9 +308,9 @@ GTEST_TEST(Container, CircularBufferEmptyRand)
 
 
 template<size_t TestBufferSize>
-void Container_CircularBuffer_ThreadTest(size_t testDataCount, int allocSizeStart, int allocSizeEnd, int ReadThreadCount, int WriteThreadCount)
+void Container_CircularBufferQueue_ThreadTest(size_t testDataCount, int allocSizeStart, int allocSizeEnd, int ReadThreadCount, int WriteThreadCount)
 {
-	typedef StaticCircularBufferQueue<TestBufferSize> CircularBufferTestT;
+	using CircularBufferTestT = StaticCircularBufferQueue<TestBufferSize> ;
 
 	Heap testHeap("test", GetSystemHeap());
 	CircularBufferTestT circularBuffer;
@@ -418,39 +417,445 @@ void Container_CircularBuffer_ThreadTest(size_t testDataCount, int allocSizeStar
 
 
 
-GTEST_TEST(Container, CircularBufferThreadR1W1Small)
+TEST_F(CircularBufferTest, CircularBufferQueueThreadR1W1Small)
 {
-	Container_CircularBuffer_ThreadTest<256>(999999, 30, 128, 1, 1);
+	Container_CircularBufferQueue_ThreadTest<256>(999999, 30, 128, 1, 1);
 	
 	Engine::GetEngineComponent<Log::LogModule>()->Flush();
 }
 
 
-GTEST_TEST(Container, CircularBufferThreadR1W1Large)
+TEST_F(CircularBufferTest, CircularBufferQueueThreadR1W1Large)
 {
-	Container_CircularBuffer_ThreadTest<1024>(999999, 30, 128, 1, 1);
+	Container_CircularBufferQueue_ThreadTest<1024>(999999, 30, 128, 1, 1);
 
 	Engine::GetEngineComponent<Log::LogModule>()->Flush();
 }
 
 
 
-GTEST_TEST(Container, CircularBufferThreadMultipleR1W2)
+TEST_F(CircularBufferTest, CircularBufferQueueThreadMultipleR1W2)
 {
-	Container_CircularBuffer_ThreadTest<1024>(999999, 30, 128, 1, 2);
+	Container_CircularBufferQueue_ThreadTest<1024>(999999, 30, 128, 1, 2);
 
 	Engine::GetEngineComponent<Log::LogModule>()->Flush();
 }
 
 
 
-GTEST_TEST(Container, CircularBufferThreadMultipleR1W4)
+TEST_F(CircularBufferTest, CircularBufferQueueThreadMultipleR1W4)
 {
-	Container_CircularBuffer_ThreadTest<1024>(999999, 30, 128, 1, 4);
+	Container_CircularBufferQueue_ThreadTest<1024>(999999, 30, 128, 1, 4);
 
 	Engine::GetEngineComponent<Log::LogModule>()->Flush();
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+TEST_F(CircularBufferTest, CircularBuffer_Simple)
+{
+	Heap testHeap("test", GetSystemHeap());
+	constexpr size_t TestBufferSize = 256;
+	StaticCircularBuffer<TestBufferSize> circularBuffer;
+	size_t allocSize = 99;
+
+	EXPECT_TRUE(circularBuffer.IsEmpty());
+
+	auto pBuffer = circularBuffer.Allocate(10 * 1024);
+	GTEST_ASSERT_EQ(nullptr, pBuffer);
+	EXPECT_NE(ResultCode::SUCCESS, circularBuffer.Free(pBuffer));
+
+	for (int iTry = 0; iTry < 10; iTry++)
+	{
+		uint8_t fillPattern = 0xC7;
+		pBuffer = circularBuffer.Allocate(allocSize);
+		GTEST_ASSERT_NE(nullptr, pBuffer);
+
+		memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
+
+		EXPECT_GE(circularBuffer.GetBufferItemSize(pBuffer), allocSize);
+
+		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.Free(pBuffer));
+	}
+}
+
+
+TEST_F(CircularBufferTest, CircularBuffer_Simple2)
+{
+	Heap testHeap("test", GetSystemHeap());
+	constexpr size_t TestBufferSize = 256;
+	StaticCircularBuffer<TestBufferSize> circularBuffer;
+	std::vector<CircularBuffer::Item*> testAllocated;
+
+	EXPECT_TRUE(circularBuffer.IsEmpty());
+
+	size_t allocSize = 10;
+	int enqueuedCount = 0;
+	for (int iTry = 0; ; iTry++, enqueuedCount++)
+	{
+		uint8_t fillPattern = iTry + 1;
+		auto pBuffer = circularBuffer.Allocate(allocSize);
+		if (pBuffer == nullptr)
+			break;
+
+		memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
+		testAllocated.push_back(pBuffer);
+	}
+
+
+	for (int iTry = 0; iTry < enqueuedCount; iTry++)
+	{
+		uint8_t fillPattern = iTry + 1;
+		auto pReadItem = testAllocated[iTry];
+		GTEST_ASSERT_NE(nullptr, pReadItem);
+
+		EXPECT_EQ(CircularBuffer::ItemState::Reserved, pReadItem->State);
+		GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
+		GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
+
+		EXPECT_GE(circularBuffer.GetBufferItemSize(pReadItem), allocSize);
+
+		auto pData = (uint8_t*)pReadItem->GetDataPtr();
+		for (int iData = 0; iData < allocSize; iData++)
+		{
+			EXPECT_EQ(fillPattern, pData[iData]);
+		}
+
+		EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.Free(pReadItem));
+	}
+
+}
+
+
+TEST_F(CircularBufferTest, CircularBuffer_Full)
+{
+	Heap testHeap("test", GetSystemHeap());
+	constexpr size_t TestBufferSize = 256;
+	constexpr size_t TestDataCount = 1000000;
+	StaticCircularBuffer<TestBufferSize> circularBuffer;
+	std::vector< CircularBuffer::Item*> allocated;
+	EXPECT_TRUE(circularBuffer.IsEmpty());
+
+
+	int enqueuedCount = 0, processedCount = 0;
+	for (int iTest = 0; iTest < TestDataCount; iTest++)
+	{
+		auto opRan = Util::Random.Rand();
+
+		size_t allocSize = Util::Random.Rand(20, 128);
+		auto pBuffer = circularBuffer.Allocate(allocSize);
+		if (pBuffer != nullptr)
+		{
+			allocSize = AlignUp(allocSize, 8);
+			auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
+			EXPECT_EQ(allocSize, newAllocSize);
+			uint8_t fillPattern = (uint8_t)allocSize;
+			memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
+
+			allocated.push_back(pBuffer);
+			enqueuedCount++;
+		}
+
+		if (enqueuedCount > processedCount && ((opRan % 100) > 40))
+		{
+			auto pReadItem = allocated.back();
+			allocated.pop_back();
+			GTEST_ASSERT_NE(nullptr, pReadItem);
+
+			EXPECT_EQ(CircularBuffer::ItemState::Reserved, pReadItem->State);
+			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
+			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
+
+			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)allocSize;
+
+			auto pData = (uint8_t*)pReadItem->GetDataPtr();
+			for (int iData = 0; iData < allocSize; iData++)
+			{
+				EXPECT_EQ(fillPattern, pData[iData]);
+			}
+
+			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.Free(pReadItem));
+			processedCount++;
+		}
+	}
+}
+
+
+
+TEST_F(CircularBufferTest, CircularBuffer_RandomFree)
+{
+	Heap testHeap("test", GetSystemHeap());
+	constexpr size_t TestBufferSize = 256;
+	constexpr size_t TestDataCount = 1000000;
+	StaticCircularBuffer<TestBufferSize> circularBuffer;
+	std::vector< CircularBuffer::Item*> allocated;
+	EXPECT_TRUE(circularBuffer.IsEmpty());
+
+
+	int enqueuedCount = 0, processedCount = 0;
+	for (int iTest = 0; iTest < TestDataCount; iTest++)
+	{
+		auto opRan = Util::Random.Rand();
+
+		size_t allocSize = Util::Random.Rand(20, 128);
+		auto pBuffer = circularBuffer.Allocate(allocSize);
+		if (pBuffer != nullptr)
+		{
+			allocSize = AlignUp(allocSize, 8);
+			auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
+			EXPECT_EQ(allocSize, newAllocSize);
+			uint8_t fillPattern = (uint8_t)allocSize;
+			memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
+
+			allocated.push_back(pBuffer);
+			enqueuedCount++;
+		}
+
+		if (enqueuedCount > processedCount && ((opRan % 100) > 40))
+		{
+			auto idxRemove = opRan % allocated.size();
+			auto pReadItem = allocated[idxRemove];
+			allocated.erase(allocated.begin() + idxRemove);
+			GTEST_ASSERT_NE(nullptr, pReadItem);
+
+			EXPECT_EQ(CircularBuffer::ItemState::Reserved, pReadItem->State);
+			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
+			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
+
+			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)allocSize;
+
+			auto pData = (uint8_t*)pReadItem->GetDataPtr();
+			for (int iData = 0; iData < allocSize; iData++)
+			{
+				EXPECT_EQ(fillPattern, pData[iData]);
+			}
+
+			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.Free(pReadItem));
+			processedCount++;
+		}
+	}
+}
+
+
+TEST_F(CircularBufferTest, CircularBuffer_Empty)
+{
+	Heap testHeap("test", GetSystemHeap());
+	constexpr size_t TestBufferSize = 256;
+	constexpr size_t TestDataCount = 1000000;
+	StaticCircularBuffer<TestBufferSize> circularBuffer;
+	std::vector<CircularBuffer::Item*> allocated;
+
+	EXPECT_TRUE(circularBuffer.IsEmpty());
+
+
+	int enqueuedCount = 0, processedCount = 0;
+	for (int iTest = 0; iTest < TestDataCount; iTest++)
+	{
+		size_t allocSize = 120;// Util::Random.Rand(20, 128);
+		auto pBuffer = circularBuffer.Allocate(allocSize);
+		if (pBuffer != nullptr)
+		{
+			allocSize = AlignUp(allocSize, 8);
+			auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
+			EXPECT_EQ(allocSize, newAllocSize);
+			uint8_t fillPattern = (uint8_t)allocSize;
+			memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
+
+			allocated.push_back(pBuffer);
+			enqueuedCount++;
+		}
+
+		if (enqueuedCount > processedCount)
+		{
+			auto pReadItem = allocated.back();
+			allocated.pop_back();
+			GTEST_ASSERT_NE(nullptr, pReadItem);
+
+			EXPECT_EQ(CircularBuffer::ItemState::Reserved, pReadItem->State.load());
+			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
+			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
+
+			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)allocSize;
+
+			auto pData = (uint8_t*)pReadItem->GetDataPtr();
+			for (int iData = 0; iData < allocSize; iData++)
+			{
+				EXPECT_EQ(fillPattern, pData[iData]);
+			}
+
+			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.Free(pReadItem));
+			processedCount++;
+		}
+	}
+
+}
+
+
+TEST_F(CircularBufferTest, CircularBuffer_EmptyRand)
+{
+	Heap testHeap("test", GetSystemHeap());
+	constexpr size_t TestBufferSize = 256;
+	constexpr size_t TestDataCount = 1000000;
+	StaticCircularBuffer<TestBufferSize> circularBuffer;
+	std::vector<CircularBuffer::Item*> allocated;
+	EXPECT_TRUE(circularBuffer.IsEmpty());
+
+
+	int enqueuedCount = 0, processedCount = 0;
+	for (int iTest = 0; iTest < TestDataCount; iTest++)
+	{
+		size_t allocSize = Util::Random.Rand(20, 128);
+		auto pBuffer = circularBuffer.Allocate(allocSize);
+		if (pBuffer != nullptr)
+		{
+			allocSize = AlignUp(allocSize, 8);
+			auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
+			EXPECT_EQ(allocSize, newAllocSize);
+			uint8_t fillPattern = (uint8_t)allocSize;
+			memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
+
+			allocated.push_back(pBuffer);
+			enqueuedCount++;
+		}
+
+		if (enqueuedCount > processedCount)
+		{
+			auto pReadItem = allocated.back();
+			allocated.pop_back();
+			GTEST_ASSERT_NE(nullptr, pReadItem);
+
+			EXPECT_EQ(CircularBuffer::ItemState::Reserved, pReadItem->State);
+			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
+			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
+
+			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)allocSize;
+
+			auto pData = (uint8_t*)pReadItem->GetDataPtr();
+			for (int iData = 0; iData < allocSize; iData++)
+			{
+				EXPECT_EQ(fillPattern, pData[iData]);
+			}
+
+			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.Free(pReadItem));
+			processedCount++;
+		}
+	}
+}
+
+
+
+
+template<size_t TestBufferSize>
+void Container_CircularBuffer_ThreadTest(std::vector<SF::Thread*>& threadArray, size_t testDataCount, int allocSizeStart, int allocSizeEnd, int ThreadCount)
+{
+	using CircularBufferTestT = StaticCircularBuffer<TestBufferSize>;
+
+	Heap testHeap("test", GetSystemHeap());
+	CircularBufferTestT circularBuffer;
+	size_t TestDataCount = testDataCount;
+
+	EXPECT_TRUE(circularBuffer.IsEmpty());
+
+	std::atomic<size_t> testedCount = 0;
+	std::atomic<size_t> finishedCount = 0;
+
+	for (int iThread = 0; iThread < ThreadCount; iThread++)
+	{
+		auto pNewThread = new(testHeap) FunctorThread([&circularBuffer, allocSizeStart, allocSizeEnd, &testedCount, &finishedCount, TestDataCount]([[maybe_unused]] Thread* pThread)
+		{
+			while (testedCount.load(std::memory_order_relaxed) < TestDataCount)
+			{
+				size_t allocSize = Util::Random.Rand(allocSizeStart, allocSizeEnd);
+				auto pBuffer = circularBuffer.Allocate(allocSize);
+				if (pBuffer == nullptr)
+				{
+					// wait a bit and try again
+					Sleep(0);
+					continue;
+				}
+
+				auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
+				allocSize = newAllocSize;
+
+				// Fill pattern
+				uint8_t fillPattern = (uint8_t)allocSize;
+				memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
+
+				ThisThread::SleepFor(DurationMS(50));
+
+				// check whether it changed during sleep
+				auto pData = (uint8_t*)pBuffer->GetDataPtr();
+				for (int iData = 0; iData < allocSize; iData++)
+				{
+					EXPECT_EQ(fillPattern, pData[iData]);
+				}
+
+				EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.Free(pBuffer));
+
+				testedCount.fetch_add(1, std::memory_order_relaxed);
+			}
+
+			finishedCount.fetch_add(1, std::memory_order_relaxed);
+		});
+
+		pNewThread->Start();
+		threadArray.push_back(pNewThread);
+	}
+
+
+	while (finishedCount < ThreadCount)
+	{
+		Sleep(500);
+	}
+
+}
+
+
+
+TEST_F(CircularBufferTest, CircularBufferThreadR1W1Small)
+{
+	Container_CircularBuffer_ThreadTest<256>(m_Threads, 999999, 30, 128, 1);
+}
+
+
+TEST_F(CircularBufferTest, CircularBufferThreadR1W1Large)
+{
+	Container_CircularBuffer_ThreadTest<1024>(m_Threads, 999999, 30, 128, 1);
+}
+
+
+TEST_F(CircularBufferTest, CircularBufferThreadMultipleR1W2)
+{
+	Container_CircularBuffer_ThreadTest<1024>(m_Threads, 999999, 30, 128, 1);
+}
+
+
+
+TEST_F(CircularBufferTest, CircularBufferThreadMultipleR1W4)
+{
+	Container_CircularBuffer_ThreadTest<1024>(m_Threads, 999999, 30, 128, 1);
+}
 
 
 

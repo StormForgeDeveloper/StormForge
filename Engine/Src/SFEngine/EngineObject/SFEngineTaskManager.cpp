@@ -186,7 +186,7 @@ namespace SF {
 
 	void EngineTaskManager::TickSyncObjectList(EngineTaskTick tick, DoubleLinkedListStaticT<EngineObject*>& objectList)
 	{
-		objectList.ForeachWithRemove([this, &objectList, tick](DoubleLinkedListNodeDataT<EngineObject*>& node)
+		objectList.ForeachWithRemove([tick](DoubleLinkedListNodeDataT<EngineObject*>& node)
 		{
 			EngineObject* objectPtr;
 			objectPtr = node.Data;
@@ -205,7 +205,7 @@ namespace SF {
 
 	void EngineTaskManager::TickAsyncObjectList(EngineTaskTick tick, DoubleLinkedListStaticT<EngineObject*>& objectList, TaskEventHandlerFinishCounter& counter)
 	{
-		objectList.ForeachWithRemove([&, tick](DoubleLinkedListNodeDataT<EngineObject*>& node)
+		objectList.ForeachWithRemove([&](DoubleLinkedListNodeDataT<EngineObject*>& node)
 		{
 
 			EngineObject* objectPtr;
@@ -228,7 +228,7 @@ namespace SF {
 
 	void EngineTaskManager::TickSyncTaskList(DoubleLinkedListStaticT<SharedPointerT<EngineTask>>& taskList)
 	{
-		taskList.ForeachWithRemove([this, &taskList](DoubleLinkedListNodeDataT<SharedPointerT<EngineTask>>& node) -> bool
+		taskList.ForeachWithRemove([&taskList](DoubleLinkedListNodeDataT<SharedPointerT<EngineTask>>& node) -> bool
 		{
 			SharedPointerT<EngineTask>& task = node.Data;
 
