@@ -504,12 +504,12 @@ namespace Net {
 	Result ConnectionMUDP::ProcReliableSendRetry()
 	{
 		Result hr = ResultCode::SUCCESS;
-		MsgWindow::MessageElement *pMessageElement = nullptr;
+		SendMsgWindow::MessageData *pMessageElement = nullptr;
 		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
 
 		assert(ThisThread::GetThreadID() == GetRunningThreadID());
 
-		// Guaranted retry
+		// Guaranteed retry
 		MutexScopeLock localLock(m_SendReliableWindow.GetLock());// until ReleaseMsg( uint16_t uiSequence ) is thread safe, we need to lock the window
 		uint uiMaxProcess = Util::Min( m_SendReliableWindow.GetMsgCount(), m_uiMaxGuarantedRetry );
 		for (uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)m_SendReliableWindow.GetWindowSize() && uiMsgProcessed < uiMaxProcess; uiIdx++)
@@ -548,7 +548,7 @@ namespace Net {
 			}
 			else
 			{
-				AssertRel(pMessageElement->state == MsgWindow::MessageElementState::MSGSTATE_FREE || pMessageElement->state == MsgWindow::MessageElementState::MSGSTATE_CANFREE);
+				AssertRel(pMessageElement->State == MessageWindow::ItemState::Free || pMessageElement->State == MessageWindow::ItemState::CanFree);
 			}
 		}
 

@@ -32,74 +32,15 @@ namespace SF {
 namespace Net {
 
 
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Packet message Sorting Window class
-	//
-
-	// Constructor
-	MsgWindow::MsgWindow(IHeap& memoryManager, INT iWndSize )
-	:	m_uiBaseSequence(0)
-	, m_uiWndBaseIndex(0)
-	, m_uiWndSize( iWndSize )
-	, m_uiMsgCount( 0 )
-	, m_pMsgWnd(nullptr)
-	{
-		m_pMsgWnd = new(memoryManager) MessageElement[GetWindowSize()];
-		//memset( m_pMsgWnd, 0, sizeof(MessageElement)*GetWindowSize() );
-	}
-
-	MsgWindow::~MsgWindow()
-	{
-		ClearWindow();
-		delete[] m_pMsgWnd;
-	}
-
-
-	// Get message info in window, index based on window base
-	Result MsgWindow::GetAt( uint uiIdx, MsgWindow::MessageElement* &pMessageElement )
-	{
-		uint iIdxCur = (uiIdx+m_uiWndBaseIndex)%GetWindowSize();
-
-		if( m_pMsgWnd == NULL )
-			return ResultCode::FAIL;
-
-		pMessageElement = &m_pMsgWnd[iIdxCur];
-
-		return ResultCode::SUCCESS;
-	}
-
-
-	// Clear window element
-	void MsgWindow::ClearWindow()
-	{
-		if( m_pMsgWnd )
-		{
-			for( INT iMsg = 0; iMsg < GetWindowSize(); iMsg++ )
-			{
-				m_pMsgWnd[iMsg].Clear();
-			}
-			//memset( m_pMsgWnd, 0, sizeof(MessageElement)*GetWindowSize() );
-		}
-		m_uiBaseSequence = 0;
-		m_uiWndBaseIndex = 0;
-		m_uiMsgCount = 0;
-	}
-
-	
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Recv message window
 	//
 
-	RecvMsgWindow::RecvMsgWindow(IHeap& memoryManager)
-		: m_uiSyncMask(0)
-		, m_uiBaseSequence(0)
-		, m_uiMsgCount(0)
-		, m_pMsgWnd(nullptr)
+	RecvMsgWindow::RecvMsgWindow(IHeap& heap)
 	{
-		m_pMsgWnd = new(memoryManager) MessageElement[CIRCULAR_QUEUE_SIZE];
+		m_pMsgWnd = new(heap) MessageElement[MessageWindow::MESSAGE_QUEUE_SIZE];
 	}
 
 	RecvMsgWindow::~RecvMsgWindow()
@@ -131,7 +72,7 @@ namespace Net {
 		}
 
 
-		int iPosIdx = msgSeq % CIRCULAR_QUEUE_SIZE;
+		int iPosIdx = msgSeq % MessageWindow::MESSAGE_QUEUE_SIZE;
 		m_uiSyncMask.fetch_or(((uint64_t)1) << iPosIdx, std::memory_order_relaxed);
 
 		// check duplicated transaction
@@ -160,7 +101,7 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 		auto baseSequence = m_uiBaseSequence.load(std::memory_order_acquire);
-		INT iPosIdx = baseSequence % CIRCULAR_QUEUE_SIZE;
+		int iPosIdx = baseSequence % MessageWindow::MESSAGE_QUEUE_SIZE;
 		if (m_pMsgWnd == nullptr )//|| m_pMsgWnd[iPosIdx].load(std::memory_order_relaxed) == nullptr)
 			return ResultCode::FAIL;
 
@@ -195,22 +136,22 @@ namespace Net {
 	// Get SyncMask
 	uint64_t RecvMsgWindow::GetSyncMask()
 	{
-		auto baseSeq = m_uiBaseSequence % CIRCULAR_QUEUE_SIZE;
+		auto baseSeq = m_uiBaseSequence % MessageWindow::MESSAGE_QUEUE_SIZE;
 
 		uint64_t resultSyncMask = m_uiSyncMask.load(std::memory_order_acquire);
 		if (baseSeq != 0)
 		{
 			auto least = resultSyncMask >> baseSeq;
-			auto most = resultSyncMask << (CIRCULAR_QUEUE_SIZE - baseSeq + SYNC_MASK_BITS);
-			most >>= SYNC_MASK_BITS; // clear MSB
+			auto most = resultSyncMask << (MessageWindow::MESSAGE_QUEUE_SIZE - baseSeq + MessageWindow::SYNC_MASK_BITS);
+			most >>= MessageWindow::SYNC_MASK_BITS; // clear MSB
 			resultSyncMask = least | most;
 		}
 
 //#ifdef DEBUG
 		//uint64_t uiSyncMask = 0;
-		//for (INT uiIdx = 0, iSeq = baseSeq; uiIdx < GetWindowSize(); uiIdx++, iSeq++)
+		//for (int uiIdx = 0, iSeq = baseSeq; uiIdx < GetWindowSize(); uiIdx++, iSeq++)
 		//{
-		//	INT iPosIdx = iSeq % CIRCULAR_QUEUE_SIZE;
+		//	int iPosIdx = iSeq % MESSAGE_QUEUE_SIZE;
 		//	if( m_pMsgWnd[ iPosIdx ].load(std::memory_order_relaxed) != nullptr )
 		//	{
 		//		uiSyncMask |= ((uint64_t)1)<<uiIdx;
@@ -227,7 +168,7 @@ namespace Net {
 	{
 		if (m_pMsgWnd)
 		{
-			for (INT iMsg = 0; iMsg < CIRCULAR_QUEUE_SIZE; iMsg++)
+			for (int iMsg = 0; iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
 			{
 				m_pMsgWnd[iMsg] = nullptr;
 			}
@@ -244,14 +185,17 @@ namespace Net {
 	//
 
 
-	SendMsgWindow::SendMsgWindow(IHeap& memoryManager, INT  iWndSize )
-		: MsgWindow(memoryManager, iWndSize)
-		, m_uiHeadSequence(0)
+	SendMsgWindow::SendMsgWindow(IHeap& heap)
 	{
+		m_pMsgWnd = new(heap) MessageData[GetWindowSize()];
 	}
 
 	SendMsgWindow::~SendMsgWindow()
 	{
+		ClearWindow();
+		if (m_pMsgWnd != nullptr)
+			delete[] m_pMsgWnd;
+		m_pMsgWnd = nullptr;
 	}
 
 	// Clear window element
@@ -259,21 +203,41 @@ namespace Net {
 	{
 		MutexScopeLock localLock(GetLock());
 
-		MsgWindow::ClearWindow();
+		if (m_pMsgWnd)
+		{
+			for (int iMsg = 0; iMsg < GetWindowSize(); iMsg++)
+			{
+				m_pMsgWnd[iMsg].Clear();
+			}
+			//memset( m_pMsgWnd, 0, sizeof(MessageElement)*GetWindowSize() );
+		}
+		m_uiBaseSequence = 0;
+		m_uiWndBaseIndex = 0;
+		m_uiMsgCount = 0;
+
 		m_uiHeadSequence = m_uiBaseSequence;
 	}
 
-	// Get available size at the end
-	uint SendMsgWindow::GetAvailableSize()
+
+	// Get message info in window, index based on window base
+	Result SendMsgWindow::GetAt(uint32_t uiIdx, MessageData* &pMessageElement)
 	{
-		return GetWindowSize() - (m_uiHeadSequence - GetBaseSequence());
+		uint32_t iIdxCur = (uiIdx + m_uiWndBaseIndex) % GetWindowSize();
+
+		if (m_pMsgWnd == NULL)
+			return ResultCode::FAIL;
+
+		pMessageElement = &m_pMsgWnd[iIdxCur];
+
+		return ResultCode::SUCCESS;
 	}
+
 
 	// Add a message at the end
 	Result SendMsgWindow::EnqueueMessage( TimeStampMS ulTimeStampMS, SharedPointerT<Message::MessageData>& pIMsg )
 	{
 		Result hr = ResultCode::SUCCESS;
-		INT iIdx = 0;
+		int iIdx = 0;
 
 		if( GetAvailableSize() == 0 )
 			return ResultCode::IO_NOT_ENOUGH_WINDOWSPACE;
@@ -293,14 +257,14 @@ namespace Net {
 			return ResultCode::IO_INVALID_SEQUENCE;
 
 		// To window queue array index
-		iIdx = (m_uiWndBaseIndex + iIdx)%m_uiWndSize;
+		iIdx = (m_uiWndBaseIndex + iIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
 
 		// check duplicated transaction
-		Assert(m_pMsgWnd[ iIdx ].state == MSGSTATE_FREE );
+		Assert(m_pMsgWnd[ iIdx ].State == ItemState::Free );
 
-		m_pMsgWnd[ iIdx ].ulTimeStamp = ulTimeStampMS;
-		m_pMsgWnd[ iIdx ].pMsg = pIMsg;
-		m_pMsgWnd[ iIdx ].state = MSGSTATE_DATA;
+		m_pMsgWnd[iIdx].ulTimeStamp = ulTimeStampMS;
+		m_pMsgWnd[iIdx].pMsg = pIMsg;
+		m_pMsgWnd[iIdx].State = ItemState::Filled;
 
 		m_uiHeadSequence++;
 		m_uiMsgCount++;
@@ -317,8 +281,8 @@ namespace Net {
 		MutexScopeLock localLock(m_Lock);
 
 		Result hr = ResultCode::SUCCESS;
-		INT iIdx;
-		uint iPosIdx;
+		int iIdx;
+		uint32_t iPosIdx;
 
 		if( m_pMsgWnd == NULL )
 			return ResultCode::SUCCESS;// nothing to release
@@ -336,10 +300,10 @@ namespace Net {
 			return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
 		}
 
-		iPosIdx = (m_uiWndBaseIndex + iIdx)%GetWindowSize();
+		iPosIdx = (m_uiWndBaseIndex + iIdx) % GetWindowSize();
 
-		// Makr it as a can-be-freed
-		if( m_pMsgWnd[ iPosIdx ].state != MSGSTATE_FREE )
+		// Make it as a can-be-freed
+		if( m_pMsgWnd[ iPosIdx ].State != ItemState::Free )
 		{
 			auto pMsg = *m_pMsgWnd[iPosIdx].pMsg;
 			if(pMsg != nullptr )
@@ -350,17 +314,17 @@ namespace Net {
 				}
 
 				m_pMsgWnd[iPosIdx].pMsg = nullptr;
-				m_pMsgWnd[ iPosIdx ].state = MSGSTATE_CANFREE;
+				m_pMsgWnd[ iPosIdx ].State = ItemState::CanFree;
 			}
 		}
 
 		// No sliding window for this because this can be called from other thread
 		// We only can mark can free for this
 		//// Slide window
-		//for( INT iMsg = 0; m_pMsgWnd[ m_uiWndBaseIndex ].state == MSGSTATE_CANFREE && iMsg < GetWindowSize();  )
+		//for( int iMsg = 0; m_pMsgWnd[ m_uiWndBaseIndex ].State == MSGSTATE_CANFREE && iMsg < GetWindowSize();  )
 		//{
 		//	m_uiBaseSequence++;
-		//	m_pMsgWnd[ m_uiWndBaseIndex ].state = MSGSTATE_FREE;
+		//	m_pMsgWnd[ m_uiWndBaseIndex ].State = MSGSTATE_FREE;
 		//	m_uiMsgCount--;
 		//	iMsg++;
 		//	m_uiWndBaseIndex = (m_uiWndBaseIndex+1)%GetWindowSize();
@@ -375,34 +339,31 @@ namespace Net {
 	// Release message sequence and slide window if can
 	Result SendMsgWindow::ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask )
 	{
+		static constexpr uint32_t MAX_WINDOW_MASK = 64;
 		Result hr = ResultCode::SUCCESS;
-		INT iIdx;
+		int iIdx;
 
 		MutexScopeLock localLock(m_Lock);
 
 		if( m_pMsgWnd == nullptr )
 			return ResultCode::SUCCESS;// nothing to release
 
-		uint uiCurBit = 0, uiSyncMaskCur = 1;
+		uint32_t uiCurBit = 0, uiSyncMaskCur = 1;
 
 		iIdx = Message::SequenceDifference(uiSequenceBase, m_uiBaseSequence);
-
-		if( iIdx >= GetWindowSize() )
-		{
-			netErr( ResultCode::IO_INVALID_SEQUENCE ); // Out of range
-		}
 
 		if(  iIdx < 0 )
 		{
 			// SKip already processed message ids
-			uint uiIdx = (uint)(-iIdx);
+			uint32_t uiIdx = (uint32_t)(-iIdx);
 			iIdx = 0;
 
-			// If client use same port for different connect this will be happened, and the connection need to be closed
+			// For some reason, peer sent old sync index, skip those indexes, but make sure it's fully send, otherwise it's protocol error
 			for (; uiCurBit < uiIdx; uiCurBit++, uiSyncMaskCur <<= 1)
 			{
 				if ((uiMsgMask & uiSyncMaskCur) == 0)
 				{
+					// If client use same port for different connect this will be happened, and the connection need to be closed
 					netErr(ResultCode::UNEXPECTED);
 				}
 			}
@@ -410,28 +371,35 @@ namespace Net {
 		else if (iIdx > 0)
 		{
 			// Using other variable is common, but I used uiCurBit because it need to be increased anyway.
-			for (; uiCurBit < (uint)iIdx; uiCurBit++)
+			for (; uiCurBit < (uint32_t)iIdx; uiCurBit++)
 			{
 				ReleaseMessage(uiCurBit);
 			}
+
+
+			if (iIdx >= GetWindowSize())
+			{
+				netErr(ResultCode::IO_INVALID_SEQUENCE); // Out of range
+			}
+
 		}
 
 		// At this point iIdx will have offset from local base sequence
-		for (; uiCurBit < 64; uiCurBit++, uiSyncMaskCur <<= 1, iIdx++)
+		for (; uiCurBit < MAX_WINDOW_MASK; uiCurBit++, uiSyncMaskCur <<= 1, iIdx++)
 		{
 			if ((uiMsgMask & uiSyncMaskCur) == 0) continue;
 
-			ReleaseMessage((uint)iIdx);
+			ReleaseMessage((uint32_t)iIdx);
 
 		}
 
 		// Slide window
-		for (INT iMsg = 0; m_pMsgWnd[m_uiWndBaseIndex].state == MSGSTATE_CANFREE && iMsg < GetWindowSize(); iMsg++)
+		for (int iMsg = 0; m_pMsgWnd[m_uiWndBaseIndex].State == ItemState::CanFree && iMsg < GetWindowSize(); iMsg++)
 		{
 			m_uiBaseSequence++;
-			m_pMsgWnd[ m_uiWndBaseIndex ].state = MSGSTATE_FREE;
+			m_pMsgWnd[ m_uiWndBaseIndex ].State = ItemState::Free;
 			m_uiMsgCount--;
-			m_uiWndBaseIndex = (m_uiWndBaseIndex+1)%GetWindowSize();
+			m_uiWndBaseIndex = (m_uiWndBaseIndex+1) % GetWindowSize();
 			hr = ResultCode::SUCCESS_FALSE;
 		}
 
@@ -444,12 +412,12 @@ namespace Net {
 
 
 	// Release message sequence
-	void SendMsgWindow::ReleaseMessage(uint iIdx)
+	void SendMsgWindow::ReleaseMessage(uint32_t iIdx)
 	{
-		uint iPosIdx = (m_uiWndBaseIndex + iIdx)%GetWindowSize();
+		uint32_t iPosIdx = (m_uiWndBaseIndex + iIdx) % GetWindowSize();
 
 		// Mark it as can-be-freed
-		if( m_pMsgWnd[ iPosIdx ].state == MSGSTATE_FREE || m_pMsgWnd[ iPosIdx ].state == MSGSTATE_CANFREE )
+		if( m_pMsgWnd[ iPosIdx ].State == ItemState::Free || m_pMsgWnd[ iPosIdx ].State == ItemState::CanFree )
 		{
 			m_pMsgWnd[iPosIdx].pMsg = nullptr;
 			return;
@@ -457,212 +425,11 @@ namespace Net {
 		}
 			
 		m_pMsgWnd[iPosIdx].pMsg = nullptr;
-		m_pMsgWnd[ iPosIdx ].state = MSGSTATE_CANFREE;
+		m_pMsgWnd[iPosIdx].State = ItemState::CanFree;
 	}
 
 
 
-
-	//////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	SendMsgWindowMT
-	//
-
-	SendMsgWindowMT::SendMsgWindowMT(IHeap& memoryManager)
-		: m_uiHeadSequence(0)
-		, m_uiBaseSequence(0)
-		, m_uiMsgCount(0)
-		, m_pMsgWnd(nullptr)
-	{
-		auto messageElements = new(memoryManager) MessageElement[CIRCULAR_QUEUE_SIZE];
-		//memset(messageElements, 0, sizeof(MessageElement)*CIRCULAR_QUEUE_SIZE);
-		m_pMsgWnd = messageElements;
-	}
-
-	SendMsgWindowMT::~SendMsgWindowMT()
-	{
-		GetSystemHeap().Delete(m_pMsgWnd);
-	}
-
-	// Clear window element
-	void SendMsgWindowMT::ClearWindow()
-	{
-		for (int iMsg = 0; iMsg < CIRCULAR_QUEUE_SIZE; iMsg++)
-		{
-			m_pMsgWnd[iMsg].Clear();
-			//auto pMsg = m_pMsgWnd[iMsg].pMsg.load(std::memory_order_relaxed);
-			//Util::SafeRelease(pMsg);
-		}
-		m_uiHeadSequence = 0;
-		m_uiBaseSequence = 0;
-		m_uiMsgCount = 0;
-	}
-
-	// Get available size at the end
-	INT SendMsgWindowMT::GetAvailableSize()
-	{
-		return GetWindowSize() - (m_uiHeadSequence.load(std::memory_order_relaxed) - m_uiBaseSequence.load(std::memory_order_relaxed));
-	}
-
-	// Add a message at the end
-	Result SendMsgWindowMT::EnqueueMessage(TimeStampMS ulTimeStampMS, SharedPointerT<Message::MessageData>& pIMsg)
-	{
-		Result hr = ResultCode::SUCCESS;
-		INT iIdx = 0;
-		Message::MessageData* expectedMsg;
-		uint expectedID;
-
-		if (pIMsg == nullptr)
-			return ResultCode::INVALID_POINTER;
-
-		if (GetAvailableSize() <= 0)
-			return ResultCode::IO_NOT_ENOUGH_WINDOWSPACE;
-
-		AssertRel(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
-
-		// start from head sequence
-		auto sequence = m_uiHeadSequence.load(std::memory_order_acquire);
-
-		expectedMsg = nullptr;
-		//do {
-			if (expectedMsg != nullptr)
-			{
-				// It's occupied. let's try next slot
-				sequence++;
-				if (Message::SequenceDifference(sequence, m_uiBaseSequence.load(std::memory_order_relaxed)) > GetWindowSize())
-				{
-					// out of sequence, this will very suck.
-					Assert(false);
-					pIMsg->ClearAssignedSequence();
-					netErr(ResultCode::IO_NOT_ENOUGH_WINDOWSPACE);
-				}
-				expectedMsg = nullptr;
-			}
-
-			iIdx = sequence % CIRCULAR_QUEUE_SIZE;
-			pIMsg->ClearAssignedSequence();
-			pIMsg->AssignSequence(sequence);
-
-			m_pMsgWnd[iIdx].pMsg = std::forward<SharedPointerT<Message::MessageData>>(pIMsg);
-
-		//} while (!m_pMsgWnd[iIdx].pMsg.compare_exchange_weak(expectedMsg, pIMsg, std::memory_order_acquire));
-
-
-		m_pMsgWnd[iIdx].ulTimeStamp.store(ulTimeStampMS.time_since_epoch().count(), std::memory_order_relaxed);
-
-		expectedID = sequence;
-		while (!m_uiHeadSequence.compare_exchange_weak(expectedID, sequence + 1, std::memory_order_release))
-		{
-			if (expectedID > sequence)
-				break; // somebody already moved on
-		}
-
-		m_uiMsgCount.fetch_add(1, std::memory_order_relaxed);
-
-
-	Proc_End:
-
-		return hr;
-	}
-
-
-	// Release message sequence and slide window if can
-	Result SendMsgWindowMT::ReleaseMsg(uint16_t uiSequenceBase, uint64_t uiMsgMask)
-	{
-		Result hr = ResultCode::SUCCESS;
-		INT iIdx;
-		uint sequence;
-
-		if (m_pMsgWnd == nullptr)
-			return ResultCode::SUCCESS;// nothing to release
-
-		uint uiCurBit = 0, uiSyncMaskCur = 1;
-
-		iIdx = Message::SequenceDifference(uiSequenceBase, m_uiBaseSequence.load(std::memory_order_acquire));
-
-		if (iIdx >= GetWindowSize())
-		{
-			netErr(ResultCode::IO_INVALID_SEQUENCE); // Out of range
-		}
-
-		if (iIdx < 0)
-		{
-			// SKip already processed message ids
-			uint uiIdx = (uint)(-iIdx);
-			iIdx = 0;
-			uiSequenceBase += (uint16_t)uiIdx;
-
-			for (; uiCurBit < uiIdx; uiCurBit++, uiSyncMaskCur <<= 1)
-			{
-				AssertRel((uiMsgMask & uiSyncMaskCur) != 0);
-			}
-		}
-		else if (iIdx > 0)
-		{
-			// Using other variable is common, but I used uiCurBit because it need to be increased anyway.
-			for (; uiCurBit < (uint)iIdx; uiCurBit++, uiSequenceBase++)
-			{
-				ReleaseMessage(uiSequenceBase);
-			}
-		}
-
-		// At this point iIdx will have offset from local base sequence
-		for (; uiCurBit < 64; uiCurBit++, uiSyncMaskCur <<= 1, uiSequenceBase++)
-		{
-			if ((uiMsgMask & uiSyncMaskCur) == 0) continue;
-
-			ReleaseMessage(uiSequenceBase);
-		}
-
-
-		// Slide window
-		sequence = m_uiBaseSequence.load(std::memory_order_acquire);
-		while (sequence < m_uiHeadSequence.load(std::memory_order_acquire))
-		{
-			uint iPosIdx = sequence % CIRCULAR_QUEUE_SIZE;
-
-			auto pMsg = *m_pMsgWnd[iPosIdx].pMsg;
-			if (pMsg == nullptr)
-			{
-				auto expected = sequence;
-				while (!m_uiBaseSequence.compare_exchange_weak(expected, sequence + 1, std::memory_order_release))
-				{
-					if (expected != sequence)
-					{
-						// somebody released this sequence already, let's move on to next
-						Assert(expected > sequence);
-						break;
-					}
-				}
-			}
-			else
-			{
-				// We've done shifting
-				break;
-			}
-
-			sequence++;
-		}
-
-
-	Proc_End:
-
-		return hr;
-	}
-
-	// Release message sequence and slide window if can
-	void SendMsgWindowMT::ReleaseMessage(uint uiSequence)
-	{
-		uint iPosIdx = uiSequence % CIRCULAR_QUEUE_SIZE;
-		m_pMsgWnd[iPosIdx].ulTimeStamp.store(0, std::memory_order_relaxed);
-		SharedPointerT<Message::MessageData> pIMsg;
-		pIMsg = std::forward<SharedPointerAtomicT<Message::MessageData>>(m_pMsgWnd[iPosIdx].pMsg);
-		//auto pIMsg = m_pMsgWnd[iPosIdx].pMsg.exchange(nullptr, std::memory_order_release);
-		if (pIMsg != nullptr)
-		{
-			m_uiMsgCount.fetch_sub(1, std::memory_order_relaxed);
-		}
-	}
 
 
 

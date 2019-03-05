@@ -582,7 +582,7 @@ typedef unsigned int		SysUInt;
 namespace SF {
 
 
-
+	using std::atomic;
 
 	typedef std::chrono::steady_clock ClockType;
 	typedef std::chrono::duration<uint> DurationSec;

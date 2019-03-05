@@ -50,18 +50,17 @@ namespace Net {
 	//
 	//	UDP Network connection class
 	//
-	constexpr int ConnectionUDPBase::BASE_WINDOW_SIZE;
 
 
 	// Constructor
-	ConnectionUDPBase::ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler, uint reliableWindowSize)
+	ConnectionUDPBase::ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler)
 		: Connection(heap, ioHandler)
 		, m_RecvReliableWindow(GetHeap())
-		, m_SendReliableWindow(GetHeap(), reliableWindowSize)
+		, m_SendReliableWindow(GetHeap())
 		, m_uiMaxGuarantedRetry(Const::UDP_SVR_RETRY_ONETIME_MAX)
 		, m_uiGatheredSize(0)
 		, m_pGatheringBuffer(nullptr)
-		, m_RecvGuaQueue(GetHeap(), reliableWindowSize / 2 )
+		, m_RecvGuaQueue(GetHeap(), MessageWindow::CIRCULAR_QUEUE_SIZE / 2 )
 		, m_pWriteQueuesUDP(nullptr)
 	{
 		SetHeartbitTry( Const::UDP_HEARTBIT_TIME);
@@ -955,7 +954,7 @@ namespace Net {
 		SharedPointerT<Message::MessageData> pIMsg;
 		Message::MessageID msgIDTem;
 		Message::MessageHeader *pMsgHeader = nullptr;
-		MsgWindow::MessageElement *pMessageElement = nullptr;
+		SendMsgWindow::MessageData *pMessageElement = nullptr;
 
 
 		if (GetConnectionState() == Net::ConnectionState::DISCONNECTED)
@@ -1086,10 +1085,10 @@ Proc_End:
 	Result ConnectionUDP::ProcReliableSendRetry()
 	{
 		Result hr = ResultCode::SUCCESS;
-		MsgWindow::MessageElement *pMessageElement = nullptr;
+		SendMsgWindow::MessageData *pMessageElement = nullptr;
 		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
 
-		// Guaranted retry
+		// Guaranteed retry
 		uint uiMaxProcess = Util::Min( m_SendReliableWindow.GetMsgCount(), m_uiMaxGuarantedRetry );
 		for( uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)m_SendReliableWindow.GetWindowSize() && uiMsgProcessed < uiMaxProcess; uiIdx++ )
 		{

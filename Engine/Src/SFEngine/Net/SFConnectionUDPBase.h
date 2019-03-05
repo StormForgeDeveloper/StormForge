@@ -34,8 +34,6 @@ namespace Net {
 	{
 	public:
 
-		// These numbers must be same size with number of bits
-		static constexpr int BASE_WINDOW_SIZE = 128;
 
 	protected:
 		// Recive Sorted messages
@@ -90,13 +88,13 @@ namespace Net {
 
 	public:
 		// Constructor
-		ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler, uint reliableWindowSize);
+		ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler);
 		virtual ~ConnectionUDPBase();
 
 		void SetWriteQueueUDP(WriteBufferQueue* writeQueue);
 
 
-		// Set maximum guaranted retry count
+		// Set maximum guaranteed retry count
 		void SetMaxGuarantedRetry(uint uiMaxGuarantedRetry) { m_uiMaxGuarantedRetry = uiMaxGuarantedRetry; }
 
 		// Set message window size connection

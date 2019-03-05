@@ -53,10 +53,10 @@ namespace Net {
 	public:
 		
 		ConnectionUDP(IHeap& heap, SocketIO* ioHandler)
-			: ConnectionUDPBase(heap, ioHandler, BASE_WINDOW_SIZE)
+			: ConnectionUDPBase(heap, ioHandler)
 		{}
 
-		// called when incoming message occure
+		// called when incoming message occur
 		virtual Result OnRecv( uint uiBuffSize, const uint8_t* pBuff );
 		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg );
 

@@ -268,11 +268,6 @@
       <ExcludedFromBuild>
       </ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFMessageWindow.inl">
-      <FileType>Document</FileType>
-      <ExcludedFromBuild>
-      </ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Net\SFNetCtrl.inl">
       <FileType>Document</FileType>
       <ExcludedFromBuild>
