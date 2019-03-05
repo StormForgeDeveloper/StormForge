@@ -224,12 +224,8 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFCryptoCrc32C.cpp">
       <Filter>Util</Filter>
     </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFCircularBuffer.cpp">
-      <Filter>Container</Filter>
-    </ClCompile>
-    <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFCircularBufferQueue.cpp">
-      <Filter>Container</Filter>
-    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFCircularBuffer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFCircularBufferQueue.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)CoreBasePCH.h" />
@@ -658,9 +654,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)String\SFHasher32C.h">
       <Filter>String</Filter>
     </ClInclude>
-    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularBufferQueue.h">
-      <Filter>Container</Filter>
-    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularBufferQueue.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Service">

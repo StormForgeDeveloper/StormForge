@@ -243,7 +243,7 @@ namespace SF
 			return ResultCode::FAIL;
 
 		auto startPos = (uintptr_t)m_Buffer;
-		auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
+		[[maybe_unused]]auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
 
 		// for debug
 #if defined(_DEBUG) || defined(DEBUG)

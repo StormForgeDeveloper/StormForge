@@ -172,7 +172,7 @@ namespace SF
 			return ResultCode::INVALID_POINTER;
 
 		auto startPos = (uintptr_t)m_Buffer;
-		auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
+		[[maybe_unused]]auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
 
 
 		// for debug

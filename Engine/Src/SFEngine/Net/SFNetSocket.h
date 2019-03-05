@@ -100,7 +100,7 @@ namespace Net {
 		std::atomic<int32_t> m_PendingSendCount;
 
 		// User socket identifier value, usually connection ID, default 0
-		intptr_t m_UserSocketID = 0;
+		uint64_t m_UserSocketID = 0;
 
 	protected:
 
@@ -121,8 +121,8 @@ namespace Net {
 		void SetAssignedIOWorker(int assignedIOWorker);
 
 		// User socket identifier value, usually connection ID
-		intptr_t GetUserSocketID() const { return m_UserSocketID; }
-		void SetUserSocketID(intptr_t userID) { m_UserSocketID = userID; }
+		uint64_t GetUserSocketID() const { return m_UserSocketID; }
+		void SetUserSocketID(uint64_t userID) { m_UserSocketID = userID; }
 
 		// casting, a bit faster than dynamic cast
 		//virtual SharedObject* AsSharedObject() { return nullptr; }

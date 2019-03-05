@@ -154,6 +154,8 @@ namespace SF {
 
 	void Thread::SetThreadNameInternal(const char* threadName)
 	{
+		if (threadName == nullptr || threadName[0] == '\0')
+			return;
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 
