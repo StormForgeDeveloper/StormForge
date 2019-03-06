@@ -43,7 +43,7 @@ namespace Net {
 		SendMsgWindow		m_SendReliableWindow;
 
 		// Maximum guaranted retry at once
-		uint				m_uiMaxGuarantedRetry;
+		uint				m_uiMaxGuarantedRetryAtOnce;
 
 		// packet gathering buffer
 		uint				m_uiGatheredSize;
@@ -95,7 +95,7 @@ namespace Net {
 
 
 		// Set maximum guaranteed retry count
-		void SetMaxGuarantedRetry(uint uiMaxGuarantedRetry) { m_uiMaxGuarantedRetry = uiMaxGuarantedRetry; }
+		void SetMaxGuarantedRetry(uint uiMaxGuarantedRetry) { m_uiMaxGuarantedRetryAtOnce = uiMaxGuarantedRetry; }
 
 		// Set message window size connection
 		Result SetMessageWindowSize( uint uiSend, uint uiRecv );

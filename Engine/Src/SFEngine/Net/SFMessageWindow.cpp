@@ -296,8 +296,7 @@ namespace Net {
 		{
 			netErr( ResultCode::IO_INVALID_SEQUENCE ); // Out of range
 		}
-		else
-		//if(  iIdx < 0 )
+		else if(  iIdx < 0 )
 		{
 			return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
 		}

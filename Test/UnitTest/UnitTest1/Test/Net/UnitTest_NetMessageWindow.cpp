@@ -456,39 +456,59 @@ TEST_F(NetTest, SendMessageWindowSimple)
 	Heap testHeap("test", GetSystemHeap());
 
 	Net::SendMsgWindow msgWindow(testHeap);
-	uint16_t uiSequence = 0;
+	
 
-	for (int iTest = 0; iTest < 1024; iTest++)
+	for (uint16_t startSequence = 0; startSequence < Net::MessageWindow::MESSAGE_QUEUE_SIZE * 2; startSequence++)
 	{
-		auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), NewMessage(testHeap));
-		if (iTest < msgWindow.GetWindowSize())
+
+		for (int iTest = 0; iTest < Net::MessageWindow::MESSAGE_QUEUE_SIZE; iTest++)
 		{
-			ASSERT_EQ(SF::ResultCode::SUCCESS, hr);
+			auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), NewMessage(testHeap));
+			if (iTest < msgWindow.GetWindowSize())
+			{
+				ASSERT_EQ(SF::ResultCode::SUCCESS, hr);
+			}
+			else
+			{
+				ASSERT_NE(SF::ResultCode::SUCCESS, hr);
+			}
 		}
-		else
-		{
-			ASSERT_NE(SF::ResultCode::SUCCESS, hr);
-		}
+
+		ASSERT_EQ(SF::ResultCode::SUCCESS, msgWindow.ReleaseMsg(msgWindow.GetHeadSequence(), 0));
+		ASSERT_EQ(0, msgWindow.GetMsgCount());
 	}
 
-	uiSequence = 0;
-	for (int iTest = 0; iTest < 1024; iTest++)
-	{
-		MessageDataPtr pResult;
-		auto hr = msgWindow.ReleaseSingleMessage(iTest);
-		if (iTest < msgWindow.GetWindowSize())
-		{
-			AssertRel(pResult != nullptr);
-			AssertRel(hr);
-
-			AssertRel(Message::SequenceDifference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence++) == 0);
-		}
-		else
-		{
-			AssertRel(pResult == nullptr);
-			AssertRel(!hr);
-		}
-	}
+	SFLog(Net, Info, "Test Finished");
 }
 
+
+TEST_F(NetTest, SendMessageWindowSimple2)
+{
+	Heap testHeap("test", GetSystemHeap());
+
+	Net::SendMsgWindow msgWindow(testHeap);
+
+
+	for (uint16_t startSequence = 0; startSequence < Net::MessageWindow::MESSAGE_QUEUE_SIZE * 2; startSequence++)
+	{
+		auto randNum = Util::Random.Rand(Net::MessageWindow::MESSAGE_QUEUE_SIZE);
+		for (int iTest = 0; (uint)iTest < randNum; iTest++)
+		{
+			auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), NewMessage(testHeap));
+			if (iTest < msgWindow.GetWindowSize())
+			{
+				ASSERT_EQ(SF::ResultCode::SUCCESS, hr);
+			}
+			else
+			{
+				ASSERT_NE(SF::ResultCode::SUCCESS, hr);
+			}
+		}
+
+		ASSERT_EQ(SF::ResultCode::SUCCESS, msgWindow.ReleaseMsg(msgWindow.GetBaseSequence() + msgWindow.GetMsgCount(), 0));
+		ASSERT_EQ(0, msgWindow.GetMsgCount());
+	}
+
+	SFLog(Net, Info, "Test Finished");
+}
 

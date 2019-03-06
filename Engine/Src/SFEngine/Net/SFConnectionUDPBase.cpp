@@ -57,7 +57,7 @@ namespace Net {
 		: Connection(heap, ioHandler)
 		, m_RecvReliableWindow(GetHeap())
 		, m_SendReliableWindow(GetHeap())
-		, m_uiMaxGuarantedRetry(Const::UDP_SVR_RETRY_ONETIME_MAX)
+		, m_uiMaxGuarantedRetryAtOnce(Const::UDP_SVR_RETRY_ONETIME_MAX)
 		, m_uiGatheredSize(0)
 		, m_pGatheringBuffer(nullptr)
 		, m_RecvGuaQueue(GetHeap(), MessageWindow::MESSAGE_QUEUE_SIZE / 2 )
@@ -1034,7 +1034,7 @@ Proc_End:
 		uint halfWindowSize = m_SendReliableWindow.GetWindowSize() >> 1;
 		Assert(halfWindowSize >= 16);
 
-		// Send guaranted message process
+		// Send guaranteed message process
 		auto availableWindow = m_SendReliableWindow.GetAvailableSize();
 		auto uiNumPacket = m_SendGuaQueue.size();
 		CounterType availablePush = Util::Min(availableWindow, halfWindowSize);
@@ -1089,7 +1089,8 @@ Proc_End:
 		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
 
 		// Guaranteed retry
-		uint uiMaxProcess = Util::Min( m_SendReliableWindow.GetMsgCount(), m_uiMaxGuarantedRetry );
+		// TODO: limit with total data size than count
+		uint uiMaxProcess = Util::Min( m_SendReliableWindow.GetMsgCount(), m_uiMaxGuarantedRetryAtOnce );
 		for( uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)m_SendReliableWindow.GetWindowSize() && uiMsgProcessed < uiMaxProcess; uiIdx++ )
 		{
 			if( (m_SendReliableWindow.GetAt( uiIdx, pMessageElement ))

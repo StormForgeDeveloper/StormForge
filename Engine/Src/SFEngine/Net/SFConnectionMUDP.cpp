@@ -335,8 +335,8 @@ namespace Net {
 		if( pNetCtrlMsg->Crc32 == 0 ) pNetCtrlMsg->Crc32 = ~pNetCtrlMsg->Crc32;
 
 		//AssertRel(m_RecvReliableWindow.GetBaseSequence() != 1 && uiSequence != 1 || uiSyncMask == 0);
-		SFLog(Net, Custom10, "NetCtrl Send RecvReliableMask : CID:{0} BaseSeq:{1}, seq:{2}, mask:{3:X8}",
-			GetCID(), m_RecvReliableWindow.GetBaseSequence(), uiSequence, uiSyncMask);
+		SFLog(Net, Custom10, "NetCtrl Send MyRecvMask : CID:{0} mySeq:{1}, mask:{2:X8}",
+			GetCID(), uiSequence, uiSyncMask);
 
 		m_uiGatheredSize += pNetCtrlMsg->Length;
 
@@ -485,7 +485,12 @@ namespace Net {
 						pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
 						pIMsg->GetMessageHeader()->msgID, 
 						pIMsg->GetMessageHeader()->Length );
-			netChk( SendPending( pIMsg ) );
+
+			// don't bother network with might not be able to processed
+			if ((m_SendReliableWindow.GetHeadSequence() - m_SendReliableWindow.GetBaseSequence()) < m_uiMaxGuarantedRetryAtOnce)
+			{
+				netChk(SendPending(pIMsg));
+			}
 			pIMsg = nullptr;
 		}
 
@@ -509,7 +514,7 @@ namespace Net {
 
 		// Guaranteed retry
 		MutexScopeLock localLock(m_SendReliableWindow.GetLock());// until ReleaseMsg( uint16_t uiSequence ) is thread safe, we need to lock the window
-		uint uiMaxProcess = Util::Min( m_SendReliableWindow.GetMsgCount(), m_uiMaxGuarantedRetry );
+		uint uiMaxProcess = Util::Min( m_SendReliableWindow.GetMsgCount(), m_uiMaxGuarantedRetryAtOnce );
 		for (uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)m_SendReliableWindow.GetWindowSize() && uiMsgProcessed < uiMaxProcess; uiIdx++)
 		{
 			if (!m_SendReliableWindow.GetAt(uiIdx, pMessageElement))

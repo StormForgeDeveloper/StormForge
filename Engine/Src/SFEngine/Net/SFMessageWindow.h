@@ -172,6 +172,9 @@ namespace Net {
 		// get message count in window
 		uint32_t GetMsgCount() { return m_uiMsgCount; }
 
+		// get Head sequence
+		uint32_t GetHeadSequence() { return m_uiHeadSequence; }
+
 		// get message base sequence
 		uint32_t GetBaseSequence() { return m_uiBaseSequence; }
 
@@ -182,7 +185,7 @@ namespace Net {
 		void ClearWindow();
 
 		// Get available size at the end
-		uint32_t GetAvailableSize() { return GetWindowSize() - (m_uiHeadSequence - GetBaseSequence()); }
+		uint32_t GetAvailableSize() { return GetWindowSize() - (m_uiHeadSequence - GetBaseSequence() + 1); }
 		
 		// Add a message at the end
 		Result EnqueueMessage(TimeStampMS ulTimeStampMS, SharedPointerT<Message::MessageData>& pIMsg );
