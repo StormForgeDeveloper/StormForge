@@ -191,8 +191,8 @@ namespace Net {
 		hrTem = sendReliableWindow.ReleaseMsg(pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
 		if (hrTem)
 		{
-			SFLog(Net, Custom10, "NetCtrl Recv SendReliableMask : CID:{0}:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
-				GetCID(), sendReliableWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask, hrTem);
+			SFLog(Net, Debug, "NetCtrl Recv Mask : CID:{0}: mySeq:{1}, seq:{2}, mask:{3:X8}",
+				GetCID(), sendReliableWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
 		}
 		else
 		{

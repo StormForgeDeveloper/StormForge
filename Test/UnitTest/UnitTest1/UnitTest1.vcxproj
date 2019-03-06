@@ -162,6 +162,7 @@
     <ClInclude Include="Test\FBX\UnitTest_FBX.h" />
     <ClInclude Include="Test\Math\UnitTest_Math.h" />
     <ClInclude Include="Test\Memory\UnitTest_Memory.h" />
+    <ClInclude Include="Test\Net\UnitTest_Net.h" />
     <ClInclude Include="Test\SFTestBase.h" />
     <ClInclude Include="Test\Thread\SFSystemSynchronizeTest.h" />
     <ClInclude Include="Test\Thread\SFThreadTest.h" />
@@ -194,6 +195,8 @@
     <ClCompile Include="Test\Memory\UnitTest_Memory_CircularHeap.cpp" />
     <ClCompile Include="Test\Memory\UnitTest_Memory_Heap.cpp" />
     <ClCompile Include="Test\Memory\UnitTest_Memory_StackHeap.cpp" />
+    <ClCompile Include="Test\Net\UnitTest_Net.cpp" />
+    <ClCompile Include="Test\Net\UnitTest_NetMessageWindow.cpp" />
     <ClCompile Include="Test\SFTestBase.cpp" />
     <ClCompile Include="Test\Texture\UnitTest_TextureJpg.cpp" />
     <ClCompile Include="Test\Texture\UnitTest_TexturePng.cpp" />
@@ -211,7 +214,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="UnitTest1.cpp" />
-    <ClCompile Include="UnitTest_NetMessageWindow.cpp" />
     <ClCompile Include="UnitTest_ServerConfig.cpp" />
     <ClCompile Include="UnitTest_Zookeeper.cpp" />
   </ItemGroup>

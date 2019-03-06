@@ -66,13 +66,13 @@ namespace Net {
 		// sequence lock
 		TicketLock m_SequenceLock;
 
-		atomic<uint64_t>			m_uiSyncMask = 0;
+		atomic<uint64_t>			m_uiSyncMask;
 
 		// Base sequence value( sequence Head)
-		atomic<uint16_t>			m_uiBaseSequence = 0;
+		atomic<uint16_t>			m_uiBaseSequence;
 
 		// Message count in window
-		atomic<uint32_t>			m_uiMsgCount = 0;
+		atomic<uint32_t>			m_uiMsgCount;
 
 		// Message data array
 		MessageElement*				m_pMsgWnd = nullptr;
@@ -143,23 +143,20 @@ namespace Net {
 		// Base sequence value( sequence Head)
 		uint32_t		m_uiBaseSequence = 0;
 
-		// Window base index
-		uint32_t		m_uiWndBaseIndex = 0;
-
 		// Message count in window
 		uint32_t		m_uiMsgCount = 0;
 
 		// Message data array
 		MessageData*	m_pMsgWnd = nullptr;
 
-
 		// Until this can do thread safe release
 		CriticalSection m_Lock;
 
 	private:
 		// Release message sequence and slide window if can
-		void ReleaseMessage(uint32_t iIdx);
+		void ReleaseMessage(uint32_t iOffset);
 
+		void SlidWindow();
 
 	public:
 		// Constructor
@@ -193,6 +190,7 @@ namespace Net {
 		// Release message sequence and slide window if can
 		// This can be called from another thread
 		Result ReleaseMsg( uint16_t uiSequence );
+
 		// Release message by message mask
 		Result ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask );
 

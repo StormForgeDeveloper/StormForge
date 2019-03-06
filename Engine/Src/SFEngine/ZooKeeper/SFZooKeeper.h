@@ -269,7 +269,7 @@ namespace SF
 		zhandle_t* m_ZKHandle = nullptr;
 
 		// State of zoo keeper server
-		std::atomic<int> m_State;
+		//std::atomic<int> m_State;
 
 		// ZooKeeper client id
 		uint8_t ClientIDBuffer[ZOOKEEPER_STAT_BUFFER_SIZE];
