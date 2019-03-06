@@ -35,8 +35,6 @@ namespace Net {
 	{
 	public:
 
-		static constexpr int MUDP_BASE_WINDOW_SIZE = 64;
-
 	private:
 		bool m_bSendSyncThisTick;
 

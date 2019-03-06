@@ -54,12 +54,10 @@ namespace Net {
 	//	Server Mobile UDP Network connection class
 	//
 
-	constexpr int ConnectionMUDP::MUDP_BASE_WINDOW_SIZE;
-
 
 	// Constructor
 	ConnectionMUDP::ConnectionMUDP(IHeap& heap, SocketIO* ioHandler)
-		: ConnectionUDPBase(heap, ioHandler, MUDP_BASE_WINDOW_SIZE)
+		: ConnectionUDPBase(heap, ioHandler)
 		, m_bSendSyncThisTick(false)
 	{
 		// limit server net retry maximum

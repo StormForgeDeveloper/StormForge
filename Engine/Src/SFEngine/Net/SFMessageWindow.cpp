@@ -142,8 +142,8 @@ namespace Net {
 		if (baseSeq != 0)
 		{
 			auto least = resultSyncMask >> baseSeq;
-			auto most = resultSyncMask << (MessageWindow::MESSAGE_QUEUE_SIZE - baseSeq + MessageWindow::SYNC_MASK_BITS);
-			most >>= MessageWindow::SYNC_MASK_BITS; // clear MSB
+			auto most = resultSyncMask << (MessageWindow::MESSAGE_QUEUE_SIZE - baseSeq + 1);
+			most >>= 1; // clear MSB
 			resultSyncMask = least | most;
 		}
 
@@ -187,7 +187,7 @@ namespace Net {
 
 	SendMsgWindow::SendMsgWindow(IHeap& heap)
 	{
-		m_pMsgWnd = new(heap) MessageData[GetWindowSize()];
+		m_pMsgWnd = new(heap) MessageData[MessageWindow::MESSAGE_QUEUE_SIZE];
 	}
 
 	SendMsgWindow::~SendMsgWindow()
@@ -205,7 +205,7 @@ namespace Net {
 
 		if (m_pMsgWnd)
 		{
-			for (int iMsg = 0; iMsg < GetWindowSize(); iMsg++)
+			for (int iMsg = 0; iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
 			{
 				m_pMsgWnd[iMsg].Clear();
 			}
@@ -222,7 +222,7 @@ namespace Net {
 	// Get message info in window, index based on window base
 	Result SendMsgWindow::GetAt(uint32_t uiIdx, MessageData* &pMessageElement)
 	{
-		uint32_t iIdxCur = (uiIdx + m_uiWndBaseIndex) % GetWindowSize();
+		uint32_t iIdxCur = (uiIdx + m_uiWndBaseIndex) % MessageWindow::MESSAGE_QUEUE_SIZE;
 
 		if (m_pMsgWnd == NULL)
 			return ResultCode::FAIL;
@@ -300,7 +300,7 @@ namespace Net {
 			return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
 		}
 
-		iPosIdx = (m_uiWndBaseIndex + iIdx) % GetWindowSize();
+		iPosIdx = (m_uiWndBaseIndex + iIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
 
 		// Make it as a can-be-freed
 		if( m_pMsgWnd[ iPosIdx ].State != ItemState::Free )
@@ -319,16 +319,6 @@ namespace Net {
 		}
 
 		// No sliding window for this because this can be called from other thread
-		// We only can mark can free for this
-		//// Slide window
-		//for( int iMsg = 0; m_pMsgWnd[ m_uiWndBaseIndex ].State == MSGSTATE_CANFREE && iMsg < GetWindowSize();  )
-		//{
-		//	m_uiBaseSequence++;
-		//	m_pMsgWnd[ m_uiWndBaseIndex ].State = MSGSTATE_FREE;
-		//	m_uiMsgCount--;
-		//	iMsg++;
-		//	m_uiWndBaseIndex = (m_uiWndBaseIndex+1)%GetWindowSize();
-		//}
 
 	Proc_End:
 
@@ -339,7 +329,6 @@ namespace Net {
 	// Release message sequence and slide window if can
 	Result SendMsgWindow::ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask )
 	{
-		static constexpr uint32_t MAX_WINDOW_MASK = 64;
 		Result hr = ResultCode::SUCCESS;
 		int iIdx;
 
@@ -371,7 +360,8 @@ namespace Net {
 		else if (iIdx > 0)
 		{
 			// Using other variable is common, but I used uiCurBit because it need to be increased anyway.
-			for (; uiCurBit < (uint32_t)iIdx; uiCurBit++)
+			auto maxRelease = std::min((uint32_t)iIdx, MessageWindow::MESSAGE_WINDOW_SIZE);
+			for (; uiCurBit < maxRelease; uiCurBit++)
 			{
 				ReleaseMessage(uiCurBit);
 			}
@@ -379,13 +369,13 @@ namespace Net {
 
 			if (iIdx >= GetWindowSize())
 			{
-				netErr(ResultCode::IO_INVALID_SEQUENCE); // Out of range
+				return ResultCode::SUCCESS;
 			}
 
 		}
 
 		// At this point iIdx will have offset from local base sequence
-		for (; uiCurBit < MAX_WINDOW_MASK; uiCurBit++, uiSyncMaskCur <<= 1, iIdx++)
+		for (; uiCurBit < MessageWindow::SYNC_MASK_BITS_MAX; uiCurBit++, uiSyncMaskCur <<= 1, iIdx++)
 		{
 			if ((uiMsgMask & uiSyncMaskCur) == 0) continue;
 
@@ -399,7 +389,7 @@ namespace Net {
 			m_uiBaseSequence++;
 			m_pMsgWnd[ m_uiWndBaseIndex ].State = ItemState::Free;
 			m_uiMsgCount--;
-			m_uiWndBaseIndex = (m_uiWndBaseIndex+1) % GetWindowSize();
+			m_uiWndBaseIndex = (m_uiWndBaseIndex+1) % MessageWindow::MESSAGE_QUEUE_SIZE;
 			hr = ResultCode::SUCCESS_FALSE;
 		}
 
@@ -414,7 +404,7 @@ namespace Net {
 	// Release message sequence
 	void SendMsgWindow::ReleaseMessage(uint32_t iIdx)
 	{
-		uint32_t iPosIdx = (m_uiWndBaseIndex + iIdx) % GetWindowSize();
+		uint32_t iPosIdx = (m_uiWndBaseIndex + iIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
 
 		// Mark it as can-be-freed
 		if( m_pMsgWnd[ iPosIdx ].State == ItemState::Free || m_pMsgWnd[ iPosIdx ].State == ItemState::CanFree )

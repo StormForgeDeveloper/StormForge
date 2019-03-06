@@ -33,10 +33,9 @@ namespace Net {
 
 	namespace MessageWindow
 	{
-		static constexpr uint32_t MESSAGE_QUEUE_SIZE = 64;
-		static constexpr uint32_t SYNC_MASK_BITS = 1;
-		static constexpr uint32_t MESSAGE_WINDOW_SIZE = MESSAGE_QUEUE_SIZE - SYNC_MASK_BITS;
-		static constexpr uint32_t SYNC_MASK_MAX = 64; // we uses 64bit mask bits for packet
+		static constexpr uint32_t MESSAGE_QUEUE_SIZE = 128;
+		static constexpr uint32_t MESSAGE_WINDOW_SIZE = MESSAGE_QUEUE_SIZE - 1; // We allow 1 less messages to avoid full state complixity
+		static constexpr uint32_t SYNC_MASK_BITS_MAX = 64; // we uses 64bit mask bits for packet
 
 
 
@@ -46,9 +45,6 @@ namespace Net {
 			Filled,
 			CanFree
 		};
-
-
-
 
 	}
 

@@ -60,7 +60,7 @@ namespace Net {
 		, m_uiMaxGuarantedRetry(Const::UDP_SVR_RETRY_ONETIME_MAX)
 		, m_uiGatheredSize(0)
 		, m_pGatheringBuffer(nullptr)
-		, m_RecvGuaQueue(GetHeap(), MessageWindow::CIRCULAR_QUEUE_SIZE / 2 )
+		, m_RecvGuaQueue(GetHeap(), MessageWindow::MESSAGE_QUEUE_SIZE / 2 )
 		, m_pWriteQueuesUDP(nullptr)
 	{
 		SetHeartbitTry( Const::UDP_HEARTBIT_TIME);
