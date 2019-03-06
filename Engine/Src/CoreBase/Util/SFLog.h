@@ -165,6 +165,8 @@ namespace Log {
 					auto messageSize = pLogService->WriteTimeTag(&block->Data); if(messageSize > 0) messageSize--; \
 					auto remainBuffSize = static_cast<int>(sizeof(block->Data.LogBuff) - messageSize);\
 					messageSize += SF::StrUtil::Format(block->Data.LogBuff + messageSize, remainBuffSize, __VA_ARGS__) - 1; \
+					messageSize = std::min(sizeof(block->Data.LogBuff) - 2, messageSize);\
+					(block->Data.LogBuff + messageSize)[0] = '\n'; (block->Data.LogBuff + messageSize)[1] = '\0'; messageSize++; \
 					pLogService->ReleaseWriteBuffer(block, messageSize); \
 				}\
 			}\

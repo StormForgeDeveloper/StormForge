@@ -350,7 +350,7 @@ namespace SF {
 			{
 				int cSrc = szSrc[0];
 				if (cSrc >= 'A' && cSrc <= 'Z')
-					cSrc = (cSrc - 'A' + 'a');
+					szSrc[0] = (cSrc - 'A' + 'a');
 
 				szSrc++;
 			}
@@ -369,7 +369,7 @@ namespace SF {
 			{
 				wchar_t cSrc = szSrc[0];
 				if (cSrc >= L'A' && cSrc <= L'Z')
-					cSrc = cSrc - L'A' + L'a';
+					szSrc[0] = cSrc - L'A' + L'a';
 
 				szSrc++;
 			}

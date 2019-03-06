@@ -85,7 +85,7 @@ namespace SF {
 		DWORD dwWriten = 0;
 		WriteConsoleA(m_hConsole, logMessage->LogBuff, (DWORD)logMessage->LogStringSize, &dwWriten, nullptr);
 #else
-		std::cout << logMessage->LogBuff << "\r\n";
+		std::cout << logMessage->LogBuff;
 #endif
 	}
 
@@ -128,7 +128,6 @@ namespace SF {
 		if (logMessage == nullptr) return;
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		OutputDebugStringA(logMessage->LogBuff);
-		OutputDebugStringA("\n");
 #endif
 	}
 

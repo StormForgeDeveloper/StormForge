@@ -12,6 +12,7 @@
 
 #include "Protocol/Message/LoginMsgClass.h"
 
+#include "UnitTest_Net.h"
 #include "SFEngine.h"
 
 
@@ -27,11 +28,11 @@ using ::testing::UnitTest;
 using namespace ::SF;
 
 
-const UINT TestScale = 5;
-const UINT TEST_COUNT = 4000000 * TestScale;
+//const uint32_t TestScale = 2;
+const uint32_t TEST_COUNT = 4000000 * TestScale;
 
 
-MessageDataPtr NewMessage(IHeap& memoryManager, UINT sequenceID)
+MessageDataPtr NewMessage(IHeap& memoryManager, uint32_t sequenceID)
 {
 	Message::MessageData* pResult = Message::Login::LoginCmd::Create(memoryManager, 0, FixedString32("Conspiracy"), "11", "11");
 	pResult->AssignSequence(sequenceID);
@@ -39,29 +40,36 @@ MessageDataPtr NewMessage(IHeap& memoryManager, UINT sequenceID)
 	return MessageDataPtr(pResult);
 }
 
+MessageDataPtr NewMessage(IHeap& memoryManager)
+{
+	Message::MessageData* pResult = Message::Login::LoginCmd::Create(memoryManager, 0, FixedString32("Conspiracy"), "11", "11");
 
-GTEST_TEST(NetTest, RecvMessageWindowSimple)
+	return MessageDataPtr(pResult);
+}
+
+
+TEST_F(NetTest, RecvMessageWindowSimple)
 {
 	Heap testHeap("test", GetSystemHeap());
 
 	Net::RecvMsgWindow recvMessage(testHeap);
 	uint16_t uiSequence = 0;
 
-	for (int iTest = 0; iTest < 256; iTest++)
+	for (int iTest = 0; iTest < 1024; iTest++)
 	{
 		auto hr = recvMessage.AddMsg(NewMessage(testHeap, uiSequence++));
 		if (iTest < recvMessage.GetWindowSize())
 		{
-			AssertRel(hr);
+			ASSERT_EQ(SF::ResultCode::SUCCESS, hr);
 		}
 		else
 		{
-			AssertRel(!hr);
+			ASSERT_NE(SF::ResultCode::SUCCESS, hr);
 		}
 	}
 
 	uiSequence = 0;
-	for (int iTest = 0; iTest < 256; iTest++)
+	for (int iTest = 0; iTest < 1024; iTest++)
 	{
 		MessageDataPtr pResult;
 		auto hr = recvMessage.PopMsg(pResult);
@@ -80,7 +88,7 @@ GTEST_TEST(NetTest, RecvMessageWindowSimple)
 	}
 }
 
-GTEST_TEST(NetTest, RecvMessageWindowSimple2)
+TEST_F(NetTest, RecvMessageWindowSimple2)
 {
 	Heap testHeap("test", GetSystemHeap());
 	Net::RecvMsgWindow recvMessage(testHeap);
@@ -129,7 +137,7 @@ GTEST_TEST(NetTest, RecvMessageWindowSimple2)
 	recvMessage.ClearWindow();
 }
 
-GTEST_TEST(NetTest, RecvMessageWindowSimple3)
+TEST_F(NetTest, RecvMessageWindowSimple3)
 {
 	Heap testHeap("test", GetSystemHeap());
 	Net::RecvMsgWindow recvMessage(testHeap);
@@ -206,7 +214,7 @@ INT MySequenceDifference(uint seq1, uint seq2)
 }
 
 
-GTEST_TEST(NetTest, RecvMessageWindowOutOfRange)
+TEST_F(NetTest, RecvMessageWindowOutOfRange)
 {
 	Heap testHeap("test", GetSystemHeap());
 
@@ -261,13 +269,13 @@ GTEST_TEST(NetTest, RecvMessageWindowOutOfRange)
 	}
 }
 
-GTEST_TEST(NetTest, RecvMessageWindowMT)
+TEST_F(NetTest, RecvMessageWindowMT)
 {
 	Heap testHeap("test", GetSystemHeap());
 	const int NUM_SEND_THREAD = 10;
 	const int NUM_RECV_THREAD = 1;
 	const int NumTry = 2;
-	const UINT runningTime = TestScale * 1 * 60 * 1000;
+	const uint32_t runningTime = TestScale * 1 * 60 * 1000;
 
 	Net::RecvMsgWindow recvMessage(testHeap);
 	std::atomic<uint16_t> uiSequence(0);
@@ -348,12 +356,12 @@ GTEST_TEST(NetTest, RecvMessageWindowMT)
 }
 
 // random bigger than current seq
-GTEST_TEST(NetTest, RecvMessageWindowMT2)
+TEST_F(NetTest, RecvMessageWindowMT2)
 {
 	Heap testHeap("test", GetSystemHeap());
 	const int NUM_SEND_THREAD = 5;
 	const int NUM_RECV_THREAD = 1;
-	const UINT runningTime = TestScale * 1 * 60 * 1000;
+	const uint32_t runningTime = TestScale * 1 * 60 * 1000;
 	const auto MaxRandomizeSequence = NET_SEQUENCE_MAX_DIFF >> 2;
 
 	Net::RecvMsgWindow recvMessage(testHeap);
@@ -441,4 +449,46 @@ GTEST_TEST(NetTest, RecvMessageWindowMT2)
 
 	recvMessage.ClearWindow();
 }
+
+
+TEST_F(NetTest, SendMessageWindowSimple)
+{
+	Heap testHeap("test", GetSystemHeap());
+
+	Net::SendMsgWindow msgWindow(testHeap);
+	uint16_t uiSequence = 0;
+
+	for (int iTest = 0; iTest < 1024; iTest++)
+	{
+		auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), NewMessage(testHeap));
+		if (iTest < msgWindow.GetWindowSize())
+		{
+			ASSERT_EQ(SF::ResultCode::SUCCESS, hr);
+		}
+		else
+		{
+			ASSERT_NE(SF::ResultCode::SUCCESS, hr);
+		}
+	}
+
+	uiSequence = 0;
+	for (int iTest = 0; iTest < 1024; iTest++)
+	{
+		MessageDataPtr pResult;
+		auto hr = msgWindow.ReleaseSingleMessage(iTest);
+		if (iTest < msgWindow.GetWindowSize())
+		{
+			AssertRel(pResult != nullptr);
+			AssertRel(hr);
+
+			AssertRel(Message::SequenceDifference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence++) == 0);
+		}
+		else
+		{
+			AssertRel(pResult == nullptr);
+			AssertRel(!hr);
+		}
+	}
+}
+
 

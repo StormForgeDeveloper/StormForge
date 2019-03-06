@@ -842,7 +842,7 @@ namespace Net {
 				// Remove from Guranted queue
 				if( pNetCtrl->rtnMsgID.IDs.Reliability )
 				{
-					hrTem = m_SendReliableWindow.ReleaseMsg(pNetCtrl->msgID.IDSeq.Sequence);
+					hrTem = m_SendReliableWindow.ReleaseSingleMessage(pNetCtrl->msgID.IDSeq.Sequence);
 					SFLog(Net, Debug1, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4:X8}",
 						GetCID(), m_SendReliableWindow.GetBaseSequence(), pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->rtnMsgID, hrTem);
 					netChk( hrTem );

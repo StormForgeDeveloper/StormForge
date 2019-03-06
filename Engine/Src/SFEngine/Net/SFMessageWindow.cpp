@@ -277,14 +277,14 @@ namespace Net {
 	}
 
 	// Release message sequence and slide window if can
-	Result SendMsgWindow::ReleaseMsg( uint16_t uiSequence )
+	Result SendMsgWindow::ReleaseSingleMessage( uint16_t uiSequence )
 	{
 		// TODO: math this function thread safe because this function can be called from other thread
 		MutexScopeLock localLock(m_Lock);
 
 		Result hr = ResultCode::SUCCESS;
 		int iIdx;
-		uint32_t iPosIdx;
+		//uint32_t iPosIdx;
 
 		if( m_pMsgWnd == NULL )
 			return ResultCode::SUCCESS;// nothing to release
@@ -296,29 +296,31 @@ namespace Net {
 		{
 			netErr( ResultCode::IO_INVALID_SEQUENCE ); // Out of range
 		}
-
-		if(  iIdx < 0 )
+		else
+		//if(  iIdx < 0 )
 		{
 			return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
 		}
 
-		iPosIdx = (m_uiBaseSequence + iIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
+		ReleaseMessageInternal(iIdx);
 
-		// Make it as a can-be-freed
-		if( m_pMsgWnd[ iPosIdx ].State != ItemState::Free )
-		{
-			auto pMsg = *m_pMsgWnd[iPosIdx].pMsg;
-			if(pMsg != nullptr )
-			{
-				if(pMsg->GetMessageHeader()->msgID.IDSeq.Sequence != uiSequence )
-				{
-					SFLog(Net, Info, "Validation error : Message has Invalid Sequence {0}, {1} Required, msg:{2:X8}", pMsg->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence, pMsg->GetMessageHeader()->msgID.ID );
-				}
+		//iPosIdx = (m_uiBaseSequence + iIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
 
-				m_pMsgWnd[iPosIdx].pMsg = nullptr;
-				m_pMsgWnd[ iPosIdx ].State = ItemState::CanFree;
-			}
-		}
+		//// Make it as a can-be-freed
+		//if( m_pMsgWnd[ iPosIdx ].State != ItemState::Free )
+		//{
+		//	auto pMsg = *m_pMsgWnd[iPosIdx].pMsg;
+		//	if(pMsg != nullptr )
+		//	{
+		//		if(pMsg->GetMessageHeader()->msgID.IDSeq.Sequence != uiSequence )
+		//		{
+		//			SFLog(Net, Info, "Validation error : Message has Invalid Sequence {0}, {1} Required, msg:{2:X8}", pMsg->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence, pMsg->GetMessageHeader()->msgID.ID );
+		//		}
+
+		//		m_pMsgWnd[iPosIdx].pMsg = nullptr;
+		//		m_pMsgWnd[ iPosIdx ].State = ItemState::CanFree;
+		//	}
+		//}
 
 		// No sliding window for this because this can be called from other thread
 
@@ -364,7 +366,7 @@ namespace Net {
 			auto maxRelease = std::min((uint32_t)iIdx, MessageWindow::MESSAGE_WINDOW_SIZE);
 			for (; uiCurBit < maxRelease; uiCurBit++)
 			{
-				ReleaseMessage(uiCurBit);
+				ReleaseMessageInternal(uiCurBit);
 			}
 
 
@@ -381,7 +383,7 @@ namespace Net {
 		{
 			if ((uiMsgMask & uiSyncMaskCur) == 0) continue;
 
-			ReleaseMessage((uint32_t)iIdx);
+			ReleaseMessageInternal((uint32_t)iIdx);
 
 		}
 
@@ -396,7 +398,7 @@ namespace Net {
 
 
 	// Release message sequence
-	void SendMsgWindow::ReleaseMessage(uint32_t iOffset)
+	void SendMsgWindow::ReleaseMessageInternal(uint32_t iOffset)
 	{
 		uint32_t iPosIdx = (m_uiBaseSequence + iOffset) % MessageWindow::MESSAGE_QUEUE_SIZE;
 

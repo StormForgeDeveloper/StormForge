@@ -33,9 +33,9 @@ namespace Net {
 
 	namespace MessageWindow
 	{
-		static constexpr uint32_t MESSAGE_QUEUE_SIZE = 128;
-		static constexpr uint32_t MESSAGE_WINDOW_SIZE = MESSAGE_QUEUE_SIZE - 1; // We allow 1 less messages to avoid full state complixity
-		static constexpr uint32_t SYNC_MASK_BITS_MAX = 64; // we uses 64bit mask bits for packet
+		static constexpr uint32_t MESSAGE_QUEUE_SIZE			= 128;
+		static constexpr uint32_t MESSAGE_WINDOW_SIZE			= MESSAGE_QUEUE_SIZE - 1; // We allow 1 less messages to avoid full state complexity
+		static constexpr uint32_t SYNC_MASK_BITS_MAX			= 64; // we uses 64bit mask bits for packet
 
 
 
@@ -154,7 +154,7 @@ namespace Net {
 
 	private:
 		// Release message sequence and slide window if can
-		void ReleaseMessage(uint32_t iOffset);
+		void ReleaseMessageInternal(uint32_t iOffset);
 
 		void SlidWindow();
 
@@ -189,7 +189,7 @@ namespace Net {
 
 		// Release message sequence and slide window if can
 		// This can be called from another thread
-		Result ReleaseMsg( uint16_t uiSequence );
+		Result ReleaseSingleMessage( uint16_t uiSequence );
 
 		// Release message by message mask
 		Result ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask );
