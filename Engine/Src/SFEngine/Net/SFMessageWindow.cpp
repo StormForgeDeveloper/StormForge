@@ -61,7 +61,7 @@ namespace Net {
 		// Base sequence should be locked until actual swap is happened
 		// There is a chance m_uiBaseSequence increase before the message is actually added if same message is added on different thread on the same time.
 		// It will cause way beyond message in the message window
-		TicketScopeLock scopeLock(TicketLock::LockMode::LOCK_NONEXCLUSIVE, m_SequenceLock);
+		TicketScopeLock scopeLock(TicketLock::LockMode::NonExclusive, m_SequenceLock);
 		int diff = Message::SequenceDifference(msgSeq, m_uiBaseSequence);
 
 		if (diff >= GetWindowSize())
@@ -109,7 +109,7 @@ namespace Net {
 			return ResultCode::FAIL;
 
 		// Base sequence should be locked during actual pop operation
-		TicketScopeLock scopeLock(TicketLock::LockMode::LOCK_EXCLUSIVE, m_SequenceLock);
+		TicketScopeLock scopeLock(TicketLock::LockMode::Exclusive, m_SequenceLock);
 
 		pIMsg = std::forward<SharedPointerAtomicT<Message::MessageData>>(m_pMsgWnd[iPosIdx]);
 		if (pIMsg == nullptr)

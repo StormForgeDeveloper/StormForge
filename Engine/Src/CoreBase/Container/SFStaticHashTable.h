@@ -483,7 +483,7 @@ namespace SF {
 				size_t iBucket = hashVal%m_Bucket.size();
 
 				Bucket& bucket = m_Bucket[iBucket];
-				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::LOCK_EXCLUSIVE, bucket.m_Lock );
+				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::Exclusive, bucket.m_Lock );
 
 				//_ReadBarrier();
 				std::atomic_thread_fence(std::memory_order_consume);
@@ -516,7 +516,7 @@ namespace SF {
 				size_t iBucket = hashVal%m_Bucket.size();
 
 				Bucket& bucket = m_Bucket[iBucket];
-				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::LOCK_NONEXCLUSIVE, bucket.m_Lock );
+				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::NonExclusive, bucket.m_Lock );
 
 				typename ItemContainer::Node *pPrevNode = nullptr;
 				if( !(bucket.m_Items.FindPrevNode( inKey, pPrevNode )) )
@@ -567,7 +567,7 @@ namespace SF {
 				size_t iBucket = hashVal%m_Bucket.size();
 
 				Bucket& bucket = m_Bucket[iBucket];
-				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::LOCK_EXCLUSIVE, bucket.m_Lock );
+				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::Exclusive, bucket.m_Lock );
 				//_ReadBarrier();
 				std::atomic_thread_fence(std::memory_order_consume);
 				
@@ -607,7 +607,7 @@ namespace SF {
 				Key = iterData.GetKey();
 				iterData = end();
 
-				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::LOCK_EXCLUSIVE, bucket.m_Lock );
+				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::Exclusive, bucket.m_Lock );
 
 				//_ReadBarrier();
 				std::atomic_thread_fence(std::memory_order_consume);

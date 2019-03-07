@@ -130,6 +130,7 @@ namespace SF {
 	//////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Ticketing class
+	//		- This works only when everybody wait their order
 	//
 
 	class Ticketing
@@ -140,7 +141,7 @@ namespace SF {
 		// working thread count...until now
 		SyncCounter m_Working;
 
-		// woking complete thread count..
+		// working complete thread count..
 		SyncCounter m_Worked;
 
 		Ticketing() {}
@@ -208,16 +209,16 @@ namespace SF {
 	public:
 		enum class LockMode : uint32_t
 		{ 
-			LOCK_FREE = 0, 
-			LOCK_NONEXCLUSIVE,
-			LOCK_EXCLUSIVE,
+			Free, 
+			NonExclusive,
+			Exclusive,
 		};
 
 	private:
 		// read lock count
-		std::atomic<uint32_t>	m_OpMode;
-		Ticketing			m_Ticketing;
-		SyncCounter			m_NonExclusiveCount;
+		//std::atomic<int32_t>	m_NonExclusiveWorkerCount[3];
+		std::atomic<uint32_t>	m_NonExclusiveCount;
+		CriticalSection			m_ExLock;
 
 	public:
 		inline TicketLock();
@@ -231,10 +232,6 @@ namespace SF {
 		inline void NonExLock();
 		inline void NonExUnlock();
 
-		// Query status
-		inline CounterType GetTicketCount() const;
-		inline CounterType GetNonExclusiveCount() const;
-		inline bool	IsLocked() const;
 	};
 
 	// Fake ticket lock

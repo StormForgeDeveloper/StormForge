@@ -128,8 +128,9 @@ namespace SF {
 	//
 
 	TicketLock::TicketLock()
-		: m_OpMode((uint32_t)LockMode::LOCK_FREE)
 	{
+		//m_NonExclusiveWorkerCount[0] = 0;
+		//m_NonExclusiveWorkerCount[1] = 0;
 		m_NonExclusiveCount = 0;
 	}
 
@@ -140,74 +141,43 @@ namespace SF {
 	// Exclusive lock/unlock
 	void TicketLock::ExLock()
 	{
-		Ticketing::Ticket myTicket = m_Ticketing.AcquireTicket();
+		m_ExLock.Lock();
 
-		// Wait my ticket
-		CounterType WaitOrder;
-		while ((WaitOrder = m_Ticketing.GetMyWaitingOrder(myTicket)) > 1)
-		{
-			if (WaitOrder > 4)
-				ThisThread::SleepFor(DurationMS(0));
-		}
-
-		// flush non exclusive lock
-		while (m_NonExclusiveCount.load(std::memory_order_relaxed) > 0)
+		// increase non exclusive index before we put free state
+		//auto curNonExIndex = m_NonExclusiveIndex.load(std::memory_order_acquire) % countof(m_NonExclusiveWorkerCount);
+		// wait all non exclusive workers to finish their job
+		auto& curCounter = m_NonExclusiveCount;// m_NonExclusiveWorkerCount[curNonExIndex];
+		while (curCounter.load(std::memory_order_relaxed) > 0)
 		{
 			ThisThread::SleepFor(DurationMS(0));
 		}
 
-		m_OpMode.store((uint32_t)LockMode::LOCK_EXCLUSIVE, std::memory_order_release);
+		//m_NonExclusiveIndex.fetch_add(1, std::memory_order_release);
 	}
 
 	void TicketLock::ExUnlock()
 	{
-		m_OpMode.store((uint32_t)LockMode::LOCK_FREE, std::memory_order_relaxed);
-		m_Ticketing.ReleaseTicket();
+		m_ExLock.UnLock();
 	}
 
 	// Non-Exclusive lock/unlock
 	void TicketLock::NonExLock()
 	{
-		Ticketing::Ticket myTicket = m_Ticketing.AcquireTicket();
+		MutexScopeLock scopeLock(m_ExLock);
 
-		// Wait my ticket
-		CounterType WaitOrder;
-		while ((WaitOrder = m_Ticketing.GetMyWaitingOrder(myTicket)) > 1)
-		{
-			if (WaitOrder > 4)
-				ThisThread::SleepFor(DurationMS(0));
-		}
-
-		assert(m_OpMode.load(std::memory_order_relaxed) != (uint32_t)LockMode::LOCK_EXCLUSIVE);
-
-		m_OpMode.store((uint32_t)LockMode::LOCK_NONEXCLUSIVE, std::memory_order_release);
-		SignedCounterType count = (SignedCounterType)(m_NonExclusiveCount.fetch_add(1, std::memory_order_relaxed) + 1);
-		unused(count);
-		assert(count > 0);
-		m_Ticketing.ReleaseTicket();
+		//auto curNonExIndex = m_NonExclusiveIndex.load(std::memory_order_acquire) % countof(m_NonExclusiveWorkerCount);
+		// wait all non exclusive workers to finish their job
+		//m_NonExclusiveWorkerCount[curNonExIndex].fetch_add(1, std::memory_order_release);
+		m_NonExclusiveCount.fetch_add(1, std::memory_order_release);
 	}
 
 	void TicketLock::NonExUnlock()
 	{
-		SignedCounterType count = (SignedCounterType)(m_NonExclusiveCount.fetch_sub(1, std::memory_order_relaxed) - 1);
+		//auto curNonExIndex = m_NonExclusiveIndex.load(std::memory_order_acquire) % countof(m_NonExclusiveWorkerCount);
+		// wait all non exclusive workers to finish their job
+		auto count = m_NonExclusiveCount.fetch_sub(1, std::memory_order_relaxed);// m_NonExclusiveWorkerCount[curNonExIndex].fetch_sub(1, std::memory_order_relaxed);
 		unused(count);
 		assert(count >= 0);
-	}
-
-	// Query status
-	CounterType TicketLock::GetTicketCount() const
-	{
-		return m_Ticketing.GetTotalWaitingCount();
-	}
-
-	CounterType TicketLock::GetNonExclusiveCount() const
-	{
-		return m_NonExclusiveCount.load(std::memory_order_relaxed);
-	}
-
-	bool TicketLock::IsLocked() const
-	{
-		return !((m_Ticketing.GetTotalWaitingCount()) == 0 && m_NonExclusiveCount.load(std::memory_order_relaxed) == 0);
 	}
 
 
@@ -220,11 +190,11 @@ namespace SF {
 
 	template< class TicketLockType >
 	TicketScopeLockT<TicketLockType>::TicketScopeLockT(TicketLock::LockMode lockMode, TicketLockType &ticketLock)
-		:m_LockMode(lockMode),
-		m_TicketLock(ticketLock)
+		: m_LockMode(lockMode)
+		, m_TicketLock(ticketLock)
 	{
-		Assert(m_LockMode == TicketLock::LockMode::LOCK_EXCLUSIVE || m_LockMode == TicketLock::LockMode::LOCK_NONEXCLUSIVE);
-		if (m_LockMode == TicketLock::LockMode::LOCK_EXCLUSIVE)
+		Assert(m_LockMode == TicketLock::LockMode::Exclusive || m_LockMode == TicketLock::LockMode::NonExclusive);
+		if (m_LockMode == TicketLock::LockMode::Exclusive)
 			m_TicketLock.ExLock();
 		else
 			m_TicketLock.NonExLock();
@@ -233,7 +203,7 @@ namespace SF {
 	template< class TicketLockType >
 	TicketScopeLockT<TicketLockType>::~TicketScopeLockT()
 	{
-		if (m_LockMode == TicketLock::LockMode::LOCK_EXCLUSIVE)
+		if (m_LockMode == TicketLock::LockMode::Exclusive)
 			m_TicketLock.ExUnlock();
 		else
 			m_TicketLock.NonExUnlock();

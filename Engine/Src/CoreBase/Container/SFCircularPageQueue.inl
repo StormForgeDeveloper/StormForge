@@ -179,7 +179,7 @@ namespace SF {
 				pCurPage = m_CircularPages[queueIndex].load(std::memory_order_relaxed);
 				if (pCurPage == nullptr) // empty add new one
 				{
-					//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::LOCK_EXCLUSIVE, m_CircularBufferLock);
+					//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::Exclusive, m_CircularBufferLock);
 
 					// We need to check after lock
 					pCurPage = m_CircularPages[queueIndex].load(std::memory_order_consume);
@@ -240,7 +240,7 @@ namespace SF {
 
 			auto defaultValue = DefaultValue<DataType>();
 
-			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::LOCK_EXCLUSIVE, m_CircularBufferLock);
+			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::Exclusive, m_CircularBufferLock);
 
 			// empty state / read count is bigger than written count
 			// m_EnqueueTicket means number of items have been enqueued
@@ -363,7 +363,7 @@ namespace SF {
 			if (m_CircularPages == nullptr)
 				return ResultCode::INVALID_POINTER;
 
-			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::LOCK_NONEXCLUSIVE, m_CircularBufferLock);
+			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::NonExclusive, m_CircularBufferLock);
 
 			Page* pCurPage = nullptr;
 			CounterType dequeueTicket = 0;
@@ -446,7 +446,7 @@ namespace SF {
 		void CircularPageQueue<DataType,DataStorageType, StorageAccessor>::ClearQueue()
 		{
 			MutexScopeLock lock(m_CircularBufferLock);
-			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::LOCK_EXCLUSIVE, m_CircularBufferLock);
+			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::Exclusive, m_CircularBufferLock);
 
 			if (m_CircularPages == nullptr) return;
 

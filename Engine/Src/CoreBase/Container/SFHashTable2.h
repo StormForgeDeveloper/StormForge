@@ -446,7 +446,7 @@ namespace SF {
 				size_t iBucket = hashVal%m_Buckets.size();
 
 				Bucket& bucket = m_Buckets[iBucket];
-				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::LOCK_EXCLUSIVE, bucket.m_Lock );
+				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::Exclusive, bucket.m_Lock );
 
 				if(Trait::UniqueKey)
 				{
@@ -489,7 +489,7 @@ namespace SF {
 				size_t iBucket = hashVal%m_Buckets.size();
 
 				Bucket& bucket = m_Buckets[iBucket];
-				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::LOCK_NONEXCLUSIVE, bucket.m_Lock );
+				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::NonExclusive, bucket.m_Lock );
 
 				Result hr = bucket.m_Items->Find(keyVal, data);
 
@@ -507,7 +507,7 @@ namespace SF {
 				size_t iBucket = hashVal%m_Buckets.size();
 
 				Bucket& bucket = m_Buckets[iBucket];
-				TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::LOCK_EXCLUSIVE, bucket.m_Lock);
+				TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::Exclusive, bucket.m_Lock);
 
 				if ((bucket.m_Items->Remove(key, erasedValue)))
 				{

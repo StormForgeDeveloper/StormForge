@@ -102,7 +102,7 @@ namespace SF {
 		// insert after specific node, if null for pPrevNode, added at front
 		Result Insert(Node* pPrevNode, Node* pNew)
 		{
-			TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::LOCK_EXCLUSIVE, m_Lock);
+			TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::Exclusive, m_Lock);
 
 			assert(pNew != (Node*)0xdddddddddddddddd);
 
@@ -156,7 +156,7 @@ namespace SF {
 
 		Result Remove(Node* pRemove)
 		{
-			TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::LOCK_EXCLUSIVE, m_Lock);
+			TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::Exclusive, m_Lock);
 			return RemoveNoLock(pRemove);
 		}
 
@@ -201,7 +201,7 @@ namespace SF {
 
 		Node* RemoveFirst()
 		{
-			TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::LOCK_EXCLUSIVE, m_Lock);
+			TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::Exclusive, m_Lock);
 			auto pRemove = m_Header;
 			if (RemoveNoLock(m_Header))
 				return nullptr;
@@ -227,7 +227,7 @@ namespace SF {
 		template<class Func>
 		void for_each(Func func)
 		{
-			TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::LOCK_NONEXCLUSIVE, m_Lock);
+			TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::NonExclusive, m_Lock);
 
 			auto pCur = m_Header;
 			while (pCur != nullptr)
@@ -242,7 +242,7 @@ namespace SF {
 		template<class Func>
 		void ForeachWithRemove(Func func)
 		{
-			TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::LOCK_EXCLUSIVE, m_Lock);
+			TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::Exclusive, m_Lock);
 
 			auto pCur = m_Header;
 			while (pCur != nullptr)

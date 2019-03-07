@@ -93,14 +93,14 @@ namespace SF {
 					:m_Items(src.m_Items)
 				{
 					// No one use this bucket, while this operation
-					Assert( !src.m_Lock.IsLocked() );
+					//Assert( !src.m_Lock.IsLocked() );
 				}
 
 				Bucket( Bucket&& src )
 					:m_Items(src.m_Items)
 				{
 					// No one use this bucket, while this operation
-					Assert( !src.m_Lock.IsLocked() );
+					//Assert( !src.m_Lock.IsLocked() );
 				}
 
 				// Destructor
@@ -487,7 +487,7 @@ namespace SF {
 				size_t iBucket = hashVal%m_Bucket.size();
 
 				Bucket& bucket = m_Bucket[iBucket];
-				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::LOCK_EXCLUSIVE, bucket.m_Lock );
+				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::Exclusive, bucket.m_Lock );
 				//_ReadBarrier();
 				std::atomic_thread_fence(std::memory_order_consume);
 
@@ -546,7 +546,7 @@ namespace SF {
 				size_t iBucket = hashVal%m_Bucket.size();
 
 				Bucket& bucket = m_Bucket[iBucket];
-				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::LOCK_NONEXCLUSIVE, bucket.m_Lock );
+				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::NonExclusive, bucket.m_Lock );
 
 				auto iter = bucket.m_Items.begin();
 				for( ; iter != bucket.m_Items.end(); ++iter )
