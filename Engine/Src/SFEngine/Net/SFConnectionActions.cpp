@@ -421,8 +421,8 @@ namespace Net {
 	Result ConnectionStateAction_SendSync::Run()
 	{
 		Result hr = ResultCode::SUCCESS;
-		auto sendBoost = GetConnection()->GetSendBoost() * 2;
-		auto syncTimeout = sendBoost > 0 ? DurationMS(Const::RELIABLE_SYNC_POLLING_TIME / sendBoost) : DurationMS(Const::RELIABLE_SYNC_POLLING_TIME);
+		auto sendBoost = GetConnection()->GetSendBoost();
+		auto syncTimeout = sendBoost > 0 ? DurationMS(Const::RELIABLE_SYNC_POLLING_TIME_BOOSTED / sendBoost) : DurationMS(Const::RELIABLE_SYNC_POLLING_TIME);
 
 		if (Util::TimeSince(m_ReliableSyncTime) < syncTimeout)
 			return hr;

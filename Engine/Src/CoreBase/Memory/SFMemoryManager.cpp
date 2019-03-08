@@ -154,15 +154,6 @@ namespace SF {
 		pMemBlock = (MemBlockHdr*)SystemAllignedAlloc(allocSize, alignment);
 
 		pMemBlock->Init(this, (uint32_t)size, (uint32_t)spaceForHeader);
-		//memset(pMemBlock, 0, sizeof(MemBlockHdr));
-		//pMemBlock->Magic = MemBlockHdr::MEM_MAGIC;
-		//pMemBlock->DataOffset = (decltype(pMemBlock->DataOffset))spaceForHeader;
-		//pMemBlock->Size = (uint32_t)size;
-		//pMemBlock->pHeap = this;
-
-		//// This works because we added +1 before
-		//auto pReverseOffset = ((uint8_t*)pMemBlock + pMemBlock->DataOffset - 1);
-		//*pReverseOffset = static_cast<uint8_t>(pMemBlock->DataOffset);
 
 		return pMemBlock;
 	}
@@ -183,8 +174,6 @@ namespace SF {
 		if (alignment == 0)
 			alignment = sizeof(int);
 
-		unused(orgSize);
-
 		// Adjust allocation size for header
 		// +1 for reverse offset
 		size_t spaceForHeader = AlignUp(sizeof(MemBlockHdr) + 1, alignment);
@@ -193,31 +182,29 @@ namespace SF {
 		MemBlockHdr* pMemBlock;
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
-		pMemBlock = (MemBlockHdr*)_aligned_realloc(ptr, allocSize, alignment);
+		void *newPtr = (MemBlockHdr*)_aligned_realloc(ptr, allocSize, alignment);
+		if (newPtr == nullptr)
+		{
+			auto newPtr2 = SystemAllignedAlloc(allocSize, alignment);
+			memcpy(newPtr2, newPtr, orgSize);
+			_aligned_free(newPtr);
+			newPtr = newPtr2;
+		}
 #else
 		void *newPtr = realloc(ptr, newSize);
 		auto remain = ((int64_t)newPtr) % alignment;
 		if (remain != 0)
 		{
 			auto newPtr2 = SystemAllignedAlloc(allocSize, alignment);
-			memcpy(newPtr, newPtr2, newSize);
+			memcpy(newPtr2, newPtr, orgSize);
 			free(newPtr);
 			newPtr = newPtr2;
 		}
-
-		pMemBlock = (MemBlockHdr*)newPtr;
 #endif
 
-		pMemBlock->Init(this, (uint32_t)newSize, (uint32_t)spaceForHeader);
-		//memset(pMemBlock, 0, sizeof(MemBlockHdr));
-		//pMemBlock->Magic = MemBlockHdr::MEM_MAGIC;
-		//pMemBlock->DataOffset = (decltype(pMemBlock->DataOffset))spaceForHeader;
-		//pMemBlock->Size = (uint32_t)newSize;
-		//pMemBlock->pHeap = this;
 
-		//// This works because we added +1 before
-		//auto pReverseOffset = ((uint8_t*)pMemBlock + pMemBlock->DataOffset - 1);
-		//*pReverseOffset = static_cast<uint8_t>(pMemBlock->DataOffset);
+		pMemBlock = reinterpret_cast<MemBlockHdr*>(newPtr);
+		pMemBlock->Init(this, (uint32_t)newSize, (uint32_t)spaceForHeader);
 
 		return pMemBlock;
 	}

@@ -122,7 +122,8 @@ namespace Net {
 		constexpr DurationMS HEARTBIT_TIMEOUT = DurationMS(2 * 60 * 1000);
 
 		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME = DurationMS(10 * 1000);
-		constexpr int RELIABLE_SEND_BOOST = 5;
+		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME_BOOSTED = DurationMS(5 * 1000);
+		constexpr int RELIABLE_SEND_BOOST = 10;
 	};
 
 
