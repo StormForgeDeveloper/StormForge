@@ -89,21 +89,6 @@ namespace Net {
 		m_pWriteQueuesUDP = writeQueue;
 	}
 
-	// Set message window size connection
-	Result ConnectionUDPBase::SetMessageWindowSize( uint uiSend, uint uiRecv )
-	{
-		if( m_RecvReliableWindow.GetMsgCount() || m_SendReliableWindow.GetMsgCount() )
-			return ResultCode::FAIL;
-
-		// TODO: Not impl
-#ifdef _DEBUG
-#else
-		//m_SendReliableWindow.SetWndSize( uiSend );
-		//m_RecvReliableWindow.SetWndSize( uiRecv );
-#endif
-
-		return ResultCode::SUCCESS;
-	}
 
 
 
@@ -114,41 +99,41 @@ namespace Net {
 		return ResultCode::NOT_IMPLEMENTED;
 	}
 
-	Result ConnectionUDPBase::ProcGuarrentedMessageWindow(const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action)
-	{
-		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<Message::MessageData> pIMsg;
+	//Result ConnectionUDPBase::ProcGuarrentedMessageWindow(const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action)
+	//{
+	//	Result hr = ResultCode::SUCCESS;
+	//	SharedPointerT<Message::MessageData> pIMsg;
 
-		// slide recv window
-		while ((m_RecvReliableWindow.PopMsg(pIMsg)))
-		{
-			Assert(pIMsg != nullptr);
-			Message::MessageHeader *pQMsgHeader = pIMsg->GetMessageHeader();
-			SFLog(Net, Debug2, "RECVGuaDEQ : CID:{0}:{1}, seq:{2}, msg:{3}, len:%4%",
-				GetCID(), m_RecvReliableWindow.GetBaseSequence(),
-				pQMsgHeader->msgID.IDSeq.Sequence,
-				pQMsgHeader->msgID,
-				pQMsgHeader->Length);
+	//	// slide recv window
+	//	while ((m_RecvReliableWindow.PopMsg(pIMsg)))
+	//	{
+	//		Assert(pIMsg != nullptr);
+	//		Message::MessageHeader *pQMsgHeader = pIMsg->GetMessageHeader();
+	//		SFLog(Net, Debug2, "RECVGuaDEQ : CID:{0}:{1}, seq:{2}, msg:{3}, len:%4%",
+	//			GetCID(), m_RecvReliableWindow.GetBaseSequence(),
+	//			pQMsgHeader->msgID.IDSeq.Sequence,
+	//			pQMsgHeader->msgID,
+	//			pQMsgHeader->Length);
 
 
-			if (pIMsg->GetMessageHeader()->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
-			{
-				OnFrameSequenceMessage(pIMsg, action);
-			}
-			else
-			{
-				action(pIMsg);
-			}
-			//netChk(Connection::OnRecv(pIMsg));
-			pIMsg = nullptr;
-		}
+	//		if (pIMsg->GetMessageHeader()->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
+	//		{
+	//			OnFrameSequenceMessage(pIMsg, action);
+	//		}
+	//		else
+	//		{
+	//			action(pIMsg);
+	//		}
+	//		//netChk(Connection::OnRecv(pIMsg));
+	//		pIMsg = nullptr;
+	//	}
 
-	//Proc_End:
+	////Proc_End:
 
-		pIMsg = nullptr;
+	//	pIMsg = nullptr;
 
-		return hr;
-	}
+	//	return hr;
+	//}
 
 	// gathering
 	Result ConnectionUDPBase::SendPending( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID )
@@ -953,84 +938,6 @@ namespace Net {
 		return hr;
 	}
 
-//
-//
-//	// Process Recv queue
-//	Result ConnectionUDP::ProcRecvReliableQueue()
-//	{
-//		Result hr = ResultCode::SUCCESS;
-//		SharedPointerT<Message::MessageData> pIMsg;
-//		Message::MessageID msgIDTem;
-//		Message::MessageHeader *pMsgHeader = nullptr;
-//		SendMsgWindow::MessageData *pMessageElement = nullptr;
-//
-//
-//		if (GetConnectionState() == Net::ConnectionState::DISCONNECTED)
-//			return ResultCode::SUCCESS;
-//
-//
-//		// Recv guaranted queue process
-//		auto loopCount = m_RecvGuaQueue.size();
-//		for (unsigned iCount = 0; iCount < loopCount; iCount++)
-//		{
-//			if (!(m_RecvGuaQueue.Dequeue(pIMsg)))
-//				break;
-//
-//			if( pIMsg == nullptr )
-//				break;
-//
-//			pMsgHeader = pIMsg->GetMessageHeader();
-//
-//			Assert(pMsgHeader->Crc32 != 0);
-//
-//			if( !pMsgHeader->msgID.IDs.Reliability )
-//			{
-//				Assert(0);// this shouldn't be happened
-//				continue;
-//			}
-//
-//			Assert( !pMsgHeader->msgID.IDs.Encrypted );
-//
-//			Result hrTem = m_RecvReliableWindow.AddMsg( pIMsg );
-//
-//			SFLog(Net, Debug2, "RECVGuaAdd : CID:{0}:{1}, msg:{2}, seq:{3}, len:%4%, hr={5:X8}",
-//							GetCID(), m_RecvReliableWindow.GetBaseSequence(), 
-//							pIMsg->GetMessageHeader()->msgID, 
-//							pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
-//							pIMsg->GetMessageHeader()->Length,
-//							hrTem );
-//
-//			if( hrTem == Result(ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE) )
-//			{
-//				SendPending(PACKET_NETCTRL_ACK, pMsgHeader->msgID.IDSeq.Sequence, pMsgHeader->msgID);
-//				pIMsg = nullptr;
-//				continue;
-//			}
-//			else if (hrTem == Result(ResultCode::IO_INVALID_SEQUENCE) || hrTem == Result(ResultCode::IO_SEQUENCE_OVERFLOW))
-//			{
-//				pIMsg = nullptr;
-//				continue;
-//			}
-//			else
-//			{
-//				// Added to msg window just send ACK
-//				pIMsg = nullptr;
-//				SendPending(PACKET_NETCTRL_ACK, pMsgHeader->msgID.IDSeq.Sequence, pMsgHeader->msgID);
-//			}
-//
-//			netChk(ProcGuarrentedMessageWindow([&](SharedPointerT<Message::MessageData>& pMsg){ Connection::OnRecv(pIMsg); }));
-//		}
-//
-//
-//Proc_End:
-//
-//		pIMsg = nullptr;
-//		if (pMessageElement != nullptr) pMessageElement->Clear();
-//
-//
-//		return hr;
-//	}
-//
 
 	// Process Send queue
 	Result ConnectionUDP::ProcSendReliableQueue()

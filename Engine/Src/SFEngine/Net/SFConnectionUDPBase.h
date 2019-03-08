@@ -96,8 +96,6 @@ namespace Net {
 		uint GetMaxGuarantedRetryAtOnce() { return m_uiMaxGuarantedRetryAtOnce; }
 		void SetMaxGuarantedRetry(uint uiMaxGuarantedRetry) { m_uiMaxGuarantedRetryAtOnce = uiMaxGuarantedRetry; }
 
-		// Set message window size connection
-		Result SetMessageWindowSize( uint uiSend, uint uiRecv );
 
 		SendMsgWindow& GetSendReliableWindow() { return m_SendReliableWindow; }
 		RecvMsgWindow& GetRecvReliableWindow() { return m_RecvReliableWindow; }
@@ -145,7 +143,7 @@ namespace Net {
 		// Update Send buffer Queue, TCP and UDP client connection
 		virtual Result UpdateSendBufferQueue() override;
 
-		virtual Result ProcGuarrentedMessageWindow(const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action);
+		//virtual Result ProcGuarrentedMessageWindow(const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action);
 
 	};
 
