@@ -328,6 +328,8 @@ namespace Net {
 		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartBit);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
 
+		AddStateAction(ConnectionState::CONNECTED, &m_ActSendSync);
+
 		auto newCID = stm_CIDGen.fetch_add(1, std::memory_order_relaxed) + 1;
 		if(newCID == 0)
 			newCID = stm_CIDGen.fetch_add(1, std::memory_order_relaxed) + 1;
@@ -365,9 +367,6 @@ namespace Net {
 	Result ConnectionMUDPClient::Connect(PeerInfo local, const PeerInfo& remote)
 	{
 		Result hr = ResultCode::SUCCESS;
-		//SOCKET socket = INVALID_SOCKET;
-		//sockaddr_storage bindAddr;
-
 
 		// detect local address
 		if (StrUtil::IsNullOrEmpty(local.PeerAddress.Address))
@@ -404,12 +403,10 @@ namespace Net {
 
 		netChk(InitConnection(local, remote));
 		SFLog(Net, Custom3, "Initialize connection CID:{0}, Addr:{1}", GetCID(), remote.PeerAddress);
-		//socket = INVALID_SOCKET;
 
 
 		m_NetIOAdapterManager.FreeCurrentHandler();
 		netChk(m_NetIOAdapterManager.NewIOHandler());
-		//netChk(Service::NetSystem->RegisterSocket(SockType::DataGram, &m_NetIOAdapter));
 
 		netChk(PendingRecv());
 
@@ -430,38 +427,6 @@ namespace Net {
 
 		return ConnectionMUDP::CloseConnection(reason);
 	}
-
-
-
-	Result ConnectionMUDPClient::ProcSendReliable()
-	{
-		Result hr;
-
-		//MutexScopeLock localLock(m_SendReliableWindow.GetLock());
-
-		hr = ProcSendReliableQueue();
-		if (!(hr))
-		{
-			SFLog(Net, Info, "Process Recv Guaranted queue failed {0:X8}", hr);
-		}
-
-		hr = ProcReliableSendRetry();
-		if (!(hr))
-		{
-			SFLog(Net, Info, "Process message window failed {0:X8}", hr);
-		}
-
-		if (Util::TimeSince(m_ReliableSyncTime) > Const::RELIABLE_SYNC_POLLING_TIME)
-		{
-			m_ReliableSyncTime = Util::Time.GetTimeMs();
-			netChk(SendSync(m_RecvReliableWindow.GetBaseSequence(), m_RecvReliableWindow.GetSyncMask()));
-		}
-
-	Proc_End:
-
-		return ResultCode::SUCCESS;
-	}
-
 
 
 	Result ConnectionMUDPClient::EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer)

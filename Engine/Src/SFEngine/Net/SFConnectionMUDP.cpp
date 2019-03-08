@@ -58,7 +58,6 @@ namespace Net {
 	// Constructor
 	ConnectionMUDP::ConnectionMUDP(IHeap& heap, SocketIO* ioHandler)
 		: ConnectionUDPBase(heap, ioHandler)
-		, m_bSendSyncThisTick(false)
 	{
 		// limit server net retry maximum
 		SetMaxGuarantedRetry( Const::UDP_CLI_RETRY_ONETIME_MAX );
@@ -70,6 +69,9 @@ namespace Net {
 		SetNetCtrlAction(NetCtrlCode_TimeSync, &m_HandleTimeSync);
 		SetNetCtrlAction(NetCtrlCode_Connect, &m_HandleConnect);
 		SetNetCtrlAction(NetCtrlCode_Disconnect, &m_HandleDisconnect);
+
+		AddStateAction(ConnectionState::CONNECTED, &m_ActSendReliableQueue);
+		AddStateAction(ConnectionState::CONNECTED, &m_ActSendReliableRetry);
 	}
 
 	ConnectionMUDP::~ConnectionMUDP()
@@ -181,9 +183,10 @@ namespace Net {
 			{
 				Disconnect("Too many zero packet");
 			}
-			goto Proc_End;
+			return hr;
 		}
 
+		MutexScopeLock scopeLock(GetUpdateLock());
 
 		while( uiBuffSize && GetConnectionState() != ConnectionState::DISCONNECTED)
 		{
@@ -235,6 +238,8 @@ namespace Net {
 	Proc_End:
 
 		pMsg = nullptr;
+
+		SendFlush();
 
 		return hr;
 	}
@@ -382,15 +387,15 @@ namespace Net {
 			// Added to msg window just send ACK
 			pIMsg = nullptr;
 
+			SharedPointerT<Message::MessageData> pPopMsg;
+			while (m_RecvReliableWindow.PopMsg(pPopMsg))
+			{
+				hr = ConnectionUDPBase::OnRecv(pPopMsg);
+			}
+
 			if (GetEventHandler() != nullptr)
 			{
-				SharedPointerT<Message::MessageData> pMsg;
-				GetEventHandler()->OnRecvMessage(this, pMsg);
-			}
-			else
-			{
-				SFLog(Net, Debug2, "RECVGuaAdded : No Event Handler for CID:{0} BaseSeq:{1}",
-					GetCID(), m_RecvReliableWindow.GetBaseSequence());
+				GetEventHandler()->OnRecvMessage(this, MessageDataPtr());
 			}
 		}
 
@@ -401,201 +406,152 @@ namespace Net {
 		return hr;
 	}
 
-	// Process recv reliable queue
-	Result ConnectionMUDP::ProcRecvReliableQueue()
-	{
-		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<Message::MessageData> pIMsg;
-
-		if (GetConnectionState() == ConnectionState::DISCONNECTED)
-			return ResultCode::SUCCESS;
-
-		assert(ThisThread::GetThreadID() == GetRunningThreadID());
-
-		// Recv guaranteed queue process
-		pIMsg = nullptr;
-		auto loopCount = m_RecvGuaQueue.size();
-		for (decltype(loopCount) iLoop = 0; iLoop < loopCount; iLoop++)
-		{
-			if (!(m_RecvGuaQueue.Dequeue(pIMsg)))
-				break;
-
-			if (pIMsg == nullptr)
-				break;
-
-			Message::MessageHeader *pMsgHeader = pIMsg->GetMessageHeader();
-			if( !pMsgHeader->msgID.IDs.Reliability )
-			{
-				Assert(0);// this should not be happened
-				continue;
-			}
-
-			Assert(!pMsgHeader->msgID.IDs.Encrypted);
-
-			netChk(OnGuarrentedMessageRecv(pIMsg));
-
-			netChk(ProcGuarrentedMessageWindow([&](SharedPointerT<Message::MessageData>& pRecvGuaMsg){ Connection::OnRecv(pRecvGuaMsg); }));
-
-			pIMsg = nullptr;
-		}
-
-		// pop if no event handler is assigned
-		if (GetEventHandler() == nullptr)
-		{
-			netChk(ProcGuarrentedMessageWindow([&](SharedPointerT<Message::MessageData>& pRecvGuaMsg){ Connection::OnRecv(pRecvGuaMsg); }));
-		}
-
-	Proc_End:
-
-		//Util::SafeRelease( pIMsg );
-		//if( pMessageElement && pMessageElement->pMsg ) pMessageElement->pMsg->Release();
-
-		return hr;
-	}
-
-	// Process Send queue
-	Result ConnectionMUDP::ProcSendReliableQueue()
-	{
-		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<Message::MessageData> pIMsg;
-		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
-
-		assert(ThisThread::GetThreadID() == GetRunningThreadID());
-
-		// Send guaranteed message process
-		CounterType NumProc = m_SendReliableWindow.GetAvailableSize();
-		CounterType uiNumPacket = m_SendGuaQueue.size();
-		NumProc = Util::Min( NumProc, uiNumPacket );
-		for( CounterType uiPacket = 0; uiPacket < NumProc ; uiPacket++ )
-		{
-			if( !(m_SendGuaQueue.Dequeue( pIMsg )) )
-				break;
-
-			AssertRel(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
-
-			// check sending window size
-			hr = m_SendReliableWindow.EnqueueMessage(ulTimeCur, pIMsg);
-			if (!(hr))
-			{
-				netErr(hr);
-			}
-
-			SFLog(Net, Debug2, "SENDENQReliable : CID:{0}, seq:{1}, msg:{2}, len:{3}",
-						GetCID(), 
-						pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
-						pIMsg->GetMessageHeader()->msgID, 
-						pIMsg->GetMessageHeader()->Length );
-
-			// don't bother network with might not be able to processed
-			if ((m_SendReliableWindow.GetHeadSequence() - m_SendReliableWindow.GetBaseSequence()) < m_uiMaxGuarantedRetryAtOnce)
-			{
-				netChk(SendPending(pIMsg));
-			}
-			pIMsg = nullptr;
-		}
 
 
-	Proc_End:
+	//// Process Send queue
+	//Result ConnectionMUDP::ProcSendReliableQueue()
+	//{
+	//	Result hr = ResultCode::SUCCESS;
+	//	SharedPointerT<Message::MessageData> pIMsg;
+	//	TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
 
-		if( !(hr) )
-			Disconnect("Failed to send reliable packets");
+	//	assert(ThisThread::GetThreadID() == GetRunningThreadID());
 
-		return hr;
-	}
-		
-	// Process message window queue
-	Result ConnectionMUDP::ProcReliableSendRetry()
-	{
-		Result hr = ResultCode::SUCCESS;
-		SendMsgWindow::MessageData *pMessageElement = nullptr;
-		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
+	//	// Send guaranteed message process
+	//	CounterType NumProc = m_SendReliableWindow.GetAvailableSize();
+	//	CounterType uiNumPacket = m_SendGuaQueue.size();
+	//	NumProc = Util::Min( NumProc, uiNumPacket );
+	//	for( CounterType uiPacket = 0; uiPacket < NumProc ; uiPacket++ )
+	//	{
+	//		if( !(m_SendGuaQueue.Dequeue( pIMsg )) )
+	//			break;
 
-		assert(ThisThread::GetThreadID() == GetRunningThreadID());
+	//		AssertRel(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
 
-		// Guaranteed retry
-		MutexScopeLock localLock(m_SendReliableWindow.GetLock());// until ReleaseMsg( uint16_t uiSequence ) is thread safe, we need to lock the window
-		uint uiMaxProcess = Util::Min( m_SendReliableWindow.GetMsgCount(), m_uiMaxGuarantedRetryAtOnce );
-		for (uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)m_SendReliableWindow.GetWindowSize() && uiMsgProcessed < uiMaxProcess; uiIdx++)
-		{
-			if (!m_SendReliableWindow.GetAt(uiIdx, pMessageElement))
-			{
-				pMessageElement = nullptr;
-				continue;
-			}
+	//		// check sending window size
+	//		hr = m_SendReliableWindow.EnqueueMessage(ulTimeCur, pIMsg);
+	//		if (!(hr))
+	//		{
+	//			netErr(hr);
+	//		}
 
-			if (pMessageElement && pMessageElement->pMsg != nullptr)
-			{
-				if (Util::TimeSince(pMessageElement->ulTimeStamp) <= DurationMS(Const::MUDP_SEND_RETRY_TIME))
-					break;
+	//		SFLog(Net, Debug2, "SENDENQReliable : CID:{0}, seq:{1}, msg:{2}, len:{3}",
+	//					GetCID(), 
+	//					pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
+	//					pIMsg->GetMessageHeader()->msgID, 
+	//					pIMsg->GetMessageHeader()->Length );
 
-				uint totalGatheredSize = GetGatheredBufferSize() + pMessageElement->pMsg->GetMessageSize();
-				if (GetGatheredBufferSize() > 0 && totalGatheredSize > Const::PACKET_GATHER_SIZE_MAX)
-				{
-					// too big to send
-					// stop gathering here, and send
-					pMessageElement = nullptr;
-					break;
-				}
-
-				SFLog(Net, Debug2, "SENDReliableRetry : CID:{0}, seq:{1}, msg:{2}, len:{3}",
-					GetCID(),
-					pMessageElement->pMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
-					pMessageElement->pMsg->GetMessageHeader()->msgID,
-					pMessageElement->pMsg->GetMessageHeader()->Length);
-				pMessageElement->ulTimeStamp = ulTimeCur;
-				// Creating new reference object will increase reference count of the message instance.
-				// And more importanly, SendPending is taking reference of the variable and clear it when it done sending
-				auto tempMsg = pMessageElement->pMsg;
-				SendPending(tempMsg);
-				pMessageElement = nullptr;
-			}
-			else
-			{
-				AssertRel(pMessageElement->State == MessageWindow::ItemState::Free || pMessageElement->State == MessageWindow::ItemState::CanFree);
-			}
-		}
+	//		// don't bother network with might not be able to processed
+	//		if ((m_SendReliableWindow.GetHeadSequence() - m_SendReliableWindow.GetBaseSequence()) < m_uiMaxGuarantedRetryAtOnce)
+	//		{
+	//			netChk(SendPending(pIMsg));
+	//		}
+	//		pIMsg = nullptr;
+	//	}
 
 
 	//Proc_End:
 
-		return hr;
-	}
+	//	if( !(hr) )
+	//		Disconnect("Failed to send reliable packets");
+
+	//	return hr;
+	//}
+
+
+	//// Process message window queue
+	//Result ConnectionMUDP::ProcReliableSendRetry()
+	//{
+	//	Result hr = ResultCode::SUCCESS;
+	//	SendMsgWindow::MessageData *pMessageElement = nullptr;
+	//	TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
+
+	//	assert(ThisThread::GetThreadID() == GetRunningThreadID());
+
+	//	// Guaranteed retry
+	//	MutexScopeLock localLock(m_SendReliableWindow.GetLock());// until ReleaseMsg( uint16_t uiSequence ) is thread safe, we need to lock the window
+	//	uint uiMaxProcess = Util::Min( m_SendReliableWindow.GetMsgCount(), m_uiMaxGuarantedRetryAtOnce );
+	//	for (uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)m_SendReliableWindow.GetWindowSize() && uiMsgProcessed < uiMaxProcess; uiIdx++)
+	//	{
+	//		if (!m_SendReliableWindow.GetAt(uiIdx, pMessageElement))
+	//		{
+	//			pMessageElement = nullptr;
+	//			continue;
+	//		}
+
+	//		if (pMessageElement && pMessageElement->pMsg != nullptr)
+	//		{
+	//			if (Util::TimeSince(pMessageElement->ulTimeStamp) <= DurationMS(Const::MUDP_SEND_RETRY_TIME))
+	//				break;
+
+	//			uint totalGatheredSize = GetGatheredBufferSize() + pMessageElement->pMsg->GetMessageSize();
+	//			if (GetGatheredBufferSize() > 0 && totalGatheredSize > Const::PACKET_GATHER_SIZE_MAX)
+	//			{
+	//				// too big to send
+	//				// stop gathering here, and send
+	//				pMessageElement = nullptr;
+	//				break;
+	//			}
+
+	//			SFLog(Net, Debug2, "SENDReliableRetry : CID:{0}, seq:{1}, msg:{2}, len:{3}",
+	//				GetCID(),
+	//				pMessageElement->pMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
+	//				pMessageElement->pMsg->GetMessageHeader()->msgID,
+	//				pMessageElement->pMsg->GetMessageHeader()->Length);
+	//			pMessageElement->ulTimeStamp = ulTimeCur;
+	//			// Creating new reference object will increase reference count of the message instance.
+	//			// And more importanly, SendPending is taking reference of the variable and clear it when it done sending
+	//			auto tempMsg = pMessageElement->pMsg;
+	//			SendPending(tempMsg);
+	//			pMessageElement = nullptr;
+	//		}
+	//		else
+	//		{
+	//			AssertRel(pMessageElement->State == MessageWindow::ItemState::Free || pMessageElement->State == MessageWindow::ItemState::CanFree);
+	//		}
+	//	}
+
+
+	////Proc_End:
+
+	//	return hr;
+	//}
 
 
 
-	Result ConnectionMUDP::ProcSendReliable()
-	{
-		Result hr;
+	//Result ConnectionMUDP::ProcSendReliable()
+	//{
+	//	Result hr;
 
-		// This is fallback implementation. this code block wouldn't get hit under normal condition
-		if (GetEventHandler() == nullptr)
-		{
-			MutexScopeLock localLock(m_SendReliableWindow.GetLock());
+	//	// This is fallback implementation. this code block wouldn't get hit under normal condition
+	//	if (GetEventHandler() == nullptr)
+	//	{
+	//		MutexScopeLock localLock(m_SendReliableWindow.GetLock());
 
-			hr = ProcSendReliableQueue();
-			if (!(hr))
-			{
-				SFLog(Net, Info, "Process Recv Guaranted queue failed {0:X8}", hr);
-			}
+	//		hr = ProcSendReliableQueue();
+	//		if (!(hr))
+	//		{
+	//			SFLog(Net, Info, "Process Recv Guaranted queue failed {0:X8}", hr);
+	//		}
 
 
-			if (m_bSendSyncThisTick)
-			{
-				hr = ProcReliableSendRetry();
-				if (!(hr))
-				{
-					SFLog(Net, Info, "Process message window failed {0:X8}", hr);
-				}
+	//		if (m_bSendSyncThisTick)
+	//		{
+	//			hr = ProcReliableSendRetry();
+	//			if (!(hr))
+	//			{
+	//				SFLog(Net, Info, "Process message window failed {0:X8}", hr);
+	//			}
 
-				m_bSendSyncThisTick = false;
-				netChk(SendSync(m_RecvReliableWindow.GetBaseSequence(), m_RecvReliableWindow.GetSyncMask()));
-			}
-		}
+	//			m_bSendSyncThisTick = false;
+	//			netChk(SendSync(m_RecvReliableWindow.GetBaseSequence(), m_RecvReliableWindow.GetSyncMask()));
+	//		}
+	//	}
 
-	Proc_End:
+	//Proc_End:
 
-		return hr;
-	}
+	//	return hr;
+	//}
 
 	// Update net control, process connection heart bit, ... etc
 	Result ConnectionMUDP::TickUpdate()
@@ -603,26 +559,28 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS;
 		Message::MessageID msgIDTem;
 
+		MutexScopeLock scopeLock(GetUpdateLock());
+
 		hr = ProcConnectionStateAction();
 		if( !(hr) )
 		{
 			SFLog(Net, Info, "Process Connection state failed {0:X8}", hr );
 		}
 
-		if (GetConnectionState() == ConnectionState::DISCONNECTED)
-			goto Proc_End;
+		//if (GetConnectionState() == ConnectionState::DISCONNECTED)
+		//	goto Proc_End;
 
-		if (GetConnectionState() == ConnectionState::CONNECTED)
-			hr = ProcSendReliable();
+		//if (GetConnectionState() == ConnectionState::CONNECTED)
+		//	hr = ProcSendReliable();
 
-		hr = ProcRecvReliableQueue();
-		if( !(hr) )
-		{
-			SFLog(Net, Info, "Process Recv Guaranted queue failed {0:X8}", hr );
-		}
+		//hr = ProcRecvReliableQueue();
+		//if( !(hr) )
+		//{
+		//	SFLog(Net, Info, "Process Recv Guaranted queue failed {0:X8}", hr );
+		//}
 
 
-	Proc_End:
+	//Proc_End:
 
 		SendFlush();
 

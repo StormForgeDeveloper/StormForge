@@ -35,8 +35,7 @@ namespace Net {
 	{
 	public:
 
-	private:
-		bool m_bSendSyncThisTick;
+	protected:
 
 		ConnectionMessageAction_MUDPHandleAck m_HandleAck;
 		ConnectionMessageAction_MUDPHandleNack m_HandleNack;
@@ -45,10 +44,15 @@ namespace Net {
 		ConnectionMessageAction_MUDPHandleConnect m_HandleConnect;
 		ConnectionMessageAction_UDPHandleDisconnect m_HandleDisconnect;
 
+		ConnectionStateAction_SendReliableQueue m_ActSendReliableQueue;
+		ConnectionStateAction_SendReliableRetry m_ActSendReliableRetry;
+
 
 		friend class ConnectionStateAction_SendReliableQueue;
 		friend class ConnectionStateAction_SendReliableRetry;
 		friend class ConnectionStateAction_SendSync;
+		friend class ConnectionStateAction_SendSyncSvr;
+		friend class ConnectionMessageAction_MUDPHandleSyncReliableServer;
 
 	public:
 		// Constructor
@@ -67,27 +71,15 @@ namespace Net {
 		// Process network control message
 		virtual Result ProcNetCtrl( const MsgNetCtrl* pNetCtrl ) override;
 
-		// Process Recv queue
-		virtual Result ProcRecvReliableQueue() override;
-
-		// Process Send queue
-		virtual Result ProcSendReliableQueue() override;
-		
-		// Process message window queue
-		virtual Result ProcReliableSendRetry() override;
-
 
 		Result OnGuarrentedMessageRecv(SharedPointerT<Message::MessageData>& pMsg);
 
 		// On server side, update send queue will be handled by event handler
 		// On client side, send queue need to be updated by connection
-		virtual Result ProcSendReliable();
+		//virtual Result ProcSendReliable();
 
 
 	public:
-		void SetSendSyncThisTick(bool bEnable) { m_bSendSyncThisTick = bEnable; }
-		bool GetSendSyncThisTick() { return m_bSendSyncThisTick; }
-
 
 		// called when incoming message occur
 		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) override;
@@ -108,25 +100,18 @@ namespace Net {
 	class ConnectionMUDPServer : public ConnectionMUDP
 	{
 	private:
-#ifdef _DEBUG
-		TimeStampMS m_SendQueueTime;
-		bool m_Reported = false;
-#endif
 
 		ConnectionMessageAction_MUDPHandleSyncReliableServer m_HandleSyncReliable;
 
+		ConnectionStateAction_SendSyncSvr m_ActSync;
+
 	public:
 		// Constructor
-		ConnectionMUDPServer(IHeap& memoryManager, SocketIO* ioHandler);
+		ConnectionMUDPServer(IHeap& heap, SocketIO* ioHandler);
 		virtual ~ConnectionMUDPServer();
-	protected:
 
-		virtual Result UpdateSendQueue() override;
-
-		virtual Result ProcSendReliable() override;
-	public:
-
-		
+		// We need this for event handling
+		Result UpdateSendQueue() override;
 	};
 
 
@@ -223,6 +208,9 @@ namespace Net {
 		ConnectionStateAction_SendHeartBit m_SendHeartBit;
 		ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
+		ConnectionStateAction_SendSync m_ActSendSync;
+
+
 		// Client side CID generator
 		static std::atomic<uint64_t> stm_CIDGen;
 
@@ -236,7 +224,7 @@ namespace Net {
 		virtual Result InitConnection(const PeerInfo &local, const PeerInfo &remote) override;
 
 
-		virtual Result ProcSendReliable() override;
+		//virtual Result ProcSendReliable() override;
 
 
 		// Send packet buffer to connection with network device

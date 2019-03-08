@@ -61,7 +61,7 @@ namespace Net {
 		// Base sequence should be locked until actual swap is happened
 		// There is a chance m_uiBaseSequence increase before the message is actually added if same message is added on different thread on the same time.
 		// It will cause way beyond message in the message window
-		TicketScopeLock scopeLock(TicketLock::LockMode::NonExclusive, m_SequenceLock);
+		//TicketScopeLock scopeLock(TicketLock::LockMode::NonExclusive, m_SequenceLock);
 		int diff = Message::SequenceDifference(msgSeq, m_uiBaseSequence);
 
 		if (diff >= GetWindowSize())
@@ -109,7 +109,7 @@ namespace Net {
 			return ResultCode::FAIL;
 
 		// Base sequence should be locked during actual pop operation
-		TicketScopeLock scopeLock(TicketLock::LockMode::Exclusive, m_SequenceLock);
+		//TicketScopeLock scopeLock(TicketLock::LockMode::Exclusive, m_SequenceLock);
 
 		pIMsg = std::forward<SharedPointerAtomicT<Message::MessageData>>(m_pMsgWnd[iPosIdx]);
 		if (pIMsg == nullptr)
@@ -204,7 +204,7 @@ namespace Net {
 	// Clear window element
 	void SendMsgWindow::ClearWindow()
 	{
-		MutexScopeLock localLock(GetLock());
+		//MutexScopeLock localLock(GetLock());
 
 		if (m_pMsgWnd)
 		{
@@ -280,7 +280,7 @@ namespace Net {
 	Result SendMsgWindow::ReleaseSingleMessage( uint16_t uiSequence )
 	{
 		// TODO: math this function thread safe because this function can be called from other thread
-		MutexScopeLock localLock(m_Lock);
+		//MutexScopeLock localLock(m_Lock);
 
 		Result hr = ResultCode::SUCCESS;
 		int iIdx;
@@ -303,24 +303,6 @@ namespace Net {
 
 		ReleaseMessageInternal(iIdx);
 
-		//iPosIdx = (m_uiBaseSequence + iIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
-
-		//// Make it as a can-be-freed
-		//if( m_pMsgWnd[ iPosIdx ].State != ItemState::Free )
-		//{
-		//	auto pMsg = *m_pMsgWnd[iPosIdx].pMsg;
-		//	if(pMsg != nullptr )
-		//	{
-		//		if(pMsg->GetMessageHeader()->msgID.IDSeq.Sequence != uiSequence )
-		//		{
-		//			SFLog(Net, Info, "Validation error : Message has Invalid Sequence {0}, {1} Required, msg:{2:X8}", pMsg->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence, pMsg->GetMessageHeader()->msgID.ID );
-		//		}
-
-		//		m_pMsgWnd[iPosIdx].pMsg = nullptr;
-		//		m_pMsgWnd[ iPosIdx ].State = ItemState::CanFree;
-		//	}
-		//}
-
 		// No sliding window for this because this can be called from other thread
 
 	Proc_End:
@@ -335,7 +317,7 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS;
 		int iIdx;
 
-		MutexScopeLock localLock(m_Lock);
+		//MutexScopeLock localLock(m_Lock);
 
 		if( m_pMsgWnd == nullptr )
 			return ResultCode::SUCCESS;// nothing to release

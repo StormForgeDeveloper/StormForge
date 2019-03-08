@@ -80,7 +80,10 @@ namespace Net {
 	TimeStampMS ConnectionActionBase::GetNetCtrlTryTime() { return GetConnection()->GetNetCtrlTryTime(); }
 	void ConnectionActionBase::UpdateNetCtrlTryTime() { GetConnection()->UpdateNetCtrlTryTime(); }
 
-
+	IConnectionEventHandler* ConnectionActionBase::GetEventHandler()
+	{
+		return m_pConnection->GetEventHandler();
+	}
 
 	ConnectionMUDP* ConnectionActionMUDP::GetConnection()
 	{
@@ -88,7 +91,13 @@ namespace Net {
 	}
 
 
-	
+	ConnectionMUDP* ConnectionMessageActionMUDP::GetConnection()
+	{
+		return static_cast<ConnectionMUDP*>(ConnectionActionBase::GetConnection());
+	}
+
+
+
 } // namespace Net
 } // namespace SF
 

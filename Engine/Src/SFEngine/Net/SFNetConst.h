@@ -79,7 +79,6 @@ namespace Net {
 		SVR_PUBLIC_CONNECTION_BUCKET_SIZE	= 100*1024,
 		SVR_PRIVATE_CONNECTION_BUCKET_SIZE	= 256,
 
-		TCP_GUARANT_PENDING_MAX			= 10,
 		TCP_ACCEPT_PENDING_MAX			= 10,
 		TCP_ACCEPT_TRYALLOC_MAX			= 1000,
 
@@ -95,6 +94,7 @@ namespace Net {
 		//UDP_HEARTBIT_TIMEOUT = 1000 * 60 * 10,
 		};
 
+		constexpr int GUARANT_PENDING_MAX = 1024;
 		// If send queue has less than this count, the message will be sent quickly. per connection
 		constexpr uint AGRESSIVE_SEND_COUNT = 20;
 
@@ -104,7 +104,7 @@ namespace Net {
 
 		constexpr DurationMS SVR_CONNECTION_TIMEOUT = DurationMS(10 * 60 * 1000);
 		constexpr DurationMS SEND_RETRY_TIME = DurationMS(1000);
-		constexpr DurationMS MUDP_SEND_RETRY_TIME = DurationMS(500);
+		constexpr DurationMS MUDP_SEND_RETRY_TIME = DurationMS(2000);
 		constexpr DurationMS CONNECTION_RETRY_TIME = DurationMS(500);
 
 		constexpr DurationMS SVR_HEARTBIT_TIME_UDP = DurationMS(5 * 1000);
@@ -121,7 +121,8 @@ namespace Net {
 #endif
 		constexpr DurationMS HEARTBIT_TIMEOUT = DurationMS(2 * 60 * 1000);
 
-		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME = DurationMS(500);
+		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME = DurationMS(10 * 1000);
+		constexpr int RELIABLE_SEND_BOOST = 5;
 	};
 
 

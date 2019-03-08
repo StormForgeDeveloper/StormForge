@@ -60,7 +60,7 @@ namespace Net {
 		, m_uiMaxGuarantedRetryAtOnce(Const::UDP_SVR_RETRY_ONETIME_MAX)
 		, m_uiGatheredSize(0)
 		, m_pGatheringBuffer(nullptr)
-		, m_RecvGuaQueue(GetHeap(), MessageWindow::MESSAGE_QUEUE_SIZE / 2 )
+	//	, m_RecvGuaQueue(GetHeap(), MessageWindow::MESSAGE_QUEUE_SIZE / 2 )
 		, m_pWriteQueuesUDP(nullptr)
 	{
 		SetHeartbitTry( Const::UDP_HEARTBIT_TIME);
@@ -216,7 +216,7 @@ namespace Net {
 		IOBUFFER_WRITE *pSendBuffer = nullptr;
 
 		// Send Flush and PrepareGathering should be called on the same thread
-		AssertRel(GetRunningThreadID() == ThisThread::GetThreadID());
+		//AssertRel(GetRunningThreadID() == ThisThread::GetThreadID());
 
 
 		auto pIOHandler = GetNetIOHandler();
@@ -284,7 +284,7 @@ namespace Net {
 			return ResultCode::FAIL;
 		}
 
-		AssertRel(GetRunningThreadID() == ThisThread::GetThreadID());
+		//AssertRel(GetRunningThreadID() == ThisThread::GetThreadID());
 
 		if( (m_uiGatheredSize + uiRequiredSize) > (uint)Const::PACKET_GATHER_SIZE_MAX )
 		{
@@ -441,7 +441,7 @@ namespace Net {
 
 		m_uiGatheredSize = 0;
 
-		m_RecvGuaQueue.ClearQueue();
+		//m_RecvGuaQueue.ClearQueue();
 
 		netChk(Connection::InitConnection( local, remote ) );
 
@@ -596,7 +596,7 @@ namespace Net {
 		Protocol::PrintDebugMessage( "Send", pMsg );
 
 		if (!msgID.IDs.Reliability
-			&& m_SendGuaQueue.size() > Const::TCP_GUARANT_PENDING_MAX)
+			&& m_SendGuaQueue.size() > Const::GUARANT_PENDING_MAX)
 		{
 			// Drop if there is too many reliable packets are pending
 			netErr(ResultCode::IO_SEND_FAIL);
@@ -634,6 +634,8 @@ namespace Net {
 				AssertRel(pMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
 
 				netChk( m_SendGuaQueue.Enqueue( std::forward<SharedPointerT<Message::MessageData>>(pMsg) ) );
+
+				SetSendBoost(Const::RELIABLE_SEND_BOOST);
 
 				// Poke send if there is any message to send and not too many in the queue
 				// Keep poking on bad network situation will make it worse
@@ -713,7 +715,7 @@ namespace Net {
 
 			ResetZeroRecvCount();
 
-			// if net control message then process immidiately except reliable messages
+			// if net control message then process immediately except reliable messages
 			if (pMsgHeader->msgID.IDs.Type == Message::MSGTYPE_NETCONTROL && pMsgHeader->msgID.IDs.Reliability == false) 
 			{
 				netChk(ProcNetCtrl((MsgNetCtrl*)pMsgHeader));
@@ -771,15 +773,21 @@ namespace Net {
 			// This message need to be merged before adding recv queue
 			if (pMsgHeader->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
 			{
-				hr = OnFrameSequenceMessage(pMsg, [&](SharedPointerT<Message::MessageData>& pMsgData) { hr = m_RecvGuaQueue.Enqueue(pMsgData); });
+				hr = OnFrameSequenceMessage(pMsg, [&](SharedPointerT<Message::MessageData>& pMsgData) { hr = m_RecvReliableWindow.AddMsg(pMsgData); });
 			}
 			else
 			{
-				hr = m_RecvGuaQueue.Enqueue(pMsg);
+				hr = m_RecvReliableWindow.AddMsg(pMsg);
 			}
 
 			pMsg = nullptr;
 			netChk(hr);
+
+			SharedPointerT<Message::MessageData> pPopMsg;
+			while (m_RecvReliableWindow.PopMsg(pPopMsg))
+			{
+				hr = ConnectionUDPBase::OnRecv(pPopMsg);
+			}
 		}
 		else
 		{
@@ -945,84 +953,84 @@ namespace Net {
 		return hr;
 	}
 
-
-
-	// Process Recv queue
-	Result ConnectionUDP::ProcRecvReliableQueue()
-	{
-		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<Message::MessageData> pIMsg;
-		Message::MessageID msgIDTem;
-		Message::MessageHeader *pMsgHeader = nullptr;
-		SendMsgWindow::MessageData *pMessageElement = nullptr;
-
-
-		if (GetConnectionState() == Net::ConnectionState::DISCONNECTED)
-			return ResultCode::SUCCESS;
-
-
-		// Recv guaranted queue process
-		auto loopCount = m_RecvGuaQueue.size();
-		for (unsigned iCount = 0; iCount < loopCount; iCount++)
-		{
-			if (!(m_RecvGuaQueue.Dequeue(pIMsg)))
-				break;
-
-			if( pIMsg == nullptr )
-				break;
-
-			pMsgHeader = pIMsg->GetMessageHeader();
-
-			Assert(pMsgHeader->Crc32 != 0);
-
-			if( !pMsgHeader->msgID.IDs.Reliability )
-			{
-				Assert(0);// this shouldn't be happened
-				continue;
-			}
-
-			Assert( !pMsgHeader->msgID.IDs.Encrypted );
-
-			Result hrTem = m_RecvReliableWindow.AddMsg( pIMsg );
-
-			SFLog(Net, Debug2, "RECVGuaAdd : CID:{0}:{1}, msg:{2}, seq:{3}, len:%4%, hr={5:X8}",
-							GetCID(), m_RecvReliableWindow.GetBaseSequence(), 
-							pIMsg->GetMessageHeader()->msgID, 
-							pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
-							pIMsg->GetMessageHeader()->Length,
-							hrTem );
-
-			if( hrTem == Result(ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE) )
-			{
-				SendPending(PACKET_NETCTRL_ACK, pMsgHeader->msgID.IDSeq.Sequence, pMsgHeader->msgID);
-				pIMsg = nullptr;
-				continue;
-			}
-			else if (hrTem == Result(ResultCode::IO_INVALID_SEQUENCE) || hrTem == Result(ResultCode::IO_SEQUENCE_OVERFLOW))
-			{
-				pIMsg = nullptr;
-				continue;
-			}
-			else
-			{
-				// Added to msg window just send ACK
-				pIMsg = nullptr;
-				SendPending(PACKET_NETCTRL_ACK, pMsgHeader->msgID.IDSeq.Sequence, pMsgHeader->msgID);
-			}
-
-			netChk(ProcGuarrentedMessageWindow([&](SharedPointerT<Message::MessageData>& pMsg){ Connection::OnRecv(pIMsg); }));
-		}
-
-
-Proc_End:
-
-		pIMsg = nullptr;
-		if (pMessageElement != nullptr) pMessageElement->Clear();
-
-
-		return hr;
-	}
-
+//
+//
+//	// Process Recv queue
+//	Result ConnectionUDP::ProcRecvReliableQueue()
+//	{
+//		Result hr = ResultCode::SUCCESS;
+//		SharedPointerT<Message::MessageData> pIMsg;
+//		Message::MessageID msgIDTem;
+//		Message::MessageHeader *pMsgHeader = nullptr;
+//		SendMsgWindow::MessageData *pMessageElement = nullptr;
+//
+//
+//		if (GetConnectionState() == Net::ConnectionState::DISCONNECTED)
+//			return ResultCode::SUCCESS;
+//
+//
+//		// Recv guaranted queue process
+//		auto loopCount = m_RecvGuaQueue.size();
+//		for (unsigned iCount = 0; iCount < loopCount; iCount++)
+//		{
+//			if (!(m_RecvGuaQueue.Dequeue(pIMsg)))
+//				break;
+//
+//			if( pIMsg == nullptr )
+//				break;
+//
+//			pMsgHeader = pIMsg->GetMessageHeader();
+//
+//			Assert(pMsgHeader->Crc32 != 0);
+//
+//			if( !pMsgHeader->msgID.IDs.Reliability )
+//			{
+//				Assert(0);// this shouldn't be happened
+//				continue;
+//			}
+//
+//			Assert( !pMsgHeader->msgID.IDs.Encrypted );
+//
+//			Result hrTem = m_RecvReliableWindow.AddMsg( pIMsg );
+//
+//			SFLog(Net, Debug2, "RECVGuaAdd : CID:{0}:{1}, msg:{2}, seq:{3}, len:%4%, hr={5:X8}",
+//							GetCID(), m_RecvReliableWindow.GetBaseSequence(), 
+//							pIMsg->GetMessageHeader()->msgID, 
+//							pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
+//							pIMsg->GetMessageHeader()->Length,
+//							hrTem );
+//
+//			if( hrTem == Result(ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE) )
+//			{
+//				SendPending(PACKET_NETCTRL_ACK, pMsgHeader->msgID.IDSeq.Sequence, pMsgHeader->msgID);
+//				pIMsg = nullptr;
+//				continue;
+//			}
+//			else if (hrTem == Result(ResultCode::IO_INVALID_SEQUENCE) || hrTem == Result(ResultCode::IO_SEQUENCE_OVERFLOW))
+//			{
+//				pIMsg = nullptr;
+//				continue;
+//			}
+//			else
+//			{
+//				// Added to msg window just send ACK
+//				pIMsg = nullptr;
+//				SendPending(PACKET_NETCTRL_ACK, pMsgHeader->msgID.IDSeq.Sequence, pMsgHeader->msgID);
+//			}
+//
+//			netChk(ProcGuarrentedMessageWindow([&](SharedPointerT<Message::MessageData>& pMsg){ Connection::OnRecv(pIMsg); }));
+//		}
+//
+//
+//Proc_End:
+//
+//		pIMsg = nullptr;
+//		if (pMessageElement != nullptr) pMessageElement->Clear();
+//
+//
+//		return hr;
+//	}
+//
 
 	// Process Send queue
 	Result ConnectionUDP::ProcSendReliableQueue()
@@ -1105,7 +1113,7 @@ Proc_End:
 									pMessageElement->pMsg->GetMessageHeader()->Length );
 					pMessageElement->ulTimeStamp = ulTimeCur;
 					// Creating new reference object will increase reference count of the message instance.
-					// And more importanly, SendPending is taking reference of the variable and clear it when it done sending
+					// And more importantly, SendPending is taking reference of the variable and clear it when it done sending
 					auto tempMsg = pMessageElement->pMsg;
 					SendPending(tempMsg);
 				}
@@ -1138,13 +1146,13 @@ Proc_End:
 			SFLog(Net, Info, "Process Connection state failed {0:X8}", hr );
 		}
 
-
+/*
 		hr = ProcRecvReliableQueue();
 		if( !(hr) )
 		{
 			SFLog(Net, Info, "Process Recv Guaranted queue failed {0:X8}", hr );
 		}
-
+*/
 		hr = ProcSendReliableQueue();
 		if( !(hr) )
 		{

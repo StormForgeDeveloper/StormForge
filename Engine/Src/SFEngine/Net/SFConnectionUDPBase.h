@@ -51,13 +51,15 @@ namespace Net {
 
 
 		// Recv guaranteed Message Queue, to enable MT enqueue
-		MsgQueue			 m_RecvGuaQueue;
+		//MsgQueue			 m_RecvGuaQueue;
 
 		// subframe message
 		SharedPointerT<Message::MessageData>		m_SubFrameMessage;
 
 		// UDP send queue
 		WriteBufferQueue*			m_pWriteQueuesUDP;
+
+		int m_SendBoost = 0;
 
 		CriticalSection		m_UpdateLock;
 
@@ -67,16 +69,7 @@ namespace Net {
 		virtual Result ProcNetCtrl( const MsgNetCtrl* pNetCtrl ) = 0;
 
 
-		// Process Recv queue
-		virtual Result ProcRecvReliableQueue() = 0;
-
-		// Process Send queue
-		virtual Result ProcSendReliableQueue() = 0;
-		
-		// Process message window queue
-		virtual Result ProcReliableSendRetry() = 0;
-
-
+		CriticalSection& GetUpdateLock() { return m_UpdateLock; }
 
 		WriteBufferQueue* GetWriteQueueUDP() { return m_pWriteQueuesUDP; }
 
@@ -91,6 +84,10 @@ namespace Net {
 		// Constructor
 		ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler);
 		virtual ~ConnectionUDPBase();
+
+		void SetSendBoost(int value) { m_SendBoost = value; }
+		int GetSendBoost() { return m_SendBoost; }
+		void DecSendBoost() { if (m_SendBoost > 0) m_SendBoost--; }
 
 		void SetWriteQueueUDP(WriteBufferQueue* writeQueue);
 

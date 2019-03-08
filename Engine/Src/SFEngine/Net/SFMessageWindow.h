@@ -64,7 +64,7 @@ namespace Net {
 	private:
 
 		// sequence lock
-		TicketLock m_SequenceLock;
+		//TicketLock m_SequenceLock;
 
 		atomic<uint64_t>			m_uiSyncMask;
 
@@ -150,7 +150,7 @@ namespace Net {
 		MessageData*	m_pMsgWnd = nullptr;
 
 		// Until this can do thread safe release
-		CriticalSection m_Lock;
+		//CriticalSection m_Lock;
 
 	private:
 		// Release message sequence and slide window if can
@@ -163,7 +163,7 @@ namespace Net {
 		SendMsgWindow(IHeap& heap);
 		~SendMsgWindow();
 
-		CriticalSection& GetLock()				{ return m_Lock; }
+		//CriticalSection& GetLock()				{ return m_Lock; }
 
 
 		// get window size

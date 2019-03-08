@@ -67,14 +67,14 @@ namespace Net {
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
 	};
 
-	class ConnectionMessageAction_MUDPHandleSyncReliableServer : public ConnectionMessageAction
+	class ConnectionMessageAction_MUDPHandleSyncReliableServer : public ConnectionMessageActionMUDP
 	{
 	public:
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
 	};
 
 
-	class ConnectionMessageAction_MUDPHandleSyncReliableClient : public ConnectionMessageAction
+	class ConnectionMessageAction_MUDPHandleSyncReliableClient : public ConnectionMessageActionMUDP
 	{
 	public:
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
@@ -144,6 +144,17 @@ namespace Net {
 		virtual Result Run() override;
 	};
 
+
+	class ConnectionStateAction_SendSyncSvr : public ConnectionActionMUDP
+	{
+	private:
+
+		TimeStampMS m_ReliableSyncTime = TimeStampMS(DurationMS_Zero);
+
+	public:
+		virtual Result Run() override;
+	};
+
 	class ConnectionStateAction_SendReliableQueue : public ConnectionActionMUDP
 	{
 	public:
@@ -155,7 +166,13 @@ namespace Net {
 	public:
 		virtual Result Run() override;
 	};
-
+/*
+	class ConnectionStateAction_UpdateRecvReliable : public ConnectionActionMUDP
+	{
+	public:
+		virtual Result Run() override;
+	};
+*/
 
 }  // namespace Net
 } // namespace SF

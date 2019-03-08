@@ -178,26 +178,27 @@ namespace Net {
 		Result hr;
 		Result hrTem;
 
-		ConnectionMUDP* pConnUDP = (ConnectionMUDP*)GetConnection();
-		auto& sendReliableWindow = pConnUDP->GetSendReliableWindow();
+		ConnectionMUDP* pConnUDP = GetConnection();
+		auto& sendWindow = pConnUDP->GetSendReliableWindow();
+		auto& recvWindow = pConnUDP->GetRecvReliableWindow();
 		const MsgMobileNetCtrl* pNetCtrl = (MsgMobileNetCtrl*)(netCtrlMsg);
 
-		MutexScopeLock localLock(sendReliableWindow.GetLock());
+		//MutexScopeLock localLock(sendReliableWindow.GetLock());
 
 		MsgMobileNetCtrlSync *pSyncCtrl = (MsgMobileNetCtrlSync*)pNetCtrl;
 		if (pSyncCtrl->Length != sizeof(MsgMobileNetCtrlSync))
 			netErr(ResultCode::IO_BADPACKET_SIZE);
 
-		hrTem = sendReliableWindow.ReleaseMsg(pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
+		hrTem = sendWindow.ReleaseMsg(pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
 		if (hrTem)
 		{
 			SFLog(Net, Debug, "NetCtrl Recv SendMask : CID:{0}: mySeq:{1}, seq:{2}, mask:{3:X8}",
-				GetCID(), sendReliableWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
+				GetCID(), sendWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
 		}
 		else
 		{
 			SFLog(Net, Debug, "NetCtrl Recv SendMask Failed : CID:{0} mySeq:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
-				GetCID(), sendReliableWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask, hrTem);
+				GetCID(), sendWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask, hrTem);
 		}
 
 		if (hrTem == Result(ResultCode::UNEXPECTED))
@@ -205,22 +206,19 @@ namespace Net {
 
 		netChk(hrTem);
 
+		netChk(GetConnection()->SendSync(recvWindow.GetBaseSequence(), recvWindow.GetSyncMask()));
 
 		// poke send network only when there is something to send
 		// Actually send proc also handles recv window
-		if (GetConnection()->GetEventHandler() != nullptr /*&& (pConnUDP->GetSendGuaQueue().size() > 0 || sendReliableWindow.GetMsgCount() > 0)*/)
+		if (GetEventHandler() != nullptr)
 		{
-			pConnUDP->SetSendSyncThisTick(true);
-			hrTem = GetConnection()->GetEventHandler()->OnNetSyncMessage(pConnUDP);
+			pConnUDP->SetSendBoost(Const::RELIABLE_SEND_BOOST);
+
+			hrTem = GetEventHandler()->OnNetSyncMessage(pConnUDP);
 			if (hrTem != ResultCode::NOT_IMPLEMENTED)
 			{
 				netChk(hrTem);
 			}
-		}
-		else
-		{
-			// Threading problem
-			//pConnUDP->UpdateSendQueue();
 		}
 
 	Proc_End:
@@ -234,11 +232,11 @@ namespace Net {
 		Result hr;
 		Result hrTem;
 
-		ConnectionMUDP* pConnUDP = (ConnectionMUDP*)GetConnection();
+		ConnectionMUDP* pConnUDP = GetConnection();
 		auto& sendReliableWindow = pConnUDP->GetSendReliableWindow();
 		const MsgMobileNetCtrl* pNetCtrl = (MsgMobileNetCtrl*)(netCtrlMsg);
 
-		MutexScopeLock localLock(sendReliableWindow.GetLock());
+		//MutexScopeLock localLock(sendReliableWindow.GetLock());
 
 		MsgMobileNetCtrlSync *pSyncCtrl = (MsgMobileNetCtrlSync*)pNetCtrl;
 		if (pSyncCtrl->Length != sizeof(MsgMobileNetCtrlSync))
@@ -254,7 +252,9 @@ namespace Net {
 		GetConnection()->UpdateNetCtrlTime();
 
 		netChk(hrTem);
-		pConnUDP->SetSendSyncThisTick(true); // for regular ping. maybe I can get rid of this later
+
+		if (sendReliableWindow.GetHeadSequence() != sendReliableWindow.GetBaseSequence())
+			pConnUDP->SetSendBoost(Const::RELIABLE_SEND_BOOST); // for regular ping. maybe I can get rid of this later
 
 	Proc_End:
 		return hr;
@@ -421,18 +421,44 @@ namespace Net {
 	Result ConnectionStateAction_SendSync::Run()
 	{
 		Result hr = ResultCode::SUCCESS;
+		auto sendBoost = GetConnection()->GetSendBoost() * 2;
+		auto syncTimeout = sendBoost > 0 ? DurationMS(Const::RELIABLE_SYNC_POLLING_TIME / sendBoost) : DurationMS(Const::RELIABLE_SYNC_POLLING_TIME);
 
-		if (!GetConnection()->GetSendSyncThisTick() 
-			&& Util::TimeSince(m_ReliableSyncTime) < Const::RELIABLE_SYNC_POLLING_TIME)
+		if (Util::TimeSince(m_ReliableSyncTime) < syncTimeout)
 			return hr;
 
 		m_ReliableSyncTime = Util::Time.GetTimeMs();
 
 		auto& recvWindow = GetConnection()->GetRecvReliableWindow();
 
+		GetConnection()->DecSendBoost();
+
 		netChk(GetConnection()->SendSync(recvWindow.GetBaseSequence(), recvWindow.GetSyncMask()));
 
 	Proc_End:
+
+		return hr;
+	}
+
+
+	Result ConnectionStateAction_SendSyncSvr::Run()
+	{
+		Result hr = ResultCode::SUCCESS;
+
+		if (GetConnection()->GetSendBoost() <= 0)
+			return hr;
+
+		m_ReliableSyncTime = Util::Time.GetTimeMs();
+
+		auto& recvWindow = GetConnection()->GetRecvReliableWindow();
+
+		GetConnection()->DecSendBoost();
+
+		//netChk(GetConnection()->SendSync(recvWindow.GetBaseSequence(), recvWindow.GetSyncMask()));
+
+	Proc_End:
+
+		if (GetEventHandler() != nullptr) GetEventHandler()->OnNetSyncMessage(GetConnection());
 
 		return hr;
 	}
@@ -495,12 +521,14 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS;
 		SendMsgWindow::MessageData *pMessageElement = nullptr;
 		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
+		auto sendBoost = GetConnection()->GetSendBoost();
+		auto retryTimeout = sendBoost > 0 ? DurationMS(Const::MUDP_SEND_RETRY_TIME / sendBoost) : DurationMS(Const::MUDP_SEND_RETRY_TIME);
 
 		//assert(ThisThread::GetThreadID() == GetRunningThreadID());
 		auto& sendWindow = GetConnection()->GetSendReliableWindow();
 
 		// Guaranteed retry
-		MutexScopeLock localLock(sendWindow.GetLock());// until ReleaseMsg( uint16_t uiSequence ) is thread safe, we need to lock the window
+		//MutexScopeLock localLock(sendWindow.GetLock());// until ReleaseMsg( uint16_t uiSequence ) is thread safe, we need to lock the window
 		uint uiMaxProcess = Util::Min(sendWindow.GetMsgCount(), GetConnection()->GetMaxGuarantedRetryAtOnce());
 		for (uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)sendWindow.GetWindowSize() && uiMsgProcessed < uiMaxProcess; uiIdx++)
 		{
@@ -516,7 +544,7 @@ namespace Net {
 				continue;
 			}
 
-			if (Util::TimeSince(pMessageElement->ulTimeStamp) <= DurationMS(Const::MUDP_SEND_RETRY_TIME))
+			if (Util::TimeSince(pMessageElement->ulTimeStamp) <= retryTimeout)
 				break;
 
 			uint totalGatheredSize = GetConnection()->GetGatheredBufferSize() + pMessageElement->pMsg->GetMessageSize();
@@ -548,6 +576,8 @@ namespace Net {
 
 		return hr;
 	}
+
+
 
 
 } // namespace Net

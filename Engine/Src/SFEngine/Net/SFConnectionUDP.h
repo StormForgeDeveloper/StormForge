@@ -40,7 +40,7 @@ namespace Net {
 		virtual Result ProcNetCtrl( const MsgNetCtrl* pNetCtrl );
 
 		// Process Recv queue
-		virtual Result ProcRecvReliableQueue();
+		//virtual Result ProcRecvReliableQueue();
 
 		// Process Send queue
 		virtual Result ProcSendReliableQueue();
