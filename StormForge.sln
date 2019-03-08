@@ -59,11 +59,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFProtocol.Win", "Engine\Sr
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFProtocol.Android", "Engine\Src\Protocol\SFProtocol.Android.vcxproj", "{147D0885-77B8-4050-8CD5-E4D982E2F888}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFCoreBase.Android", "Engine\Src\CoreBase\SFCoreBase.Android.vcxproj", "{193233AF-A406-4BCC-9FEE-8D39664DEFC2}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFCore.Android", "Engine\Src\SFCore\SFCore.Android.vcxproj", "{193233AF-A406-4BCC-9FEE-8D39664DEFC2}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFCoreBase.Win", "Engine\Src\CoreBase\SFCoreBase.Win.vcxproj", "{758FA598-B851-4848-BEC0-E039EDBD2E5E}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFCore.Win", "Engine\Src\SFCore\SFCore.Win.vcxproj", "{758FA598-B851-4848-BEC0-E039EDBD2E5E}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFCoreBase", "Engine\Src\CoreBase\SFCoreBase.vcxitems", "{62D7BD92-62C4-4B83-8E3B-0AFE3942FE28}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "SFCore", "Engine\Src\SFCore\SFCore.vcxitems", "{62D7BD92-62C4-4B83-8E3B-0AFE3942FE28}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestGraphic", "TestGraphic", "{2D570254-9AA8-47E3-8758-9F0BD086F98F}"
 EndProject
@@ -82,16 +82,16 @@ EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Engine\Src\Protocol\SFProtocol.vcxitems*{147d0885-77b8-4050-8cd5-e4d982e2f888}*SharedItemsImports = 4
-		Engine\Src\CoreBase\SFCoreBase.vcxitems*{193233af-a406-4bcc-9fee-8d39664defc2}*SharedItemsImports = 4
+		Engine\Src\SFCore\SFCore.vcxitems*{193233af-a406-4bcc-9fee-8d39664defc2}*SharedItemsImports = 4
 		Engine\Src\SFEngine\SFEngine.vcxitems*{1ac5e64d-18e3-4521-805d-e083933ac19c}*SharedItemsImports = 4
 		Test\TestNet\TestNet.Shared\TestNet.Shared.vcxitems*{219fa9f2-b34a-47d5-bfd9-20fce4e98f5a}*SharedItemsImports = 4
 		Engine\Src\SFEngineTool\SFEngineTool.vcxitems*{45d41acc-2c3c-43d2-bc10-02aa73ffc7c7}*SharedItemsImports = 9
 		Engine\Src\SFEngine\SFEngine.vcxitems*{4c5f1eda-df00-4652-a0e1-ae068e906064}*SharedItemsImports = 9
 		Engine\Src\SFEngineTool\SFEngineTool.vcxitems*{5554dd42-b106-4f4b-93e6-cefae0600422}*SharedItemsImports = 4
-		Engine\Src\CoreBase\SFCoreBase.vcxitems*{62d7bd92-62c4-4b83-8e3b-0afe3942fe28}*SharedItemsImports = 9
+		Engine\Src\SFCore\SFCore.vcxitems*{62d7bd92-62c4-4b83-8e3b-0afe3942fe28}*SharedItemsImports = 9
 		Engine\Src\SFEngine\SFEngine.vcxitems*{66f06996-bae4-4e21-a687-0c4553c72f30}*SharedItemsImports = 4
 		Engine\Src\Protocol\SFProtocol.vcxitems*{6d3c3d98-6342-40dd-a734-d9b353d9ab7b}*SharedItemsImports = 9
-		Engine\Src\CoreBase\SFCoreBase.vcxitems*{758fa598-b851-4848-bec0-e039edbd2e5e}*SharedItemsImports = 4
+		Engine\Src\SFCore\SFCore.vcxitems*{758fa598-b851-4848-bec0-e039edbd2e5e}*SharedItemsImports = 4
 		Test\TestNet\TestNet.Shared\TestNet.Shared.vcxitems*{82c91c93-2d51-4380-ba6e-f343d98d9ba5}*SharedItemsImports = 9
 		Engine\Src\Protocol\SFProtocol.vcxitems*{a670f5b5-d452-4ee5-8531-c1cde3342484}*SharedItemsImports = 4
 	EndGlobalSection

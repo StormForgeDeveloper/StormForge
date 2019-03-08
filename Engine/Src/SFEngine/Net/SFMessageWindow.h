@@ -185,7 +185,7 @@ namespace Net {
 		void ClearWindow();
 
 		// Get available size at the end
-		uint32_t GetAvailableSize() { return GetWindowSize() - (m_uiHeadSequence - GetBaseSequence() + 1); }
+		uint32_t GetAvailableSize() { return MessageWindow::MESSAGE_QUEUE_SIZE - (m_uiHeadSequence - GetBaseSequence() + 1); }
 		
 		// Add a message at the end
 		Result EnqueueMessage(TimeStampMS ulTimeStampMS, SharedPointerT<Message::MessageData>& pIMsg );
