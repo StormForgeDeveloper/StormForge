@@ -134,6 +134,29 @@ namespace Net {
 	};
 
 
+	class ConnectionStateAction_SendSync : public ConnectionActionMUDP
+	{
+	private:
+
+		TimeStampMS m_ReliableSyncTime = TimeStampMS(DurationMS_Zero);
+
+	public:
+		virtual Result Run() override;
+	};
+
+	class ConnectionStateAction_SendReliableQueue : public ConnectionActionMUDP
+	{
+	public:
+		virtual Result Run() override;
+	};
+
+	class ConnectionStateAction_SendReliableRetry : public ConnectionActionMUDP
+	{
+	public:
+		virtual Result Run() override;
+	};
+
+
 }  // namespace Net
 } // namespace SF
 

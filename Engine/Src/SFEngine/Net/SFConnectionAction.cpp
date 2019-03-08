@@ -17,6 +17,7 @@
 
 
 #include "Net/SFConnection.h"
+#include "Net/SFConnectionMUDP.h"
 #include "Net/SFConnectionAction.h"
 #include "Net/SFNetConst.h"
 #include "Net/SFNetSystem.h"
@@ -78,6 +79,13 @@ namespace Net {
 	TimeStampMS ConnectionActionBase::GetNetCtrlTime() { return GetConnection()->GetNetCtrlTime(); }
 	TimeStampMS ConnectionActionBase::GetNetCtrlTryTime() { return GetConnection()->GetNetCtrlTryTime(); }
 	void ConnectionActionBase::UpdateNetCtrlTryTime() { GetConnection()->UpdateNetCtrlTryTime(); }
+
+
+
+	ConnectionMUDP* ConnectionActionMUDP::GetConnection()
+	{
+		return static_cast<ConnectionMUDP*>(ConnectionActionBase::GetConnection());
+	}
 
 
 	

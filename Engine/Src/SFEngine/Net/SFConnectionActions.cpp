@@ -417,6 +417,139 @@ namespace Net {
 		return hr;
 	}
 
+
+	Result ConnectionStateAction_SendSync::Run()
+	{
+		Result hr = ResultCode::SUCCESS;
+
+		if (!GetConnection()->GetSendSyncThisTick() 
+			&& Util::TimeSince(m_ReliableSyncTime) < Const::RELIABLE_SYNC_POLLING_TIME)
+			return hr;
+
+		m_ReliableSyncTime = Util::Time.GetTimeMs();
+
+		auto& recvWindow = GetConnection()->GetRecvReliableWindow();
+
+		netChk(GetConnection()->SendSync(recvWindow.GetBaseSequence(), recvWindow.GetSyncMask()));
+
+	Proc_End:
+
+		return hr;
+	}
+
+	Result ConnectionStateAction_SendReliableQueue::Run()
+	{
+		Result hr = ResultCode::SUCCESS;
+		SharedPointerT<Message::MessageData> pIMsg;
+		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
+
+		//assert(ThisThread::GetThreadID() ==  GetConnection()->GetRunningThreadID());
+
+		auto& sendWindow = GetConnection()->GetSendReliableWindow();
+		auto& sendGuaQueue = GetConnection()->GetSendGuaQueue();
+
+		// Send guaranteed message process
+		CounterType NumProc = sendWindow.GetAvailableSize();
+		CounterType uiNumPacket = sendGuaQueue.size();
+		NumProc = Util::Min(NumProc, uiNumPacket);
+		for (CounterType uiPacket = 0; uiPacket < NumProc; uiPacket++)
+		{
+			if (!(sendGuaQueue.Dequeue(pIMsg)))
+				break;
+
+			AssertRel(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
+
+			// check sending window size
+			hr = sendWindow.EnqueueMessage(ulTimeCur, pIMsg);
+			if (!(hr))
+			{
+				netErr(hr);
+			}
+
+			SFLog(Net, Debug2, "SENDENQReliable : CID:{0}, seq:{1}, msg:{2}, len:{3}",
+				GetCID(),
+				pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
+				pIMsg->GetMessageHeader()->msgID,
+				pIMsg->GetMessageHeader()->Length);
+
+			// don't bother network with might not be able to processed
+			if ((sendWindow.GetHeadSequence() - sendWindow.GetBaseSequence()) < GetConnection()->GetMaxGuarantedRetryAtOnce())
+			{
+				netChk(GetConnection()->SendPending(pIMsg));
+			}
+			pIMsg = nullptr;
+		}
+
+
+	Proc_End:
+
+		if (!(hr))
+			Disconnect("Failed to send reliable packets");
+
+		return hr;
+	}
+
+
+	Result ConnectionStateAction_SendReliableRetry::Run()
+	{
+		Result hr = ResultCode::SUCCESS;
+		SendMsgWindow::MessageData *pMessageElement = nullptr;
+		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
+
+		//assert(ThisThread::GetThreadID() == GetRunningThreadID());
+		auto& sendWindow = GetConnection()->GetSendReliableWindow();
+
+		// Guaranteed retry
+		MutexScopeLock localLock(sendWindow.GetLock());// until ReleaseMsg( uint16_t uiSequence ) is thread safe, we need to lock the window
+		uint uiMaxProcess = Util::Min(sendWindow.GetMsgCount(), GetConnection()->GetMaxGuarantedRetryAtOnce());
+		for (uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)sendWindow.GetWindowSize() && uiMsgProcessed < uiMaxProcess; uiIdx++)
+		{
+			if (!sendWindow.GetAt(uiIdx, pMessageElement))
+			{
+				pMessageElement = nullptr;
+				continue;
+			}
+
+			if (pMessageElement == nullptr || pMessageElement->pMsg == nullptr)
+			{
+				//AssertRel(pMessageElement->State == MessageWindow::ItemState::Free || pMessageElement->State == MessageWindow::ItemState::CanFree);
+				continue;
+			}
+
+			if (Util::TimeSince(pMessageElement->ulTimeStamp) <= DurationMS(Const::MUDP_SEND_RETRY_TIME))
+				break;
+
+			uint totalGatheredSize = GetConnection()->GetGatheredBufferSize() + pMessageElement->pMsg->GetMessageSize();
+			if (GetConnection()->GetGatheredBufferSize() > 0 && totalGatheredSize > Const::PACKET_GATHER_SIZE_MAX)
+			{
+				// too big to send
+				// stop gathering here, and send
+				pMessageElement = nullptr;
+				break;
+			}
+
+			SFLog(Net, Debug2, "SENDReliableRetry : CID:{0}, seq:{1}, msg:{2}, len:{3}",
+				GetCID(),
+				pMessageElement->pMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
+				pMessageElement->pMsg->GetMessageHeader()->msgID,
+				pMessageElement->pMsg->GetMessageHeader()->Length);
+
+			pMessageElement->ulTimeStamp = ulTimeCur;
+
+			// Creating new reference object will increase reference count of the message instance.
+			// And more importantly, SendPending is taking reference of the variable and clear it when it done sending
+			auto tempMsg = pMessageElement->pMsg;
+			GetConnection()->SendPending(tempMsg);
+			pMessageElement = nullptr;
+		}
+
+
+		//Proc_End:
+
+		return hr;
+	}
+
+
 } // namespace Net
 } // namespace SF
 

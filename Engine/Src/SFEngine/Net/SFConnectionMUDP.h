@@ -46,6 +46,10 @@ namespace Net {
 		ConnectionMessageAction_UDPHandleDisconnect m_HandleDisconnect;
 
 
+		friend class ConnectionStateAction_SendReliableQueue;
+		friend class ConnectionStateAction_SendReliableRetry;
+		friend class ConnectionStateAction_SendSync;
+
 	public:
 		// Constructor
 		ConnectionMUDP(IHeap& heap, SocketIO* ioHandler);
@@ -85,7 +89,7 @@ namespace Net {
 		bool GetSendSyncThisTick() { return m_bSendSyncThisTick; }
 
 
-		// called when incoming message occure
+		// called when incoming message occur
 		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) override;
 		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg ) override;
 

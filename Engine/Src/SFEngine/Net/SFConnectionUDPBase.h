@@ -36,21 +36,21 @@ namespace Net {
 
 
 	protected:
-		// Recive Sorted messages
+		// Receive Sorted messages
 		RecvMsgWindow		m_RecvReliableWindow;
 
-		// Send Guaranted Messages
+		// Send Guaranteed Messages
 		SendMsgWindow		m_SendReliableWindow;
 
-		// Maximum guaranted retry at once
+		// Maximum guaranteed retry at once
 		uint				m_uiMaxGuarantedRetryAtOnce;
 
 		// packet gathering buffer
 		uint				m_uiGatheredSize;
-		uint8_t*				m_pGatheringBuffer;
+		uint8_t*			m_pGatheringBuffer;
 
 
-		// Recv guaranted Message Queue, to enable MT enqueue
+		// Recv guaranteed Message Queue, to enable MT enqueue
 		MsgQueue			 m_RecvGuaQueue;
 
 		// subframe message
@@ -59,6 +59,7 @@ namespace Net {
 		// UDP send queue
 		WriteBufferQueue*			m_pWriteQueuesUDP;
 
+		CriticalSection		m_UpdateLock;
 
 	protected:
 		
@@ -95,12 +96,14 @@ namespace Net {
 
 
 		// Set maximum guaranteed retry count
+		uint GetMaxGuarantedRetryAtOnce() { return m_uiMaxGuarantedRetryAtOnce; }
 		void SetMaxGuarantedRetry(uint uiMaxGuarantedRetry) { m_uiMaxGuarantedRetryAtOnce = uiMaxGuarantedRetry; }
 
 		// Set message window size connection
 		Result SetMessageWindowSize( uint uiSend, uint uiRecv );
 
 		SendMsgWindow& GetSendReliableWindow() { return m_SendReliableWindow; }
+		RecvMsgWindow& GetRecvReliableWindow() { return m_RecvReliableWindow; }
 
 
 		// gathering

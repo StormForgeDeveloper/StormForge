@@ -29,6 +29,7 @@ namespace Net {
 
 
 	class Connection;
+	class ConnectionMUDP;
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -83,7 +84,15 @@ namespace Net {
 	public:
 
 
-		virtual Result Run() = 0;
+		virtual Result Run() { return ResultCode::NOT_IMPLEMENTED; }
+	};
+
+	class ConnectionActionMUDP : public ConnectionAction
+	{
+	public:
+
+		ConnectionMUDP* GetConnection();
+
 	};
 
 
@@ -93,7 +102,7 @@ namespace Net {
 
 		void OnConnectionResult(Result hrConnect);
 
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) = 0;
+		virtual Result Run([[maybe_unused]]const Message::MessageHeader* netCtrlMsg) { return ResultCode::NOT_IMPLEMENTED; }
 	};
 
 
