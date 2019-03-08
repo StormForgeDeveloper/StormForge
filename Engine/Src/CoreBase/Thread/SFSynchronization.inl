@@ -168,14 +168,14 @@ namespace SF {
 		//auto curNonExIndex = m_NonExclusiveIndex.load(std::memory_order_acquire) % countof(m_NonExclusiveWorkerCount);
 		// wait all non exclusive workers to finish their job
 		//m_NonExclusiveWorkerCount[curNonExIndex].fetch_add(1, std::memory_order_release);
-		m_NonExclusiveCount.fetch_add(1, std::memory_order_release);
+		m_NonExclusiveCount.fetch_add(1, std::memory_order_relaxed);
 	}
 
 	void TicketLock::NonExUnlock()
 	{
 		//auto curNonExIndex = m_NonExclusiveIndex.load(std::memory_order_acquire) % countof(m_NonExclusiveWorkerCount);
 		// wait all non exclusive workers to finish their job
-		auto count = m_NonExclusiveCount.fetch_sub(1, std::memory_order_relaxed);// m_NonExclusiveWorkerCount[curNonExIndex].fetch_sub(1, std::memory_order_relaxed);
+		auto count = m_NonExclusiveCount.fetch_sub(1, std::memory_order_release);// m_NonExclusiveWorkerCount[curNonExIndex].fetch_sub(1, std::memory_order_relaxed);
 		unused(count);
 		assert(count >= 0);
 	}
