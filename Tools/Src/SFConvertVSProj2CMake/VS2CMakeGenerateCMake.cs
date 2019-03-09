@@ -30,7 +30,7 @@ namespace SFConvertVSProj2CMake
     [Export(typeof(IBatchTask))]
     class VS2CMakeGenerateCMake : IBatchTask, IInitializable
     {
-        public override int Priority => 1;
+        public override int Priority => 2;
 
         [ImportingConstructor]
         public VS2CMakeGenerateCMake(IBatchTaskManager manager)
@@ -48,17 +48,51 @@ namespace SFConvertVSProj2CMake
         /// </summary>
         public override void Execute()
         {
-            var output = AppConfig.GetValueString("out");
-            if(output == null)
+            var makeinput = AppConfig.GetValueString("makein");
+            if(makeinput == null)
             {
-                Outputs.WriteLine(OutputMessageType.Error, "No input source");
-                throw new InvalidDataException("Input list is empty. add parameter +in=<sourceFile>");
+                Outputs.WriteLine(OutputMessageType.Error, "No input schematic specified");
+                throw new InvalidDataException("No input schematic +makein=<inputSchematicFile>");
             }
 
+            var inputSchematic = Path.GetFullPath(makeinput);
+            var inputSchematicDir = Path.GetDirectoryName(Path.GetFullPath(makeinput));
+            var outputFullPath = Path.Combine(inputSchematicDir, "CMakeLists.txt");
 
-            Uri uri = new Uri(Path.GetFullPath(output));
+            string[] inputPattern = System.IO.File.ReadAllLines(inputSchematic);
+
+            Uri baseDir = new Uri(inputSchematicDir);
+            m_SourceList = BuildFileListString(baseDir, m_compileContext.SourceFiles);
+            m_HeaderList = BuildFileListString(baseDir, m_compileContext.HeaderFiles);
+
+            using (StreamWriter outputStream = new StreamWriter(outputFullPath, false, Encoding.UTF8))
+            {
+                foreach (string line in inputPattern)
+                {
+                    var outputString = line.Replace("%SOURCE_LIST%", m_SourceList);
+                    outputString = outputString.Replace("%HEADER_LIST%", m_HeaderList);
+
+                    outputStream.WriteLine(outputString);
+                }
+            }
 
         }
+
+        string BuildFileListString(Uri baseDir, IList<string> fileList)
+        {
+            StringBuilder listBuilder = new StringBuilder();
+            foreach(var file in fileList)
+            {
+                Uri fullPath = new Uri(file);
+                listBuilder.Append("\t");
+                listBuilder.AppendLine(baseDir.MakeRelativeUri(fullPath).ToString());
+            }
+
+            return listBuilder.ToString();
+        }
+
+        string m_SourceList;
+        string m_HeaderList;
 
         [Import(AllowDefault = false)]
         protected VS2CMakeContext m_compileContext = null;

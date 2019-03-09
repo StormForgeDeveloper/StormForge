@@ -79,6 +79,10 @@ namespace SFConvertVSProj2CMake
             using (FileStream stream = new FileStream(uri.AbsolutePath, FileMode.Open, FileAccess.Read))
             using (XmlReader reader = XmlReader.Create(stream, settings))
             {
+                m_SrcDir = Path.GetDirectoryName(uri.AbsolutePath);
+                if (!m_SrcDir.EndsWith("\\") && !m_SrcDir.EndsWith("/"))
+                    m_SrcDir = m_SrcDir + Path.DirectorySeparatorChar;
+
                 reader.MoveToContent();
 
                 return ReadElement(reader);
@@ -91,16 +95,24 @@ namespace SFConvertVSProj2CMake
             if (IsInclude || IsCompile)
             {
                 // read attributes
-                while (reader.MoveToNextAttribute())
+                if (reader.MoveToFirstAttribute())
                 {
-                    if (reader.LocalName == "Include")
+                    do
                     {
-                        if (IsInclude)
-                            m_compileContext.HeaderFiles.Add(reader.Value);
-                        else
-                            m_compileContext.SourceFiles.Add(reader.Value);
-                    }
+                        if (reader.LocalName == "Include")
+                        {
+                            var absolutePath = ToAbsolutePath(reader.Value);
+
+                            if (IsInclude)
+                                m_compileContext.HeaderFiles.Add(absolutePath);
+                            else
+                                m_compileContext.SourceFiles.Add(absolutePath);
+
+                            break;
+                        }
+                    } while (reader.MoveToNextAttribute());
                 }
+
             }
 
             // read all elements
@@ -127,6 +139,13 @@ namespace SFConvertVSProj2CMake
             return true;
         }
 
+        string ToAbsolutePath(string inputPath)
+        {
+            return inputPath.Replace("$(MSBuildThisFileDirectory)", m_SrcDir);
+        }
+
+
+        string m_SrcDir;
 
 
         [Import(AllowDefault = false)]

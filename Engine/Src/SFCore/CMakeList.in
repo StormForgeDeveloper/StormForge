@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.7)
+
+
+
+set(SFCORE_LIB_FILES
+  %SOURCE_LIST%
+  %HEADER_LIST%
+  )
+
+
+
+
+#include_directories(../SFCore)
+
+
+
+add_library(SFProtocol static ${SFCORE_LIB_FILES})
+
+target_include_directories (SFProtocol PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+
+
+

@@ -60,13 +60,10 @@ namespace SFConvertVSProj2CMake
                 typeof(UnhandledExceptionService),      // catches unhandled exceptions, displays info, and gives user a chance to save
                 typeof(FileDialogService),              // standard Windows file dialogs
 
-                typeof(DomNodeRefDictionary),           // Reference dictionary
-                //typeof(TongScriptCompilerTypeManager),
-                //typeof(ScriptNodeDefinitionManager),
-                //typeof(ZooKeeperSession),
-                //typeof(TongCompilerStart),
-                //typeof(TongCompilerBatchRead),
-                //typeof(TongCompilerBatchGenerateBytecode),
+                typeof(VS2CMakeContext),
+                typeof(DomNodeRefDictionary),
+                typeof(VS2CMakeImport),
+                typeof(VS2CMakeGenerateCMake),
 
                 typeof(Outputs),                        // passes messages to all log writers
                 typeof(ErrorDialogService),             // displays errors to the user in a message box
