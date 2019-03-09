@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.7)
 
 
 
-set(SFENGINE_LIB_FILES
+set(SFENGINEDLL_LIB_FILES
   %SOURCE_LIST%
   %HEADER_LIST%
   )
@@ -10,9 +10,8 @@ set(SFENGINE_LIB_FILES
 
 
 
+add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES})
 
-add_library(SFEngine SHARED ${SFENGINE_LIB_FILES})
-
-target_include_directories (SFProtocol PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
+target_include_directories (SFEngineDLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
 
 

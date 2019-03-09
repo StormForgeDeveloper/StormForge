@@ -104,10 +104,15 @@ namespace SFConvertVSProj2CMake
                             var absolutePath = ToAbsolutePath(reader.Value);
 
                             if (IsInclude)
-                                m_compileContext.HeaderFiles.Add(absolutePath);
+                            {
+                                if (!m_compileContext.HeaderFiles.Contains(absolutePath))
+                                    m_compileContext.HeaderFiles.Add(absolutePath);
+                            }
                             else
-                                m_compileContext.SourceFiles.Add(absolutePath);
-
+                            {
+                                if (!m_compileContext.SourceFiles.Contains(absolutePath))
+                                    m_compileContext.SourceFiles.Add(absolutePath);
+                            }
                             break;
                         }
                     } while (reader.MoveToNextAttribute());
@@ -141,7 +146,8 @@ namespace SFConvertVSProj2CMake
 
         string ToAbsolutePath(string inputPath)
         {
-            return inputPath.Replace("$(MSBuildThisFileDirectory)", m_SrcDir);
+            var relative = inputPath.Replace("$(MSBuildThisFileDirectory)", "");
+            return Path.Combine(m_SrcDir, relative);
         }
 
 

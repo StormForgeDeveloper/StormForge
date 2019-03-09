@@ -9,6 +9,12 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
+
+#include "SFEngineDLLPCH.h"
+
+#if SF_PLATFORM == SF_PLATFORM_ANDROID
+
+
 #include <jni.h>
 #include <android/configuration.h>
 #include <android/native_activity.h>
@@ -56,3 +62,6 @@ extern "C"
 
 	
 }
+
+#endif
+

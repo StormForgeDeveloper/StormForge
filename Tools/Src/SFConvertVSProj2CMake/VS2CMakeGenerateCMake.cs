@@ -61,9 +61,11 @@ namespace SFConvertVSProj2CMake
 
             string[] inputPattern = System.IO.File.ReadAllLines(inputSchematic);
 
+            if (!inputSchematicDir.EndsWith("\\") && !inputSchematicDir.EndsWith("/"))
+                inputSchematicDir = inputSchematicDir + Path.DirectorySeparatorChar;
             Uri baseDir = new Uri(inputSchematicDir);
-            m_SourceList = BuildFileListString(baseDir, m_compileContext.SourceFiles);
-            m_HeaderList = BuildFileListString(baseDir, m_compileContext.HeaderFiles);
+            m_SourceList = BuildFileListString(baseDir, m_compileContext.SourceFiles.ToList());
+            m_HeaderList = BuildFileListString(baseDir, m_compileContext.HeaderFiles.ToList());
 
             using (StreamWriter outputStream = new StreamWriter(outputFullPath, false, Encoding.UTF8))
             {
@@ -83,8 +85,9 @@ namespace SFConvertVSProj2CMake
             foreach(var file in fileList)
             {
                 Uri fullPath = new Uri(file);
+                var relative = baseDir.MakeRelativeUri(fullPath);
                 listBuilder.Append("\t");
-                listBuilder.AppendLine(baseDir.MakeRelativeUri(fullPath).ToString());
+                listBuilder.AppendLine(relative.ToString());
             }
 
             return listBuilder.ToString();

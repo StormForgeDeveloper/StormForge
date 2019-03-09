@@ -32,9 +32,9 @@ namespace SFConvertVSProj2CMake
     class VS2CMakeContext : IInitializable
     {
 
-        public List<string> SourceFiles { get; } = new List<string>();
+        public HashSet<string> SourceFiles { get; } = new HashSet<string>();
 
-        public List<string> HeaderFiles { get; } = new List<string>();
+        public HashSet<string> HeaderFiles { get; } = new HashSet<string>();
 
 
 
