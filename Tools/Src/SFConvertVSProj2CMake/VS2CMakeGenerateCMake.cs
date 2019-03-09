@@ -75,7 +75,6 @@ namespace SFConvertVSProj2CMake
                     outputStream.WriteLine(outputString);
                 }
             }
-
         }
 
         string BuildFileListString(Uri baseDir, IList<string> fileList)
