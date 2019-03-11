@@ -103,27 +103,29 @@ namespace SF
         static ulong m_TimeOffset = 0;
         static public ulong TimeOffset { get { return m_TimeOffset; } set { m_TimeOffset = value; } }
 
-        static public DateTime ToDateTime(uint Time)
+        static public DateTime ToDateTime(long Time)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
-			return origin.AddSeconds(Time);
+            return origin.AddTicks(Time);
+            // return origin.AddSeconds(Time);
         }
 
-		static public ulong FromDateTime(DateTime date)
+        static public long FromDateTime(DateTime date)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
             TimeSpan diff = date.ToUniversalTime() - origin;
-			return (ulong)diff.TotalSeconds;
+            return diff.Ticks;
+            //return (ulong)diff.TotalSeconds;
         }
 
-        static public ulong NowRaw()
+        static public long NowRaw()
         {
-			return TimeUTC.FromDateTime(DateTime.UtcNow);
+            return TimeUTC.FromDateTime(DateTime.UtcNow);
         }
 
-        static public ulong Now()
+        static public long Now()
         {
-            return NowRaw() - m_TimeOffset;
+            return NowRaw();// - (long) m_TimeOffset;
         }
 
         static public void UpdateTimeOffset()
@@ -142,6 +144,12 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFTime_NativeGetTimeOffset", CharSet = CharSet.Auto)]
         static extern UInt64 NativeGetTimeOffset();
+
+        [DllImport(NativeDllName, EntryPoint = "SFTime_NativeGetTimeOffsetTicks", CharSet = CharSet.Auto)]
+        static extern UInt64 NativeGetTickTimeOffset();
+
+
+
 
         #endregion
     };

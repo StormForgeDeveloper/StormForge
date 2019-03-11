@@ -49,6 +49,7 @@ namespace SF {
 
 			// Time correction over network
 			uint64_t					m_UTCPeerOffset = 0;
+			uint64_t					m_UTCPeerTickOffset = 0;
 
 		protected:
 			// Update Time stamp
@@ -88,7 +89,13 @@ namespace SF {
 			DurationSec		GetUTCSecOffset() { return DurationSec(m_ullUTCOffset); }
 			uint64_t		GetUTCSecPeerOffset() { return m_UTCPeerOffset; }
 
+			uint64_t		GetUTCTickPeerOffset() { return m_UTCPeerTickOffset; }
+
+			
+
 			void			UpdateUTCPeerOffset(TimeStampSec expectedTime);
+			void            UpdateUTCPeerTickOffset(TimeStampSec expectedTime);
+
 		};
 
 
