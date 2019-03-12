@@ -150,6 +150,8 @@ namespace SF {
 		// Get time tick in ms
 		TimeStampMS Time_Chrono::GetRawTimeMs()
 		{
+			//std::chrono::high_resolution_clock::now();
+
 			auto timeStamp = ClockType::now().time_since_epoch();
 			return TimeStampMS(std::chrono::duration_cast<DurationMS>(timeStamp));
 		}
@@ -161,6 +163,13 @@ namespace SF {
 			time_t counter;
 			counter = time(&counter);
 			return TimeStampSec(DurationSec((uint64_t)counter - (m_ullUTCOffset + m_UTCPeerOffset)));
+		}
+
+		TimeStampMS Time_Chrono::GetRawUTCMS()
+		{
+			time_t counter;
+			counter = time(&counter);
+			return TimeStampMS(DurationMS((uint64_t)counter - (m_ullUTCOffset + m_UTCPeerTickOffset)));
 		}
 
 
@@ -178,6 +187,22 @@ namespace SF {
 			}
 		}
 
+		void Time_Chrono::UpdateUTCPeerTickOffset(TimeStampMS expectedTime)
+		{
+			auto oldValue = m_UTCPeerTickOffset;
+			m_UTCPeerTickOffset = 0;
+			auto localTime  = GetRawUTCMS();// = GetRawUTCSec();
+			
+			m_UTCPeerTickOffset = ((uint64_t)localTime.time_since_epoch().count() - (uint64_t)expectedTime.time_since_epoch().count());
+
+			// Average with previous value
+			if (oldValue != 0)
+			{
+				m_UTCPeerTickOffset = (m_UTCPeerTickOffset + oldValue) >> 1;
+			}
+		}
+
+		
 
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
