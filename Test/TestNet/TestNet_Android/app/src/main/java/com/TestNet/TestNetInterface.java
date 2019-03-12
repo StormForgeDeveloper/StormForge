@@ -3,7 +3,7 @@ package com.TestNet;
 
 import java.lang.*;
 
-class TestNetInterface
+public class TestNetInterface
 {
 	public native void Initialize();
 	public native void Deinitialize();

@@ -29,6 +29,7 @@ namespace SF
 
 
 
+
 extern "C"  JNIEXPORT void JNICALL Java_com_TestNet_TestNetInterface_Initialize(JNIEnv* env, jobject thisObj)
 {
 	EngineInitParam initParam;

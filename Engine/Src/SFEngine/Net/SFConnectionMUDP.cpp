@@ -395,7 +395,8 @@ namespace Net {
 
 			if (GetEventHandler() != nullptr)
 			{
-				GetEventHandler()->OnRecvMessage(this, MessageDataPtr());
+				MessageDataPtr temp;
+				GetEventHandler()->OnRecvMessage(this, temp);
 			}
 		}
 

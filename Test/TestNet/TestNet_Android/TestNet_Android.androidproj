@@ -36,17 +36,13 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <AndroidBuildType>Gradle</AndroidBuildType>
-    <RootNamespace>TestNet_AndroidGradle</RootNamespace>
+    <RootNamespace>TestNet_Android</RootNamespace>
     <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
     <ProjectVersion>1.0</ProjectVersion>
-    <ProjectGuid>{f6e372c5-f872-47a1-bd88-3e6087e464ed}</ProjectGuid>
+    <ProjectGuid>{6f7c2e54-234c-4bff-8627-c6152424817b}</ProjectGuid>
     <_PackagingProjectWithoutNativeComponent>true</_PackagingProjectWithoutNativeComponent>
-    <LaunchActivity Condition="'$(LaunchActivity)' == ''">com.TestNet_AndroidGradle.TestNet_AndroidGradle</LaunchActivity>
+    <LaunchActivity Condition="'$(LaunchActivity)' == ''">com.TestNet_Android.TestNet_Android</LaunchActivity>
     <JavaSourceRoots>src\main\java</JavaSourceRoots>
-    <SccProjectName />
-    <SccProvider />
-    <SccAuxPath />
-    <SccLocalPath />
   </PropertyGroup>
   <Import Project="$(AndroidTargetsPath)\Android.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'" Label="Configuration">
@@ -67,7 +63,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <AndroidAPILevel>android-23</AndroidAPILevel>
+    <AndroidAPILevel>android-25</AndroidAPILevel>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -98,14 +94,14 @@
   </ItemGroup>
   <ItemGroup>
     <JavaCompile Include="app\src\main\java\com\TestNet\TestNetInterface.java" />
-    <JavaCompile Include="app\src\main\java\com\TestNet\TestNet_AndroidGradle.java" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\TestNet.AndroidLib\TestNet.AndroidLib.vcxproj" />
+    <JavaCompile Include="app\src\main\java\com\TestNet_Android\TestNet_Android.java" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\src\main\res\layout\main_layout.xml" />
     <Content Include="app\src\main\res\values\strings.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\TestNet.AndroidLib\TestNet.AndroidLib.vcxproj" />
   </ItemGroup>
   <Import Project="$(AndroidTargetsPath)\Android.targets" />
   <ImportGroup Label="ExtensionTargets" />

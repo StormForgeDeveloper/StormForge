@@ -214,11 +214,11 @@
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CoreBase\SFCoreBase.Android.vcxproj">
-      <Project>{193233af-a406-4bcc-9fee-8d39664defc2}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Protocol\SFProtocol.Android.vcxproj">
       <Project>{147d0885-77b8-4050-8cd5-e4d982e2f888}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\SFCore\SFCore.Android.vcxproj">
+      <Project>{193233af-a406-4bcc-9fee-8d39664defc2}</Project>
     </ProjectReference>
     <ProjectReference Include="..\SFEngine\SFEngine.Android.vcxproj">
       <Project>{66f06996-bae4-4e21-a687-0c4553c72f30}</Project>
