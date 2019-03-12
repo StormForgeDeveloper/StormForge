@@ -230,11 +230,11 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CoreBase\SFCoreBase.Win.vcxproj">
-      <Project>{758fa598-b851-4848-bec0-e039edbd2e5e}</Project>
-    </ProjectReference>
     <ProjectReference Include="..\Protocol\SFProtocol.Win.vcxproj">
       <Project>{a670f5b5-d452-4ee5-8531-c1cde3342484}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\SFCore\SFCore.Win.vcxproj">
+      <Project>{758fa598-b851-4848-bec0-e039edbd2e5e}</Project>
     </ProjectReference>
     <ProjectReference Include="..\SFEngine\SFEngine.Win.vcxproj">
       <Project>{1ac5e64d-18e3-4521-805d-e083933ac19c}</Project>

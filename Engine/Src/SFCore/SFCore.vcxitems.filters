@@ -1,0 +1,744 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SFTypedefs.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\SF3DMath.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Object\SFObjectManager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Object\SFObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)String\SFString.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\SFFile.linux.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\SFFile.win32.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\SFFileInputStream.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\SFFileOutputStream.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Platform\StackWalker.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Memory\SFMemory.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFLog.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFLogComponent.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)SFNetAddress.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFRandom.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Platform\SFNativeWindow.cpp">
+      <Filter>Platform</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Stream\SFMemoryStream.cpp">
+      <Filter>Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\SFFile.cpp">
+      <Filter>IO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort_KQUEUE.cpp">
+      <Filter>IO\AsyncIO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOAdapter.cpp">
+      <Filter>IO\AsyncIO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort.cpp">
+      <Filter>IO\AsyncIO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort_EPOLL.cpp">
+      <Filter>IO\AsyncIO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort_IOCP.cpp">
+      <Filter>IO\AsyncIO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPortWriteBufferQueue.cpp">
+      <Filter>IO\AsyncIO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort_Reactor.cpp">
+      <Filter>IO\AsyncIO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\SharedMemory\SFSharedMemory.cpp">
+      <Filter>IO\SharedMemory</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\SharedMemory\SFSharedMemory_linux.cpp">
+      <Filter>IO\SharedMemory</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\SharedMemory\SFSharedMemory_win.cpp">
+      <Filter>IO\SharedMemory</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPortSystemImpl.cpp">
+      <Filter>IO\AsyncIO</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Variable\SFVariable.cpp">
+      <Filter>Variable</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Variable\SFVariableTable.cpp">
+      <Filter>Variable</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Task\SFTask.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Service\SFService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Task\SFTimerScheduler.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Task\SFAsyncTaskManager.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFPath.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Stream\SFCompressedStream.cpp">
+      <Filter>Stream</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)String\SFFixedString.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)String\SFFixedStringDB.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)String\SFStrParserUtil.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)String\SFStrUtil.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFUtility.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFCryptoBase64.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFCryptoCrc32.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFCryptoCrc64.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFCryptoSHA.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Thread\SFSynchronization.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Thread\SFThread.cpp">
+      <Filter>Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFTimeUtil.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFUniqueIDGenerator.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Memory\SFIMemoryManager.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Object\SFLibraryComponent.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Memory\SFMemoryManager.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Memory\SFMemoryPool.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Object\SFObjectPool.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Object\SFSharedObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Object\SFSharedObjectManager.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFStackPool.cpp">
+      <Filter>Container</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Component\SFUnhandledExceptionHandlerComponent.cpp">
+      <Filter>Component</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Math\SF3DMathSSE.cpp">
+      <Filter>Math</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)String\SFToString.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)String\SFToStringBase.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Variable\SFVariableBoxing.cpp">
+      <Filter>Variable</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Service\SFScriptService.cpp">
+      <Filter>Service</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptEngine.cpp">
+      <Filter>Script\Tong</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptVariable.cpp">
+      <Filter>Script\Tong</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptFunction.cpp">
+      <Filter>Script\Tong</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Memory\SFHeapMemory.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptEnvironment.cpp">
+      <Filter>Script\Tong</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Memory\SFHeapTree.cpp">
+      <Filter>Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)String\SFPathString.cpp">
+      <Filter>String</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptByteCode.cpp">
+      <Filter>Script\Tong</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptContext.cpp">
+      <Filter>Script\Tong</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Variable\SFVariableStack.cpp">
+      <Filter>Variable</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Util\SFCryptoCrc32C.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFCircularBuffer.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFCircularBufferQueue.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SFTypedefs.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SF3DMath.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SFAngle.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFArray.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Object\SFObjectManager.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Object\SFObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SFMath.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SFMathConsts.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SFMathTypes.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFString.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\SFFile.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\SFFileInputStream.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\SFFileOutputStream.h">
+      <Filter>IO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Platform\StackWalker.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Memory\SFMemory.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SFTypedefs.inl" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSortedSet.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Platform\StackWalkerComponent.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFArray.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SFAssert.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Util\SFLog.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Util\SFLogComponent.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SFMath.inl">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Util\SFRandom.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Util\SFRandom.inl">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SFAngle.inl">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Platform\SFNativeWindow.h">
+      <Filter>Platform</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Stream\SFMemoryStream.h">
+      <Filter>Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Stream\SFStream.h">
+      <Filter>Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Memory\SFCircularHeap.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)SFResult.h">
+      <Filter>ResultCode</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResultCode\SFResultCodeLibrary.h">
+      <Filter>ResultCode</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)ResultCode\SFResultCodeSystem.h">
+      <Filter>ResultCode</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSortedSet.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort_KQUEUE.h">
+      <Filter>IO\AsyncIO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOAdapter.h">
+      <Filter>IO\AsyncIO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort.h">
+      <Filter>IO\AsyncIO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort_EPOLL.h">
+      <Filter>IO\AsyncIO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort_IOCP.h">
+      <Filter>IO\AsyncIO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPortWriteBufferQueue.h">
+      <Filter>IO\AsyncIO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort_Reactor.h">
+      <Filter>IO\AsyncIO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\SharedMemory\SFSharedMemory.h">
+      <Filter>IO\SharedMemory</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPortSystemImpl.h">
+      <Filter>IO\AsyncIO</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularBuffer.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Variable\SFVariable.h">
+      <Filter>Variable</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Variable\SFVariableTable.h">
+      <Filter>Variable</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Variable\SFVariableMapBuilder.h">
+      <Filter>Variable</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Task\SFTask.h">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFServices.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFLogService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Task\SFTimerSchedulerAction.h">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Task\SFTimerScheduler.h">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Task\SFAsyncTaskManager.h">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFAsyncIOPortService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Util\SFPath.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Stream\SFCompressedStream.h">
+      <Filter>Stream</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFHasher32.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFFixedString.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFFixedString32.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFFixedStringDB.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFStrUtil.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFHashCRC32Table.inl">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFHasher64.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFStrFormat.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFStrParserUtil.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Util\SFUtility.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Util\SFUtility.inl">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFStrUtil.inl">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Thread\SFSynchronization.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Thread\SFSynchronization.inl">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Thread\SFSystemSynchronization.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Thread\SFSystemSynchronize_win.inl">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Thread\SFThread.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Thread\SFThread.inl">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Util\SFTimeUtil.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Util\SFTimeUtil.inl">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Util\SFUniqueIDGenerator.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularPageQueue.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularPageQueue.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularQueue.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularQueue.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFContainerTrait.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFContainerTraitBase.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFDoubleLinkedList.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFDoubleLinkedListBase.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFDualSortedMap.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFDualSortedMap.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFHashTable.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFHashTable2.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFIndexing.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Memory\SFIMemoryManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Object\SFLibraryComponent.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Object\SFLibraryComponentAdapter.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Object\SFLibraryComponentManager.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Memory\SFMemoryManager.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Memory\SFMemoryPool.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Object\SFObjectPool.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFOrderedLinkedList.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFPageQueue.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Object\SFSharedObject.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Object\SFSharedObjectManager.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Object\SFSharedPointer.h">
+      <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSortedArray.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSortedArray.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSortedMap.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSortedMap.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSpinBuffer.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSpinBuffer.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSpinBufferMT.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSpinBufferMT.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSpinSharedBuffer.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFSpinSharedBuffer.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFStackPool.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFStackPool.inl">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFStaticDoubleLinkedList.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFStaticHashTable.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFStaticLinkedList.h">
+      <Filter>Container</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Component\SFUnhandledExceptionHandlerComponent.h">
+      <Filter>Component</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SF3DMath_matrixSoft.inl">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SF3DMath_quaternionSoft.inl">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SF3DMath_vectorSoft.inl">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SF3DMathSoft.inl">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SF3DMathSoft.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SF3DMathSSE.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Math\SFMathUtil.h">
+      <Filter>Math</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFToString.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFToStringBase.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Service\SFScriptService.h">
+      <Filter>Service</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Variable\SFVariableBoxing.h">
+      <Filter>Variable</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptEngine.h">
+      <Filter>Script\Tong</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptVariable.h">
+      <Filter>Script\Tong</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptFunction.h">
+      <Filter>Script\Tong</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Memory\SFHeapMemory.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptEnvironment.h">
+      <Filter>Script\Tong</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Memory\SFHeapTree.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFPathString.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptByteCode.h">
+      <Filter>Script\Tong</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptBytecodeOpCode.h">
+      <Filter>Script\Tong</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptContext.h">
+      <Filter>Script\Tong</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Memory\SFStackHeap.h">
+      <Filter>Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Variable\SFVariableStack.h">
+      <Filter>Variable</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)String\SFHasher32C.h">
+      <Filter>String</Filter>
+    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularBufferQueue.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)SFCorePCH.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Service">
+      <UniqueIdentifier>{3e5bab5f-a50b-4933-a7ae-e0261b47d6fd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{3662e65e-1554-40db-95f2-ebf7417da3c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Container">
+      <UniqueIdentifier>{d0c4d3c8-674a-4aad-9bde-79a1c5cd7844}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Memory">
+      <UniqueIdentifier>{1149e7df-40d9-4403-b88f-856e3b7801ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Math">
+      <UniqueIdentifier>{f7a04a95-c941-46fb-af70-b5763d2be7b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{808d8b94-cb8b-48e0-ba2e-6dd9cf6bf157}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="String">
+      <UniqueIdentifier>{e9fafa17-6838-431e-9a86-0b54fba4ae4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IO">
+      <UniqueIdentifier>{f449989f-4e4a-4513-8813-9ce84f5fe86b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Platform">
+      <UniqueIdentifier>{b9f8b305-710e-4b6f-8bf5-12eb0421f83b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{ee9f1f6c-423c-4877-9d07-2300dd712b37}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stream">
+      <UniqueIdentifier>{bf976432-1c7a-4d24-a067-215fbe28b73b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Task">
+      <UniqueIdentifier>{3a53a76e-a11c-42a9-8924-402b010bb3cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{ca14fb7a-d962-413e-84c8-e8b3237e9889}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResultCode">
+      <UniqueIdentifier>{cd0b379d-3cae-4318-bd5f-e9fd2d1a8f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IO\AsyncIO">
+      <UniqueIdentifier>{a28f4f70-7076-41e5-8506-cd52f5ba0cec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IO\SharedMemory">
+      <UniqueIdentifier>{68360d0e-2b91-4cf3-8ab6-8428fff38d62}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Variable">
+      <UniqueIdentifier>{3beded17-da08-405e-b311-ebad7663f2b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{e3688fc2-9405-4878-84d8-82a0c581b2ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script\Tong">
+      <UniqueIdentifier>{5c67e0d1-945e-43c9-979e-148b7a061167}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)Memory\SFCircularHeap.inl">
+      <Filter>Memory</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Thread\SFSystemSynchronize_linux.inl">
+      <Filter>Thread</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Container\SFPageQueue.inl">
+      <Filter>Container</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Math\SF3DMathSSE.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Math\SF3DMath_matrixSSE.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Math\SF3DMath_quaternionSSE.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Math\SF3DMath_vectorSSE.inl">
+      <Filter>Math</Filter>
+    </None>
+    <None Include="$(MSBuildThisFileDirectory)Memory\SFStackHeap.inl">
+      <Filter>Memory</Filter>
+    </None>
+  </ItemGroup>
+</Project>

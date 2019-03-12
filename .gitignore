@@ -37,6 +37,8 @@
 .workspace
 
 *.xcuserstate
+.DS_Store
+
 
 Intermediate/
 3rdParties/

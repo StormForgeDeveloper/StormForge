@@ -39,6 +39,9 @@ namespace Net {
 	//
 
 	RecvMsgWindow::RecvMsgWindow(IHeap& heap)
+		: m_uiSyncMask(0)
+		, m_uiBaseSequence(0)
+		, m_uiMsgCount(0)
 	{
 		m_pMsgWnd = new(heap) MessageElement[MessageWindow::MESSAGE_QUEUE_SIZE];
 	}
@@ -58,7 +61,7 @@ namespace Net {
 		// Base sequence should be locked until actual swap is happened
 		// There is a chance m_uiBaseSequence increase before the message is actually added if same message is added on different thread on the same time.
 		// It will cause way beyond message in the message window
-		TicketScopeLock scopeLock(TicketLock::LockMode::LOCK_NONEXCLUSIVE, m_SequenceLock);
+		//TicketScopeLock scopeLock(TicketLock::LockMode::NonExclusive, m_SequenceLock);
 		int diff = Message::SequenceDifference(msgSeq, m_uiBaseSequence);
 
 		if (diff >= GetWindowSize())
@@ -106,7 +109,7 @@ namespace Net {
 			return ResultCode::FAIL;
 
 		// Base sequence should be locked during actual pop operation
-		TicketScopeLock scopeLock(TicketLock::LockMode::LOCK_EXCLUSIVE, m_SequenceLock);
+		//TicketScopeLock scopeLock(TicketLock::LockMode::Exclusive, m_SequenceLock);
 
 		pIMsg = std::forward<SharedPointerAtomicT<Message::MessageData>>(m_pMsgWnd[iPosIdx]);
 		if (pIMsg == nullptr)
@@ -201,7 +204,7 @@ namespace Net {
 	// Clear window element
 	void SendMsgWindow::ClearWindow()
 	{
-		MutexScopeLock localLock(GetLock());
+		//MutexScopeLock localLock(GetLock());
 
 		if (m_pMsgWnd)
 		{
@@ -212,7 +215,6 @@ namespace Net {
 			//memset( m_pMsgWnd, 0, sizeof(MessageElement)*GetWindowSize() );
 		}
 		m_uiBaseSequence = 0;
-		m_uiWndBaseIndex = 0;
 		m_uiMsgCount = 0;
 
 		m_uiHeadSequence = m_uiBaseSequence;
@@ -222,7 +224,7 @@ namespace Net {
 	// Get message info in window, index based on window base
 	Result SendMsgWindow::GetAt(uint32_t uiIdx, MessageData* &pMessageElement)
 	{
-		uint32_t iIdxCur = (uiIdx + m_uiWndBaseIndex) % MessageWindow::MESSAGE_QUEUE_SIZE;
+		uint32_t iIdxCur = (m_uiBaseSequence + uiIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
 
 		if (m_pMsgWnd == NULL)
 			return ResultCode::FAIL;
@@ -257,7 +259,7 @@ namespace Net {
 			return ResultCode::IO_INVALID_SEQUENCE;
 
 		// To window queue array index
-		iIdx = (m_uiWndBaseIndex + iIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
+		iIdx = (m_uiBaseSequence + iIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
 
 		// check duplicated transaction
 		Assert(m_pMsgWnd[ iIdx ].State == ItemState::Free );
@@ -275,14 +277,14 @@ namespace Net {
 	}
 
 	// Release message sequence and slide window if can
-	Result SendMsgWindow::ReleaseMsg( uint16_t uiSequence )
+	Result SendMsgWindow::ReleaseSingleMessage( uint16_t uiSequence )
 	{
 		// TODO: math this function thread safe because this function can be called from other thread
-		MutexScopeLock localLock(m_Lock);
+		//MutexScopeLock localLock(m_Lock);
 
 		Result hr = ResultCode::SUCCESS;
 		int iIdx;
-		uint32_t iPosIdx;
+		//uint32_t iPosIdx;
 
 		if( m_pMsgWnd == NULL )
 			return ResultCode::SUCCESS;// nothing to release
@@ -294,29 +296,12 @@ namespace Net {
 		{
 			netErr( ResultCode::IO_INVALID_SEQUENCE ); // Out of range
 		}
-
-		if(  iIdx < 0 )
+		else if(  iIdx < 0 )
 		{
 			return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
 		}
 
-		iPosIdx = (m_uiWndBaseIndex + iIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
-
-		// Make it as a can-be-freed
-		if( m_pMsgWnd[ iPosIdx ].State != ItemState::Free )
-		{
-			auto pMsg = *m_pMsgWnd[iPosIdx].pMsg;
-			if(pMsg != nullptr )
-			{
-				if(pMsg->GetMessageHeader()->msgID.IDSeq.Sequence != uiSequence )
-				{
-					SFLog(Net, Info, "Validation error : Message has Invalid Sequence {0}, {1} Required, msg:{2:X8}", pMsg->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence, pMsg->GetMessageHeader()->msgID.ID );
-				}
-
-				m_pMsgWnd[iPosIdx].pMsg = nullptr;
-				m_pMsgWnd[ iPosIdx ].State = ItemState::CanFree;
-			}
-		}
+		ReleaseMessageInternal(iIdx);
 
 		// No sliding window for this because this can be called from other thread
 
@@ -332,7 +317,7 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS;
 		int iIdx;
 
-		MutexScopeLock localLock(m_Lock);
+		//MutexScopeLock localLock(m_Lock);
 
 		if( m_pMsgWnd == nullptr )
 			return ResultCode::SUCCESS;// nothing to release
@@ -359,16 +344,16 @@ namespace Net {
 		}
 		else if (iIdx > 0)
 		{
-			// Using other variable is common, but I used uiCurBit because it need to be increased anyway.
 			auto maxRelease = std::min((uint32_t)iIdx, MessageWindow::MESSAGE_WINDOW_SIZE);
 			for (; uiCurBit < maxRelease; uiCurBit++)
 			{
-				ReleaseMessage(uiCurBit);
+				ReleaseMessageInternal(uiCurBit);
 			}
 
 
 			if (iIdx >= GetWindowSize())
 			{
+				SlidWindow();
 				return ResultCode::SUCCESS;
 			}
 
@@ -379,20 +364,12 @@ namespace Net {
 		{
 			if ((uiMsgMask & uiSyncMaskCur) == 0) continue;
 
-			ReleaseMessage((uint32_t)iIdx);
+			ReleaseMessageInternal((uint32_t)iIdx);
 
 		}
 
 		// Slide window
-		for (int iMsg = 0; m_pMsgWnd[m_uiWndBaseIndex].State == ItemState::CanFree && iMsg < GetWindowSize(); iMsg++)
-		{
-			m_uiBaseSequence++;
-			m_pMsgWnd[ m_uiWndBaseIndex ].State = ItemState::Free;
-			m_uiMsgCount--;
-			m_uiWndBaseIndex = (m_uiWndBaseIndex+1) % MessageWindow::MESSAGE_QUEUE_SIZE;
-			hr = ResultCode::SUCCESS_FALSE;
-		}
-
+		SlidWindow();
 
 	Proc_End:
 
@@ -402,26 +379,34 @@ namespace Net {
 
 
 	// Release message sequence
-	void SendMsgWindow::ReleaseMessage(uint32_t iIdx)
+	void SendMsgWindow::ReleaseMessageInternal(uint32_t iOffset)
 	{
-		uint32_t iPosIdx = (m_uiWndBaseIndex + iIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
+		uint32_t iPosIdx = (m_uiBaseSequence + iOffset) % MessageWindow::MESSAGE_QUEUE_SIZE;
+
+		m_pMsgWnd[iPosIdx].pMsg = nullptr;
 
 		// Mark it as can-be-freed
 		if( m_pMsgWnd[ iPosIdx ].State == ItemState::Free || m_pMsgWnd[ iPosIdx ].State == ItemState::CanFree )
 		{
-			m_pMsgWnd[iPosIdx].pMsg = nullptr;
 			return;
-			//continue;
 		}
 			
-		m_pMsgWnd[iPosIdx].pMsg = nullptr;
 		m_pMsgWnd[iPosIdx].State = ItemState::CanFree;
 	}
 
 
+	void SendMsgWindow::SlidWindow()
+	{
+		auto windowSeq = m_uiBaseSequence % MessageWindow::MESSAGE_QUEUE_SIZE;
+		for (int iMsg = 0; m_pMsgWnd[windowSeq].State == ItemState::CanFree && iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
+		{
+			m_pMsgWnd[windowSeq].State = ItemState::Free;
+			m_uiMsgCount--;
+			m_uiBaseSequence++;
+			windowSeq = m_uiBaseSequence % MessageWindow::MESSAGE_QUEUE_SIZE;
+		}
 
-
-
+	}
 
 } // namespace Net
 } // namespace SF

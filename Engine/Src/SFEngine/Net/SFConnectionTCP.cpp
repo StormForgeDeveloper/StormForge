@@ -823,9 +823,9 @@ namespace Net {
 		Protocol::PrintDebugMessage( "Send", pMsg );
 
 		if( !pMsg->GetMessageHeader()->msgID.IDs.Reliability
-			&& (m_lGuarantedSent - m_lGuarantedAck) > Const::TCP_GUARANT_PENDING_MAX )
+			&& (m_lGuarantedSent - m_lGuarantedAck) > Const::GUARANT_PENDING_MAX)
 		{
-			// Drop if there is too many reliable packets are pending
+			// Drop if there are too many reliable packets
 			netErr( ResultCode::IO_SEND_FAIL );
 		}
 

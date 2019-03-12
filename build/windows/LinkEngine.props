@@ -9,7 +9,7 @@
   <ItemDefinitionGroup>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)bin/Win/$(Platform)$(Configuration);$(SolutionDir)bin/lib/Win/$(Platform)$(Configuration);$(SolutionDir)3rdParties/src/vulkan/1.0.51.0/$(Platform);$(SolutionDir)Bin\Win\$(PlatformShortName)\openssl\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>Ws2_32.lib;Mswsock.lib;Curl.Win.lib;devIL.Win.lib;freetype.Win.lib;Iconv.Win.lib;jasper.Win.lib;jpeg.Win.lib;JsonCPP.Win.lib;lcms.Win.lib;libmng.Win.lib;libpng.Win.lib;libtiff.Win.lib;libXML.Win.lib;libcrypto.lib;libssl.lib;tinyxml.Win.lib;ZLib.Win.lib;SFCoreBase.Win.lib;SFEngine.Win.lib;SFProtocol.Win.lib;zookeeper.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;Mswsock.lib;Curl.Win.lib;devIL.Win.lib;freetype.Win.lib;Iconv.Win.lib;jasper.Win.lib;jpeg.Win.lib;JsonCPP.Win.lib;lcms.Win.lib;libmng.Win.lib;libpng.Win.lib;libtiff.Win.lib;libXML.Win.lib;libcrypto.lib;libssl.lib;tinyxml.Win.lib;ZLib.Win.lib;SFCore.Win.lib;SFEngine.Win.lib;SFProtocol.Win.lib;zookeeper.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />

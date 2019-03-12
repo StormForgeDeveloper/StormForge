@@ -14,7 +14,7 @@
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <CppLanguageStandard>c++1z</CppLanguageStandard>
       <CLanguageStandard>c11</CLanguageStandard>
-      <AdditionalIncludeDirectories>./;$(SolutionDir)Bin/lib/Android/openssl/$(Platform)/include;$(SolutionDir)3rdParties\src\libiconv\libiconv-1.14\include;$(SolutionDir)3rdParties\src\lcms\lcms2-2.7\include;$(SolutionDir)3rdParties\src\freetype\freetype-2.5.5\include;$(SolutionDir)3rdParties\src\DevIL\devil-1.7.8\include;$(SolutionDir)3rdParties\src\jpeg\jpeg-9a;$(SolutionDir)3rdParties/src/libxml/libxml2/include;$(SolutionDir)Engine/src/CoreBase;$(SolutionDir)Engine/src/SFEngine;$(SolutionDir)Engine/src/CoreBase/Platform/Android;$(SolutionDir)Engine/Src/Protocol;$(SolutionDir)3rdParties/src/zlib/zlib-1.2.8;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>./;$(SolutionDir)Bin/lib/Android/openssl/$(Platform)/include;$(SolutionDir)3rdParties\src\libiconv\libiconv-1.14\include;$(SolutionDir)3rdParties\src\lcms\lcms2-2.7\include;$(SolutionDir)3rdParties\src\freetype\freetype-2.5.5\include;$(SolutionDir)3rdParties\src\DevIL\devil-1.7.8\include;$(SolutionDir)3rdParties\src\jpeg\jpeg-9a;$(SolutionDir)3rdParties/src/libxml/libxml2/include;$(SolutionDir)Engine/src/SFCore;$(SolutionDir)Engine/src/SFEngine;$(SolutionDir)Engine/src/SFCore/Platform/Android;$(SolutionDir)Engine/Src/Protocol;$(SolutionDir)3rdParties/src/zlib/zlib-1.2.8;%(AdditionalIncludeDirectories);$(MSBuildThisFileDirectory)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <AddModuleNamesToAssembly>..\..\bin\lib</AddModuleNamesToAssembly>

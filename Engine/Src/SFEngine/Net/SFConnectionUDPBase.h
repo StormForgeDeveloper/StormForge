@@ -36,22 +36,22 @@ namespace Net {
 
 
 	protected:
-		// Recive Sorted messages
+		// Receive Sorted messages
 		RecvMsgWindow		m_RecvReliableWindow;
 
-		// Send Guaranted Messages
+		// Send Guaranteed Messages
 		SendMsgWindow		m_SendReliableWindow;
 
-		// Maximum guaranted retry at once
-		uint				m_uiMaxGuarantedRetry;
+		// Maximum guaranteed retry at once
+		uint				m_uiMaxGuarantedRetryAtOnce;
 
 		// packet gathering buffer
 		uint				m_uiGatheredSize;
-		uint8_t*				m_pGatheringBuffer;
+		uint8_t*			m_pGatheringBuffer;
 
 
-		// Recv guaranted Message Queue, to enable MT enqueue
-		MsgQueue			 m_RecvGuaQueue;
+		// Recv guaranteed Message Queue, to enable MT enqueue
+		//MsgQueue			 m_RecvGuaQueue;
 
 		// subframe message
 		SharedPointerT<Message::MessageData>		m_SubFrameMessage;
@@ -59,6 +59,9 @@ namespace Net {
 		// UDP send queue
 		WriteBufferQueue*			m_pWriteQueuesUDP;
 
+		int m_SendBoost = 0;
+
+		CriticalSection		m_UpdateLock;
 
 	protected:
 		
@@ -66,16 +69,7 @@ namespace Net {
 		virtual Result ProcNetCtrl( const MsgNetCtrl* pNetCtrl ) = 0;
 
 
-		// Process Recv queue
-		virtual Result ProcRecvReliableQueue() = 0;
-
-		// Process Send queue
-		virtual Result ProcSendReliableQueue() = 0;
-		
-		// Process message window queue
-		virtual Result ProcReliableSendRetry() = 0;
-
-
+		CriticalSection& GetUpdateLock() { return m_UpdateLock; }
 
 		WriteBufferQueue* GetWriteQueueUDP() { return m_pWriteQueuesUDP; }
 
@@ -91,16 +85,20 @@ namespace Net {
 		ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler);
 		virtual ~ConnectionUDPBase();
 
+		void SetSendBoost(int value) { m_SendBoost = value; }
+		int GetSendBoost() { return m_SendBoost; }
+		void DecSendBoost() { if (m_SendBoost > 0) m_SendBoost--; }
+
 		void SetWriteQueueUDP(WriteBufferQueue* writeQueue);
 
 
 		// Set maximum guaranteed retry count
-		void SetMaxGuarantedRetry(uint uiMaxGuarantedRetry) { m_uiMaxGuarantedRetry = uiMaxGuarantedRetry; }
+		uint GetMaxGuarantedRetryAtOnce() { return m_uiMaxGuarantedRetryAtOnce; }
+		void SetMaxGuarantedRetry(uint uiMaxGuarantedRetry) { m_uiMaxGuarantedRetryAtOnce = uiMaxGuarantedRetry; }
 
-		// Set message window size connection
-		Result SetMessageWindowSize( uint uiSend, uint uiRecv );
 
 		SendMsgWindow& GetSendReliableWindow() { return m_SendReliableWindow; }
+		RecvMsgWindow& GetRecvReliableWindow() { return m_RecvReliableWindow; }
 
 
 		// gathering
@@ -145,7 +143,7 @@ namespace Net {
 		// Update Send buffer Queue, TCP and UDP client connection
 		virtual Result UpdateSendBufferQueue() override;
 
-		virtual Result ProcGuarrentedMessageWindow(const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action);
+		//virtual Result ProcGuarrentedMessageWindow(const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action);
 
 	};
 

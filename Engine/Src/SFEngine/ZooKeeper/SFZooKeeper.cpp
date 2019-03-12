@@ -55,22 +55,16 @@ namespace SF
 			evt.Components.EventType = type;
 			zkWatcher->OnNewEvent(evt);
 
-			if (state == ZooKeeper::STATE_CONNECTED)
-			{
-				SFLog(System, Info, "ZK Connected prev:{0}, new:{1}", previousState, state);
+			SFLog(System, Info, "ZK Connected prev:{0}, new:{1}", previousState, state);
 
-				auto zkInstance = zkWatcher->GetZKInstance();
-				for (auto itRegistered : zkInstance->GetRegisteredWatchers())
-				{
-					if (itRegistered != zkWatcher && itRegistered->m_State.exchange(std::memory_order_consume) != state)
-					{
-						itRegistered->OnNewEvent(evt);
-					}
-				}
-			}
-			else
+			auto zkInstance = zkWatcher->GetZKInstance();
+			for (auto itRegistered : zkInstance->GetRegisteredWatchers())
 			{
-				SFLog(System, Info, "ZK Disconnected prev:{0}, new:{1}", previousState, state);
+				if (itRegistered != zkWatcher && itRegistered->m_State.load(std::memory_order_relaxed) != state)
+				{
+					itRegistered->m_State.store(state, std::memory_order_release);
+					itRegistered->OnNewEvent(evt);
+				}
 			}
 		}
 		else
@@ -245,7 +239,7 @@ namespace SF
 	ZooKeeper::ZooKeeper(IHeap& memoryManager, uint32_t debugLogLevel)
 		: m_Heap(memoryManager)
 		, m_ZKHandle(nullptr)
-		, m_State(0)
+//		, m_State(0)
 		, m_ZKWatcher(memoryManager)
 		, m_LogLevel(debugLogLevel)
 		, m_RegisteredWatcher(m_Heap)

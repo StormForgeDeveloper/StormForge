@@ -12,6 +12,9 @@
 
 #pragma once
 
+
+#if SF_PLATFORM == SF_PLATFORM_ANDROID
+
 #include "String/SFFixedString.h"
 #include "String/SFString.h"
 #include "Variable/SFVariableMapBuilder.h"
@@ -93,4 +96,7 @@ namespace SF
 
 
 }
+
+#endif
+
 

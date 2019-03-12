@@ -55,6 +55,9 @@
     <Filter Include="Test\Variable">
       <UniqueIdentifier>{e261f0b4-d060-462d-ba91-28610b2d6111}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Test\Net">
+      <UniqueIdentifier>{944d7288-a1b2-4f24-9d41-67241eb03393}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UnitTest1PCH.h">
@@ -102,6 +105,9 @@
     <ClInclude Include="Test\Container\UnitTest_CircularBuffer.h">
       <Filter>Test\Container</Filter>
     </ClInclude>
+    <ClInclude Include="Test\Net\UnitTest_Net.h">
+      <Filter>Test\Net</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="UnitTest1PCH.cpp">
@@ -109,9 +115,6 @@
     </ClCompile>
     <ClCompile Include="UnitTest1.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="UnitTest_NetMessageWindow.cpp">
-      <Filter>Test</Filter>
     </ClCompile>
     <ClCompile Include="UnitTest_Zookeeper.cpp">
       <Filter>Test</Filter>
@@ -214,6 +217,12 @@
     </ClCompile>
     <ClCompile Include="..\..\..\3rdParties\src\gtest\googletest\src\gtest-all.cc">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Net\UnitTest_Net.cpp">
+      <Filter>Test\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\Net\UnitTest_NetMessageWindow.cpp">
+      <Filter>Test\Net</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

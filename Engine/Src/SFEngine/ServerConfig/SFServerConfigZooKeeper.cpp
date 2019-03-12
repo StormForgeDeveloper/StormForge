@@ -164,29 +164,6 @@ namespace SF
 
 		switch (Crc32C(moduleName))
 		{
-		case "ModMatchingQueue_Game_8x1"_crc:
-		case "ModMatchingQueue_Game_8x2"_crc:
-		case "ModMatchingQueue_Game_8x3"_crc:
-		case "ModMatchingQueue_Game_8x4"_crc:
-		case "ModMatchingQueue_Game_8x5"_crc:
-		case "ModMatchingQueue_Game_8x6"_crc:
-		case "ModMatchingQueue_Game_8x7"_crc:
-		case "ModMatchingQueue_Game_8x1S"_crc:
-		case "ModMatchingQueue_Game_8x1W"_crc:
-		case "ModMatchingQueue_Game_4x1"_crc:
-		case "ModMatchingQueue_Game_4x2"_crc:
-		case "ModMatchingQueue_Game_4x3"_crc:
-		case "ModMatchingQueue_Game_4x1S"_crc:
-		case "ModMatchingQueue_Game_4x1W"_crc:
-		case "ModGamePartyManager"_crc:
-		case "ModMonitoring"_crc:
-		case "ModRanking"_crc:
-		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModule(GetHeap());
-			pServerModule = pModule;
-		}
-			break;
-
 		case "ModMatching_Game_8"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModuleMatching_8(GetHeap());
@@ -248,6 +225,30 @@ namespace SF
 			break;
 		case "NetPrivate"_crc:
 			break;
+
+		case "ModMatchingQueue_Game_8x1"_crc:
+		case "ModMatchingQueue_Game_8x2"_crc:
+		case "ModMatchingQueue_Game_8x3"_crc:
+		case "ModMatchingQueue_Game_8x4"_crc:
+		case "ModMatchingQueue_Game_8x5"_crc:
+		case "ModMatchingQueue_Game_8x6"_crc:
+		case "ModMatchingQueue_Game_8x7"_crc:
+		case "ModMatchingQueue_Game_8x1S"_crc:
+		case "ModMatchingQueue_Game_8x1W"_crc:
+		case "ModMatchingQueue_Game_4x1"_crc:
+		case "ModMatchingQueue_Game_4x2"_crc:
+		case "ModMatchingQueue_Game_4x3"_crc:
+		case "ModMatchingQueue_Game_4x1S"_crc:
+		case "ModMatchingQueue_Game_4x1W"_crc:
+		case "ModGamePartyManager"_crc:
+		case "ModMonitoring"_crc:
+		case "ModRanking"_crc:
+		case "ModChatting"_crc:
+		{
+			auto pModule = new(GetHeap()) ServerConfig::ServerModule(GetHeap());
+			pServerModule = pModule;
+		}
+		break;
 		default:
 			assert(false);
 			break;
@@ -634,23 +635,6 @@ namespace SF
 
 		switch (Crc32C((const char*)pServerModule->ModuleName))
 		{
-		case "ModMatchingQueue_Game_8x1"_crc:
-		case "ModMatchingQueue_Game_8x2"_crc:
-		case "ModMatchingQueue_Game_8x3"_crc:
-		case "ModMatchingQueue_Game_8x4"_crc:
-		case "ModMatchingQueue_Game_8x5"_crc:
-		case "ModMatchingQueue_Game_8x6"_crc:
-		case "ModMatchingQueue_Game_8x7"_crc:
-		case "ModMatchingQueue_Game_8x1S"_crc:
-		case "ModMatchingQueue_Game_8x1W"_crc:
-		case "ModMatchingQueue_Game_4x1"_crc:
-		case "ModMatchingQueue_Game_4x2"_crc:
-		case "ModMatchingQueue_Game_4x3"_crc:
-		case "ModMatchingQueue_Game_4x1S"_crc:
-		case "ModMatchingQueue_Game_4x1W"_crc:
-		case "ModGamePartyManager"_crc:
-			break;
-
 		case "ModMatching_Game_8"_crc:
 			itemValue["UseBot"] = Json::Value(((ServerConfig::ServerModuleMatching_8*)pServerModule)->UseBot);
 			break;
@@ -689,6 +673,23 @@ namespace SF
 		}
 		break;
 		case "NetPrivate"_crc:
+			break;
+		case "ModMatchingQueue_Game_8x1"_crc:
+		case "ModMatchingQueue_Game_8x2"_crc:
+		case "ModMatchingQueue_Game_8x3"_crc:
+		case "ModMatchingQueue_Game_8x4"_crc:
+		case "ModMatchingQueue_Game_8x5"_crc:
+		case "ModMatchingQueue_Game_8x6"_crc:
+		case "ModMatchingQueue_Game_8x7"_crc:
+		case "ModMatchingQueue_Game_8x1S"_crc:
+		case "ModMatchingQueue_Game_8x1W"_crc:
+		case "ModMatchingQueue_Game_4x1"_crc:
+		case "ModMatchingQueue_Game_4x2"_crc:
+		case "ModMatchingQueue_Game_4x3"_crc:
+		case "ModMatchingQueue_Game_4x1S"_crc:
+		case "ModMatchingQueue_Game_4x1W"_crc:
+		case "ModGamePartyManager"_crc:
+		case "ModChatting"_crc:
 			break;
 		default:
 			assert(false);

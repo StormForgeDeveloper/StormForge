@@ -33,9 +33,9 @@ namespace Net {
 
 	namespace MessageWindow
 	{
-		static constexpr uint32_t MESSAGE_QUEUE_SIZE = 128;
-		static constexpr uint32_t MESSAGE_WINDOW_SIZE = MESSAGE_QUEUE_SIZE - 1; // We allow 1 less messages to avoid full state complixity
-		static constexpr uint32_t SYNC_MASK_BITS_MAX = 64; // we uses 64bit mask bits for packet
+		static constexpr uint32_t MESSAGE_QUEUE_SIZE			= 128;
+		static constexpr uint32_t MESSAGE_WINDOW_SIZE			= MESSAGE_QUEUE_SIZE - 1; // We allow 1 less messages to avoid full state complexity
+		static constexpr uint32_t SYNC_MASK_BITS_MAX			= 64; // we uses 64bit mask bits for packet
 
 
 
@@ -64,15 +64,15 @@ namespace Net {
 	private:
 
 		// sequence lock
-		TicketLock m_SequenceLock;
+		//TicketLock m_SequenceLock;
 
-		atomic<uint64_t>			m_uiSyncMask = 0;
+		atomic<uint64_t>			m_uiSyncMask;
 
 		// Base sequence value( sequence Head)
-		atomic<uint16_t>			m_uiBaseSequence = 0;
+		atomic<uint16_t>			m_uiBaseSequence;
 
 		// Message count in window
-		atomic<uint32_t>			m_uiMsgCount = 0;
+		atomic<uint32_t>			m_uiMsgCount;
 
 		// Message data array
 		MessageElement*				m_pMsgWnd = nullptr;
@@ -143,30 +143,27 @@ namespace Net {
 		// Base sequence value( sequence Head)
 		uint32_t		m_uiBaseSequence = 0;
 
-		// Window base index
-		uint32_t		m_uiWndBaseIndex = 0;
-
 		// Message count in window
 		uint32_t		m_uiMsgCount = 0;
 
 		// Message data array
 		MessageData*	m_pMsgWnd = nullptr;
 
-
 		// Until this can do thread safe release
-		CriticalSection m_Lock;
+		//CriticalSection m_Lock;
 
 	private:
 		// Release message sequence and slide window if can
-		void ReleaseMessage(uint32_t iIdx);
+		void ReleaseMessageInternal(uint32_t iOffset);
 
+		void SlidWindow();
 
 	public:
 		// Constructor
 		SendMsgWindow(IHeap& heap);
 		~SendMsgWindow();
 
-		CriticalSection& GetLock()				{ return m_Lock; }
+		//CriticalSection& GetLock()				{ return m_Lock; }
 
 
 		// get window size
@@ -174,6 +171,9 @@ namespace Net {
 
 		// get message count in window
 		uint32_t GetMsgCount() { return m_uiMsgCount; }
+
+		// get Head sequence
+		uint32_t GetHeadSequence() { return m_uiHeadSequence; }
 
 		// get message base sequence
 		uint32_t GetBaseSequence() { return m_uiBaseSequence; }
@@ -185,14 +185,15 @@ namespace Net {
 		void ClearWindow();
 
 		// Get available size at the end
-		uint32_t GetAvailableSize() { return GetWindowSize() - (m_uiHeadSequence - GetBaseSequence()); }
+		uint32_t GetAvailableSize() { return MessageWindow::MESSAGE_QUEUE_SIZE - (m_uiHeadSequence - GetBaseSequence() + 1); }
 		
 		// Add a message at the end
 		Result EnqueueMessage(TimeStampMS ulTimeStampMS, SharedPointerT<Message::MessageData>& pIMsg );
 
 		// Release message sequence and slide window if can
 		// This can be called from another thread
-		Result ReleaseMsg( uint16_t uiSequence );
+		Result ReleaseSingleMessage( uint16_t uiSequence );
+
 		// Release message by message mask
 		Result ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask );
 

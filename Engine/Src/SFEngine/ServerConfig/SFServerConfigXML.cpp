@@ -177,26 +177,6 @@ namespace SF
 
 		switch (Crc32C((const char*)pNode->name))
 		{
-		case "ModMatchingQueue_Game_8x1"_crc:
-		case "ModMatchingQueue_Game_8x2"_crc:
-		case "ModMatchingQueue_Game_8x3"_crc:
-		case "ModMatchingQueue_Game_8x4"_crc:
-		case "ModMatchingQueue_Game_8x5"_crc:
-		case "ModMatchingQueue_Game_8x6"_crc:
-		case "ModMatchingQueue_Game_8x7"_crc:
-		case "ModMatchingQueue_Game_8x1S"_crc:
-		case "ModMatchingQueue_Game_8x1W"_crc:
-		case "ModMatchingQueue_Game_4x1"_crc:
-		case "ModMatchingQueue_Game_4x2"_crc:
-		case "ModMatchingQueue_Game_4x3"_crc:
-		case "ModMatchingQueue_Game_4x1S"_crc:
-		case "ModMatchingQueue_Game_4x1W"_crc:
-		case "ModGamePartyManager"_crc:
-		case "ModMonitoring"_crc:
-		case "ModRanking"_crc:
-			pServerModule = new(GetHeap()) ServerConfig::ServerModule(GetHeap());
-			break;
-
 		case "ModMatching_Game_8"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModuleMatching_8(GetHeap());
 			((ServerConfig::ServerModuleMatching_8*)pServerModule)->UseBot = ParseXMLBool((const char*)xmlGetProp(pNode, (xmlChar*)"UseBot"));
@@ -239,6 +219,26 @@ namespace SF
 		case "NetPrivate"_crc:
 			// Skip these They are not module
 			return ResultCode::SUCCESS;
+		case "ModMatchingQueue_Game_8x1"_crc:
+		case "ModMatchingQueue_Game_8x2"_crc:
+		case "ModMatchingQueue_Game_8x3"_crc:
+		case "ModMatchingQueue_Game_8x4"_crc:
+		case "ModMatchingQueue_Game_8x5"_crc:
+		case "ModMatchingQueue_Game_8x6"_crc:
+		case "ModMatchingQueue_Game_8x7"_crc:
+		case "ModMatchingQueue_Game_8x1S"_crc:
+		case "ModMatchingQueue_Game_8x1W"_crc:
+		case "ModMatchingQueue_Game_4x1"_crc:
+		case "ModMatchingQueue_Game_4x2"_crc:
+		case "ModMatchingQueue_Game_4x3"_crc:
+		case "ModMatchingQueue_Game_4x1S"_crc:
+		case "ModMatchingQueue_Game_4x1W"_crc:
+		case "ModGamePartyManager"_crc:
+		case "ModMonitoring"_crc:
+		case "ModRanking"_crc:
+		case "ModChatting"_crc:
+			pServerModule = new(GetHeap()) ServerConfig::ServerModule(GetHeap());
+			break;
 		default:
 			return ResultCode::UNEXPECTED;
 		}

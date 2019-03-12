@@ -29,6 +29,7 @@ namespace Net {
 
 
 	class Connection;
+	class ConnectionMUDP;
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -69,6 +70,7 @@ namespace Net {
 		TimeStampMS GetNetCtrlTryTime();
 		void UpdateNetCtrlTryTime();
 
+		IConnectionEventHandler* GetEventHandler();
 
 		Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID);
 
@@ -82,8 +84,13 @@ namespace Net {
 	{
 	public:
 
+		virtual Result Run() { return ResultCode::NOT_IMPLEMENTED; }
+	};
 
-		virtual Result Run() = 0;
+	class ConnectionActionMUDP : public ConnectionAction
+	{
+	public:
+		ConnectionMUDP* GetConnection();
 	};
 
 
@@ -93,7 +100,15 @@ namespace Net {
 
 		void OnConnectionResult(Result hrConnect);
 
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) = 0;
+		virtual Result Run([[maybe_unused]]const Message::MessageHeader* netCtrlMsg) { return ResultCode::NOT_IMPLEMENTED; }
+	};
+
+
+	class ConnectionMessageActionMUDP : public ConnectionMessageAction
+	{
+	public:
+		ConnectionMUDP* GetConnection();
+
 	};
 
 

@@ -10,6 +10,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
+#include "SFEngineDLLPCH.h"
+
+#if SF_PLATFORM == SF_PLATFORM_ANDROID
 
 #include "SFAssert.h"
 #include "Util/SFUtility.h"
@@ -366,3 +369,7 @@ namespace SF
 		return jobj;
 	}
 }
+
+
+#endif
+
