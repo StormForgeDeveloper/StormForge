@@ -180,7 +180,7 @@ namespace SF {
 			}
 		}
 
-		void Time_Chrono::UpdateUTCPeerTickOffset(TimeStampSec expectedTime)
+		void Time_Chrono::UpdateUTCPeerTickOffset(TimeStampMS expectedTime)
 		{
 			auto oldValue = m_UTCPeerTickOffset;
 			m_UTCPeerTickOffset = 0;

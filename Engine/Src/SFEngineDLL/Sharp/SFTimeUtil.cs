@@ -103,11 +103,16 @@ namespace SF
         static ulong m_TimeOffset = 0;
         static public ulong TimeOffset { get { return m_TimeOffset; } set { m_TimeOffset = value; } }
 
-        static public DateTime ToDateTime(long Time)
+        static private DateTime ToDateTime(long Time)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
             return origin.AddTicks(Time);
             // return origin.AddSeconds(Time);
+        }
+
+        static public DateTime NowDateTime()
+        {
+            return ToDateTime(Now());
         }
 
         static public long FromDateTime(DateTime date)
@@ -125,12 +130,13 @@ namespace SF
 
         static public long Now()
         {
-            return NowRaw();// - (long) m_TimeOffset;
+            return NowRaw() + (long) m_TimeOffset;
         }
 
         static public void UpdateTimeOffset()
         {
-            m_TimeOffset = NativeGetTimeOffset();
+
+            m_TimeOffset = NativeGetTickTimeOffset();// NativeGetTimeOffset();
         }
 
         #region Native interfaces

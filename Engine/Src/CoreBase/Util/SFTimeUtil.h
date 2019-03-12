@@ -94,7 +94,7 @@ namespace SF {
 			
 
 			void			UpdateUTCPeerOffset(TimeStampSec expectedTime);
-			void            UpdateUTCPeerTickOffset(TimeStampSec expectedTime);
+			void            UpdateUTCPeerTickOffset(TimeStampMS expectedTime);
 
 		};
 
