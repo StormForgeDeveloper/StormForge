@@ -165,6 +165,13 @@ namespace SF {
 			return TimeStampSec(DurationSec((uint64_t)counter - (m_ullUTCOffset + m_UTCPeerOffset)));
 		}
 
+		TimeStampMS Time_Chrono::GetRawUTCMS()
+		{
+			time_t counter;
+			counter = time(&counter);
+			return TimeStampMS(DurationMS((uint64_t)counter - (m_ullUTCOffset + m_UTCPeerTickOffset)));
+		}
+
 
 		void Time_Chrono::UpdateUTCPeerOffset(TimeStampSec expectedTime)
 		{
@@ -184,7 +191,7 @@ namespace SF {
 		{
 			auto oldValue = m_UTCPeerTickOffset;
 			m_UTCPeerTickOffset = 0;
-			auto localTime  = GetRawTimeMs();// = GetRawUTCSec();
+			auto localTime  = GetRawUTCMS();// = GetRawUTCSec();
 			
 			m_UTCPeerTickOffset = ((uint64_t)localTime.time_since_epoch().count() - (uint64_t)expectedTime.time_since_epoch().count());
 

@@ -130,7 +130,7 @@ namespace SF
 
         static public long Now()
         {
-            return NowRaw() + (long) m_TimeOffset;
+            return NowRaw() - (long) m_TimeOffset;
         }
 
         static public void UpdateTimeOffset()

@@ -85,6 +85,7 @@ namespace SF {
 
 			// Get current UTC sec
 			TimeStampSec	GetRawUTCSec();
+			TimeStampMS		GetRawUTCMS();
 
 			DurationSec		GetUTCSecOffset() { return DurationSec(m_ullUTCOffset); }
 			uint64_t		GetUTCSecPeerOffset() { return m_UTCPeerOffset; }
