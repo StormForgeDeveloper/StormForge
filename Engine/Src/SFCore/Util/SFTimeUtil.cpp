@@ -101,7 +101,7 @@ namespace SF {
 			timeStruct.tm_year = UTC_REFERENCE_YEAR - 1900;
 			timeStruct.tm_mday = 1;
 
-			m_ullUTCOffset = (uint64_t)timegm(&timeStruct);
+			m_ullUTCOffset = DurationMS((uint64_t)timegm(&timeStruct) * 1000 + std::chrono::duration_cast<DurationMS>(ClockType::now().time_since_epoch()).count());
 
 			UpdateTimer();
 		}
@@ -160,45 +160,27 @@ namespace SF {
 		// Get current UTC sec
 		TimeStampSec Time_Chrono::GetRawUTCSec()
 		{
-			time_t counter;
-			counter = time(&counter);
-			return TimeStampSec(DurationSec((uint64_t)counter - (m_ullUTCOffset + m_UTCPeerOffset)));
+			TimeStampMS utcMS = GetRawUTCMs();
+			return std::chrono::time_point_cast<std::chrono::seconds>(utcMS);
 		}
 
-		TimeStampMS Time_Chrono::GetRawUTCMS()
+		TimeStampMS Time_Chrono::GetRawUTCMs()
 		{
-			time_t counter;
-			counter = time(&counter);
-			return TimeStampMS(DurationMS((uint64_t)counter - (m_ullUTCOffset + m_UTCPeerTickOffset)));
+			return TimeStampMS(GetRawTimeMs() - m_ullUTCOffset);
 		}
 
 
-		void Time_Chrono::UpdateUTCPeerOffset(TimeStampSec expectedTime)
+		void Time_Chrono::UpdateUTCOffset(TimeStampMS expectedTime)
 		{
-			auto oldValue = m_UTCPeerOffset;
-			m_UTCPeerOffset = 0;
-			auto localTime = GetRawUTCSec();
-			m_UTCPeerOffset = ((uint64_t)localTime.time_since_epoch().count() - (uint64_t)expectedTime.time_since_epoch().count());
+			auto oldValue = m_ullUTCOffset;
+			//m_ullUTCOffset = DurationMS_Zero;
+			auto localTime = GetRawUTCMs();
+			auto diff = ((uint64_t)localTime.time_since_epoch().count() - (uint64_t)expectedTime.time_since_epoch().count());
 
 			// Average with previous value
-			if (oldValue != 0)
+			if (oldValue.count() != 0)
 			{
-				m_UTCPeerOffset = (m_UTCPeerOffset + oldValue) >> 1;
-			}
-		}
-
-		void Time_Chrono::UpdateUTCPeerTickOffset(TimeStampMS expectedTime)
-		{
-			auto oldValue = m_UTCPeerTickOffset;
-			m_UTCPeerTickOffset = 0;
-			auto localTime  = GetRawUTCMS();// = GetRawUTCSec();
-			
-			m_UTCPeerTickOffset = ((uint64_t)localTime.time_since_epoch().count() - (uint64_t)expectedTime.time_since_epoch().count());
-
-			// Average with previous value
-			if (oldValue != 0)
-			{
-				m_UTCPeerTickOffset = (m_UTCPeerTickOffset + oldValue) >> 1;
+				m_ullUTCOffset = DurationMS(diff + oldValue.count());
 			}
 		}
 

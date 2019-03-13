@@ -45,11 +45,8 @@ namespace SF {
 			std::atomic<TimeStampSec>		m_ullTimeStampUTC;
 
 			// Default UTC offset
-			uint64_t					m_ullUTCOffset;
+			DurationMS					m_ullUTCOffset;
 
-			// Time correction over network
-			uint64_t					m_UTCPeerOffset = 0;
-			uint64_t					m_UTCPeerTickOffset = 0;
 
 		protected:
 			// Update Time stamp
@@ -85,17 +82,11 @@ namespace SF {
 
 			// Get current UTC sec
 			TimeStampSec	GetRawUTCSec();
-			TimeStampMS		GetRawUTCMS();
+			TimeStampMS		GetRawUTCMs();
 
-			DurationSec		GetUTCSecOffset() { return DurationSec(m_ullUTCOffset); }
-			uint64_t		GetUTCSecPeerOffset() { return m_UTCPeerOffset; }
+			DurationSec		GetUTCSecOffset() { return std::chrono::duration_cast<DurationSec>(m_ullUTCOffset); }
 
-			uint64_t		GetUTCTickPeerOffset() { return m_UTCPeerTickOffset; }
-
-			
-
-			void			UpdateUTCPeerOffset(TimeStampSec expectedTime);
-			void            UpdateUTCPeerTickOffset(TimeStampMS expectedTime);
+			void			UpdateUTCOffset(TimeStampMS expectedTime);
 
 		};
 

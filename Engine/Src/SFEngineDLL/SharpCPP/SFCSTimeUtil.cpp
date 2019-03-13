@@ -25,12 +25,7 @@ namespace SF
 
 	SFDLL_EXPORT uint64_t SFTime_NativeGetTimeOffset()
 	{
-		return Util::Time.GetUTCSecPeerOffset();
-	}
-
-	SFDLL_EXPORT uint64_t SFTime_NativeGetTimeOffsetTicks()
-	{
-		return Util::Time.GetUTCTickPeerOffset();
+		return Util::Time.GetRawUTCMs().time_since_epoch().count();
 	}
 
 

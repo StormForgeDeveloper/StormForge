@@ -103,11 +103,10 @@ namespace SF
         static ulong m_TimeOffset = 0;
         static public ulong TimeOffset { get { return m_TimeOffset; } set { m_TimeOffset = value; } }
 
-        static private DateTime ToDateTime(long Time)
+        static private DateTime ToDateTime(ulong Time)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
-            return origin.AddTicks(Time);
-            // return origin.AddSeconds(Time);
+            return origin.AddMilliseconds(Time);
         }
 
         static public DateTime NowDateTime()
@@ -115,28 +114,27 @@ namespace SF
             return ToDateTime(Now());
         }
 
-        static public long FromDateTime(DateTime date)
+        static public ulong FromDateTime(DateTime date)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
             TimeSpan diff = date.ToUniversalTime() - origin;
-            return diff.Ticks;
-            //return (ulong)diff.TotalSeconds;
+            return (ulong)diff.TotalMilliseconds;
         }
 
-        static public long NowRaw()
+        static public ulong NowRaw()
         {
-            return TimeUTC.FromDateTime(DateTime.UtcNow);
+            return FromDateTime(DateTime.UtcNow);
         }
 
-        static public long Now()
+        static public ulong Now()
         {
-            return NowRaw() - (long) m_TimeOffset;
+            return NowRaw() - (ulong) m_TimeOffset;
         }
 
         static public void UpdateTimeOffset()
         {
 
-            m_TimeOffset = NativeGetTickTimeOffset();// NativeGetTimeOffset();
+            m_TimeOffset = NativeGetTimeOffset();
         }
 
         #region Native interfaces
@@ -151,8 +149,6 @@ namespace SF
         [DllImport(NativeDllName, EntryPoint = "SFTime_NativeGetTimeOffset", CharSet = CharSet.Auto)]
         static extern UInt64 NativeGetTimeOffset();
 
-        [DllImport(NativeDllName, EntryPoint = "SFTime_NativeGetTimeOffsetTicks", CharSet = CharSet.Auto)]
-        static extern UInt64 NativeGetTickTimeOffset();
 
 
 

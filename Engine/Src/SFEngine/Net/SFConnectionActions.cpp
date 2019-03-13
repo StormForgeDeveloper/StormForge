@@ -165,8 +165,7 @@ namespace Net {
 
 		auto serverTime = TimeStampSec(DurationSec(pNetCtrlData->PeerID + halfRoundTripSec));
 		
-		Util::Time.UpdateUTCPeerOffset(serverTime);
-		Util::Time.UpdateUTCPeerTickOffset(TimeStampMS(roundTripTime));
+		Util::Time.UpdateUTCOffset(TimeStampMS(roundTripTime));
 
 		GetConnection()->OnTimeSyncRtn(roundTripTime);
 

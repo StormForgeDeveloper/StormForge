@@ -87,7 +87,9 @@
   <PropertyGroup Label="UserMacros" />
   <ItemGroup>
     <GradleTemplate Include="app\build.gradle.template" />
-    <GradleTemplate Include="app\src\main\AndroidManifest.xml.template" />
+    <GradleTemplate Include="app\src\main\AndroidManifest.xml.template">
+      <SubType>Designer</SubType>
+    </GradleTemplate>
     <GradleTemplate Include="build.gradle.template" />
     <GradleTemplate Include="settings.gradle.template" />
     <GradleTemplate Include="gradle\wrapper\gradle-wrapper.properties.template" />
