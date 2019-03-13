@@ -70,6 +70,7 @@ Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		Engine\Src\SFEngine\SFEngine.vcxitems*{1ac5e64d-18e3-4521-805d-e083933ac19c}*SharedItemsImports = 4
 		Engine\Src\SFEngine\SFEngine.vcxitems*{4c5f1eda-df00-4652-a0e1-ae068e906064}*SharedItemsImports = 9
+		Engine\Src\SFCore\SFCore.vcxitems*{62d7bd92-62c4-4b83-8e3b-0afe3942fe28}*SharedItemsImports = 9
 		Engine\Src\Protocol\SFProtocol.vcxitems*{6d3c3d98-6342-40dd-a734-d9b353d9ab7b}*SharedItemsImports = 9
 		Engine\Src\SFCore\SFCore.vcxitems*{758fa598-b851-4848-bec0-e039edbd2e5e}*SharedItemsImports = 4
 		Engine\Src\Protocol\SFProtocol.vcxitems*{a670f5b5-d452-4ee5-8531-c1cde3342484}*SharedItemsImports = 4

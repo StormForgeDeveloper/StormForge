@@ -59,7 +59,7 @@ namespace SFConvertVSProj2CMake
             var inputSchematicDir = Path.GetDirectoryName(Path.GetFullPath(makeinput));
             var outputFullPath = Path.Combine(inputSchematicDir, "CMakeLists.txt");
 
-            string[] inputPattern = System.IO.File.ReadAllLines(inputSchematic);
+            string[] inputPattern = File.ReadAllLines(inputSchematic);
 
             if (!inputSchematicDir.EndsWith("\\") && !inputSchematicDir.EndsWith("/"))
                 inputSchematicDir = inputSchematicDir + Path.DirectorySeparatorChar;
