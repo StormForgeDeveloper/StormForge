@@ -1,5 +1,8 @@
-cmake_minimum_required(VERSION 3.7)
 
+cmake_minimum_required(VERSION 3.6)
+
+
+project(StormForge C CXX)
 
 
 message ( "Input system = ${CMAKE_SYSTEM_NAME}" )
@@ -33,20 +36,25 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 endif(MSVC)
 
 
-# set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/bin/${PROJECT_OUTPUT_DIRNAME}")
-# set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib/${PROJECT_OUTPUT_DIRNAME}")
-# set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/lib/${PROJECT_OUTPUT_DIRNAME}")
+# set(cmake_runtime_output_directory "${project_binary_dir}/bin/${project_output_dirname}")
+# set(cmake_library_output_directory "${project_binary_dir}/lib/${project_output_dirname}")
+# set(cmake_archive_output_directory "${project_binary_dir}/lib/${project_output_dirname}")
 
 
+set(CMAKE_C_COMPILER clang)
+#set(CMAKE_CXX_COMPILER clang++)
 
-project(StormForge)
+
+# include(C:\NVPACK\android-ndk-r15c\build\cmake\android.toolchain.cmake)
 
 
-add_definitions(NOMINMAX)
-add_definitions(HAVE_CONFIG_H)
-add_definitions(CURL_STATICLIB)
-add_definitions(HAVE_STDDEF_H=1)
-add_definitions(HAVE_SYS_TYPES_H=1)
+add_definitions(-DNOMINMAX)
+add_definitions(-DHAVE_CONFIG_H)
+add_definitions(-DCURL_STATICLIB)
+add_definitions(-DHAVE_STDDEF_H=1)
+add_definitions(-DHAVE_SYS_TYPES_H=1)
+
+
 
 include_directories(AFTER 
 	Bin/lib/Android/openssl/${CMAKE_SYSTEM_NAME}/include

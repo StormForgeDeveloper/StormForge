@@ -3,6 +3,8 @@
 StormForge is a base system for game which is supporting Windows, Android, and working on Linux support.
 For now the development is still going on and have many missing modules, however, it has system wrapper with useful middle wares, implementations of algorithms and tools. On one day, I hope it became a nice in-house engine.
 
+I am in the middle of transtion to Linux sub system for Windows. some script may need Linux sub system with Ubuntu core.
+
 For now, StormForge covers,
 1. Hierarchical Memory management. Hierarchical memory management gives you better track of memory ownership so that you can easily track down memory leak and usage. See memory management article.
 1. Component based engine module management.
