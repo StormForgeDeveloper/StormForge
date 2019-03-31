@@ -547,7 +547,7 @@ namespace Net {
 		{
 			if (cbInstance->GetWriteQueue() == nullptr)
 			{
-				Assert(sockType == SockType::DataGram);
+				Assert(cbInstance->GetIOSockType() == SockType::DataGram);
 				cbInstance->SetWriteQueue( &m_UDPSendWorker->GetWriteQueue() );
 			}
 

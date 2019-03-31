@@ -253,7 +253,7 @@ namespace SF
 
 	bool MemoryPoolManager::QuantizeAndFind(size_t memorySize, uint32_t& minBitShift, size_t &newSize)
 	{
-		Assert(memorySize < (size_t)std::numeric_limits<UINT32>::max());
+		Assert(memorySize < (size_t)std::numeric_limits<uint32_t>::max());
 
 		minBitShift = Util::FindMinBitShift((uint32_t)memorySize);
 

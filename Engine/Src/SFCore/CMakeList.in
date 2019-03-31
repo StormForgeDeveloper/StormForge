@@ -9,7 +9,7 @@ set(SFCORE_LIB_FILES
 
 
 
-#include_directories(../SFCore)
+include_directories(./)
 
 
 

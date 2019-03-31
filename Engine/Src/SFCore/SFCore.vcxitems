@@ -45,6 +45,7 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFStaticDoubleLinkedList.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFStaticHashTable.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFStaticLinkedList.h" />
+    <ClInclude Include="$(MSBuildThisFileDirectory)Platform\Android\SFifaddrs.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SFCorePCH.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOAdapter.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)IO\AsyncIO\AsyncIOPort.h" />
@@ -174,6 +175,7 @@
     <ClCompile Include="$(MSBuildThisFileDirectory)Object\SFObjectManager.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Object\SFSharedObject.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Object\SFSharedObjectManager.cpp" />
+    <ClCompile Include="$(MSBuildThisFileDirectory)Platform\Android\SFifaddrs.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Platform\SFNativeWindow.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Platform\StackWalker.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Script\Tong\SFTongScriptBytecode.cpp" />

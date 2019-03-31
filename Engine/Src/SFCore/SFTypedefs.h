@@ -22,25 +22,6 @@
 #endif
 
 
-// define sse flagss
-#if defined(__x86_64__) || defined(_M_X64) || defined(_M_IX86) || defined(__i386__)
-	#define SF_SIMD_SSE
-	#define SF_SIMD_SSE42
-	#define SF_SIMD_AVX
-#elif defined(__arm__ ) || defined(_M_ARM)
-// TODO: detect ARM8 only
-	#define SF_SIMD_NEON
-#elif defined(__powerpc__ ) || defined(_M_PPC)
-	#define SF_SIMD_SSE
-	#define SF_SIMD_SSE42
-	#define SF_SIMD_AVX
-#elif defined(__mips__ )
-	#define SF_SIMD_SSE
-	#define SF_SIMD_SSE42
-	#define SF_SIMD_AVX
-#else
-#endif
-
 
 
 #define SF_PLATFORM_WINDOWS		1
@@ -70,6 +51,21 @@
 #endif
 
 
+// TODO: need to detect for other platform
+// define sse flagss
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+#	if defined(__x86_64__) || defined(_M_X64) || defined(_M_IX86) || defined(__i386__)
+	#define SF_SIMD_SSE
+	#define SF_SIMD_SSE42
+	#define SF_SIMD_AVX
+#	elif defined(__arm__ ) || defined(_M_ARM)
+// TODO: detect ARM8 only
+		#define SF_SIMD_NEON
+#	elif defined(__powerpc__ ) || defined(_M_PPC)
+#	elif defined(__mips__ )
+#	else
+#   endif
+#endif
 
 
 //////////////////////////////////////////////////
@@ -697,7 +693,8 @@ namespace SF {
 	template <typename T, std::size_t N>
 	constexpr std::size_t countof(T const (&)[N]) noexcept	{ return N; }
 
-	#define ContainerPtrFromMember(ContainerTypeT, member, memberPtr) ((ContainerTypeT*)((uint8_t*)(memberPtr) - offsetof(ContainerTypeT,member)))
+	#define OffsetOf(s,m) ((size_t)&reinterpret_cast<char const volatile&>((((s*)0)->m)))
+	#define ContainerPtrFromMember(ContainerTypeT, member, memberPtr) ((ContainerTypeT*)((uint8_t*)(memberPtr) - OffsetOf(ContainerTypeT,member)))
 
 
 #ifndef SWIG

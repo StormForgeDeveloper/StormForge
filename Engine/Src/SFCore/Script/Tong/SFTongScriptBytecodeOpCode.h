@@ -17,7 +17,7 @@
 #include "Service/SFScriptService.h"
 #include "Object/SFLibraryComponent.h"
 #include "Container/SFSortedArray.h"
-#include "Script/Tong/SFTongScriptByteCode.h"
+#include "Script/Tong/SFTongScriptBytecode.h"
 
 namespace SF
 {

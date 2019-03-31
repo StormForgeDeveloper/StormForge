@@ -1,5 +1,4 @@
-﻿cmake_minimum_required(VERSION 3.7)
-
+﻿
 
 
 set(SFENGINE_LIB_FILES
@@ -250,6 +249,7 @@ set(SFENGINE_LIB_FILES
 
 
 add_library(SFEngine STATIC ${SFENGINE_LIB_FILES})
+
 
 target_include_directories (SFEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
 

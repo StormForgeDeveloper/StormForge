@@ -27,11 +27,6 @@
 #include "SFCSUtil.h"
 
 
-namespace SF
-{
-
-}
-
 using namespace SF;
 
 

@@ -667,15 +667,12 @@ namespace SF {
 
 	};
 
-
-
-
 }
 
 
 #include "Math/SF3DMathSoft.inl"
 #include "Math/SF3DMath_vectorSoft.inl"
 #include "Math/SF3DMath_matrixSoft.inl"
-#include "Math/SF3DMath_QuaternionSoft.inl"
+#include "Math/SF3DMath_quaternionSoft.inl"
 
 

@@ -18,6 +18,7 @@
 #include "Util/SFTimeUtil.h"
 #include "Util/SFUtility.h"
 #include "String/SFToString.h"
+#include "Platform/Android/SFifaddrs.h"
 
 #include "Net/SFNetUtil.h"
 #include "Net/SFNetSystem.h"
@@ -25,7 +26,9 @@
 
 #if SF_PLATFORM != SF_PLATFORM_WINDOWS
 #include <net/if.h>
-#include <ifaddrs.h>
+#	if SF_PLATFORM != SF_PLATFORM_ANDROID
+#	include <ifaddrs.h>
+#	endif
 #endif
 
 

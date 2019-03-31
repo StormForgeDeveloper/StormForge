@@ -3,7 +3,4 @@
   <ItemGroup>
     <ClInclude Include="pch.h" />
   </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Platform\Android\ifaddrs.cpp" />
-  </ItemGroup>
 </Project>

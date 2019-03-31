@@ -11,6 +11,10 @@ set(SFENGINEDLL_LIB_FILES
 
 add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES})
 
+
+add_dependencies(SFEngineDLL SFCore SFEngine SFProtocol)
+target_link_libraries(SFEngineDLL SFCore SFEngine SFProtocol iconv)
+
 target_include_directories (SFEngineDLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
 
 

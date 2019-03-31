@@ -1,33 +1,11 @@
 
-cmake_minimum_required(VERSION 3.6)
+cmake_minimum_required(VERSION 3.10)
 
 
 project(StormForge C CXX)
 
 
 message ( "Input system = ${CMAKE_SYSTEM_NAME}" )
-
-# if (CMAKE_SYSTEM_NAME=Android)
-	# message (Setup Android)
-	# #set(CMAKE_ANDROID_ARCH_ABI arm64-v8a)
-	# #set(CMAKE_ANDROID_ARCH_ABI armeabi-v7a)
-	# #set(CMAKE_ANDROID_NDK_TOOLCHAIN_VERSION)
-	# set(CMAKE_ANDROID_NDK "${ANDROID_NDK_ROOT}")
-	# set(CMAKE_ANDROID_STL_TYPE c++_static)
-	# set(CMAKE_ANDROID_API_MIN 23)
-	# set(CMAKE_ANDROID_API 25)
-	# set(CMAKE_ANDROID_GUI 1)
-	# set(PROJECT_OUTPUT_DIRNAME "${CMAKE_SYSTEM_NAME}${CMAKE_ANDROID_ARCH_ABI}")
-	
-	
-# elseif (CMAKE_SYSTEM_NAME=Windows)
-	# message( Setup Windows)
-	
-# elseif (CMAKE_SYSTEM_NAME=Linux)
-
-# elseif (CMAKE_SYSTEM_NAME=Darwin ) #OSX
-
-# endif (CMAKE_SYSTEM_NAME=Android)
 
 
 set(CMAKE_CXX_STANDARD 17)
@@ -45,7 +23,6 @@ set(CMAKE_C_COMPILER clang)
 #set(CMAKE_CXX_COMPILER clang++)
 
 
-# include(C:\NVPACK\android-ndk-r15c\build\cmake\android.toolchain.cmake)
 
 
 add_definitions(-DNOMINMAX)
@@ -53,13 +30,17 @@ add_definitions(-DHAVE_CONFIG_H)
 add_definitions(-DCURL_STATICLIB)
 add_definitions(-DHAVE_STDDEF_H=1)
 add_definitions(-DHAVE_SYS_TYPES_H=1)
+add_definitions(-DSF_USE_MBEDTLS)
 
 
 
 include_directories(AFTER 
-	Bin/lib/Android/openssl/${CMAKE_SYSTEM_NAME}/include
+	#Bin/lib/Android/openssl/${CMAKE_SYSTEM_NAME}/include
+	3rdParties/src/mbedtls/mbedtls-2.16.0/include
 	3rdParties/src/libiconv/libiconv-1.14/include
 	3rdParties/src/libpng/lpng1617
+	3rdParties/src/jpeg/jpeg-9a
+	3rdParties/src/libxml/libxml2/include
 	Engine/Src/SFCore
 	Engine/Src/SFEngine
 	Engine/Src/Protocol
@@ -72,7 +53,6 @@ include_directories(AFTER
 
 
 
-#include_directories(include/)
 
 
 

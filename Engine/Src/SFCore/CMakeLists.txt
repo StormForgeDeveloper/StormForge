@@ -36,6 +36,7 @@ set(SFCORE_LIB_FILES
 	Object/SFObjectManager.cpp
 	Object/SFSharedObject.cpp
 	Object/SFSharedObjectManager.cpp
+	Platform/Android/SFifaddrs.cpp
 	Platform/SFNativeWindow.cpp
 	Platform/StackWalker.cpp
 	Script/Tong/SFTongScriptBytecode.cpp
@@ -106,6 +107,7 @@ set(SFCORE_LIB_FILES
 	Container/SFStaticDoubleLinkedList.h
 	Container/SFStaticHashTable.h
 	Container/SFStaticLinkedList.h
+	Platform/Android/SFifaddrs.h
 	SFCorePCH.h
 	IO/AsyncIO/AsyncIOAdapter.h
 	IO/AsyncIO/AsyncIOPort.h
@@ -231,7 +233,7 @@ set(SFCORE_LIB_FILES
 
 
 
-#include_directories(../SFCore)
+include_directories(./)
 
 
 
