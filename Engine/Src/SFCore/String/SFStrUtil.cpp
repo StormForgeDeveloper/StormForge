@@ -433,7 +433,7 @@ namespace StrUtil {
 
 			convertedSize = 0;
 
-			iconv_t context = iconv_open(destCode, srcCode);
+			iconv_t context = libiconv_open(destCode, srcCode);
 			if (context == (iconv_t)-1)
 			{
 				hr = ResultCode::FAIL;
@@ -451,10 +451,10 @@ namespace StrUtil {
                     goto Proc_End;
                 }
                 char* strCopied = srcTemp.data();
-				convertedSize = iconv(context, &strCopied, &srcSize, &dest, &destSize); // linux version uses char** for src
+				convertedSize = libiconv(context, &strCopied, &srcSize, &dest, &destSize); // linux version uses char** for src
 			}
 #else
-			convertedSize = iconv(context, (const char**)&src, &srcSize, &dest, &destSize); // linux version uses char** for src
+			convertedSize = libiconv(context, (const char**)&src, &srcSize, &dest, &destSize); // linux version uses char** for src
 #endif
 			if (convertedSize == (size_t)-1)
 			{
@@ -485,7 +485,7 @@ namespace StrUtil {
 
 			if (context != (iconv_t)-1)
 			{
-				iconv_close(context);
+				libiconv_close(context);
 			}
 
 			return hr;

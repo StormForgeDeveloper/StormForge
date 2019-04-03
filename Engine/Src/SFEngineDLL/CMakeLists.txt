@@ -30,7 +30,6 @@ set(SFENGINEDLL_LIB_FILES
 	SharpCPP/SFCSUtil.h
 	Java/JniUtil.h
 	pch.h
-
   )
 
 
@@ -39,8 +38,8 @@ set(SFENGINEDLL_LIB_FILES
 add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES})
 
 
-add_dependencies(SFEngineDLL SFCore SFEngine SFProtocol)
-target_link_libraries(SFEngineDLL SFCore SFEngine SFProtocol iconv)
+add_dependencies(SFEngineDLL SFCore SFEngine SFProtocol curl iconv)
+target_link_libraries(SFEngineDLL SFCore SFEngine SFProtocol curl iconv)
 
 target_include_directories (SFEngineDLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
 

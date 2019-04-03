@@ -3,12 +3,6 @@
 
 
 
-project(jpeg)
-
-
-
-
-
 set(SRC_FILES
 	jpeg-9a/jaricom.c 
 	jpeg-9a/jcapimin.c 
