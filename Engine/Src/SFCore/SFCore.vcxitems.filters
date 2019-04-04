@@ -226,9 +226,7 @@
     </ClCompile>
     <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFCircularBuffer.cpp" />
     <ClCompile Include="$(MSBuildThisFileDirectory)Container\SFCircularBufferQueue.cpp" />
-    <ClCompile Include="C:\work\StormForge\Engine\Src\SFCore\Platform\Android\SFifaddrs.cpp">
-      <Filter>Platform\Android</Filter>
-    </ClCompile>
+    <ClCompile Include="$(MSBuildThisFileDirectory)Platform\Android\SFifaddrs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="$(MSBuildThisFileDirectory)SFTypedefs.h" />
@@ -658,9 +656,7 @@
     </ClInclude>
     <ClInclude Include="$(MSBuildThisFileDirectory)Container\SFCircularBufferQueue.h" />
     <ClInclude Include="$(MSBuildThisFileDirectory)SFCorePCH.h" />
-    <ClInclude Include="C:\work\StormForge\Engine\Src\SFCore\Platform\Android\SFifaddrs.h">
-      <Filter>Platform\Android</Filter>
-    </ClInclude>
+    <ClInclude Include="$(MSBuildThisFileDirectory)Platform\Android\SFifaddrs.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Service">

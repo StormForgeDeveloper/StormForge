@@ -14,6 +14,4 @@ cd Intermediate\%CMAKE_SYSTEM_NAME%
 cmake --build .
 
 
-
-
 pause

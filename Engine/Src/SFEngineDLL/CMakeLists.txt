@@ -39,7 +39,7 @@ add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES})
 
 
 add_dependencies(SFEngineDLL SFCore SFEngine SFProtocol curl iconv)
-target_link_libraries(SFEngineDLL SFCore SFEngine SFProtocol curl iconv)
+target_link_libraries(SFEngineDLL SFProtocol SFEngine  SFCore  curl iconv mbedtls libxml zlib android jnigraphics log)
 
 target_include_directories (SFEngineDLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
 
