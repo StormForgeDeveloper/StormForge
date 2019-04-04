@@ -56,18 +56,24 @@ include_directories(AFTER
 
 if(WIN32)
 
-add_definitions(-DNOMINMAX)
-add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-add_definitions(-DWIN32_LEAN_AND_MEAN)
-add_definitions(-DWIN64)
-add_definitions(-DWIN32)
+	add_definitions(-DNOMINMAX)
+	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+	add_definitions(-DWIN32_LEAN_AND_MEAN)
+	add_definitions(-DWIN64)
+	add_definitions(-DWIN32)
 
-SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
 
-include_directories(AFTER 
-	3rdParties/VulkanSDK/1.1.82.1/include
-)
+	include_directories(AFTER 
+		3rdParties/VulkanSDK/1.1.82.1/include
+	)
+
+	set(PLATFORM_LIBS Ws2_32 Mswsock)
+else()
+	set(PLATFORM_LIBS android jnigraphics log)
 endif()
+
+
 
 #string(REGEX MATCH "Clang" CMAKE_COMPILER_IS_CLANG "${CMAKE_C_COMPILER_ID}")
 #string(REGEX MATCH "GNU" CMAKE_COMPILER_IS_GNU "${CMAKE_C_COMPILER_ID}")
