@@ -45,10 +45,29 @@ include_directories(AFTER
 	3rdParties/src/libpng/lpng1617
 	3rdParties/src/jpeg/jpeg-9a
 	3rdParties/src/libxml/libxml2/include
+	3rdParties/src/curl/curl
+	3rdParties/src/zlib/zlib-1.2.8
+	3rdParties/src/jsoncpp/include
+	3rdParties/src/zookeeper/zookeeperConnector/include
 	Engine/Src/SFCore
 	Engine/Src/SFEngine
 	Engine/Src/Protocol
 	)
+
+if(WIN32)
+
+add_definitions(-DNOMINMAX)
+add_definitions(-D_CRT_SECURE_NO_WARNINGS)
+add_definitions(-DWIN32_LEAN_AND_MEAN)
+add_definitions(-DWIN64)
+add_definitions(-DWIN32)
+
+SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
+
+include_directories(AFTER 
+	3rdParties/VulkanSDK/1.1.82.1/include
+)
+endif()
 
 #string(REGEX MATCH "Clang" CMAKE_COMPILER_IS_CLANG "${CMAKE_C_COMPILER_ID}")
 #string(REGEX MATCH "GNU" CMAKE_COMPILER_IS_GNU "${CMAKE_C_COMPILER_ID}")

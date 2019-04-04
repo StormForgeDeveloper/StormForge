@@ -1,5 +1,8 @@
 ﻿
 
+include_directories(AFTER 
+	../../../3rdParties/FBXSDK/2019.0/include
+)
 
 set(SFENGINE_LIB_FILES
   	Application/Android/AndroidApp.cpp
