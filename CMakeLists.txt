@@ -37,6 +37,9 @@ add_definitions(-DHAVE_SYS_TYPES_H=1)
 add_definitions(-DSF_USE_MBEDTLS)
 #add_definitions(-DLIBICONV_PLUG)
 
+SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG")
+SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
+
 
 include_directories(AFTER 
 	3rdParties/src/mbedtls/mbedtls-2.16.0/include
@@ -53,6 +56,8 @@ include_directories(AFTER
 	Engine/Src/Protocol
 	)
 
+
+
 if(WIN32)
 
 	add_definitions(-DNOMINMAX)
@@ -62,6 +67,12 @@ if(WIN32)
 	add_definitions(-DWIN32)
 	add_definitions(-D_WINDOWS)
 
+
+	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Od")
+	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Od")
+
+	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -O2")
+	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O2")
 
 	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
 
@@ -75,16 +86,43 @@ elseif(UNIX)
 	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread -fPIC")
 	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -fPIC")
 
+	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
+	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+
+	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -O3")
+	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+
+
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)
+
 
 	include_directories(AFTER 
 		/usr/include/mysql
 		#3rdParties/VulkanSDK/1.1.82.1/include
 	)
 
-else()
+elseif(ANDROID)
+
+	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
+	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+
+	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -O3")
+	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+
+	add_definitions(-D__ANDROID__=1)
 	set(PLATFORM_LIBS android jnigraphics log)
+
+elseif(IOS)
+
+	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
+	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+
+	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -O3")
+	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+
+	add_definitions(-D__IOS__=1)
+	add_definitions(-DKQUEUE)
 
 endif()
 
