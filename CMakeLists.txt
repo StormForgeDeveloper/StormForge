@@ -70,8 +70,22 @@ if(WIN32)
 	)
 
 	set(PLATFORM_LIBS Ws2_32 Mswsock)
+elseif(UNIX)
+
+	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread -fPIC")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -fPIC")
+
+	add_definitions(-D_LINUX_=1)
+	add_definitions(-DEPOLL)
+
+	include_directories(AFTER 
+		/usr/include/mysql
+		#3rdParties/VulkanSDK/1.1.82.1/include
+	)
+
 else()
 	set(PLATFORM_LIBS android jnigraphics log)
+
 endif()
 
 

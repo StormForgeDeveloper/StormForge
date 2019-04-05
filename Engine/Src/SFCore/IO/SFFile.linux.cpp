@@ -60,7 +60,7 @@ namespace SF {
 		if (FileOpenMode == OpenMode::Read)
 		{
 			assert(OperationSize == 0); // just checking
-			Buffer.SetItemCount(OperationSize);
+			Buffer.resize(OperationSize);
 		}
 
 #endif

@@ -11,7 +11,7 @@
 
 #pragma once
 
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+
 #include "String/SFFixedString32.h"
 #include "String/SFString.h"
 
@@ -132,4 +132,4 @@ namespace SF
 
 	};
 }
-#endif
+

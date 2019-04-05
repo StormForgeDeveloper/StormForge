@@ -12,7 +12,7 @@
 
 #include "SFEnginePCH.h"
 
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+
 #include "SFServerConfigZooKeeper.h"
 #include "String/SFFixedString32.h"
 
@@ -1005,4 +1005,4 @@ namespace SF
 
 }
 
-#endif
+

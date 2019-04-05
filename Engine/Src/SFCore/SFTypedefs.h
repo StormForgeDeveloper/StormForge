@@ -537,8 +537,11 @@ typedef unsigned int		SysUInt;
 #define COMPILETIME_MESSAGE(x) DO_PRAGMA(message ("Message - " #x))
 #define COMPILETIME_WARNING(x) DO_PRAGMA(message ("Warning - " #x))
 
+// clange uses dllimport style
 #define DLL_IMPORT __attribute__((visibility("default")))
-#define SFDLL_EXPORT __attribute__((visibility("default"))) extern "C"
+#define SFDLL_EXPORT extern "C" __attribute__((visibility("default"))) 
+//#define SFDLL_IMPORT extern "C" __declspec(dllimport)
+//#define SFDLL_EXPORT extern "C" __declspec(dllexport)
 #define SYSTEMAPI 
 
 #else

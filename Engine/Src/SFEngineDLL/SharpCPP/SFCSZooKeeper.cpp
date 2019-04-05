@@ -182,7 +182,7 @@ SFDLL_EXPORT bool SFZooKeeper_NativeExists(intptr_t nativeHandle, const char* pa
 SFDLL_EXPORT const char* SFZooKeeper_NativeGet(intptr_t nativeHandle, const char* path)
 {
 	if (nativeHandle == 0)
-		return false;
+		return nullptr;
 
 	auto pZKInstance = (ZooKeeper*)nativeHandle;
 

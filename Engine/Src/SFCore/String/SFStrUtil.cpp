@@ -444,17 +444,17 @@ namespace StrUtil {
 			{
 				// On linux, source buffer can be changed.
 				StaticArray<char, 2048> srcTemp(GetSystemHeap());
-				srcTemp.Reserve(srcSize);
+				srcTemp.reserve(srcSize);
 				if(!StrUtil::StringCopy(srcTemp.data(), (int)srcSize, src))
                 {
                     hr = ResultCode::FAIL;
                     goto Proc_End;
                 }
                 char* strCopied = srcTemp.data();
-				convertedSize = libiconv(context, &strCopied, &srcSize, &dest, &destSize); // linux version uses char** for src
+				convertedSize = libiconv(context, (const char**)&strCopied, &srcSize, &dest, &destSize);
 			}
 #else
-			convertedSize = libiconv(context, (const char**)&src, &srcSize, &dest, &destSize); // linux version uses char** for src
+			convertedSize = libiconv(context, (const char**)&src, &srcSize, &dest, &destSize);
 #endif
 			if (convertedSize == (size_t)-1)
 			{

@@ -39,7 +39,7 @@ namespace SF {
 	{
 		//Effect Material;
 		uint32_t IndexOffset = 0;
-		DrawPrimitiveType DrawPrimitiveType = DrawPrimitiveType::Lines;
+		DrawPrimitiveType PrimitiveType = DrawPrimitiveType::Lines;
 		uint PrimitiveCount = 0;
 	};
 
