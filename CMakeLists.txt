@@ -60,6 +60,8 @@ include_directories(AFTER
 
 if(WIN32)
 
+	message ( "Setup Windows configs" )
+
 	add_definitions(-DNOMINMAX)
 	add_definitions(-D_CRT_SECURE_NO_WARNINGS)
 	add_definitions(-DWIN32_LEAN_AND_MEAN)
@@ -81,7 +83,39 @@ if(WIN32)
 	)
 
 	set(PLATFORM_LIBS Ws2_32 Mswsock)
+elseif(ANDROID_PLATFORM)
+
+	message ( "Setup Android configs" )
+
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti -pthread -fPIC")
+ 
+	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
+	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+
+	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -O3")
+	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+
+	add_definitions(-D__ANDROID__=1)
+	set(PLATFORM_LIBS android jnigraphics log)
+
+elseif(IOS)
+
+	message ( "Setup IOS configs" )
+
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti -pthread -fPIC")
+
+	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
+	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+
+	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -O3")
+	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
+
+	add_definitions(-D__IOS__=1)
+	add_definitions(-DKQUEUE)
+
 elseif(UNIX)
+
+	message ( "Setup UNIX configs" )
 
 	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread -fPIC")
 	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -fPIC")
@@ -101,28 +135,6 @@ elseif(UNIX)
 		/usr/include/mysql
 		#3rdParties/VulkanSDK/1.1.82.1/include
 	)
-
-elseif(ANDROID)
-
-	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
-	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
-
-	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -O3")
-	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
-
-	add_definitions(-D__ANDROID__=1)
-	set(PLATFORM_LIBS android jnigraphics log)
-
-elseif(IOS)
-
-	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
-	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
-
-	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -O3")
-	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
-
-	add_definitions(-D__IOS__=1)
-	add_definitions(-DKQUEUE)
 
 endif()
 

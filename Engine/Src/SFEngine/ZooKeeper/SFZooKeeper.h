@@ -12,9 +12,8 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS || SF_PLATFORM == SF_PLATFORM_LINUX
+
 #define USE_ZOOKEEPER
-#endif
 
 #ifdef USE_ZOOKEEPER
 #include "String/SFFixedString32.h"
