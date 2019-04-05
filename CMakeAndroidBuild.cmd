@@ -12,6 +12,7 @@ cd %BUILD_DIR%
 
 cmake --build .
 
+
 set CMAKE_BUILD_TYPE=Release
 set BUILD_DIR=Intermediate\%CMAKE_SYSTEM_NAME%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%
 

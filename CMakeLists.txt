@@ -29,7 +29,7 @@ endif(MSVC)
 
 
 
-add_definitions(-DNOMINMAX)
+#add_definitions(-DNOMINMAX)
 add_definitions(-DHAVE_CONFIG_H)
 add_definitions(-DCURL_STATICLIB)
 add_definitions(-DHAVE_STDDEF_H=1)
@@ -39,7 +39,6 @@ add_definitions(-DSF_USE_MBEDTLS)
 
 
 include_directories(AFTER 
-	#Bin/lib/Android/openssl/${CMAKE_SYSTEM_NAME}/include
 	3rdParties/src/mbedtls/mbedtls-2.16.0/include
 	3rdParties/src/libiconv/libiconv-1.15/include
 	3rdParties/src/libpng/lpng1617
@@ -61,6 +60,8 @@ if(WIN32)
 	add_definitions(-DWIN32_LEAN_AND_MEAN)
 	add_definitions(-DWIN64)
 	add_definitions(-DWIN32)
+	add_definitions(-D_WINDOWS)
+
 
 	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
 
