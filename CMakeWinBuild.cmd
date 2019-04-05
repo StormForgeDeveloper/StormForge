@@ -10,11 +10,11 @@ set BUILD_DIR=Intermediate\%CMAKE_SYSTEM_NAME%\%PROCESS_ARCHITECTUR%
 
 cd %BUILD_DIR%
 
-cmake --build . 
+cmake --build . --parallel --target ALL_BUILD -- /p:Configuration=Debug
 
 set CMAKE_BUILD_TYPE=Release
 
-cmake --build .
+cmake --build . --parallel --target ALL_BUILD -- /p:Configuration=Release
 
 
 

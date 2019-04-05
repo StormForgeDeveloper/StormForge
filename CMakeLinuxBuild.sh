@@ -6,17 +6,21 @@ export CMAKE_SYSTEM_NAME=Linux
 
 
 export BUILD_DIR=Intermediate/$CMAKE_SYSTEM_NAME
+
+mkdir $BUILD_DIR/Debug
+mkdir $BUILD_DIR/Release
+
 cd $BUILD_DIR
 
 
 
 export CMAKE_BUILD_TYPE=Debug
-
-cmake --build . 
+cd $CMAKE_BUILD_TYPE
+cmake --build . --target all -- -DDEBUG -O0
 
 export CMAKE_BUILD_TYPE=Release
-
-cmake --build .
+cd ../$CMAKE_BUILD_TYPE
+cmake --build . --target all -- -O3
 
 
 echo Done
