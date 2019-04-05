@@ -14,7 +14,7 @@ if not exist %BUILD_DIR% mkdir %BUILD_DIR%
 cd %BUILD_DIR%
 
 
-
+set CMAKE_BUILD_TYPE=Release
 cmake ../../../ -G "Visual Studio 15 2017" -A %PROCESS_ARCHITECTUR%
 
 

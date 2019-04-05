@@ -328,19 +328,19 @@ namespace SF {
 
 		bool TypeCheck(SharedObject* pObject)
 		{
-#ifdef DEBUG
-			if (pObject == nullptr) return true;
-
-			bool sameType = dynamic_cast<ClassType*>(pObject) != nullptr;
-			//auto type = typeid(*pObject).name();
-			//auto type2 = typeid(ClassType).name();
-			//bool sameType = type == type2;
-			assert(sameType);
-			return sameType;
-#else
+//#ifdef DEBUG
+//			if (pObject == nullptr) return true;
+//
+//			bool sameType = dynamic_cast<ClassType*>(pObject) != nullptr;
+//			//auto type = typeid(*pObject).name();
+//			//auto type2 = typeid(ClassType).name();
+//			//bool sameType = type == type2;
+//			assert(sameType);
+//			return sameType;
+//#else
 			// don't check
 			return true;
-#endif
+//#endif
 		}
 
 		virtual void SetPointer(SharedObject* pObject) override
@@ -734,19 +734,19 @@ namespace SF {
 
 		bool TypeCheck(SharedObject* pObject)
 		{
-#ifdef DEBUG
-			if (pObject == nullptr) return true;
-
-			bool sameType = dynamic_cast<ClassType*>(pObject) != nullptr;
-			//auto type = typeid(*pObject).name();
-			//auto type2 = typeid(ClassType).name();
-			//bool sameType = type == type2;
-			assert(sameType);
-			return sameType;
-#else
+//#ifdef DEBUG
+//			if (pObject == nullptr) return true;
+//
+//			bool sameType = dynamic_cast<ClassType*>(pObject) != nullptr;
+//			//auto type = typeid(*pObject).name();
+//			//auto type2 = typeid(ClassType).name();
+//			//bool sameType = type == type2;
+//			assert(sameType);
+//			return sameType;
+//#else
 			// don't check
 			return true;
-#endif
+//#endif
 		}
 
 		virtual void SetPointer(SharedObject* pObject) override
