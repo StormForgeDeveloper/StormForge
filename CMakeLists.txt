@@ -41,6 +41,9 @@ SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG")
 SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 
+set(ENGINE_LINK_LIBS SFProtocol SFEngine  SFCore  curl iconv png mng jpeg tiff zookeeper jsoncpp mbedtls libxml zlib)
+
+
 include_directories(AFTER 
 	3rdParties/src/mbedtls/mbedtls-2.16.0/include
 	3rdParties/src/libiconv/libiconv-1.15/include
@@ -83,6 +86,7 @@ if(WIN32)
 	)
 
 	set(PLATFORM_LIBS Ws2_32 Mswsock)
+
 elseif(ANDROID_PLATFORM)
 
 	message ( "Setup Android configs" )
@@ -96,7 +100,7 @@ elseif(ANDROID_PLATFORM)
 	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 
 	add_definitions(-D__ANDROID__=1)
-	set(PLATFORM_LIBS android jnigraphics log)
+	set(PLATFORM_LIBS android jnigraphics log GLESv1_CM GLESv2 EGL)
 
 elseif(IOS)
 
@@ -155,6 +159,7 @@ add_subdirectory(Engine/Src/SFCore)
 add_subdirectory(Engine/Src/SFEngine)
 add_subdirectory(Engine/Src/Protocol)
 add_subdirectory(Engine/Src/SFEngineDLL)
+add_subdirectory(Test)
 
 
 

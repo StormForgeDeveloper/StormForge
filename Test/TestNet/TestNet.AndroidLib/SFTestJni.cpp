@@ -17,6 +17,8 @@
 
 #include "TestNetNative.h"
 #include "String/SFToString.h"
+#include <jni.h>
+#include <errno.h>
 
 
 using namespace SF;
