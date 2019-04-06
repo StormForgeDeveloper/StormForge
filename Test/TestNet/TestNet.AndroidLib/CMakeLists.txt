@@ -20,3 +20,8 @@ add_dependencies(TestNet_AndroidLib SFCore SFEngine SFProtocol curl iconv)
 target_link_libraries(TestNet_AndroidLib ${ENGINE_LINK_LIBS} ${PLATFORM_LIBS})
 
 
+install (TARGETS TestNet_AndroidLib
+         ARCHIVE DESTINATION test COMPONENT StormForgeTest
+         LIBRARY DESTINATION test COMPONENT StormForgeTest
+         RUNTIME DESTINATION test COMPONENT StormForgeTest)
+

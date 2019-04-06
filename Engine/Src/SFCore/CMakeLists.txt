@@ -241,5 +241,9 @@ add_library(SFCore STATIC ${SFCORE_LIB_FILES})
 
 target_include_directories (SFCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
+install (TARGETS SFCore
+         ARCHIVE DESTINATION lib COMPONENT StormForge
+         LIBRARY DESTINATION lib COMPONENT StormForge
+         RUNTIME DESTINATION bin COMPONENT StormForge)
 
 

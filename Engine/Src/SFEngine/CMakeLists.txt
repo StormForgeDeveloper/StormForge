@@ -256,4 +256,8 @@ add_library(SFEngine STATIC ${SFENGINE_LIB_FILES})
 
 target_include_directories (SFEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
 
+install (TARGETS SFEngine
+         ARCHIVE DESTINATION lib COMPONENT StormForge
+         LIBRARY DESTINATION lib COMPONENT StormForge
+         RUNTIME DESTINATION bin COMPONENT StormForge)
 

@@ -10,7 +10,7 @@ set BUILD_DIR=Intermediate\%CMAKE_SYSTEM_NAME%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD
 
 cd %BUILD_DIR%
 
-cmake --build .
+cmake --build . --target install --config Debug
 
 
 set CMAKE_BUILD_TYPE=Release
@@ -18,7 +18,7 @@ set BUILD_DIR=Intermediate\%CMAKE_SYSTEM_NAME%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD
 
 cd ../../../%BUILD_DIR%
 
-cmake --build .
+cmake --build .  --target install --config Release
 
 
 

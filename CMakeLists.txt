@@ -20,12 +20,6 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
 endif(MSVC)
 
 
-# set(cmake_runtime_output_directory "${project_binary_dir}/bin/${project_output_dirname}")
-# set(cmake_library_output_directory "${project_binary_dir}/lib/${project_output_dirname}")
-# set(cmake_archive_output_directory "${project_binary_dir}/lib/${project_output_dirname}")
-
-
-
 
 
 
@@ -41,7 +35,7 @@ SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG")
 SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG")
 
 
-set(ENGINE_LINK_LIBS SFProtocol SFEngine  SFCore  curl iconv png mng jpeg tiff zookeeper jsoncpp mbedtls libxml zlib)
+set(ENGINE_LINK_LIBS SFProtocol SFEngine  SFCore  curl iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 zlib)
 
 
 include_directories(AFTER 
@@ -84,6 +78,8 @@ if(WIN32)
 	include_directories(AFTER 
 		3rdParties/VulkanSDK/1.1.82.1/include
 	)
+	
+	set(ARTECTURE x64)
 
 	set(PLATFORM_LIBS Ws2_32 Mswsock)
 
@@ -102,6 +98,8 @@ elseif(ANDROID_PLATFORM)
 	add_definitions(-D__ANDROID__=1)
 	set(PLATFORM_LIBS android jnigraphics log GLESv1_CM GLESv2 EGL)
 
+	set(ARTECTURE ${CMAKE_ANDROID_ARCH_ABI})
+
 elseif(IOS)
 
 	message ( "Setup IOS configs" )
@@ -116,6 +114,8 @@ elseif(IOS)
 
 	add_definitions(-D__IOS__=1)
 	add_definitions(-DKQUEUE)
+
+	set(ARTECTURE ${CMAKE_OSX_ARCHITECTURES})
 
 elseif(UNIX)
 
@@ -139,18 +139,16 @@ elseif(UNIX)
 		/usr/include/mysql
 		#3rdParties/VulkanSDK/1.1.82.1/include
 	)
+	
+	#
+	set(ARTECTURE x64)
 
 endif()
 
 
 
-#string(REGEX MATCH "Clang" CMAKE_COMPILER_IS_CLANG "${CMAKE_C_COMPILER_ID}")
-#string(REGEX MATCH "GNU" CMAKE_COMPILER_IS_GNU "${CMAKE_C_COMPILER_ID}")
-#string(REGEX MATCH "IAR" CMAKE_COMPILER_IS_IAR "${CMAKE_C_COMPILER_ID}")
-#string(REGEX MATCH "MSVC" CMAKE_COMPILER_IS_MSVC "${CMAKE_C_COMPILER_ID}")
 
-
-
+set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/Built${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
 
 
 
@@ -160,6 +158,7 @@ add_subdirectory(Engine/Src/SFEngine)
 add_subdirectory(Engine/Src/Protocol)
 add_subdirectory(Engine/Src/SFEngineDLL)
 add_subdirectory(Test)
+
 
 
 

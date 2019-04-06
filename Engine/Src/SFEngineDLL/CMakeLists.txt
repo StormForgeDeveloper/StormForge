@@ -45,4 +45,9 @@ target_link_libraries(SFEngineDLL ${ENGINE_LINK_LIBS} ${PLATFORM_LIBS})
 
 target_include_directories (SFEngineDLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
 
+install (TARGETS SFEngineDLL
+         ARCHIVE DESTINATION lib COMPONENT StormForge
+         LIBRARY DESTINATION lib COMPONENT StormForge
+         RUNTIME DESTINATION bin COMPONENT StormForge)
+
 

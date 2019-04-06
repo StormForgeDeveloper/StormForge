@@ -16,11 +16,11 @@ cd $BUILD_DIR
 
 export CMAKE_BUILD_TYPE=Debug
 cd $CMAKE_BUILD_TYPE
-cmake --build . 
+cmake --build .   --target install --config Debug
 
 export CMAKE_BUILD_TYPE=Release
 cd ../$CMAKE_BUILD_TYPE
-cmake --build . 
+cmake --build .   --target install --config Release
 
 
 echo Done
