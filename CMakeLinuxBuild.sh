@@ -25,5 +25,4 @@ cmake --build .
 
 echo Done
 
-read -n1 -r -p "Press space to continue..." key
 

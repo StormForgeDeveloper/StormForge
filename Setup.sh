@@ -10,4 +10,4 @@ git clone https://github.com/blue3k/StormForge3rdParties.git $SF_PATH/../StormFo
 
 ln -s $SF_PATH/../StormForge3rdParties/3rdParties $SF_PATH/3rdParties 
 
-pause
+
