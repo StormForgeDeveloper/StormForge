@@ -5,7 +5,7 @@
 export CMAKE_SYSTEM_NAME=Linux
 
 
-export BUILD_DIR=Intermediate/$CMAKE_SYSTEM_NAME
+export BUILD_DIR=build$CMAKE_SYSTEM_NAME
 
 mkdir $BUILD_DIR/Debug
 mkdir $BUILD_DIR/Release

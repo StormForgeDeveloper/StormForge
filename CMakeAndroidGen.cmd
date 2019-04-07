@@ -4,20 +4,23 @@
 set PATH=C:\DevEnv\Android\cmake\3.10.2.4988404\bin;%PATH%
 set CMAKE_SYSTEM_NAME=Android
 set PROCESS_ARCHITECTUR=armeabi-v7a
-set CMAKE_BUILD_TYPE=Debug
-
-if not exist Intermediate mkdir Intermediate
-if not exist Intermediate\%CMAKE_SYSTEM_NAME% mkdir Intermediate\%CMAKE_SYSTEM_NAME%
 
 
-set BUILD_DIR=Intermediate\%CMAKE_SYSTEM_NAME%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%
+if not exist build%CMAKE_SYSTEM_NAME% mkdir build%CMAKE_SYSTEM_NAME%
+set BUILD_DIR=build%CMAKE_SYSTEM_NAME%
+
+
+
 if not exist %BUILD_DIR% mkdir %BUILD_DIR%
+if not exist %BUILD_DIR%\%PROCESS_ARCHITECTUR%Debug mkdir %BUILD_DIR%\%PROCESS_ARCHITECTUR%Debug
+if not exist %BUILD_DIR%\%PROCESS_ARCHITECTUR%Release mkdir %BUILD_DIR%\%PROCESS_ARCHITECTUR%Release
 
-cd %BUILD_DIR%
 
 
+set CMAKE_BUILD_TYPE=Debug
+cd %BUILD_DIR%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%
 
-cmake ../../../ -G Ninja ^
+cmake ../../ -G Ninja ^
 	-DCMAKE_ANDROID_NDK=%ANDROID_NDK_ROOT% ^
 	-DCMAKE_CROSSCOMPILING=true ^
 	-DCMAKE_TOOLCHAIN_FILE=%ANDROID_NDK_ROOT%\build\cmake\android.toolchain.cmake ^
@@ -34,11 +37,9 @@ cmake ../../../ -G Ninja ^
 
 
 set CMAKE_BUILD_TYPE=Release
-set BUILD_DIR=..\..\..\Intermediate\%CMAKE_SYSTEM_NAME%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%
-if not exist %BUILD_DIR% mkdir %BUILD_DIR%
+cd ../%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%
 
-cd %BUILD_DIR%
-cmake ../../../ -G Ninja ^
+cmake ../../ -G Ninja ^
 	-DCMAKE_ANDROID_NDK=%ANDROID_NDK_ROOT% ^
 	-DCMAKE_CROSSCOMPILING=true ^
 	-DCMAKE_TOOLCHAIN_FILE=%ANDROID_NDK_ROOT%\build\cmake\android.toolchain.cmake ^
