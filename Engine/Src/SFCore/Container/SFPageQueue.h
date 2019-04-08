@@ -14,6 +14,7 @@
 #include "SFAssert.h"
 #include "Thread/SFSynchronization.h"
 #include "Util/SFLog.h"
+#include "Util/SFUtility.h"
 
 
 

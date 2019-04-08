@@ -44,7 +44,7 @@ include_directories(AFTER
 	3rdParties/src/libpng/lpng1617
 	3rdParties/src/jpeg/jpeg-9a
 	3rdParties/src/libxml/libxml2/include
-	3rdParties/src/curl/curl
+	3rdParties/src/curl/curl/include
 	3rdParties/src/zlib/zlib-1.2.8
 	3rdParties/src/jsoncpp/include
 	3rdParties/src/zookeeper/zookeeperConnector/include
