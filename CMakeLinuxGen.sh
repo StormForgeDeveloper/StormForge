@@ -18,12 +18,14 @@ cd $BUILD_DIR
 
 export CMAKE_BUILD_TYPE=Debug
 cd {$PROCESS_ARCHITECTUR}$CMAKE_BUILD_TYPE
-cmake ../../ -G "Unix Makefiles"
+cmake ../../ -G "Unix Makefiles" ^
+	-DCMAKE_INSTALL_PREFIX=../../build%CMAKE_SYSTEM_NAME%/%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE% 
 
 
 export CMAKE_BUILD_TYPE=Release
 cd ../{$PROCESS_ARCHITECTUR}$CMAKE_BUILD_TYPE
-cmake ../../ -G "Unix Makefiles"
+cmake ../../ -G "Unix Makefiles" ^
+	-DCMAKE_INSTALL_PREFIX=../../build%CMAKE_SYSTEM_NAME%/%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE% 
 
 
 echo Done

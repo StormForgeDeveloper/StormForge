@@ -17,7 +17,8 @@ REM if not exist %BUILD_DIR%\%PROCESS_ARCHITECTUR%Release mkdir %BUILD_DIR%\%PRO
 
 cd %BUILD_DIR%
 
-cmake ../../ -G "Visual Studio 15 2017" -A %PROCESS_ARCHITECTUR% 
+cmake ../../ -G "Visual Studio 15 2017" -A %PROCESS_ARCHITECTUR%  ^
+	-DCMAKE_INSTALL_PREFIX=../../build%CMAKE_SYSTEM_NAME%/%PROCESS_ARCHITECTUR% 
 
 
 
