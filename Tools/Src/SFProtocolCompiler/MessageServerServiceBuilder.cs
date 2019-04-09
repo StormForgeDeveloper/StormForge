@@ -171,7 +171,7 @@ namespace ProtocolCompiler
             {
                 if (type == MsgType.Cmd)
                 {
-                    MatchIndent(); OutStream.WriteLine("RouteContext InRouteContext( EntityUID(GetMyServerID(),InTransactionID.GetEntityID()), GetServiceEntityUID() );");
+                    MatchIndent(); OutStream.WriteLine("RouteContext InRouteContext( EntityUID(GetMyServerID(),TransactionID(InTransactionID).GetEntityID()), GetServiceEntityUID() );");
                     ParamRouteContext = m_ParameterRouteHopContext;
                     parameters = MakeParameters(type, originalParameters);
                     ParamRouteContext = null;
