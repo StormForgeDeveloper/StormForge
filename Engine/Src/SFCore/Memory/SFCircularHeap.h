@@ -67,8 +67,8 @@ namespace SF {
 
 	protected:
 
-		virtual MemBlockHdr* AllocInternal(size_t size, size_t alignment) override;
-		virtual MemBlockHdr* ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment) override;
+		virtual MemBlockHdr* AllocInternal(size_t size, size_t align) override;
+		virtual MemBlockHdr* ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t align) override;
 		virtual void FreeInternal(MemBlockHdr* ptr) override;
 
 	public:

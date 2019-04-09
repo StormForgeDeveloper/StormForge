@@ -54,13 +54,14 @@ namespace SF {
 
 	// Allocate 
 	template< size_t BufferSize, size_t alignment >
-	MemBlockHdr* CircularHeap<BufferSize, alignment>::AllocInternal(size_t size, size_t alignment)
+	MemBlockHdr* CircularHeap<BufferSize, alignment>::AllocInternal(size_t size, size_t align)
 	{
+		align = Util::Max(alignment, align);
 		MemoryChunkHeader *pChunk = nullptr;
-		intptr_t allocationSize = (intptr_t)AlignUp(HEADER_SIZE + size, alignment);
+		intptr_t allocationSize = (intptr_t)AlignUp(HEADER_SIZE + size, align);
 
 		if (m_FreeSize < allocationSize)
-			return GetParent()->AllocInternal(size, alignment);
+			return GetParent()->AllocInternal(size, align);
 
 		if ((m_AllocatePosition + allocationSize) < (decltype(m_AllocatePosition))BufferSize)
 		{
@@ -77,7 +78,7 @@ namespace SF {
 			intptr_t remainSize = BufferSize - m_AllocatePosition;
 
 			if (m_FreeSize < (allocationSize + remainSize))
-				return GetParent()->AllocInternal(size, alignment);
+				return GetParent()->AllocInternal(size, align);
 
 			// Add dummy area
 			pChunk = (MemoryChunkHeader*)(m_AllocationBuffer + m_AllocatePosition);
@@ -110,7 +111,7 @@ namespace SF {
 
 	// Reallocate
 	template< size_t BufferSize, size_t alignment >
-	MemBlockHdr* CircularHeap<BufferSize, alignment>::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment)
+	MemBlockHdr* CircularHeap<BufferSize, alignment>::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t align)
 	{
 		return nullptr;
 	}
