@@ -171,9 +171,6 @@
     <ClInclude Include="UnitTest1PCH.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\3rdParties\src\gtest\googletest\src\gtest-all.cc">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-    </ClCompile>
     <ClCompile Include="Test\Algorithm\Matching\SFSphericalShellManager.cpp" />
     <ClCompile Include="Test\Algorithm\Matching\UnitTest_Algorithm_MatchingPreferance.cpp" />
     <ClCompile Include="Test\Algorithm\Matching\UnitTest_Algorithm_MatchingQueue.cpp" />

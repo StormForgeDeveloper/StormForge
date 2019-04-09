@@ -215,9 +215,6 @@
     <ClCompile Include="Test\TongScript\UnitTest_TongScript_FileFormat.cpp">
       <Filter>Test\Tong</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\3rdParties\src\gtest\googletest\src\gtest-all.cc">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Test\Net\UnitTest_Net.cpp">
       <Filter>Test\Net</Filter>
     </ClCompile>

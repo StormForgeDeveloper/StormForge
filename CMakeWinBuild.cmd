@@ -20,7 +20,6 @@ robocopy bin ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin  /purge
 
 
 set CMAKE_BUILD_TYPE=Release
-cd ../%PROCESS_ARCHITECTUR%
 cmake --build . --parallel --target install -- /p:Configuration=Release 
 
 

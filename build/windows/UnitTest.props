@@ -7,14 +7,14 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParties/src/gtest/googletest;$(SolutionDir)3rdParties/src/gtest/googletest/include;$(SolutionDir)3rdParties/src/zookeeperConnector/include;$(SolutionDir)3rdParties/src/zookeeperConnector/generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParties/src/gtest/gtest/googletest;$(SolutionDir)3rdParties/src/gtest/gtest/googletest/include;$(SolutionDir)3rdParties/src/zookeeper/zookeeperConnector/include;$(SolutionDir)3rdParties/src/zookeeper/zookeeperConnector/generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>
       <IgnoreSpecificDefaultLibraries>
       </IgnoreSpecificDefaultLibraries>
       <AdditionalLibraryDirectories>$(SolutionDir)Bin/lib/Win/$(Platform)$(Configuration);$(SolutionDir)Bin/Win/$(Platform)$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zookeeper.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>gtest.lib;zookeeper.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup />
