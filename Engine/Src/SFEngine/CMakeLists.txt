@@ -7,6 +7,8 @@ include_directories(AFTER
 set(SFENGINE_LIB_FILES
   	Application/Android/AndroidApp.cpp
 	Application/Android/AndroidAppTasks.cpp
+  	Application/Linux/LinuxApp.cpp
+	Application/Linux/LinuxAppTasks.cpp
 	Application/SFApplicationBase.cpp
 	Application/IOS/IOSApp.cpp
 	Application/IOS/IOSAppTasks.cpp
@@ -114,6 +116,7 @@ set(SFENGINE_LIB_FILES
 	SFEngine.cpp
 	SFEngine.IOS.cpp
 	SFEngine.Win.cpp
+	SFEngine.Linux.cpp
 	String/SFToStringEngineTypes.cpp
 	Types/SFEngineTypedefs.cpp
 	ZooKeeper/SFZooKeeper.cpp

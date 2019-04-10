@@ -121,8 +121,8 @@ elseif(UNIX)
 
 	message ( "Setup UNIX configs" )
 
-	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pthread -fPIC")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread -fPIC")
+	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fexceptions -frtti -pthread -fPIC")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fexceptions -frtti -pthread -fPIC")
 
 	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
@@ -134,14 +134,16 @@ elseif(UNIX)
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)
 
+	set(PLATFORM_LIBS rt m)
 
 	include_directories(AFTER 
 		/usr/include/mysql
 		#3rdParties/VulkanSDK/1.1.82.1/include
 	)
 	
-	#
+
 	set(ARTECTURE x64)
+
 
 endif()
 
