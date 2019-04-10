@@ -64,7 +64,7 @@ namespace SF
 	}
 
 
-	VkBool32 VulkanDebug::MessageCallback(
+	VKAPI_ATTR VkBool32 VKAPI_CALL VulkanDebug::MessageCallback(
 		VkDebugReportFlagsEXT flags,
 		VkDebugReportObjectTypeEXT objType,
 		uint64_t srcObject,

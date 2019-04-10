@@ -16,6 +16,9 @@
 #include "Graphics/Vulkan/SFVulkanLibrary.h"
 
 #if HAVE_VULKAN
+#include "vulkan/vk_platform.h"
+
+
 
 namespace SF
 {
@@ -34,7 +37,7 @@ namespace SF
 
 	private:
 
-		static VkBool32 MessageCallback(
+		static VKAPI_ATTR VkBool32 VKAPI_CALL MessageCallback(
 			VkDebugReportFlagsEXT flags,
 			VkDebugReportObjectTypeEXT objType,
 			uint64_t srcObject,
