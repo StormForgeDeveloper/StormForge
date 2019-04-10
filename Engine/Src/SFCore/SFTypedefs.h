@@ -235,7 +235,6 @@ typedef wchar_t WCHAR;
 typedef unsigned int uint;
 typedef int INT;
 
-typedef short SHORT;
 typedef unsigned int DWORD;
 typedef unsigned short WORD;
 
@@ -333,7 +332,6 @@ typedef wchar_t WCHAR;
 typedef unsigned int uint;
 typedef int INT;
 
-typedef short SHORT;
 typedef unsigned int DWORD;
 typedef unsigned short WORD;
 
@@ -424,7 +422,6 @@ typedef wchar_t WCHAR;
 typedef unsigned int uint;
 typedef int INT;
 
-typedef short SHORT;
 typedef unsigned int DWORD;
 typedef unsigned short WORD;
 
