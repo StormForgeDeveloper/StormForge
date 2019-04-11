@@ -215,20 +215,6 @@
     <ClCompile Include="UnitTest_Zookeeper.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Engine\Src\CoreBase\SFCoreBase.Win.vcxproj">
-      <Project>{758fa598-b851-4848-bec0-e039edbd2e5e}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Engine\Src\Protocol\SFProtocol.Win.vcxproj">
-      <Project>{a670f5b5-d452-4ee5-8531-c1cde3342484}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Engine\Src\SFEngineTool\SFEngineTool.Win.vcxproj">
-      <Project>{5554dd42-b106-4f4b-93e6-cefae0600422}</Project>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Engine\Src\SFEngine\SFEngine.Win.vcxproj">
-      <Project>{1ac5e64d-18e3-4521-805d-e083933ac19c}</Project>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Xml Include="ServerConfig_StressTest.xml">
       <DeploymentContent>true</DeploymentContent>
       <SubType>Designer</SubType>

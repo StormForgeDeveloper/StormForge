@@ -8,7 +8,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <Link>
-      <AdditionalLibraryDirectories>$(SolutionDir)bin/Win/$(Platform)$(Configuration);$(SolutionDir)bin/lib/Win/$(Platform)$(Configuration);$(SolutionDir)3rdParties/src/vulkan/1.0.51.0/$(Platform);$(SolutionDir)buildWindows\$(Platform)$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)3rdParties/src/vulkan/1.0.51.0/$(Platform);$(SolutionDir)buildWindows\$(Platform)$(Configuration)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>Ws2_32.lib;Mswsock.lib;curl.lib;freetype.lib;Iconv.lib;jasper.lib;jpeg.lib;JsonCPP.lib;lcms2.lib;mng.lib;png.lib;tiff.lib;XML2.lib;tinyxml.lib;ZLib.lib;SFCore.lib;SFEngine.lib;SFProtocol.lib;zookeeper.lib;libfbxsdk.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>

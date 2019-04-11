@@ -25,10 +25,7 @@ set(SFPROTOCOL_LIB_FILES
 	Protocol/SFProtocolHelper.h
 	Protocol/SFProtocol.h
 	Protocol/SFProtocolHelper.inl
-
   )
-
-
 
 
 
@@ -36,6 +33,7 @@ add_library(SFProtocol STATIC ${SFPROTOCOL_LIB_FILES})
 
 target_include_directories (SFProtocol PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
 
+#set_target_properties(SFProtocol PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/)
 
 install (TARGETS SFProtocol
          ARCHIVE DESTINATION lib COMPONENT StormForge
