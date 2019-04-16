@@ -1,7 +1,7 @@
 
 
 
-set PATH=C:\DevEnv\Android\cmake\3.10.2.4988404\bin;%PATH%
+rem set PATH=C:\DevEnv\Android\cmake\3.10.2.4988404\bin;%PATH%
 set CMAKE_SYSTEM_NAME=Android
 set PROCESS_ARCHITECTUR=armeabi-v7a
 
@@ -32,7 +32,7 @@ cmake ../../ -G Ninja ^
 	-DANDROID_NDK=%ANDROID_NDK_ROOT% ^
 	-DCMAKE_ANDROID_ARCH_ABI=%PROCESS_ARCHITECTUR% ^
 	-DCMAKE_TOOLCHAIN_FILE=%ANDROID_NDK_ROOT%\build\cmake\android.toolchain.cmake ^
-	-DCMAKE_MAKE_PROGRAM=C:\DevEnv\Android\cmake\3.10.2.4988404\bin\ninja.exe ^
+	-DCMAKE_MAKE_PROGRAM=%ANDROID_HOME%\cmake\3.10.2.4988404\bin\ninja.exe ^
 	-DCMAKE_EXPORT_COMPILE_COMMANDS=ON ^
 	-DANDROID=1
 
@@ -52,7 +52,7 @@ cmake ../../ -G Ninja ^
 	-DANDROID_NDK=%ANDROID_NDK_ROOT% ^
 	-DCMAKE_ANDROID_ARCH_ABI=%PROCESS_ARCHITECTUR% ^
 	-DCMAKE_TOOLCHAIN_FILE=%ANDROID_NDK_ROOT%\build\cmake\android.toolchain.cmake ^
-	-DCMAKE_MAKE_PROGRAM=C:\DevEnv\Android\cmake\3.10.2.4988404\bin\ninja.exe ^
+	-DCMAKE_MAKE_PROGRAM=%ANDROID_HOME%\cmake\3.10.2.4988404\bin\ninja.exe ^
 	-DCMAKE_EXPORT_COMPILE_COMMANDS=ON ^
 	-DANDROID=1
 

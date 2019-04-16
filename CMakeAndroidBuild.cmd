@@ -1,7 +1,7 @@
 
 
 
-set PATH=C:\DevEnv\Android\cmake\3.10.2.4988404\bin;%PATH%
+rem set PATH=C:\DevEnv\Android\cmake\3.10.2.4988404\bin;%PATH%
 set CMAKE_SYSTEM_NAME=Android
 set PROCESS_ARCHITECTUR=armeabi-v7a
 
