@@ -45,6 +45,7 @@ namespace Net {
 	Result SetSockAddr( sockaddr_in6& sockAddr, const char *strAddr, uint16_t usPort );
 	Result SetSockAddr(sockaddr_in& sockAddr, const char *strAddr, uint16_t usPort);
 	Result SetSockAddr(sockaddr_storage& sockAddr, const char *strAddr, uint16_t usPort);
+	Result GetLocalAddressBSD(SockFamily family, NetAddress &addr);
 	Result GetLocalAddress(SockFamily family, NetAddress &addr);
 	Result GetLocalAddressIPv4(NetAddress &addr);
 	Result GetLocalAddressIPv6(NetAddress &addr);

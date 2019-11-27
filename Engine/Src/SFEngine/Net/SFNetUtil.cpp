@@ -29,6 +29,12 @@
 #	if SF_PLATFORM != SF_PLATFORM_ANDROID
 #	include <ifaddrs.h>
 #	endif
+
+#else // SF_PLATFORM_WINDOWS
+
+#include <iphlpapi.h>
+#pragma comment(lib, "iphlpapi.lib")
+
 #endif
 
 
@@ -242,10 +248,7 @@ namespace Net {
 	}
 
 
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS
-
-
-	Result GetLocalAddress(SockFamily family, NetAddress &addr)
+	Result GetLocalAddressBSD(SockFamily family, NetAddress &addr)
 	{
 		char tempBuffer[128];
 		//Convert IPV6 to IPV4
@@ -280,7 +283,7 @@ namespace Net {
 				bIsFound = inet_ntop(AF_INET, &psockAddr4->sin_addr, tempBuffer, sizeof tempBuffer) != nullptr;
 				break;
 			}
-			else if(curAddr->ai_family == AF_INET6)
+			else if (curAddr->ai_family == AF_INET6)
 			{
 				sockaddr_in6* psockAddr6 = ((sockaddr_in6*)curAddr->ai_addr);
 				if (!bIsFound || psockAddr6->sin6_scope_id == 0)
@@ -300,6 +303,89 @@ namespace Net {
 		}
 
 		return bIsFound ? ResultCode::SUCCESS : ResultCode::FAIL;
+	}
+
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+
+	Result GetLocalAddress(SockFamily family, NetAddress &outAddr)
+	{
+		DWORD retval;
+		MIB_IPFORWARD_TABLE2 *routes = NULL;
+		MIB_IPFORWARD_ROW2 *route;
+
+		unsigned int i;
+		IP_ADAPTER_ADDRESSES IPAddressTable[256];
+		ULONG AddrTableSize = sizeof(IPAddressTable);
+		auto ret = GetAdaptersAddresses(AF_UNSPEC, GAA_FLAG_SKIP_DNS_SERVER, 0, IPAddressTable, &AddrTableSize);
+		if (ret != NO_ERROR)
+		{
+			SFLog(Net, Error, "GetAdaptersAddresses failed (0x{0})\n.", retval);
+			return ResultCode::FAIL;
+		}
+
+		PIP_ADAPTER_UNICAST_ADDRESS pUnicast = NULL;
+		retval = GetIpForwardTable2(AF_UNSPEC, &routes);
+		if (retval != ERROR_SUCCESS)
+		{
+			SFLog(Net, Error, "GetIpForwardTable2 failed (0x{0})\n.", retval);
+			return ResultCode::FAIL;
+		}
+
+		for (unsigned iRoute = 0; iRoute < routes->NumEntries; iRoute++)
+		{
+			route = routes->Table + iRoute;
+
+			if (route->Loopback)
+				continue;
+
+			if (route->Protocol != PROTO_IP_NETMGMT)
+				continue;
+
+			//char ipv6AddrString[128] = {};
+			//inet_pton(AF_INET6, (PCSTR)&route->NextHop.Ipv6.sin6_addr, ipv6AddrString);
+			//printf("next hop: \t %s, %s\n", inet_ntoa(route->NextHop.Ipv4.sin_addr), ipv6AddrString);
+			auto RoutingProtocolFamily = route->NextHop.si_family;
+			if (ToSockValue(family) != RoutingProtocolFamily)
+				continue;
+
+			auto pCurrAddresses = IPAddressTable;
+			for (; pCurrAddresses != nullptr; pCurrAddresses = pCurrAddresses->Next)
+			{
+				if (route->InterfaceIndex != pCurrAddresses->IfIndex)
+					continue;
+
+				if (pCurrAddresses->OperStatus != IfOperStatusUp)
+					continue;
+
+				pUnicast = pCurrAddresses->FirstUnicastAddress;
+				if (pUnicast != nullptr)
+				{
+					for (i = 0; pUnicast != nullptr; pUnicast = pUnicast->Next, i++)
+					{
+						// Skip invalid socket family, the gateway wouldn't accept it anyway
+						if (RoutingProtocolFamily != pUnicast->Address.lpSockaddr->sa_family)
+							continue;
+
+
+						//char AddrString[256];
+						//DWORD AddressStringLength = sizeof(AddrString);
+						//WSAAddressToStringA(pUnicast->Address.lpSockaddr,
+						//	(DWORD)pUnicast->Address.iSockaddrLength,
+						//	nullptr,
+						//	AddrString,
+						//	&AddressStringLength);
+
+						//printf("  Ip Address: %s\n", AddrString);
+
+						outAddr = *reinterpret_cast<const sockaddr_storage*>(pUnicast->Address.lpSockaddr);
+
+						return ResultCode::SUCCESS;
+					}
+				}
+			}
+		}
+
+		return ResultCode::FAIL;
 	}
 
 	Result GetLocalAddressIPv4(NetAddress &addr)
