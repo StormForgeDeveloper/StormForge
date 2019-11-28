@@ -6,11 +6,11 @@ For now the development is still going on and have many missing modules, however
 # Prerequisites
 1. Linux sub system for WIndows. 
 	- It's tested on Ubuntu 18.04.
-1. Visual Studio 17 latest
+1. Visual Studio 17
 1. CMake 3.10 or later
 
 
-I am in the middle of transtion to Linux sub system for Windows. some script may need Linux sub system with Ubuntu core.
+I am in the middle of transtion to Linux sub system for Windows. some script may need Linux sub system with Ubuntu core while some others use cygwin.
 
 For now, StormForge has,
 1. Hierarchical Memory management. Hierarchical memory management gives you better track of memory ownership so that you can easily track down memory leak and usage. See memory management article.
