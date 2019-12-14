@@ -1000,6 +1000,32 @@ namespace SF
 
 
 
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Variable FixedString
+	//
+
+	constexpr FixedString VariableBLOB::TYPE_NAME;
+
+	Result VariableBLOB::ToString(ToStringContext& context) const
+	{
+		// todo
+
+		return ResultCode::SUCCESS;
+	}
+
+	Variable* VariableBLOB::Clone(Array<uint8_t>& buffer) const
+	{
+		return new((void*)buffer.data()) VariableBLOB(m_Value);
+	}
+
+	Variable* VariableBLOB::Clone(IHeap& heap) const
+	{
+		return new(heap) VariableBLOB(heap);
+	}
+
+
+
 
 } // namespace SF
 

@@ -169,7 +169,7 @@ namespace Net {
 	Result RawUDP::InitializeNet(const NetAddress& localAddress, MessageHandler *pHandler)
 	{
 		Result hr = ResultCode::SUCCESS;
-		SOCKET socket = INVALID_SOCKET;
+		SF_SOCKET socket = INVALID_SOCKET;
 		INT iOptValue;
 		//int bOptValue = 0;
 		sockaddr_storage bindAddr;

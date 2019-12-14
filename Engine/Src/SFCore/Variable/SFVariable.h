@@ -63,6 +63,8 @@ namespace SF {
 		virtual void SetValue(const String& value) { unused(value); }
 		virtual void SetValue(FixedString32 value) { unused(value); }
 		virtual void SetValue(FixedString value) { unused(value); }
+		virtual void SetValue(const Array<uint8_t>& value) { unused(value); }
+		virtual void SetValue(Array<uint8_t>&& value) { unused(value); }
 
 
 		virtual void* GetDataPtr() const { return nullptr; }
@@ -82,6 +84,7 @@ namespace SF {
 		virtual const wchar_t* GetValueWCharString() const { return nullptr; }
 		virtual FixedString32 GetValueFixedString32() const { return FixedString32(); }
 		virtual FixedString GetValueFixedString() const { return FixedString(); }
+		virtual const Array<uint8_t>& GetValueBLOB() const { static StaticArray<uint8_t,1> temp; return temp; }
 
 		// Template implementation for type based GetValue access
 		template<class ValueType>
@@ -122,6 +125,7 @@ namespace SF {
 	template<> inline const wchar_t* Variable::GetValue<const wchar_t*>() { return GetValueWCharString(); }
 	template<> inline FixedString32 Variable::GetValue<FixedString32>() { return GetValueFixedString32(); }
 	template<> inline FixedString Variable::GetValue<FixedString>() { return GetValueFixedString(); }
+	//template<> inline Array<uint8_t> Variable::GetValue<Array<uint8_t>>() { return GetValueBLOB(); }
 
 
 
@@ -1038,6 +1042,67 @@ namespace SF {
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//
+	//	Variable BLOB
+	//
+
+	class VariableBLOB : public Variable
+	{
+	public:
+
+		static constexpr FixedString TYPE_NAME = "BLOB";
+
+	private:
+		DynamicArray<uint8_t> m_Value;
+
+	public:
+		VariableBLOB()
+			: m_Value(GetSystemHeap())
+		{
+		}
+
+		VariableBLOB(IHeap& heap)
+			: m_Value(heap)
+		{
+		}
+
+		VariableBLOB(const Array<uint8_t>& value)
+			: m_Value(value.GetHeap())
+		{
+			m_Value = value;
+		}
+
+		VariableBLOB(IHeap& heap, const Array<uint8_t>& value)
+			: m_Value(heap)
+		{
+			m_Value = value;
+		}
+
+		VariableBLOB(IHeap& heap, Array<uint8_t>&& value)
+			: m_Value(heap)
+		{
+			m_Value = value;
+		}
+
+		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+
+
+		virtual void SetValue(const Array<uint8_t>& value) { unused(value); }
+		virtual void SetValue(Array<uint8_t>&& value) { unused(value); }
+
+		virtual void* GetDataPtr() const override { return const_cast<uint8_t*>(m_Value.data()); }
+		virtual bool GetValueBool() const override { return m_Value.size() != 0; }
+		virtual const Array<uint8_t>& GetValueBLOB() const override { return m_Value; }
+
+		virtual Result ToString(ToStringContext& context) const override;
+
+		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
+		virtual Variable* Clone(IHeap& heap) const override;
+	};
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	//
 	//	Variable generic boxing
 	//
 
@@ -1045,17 +1110,23 @@ namespace SF {
 	class VariableByBinaryValue : public Variable
 	{
 	public:
+		typedef std::decay_t<ValueType> ValueTypeDecay;
 
 
 	private:
-		ValueType m_Value;
+		ValueTypeDecay m_Value;
 
 	public:
 		VariableByBinaryValue()
 		{
 		}
 
-		VariableByBinaryValue(const ValueType& value)
+		VariableByBinaryValue(const ValueTypeDecay& value)
+			: m_Value(value)
+		{
+		}
+
+		VariableByBinaryValue(ValueTypeDecay&& value)
 			: m_Value(value)
 		{
 		}
@@ -1087,9 +1158,9 @@ namespace SF {
 				return false;
 
 			if (GetTypeName() == op.GetTypeName())
-				return m_Value == *reinterpret_cast<ValueType*>(op.GetDataPtr());
+				return m_Value == *reinterpret_cast<ValueTypeDecay*>(op.GetDataPtr());
 
-			return memcmp(&m_Value, op.GetDataPtr(), sizeof(ValueType));
+			return memcmp(&m_Value, op.GetDataPtr(), sizeof(ValueTypeDecay));
 		}
 
 	};
@@ -1105,10 +1176,10 @@ namespace SF {
 	class VariableValueReference : public Variable
 	{
 	public:
-
+		typedef std::decay_t<ValueType> ValueTypeDecay;
 
 	private:
-		ValueType* m_Value = nullptr;
+		ValueTypeDecay* m_Value = nullptr;
 
 	public:
 
@@ -1116,8 +1187,13 @@ namespace SF {
 		{
 		}
 
-		VariableValueReference(const ValueType& value)
-			: m_Value(const_cast<ValueType*>(&value))
+		VariableValueReference(const ValueTypeDecay& value)
+			: m_Value(const_cast<ValueTypeDecay*>(&value))
+		{
+		}
+
+		VariableValueReference(const VariableValueReference& value)
+			: m_Value(value.m_Value)
 		{
 		}
 

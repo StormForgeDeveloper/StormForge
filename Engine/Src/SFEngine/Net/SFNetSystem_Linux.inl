@@ -21,7 +21,7 @@
 
 
 // Initialize for IO
-void IOBUFFER_WRITE::InitForIO(SOCKET sockWrite)
+void IOBUFFER_WRITE::InitForIO(SF_SOCKET sockWrite)
 {
 	//memset(this, 0, sizeof(IOBUFFER_WRITE));
 	SockWrite = sockWrite;
@@ -49,7 +49,7 @@ void IOBUFFER_WRITE::InitBuff(uint uiBuffSize, uint8_t* pBuff)
 	pRawSendBuffer = pBuff;
 }
 
-void IOBUFFER_WRITE::SetupSendUDP(SOCKET sockWrite, const sockaddr_storage& to, SharedPointerT<Message::MessageData>&& pMsg)
+void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, SharedPointerT<Message::MessageData>&& pMsg)
 {
 	InitForIO(sockWrite);
 
@@ -60,7 +60,7 @@ void IOBUFFER_WRITE::SetupSendUDP(SOCKET sockWrite, const sockaddr_storage& to, 
 	Operation = IOBUFFER_OPERATION::OP_UDPWRITE;
 }
 
-void IOBUFFER_WRITE::SetupSendUDP(SOCKET sockWrite, const sockaddr_storage& to, uint uiBuffSize, uint8_t* pBuff)
+void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, uint uiBuffSize, uint8_t* pBuff)
 {
 	InitForIO(sockWrite);
 
@@ -130,7 +130,7 @@ void IOBUFFER_READ::SetupRecvTCP(uint64_t iCID)
 
 
 // Setup accept
-void IOBUFFER_ACCEPT::SetupAccept(SOCKET sock)
+void IOBUFFER_ACCEPT::SetupAccept(SF_SOCKET sock)
 {
 	Operation = IOBUFFER_OPERATION::OP_TCPACCEPT;
 	sockAccept = sock;

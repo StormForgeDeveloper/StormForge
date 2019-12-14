@@ -86,7 +86,7 @@ namespace AsyncIO {
 		return ResultCode::SUCCESS;
 	}
 
-	Result IOWorkerKQUEUE::HandleAccept(SOCKET sock, AsyncIOAdapter* pCallBack)
+	Result IOWorkerKQUEUE::HandleAccept(SF_SOCKET sock, AsyncIOAdapter* pCallBack)
 	{
 		Result hr = ResultCode::SUCCESS;
 		IOBUFFER_ACCEPT* pAcceptInfo = nullptr;

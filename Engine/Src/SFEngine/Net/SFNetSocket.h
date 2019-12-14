@@ -93,7 +93,7 @@ namespace Net {
 		int m_AssignedIOWorker = -1;
 
 		// Link to original socket variable
-		SOCKET m_IOSocket = INVALID_SOCKET;
+		SF_SOCKET m_IOSocket = INVALID_SOCKET;
 
 		// Recv pending count
 		std::atomic<int32_t> m_PendingRecvCount;
@@ -130,7 +130,7 @@ namespace Net {
 		void OnIORegistered();
 		void OnIOUnregistered();
 
-		void SetSocket(SockFamily sockFamily, SockType socketType, SOCKET socket);
+		void SetSocket(SockFamily sockFamily, SockType socketType, SF_SOCKET socket);
 		void CloseSocket();
 
 		SockType GetIOSockType() const { return m_IOSockType; }
@@ -138,7 +138,7 @@ namespace Net {
 
 		const CBFlags& GetIOFlags() const { return m_CBFlags; }
 		CBFlags& GetIOFlagsEditable() { return m_CBFlags; }
-		SOCKET GetIOSocket() const { return m_IOSocket; }
+		SF_SOCKET GetIOSocket() const { return m_IOSocket; }
 
 		// Write queue
 		WriteBufferQueue* GetWriteQueue() { return m_pWriteQueues; }

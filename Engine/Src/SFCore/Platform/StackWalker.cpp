@@ -62,10 +62,10 @@ namespace SF {
 		Result BuildSymbolPath();
 		Result LoadModuleSymbols();
 
-		FORCEINLINE void GetStackFrame( CONTEXT& context, STACKFRAME64& stackFrame, DWORD& imageType );
+		SF_FORCEINLINE void GetStackFrame( CONTEXT& context, STACKFRAME64& stackFrame, DWORD& imageType );
 
-		void STDCALL CaptureCallStackFast( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth );
-		void STDCALL CaptureCallStackReliable( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth );
+		void SF_STDCALL CaptureCallStackFast( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth );
+		void SF_STDCALL CaptureCallStackReliable( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth );
 #else
 #endif
 
@@ -75,10 +75,10 @@ namespace SF {
 		virtual ~StackWalkerImpl();
 
 		// initialize stace walker
-		bool STDCALL Initialize();
+		bool SF_STDCALL Initialize();
 
 		// get current stack trace
-		void STDCALL CaptureCallStack( CallStackTrace& stackTrace, uint skipDepth, uint maxDepth );
+		void SF_STDCALL CaptureCallStack( CallStackTrace& stackTrace, uint skipDepth, uint maxDepth );
 
 		// print stack trace
 		void PrintStackTrace();
@@ -408,7 +408,7 @@ namespace SF {
 	}
 
 	// This implementation tested on x86 and x64
-	void STDCALL StackWalkerImpl::CaptureCallStackFast( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth )
+	void SF_STDCALL StackWalkerImpl::CaptureCallStackFast( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth )
 	{
 		ULONG_PTR lowLimit, highLimit;
 		HANDLE hThread = GetCurrentThread();
@@ -479,7 +479,7 @@ namespace SF {
 		stackTrace.m_StackTraceCount = stackIndex;
 	}
 
-	void STDCALL StackWalkerImpl::CaptureCallStackReliable( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth )
+	void SF_STDCALL StackWalkerImpl::CaptureCallStackReliable( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth )
 	{
 		HANDLE hThread = GetCurrentThread();
 
@@ -509,7 +509,7 @@ namespace SF {
 
 	// get current stack trace
 	// #pragma optimize("y",off)
-	void STDCALL StackWalkerImpl::CaptureCallStack( CallStackTrace& stackTrace, uint skipDepth, uint maxDepth )
+	void SF_STDCALL StackWalkerImpl::CaptureCallStack( CallStackTrace& stackTrace, uint skipDepth, uint maxDepth )
 	{
 		STACKFRAME64 stackFrame;
 		DWORD imageType = 0;

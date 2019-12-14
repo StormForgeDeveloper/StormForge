@@ -49,7 +49,7 @@ namespace Net {
 
 
 	// handle Socket accept
-	Result ServerPeerTCP::OnAcceptedSocket(SOCKET acceptedSocket, const sockaddr_storage& remoteSockAddr, const PeerInfo& remote, ConnectionPtr &pConn)
+	Result ServerPeerTCP::OnAcceptedSocket(SF_SOCKET acceptedSocket, const sockaddr_storage& remoteSockAddr, const PeerInfo& remote, ConnectionPtr &pConn)
 	{
 		Result hr = ResultCode::SUCCESS;
 		ConnectionTCP *pConnection = nullptr;

@@ -91,7 +91,7 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result KQUEUEWorker::HandleAccept(SOCKET sock, SocketIO* pCallBack)
+	Result KQUEUEWorker::HandleAccept(SF_SOCKET sock, SocketIO* pCallBack)
 	{
 		Result hr = ResultCode::SUCCESS;
 		IOBUFFER_ACCEPT* pAcceptInfo = nullptr;
@@ -131,7 +131,7 @@ namespace Net {
 		return hr;
 	}
 
-	Result KQUEUEWorker::HandleRW(SOCKET sock, unsigned int events, SocketIO* pCallBack)
+	Result KQUEUEWorker::HandleRW(SF_SOCKET sock, unsigned int events, SocketIO* pCallBack)
 	{
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
 		IOBUFFER_READ* pReadBuffer = nullptr;
@@ -246,7 +246,7 @@ namespace Net {
 				auto& curEvent = events[iEvent];
 				auto pCallback = (SocketIO*)curEvent.udata;
 				bool isListenSocket = pCallback->GetIOFlags().IsListenSocket != 0;
-				SOCKET sock = pCallback->GetIOSocket();
+				SF_SOCKET sock = pCallback->GetIOSocket();
 
 				// skip invalid handlers
 				if (pCallback == nullptr || !pCallback->GetIsIORegistered())
@@ -468,7 +468,7 @@ namespace Net {
 		}
 	}
 
-	Result KQUEUESystem::MakeSocketNonBlocking(SOCKET sfd)
+	Result KQUEUESystem::MakeSocketNonBlocking(SF_SOCKET sfd)
 	{
 		int flags, s;
 

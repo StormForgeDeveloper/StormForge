@@ -258,7 +258,7 @@ namespace SF {
 			Array(IHeap& heap);
 			virtual ~Array();
 
-			IHeap& GetHeap() { return *m_Heap; }
+			IHeap& GetHeap() const { return *m_Heap; }
 
 			// Get Size
 			inline size_t size() const;
@@ -404,7 +404,7 @@ namespace SF {
 			DataType*	m_pAllocatedBuffer;
 
 		public:
-			StaticArray(IHeap& memoryManager);
+			StaticArray(IHeap& heap = GetSystemHeap());
 			virtual ~StaticArray();
 
 			// set Reserve size
@@ -431,7 +431,7 @@ namespace SF {
 			DataType*	m_pAllocatedBuffer;
 
 		public:
-			DynamicArray(IHeap& heap, size_t increaseSize = 10);
+			DynamicArray(IHeap& heap = GetSystemHeap(), size_t increaseSize = 10);
 			virtual ~DynamicArray();
 
 			// set Reserve size

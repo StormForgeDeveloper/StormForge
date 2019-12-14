@@ -70,7 +70,7 @@ namespace SF {
 			virtual Result Initialize(uint netThreadCount) { return ResultCode::SUCCESS; }
 			virtual void Terminate() {}
 
-			virtual Result MakeSocketNonBlocking(SOCKET sfd) { return ResultCode::FAIL; }
+			virtual Result MakeSocketNonBlocking(SF_SOCKET sfd) { return ResultCode::FAIL; }
 			virtual Net::WriteBufferQueue* GetWriteBufferQueue() { return nullptr; }
 
 								// Register the socket to KQUEUE
@@ -96,23 +96,23 @@ namespace SF {
 		///////////////////////////////////////////////////////////////////////////////
 		// Socket handling 
 
-		virtual Result SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SOCKET socket) { unused(sockType, socket); return ResultCode::SUCCESS_FALSE; }
+		virtual Result SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket) { unused(sockType, socket); return ResultCode::SUCCESS_FALSE; }
 
 		virtual Result RegisterSocket(Net::SocketIO* cbInstance) { unused(cbInstance); return ResultCode::SUCCESS_FALSE; }
 		virtual Result UnregisterSocket(Net::SocketIO* cbInstance) { unused(cbInstance); return ResultCode::SUCCESS_FALSE; }
 		//Result RegisterSharedSocket(SockType sockType, SocketIO* cbInstance);
 
-		virtual SOCKET Socket(SockFamily domain, SockType type) { return INVALID_SOCKET; }
-		virtual void CloseSocket(SOCKET sock) { unused(sock); }
+		virtual SF_SOCKET Socket(SockFamily domain, SockType type) { return INVALID_SOCKET; }
+		virtual void CloseSocket(SF_SOCKET sock) { unused(sock); }
 
-		virtual Result Accept(SOCKET sockListen, Net::IOBUFFER_ACCEPT* pAccept) { unused(sockListen, pAccept); return ResultCode::SUCCESS_FALSE; }
-		virtual Result HandleAcceptedSocket(SOCKET sockListen, Net::IOBUFFER_ACCEPT* pAccept, sockaddr_storage& remoteAddr) { unused(sockListen, pAccept, remoteAddr); return ResultCode::SUCCESS_FALSE; }
+		virtual Result Accept(SF_SOCKET sockListen, Net::IOBUFFER_ACCEPT* pAccept) { unused(sockListen, pAccept); return ResultCode::SUCCESS_FALSE; }
+		virtual Result HandleAcceptedSocket(SF_SOCKET sockListen, Net::IOBUFFER_ACCEPT* pAccept, sockaddr_storage& remoteAddr) { unused(sockListen, pAccept, remoteAddr); return ResultCode::SUCCESS_FALSE; }
 
-		virtual Result Recv(SOCKET sock, Net::IOBUFFER_READ* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
-		virtual Result RecvFrom(SOCKET sock, Net::IOBUFFER_READ* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
+		virtual Result Recv(SF_SOCKET sock, Net::IOBUFFER_READ* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
+		virtual Result RecvFrom(SF_SOCKET sock, Net::IOBUFFER_READ* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
 
-		virtual Result Send(SOCKET sock, Net::IOBUFFER_WRITE* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
-		virtual Result SendTo(SOCKET sock, Net::IOBUFFER_WRITE* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
+		virtual Result Send(SF_SOCKET sock, Net::IOBUFFER_WRITE* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
+		virtual Result SendTo(SF_SOCKET sock, Net::IOBUFFER_WRITE* pBuffer) { unused(sock, pBuffer); return ResultCode::SUCCESS_FALSE; }
 	};
 
 

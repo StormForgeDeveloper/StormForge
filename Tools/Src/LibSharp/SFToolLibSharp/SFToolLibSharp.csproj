@@ -119,6 +119,7 @@
     <Compile Include="Tong\schemas\TongScriptTypes.cs" />
     <Compile Include="Tong\ScriptAnnotation.cs" />
     <Compile Include="Tong\ScriptDocument.cs" />
+    <Compile Include="Tong\ScriptGraphNode.cs" />
     <Compile Include="Tong\ScriptGroup.cs" />
     <Compile Include="Tong\ScriptGroupReference.cs" />
     <Compile Include="Tong\ScriptGroupSocket.cs" />

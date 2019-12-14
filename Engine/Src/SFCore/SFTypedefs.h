@@ -183,6 +183,7 @@
 
 typedef HWND NativeWindow;
 typedef unsigned int uint;
+using SF_SOCKET = SOCKET;
 
 #if !X32
 #define HAVE_VULKAN 1
@@ -219,7 +220,6 @@ typedef unsigned int uint;
 #include <netinet/tcp.h>
 #include <stdint.h>
 #include <semaphore.h>
-#include <my_global.h>
 #include <malloc.h>
 #include <aio.h>
 
@@ -261,7 +261,8 @@ typedef intptr_t NativeWindow;
 #define IN
 #define OUT
 
-#define SOCKET int
+using SF_SOCKET = int;
+#define INVALID_SOCKET (-1)
 
 
 
@@ -358,7 +359,7 @@ typedef struct ANativeWindow* NativeWindow;
 #define IN
 #define OUT
 
-#define SOCKET int
+using SF_SOCKET = int;
 #define INVALID_SOCKET (-1)
 
 
@@ -443,7 +444,7 @@ typedef struct ANativeWindow* NativeWindow;
 #define IN
 #define OUT
 
-#define SOCKET int
+using SF_SOCKET = int;
 #define INVALID_SOCKET (-1)
 
 #define TRUE 1
@@ -522,44 +523,44 @@ typedef unsigned int		SysUInt;
 
 #if __GNUC__ || SF_PLATFORM == SF_PLATFORM_IOS
 
-#define FORCEINLINE __attribute__((always_inline))
-//#define STDCALL __attribute__((stdcall))
-#define STDCALL 
-#define FASTCALL __attribute__((fastcall))
-#define TEMPLATE_EXTERN
+#define SF_FORCEINLINE __attribute__((always_inline))
+//#define SF_STDCALL __attribute__((stdcall))
+#define SF_STDCALL 
+#define SF_FASTCALL __attribute__((fastcall))
+#define SF_TEMPLATE_EXTERN
 
-// disable unreferenced label warnning (Proc_End)
-#define DO_PRAGMA(x) _Pragma (#x)
-#define COMPILETIME_TODO(x) DO_PRAGMA(message ("TODO - " #x))
-#define COMPILETIME_MESSAGE(x) DO_PRAGMA(message ("Message - " #x))
-#define COMPILETIME_WARNING(x) DO_PRAGMA(message ("Warning - " #x))
+// disable unreferenced label warning (Proc_End)
+#define SF_DO_PRAGMA(x) _Pragma (#x)
+#define SF_COMPILETIME_TODO(x) SF_DO_PRAGMA(message ("TODO - " #x))
+#define SF_COMPILETIME_MESSAGE(x) SF_DO_PRAGMA(message ("Message - " #x))
+#define SF_COMPILETIME_WARNING(x) SF_DO_PRAGMA(message ("Warning - " #x))
 
-// clange uses dllimport style
-#define DLL_IMPORT __attribute__((visibility("default")))
+// clang uses dllimport style
+#define SFDLL_IMPORT __attribute__((visibility("default")))
 #define SFDLL_EXPORT extern "C" __attribute__((visibility("default"))) 
 //#define SFDLL_IMPORT extern "C" __declspec(dllimport)
 //#define SFDLL_EXPORT extern "C" __declspec(dllexport)
-#define SYSTEMAPI 
+#define SF_SYSTEMAPI 
 
 #else
 
-#define FORCEINLINE __forceinline
-#define STDCALL __stdcall
-#define FASTCALL __fastcall
-#define TEMPLATE_EXTERN extern
+#define SF_FORCEINLINE __forceinline
+#define SF_STDCALL __stdcall
+#define SF_FASTCALL __fastcall
+#define SF_TEMPLATE_EXTERN extern
 
-// disable unreferenced label warnning (Proc_End)
+// disable unreferenced label warning (Proc_End)
 #pragma warning( disable : 4102 )
 #pragma warning( disable : 4996 )
 
-#define DO_PRAGMA(x) __pragma(#x)
-#define COMPILETIME_TODO(x) DO_PRAGMA(comment ("TODO - " #x))
-#define COMPILETIME_MESSAGE(x) DO_PRAGMA(comment ("Message - " #x))
-#define COMPILETIME_WARNING(x) DO_PRAGMA(comment ("Warning - " #x))
+#define SF_DO_PRAGMA(x) __pragma(#x)
+#define SF_COMPILETIME_TODO(x) SF_DO_PRAGMA(comment ("TODO - " #x))
+#define SF_COMPILETIME_MESSAGE(x) SF_DO_PRAGMA(comment ("Message - " #x))
+#define SF_COMPILETIME_WARNING(x) SF_DO_PRAGMA(comment ("Warning - " #x))
 
 #define SFDLL_IMPORT extern "C" __declspec(dllimport)
 #define SFDLL_EXPORT extern "C" __declspec(dllexport)
-#define SYSTEMAPI APIENTRY
+#define SF_SYSTEMAPI APIENTRY
 
 
 
@@ -684,6 +685,7 @@ namespace SF {
 		NetAddress& operator = (const NetAddress& src);
 
 		bool operator == (const NetAddress& op) const;
+		bool operator != (const NetAddress& op) const;
 	};
 
 

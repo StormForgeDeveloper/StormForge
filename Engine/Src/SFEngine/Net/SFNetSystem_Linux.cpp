@@ -212,7 +212,7 @@ namespace Net {
 	///////////////////////////////////////////////////////////////////////////////
 	// Socket handling 
 
-	Result NetSystem::SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SOCKET socket)
+	Result NetSystem::SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket)
 	{
 		Result hr;
 		int32_t iOptValue;
@@ -302,19 +302,19 @@ namespace Net {
 	//}
 
 
-	SOCKET NetSystem::Socket(SockFamily domain, SockType type)
+	SF_SOCKET NetSystem::Socket(SockFamily domain, SockType type)
 	{
 		return socket(ToSockValue(domain), ToSockValue(type), ToSockProto(type));
 	}
 
-	void NetSystem::CloseSocket(SOCKET sock)
+	void NetSystem::CloseSocket(SF_SOCKET sock)
 	{
 		shutdown(sock, SHUT_RDWR);
 		close(sock);
 		SFLog(Net, Info, "CloseSocket sock:{0}", sock);
 	}
 
-	Result NetSystem::Accept(SOCKET sockListen, IOBUFFER_ACCEPT* pAccept)
+	Result NetSystem::Accept(SF_SOCKET sockListen, IOBUFFER_ACCEPT* pAccept)
 	{
 		Result hr = ResultCode::SUCCESS;
 		socklen_t len = sizeof(pAccept->sockAddr);
@@ -370,7 +370,7 @@ namespace Net {
 		return hr;
 	}
 
-	Result NetSystem::HandleAcceptedSocket(SOCKET sockListen, IOBUFFER_ACCEPT* pAccept, sockaddr_storage& remoteAddr)
+	Result NetSystem::HandleAcceptedSocket(SF_SOCKET sockListen, IOBUFFER_ACCEPT* pAccept, sockaddr_storage& remoteAddr)
 	{
 		socklen_t len;
 
@@ -383,7 +383,7 @@ namespace Net {
 	}
 
 
-	Result NetSystem::Recv(SOCKET sock, IOBUFFER_READ* pBuffer)
+	Result NetSystem::Recv(SF_SOCKET sock, IOBUFFER_READ* pBuffer)
 	{
 		ssize_t recvSize = recv(sock, pBuffer->buffer, sizeof(pBuffer->buffer), MSG_DONTWAIT);
 		if (recvSize < 0)
@@ -400,7 +400,7 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result NetSystem::RecvFrom(SOCKET sock, IOBUFFER_READ* pBuffer)
+	Result NetSystem::RecvFrom(SF_SOCKET sock, IOBUFFER_READ* pBuffer)
 	{
 		Assert(pBuffer->iSockLen == sizeof(pBuffer->NetAddr.From));
 
@@ -421,7 +421,7 @@ namespace Net {
 	}
 
 
-	Result NetSystem::Send(SOCKET sock, IOBUFFER_WRITE* pBuffer)
+	Result NetSystem::Send(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer)
 	{
 		ssize_t sendSize = send(sock, pBuffer->pRawSendBuffer, pBuffer->RawSendSize, MSG_DONTWAIT | MSG_NOSIGNAL);
 		if (sendSize < 0)
@@ -434,7 +434,7 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result NetSystem::SendTo(SOCKET sock, IOBUFFER_WRITE* pBuffer)
+	Result NetSystem::SendTo(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer)
 	{
 		const sockaddr_storage& dstAddress = pBuffer->NetAddr.To;
 		ssize_t sendSize = sendto(sock, pBuffer->pRawSendBuffer, pBuffer->RawSendSize, MSG_DONTWAIT | MSG_NOSIGNAL,

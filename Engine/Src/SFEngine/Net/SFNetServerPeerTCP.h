@@ -56,7 +56,7 @@ namespace Net {
 		//  Net callback
 
 		// handle Socket accept
-		virtual Result OnAcceptedSocket(SOCKET acceptedSocket, const sockaddr_storage& remoteSockAddr, const PeerInfo& remoteInfo, ConnectionPtr &pConnOut ) override;
+		virtual Result OnAcceptedSocket(SF_SOCKET acceptedSocket, const sockaddr_storage& remoteSockAddr, const PeerInfo& remoteInfo, ConnectionPtr &pConnOut ) override;
 
 
 		// Connect to other peer

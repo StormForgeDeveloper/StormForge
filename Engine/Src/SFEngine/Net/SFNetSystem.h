@@ -119,23 +119,23 @@ namespace Net {
 		///////////////////////////////////////////////////////////////////////////////
 		// Socket handling 
 
-		virtual Result SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SOCKET socket) override;
+		virtual Result SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket) override;
 
 		virtual Result RegisterSocket(SocketIO* cbInstance) override;
 		virtual Result UnregisterSocket(SocketIO* cbInstance) override;
 		//Result RegisterSharedSocket(SockType sockType, SocketIO* cbInstance) override;
 
-		virtual SOCKET Socket(SockFamily domain, SockType type) override;
-		virtual void CloseSocket(SOCKET sock) override;
+		virtual SF_SOCKET Socket(SockFamily domain, SockType type) override;
+		virtual void CloseSocket(SF_SOCKET sock) override;
 
-		virtual Result Accept(SOCKET sockListen, IOBUFFER_ACCEPT* pAccept) override;
-		virtual Result HandleAcceptedSocket(SOCKET sockListen, IOBUFFER_ACCEPT* pAccept, sockaddr_storage& remoteAddr) override;
+		virtual Result Accept(SF_SOCKET sockListen, IOBUFFER_ACCEPT* pAccept) override;
+		virtual Result HandleAcceptedSocket(SF_SOCKET sockListen, IOBUFFER_ACCEPT* pAccept, sockaddr_storage& remoteAddr) override;
 
-		virtual Result Recv(SOCKET sock, IOBUFFER_READ* pBuffer) override;
-		virtual Result RecvFrom(SOCKET sock, IOBUFFER_READ* pBuffer) override;
+		virtual Result Recv(SF_SOCKET sock, IOBUFFER_READ* pBuffer) override;
+		virtual Result RecvFrom(SF_SOCKET sock, IOBUFFER_READ* pBuffer) override;
 
-		virtual Result Send(SOCKET sock, IOBUFFER_WRITE* pBuffer) override;
-		virtual Result SendTo(SOCKET sock, IOBUFFER_WRITE* pBuffer) override;
+		virtual Result Send(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer) override;
+		virtual Result SendTo(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer) override;
 	};
 
 

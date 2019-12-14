@@ -254,7 +254,7 @@ namespace Net {
 	}
 
 	template<class ConnectionType>
-	void ConnectionManager::NewUDPAddress_Internal(IHeap& memMgr, ServerNet* pNet, SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
+	void ConnectionManager::NewUDPAddress_Internal(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
 	{
 		Result hr;
 		auto sockAddr = (sockaddr_storage)remote.PeerAddress;
@@ -286,7 +286,7 @@ namespace Net {
 		return;
 	}
 
-	void ConnectionManager::NewMUDPAddress(IHeap& memMgr, ServerNet* pNet, SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
+	void ConnectionManager::NewMUDPAddress(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
 	{
 		Service::EngineTaskManager->RunOnEngineThread(EngineTaskTick::SyncPostTick, [&memMgr, pNet, socket, local, remote, this]()
 		{
@@ -294,7 +294,7 @@ namespace Net {
 		});
 	}
 
-	void ConnectionManager::NewUDPAddress(IHeap& memMgr, ServerNet* pNet, SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
+	void ConnectionManager::NewUDPAddress(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
 	{
 		Service::EngineTaskManager->RunOnEngineThread(EngineTaskTick::SyncPostTick, [&memMgr, pNet, socket, local, remote, this]()
 		{

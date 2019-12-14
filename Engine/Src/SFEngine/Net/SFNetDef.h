@@ -132,6 +132,9 @@ namespace Net {
 
 		void SetInfo(NetClass Class, const NetAddress& Addr, uint64_t UID);
 		void SetInfo(NetClass Class, uint64_t UID);
+
+		bool operator == (const PeerInfo& op) const;
+		bool operator != (const PeerInfo& op) const;
 	};
 
 

@@ -54,5 +54,18 @@ inline void PeerInfo::SetInfo(NetClass Class, uint64_t UID)
 	PeerID = UID;
 }
 
+inline bool PeerInfo::operator == (const PeerInfo& op) const
+{
+	return PeerAddress == op.PeerAddress
+		&& PeerClass == op.PeerClass
+		&& PeerID == op.PeerID;
+}
+
+inline bool PeerInfo::operator != (const PeerInfo& op) const
+{
+	return PeerAddress != op.PeerAddress
+		|| PeerClass != op.PeerClass
+		|| PeerID != op.PeerID;
+}
 
 

@@ -58,6 +58,9 @@
     <Filter Include="Test\Net">
       <UniqueIdentifier>{944d7288-a1b2-4f24-9d41-67241eb03393}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Test\LogServer">
+      <UniqueIdentifier>{e8403187-ac4f-480e-87e0-750ba6f97753}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UnitTest1PCH.h">
@@ -107,6 +110,9 @@
     </ClInclude>
     <ClInclude Include="Test\Net\UnitTest_Net.h">
       <Filter>Test\Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\LogServer\UnitTest_Kafka.h">
+      <Filter>Test\LogServer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -220,6 +226,9 @@
     </ClCompile>
     <ClCompile Include="Test\Net\UnitTest_NetMessageWindow.cpp">
       <Filter>Test\Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\LogServer\UnitTest_Kafka.cpp">
+      <Filter>Test\LogServer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

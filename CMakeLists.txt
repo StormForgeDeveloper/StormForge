@@ -48,6 +48,8 @@ include_directories(AFTER
 	3rdParties/src/zlib/zlib-1.2.8
 	3rdParties/src/jsoncpp/include
 	3rdParties/src/zookeeper/zookeeperConnector/include
+	3rdParties/src/rdkafka
+	3rdParties/src/rdkafka/rdkafka/include
 	Engine/Src/SFCore
 	Engine/Src/SFEngine
 	Engine/Src/Protocol
@@ -77,6 +79,7 @@ if(WIN32)
 
 	include_directories(AFTER 
 		3rdParties/VulkanSDK/1.1.82.1/include
+		3rdParties/src/mysql-connector-c++-8.0.18-winx64/include
 	)
 	
 	set(ARTECTURE x64)
@@ -147,7 +150,7 @@ elseif(UNIX)
 	set(PLATFORM_LIBS rt m)
 
 	include_directories(AFTER 
-		/usr/include/mysql
+		/usr/include/mysql--cppconn-8
 		#3rdParties/VulkanSDK/1.1.82.1/include
 	)
 	

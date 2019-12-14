@@ -61,7 +61,7 @@ namespace Net {
 		void SetNetClass(NetClass value) { m_LocalClass = value; }
 
 		// Set socket
-		//inline void SetSocket( SOCKET sock );
+		//inline void SetSocket( SF_SOCKET sock );
 
 
 		void SetSocketIO(SocketIO* socketIO) { m_SocketIO = socketIO; }
@@ -97,7 +97,7 @@ namespace Net {
 
 
 		// Get Socket
-		const SOCKET GetSocket() const { return GetSocketIO() != nullptr ? GetSocketIO()->GetIOSocket() : INVALID_SOCKET; }
+		const SF_SOCKET GetSocket() const { return GetSocketIO() != nullptr ? GetSocketIO()->GetIOSocket() : INVALID_SOCKET; }
 
 		const std::function<void(ConnectionPtr&)>& GetNewConnectionHandler() { return m_NewConnectionhandler; }
 		void SetNewConnectionhandler(std::function<void(ConnectionPtr&)> handler);

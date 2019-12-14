@@ -272,6 +272,11 @@ namespace SF {
 		return strcmp(Address, op.Address) == 0 && Port == op.Port;
 	}
 
+	bool NetAddress::operator != (const NetAddress& op) const
+	{
+		return strcmp(Address, op.Address) != 0 || Port != op.Port;
+	}
+
 
 
 } // namespace SF

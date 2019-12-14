@@ -111,7 +111,7 @@ namespace Net {
 	Result ServerUDPBase::HostOpen( NetClass netCls, const char *strLocalIP, uint16_t usLocalPort )
 	{
 		Result hr = ResultCode::SUCCESS;
-		SOCKET socket = INVALID_SOCKET;
+		SF_SOCKET socket = INVALID_SOCKET;
 		//INT iOptValue;
 		sockaddr_storage bindAddr;
 

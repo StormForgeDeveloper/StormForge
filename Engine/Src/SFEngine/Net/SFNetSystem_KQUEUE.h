@@ -71,8 +71,8 @@ namespace Net {
 		virtual void Run() override;
 
 
-		Result HandleAccept(SOCKET sock, SocketIO* pCallBack);
-		Result HandleRW(SOCKET sock, unsigned int events, SocketIO* pCallBack);
+		Result HandleAccept(SF_SOCKET sock, SocketIO* pCallBack);
+		Result HandleRW(SF_SOCKET sock, unsigned int events, SocketIO* pCallBack);
 	};
 
 
@@ -123,7 +123,7 @@ namespace Net {
 		virtual Result Initialize(uint netThreadCount) override;
 		virtual void Terminate() override;
 
-		virtual Result MakeSocketNonBlocking(SOCKET sfd) override;
+		virtual Result MakeSocketNonBlocking(SF_SOCKET sfd) override;
 		virtual WriteBufferQueue* GetWriteBufferQueue() override;
 		//Result RegisterSharedSocket(SockType sockType, SocketIO* cbInstance) override;
 

@@ -320,7 +320,7 @@ namespace SF
 #else
 
 #ifdef WIN32
-		SOCKET fd;
+		SF_SOCKET fd;
 #else
 		int fd;
 #endif

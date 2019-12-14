@@ -50,6 +50,7 @@ namespace SFTongCompiler
             tongScriptType.Type.Define(new ExtensionInfo<TongScriptObjectTable>());
 
             moduleType.Type.Define(new ExtensionInfo<ScriptNodeLinkCache>());
+            moduleType.Type.Define(new ExtensionInfo<ScriptGraphNode>());
         }
 
     }

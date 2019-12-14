@@ -24,24 +24,24 @@
 namespace SF {
 
 
-	typedef FixedString32 GameID;
+	using GameID = FixedString32;
 
 
 	// context ID type
-	typedef uint64_t Context;
+	using Context = uint64_t;
 
 	// Authentication ticket
-	typedef uint64_t AuthTicket;
+	using AuthTicket = uint64_t;
 
-	typedef uint64_t AccountID;
+	using AccountID = uint64_t;
 
-	typedef uint64_t PlayerID;
+	using PlayerID = uint64_t;
 
-	typedef uint64_t FacebookUID;
+	using FacebookUID = uint64_t;
 
 
 	// server ID
-	typedef uint32_t ServerID;
+	using ServerID = uint32_t;
 
 
 

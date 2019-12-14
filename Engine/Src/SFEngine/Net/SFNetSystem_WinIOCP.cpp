@@ -511,7 +511,7 @@ namespace Net {
 	//	return hr;
 	//}
 
-	Result NetSystem::SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SOCKET socket)
+	Result NetSystem::SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket)
 	{
 		Result hr;
 
@@ -590,7 +590,7 @@ namespace Net {
 		return hr;
 	}
 
-	SOCKET NetSystem::Socket(SockFamily domain, SockType type)
+	SF_SOCKET NetSystem::Socket(SockFamily domain, SockType type)
 	{
 		if (type == SockType::Stream)
 		{
@@ -602,14 +602,14 @@ namespace Net {
 		}
 	}
 
-	void NetSystem::CloseSocket(SOCKET sock)
+	void NetSystem::CloseSocket(SF_SOCKET sock)
 	{
 		//shutdown(sock, SHUT_RDWR);
 		closesocket(sock);
 	}
 
 
-	Result NetSystem::Accept(SOCKET sockListen, IOBUFFER_ACCEPT* pAccept)
+	Result NetSystem::Accept(SF_SOCKET sockListen, IOBUFFER_ACCEPT* pAccept)
 	{
 		Result hr = ResultCode::SUCCESS;
 
@@ -648,12 +648,12 @@ namespace Net {
 		return hr;
 	}
 
-	Result NetSystem::HandleAcceptedSocket(SOCKET sockListen, IOBUFFER_ACCEPT* pAccept, sockaddr_storage& remoteAddr)
+	Result NetSystem::HandleAcceptedSocket(SF_SOCKET sockListen, IOBUFFER_ACCEPT* pAccept, sockaddr_storage& remoteAddr)
 	{
 		int iLenLocalAddr = 0, iLenRemoteAddr = 0;
 		sockaddr_storage *pLocalAddr = nullptr, *pRemoteAddr = nullptr;
 
-		if (setsockopt(pAccept->sockAccept, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char *)&sockListen, sizeof(SOCKET)) == SOCKET_ERROR)
+		if (setsockopt(pAccept->sockAccept, SOL_SOCKET, SO_UPDATE_ACCEPT_CONTEXT, (char *)&sockListen, sizeof(SF_SOCKET)) == SOCKET_ERROR)
 		{
 			SFLog(Net, Info, "Failed set socket option SO_UPDATE_ACCEPT_CONTEXT err:{0:X8}", GetLastNetSystemResult());
 			return ResultCode::FAIL;
@@ -675,7 +675,7 @@ namespace Net {
 	}
 
 
-	Result NetSystem::Recv(SOCKET sock, IOBUFFER_READ* pBuffer)
+	Result NetSystem::Recv(SF_SOCKET sock, IOBUFFER_READ* pBuffer)
 	{
 		INT iErr = 0;
 		iErr = WSARecv(sock, &pBuffer->wsaBuff, 1, &pBuffer->dwNumberOfByte, &pBuffer->dwFlags, pBuffer, NULL);
@@ -687,7 +687,7 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result NetSystem::RecvFrom(SOCKET sock, IOBUFFER_READ* pBuffer)
+	Result NetSystem::RecvFrom(SF_SOCKET sock, IOBUFFER_READ* pBuffer)
 	{
 		INT iErr = 0;
 		iErr = WSARecvFrom(sock, &pBuffer->wsaBuff, 1, NULL, &pBuffer->dwFlags, (sockaddr*)&pBuffer->NetAddr.From, &pBuffer->iSockLen, pBuffer, NULL);
@@ -699,7 +699,7 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result NetSystem::Send(SOCKET sock, IOBUFFER_WRITE* pBuffer)
+	Result NetSystem::Send(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer)
 	{
 		INT iErr = WSASend(sock, &pBuffer->wsaBuff, 1, nullptr, 0, pBuffer, NULL);
 		if (iErr == SOCKET_ERROR)
@@ -710,7 +710,7 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result NetSystem::SendTo(SOCKET sock, IOBUFFER_WRITE* pBuffer)
+	Result NetSystem::SendTo(SF_SOCKET sock, IOBUFFER_WRITE* pBuffer)
 	{
 		const sockaddr_storage& dstAddress = pBuffer->NetAddr.To;
 		INT iErr = WSASendTo(sock, &pBuffer->wsaBuff, 1, nullptr, 0, 

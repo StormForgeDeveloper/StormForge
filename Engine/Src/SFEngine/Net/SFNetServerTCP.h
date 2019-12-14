@@ -97,7 +97,7 @@ namespace Net {
 
 
 			// handle Socket accept
-		virtual Result OnAcceptedSocket(SOCKET acceptedSocket, const sockaddr_storage& remoteSockAddr, const PeerInfo& remoteInfo, ConnectionPtr &pConnOut);
+		virtual Result OnAcceptedSocket(SF_SOCKET acceptedSocket, const sockaddr_storage& remoteSockAddr, const PeerInfo& remoteInfo, ConnectionPtr &pConnOut);
 
 
 		// Enable/Disable new connection acception

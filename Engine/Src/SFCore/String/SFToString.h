@@ -28,6 +28,7 @@ namespace SF {
 	Result _ToString(ToStringContext& context, const sockaddr_storage& value);
 
 
+
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(NetAddress);
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(TimeStampMS);
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(DurationMS);

@@ -54,7 +54,7 @@ namespace Net {
 		Assert(m_PendingSendCount == 0 && m_PendingRecvCount == 0);
 	}
 
-	void SocketIO::SetSocket(SockFamily sockFamily, SockType socketType, SOCKET socket)
+	void SocketIO::SetSocket(SockFamily sockFamily, SockType socketType, SF_SOCKET socket)
 	{
 		m_IOSockFamily = sockFamily;
 		m_IOSockType = socketType;
@@ -379,7 +379,7 @@ namespace Net {
 	Result SocketIOTCP::Accept(IOBUFFER_ACCEPT* &pAcceptInfo)
 	{
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
-		SOCKET sockAccept = INVALID_SOCKET;
+		SF_SOCKET sockAccept = INVALID_SOCKET;
 		socklen_t iOptValue = 0;
 
 		pAcceptInfo = new(GetIOHeap()) IOBUFFER_ACCEPT;

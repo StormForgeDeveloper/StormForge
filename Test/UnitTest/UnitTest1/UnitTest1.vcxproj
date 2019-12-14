@@ -160,6 +160,7 @@
     <ClInclude Include="Test\Container\UnitTest_ConcurrentContainerTest.h" />
     <ClInclude Include="Test\Container\UnitTest_HashTableTest.h" />
     <ClInclude Include="Test\FBX\UnitTest_FBX.h" />
+    <ClInclude Include="Test\LogServer\UnitTest_Kafka.h" />
     <ClInclude Include="Test\Math\UnitTest_Math.h" />
     <ClInclude Include="Test\Memory\UnitTest_Memory.h" />
     <ClInclude Include="Test\Net\UnitTest_Net.h" />
@@ -186,6 +187,7 @@
     <ClCompile Include="Test\Container\UnitTest_HashTableTest.cpp" />
     <ClCompile Include="Test\Container\UnitTest_QueueTest.cpp" />
     <ClCompile Include="Test\FBX\UnitTest_FBX.cpp" />
+    <ClCompile Include="Test\LogServer\UnitTest_Kafka.cpp" />
     <ClCompile Include="Test\Math\3D\UnitTest_Math3D_Matrix.cpp" />
     <ClCompile Include="Test\Math\3D\UnitTest_Math3D_Quaternion.cpp" />
     <ClCompile Include="Test\Math\3D\UnitTest_Math3D_Vector.cpp" />

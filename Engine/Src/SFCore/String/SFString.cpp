@@ -58,7 +58,7 @@ namespace SF {
 	{
 		if (newAllocationSize < m_StringBufferLength)
 		{
-			// No corping is supported
+			// No chopping is supported
 			return false;
 		}
 
@@ -276,6 +276,12 @@ namespace SF {
 			return *this;
 		}
 
+		//auto newSize = m_Buffer->GetStringBufferLength() + addLen + 1;
+		//if (m_Buffer->GetAllocatedSize() < newSize)
+		//{
+		//	m_Buffer->Resize(newSize);
+		//}
+		//m_Buffer->Append(src, addLen);
 
 		auto newBuffer = new(GetHeap()) SharedStringBuffer(GetHeap(), m_Buffer->GetStringBufferLength() + addLen + 1);
 		newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringBufferLength());
@@ -982,6 +988,128 @@ namespace SF {
 		return length;
 	}
 
+
+
+
+	/////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	StringBuilder
+	//
+
+	StringBuilder::StringBuilder(IHeap& heap, size_t growSize)
+		: m_GrowSize(growSize)
+	{
+		m_Buffer = new(heap) SharedStringBuffer(heap);
+		m_Buffer->Resize(growSize);
+	}
+
+	// Append to string
+	StringBuilder& StringBuilder::Append(const String& src)
+	{
+		auto newSize = src.GetBufferLength() + m_Buffer->GetStringLength();
+		if (m_Buffer->GetAllocatedSize() < newSize)
+		{
+			m_Buffer->Resize(((newSize + m_GrowSize - 1) / m_GrowSize) * m_GrowSize);
+		}
+
+		m_Buffer->Append(src.data(), src.GetLength());
+
+		return *this;
+	}
+
+	StringBuilder& StringBuilder::Append(const char* src)
+	{
+		if (src == nullptr)
+			return *this;
+
+		auto strLen = strlen(src);
+		auto newSize = strLen + 1 + m_Buffer->GetStringLength();
+		if (m_Buffer->GetAllocatedSize() < newSize)
+		{
+			m_Buffer->Resize(((newSize + m_GrowSize - 1) / m_GrowSize) * m_GrowSize);
+		}
+
+		m_Buffer->Append(src, strLen);
+
+		return *this;
+	}
+
+	StringBuilder& StringBuilder::Append(char src)
+	{
+		char temp[2] = {src, '\0'};
+
+		return Append(temp);
+	}
+
+
+	StringBuilder& StringBuilder::Append(int number)
+	{
+		char temp[128];
+		ToStringContext context;
+		context.StringBuffer = temp;
+		context.StringBufferLength = sizeof(temp);
+		_IToA(context, number);
+
+		return Append(temp);
+	}
+
+	StringBuilder& StringBuilder::Append(unsigned int number)
+	{
+		char temp[128];
+		ToStringContext context;
+		context.StringBuffer = temp;
+		context.StringBufferLength = sizeof(temp);
+		_IToA(context, number);
+
+		return Append(temp);
+	}
+
+	StringBuilder& StringBuilder::Append(float number)
+	{
+		char temp[128];
+		ToStringContext context;
+		context.StringBuffer = temp;
+		context.StringBufferLength = sizeof(temp);
+		_FToA(context, number);
+
+		return Append(temp);
+	}
+
+	StringBuilder& StringBuilder::Append(double number)
+	{
+		char temp[128];
+		ToStringContext context;
+		context.StringBuffer = temp;
+		context.StringBufferLength = sizeof(temp);
+		_FToA(context, number);
+
+		return Append(temp);
+	}
+
+	String StringBuilder::ToString()
+	{
+		return String(GetHeap(), m_Buffer->GetBufferPointer());
+	}
+
+	size_t StringBuilder::AppendFormat_Internal(const char* szFormating, int iNumArg, VariableBox* Args)
+	{
+		char* szBuffer = nullptr;
+		int buffLen = -1;
+		size_t requiredSize = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args) + 1;
+		size_t currentStringLen = m_Buffer->GetStringLength();
+		size_t newSize = currentStringLen + requiredSize;
+		if (m_Buffer->GetAllocatedSize() < newSize)
+		{
+			m_Buffer->Resize(((newSize + m_GrowSize - 1) / m_GrowSize) * m_GrowSize);
+		}
+
+		szBuffer = m_Buffer->GetBufferPointer() + currentStringLen;
+		buffLen = (int)requiredSize;
+		auto length = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
+		m_Buffer->SetStringBufferLength(newSize);
+
+		return length;
+	}
 
 
 

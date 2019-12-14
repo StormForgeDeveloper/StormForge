@@ -193,20 +193,10 @@ namespace SF {
 		// Format string
 		template< class ...ArgTypes >
 		inline String& Format(const char* strFormat, ArgTypes... args);
-		//{
-		//	VariableBox arguments[sizeof...(args)] = { Boxing<ArgTypes>(args)... };
-		//	Format_Internal(strFormat, sizeof...(args), arguments);
-		//	return *this;
-		//}
 
 		// Format string
 		template< class ...ArgTypes >
 		inline String& AppendFormat(const char* strFormat, ArgTypes... args);
-		//{
-		//	VariableBox arguments[sizeof...(args)] = { Boxing<ArgTypes>(args)... };
-		//	AppendFormat_Internal(strFormat, sizeof...(args), arguments);
-		//	return *this;
-		//}
 
 		const char* data() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
 		operator const char*() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
@@ -224,6 +214,46 @@ namespace SF {
 	};
 
 
+
+
+	class StringBuilder
+	{
+	private:
+
+		size_t m_GrowSize;
+
+		// string buffer
+		SharedPointerT<SharedStringBuffer> m_Buffer;
+
+	public:
+
+		StringBuilder(IHeap& heap, size_t growSize = 1024);
+
+		IHeap& GetHeap() { return m_Buffer->GetHeap(); }
+
+		// Append to string
+		StringBuilder& Append(const String& src);
+		StringBuilder& Append(const char* src);
+		StringBuilder& Append(char src);
+
+		StringBuilder& Append(int number);
+		StringBuilder& Append(unsigned int number);
+		StringBuilder& Append(float number);
+		StringBuilder& Append(double number);
+
+
+		// Format string
+		template< class ...ArgTypes >
+		inline StringBuilder& AppendFormat(const char* strFormat, ArgTypes... args);
+
+
+		// Convert to string object
+		String ToString();
+
+	protected:
+
+		size_t AppendFormat_Internal(const char* szFormating, int iNumArg, VariableBox* Args);
+	};
 
 
 }; // namespace SF

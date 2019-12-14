@@ -466,7 +466,7 @@ namespace Net {
 	Result ConnectionTCP::Connect(PeerInfo local, const PeerInfo& remote)
 	{
 		Result hr = ResultCode::SUCCESS;
-		SOCKET socket = INVALID_SOCKET;
+		SF_SOCKET socket = INVALID_SOCKET;
 		NetAddress localAddress;
 		int flag = 1;
 		int result;

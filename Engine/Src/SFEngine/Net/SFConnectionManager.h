@@ -66,7 +66,7 @@ namespace Net {
 
 		Result AddConnection_Internal(const ConnectionPtr& pConn);
 		template<class ConnectionType>
-		void NewUDPAddress_Internal(IHeap& memMgr, ServerNet* pNet, SOCKET socket, const PeerInfo& local, const PeerInfo& remote);
+		void NewUDPAddress_Internal(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote);
 		void RemoveConnection_Internal(const ConnectionPtr& pConn);
 
 		void AddressRemap_Internal(const ConnectionPtr& pConn, const sockaddr_storage &addressOrg, const sockaddr_storage &newAddress);
@@ -104,8 +104,8 @@ namespace Net {
 		// Free connection directly
 		virtual EngineTaskPtr RemoveConnection(SharedPointerT<Connection>& pConn ) override;
 
-		virtual void NewMUDPAddress(IHeap& memMgr, ServerNet* pNet, SOCKET socket, const PeerInfo& local, const PeerInfo& remote) override;
-		virtual void NewUDPAddress(IHeap& memMgr, ServerNet* pNet, SOCKET socket, const PeerInfo& local, const PeerInfo& remote) override;
+		virtual void NewMUDPAddress(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote) override;
+		virtual void NewUDPAddress(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote) override;
 
 		virtual void AddressRemap(SharedPointerT<Connection>& pConn, const sockaddr_storage &addressOrg, const sockaddr_storage &newAddress) override;
 

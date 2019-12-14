@@ -145,16 +145,20 @@ namespace SF.Tong
                 return;
 
             var linkCache = connection.OutputElement.As<ScriptNodeLinkCache>();
-            if (linkCache == null)
-                throw new System.Exception("We need ScriptNodeLinkCache adaptable for nodes");
+            if (linkCache != null)
+                linkCache.NewConnectionFromThis(connection);
 
-            linkCache.NewConnectionFromThis(connection);
+            var linkGraph = connection.OutputElement.As<ScriptGraphNode>();
+            if (linkGraph != null)
+                linkGraph.NewConnectionFromThis(connection);
 
             var linkCacheTo = connection.InputElement.As<ScriptNodeLinkCache>();
-            if (linkCacheTo == null)
-                throw new System.Exception("We need ScriptNodeLinkCache adaptable for nodes");
+            if (linkCacheTo != null)
+                linkCacheTo.NewConnectionToThis(connection);
 
-            linkCacheTo.NewConnectionToThis(connection);
+            var linkGraphTo = connection.InputElement.As<ScriptGraphNode>();
+            if (linkGraphTo != null)
+                linkGraphTo.NewConnectionToThis(connection);
         }
 
         void RemoveConnection(ScriptNodeConnection connection)

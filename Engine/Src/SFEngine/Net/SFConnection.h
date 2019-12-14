@@ -195,7 +195,7 @@ namespace Net {
 
 
 		// Get socket handle
-		const SOCKET GetSocket() const { return GetNetIOHandler() != nullptr ? GetNetIOHandler()->GetIOSocket() : INVALID_SOCKET; }
+		const SF_SOCKET GetSocket() const { return GetNetIOHandler() != nullptr ? GetNetIOHandler()->GetIOSocket() : INVALID_SOCKET; }
 
 		SocketIO* GetNetIOHandler() const { return m_IOHandler; }
 		IHeap& GetIOHeap();

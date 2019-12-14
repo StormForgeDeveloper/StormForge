@@ -98,7 +98,7 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
-	Result EPOLLWorker::HandleAccept(SOCKET sock, SocketIO* pCallBack)
+	Result EPOLLWorker::HandleAccept(SF_SOCKET sock, SocketIO* pCallBack)
 	{
 		Result hr = ResultCode::SUCCESS;
 		IOBUFFER_ACCEPT* pAcceptInfo = nullptr;
@@ -137,7 +137,7 @@ namespace Net {
 		return hr;
 	}
 
-	Result EPOLLWorker::HandleRW(SOCKET sock, unsigned int events, SocketIO* pCallBack)
+	Result EPOLLWorker::HandleRW(SF_SOCKET sock, unsigned int events, SocketIO* pCallBack)
 	{
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
 		IOBUFFER_READ* pReadBuffer = nullptr;
@@ -257,7 +257,7 @@ namespace Net {
 				auto& curEvent = events[iEvent];
 				auto pCallback = (SocketIO*)curEvent.data.ptr;
 				bool isListenSocket = pCallback->GetIOFlags().IsListenSocket != 0;
-				SOCKET sock = pCallback->GetIOSocket();
+				SF_SOCKET sock = pCallback->GetIOSocket();
 
 				// skip invalid handlers
 				if (pCallback == nullptr || !pCallback->GetIsIORegistered())
@@ -473,7 +473,7 @@ namespace Net {
 		}
 	}
 
-	Result EPOLLSystem::MakeSocketNonBlocking(SOCKET sfd)
+	Result EPOLLSystem::MakeSocketNonBlocking(SF_SOCKET sfd)
 	{
 		int flags, s;
 

@@ -66,7 +66,7 @@ namespace Net {
 	// UDP/TCP write overlapped
 	struct IOBUFFER_WRITE : public IOBUFFER_RWBASE
 	{
-		SOCKET SockWrite;
+		SF_SOCKET SockWrite;
 
 		// Sending raw buffer, always has send buffer data pointer and size
 		uint RawSendSize;
@@ -83,13 +83,13 @@ namespace Net {
 		~IOBUFFER_WRITE();
 
 		// Initialize for IO
-		inline void InitForIO(SOCKET sockWrite);
+		inline void InitForIO(SF_SOCKET sockWrite);
 		inline void InitMsg(SharedPointerT<Message::MessageData>&& pMsg);
 		inline void InitBuff(uint uiBuffSize, uint8_t* pBuff);
 
 		// Setup sending mode
-		inline void SetupSendUDP(SOCKET sockWrite, const sockaddr_storage& to, SharedPointerT<Message::MessageData>&& pMsg);
-		inline void SetupSendUDP(SOCKET sockWrite, const sockaddr_storage& to, uint uiBuffSize, uint8_t* pBuff);
+		inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, SharedPointerT<Message::MessageData>&& pMsg);
+		inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, uint uiBuffSize, uint8_t* pBuff);
 		inline void SetupSendTCP(SharedPointerT<Message::MessageData>&& pMsg);
 		inline void SetupSendTCP(uint uiBuffSize, uint8_t* pBuff);
 
@@ -131,7 +131,7 @@ namespace Net {
 	// TCP accept overlapped
 	struct IOBUFFER_ACCEPT : public IOBUFFER
 	{
-		SOCKET sockAccept;
+		SF_SOCKET sockAccept;
 
 		sockaddr_storage sockAddr;
 
@@ -140,7 +140,7 @@ namespace Net {
 		~IOBUFFER_ACCEPT();
 
 		// Setup accept
-		inline void SetupAccept(SOCKET sock);
+		inline void SetupAccept(SF_SOCKET sock);
 	};
 
 

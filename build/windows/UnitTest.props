@@ -7,7 +7,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup>
     <ClCompile>
-      <AdditionalIncludeDirectories>$(SolutionDir)3rdParties/src/gtest/gtest/googletest;$(SolutionDir)3rdParties/src/gtest/gtest/googletest/include;$(SolutionDir)3rdParties/src/zookeeper/zookeeperConnector/include;$(SolutionDir)3rdParties/src/zookeeper/zookeeperConnector/generated;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)3rdParties/src/gtest/gtest/googletest;$(SolutionDir)3rdParties/src/gtest/gtest/googletest/include;$(SolutionDir)3rdParties/src/zookeeper/zookeeperConnector/include;$(SolutionDir)3rdParties/src/zookeeper/zookeeperConnector/generated;$(SolutionDir)3rdParties/src/rdkafka/librdkafka/src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4996;%(DisableSpecificWarnings)</DisableSpecificWarnings>
     </ClCompile>
     <Link>

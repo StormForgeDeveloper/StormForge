@@ -87,65 +87,106 @@ namespace SF
 	}
 
 
-/*
-	template< >
-	class ArgumentWrapperT<double> : public VariableBox
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+//
+//	Default platform type helpers
+//
+
+
+
+	Result _ToString(ToStringContext& context, const bool& value)
 	{
-	private:
-		double m_Data;
-		unsigned m_digitAfterDecimalPoint;
+		return _IToA(context, value);
+	}
 
-	public:
-		ArgumentWrapperT(double src, unsigned digitAfterDecimalPoint = 5)
-			:m_Data(src),
-			m_digitAfterDecimalPoint(digitAfterDecimalPoint)
+	Result _ToString(ToStringContext& context, const int8_t& value)
+	{
+		return _IToA(context, value);
+	}
+
+	Result _ToString(ToStringContext& context, const uint8_t& value)
+	{
+		return _IToA(context, value);
+	}
+
+	Result _ToString(ToStringContext& context, const int16_t& value)
+	{
+		return _IToA(context, value);
+	}
+
+	Result _ToString(ToStringContext& context, const uint16_t& value)
+	{
+		return _IToA(context, value);
+	}
+
+	Result _ToString(ToStringContext& context, const int32_t& value)
+	{
+		return _IToA(context, value);
+	}
+
+	Result _ToString(ToStringContext& context, const uint32_t& value)
+	{
+		return _IToA(context, value);
+	}
+
+	Result _ToString(ToStringContext& context, const int64_t& value)
+	{
+		return _IToA(context, value);
+	}
+
+	Result _ToString(ToStringContext& context, const uint64_t& value)
+	{
+		return _IToA(context, value);
+	}
+
+	Result _ToString(ToStringContext& context, const float& value)
+	{
+		return _FToA(context, value);
+	}
+
+	Result _ToString(ToStringContext& context, const double& value)
+	{
+		return _FToA(context, value);
+	}
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+	Result _ToString(ToStringContext& context, const long& value)
+	{
+		return _IToA(context, (int32_t)value);
+	}
+	Result _ToString(ToStringContext& context, const unsigned long& value)
+	{
+		return _IToA(context, (uint32_t)value);
+	}
+#endif
+
+
+	bool operator == (const sockaddr_storage& op1, const sockaddr_storage& op2)
+	{
+		if (op1.ss_family != op2.ss_family)
+			return false;
+
+		if (op1.ss_family == AF_INET)
 		{
+			return memcmp((sockaddr_in*)&op1, (sockaddr_in*)&op2, sizeof(sockaddr_in)) == 0;
 		}
-
-		ArgumentWrapperT(const ArgumentWrapperT& src)
-			: m_Data(src.m_Data)
-			, m_digitAfterDecimalPoint(src.m_digitAfterDecimalPoint)
+		else
 		{
+			return memcmp((sockaddr_in6*)&op1, (sockaddr_in6*)&op2, sizeof(sockaddr_in6)) == 0;
 		}
+	}
 
-		VariableBox* Clone(INT iBuffLen, uint8_t* pBuff) const override
-		{
-			AssertRel(iBuffLen >= sizeof(ArgumentWrapperT<double>));
-			return new(pBuff)ArgumentWrapperT<double>(*this);
-		}
+	bool operator == (const sockaddr_in& op1, const sockaddr_in& op2)
+	{
+		return memcmp((sockaddr_in*)&op1, (sockaddr_in*)&op2, sizeof(sockaddr_in)) == 0;
+	}
 
-		virtual void GetValueString(char*& pBuff, INT& iBuffLen) const
-		{
-			ToString<double>(pBuff, iBuffLen, m_Data, (int)(m_digitAfterDecimalPoint << 16));
-		}
-	};
-*/
+	bool operator == (const sockaddr_in6& op1, const sockaddr_in6& op2)
+	{
+		return memcmp((sockaddr_in6*)&op1, (sockaddr_in6*)&op2, sizeof(sockaddr_in6)) == 0;
+	}
 
-
-
-
-
-//	template class ArgumentWrapperT < int8_t>;
-//	template class ArgumentWrapperT < uint8_t>;
-//	template class ArgumentWrapperT < int16_t>;
-//	template class ArgumentWrapperT < uint16_t>;
-//	template class ArgumentWrapperT < int32_t>;
-//	template class ArgumentWrapperT < uint32_t>;
-//	template class ArgumentWrapperT < int64_t>;
-//	template class ArgumentWrapperT < uint64_t>;
-//#if SF_PLATFORM == SF_PLATFORM_WINDOWS
-//	//template class ArgumentWrapperT < long>;
-//	//template class ArgumentWrapperT < unsigned long>;
-//	template class ArgumentWrapperT < char>;
-//#endif
-//	template class ArgumentWrapperT < LPCSTR>;
-//	template class ArgumentWrapperT < LPSTR>;
-//	template class ArgumentWrapperT < wchar_t>;
-//	template class ArgumentWrapperT < LPCWSTR>;
-//	template class ArgumentWrapperT < LPWSTR>;
-//	template class ArgumentWrapperT < std::string>;
-//	template class ArgumentWrapperT < std::wstring>;
-//    template class ArgumentWrapperT < Result>;
 
 }; // namespace StrUtil
 

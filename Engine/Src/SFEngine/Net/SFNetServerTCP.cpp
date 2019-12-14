@@ -95,8 +95,8 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 		sockaddr_storage remoteAddr;
-		SOCKET sockSvr = GetIOSocket();
-		SOCKET sockAccept = pOverAccept->sockAccept;
+		SF_SOCKET sockSvr = GetIOSocket();
+		SF_SOCKET sockAccept = pOverAccept->sockAccept;
 		Net::PeerInfo remote;
 
 		netChkPtr(pOverAccept);
@@ -187,7 +187,7 @@ namespace Net {
 	}
 	
 	// handle Socket accept
-	Result ServerTCP::OnAcceptedSocket( SOCKET acceptedSocket, const sockaddr_storage& remoteSockAddr, const PeerInfo& remote, ConnectionPtr &pConn)
+	Result ServerTCP::OnAcceptedSocket(SF_SOCKET acceptedSocket, const sockaddr_storage& remoteSockAddr, const PeerInfo& remote, ConnectionPtr &pConn)
 	{
 		Result hr = ResultCode::SUCCESS;
 		ConnectionTCP *pConnection = nullptr;
@@ -276,7 +276,7 @@ namespace Net {
 	Result ServerTCP::HostOpen( NetClass netCls, const char *strLocalIP, uint16_t usLocalPort )
 	{
 		Result hr = ResultCode::SUCCESS;
-		SOCKET socket = INVALID_SOCKET;
+		SF_SOCKET socket = INVALID_SOCKET;
 		//int32_t iOptValue;
 		int bOptValue;
 		sockaddr_storage bindAddr;

@@ -83,13 +83,13 @@ namespace Net {
 		~RecvMsgWindow();
 
 		// get window size
-		FORCEINLINE int GetWindowSize()							{ return MessageWindow::MESSAGE_WINDOW_SIZE; }
+		SF_FORCEINLINE int GetWindowSize()							{ return MessageWindow::MESSAGE_WINDOW_SIZE; }
 
 		// get message count in window
-		FORCEINLINE uint32_t GetMsgCount()						{ return m_uiMsgCount.load(std::memory_order_relaxed); }
+		SF_FORCEINLINE uint32_t GetMsgCount()						{ return m_uiMsgCount.load(std::memory_order_relaxed); }
 
 		// get message base sequence
-		FORCEINLINE uint16_t GetBaseSequence()					{ return m_uiBaseSequence.load(std::memory_order_consume); }
+		SF_FORCEINLINE uint16_t GetBaseSequence()					{ return m_uiBaseSequence.load(std::memory_order_consume); }
 
 		// Add message
 		Result AddMsg(SharedPointerT<Message::MessageData>& pIMsg );
