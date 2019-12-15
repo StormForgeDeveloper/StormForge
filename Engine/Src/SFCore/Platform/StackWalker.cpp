@@ -641,6 +641,11 @@ void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, uint skipDept
 	StackWalker::StackWalker()
 		: LibraryComponent("StackWalker")
 	{
+		if (stm_pInstance == nullptr)
+		{
+			stm_pInstance = new(GetSystemHeap()) StackWalkerImpl;
+			stm_pInstance->Initialize();
+		}
 	}
 
 	StackWalker::~StackWalker()
@@ -652,11 +657,6 @@ void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, uint skipDept
 	// Initialize component
 	Result StackWalker::InitializeComponent()
 	{
-		if (stm_pInstance == nullptr)
-		{
-			stm_pInstance = new(GetSystemHeap()) StackWalkerImpl;
-			stm_pInstance->Initialize();
-		}
 
 		return ResultCode::SUCCESS;
 	}
@@ -667,7 +667,7 @@ void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, uint skipDept
 		if (stm_pInstance == nullptr)
 			return;
 
-		GetSystemHeap().Delete(stm_pInstance);
+		delete stm_pInstance;
 		stm_pInstance = nullptr;
 	}
 

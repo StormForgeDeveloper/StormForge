@@ -120,7 +120,6 @@ namespace SF {
 		// Look into m_AllocatedList for detail
 		if (m_AllocatedDRAM.load(std::memory_order_acquire) != 0 || m_AllocatedVRAM.load(std::memory_order_acquire) != 0)
 		{
-			Assert(false);
 			SFLog(System, Warning, "MemoryLeak detected, {0}", m_AllocatedList.size());
 #if ENABLE_MEMORY_TRACE
 			int printcount = 0;
@@ -132,6 +131,7 @@ namespace SF {
 				return printcount < 10; // print max 10
 			});
 #endif
+			Assert(false);
 		}
 		//Assert(m_AllocatedDRAM.load(std::memory_order_acquire) == 0 && m_AllocatedVRAM.load(std::memory_order_acquire) == 0);
 	}
