@@ -99,9 +99,11 @@ namespace SF {
 		}
 
 		// copy string data and update string length
-		memcpy(m_StringValue + GetStringLength(), src, sizeof(char)*(strLen +1));
-		m_StringValue[strLen] = '\0';
-		m_StringBufferLength = strlen(m_StringValue) + 1;
+		auto copyStart = m_StringValue + GetStringLength();
+		memcpy(copyStart, src, sizeof(char)*(strLen +1));
+		copyStart[strLen] = '\0';
+		m_StringBufferLength = static_cast<uintptr_t>(copyStart + strLen - m_StringValue +1);
+		assert(m_StringBufferLength == (strlen(m_StringValue) + 1));
 		return true;
 	}
 
@@ -152,8 +154,10 @@ namespace SF {
 	String::String(const String& src)
 		: m_pHeap(src.m_pHeap)
 		, m_Buffer(src.m_Buffer)
+		, m_StringValue(nullptr)
 	{
-		m_StringValue = m_Buffer->GetBufferPointer();
+		if (m_Buffer != nullptr)
+			m_StringValue = m_Buffer->GetBufferPointer();
 	}
 
 

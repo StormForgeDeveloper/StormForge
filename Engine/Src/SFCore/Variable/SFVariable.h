@@ -44,7 +44,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const = 0;
+		virtual FixedString32 GetTypeName() const = 0;
 
 
 		virtual void SetValue(bool value) { unused(value); }
@@ -139,7 +139,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "bool";
+		static constexpr FixedString32 TYPE_NAME = "bool"_crc32c;
 
 	private:
 		bool m_Value;
@@ -154,7 +154,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(bool value) override { m_Value = value; }
 		virtual void SetValue(int8_t value) override { m_Value = value == 0 ? false : true; }
@@ -206,7 +206,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "void*";
+		static constexpr FixedString32 TYPE_NAME = "void*"_crc32c;
 
 	private:
 		void* m_Value = nullptr;
@@ -223,7 +223,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(int64_t value) override { m_Value = (void*)value; }
 		virtual void SetValue(uint64_t value) override { m_Value = (void*)value; }
@@ -251,7 +251,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "int";
+		static constexpr FixedString32 TYPE_NAME = "int"_crc32c;
 
 	private:
 		int32_t m_Value;
@@ -268,7 +268,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(bool value) override { m_Value = value == false ? 0 : 1; }
 		virtual void SetValue(int8_t value) override { m_Value = (int8_t)value; }
@@ -316,7 +316,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "uint";
+		static constexpr FixedString32 TYPE_NAME = "uint"_crc32c;
 
 	private:
 		uint32_t m_Value;
@@ -331,7 +331,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(bool value) override { m_Value = value == false ? 0 : 1; }
 		virtual void SetValue(int8_t value) override { m_Value = (int8_t)value; }
@@ -380,7 +380,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "Result";
+		static constexpr FixedString32 TYPE_NAME = "Result"_crc32c;
 
 	private:
 		Result m_Value;
@@ -394,7 +394,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(bool value) override { m_Value = value == false ? ResultCode::FAIL : ResultCode::SUCCESS; }
 		virtual void SetValue(int8_t value) override { m_Value = (int8_t)value; }
@@ -440,7 +440,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "int64";
+		static constexpr FixedString32 TYPE_NAME = "int64"_crc32c;
 
 	private:
 		int64_t m_Value;
@@ -457,7 +457,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(bool value) override { m_Value = value == false ? 0 : 1; }
 		virtual void SetValue(int8_t value) override { m_Value = (int8_t)value; }
@@ -505,7 +505,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "uint64";
+		static constexpr FixedString32 TYPE_NAME = "uint64"_crc32c;
 
 	private:
 		uint64_t m_Value;
@@ -520,7 +520,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(bool value) override { m_Value = value == false ? 0 : 1; }
 		virtual void SetValue(int8_t value) override { m_Value = (uint64_t)value; }
@@ -568,7 +568,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "float";
+		static constexpr FixedString32 TYPE_NAME = "float"_crc32c;
 
 	private:
 		float m_Value;
@@ -585,7 +585,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(bool value) override { m_Value = value == false ? 0.f : 1.f; }
 		virtual void SetValue(int8_t value) override { m_Value = (float)value; }
@@ -635,7 +635,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "double";
+		static constexpr FixedString32 TYPE_NAME = "double"_crc32c;
 
 	private:
 		double m_Value;
@@ -650,7 +650,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(bool value) override { m_Value = value == false ? 0. : 1.; }
 		virtual void SetValue(int8_t value) override { m_Value = (double)value; }
@@ -702,7 +702,7 @@ namespace SF {
 	public:
 		typedef VariableUInt super;
 
-		static constexpr FixedString TYPE_NAME = "hex32";
+		static constexpr FixedString32 TYPE_NAME = "hex32"_crc32c;
 
 	public:
 		VariableHex32()
@@ -714,7 +714,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(const char* value) override;
 		virtual void SetValue(const String& value) override;
@@ -738,7 +738,7 @@ namespace SF {
 
 		typedef VariableUInt64 super;
 
-		static constexpr FixedString TYPE_NAME = "hex64";
+		static constexpr FixedString32 TYPE_NAME = "hex64"_crc32c;
 
 	public:
 		VariableHex64()
@@ -749,7 +749,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(const char* value) override;
 		virtual void SetValue(const String& value) override;
@@ -772,7 +772,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "const char*";
+		static constexpr FixedString32 TYPE_NAME = "const char*"_crc32c;
 
 	private:
 		const char* m_Value = nullptr;
@@ -787,7 +787,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(const char* value) override { m_Value = value; }
 		// This method will reference original string buffer. be careful when you call this one
@@ -825,7 +825,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "const wchar_t*";
+		static constexpr FixedString32 TYPE_NAME = "const wchar_t*"_crc32c;
 
 	private:
 		const wchar_t* m_Value = nullptr;
@@ -840,7 +840,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(const wchar_t* value) override { m_Value = value; }
 
@@ -869,7 +869,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "string";
+		static constexpr FixedString32 TYPE_NAME = "string"_crc32c;
 
 	private:
 		String m_Value;
@@ -884,7 +884,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(bool value) override;
 		virtual void SetValue(int8_t value) override;
@@ -936,7 +936,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "FixedString";
+		static constexpr FixedString32 TYPE_NAME = "FixedString"_crc32c;
 
 	private:
 		FixedString32 m_Value;
@@ -951,7 +951,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(int32_t value) override { m_Value = value; }
 		virtual void SetValue(uint32_t value) override { m_Value = value; }
@@ -994,7 +994,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "FixedString";
+		static constexpr FixedString32 TYPE_NAME = "FixedString"_crc32c;
 
 	private:
 		FixedString m_Value;
@@ -1008,7 +1008,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 		virtual void SetValue(int64_t value) override { m_Value = value; }
 		virtual void SetValue(uint64_t value) override { m_Value = value; }
@@ -1049,7 +1049,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TYPE_NAME = "BLOB";
+		static constexpr FixedString32 TYPE_NAME = "BLOB"_crc32c;
 
 	private:
 		DynamicArray<uint8_t> m_Value;
@@ -1083,7 +1083,7 @@ namespace SF {
 			m_Value = value;
 		}
 
-		virtual FixedString GetTypeName() const override { return TYPE_NAME; }
+		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 
 		virtual void SetValue(const Array<uint8_t>& value) { unused(value); }
@@ -1131,7 +1131,7 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return "BinaryValue"; }
+		virtual FixedString32 GetTypeName() const override { return "BinaryValue"_crc32c; }
 
 		virtual void* GetDataPtr() const override { return (void*)&m_Value; }
 
@@ -1176,6 +1176,7 @@ namespace SF {
 	class VariableValueReference : public Variable
 	{
 	public:
+		using super = Variable;
 		typedef std::decay_t<ValueType> ValueTypeDecay;
 
 	private:
@@ -1197,11 +1198,46 @@ namespace SF {
 		{
 		}
 
-		virtual FixedString GetTypeName() const override { return "ref*"; }
+		virtual FixedString32 GetTypeName() const override { return "ref*"_crc32c; }// This is supposed to be specialized
+
+		// Those overriding stay here so that we can override
+		virtual void SetValue(int8_t value) override { super::SetValue(value); }
+		virtual void SetValue(uint8_t value) override { super::SetValue(value); }
+		virtual void SetValue(int16_t value) override { super::SetValue(value); }
+		virtual void SetValue(uint16_t value) override { super::SetValue(value); }
+		virtual void SetValue(int32_t value) override { super::SetValue(value); }
+		virtual void SetValue(uint32_t value) override { super::SetValue(value); }
+		virtual void SetValue(int64_t value) override { super::SetValue(value); }
+		virtual void SetValue(uint64_t value) override { super::SetValue(value); }
+		virtual void SetValue(float value) override { super::SetValue(value); }
+		virtual void SetValue(double value) override { super::SetValue(value); }
+		virtual void SetValue(const char* value) override { super::SetValue(value); }
+		virtual void SetValue(const wchar_t* value) override { super::SetValue(value); }
+		virtual void SetValue(const String& value) override { super::SetValue(value); }
+		virtual void SetValue(FixedString32 value) override { super::SetValue(value); }
+		virtual void SetValue(FixedString value) override { super::SetValue(value); }
+		virtual void SetValue(const Array<uint8_t>& value) override { super::SetValue(value); }
+		virtual void SetValue(Array<uint8_t>&& value) override { super::SetValue(value); }
 
 		virtual void* GetDataPtr() const override { return m_Value; }
+		virtual bool GetValueBool() const override { return super::GetValueBool(); }
+		virtual int8_t GetValueInt8() const override { return super::GetValueInt8(); }
+		virtual uint8_t GetValueUInt8() const override { return super::GetValueUInt8(); }
+		virtual int16_t GetValueInt16() const override { return super::GetValueInt16(); }
+		virtual uint16_t GetValueUInt16() const override { return super::GetValueUInt16(); }
+		virtual int32_t GetValueInt32() const override { return super::GetValueInt32(); }
+		virtual uint32_t GetValueUInt32() const override { return super::GetValueUInt32(); }
+		virtual int64_t GetValueInt64() const override { return super::GetValueInt64(); }
+		virtual uint64_t GetValueUInt64() const override { return super::GetValueUInt64(); }
+		virtual float GetValueFloat() const override { return super::GetValueFloat(); }
+		virtual double GetValueDouble() const override { return super::GetValueDouble(); }
+		virtual String GetValueString() const override { return super::GetValueString(); }
+		virtual const char* GetValueCharString() const override { return super::GetValueCharString(); }
+		virtual const wchar_t* GetValueWCharString() const override { return super::GetValueWCharString(); }
+		virtual FixedString32 GetValueFixedString32() const override { return super::GetValueFixedString32(); }
+		virtual FixedString GetValueFixedString() const override { return super::GetValueFixedString(); }
+		virtual const Array<uint8_t>& GetValueBLOB() const override { return super::GetValueBLOB(); }
 
-		virtual bool GetValueBool() const override { return m_Value != nullptr; }
 
 		// Need to be overridden case by case
 		virtual Result ToString(ToStringContext& context) const override

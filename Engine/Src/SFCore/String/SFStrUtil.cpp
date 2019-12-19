@@ -195,7 +195,7 @@ namespace StrUtil {
 						pArg->ToString(context);
 
 						int usedSize = ((int)sizeof(tempBuffer) - context.StringBufferLength);
-						assert(usedSize > 0);
+						assert(usedSize >= 0);
 						iBuffLen -= usedSize;
 					}
 				}

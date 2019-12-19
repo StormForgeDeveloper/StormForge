@@ -100,18 +100,18 @@ namespace SF {
 		// internal interfaces
 	private:
 
-		constexpr uint32_t GetStringLength(const char* str) const
+		static constexpr uint32_t GetStringLength(const char* str)
 		{
 			return *str ? 1 + GetStringLength(str + 1) : 0;
 		}
 
-		constexpr uint32_t MakeNonZero(uint32_t hash) const
+		static constexpr uint32_t MakeNonZero(uint32_t hash)
 		{
 			return hash == 0 ? 1 : hash;
 		}
 
 		template<class byteType>
-		constexpr uint32_t GetUint32(const byteType * data) const
+		static constexpr uint32_t GetUint32(const byteType * data)
 		{
 			return (uint32_t(uint8_t(data[0])))
 				| ((uint32_t(uint8_t(data[1]))) << 8)
@@ -125,7 +125,7 @@ namespace SF {
 		//	Crc32 of little endian
 		//
 
-		constexpr uint32_t Crc32C(uint32_t crc, const uint8_t* pBuff, size_t length) const
+		static constexpr uint32_t Crc32C(uint32_t crc, const uint8_t* pBuff, size_t length)
 		{
 			if (length == 0)
 				return 0;
@@ -138,7 +138,7 @@ namespace SF {
 		}
 
 
-		constexpr uint32_t Crc32C(uint32_t crc, const char* pBuff) const
+		static constexpr uint32_t Crc32C(uint32_t crc, const char* pBuff)
 		{
 			if (pBuff == nullptr)
 				return 0;
@@ -158,14 +158,14 @@ namespace SF {
 		{
 		}
 
-		constexpr uint32_t Hash(const uint8_t* data, size_t length) const
+		static constexpr uint32_t Hash(const uint8_t* data, size_t length)
 		{
 			return data == nullptr
 				? 0
 				: MakeNonZero(Crc32C(0xffffffff, data, length) ^ 0xffffffff);
 		}
 
-		constexpr uint32_t Hash(const char* data) const
+		static constexpr uint32_t Hash(const char* data)
 		{
 			return data == nullptr
 				? 0
@@ -183,11 +183,11 @@ namespace SF {
 	uint32_t Crc32C(const uint8_t *buf, size_t len);
 
 	constexpr uint32_t operator "" _crc(const char* s, size_t sz) {
-		return Hasher_Crc32C().Hash(s);
+		return Hasher_Crc32C::Hash(s);
 	}
 
 	constexpr uint32_t operator "" _crc32c(const char* s, size_t sz) {
-		return Hasher_Crc32C().Hash(s);
+		return Hasher_Crc32C::Hash(s);
 	}
 }
 

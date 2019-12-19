@@ -276,6 +276,14 @@ namespace SF {
 		return Hasher_Murmur64().Hash(s);
 	}
 
+	constexpr uint64_t operator "" _crc64(const char* s, size_t sz) {
+		return Hasher_Murmur64().Hash(s);
+	}
+
+	//constexpr uint64_t operator "" _crc(const char* s, size_t sz) {
+	//	return Hasher_Murmur64().Hash(s);
+	//}
+
 
 }
 

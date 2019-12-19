@@ -71,6 +71,7 @@ namespace SF
 	}
 
 
+	// TODO: move to unit test
 	void TestFunc()
 	{
 		bool TestBool = true;
@@ -160,6 +161,30 @@ namespace SF
 		return _IToA(context, (uint32_t)value);
 	}
 #endif
+
+	Result _ToString(ToStringContext& context, const char* value)
+	{
+		if (value != nullptr)
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, value);
+		else
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(Null)");
+	}
+
+	Result _ToString(ToStringContext& context, const wchar_t* value)
+	{
+		char destBuff[1024];
+
+
+		if (value != nullptr)
+		{
+			if (!StrUtil::WCSToUTF8(value, destBuff))
+				return ResultCode::FAIL;
+
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, destBuff);
+		}
+		else
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(Null)");
+	}
 
 
 	bool operator == (const sockaddr_storage& op1, const sockaddr_storage& op2)

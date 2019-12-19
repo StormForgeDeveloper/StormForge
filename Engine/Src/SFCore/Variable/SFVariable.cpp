@@ -26,7 +26,7 @@ namespace SF
 	//	Variable int
 	//
 
-	constexpr FixedString VariableBool::TYPE_NAME;
+	constexpr FixedString32 VariableBool::TYPE_NAME;
  
 	Result VariableBool::ToString(ToStringContext& context) const
 	{
@@ -57,7 +57,7 @@ namespace SF
 	//	Variable void*
 	//
 
-	constexpr FixedString VariableVoidP::TYPE_NAME;
+	constexpr FixedString32 VariableVoidP::TYPE_NAME;
 
 	Result VariableVoidP::ToString(ToStringContext& context) const
 	{
@@ -93,7 +93,7 @@ namespace SF
 	//	Variable int
 	//
 
-	constexpr FixedString VariableInt::TYPE_NAME;
+	constexpr FixedString32 VariableInt::TYPE_NAME;
 
 	void VariableInt::SetValue(const char* value)
 	{
@@ -171,7 +171,7 @@ namespace SF
 	//	Variable uint
 	//
 
-	constexpr FixedString VariableUInt::TYPE_NAME;
+	constexpr FixedString32 VariableUInt::TYPE_NAME;
 
 	void VariableUInt::SetValue(const char* value)
 	{
@@ -245,7 +245,7 @@ namespace SF
 	//	Variable Result
 	//
 
-	constexpr FixedString VariableResult::TYPE_NAME;
+	constexpr FixedString32 VariableResult::TYPE_NAME;
 
 	Result VariableResult::ToString(ToStringContext& context) const
 	{
@@ -272,7 +272,7 @@ namespace SF
 	//	Variable int64
 	//
 
-	constexpr FixedString VariableInt64::TYPE_NAME;
+	constexpr FixedString32 VariableInt64::TYPE_NAME;
 
 	void VariableInt64::SetValue(const char* value)
 	{
@@ -350,7 +350,7 @@ namespace SF
 	//	Variable uint
 	//
 
-	constexpr FixedString VariableUInt64::TYPE_NAME;
+	constexpr FixedString32 VariableUInt64::TYPE_NAME;
 
 	void VariableUInt64::SetValue(const char* value)
 	{
@@ -425,7 +425,7 @@ namespace SF
 	//	Variable float
 	//
 
-	constexpr FixedString VariableFloat::TYPE_NAME;
+	constexpr FixedString32 VariableFloat::TYPE_NAME;
 
 	void VariableFloat::SetValue(const char* value)
 	{
@@ -504,7 +504,7 @@ namespace SF
 	//	Variable double
 	//
 
-	constexpr FixedString VariableDouble::TYPE_NAME;
+	constexpr FixedString32 VariableDouble::TYPE_NAME;
 
 	void VariableDouble::SetValue(const char* value)
 	{
@@ -585,7 +585,7 @@ namespace SF
 	//	Variable 32 bit base 16 integer
 	//
 
-	constexpr FixedString VariableHex32::TYPE_NAME;
+	constexpr FixedString32 VariableHex32::TYPE_NAME;
 
 	void VariableHex32::SetValue(const char* value)
 	{
@@ -631,7 +631,7 @@ namespace SF
 	//	Variable 64 bit base 16 integer
 	//
 
-	constexpr FixedString VariableHex64::TYPE_NAME;
+	constexpr FixedString32 VariableHex64::TYPE_NAME;
 
 	void VariableHex64::SetValue(const char* value)
 	{
@@ -678,7 +678,7 @@ namespace SF
 	//	  - This class only holds pointer, doesn't copy or allocate memory internally
 	//
 
-	constexpr FixedString VariableCharString::TYPE_NAME;
+	constexpr FixedString32 VariableCharString::TYPE_NAME;
 
 	Result VariableCharString::ToString(ToStringContext& context) const
 	{
@@ -710,7 +710,7 @@ namespace SF
 	//	  - This class only holds pointer, doesn't copy or allocate memory internally
 	//
 
-	constexpr FixedString VariableWCharString::TYPE_NAME;
+	constexpr FixedString32 VariableWCharString::TYPE_NAME;
 
 	Result VariableWCharString::ToString(ToStringContext& context) const
 	{
@@ -752,7 +752,7 @@ namespace SF
 	//	Variable String
 	//
 
-	constexpr FixedString VariableString::TYPE_NAME;
+	constexpr FixedString32 VariableString::TYPE_NAME;
 
 	void VariableString::SetValue(bool value)
 	{
@@ -926,7 +926,7 @@ namespace SF
 	//	Variable FixedString32
 	//
 
-	constexpr FixedString VariableFixedString32::TYPE_NAME;
+	constexpr FixedString32 VariableFixedString32::TYPE_NAME;
 
 	String VariableFixedString32::GetValueString() const
 	{
@@ -964,7 +964,7 @@ namespace SF
 	//	Variable FixedString
 	//
 
-	constexpr FixedString VariableFixedString::TYPE_NAME;
+	constexpr FixedString32 VariableFixedString::TYPE_NAME;
 
 	String VariableFixedString::GetValueString() const
 	{
@@ -1005,7 +1005,7 @@ namespace SF
 	//	Variable FixedString
 	//
 
-	constexpr FixedString VariableBLOB::TYPE_NAME;
+	constexpr FixedString32 VariableBLOB::TYPE_NAME;
 
 	Result VariableBLOB::ToString(ToStringContext& context) const
 	{
