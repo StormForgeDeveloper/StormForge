@@ -30,6 +30,7 @@ add_definitions(-DHAVE_STDDEF_H=1)
 add_definitions(-DHAVE_SYS_TYPES_H=1)
 add_definitions(-DSF_USE_MBEDTLS)
 #add_definitions(-DLIBICONV_PLUG)
+add_definitions(-DENABLE_PLAYFABSERVER_API)
 
 SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG=1")
 SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG=1")
@@ -46,10 +47,11 @@ include_directories(AFTER
 	3rdParties/src/libxml/libxml2/include
 	3rdParties/src/curl/curl/include
 	3rdParties/src/zlib/zlib-1.2.8
-	3rdParties/src/jsoncpp/include
+	3rdParties/src/jsoncpp/jsoncpp/include
 	3rdParties/src/zookeeper/zookeeperConnector/include
 	3rdParties/src/rdkafka
 	3rdParties/src/rdkafka/rdkafka/include
+	3rdParties/src/PlayFab/XPlatCppSdk/code/include
 	Engine/Src/SFCore
 	Engine/Src/SFEngine
 	Engine/Src/Protocol
