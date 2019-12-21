@@ -18,6 +18,7 @@
 #include "Variable/SFVariable.h"
 
 
+
 namespace SF {
 
 
@@ -207,10 +208,6 @@ namespace SF {
 #endif
 	Result _ToString(ToStringContext& context, const char* value);
 	Result _ToString(ToStringContext& context, const wchar_t* value);
-
-	bool operator == (const sockaddr_storage& op1, const sockaddr_storage& op2);
-	bool operator == (const sockaddr_in& op1, const sockaddr_in& op2);
-	bool operator == (const sockaddr_in6& op1, const sockaddr_in6& op2);
 
 
 

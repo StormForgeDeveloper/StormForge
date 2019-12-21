@@ -736,4 +736,14 @@ namespace SF {
 #include "ResultCode/SFResultCodeSystem.h"
 
 
+/////////////////////////////////////////////////////////////////////
+//
+//	Type utility for global
+//
+
+// Some old compiler require them in global scope
+
+bool operator == (const sockaddr_storage& op1, const sockaddr_storage& op2);
+bool operator == (const sockaddr_in& op1, const sockaddr_in& op2);
+bool operator == (const sockaddr_in6& op1, const sockaddr_in6& op2);
 
