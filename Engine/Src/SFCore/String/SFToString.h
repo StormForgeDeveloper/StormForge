@@ -16,6 +16,10 @@
 #include "Variable/SFVariableBoxing.h"
 
 
+
+inline bool operator == (const sockaddr_in6& op1, const sockaddr_in6& op2) { return memcmp(&op1, &op2, sizeof(op1)) == 0; }
+inline bool operator == (const sockaddr_storage& op1, const sockaddr_storage& op2) { return memcmp(&op1, &op2, sizeof(op1)) == 0; }
+
 namespace SF {
 
 
@@ -26,7 +30,6 @@ namespace SF {
 	Result _ToString(ToStringContext& context, const DurationSec& value);
 	Result _ToString(ToStringContext& context, const sockaddr_in6& value);
 	Result _ToString(ToStringContext& context, const sockaddr_storage& value);
-
 
 
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(NetAddress);

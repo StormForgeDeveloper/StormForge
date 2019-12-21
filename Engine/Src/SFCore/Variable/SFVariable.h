@@ -1086,8 +1086,8 @@ namespace SF {
 		virtual FixedString32 GetTypeName() const override { return TYPE_NAME; }
 
 
-		virtual void SetValue(const Array<uint8_t>& value) { unused(value); }
-		virtual void SetValue(Array<uint8_t>&& value) { unused(value); }
+		virtual void SetValue(const Array<uint8_t>& value) override { unused(value); }
+		virtual void SetValue(Array<uint8_t>&& value) override { unused(value); }
 
 		virtual void* GetDataPtr() const override { return const_cast<uint8_t*>(m_Value.data()); }
 		virtual bool GetValueBool() const override { return m_Value.size() != 0; }
@@ -1157,10 +1157,7 @@ namespace SF {
 			if (op.GetDataPtr() == nullptr)
 				return false;
 
-			if (GetTypeName() == op.GetTypeName())
-				return m_Value == *reinterpret_cast<ValueTypeDecay*>(op.GetDataPtr());
-
-			return memcmp(&m_Value, op.GetDataPtr(), sizeof(ValueTypeDecay));
+			return m_Value == *reinterpret_cast<ValueTypeDecay*>(op.GetDataPtr());
 		}
 
 	};
