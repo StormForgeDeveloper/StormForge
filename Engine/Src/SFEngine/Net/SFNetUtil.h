@@ -36,9 +36,7 @@ namespace Net {
 	//
 	//	Network Utility functions
 	//
-	//Result SockAddr2Addr( const sockaddr_in6 &sockAddr, NetAddress &addr );
-	//Result SockAddr2Addr(const sockaddr_in &sockAddr, NetAddress &addr);
-	//Result SockAddr2Addr(const sockaddr_storage &sockAddr, NetAddress &addr);
+
 	Result Addr2SockAddr( const NetAddress &addr, sockaddr_in6 &sockAddr );
 	Result Addr2SockAddr(const NetAddress &addr, sockaddr_in &sockAddr);
 	Result Addr2SockAddr(const NetAddress &addr, sockaddr_storage &sockAddr);
