@@ -60,7 +60,7 @@ namespace SF {
 
 	public:
 		static DataType Read(DataStorageType& src) { return src.load(std::memory_order_acquire); }
-		static void CopyRValue(DataType& dest, DataStorageType& src) { dest = src.exchange(DefaultValue<DataType>(), std::memory_order_acq_rel); }
+		static void CopyRValue(DataType& dest, DataStorageType& src) { dest = src.exchange(DataType{}, std::memory_order_acq_rel); }
 
 		static void Write(DataStorageType& dest, const DataType& data) { DataType temp = data; dest.store(temp, std::memory_order_release); }
 		static void Write(DataStorageType& dest, DataType&& data) { dest.store(data, std::memory_order_release); }
@@ -124,20 +124,18 @@ namespace SF {
 
 			Page( CounterType InItemCount )
 			{
-				auto defaultValue = DefaultValue<DataType>();
 				for( CounterType iEle = 1; iEle < InItemCount; iEle++ )
 				{
 					new (&Element[iEle]) DataType;
-					StorageAccessor::Write(Element[iEle], defaultValue);
+					StorageAccessor::Write(Element[iEle], {});
 				}
 			}
 
 			void DeleteElements(CounterType ItemCpacity)
 			{
-				auto defaultValue = DefaultValue<DataType>();
 				for (CounterType iEle = 1; iEle < ItemCpacity; iEle++)
 				{
-					StorageAccessor::Write(Element[iEle], defaultValue);
+					StorageAccessor::Write(Element[iEle], {});
 				}
 			}
 		};

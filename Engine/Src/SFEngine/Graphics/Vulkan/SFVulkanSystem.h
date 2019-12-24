@@ -26,12 +26,6 @@ namespace SF
 	//
 	//	Default value accessors for Vulkan
 	//
-	template<> inline VkLayerProperties DefaultValue<VkLayerProperties>() { static VkLayerProperties Zero = {}; return Zero; }
-	template<> inline VkPhysicalDevice DefaultValue<VkPhysicalDevice>() { static VkPhysicalDevice Zero = {}; return Zero; }
-	template<> inline VkExtensionProperties DefaultValue<VkExtensionProperties>() { static VkExtensionProperties Zero = {}; return Zero; }
-	template<> inline VkMemoryHeap DefaultValue<VkMemoryHeap>() { static VkMemoryHeap Zero = {}; return Zero; }
-	template<> inline VkMemoryType DefaultValue<VkMemoryType>() { static VkMemoryType Zero = {}; return Zero; }
-	template<> inline VkQueueFamilyProperties DefaultValue<VkQueueFamilyProperties>() { static VkQueueFamilyProperties Zero = {}; return Zero; }
 
 
 	//template instancing

@@ -41,7 +41,6 @@ namespace SF {
 		TaskState State;
 	};
 
-	//template<> TaskNotification DefaultValue<TaskNotification>() { return TaskNotification(); }
 
 	typedef CircularPageQueueAtomic<TaskNotification*> TaskNotificationQueue;
 	
@@ -181,7 +180,6 @@ namespace SF {
 
 	typedef SharedPointerT < Task > TaskPtr;
 
-	template<> inline WeakPointerT<Task> DefaultValue<WeakPointerT<Task>>() { return WeakPointerT<Task>(); }
 
 
 }; // namespace SF

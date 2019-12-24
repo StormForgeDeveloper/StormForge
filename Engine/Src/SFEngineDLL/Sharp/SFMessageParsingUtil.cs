@@ -110,6 +110,9 @@ namespace SF
                 case "TotalRankingPlayerInformation":
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(TotalRankingPlayerInformation)));
                     break;
+                case "RelayPlayerInfo":
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(RelayPlayerInfo)));
+                    break;
                 default:
                     System.Diagnostics.Debug.Assert(false);
                     break;
@@ -244,6 +247,13 @@ namespace SF
                 case "TotalRankingPlayerInformation":
                     {
                         var newArray = new TotalRankingPlayerInformation[arrayCount];
+                        MarshalCopy(Value, newArray, 0, arrayCount);
+                        stm_ParsingMessage.SetValue(stringHash, newArray);
+                    }
+                    break;
+                case "RelayPlayerInfo":
+                    {
+                        var newArray = new RelayPlayerInfo[arrayCount];
                         MarshalCopy(Value, newArray, 0, arrayCount);
                         stm_ParsingMessage.SetValue(stringHash, newArray);
                     }

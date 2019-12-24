@@ -252,6 +252,18 @@ namespace SF
 
     [Struct]
     [StructLayout(LayoutKind.Sequential)]
+    public class RelayPlayerInfo
+    {
+        public ulong RelayPlayerID;
+        public ulong PlayerID;
+
+        public RelayPlayerInfo()
+        {
+        }
+    }
+
+    [Struct]
+    [StructLayout(LayoutKind.Sequential)]
     public struct SFRouteContext
     {
         public long From;

@@ -486,8 +486,9 @@ namespace SF
 		if (acl == nullptr)
 			acl = &ZOO_OPEN_ACL_UNSAFE;
 
-		Json::FastWriter writer;
-		auto valueBuffer = std::forward<std::string>(writer.write(value));
+		Json::StreamWriterBuilder builder;
+		builder["indentation"] = "";
+		auto valueBuffer = std::forward<std::string>(Json::writeString(builder, value));
 
 		StaticArray<char, 1024> nameBuffer(m_Heap);
 		auto zkResult = zoo_create(m_ZKHandle, path, (const char*)valueBuffer.data(), (int)valueBuffer.size(), acl, flags, nameBuffer.data(), (int)nameBuffer.GetAllocatedSize());
@@ -535,8 +536,11 @@ namespace SF
 		SharedPointerT<StringTask> pTask = new(m_Heap) StringTask(m_Heap, GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
-		Json::FastWriter writer;
-		auto valueBuffer = std::forward<std::string>(writer.write(value));
+
+		Json::StreamWriterBuilder builder;
+		builder["indentation"] = "";
+		auto valueBuffer = std::forward<std::string>(Json::writeString(builder, value));
+
 		auto zkResult = zoo_acreate(m_ZKHandle, path, (const char*)valueBuffer.data(), (int)valueBuffer.size(), acl, flags, ZooKeeperWatcher::ZKWatcherCBStringComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
@@ -658,9 +662,13 @@ namespace SF
 		auto zkResult = zoo_get(m_ZKHandle, path, 0, (char*)valueBuffer.data(), &buffLen, nullptr);
 		valueBuffer.resize(buffLen);
 
-
-		Json::Reader reader;
-		auto bRes = reader.parse(reinterpret_cast<const char*>(valueBuffer.data()), reinterpret_cast<const char*>(valueBuffer.data()) + valueBuffer.size(), jsonValue, false);
+		std::stringstream inputStream(std::string(reinterpret_cast<const char*>(valueBuffer.data()), valueBuffer.size()), std::ios_base::in);
+		Json::Value jsonData;
+		Json::CharReaderBuilder jsonReader;
+		std::string errs;
+		auto bRes = Json::parseFromStream(jsonReader, inputStream, &jsonData, &errs);
+		//Json::Reader reader;
+		//auto bRes = reader.parse(reinterpret_cast<const char*>(valueBuffer.data()), reinterpret_cast<const char*>(valueBuffer.data()) + valueBuffer.size(), jsonValue, false);
 		if (!bRes)
 			return ResultCode::FAIL;
 
@@ -711,8 +719,9 @@ namespace SF
 		if (!IsConnected())
 			return ResultCode::INVALID_STATE;
 
-		Json::FastWriter writer;
-		auto valueBuffer = std::forward<std::string>(writer.write(value));
+		Json::StreamWriterBuilder builder;
+		builder["indentation"] = "";
+		auto valueBuffer = std::forward<std::string>(Json::writeString(builder, value));
 
 		auto zkResult = zoo_set(m_ZKHandle, path, (char*)valueBuffer.data(), (int)valueBuffer.size(), version);
 
@@ -749,8 +758,10 @@ namespace SF
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		int zkResult = 0;
-		Json::FastWriter writer;
-		auto valueBuffer = std::forward<std::string>(writer.write(value));
+
+		Json::StreamWriterBuilder builder;
+		builder["indentation"] = "";
+		auto valueBuffer = std::forward<std::string>(Json::writeString(builder, value));
 		zkResult = zoo_aset(m_ZKHandle, path, (char*)valueBuffer.data(), (int)valueBuffer.size(), version, ZooKeeperWatcher::ZKWatcherCBStatComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));

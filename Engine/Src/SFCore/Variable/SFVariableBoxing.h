@@ -56,7 +56,6 @@ namespace SF {
 	//
 
 
-	template<> inline VariableBox DefaultValue<VariableBox>() { static VariableBox dummy; return dummy; }
 
 	// Boxing
 	//template<class ValueType>
@@ -76,7 +75,7 @@ namespace SF {
 	{
 		auto pVar = box.GetVariable();
 		if (pVar == nullptr)
-			return DefaultValue<ValueType>();
+			return ValueType{};
 
 		return pVar->GetValue<ValueType>();
 	}

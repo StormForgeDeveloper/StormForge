@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Protocols xmlns="http://www.StormForge.com/XMLProtocol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.StormForge.com/XMLProtocol ../../StormForge/Engine/Data/Protocol/ProtocolDef.xsd">
+	<ProtocolGroup Name="Relay" IsMobile="false" Desc="Relay Protocol">
+
+    <!-- ============================  Relay ============================================ -->
+
+	<C2SEvent Name="JoinRelayInstance" Reliable="false" Crypto="No" Trace="Debug1" Desc="Event for Player Join request.">
+		<Params Type="PlayerID" Name="PlayerID" Desc="Joining player id"/>
+	</C2SEvent>
+
+	<S2CEvent Name="JoinRelayInstanceRes" Reliable="false" Crypto="No" Trace="Debug1" Desc="Event for joined player">
+		<Params Type="Result" Name="Result" Desc="Join result"/>
+		<Params Type="RelayPlayerInfo" Name="MyPlayerInfo" Desc="Joined player info"/>
+		<Params Type="uint32" Name="RelayInstanceID" Desc="joined relay instance ID"/>
+		<Params Type="RelayPlayerInfo" IsArray="true" Name="MemberInfos" Desc="Member player IDs"/>
+	</S2CEvent>
+
+	<C2SEvent Name="LeaveRelayInstance" Reliable="false" Crypto="No" Trace="Debug1" Desc="Event for Player Join request.">
+		<Params Type="uint32" Name="RelayInstanceID" Desc="Relay Instance id"/>
+		<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
+	</C2SEvent>
+
+
+	<S2CEvent Name="PlayerJoin" Reliable="false" Crypto="No" Trace="Debug1" Desc="Event for Player joined.">
+		<Params Type="uint32" Name="RelayInstanceID" Desc="Relay Instance id"/>
+		<Params Type="RelayPlayerInfo" Name="JoinedPlayerInfo" Desc="Joined player ID"/>
+	</S2CEvent>
+
+	<S2CEvent Name="PlayerLeft" Reliable="false" Crypto="No" Trace="Debug1" Desc="Event for Player left.">
+		<Params Type="uint32" Name="RelayInstanceID" Desc="Relay Instance id"/>
+		<Params Type="PlayerID" Name="LeftPlayerID" Desc="Left player ID"/>
+		<Params Type="uint32" Name="KickedReason" Desc="Reason"/>
+	</S2CEvent>
+
+
+	<C2SEvent Name="RelayPacket" Reliable="false" Crypto="No" Trace="Debug1" Desc="Relay packet">
+		<Params Type="uint32" Name="RelayInstanceID" Desc="Relay Instance id"/>
+		<Params Type="uint64" Name="SenderRelayID" Desc="Sender player ID"/>
+		<Params Type="uint64" Name="TargetRelayMask" Desc="Target relay mask."/>
+	</C2SEvent>
+
+
+    <!-- =============================  ======================================= -->
+
+	</ProtocolGroup>
+</Protocols>

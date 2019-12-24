@@ -133,68 +133,69 @@
 				<xs:documentation>Type of parameter</xs:documentation>
 			</xs:annotation>
 			<xs:simpleType>
-        <xs:restriction base="xs:string">
-          <xs:enumeration value="intptr"/>
-          <xs:enumeration value="String"/>
-					<xs:enumeration value="int8"/>
-					<xs:enumeration value="uint8"/>
-					<xs:enumeration value="int16"/>
-					<xs:enumeration value="uint16"/>
-					<xs:enumeration value="int32"/>
-					<xs:enumeration value="uint32"/>
-					<xs:enumeration value="int64"/>
-					<xs:enumeration value="uint64"/>
-					<xs:enumeration value="uint8"/>
-					<xs:enumeration value="WORD"/>
-					<xs:enumeration value="DWORD"/>
-					<xs:enumeration value="QWORD"/>
-					<xs:enumeration value="FLOAT"/>
-					<xs:enumeration value="TransactionID"/>
-          <xs:enumeration value="ClusterID"/>
-					<xs:enumeration value="AccountID"/>
-          <xs:enumeration value="PlayerID"/>
-          <xs:enumeration value="FacebookUID"/>
-          <xs:enumeration value="AuthTicket"/>
-					<xs:enumeration value="GameInsID"/>
-					<xs:enumeration value="GameInsUID"/>
-          <xs:enumeration value="PartyUID"/>
+				<xs:restriction base="xs:string">
+				<xs:enumeration value="intptr"/>
+				<xs:enumeration value="String"/>
+				<xs:enumeration value="int8"/>
+				<xs:enumeration value="uint8"/>
+				<xs:enumeration value="int16"/>
+				<xs:enumeration value="uint16"/>
+				<xs:enumeration value="int32"/>
+				<xs:enumeration value="uint32"/>
+				<xs:enumeration value="int64"/>
+				<xs:enumeration value="uint64"/>
+				<xs:enumeration value="uint8"/>
+				<xs:enumeration value="WORD"/>
+				<xs:enumeration value="DWORD"/>
+				<xs:enumeration value="QWORD"/>
+				<xs:enumeration value="FLOAT"/>
+				<xs:enumeration value="TransactionID"/>
+				<xs:enumeration value="ClusterID"/>
+				<xs:enumeration value="AccountID"/>
+				<xs:enumeration value="PlayerID"/>
+				<xs:enumeration value="FacebookUID"/>
+				<xs:enumeration value="AuthTicket"/>
+				<xs:enumeration value="GameInsID"/>
+				<xs:enumeration value="GameInsUID"/>
+				<xs:enumeration value="PartyUID"/>
 
-          <xs:enumeration value="NotificationType"/>
+				<xs:enumeration value="NotificationType"/>
 
-          <xs:enumeration value="RankingType"/>
-          <xs:enumeration value="PlayerRole"/>
-          <xs:enumeration value="GameStateID"/>
-          <xs:enumeration value="GameWinner"/>
-          <xs:enumeration value="PlayerKilledReason"/>
-          <xs:enumeration value="PlayerRevealedReason"/>
-          
-          <xs:enumeration value="ClusterType"/>
-          <xs:enumeration value="ClusterMembership"/>
-          <xs:enumeration value="ServiceStatus"/>
+				<xs:enumeration value="RankingType"/>
+				<xs:enumeration value="PlayerRole"/>
+				<xs:enumeration value="GameStateID"/>
+				<xs:enumeration value="GameWinner"/>
+				<xs:enumeration value="PlayerKilledReason"/>
+				<xs:enumeration value="PlayerRevealedReason"/>
 
-          <xs:enumeration value="GameID"/>
+				<xs:enumeration value="ClusterType"/>
+				<xs:enumeration value="ClusterMembership"/>
+				<xs:enumeration value="ServiceStatus"/>
 
-          <xs:enumeration value="MatchingPlayerInformation"/>
-          <xs:enumeration value="MatchingQueueTicket"/>
-          <xs:enumeration value="LocalUID"/>
+				<xs:enumeration value="GameID"/>
 
-          <xs:enumeration value="Vector2"/>
-					<xs:enumeration value="Vector3"/>
-					<xs:enumeration value="Result"/>
-          <xs:enumeration value="NetClass"/>
-					<xs:enumeration value="NetAddress"/>
-					<xs:enumeration value="EntityID"/>
-					<xs:enumeration value="EntityUID"/>
-					<xs:enumeration value="ServerID"/>
-					<xs:enumeration value="RouteContext"/>
-          <xs:enumeration value="ServiceInformation"/>
-          <xs:enumeration value="PlayerInformation"/>
-          <xs:enumeration value="RankingPlayerInformation"/>
-          <xs:enumeration value="FriendInformation"/>
-          <xs:enumeration value="ServerFriendInformation"/>
-          <xs:enumeration value="TotalRankingPlayerInformation"/>
-          <xs:enumeration value="PerformanceCounterInfo"/>
-          <xs:enumeration value="PerformanceCounterInstanceInfo"/>
+				<xs:enumeration value="MatchingPlayerInformation"/>
+				<xs:enumeration value="MatchingQueueTicket"/>
+				<xs:enumeration value="LocalUID"/>
+
+				<xs:enumeration value="Vector2"/>
+				<xs:enumeration value="Vector3"/>
+				<xs:enumeration value="Result"/>
+				<xs:enumeration value="NetClass"/>
+				<xs:enumeration value="NetAddress"/>
+				<xs:enumeration value="EntityID"/>
+				<xs:enumeration value="EntityUID"/>
+				<xs:enumeration value="ServerID"/>
+				<xs:enumeration value="RouteContext"/>
+				<xs:enumeration value="ServiceInformation"/>
+				<xs:enumeration value="PlayerInformation"/>
+				<xs:enumeration value="RankingPlayerInformation"/>
+				<xs:enumeration value="FriendInformation"/>
+				<xs:enumeration value="ServerFriendInformation"/>
+				<xs:enumeration value="TotalRankingPlayerInformation"/>
+				<xs:enumeration value="PerformanceCounterInfo"/>
+				<xs:enumeration value="PerformanceCounterInstanceInfo"/>
+				<xs:enumeration value="RelayPlayerInfo"/>
 
         </xs:restriction>
 			</xs:simpleType>

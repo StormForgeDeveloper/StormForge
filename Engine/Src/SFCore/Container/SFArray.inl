@@ -95,7 +95,7 @@ namespace SF {
 			{
 				for (int iItem = 0; iItem < (int)m_Size; iItem++)
 				{
-					m_pDataPtr[iItem] = DefaultValue<DataType>();
+					m_pDataPtr[iItem] = {};
 				}
 			}
 			m_Size = 0;
@@ -178,7 +178,7 @@ namespace SF {
 			{
 				for (int iIdx = (int)m_Size; iIdx < index; iIdx++)
 				{
-					m_pDataPtr[iIdx] = DefaultValue<DataType>();
+					m_pDataPtr[iIdx] = {};
 				}
 
 				m_Size = index + 1;
@@ -276,7 +276,7 @@ namespace SF {
 			if (size() == 0)
 			{
 				Assert(false);
-				return DefaultValue<DataType>();
+				return {};
 			}
 
 			auto item = std::forward<DataType>(m_pDataPtr[size() - 1]);

@@ -138,7 +138,7 @@ namespace SF {
 		template <class DataType, class DataStorageType, class StorageAccessor>
 		Result CircularPageQueue<DataType,DataStorageType, StorageAccessor>::Enqueue(DataType&& item)
 		{
-			auto defaultValue = DefaultValue<DataType>();
+			DataType defaultValue = DataType{};
 
 			if (m_CircularPages == nullptr)
 				return ResultCode::INVALID_POINTER;
@@ -238,7 +238,7 @@ namespace SF {
 			if (m_CircularPages == nullptr)
 				return ResultCode::INVALID_POINTER;
 
-			auto defaultValue = DefaultValue<DataType>();
+			auto defaultValue = DataType{};
 
 			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::Exclusive, m_CircularBufferLock);
 
@@ -359,7 +359,7 @@ namespace SF {
 		template <class DataType, class DataStorageType, class StorageAccessor>
 		Result CircularPageQueue<DataType,DataStorageType, StorageAccessor>::GetFront(DataType& item)
 		{
-			auto defaultValue = DefaultValue<DataType>();
+			auto defaultValue = DataType{};
 			if (m_CircularPages == nullptr)
 				return ResultCode::INVALID_POINTER;
 

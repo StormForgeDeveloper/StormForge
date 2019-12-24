@@ -711,24 +711,6 @@ namespace SF {
 
 
 	Result GetLastResultCode();
-
-
-	template <typename DataType>
-	constexpr DataType DefaultValue() { return DataType(nullptr); }
-
-	template<> constexpr char DefaultValue<char>() { return 0; }
-	template<> constexpr int64_t DefaultValue<int64_t>() { return 0; }
-	template<> constexpr uint64_t DefaultValue<uint64_t>() { return 0; }
-	template<> constexpr int32_t DefaultValue<int32_t>() { return 0; }
-	template<> constexpr uint32_t DefaultValue<uint32_t>() { return 0; }
-	template<> constexpr int16_t DefaultValue<int16_t>() { return 0; }
-	template<> constexpr uint16_t DefaultValue<uint16_t>() { return 0; }
-	template<> constexpr int8_t DefaultValue<int8_t>() { return 0; }
-	template<> constexpr uint8_t DefaultValue<uint8_t>() { return 0; }
-	template<> constexpr float DefaultValue<float>() { return 0; }
-	template<> constexpr double DefaultValue<double>() { return 0; }
-
-	template<> inline NetAddress DefaultValue<NetAddress>() { return NetAddress(); }
 };
 
 

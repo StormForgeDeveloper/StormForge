@@ -201,20 +201,6 @@ namespace Net {
 			netErr(ResultCode::UNEXPECTED);
 		}
 
-		//iOptValue = Const::SVR_RECV_BUFFER_SIZE;
-		//if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
-		//{
-		//	SFLog(Net, Error, "RawUDP: Failed to change socket option SO_RCVBUF = {0}, err = {1}", iOptValue, GetLastNetSystemResult());
-		//	netErr(ResultCode::UNEXPECTED);
-		//}
-
-		//iOptValue = Const::SVR_SEND_BUFFER_SIZE;
-		//if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
-		//{
-		//	SFLog(Net, Error, "RawUDP: Failed to change socket option SO_SNDBUF = {0}, err = {1}", iOptValue, GetLastNetSystemResult());
-		//	netErr(ResultCode::UNEXPECTED);
-		//}
-
 		iOptValue = 0;
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		INT iOptLen = sizeof(iOptValue);

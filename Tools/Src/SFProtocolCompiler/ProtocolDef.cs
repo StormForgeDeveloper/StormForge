@@ -463,6 +463,9 @@ namespace ProtocolXml {
         
         /// <remarks/>
         PerformanceCounterInstanceInfo,
+        
+        /// <remarks/>
+        RelayPlayerInfo,
     }
     
     /// <remarks/>

@@ -165,8 +165,6 @@ namespace Net {
 } // namespace Net
 
 
-template<> inline Net::ConnectionState DefaultValue<Net::ConnectionState>() { return Net::ConnectionState::NONE; }
-template<> inline Net::PeerInfo DefaultValue<Net::PeerInfo>() { static Net::PeerInfo defaultValue; return defaultValue; }
 
 } // namespace SF
 

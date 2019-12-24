@@ -115,36 +115,28 @@ namespace SF {
 			class MapNode : public ObjectPoolObject
 			{
 			public:
-				KeyType Key;
-				ValueType Value;
+				KeyType Key{};
+				ValueType Value{};
 
-				INT Balance;
-				INT DepthOfChildren;
+				INT Balance = 0;
+				INT DepthOfChildren = 0;
 				// Number of nodes - include child
-				INT NumberOfChildren;
+				INT NumberOfChildren = 0;
 
-				uint UpdateSerial;
+				uint UpdateSerial = 0;
 
 				ReferenceAccessPoint Left;
 				ReferenceAccessPoint Right;
 
-				MapNode* NextPendingFree;
+				MapNode* NextPendingFree = nullptr;
 #ifdef DEBUG
 				CallStackTrace StackTrace;
 #endif
-				bool IsCloned;
+				bool IsCloned = false;
 
 				MapNode()
-					: Key(DefaultValue<KeyType>())
-					, Value(DefaultValue<ValueType>())
-					, Balance(0)
-					, DepthOfChildren(0)
-					, NumberOfChildren(0)
-					, UpdateSerial(0)
-					, Left(nullptr)
+					: Left(nullptr)
 					, Right(nullptr)
-					, NextPendingFree(nullptr)
-					, IsCloned(false)
 				{
 				}
 

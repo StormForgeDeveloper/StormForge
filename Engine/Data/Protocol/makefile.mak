@@ -17,6 +17,7 @@ PROTO_BUILD_PARAM_DOC=+out=$(OUTPUT_DOC_PATH) +gen=MessageGithubDocBuilder
 
 SOURCES=ProtocolGame.xml \
 	ProtocolLogin.xml \
+	ProtocolRelay.xml
 
 
 SOURCES_POSTFIXED=$(SOURCES:.xml=.h)

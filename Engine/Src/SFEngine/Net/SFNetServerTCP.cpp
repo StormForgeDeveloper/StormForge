@@ -320,16 +320,6 @@ namespace Net {
 			netErr( ResultCode::UNEXPECTED );
 		}
 
-		//if (GetSocketAddr().ss_family== AF_INET6)
-		//{
-		//	iOptValue = FALSE;
-		//	if (setsockopt(socket, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
-		//	{
-		//		SFLog(Net, Error, "Failed to change socket option IPV6_V6ONLY = {0}, err = {1:X8}", iOptValue, GetLastNetSystemResult());
-		//		netErr( ResultCode::UNEXPECTED );
-		//	}
-		//}
-
 		GetAnyBindAddr(GetSocketAddr(), bindAddr);
 		if (bind(socket, (sockaddr*)&bindAddr, GetSocketAddrSize()) == SOCKET_ERROR)
 		{

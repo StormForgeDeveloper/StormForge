@@ -44,7 +44,7 @@ namespace SF {
 
 		DoubleLinkedListNodeDataT()
 		{
-			Data = DefaultValue<DataType>();
+			Data = DataType{};
 		}
 
 		DoubleLinkedListNodeDataT(const DataType& pObj)

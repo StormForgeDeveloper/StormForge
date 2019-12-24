@@ -65,7 +65,7 @@ namespace SF
 					new ((void*)&Element[iEle]) DataType;
 				}
 
-				auto defaultValue = DefaultValue<DataType>();
+				auto defaultValue = DataType{};
 				for( CounterType iEle = 0; iEle < InItemCount; iEle++ )
 				{
 					Element[iEle] = defaultValue;

@@ -159,7 +159,6 @@ namespace SF {
 		//Watcher,			// Service data watcher, Only effect with replica model
 	};
 
-	template<> inline ClusterID DefaultValue<ClusterID>() { return ClusterID::Invalid; }
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -232,7 +231,6 @@ namespace SF {
 	typedef EntityUID	PartyUID;
 
 
-	template<> inline EntityUID DefaultValue<EntityUID>() { return EntityUID(); }
 
 
 #pragma pack(push)
@@ -346,7 +344,6 @@ namespace SF {
 		PlayerInformation& operator = (const PlayerInformation& src);
 		bool operator == (const PlayerInformation& src) const;
 	};
-	template<> inline PlayerInformation DefaultValue<PlayerInformation>() { return PlayerInformation(); }
 
 
 	struct RankingPlayerInformation : public PlayerInformation
@@ -361,7 +358,6 @@ namespace SF {
 		bool operator == (const RankingPlayerInformation& src) const;
 	};
 
-	template<> inline RankingPlayerInformation DefaultValue<RankingPlayerInformation>() { return RankingPlayerInformation(); }
 
 
 	struct FriendInformation : public RankingPlayerInformation
@@ -375,7 +371,6 @@ namespace SF {
 		bool operator == (const FriendInformation& src) const;
 	};
 
-	template<> inline FriendInformation DefaultValue<FriendInformation>() { return FriendInformation(); }
 	
 
 	struct TotalRankingPlayerInformation
@@ -412,7 +407,6 @@ namespace SF {
 		bool operator == (const TotalRankingPlayerInformation& src) const;
 	};
 
-	template<> inline TotalRankingPlayerInformation DefaultValue<TotalRankingPlayerInformation>() { static TotalRankingPlayerInformation defaultValue; return defaultValue; }
 
 
 	////////////////////////////////////////////////////////////////////////////
@@ -573,7 +567,17 @@ namespace SF {
 		operator uint128_t() const { uint128_t val = { QueueUID, QueueItemID }; return val; }
 	};
 
-	template<> inline MatchingQueueTicket DefaultValue<MatchingQueueTicket>() { static MatchingQueueTicket defaultValue; return defaultValue; }
+
+
+#pragma pack(4)
+
+	struct RelayPlayerInfo
+	{
+		uint64_t RelayClientID;	// 
+		PlayerID RelayPlayerID; // 
+	};
+
+
 
 #pragma pack(pop)
 
@@ -583,8 +587,6 @@ namespace SF {
 
 	// Game Instance
 	typedef EntityID	GameInsID;
-
-
 
 
 };

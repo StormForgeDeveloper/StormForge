@@ -86,6 +86,7 @@ set(SFCORE_LIB_FILES
 	Container/SFCircularBufferQueue.h
 	Container/SFCircularPageQueue.h
 	Container/SFCircularQueue.h
+	Container/SFCircularQueue.inl
 	Container/SFContainerTrait.h
 	Container/SFContainerTraitBase.h
 	Container/SFDoubleLinkedList.h
@@ -96,6 +97,7 @@ set(SFCORE_LIB_FILES
 	Container/SFIndexing.h
 	Container/SFOrderedLinkedList.h
 	Container/SFPageQueue.h
+	Container/SFPageQueue.inl
 	Container/SFArray.h
 	Container/SFSortedSet.h
 	Container/SFSortedArray.h
@@ -202,7 +204,6 @@ set(SFCORE_LIB_FILES
 	Variable/SFVariableStack.h
 	Variable/SFVariableTable.h
 	Container/SFCircularPageQueue.inl
-	Container/SFCircularQueue.inl
 	Container/SFDualSortedMap.inl
 	Container/SFArray.inl
 	Container/SFSortedArray.inl

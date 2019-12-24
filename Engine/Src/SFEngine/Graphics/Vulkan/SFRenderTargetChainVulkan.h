@@ -34,7 +34,6 @@ namespace SF
 		RenderTargetChainVulkan_SwapChainImage() { memset(this, 0, sizeof(RenderTargetChainVulkan_SwapChainImage)); }
 	};
 
-	template<> inline RenderTargetChainVulkan_SwapChainImage DefaultValue<RenderTargetChainVulkan_SwapChainImage>() { static RenderTargetChainVulkan_SwapChainImage dummy; return dummy; }
 
 
 	////////////////////////////////////////////////////////////////////

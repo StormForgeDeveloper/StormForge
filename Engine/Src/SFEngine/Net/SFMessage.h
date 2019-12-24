@@ -290,8 +290,6 @@ namespace Message {
 
 	typedef SharedPointerT<Message::MessageData> MessageDataPtr;
 
-	template<> inline SharedPointerT<Message::MessageData> DefaultValue<SharedPointerT<Message::MessageData>>() { return SharedPointerT<Message::MessageData>(); }
-	template<> inline Message::MessageID DefaultValue<Message::MessageID>() { return Message::MessageID(); }
 
 
 } // SF

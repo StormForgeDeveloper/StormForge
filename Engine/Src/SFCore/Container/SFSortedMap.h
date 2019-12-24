@@ -45,8 +45,8 @@ namespace SF {
 			class MapNode : public ObjectPoolObject
 			{
 			public:
-				KeyType Key;
-				ValueType Value;
+				KeyType Key{};
+				ValueType Value{};
 
 				int Balance = 0;
 				int DepthOfChildren = 0;
@@ -57,9 +57,7 @@ namespace SF {
 				ReferenceAccessPoint Right = nullptr;
 
 				MapNode()
-					: Key(DefaultValue<KeyType>())
 				{
-					Value = DefaultValue<ValueType>();
 				}
 
 				void SetValue()
@@ -67,8 +65,8 @@ namespace SF {
 					Balance = 0;
 					DepthOfChildren = 0;
 					NumberOfChildren = 0;
-					Key = 0;
-					Value = 0;
+					Key = KeyType{};
+					Value = ValueType{};
 					Left = nullptr;
 					Right = nullptr;
 				}

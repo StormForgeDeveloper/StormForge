@@ -78,7 +78,6 @@ namespace SF {
 
 	extern template class SharedPointerT < TimerAction >;
 
-	template<> inline SharedPointerT < TimerAction > DefaultValue<SharedPointerT < TimerAction >>() { return SharedPointerT < TimerAction >(); }
 
 
 }; // namespace SF

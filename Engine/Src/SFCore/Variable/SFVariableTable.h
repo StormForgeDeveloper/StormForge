@@ -68,7 +68,7 @@ namespace SF {
 		{
 			Variable* pVariable = GetVariable(name);
 			if (pVariable == nullptr)
-				return DefaultValue<ValueType>();
+				return ValueType{};
 
 			return pVariable->GetValue<ValueType>();
 		}
@@ -122,7 +122,7 @@ namespace SF {
 		{
 			Variable* pVariable = GetVariable(name);
 			if (pVariable == nullptr)
-				return DefaultValue<ValueType>();
+				return ValueType{};
 
 			return pVariable->GetValue<ValueType>();
 		}

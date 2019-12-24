@@ -36,13 +36,13 @@ namespace SF {
 		private:
 
 			// Container
-			mutable SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>*  m_Container;
+			mutable SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>*  m_Container = nullptr;
 
-			mutable int           m_CurrentIndex;
+			mutable int           m_CurrentIndex = -1;
 
 			// used when m_CurrentIndex or m_Container is invalid
-			bool m_ValidKey;
-			KeyType m_KeyValue;
+			bool m_ValidKey = false;
+			KeyType m_KeyValue{};
 
 		private:
 			Iterator(SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>* container, int currentIndex);
@@ -153,7 +153,7 @@ namespace SF {
 		// Find a key value
 		Result Find(const KeyType& key, ValueType& value, int64_t *pOrder = nullptr);
 		Result find(const KeyType& key, ValueType& value, int64_t *pOrder = nullptr) { return Find(key, value, pOrder); }
-		ValueType find(const KeyType& key) { ValueType value = DefaultValue<ValueType>();  Find(key, value); return value; }
+		ValueType find(const KeyType& key) { ValueType value{};  Find(key, value); return value; }
 
 		Iterator operator[](const KeyType& key);
 

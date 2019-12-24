@@ -1120,7 +1120,7 @@ namespace SF {
 			//			return true;
 			//		});
 			//#endif
-			pNode->Value = DefaultValue<ValueType>();
+			pNode->Value = ValueType{};
 			m_pNodePool->Free(pNode);
 		}
 

@@ -72,7 +72,7 @@ namespace SF {
 		{
 			Variable* pVariable = GetFromFront();
 			if (pVariable == nullptr)
-				return DefaultValue<ValueType>();
+				return ValueType{};
 
 			// After pop call, the variable already released
 			auto result = pVariable->GetValue<ValueType>();

@@ -32,10 +32,6 @@ namespace SF {
 
 		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
 		SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Iterator::Iterator()
-			: m_Container(nullptr)
-			, m_CurrentIndex(-1)
-			, m_ValidKey(false)
-			, m_KeyValue(DefaultValue<KeyType>())
 		{
 		}
 
@@ -80,7 +76,7 @@ namespace SF {
 			if (!IsValid())
 			{
 				assert(m_Container != nullptr && m_CurrentIndex >= 0 && m_CurrentIndex < (int)m_Container->size());
-				return DefaultValue<ValueType>();
+				return ValueType{};
 			}
 
 			return m_Container->GetValueAt(m_CurrentIndex);
@@ -239,7 +235,7 @@ namespace SF {
 		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
 		void SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Clear()
 		{
-			auto defaultValue = DefaultValue<ValueType>();
+			auto defaultValue = ValueType{};
 			for (size_t iItem = 0; iItem < m_ItemCount; iItem++)
 			{
 				m_ValueArray[iItem] = defaultValue;
@@ -350,8 +346,8 @@ namespace SF {
 
 					for (; iPos < m_ItemCount; iPos++)
 					{
-						m_KeyArray[iPos] = DefaultValue<KeyType>();
-						m_ValueArray[iPos] = DefaultValue<ValueType>();
+						m_KeyArray[iPos] = KeyType{};
+						m_ValueArray[iPos] = ValueType{};
 					}
 				}
 			}
@@ -366,8 +362,8 @@ namespace SF {
 				{
 					for (uint iPos = (uint)newSize; iPos < m_ItemCount; iPos++)
 					{
-						m_KeyArray[iPos] = DefaultValue<KeyType>();
-						m_ValueArray[iPos] = DefaultValue<ValueType>();
+						m_KeyArray[iPos] = KeyType{};
+						m_ValueArray[iPos] = ValueType{};
 					}
 				}
 			}
@@ -383,7 +379,7 @@ namespace SF {
 		KeyType SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::GetKeyAt(int64_t index)
 		{
 			if (index < 0 || index >= (int64_t)m_ItemCount)
-				return DefaultValue<KeyType>();
+				return KeyType{};
 
 			return m_KeyArray[index];
 		}
@@ -393,7 +389,7 @@ namespace SF {
 		ValueType SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::GetValueAt(int64_t index)
 		{
 			if (index < 0 || index >= (decltype(index))m_ItemCount)
-				return DefaultValue<ValueType>();
+				return ValueType{};
 
 			return m_ValueArray[index];
 		}
@@ -516,8 +512,8 @@ namespace SF {
 			}
 			else
 			{
-				m_KeyArray[index] = DefaultValue<KeyType>();
-				m_ValueArray[index] = DefaultValue<ValueType>();
+				m_KeyArray[index] = KeyType{};
+				m_ValueArray[index] = ValueType{};
 			}
 
 			return ResultCode::SUCCESS;

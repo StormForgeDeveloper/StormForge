@@ -252,6 +252,7 @@ namespace SF
             new TypeMap( ParameterType.TotalRankingPlayerInformation, Marshal.SizeOf(typeof(TotalRankingPlayerInformation)), typeof(TotalRankingPlayerInformation) ),
             new TypeMap( ParameterType.PerformanceCounterInfo, Marshal.SizeOf(typeof(PerformanceCounterInfo)), typeof(PerformanceCounterInfo) ),
             new TypeMap( ParameterType.PerformanceCounterInstanceInfo, Marshal.SizeOf(typeof(PerformanceCounterInstanceInfo)), typeof(PerformanceCounterInstanceInfo) ),
+            new TypeMap( ParameterType.RelayPlayerInfo, Marshal.SizeOf(typeof(RelayPlayerInfo)), typeof(RelayPlayerInfo) ),
         };
 
         static Dictionary<ParameterType, TypeMap> MapToCSharp = new Dictionary<ParameterType, TypeMap>();

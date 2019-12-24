@@ -84,9 +84,6 @@ namespace Net {
 	extern template class SharedPointerT <Net::ConnectionGroup>;
 	extern template class WeakPointerT < Net::ConnectionGroup >;
 
-	template<> inline SharedPointerT<Net::ConnectionGroup> DefaultValue<SharedPointerT<Net::ConnectionGroup>>() { return SharedPointerT<Net::ConnectionGroup>(); }
-	template<> inline WeakPointerT<Net::ConnectionGroup> DefaultValue<WeakPointerT<Net::ConnectionGroup>>() { return WeakPointerT<Net::ConnectionGroup>(); }
-	template<> inline Net::ConnectionGroup::EventInformation DefaultValue<Net::ConnectionGroup::EventInformation>() { return Net::ConnectionGroup::EventInformation(); }
 
 
 }; // namespace SF

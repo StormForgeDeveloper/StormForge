@@ -132,7 +132,6 @@ namespace Net {
 
 } // namespace Net
 
-template<> inline ConnectionManagerService::Sockaddress DefaultValue<ConnectionManagerService::Sockaddress>() { return ConnectionManagerService::Sockaddress(); }
 
 } // namespace SF
 

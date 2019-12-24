@@ -45,7 +45,6 @@ namespace SF {
 
 
 
-	template<> inline SceneNodeComponentMesh_SubMesh DefaultValue<SceneNodeComponentMesh_SubMesh>() { return SceneNodeComponentMesh_SubMesh(); }
 
 	////////////////////////////////////////////////////////////////////////////////////////
 	//

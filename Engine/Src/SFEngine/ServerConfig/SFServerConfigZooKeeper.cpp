@@ -15,6 +15,7 @@
 
 #include "SFServerConfigZooKeeper.h"
 #include "String/SFFixedString32.h"
+#include "Util/SFLog.h"
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -495,7 +496,10 @@ namespace SF
 
 	Result ServerConfigZooKeeper::LoadConfig(const String& nodePath)
 	{
-		Result result;
+		FunctionContext result([](Result result) 
+		{
+			SFLog(Engine, Error, "ServerConfigZooKeeper::LoadConfig, has failed {0}", result);
+		});
 		String rootPath;
 
 		m_Config.Clear();
@@ -533,7 +537,6 @@ namespace SF
 		if (!result)
 			return result;
 
-
 		rootPath.Format("{0}/{1}", nodePath, "GameCluster");
 		result = ForeachChild(rootPath, [&](const String& nodeName)
 		{
@@ -556,8 +559,6 @@ namespace SF
 		});
 		if (!result)
 			return result;
-
-
 
 		return result;
 	}

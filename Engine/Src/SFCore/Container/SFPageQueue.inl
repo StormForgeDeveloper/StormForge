@@ -183,7 +183,7 @@ namespace SF
 	Result PageQueue<DataType>::Enqueue(DataType&& item)
 	{
 		//Result hr = ResultCode::SUCCESS;
-		auto defaultValue = DefaultValue<DataType>();
+		auto defaultValue = DataType{};
 
 		Assert(item != defaultValue);
 		if (item == defaultValue)
@@ -255,7 +255,7 @@ namespace SF
 	template <class DataType>
 	Result PageQueue<DataType>::Dequeue(DataType& item)
 	{
-		auto defaultValue = DefaultValue<DataType>();
+		auto defaultValue = DataType{};
 		// empty state / read count is bigger than written count
 		if (m_DequeueTicket.load(std::memory_order_relaxed) >= m_EnqueueTicket.load(std::memory_order_relaxed)) return ResultCode::FAIL;
 
@@ -313,7 +313,7 @@ namespace SF
 	Result PageQueue<DataType>::DequeueMT(DataType& item, DurationMS uiCheckInterval)
 	{
 		Result hr = ResultCode::SUCCESS;
-		auto defaultValue = DefaultValue<DataType>();
+		auto defaultValue = DataType{};
 
 		// total ticket number
 		CounterType myDequeueTicket = m_DequeueTicket.fetch_add(1, std::memory_order_relaxed);
@@ -371,7 +371,7 @@ namespace SF
 	template <class DataType>
 	Result PageQueue<DataType>::GetFront(DataType& item)
 	{
-		auto defaultValue = DefaultValue<DataType>();
+		auto defaultValue = DataType{};
 		// empty state / read count is bigger than written count
 		if (m_DequeueTicket.load(std::memory_order_relaxed) >= m_EnqueueTicket.load(std::memory_order_relaxed)) return ResultCode::FAIL;
 

@@ -245,7 +245,7 @@ namespace SF {
 		KeyType SortedSet<KeyType>::GetKeyAt(int64_t index) const
 		{
 			if (index < 0 || index >= (int64_t)m_ItemCount)
-				return DefaultValue<KeyType>();
+				return KeyType{};
 
 			return m_KeyArray[index];
 		}
@@ -338,7 +338,7 @@ namespace SF {
 			}
 			else
 			{
-				m_KeyArray[index] = DefaultValue<KeyType>();
+				m_KeyArray[index] = KeyType{};
 			}
 
 			return ResultCode::SUCCESS;

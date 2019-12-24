@@ -92,7 +92,7 @@ namespace SF
 		{
 			auto pVariable = GetVariable();
 			if (pVariable == nullptr)
-				return DefaultValue<ValueType>();
+				return ValueType{};
 
 			return pVariable->GetValue<ValueType>();
 		}
