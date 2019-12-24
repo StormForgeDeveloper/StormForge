@@ -154,6 +154,15 @@ namespace SF
 			{}
 		};
 
+		struct ServerModuleRelayService : public ServerModulePublicService
+		{
+			uint32_t MaximumRelayInstances = 1000;
+
+			ServerModuleRelayService(IHeap& heap)
+				: ServerModulePublicService(heap)
+			{}
+		};
+
 		struct GenericServer
 		{
 			GameCluster* pGameCluster = nullptr; // Game Cluster pointer if it's under game cluster
@@ -189,7 +198,7 @@ namespace SF
 			{}
 		};
 
-
+		// deprecated use module
 		struct ServerComponent
 		{
 			String ComponentName;
@@ -200,6 +209,7 @@ namespace SF
 			virtual ~ServerComponent() {}
 		};
 
+		// deprecated use module
 		struct ServerComponentGoogle : public ServerComponent
 		{
 			String Account;
@@ -215,6 +225,7 @@ namespace SF
 			virtual ~ServerComponentGoogle() {}
 		};
 
+		// deprecated use module
 		struct ServerComponentIOS : public ServerComponent
 		{
 			String URL;
@@ -228,6 +239,7 @@ namespace SF
 			virtual ~ServerComponentIOS() {}
 		};
 
+		// Gradually deprecated
 		struct GameServer : public GenericServer
 		{
 
@@ -239,7 +251,7 @@ namespace SF
 			}
 		};
 
-
+		// Gradually deprecated
 		struct GameInstanceServer : public GenericServer
 		{
 			GameInstanceServer(IHeap& heap) : GenericServer(heap) {}

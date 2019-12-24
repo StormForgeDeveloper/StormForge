@@ -210,11 +210,29 @@ namespace SF
 			pServerModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ForeachElement(pNode->children, [&](xmlNode* pChild)
 			{
-				if (FixedString32((const char*)pChild->name) == "NetPublic")
+				if (FixedString32((const char*)pChild->name) == "NetPublic"_crc32c)
 					return ParseXMLNetPublic(pChild, ((ServerConfig::ServerModulePublicService*)pServerModule)->PublicNet);
 
 				return ResultCode::SUCCESS;
 			});
+			break;
+		case "ModRelay"_crc:
+			pServerModule = new(GetHeap()) ServerConfig::ServerModuleRelayService(GetHeap());
+			result = ForeachElement(pNode->children, [&](xmlNode* pChild)
+			{
+				if (FixedString32((const char*)pChild->name) == "NetPublic"_crc32c)
+					return ParseXMLNetPublic(pChild, ((ServerConfig::ServerModulePublicService*)pServerModule)->PublicNet);
+
+				return ResultCode::SUCCESS;
+			});
+			{
+				auto MaximumRelayInstances = (const char*)xmlGetProp(pNode, (xmlChar*)"MaximumRelayInstances");
+				if (MaximumRelayInstances != nullptr)
+				{
+					((ServerConfig::ServerModuleRelayService*)pServerModule)->MaximumRelayInstances = atoi(MaximumRelayInstances);
+
+				}
+			}
 			break;
 		case "NetPrivate"_crc:
 			// Skip these They are not module

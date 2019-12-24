@@ -60,6 +60,9 @@ namespace SF
 		constexpr bool operator == (const FixedString32& op) const { return m_Crc == op.m_Crc; }
 		constexpr bool operator != (const FixedString32& op) const { return m_Crc != op.m_Crc; }
 
+		constexpr bool operator == (const uint32_t op) const { return m_Crc == op; }
+		constexpr bool operator != (const uint32_t op) const { return m_Crc != op; }
+
 		const char* ToString() const;
 	};
 

@@ -66,6 +66,9 @@ namespace SF {
 		constexpr bool operator == (const FixedString& op) const { return m_Hash == op.m_Hash; }
 		constexpr bool operator != (const FixedString& op) const { return m_Hash != op.m_Hash; }
 
+		constexpr bool operator == (const uint64_t op) const { return m_Hash == op; }
+		constexpr bool operator != (const uint64_t op) const { return m_Hash != op; }
+
 		const char* ToString() const;
 	};
 
