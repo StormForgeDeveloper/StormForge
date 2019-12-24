@@ -17,9 +17,6 @@
 
 
 
-inline bool operator == (const sockaddr_in6& op1, const sockaddr_in6& op2) { return memcmp(&op1, &op2, sizeof(op1)) == 0; }
-inline bool operator == (const sockaddr_storage& op1, const sockaddr_storage& op2) { return memcmp(&op1, &op2, sizeof(op1)) == 0; }
-
 namespace SF {
 
 

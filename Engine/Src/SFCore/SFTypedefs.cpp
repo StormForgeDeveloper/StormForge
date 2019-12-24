@@ -17,6 +17,36 @@
 
 
 
+/////////////////////////////////////////////////////////////////////
+//
+//	Type utility for global
+//
+
+bool operator == (const sockaddr_storage& op1, const sockaddr_storage& op2)
+{
+	if (op1.ss_family != op2.ss_family)
+		return false;
+
+	if (op1.ss_family == AF_INET)
+	{
+		return memcmp((sockaddr_in*)&op1, (sockaddr_in*)&op2, sizeof(sockaddr_in)) == 0;
+	}
+	else
+	{
+		return memcmp((sockaddr_in6*)&op1, (sockaddr_in6*)&op2, sizeof(sockaddr_in6)) == 0;
+	}
+}
+
+bool operator == (const sockaddr_in& op1, const sockaddr_in& op2)
+{
+	return memcmp((sockaddr_in*)&op1, (sockaddr_in*)&op2, sizeof(sockaddr_in)) == 0;
+}
+
+bool operator == (const sockaddr_in6& op1, const sockaddr_in6& op2)
+{
+	return memcmp((sockaddr_in6*)&op1, (sockaddr_in6*)&op2, sizeof(sockaddr_in6)) == 0;
+}
+
 
 
 namespace SF {

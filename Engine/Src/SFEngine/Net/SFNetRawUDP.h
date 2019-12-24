@@ -4,7 +4,7 @@
 // 
 // Author : KyungKun Ko
 //
-// Description : Net Client
+// Description : Net Raw UDP
 //	
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ namespace Net {
 		Result SendMsg(const sockaddr_storage& dest, SharedPointerT<Message::MessageData>& pMsg);
 
 
-		// called when incoming message occure
+		// called when incoming message occur
 		Result OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff);
 	};
 
