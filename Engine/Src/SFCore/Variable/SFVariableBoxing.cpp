@@ -186,6 +186,14 @@ namespace SF
 			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(Null)");
 	}
 
+	Result _ToString(ToStringContext& context, const std::string& value)
+	{
+		if (value.length() > 0)
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, value.c_str());
+		else
+			return ResultCode::SUCCESS;
+	}
+
 
 
 }; // namespace StrUtil

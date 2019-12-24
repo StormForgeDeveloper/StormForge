@@ -207,6 +207,7 @@ namespace SF {
 #endif
 	Result _ToString(ToStringContext& context, const char* value);
 	Result _ToString(ToStringContext& context, const wchar_t* value);
+	Result _ToString(ToStringContext& context, const std::string& value);
 
 
 
@@ -296,6 +297,7 @@ namespace SF {
 	DEFINE_BOXING_TEMPLETE(FixedString, VariableFixedString);
 	DEFINE_BOXING_TEMPLETE(FixedString32, VariableFixedString32);
 	DEFINE_BOXING_TEMPLETE(Result, VariableResult);
+	DEFINE_BOXING_TEMPLETE_BYREFERENCE(std::string);
 
 	// They comes from OS system types, but not referenced by std types on windows(VC compiler)
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS

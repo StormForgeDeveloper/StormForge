@@ -148,7 +148,7 @@ namespace Log {
 
 
 	// Intended to replace goto Proc_End style with c++ way
-	// Function Result handling. If error Func has assigned, it will run the function if the function has failed 
+	// Function Result handling. If error Func has assigned, it will run the error function on failure when the function scope is finished.
 	template<typename ErrorFunc = std::function<void(Result result)>>
 	class FunctionContext
 	{
