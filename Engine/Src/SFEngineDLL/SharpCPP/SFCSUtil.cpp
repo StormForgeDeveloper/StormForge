@@ -141,6 +141,11 @@ namespace SF
 		m_SetFunc(varName, "TotalRankingPlayerInformation", &value);
 	}
 
+	void VariableMapBuilderCS::SetVariable(const char* varName, const RelayPlayerInfo& value)
+	{
+		m_SetFunc(varName, "RelayPlayerInfo", &value);
+	}
+
 	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<bool>& value)
 	{
 		m_SetArrayFunc(varName, "bool", (int)value.size(), value.data());
@@ -204,6 +209,11 @@ namespace SF
 	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<TotalRankingPlayerInformation>& value)
 	{
 		m_SetArrayFunc(varName, "TotalRankingPlayerInformation", (int)value.size(), value.data());
+	}
+
+	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<RelayPlayerInfo>& value)
+	{
+		m_SetArrayFunc(varName, "RelayPlayerInfo", (int)value.size(), value.data());
 	}
 
 

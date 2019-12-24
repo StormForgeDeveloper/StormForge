@@ -131,6 +131,20 @@ namespace SF {
 		return ResultCode::SUCCESS;
 	}
 
+	Result _ToString(ToStringContext& context, const RelayPlayerInfo& value)
+	{
+		if (!(_IToA(context, value.RelayClientID)))
+			return ResultCode::FAIL;
+
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+			return ResultCode::FAIL;
+
+		if (!(_IToA(context, value.RelayPlayerID)))
+			return ResultCode::FAIL;
+
+		return ResultCode::SUCCESS;
+	}
+
 
 	void TestEngineTypes()
 	{
@@ -157,7 +171,6 @@ namespace SF {
 
 	}
 
-	//template Result ToStringArray(ToStringContext& context, const Array<MatchingQueueTicket>& value);
 }
 
 

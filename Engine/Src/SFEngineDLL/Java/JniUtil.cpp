@@ -201,6 +201,14 @@ namespace SF
 		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
 	}
 
+	void VariableMapBuilderJObject::SetVariable(const char* varName, const RelayPlayerInfo& value)
+	{
+		jobject jobj = ToJavaObject(value);
+
+		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
+	}
+
 
 
 
@@ -345,6 +353,19 @@ namespace SF
 		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, valueArray);
 	}
 
+	void VariableMapBuilderJObject::SetVariable(const char* varName, const Array<RelayPlayerInfo>& value)
+	{
+		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+
+		auto objectClass = m_Env->FindClass("java/lang/Object");
+		auto valueArray = m_Env->NewObjectArray(value.size(), objectClass, nullptr);
+
+		for (int iValue = 0; iValue < value.size(); iValue++)
+			m_Env->SetObjectArrayElement(valueArray, iValue, ToJavaObject(value[iValue]));
+
+		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, valueArray);
+	}
+
 
 
 	jobject VariableMapBuilderJObject::ToJavaObject(const FriendInformation& value)
@@ -368,6 +389,19 @@ namespace SF
 		jobject jobj = m_Env->NewObject(jcls, constructorID, (int)value.RankingID, (int)value.Ranking, (jlong)value.PlayerID, (jlong)value.FBUID, jstrName, (int)value.Level, (int)value.ScoreLow, (int)value.ScoreHigh);
 		return jobj;
 	}
+
+
+	jobject VariableMapBuilderJObject::ToJavaObject(const RelayPlayerInfo& value)
+	{
+		static jclass jcls = m_Env->FindClass("java/com/sf/SFRelayPlayerInfo");
+		static jmethodID constructorID = m_Env->GetMethodID(jcls, "<init>", "(J;J)V");
+
+		jstring jstrName = m_Env->NewStringUTF(value.NickName);
+
+		jobject jobj = m_Env->NewObject(jcls, constructorID, (jlong)value.RelayClientID, (jlong)value.RelayPlayerID);
+		return jobj;
+	}
+
 }
 
 

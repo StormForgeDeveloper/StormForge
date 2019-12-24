@@ -571,10 +571,14 @@ namespace SF {
 
 #pragma pack(4)
 
+	// Relay player information 
 	struct RelayPlayerInfo
 	{
-		uint64_t RelayClientID;	// 
-		PlayerID RelayPlayerID; // 
+		uint64_t RelayClientID;	// Relay client id. unique in relay instance
+		PlayerID RelayPlayerID; // PlayerID
+
+		bool operator == (const RelayPlayerInfo& op1) const { return RelayClientID == op1.RelayClientID && RelayPlayerID == op1.RelayPlayerID; }
+		bool operator != (const RelayPlayerInfo& op1) const { return RelayClientID != op1.RelayClientID || RelayPlayerID != op1.RelayPlayerID; }
 	};
 
 
