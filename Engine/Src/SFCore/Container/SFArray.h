@@ -398,7 +398,7 @@ namespace SF {
 
 		private:
 			// static storage for remove heap alloc
-			DataType	m_pDefautlBuffer[DefaultBufferSize];
+			DataType	m_pDefaultBuffer[DefaultBufferSize];
 
 			// Data pointer
 			DataType*	m_pAllocatedBuffer;

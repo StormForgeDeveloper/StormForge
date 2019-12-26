@@ -56,6 +56,8 @@ namespace SF {
 			: Data(std::forward<DataType>(pObj))
 		{
 		}
+
+		virtual ~DoubleLinkedListNodeDataT() = default;
 	};
 
 

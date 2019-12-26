@@ -48,19 +48,19 @@ namespace SF
 				JoinRelayInstanceC2SEvt()
 					{}
 
-				JoinRelayInstanceC2SEvt( MessageDataPtr &pMsg )
-					:MessageBase(pMsg)
+				JoinRelayInstanceC2SEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 
-				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
 				virtual Result ParseMessage( MessageData* pIMsg );
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
 				static MessageData* Create( IHeap& memHeap, const PlayerID &InPlayerID );
 
@@ -95,8 +95,8 @@ namespace SF
 				JoinRelayInstanceResS2CEvt()
 					{}
 
-				JoinRelayInstanceResS2CEvt( MessageDataPtr &pMsg )
-					:MessageBase(pMsg)
+				JoinRelayInstanceResS2CEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -106,11 +106,11 @@ namespace SF
 				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
 				const Array<RelayPlayerInfo>& GetMemberInfos() const	{ return m_MemberInfos; };
 
-				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
 				virtual Result ParseMessage( MessageData* pIMsg );
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
 				static MessageData* Create( IHeap& memHeap, const Result &InResult, const RelayPlayerInfo &InMyPlayerInfo, const uint32_t &InRelayInstanceID, const Array<RelayPlayerInfo>& InMemberInfos );
 
@@ -142,8 +142,8 @@ namespace SF
 				LeaveRelayInstanceC2SEvt()
 					{}
 
-				LeaveRelayInstanceC2SEvt( MessageDataPtr &pMsg )
-					:MessageBase(pMsg)
+				LeaveRelayInstanceC2SEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -151,11 +151,11 @@ namespace SF
 				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 
-				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
 				virtual Result ParseMessage( MessageData* pIMsg );
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID );
 
@@ -188,8 +188,8 @@ namespace SF
 				PlayerJoinS2CEvt()
 					{}
 
-				PlayerJoinS2CEvt( MessageDataPtr &pMsg )
-					:MessageBase(pMsg)
+				PlayerJoinS2CEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -197,11 +197,11 @@ namespace SF
 				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
 				const RelayPlayerInfo& GetJoinedPlayerInfo() const	{ return m_JoinedPlayerInfo; };
 
-				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
 				virtual Result ParseMessage( MessageData* pIMsg );
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo );
 
@@ -235,8 +235,8 @@ namespace SF
 				PlayerLeftS2CEvt()
 					{}
 
-				PlayerLeftS2CEvt( MessageDataPtr &pMsg )
-					:MessageBase(pMsg)
+				PlayerLeftS2CEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -245,11 +245,11 @@ namespace SF
 				const PlayerID& GetLeftPlayerID() const	{ return m_LeftPlayerID; };
 				const uint32_t& GetKickedReason() const	{ return m_KickedReason; };
 
-				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
 				virtual Result ParseMessage( MessageData* pIMsg );
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason );
 
@@ -283,8 +283,8 @@ namespace SF
 				RelayPacketC2SEvt()
 					{}
 
-				RelayPacketC2SEvt( MessageDataPtr &pMsg )
-					:MessageBase(pMsg)
+				RelayPacketC2SEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -293,11 +293,11 @@ namespace SF
 				const uint64_t& GetSenderRelayID() const	{ return m_SenderRelayID; };
 				const uint64_t& GetTargetRelayMask() const	{ return m_TargetRelayMask; };
 
-				static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
 				virtual Result ParseMessage( MessageData* pIMsg );
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint64_t &InSenderRelayID, const uint64_t &InTargetRelayMask );
 

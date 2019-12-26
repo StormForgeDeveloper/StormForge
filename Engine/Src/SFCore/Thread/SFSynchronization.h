@@ -219,6 +219,7 @@ namespace SF {
 		//std::atomic<int32_t>	m_NonExclusiveWorkerCount[3];
 		std::atomic<uint32_t>	m_NonExclusiveCount;
 		CriticalSection			m_ExLock;
+		bool					m_IsLocked = false;
 
 	public:
 		inline TicketLock();
@@ -232,6 +233,9 @@ namespace SF {
 		inline void NonExLock();
 		inline void NonExUnlock();
 
+		// checking only ex lock state
+		// Use only for debugging
+		bool IsLocked() { return m_IsLocked; }
 	};
 
 	// Fake ticket lock

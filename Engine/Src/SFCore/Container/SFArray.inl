@@ -392,7 +392,7 @@ namespace SF {
 			: Array<DataType>(heap)
 			, m_pAllocatedBuffer(nullptr)
 		{
-			Array<DataType>::SetBuffPtr(DefaultBufferSize, m_pDefautlBuffer);
+			Array<DataType>::SetBuffPtr(DefaultBufferSize, m_pDefaultBuffer);
 		}
 
 

@@ -72,6 +72,9 @@ namespace SF {
 		// Log filter mask for file output
 		LogChannelMask LogOutputFile = { 0 };
 
+		// Log filter mask for file output
+		LogChannelMask LogOutputCommon = { 0 };
+
 		// Log file name prefix
 		const char* LogFilePrefix = nullptr;
 	};

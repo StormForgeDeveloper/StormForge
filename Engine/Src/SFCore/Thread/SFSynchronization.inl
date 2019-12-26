@@ -142,6 +142,7 @@ namespace SF {
 	void TicketLock::ExLock()
 	{
 		m_ExLock.Lock();
+		m_IsLocked = true;
 
 		// increase non exclusive index before we put free state
 		//auto curNonExIndex = m_NonExclusiveIndex.load(std::memory_order_acquire) % countof(m_NonExclusiveWorkerCount);
@@ -157,6 +158,7 @@ namespace SF {
 
 	void TicketLock::ExUnlock()
 	{
+		m_IsLocked = false;
 		m_ExLock.UnLock();
 	}
 

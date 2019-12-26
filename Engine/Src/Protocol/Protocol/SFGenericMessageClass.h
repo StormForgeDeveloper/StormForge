@@ -31,8 +31,8 @@ namespace Message {
 			FailResultS2CEvt()
 				{}
 
-			FailResultS2CEvt( MessageDataPtr &pMsg )
-				:MessageBase(pMsg)
+			FailResultS2CEvt( MessageDataPtr &&pMsg )
+				:MessageBase(std::forward<MessageDataPtr>(pMsg))
 				{}
 
 			const Context& GetContext() const	{ return m_Context; };

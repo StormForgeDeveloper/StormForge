@@ -134,7 +134,7 @@ namespace ProtocolCompiler
         void BuildMessageTrace(string Name, string typeName, string traceChannel, Parameter[] parameters)
         {
             string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::TraceOut(const char* prefix, MessageDataPtr& pMsg)");
+            OpenSection("Result", strClassName + "::TraceOut(const char* prefix, const MessageDataPtr& pMsg)");
 
             string strTrace = string.Format("{0}, \"{1}:{{0}}:{{1}} ", traceChannel, Name, typeName);
             string strTraceMember = "prefix, pMsg->GetMessageHeader()->Length";
@@ -328,8 +328,8 @@ namespace ProtocolCompiler
             MatchIndent(1); OutStream.WriteLine("{}");
             NewLine();
 
-            MatchIndent(); OutStream.WriteLine(strClassName + "( MessageDataPtr &pMsg )");
-            MatchIndent(1); OutStream.WriteLine(":MessageBase(pMsg)");
+            MatchIndent(); OutStream.WriteLine(strClassName + "( MessageDataPtr &&pMsg )");
+            MatchIndent(1); OutStream.WriteLine(": MessageBase(std::forward<MessageDataPtr>(pMsg))");
             BuildParserClassInit(",", parameters);
             MatchIndent(1); OutStream.WriteLine("{}");
             NewLine();
@@ -371,7 +371,7 @@ namespace ProtocolCompiler
 
             NewLine();
             // message trace function
-            MatchIndent(); OutStream.WriteLine("static Result TraceOut(const char* prefix, MessageDataPtr& pMsg);");
+            MatchIndent(); OutStream.WriteLine("static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);");
             NewLine();
 
             // Parse function
@@ -381,7 +381,7 @@ namespace ProtocolCompiler
                 MatchIndent(); OutStream.WriteLine("static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );");
             }
 
-            MatchIndent(); OutStream.WriteLine("static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMsgBase );");
+            MatchIndent(); OutStream.WriteLine("static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );");
             NewLine();
 
             // Build function
@@ -608,14 +608,14 @@ namespace ProtocolCompiler
         void BuildParserToMessageBaseImpl(string Name, string typeName, Parameter[] parameters)
         {
             string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr& pIMsg, MessageBase* &pMessageBase )");
+            OpenSection("Result", strClassName + "::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )");
 
             DefaultHRESULT();
 
             bool bHasParameter = parameters != null && parameters.Length > 0;
 
             NewLine();
-            MatchIndent(); OutStream.WriteLine("protocolMem(pMessageBase = new(memHeap) {0}(pIMsg));", strClassName);
+            MatchIndent(); OutStream.WriteLine("protocolMem(pMessageBase = new(memHeap) {0}(std::forward<MessageDataPtr>(pIMsg)));", strClassName);
             MatchIndent(); OutStream.WriteLine("protocolChk(pMessageBase->ParseMsg());", strClassName);
             NewLine();
 

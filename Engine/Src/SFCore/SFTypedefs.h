@@ -694,6 +694,49 @@ namespace SF {
 
 
 
+
+	//////////////////////////////////////////////////////////////////////////////////////
+	//
+	//  Function context
+	//
+
+
+	// Intended to replace goto Proc_End style with c++ way
+	// Function Result handling. If error Func has assigned, it will run the error function on failure when the function scope is finished.
+	template<typename ErrorFunc = std::function<void(Result result)>>
+	class FunctionContext
+	{
+	public:
+
+		FunctionContext() = default;
+		FunctionContext(Result src) : m_Hr(src) {}
+		FunctionContext(ErrorFunc&& errorFunc)
+			: m_ErrorFunc(errorFunc)
+		{
+		}
+
+		~FunctionContext()
+		{
+			if (!m_Hr)
+			{
+				m_ErrorFunc(m_Hr);
+			}
+		}
+
+		FunctionContext& operator = (Result src) { m_Hr = src; return *this; }
+
+		operator Result() const { return m_Hr; }
+		explicit operator bool() const { return m_Hr; }
+
+	private:
+
+		// function will be invoked when it has error
+		ErrorFunc m_ErrorFunc;
+		Result m_Hr = ResultCode::SUCCESS;
+	};
+
+
+
 	template <typename T, std::size_t N>
 	constexpr std::size_t countof(T const (&)[N]) noexcept	{ return N; }
 
@@ -728,4 +771,5 @@ namespace SF {
 bool operator == (const sockaddr_storage& op1, const sockaddr_storage& op2);
 bool operator == (const sockaddr_in& op1, const sockaddr_in& op2);
 bool operator == (const sockaddr_in6& op1, const sockaddr_in6& op2);
+
 

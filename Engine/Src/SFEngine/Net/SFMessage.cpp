@@ -313,10 +313,10 @@ namespace Message {
 
 	Result MessageBase::ParseMsg()
 	{ 
-		if(m_bIsParsed)
+		if(m_bHasParsed)
 			return m_hrParsing;
 
-		m_bIsParsed = true;
+		m_bHasParsed = true;
 		m_hrParsing = ParseMessage(GetMessage());
 
 		return m_hrParsing;

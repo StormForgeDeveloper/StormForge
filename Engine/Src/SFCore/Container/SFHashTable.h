@@ -151,7 +151,7 @@ namespace SF {
 			};
 
 			// Bucket list container type
-			typedef std::vector<Bucket> BucketListType;
+			using BucketListType = DynamicArray<Bucket>;
 
 
 			///////////////////////////////////////////
@@ -390,9 +390,17 @@ namespace SF {
 		public:
 
 			HashTable( INT iBucketCount = 16 )
-				:m_lItemCount(0)
+				: m_Bucket(GetSystemHeap())
+				, m_lItemCount(0)
 			{
 				m_Bucket.resize( iBucketCount );
+			}
+
+			HashTable(IHeap& heap, INT iBucketCount = 16)
+				: m_Bucket(heap)
+				, m_lItemCount(0)
+			{
+				m_Bucket.resize(iBucketCount);
 			}
 
 			virtual ~HashTable()

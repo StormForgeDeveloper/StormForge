@@ -259,22 +259,29 @@ namespace Message {
 		SharedPointerT<MessageData>	m_pIMsg;
 		
 		// Parsing result
-		Result		m_hrParsing;
-
-		bool		m_bIsParsed;
+		Result		m_hrParsing = ResultCode::SUCCESS_FALSE;
+		bool		m_bHasParsed = false;
 
 	public:
-		inline MessageBase();
-		inline MessageBase(SharedPointerT<MessageData> &pIMsg);
-		inline virtual ~MessageBase();
+
+		MessageBase() = default;
+		MessageBase(SharedPointerT<MessageData> &&pIMsg)
+			: m_pIMsg(std::forward<SharedPointerT<MessageData>>(pIMsg))
+		{
+		}
+
+		virtual ~MessageBase() { m_pIMsg = nullptr; }
 
 		// Get Message
-		inline MessageData* GetMessage();
+		MessageData* GetMessage() { return *m_pIMsg; }
 
 		// Get Parsing Result
-		inline Result GetParsingResult();
+		Result GetParsingResult() { return m_hrParsing; }
 
+		// Parse message data, message data should be passed to constructor
 		virtual Result ParseMsg();
+
+		// Parsing message data
 		virtual Result ParseMessage( MessageData* pIMsg ) = 0;
 
 		virtual Result OverrideRouteContextDestination( EntityUID to ) { unused(to); AssertRel(false); return ResultCode::SUCCESS; }

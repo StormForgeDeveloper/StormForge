@@ -32,6 +32,8 @@
 #include "Protocol/Message/LoginMsgParsing.h"
 #include "Protocol/Message/GameMsgParsing.h"
 
+#include "Protocol/Message/RelayMsgDebug.h"
+#include "Protocol/Message/RelayMsgParsing.h"
 
 
 namespace SF {
@@ -45,6 +47,7 @@ namespace Protocol {
 		
 		RegisterDebugTraceLogin( );
 		RegisterDebugTraceGame( );
+		RegisterDebugTraceRelay();
 	}
 
 	
@@ -57,9 +60,10 @@ namespace Protocol {
 		
 		RegisterParserLogin();
 		RegisterParserGame();
+		RegisterParserRelay();
 	}
 	
-	void PrintDebugMessage(const char* preFix, SharedPointerT<Message::MessageData>& pMsg )
+	void PrintDebugMessage(const char* preFix, const SharedPointerT<Message::MessageData>& pMsg )
 	{
 		if( pMsg == nullptr )
 			return;
@@ -79,13 +83,13 @@ namespace Protocol {
 		auto itFound = MessageParseToVariableMap.find(pMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
 		if (itFound != MessageParseToVariableMap.end())
 		{
-			return (itFound->second)(pMsg, variableMap);
+			return (itFound->second)(std::forward<MessageDataPtr>(pMsg), variableMap);
 		}
 		
 		return ResultCode::IO_BADPACKET;
 	}
 	
-	Result ParseMessage(IHeap& memoryManager, SharedPointerT<Message::MessageData>&pMsg, Message::MessageBase * &pMsgBase)
+	Result ParseMessage(IHeap& memoryManager, SharedPointerT<Message::MessageData>&& pMsg, Message::MessageBase * &pMsgBase)
 	{
 		pMsgBase = nullptr;
 
@@ -95,7 +99,7 @@ namespace Protocol {
 		auto itFound = MessageParseToMessageBaseMap.find(pMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
 		if (itFound != MessageParseToMessageBaseMap.end())
 		{
-			return (itFound->second)(memoryManager, pMsg, pMsgBase);
+			return (itFound->second)(memoryManager, std::forward<MessageDataPtr>(pMsg), pMsgBase);
 		}
 		
 		return ResultCode::IO_BADPACKET;

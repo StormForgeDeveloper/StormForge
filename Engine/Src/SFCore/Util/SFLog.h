@@ -139,48 +139,6 @@ namespace Log {
 
 } // namespace Log
 
-
-
-	//////////////////////////////////////////////////////////////////////////////////////
-	//
-	//  Function context
-	//
-
-
-	// Intended to replace goto Proc_End style with c++ way
-	// Function Result handling. If error Func has assigned, it will run the error function on failure when the function scope is finished.
-	template<typename ErrorFunc = std::function<void(Result result)>>
-	class FunctionContext
-	{
-	public:
-
-		FunctionContext() = default;
-		FunctionContext(Result src) : m_Hr(src) {}
-		FunctionContext(ErrorFunc&& errorFunc)
-			: m_ErrorFunc(errorFunc)
-		{
-		}
-
-		~FunctionContext()
-		{
-			if (!m_Hr)
-			{
-				m_ErrorFunc(m_Hr);
-			}
-		}
-
-		FunctionContext& operator = (Result src) { m_Hr = src; return *this; }
-		operator Result() const { return m_Hr; }
-		operator bool() const { return m_Hr; }
-
-	private:
-
-		// function will be invoked when it has error
-		ErrorFunc m_ErrorFunc;
-		Result m_Hr = ResultCode::SUCCESS;
-	};
-
-
 } // namespace SF
 
 
