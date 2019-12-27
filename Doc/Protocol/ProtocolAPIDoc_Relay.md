@@ -75,13 +75,13 @@ Event for Player left.
 ## RelayPacketC2SEvt
 Relay packet
 
-        Result RelayPacketC2SEvt(const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint64_t &InTargetRelayMask, const Array<uint8_t>& InPayload)
+        Result RelayPacketC2SEvt(const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint32_t &InTargetRelayMask, const Array<uint8_t>& InPayload)
 
 		- OutInRelayInstanceID: uint32 type. Relay Instance id
 
 		- OutInSenderRelayID: uint32 type. Sender player ID
 
-		- OutInTargetRelayMask: uint64 type. Target relay mask.
+		- OutInTargetRelayMask: uint32 type. Target relay mask.
 
 		- OutInPayload: uint8 type. Payload data
 

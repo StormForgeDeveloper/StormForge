@@ -133,7 +133,7 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const RelayPlayerInfo& value)
 	{
-		if (!(_IToA(context, value.RelayClientID)))
+		if (!(_IToA(context, value.PlayerID)))
 			return ResultCode::FAIL;
 
 		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))

@@ -60,7 +60,7 @@ namespace SF
 
 		}; // Result NetPolicyRelay::LeaveRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
 		// C2S: Relay packet
-		Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint64_t &InTargetRelayMask, const Array<uint8_t>& InPayload )
+		Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint32_t &InTargetRelayMask, const Array<uint8_t>& InPayload )
 		{
  			Result hr;
 
@@ -76,7 +76,7 @@ namespace SF
 
 			return hr;
 
-		}; // Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint64_t &InTargetRelayMask, const Array<uint8_t>& InPayload )
+		}; // Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint32_t &InTargetRelayMask, const Array<uint8_t>& InPayload )
 
 
 		// S2C: Event for joined player

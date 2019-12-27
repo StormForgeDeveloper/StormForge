@@ -36,7 +36,7 @@ namespace SF
 			// C2S: Event for Player Join request.
 			Result LeaveRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID );
 			// C2S: Relay packet
-			Result RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint64_t &InTargetRelayMask, const Array<uint8_t>& InPayload );
+			Result RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint32_t &InTargetRelayMask, const Array<uint8_t>& InPayload );
 
 		}; // class NetPolicyRelay 
 

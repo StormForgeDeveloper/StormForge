@@ -284,7 +284,7 @@ namespace SF
 			private:
 				uint32_t m_RelayInstanceID;
 				uint32_t m_SenderRelayID;
-				uint64_t m_TargetRelayMask;
+				uint32_t m_TargetRelayMask;
 				ExternalBufferArray<uint8_t> m_Payload;
 			public:
 				RelayPacketC2SEvt()
@@ -298,7 +298,7 @@ namespace SF
 
 				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
 				const uint32_t& GetSenderRelayID() const	{ return m_SenderRelayID; };
-				const uint64_t& GetTargetRelayMask() const	{ return m_TargetRelayMask; };
+				const uint32_t& GetTargetRelayMask() const	{ return m_TargetRelayMask; };
 				const Array<uint8_t>& GetPayload() const	{ return m_Payload; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -307,7 +307,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint64_t &InTargetRelayMask, const Array<uint8_t>& InPayload );
+				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint32_t &InTargetRelayMask, const Array<uint8_t>& InPayload );
 
 			}; // class RelayPacketC2SEvt : public MessageBase
 

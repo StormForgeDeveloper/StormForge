@@ -38,7 +38,7 @@
 	<C2SEvent Name="RelayPacket" Reliable="false" Crypto="No" Trace="Debug1" Desc="Relay packet">
 		<Params Type="uint32" Name="RelayInstanceID" Desc="Relay Instance id"/>
 		<Params Type="uint32" Name="SenderRelayID" Desc="Sender player ID"/>
-		<Params Type="uint64" Name="TargetRelayMask" Desc="Target relay mask."/>
+		<Params Type="uint32" Name="TargetRelayMask" Desc="Target relay mask."/>
 		<Params Type="uint8" IsArray="true" Name="Payload" Desc="Payload data"/>
 	</C2SEvent>
 
