@@ -32,11 +32,11 @@ namespace SF
 			{}
 
 			// C2S: Event for Player Join request.
-			Result JoinRelayInstanceC2SEvt( const PlayerID &InPlayerID );
+			Result JoinRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
 			// C2S: Event for Player Join request.
 			Result LeaveRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID );
 			// C2S: Relay packet
-			Result RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint64_t &InSenderRelayID, const uint64_t &InTargetRelayMask );
+			Result RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint64_t &InTargetRelayMask, const Array<uint8_t>& InPayload );
 
 		}; // class NetPolicyRelay 
 
@@ -53,7 +53,7 @@ namespace SF
 			{}
 
 			// S2C: Event for joined player
-			Result JoinRelayInstanceResS2CEvt( const Result &InResult, const RelayPlayerInfo &InMyPlayerInfo, const uint32_t &InRelayInstanceID, const Array<RelayPlayerInfo>& InMemberInfos );
+			Result JoinRelayInstanceResS2CEvt( const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyPlayerRelayID, const Array<RelayPlayerInfo>& InMemberInfos );
 			// S2C: Event for Player joined.
 			Result PlayerJoinS2CEvt( const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo );
 			// S2C: Event for Player left.

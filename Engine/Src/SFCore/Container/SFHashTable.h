@@ -158,86 +158,8 @@ namespace SF {
 			// Hash table iterator
 			class iterator
 			{
-			private:
-				// Is Bucket internal iterator?, then only iterate inside bucket
-				bool m_bIsIterInBucket;
-				// Bucket list iterator. directing which bucket
-				typename BucketListType::iterator m_iterBucket;
-				// Main container pointer
-				HashTable			*m_pContainer;
-				// Index in bucket container
-				int					m_iIdx;
-				// MapItemType
-				mutable MapItemType		*m_pCache;
-
+			public:
 				enum { END_IDX = -1 };
-
-				// constructor
-				iterator( HashTable *pContainer, typename BucketListType::iterator iterBucket, INT iIdx, bool bIsBucketIter = false )
-					: m_bIsIterInBucket(bIsBucketIter)
-					, m_iterBucket(iterBucket)
-					, m_pContainer(pContainer)
-					, m_iIdx(iIdx)
-				{
-					m_pCache = nullptr;
-					if( m_pContainer && m_iterBucket != m_pContainer->bucket_end() && m_iIdx > END_IDX )
-						m_iterBucket->ReadLock();
-				}
-
-				friend class HashTable;
-
-
-				void NextIter()
-				{
-					Assert(m_pContainer != nullptr);
-					Assert( m_iterBucket != m_pContainer->bucket_end() );
-					Assert( m_iIdx >= 0 );
-					m_iIdx++;
-					if( m_iIdx < (INT)m_iterBucket->m_Items.size() )
-						return;
-
-					if( m_bIsIterInBucket )
-					{
-						m_iterBucket = m_pContainer->bucket_end();
-						m_iIdx = END_IDX;
-						return;
-					}
-
-					m_iterBucket->ReadUnlock();
-					m_iterBucket++;
-					while( m_iterBucket != m_pContainer->bucket_end() )
-					{
-						if( m_iterBucket->m_Items.size() != 0 )
-						{
-							m_iterBucket->ReadLock();
-							if( m_iterBucket->m_Items.size() != 0 )
-							{
-								m_iIdx = 0;
-								return;
-							}
-							// failed search again
-							m_iterBucket->ReadUnlock();
-						}
-						m_iterBucket++;
-					}
-
-					m_iIdx = END_IDX;
-				}
-
-				// set iter
-				void Set( HashTable *pContainer, typename BucketListType::iterator iterBucket, INT iIdx, bool bIsLock = true, bool bIsBucketIter = false )
-				{
-					if( m_pContainer && m_iterBucket != m_pContainer->bucket_end() && m_iIdx > END_IDX )
-						m_iterBucket->ReadUnlock();
-
-					m_bIsIterInBucket = bIsBucketIter;
-					m_pContainer = pContainer;
-					m_iterBucket = iterBucket;
-					m_iIdx = iIdx;
-
-					if( bIsLock && m_pContainer && m_iterBucket != m_pContainer->bucket_end() && m_iIdx > END_IDX )
-						m_iterBucket->ReadLock();
-				}
 
 			public:
 				iterator()
@@ -337,6 +259,20 @@ namespace SF {
 					*this = nullptr;
 				}
 
+				iterator& operator = (iterator&& op)
+				{
+					if (m_pContainer && m_iterBucket != m_pContainer->bucket_end())
+					{
+						m_iterBucket->ReadUnlock();
+					}
+
+					m_pContainer = op.m_pContainer; op.m_pContainer == nullptr;
+					m_iterBucket = std::forward<typename BucketListType::iterator>(op.m_iterBucket);
+					m_iIdx = op.m_iIdx; op.m_iIdx = END_IDX;
+
+					return *this;
+				}
+
 				iterator& operator = ( const iterator& op )
 				{
 					if( m_pContainer && m_iterBucket != m_pContainer->bucket_end() )
@@ -378,6 +314,90 @@ namespace SF {
 
 					return *this;
 				}
+
+			private:
+
+
+				// constructor
+				iterator(HashTable *pContainer, typename BucketListType::iterator iterBucket, INT iIdx, bool bIsBucketIter = false)
+					: m_bIsIterInBucket(bIsBucketIter)
+					, m_iterBucket(iterBucket)
+					, m_pContainer(pContainer)
+					, m_iIdx(iIdx)
+				{
+					m_pCache = nullptr;
+					if (m_pContainer && m_iterBucket != m_pContainer->bucket_end() && m_iIdx > END_IDX)
+						m_iterBucket->ReadLock();
+				}
+
+				friend class HashTable;
+
+
+				void NextIter()
+				{
+					Assert(m_pContainer != nullptr);
+					Assert(m_iterBucket != m_pContainer->bucket_end());
+					Assert(m_iIdx >= 0);
+					m_iIdx++;
+					if (m_iIdx < (INT)m_iterBucket->m_Items.size())
+						return;
+
+					if (m_bIsIterInBucket)
+					{
+						m_iterBucket = m_pContainer->bucket_end();
+						m_iIdx = END_IDX;
+						return;
+					}
+
+					m_iterBucket->ReadUnlock();
+					m_iterBucket++;
+					while (m_iterBucket != m_pContainer->bucket_end())
+					{
+						if (m_iterBucket->m_Items.size() != 0)
+						{
+							m_iterBucket->ReadLock();
+							if (m_iterBucket->m_Items.size() != 0)
+							{
+								m_iIdx = 0;
+								return;
+							}
+							// failed search again
+							m_iterBucket->ReadUnlock();
+						}
+						m_iterBucket++;
+					}
+
+					m_iIdx = END_IDX;
+				}
+
+				// set iter
+				void Set(HashTable *pContainer, typename BucketListType::iterator iterBucket, INT iIdx, bool bIsLock = true, bool bIsBucketIter = false)
+				{
+					if (m_pContainer && m_iterBucket != m_pContainer->bucket_end() && m_iIdx > END_IDX)
+						m_iterBucket->ReadUnlock();
+
+					m_bIsIterInBucket = bIsBucketIter;
+					m_pContainer = pContainer;
+					m_iterBucket = iterBucket;
+					m_iIdx = iIdx;
+
+					if (bIsLock && m_pContainer && m_iterBucket != m_pContainer->bucket_end() && m_iIdx > END_IDX)
+						m_iterBucket->ReadLock();
+				}
+
+
+			private:
+				// Is Bucket internal iterator?, then only iterate inside bucket
+				bool m_bIsIterInBucket = false;
+				// Bucket list iterator. directing which bucket
+				typename BucketListType::iterator m_iterBucket;
+				// Main container pointer
+				HashTable			*m_pContainer = nullptr;
+				// Index in bucket container
+				int					m_iIdx = -1;
+				// MapItemType
+				mutable MapItemType		*m_pCache = nullptr;
+
 			};
 
 		private:
@@ -591,6 +611,31 @@ namespace SF {
 
 				bucket.ReadUnlock();
 				return ResultCode::FAIL;
+			}
+
+			iterator find(const KeyType& keyVal)
+			{
+				size_t hashVal = Hasher()(keyVal);
+				size_t iBucket = hashVal % m_Bucket.size();
+
+				Bucket& bucket = m_Bucket[iBucket];
+
+				iterator iterData = end();
+				bucket.ReadLock();
+
+				auto iter = bucket.m_Items.begin();
+				for (INT iIdx = 0; iter != bucket.m_Items.end(); ++iter, ++iIdx)
+				{
+					if (equal_to<KeyType>()(keyVal, iter->Key))
+					{
+						iterData.Set(this, m_Bucket.begin() + iBucket, iIdx, false);
+						// taking read lock with iterator
+						return iterData;
+					}
+				}
+
+				bucket.ReadUnlock();
+				return std::forward<iterator>(iterData);
 			}
 
 			// Erase a data from hash map

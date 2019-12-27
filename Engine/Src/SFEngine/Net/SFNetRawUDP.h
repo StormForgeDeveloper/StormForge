@@ -89,10 +89,7 @@ namespace Net {
 
 		const NetAddress& GetLocalAddress() const { return m_LocalAddress; }
 
-		//Result PendingRecv(IOBUFFER_READ *pOver);
-		//virtual Result WriteBuffer(IOBUFFER_WRITE *pSendBuffer) override;
 		Result SendMsg(const sockaddr_storage& dest, SharedPointerT<Message::MessageData>& pMsg);
-
 
 		// called when incoming message occur
 		Result OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff);

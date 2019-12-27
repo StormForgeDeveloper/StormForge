@@ -273,10 +273,11 @@ namespace Message {
 		virtual ~MessageBase() { m_pIMsg = nullptr; }
 
 		// Get Message
-		MessageData* GetMessage() { return *m_pIMsg; }
+		MessageData* GetMessage() const { return *m_pIMsg; }
+		const SharedPointerT<MessageData>& GetMessagePtr() const { return m_pIMsg; }
 
 		// Get Parsing Result
-		Result GetParsingResult() { return m_hrParsing; }
+		Result GetParsingResult() const { return m_hrParsing; }
 
 		// Parse message data, message data should be passed to constructor
 		virtual Result ParseMsg();

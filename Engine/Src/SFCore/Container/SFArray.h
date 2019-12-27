@@ -83,23 +83,30 @@ namespace SF {
 			public:
 
 				iterator()
-					:m_pContainer(nullptr),
-					m_iIdx(END_IDX)
+					: m_pContainer(nullptr)
+					, m_iIdx(END_IDX)
 				{
 				}
 
 				iterator(Array<DataType> *pContainer, uint index = 0)
-					:m_pContainer(pContainer),
-					m_iIdx(index)
+					: m_pContainer(pContainer)
+					, m_iIdx(index)
 				{
 					Assert(m_pContainer != nullptr);
 				}
 
 				iterator(const iterator& src)
-					:m_pContainer(src.m_pContainer),
-					m_iIdx(src.m_iIdx)
+					: m_pContainer(src.m_pContainer)
+					, m_iIdx(src.m_iIdx)
 				{
 					Assert(m_pContainer != nullptr);
+				}
+
+				iterator(iterator&& src)
+					: m_pContainer(src.m_pContainer)
+					, m_iIdx(src.m_iIdx)
+				{
+					src.Reset();
 				}
 
 				~iterator()

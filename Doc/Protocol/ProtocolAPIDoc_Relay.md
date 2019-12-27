@@ -17,21 +17,25 @@ namespace SF::Message::Relay
 ## JoinRelayInstanceC2SEvt
 Event for Player Join request.
 
-        Result JoinRelayInstanceC2SEvt(const PlayerID &InPlayerID)
+        Result JoinRelayInstanceC2SEvt(const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier)
+
+		- OutInRelayInstanceID: uint32 type. Relay instance to join
 
 		- OutInPlayerID: PlayerID type. Joining player id
+
+		- OutInPlayerIdentifier: String type. Joining player identifier. string value
 
 
 ## JoinRelayInstanceResS2CEvt
 Event for joined player
 
-        Result JoinRelayInstanceResS2CEvt(const Result &InResult, const RelayPlayerInfo &InMyPlayerInfo, const uint32_t &InRelayInstanceID, const Array<RelayPlayerInfo>& InMemberInfos)
+        Result JoinRelayInstanceResS2CEvt(const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyPlayerRelayID, const Array<RelayPlayerInfo>& InMemberInfos)
 
 		- OutInResult: Result type. Join result
 
-		- OutInMyPlayerInfo: RelayPlayerInfo type. Joined player info
-
 		- OutInRelayInstanceID: uint32 type. joined relay instance ID
+
+		- OutInMyPlayerRelayID: uint32 type. Joined player relayID
 
 		- OutInMemberInfos: RelayPlayerInfo type. Member player IDs
 
@@ -71,13 +75,15 @@ Event for Player left.
 ## RelayPacketC2SEvt
 Relay packet
 
-        Result RelayPacketC2SEvt(const uint32_t &InRelayInstanceID, const uint64_t &InSenderRelayID, const uint64_t &InTargetRelayMask)
+        Result RelayPacketC2SEvt(const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint64_t &InTargetRelayMask, const Array<uint8_t>& InPayload)
 
 		- OutInRelayInstanceID: uint32 type. Relay Instance id
 
-		- OutInSenderRelayID: uint64 type. Sender player ID
+		- OutInSenderRelayID: uint32 type. Sender player ID
 
 		- OutInTargetRelayMask: uint64 type. Target relay mask.
+
+		- OutInPayload: uint8 type. Payload data
 
 
 

@@ -43,18 +43,24 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
+				uint32_t m_RelayInstanceID;
 				PlayerID m_PlayerID;
+				const char* m_PlayerIdentifier;
 			public:
 				JoinRelayInstanceC2SEvt()
+				:m_PlayerIdentifier(nullptr)
 					{}
 
 				JoinRelayInstanceC2SEvt( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+				,m_PlayerIdentifier(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
+				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const char* GetPlayerIdentifier() const	{ return m_PlayerIdentifier; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -62,7 +68,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const PlayerID &InPlayerID );
+				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
 
 			}; // class JoinRelayInstanceC2SEvt : public MessageBase
 
@@ -88,8 +94,8 @@ namespace SF
 				uint64_t GetSender() { return 0; }
 			private:
 				Result m_Result;
-				RelayPlayerInfo m_MyPlayerInfo;
 				uint32_t m_RelayInstanceID;
+				uint32_t m_MyPlayerRelayID;
 				ExternalBufferArray<RelayPlayerInfo> m_MemberInfos;
 			public:
 				JoinRelayInstanceResS2CEvt()
@@ -102,8 +108,8 @@ namespace SF
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const Result& GetResult() const	{ return m_Result; };
-				const RelayPlayerInfo& GetMyPlayerInfo() const	{ return m_MyPlayerInfo; };
 				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
+				const uint32_t& GetMyPlayerRelayID() const	{ return m_MyPlayerRelayID; };
 				const Array<RelayPlayerInfo>& GetMemberInfos() const	{ return m_MemberInfos; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -112,7 +118,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const Result &InResult, const RelayPlayerInfo &InMyPlayerInfo, const uint32_t &InRelayInstanceID, const Array<RelayPlayerInfo>& InMemberInfos );
+				static MessageData* Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyPlayerRelayID, const Array<RelayPlayerInfo>& InMemberInfos );
 
 			}; // class JoinRelayInstanceResS2CEvt : public MessageBase
 
@@ -277,8 +283,9 @@ namespace SF
 				uint64_t GetSender() { return 0; }
 			private:
 				uint32_t m_RelayInstanceID;
-				uint64_t m_SenderRelayID;
+				uint32_t m_SenderRelayID;
 				uint64_t m_TargetRelayMask;
+				ExternalBufferArray<uint8_t> m_Payload;
 			public:
 				RelayPacketC2SEvt()
 					{}
@@ -290,8 +297,9 @@ namespace SF
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
-				const uint64_t& GetSenderRelayID() const	{ return m_SenderRelayID; };
+				const uint32_t& GetSenderRelayID() const	{ return m_SenderRelayID; };
 				const uint64_t& GetTargetRelayMask() const	{ return m_TargetRelayMask; };
+				const Array<uint8_t>& GetPayload() const	{ return m_Payload; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -299,7 +307,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint64_t &InSenderRelayID, const uint64_t &InTargetRelayMask );
+				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint64_t &InTargetRelayMask, const Array<uint8_t>& InPayload );
 
 			}; // class RelayPacketC2SEvt : public MessageBase
 
