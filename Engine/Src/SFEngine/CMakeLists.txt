@@ -87,6 +87,8 @@ set(SFENGINE_LIB_FILES
 	Net/SFNetSystem_WinIOCP.cpp
 	Net/SFNetToString.cpp
 	Net/SFNetUtil.cpp
+	Net/SFNetRelayNetwork.cpp
+	Net/SFNetRelayNetwork.h
 	Resource/SFAnimation.cpp
 	Resource/SFDeviceMesh.cpp
 	Resource/SFDeviceResource.cpp

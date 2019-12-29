@@ -13,7 +13,7 @@
 	<S2CEvent Name="JoinRelayInstanceRes" Reliable="false" Crypto="No" Trace="Debug1" Desc="Event for joined player">
 		<Params Type="Result" Name="Result" Desc="Join result"/>
 		<Params Type="uint32" Name="RelayInstanceID" Desc="joined relay instance ID"/>
-		<Params Type="uint32" Name="MyPlayerRelayID" Desc="Joined player relayID"/>
+		<Params Type="uint32" Name="MyEndpointID" Desc="Joined player relayID"/>
 		<Params Type="RelayPlayerInfo" IsArray="true" Name="MemberInfos" Desc="Member player IDs"/>
 	</S2CEvent>
 
@@ -37,8 +37,8 @@
 
 	<C2SEvent Name="RelayPacket" Reliable="false" Crypto="No" Trace="Debug1" Desc="Relay packet">
 		<Params Type="uint32" Name="RelayInstanceID" Desc="Relay Instance id"/>
-		<Params Type="uint32" Name="SenderRelayID" Desc="Sender player ID"/>
-		<Params Type="uint32" Name="TargetRelayMask" Desc="Target relay mask."/>
+		<Params Type="uint32" Name="SenderEndpointID" Desc="Sender player ID"/>
+		<Params Type="uint32" Name="TargetEndpointMask" Desc="Target relay mask."/>
 		<Params Type="uint8" IsArray="true" Name="Payload" Desc="Payload data"/>
 	</C2SEvent>
 

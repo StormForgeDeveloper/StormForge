@@ -29,13 +29,13 @@ Event for Player Join request.
 ## JoinRelayInstanceResS2CEvt
 Event for joined player
 
-        Result JoinRelayInstanceResS2CEvt(const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyPlayerRelayID, const Array<RelayPlayerInfo>& InMemberInfos)
+        Result JoinRelayInstanceResS2CEvt(const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos)
 
 		- OutInResult: Result type. Join result
 
 		- OutInRelayInstanceID: uint32 type. joined relay instance ID
 
-		- OutInMyPlayerRelayID: uint32 type. Joined player relayID
+		- OutInMyEndpointID: uint32 type. Joined player relayID
 
 		- OutInMemberInfos: RelayPlayerInfo type. Member player IDs
 
@@ -75,13 +75,13 @@ Event for Player left.
 ## RelayPacketC2SEvt
 Relay packet
 
-        Result RelayPacketC2SEvt(const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint32_t &InTargetRelayMask, const Array<uint8_t>& InPayload)
+        Result RelayPacketC2SEvt(const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload)
 
 		- OutInRelayInstanceID: uint32 type. Relay Instance id
 
-		- OutInSenderRelayID: uint32 type. Sender player ID
+		- OutInSenderEndpointID: uint32 type. Sender player ID
 
-		- OutInTargetRelayMask: uint32 type. Target relay mask.
+		- OutInTargetEndpointMask: uint32 type. Target relay mask.
 
 		- OutInPayload: uint8 type. Payload data
 

@@ -60,14 +60,14 @@ namespace SF
 
 		}; // Result NetPolicyRelay::LeaveRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
 		// C2S: Relay packet
-		Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint32_t &InTargetRelayMask, const Array<uint8_t>& InPayload )
+		Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 		{
  			Result hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
 
-			 pMessage = SF::Message::Relay::RelayPacketC2SEvt::Create(m_pConnection->GetIOHeap(), InRelayInstanceID, InSenderRelayID, InTargetRelayMask, InPayload);
+			 pMessage = SF::Message::Relay::RelayPacketC2SEvt::Create(m_pConnection->GetIOHeap(), InRelayInstanceID, InSenderEndpointID, InTargetEndpointMask, InPayload);
 			 protocolChkPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
@@ -76,18 +76,18 @@ namespace SF
 
 			return hr;
 
-		}; // Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint32_t &InTargetRelayMask, const Array<uint8_t>& InPayload )
+		}; // Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 
 
 		// S2C: Event for joined player
-		Result NetSvrPolicyRelay::JoinRelayInstanceResS2CEvt( const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyPlayerRelayID, const Array<RelayPlayerInfo>& InMemberInfos )
+		Result NetSvrPolicyRelay::JoinRelayInstanceResS2CEvt( const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 		{
  			Result hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
 
-			 pMessage = SF::Message::Relay::JoinRelayInstanceResS2CEvt::Create(m_pConnection->GetIOHeap(), InResult, InRelayInstanceID, InMyPlayerRelayID, InMemberInfos);
+			 pMessage = SF::Message::Relay::JoinRelayInstanceResS2CEvt::Create(m_pConnection->GetIOHeap(), InResult, InRelayInstanceID, InMyEndpointID, InMemberInfos);
 			 protocolChkPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
@@ -96,7 +96,7 @@ namespace SF
 
 			return hr;
 
-		}; // Result NetSvrPolicyRelay::JoinRelayInstanceResS2CEvt( const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyPlayerRelayID, const Array<RelayPlayerInfo>& InMemberInfos )
+		}; // Result NetSvrPolicyRelay::JoinRelayInstanceResS2CEvt( const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 		// S2C: Event for Player joined.
 		Result NetSvrPolicyRelay::PlayerJoinS2CEvt( const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo )
 		{

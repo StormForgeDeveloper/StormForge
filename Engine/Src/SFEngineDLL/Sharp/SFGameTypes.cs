@@ -254,7 +254,7 @@ namespace SF
     [StructLayout(LayoutKind.Sequential)]
     public class RelayPlayerInfo
     {
-        public ulong RelayPlayerID;
+        public ulong EndpointID;
         public ulong PlayerID;
 
         public RelayPlayerInfo()

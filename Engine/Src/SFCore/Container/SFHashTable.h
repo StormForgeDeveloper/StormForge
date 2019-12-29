@@ -266,7 +266,8 @@ namespace SF {
 						m_iterBucket->ReadUnlock();
 					}
 
-					m_pContainer = op.m_pContainer; op.m_pContainer == nullptr;
+					m_pContainer = op.m_pContainer;
+					op.m_pContainer = nullptr;
 					m_iterBucket = std::forward<typename BucketListType::iterator>(op.m_iterBucket);
 					m_iIdx = op.m_iIdx; op.m_iIdx = END_IDX;
 

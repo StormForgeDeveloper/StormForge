@@ -83,7 +83,7 @@ namespace Protocol {
 		auto itFound = MessageParseToVariableMap.find(pMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
 		if (itFound != MessageParseToVariableMap.end())
 		{
-			return (itFound->second)(std::forward<MessageDataPtr>(pMsg), variableMap);
+			return (itFound->second)(pMsg, variableMap);
 		}
 		
 		return ResultCode::IO_BADPACKET;

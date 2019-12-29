@@ -419,110 +419,113 @@ namespace SF {
 		// Disconnected 
 		public const int IO_DISCONNECTED =                                  unchecked((int)0xE7010086); 
 
+		// Canceled 
+		public const int IO_CANCELED =                                      unchecked((int)0xE7010087); 
+
 		// Zookeeper System and server-side errors. 
-		public const int ZK_SYSTEM =                                        unchecked((int)0xE7010087); 
+		public const int ZK_SYSTEM =                                        unchecked((int)0xE7010088); 
 
 		// Zookeeper  A runtime inconsistency was found 
-		public const int ZK_ZRUNTIMEINCONSISTENCY =                         unchecked((int)0xE7010088); 
+		public const int ZK_ZRUNTIMEINCONSISTENCY =                         unchecked((int)0xE7010089); 
 
 		// Zookeeper A data inconsistency was found 
-		public const int ZK_ZDATAINCONSISTENCY =                            unchecked((int)0xE7010089); 
+		public const int ZK_ZDATAINCONSISTENCY =                            unchecked((int)0xE701008A); 
 
 		// Zookeeper Connection to the server has been lost 
-		public const int ZK_ZCONNECTIONLOSS =                               unchecked((int)0xE701008A); 
+		public const int ZK_ZCONNECTIONLOSS =                               unchecked((int)0xE701008B); 
 
 		// Zookeeper Error while marshalling or unmarshalling data 
-		public const int ZK_ZMARSHALLINGERROR =                             unchecked((int)0xE701008B); 
+		public const int ZK_ZMARSHALLINGERROR =                             unchecked((int)0xE701008C); 
 
 		// Zookeeper Operation is unimplemented 
-		public const int ZK_ZUNIMPLEMENTED =                                unchecked((int)0xE701008C); 
+		public const int ZK_ZUNIMPLEMENTED =                                unchecked((int)0xE701008D); 
 
 		// Zookeeper Operation timeout 
-		public const int ZK_ZOPERATIONTIMEOUT =                             unchecked((int)0xE701008D); 
+		public const int ZK_ZOPERATIONTIMEOUT =                             unchecked((int)0xE701008E); 
 
 		// Zookeeper Invalid arguments 
-		public const int ZK_ZBADARGUMENTS =                                 unchecked((int)0xE701008E); 
+		public const int ZK_ZBADARGUMENTS =                                 unchecked((int)0xE701008F); 
 
 		// Zookeeper Invliad zhandle state 
-		public const int ZK_ZINVALIDSTATE =                                 unchecked((int)0xE701008F); 
+		public const int ZK_ZINVALIDSTATE =                                 unchecked((int)0xE7010090); 
 
 		// Zookeeper API errors. 
-		public const int ZK_ZAPIERROR =                                     unchecked((int)0xE7010090); 
+		public const int ZK_ZAPIERROR =                                     unchecked((int)0xE7010091); 
 
 		// Zookeeper Node does not exist 
-		public const int ZK_ZNONODE =                                       unchecked((int)0xE7010091); 
+		public const int ZK_ZNONODE =                                       unchecked((int)0xE7010092); 
 
 		// Zookeeper Not authenticated 
-		public const int ZK_ZNOAUTH =                                       unchecked((int)0xE7010092); 
+		public const int ZK_ZNOAUTH =                                       unchecked((int)0xE7010093); 
 
 		// Zookeeper Version conflict 
-		public const int ZK_ZBADVERSION =                                   unchecked((int)0xE7010093); 
+		public const int ZK_ZBADVERSION =                                   unchecked((int)0xE7010094); 
 
 		// Zookeeper Ephemeral nodes may not have children 
-		public const int ZK_ZNOCHILDRENFOREPHEMERALS =                      unchecked((int)0xE7010094); 
+		public const int ZK_ZNOCHILDRENFOREPHEMERALS =                      unchecked((int)0xE7010095); 
 
 		// Zookeeper The node already exists 
-		public const int ZK_ZNODEEXISTS =                                   unchecked((int)0xE7010095); 
+		public const int ZK_ZNODEEXISTS =                                   unchecked((int)0xE7010096); 
 
 		// Zookeeper The node has children 
-		public const int ZK_ZNOTEMPTY =                                     unchecked((int)0xE7010096); 
+		public const int ZK_ZNOTEMPTY =                                     unchecked((int)0xE7010097); 
 
 		// Zookeeper The session has been expired by the server 
-		public const int ZK_ZSESSIONEXPIRED =                               unchecked((int)0xE7010097); 
+		public const int ZK_ZSESSIONEXPIRED =                               unchecked((int)0xE7010098); 
 
 		// Zookeeper Invalid callback specified 
-		public const int ZK_ZINVALIDCALLBACK =                              unchecked((int)0xE7010098); 
+		public const int ZK_ZINVALIDCALLBACK =                              unchecked((int)0xE7010099); 
 
 		// Zookeeper Invalid ACL specified 
-		public const int ZK_ZINVALIDACL =                                   unchecked((int)0xE7010099); 
+		public const int ZK_ZINVALIDACL =                                   unchecked((int)0xE701009A); 
 
 		// Zookeeper Client authentication failed 
-		public const int ZK_ZAUTHFAILED =                                   unchecked((int)0xE701009A); 
+		public const int ZK_ZAUTHFAILED =                                   unchecked((int)0xE701009B); 
 
 		// Zookeeper ZooKeeper is closing 
-		public const int ZK_ZCLOSING =                                      unchecked((int)0xE701009B); 
+		public const int ZK_ZCLOSING =                                      unchecked((int)0xE701009C); 
 
 		// Zookeeper (not error) no server responses to process 
-		public const int ZK_ZNOTHING =                                      unchecked((int)0xE701009C); 
+		public const int ZK_ZNOTHING =                                      unchecked((int)0xE701009D); 
 
 		// Zookeeper session moved to another server, so operation is ignored 
-		public const int ZK_ZSESSIONMOVED =                                 unchecked((int)0xE701009D); 
+		public const int ZK_ZSESSIONMOVED =                                 unchecked((int)0xE701009E); 
 
 		// End of stream 
-		public const int END_OF_STREAM =                                    unchecked((int)0xE701009E); 
+		public const int END_OF_STREAM =                                    unchecked((int)0xE701009F); 
 
 		// End of file 
-		public const int END_OF_FILE =                                      unchecked((int)0xE701009F); 
+		public const int END_OF_FILE =                                      unchecked((int)0xE70100A0); 
 
 		// Out of reserved memory 
-		public const int OUT_OF_RESERVED_MEMORY =                           unchecked((int)0xE70100A0); 
+		public const int OUT_OF_RESERVED_MEMORY =                           unchecked((int)0xE70100A1); 
 
 		// The object not initialized or opened 
-		public const int NOT_OPENED =                                       unchecked((int)0xE70100A1); 
+		public const int NOT_OPENED =                                       unchecked((int)0xE70100A2); 
 
 		// Operation is canceled 
-		public const int SUCCESS_CANCELED =                                 unchecked((int)0x270100A2); 
+		public const int SUCCESS_CANCELED =                                 unchecked((int)0x270100A3); 
 
 		// Operation is not supported 
-		public const int NOT_SUPPORTED =                                    unchecked((int)0xE70100A3); 
+		public const int NOT_SUPPORTED =                                    unchecked((int)0xE70100A4); 
 
 		// Format is not supported 
-		public const int NOT_SUPPORTED_FORMAT =                             unchecked((int)0xE70100A4); 
+		public const int NOT_SUPPORTED_FORMAT =                             unchecked((int)0xE70100A5); 
 
 		// Format is not valid 
-		public const int INVALID_FORMAT =                                   unchecked((int)0xE70100A5); 
+		public const int INVALID_FORMAT =                                   unchecked((int)0xE70100A6); 
 
 		// Failed to open file 
-		public const int INVALID_FILE =                                     unchecked((int)0xE70100A6); 
+		public const int INVALID_FILE =                                     unchecked((int)0xE70100A7); 
 
 		// Specific variable not found 
-		public const int VARIABLE_NOT_FOUND =                               unchecked((int)0xE70100A7); 
+		public const int VARIABLE_NOT_FOUND =                               unchecked((int)0xE70100A8); 
 
 		// Specific function not found 
-		public const int FUNCTION_NOT_FOUND =                               unchecked((int)0xE70100A8); 
+		public const int FUNCTION_NOT_FOUND =                               unchecked((int)0xE70100A9); 
 
 		// Specific object not found 
-		public const int OBJECT_NOT_FOUND =                                 unchecked((int)0xE70100A9); 
+		public const int OBJECT_NOT_FOUND =                                 unchecked((int)0xE70100AA); 
 
 	}
 }

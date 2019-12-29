@@ -180,6 +180,14 @@ namespace Log {
 #endif
 
 
+
+/////////////////////////////////////////////////
+//
+// Error Jump Macros.
+//
+/////////////////////////////////////////////////
+
+// gradually deprecated
 #define SFErrJmp(mainChannel, errval) \
 	do {\
 		hr = errval;\
@@ -188,4 +196,61 @@ namespace Log {
 	} while(0);
 
 
+#ifdef DEBUG
 
+#define SFCheckResult(trcMod, Op) \
+	do {\
+		hr = (Op);\
+		if (!hr) { \
+			SFLog(trcMod, Error, "{0}({1}): {2}", __FILE__, __LINE__, (Result)hr );    \
+			return hr;\
+		}\
+	} while(0);
+
+#define SFCheckMem(trcMod, Op) \
+	do {\
+		hr = (Op) != nullptr ? ResultCode::SUCCESS : ResultCode::OUT_OF_MEMORY;\
+		if (!hr) { \
+			SFLog(trcMod, Error, "{0}({1}): {2}", __FILE__, __LINE__, (Result)hr );    \
+			return hr;\
+		}\
+	} while(0);
+
+
+#define SFCheckPtr(trcMod, Op) \
+	do {\
+		hr = (Op) != nullptr ? ResultCode::SUCCESS : ResultCode::INVALID_POINTER;\
+		if (!hr) { \
+			SFLog(trcMod, Error, "{0}({1}): {2}", __FILE__, __LINE__, (Result)hr );    \
+			return hr;\
+		}\
+	} while(0);
+
+#else // #ifdef DEBUG
+
+#define SFCheckResult(trcMod, Op) \
+	do {\
+		hr = (Op);\
+		if (!hr) { \
+			return hr;\
+		}\
+	} while(0);
+
+#define SFCheckMem(trcMod, Op) \
+	do {\
+		hr = (Op) != nullptr ? ResultCode::SUCCESS : ResultCode::OUT_OF_MEMORY;\
+		if (!hr) { \
+			return hr;\
+		}\
+	} while(0);
+
+
+#define SFCheckPtr(trcMod, Op) \
+	do {\
+		hr = (Op) != nullptr ? ResultCode::SUCCESS : ResultCode::INVALID_POINTER;\
+		if (!hr) { \
+			return hr;\
+		}\
+	} while(0);
+
+#endif // #ifdef DEBUG

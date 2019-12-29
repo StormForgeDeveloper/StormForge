@@ -3,7 +3,7 @@ RESULT_BUILD=../../../bin/SFResultCodeCompiler.exe
 
 
 
-COREBASE_OUTPUT_PATH=../../Src/Corebase/ResultCode
+COREBASE_OUTPUT_PATH=../../Src/SFCore/ResultCode
 COREBASE_SOURCES=ResultCodeLibrary.xml \
 
 

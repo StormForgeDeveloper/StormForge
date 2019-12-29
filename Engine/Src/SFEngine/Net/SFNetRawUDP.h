@@ -26,7 +26,8 @@ namespace Net {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	//	Client base class
+	//	Pure UDP networking class
+	//		- No logical connection management and so on
 	//
 
 	class RawUDP
@@ -44,7 +45,6 @@ namespace Net {
 
 			MyNetSocketIOAdapter(RawUDP &owner);
 
-
 			// Send message to connection with network device
 			virtual Result WriteBuffer(IOBUFFER_WRITE *pSendBuffer) override;
 
@@ -54,11 +54,7 @@ namespace Net {
 			virtual Result OnWriteReady() override;
 		};
 
-		class MessageHandler
-		{
-		public:
-			virtual Result OnRecv(const sockaddr_storage& remoteAddr, SharedPointerT<Message::MessageData>& pMsg) = 0;
-		};
+		using MessageHandlerFunc = std::function<Result(const sockaddr_storage& remoteAddr, SharedPointerT<Message::MessageData>& pMsg)>;
 
 	private:
 
@@ -71,8 +67,7 @@ namespace Net {
 
 		IOBUFFER_READ *m_pRecvBuffers = nullptr;
 
-		MessageHandler *m_pMessageHandler = nullptr;
-
+		MessageHandlerFunc m_MessageHandler;
 
 
 	protected:
@@ -80,11 +75,14 @@ namespace Net {
 	public:
 
 		RawUDP();
+		RawUDP(IHeap& heap);
 		virtual ~RawUDP();
 
 		IHeap& GetHeap() { return m_Heap; }
 
-		Result InitializeNet(const NetAddress& localAddress, MessageHandler *pHandler);
+		bool CanDelete() { return m_NetIOAdapter.CanDelete(); }
+
+		Result InitializeNet(const NetAddress& localAddress, MessageHandlerFunc&& Handler);
 		Result TerminateNet();
 
 		const NetAddress& GetLocalAddress() const { return m_LocalAddress; }

@@ -732,7 +732,7 @@ namespace SF {
 
 		// function will be invoked when it has error
 		ErrorFunc m_ErrorFunc;
-		Result m_Hr = ResultCode::SUCCESS;
+		Result m_Hr;
 	};
 
 

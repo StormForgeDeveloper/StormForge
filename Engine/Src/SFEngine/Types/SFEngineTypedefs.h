@@ -574,11 +574,11 @@ namespace SF {
 	// Relay player information 
 	struct RelayPlayerInfo
 	{
-		uint64_t RelayPlayerID;	// Relay player id. unique in relay instance
-		PlayerID PlayerID; // PlayerID
+		uint64_t EndpointID;	// Endpoint id. unique in relay instance
+		PlayerID RelayPlayerID; // PlayerID
 
-		bool operator == (const RelayPlayerInfo& op1) const { return RelayPlayerID == op1.RelayPlayerID && PlayerID == op1.PlayerID; }
-		bool operator != (const RelayPlayerInfo& op1) const { return RelayPlayerID != op1.RelayPlayerID || PlayerID != op1.PlayerID; }
+		bool operator == (const RelayPlayerInfo& op1) const { return EndpointID == op1.EndpointID && RelayPlayerID == op1.RelayPlayerID; }
+		bool operator != (const RelayPlayerInfo& op1) const { return EndpointID != op1.EndpointID || RelayPlayerID != op1.RelayPlayerID; }
 	};
 
 

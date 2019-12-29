@@ -168,6 +168,12 @@ namespace Net {
 
 } // namespace SF
 
+
+#define netCheck(e) SFCheckResult(Net,e)
+#define netCheckPtr(e) SFCheckPtr(Net,e)
+#define netCheckMem(e) SFCheckMem(Net,e)
+
+
 #define netChkPtr(e)		do{ if( (e) == nullptr ) SFErrJmp(Net,ResultCode::INVALID_POINTER); } while(false)
 #define netChk(e)			do{ Result hRes = e; if( !(hRes) ) SFErrJmp(Net,hRes); } while(false)
 #define netMem(a)			do{ if( (a) == nullptr ) SFErrJmp(Net,ResultCode::OUT_OF_MEMORY); } while(false)

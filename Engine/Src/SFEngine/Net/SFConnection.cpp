@@ -446,7 +446,7 @@ namespace Net {
 
 	Result Connection::OnRecv( SharedPointerT<Message::MessageData>& pMsg )
 	{
-		Result hr = ResultCode::SUCCESS;
+		FunctionContext hr;
 	
 		if (pMsg == nullptr)
 			return hr;
@@ -465,15 +465,12 @@ namespace Net {
 
 		if (GetEventHandler() == nullptr )
 		{
-			netChk(GetRecvQueue().Enqueue(pMsg));
+			netCheck(GetRecvQueue().Enqueue(pMsg));
 		}
 		else if (!(GetEventHandler()->OnRecvMessage(this, pMsg)))
 		{
 			SFLog(Net, Error, "Failed to route a message to recv msg:{0}", msgID);
-			if (pMsg != nullptr)
-			{
-				netChk(GetRecvQueue().Enqueue(std::forward<SharedPointerT<Message::MessageData>>(pMsg)));
-			}
+			netChk(GetRecvQueue().Enqueue(std::forward<SharedPointerT<Message::MessageData>>(pMsg)));
 		}
 
 		pMsg = nullptr;

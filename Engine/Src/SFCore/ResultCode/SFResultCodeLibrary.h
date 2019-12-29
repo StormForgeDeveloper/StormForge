@@ -423,110 +423,113 @@ namespace SF {
 			// Disconnected 
 			constexpr Result 			IO_DISCONNECTED                                                    ((int32_t)0xE7010086L);
 
+			// Canceled 
+			constexpr Result 			IO_CANCELED                                                        ((int32_t)0xE7010087L);
+
 			// Zookeeper System and server-side errors. 
-			constexpr Result 			ZK_SYSTEM                                                          ((int32_t)0xE7010087L);
+			constexpr Result 			ZK_SYSTEM                                                          ((int32_t)0xE7010088L);
 
 			// Zookeeper  A runtime inconsistency was found 
-			constexpr Result 			ZK_ZRUNTIMEINCONSISTENCY                                           ((int32_t)0xE7010088L);
+			constexpr Result 			ZK_ZRUNTIMEINCONSISTENCY                                           ((int32_t)0xE7010089L);
 
 			// Zookeeper A data inconsistency was found 
-			constexpr Result 			ZK_ZDATAINCONSISTENCY                                              ((int32_t)0xE7010089L);
+			constexpr Result 			ZK_ZDATAINCONSISTENCY                                              ((int32_t)0xE701008AL);
 
 			// Zookeeper Connection to the server has been lost 
-			constexpr Result 			ZK_ZCONNECTIONLOSS                                                 ((int32_t)0xE701008AL);
+			constexpr Result 			ZK_ZCONNECTIONLOSS                                                 ((int32_t)0xE701008BL);
 
 			// Zookeeper Error while marshalling or unmarshalling data 
-			constexpr Result 			ZK_ZMARSHALLINGERROR                                               ((int32_t)0xE701008BL);
+			constexpr Result 			ZK_ZMARSHALLINGERROR                                               ((int32_t)0xE701008CL);
 
 			// Zookeeper Operation is unimplemented 
-			constexpr Result 			ZK_ZUNIMPLEMENTED                                                  ((int32_t)0xE701008CL);
+			constexpr Result 			ZK_ZUNIMPLEMENTED                                                  ((int32_t)0xE701008DL);
 
 			// Zookeeper Operation timeout 
-			constexpr Result 			ZK_ZOPERATIONTIMEOUT                                               ((int32_t)0xE701008DL);
+			constexpr Result 			ZK_ZOPERATIONTIMEOUT                                               ((int32_t)0xE701008EL);
 
 			// Zookeeper Invalid arguments 
-			constexpr Result 			ZK_ZBADARGUMENTS                                                   ((int32_t)0xE701008EL);
+			constexpr Result 			ZK_ZBADARGUMENTS                                                   ((int32_t)0xE701008FL);
 
 			// Zookeeper Invliad zhandle state 
-			constexpr Result 			ZK_ZINVALIDSTATE                                                   ((int32_t)0xE701008FL);
+			constexpr Result 			ZK_ZINVALIDSTATE                                                   ((int32_t)0xE7010090L);
 
 			// Zookeeper API errors. 
-			constexpr Result 			ZK_ZAPIERROR                                                       ((int32_t)0xE7010090L);
+			constexpr Result 			ZK_ZAPIERROR                                                       ((int32_t)0xE7010091L);
 
 			// Zookeeper Node does not exist 
-			constexpr Result 			ZK_ZNONODE                                                         ((int32_t)0xE7010091L);
+			constexpr Result 			ZK_ZNONODE                                                         ((int32_t)0xE7010092L);
 
 			// Zookeeper Not authenticated 
-			constexpr Result 			ZK_ZNOAUTH                                                         ((int32_t)0xE7010092L);
+			constexpr Result 			ZK_ZNOAUTH                                                         ((int32_t)0xE7010093L);
 
 			// Zookeeper Version conflict 
-			constexpr Result 			ZK_ZBADVERSION                                                     ((int32_t)0xE7010093L);
+			constexpr Result 			ZK_ZBADVERSION                                                     ((int32_t)0xE7010094L);
 
 			// Zookeeper Ephemeral nodes may not have children 
-			constexpr Result 			ZK_ZNOCHILDRENFOREPHEMERALS                                        ((int32_t)0xE7010094L);
+			constexpr Result 			ZK_ZNOCHILDRENFOREPHEMERALS                                        ((int32_t)0xE7010095L);
 
 			// Zookeeper The node already exists 
-			constexpr Result 			ZK_ZNODEEXISTS                                                     ((int32_t)0xE7010095L);
+			constexpr Result 			ZK_ZNODEEXISTS                                                     ((int32_t)0xE7010096L);
 
 			// Zookeeper The node has children 
-			constexpr Result 			ZK_ZNOTEMPTY                                                       ((int32_t)0xE7010096L);
+			constexpr Result 			ZK_ZNOTEMPTY                                                       ((int32_t)0xE7010097L);
 
 			// Zookeeper The session has been expired by the server 
-			constexpr Result 			ZK_ZSESSIONEXPIRED                                                 ((int32_t)0xE7010097L);
+			constexpr Result 			ZK_ZSESSIONEXPIRED                                                 ((int32_t)0xE7010098L);
 
 			// Zookeeper Invalid callback specified 
-			constexpr Result 			ZK_ZINVALIDCALLBACK                                                ((int32_t)0xE7010098L);
+			constexpr Result 			ZK_ZINVALIDCALLBACK                                                ((int32_t)0xE7010099L);
 
 			// Zookeeper Invalid ACL specified 
-			constexpr Result 			ZK_ZINVALIDACL                                                     ((int32_t)0xE7010099L);
+			constexpr Result 			ZK_ZINVALIDACL                                                     ((int32_t)0xE701009AL);
 
 			// Zookeeper Client authentication failed 
-			constexpr Result 			ZK_ZAUTHFAILED                                                     ((int32_t)0xE701009AL);
+			constexpr Result 			ZK_ZAUTHFAILED                                                     ((int32_t)0xE701009BL);
 
 			// Zookeeper ZooKeeper is closing 
-			constexpr Result 			ZK_ZCLOSING                                                        ((int32_t)0xE701009BL);
+			constexpr Result 			ZK_ZCLOSING                                                        ((int32_t)0xE701009CL);
 
 			// Zookeeper (not error) no server responses to process 
-			constexpr Result 			ZK_ZNOTHING                                                        ((int32_t)0xE701009CL);
+			constexpr Result 			ZK_ZNOTHING                                                        ((int32_t)0xE701009DL);
 
 			// Zookeeper session moved to another server, so operation is ignored 
-			constexpr Result 			ZK_ZSESSIONMOVED                                                   ((int32_t)0xE701009DL);
+			constexpr Result 			ZK_ZSESSIONMOVED                                                   ((int32_t)0xE701009EL);
 
 			// End of stream 
-			constexpr Result 			END_OF_STREAM                                                      ((int32_t)0xE701009EL);
+			constexpr Result 			END_OF_STREAM                                                      ((int32_t)0xE701009FL);
 
 			// End of file 
-			constexpr Result 			END_OF_FILE                                                        ((int32_t)0xE701009FL);
+			constexpr Result 			END_OF_FILE                                                        ((int32_t)0xE70100A0L);
 
 			// Out of reserved memory 
-			constexpr Result 			OUT_OF_RESERVED_MEMORY                                             ((int32_t)0xE70100A0L);
+			constexpr Result 			OUT_OF_RESERVED_MEMORY                                             ((int32_t)0xE70100A1L);
 
 			// The object not initialized or opened 
-			constexpr Result 			NOT_OPENED                                                         ((int32_t)0xE70100A1L);
+			constexpr Result 			NOT_OPENED                                                         ((int32_t)0xE70100A2L);
 
 			// Operation is canceled 
-			constexpr Result 			SUCCESS_CANCELED                                                   ((int32_t)0x270100A2L);
+			constexpr Result 			SUCCESS_CANCELED                                                   ((int32_t)0x270100A3L);
 
 			// Operation is not supported 
-			constexpr Result 			NOT_SUPPORTED                                                      ((int32_t)0xE70100A3L);
+			constexpr Result 			NOT_SUPPORTED                                                      ((int32_t)0xE70100A4L);
 
 			// Format is not supported 
-			constexpr Result 			NOT_SUPPORTED_FORMAT                                               ((int32_t)0xE70100A4L);
+			constexpr Result 			NOT_SUPPORTED_FORMAT                                               ((int32_t)0xE70100A5L);
 
 			// Format is not valid 
-			constexpr Result 			INVALID_FORMAT                                                     ((int32_t)0xE70100A5L);
+			constexpr Result 			INVALID_FORMAT                                                     ((int32_t)0xE70100A6L);
 
 			// Failed to open file 
-			constexpr Result 			INVALID_FILE                                                       ((int32_t)0xE70100A6L);
+			constexpr Result 			INVALID_FILE                                                       ((int32_t)0xE70100A7L);
 
 			// Specific variable not found 
-			constexpr Result 			VARIABLE_NOT_FOUND                                                 ((int32_t)0xE70100A7L);
+			constexpr Result 			VARIABLE_NOT_FOUND                                                 ((int32_t)0xE70100A8L);
 
 			// Specific function not found 
-			constexpr Result 			FUNCTION_NOT_FOUND                                                 ((int32_t)0xE70100A8L);
+			constexpr Result 			FUNCTION_NOT_FOUND                                                 ((int32_t)0xE70100A9L);
 
 			// Specific object not found 
-			constexpr Result 			OBJECT_NOT_FOUND                                                   ((int32_t)0xE70100A9L);
+			constexpr Result 			OBJECT_NOT_FOUND                                                   ((int32_t)0xE70100AAL);
 
 	}//namespace ResultCode 
 }//namespace SF 

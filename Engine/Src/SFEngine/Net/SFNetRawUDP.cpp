@@ -46,15 +46,6 @@ namespace Net {
 	{
 	}
 
-	//bool RawUDP::MyNetSocketIOAdapter::CanDelete()
-	//{
-	//	if (GetIsIORegistered())
-	//		return false;
-
-	//	return ((GetPendingSendCount() + GetPendingRecvCount()) == 0);
-
-	//}
-
 	Result RawUDP::MyNetSocketIOAdapter::OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer)
 	{
 		Result hr = ResultCode::SUCCESS;
@@ -156,17 +147,20 @@ namespace Net {
 		: m_Heap("NetRawUDP", Service::NetSystem->GetHeap())
 		, m_NetIOAdapter(*this)
 	{
-		// we will share the write queue for UDP
-		//SetWriteQueue(new WriteBufferQueue);
+	}
+
+	RawUDP::RawUDP(IHeap& heap)
+		: m_Heap("NetRawUDP", heap)
+		, m_NetIOAdapter(*this)
+	{
 	}
 
 	RawUDP::~RawUDP()
 	{
-		IHeap::Delete(m_pRecvBuffers);
-		//if (GetWriteQueue()) GetHeap().Delete( GetWriteQueue());
+		delete m_pRecvBuffers;
 	}
 
-	Result RawUDP::InitializeNet(const NetAddress& localAddress, MessageHandler *pHandler)
+	Result RawUDP::InitializeNet(const NetAddress& localAddress, MessageHandlerFunc &&Handler)
 	{
 		Result hr = ResultCode::SUCCESS;
 		SF_SOCKET socket = INVALID_SOCKET;
@@ -177,7 +171,7 @@ namespace Net {
 
 		m_NetIOAdapter.CloseSocket();
 
-		m_pMessageHandler = pHandler;
+		m_MessageHandler = std::forward<MessageHandlerFunc>(Handler);
 
 		if (StrUtil::IsNullOrEmpty(localAddress.Address) == '\0')
 		{
@@ -263,68 +257,17 @@ namespace Net {
 
 	Result RawUDP::TerminateNet()
 	{
-		Result hr = ResultCode::SUCCESS;
+		FunctionContext hr;
 
 		m_NetIOAdapter.CloseSocket();
 
-
-	//Proc_End:
+		// Clear handler pointer
+		m_MessageHandler = {};
 
 		SFLog(Net, Info, "RawUDP Close {0}, hr={1}", m_LocalAddress, hr);
 
 		return hr;
 	}
-
-	//Result RawUDP::PendingRecv(IOBUFFER_READ *pOver)
-	//{
-	//	Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
-
-	//	if (!NetSystem::IsProactorSystem())
-	//		return ResultCode::SUCCESS;
-
-	//	netChk(pOver->SetPendingTrue());
-	//	pOver->SetupRecvUDP(0);
-
-	//	while (1)
-	//	{
-	//		hrErr = Service::NetSystem->RecvFrom(m_NetIOAdapter.GetIOSocket(), pOver);
-	//		hr = hrErr;
-	//		switch ((uint32_t)hrErr)
-	//		{
-	//		case (uint32_t)ResultCode::SUCCESS_FALSE:
-	//			assert(false);  // this is supposed not to be happened
-	//			//hr = ResultCode::IO_TRY_AGAIN; 
-	//			goto Proc_End;// success
-	//			break;
-	//		case (uint32_t)ResultCode::SUCCESS:
-	//		case (uint32_t)ResultCode::IO_IO_PENDING:
-	//		case (uint32_t)ResultCode::IO_WOULDBLOCK:
-	//			hr = hrErr;
-	//			goto Proc_End;// success
-	//			break;
-	//		case (uint32_t)ResultCode::IO_TRY_AGAIN:
-	//		case (uint32_t)ResultCode::IO_NETUNREACH:
-	//		case (uint32_t)ResultCode::IO_CONNABORTED:
-	//		case (uint32_t)ResultCode::IO_CONNRESET:
-	//		case (uint32_t)ResultCode::IO_NETRESET:
-	//			// some remove has problem with continue connection
-	//			SFLog(Net, Debug2, "UDP Remote has connection error err={0:X8}, {1}", hrErr, pOver->NetAddr.From);
-	//			//break;
-	//		default:
-	//			// Unknown error
-	//			SFLog(Net, Debug3, "UDP Read Pending failed err={0:X8}", hrErr);
-	//			//netErr( HRESULT_FROM_WIN32(iErr2) );
-	//			break;
-	//		};
-	//	}
-
-	//Proc_End:
-
-	//	return hr;
-	//}
-
-
-
 
 
 	// Send message to connection with network device
@@ -357,7 +300,7 @@ namespace Net {
 			{
 				pOverlapped->ClearBuffer();
 				pOverlapped->pMsgs = nullptr;
-				GetHeap().Delete(pOverlapped);
+				delete pOverlapped;
 			}
 			else
 			{
@@ -390,7 +333,7 @@ namespace Net {
 	}
 
 
-	// called when incoming message occure
+	// called when incoming message occur
 	Result RawUDP::OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff)
 	{
 		Result hr = ResultCode::SUCCESS;
@@ -416,8 +359,7 @@ namespace Net {
 			uiBuffSize -= pMsgHeader->Length;
 			pBuff += pMsgHeader->Length;
 
-			if (m_pMessageHandler != nullptr)
-				m_pMessageHandler->OnRecv(remoteAddr, pMsg);
+			m_MessageHandler(remoteAddr, pMsg);
 
 			netChk(hr);
 		}

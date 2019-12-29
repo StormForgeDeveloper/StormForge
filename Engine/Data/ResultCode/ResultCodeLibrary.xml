@@ -145,6 +145,7 @@
   <ResultCodeItem Severity="Error" CodeName="IO_ADDRINUSE" Desc="Address in use"/>
   <ResultCodeItem Severity="Error" CodeName="IO_BADPACKET" Desc="Network Message not expected packet data"/>
   <ResultCodeItem Severity="Error" CodeName="IO_DISCONNECTED" Desc="Disconnected"/>
+  <ResultCodeItem Severity="Error" CodeName="IO_CANCELED" Desc="Canceled"/>
 
   <!-- ZooKeeper -->
   <ResultCodeItem Severity="Error" CodeName="ZK_SYSTEM" Desc="Zookeeper System and server-side errors."/>

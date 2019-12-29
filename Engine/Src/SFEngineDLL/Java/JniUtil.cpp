@@ -396,9 +396,7 @@ namespace SF
 		static jclass jcls = m_Env->FindClass("java/com/sf/SFRelayPlayerInfo");
 		static jmethodID constructorID = m_Env->GetMethodID(jcls, "<init>", "(J;J)V");
 
-		jstring jstrName = m_Env->NewStringUTF(value.NickName);
-
-		jobject jobj = m_Env->NewObject(jcls, constructorID, (jlong)value.RelayClientID, (jlong)value.RelayPlayerID);
+		jobject jobj = m_Env->NewObject(jcls, constructorID, (jlong)value.EndpointID, (jlong)value.RelayPlayerID);
 		return jobj;
 	}
 

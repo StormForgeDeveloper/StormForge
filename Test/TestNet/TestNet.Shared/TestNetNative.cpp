@@ -196,7 +196,7 @@ Result TestNetNative::OnTick(EngineTaskTick tick)
 	while (pCon->GetRecvMessage(pIMsg))
 	{
 		Message::MessageBase * pMsgBase = nullptr;
-		Result hrParse = Protocol::ParseMessage(Service::NetSystem->GetHeap(), pIMsg, pMsgBase);
+		Result hrParse = Protocol::ParseMessage(Service::NetSystem->GetHeap(), std::forward<MessageDataPtr>(pIMsg), pMsgBase);
 		if (!hrParse || pMsgBase == nullptr)
 			continue;
 

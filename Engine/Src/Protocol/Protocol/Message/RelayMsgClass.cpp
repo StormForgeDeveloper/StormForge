@@ -145,7 +145,7 @@ namespace SF
 
 				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
 				protocolChk( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_MyPlayerRelayID, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_MyEndpointID, pCur, iMsgSize, sizeof(uint32_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &numberofMemberInfos, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( pMemberInfos, pCur, iMsgSize, sizeof(RelayPlayerInfo)*numberofMemberInfos ) );
 				m_MemberInfos.SetLinkedBuffer(numberofMemberInfos, numberofMemberInfos, pMemberInfos);
@@ -167,7 +167,7 @@ namespace SF
 
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("RelayInstanceID", parser.GetRelayInstanceID());
-				variableBuilder.SetVariable("MyPlayerRelayID", parser.GetMyPlayerRelayID());
+				variableBuilder.SetVariable("MyEndpointID", parser.GetMyEndpointID());
 				variableBuilder.SetVariable("MemberInfos", parser.GetMemberInfos());
 
 
@@ -189,7 +189,7 @@ namespace SF
 
 			}; // Result JoinRelayInstanceResS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* JoinRelayInstanceResS2CEvt::Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyPlayerRelayID, const Array<RelayPlayerInfo>& InMemberInfos )
+			MessageData* JoinRelayInstanceResS2CEvt::Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -210,7 +210,7 @@ namespace SF
 
 				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
 				Protocol::PackParamCopy( pMsgData, &InRelayInstanceID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InMyPlayerRelayID, sizeof(uint32_t));
+				Protocol::PackParamCopy( pMsgData, &InMyEndpointID, sizeof(uint32_t));
 				Protocol::PackParamCopy( pMsgData, &numberOfInMemberInfos, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InMemberInfos.data(), (INT)(sizeof(RelayPlayerInfo)*InMemberInfos.size())); 
 
@@ -224,7 +224,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* JoinRelayInstanceResS2CEvt::Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyPlayerRelayID, const Array<RelayPlayerInfo>& InMemberInfos )
+			}; // MessageData* JoinRelayInstanceResS2CEvt::Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 
 
 
@@ -232,8 +232,8 @@ namespace SF
 			{
  				JoinRelayInstanceResS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "JoinRelayInstanceRes:{0}:{1} , Result:{2:X8}, RelayInstanceID:{3}, MyPlayerRelayID:{4}, MemberInfos:{5,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetResult(), parser.GetRelayInstanceID(), parser.GetMyPlayerRelayID(), parser.GetMemberInfos()); 
+				SFLog(Net, Debug1, "JoinRelayInstanceRes:{0}:{1} , Result:{2:X8}, RelayInstanceID:{3}, MyEndpointID:{4}, MemberInfos:{5,30}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetResult(), parser.GetRelayInstanceID(), parser.GetMyEndpointID(), parser.GetMemberInfos()); 
 				return ResultCode::SUCCESS;
 			}; // Result JoinRelayInstanceResS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -545,8 +545,8 @@ namespace SF
 				pCur = pIMsg->GetMessageData();
 
 				protocolChk( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_SenderRelayID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_TargetRelayMask, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_SenderEndpointID, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolChk( Protocol::StreamParamCopy( &m_TargetEndpointMask, pCur, iMsgSize, sizeof(uint32_t) ) );
 				protocolChk( Protocol::StreamParamCopy( &numberofPayload, pCur, iMsgSize, sizeof(uint16_t) ) );
 				protocolChk( Protocol::StreamParamLnk( pPayload, pCur, iMsgSize, sizeof(uint8_t)*numberofPayload ) );
 				m_Payload.SetLinkedBuffer(numberofPayload, numberofPayload, pPayload);
@@ -567,8 +567,8 @@ namespace SF
 				protocolChk(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("RelayInstanceID", parser.GetRelayInstanceID());
-				variableBuilder.SetVariable("SenderRelayID", parser.GetSenderRelayID());
-				variableBuilder.SetVariable("TargetRelayMask", parser.GetTargetRelayMask());
+				variableBuilder.SetVariable("SenderEndpointID", parser.GetSenderEndpointID());
+				variableBuilder.SetVariable("TargetEndpointMask", parser.GetTargetEndpointMask());
 				variableBuilder.SetVariable("Payload", parser.GetPayload());
 
 
@@ -590,7 +590,7 @@ namespace SF
 
 			}; // Result RelayPacketC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* RelayPacketC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint32_t &InTargetRelayMask, const Array<uint8_t>& InPayload )
+			MessageData* RelayPacketC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 			{
  				MessageData *pNewMsg = nullptr;
 				Result hr;
@@ -610,8 +610,8 @@ namespace SF
 				pMsgData = pNewMsg->GetMessageData();
 
 				Protocol::PackParamCopy( pMsgData, &InRelayInstanceID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InSenderRelayID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InTargetRelayMask, sizeof(uint32_t));
+				Protocol::PackParamCopy( pMsgData, &InSenderEndpointID, sizeof(uint32_t));
+				Protocol::PackParamCopy( pMsgData, &InTargetEndpointMask, sizeof(uint32_t));
 				Protocol::PackParamCopy( pMsgData, &numberOfInPayload, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InPayload.data(), (INT)(sizeof(uint8_t)*InPayload.size())); 
 
@@ -625,7 +625,7 @@ namespace SF
 				}
 				return pNewMsg;
 
-			}; // MessageData* RelayPacketC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderRelayID, const uint32_t &InTargetRelayMask, const Array<uint8_t>& InPayload )
+			}; // MessageData* RelayPacketC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 
 
 
@@ -633,8 +633,8 @@ namespace SF
 			{
  				RelayPacketC2SEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "RelayPacket:{0}:{1} , RelayInstanceID:{2}, SenderRelayID:{3}, TargetRelayMask:{4}, Payload:{5,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetRelayInstanceID(), parser.GetSenderRelayID(), parser.GetTargetRelayMask(), parser.GetPayload()); 
+				SFLog(Net, Debug1, "RelayPacket:{0}:{1} , RelayInstanceID:{2}, SenderEndpointID:{3}, TargetEndpointMask:{4}, Payload:{5,30}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetRelayInstanceID(), parser.GetSenderEndpointID(), parser.GetTargetEndpointMask(), parser.GetPayload()); 
 				return ResultCode::SUCCESS;
 			}; // Result RelayPacketC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

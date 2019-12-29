@@ -92,7 +92,7 @@ public:
 		m_Objects = new(heap) std::atomic<ObjectType>[itemCount];
 		for (uint iObj = 0; iObj < m_ItemCount; iObj++)
 		{
-			m_Objects[iObj] = DefaultValue<ObjectType>();
+			m_Objects[iObj] = {};
 		}
 	}
 
@@ -116,13 +116,14 @@ public:
 	Result Enqueue(const ObjectType& pObj)
 	{
 		auto headIndex = m_HeadIndex.fetch_add(1, std::memory_order_relaxed) % m_ItemCount;
-		ObjectType expected = DefaultValue<ObjectType>();
+		const ObjectType defaultValue = {};
+		ObjectType expected = {};
 
 		while (!m_Objects[headIndex].compare_exchange_weak(expected, pObj, std::memory_order_release, std::memory_order_relaxed))
 		{
-			if (expected != DefaultValue<ObjectType>())
+			if (expected != defaultValue)
 			{
-				expected = DefaultValue<ObjectType>();
+				expected = {};
 				Sleep(0);
 			}
 		}
@@ -133,18 +134,19 @@ public:
 	// Dequeue from the queue
 	Result Dequeue(ObjectType& obj)
 	{
-		obj = DefaultValue<ObjectType>();
+		obj = {};
 		auto head = m_HeadIndex.fetch_add(1, std::memory_order_relaxed);
 		auto tail = m_TailIndex.fetch_add(1, std::memory_order_relaxed);
 		if ((int)(head - tail) <= 0)
 			return ResultCode::FAIL;
 
 		auto tailIndex = tail % m_ItemCount;
-		ObjectType expected = DefaultValue<ObjectType>();
+		const ObjectType defaultValue = {};
+		ObjectType expected = {};
 
 		while(true)
 		{
-			obj = m_Objects[tailIndex].exchange(DefaultValue<ObjectType>(), std::memory_order_seq_cst);
+			obj = m_Objects[tailIndex].exchange(defaultValue, std::memory_order_seq_cst);
 			if (obj != nullptr)
 				return ResultCode::SUCCESS;
 		}
