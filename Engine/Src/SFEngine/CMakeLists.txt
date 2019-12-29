@@ -71,6 +71,7 @@ set(SFENGINE_LIB_FILES
 	Net/SFConnectionUDPBase.cpp
 	Net/SFLoopbackConnection.cpp
 	Net/SFMessage.cpp
+	Net/SFMessageData.h
 	Net/SFMessageWindow.cpp
 	Net/SFNetCtrl.cpp
 	Net/SFNetDef.cpp

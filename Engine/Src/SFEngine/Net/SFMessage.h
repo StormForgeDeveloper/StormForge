@@ -16,8 +16,6 @@
 #include "Types/SFEngineTypedefs.h"
 #include "SFAssert.h"
 #include "Protocol/SFProtocol.h"
-#include "Object/SFSharedObject.h"
-#include "Object/SFSharedPointer.h"
 
 
 namespace SF {
@@ -184,124 +182,11 @@ namespace Message {
 #pragma pack(pop)
 
 
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Network message object
-	//
-
-	
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Message data class
-	//
-
-	class MessageData : public SharedObject
-	{
-	private:
-		// Message Buffer Pointer
-		union {
-		MessageHeader*			m_pMsgHeader;
-		MobileMessageHeader*	m_pMobileMsgHeader;
-		};
-
-		bool					m_bIsSequenceAssigned;
-
-		// Encryption status
-
-	private:
-		MessageData( uint uiMsgBufSize, const uint8_t* pData = NULL );
-
-	public:
-		virtual ~MessageData();
-
-		inline MessageHeader*	GetMessageHeader();
-		inline MobileMessageHeader*	GetMobileMessageHeader();
-		inline uint8_t*	GetMessageBuff();       // data include header
-		inline uint		GetMessageSize() const; // total length
-		inline uint8_t*	GetMessageData();       // data except header
-
-		// Data except header
-		void GetLengthNDataPtr( uint& length, uint8_t* &pDataPtr);
-		uint GetDataLength();
-
-		// Parsing helper
-		void GetRouteInfo(RouteContext& routeContext, TransactionID& transID);
-
-		void ClearAssignedSequence();
-		void AssignSequence( uint sequence );
-		inline bool GetIsSequenceAssigned()					{ return m_bIsSequenceAssigned; }
-
-		// Initialize message buffer
-		static MessageData* NewMessage(IHeap& heap, uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData = nullptr );
-
-		virtual MessageData* Clone(IHeap& memoryManager);
-
-
-		// Update checksume and encrypt
-		void UpdateChecksum();
-		void UpdateChecksumNEncrypt();
-
-		Result ValidateChecksum();
-		Result ValidateChecksumNDecrypt();
-	};
-	
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Message base class
-	//
-
-	class MessageBase
-	{
-	private:
-		// Message handler
-		SharedPointerT<MessageData>	m_pIMsg;
-		
-		// Parsing result
-		Result		m_hrParsing = ResultCode::SUCCESS_FALSE;
-		bool		m_bHasParsed = false;
-
-	public:
-
-		MessageBase() = default;
-		MessageBase(SharedPointerT<MessageData> &&pIMsg)
-			: m_pIMsg(std::forward<SharedPointerT<MessageData>>(pIMsg))
-		{
-		}
-
-		virtual ~MessageBase() { m_pIMsg = nullptr; }
-
-		// Get Message
-		MessageData* GetMessage() const { return *m_pIMsg; }
-		const SharedPointerT<MessageData>& GetMessagePtr() const { return m_pIMsg; }
-
-		// Get Parsing Result
-		Result GetParsingResult() const { return m_hrParsing; }
-
-		// Parse message data, message data should be passed to constructor
-		virtual Result ParseMsg();
-
-		// Parsing message data
-		virtual Result ParseMessage( MessageData* pIMsg ) = 0;
-
-		virtual Result OverrideRouteContextDestination( EntityUID to ) { unused(to); AssertRel(false); return ResultCode::SUCCESS; }
-		virtual Result OverrideRouteInfomation( EntityUID to, uint hopCount ) { unused(to, hopCount); AssertRel(false); return ResultCode::SUCCESS; }
-	};
-
-
-
 #include "SFMessage.inl"
 
 } // Message
-
-
-	typedef SharedPointerT<Message::MessageData> MessageDataPtr;
-
-
-
 } // SF
 
-extern template class SF::SharedPointerT<SF::Message::MessageData>;
+
 
 

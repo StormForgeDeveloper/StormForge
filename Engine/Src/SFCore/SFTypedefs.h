@@ -529,7 +529,6 @@ typedef unsigned int		SysUInt;
 #define SF_FASTCALL __attribute__((fastcall))
 #define SF_TEMPLATE_EXTERN
 
-// disable unreferenced label warning (Proc_End)
 #define SF_DO_PRAGMA(x) _Pragma (#x)
 #define SF_COMPILETIME_TODO(x) SF_DO_PRAGMA(message ("TODO - " #x))
 #define SF_COMPILETIME_MESSAGE(x) SF_DO_PRAGMA(message ("Message - " #x))
@@ -538,8 +537,6 @@ typedef unsigned int		SysUInt;
 // clang uses dllimport style
 #define SFDLL_IMPORT __attribute__((visibility("default")))
 #define SFDLL_EXPORT extern "C" __attribute__((visibility("default"))) 
-//#define SFDLL_IMPORT extern "C" __declspec(dllimport)
-//#define SFDLL_EXPORT extern "C" __declspec(dllexport)
 #define SF_SYSTEMAPI 
 
 #else
@@ -563,10 +560,14 @@ typedef unsigned int		SysUInt;
 #define SF_SYSTEMAPI APIENTRY
 
 
-
-
 #endif
 
+
+#ifdef SF_BUILD_ENGINE_DLL
+#	define SF_ENGINE_API SFDLL_EXPORT
+#else
+#	define SF_ENGINE_API SFDLL_IMPORT
+#endif
 
 
 

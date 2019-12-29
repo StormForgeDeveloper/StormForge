@@ -17,15 +17,15 @@
 #include "SFTypedefs.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
-
+#include "Net/SFMessageData.h"
 
 namespace SF
 {
 
-	namespace Message {
-		class MessageData;
-		class MessageBase;
-	}
+	//namespace Message {
+	//	class MessageData;
+	//	class MessageBase;
+	//}
 
 	enum {
 		SF_PROTOCOL_VERSION = 10

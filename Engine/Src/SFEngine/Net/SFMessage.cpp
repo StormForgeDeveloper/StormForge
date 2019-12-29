@@ -57,6 +57,35 @@ namespace Message {
 	{
 	}
 
+	MessageHeader* MessageData::GetMessageHeader()
+	{
+		return m_pMsgHeader;
+	}
+
+	MobileMessageHeader* MessageData::GetMobileMessageHeader()
+	{
+		AssertRel(m_pMsgHeader->msgID.IDs.Mobile);
+		return m_pMobileMsgHeader;
+	}
+
+	uint8_t* MessageData::GetMessageBuff()
+	{
+		return (uint8_t*)m_pMsgHeader;
+	}
+
+	uint MessageData::GetMessageSize() const
+	{
+		return m_pMsgHeader ? m_pMsgHeader->Length : 0;
+	}
+
+	uint8_t* MessageData::GetMessageData()
+	{
+		if (m_pMsgHeader->msgID.IDs.Mobile)
+			return (uint8_t*)(m_pMobileMsgHeader + 1);
+		else
+			return (uint8_t*)(m_pMsgHeader + 1);
+	}
+
 	void MessageData::AssignSequence( uint sequence )
 	{
 		// sequence must not assigned twice

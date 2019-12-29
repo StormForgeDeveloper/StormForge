@@ -17,6 +17,7 @@
 #include "Thread/SFSystemSynchronization.h"
 
 
+
 namespace SF {
 
 
@@ -43,8 +44,11 @@ namespace SF {
 	private:
 
 		// Thread name
-		const char* m_ThreadName = "";
 		FixedString m_Name;
+		char* m_ThreadName = nullptr;
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+		wchar_t* m_wThreadName = nullptr;
+#endif
 
 		// working thread priority
 		PRIORITY m_threadPriority;

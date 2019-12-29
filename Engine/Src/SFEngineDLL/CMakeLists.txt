@@ -34,7 +34,7 @@ set(SFENGINEDLL_LIB_FILES
 
 
 
-
+add_definitions(-DSF_BUILD_ENGINE_DLL)
 add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES})
 
 

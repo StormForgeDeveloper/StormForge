@@ -150,6 +150,14 @@ namespace SF {
 	Thread::~Thread()
 	{
 		Stop(true);
+
+		delete m_ThreadName;
+		m_ThreadName = nullptr;
+
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+		delete m_wThreadName;
+		m_wThreadName = nullptr;
+#endif
 	}
 
 	void Thread::SetThreadNameInternal(const char* threadName)
@@ -160,8 +168,6 @@ namespace SF {
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 
 		typedef HRESULT(_stdcall *TSetThreadDescription)(HANDLE hThread, PCWSTR threadName);
-		wchar_t threadNameBuffer[512];
-
 		static HMODULE hKernel = LoadLibraryA("Kernel32.dll");
 		if (hKernel == nullptr)
 			return;
@@ -170,10 +176,14 @@ namespace SF {
 		if (pSetThreadDescription == nullptr)
 			return;
 
-		StrUtil::UTF8ToWCS(threadName, threadNameBuffer);
+		delete m_wThreadName;
+		auto buffLen = static_cast<int>(strlen(threadName)) + 1;
+		m_wThreadName = new wchar_t[buffLen];
+
+		StrUtil::UTF8ToWCS(threadName, m_wThreadName, buffLen);
 
 		auto nativeHandle = thread::native_handle();
-		pSetThreadDescription((HANDLE)nativeHandle, threadNameBuffer);
+		pSetThreadDescription((HANDLE)nativeHandle, m_wThreadName);
 #else
 		pthread_setname_np(native_handle(), threadName);
 #endif
@@ -183,13 +193,17 @@ namespace SF {
 	{
 		if (threadName == nullptr) threadName = "NoName";
 
-		m_ThreadName = threadName;
+		delete m_ThreadName;
+		auto buffLen = static_cast<int>(strlen(threadName)) + 1;
+		m_ThreadName = new(GetSystemHeap()) char[buffLen];
+		StrUtil::StringCopy(m_ThreadName, buffLen, threadName);
+
 		m_Name = Service::StringDB->AddNGetString(threadName);
 
 		if (GetThreadID() == thread::id())
 			return;
 
-		SetThreadNameInternal(threadName);
+		SetThreadNameInternal(static_cast<const char*>(m_ThreadName));
 	}
 
 	// Get/Set Thread Priority
