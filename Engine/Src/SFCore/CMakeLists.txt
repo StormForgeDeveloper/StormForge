@@ -218,7 +218,6 @@ set(SFCORE_LIB_FILES
 	Math/SF3DMath_vectorSoft.inl
 	Math/SFAngle.inl
 	Math/SFMath.inl
-	SFTypedefs.inl
 	String/SFHashCRC32Table.inl
 	String/SFStrUtil.inl
 	Thread/SFSynchronization.inl

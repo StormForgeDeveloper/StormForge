@@ -80,19 +80,19 @@ namespace Message {
 		} IDSeq;
 		uint32_t ID;
 
-		inline MessageID();
+		MessageID() : ID(0) {}
 		//inline tag_MessageID( const tag_MessageID& src );
-		inline MessageID( uint32_t uiID );
-		inline MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode );
+		MessageID( uint32_t uiID ) : ID(uiID) {}
+		MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode );
 
-		inline uint32_t SetMessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode );
+		uint32_t SetMessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode );
 
-		void SetSequence(uint sequence);
+		void SetSequence(uint sequence) { IDSeq.Sequence = sequence; }
 
 		// Only MsgID part, no sequence or length
-		uint GetMsgID() const;
+		uint GetMsgID() const { return IDSeq.MsgID; }
 #ifndef SWIG
-		inline operator uint32_t() const;
+		operator uint32_t() const { return ID; }
 #endif
 	} ;
 

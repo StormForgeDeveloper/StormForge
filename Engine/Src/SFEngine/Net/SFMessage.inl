@@ -19,27 +19,12 @@
 
 
 
-MessageID::MessageID()
-	:ID(0)
-{
-}
-
-//MessageID::MessageID( const MessageID& src )
-//	:ID(src.ID)
-//{
-//}
-
-MessageID::MessageID( uint32_t uiID )
-	:ID(uiID)
-{
-}
-
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
 #endif
 
-MessageID::MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode )
+inline MessageID::MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode )
 {
 	IDs.MsgCode = uiCode;
 	IDs.Policy = uiPolicy;
@@ -50,7 +35,7 @@ MessageID::MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiP
 	IDs.Sequence = 0;// uiSeq;
 }
 
-uint32_t MessageID::SetMessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode )
+inline uint32_t MessageID::SetMessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode )
 {
 	IDs.MsgCode = uiCode;
 	IDs.Policy = uiPolicy;
@@ -60,22 +45,6 @@ uint32_t MessageID::SetMessageID( uint uiType, uint uiReliability, uint uiMobili
 	IDs.Type = uiType;
 	IDs.Sequence = 0;// uiSeq;
 
-	return ID;
-}
-
-inline void MessageID::SetSequence(uint sequence)
-{
-	IDSeq.Sequence = sequence;
-}
-
-// Only MsgID part, no sequence or length
-inline uint MessageID::GetMsgID() const
-{
-	return IDSeq.MsgID;
-}
-
-MessageID::operator uint32_t() const
-{
 	return ID;
 }
 

@@ -25,11 +25,13 @@ set(SFENGINEDLL_LIB_FILES
 	Java/JniEngine.cpp
 	Java/JniObject.cpp
 	Java/JniUtil.cpp
-
   	SFEngineDLLPCH.h
 	SharpCPP/SFCSUtil.h
 	Java/JniUtil.h
 	pch.h
+	Interfaces/SFPublicInterface.cpp
+	Interfaces/SFNetRelayInterface.h
+	Interfaces/SFNetRelayInterface.cpp
   )
 
 

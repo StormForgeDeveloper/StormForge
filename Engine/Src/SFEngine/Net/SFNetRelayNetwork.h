@@ -21,6 +21,7 @@
 #include "EngineObject/SFEngineObject.h"
 #include "Net/SFNetSocket.h"
 #include "Net/SFNetRawUDP.h"
+#include "Interfaces/SFPublicTypes.h"
 
 
 namespace SF {
@@ -39,17 +40,8 @@ namespace Net {
 	{
 	public:
 
-		enum class RelayNetworkState : uint16_t
-		{
-			None,
-			Initialized,
-			Connecting,
-			Connected,
-			Disconnecting,
-			Disconnected,
-		};
-
 		using super = EngineObject;
+		using RecvHandler = std::function<void(uint32_t senderEndPoint, size_t payloadSize, const void* payloadData)>;
 
 	public:
 
@@ -63,13 +55,13 @@ namespace Net {
 		RelayNetworkState GetRelayNetworkState() const { return m_RelayNetworkState; }
 		uint32_t GetRelayInstanceID() const { return m_RelayInstanceID; }
 		PlayerID GetLocalPlayerID() const { return m_PlayerID; }
-		uint32_t GetRelayEndpointID() const { return m_PlayerEndpointID; }
+		uint32_t GetLocalEndpointID() const { return m_PlayerEndpointID; }
 
 		// Connect to remote. InitConnection + Connect 
 		// @relayServerAddr: relay server address
 		// @relayInstanceID:  relay server instance id
 		// @myPlayerID: my player id, 
-		virtual Result Connect(const NetAddress& relayServerAddr, uint32_t relayInstanceID, PlayerID myPlayerID);
+		virtual Result Connect(const NetAddress& relayServerAddr, uint32_t relayInstanceID, PlayerID myPlayerID, RecvHandler&& recvHandler);
 
 		// Disconnect connection
 		virtual Result Disconnect(const char* reason);
@@ -81,17 +73,11 @@ namespace Net {
 		//virtual void DisconnectNRelease(const char* reason);
 
 		// Query connection event
-		uint32_t GetRelayNetworkEventCount();
+		size_t GetRelayNetworkEventCount();
 		Result DequeueRelayNetworkEvent(ConnectionEvent& curEvent);
 
 		// Send message to connected entity
 		virtual Result Send(uint32_t targetEndpointMask, size_t payloadSize, const void* payloadData);
-
-		// Message count currently in recv queue
-		virtual SysUInt GetRecvMessageCount();
-
-		// Get received Message
-		virtual Result GetRecvMessage(SharedPointerT<Message::MessageData> &pIMsg);
 
 
 		// Engine object
@@ -106,6 +92,12 @@ namespace Net {
 
 		// called when incoming message occur
 		Result OnRecv(const sockaddr_storage& remoteAddr, SharedPointerT<Message::MessageData>& pMsg);
+
+		Result OnJoinRelayInstanceResS2CEvt(MessageDataPtr&& pMsg);
+		Result OnPlayerJoinS2CEvt(MessageDataPtr&& pMsg);
+		Result OnPlayerLeftS2CEvt(MessageDataPtr&& pMsg);
+		Result OnRelayPacketC2SEvt(MessageDataPtr&& pMsg);
+
 
 		// Called on connection result
 		virtual void OnRelayNetworkResult(Result hrConnect);
@@ -139,11 +131,15 @@ namespace Net {
 		// Raw udp network
 		RawUDP m_RawUDP;
 
-		// Recv Message Queue
-		MsgQueue m_RecvQueue;
+		// Recv Message handler
+		RecvHandler m_RecvHandler;
 
 		// Event queue
 		CircularPageQueueAtomic<uint64_t>	m_EventQueue;
+
+		CriticalSection m_NetLock;
+		// Players in the relay network
+		DynamicArray<RelayPlayerInfo> m_Players;
 	};
 
 

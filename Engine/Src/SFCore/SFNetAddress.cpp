@@ -199,7 +199,7 @@ namespace SF {
 
 		return storage;
 	}
-    
+
     size_t NetAddress::GetSockAddrSize() const
     {
         return (SocketFamily == SockFamily::IPV6) ? sizeof(sockaddr_in6) : sizeof(sockaddr_in);

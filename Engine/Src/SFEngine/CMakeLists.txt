@@ -250,7 +250,9 @@ set(SFENGINE_LIB_FILES
 	Net/SFNetDef.inl
 	Net/SFNetSystem_Linux.inl
 	Net/SFNetSystem_WinIOCP.inl
-
+	
+	Interfaces/SFPublicInterface.h
+	Interfaces/SFPublicTypes.h
   )
 
 

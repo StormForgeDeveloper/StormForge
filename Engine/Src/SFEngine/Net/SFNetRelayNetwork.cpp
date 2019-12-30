@@ -18,6 +18,7 @@
 #include "Util/SFLog.h"
 #include "Util/SFTimeUtil.h"
 #include "String/SFToString.h"
+#include "String/SFToStringEngineTypes.h"
 #include "Service/SFEngineService.h"
 #include "Protocol/SFProtocol.h"
 #include "Net/SFNetConst.h"
@@ -27,7 +28,6 @@
 #include "Net/SFNetSystem.h"
 #include "Net/SFNetToString.h"
 #include "Net/SFNetRelayNetwork.h"
-
 #include "Protocol/Message/RelayMsgClass.h"
 
 
@@ -51,7 +51,7 @@ namespace Net {
 		, m_RelayNetworkState(RelayNetworkState::Disconnected)
 		, m_RawUDP(GetHeap())
 		, m_EventQueue(GetHeap())
-		, m_RecvQueue(GetHeap())
+		, m_Players(GetHeap())
 	{
 	}
 
@@ -74,15 +74,35 @@ namespace Net {
 			m_RawUDP.TerminateNet();
 
 		m_RelayNetworkState = RelayNetworkState::Disconnected;
+		m_RecvHandler = {};
 
 		EngineObject::Dispose();
 	}
 
-	// Message count currently in recv queue
-	SysUInt RelayNetwork::GetRecvMessageCount()
+	Result RelayNetwork::Connect(const NetAddress& relayServerAddr, uint32_t relayInstanceID, PlayerID myPlayerID, RecvHandler&& recvHandler)
 	{
-		return m_RecvQueue.size();
+		FunctionContext hr([this](Result result)
+		{
+			if (GetRelayNetworkState() == RelayNetworkState::Connecting)
+				m_RelayNetworkState = RelayNetworkState::Disconnected;
+		});
+
+		if (GetRelayNetworkState() != RelayNetworkState::Initialized
+			&& GetRelayNetworkState() != RelayNetworkState::Disconnected)
+			return hr = ResultCode::INVALID_STATE;
+
+		m_RelayNetworkState = RelayNetworkState::Connecting;
+		m_RelayInstanceID = relayInstanceID;
+		m_PlayerID = myPlayerID;
+		m_RecvHandler = std::forward<RecvHandler>(recvHandler);
+
+		MessageDataPtr pMessage = Message::Relay::JoinRelayInstanceC2SEvt::Create(m_RawUDP.GetHeap(), GetRelayInstanceID(), GetLocalPlayerID(), "TempUser");
+		if (pMessage == nullptr)
+			return hr = ResultCode::OUT_OF_MEMORY;
+
+		return hr = m_RawUDP.SendMsg(m_RelaySockAddr, pMessage);
 	}
+
 
 	// Called on RelayNetwork result
 	void RelayNetwork::OnRelayNetworkResult( Result hrConnect )
@@ -200,13 +220,136 @@ namespace Net {
 
 		Assert(pMsg->GetDataLength() == 0 || pMsg->GetMessageHeader()->Crc32 != 0);
 
-		netCheck(m_RecvQueue.Enqueue(std::forward<SharedPointerT<Message::MessageData>>(pMsg)));
-
-		pMsg = nullptr;
+		if (msgID.GetMsgID() == Message::Relay::JoinRelayInstanceResS2CEvt::MID)
+		{
+			OnJoinRelayInstanceResS2CEvt(std::forward<MessageDataPtr>(pMsg));
+		}
+		else if(msgID.GetMsgID() == Message::Relay::PlayerJoinS2CEvt::MID)
+		{
+			OnPlayerJoinS2CEvt(std::forward<MessageDataPtr>(pMsg));
+		}
+		else if (msgID.GetMsgID() == Message::Relay::PlayerLeftS2CEvt::MID)
+		{
+			OnPlayerLeftS2CEvt(std::forward<MessageDataPtr>(pMsg));
+		}
+		else if (msgID.GetMsgID() == Message::Relay::RelayPacketC2SEvt::MID)
+		{
+			OnPlayerLeftS2CEvt(std::forward<MessageDataPtr>(pMsg));
+		}
+		else
+		{
+			//netCheck(m_RecvQueue.Enqueue(std::forward<SharedPointerT<Message::MessageData>>(pMsg)));
+			SFLog(Net, Error, "RelayNetwork Unknown message for Instance:{0}", GetRelayInstanceID());
+		}
 
 		return hr;
 	}
 
+	Result RelayNetwork::OnJoinRelayInstanceResS2CEvt(MessageDataPtr&& pMsg)
+	{
+		FunctionContext hr;
+		if (GetRelayNetworkState() != RelayNetworkState::Connecting)
+			return hr;
+
+		Message::Relay::JoinRelayInstanceResS2CEvt message(std::forward<MessageDataPtr>(pMsg));
+		netCheck(message.ParseMsg());
+
+		m_PlayerEndpointID = message.GetMyEndpointID();
+
+		m_Players.Clear();
+
+		if (message.GetResult())
+		{
+			MutexScopeLock lockScope(m_NetLock);
+			for (auto& itOtherPlayerInfo : message.GetMemberInfos())
+			{
+				m_Players.push_back(itOtherPlayerInfo);
+			}
+
+			SetRelayNetworkState(RelayNetworkState::Connected);
+
+			SFLog(Net, Info, "RelayNetwork connected, InstanceID:{0}", GetRelayInstanceID());
+		}
+		else
+		{
+			SFLog(Net, Error, "RelayNetwork failed to join InstanceID:{0}, result:{1}", GetRelayInstanceID(), message.GetResult());
+		}
+
+		EnqueueRelayNetworkEvent(ConnectionEvent(ConnectionEvent::EVT_CONNECTION_RESULT, message.GetResult()));
+
+		return hr;
+	}
+
+	Result RelayNetwork::OnPlayerJoinS2CEvt(MessageDataPtr&& pMsg)
+	{
+		FunctionContext hr;
+		if (GetRelayNetworkState() != RelayNetworkState::Connecting)
+			return hr;
+
+		Message::Relay::PlayerJoinS2CEvt message(std::forward<MessageDataPtr>(pMsg));
+		netCheck(message.ParseMsg());
+
+		auto& joinedPlayerInfo = message.GetJoinedPlayerInfo();
+		MutexScopeLock lockScope(m_NetLock);
+		for (auto& itPlayer : m_Players)
+		{
+			// skip if we alread has the endpoint
+			if(itPlayer == joinedPlayerInfo)
+				return hr;
+		}
+
+		SFLog(Net, Info, "RelayNetwork Player joined, InstanceID:{0}, Player:{1}", GetRelayInstanceID(), joinedPlayerInfo);
+		m_Players.push_back(message.GetJoinedPlayerInfo());
+		//message.GetRelayInstanceID();
+		//message.GetJoinedPlayerInfo();
+
+		return hr;
+	}
+
+	Result RelayNetwork::OnPlayerLeftS2CEvt(MessageDataPtr&& pMsg)
+	{
+		FunctionContext hr;
+		if (GetRelayNetworkState() != RelayNetworkState::Connecting)
+			return hr;
+
+		Message::Relay::PlayerLeftS2CEvt message(std::forward<MessageDataPtr>(pMsg));
+		netCheck(message.ParseMsg());
+
+		auto& leftPlayerID = message.GetLeftPlayerID();
+
+		MutexScopeLock lockScope(m_NetLock);
+		for (uint32_t iPlayer = 0; iPlayer < m_Players.size(); iPlayer++)
+		{
+			// skip if we already has the endpoint
+			if (m_Players[iPlayer].RelayPlayerID == leftPlayerID)
+			{
+				m_Players.RemoveAt(iPlayer);
+				SFLog(Net, Info, "RelayNetwork Player left, InstanceID:{0}, Player:{1}", GetRelayInstanceID(), leftPlayerID);
+				break;
+			}
+		}
+
+		return hr;
+	}
+
+	Result RelayNetwork::OnRelayPacketC2SEvt(MessageDataPtr&& pMsg)
+	{
+		FunctionContext hr;
+		if (GetRelayNetworkState() != RelayNetworkState::Connecting)
+			return hr;
+
+		Message::Relay::RelayPacketC2SEvt message(std::forward<MessageDataPtr>(pMsg));
+		netCheck(message.ParseMsg());
+
+		m_RecvHandler(message.GetSenderEndpointID(), message.GetPayload().size(), message.GetPayload().data());
+
+		return hr;
+	}
+
+	size_t RelayNetwork::GetRelayNetworkEventCount()
+	{
+		return m_EventQueue.size();
+	}
 
 	// Query RelayNetwork event
 	Result RelayNetwork::DequeueRelayNetworkEvent( ConnectionEvent& curEvent )
@@ -220,26 +363,21 @@ namespace Net {
 		return m_EventQueue.Enqueue(evt.Composited);
 	}
 
-
-	// Get received Message
-	Result RelayNetwork::GetRecvMessage( SharedPointerT<Message::MessageData> &pIMsg )
+	// Send message to connected entity
+	Result RelayNetwork::Send(uint32_t targetEndpointMask, size_t payloadSize, const void* payloadData)
 	{
 		FunctionContext hr;
 
-		pIMsg = nullptr;
+		MessageDataPtr pMessage = Message::Relay::RelayPacketC2SEvt::Create(m_RawUDP.GetHeap(), 
+			GetRelayInstanceID(), 
+			GetLocalEndpointID(), 
+			targetEndpointMask, 
+			ExternalBufferArray(payloadSize, static_cast<const uint8_t*>(payloadData))
+		);
+		if (pMessage == nullptr)
+			return hr = ResultCode::OUT_OF_MEMORY;
 
-		if( !m_RecvQueue.Dequeue( pIMsg ) )
-			return hr = ResultCode::FAIL;
-
-		Message::MessageHeader* pMsgHeader = pIMsg->GetMessageHeader();
-		uint uiPolicy = pMsgHeader->msgID.IDs.Policy;
-		if (uiPolicy == 0
-			|| uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
-		{
-			return hr = ResultCode::IO_BADPACKET_NOTEXPECTED;
-		}
-
-		return hr;
+		return m_RawUDP.SendMsg(m_RelaySockAddr, pMessage);
 	}
 
 

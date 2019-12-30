@@ -456,10 +456,10 @@ namespace SF {
 		//		Use externally allocated buffer only
 		//
 
+		// TODO: find better name
 		template< class DataType >
 		class ExternalBufferArray : public Array<DataType>
 		{
-		private:
 		public:
 			ExternalBufferArray();
 			ExternalBufferArray(uint maxDataCount, uint dataCount, DataType* pDataPtr);

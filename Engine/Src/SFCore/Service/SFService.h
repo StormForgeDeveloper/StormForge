@@ -22,7 +22,7 @@
 //	
 //
 
-// When you add a new service Inherite
+// When you add a new service Inherits
 //  1. Create base interface class with default implementation doing nothing. 
 //     ex) 
 //class SampleService

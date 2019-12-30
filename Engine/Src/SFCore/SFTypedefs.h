@@ -523,28 +523,15 @@ typedef unsigned int		SysUInt;
 
 #if __GNUC__ || SF_PLATFORM == SF_PLATFORM_IOS
 
-#define SF_FORCEINLINE __attribute__((always_inline))
-//#define SF_STDCALL __attribute__((stdcall))
-#define SF_STDCALL 
-#define SF_FASTCALL __attribute__((fastcall))
-#define SF_TEMPLATE_EXTERN
 
 #define SF_DO_PRAGMA(x) _Pragma (#x)
 #define SF_COMPILETIME_TODO(x) SF_DO_PRAGMA(message ("TODO - " #x))
 #define SF_COMPILETIME_MESSAGE(x) SF_DO_PRAGMA(message ("Message - " #x))
 #define SF_COMPILETIME_WARNING(x) SF_DO_PRAGMA(message ("Warning - " #x))
 
-// clang uses dllimport style
-#define SFDLL_IMPORT __attribute__((visibility("default")))
-#define SFDLL_EXPORT extern "C" __attribute__((visibility("default"))) 
-#define SF_SYSTEMAPI 
 
 #else
 
-#define SF_FORCEINLINE __forceinline
-#define SF_STDCALL __stdcall
-#define SF_FASTCALL __fastcall
-#define SF_TEMPLATE_EXTERN extern
 
 // disable unreferenced label warning (Proc_End)
 #pragma warning( disable : 4102 )
@@ -555,19 +542,9 @@ typedef unsigned int		SysUInt;
 #define SF_COMPILETIME_MESSAGE(x) SF_DO_PRAGMA(comment ("Message - " #x))
 #define SF_COMPILETIME_WARNING(x) SF_DO_PRAGMA(comment ("Warning - " #x))
 
-#define SFDLL_IMPORT extern "C" __declspec(dllimport)
-#define SFDLL_EXPORT extern "C" __declspec(dllexport)
-#define SF_SYSTEMAPI APIENTRY
-
 
 #endif
 
-
-#ifdef SF_BUILD_ENGINE_DLL
-#	define SF_ENGINE_API SFDLL_EXPORT
-#else
-#	define SF_ENGINE_API SFDLL_IMPORT
-#endif
 
 
 
@@ -578,6 +555,7 @@ typedef unsigned int		SysUInt;
 //
 
 #include "SFResult.h"
+#include "Interfaces/SFPublicInterface.h"
 
 namespace SF {
 
@@ -758,7 +736,6 @@ namespace SF {
 };
 
 
-#include "SFTypedefs.inl"
 #include "ResultCode/SFResultCodeSystem.h"
 
 
