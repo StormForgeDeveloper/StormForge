@@ -18,6 +18,7 @@
 #include "Service/SFEngineService.h"
 #include "Interfaces/SFNetRelayInterface.h"
 #include "Net/SFNetRelayNetwork.h"
+#include "Protocol/Message/RelayMsgClass.h"
 
 
 namespace SF
@@ -58,7 +59,7 @@ namespace SF
 		return m_Impl->GetRelayInstanceID();
 	}
 
-	PlayerID NetRelayNetwork::GetLocalPlayerID() const
+	uint64_t NetRelayNetwork::GetLocalPlayerID() const
 	{
 		return m_Impl->GetLocalPlayerID();
 	}
@@ -73,29 +74,76 @@ namespace SF
 	// @relayServerAddr: relay server address
 	// @relayInstanceID:  relay server instance id
 	// @myPlayerID: my player id, 
-	Result NetRelayNetwork::Connect(const NetAddress& relayServerAddr, uint32_t relayInstanceID, PlayerID myPlayerID, RecvHandler&& handler)
+	uint32_t NetRelayNetwork::Connect(const char* relayServerAddr, uint32_t port, uint32_t relayInstanceID, uint64_t myPlayerID)
 	{
-		return m_Impl->Connect(relayServerAddr, relayInstanceID, myPlayerID, std::forward<RecvHandler>(handler));
+		return m_Impl->Connect(NetAddress(relayServerAddr, port), relayInstanceID, myPlayerID);
 	}
 
 	// Disconnect connection
-	Result NetRelayNetwork::Disconnect(const char* reason)
+	uint32_t NetRelayNetwork::Disconnect(const char* reason)
 	{
 		return m_Impl->Disconnect(reason);
 	}
 
 	// Close connection
-	Result NetRelayNetwork::CloseConnection(const char* reason)
+	uint32_t NetRelayNetwork::CloseConnection(const char* reason)
 	{
 		return m_Impl->CloseConnection(reason);
 	}
 
 	// Send message to connected entity
-	Result NetRelayNetwork::Send(uint32_t targetEndpointMask, size_t payloadSize, const void* payloadData)
+	uint32_t NetRelayNetwork::Send(uint32_t targetEndpointMask, uint32_t payloadSize, const void* payloadData)
 	{
 		return m_Impl->Send(targetEndpointMask, payloadSize, payloadData);
 	}
 
+	size_t NetRelayNetwork::GetRecvMessageCount()
+	{
+		return m_Impl->GetRecvMessageCount();
+	}
+
+	size_t NetRelayNetwork::GetRecvDataSize()
+	{
+		MessageDataPtr pMsg;
+
+		if (!m_Impl->GetFrontRecvMessage(pMsg))
+			return 0;
+
+		// Hum, shouldn't be happended
+		if (pMsg->GetMessageSize() < sizeof(uint32_t) * 3)
+		{
+			assert(0);
+			return 1;
+		}
+
+		return pMsg->GetMessageSize() - sizeof(uint32_t) * 3;
+	}
+
+	size_t NetRelayNetwork::RecvData(size_t bufferSize, void* dataBuffer)
+	{
+		MessageDataPtr pMsg;
+
+		if (!m_Impl->GetRecvMessage(pMsg))
+			return 0;
+
+		Message::Relay::RelayPacketC2SEvt message(std::forward<MessageDataPtr>(pMsg));
+		auto hr = message.ParseMsg();
+		if (!hr)
+		{
+			SFLog(Net, Error, "NetRelayNetwork::RecvData, : parse error {0}", hr);
+			return 0;
+		}
+
+		if (dataBuffer == nullptr || bufferSize < message.GetPayload().size())
+		{
+			SFLog(Net, Error, "NetRelayNetwork::RecvData, : Not enough buffer size: required:{0}", message.GetPayload().size());
+			return 0;
+		}
+
+		memcpy(dataBuffer, message.GetPayload().data(), message.GetPayload().size());
+
+		return message.GetPayload().size();
+	}
 	
 }
 

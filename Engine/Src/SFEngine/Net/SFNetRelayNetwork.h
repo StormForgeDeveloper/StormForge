@@ -61,7 +61,7 @@ namespace Net {
 		// @relayServerAddr: relay server address
 		// @relayInstanceID:  relay server instance id
 		// @myPlayerID: my player id, 
-		virtual Result Connect(const NetAddress& relayServerAddr, uint32_t relayInstanceID, PlayerID myPlayerID, RecvHandler&& recvHandler);
+		virtual Result Connect(const NetAddress& relayServerAddr, uint32_t relayInstanceID, PlayerID myPlayerID);
 
 		// Disconnect connection
 		virtual Result Disconnect(const char* reason);
@@ -78,6 +78,14 @@ namespace Net {
 
 		// Send message to connected entity
 		virtual Result Send(uint32_t targetEndpointMask, size_t payloadSize, const void* payloadData);
+
+		// Message count currently in recv queue
+		virtual size_t GetRecvMessageCount();
+
+		Result GetFrontRecvMessage(SharedPointerT<Message::MessageData> &pIMsg);
+
+		// Get received Message
+		virtual Result GetRecvMessage(SharedPointerT<Message::MessageData> &pIMsg);
 
 
 		// Engine object
@@ -131,8 +139,8 @@ namespace Net {
 		// Raw udp network
 		RawUDP m_RawUDP;
 
-		// Recv Message handler
-		RecvHandler m_RecvHandler;
+		// Recv Message queue
+		MsgQueue m_RecvQueue;
 
 		// Event queue
 		CircularPageQueueAtomic<uint64_t>	m_EventQueue;

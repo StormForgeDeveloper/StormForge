@@ -667,14 +667,14 @@ namespace StrUtil {
 
 
 	// UTF8 to Unicode string conversion
-	Result UTF8ToWCS(const char *strUTF8, WCHAR* strWCS, INT iBuffLen)
+	Result UTF8ToWCS(const char *strUTF8, wchar_t* strWCS, INT iBuffLen)
 	{
 		size_t convertedSize;
 
 		if (strWCS == nullptr || strUTF8 == nullptr)
 			return ResultCode::INVALID_ARG;
 
-		Result hr = ModuleIconv.Convert("UTF-16LE", (char*)strWCS, iBuffLen, "UTF-8", (const char*)strUTF8, strlen(strUTF8)+1, convertedSize);
+		Result hr = ModuleIconv.Convert("UTF-16LE", (char*)strWCS, iBuffLen * sizeof(wchar_t), "UTF-8", (const char*)strUTF8, strlen(strUTF8)+1, convertedSize);
 		if (!(hr)) return hr;
 
 		if (iBuffLen >= 1)
@@ -697,7 +697,7 @@ namespace StrUtil {
 			return ResultCode::SUCCESS;
 		}
 
-		Result hr = ModuleIconv.Convert("UTF-16LE", (char*)stringBuffer, countof(stringBuffer), "UTF-8", (const char*)strUTF8.c_str(), strUTF8.length(), convertedSize);
+		Result hr = ModuleIconv.Convert("UTF-16LE", (char*)stringBuffer, countof(stringBuffer) * sizeof(wchar_t), "UTF-8", (const char*)strUTF8.c_str(), strUTF8.length(), convertedSize);
 		if (!(hr)) return hr;
 
 		auto lastPos = std::min(convertedSize + 1, countof(stringBuffer)) - 1;

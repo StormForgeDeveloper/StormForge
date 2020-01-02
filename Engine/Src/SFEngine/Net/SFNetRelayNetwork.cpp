@@ -50,6 +50,7 @@ namespace Net {
 		: EngineObject(new(heap) IHeap("RelayNetwork", &heap),"RelayNetwork")
 		, m_RelayNetworkState(RelayNetworkState::Disconnected)
 		, m_RawUDP(GetHeap())
+		, m_RecvQueue(GetHeap())
 		, m_EventQueue(GetHeap())
 		, m_Players(GetHeap())
 	{
@@ -74,12 +75,12 @@ namespace Net {
 			m_RawUDP.TerminateNet();
 
 		m_RelayNetworkState = RelayNetworkState::Disconnected;
-		m_RecvHandler = {};
+		m_RecvQueue.ClearQueue();
 
 		EngineObject::Dispose();
 	}
 
-	Result RelayNetwork::Connect(const NetAddress& relayServerAddr, uint32_t relayInstanceID, PlayerID myPlayerID, RecvHandler&& recvHandler)
+	Result RelayNetwork::Connect(const NetAddress& relayServerAddr, uint32_t relayInstanceID, PlayerID myPlayerID)
 	{
 		FunctionContext hr([this](Result result)
 		{
@@ -94,7 +95,6 @@ namespace Net {
 		m_RelayNetworkState = RelayNetworkState::Connecting;
 		m_RelayInstanceID = relayInstanceID;
 		m_PlayerID = myPlayerID;
-		m_RecvHandler = std::forward<RecvHandler>(recvHandler);
 
 		MessageDataPtr pMessage = Message::Relay::JoinRelayInstanceC2SEvt::Create(m_RawUDP.GetHeap(), GetRelayInstanceID(), GetLocalPlayerID(), "TempUser");
 		if (pMessage == nullptr)
@@ -338,12 +338,13 @@ namespace Net {
 		if (GetRelayNetworkState() != RelayNetworkState::Connecting)
 			return hr;
 
-		Message::Relay::RelayPacketC2SEvt message(std::forward<MessageDataPtr>(pMsg));
-		netCheck(message.ParseMsg());
+		return m_RecvQueue.Enqueue(std::forward<MessageDataPtr>(pMsg));
+		//Message::Relay::RelayPacketC2SEvt message(std::forward<MessageDataPtr>(pMsg));
+		//netCheck(message.ParseMsg());
 
-		m_RecvHandler(message.GetSenderEndpointID(), message.GetPayload().size(), message.GetPayload().data());
+		//m_RecvHandler(message.GetSenderEndpointID(), message.GetPayload().size(), message.GetPayload().data());
 
-		return hr;
+		//return hr;
 	}
 
 	size_t RelayNetwork::GetRelayNetworkEventCount()
@@ -380,6 +381,23 @@ namespace Net {
 		return m_RawUDP.SendMsg(m_RelaySockAddr, pMessage);
 	}
 
+
+	// Message count currently in recv queue
+	size_t RelayNetwork::GetRecvMessageCount()
+	{
+		return m_RecvQueue.size();
+	}
+
+	Result RelayNetwork::GetFrontRecvMessage(SharedPointerT<Message::MessageData> &pIMsg)
+	{
+		return m_RecvQueue.GetFront(pIMsg);
+	}
+
+	// Get received Message
+	Result RelayNetwork::GetRecvMessage(SharedPointerT<Message::MessageData> &pIMsg)
+	{
+		return m_RecvQueue.Dequeue(pIMsg);
+	}
 
 	Result RelayNetwork::OnTick(EngineTaskTick tick)
 	{

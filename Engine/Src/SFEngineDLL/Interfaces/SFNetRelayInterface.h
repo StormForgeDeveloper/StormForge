@@ -29,31 +29,38 @@ namespace SF {
 	{
 	public:
 
-		using RecvHandler = std::function<void(uint32_t senderEndPoint, size_t payloadSize, const void* payloadData)>;
-
 	public:
 		NetRelayNetwork();
 		~NetRelayNetwork();
 
 		RelayNetworkState GetRelayNetworkState();
 		uint32_t GetRelayInstanceID() const;
-		PlayerID GetLocalPlayerID() const;
+		uint64_t GetLocalPlayerID() const;
 		uint32_t GetLocalEndpointID() const;
 
 		// Connect to remote. InitConnection + Connect 
 		// @relayServerAddr: relay server address
 		// @relayInstanceID:  relay server instance id
 		// @myPlayerID: my player id, 
-		Result Connect(const NetAddress& relayServerAddr, uint32_t relayInstanceID, PlayerID myPlayerID, RecvHandler&& handler);
+		uint32_t Connect(const char* relayServerAddr, uint32_t port, uint32_t relayInstanceID, uint64_t myPlayerID);
 
 		// Disconnect connection
-		Result Disconnect(const char* reason);
+		uint32_t Disconnect(const char* reason);
 
 		// Close connection
-		Result CloseConnection(const char* reason);
+		uint32_t CloseConnection(const char* reason);
 
 		// Send message to connected entity
-		Result Send(uint32_t targetEndpointMask, size_t payloadSize, const void* payloadData);
+		uint32_t Send(uint32_t targetEndpointMask, uint32_t payloadSize, const void* payloadData);
+
+		// Recv message count
+		size_t GetRecvMessageCount();
+
+		// Get first data size
+		size_t GetRecvDataSize();
+
+		// buffer size 
+		size_t RecvData(size_t bufferSize, void* dataBuffer);
 
 	private:
 		Net::RelayNetwork* m_Impl = nullptr;
