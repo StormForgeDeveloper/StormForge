@@ -25,108 +25,6 @@ namespace SF {
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	//	SharedStringBuffer
-	//
-
-
-	SharedStringBuffer::SharedStringBuffer(IHeap& heap)
-		: m_Heap(heap)
-	{
-
-	}
-
-	SharedStringBuffer::SharedStringBuffer(IHeap& heap, size_t initialBufferSize)
-		: m_Heap(heap)
-	{
-		Resize(initialBufferSize);
-	}
-
-	SharedStringBuffer::SharedStringBuffer(IHeap& heap, const char* src)
-		: m_Heap(heap)
-	{
-		if(src != nullptr)
-			Append(src, strlen(src));
-	}
-
-	SharedStringBuffer::~SharedStringBuffer()
-	{
-		m_Heap.Free(m_StringValue);
-		m_StringValue = nullptr;
-	}
-
-	bool SharedStringBuffer::Resize(size_t newAllocationSize)
-	{
-		if (newAllocationSize < m_StringBufferLength)
-		{
-			// No chopping is supported
-			return false;
-		}
-
-		char* newBuffer = nullptr;
-		if (m_StringValue != nullptr)
-		{
-			newBuffer = (char*)GetHeap().Realloc(m_StringValue, newAllocationSize);
-		}
-		else
-		{
-			newBuffer = (char*)GetHeap().Alloc(newAllocationSize);
-		}
-
-		if (newBuffer == nullptr)
-		{
-			// out of memory
-			assert(false);
-			return false;
-		}
-
-		// Update allocated buffer and size
-		m_StringValue = newBuffer;
-		m_AllocatedSize = newAllocationSize;
-
-		return true;
-	}
-
-	bool SharedStringBuffer::Append(const char* src, size_t strLen, size_t extraBufferSize)
-	{
-		if (src == nullptr) return false;
-
-		auto newStringLength = std::max(m_StringBufferLength, (size_t)1) + strLen;
-		if (newStringLength > m_AllocatedSize)
-		{
-			auto newAllocationSize = extraBufferSize == 0 ? newStringLength : std::max(newStringLength, m_AllocatedSize) + extraBufferSize;
-			if (!Resize(newAllocationSize))
-				return false;
-		}
-
-		// copy string data and update string length
-		auto copyStart = m_StringValue + GetStringLength();
-		memcpy(copyStart, src, sizeof(char)*(strLen +1));
-		copyStart[strLen] = '\0';
-		m_StringBufferLength = static_cast<uintptr_t>(copyStart + strLen - m_StringValue +1);
-		assert(m_StringBufferLength == (strlen(m_StringValue) + 1));
-		return true;
-	}
-
-	void SharedStringBuffer::Dispose()
-	{
-		IHeap::Free(m_StringValue);
-		m_StringValue = nullptr;
-	}
-
-
-	void SharedStringBuffer::SetStringBufferLength(size_t newStringLength)
-	{
-		assert(m_AllocatedSize >= newStringLength);
-		if (m_AllocatedSize < newStringLength) return;
-
-		m_StringBufferLength = newStringLength;
-		if(m_StringValue != nullptr)
-			m_StringValue[m_StringBufferLength] = '\0';
-	}
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
 	//	String
 	//
 
@@ -143,10 +41,10 @@ namespace SF {
 	}
 
 
-	String::String(const char* src)
+	String::String(const CharType* src)
 		: m_pHeap(&GetSystemHeap())
 	{
-		m_Buffer = new(GetHeap()) SharedStringBuffer(GetHeap(), src);
+		m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src);
 		m_StringValue = m_Buffer->GetBufferPointer();
 	}
 
@@ -170,7 +68,7 @@ namespace SF {
 	String::String(IHeap& heap, const char* src)
 		: m_pHeap(&heap)
 	{
-		m_Buffer = new(GetHeap()) SharedStringBuffer(GetHeap(), src);
+		m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src);
 		m_StringValue = m_Buffer->GetBufferPointer();
 	}
 
@@ -180,7 +78,7 @@ namespace SF {
 	{
 		size_t strLen = 0;
 		if (src != nullptr)
-			strLen = (int)strlen(src);
+			strLen = (int)StrUtil::StringLen(src);
 
 		if (startIndex >= static_cast<int>(strLen))
 			return;
@@ -204,7 +102,7 @@ namespace SF {
 			if (size <= 0)
 				return;
 
-			m_Buffer = new(GetHeap()) SharedStringBuffer(GetHeap(), size + 1);
+			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), size + 1);
 			m_Buffer->Append(src + startIndex, size);
 			m_StringValue = m_Buffer->GetBufferPointer();
 		}
@@ -219,7 +117,7 @@ namespace SF {
 	}
 
 
-	String::String(IHeap& heap, SharedStringBuffer& src)
+	String::String(IHeap& heap, SharedStringBufferType& src)
 		: m_pHeap(&heap)
 	{
 		m_Buffer = &src;
@@ -256,7 +154,7 @@ namespace SF {
 		unused(pStr, addLen);
 		assert(pStr != nullptr && addLen > 0);
 
-		auto newBuffer = new(GetHeap()) SharedStringBuffer(GetHeap(), m_Buffer->GetStringBufferLength() + src.m_Buffer->GetStringBufferLength() + 1);
+		auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringBufferLength() + src.m_Buffer->GetStringBufferLength() + 1);
 		newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringBufferLength());
 		newBuffer->Append(src.m_Buffer->GetBufferPointer(), src.m_Buffer->GetStringBufferLength());
 
@@ -271,10 +169,10 @@ namespace SF {
 		if (src == nullptr || src[0] == '\0')
 			return *this;
 
-		auto addLen = strlen(src);
+		auto addLen = StrUtil::StringLen(src);
 		if (IsNullOrEmpty())
 		{
-			auto newBuffer = new(GetHeap()) SharedStringBuffer(GetHeap(), addLen + 1);
+			auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), addLen + 1);
 			newBuffer->Append(src, addLen);
 			m_Buffer = newBuffer;
 			return *this;
@@ -287,7 +185,7 @@ namespace SF {
 		//}
 		//m_Buffer->Append(src, addLen);
 
-		auto newBuffer = new(GetHeap()) SharedStringBuffer(GetHeap(), m_Buffer->GetStringBufferLength() + addLen + 1);
+		auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringBufferLength() + addLen + 1);
 		newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringBufferLength());
 		newBuffer->Append(src, addLen);
 
@@ -362,7 +260,7 @@ namespace SF {
 		unused(pStr, addLen);
 		assert(pStr != nullptr && addLen > 0);
 
-		auto newBuffer = new(GetHeap()) SharedStringBuffer(GetHeap(), m_Buffer->GetStringBufferLength() + op2.m_Buffer->GetStringBufferLength() + 1);
+		auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringBufferLength() + op2.m_Buffer->GetStringBufferLength() + 1);
 		newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringBufferLength());
 		newBuffer->Append(op2.m_Buffer->GetBufferPointer(), op2.m_Buffer->GetStringBufferLength());
 
@@ -389,7 +287,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return false;
 		if (StrUtil::IsNullOrEmpty(op)) return false;
 
-		auto opLen = strlen(op);
+		auto opLen = StrUtil::StringLen(op);
 		if (opLen > GetBufferLength()) return false;
 
 		if (ignoreCase)
@@ -431,7 +329,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return false;
 		if (StrUtil::IsNullOrEmpty(op)) return false;
 
-		auto opLen = strlen(op);
+		auto opLen = StrUtil::StringLen(op);
 		if (opLen > GetBufferLength()) return false;
 
 		auto compareStart = m_Buffer->GetBufferPointer() + GetBufferLength() - opLen;
@@ -476,7 +374,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return -1;
 		if (searchString == nullptr) return -1;
 
-		auto strLen = strlen(searchString);
+		auto strLen = StrUtil::StringLen(searchString);
 
 		auto len = GetBufferLength();
 		auto pCur = m_Buffer->GetBufferPointer();
@@ -504,7 +402,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return -1;
 		if (searchChars == nullptr) return -1;
 
-		auto numChar = strlen(searchChars);
+		auto numChar = StrUtil::StringLen(searchChars);
 
 		auto len = GetBufferLength();
 		auto pCur = m_Buffer->GetBufferPointer();
@@ -525,7 +423,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return -1;
 		if (searchString == nullptr) return -1;
 
-		auto strLen = (int)strlen(searchString);
+		auto strLen = (int)StrUtil::StringLen(searchString);
 
 		auto len = (int)GetBufferLength() - strLen;
 		auto pCur = m_Buffer->GetBufferPointer() + len;
@@ -568,7 +466,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return -1;
 		if (searchChars == nullptr) return -1;
 
-		auto numChar = (int)strlen(searchChars);
+		auto numChar = (int)StrUtil::StringLen(searchChars);
 
 		auto len = (int)GetBufferLength() - 1;
 		auto pCur = m_Buffer->GetBufferPointer() + len;
@@ -590,14 +488,14 @@ namespace SF {
 			return String(GetEngineHeap());
 
 		size_t totalSize = 0;
-		auto delimiterSize = strlen(delimiter);
+		auto delimiterSize = StrUtil::StringLen(delimiter);
 		for (size_t iItem = 0; iItem < strings.size(); iItem++)
 		{
 			totalSize += strings[iItem].GetBufferLength();
 		}
 
 		auto& heap = strings[0].GetHeap();
-		auto newBuffer = new(heap) SharedStringBuffer(heap, totalSize + strings.size() * delimiterSize + 1);
+		auto newBuffer = new(heap) SharedStringBufferType(heap, totalSize + strings.size() * delimiterSize + 1);
 		for (size_t iItem = 0; iItem < strings.size(); iItem++)
 		{
 			if(iItem != 0)
@@ -613,7 +511,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return false;
 		if (delimiterString == nullptr) return false;
 
-		auto strLen = strlen(delimiterString);
+		auto strLen = StrUtil::StringLen(delimiterString);
 
 		auto len = GetBufferLength();
 		auto pCur = m_Buffer->GetBufferPointer();
@@ -652,7 +550,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return false;
 		if (delimiterChars == nullptr) return false;
 
-		auto numChar = strlen(delimiterChars);
+		auto numChar = StrUtil::StringLen(delimiterChars);
 
 		auto len = GetBufferLength();
 		auto pCur = m_Buffer->GetBufferPointer();
@@ -701,7 +599,7 @@ namespace SF {
 	{
 		if (IsNullOrEmpty()) return *this;
 
-		auto newBuffer = new(GetHeap()) SharedStringBuffer(GetHeap(), GetBufferLength() + 1);
+		auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), GetBufferLength() + 1);
 		auto bufferPointer = newBuffer->GetBufferPointer();
 		int bufferSize = (int)newBuffer->GetAllocatedSize();
 		StrUtil::StringUpper(bufferPointer, bufferSize, m_Buffer->GetBufferPointer());
@@ -713,7 +611,7 @@ namespace SF {
 	{
 		if (IsNullOrEmpty()) return *this;
 
-		auto newBuffer = new(GetHeap()) SharedStringBuffer(GetHeap(), GetBufferLength() + 1);
+		auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), GetBufferLength() + 1);
 		auto bufferPointer = newBuffer->GetBufferPointer();
 		int bufferSize = (int)newBuffer->GetAllocatedSize();
 		StrUtil::StringLower(bufferPointer, bufferSize, m_Buffer->GetBufferPointer());
@@ -728,7 +626,7 @@ namespace SF {
 
 	bool String::IsEqual(const char* op) const
 	{
-		auto opLen = op != nullptr ? strlen(op) : 0;
+		auto opLen = op != nullptr ? StrUtil::StringLen(op) : 0;
 		return StrUtil::StringCompair((const char*)*this, (int)GetBufferLength(), (const char*)op, (int)opLen);
 	}
 
@@ -739,7 +637,7 @@ namespace SF {
 
 	bool String::IsEqualIgnoreCase(const char* op) const
 	{
-		auto opLen = op != nullptr ? strlen(op) : 0;
+		auto opLen = op != nullptr ? StrUtil::StringLen(op) : 0;
 		return StrUtil::StringCompairIgnoreCase((const char*)*this, (int)GetBufferLength(), (const char*)op, (int)opLen);
 	}
 
@@ -776,7 +674,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return *this;
 		if (chars == nullptr) return *this;
 
-		auto numChar = (int)strlen(chars);
+		auto numChar = (int)StrUtil::StringLen(chars);
 
 		auto len = (int)GetBufferLength();
 		auto strString = m_Buffer->GetBufferPointer();
@@ -822,7 +720,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return *this;
 		if (chars == nullptr) return *this;
 
-		auto numChar = (int)strlen(chars);
+		auto numChar = (int)StrUtil::StringLen(chars);
 
 		auto len = (int)GetBufferLength();
 		auto strString = m_Buffer->GetBufferPointer();
@@ -856,7 +754,7 @@ namespace SF {
 		if (IsNullOrEmpty()) return *this;
 		if (chars == nullptr) return *this;
 
-		auto numChar = (int)strlen(chars);
+		auto numChar = (int)StrUtil::StringLen(chars);
 
 		auto len = (int)GetBufferLength();
 		auto strString = m_Buffer->GetBufferPointer();
@@ -893,7 +791,7 @@ namespace SF {
 		auto length = (int)GetBufferLength();
 		if (starIndex >= length) return String(GetHeap());
 
-		auto newBuffer = new(GetEngineHeap()) SharedStringBuffer(GetHeap(), count + 1);
+		auto newBuffer = new(GetEngineHeap()) SharedStringBufferType(GetHeap(), count + 1);
 		auto pDest = newBuffer->GetBufferPointer();
 		//int bufferSize = (int)newBuffer->GetAllocatedSize();
 		auto pSrc = m_Buffer->GetBufferPointer() + starIndex;
@@ -904,15 +802,15 @@ namespace SF {
 			count -= (starIndex + count) - (length + 1);
 		}
 
-		memcpy(pDest, pSrc, count*sizeof(char));
-		pDest[count] = '\0';
+		memcpy(pDest, pSrc, count * sizeof(CharType));
+		pDest[count] = {};
 
 		return String(GetHeap(), *newBuffer);
 	}
 
 
 
-	bool String::operator == (const char* src) const
+	bool String::operator == (const CharType* src) const
 	{
 		if (m_Buffer == nullptr && src == nullptr) return true;
 		if (m_Buffer == nullptr || src == nullptr) return false;
@@ -953,26 +851,26 @@ namespace SF {
 		return *this;
 	}
 
-	size_t String::Format_Internal(const char* szFormating, int iNumArg, VariableBox* Args)
+	size_t String::Format_Internal(const CharType* szFormating, int iNumArg, VariableBox* Args)
 	{
 		char* szBuffer = nullptr;
 		int buffLen = -1;
 		size_t requiredSize = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args) + 1;
-		m_Buffer = new(GetHeap()) SharedStringBuffer(GetHeap(), requiredSize);
+		m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), requiredSize);
 		if (m_Buffer->GetAllocatedSize() != requiredSize)
 			return 0;
 
 		szBuffer = m_Buffer->GetBufferPointer();
 		buffLen = (int)requiredSize;
 		auto length = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
-		m_Buffer->SetStringBufferLength(length);
+		m_Buffer->Resize(length);
 
 		m_StringValue = m_Buffer->GetBufferPointer();
 
 		return length;
 	}
 
-	size_t String::AppendFormat_Internal(const char* szFormating, int iNumArg, VariableBox* Args)
+	size_t String::AppendFormat_Internal(const CharType* szFormating, int iNumArg, VariableBox* Args)
 	{
 		char* szBuffer = nullptr;
 		int buffLen = -1;
@@ -985,7 +883,7 @@ namespace SF {
 		szBuffer = m_Buffer->GetBufferPointer() + currentStringLen;
 		buffLen = (int)requiredSize;
 		auto length = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
-		m_Buffer->SetStringBufferLength(totalSize);
+		m_Buffer->Resize(totalSize);
 
 		m_StringValue = m_Buffer->GetBufferPointer();
 
@@ -1003,7 +901,7 @@ namespace SF {
 	StringBuilder::StringBuilder(IHeap& heap, size_t growSize)
 		: m_GrowSize(growSize)
 	{
-		m_Buffer = new(heap) SharedStringBuffer(heap);
+		m_Buffer = new(heap) SharedStringBufferType(heap);
 		m_Buffer->Resize(growSize);
 	}
 
@@ -1110,7 +1008,7 @@ namespace SF {
 		szBuffer = m_Buffer->GetBufferPointer() + currentStringLen;
 		buffLen = (int)requiredSize;
 		auto length = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
-		m_Buffer->SetStringBufferLength(newSize);
+		m_Buffer->Resize(newSize);
 
 		return length;
 	}

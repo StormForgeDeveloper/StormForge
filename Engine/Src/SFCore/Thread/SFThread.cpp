@@ -132,6 +132,8 @@ namespace SF {
 
 #endif
 
+	constexpr int Thread::NAMELEN;
+
 	Thread::Thread()
 		: m_threadPriority(PRIORITY::NORMAL)
 		, m_KillFlag(false)
@@ -151,18 +153,15 @@ namespace SF {
 	{
 		Stop(true);
 
-		delete m_ThreadName;
-		m_ThreadName = nullptr;
-
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		delete m_wThreadName;
 		m_wThreadName = nullptr;
 #endif
 	}
 
-	void Thread::SetThreadNameInternal(const char* threadName)
+	void Thread::SetThreadNameInternal()
 	{
-		if (threadName == nullptr || threadName[0] == '\0')
+		if (m_ThreadName[0] == '\0')
 			return;
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
@@ -177,10 +176,10 @@ namespace SF {
 			return;
 
 		delete m_wThreadName;
-		auto buffLen = static_cast<int>(strlen(threadName)) + 1;
+		auto buffLen = static_cast<int>(StrUtil::StringLen(m_ThreadName)) + 1;
 		m_wThreadName = new wchar_t[buffLen];
 
-		StrUtil::UTF8ToWCS(threadName, m_wThreadName, buffLen);
+		StrUtil::UTF8ToWCS(m_ThreadName, m_wThreadName, buffLen);
 
 		auto nativeHandle = thread::native_handle();
 		pSetThreadDescription((HANDLE)nativeHandle, m_wThreadName);
@@ -193,17 +192,14 @@ namespace SF {
 	{
 		if (threadName == nullptr) threadName = "NoName";
 
-		delete m_ThreadName;
-		auto buffLen = static_cast<int>(strlen(threadName)) + 1;
-		m_ThreadName = new(GetSystemHeap()) char[buffLen];
-		StrUtil::StringCopy(m_ThreadName, buffLen, threadName);
+		StrUtil::StringCopy(m_ThreadName, threadName);
 
 		m_Name = Service::StringDB->AddNGetString(threadName);
 
 		if (GetThreadID() == thread::id())
 			return;
 
-		SetThreadNameInternal(static_cast<const char*>(m_ThreadName));
+		SetThreadNameInternal();
 	}
 
 	// Get/Set Thread Priority
@@ -313,12 +309,7 @@ namespace SF {
 		swap(localThread);
 
 		// set name if specified
-		auto strThreadName = Service::StringDB->GetString(GetThreadName());
-		if (StrUtil::IsNullOrEmpty(strThreadName) && !StrUtil::IsNullOrEmpty(m_ThreadName))
-			SetThreadNameInternal(m_ThreadName);
-		else
-			SetThreadNameInternal(strThreadName);
-
+		SetThreadNameInternal();
 	}
 
 	void Thread::Stop(bool bSendKillEvt)

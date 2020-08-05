@@ -79,12 +79,6 @@ public:
 	}
 };
 
-namespace SF
-{
-	template <>
-	WeakPointerT<WorkingEntity> DefaultValue<WeakPointerT<WorkingEntity>>() { return WeakPointerT<WorkingEntity>(); }
-}
-
 
 
 class TaskWorkerThread : public Thread

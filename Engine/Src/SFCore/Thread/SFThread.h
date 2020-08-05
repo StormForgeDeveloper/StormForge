@@ -40,12 +40,13 @@ namespace SF {
 			IDLE,				// Indicates 4 points below normal priority. 
 		};
 
+		static constexpr int NAMELEN = 16;
 
 	private:
 
 		// Thread name
 		FixedString m_Name;
-		char* m_ThreadName = nullptr;
+		char m_ThreadName[NAMELEN] = {};
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		wchar_t* m_wThreadName = nullptr;
 #endif
@@ -70,7 +71,7 @@ namespace SF {
 
 	protected:
 
-		void SetThreadNameInternal(const char* threadName);
+		void SetThreadNameInternal();
 
 	public:
 		Thread();

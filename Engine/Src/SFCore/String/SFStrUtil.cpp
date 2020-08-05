@@ -246,7 +246,31 @@ namespace StrUtil {
 
 
 
+	size_t StringLen(const char* Dest)
+	{
+		if (Dest == nullptr)
+			return 0;
 
+		size_t strLen = 0;
+		for (; *Dest != '\0'; Dest++, strLen++)
+		{
+		}
+		
+		return strLen;
+	}
+
+	size_t StringLen(const wchar_t* Dest)
+	{
+		if (Dest == nullptr)
+			return 0;
+
+		size_t strLen = 0;
+		for (; *Dest != '\0'; Dest++, strLen++)
+		{
+		}
+
+		return strLen;
+	}
 
 	// String duplication, szDest will destroyded if exist, and new memory will be allocated
 	Result StringDup(IHeap& memoryManager, char* &szDest, const char* szSrc)
