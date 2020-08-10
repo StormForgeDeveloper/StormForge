@@ -28,7 +28,8 @@ namespace StrUtil {
 	// Format string with argument list
 	// Modified buffer pointer and remain buffer size returned to original parameter
 	// return used or required string buffer length
-	size_t Format_Internal( char*& szBuffer, int& BuffLen, const char* szFormating, int iNumArg, VariableBox* Args );
+	size_t Format_Internal(char*& szBuffer, int& BuffLen, const char* szFormating, int iNumArg, VariableBox* Args );
+	size_t Format_Internal(wchar_t*& szBuffer, int& BuffLen, const wchar_t* szFormating, int iNumArg, VariableBox* Args);
 
 
 	// 
@@ -39,7 +40,7 @@ namespace StrUtil {
 
 	// 
 	template< class ...ArgTypes >
-		inline size_t Format(char* szBuffer, INT& BuffLen, const char* strFormat, const ArgTypes&... args)
+	inline size_t Format(char* szBuffer, INT& BuffLen, const char* strFormat, const ArgTypes&... args)
 	{
 		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
 		return Format_Internal(szBuffer, BuffLen, strFormat, sizeof...(args), arguments);

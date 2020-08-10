@@ -46,9 +46,24 @@ namespace StrUtil {
 		return -1;
 	}
 
+	static inline int ChToInt(wchar_t ch)
+	{
+		int iChar = ch;
+		iChar -= L'0';
+		if (iChar >= 0 && iChar < 10)
+			return iChar;
+
+		return -1;
+	}
+
 	static inline void SkipSpace(const char*& szFormating)
 	{
 		for (char curChar = *szFormating; curChar && (curChar == ' ' && curChar != '	'); curChar = *szFormating++);
+	}
+
+	static inline void SkipSpace(const wchar_t*& szFormating)
+	{
+		for (wchar_t curChar = *szFormating; curChar && (curChar == L' ' && curChar != L'	'); curChar = *szFormating++);
 	}
 
 	static inline double ReadNumber(char& curChar, const char*& szFormating)
@@ -89,17 +104,59 @@ namespace StrUtil {
 		return fNumber;
 	}
 
+	static inline double ReadNumber(wchar_t& curChar, const wchar_t*& szFormating)
+	{
+		double fNumber = 0;
+		for (curChar = *szFormating++; curChar && (curChar != L'%' && curChar != L'}' && curChar != L'{' && curChar != L':' && curChar != L','); curChar = *szFormating++)
+		{
+			if (curChar == L'.')
+				break;
+
+			if (curChar == L'\0')
+				return fNumber;
+
+			if (curChar < L'0' || curChar > L'9')
+				continue;
+
+			int iArgTem = ChToInt(curChar);
+			if (iArgTem >= 0)
+				fNumber = fNumber * 10 + iArgTem;
+		}
+
+		if (curChar != L'.') return fNumber;
+
+		double fExponent = 0.1;
+		for (curChar = *szFormating++; curChar && (curChar != L'%' && curChar != L'}' && curChar != L':' && curChar != L','); curChar = *szFormating++)
+		{
+			if (curChar < L'0' || curChar > L'9')
+				continue;
+
+			if (curChar == L'\0')
+				return fNumber;
+
+			int iArgTem = ChToInt(curChar);
+			if (iArgTem >= 0)
+				fNumber += (double)iArgTem * fExponent;
+		}
+
+		return fNumber;
+	}
+
 	// Internal format routine
 	size_t Format_Internal( char*& pBuffer, int& iBuffLen, const char* szFormating, int iNumArg, VariableBox* Args )
 	{
-		char tempBuffer[512];
+		const size_t tempBufferSize = 512;
+		char* tempBuffer = nullptr;
 
 		if(pBuffer != nullptr && iBuffLen <= 0)
 			return 0;
 
 		// we are going to calculate size only
-		if(pBuffer == nullptr)
+		if (pBuffer == nullptr)
+		{
+			tempBuffer = reinterpret_cast<char*>(alloca(tempBufferSize)); // don't need to allocate if we don't use size calculation
 			iBuffLen = std::numeric_limits<int>::max();
+		}
 
 		auto orgBuffLen = iBuffLen;
 
@@ -190,11 +247,11 @@ namespace StrUtil {
 					else
 					{
 						context.StringBuffer = tempBuffer;
-						context.StringBufferLength = (int)sizeof(tempBuffer);
+						context.StringBufferLength = (int)tempBufferSize;
 
 						pArg->ToString(context);
 
-						int usedSize = ((int)sizeof(tempBuffer) - context.StringBufferLength);
+						int usedSize = ((int)tempBufferSize - context.StringBufferLength);
 						assert(usedSize >= 0);
 						iBuffLen -= usedSize;
 					}
@@ -243,36 +300,204 @@ namespace StrUtil {
 		return orgBuffLen - iBuffLen;
 	}
 
-
-
-
-	size_t StringLen(const char* Dest)
+	size_t Format_Internal(wchar_t*& pBuffer, int& iBuffLen, const wchar_t* szFormating, int iNumArg, VariableBox* Args)
 	{
-		if (Dest == nullptr)
+		char tempBuffer[512];
+
+		if (pBuffer != nullptr && iBuffLen <= 0)
+			return 0;
+
+		// we are going to calculate size only
+		if (pBuffer == nullptr)
+			iBuffLen = std::numeric_limits<int>::max();
+
+		auto orgBuffLen = iBuffLen;
+
+		wchar_t curChar;
+
+		for (curChar = *szFormating++; curChar && iBuffLen > 0; curChar = *szFormating++)
+		{
+			if (curChar == L'%' || curChar == L'{')
+			{
+				int iArg = 0;
+
+				SkipSpace(szFormating);
+
+				// read argument index
+				iArg = (int)(ReadNumber(curChar, szFormating) + 0.1);
+				if (curChar == '{')
+				{
+					if (pBuffer != nullptr) *pBuffer++ = curChar;
+					iBuffLen--;
+					continue;
+				}
+
+				// read option
+				wchar_t option = L'\0';
+				double digits = -1;
+				if (curChar == L':')
+				{
+					if (curChar == L'\0')
+					{
+						assert(false);
+						return 0;
+					}
+
+					SkipSpace(szFormating);
+
+					if (curChar == L'\0')
+						return 0;
+
+					curChar = *szFormating++;
+
+					if (curChar == L'\0')
+						return 0;
+
+					option = curChar;
+
+					digits = ReadNumber(curChar, szFormating);
+				}
+
+				// Read max length
+				if (curChar == L',')
+				{
+					if (curChar == L'\0')
+					{
+						assert(false);
+						return 0;
+					}
+
+					SkipSpace(szFormating);
+
+					if (curChar == L'\0')
+						return 0;
+
+					option = (wchar_t)ReadNumber(curChar, szFormating);
+				}
+
+				if (curChar == L'\0')
+					return 0;
+
+				if (iArg < iNumArg && Args[iArg].GetVariable() != nullptr)
+				{
+					ToStringContext context;
+					context.MaxDigit = (int)digits;
+					if (option == L'x' || option == L'X')
+						context.Radix = 16;
+
+					auto pArg = Args[iArg].GetVariable();
+
+					context.StringBuffer = tempBuffer;
+					context.StringBufferLength = (int)sizeof(tempBuffer);
+
+					pArg->ToString(context);
+
+					int usedSize = ((int)sizeof(tempBuffer) - context.StringBufferLength);
+					assert(usedSize >= 0);
+					if (pBuffer == nullptr)
+					{
+						iBuffLen -= usedSize;
+					}
+					else
+					{
+						auto convertedSize = StrUtil::UTF8ToWCS(tempBuffer, pBuffer, iBuffLen);
+						iBuffLen -= static_cast<int>(convertedSize);
+					}
+				}
+				else
+				{
+					if (pBuffer != nullptr)
+						StrUtil::StringCopyEx(pBuffer, iBuffLen, L"(Null)");
+					else
+						iBuffLen -= (int)(StrUtil::StringLen(L"(Null)"));
+				}
+			}
+			else if (curChar == L'}')
+			{
+				// Skip the first closing bracket
+				curChar = *szFormating++;
+				if (curChar == L'}')
+				{
+					if (pBuffer != nullptr) *pBuffer++ = curChar;
+					iBuffLen--;
+				}
+				else
+				{
+					// ignore other case
+				}
+			}
+			else
+			{
+				if (pBuffer != nullptr) *pBuffer++ = curChar;
+				iBuffLen--;
+			}
+		}
+
+		if (pBuffer != nullptr)
+		{
+			// Force Null terminate
+			if (iBuffLen == 0)
+				(pBuffer - 1)[0] = 0;
+			else if (iBuffLen > 0)
+			{
+				pBuffer[0] = 0;
+				iBuffLen--;
+			}
+		}
+
+		return orgBuffLen - iBuffLen;
+	}
+
+
+
+	size_t StringLen(const char* StringValue)
+	{
+		if (StringValue == nullptr)
 			return 0;
 
 		size_t strLen = 0;
-		for (; *Dest != '\0'; Dest++, strLen++)
+		for (; *StringValue != '\0'; StringValue++, strLen++)
 		{
 		}
 		
 		return strLen;
 	}
 
-	size_t StringLen(const wchar_t* Dest)
+	size_t StringLen(const wchar_t* StringValue)
 	{
-		if (Dest == nullptr)
+		if (StringValue == nullptr)
 			return 0;
 
 		size_t strLen = 0;
-		for (; *Dest != '\0'; Dest++, strLen++)
+		for (; *StringValue != '\0'; StringValue++, strLen++)
 		{
 		}
 
 		return strLen;
 	}
 
-	// String duplication, szDest will destroyded if exist, and new memory will be allocated
+	size_t CharacterCount(const char* StringValue)
+	{
+		static const uint8_t AdditionalCount[] = { 1, 1, 1, 1,  1, 1, 2, 3 };
+
+		if (StringValue == nullptr)
+			return 0;
+
+		auto* CurPos = reinterpret_cast<const uint8_t*>(StringValue);
+		size_t CharacterCount = 0;
+		for(uint32_t CurChar = *CurPos++; CurChar != 0; CurChar = *CurPos++, CharacterCount++)
+		{
+			CurChar >>= 4;
+			if ((CurChar & 0x8) == 0)
+				continue;
+
+			CurPos += AdditionalCount[CurChar & 0x7];
+		}
+
+		return CharacterCount;
+	}
+
+	// String duplication, szDest will destroyed if exist, and new memory will be allocated
 	Result StringDup(IHeap& memoryManager, char* &szDest, const char* szSrc)
 	{
 		if (szDest != NULL)
@@ -588,7 +813,7 @@ namespace StrUtil {
 	// 
 	Result UTF8ToANSI(const char* strUTF8, char *strAnsi, INT iBuffLen)
 	{
-		size_t convertedSize;
+		size_t convertedSize = 0;
 
 		if (strAnsi == nullptr || strUTF8 == nullptr)
 			return ResultCode::INVALID_ARG;
@@ -606,7 +831,7 @@ namespace StrUtil {
 	}
 
 	// Unicode to UTF8 string conversion
-	Result WCSToUTF8(const WCHAR* strWCS, char *strUTF8, INT iBuffLen)
+	size_t WCSToUTF8(const WCHAR* strWCS, char *strUTF8, int iBuffLen)
 	{
 		size_t convertedSize;
 
@@ -618,14 +843,14 @@ namespace StrUtil {
 
 		if (iBuffLen >= 1)
 		{
-			iBuffLen = std::min((INT)convertedSize + 1, iBuffLen) - 1;
+			iBuffLen = std::min((int)convertedSize + 1, iBuffLen) - 1;
 			strUTF8[iBuffLen] = '\0';
 		}
 
-		return ResultCode::SUCCESS;
+		return convertedSize;
 	}
 
-	Result WCSToUTF8(const std::wstring &strWCS, std::string &strUTF8)
+	size_t WCSToUTF8(const std::wstring &strWCS, std::string &strUTF8)
 	{
 		size_t convertedSize;
 		char stringBuffer[4 * 1024];
@@ -644,7 +869,7 @@ namespace StrUtil {
 
 		strUTF8 = stringBuffer;
 
-		return ResultCode::SUCCESS;
+		return convertedSize;
 	}
 
 	//// MBCS to Unicode string conversion
@@ -691,7 +916,7 @@ namespace StrUtil {
 
 
 	// UTF8 to Unicode string conversion
-	Result UTF8ToWCS(const char *strUTF8, wchar_t* strWCS, INT iBuffLen)
+	size_t UTF8ToWCS(const char *strUTF8, wchar_t* strWCS, int iBuffLen)
 	{
 		size_t convertedSize;
 
@@ -703,14 +928,14 @@ namespace StrUtil {
 
 		if (iBuffLen >= 1)
 		{
-			iBuffLen = std::min((INT)convertedSize + 1, iBuffLen) - 1;
+			iBuffLen = std::min((int)convertedSize + 1, iBuffLen) - 1;
 			strWCS[iBuffLen] = '\0';
 		}
 
-		return ResultCode::SUCCESS;
+		return convertedSize;
 	}
 
-	Result UTF8ToWCS(const std::string& strUTF8, std::wstring& strWCS)
+	size_t UTF8ToWCS(const std::string& strUTF8, std::wstring& strWCS)
 	{
 		size_t convertedSize;
 		wchar_t stringBuffer[4 * 1024];
@@ -729,7 +954,7 @@ namespace StrUtil {
 
 		strWCS = stringBuffer;
 
-		return ResultCode::SUCCESS;
+		return strWCS.length();
 	}
 
 

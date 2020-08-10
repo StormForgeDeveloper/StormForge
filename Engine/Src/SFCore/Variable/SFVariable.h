@@ -791,7 +791,7 @@ namespace SF {
 
 		virtual void SetValue(const char* value) override { m_Value = value; }
 		// This method will reference original string buffer. be careful when you call this one
-		virtual void SetValue(const String& value) override { m_Value = value; } 
+		virtual void SetValue(const String& value) override { m_Value = value.data(); } 
 		//virtual void SetValue(FixedString value) override;
 
 		virtual void* GetDataPtr() const override { return (void*)m_Value; }

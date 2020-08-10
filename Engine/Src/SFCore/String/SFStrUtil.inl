@@ -66,14 +66,14 @@ namespace SF {
 
 
 		template<int iBuffLen>
-		Result WCSToUTF8(const wchar_t* strWCS, char(&strUTF8)[iBuffLen])
+		size_t WCSToUTF8(const wchar_t* strWCS, char(&strUTF8)[iBuffLen])
 		{
 			return WCSToUTF8(strWCS, strUTF8, iBuffLen);
 		}
 
 
 		template<int iBuffLen>
-		Result UTF8ToWCS(const char *strUTF8, wchar_t(&strWCS)[iBuffLen])
+		size_t UTF8ToWCS(const char *strUTF8, wchar_t(&strWCS)[iBuffLen])
 		{
 			return UTF8ToWCS(strUTF8, strWCS, iBuffLen);
 		}
@@ -693,10 +693,22 @@ namespace SF {
 			return ch == ' ' || ch == '\r' || ch == '\n' || ch == '\t';
 		}
 
+		inline bool IsWhiteSpace(wchar_t ch)
+		{
+			return ch == L' ' || ch == L'\r' || ch == L'\n' || ch == L'\t';
+		}
+
 
 		inline bool IsNullOrEmpty(const char* str)
 		{
 			if (str == nullptr || str[0] == '\0')
+				return true;
+			return false;
+		}
+
+		inline bool IsNullOrEmpty(const wchar_t* str)
+		{
+			if (str == nullptr || str[0] == L'\0')
 				return true;
 			return false;
 		}

@@ -61,6 +61,9 @@
     <Filter Include="Test\LogServer">
       <UniqueIdentifier>{e8403187-ac4f-480e-87e0-750ba6f97753}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Test\String">
+      <UniqueIdentifier>{9ba99c2e-0454-428f-b624-5b5dd0b0a8df}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="UnitTest1PCH.h">
@@ -113,6 +116,9 @@
     </ClInclude>
     <ClInclude Include="Test\LogServer\UnitTest_Kafka.h">
       <Filter>Test\LogServer</Filter>
+    </ClInclude>
+    <ClInclude Include="Test\String\UnitTest_String.h">
+      <Filter>Test\String</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -229,6 +235,9 @@
     </ClCompile>
     <ClCompile Include="Test\LogServer\UnitTest_Kafka.cpp">
       <Filter>Test\LogServer</Filter>
+    </ClCompile>
+    <ClCompile Include="Test\String\UnitTest_String_BasicTest.cpp">
+      <Filter>Test\String</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

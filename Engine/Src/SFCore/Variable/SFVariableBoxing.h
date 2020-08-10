@@ -305,40 +305,6 @@ namespace SF {
 	DEFINE_BOXING_TEMPLETE(unsigned long, VariableUInt);
 #endif
 
-	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	String class method
-	//	  - They are here because we need them defined after boxing/unboxing, but main body of string should be defined before hand
-	//
-
-		// Format string
-	template< class ...ArgTypes >
-	inline String& String::Format(const char* strFormat, ArgTypes... args)
-	{
-		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
-		Format_Internal(strFormat, sizeof...(args), arguments);
-		return *this;
-	}
-
-	// Format string
-	template< class ...ArgTypes >
-	inline String& String::AppendFormat(const char* strFormat, ArgTypes... args)
-	{
-		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
-		AppendFormat_Internal(strFormat, sizeof...(args), arguments);
-		return *this;
-	}
-
-
-	// Format string
-	template< class ...ArgTypes >
-	inline StringBuilder& StringBuilder::AppendFormat(const char* strFormat, ArgTypes... args)
-	{
-		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
-		AppendFormat_Internal(strFormat, sizeof...(args), arguments);
-		return *this;
-	}
-
 
 }; // namespace StrUtil
 

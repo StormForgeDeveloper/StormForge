@@ -23,14 +23,26 @@ namespace SF {
 
 namespace StrUtil
 {
+	// Maximum utf8 bytes per character
+	// UTF-8 encoding supports longer byte sequences, up to 6 bytes, but the biggest code point of Unicode 6.0 (U+10FFFF) only takes 4 bytes.
+	constexpr size_t MAX_UTF8_BYTES = 6;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	String functions
 	//
 
-	size_t StringLen(const char* Dest);
-	size_t StringLen(const wchar_t* Dest);
+	// string length in input data type, element count
+	size_t StringLen(const char* StringValue);
+	size_t StringLen(const wchar_t* StringValue);
+
+	// string length in input data type for specified character count
+	size_t StringLen(const char* StringValue, int CharacterCount); // We uses utf8
+	inline size_t StringLen(const wchar_t* StringValue, int CharacterCount) { return std::min((size_t)CharacterCount, StringLen(StringValue)); }
+
+	// Character count in the string
+	size_t CharacterCount(const char* StringValue); // We uses utf8
+	inline size_t CharacterCount(const wchar_t* StringValue) { return StringLen(StringValue); }
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -71,10 +83,10 @@ namespace StrUtil
 
 
 	// Unicode to UTF8 string conversion
-	Result WCSToUTF8( const wchar_t* strWCS, char *strUTF8, int iBuffLen );
+	size_t WCSToUTF8( const wchar_t* strWCS, char *strUTF8, int iBuffLen );
 	template<int iBuffLen>
-	Result WCSToUTF8( const wchar_t* strWCS, char (&strUTF8)[iBuffLen] );
-	Result WCSToUTF8( const std::wstring &strWCS, std::string &strUTF8 );
+	size_t WCSToUTF8( const wchar_t* strWCS, char (&strUTF8)[iBuffLen] );
+	size_t WCSToUTF8( const std::wstring &strWCS, std::string &strUTF8 );
 
 	//// MBCS to Unicode string conversion
 	//Result MBCSToWCS( const char *strMBCS, wchar_t* strWCS, int iBuffLen );
@@ -89,10 +101,10 @@ namespace StrUtil
 	//Result MBCSToUTF8( const std::string &strMBCS, std::string &strUTF8 );
 
 	// UTF8 to Unicode string conversion
-	Result UTF8ToWCS( const char *strUTF8, wchar_t* strWCS, int iBuffLen );
+	size_t UTF8ToWCS( const char *strUTF8, wchar_t* strWCS, int iBuffLen );
 	template<int iBuffLen>
-	Result UTF8ToWCS( const char *strUTF8, wchar_t (&strWCS)[iBuffLen] );
-	Result UTF8ToWCS( const std::string& strUTF8, std::wstring& strWCS );
+	size_t UTF8ToWCS( const char *strUTF8, wchar_t (&strWCS)[iBuffLen] );
+	size_t UTF8ToWCS( const std::string& strUTF8, std::wstring& strWCS );
 
 	//// UTF8 to MBCS string conversion
 	//Result UTF8ToMBCS( const char *strUTF8, char* strMBCS, int iBuffLen );
@@ -199,9 +211,11 @@ namespace StrUtil
 
 	// Check whether the character is white space character
 	bool IsWhiteSpace(char ch);
+	bool IsWhiteSpace(wchar_t ch);
 
 	// Check whether the string is empty or null
 	bool IsNullOrEmpty(const char* str);
+	bool IsNullOrEmpty(const wchar_t* str);
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////

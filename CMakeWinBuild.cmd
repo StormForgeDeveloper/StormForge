@@ -13,17 +13,23 @@ cd %BUILD_DIR%\%PROCESS_ARCHITECTUR%
 cmake --build . --parallel --target install  -- /p:Configuration=%CMAKE_BUILD_TYPE% 
 
 
-robocopy lib ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib  /purge /move
-robocopy bin ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin  /purge /move
+robocopy lib ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib  /purge
+robocopy bin ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin  /purge
+robocopy Engine\Src\SFCore\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib *.pdb
+robocopy Engine\Src\SFEngine\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib  *.pdb
+robocopy Engine\Src\Protocol\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib *.pdb
 
 
 
-set CMAKE_BUILD_TYPE=Release
+set CMAKE_BUILD_TYPE=RelWithDebInfo
 cmake --build . --parallel --target install -- /p:Configuration=%CMAKE_BUILD_TYPE% 
 
 
-robocopy lib ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib  /purge /move
-robocopy bin ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin  /purge /move
+robocopy lib ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib  /purge
+robocopy bin ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin  /purge
+robocopy Engine\Src\SFCore\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib *.pdb
+robocopy Engine\Src\SFEngine\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib *.pdb
+robocopy Engine\Src\Protocol\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib *.pdb
 
 
 

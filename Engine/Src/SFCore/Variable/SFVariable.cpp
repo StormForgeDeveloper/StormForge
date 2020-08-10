@@ -106,6 +106,7 @@ namespace SF
 		m_Value = atoi(value);
 	}
 
+
 	void VariableInt::SetValue(const String& value)
 	{
 		if (value == nullptr)

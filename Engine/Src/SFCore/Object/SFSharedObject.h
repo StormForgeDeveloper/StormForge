@@ -63,7 +63,8 @@ namespace SF {
 		inline SharedObjectManager*		GetReferenceManager()					{ return m_ReferenceManagerObject; }
 
 		// If your object is added to shared object manager and CanDelete returns false the manager will give more time for the object
-		virtual bool CanDelete() { return true; }
+		virtual bool	CanDelete() { return true; }
+		inline bool		IsUniquelyReferenced() const { return m_ReferenceCount.load(std::memory_order_relaxed) == 1; }
 
 		virtual void Dispose() {}
 

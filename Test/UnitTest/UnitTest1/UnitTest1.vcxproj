@@ -166,6 +166,7 @@
     <ClInclude Include="Test\Memory\UnitTest_Memory.h" />
     <ClInclude Include="Test\Net\UnitTest_Net.h" />
     <ClInclude Include="Test\SFTestBase.h" />
+    <ClInclude Include="Test\String\UnitTest_String.h" />
     <ClInclude Include="Test\Thread\SFSystemSynchronizeTest.h" />
     <ClInclude Include="Test\Thread\SFThreadTest.h" />
     <ClInclude Include="Test\TongScript\UnitTest_TongScript.h" />
@@ -198,6 +199,7 @@
     <ClCompile Include="Test\Net\UnitTest_Net.cpp" />
     <ClCompile Include="Test\Net\UnitTest_NetMessageWindow.cpp" />
     <ClCompile Include="Test\SFTestBase.cpp" />
+    <ClCompile Include="Test\String\UnitTest_String_BasicTest.cpp" />
     <ClCompile Include="Test\Texture\UnitTest_TextureJpg.cpp" />
     <ClCompile Include="Test\Texture\UnitTest_TexturePng.cpp" />
     <ClCompile Include="Test\Texture\UnitTest_TextureTGA.cpp" />
