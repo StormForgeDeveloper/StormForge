@@ -159,9 +159,6 @@ namespace SF {
 
 
 
-	// Deprecated
-#define SF_MEMORYPOOL_IMPLEMENT(className) 
-
 
 
 
