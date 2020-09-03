@@ -16,6 +16,8 @@
 #include "ResultCode/SFResultCodeSystem.h"
 
 
+constexpr int NetAddress::MAX_NETNAME;
+
 
 /////////////////////////////////////////////////////////////////////
 //

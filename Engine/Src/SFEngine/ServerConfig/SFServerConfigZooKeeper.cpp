@@ -506,7 +506,10 @@ namespace SF
 	{
 		FunctionContext result([](Result result) 
 		{
-			SFLog(Engine, Error, "ServerConfigZooKeeper::LoadConfig, has failed {0}", result);
+			if (!result)
+			{
+				SFLog(Engine, Error, "ServerConfigZooKeeper::LoadConfig, has failed {0}", result);
+			}
 		});
 		String rootPath;
 

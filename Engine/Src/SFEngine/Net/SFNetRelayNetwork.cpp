@@ -84,7 +84,7 @@ namespace Net {
 	{
 		FunctionContext hr([this](Result result)
 		{
-			if (GetRelayNetworkState() == RelayNetworkState::Connecting)
+			if (!result && GetRelayNetworkState() == RelayNetworkState::Connecting)
 				m_RelayNetworkState = RelayNetworkState::Disconnected;
 		});
 
@@ -339,12 +339,6 @@ namespace Net {
 			return hr;
 
 		return m_RecvQueue.Enqueue(std::forward<MessageDataPtr>(pMsg));
-		//Message::Relay::RelayPacketC2SEvt message(std::forward<MessageDataPtr>(pMsg));
-		//netCheck(message.ParseMsg());
-
-		//m_RecvHandler(message.GetSenderEndpointID(), message.GetPayload().size(), message.GetPayload().data());
-
-		//return hr;
 	}
 
 	size_t RelayNetwork::GetRelayNetworkEventCount()

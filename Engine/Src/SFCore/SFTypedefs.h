@@ -636,20 +636,18 @@ namespace SF {
 
 	struct NetAddress
 	{
-		enum {
-			MAX_NETNAME = 70,
-		};
-		char Address[MAX_NETNAME] = "";
+		static constexpr int MAX_NETNAME = 70;
+
+		char Address[MAX_NETNAME] = {};
 		uint16_t Port = 0;
 		SockFamily SocketFamily = SockFamily::None;
 
-		inline NetAddress() : Port(0){}
+		NetAddress() = default;
 		NetAddress(SockFamily sockFamily, const char* strAdr, uint16_t port = 0);
 		NetAddress(const char* strAdr, uint16_t port = 0);
 		NetAddress(const sockaddr_in& sockAddr);
 		NetAddress(const sockaddr_in6& sockAddr);
 		NetAddress(const sockaddr_storage& sockAddr);
-		//NetAddress(int);
 
 		explicit operator sockaddr_in() const;
 		explicit operator sockaddr_in6() const;
@@ -682,24 +680,21 @@ namespace SF {
 
 	// Intended to replace goto Proc_End style with c++ way
 	// Function Result handling. If error Func has assigned, it will run the error function on failure when the function scope is finished.
-	template<typename ErrorFunc = std::function<void(Result result)>>
+	template<typename ExitFunc = std::function<void(Result result)>>
 	class FunctionContext
 	{
 	public:
 
 		FunctionContext() = default;
 		FunctionContext(Result src) : m_Hr(src) {}
-		FunctionContext(ErrorFunc&& errorFunc)
-			: m_ErrorFunc(errorFunc)
+		FunctionContext(ExitFunc&& errorFunc)
+			: m_ExitFunc(errorFunc)
 		{
 		}
 
 		~FunctionContext()
 		{
-			if (!m_Hr)
-			{
-				m_ErrorFunc(m_Hr);
-			}
+			m_ExitFunc(m_Hr);
 		}
 
 		FunctionContext& operator = (Result src) { m_Hr = src; return *this; }
@@ -710,7 +705,7 @@ namespace SF {
 	private:
 
 		// function will be invoked when it has error
-		ErrorFunc m_ErrorFunc;
+		ExitFunc m_ExitFunc;
 		Result m_Hr;
 	};
 
