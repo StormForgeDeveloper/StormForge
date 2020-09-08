@@ -348,6 +348,12 @@ namespace ProtocolXml {
         TransactionID,
         
         /// <remarks/>
+        StringCrc32,
+        
+        /// <remarks/>
+        StringCrc64,
+        
+        /// <remarks/>
         ClusterID,
         
         /// <remarks/>
@@ -373,6 +379,12 @@ namespace ProtocolXml {
         
         /// <remarks/>
         NotificationType,
+        
+        /// <remarks/>
+        BoxedValue,
+        
+        /// <remarks/>
+        BoxedValueWithName,
         
         /// <remarks/>
         RankingType,

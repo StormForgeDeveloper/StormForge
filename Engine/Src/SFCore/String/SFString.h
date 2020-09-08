@@ -22,7 +22,7 @@
 
 namespace SF {
 
-	class FixedString;
+	class StringCrc64;
 	class VariableBox;
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -260,7 +260,7 @@ namespace SF {
 			}
 		}
 
-		TString(IHeap& heap, const FixedString& src)
+		TString(IHeap& heap, const StringCrc64& src)
 			: m_pHeap(&heap)
 		{
 			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src.ToString());

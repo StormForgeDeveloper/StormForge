@@ -26,7 +26,7 @@ namespace SF
 	//	Variable int
 	//
 
-	constexpr FixedString32 VariableBool::TYPE_NAME;
+	constexpr StringCrc32 VariableBool::TYPE_NAME;
  
 	Result VariableBool::ToString(ToStringContext& context) const
 	{
@@ -57,7 +57,7 @@ namespace SF
 	//	Variable void*
 	//
 
-	constexpr FixedString32 VariableVoidP::TYPE_NAME;
+	constexpr StringCrc32 VariableVoidP::TYPE_NAME;
 
 	Result VariableVoidP::ToString(ToStringContext& context) const
 	{
@@ -93,7 +93,7 @@ namespace SF
 	//	Variable int
 	//
 
-	constexpr FixedString32 VariableInt::TYPE_NAME;
+	constexpr StringCrc32 VariableInt::TYPE_NAME;
 
 	void VariableInt::SetValue(const char* value)
 	{
@@ -118,7 +118,7 @@ namespace SF
 		m_Value = atoi(value);
 	}
 
-	void VariableInt::SetValue(FixedString value)
+	void VariableInt::SetValue(StringCrc64 value)
 	{
 		Assert(false); // It will lose precision
 		m_Value = (int)value.GetHash();
@@ -127,7 +127,7 @@ namespace SF
 
 
 
-	FixedString VariableInt::GetValueFixedString() const
+	StringCrc64 VariableInt::GetValueStringCrc64() const
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
@@ -136,7 +136,7 @@ namespace SF
 
 		ToString(context);
 
-		return FixedString(renderBuffer);
+		return StringCrc64(renderBuffer);
 	}
 
 	String VariableInt::GetValueString() const
@@ -172,7 +172,7 @@ namespace SF
 	//	Variable uint
 	//
 
-	constexpr FixedString32 VariableUInt::TYPE_NAME;
+	constexpr StringCrc32 VariableUInt::TYPE_NAME;
 
 	void VariableUInt::SetValue(const char* value)
 	{
@@ -196,13 +196,13 @@ namespace SF
 		m_Value = atoi(value);
 	}
 
-	void VariableUInt::SetValue(FixedString value)
+	void VariableUInt::SetValue(StringCrc64 value)
 	{
 		Assert(false); // It will lose precision
 		m_Value = (int)value.GetHash();
 	}
 
-	FixedString VariableUInt::GetValueFixedString() const
+	StringCrc64 VariableUInt::GetValueStringCrc64() const
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
@@ -210,7 +210,7 @@ namespace SF
 		context.StringBufferLength = sizeof(renderBuffer);
 
 		ToString(context);
-		return FixedString(renderBuffer);
+		return StringCrc64(renderBuffer);
 	}
 
 	String VariableUInt::GetValueString() const
@@ -246,7 +246,7 @@ namespace SF
 	//	Variable Result
 	//
 
-	constexpr FixedString32 VariableResult::TYPE_NAME;
+	constexpr StringCrc32 VariableResult::TYPE_NAME;
 
 	Result VariableResult::ToString(ToStringContext& context) const
 	{
@@ -273,7 +273,7 @@ namespace SF
 	//	Variable int64
 	//
 
-	constexpr FixedString32 VariableInt64::TYPE_NAME;
+	constexpr StringCrc32 VariableInt64::TYPE_NAME;
 
 	void VariableInt64::SetValue(const char* value)
 	{
@@ -297,7 +297,7 @@ namespace SF
 		m_Value = atoi(value);
 	}
 
-	void VariableInt64::SetValue(FixedString value)
+	void VariableInt64::SetValue(StringCrc64 value)
 	{
 		Assert(false); // It will lose precision
 		m_Value = (int)value.GetHash();
@@ -306,7 +306,7 @@ namespace SF
 
 
 
-	FixedString VariableInt64::GetValueFixedString() const
+	StringCrc64 VariableInt64::GetValueStringCrc64() const
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
@@ -315,7 +315,7 @@ namespace SF
 
 		ToString(context);
 
-		return FixedString(renderBuffer);
+		return StringCrc64(renderBuffer);
 	}
 
 	String VariableInt64::GetValueString() const
@@ -351,7 +351,7 @@ namespace SF
 	//	Variable uint
 	//
 
-	constexpr FixedString32 VariableUInt64::TYPE_NAME;
+	constexpr StringCrc32 VariableUInt64::TYPE_NAME;
 
 	void VariableUInt64::SetValue(const char* value)
 	{
@@ -375,13 +375,13 @@ namespace SF
 		m_Value = atoi(value);
 	}
 
-	void VariableUInt64::SetValue(FixedString value)
+	void VariableUInt64::SetValue(StringCrc64 value)
 	{
 		Assert(false); // It will lose precision
 		m_Value = (int)value.GetHash();
 	}
 
-	FixedString VariableUInt64::GetValueFixedString() const
+	StringCrc64 VariableUInt64::GetValueStringCrc64() const
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
@@ -389,7 +389,7 @@ namespace SF
 		context.StringBufferLength = sizeof(renderBuffer);
 
 		ToString(context);
-		return FixedString(renderBuffer);
+		return StringCrc64(renderBuffer);
 	}
 
 	String VariableUInt64::GetValueString() const
@@ -426,7 +426,7 @@ namespace SF
 	//	Variable float
 	//
 
-	constexpr FixedString32 VariableFloat::TYPE_NAME;
+	constexpr StringCrc32 VariableFloat::TYPE_NAME;
 
 	void VariableFloat::SetValue(const char* value)
 	{
@@ -450,13 +450,13 @@ namespace SF
 		m_Value = (float)atof(value);
 	}
 
-	void VariableFloat::SetValue(FixedString value)
+	void VariableFloat::SetValue(StringCrc64 value)
 	{
 		Assert(false); // It will lose precision
 		m_Value = (float)value.GetHash();
 	}
 
-	FixedString VariableFloat::GetValueFixedString() const
+	StringCrc64 VariableFloat::GetValueStringCrc64() const
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
@@ -464,7 +464,7 @@ namespace SF
 		context.StringBufferLength = sizeof(renderBuffer);
 
 		ToString(context);
-		return FixedString(renderBuffer);
+		return StringCrc64(renderBuffer);
 	}
 
 	String VariableFloat::GetValueString() const
@@ -505,7 +505,7 @@ namespace SF
 	//	Variable double
 	//
 
-	constexpr FixedString32 VariableDouble::TYPE_NAME;
+	constexpr StringCrc32 VariableDouble::TYPE_NAME;
 
 	void VariableDouble::SetValue(const char* value)
 	{
@@ -529,13 +529,13 @@ namespace SF
 		m_Value = atof(value);
 	}
 
-	void VariableDouble::SetValue(FixedString value)
+	void VariableDouble::SetValue(StringCrc64 value)
 	{
 		Assert(false); // It will lose precision
 		m_Value = (int)value.GetHash();
 	}
 
-	FixedString VariableDouble::GetValueFixedString() const
+	StringCrc64 VariableDouble::GetValueStringCrc64() const
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
@@ -543,7 +543,7 @@ namespace SF
 		context.StringBufferLength = sizeof(renderBuffer);
 
 		ToString(context);
-		return FixedString(renderBuffer);
+		return StringCrc64(renderBuffer);
 	}
 
 	String VariableDouble::GetValueString() const
@@ -586,7 +586,7 @@ namespace SF
 	//	Variable 32 bit base 16 integer
 	//
 
-	constexpr FixedString32 VariableHex32::TYPE_NAME;
+	constexpr StringCrc32 VariableHex32::TYPE_NAME;
 
 	void VariableHex32::SetValue(const char* value)
 	{
@@ -632,7 +632,7 @@ namespace SF
 	//	Variable 64 bit base 16 integer
 	//
 
-	constexpr FixedString32 VariableHex64::TYPE_NAME;
+	constexpr StringCrc32 VariableHex64::TYPE_NAME;
 
 	void VariableHex64::SetValue(const char* value)
 	{
@@ -679,7 +679,7 @@ namespace SF
 	//	  - This class only holds pointer, doesn't copy or allocate memory internally
 	//
 
-	constexpr FixedString32 VariableCharString::TYPE_NAME;
+	constexpr StringCrc32 VariableCharString::TYPE_NAME;
 
 	Result VariableCharString::ToString(ToStringContext& context) const
 	{
@@ -711,7 +711,7 @@ namespace SF
 	//	  - This class only holds pointer, doesn't copy or allocate memory internally
 	//
 
-	constexpr FixedString32 VariableWCharString::TYPE_NAME;
+	constexpr StringCrc32 VariableWCharString::TYPE_NAME;
 
 	Result VariableWCharString::ToString(ToStringContext& context) const
 	{
@@ -753,7 +753,7 @@ namespace SF
 	//	Variable String
 	//
 
-	constexpr FixedString32 VariableString::TYPE_NAME;
+	constexpr StringCrc32 VariableString::TYPE_NAME;
 
 	void VariableString::SetValue(bool value)
 	{
@@ -820,7 +820,7 @@ namespace SF
 		m_Value = value;
 	}
 
-	void VariableString::SetValue(FixedString value)
+	void VariableString::SetValue(StringCrc64 value)
 	{
 		m_Value.Format("{0}", value);
 	}
@@ -883,9 +883,9 @@ namespace SF
 		return (double)atof(m_Value);
 	}
 
-	FixedString VariableString::GetValueFixedString() const
+	StringCrc64 VariableString::GetValueStringCrc64() const
 	{
-		return FixedString(m_Value);
+		return StringCrc64(m_Value);
 	}
 
 	String VariableString::GetValueString() const
@@ -924,17 +924,17 @@ namespace SF
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	Variable FixedString32
+	//	Variable StringCrc32
 	//
 
-	constexpr FixedString32 VariableFixedString32::TYPE_NAME;
+	constexpr StringCrc32 VariableStringCrc32::TYPE_NAME;
 
-	String VariableFixedString32::GetValueString() const
+	String VariableStringCrc32::GetValueString() const
 	{
 		return Service::StringDB->GetString(m_Value);
 	}
 
-	Result VariableFixedString32::ToString(ToStringContext& context) const
+	Result VariableStringCrc32::ToString(ToStringContext& context) const
 	{
 		auto pStr = Service::StringDB->GetString(m_Value);
 		if (pStr != nullptr)
@@ -949,30 +949,30 @@ namespace SF
 		}
 	}
 
-	Variable* VariableFixedString32::Clone(Array<uint8_t>& buffer) const
+	Variable* VariableStringCrc32::Clone(Array<uint8_t>& buffer) const
 	{
-		return new((void*)buffer.data()) VariableFixedString32(m_Value);
+		return new((void*)buffer.data()) VariableStringCrc32(m_Value);
 	}
 
-	Variable* VariableFixedString32::Clone(IHeap& heap) const
+	Variable* VariableStringCrc32::Clone(IHeap& heap) const
 	{
-		return new(heap) VariableFixedString32(m_Value);
+		return new(heap) VariableStringCrc32(m_Value);
 	}
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	Variable FixedString
+	//	Variable StringCrc64
 	//
 
-	constexpr FixedString32 VariableFixedString::TYPE_NAME;
+	constexpr StringCrc32 VariableStringCrc64::TYPE_NAME;
 
-	String VariableFixedString::GetValueString() const
+	String VariableStringCrc64::GetValueString() const
 	{
 		return Service::StringDB->GetString(m_Value);
 	}
 
-	Result VariableFixedString::ToString(ToStringContext& context) const
+	Result VariableStringCrc64::ToString(ToStringContext& context) const
 	{
 		auto pStr = Service::StringDB->GetString(m_Value);
 		if (pStr != nullptr)
@@ -987,14 +987,14 @@ namespace SF
 		}
 	}
 
-	Variable* VariableFixedString::Clone(Array<uint8_t>& buffer) const
+	Variable* VariableStringCrc64::Clone(Array<uint8_t>& buffer) const
 	{
-		return new((void*)buffer.data()) VariableFixedString(m_Value);
+		return new((void*)buffer.data()) VariableStringCrc64(m_Value);
 	}
 
-	Variable* VariableFixedString::Clone(IHeap& heap) const
+	Variable* VariableStringCrc64::Clone(IHeap& heap) const
 	{
-		return new(heap) VariableFixedString(m_Value);
+		return new(heap) VariableStringCrc64(m_Value);
 	}
 
 
@@ -1003,10 +1003,10 @@ namespace SF
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	Variable FixedString
+	//	Variable StringCrc64
 	//
 
-	constexpr FixedString32 VariableBLOB::TYPE_NAME;
+	constexpr StringCrc32 VariableBLOB::TYPE_NAME;
 
 	Result VariableBLOB::ToString(ToStringContext& context) const
 	{

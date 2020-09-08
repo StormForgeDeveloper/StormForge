@@ -108,7 +108,7 @@ namespace SF {
 		{
 		public:
 
-			static constexpr FixedString TypeName = "AsyncIOPortSystem";
+			static constexpr StringCrc64 TypeName = "AsyncIOPortSystem";
 
 		private:
 
@@ -134,7 +134,7 @@ namespace SF {
 			AsyncIOPortSystem(uint numThread);
 			~AsyncIOPortSystem();
 
-			virtual const FixedString& GetTypeName() override { return TypeName; }
+			virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 			// Initialize component
 			virtual Result InitializeComponent() override;

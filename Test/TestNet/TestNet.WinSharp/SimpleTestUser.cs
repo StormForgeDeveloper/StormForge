@@ -122,7 +122,7 @@ namespace TestNet.WinSharp
                     if (conEvent.HResult.IsSucceeded)
                     {
                         m_Login = new SF.Net.SendMessageLogin(m_ConnectionLogin);
-                        m_Login.CreateRandomUserCmd(0, FixedString32.HashString(m_GameID), m_LoginID);
+                        m_Login.CreateRandomUserCmd(0, StringCrc32.HashString(m_GameID), m_LoginID);
                     }
                     break;
                 case SFConnection.EventTypes.EVT_DISCONNECTED:

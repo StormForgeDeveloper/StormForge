@@ -110,7 +110,7 @@ namespace SF
 		DynamicArray<SceneNode*> m_ChildrenToRemove;
 
 		// Node component
-		SortedArray<FixedString, SharedPointerT<SceneNodeComponent>, true, false> m_NodeComponents;
+		SortedArray<StringCrc64, SharedPointerT<SceneNodeComponent>, true, false> m_NodeComponents;
 
 	protected:
 
@@ -123,7 +123,7 @@ namespace SF
 
 	public:
 		// Constructor
-		SceneNode(IHeap& heap, const FixedString& name = "");
+		SceneNode(IHeap& heap, const StringCrc64& name = "");
 		virtual ~SceneNode();
 
 		// Dispose
@@ -210,7 +210,7 @@ namespace SF
 		void RemoveChild(SceneNode* child);
 
 		// Find child
-		SceneNode* FindChild(FixedString nodeName);
+		SceneNode* FindChild(StringCrc64 nodeName);
 
 		/// <summary>
 		/// Find child recursively

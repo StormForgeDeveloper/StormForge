@@ -46,7 +46,7 @@ TEST_F(MemoryTest, Heap)
 		pPtr[i] = i + 1;
 	}
 
-	SF::SortedArray<FixedString, intptr_t> testArray(GetHeap());
+	SF::SortedArray<StringCrc64, intptr_t> testArray(GetHeap());
 	testArray.Set("a", 1);
 	testArray.Set("b", 2);
 	testArray.Set("c", 3);

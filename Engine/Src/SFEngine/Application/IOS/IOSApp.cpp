@@ -40,7 +40,7 @@
 
 namespace SF
 {
-	constexpr FixedString IOSApp::TypeName;
+	constexpr StringCrc64 IOSApp::TypeName;
 
 	IOSApp::IOSApp()
 	{

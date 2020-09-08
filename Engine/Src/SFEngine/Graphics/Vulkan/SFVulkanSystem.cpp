@@ -28,7 +28,7 @@ namespace SF
 	template class DynamicArray<VkMemoryType>;
 
 
-	constexpr FixedString VulkanSystem::TypeName;
+	constexpr StringCrc64 VulkanSystem::TypeName;
 
 
 	VulkanSystem::VulkanSystem()

@@ -26,14 +26,14 @@ namespace SF
 	{
 	public:
 
-		typedef SortedArray<FixedString, ResourcePtr, true, false> AssetList;
+		typedef SortedArray<StringCrc64, ResourcePtr, true, false> AssetList;
 
-		typedef SortedArray<FixedString, SharedPointerT<AssetPackage>, true, false> AssetPackageList;
+		typedef SortedArray<StringCrc64, SharedPointerT<AssetPackage>, true, false> AssetPackageList;
 
 	private:
 
 		// Name of the exporter
-		FixedString m_Name;
+		StringCrc64 m_Name;
 
 		// heap for resource
 		Heap m_Heap;
@@ -47,7 +47,7 @@ namespace SF
 		AssetPackageList m_References;
 
 	public:
-		AssetPackage(IHeap& heap, const FixedString& name);
+		AssetPackage(IHeap& heap, const StringCrc64& name);
 		virtual ~AssetPackage();
 
 		virtual void Dispose() override;
@@ -56,7 +56,7 @@ namespace SF
 		IHeap& GetHeap() { return m_Heap; }
 
 		// Get name
-		FixedString GetName() const { return m_Name; }
+		StringCrc64 GetName() const { return m_Name; }
 
 		// Add asset to the package
 		// Package will hold 1 reference counter from the resource
@@ -66,7 +66,7 @@ namespace SF
 		Result RemoveAsset(const SharedPointerT<Resource>& asset);
 
 		// Find an resource asset
-		SharedPointerT<Resource> FindAsset(FixedString assetName);
+		SharedPointerT<Resource> FindAsset(StringCrc64 assetName);
 
 		// Get asset list
 		AssetList& GetAssetList() { return m_Assets; }

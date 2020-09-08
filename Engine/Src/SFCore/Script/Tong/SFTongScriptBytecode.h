@@ -43,11 +43,11 @@ namespace SF
 			SrciptBytecodeOpCode m_OpCode;
 
 			// first 2s are input, the last one is for output
-			FixedString m_Parameters[3] = { nullptr, nullptr, nullptr };
+			StringCrc64 m_Parameters[3] = { nullptr, nullptr, nullptr };
 
 		public:
 
-			ScriptOpcodeInfo(SrciptBytecodeOpCode opCode, FixedString parameter1, FixedString parameter2, FixedString parameter3)
+			ScriptOpcodeInfo(SrciptBytecodeOpCode opCode, StringCrc64 parameter1, StringCrc64 parameter2, StringCrc64 parameter3)
 				: m_OpCode(opCode)
 			{
 				m_Parameters[0] = parameter1;
@@ -56,7 +56,7 @@ namespace SF
 			}
 
 			SrciptBytecodeOpCode GetOpCode() const { return m_OpCode; }
-			FixedString GetParameter(int i) const { return m_Parameters[i]; }
+			StringCrc64 GetParameter(int i) const { return m_Parameters[i]; }
 
 			const char* ParseString(ScriptContext& context, int& stringSize) const
 			{
@@ -132,7 +132,7 @@ namespace SF
 			//
 
 			Result AppendNoop();
-			Result AppendLabel(FixedString32 label);
+			Result AppendLabel(StringCrc32 label);
 			Result AppendExit();
 
 			Result AppendAdd();
@@ -156,8 +156,8 @@ namespace SF
 			Result AppendCmpGreaterOrEqual();
 			Result AppendCmpLessOrEqual();
 
-			Result AppendJump(FixedString32 label);
-			Result AppendJumpFalse(FixedString32 label);
+			Result AppendJump(StringCrc32 label);
+			Result AppendJumpFalse(StringCrc32 label);
 			Result AppendYieldFrame();
 
 			Result AppendStoreToContext(const char* name);

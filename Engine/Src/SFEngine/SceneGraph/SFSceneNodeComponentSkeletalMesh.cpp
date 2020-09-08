@@ -35,7 +35,7 @@ namespace SF {
 
 
 	// Constructor
-	SceneNodeComponentSkeletalMesh::SceneNodeComponentSkeletalMesh(IHeap& heap, const FixedString& name)
+	SceneNodeComponentSkeletalMesh::SceneNodeComponentSkeletalMesh(IHeap& heap, const StringCrc64& name)
 		: SceneNodeComponentMesh(heap, name)
 		, m_Joints(heap)
 		, m_Skeletons(heap)

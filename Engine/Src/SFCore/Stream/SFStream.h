@@ -12,7 +12,7 @@
 
 #include "SFTypedefs.h"
 #include "Object/SFSharedObject.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 
 
 namespace SF
@@ -37,9 +37,9 @@ namespace SF
 	private:
 
 		// Name of stream
-		FixedString m_Name;
+		StringCrc64 m_Name;
 		// Source name of the stream such as file name
-		FixedString m_SourceName;
+		StringCrc64 m_SourceName;
 
 	public:
 
@@ -47,14 +47,14 @@ namespace SF
 		virtual ~IStream() {}
 
 		// Set name
-		void SetName(FixedString name) { m_Name = name; }
+		void SetName(StringCrc64 name) { m_Name = name; }
 		// Get name
-		FixedString GetName() const { return m_Name; }
+		StringCrc64 GetName() const { return m_Name; }
 
 		// Set name
-		void SetSourceName(FixedString name) { m_Name = name; }
+		void SetSourceName(StringCrc64 name) { m_Name = name; }
 		// Get name
-		FixedString GetSourceName() const { return m_Name; }
+		StringCrc64 GetSourceName() const { return m_Name; }
 
 		virtual class IInputStream* ToInputStream() { return nullptr; }
 		virtual class IOutputStream* ToOutputStream() { return nullptr; }

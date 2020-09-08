@@ -62,7 +62,7 @@ namespace SF
 
 	public:
 
-		StackHeap(FixedString name, IHeap& overflowHeap);
+		StackHeap(StringCrc64 name, IHeap& overflowHeap);
 		~StackHeap();
 
 		bool GetIsInStaticBuffer(void* pPtr);

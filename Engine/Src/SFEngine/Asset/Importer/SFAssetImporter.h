@@ -28,21 +28,21 @@ namespace SF
 	private:
 
 		// Name of importer
-		FixedString m_Name;
+		StringCrc64 m_Name;
 
 		// heap for importer
 		IHeap& m_Heap;
 
 		// Supporting asset types
-		//Array<FixedString>& m_AssetTypes;
-		StaticArray<FixedString, 4> m_AssetTypes;
+		//Array<StringCrc64>& m_AssetTypes;
+		StaticArray<StringCrc64, 4> m_AssetTypes;
 
 
 	public:
-		AssetImporter(IHeap& heap, const FixedString& name);
+		AssetImporter(IHeap& heap, const StringCrc64& name);
 		virtual ~AssetImporter();
 
-		FixedString GetName() const { return m_Name; }
+		StringCrc64 GetName() const { return m_Name; }
 
 		IHeap& GetHeap() { return m_Heap; }
 
@@ -50,7 +50,7 @@ namespace SF
 		void AddAssetType(const char* pAssetType);
 
 		// Asset type list
-		const Array<FixedString>& GetAssetTypes() const { return m_AssetTypes; }
+		const Array<StringCrc64>& GetAssetTypes() const { return m_AssetTypes; }
 
 
 		// Import

@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "Types/SFEngineTypedefs.h"
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc64.h"
 #include "String/SFString.h"
 #include "Container/SFCircularPageQueue.h"
 #include "Task/SFTask.h"
@@ -44,9 +44,9 @@ namespace SF
 		const char *const* GetValueNames() const;
 
 		const char* GetValueName(EnumType value) const { return nullptr; }
-		FixedString GetValueNameCrc(EnumType value) const { return nullptr; }
+		StringCrc64 GetValueNameCrc(EnumType value) const { return nullptr; }
 		EnumType GetValue(const char*) const;
-		EnumType GetValue(FixedString valueName) const;
+		EnumType GetValue(StringCrc64 valueName) const;
 	};
 
 
@@ -66,11 +66,11 @@ namespace SF
 
 		const char* GetValueName(DBClusterType value) const;
 
-		FixedString GetValueNameCrc(DBClusterType value) const;
+		StringCrc64 GetValueNameCrc(DBClusterType value) const;
 
 		DBClusterType GetValue(const char*) const;
 
-		DBClusterType GetValue(FixedString valueName) const;
+		DBClusterType GetValue(StringCrc64 valueName) const;
 	};
 
 
@@ -92,11 +92,11 @@ namespace SF
 
 		const char* GetValueName(ClusterID value) const;
 
-		FixedString GetValueNameCrc(ClusterID value) const;
+		StringCrc64 GetValueNameCrc(ClusterID value) const;
 
 		ClusterID GetValue(const char*) const;
 
-		ClusterID GetValue(FixedString valueName) const;
+		ClusterID GetValue(StringCrc64 valueName) const;
 	};
 
 

@@ -28,19 +28,19 @@ namespace SF
 	private:
 
 		// Name of the exporter
-		FixedString m_Name;
+		StringCrc64 m_Name;
 
 		// Exporting type
-		FixedString m_ExportType;
+		StringCrc64 m_ExportType;
 
 		// heap for resource
 		IHeap& m_Heap;
 
 	public:
-		AssetExporter(IHeap& heap, const FixedString& name, const FixedString& exportType);
+		AssetExporter(IHeap& heap, const StringCrc64& name, const StringCrc64& exportType);
 		virtual ~AssetExporter();
 
-		FixedString GetName() const { return m_Name; }
+		StringCrc64 GetName() const { return m_Name; }
 
 		IHeap& GetHeap() { return m_Heap; }
 

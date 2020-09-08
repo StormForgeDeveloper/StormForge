@@ -580,7 +580,6 @@ namespace ProtocolCompiler
                             if (param.IsArray)
                             {
                                 var cppTypeName = SystemTypeInfo.ElementTypeNameFor(TypeUsage.CPP, param);
-                                //MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", (int)parser.Get{0}().size(), (const {1}*)parser.Get{0}().data());", param.Name, cppTypeName);
                                 MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name, cppTypeName);
                             }
                             else if(csharpType.IsEnum)

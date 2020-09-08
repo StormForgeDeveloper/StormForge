@@ -633,7 +633,7 @@ void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, uint skipDept
 	//	Stack walker
 	//
 
-	constexpr FixedString StackWalker::TypeName;
+	constexpr StringCrc64 StackWalker::TypeName;
 
 	StackWalkerImpl* StackWalker::stm_pInstance = nullptr;
 

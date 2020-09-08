@@ -48,7 +48,7 @@ namespace SF {
 	// Clear components
 	void LibraryComponentManager::ClearComponents()
 	{
-		m_ComponentByName.ForeachOrder(0, (int)m_ComponentByName.size(), [](const FixedString& name, LibraryComponent* pComponent)
+		m_ComponentByName.ForeachOrder(0, (int)m_ComponentByName.size(), [](const StringCrc64& name, LibraryComponent* pComponent)
 		{
 			unused(name);
 			GetSystemHeap().Delete(pComponent);
@@ -108,7 +108,7 @@ namespace SF {
 
 		m_IsInitialized = true;
 
-		return m_ComponentByName.ForeachOrder(0, (int)m_ComponentByName.size(), [&](const FixedString& name, LibraryComponent* pComponent)
+		return m_ComponentByName.ForeachOrder(0, (int)m_ComponentByName.size(), [&](const StringCrc64& name, LibraryComponent* pComponent)
 		{
 			unused(name);
 			auto result = InitializeComponent(pComponent);
@@ -118,7 +118,7 @@ namespace SF {
 
 	Result LibraryComponentManager::DeinitializeComponents()
 	{
-		m_ComponentByName.ForeachOrder(0, (int)m_ComponentByName.size(), [](const FixedString& name, LibraryComponent* pComponent)
+		m_ComponentByName.ForeachOrder(0, (int)m_ComponentByName.size(), [](const StringCrc64& name, LibraryComponent* pComponent)
 		{
 			unused(name);
 			pComponent->DeinitializeComponent();
@@ -153,7 +153,7 @@ namespace SF {
 		return pRemove;
 	}
 
-	LibraryComponent* LibraryComponentManager::RemoveComponent(const FixedString& name)
+	LibraryComponent* LibraryComponentManager::RemoveComponent(const StringCrc64& name)
 	{
 		LibraryComponent* pRemove = nullptr;
 		auto result = m_ComponentByName.Remove(name, pRemove);
@@ -201,7 +201,7 @@ namespace SF {
 	}
 
 
-	LibraryComponent* LibraryComponentManager::GetComponentByName(const FixedString& name)
+	LibraryComponent* LibraryComponentManager::GetComponentByName(const StringCrc64& name)
 	{
 		LibraryComponent* pFound = nullptr;
 		auto result = m_ComponentByName.Find(name, pFound);
@@ -210,7 +210,7 @@ namespace SF {
 		return pFound;
 	}
 
-	LibraryComponent* LibraryComponentManager::GetComponentByType(const FixedString& typeName)
+	LibraryComponent* LibraryComponentManager::GetComponentByType(const StringCrc64& typeName)
 	{
 		LibraryComponent* pFound = nullptr;
 		auto result = m_ComponentByTypeName.Find(typeName, pFound);

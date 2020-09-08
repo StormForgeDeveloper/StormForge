@@ -20,8 +20,8 @@
 
 namespace SF
 {
-	constexpr FixedString ScriptObject::Type_Variable;
-	constexpr FixedString ScriptObject::Type_Function;
+	constexpr StringCrc64 ScriptObject::Type_Variable;
+	constexpr StringCrc64 ScriptObject::Type_Function;
 
 	ScriptEnvironment::ScriptEnvironment(IHeap& heap, ScriptEnvironment* pParent, const String& name)
 		: m_Heap("ScriptEnvironment", heap)

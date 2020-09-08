@@ -14,7 +14,7 @@
 
 
 #include "SFTypedefs.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Object/SFLibraryComponent.h"
 
@@ -32,7 +32,7 @@ namespace SF {
 	class LibraryComponentAdapter : public LibraryComponent
 	{
 	public:
-		static constexpr FixedString TypeName = ClassType::TypeName;
+		static constexpr StringCrc64 TypeName = ClassType::TypeName;
 
 	private:
 
@@ -57,7 +57,7 @@ namespace SF {
 		// Heap
 		IHeap& GetHeap() { return m_Heap; }
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		ClassType* operator ->() { return *m_Object; }
 		ClassType* operator *() { return *m_Object; }

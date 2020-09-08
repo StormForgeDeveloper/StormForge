@@ -32,10 +32,10 @@ namespace SF {
 		//	Module
 		//
 
-		constexpr FixedString LibraryComponentTime::TypeName;
+		constexpr StringCrc64 LibraryComponentTime::TypeName;
 
 		LibraryComponentTime::LibraryComponentTime()
-			: LibraryComponent(FixedString("Timer"))
+			: LibraryComponent(StringCrc64("Timer"))
 		{
 
 		}

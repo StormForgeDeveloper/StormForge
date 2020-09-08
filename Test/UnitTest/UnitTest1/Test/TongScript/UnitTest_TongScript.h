@@ -71,7 +71,7 @@ public:
 	}
 
 	void RunFunctionTest(SF::Tong::ScriptEnvironment* pEnvironment, 
-		SF::FixedString functName, 
+		SF::StringCrc64 functName, 
 		const SF::Array<SF::VariableBox>& stackVariables, 
 		const SF::Array<SF::VariableBox>& expectedStackResults,
 		std::function<void(SF::Tong::ScriptContext& context)> extTest = [](SF::Tong::ScriptContext& context) {})

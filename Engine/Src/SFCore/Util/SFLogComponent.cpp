@@ -16,7 +16,7 @@
 #include "Util/SFLogComponent.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFUtility.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "Service/SFService.h"
 
 
@@ -24,13 +24,13 @@
 namespace SF {
 
 
-	constexpr FixedString LogOutputConsoleComponent::TypeName;
+	constexpr StringCrc64 LogOutputConsoleComponent::TypeName;
 
 
 
 
 	LogOutputConsoleComponent::LogOutputConsoleComponent(const LogChannelMask& logMask)
-		: LibraryComponent(FixedString("LogConsole"))
+		: LibraryComponent(StringCrc64("LogConsole"))
 		, m_Handler(logMask)
 	{
 	}
@@ -109,10 +109,10 @@ namespace SF {
 
 
 
-	constexpr FixedString LogOutputDebuggerComponent::TypeName;
+	constexpr StringCrc64 LogOutputDebuggerComponent::TypeName;
 
 	LogOutputDebuggerComponent::LogOutputDebuggerComponent(const LogChannelMask& logMask)
-		: LibraryComponent(FixedString("LogDebugger"))
+		: LibraryComponent(StringCrc64("LogDebugger"))
 		, m_Handler(logMask)
 	{
 
@@ -147,10 +147,10 @@ namespace SF {
 
 
 
-	constexpr FixedString LogOutputFileComponent::TypeName;
+	constexpr StringCrc64 LogOutputFileComponent::TypeName;
 
 	LogOutputFileComponent::LogOutputFileComponent(const LogChannelMask& logMask, const String& filePrefix, bool bOpenNewHourly)
-		: LibraryComponent(FixedString("LogFile"))
+		: LibraryComponent(StringCrc64("LogFile"))
 		, m_Handler(logMask, filePrefix, bOpenNewHourly)
 	{
 

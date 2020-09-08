@@ -17,7 +17,7 @@
 namespace SF
 {
 
-	AssetImporter::AssetImporter(IHeap& heap, const FixedString& name)
+	AssetImporter::AssetImporter(IHeap& heap, const StringCrc64& name)
 		: m_Name(name)
 		, m_Heap(heap)
 		, m_AssetTypes(heap)

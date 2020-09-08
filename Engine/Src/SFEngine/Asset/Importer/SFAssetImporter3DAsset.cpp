@@ -19,7 +19,7 @@ namespace SF
 {
 
 
-	AssetImporter3DAsset::AssetImporter3DAsset(IHeap& heap, const FixedString& name)
+	AssetImporter3DAsset::AssetImporter3DAsset(IHeap& heap, const StringCrc64& name)
 		: AssetImporter(heap, name)
 	{
 

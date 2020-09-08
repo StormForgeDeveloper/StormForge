@@ -21,7 +21,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr FixedString TypeName = "UnhandledExceptionHandlerComponent";
+		static constexpr StringCrc64 TypeName = "UnhandledExceptionHandlerComponent";
 
 	private:
 
@@ -38,7 +38,7 @@ namespace SF {
 
 		UnhandledExceptionHandlerComponent();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 
 

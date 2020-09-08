@@ -301,7 +301,7 @@ namespace TestNet.WinSharp
                             mLoginConnectedAction(this);
 
                         m_Login = new SF.Net.SendMessageLogin(m_ConnectionLogin);
-                        m_Login.CreateRandomUserCmd(0, FixedString32.HashString(m_GameID), m_LoginID);
+                        m_Login.CreateRandomUserCmd(0, StringCrc32.HashString(m_GameID), m_LoginID);
                     }
                     else
                     {

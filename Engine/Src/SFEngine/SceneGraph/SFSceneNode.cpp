@@ -34,7 +34,7 @@ namespace SF {
 
 
 	// Constructor
-	SceneNode::SceneNode(IHeap& heap, const FixedString& name)
+	SceneNode::SceneNode(IHeap& heap, const StringCrc64& name)
 		: Object(&heap, name)
 		, m_Children(heap)
 		, m_ChildrenToRemove(heap)
@@ -194,7 +194,7 @@ namespace SF {
 		}
 	}
 
-	SceneNode* SceneNode::FindChild(FixedString nodeName)
+	SceneNode* SceneNode::FindChild(StringCrc64 nodeName)
 	{
 		for(auto child : m_Children)
 		{
@@ -239,9 +239,9 @@ namespace SF {
 		SceneNode* currentNode = this;
 
 		// Fixup root path down to one level
-		if (currentNode->GetName() != FixedString(targetPaths[0]))
+		if (currentNode->GetName() != StringCrc64(targetPaths[0]))
 		{
-			auto found = currentNode->FindChild(FixedString(targetPaths[0]));
+			auto found = currentNode->FindChild(StringCrc64(targetPaths[0]));
 			if (found == nullptr)
 			{
 				SFLog(Game, Error, "Animation target assign failed: Can't find root node");
@@ -253,7 +253,7 @@ namespace SF {
 
 		for (uint depth = 1; depth < targetPaths.size(); depth++)
 		{
-			currentNode = currentNode->FindChild(FixedString(targetPaths[depth]));
+			currentNode = currentNode->FindChild(StringCrc64(targetPaths[depth]));
 			if (currentNode == nullptr)
 			{
 				SFLog(Game, Error, "Animation target assign failed: Can't find node");

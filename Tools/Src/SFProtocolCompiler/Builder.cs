@@ -407,6 +407,17 @@ namespace ProtocolCompiler
             }
         }
 
+        public string IsVariableSize(Parameter param)
+        {
+            switch (param.Type)
+            {
+                case ParameterType.String:
+                    return "char*";
+                default:
+                    return null;
+            }
+        }
+
         virtual public Parameter[] MakeParameters(MsgType type, Parameter[] parameter)
         {
             int iParam = 0;
@@ -451,21 +462,15 @@ namespace ProtocolCompiler
         public virtual string ParamInString(Parameter[] parameter)
         {
             string strParams = "";
-            bool bIsFirst = true;
 
             if (parameter == null)
                 return strParams;
 
+            string Separator = "";
             foreach (Parameter param in parameter)
             {
-                if (bIsFirst)
-                {
-                    bIsFirst = false;
-                }
-                else
-                {
-                    strParams += ", ";
-                }
+                strParams += Separator;
+                Separator = ", ";
 
                 if (IsStrType(param)) // string type
                 {
@@ -487,21 +492,16 @@ namespace ProtocolCompiler
         public string ParamOutString(Parameter[] parameter)
         {
             string strParams = "";
-            bool bIsFirst = true;
 
             if (parameter == null)
                 return strParams;
 
+
+            string Separator = "";
             foreach (Parameter param in parameter)
             {
-                if (bIsFirst)
-                {
-                    bIsFirst = false;
-                }
-                else
-                {
-                    strParams += ", ";
-                }
+                strParams += Separator;
+                Separator = ", ";
 
                 if (IsStrType(param)) // string type
                 {

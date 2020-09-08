@@ -216,11 +216,11 @@ namespace SF {
 	//	AsyncTaskManager component
 	//
 
-	constexpr FixedString AsyncTaskManagerComponent::TypeName;
+	constexpr StringCrc64 AsyncTaskManagerComponent::TypeName;
 
 
 	AsyncTaskManagerComponent::AsyncTaskManagerComponent(int numThread)
-		: LibraryComponent(FixedString(TypeName))
+		: LibraryComponent(StringCrc64(TypeName))
 		, m_TaskManager(numThread)
 	{
 

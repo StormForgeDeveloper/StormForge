@@ -12,7 +12,7 @@
 
 #include "SFEnginePCH.h"
 #include "SFServerConfigXML.h"
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc32.h"
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -200,7 +200,7 @@ namespace SF
 			pServerModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ForeachElement(pNode->children, [&](xmlNode* pChild)
 			{
-				if(FixedString32((const char*)pChild->name) == "NetPublic")
+				if(StringCrc32((const char*)pChild->name) == "NetPublic")
 					return ParseXMLNetPublic(pChild, ((ServerConfig::ServerModulePublicService*)pServerModule)->PublicNet);
 
 				return ResultCode::SUCCESS;
@@ -210,7 +210,7 @@ namespace SF
 			pServerModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ForeachElement(pNode->children, [&](xmlNode* pChild)
 			{
-				if (FixedString32((const char*)pChild->name) == "NetPublic"_crc32c)
+				if (StringCrc32((const char*)pChild->name) == "NetPublic"_crc32c)
 					return ParseXMLNetPublic(pChild, ((ServerConfig::ServerModulePublicService*)pServerModule)->PublicNet);
 
 				return ResultCode::SUCCESS;
@@ -220,7 +220,7 @@ namespace SF
 			pServerModule = new(GetHeap()) ServerConfig::ServerModuleRelayService(GetHeap());
 			result = ForeachElement(pNode->children, [&](xmlNode* pChild)
 			{
-				if (FixedString32((const char*)pChild->name) == "NetPublic"_crc32c)
+				if (StringCrc32((const char*)pChild->name) == "NetPublic"_crc32c)
 					return ParseXMLNetPublic(pChild, ((ServerConfig::ServerModulePublicService*)pServerModule)->PublicNet);
 
 				return ResultCode::SUCCESS;

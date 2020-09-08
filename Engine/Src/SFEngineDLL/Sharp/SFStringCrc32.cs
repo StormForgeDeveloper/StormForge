@@ -16,30 +16,30 @@ using System.Text;
 
 namespace SF
 {
-    public class FixedString
+    public struct StringCrc32
     {
-        public UInt64 StringHash;
+        public UInt32 StringHash;
 
 
-        public FixedString(UInt64 strHash)
+        public StringCrc32(UInt32 strHash)
         {
             StringHash = strHash;
         }
 
-        public FixedString(string strValue)
+        public StringCrc32(string strValue)
         {
-            StringHash = NativeAddNGetString(strValue);
+            StringHash = NativeAddNGetString32(strValue);
         }
 
 
         public override string ToString()
         {
-            return Marshal.PtrToStringAnsi(NativeGetString(StringHash));
+            return Marshal.PtrToStringAnsi(NativeGetString32(StringHash));
         }
 
-        public static UInt64 HashString(string strValue)
+        public static UInt32 HashString(string strValue)
         {
-            return NativeAddNGetString(strValue);
+            return NativeAddNGetString32(strValue);
         }
 
 
@@ -52,12 +52,11 @@ namespace SF
             "SFEngineDLL";
 #endif
 
-        [DllImport(NativeDLLName, EntryPoint = "SFFixedString_AddNGetString", CharSet = CharSet.Auto)]
-        static extern UInt64 NativeAddNGetString([MarshalAs(UnmanagedType.LPStr)] string strValue);
-
-        [DllImport(NativeDLLName, EntryPoint = "SFFixedString_GetString", CharSet = CharSet.Auto)]
-        static extern IntPtr NativeGetString(UInt64 strHash);
-
+        [DllImport(NativeDLLName, EntryPoint = "SFStringCrc_AddNGetString32", CharSet = CharSet.Auto)]
+        static extern UInt32 NativeAddNGetString32([MarshalAs(UnmanagedType.LPStr)] string strValue);
+        
+        [DllImport(NativeDLLName, EntryPoint = "SFStringCrc_GetString32", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeGetString32(UInt32 strHash);
 
         #endregion
 

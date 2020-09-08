@@ -13,7 +13,7 @@
 
 
 #include "SFTypedefs.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "Thread/SFSystemSynchronization.h"
 
 
@@ -45,7 +45,7 @@ namespace SF {
 	private:
 
 		// Thread name
-		FixedString m_Name;
+		StringCrc64 m_Name;
 		char m_ThreadName[NAMELEN] = {};
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		wchar_t* m_wThreadName = nullptr;
@@ -78,7 +78,7 @@ namespace SF {
 		Thread(const char* name);
 		virtual ~Thread();
 
-		FixedString GetThreadName() const { return m_Name; }
+		StringCrc64 GetThreadName() const { return m_Name; }
 
 		// Get thread
 		inline ThreadHandle GetThread();

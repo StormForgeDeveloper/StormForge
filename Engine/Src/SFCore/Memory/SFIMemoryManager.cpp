@@ -15,7 +15,7 @@
 #include "Memory/SFMemoryManager.h"
 #include "Memory/SFMemoryPool.h"
 #include "String/SFString.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "Util/SFLog.h"
 #include "Object/SFSharedObjectManager.h"
 
@@ -85,7 +85,7 @@ namespace SF {
 	//	IHeap implementation
 	//
 
-	IHeap::IHeap(FixedString nameCrc, IHeap* pParent)
+	IHeap::IHeap(StringCrc64 nameCrc, IHeap* pParent)
 		: m_Parent(pParent)
 		, m_NameCrc(nameCrc)
 		, m_IgnoreMemoryLeak(!IHeap::GetMemoryLeakDetection())

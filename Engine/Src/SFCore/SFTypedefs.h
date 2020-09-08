@@ -652,7 +652,7 @@ namespace SF {
 		explicit operator sockaddr_in() const;
 		explicit operator sockaddr_in6() const;
 		explicit operator sockaddr_storage() const;
-        
+
         // sizeof(sockaddr_in) for IPV4, and sizeof(sockaddr_in6) for IPV6 socket
         size_t GetSockAddrSize() const;
 

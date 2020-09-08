@@ -65,7 +65,7 @@ namespace SF
 	class VulkanSystem : public LibraryComponent
 	{
 	public:
-		static constexpr FixedString TypeName = "VulkanSystem";
+		static constexpr StringCrc64 TypeName = "VulkanSystem";
 
 		typedef LibraryComponent super;
 
@@ -103,7 +103,7 @@ namespace SF
 		VulkanSystem();
 		~VulkanSystem();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		VkInstance GetVulkan() { return m_VKInstance; }
 

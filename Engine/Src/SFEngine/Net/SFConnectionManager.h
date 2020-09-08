@@ -39,7 +39,7 @@ namespace Net {
 	class ConnectionManager : public LibraryComponent, public ConnectionManagerService
 	{
 	public:
-		static constexpr FixedString TypeName = "ConnectionManager";
+		static constexpr StringCrc64 TypeName = "ConnectionManager";
 
 	private:
 
@@ -78,7 +78,7 @@ namespace Net {
 		ConnectionManager(uint uiBucketSize );
 		virtual ~ConnectionManager();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		virtual IHeap& GetHeap() override { return m_Heap; }
 

@@ -16,7 +16,7 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 #include "ResultCode/SFResultCodeSystem.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "Container/SFSortedArray.h"
 #include "Object/SFLibraryComponent.h"
 
@@ -39,8 +39,8 @@ namespace SF {
 	private:
 
 
-		SortedArray<FixedString, LibraryComponent*> m_ComponentByName;
-		SortedArray<FixedString, LibraryComponent*> m_ComponentByTypeName;
+		SortedArray<StringCrc64, LibraryComponent*> m_ComponentByName;
+		SortedArray<StringCrc64, LibraryComponent*> m_ComponentByTypeName;
 
 		bool m_IsInitialized;
 
@@ -68,7 +68,7 @@ namespace SF {
 
 		// Add component
 		LibraryComponent* RemoveComponent(LibraryComponent* pComponent);
-		LibraryComponent* RemoveComponent(const FixedString& name);
+		LibraryComponent* RemoveComponent(const StringCrc64& name);
 
 		template< class ComponentType >
 		ComponentType* RemoveComponent()
@@ -99,10 +99,10 @@ namespace SF {
 
 
 		// Get component with name
-		LibraryComponent* GetComponentByName(const FixedString& name);
+		LibraryComponent* GetComponentByName(const StringCrc64& name);
 
 		// Get component with typename
-		LibraryComponent* GetComponentByType(const FixedString& typeName);
+		LibraryComponent* GetComponentByType(const StringCrc64& typeName);
 
 		template< class ComponentType >
 		ComponentType* GetComponent()

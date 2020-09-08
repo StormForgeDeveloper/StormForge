@@ -78,7 +78,7 @@ namespace SF {
 
 
 		// material list
-		DynamicArray<FixedString> m_MergedMaterials;
+		DynamicArray<StringCrc64> m_MergedMaterials;
 
 		// sub-meshes
 		DynamicArray<SubMesh> m_SubMeshes;
@@ -158,7 +158,7 @@ namespace SF {
 
 	public:
 		// Constructor
-		SceneNodeComponentMesh(IHeap& heap, const FixedString& name = "");
+		SceneNodeComponentMesh(IHeap& heap, const StringCrc64& name = "");
 		virtual ~SceneNodeComponentMesh();
 
 		// Dispose

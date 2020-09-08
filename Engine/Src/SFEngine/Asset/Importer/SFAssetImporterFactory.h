@@ -35,7 +35,7 @@ namespace SF
 		Heap m_Heap;
 
 		// Registered importers by type
-		SortedArray<FixedString, AssetImporter*> m_AssetImporterByType;
+		SortedArray<StringCrc64, AssetImporter*> m_AssetImporterByType;
 
 		// registered importers
 		DynamicArray<AssetImporter*> m_AssetImporters;
@@ -57,7 +57,7 @@ namespace SF
 		virtual Result RegisterImporter(AssetImporter* pNewImporter) override;
 
 		// Find importer with type
-		virtual Result FindImporter(FixedString type, AssetImporter* &pImporter) override;
+		virtual Result FindImporter(StringCrc64 type, AssetImporter* &pImporter) override;
 
 	};
 
@@ -70,7 +70,7 @@ namespace SF
 	class AssetImporterFactoryComponent : public LibraryComponent
 	{
 	public:
-		static constexpr FixedString TypeName = "AssetImporterFactory";
+		static constexpr StringCrc64 TypeName = "AssetImporterFactory";
 
 		AssetImporterFactory m_AssetImporterFactory;
 
@@ -79,7 +79,7 @@ namespace SF
 		AssetImporterFactoryComponent();
 		~AssetImporterFactoryComponent();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		// Initialize component
 		virtual Result InitializeComponent() override;

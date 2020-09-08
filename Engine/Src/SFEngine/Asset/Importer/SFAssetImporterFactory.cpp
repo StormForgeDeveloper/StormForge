@@ -77,7 +77,7 @@ namespace SF
 
 
 	// Find importer with type
-	Result AssetImporterFactory::FindImporter(FixedString type, AssetImporter* &pImporter)
+	Result AssetImporterFactory::FindImporter(StringCrc64 type, AssetImporter* &pImporter)
 	{
 
 		auto result = m_AssetImporterByType.Find(type, pImporter);
@@ -96,7 +96,7 @@ namespace SF
 	//	Resource Manager Component
 	//
 
-	constexpr FixedString AssetImporterFactoryComponent::TypeName;
+	constexpr StringCrc64 AssetImporterFactoryComponent::TypeName;
 
 
 	AssetImporterFactoryComponent::AssetImporterFactoryComponent()

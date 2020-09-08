@@ -28,7 +28,7 @@ namespace SF {
 	class StackWalker : public LibraryComponent
 	{
 	public:
-		static constexpr FixedString TypeName = "StackWalker";
+		static constexpr StringCrc64 TypeName = "StackWalker";
 
 	private:
 
@@ -39,7 +39,7 @@ namespace SF {
 		StackWalker();
 		~StackWalker();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		// Initialize component
 		virtual Result InitializeComponent() override;

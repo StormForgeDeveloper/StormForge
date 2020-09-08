@@ -44,7 +44,7 @@ namespace SF.Tong.Compiler
             NativeAppendNoop(NativeHandle);
         }
 
-        public void AppendLabel(FixedString32 label)
+        public void AppendLabel(StringCrc32 label)
         {
             NativeAppendLabel(NativeHandle, label.StringHash);
         }
@@ -139,12 +139,12 @@ namespace SF.Tong.Compiler
             NativeAppendCmpLessOrEqual(NativeHandle);
         }
 
-        public void AppendJump(FixedString32 label)
+        public void AppendJump(StringCrc32 label)
         {
             NativeAppendJump(NativeHandle, label.StringHash);
         }
 
-        public void AppendJumpFalse(FixedString32 label)
+        public void AppendJumpFalse(StringCrc32 label)
         {
             NativeAppendJumpFalse(NativeHandle, label.StringHash);
         }

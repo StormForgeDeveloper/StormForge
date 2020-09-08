@@ -25,7 +25,7 @@ namespace SF
 	private:
 
 	public:
-		VertexBuffer(IHeap& heap, const FixedString& name);
+		VertexBuffer(IHeap& heap, const StringCrc64& name);
 		virtual ~VertexBuffer();
 
 

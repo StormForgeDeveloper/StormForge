@@ -35,7 +35,7 @@ namespace SF {
 
 
 	// Constructor
-	SceneNodeComponent::SceneNodeComponent(IHeap& heap, const FixedString& name)
+	SceneNodeComponent::SceneNodeComponent(IHeap& heap, const StringCrc64& name)
 		: Object(&heap, name)
 	{
 

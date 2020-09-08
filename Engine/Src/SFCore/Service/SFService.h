@@ -100,7 +100,7 @@ namespace SF {
 
 	namespace Service
 	{
-		extern ServiceInstance<FixedStringDB> StringDB;
+		extern ServiceInstance<StringCrcDB> StringDB;
 		extern ServiceInstance<AsyncTaskService> AsyncTaskManager;
 		extern ServiceInstance<LogService> LogModule;
 		extern ServiceInstance<AsyncIOPortService> AsyncIOPort;

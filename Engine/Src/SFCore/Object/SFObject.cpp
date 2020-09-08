@@ -29,7 +29,7 @@ namespace SF {
 	// base object
 	//
 
-	Object::Object(IHeap* heap, const FixedString& name)
+	Object::Object(IHeap* heap, const StringCrc64& name)
 		: m_Name(name)
 		, m_Heap(heap)
 	{

@@ -14,7 +14,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "String/SFString.h"
 #include "Variable/SFVariable.h"
 #include "Memory/SFStackHeap.h"

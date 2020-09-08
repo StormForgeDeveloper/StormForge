@@ -40,7 +40,7 @@
 
 namespace SF
 {
-	constexpr FixedString WindowsApp::TypeName;
+	constexpr StringCrc64 WindowsApp::TypeName;
 
 	WindowsApp::WindowsApp()
 	{

@@ -33,7 +33,7 @@ namespace SF
 		class ScriptEngine : public ScriptEngineService, public LibraryComponent
 		{
 		public:
-			static constexpr FixedString TypeName = "ScriptEngine";
+			static constexpr StringCrc64 TypeName = "ScriptEngine";
 
 		private:
 
@@ -48,7 +48,7 @@ namespace SF
 			ScriptEngine(IHeap& heap);
 			~ScriptEngine();
 
-			virtual const FixedString& GetTypeName() override { return TypeName; }
+			virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 
 			// Heap for engine

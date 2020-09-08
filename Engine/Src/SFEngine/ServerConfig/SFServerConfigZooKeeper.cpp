@@ -14,7 +14,7 @@
 
 
 #include "SFServerConfigZooKeeper.h"
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc32.h"
 #include "Util/SFLog.h"
 
 #include <libxml/parser.h>

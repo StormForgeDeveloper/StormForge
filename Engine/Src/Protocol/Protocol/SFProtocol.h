@@ -61,6 +61,9 @@ namespace SF
 		PROTOCOLID_MONITORING,
 		PROTOCOLID_SVR_MONITORING,
 
+		PROTOCOLID_CHARACTERDATASERVER,
+		PROTOCOLID_SVR_CHARACTERDATASERVER,
+
 		//////////////////////////////////////////////////////////////////////////
 		//
 		//	Game cluster

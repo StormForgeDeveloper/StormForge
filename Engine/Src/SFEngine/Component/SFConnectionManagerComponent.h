@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "Types/SFEngineTypedefs.h"
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc32.h"
 #include "String/SFString.h"
 #include "Object/SFLibraryComponent.h"
 
@@ -31,7 +31,7 @@ namespace SF
 	class ConnectionManagerComponent : public LibraryComponent
 	{
 	public:
-		static constexpr FixedString TypeName = "ConnectionManagerComponent";
+		static constexpr StringCrc64 TypeName = "ConnectionManagerComponent";
 
 	private:
 
@@ -44,7 +44,7 @@ namespace SF
 		~ConnectionManagerComponent();
 
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		// Initialize component
 		virtual Result InitializeComponent() override;

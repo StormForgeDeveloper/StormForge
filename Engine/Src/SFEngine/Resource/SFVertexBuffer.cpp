@@ -17,7 +17,7 @@ namespace SF
 {
 	template class SharedPointerT<VertexBuffer>;
 
-	VertexBuffer::VertexBuffer(IHeap& heap, const FixedString& name)
+	VertexBuffer::VertexBuffer(IHeap& heap, const StringCrc64& name)
 		: GraphicBuffer(heap, name)
 	{
 

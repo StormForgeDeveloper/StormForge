@@ -100,10 +100,10 @@ namespace SF
 		//m_SetFunc(varName, "string", value);
 	}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const FixedString& value)
+	void VariableMapBuilderCS::SetVariable(const char* varName, const StringCrc64& value)
 	{
 		uint64_t hashValue = value;
-		m_SetFunc(varName, "FixedString", &hashValue);
+		m_SetFunc(varName, "StringCrc64", &hashValue);
 	}
 
 	void VariableMapBuilderCS::SetVariable(const char* varName, const RouteContext& value)

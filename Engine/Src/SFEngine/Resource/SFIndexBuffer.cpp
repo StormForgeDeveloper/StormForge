@@ -18,7 +18,7 @@ namespace SF
 	template class SharedPointerT<IndexBuffer>;
 
 	
-	IndexBuffer::IndexBuffer(IHeap& heap, const FixedString& name)
+	IndexBuffer::IndexBuffer(IHeap& heap, const StringCrc64& name)
 		: GraphicBuffer(heap, name)
 	{
 

@@ -4,7 +4,7 @@
 // 
 // Author : KyungKun Ko
 //
-// Description : FixedString32
+// Description : StringCrc32
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -17,26 +17,26 @@
 namespace SF
 {
 
-	class FixedString32
+	class StringCrc32
 	{
 	private:
 
 		uint32_t m_Crc;
 
 	public:
-		constexpr FixedString32()
+		constexpr StringCrc32()
 			: m_Crc(0)
 		{
 
 		}
 
-		constexpr FixedString32(uint32_t stringCrc)
+		constexpr StringCrc32(uint32_t stringCrc)
 			: m_Crc(stringCrc)
 		{
 
 		}
 
-		FixedString32(const char* text)
+		StringCrc32(const char* text)
 			: m_Crc(Hasher_Crc32C().Hash(text))
 		{
 
@@ -57,8 +57,8 @@ namespace SF
 			return ToString();
 		}
 
-		constexpr bool operator == (const FixedString32& op) const { return m_Crc == op.m_Crc; }
-		constexpr bool operator != (const FixedString32& op) const { return m_Crc != op.m_Crc; }
+		constexpr bool operator == (const StringCrc32& op) const { return m_Crc == op.m_Crc; }
+		constexpr bool operator != (const StringCrc32& op) const { return m_Crc != op.m_Crc; }
 
 		constexpr bool operator == (const uint32_t op) const { return m_Crc == op; }
 		constexpr bool operator != (const uint32_t op) const { return m_Crc != op; }

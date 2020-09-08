@@ -28,7 +28,7 @@ namespace SF {
 	class ObjectManager : public LibraryComponent
 	{
 	public:
-		static constexpr FixedString TypeName = "ObjectManager";
+		static constexpr StringCrc64 TypeName = "ObjectManager";
 
 	protected:
 
@@ -36,10 +36,10 @@ namespace SF {
 
 	public:
 
-		ObjectManager(IHeap& memoryManager, const FixedString& name = FixedString("ObjectManager"));
+		ObjectManager(IHeap& memoryManager, const StringCrc64& name = StringCrc64("ObjectManager"));
 		virtual ~ObjectManager();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		// Initialize component
 		virtual Result InitializeComponent() override;

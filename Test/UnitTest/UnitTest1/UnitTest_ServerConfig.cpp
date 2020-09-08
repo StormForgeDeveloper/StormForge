@@ -12,7 +12,7 @@
 #include "Task/SFTask.h"
 #include "SFEngine.h"
 
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc32.h"
 #include "String/SFString.h"
 #include "Container/SFCircularPageQueue.h"
 

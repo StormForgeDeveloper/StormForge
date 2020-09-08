@@ -22,7 +22,7 @@
 
 namespace SF {
 
-	class FixedString;
+	class StringCrc64;
 	class VariableBox;
 
 

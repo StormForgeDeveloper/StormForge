@@ -40,7 +40,7 @@
 
 namespace SF
 {
-	constexpr FixedString AndroidApp::TypeName;
+	constexpr StringCrc64 AndroidApp::TypeName;
 
 	AndroidApp::AndroidApp(AAssetManager* assetManager)
 		: m_Looper(nullptr)

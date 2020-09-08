@@ -28,7 +28,7 @@ namespace SF
 		virtual ~ResourceFactory();
 
 		// Create resource
-		ResourcePtr CreateResource(FixedString resType);
+		ResourcePtr CreateResource(StringCrc64 resType);
 	};
 	
 

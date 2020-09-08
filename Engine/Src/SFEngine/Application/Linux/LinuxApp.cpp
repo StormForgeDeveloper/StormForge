@@ -40,7 +40,7 @@
 
 namespace SF
 {
-	constexpr FixedString LinuxApp::TypeName;
+	constexpr StringCrc64 LinuxApp::TypeName;
 
 	LinuxApp::LinuxApp()
 	{

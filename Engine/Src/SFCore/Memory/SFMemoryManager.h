@@ -55,7 +55,7 @@ namespace SF {
 		IHeap* GetParent() { return m_pHeap != nullptr ? m_pHeap->GetParent() : nullptr; }
 
 		// get heap name
-		FixedString GetNameCrc() { return m_pHeap != nullptr ? m_pHeap->GetNameCrc() : ""; }
+		StringCrc64 GetNameCrc() { return m_pHeap != nullptr ? m_pHeap->GetNameCrc() : ""; }
 
 		// Allocation/Reallocation interface
 		void* Alloc(size_t size, size_t alignment = SF_ALIGN_DOUBLE);

@@ -19,7 +19,7 @@ namespace SF
 {
 
 
-	AssetImporterTexture::AssetImporterTexture(IHeap& heap, const FixedString& name)
+	AssetImporterTexture::AssetImporterTexture(IHeap& heap, const StringCrc64& name)
 		: AssetImporter(heap, name)
 	{
 

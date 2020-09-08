@@ -20,7 +20,7 @@ namespace SF
 	template class WeakPointerT<AssetPackage>;
 
 
-	AssetPackage::AssetPackage(IHeap& heap, const FixedString& name)
+	AssetPackage::AssetPackage(IHeap& heap, const StringCrc64& name)
 		: m_Name(name)
 		, m_Heap("name", heap)
 		, m_Assets(m_Heap)
@@ -66,7 +66,7 @@ namespace SF
 		return result;
 	}
 
-	SharedPointerT<Resource> AssetPackage::FindAsset(FixedString assetName)
+	SharedPointerT<Resource> AssetPackage::FindAsset(StringCrc64 assetName)
 	{
 		ResourcePtr found;
 		m_Assets.Find(assetName, found);

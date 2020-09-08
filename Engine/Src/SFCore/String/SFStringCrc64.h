@@ -4,7 +4,7 @@
 // 
 // Author : KyungKun Ko
 //
-// Description : FixedString
+// Description : StringCrc64
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -23,26 +23,26 @@ namespace SF {
 
 
 
-	class FixedString
+	class StringCrc64
 	{
 	private:
 
 		uint64_t m_Hash;
 
 	public:
-		constexpr FixedString()
+		constexpr StringCrc64()
 			: m_Hash(0)
 		{
 
 		}
 
-		constexpr FixedString(uint64_t hash)
+		constexpr StringCrc64(uint64_t hash)
 			: m_Hash(hash)
 		{
 
 		}
 
-		constexpr FixedString(const char* text)
+		constexpr StringCrc64(const char* text)
 			: m_Hash(Hasher_Murmur64().Hash(text))
 		{
 
@@ -63,8 +63,8 @@ namespace SF {
 			return ToString();
 		}
 
-		constexpr bool operator == (const FixedString& op) const { return m_Hash == op.m_Hash; }
-		constexpr bool operator != (const FixedString& op) const { return m_Hash != op.m_Hash; }
+		constexpr bool operator == (const StringCrc64& op) const { return m_Hash == op.m_Hash; }
+		constexpr bool operator != (const StringCrc64& op) const { return m_Hash != op.m_Hash; }
 
 		constexpr bool operator == (const uint64_t op) const { return m_Hash == op; }
 		constexpr bool operator != (const uint64_t op) const { return m_Hash != op; }

@@ -250,6 +250,36 @@ namespace SF
         }
     }
 
+    public class BoxedValue
+    {
+        public object Value;
+
+        public BoxedValue()
+        {
+        }
+
+        public BoxedValue(object InValue)
+        {
+            Value = InValue;
+        }
+    }
+
+    public class BoxedValueWithName
+    {
+        public UInt32 NameCrc;
+        public object Value;
+
+        public BoxedValueWithName()
+        {
+        }
+
+        public BoxedValueWithName(UInt32 InNameCrc, object InValue = null)
+        {
+            NameCrc = InNameCrc;
+            Value = InValue;
+        }
+    }
+
     [Struct]
     [StructLayout(LayoutKind.Sequential)]
     public class RelayPlayerInfo

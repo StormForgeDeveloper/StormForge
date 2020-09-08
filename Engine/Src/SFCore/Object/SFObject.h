@@ -11,7 +11,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
 #include "Memory/SFMemoryManager.h"
@@ -32,7 +32,7 @@ namespace SF {
 	{
 
 	private:
-		FixedString m_Name;
+		StringCrc64 m_Name;
 
 		// Object heap
 		// As we are using hierarchical memory management, this should be safe, if it has crash because of this, it means you have non-hierarchical memory usage.
@@ -41,12 +41,12 @@ namespace SF {
 
 	public:
 
-		Object(IHeap* heap, const FixedString& name = "");
+		Object(IHeap* heap, const StringCrc64& name = "");
 
 		virtual ~Object();
 
-		const FixedString& GetName() { return m_Name; }
-		void SetName(const FixedString& name) { m_Name = name; }
+		const StringCrc64& GetName() { return m_Name; }
+		void SetName(const StringCrc64& name) { m_Name = name; }
 
 		IHeap& GetHeap() { return **m_Heap; }
 	};

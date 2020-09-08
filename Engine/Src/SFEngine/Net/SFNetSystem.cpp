@@ -42,7 +42,7 @@ namespace Net {
 	//
 	//	NetSystem
 	//
-	constexpr FixedString NetSystem::TypeName;
+	constexpr StringCrc64 NetSystem::TypeName;
 
 
 	NetSystem::NetSystem(uint recvBufferSize, uint sendBufferSize, uint numThread, uint gatheringBufferSize)

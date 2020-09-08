@@ -36,42 +36,42 @@ using namespace SF;
 //	Connection interface
 //
 
-SFDLL_EXPORT uint32_t SFFixedString_LoadStringTable(const char* strFileName)
+SFDLL_EXPORT uint32_t SFStringCrc_LoadStringTable(const char* strFileName)
 {
 	FileInputStream stream(strFileName);
 	return (uint32_t)SF::Service::StringDB->LoadStringTable(stream);
 }
 
-SFDLL_EXPORT uint32_t SFFixedString_SaveStringTable(const char* strFileName)
+SFDLL_EXPORT uint32_t SFStringCrc_SaveStringTable(const char* strFileName)
 {
 	FileOutputStream stream(strFileName);
 	return (uint32_t)SF::Service::StringDB->SaveStringTable(stream);
 }
 
-SFDLL_EXPORT void SFFixedString_AddString(const char* str)
+SFDLL_EXPORT void SFStringCrc_AddString(const char* str)
 {
 	SF::Service::StringDB->AddString(str);
 }
 
-SFDLL_EXPORT uint64_t SFFixedString_AddNGetString(const char* str)
+SFDLL_EXPORT uint64_t SFStringCrc_AddNGetString(const char* str)
 {
 	return SF::Service::StringDB->AddNGetString(str);
 }
 
 
-SFDLL_EXPORT uint32_t SFFixedString_AddNGetString32(const char* str)
+SFDLL_EXPORT uint32_t SFStringCrc_AddNGetString32(const char* str)
 {
 	return SF::Service::StringDB->AddNGetString32(str);
 }
 
 
-SFDLL_EXPORT const char* SFFixedString_GetString32(uint32_t hash)
+SFDLL_EXPORT const char* SFStringCrc_GetString32(uint32_t hash)
 {
 	return SF::Service::StringDB->GetString(hash);
 }
 
 
-SFDLL_EXPORT const char* SFFixedString_GetString64(uint64_t hash)
+SFDLL_EXPORT const char* SFStringCrc_GetString64(uint64_t hash)
 {
 	return SF::Service::StringDB->GetString(hash);
 }

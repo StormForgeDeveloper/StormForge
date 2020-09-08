@@ -14,7 +14,7 @@
 
 
 #include "SFTypedefs.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Container/SFSortedSet.h"
 
@@ -34,24 +34,24 @@ namespace SF {
 	private:
 
 		// Component name
-		FixedString m_Name;
+		StringCrc64 m_Name;
 
 		// flags
 		bool m_IsInitialized;
 
-		SortedSet<FixedString> m_Dependencies;
+		SortedSet<StringCrc64> m_Dependencies;
 
 	public:
-		LibraryComponent(const FixedString& name) : m_Name(name), m_IsInitialized(false), m_Dependencies(GetSystemHeap()){}
+		LibraryComponent(const StringCrc64& name) : m_Name(name), m_IsInitialized(false), m_Dependencies(GetSystemHeap()){}
 		virtual ~LibraryComponent() {}
 
-		const FixedString& GetName() { return m_Name; }
-		virtual const FixedString& GetTypeName() = 0;
+		const StringCrc64& GetName() { return m_Name; }
+		virtual const StringCrc64& GetTypeName() = 0;
 
-		// Check wheather this component is initialized or not
+		// Check whether this component is initialized or not
 		bool GetIsInitialized() const { return m_IsInitialized; }
 
-		// Add component depency
+		// Add component dependency
 		template<class ComponentType>
 		void AddDependency()
 		{
@@ -59,14 +59,14 @@ namespace SF {
 		}
 
 		// Add dependency with name
-		void AddDependency(FixedString dependencyName)
+		void AddDependency(StringCrc64 dependencyName)
 		{
 			m_Dependencies.Set(dependencyName);
 		}
 
 
 		// Get component dependencies
-		const SortedSet<FixedString>& GetDependencies() const { return m_Dependencies; }
+		const SortedSet<StringCrc64>& GetDependencies() const { return m_Dependencies; }
 
 		// Initialize component
 		virtual Result InitializeComponent() { m_IsInitialized = true; return ResultCode::SUCCESS; }

@@ -22,7 +22,7 @@ namespace SF
 
 
 
-	AssetExporter::AssetExporter(IHeap& heap, const FixedString& name, const FixedString& exportType)
+	AssetExporter::AssetExporter(IHeap& heap, const StringCrc64& name, const StringCrc64& exportType)
 		: m_Name(name)
 		, m_ExportType(exportType)
 		, m_Heap(heap)

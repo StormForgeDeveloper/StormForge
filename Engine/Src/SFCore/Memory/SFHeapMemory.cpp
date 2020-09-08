@@ -165,7 +165,7 @@ namespace SF
 	//	Heap memory manager
 	//
 
-	HeapMemory::HeapMemory(FixedString name, IHeap& parentHeap, size_t initialMemoryBlockSize)
+	HeapMemory::HeapMemory(StringCrc64 name, IHeap& parentHeap, size_t initialMemoryBlockSize)
 		: IHeap(name, &parentHeap)
 	{
 		if (initialMemoryBlockSize > 0)

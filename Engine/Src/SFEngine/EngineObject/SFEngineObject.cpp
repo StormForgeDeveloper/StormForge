@@ -66,7 +66,7 @@ namespace SF {
 
 
 	// Constructor
-	EngineObject::EngineObject(IHeap* heap, const FixedString& name)
+	EngineObject::EngineObject(IHeap* heap, const StringCrc64& name)
 		: Object(heap, name)
 		, m_ActiveTickFlags(0)
 		, m_TickFlags(0)

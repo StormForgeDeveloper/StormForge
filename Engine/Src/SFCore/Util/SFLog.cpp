@@ -56,7 +56,7 @@ namespace Log {
 	//
 
 
-	constexpr FixedString LogModule::TypeName;
+	constexpr StringCrc64 LogModule::TypeName;
 
 
 	LogModule::LogModule(const LogChannelParameter& printMask)

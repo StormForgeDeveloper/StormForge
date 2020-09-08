@@ -50,7 +50,7 @@ namespace SF {
 	//	EngineObject Manager base class -  interface for task manager
 	//
 
-	constexpr FixedString EngineObjectManager::TypeName;
+	constexpr StringCrc64 EngineObjectManager::TypeName;
 
 	// Constructor/Destructor
 	EngineObjectManager::EngineObjectManager()

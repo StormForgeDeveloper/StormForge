@@ -7,7 +7,7 @@ set(SFENGINEDLL_LIB_FILES
 	SharpCPP/SFCSEngine.Android.cpp
 	SharpCPP/SFCSEngine.IOS.cpp
 	SharpCPP/SFCSEngine.Win.cpp
-	SharpCPP/SFCSFixedString.cpp
+	SharpCPP/SFCSStringCrc.cpp
 	SharpCPP/SFCSNetMessageIDGame.cpp
 	SharpCPP/SFCSNetMessageIDLogin.cpp
 	SharpCPP/SFCSNetSendMessageGame.cpp

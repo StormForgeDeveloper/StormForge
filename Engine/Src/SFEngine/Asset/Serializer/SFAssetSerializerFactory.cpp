@@ -74,7 +74,7 @@ namespace SF
 
 
 	// Find importer with type
-	Result AssetSerializerFactory::FindSerializer(FixedString type, AssetSerializer* &pSerializer)
+	Result AssetSerializerFactory::FindSerializer(StringCrc64 type, AssetSerializer* &pSerializer)
 	{
 
 		auto result = m_AssetSerializerByType.Find(type, pSerializer);
@@ -93,7 +93,7 @@ namespace SF
 	//	Resource Manager Component
 	//
 
-	constexpr FixedString AssetSerializerFactoryComponent::TypeName;
+	constexpr StringCrc64 AssetSerializerFactoryComponent::TypeName;
 
 
 	AssetSerializerFactoryComponent::AssetSerializerFactoryComponent()

@@ -14,7 +14,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "String/SFString.h"
 #include "Variable/SFVariable.h"
 #include "Container/SFDualSortedMap.h"
@@ -39,7 +39,7 @@ namespace SF {
 		IHeap& m_Heap;
 
 		// Variable 
-		SortedArray<FixedString, Variable*, true, false> m_VairableTable;
+		SortedArray<StringCrc64, Variable*, true, false> m_VairableTable;
 
 	public:
 
@@ -49,12 +49,12 @@ namespace SF {
 		IHeap& GetHeap() { return m_Heap; }
 
 		// Get/Set variable
-		virtual Result SetVariable(FixedString name, const Variable& variable);
-		Variable* GetVariable(FixedString name);
+		virtual Result SetVariable(StringCrc64 name, const Variable& variable);
+		Variable* GetVariable(StringCrc64 name);
 
 		// Get/Set values
 		template<class ValueType>
-		Result SetValue(FixedString name, ValueType value)
+		Result SetValue(StringCrc64 name, ValueType value)
 		{
 			auto boxedValue = Boxing(value);
 			if (boxedValue.GetVariable() == nullptr)
@@ -64,7 +64,7 @@ namespace SF {
 		}
 
 		template<class ValueType>
-		ValueType GetValue(FixedString name)
+		ValueType GetValue(StringCrc64 name)
 		{
 			Variable* pVariable = GetVariable(name);
 			if (pVariable == nullptr)
@@ -91,7 +91,7 @@ namespace SF {
 		IHeap& m_Heap;
 
 		// Variable 
-		DualSortedMap<FixedString, Variable*> m_VairableTable;
+		DualSortedMap<StringCrc64, Variable*> m_VairableTable;
 
 	public:
 
@@ -101,11 +101,11 @@ namespace SF {
 
 		IHeap& GetHeap() { return m_Heap; }
 
-		virtual Result SetVariable(FixedString name, const Variable& variable);
+		virtual Result SetVariable(StringCrc64 name, const Variable& variable);
 
 
 		template<class ValueType>
-		Result SetValue(FixedString name, ValueType value)
+		Result SetValue(StringCrc64 name, ValueType value)
 		{
 			auto boxedValue = Boxing(value);
 			if (boxedValue.GetVariable() == nullptr)
@@ -115,10 +115,10 @@ namespace SF {
 		}
 
 
-		Variable* GetVariable(FixedString name);
+		Variable* GetVariable(StringCrc64 name);
 
 		template<class ValueType>
-		ValueType GetValue(FixedString name)
+		ValueType GetValue(StringCrc64 name)
 		{
 			Variable* pVariable = GetVariable(name);
 			if (pVariable == nullptr)

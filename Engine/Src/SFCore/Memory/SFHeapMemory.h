@@ -79,7 +79,7 @@ namespace SF
 		// @nameCrc: name of the heap
 		// @parentHeap: parent heap, it also used for fall back heap
 		// @initialMemoryBlockSize: Initial memory block size. 
-		HeapMemory(FixedString nameCrc, IHeap& parentHeap, size_t initialMemoryBlockSize = 4096);
+		HeapMemory(StringCrc64 nameCrc, IHeap& parentHeap, size_t initialMemoryBlockSize = 4096);
 		virtual ~HeapMemory();
 
 

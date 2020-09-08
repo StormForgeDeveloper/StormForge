@@ -14,7 +14,7 @@
 #include "Memory/SFMemory.h"
 #include "Stream/SFStream.h"
 #include "String/SFString.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "Variable/SFVariable.h"
 #include "Variable/SFVariableTable.h"
 

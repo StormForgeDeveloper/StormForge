@@ -25,7 +25,7 @@ namespace SF
 	private:
 
 	public:
-		IndexBuffer(IHeap& heap, const FixedString& name);
+		IndexBuffer(IHeap& heap, const StringCrc64& name);
 		virtual ~IndexBuffer();
 
 

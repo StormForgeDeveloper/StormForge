@@ -57,7 +57,7 @@ namespace SF
 	{
 	}
 
-	Result ResourceManager::AssetLoadingTaskImpl::LoadPackage(FixedString assetType, IInputStream& stream)
+	Result ResourceManager::AssetLoadingTaskImpl::LoadPackage(StringCrc64 assetType, IInputStream& stream)
 	{
 		AssetPackage* pPackage = new(HeapForLoading) AssetPackage(HeapForLoading, AssetName.data());
 		
@@ -74,7 +74,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result ResourceManager::AssetLoadingTaskImpl::LoadAsset(FixedString assetType, IInputStream& stream)
+	Result ResourceManager::AssetLoadingTaskImpl::LoadAsset(StringCrc64 assetType, IInputStream& stream)
 	{
 		AssetImporter *pImporter = nullptr;
 		Result result = Service::AssetImporterFactory->FindImporter(assetType, pImporter);
@@ -113,7 +113,7 @@ namespace SF
 
 		String extension(HeapForLoading, pExt + 1);
 		extension = extension.ToLower();
-		FixedString assetType = FixedString(extension.data());
+		StringCrc64 assetType = StringCrc64(extension.data());
 
 		// find importer for the type
 		FileInputStream inputStream(FilePath);
@@ -199,7 +199,7 @@ namespace SF
 	//	Resource Manager Component
 	//
 
-	constexpr FixedString ResourceManagerComponent::TypeName;
+	constexpr StringCrc64 ResourceManagerComponent::TypeName;
 
 
 	ResourceManagerComponent::ResourceManagerComponent()

@@ -29,7 +29,7 @@ namespace SF
 
 
 	public:
-		AssetImporter3DAsset(IHeap& heap, const FixedString& name);
+		AssetImporter3DAsset(IHeap& heap, const StringCrc64& name);
 		virtual ~AssetImporter3DAsset();
 
 		

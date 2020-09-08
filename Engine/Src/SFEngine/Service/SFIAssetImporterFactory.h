@@ -50,7 +50,7 @@ namespace SF
 
 
 		// Find importer with type
-		virtual Result FindImporter(FixedString type, AssetImporter* &pImporter) { unused(type), unused(pImporter); return ResultCode::NOT_IMPLEMENTED; }
+		virtual Result FindImporter(StringCrc64 type, AssetImporter* &pImporter) { unused(type), unused(pImporter); return ResultCode::NOT_IMPLEMENTED; }
 
 	};
 

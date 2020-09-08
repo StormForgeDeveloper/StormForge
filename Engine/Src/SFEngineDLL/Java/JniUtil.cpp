@@ -128,7 +128,7 @@ namespace SF
 		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jstrValue);
 	}
 
-	void VariableMapBuilderJObject::SetVariable(const char* varName, const FixedString& value)
+	void VariableMapBuilderJObject::SetVariable(const char* varName, const StringCrc64& value)
 	{
 		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
 		jstring jstrValue = m_Env->NewStringUTF((const char*)value);

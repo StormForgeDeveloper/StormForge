@@ -28,7 +28,7 @@ namespace SF
 	{
 	public:
 
-		static constexpr FixedString HEADER_MAGIC = "sfpkg";
+		static constexpr StringCrc64 HEADER_MAGIC = "sfpkg";
 		static constexpr uint32_t HEADER_VERSION = 1;
 
 
@@ -38,30 +38,30 @@ namespace SF
 	private:
 
 		// Name of importer
-		FixedString m_Name;
+		StringCrc64 m_Name;
 
 		// heap for importer
 		IHeap& m_Heap;
 
 		// Supporting asset types
-		StaticArray<FixedString, 2> m_AssetTypes;
+		StaticArray<StringCrc64, 2> m_AssetTypes;
 
 
 
 	protected:
 
 		// Add handling asset type
-		Result AddHandlingAssetType(FixedString assetType);
+		Result AddHandlingAssetType(StringCrc64 assetType);
 
 	public:
-		AssetSerializer(IHeap& heap, const FixedString& name);
+		AssetSerializer(IHeap& heap, const StringCrc64& name);
 		virtual ~AssetSerializer();
 
 		// Heap
 		IHeap& GetHeap() { return m_Heap; }
 
 		// Asset type list
-		virtual const Array<FixedString>& GetAssetTypes() const { return m_AssetTypes; }
+		virtual const Array<StringCrc64>& GetAssetTypes() const { return m_AssetTypes; }
 
 
 		// Serialize stream

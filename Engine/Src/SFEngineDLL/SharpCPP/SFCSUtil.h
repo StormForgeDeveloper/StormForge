@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "String/SFString.h"
 #include "Variable/SFVariableMapBuilder.h"
 
@@ -62,7 +62,7 @@ namespace SF
 		virtual void SetVariable(const char* varName, float value) override;
 		virtual void SetVariable(const char* varName, double value) override;
 		virtual void SetVariable(const char* varName, const char* value) override;
-		virtual void SetVariable(const char* varName, const FixedString& value) override;
+		virtual void SetVariable(const char* varName, const StringCrc64& value) override;
 
 		virtual void SetVariable(const char* varName, const RouteContext& value) override;
 		virtual void SetVariable(const char* varName, const NetAddress& value) override;

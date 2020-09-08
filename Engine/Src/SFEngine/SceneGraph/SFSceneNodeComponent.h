@@ -24,8 +24,8 @@ namespace SF {
 	class SceneNode;
 
 #define SCENENODECOMPONENT_DEFINE_SIGNATURE(sig) \
-		static constexpr FixedString TypeSignature = #sig;\
-		virtual FixedString GetTypeSignature() const override { return TypeSignature; }\
+		static constexpr StringCrc64 TypeSignature = #sig;\
+		virtual StringCrc64 GetTypeSignature() const override { return TypeSignature; }\
 
 
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -71,11 +71,11 @@ namespace SF {
 
 	public:
 		// Constructor
-		SceneNodeComponent(IHeap& heap, const FixedString& name = "");
+		SceneNodeComponent(IHeap& heap, const StringCrc64& name = "");
 		virtual ~SceneNodeComponent();
 
 		// Component signature
-		virtual FixedString GetTypeSignature() const { return nullptr; }
+		virtual StringCrc64 GetTypeSignature() const { return nullptr; }
 
 		// Dispose
 		virtual void Dispose() override;

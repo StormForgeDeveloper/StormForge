@@ -15,7 +15,6 @@
 #include "Container/SFHashTable2.h"
 #include "Object/SFSharedPointer.h"
 #include "Memory/SFMemoryManager.h"
-#include "String/SFFixedStringDB.h"
 #include "Task/SFTask.h"
 #include "Container/SFCircularBufferQueue.h"
 #include "Resource/SFTextureFormat.h"

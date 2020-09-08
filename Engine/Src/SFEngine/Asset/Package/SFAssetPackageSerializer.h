@@ -27,19 +27,19 @@ namespace SF
 	{
 	public:
 
-		static constexpr FixedString HEADER_MAGIC = "sfpkg";
+		static constexpr StringCrc64 HEADER_MAGIC = "sfpkg";
 		static constexpr uint32_t HEADER_VERSION = 1;
 
 #pragma pack(push,1)
 
 		// Package Header
-		// Dpenddencies(FixedString list)
+		// Dpenddencies(StringCrc64 list)
 		// ObjectHeader + object data. One object can be string DB 
 
 		// Package header
 		struct PackageHeader
 		{
-			FixedString		Magic;
+			StringCrc64		Magic;
 			uint16_t		Version;
 			uint16_t		OffsetToDependency;		// Offset to package dependency
 			uint16_t		OffsetToData;			// Offset to the first object 
@@ -51,8 +51,8 @@ namespace SF
 		// Object header
 		struct ObjectHeader
 		{
-			FixedString		ObjectType;				// Object type
-			FixedString		ObjectName;				// Object name
+			StringCrc64		ObjectType;				// Object type
+			StringCrc64		ObjectName;				// Object name
 			uint16_t		Version;				// Version
 			uint16_t		Encoding;				// Compression method
 			uint32_t		DataSize;				// Data size

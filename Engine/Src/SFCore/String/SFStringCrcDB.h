@@ -4,7 +4,7 @@
 // 
 // Author : KyungKun Ko
 //
-// Description : FixedString DB
+// Description : StringCrc DB
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -20,7 +20,7 @@
 namespace SF
 {
 
-	class FixedStringDB
+	class StringCrcDB
 	{
 	public:
 
@@ -74,8 +74,8 @@ namespace SF
 		const StringItem* AddStringToBuffer(uint64_t hash64, uint32_t hash32, const char* string);
 
 	public:
-		FixedStringDB();
-		~FixedStringDB();
+		StringCrcDB();
+		~StringCrcDB();
 
 		// Clear and release all memory
 		void Clear();

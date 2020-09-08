@@ -49,7 +49,7 @@ namespace SF
 		virtual Result RegisterSerializer(AssetSerializer* pSerializer) { unused(pSerializer); return ResultCode::NOT_IMPLEMENTED; }
 
 		// Find importer with type
-		virtual Result FindSerializer(FixedString type, AssetSerializer* &pSerializer) { unused(type), unused(pSerializer); return ResultCode::NOT_IMPLEMENTED; }
+		virtual Result FindSerializer(StringCrc64 type, AssetSerializer* &pSerializer) { unused(type), unused(pSerializer); return ResultCode::NOT_IMPLEMENTED; }
 
 	};
 

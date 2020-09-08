@@ -13,8 +13,8 @@
 
 #include "SFTypedefs.h"
 #include "SFResult.h"
-#include "String/SFFixedString.h"
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc64.h"
+#include "String/SFStringCrc32.h"
 #include "String/SFString.h"
 #include "String/SFPathString.h"
 #include "Variable/SFVariableBoxing.h"
@@ -34,28 +34,28 @@ namespace SF
 	{
 	public:
 
-		constexpr static FixedString Type_Variable = "VARIABLE";
-		constexpr static FixedString Type_Function = "FUNCTION";
+		constexpr static StringCrc64 Type_Variable = "VARIABLE";
+		constexpr static StringCrc64 Type_Function = "FUNCTION";
 
 	private:
 		// Object Type name
 		//  - nullptr : not assigned
 		//  - "VARIABLE" : ScriptVariable
 		//  - "FUNCTION" : Function
-		FixedString m_ObjectTypeName;
+		StringCrc64 m_ObjectTypeName;
 
 		// Environment that holds this object
 		ScriptEnvironment* m_pEnv = nullptr;
 
 	public:
-		ScriptObject(FixedString objectTypeName, ScriptEnvironment* pEnv)
+		ScriptObject(StringCrc64 objectTypeName, ScriptEnvironment* pEnv)
 			: m_ObjectTypeName(objectTypeName)
 			, m_pEnv(pEnv)
 		{}
 		virtual ~ScriptObject() {}
 
 		// Get object type name
-		FixedString GetObjectTypeName() const { return m_ObjectTypeName; }
+		StringCrc64 GetObjectTypeName() const { return m_ObjectTypeName; }
 
 		// Get Environment
 		ScriptEnvironment* GetEnvironment() const { return m_pEnv; }
@@ -147,8 +147,8 @@ namespace SF
 
 		struct ParameterInfo
 		{
-			FixedString Name = nullptr;
-			FixedString TypeName = nullptr;
+			StringCrc64 Name = nullptr;
+			StringCrc64 TypeName = nullptr;
 
 			ParameterInfo(void* pInitValue = nullptr) {}
 		};
@@ -223,15 +223,15 @@ namespace SF
 		const String& GetName() const { return m_Name; }
 
 		// Get script object - Searchs local first and extend search to the parent environment
-		virtual ScriptObject* GetScriptObject(FixedString objectType, FixedString variableName, bool searchLocalOnly = false) { unused(objectType, variableName); return nullptr; }
+		virtual ScriptObject* GetScriptObject(StringCrc64 objectType, StringCrc64 variableName, bool searchLocalOnly = false) { unused(objectType, variableName); return nullptr; }
 
 		// Get variable - Takes full/partial path of the function
 		//				- ex) /globalVarName, /myParent/VarName, myScope/Varname
-		virtual ScriptObject* GetScriptObject(FixedString objectType, const PathString& variablePath) { unused(objectType, variablePath); return nullptr; }
+		virtual ScriptObject* GetScriptObject(StringCrc64 objectType, const PathString& variablePath) { unused(objectType, variablePath); return nullptr; }
 
 
 		// Get variable - Searchs local first and extend search to the parent environment
-		virtual Variable* GetVariable(FixedString variableName)
+		virtual Variable* GetVariable(StringCrc64 variableName)
 		{
 			auto pObject = GetScriptObject(ScriptObject::Type_Variable, variableName);
 			if (pObject == nullptr || pObject->GetObjectTypeName() != ScriptObject::Type_Variable)
@@ -252,7 +252,7 @@ namespace SF
 		}
 
 		// Call a function- Searches local first and extend search to the parent environment
-		virtual ScriptFunction* GetFunction(FixedString functionName)
+		virtual ScriptFunction* GetFunction(StringCrc64 functionName)
 		{
 			auto pObject = GetScriptObject(ScriptObject::Type_Function, functionName);
 			if (pObject == nullptr || pObject->GetObjectTypeName() != ScriptObject::Type_Function)
@@ -275,7 +275,7 @@ namespace SF
 		// Set variable - Takes full/partial path of the function
 //				- ex) /globalVarName, /myParent/VarName, myScope/Varname
 		virtual Result SetVariable(const PathString& variablePath, const Variable& variable) = 0;
-		virtual Result SetVariable(FixedString variableName, const Variable& variable) = 0;
+		virtual Result SetVariable(StringCrc64 variableName, const Variable& variable) = 0;
 
 		template<class ValueType>
 		Result SetValue(const PathString& variablePath, const ValueType& value)
@@ -285,7 +285,7 @@ namespace SF
 		}
 
 		template<class ValueType>
-		Result SetValue(FixedString variableName, const ValueType& value)
+		Result SetValue(StringCrc64 variableName, const ValueType& value)
 		{
 			VariableBox boxed = Boxing(value);
 			return SetVariable(variableName, *boxed.GetVariable());
@@ -294,7 +294,7 @@ namespace SF
 		// Set function - Takes full/partial path of the function
 		//				- ex) /globalVarName, /myParent/VarName, myScope/Varname
 		virtual Result SetFunction(const PathString& functionPath, const Array<ScriptFunction::ParameterInfo>& parameterList, const Array<uint8_t>& byteCode) = 0;
-		virtual Result SetFunction(FixedString functionPath, const Array<ScriptFunction::ParameterInfo>& parameterList, const Array<uint8_t>& byteCode) = 0;
+		virtual Result SetFunction(StringCrc64 functionPath, const Array<ScriptFunction::ParameterInfo>& parameterList, const Array<uint8_t>& byteCode) = 0;
 
 	};
 

@@ -28,7 +28,7 @@ namespace SF {
 	//
 
 
-	constexpr FixedString UnhandledExceptionHandlerComponent::TypeName;
+	constexpr StringCrc64 UnhandledExceptionHandlerComponent::TypeName;
 
 
 	UnhandledExceptionHandlerComponent::UnhandledExceptionHandlerComponent()

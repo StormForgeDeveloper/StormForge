@@ -11,7 +11,6 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "String/SFFixedString.h"
 #include "Stream/SFStream.h"
 #include "IO/SFFile.h"
 

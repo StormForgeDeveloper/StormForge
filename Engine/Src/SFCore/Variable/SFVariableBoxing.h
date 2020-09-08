@@ -50,16 +50,13 @@ namespace SF {
 		VariableBox& operator = (const VariableBox& src);
 	};
 
+
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Boxing/Unboxing interfaces
 	//
 
-
-
-	// Boxing
-	//template<class ValueType>
-	//VariableBox Boxing(ValueType value);
 
 	// always boxing by binary value
 	template<class ValueType>
@@ -105,9 +102,9 @@ namespace SF {
 	inline VariableBox Boxing(const std::decay_t<varType>& src) { varClassType variable(src); return VariableBox(variable); } \
 	inline VariableBox Boxing(std::decay_t<varType>&& src) { varClassType variable(src); return VariableBox(variable); } \
 	inline VariableBox Boxing(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
-	template<> inline FixedString32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
-	template<> inline FixedString32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
-	template<> inline FixedString32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
+	template<> inline StringCrc32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
+	template<> inline StringCrc32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
+	template<> inline StringCrc32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
 	template<> inline Result VariableValueReference<Array<std::decay_t<varType>>>::ToString(ToStringContext& context) const\
 	{\
 		if (m_Value == nullptr) return ResultCode::FAIL;\
@@ -133,9 +130,9 @@ namespace SF {
 	inline VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
 	inline VariableBox Boxing(const std::decay_t<varType>& src) { VariableByBinaryValue<varType> variable(src); return VariableBox(variable); } \
 	inline VariableBox Boxing(std::decay_t<varType>&& src) { VariableByBinaryValue<varType> variable(src); return VariableBox(variable); } \
-	template<> inline FixedString32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
-	template<> inline FixedString32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
-	template<> inline FixedString32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
+	template<> inline StringCrc32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
+	template<> inline StringCrc32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
+	template<> inline StringCrc32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
 	inline VariableBox Boxing(Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
 	inline VariableBox Boxing(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
 	template<> inline Result VariableValueReference<Array<varType>>::ToString(ToStringContext& context) const\
@@ -162,9 +159,9 @@ namespace SF {
 	inline VariableBox Boxing(const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
 	inline VariableBox Boxing(std::decay_t<varType>&& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
 	inline VariableBox Boxing(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
-	template<> inline FixedString32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
-	template<> inline FixedString32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
-	template<> inline FixedString32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
+	template<> inline StringCrc32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
+	template<> inline StringCrc32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
+	template<> inline StringCrc32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
 	template<> inline Result VariableValueReference<Array<std::decay_t<varType>>>::ToString(ToStringContext& context) const\
 	{\
 		if (m_Value == nullptr) return ResultCode::FAIL;\
@@ -221,15 +218,15 @@ namespace SF {
 	template<> inline String VariableValueReference<SF::String>::GetValueString() const { return *reinterpret_cast<const String*>(GetDataPtr()); }
 	template<> inline const char* VariableValueReference<SF::String>::GetValueCharString() const { return reinterpret_cast<const String*>(GetDataPtr())->data(); }
 	//template<> inline const wchar_t* VariableValueReference<SF::String>::GetValueWCharString() const { return nullptr; }
-	template<> inline FixedString32 VariableValueReference<SF::String>::GetValueFixedString32() const { return FixedString32(reinterpret_cast<const String*>(GetDataPtr())->data()); }
-	template<> inline FixedString VariableValueReference<SF::String>::GetValueFixedString() const { return FixedString(reinterpret_cast<const String*>(GetDataPtr())->data()); }
+	template<> inline StringCrc32 VariableValueReference<SF::String>::GetValueStringCrc32() const { return StringCrc32(reinterpret_cast<const String*>(GetDataPtr())->data()); }
+	template<> inline StringCrc64 VariableValueReference<SF::String>::GetValueStringCrc64() const { return StringCrc64(reinterpret_cast<const String*>(GetDataPtr())->data()); }
 
 	// Specialize for char*
 	template<> inline String VariableValueReference<const char*>::GetValueString() const { return reinterpret_cast<const char*>(GetDataPtr()); }
 	template<> inline const char* VariableValueReference<const char*>::GetValueCharString() const { return reinterpret_cast<const char*>(GetDataPtr()); }
 	//template<> inline const wchar_t* VariableValueReference<const char*>::GetValueWCharString() const { return nullptr; }
-	template<> inline FixedString32 VariableValueReference<const char*>::GetValueFixedString32() const { return FixedString32(reinterpret_cast<const char*>(GetDataPtr())); }
-	template<> inline FixedString VariableValueReference<const char*>::GetValueFixedString() const { return FixedString(reinterpret_cast<const char*>(GetDataPtr())); }
+	template<> inline StringCrc32 VariableValueReference<const char*>::GetValueStringCrc32() const { return StringCrc32(reinterpret_cast<const char*>(GetDataPtr())); }
+	template<> inline StringCrc64 VariableValueReference<const char*>::GetValueStringCrc64() const { return StringCrc64(reinterpret_cast<const char*>(GetDataPtr())); }
 
 	// Specialize for wchar*
 	template<> inline const wchar_t* VariableValueReference<const wchar_t*>::GetValueWCharString() const { return reinterpret_cast<const wchar_t*>(GetDataPtr()); }
@@ -294,8 +291,8 @@ namespace SF {
 	//DEFINE_BOXING_TEMPLETE(wchar_t*, VariableWCharString);
 	DEFINE_BOXING_TEMPLETE_BYVALUE(const wchar_t*);
 	DEFINE_BOXING_TEMPLETE(String, VariableString);
-	DEFINE_BOXING_TEMPLETE(FixedString, VariableFixedString);
-	DEFINE_BOXING_TEMPLETE(FixedString32, VariableFixedString32);
+	DEFINE_BOXING_TEMPLETE(StringCrc64, VariableStringCrc64);
+	DEFINE_BOXING_TEMPLETE(StringCrc32, VariableStringCrc32);
 	DEFINE_BOXING_TEMPLETE(Result, VariableResult);
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(std::string);
 

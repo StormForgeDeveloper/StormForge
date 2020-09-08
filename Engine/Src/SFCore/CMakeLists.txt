@@ -51,8 +51,8 @@ set(SFCORE_LIB_FILES
 	SFTypedefs.cpp
 	Stream/SFCompressedStream.cpp
 	Stream/SFMemoryStream.cpp
-	String/SFFixedString.cpp
-	String/SFFixedStringDB.cpp
+	String/SFStringCrc64.cpp
+	String/SFStringCrcDB.cpp
 	String/SFPathString.cpp
 	String/SFString.cpp
 	String/SFStrParserUtil.cpp
@@ -171,9 +171,9 @@ set(SFCORE_LIB_FILES
 	Stream/SFCompressedStream.h
 	Stream/SFMemoryStream.h
 	Stream/SFStream.h
-	String/SFFixedString.h
-	String/SFFixedString32.h
-	String/SFFixedStringDB.h
+	String/SFStringCrc64.h
+	String/SFStringCrc32.h
+	String/SFStringCrcDB.h
 	String/SFHasher32.h
 	String/SFHasher32C.h
 	String/SFHasher64.h

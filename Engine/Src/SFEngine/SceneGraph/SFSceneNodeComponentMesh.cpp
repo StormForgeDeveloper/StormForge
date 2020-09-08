@@ -35,7 +35,7 @@ namespace SF {
 
 
 	// Constructor
-	SceneNodeComponentMesh::SceneNodeComponentMesh(IHeap& heap, const FixedString& name)
+	SceneNodeComponentMesh::SceneNodeComponentMesh(IHeap& heap, const StringCrc64& name)
 		: SceneNodeComponent(heap, name)
 		, m_MergedMaterials(heap)
 		, m_SubMeshes(heap)

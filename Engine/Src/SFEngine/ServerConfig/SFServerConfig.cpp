@@ -12,7 +12,7 @@
 
 #include "SFEnginePCH.h"
 #include "SFServerConfig.h"
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc32.h"
 
 
 
@@ -128,22 +128,22 @@ namespace SF
 		return nullptr;
 	}
 
-	const ServerConfig::DBCluster* ServerConfig::FindDBCluster(FixedString clusterName) const
+	const ServerConfig::DBCluster* ServerConfig::FindDBCluster(StringCrc64 clusterName) const
 	{
 		for (auto& itItem : m_DBClusters)
 		{
-			if (clusterName == FixedString(itItem->ClusterName))
+			if (clusterName == StringCrc64(itItem->ClusterName))
 				return itItem;
 		}
 
 		return nullptr;
 	}
 
-	ServerConfig::DBCluster* ServerConfig::FindDBCluster(FixedString clusterName)
+	ServerConfig::DBCluster* ServerConfig::FindDBCluster(StringCrc64 clusterName)
 	{
 		for (auto& itItem : m_DBClusters)
 		{
-			if (clusterName == FixedString(itItem->ClusterName))
+			if (clusterName == StringCrc64(itItem->ClusterName))
 				return itItem;
 		}
 

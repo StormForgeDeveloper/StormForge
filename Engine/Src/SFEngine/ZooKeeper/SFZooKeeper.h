@@ -16,7 +16,7 @@
 #define USE_ZOOKEEPER
 
 #ifdef USE_ZOOKEEPER
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc32.h"
 #include "String/SFString.h"
 #include "Container/SFCircularPageQueue.h"
 #include "Task/SFTask.h"
@@ -53,7 +53,7 @@ namespace SF
 		union ZKEvent
 		{
 			struct {
-				FixedString32 NodePath;
+				StringCrc32 NodePath;
 				int16_t State;
 				int16_t EventType;
 			} Components;

@@ -70,7 +70,7 @@ namespace SF {
 
 	public:
 		// Constructor
-		EngineObject(IHeap* heap, const FixedString& name);
+		EngineObject(IHeap* heap, const StringCrc64& name);
 		virtual ~EngineObject();
 
 		void RegisterToEngineObjectManager();

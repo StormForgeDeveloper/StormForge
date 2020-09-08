@@ -91,7 +91,7 @@ namespace SF
 
 
 		// Get script object - Searches local first and extend search to the parent environment
-		ScriptObject* ScriptEnvironment::GetScriptObject(FixedString objectType, FixedString variableName, bool searchLocalOnly)
+		ScriptObject* ScriptEnvironment::GetScriptObject(StringCrc64 objectType, StringCrc64 variableName, bool searchLocalOnly)
 		{
 			if (objectType == nullptr || objectType == ScriptObject::Type_Variable)
 			{
@@ -116,18 +116,18 @@ namespace SF
 
 		// Get variable - Takes full/partial path of the function
 		//				- ex) /globalVarName, /myParent/VarName, myScope/Varname
-		ScriptObject* ScriptEnvironment::GetScriptObject(FixedString objectType, const PathString& variablePath)
+		ScriptObject* ScriptEnvironment::GetScriptObject(StringCrc64 objectType, const PathString& variablePath)
 		{
 			if (variablePath.size() <= 1)
 			{
-				return GetScriptObject(objectType, FixedString(variablePath[0]));
+				return GetScriptObject(objectType, StringCrc64(variablePath[0]));
 			}
 
 			auto pParentEnv = FindParentEnvironment(variablePath);
 			if (pParentEnv == nullptr)
 				return nullptr;
 
-			return pParentEnv->GetScriptObject(objectType, FixedString(variablePath[(int)variablePath.size() - 1]), true);
+			return pParentEnv->GetScriptObject(objectType, StringCrc64(variablePath[(int)variablePath.size() - 1]), true);
 		}
 
 
@@ -138,7 +138,7 @@ namespace SF
 			if (variablePath.size() == 0)
 				return ResultCode::INVALID_ARG;
 			else if (variablePath.size() == 1)
-				return SetVariable(FixedString(variablePath[(int)variablePath.size() - 1]), variable);
+				return SetVariable(StringCrc64(variablePath[(int)variablePath.size() - 1]), variable);
 
 			auto pEnv = FindParentEnvironment(variablePath);
 			if (pEnv == nullptr)
@@ -146,10 +146,10 @@ namespace SF
 				return ResultCode::NOT_EXIST;
 			}
 
-			return SetVariable(FixedString(variablePath[(int)variablePath.size() - 1]), variable);
+			return SetVariable(StringCrc64(variablePath[(int)variablePath.size() - 1]), variable);
 		}
 
-		Result ScriptEnvironment::SetVariable(FixedString variableName, const Variable& variable)
+		Result ScriptEnvironment::SetVariable(StringCrc64 variableName, const Variable& variable)
 		{
 			auto pScriptVar = m_VairableTable.find(variableName);
 			if (pScriptVar == nullptr)
@@ -175,7 +175,7 @@ namespace SF
 			return pEnv->SetFunction(functionPath[(int)functionPath.size() - 1], parameterList, byteCode);
 		}
 
-		Result ScriptEnvironment::SetFunction(FixedString functionName, const Array<SF::ScriptFunction::ParameterInfo>& parameterList, const Array<uint8_t>& byteCode)
+		Result ScriptEnvironment::SetFunction(StringCrc64 functionName, const Array<SF::ScriptFunction::ParameterInfo>& parameterList, const Array<uint8_t>& byteCode)
 		{
 			ScriptFunction* pObj = nullptr;
 			pObj = m_FunctionTable.find(functionName);

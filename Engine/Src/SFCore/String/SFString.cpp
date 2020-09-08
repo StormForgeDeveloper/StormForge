@@ -15,7 +15,7 @@
 #include "SFTypedefs.h"
 #include "String/SFStrFormat.h"
 //#include "Variable/SFVariableBoxing.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "String/SFString.h"
 #include "Util/SFUtility.h"
 

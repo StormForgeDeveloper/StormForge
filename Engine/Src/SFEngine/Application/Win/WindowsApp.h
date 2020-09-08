@@ -29,7 +29,7 @@ namespace SF
 	class WindowsApp : public ApplicationBase
 	{
 	public:
-		static constexpr FixedString TypeName = "WindowsApp";
+		static constexpr StringCrc64 TypeName = "WindowsApp";
 
 	private:
 
@@ -37,7 +37,7 @@ namespace SF
 		WindowsApp();
 		~WindowsApp();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		virtual Result InitializeComponent() override;
 		virtual void DeinitializeComponent() override;

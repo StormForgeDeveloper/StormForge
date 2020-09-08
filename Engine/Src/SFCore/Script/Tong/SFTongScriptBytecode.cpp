@@ -131,7 +131,7 @@ namespace SF
 			return m_ByteCode.push_back((uint8_t)SrciptBytecodeOpCode::NoOp);
 		}
 
-		Result ScriptBytecode::AppendLabel(FixedString32 label)
+		Result ScriptBytecode::AppendLabel(StringCrc32 label)
 		{
 			auto result = m_ByteCode.push_back((uint8_t)SrciptBytecodeOpCode::Label);
 			if (!result)
@@ -263,7 +263,7 @@ namespace SF
 		}
 
 
-		Result ScriptBytecode::AppendJump(FixedString32 label)
+		Result ScriptBytecode::AppendJump(StringCrc32 label)
 		{
 			auto result = m_ByteCode.push_back((uint8_t)SrciptBytecodeOpCode::Jump);
 			if (!result)
@@ -272,7 +272,7 @@ namespace SF
 			return AppendInt32(label);
 		}
 
-		Result ScriptBytecode::AppendJumpFalse(FixedString32 label)
+		Result ScriptBytecode::AppendJumpFalse(StringCrc32 label)
 		{
 			auto result = m_ByteCode.push_back((uint8_t)SrciptBytecodeOpCode::JumpFalse);
 			if (!result)

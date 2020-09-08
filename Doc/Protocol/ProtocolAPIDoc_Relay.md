@@ -1,6 +1,6 @@
 ﻿***
  
- CopyRight (c) 2019 StormForge
+ CopyRight (c) 2020 StormForge
  
  Description : Relay Message Protocol API Document
 

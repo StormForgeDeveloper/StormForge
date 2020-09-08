@@ -4,7 +4,7 @@
 // 
 // Author : KyungKun Ko
 //
-// Description : FixedString DB for reverse crc
+// Description : StringCrc64 DB for reverse crc
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -12,7 +12,7 @@
 
 #include "String/SFHasher32.h"
 #include "String/SFHasher64.h"
-#include "String/SFFixedStringDB.h"
+#include "String/SFStringCrcDB.h"
 #include "String/SFStrFormat.h"
 #include "Service/SFService.h"
 
@@ -24,7 +24,7 @@ namespace SF
 
 
 
-	const FixedStringDB::StringItem* FixedStringDB::StringBuffer::AddString(uint64_t hash64, uint32_t hash32, const char* string, size_t strLen)
+	const StringCrcDB::StringItem* StringCrcDB::StringBuffer::AddString(uint64_t hash64, uint32_t hash32, const char* string, size_t strLen)
 	{
 		auto requiredSize = strLen + 1;
 		requiredSize = AlignUp(requiredSize, 8);
@@ -45,22 +45,22 @@ namespace SF
 	}
 
 
-	FixedStringDB::FixedStringDB()
-		: m_Heap("FixedStringDB", GetSystemHeap())
+	StringCrcDB::StringCrcDB()
+		: m_Heap("StringCrcDB", GetSystemHeap())
 		, m_StringMap32(m_Heap)
 		, m_StringMap64(m_Heap)
 	{
 		Service::StringDB = this;
 	}
 
-	FixedStringDB::~FixedStringDB()
+	StringCrcDB::~StringCrcDB()
 	{
 		Clear();
 	}
 
 
 	// Clear and release all memory
-	void FixedStringDB::Clear()
+	void StringCrcDB::Clear()
 	{
 		auto pCurBlock = m_Head;
 		while (pCurBlock != nullptr)
@@ -76,7 +76,7 @@ namespace SF
 	}
 
 	// Load string table file
-	bool FixedStringDB::LoadStringTable(IInputStream& stream)
+	bool StringCrcDB::LoadStringTable(IInputStream& stream)
 	{
 		// FILE_MAGIC
 		uint64_t fileMagic, fileVersion;
@@ -107,7 +107,7 @@ namespace SF
 	}
 
 	// Save current strings to string table
-	bool FixedStringDB::SaveStringTable(IOutputStream& stream)
+	bool StringCrcDB::SaveStringTable(IOutputStream& stream)
 	{
 		// If nothing to save
 		if (m_Head == nullptr)
@@ -133,7 +133,7 @@ namespace SF
 	}
 
 
-	const FixedStringDB::StringItem* FixedStringDB::AddStringToBuffer(uint64_t hash64, uint32_t hash32, const char* string)
+	const StringCrcDB::StringItem* StringCrcDB::AddStringToBuffer(uint64_t hash64, uint32_t hash32, const char* string)
 	{
 		if (string == nullptr)
 			return nullptr;
@@ -170,7 +170,7 @@ namespace SF
 	}
 
 	// Add string to both 32 and 64 hash
-	void FixedStringDB::AddString(const char* str)
+	void StringCrcDB::AddString(const char* str)
 	{
 		uint32_t hash32Value = Crc32C(str);
 		uint64_t hash64Value = Hash64(str);
@@ -189,7 +189,7 @@ namespace SF
 	}
 
 	// Add string to specific table
-	uint32_t FixedStringDB::AddNGetString32(const char* str)
+	uint32_t StringCrcDB::AddNGetString32(const char* str)
 	{
 		uint64_t hash64Value = Hash64(str);
 		uint32_t hash32Value = Crc32C(str);
@@ -209,7 +209,7 @@ namespace SF
 		return hash32Value;
 	}
 
-	uint64_t FixedStringDB::AddNGetString(const char* str)
+	uint64_t StringCrcDB::AddNGetString(const char* str)
 	{
 		uint64_t hash64Value = Hash64(str);
 		uint32_t hash32Value = Crc32C(str);
@@ -235,7 +235,7 @@ namespace SF
 		return hash64Value;
 	}
 
-	const char* FixedStringDB::GetString(uint32_t hash)
+	const char* StringCrcDB::GetString(uint32_t hash)
 	{
 		if (hash == 0)
 			return nullptr;
@@ -249,7 +249,7 @@ namespace SF
 		return nullptr;
 	}
 
-	const char* FixedStringDB::GetString(uint64_t hash)
+	const char* StringCrcDB::GetString(uint64_t hash)
 	{
 		if (hash == 0)
 			return nullptr;

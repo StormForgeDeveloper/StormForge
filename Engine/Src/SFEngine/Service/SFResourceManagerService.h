@@ -31,7 +31,7 @@ namespace SF
 	{
 	public:
 
-		typedef DualSortedMap<FixedString, AssetPackagePtr> AssetPackageList;
+		typedef DualSortedMap<StringCrc64, AssetPackagePtr> AssetPackageList;
 
 
 		// Asset loading notification task

@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "Service/SFLogService.h"
-#include "String/SFFixedStringDB.h"
+#include "String/SFStringCrcDB.h"
 
 
 namespace SF {

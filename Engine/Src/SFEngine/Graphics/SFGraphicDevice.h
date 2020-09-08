@@ -64,7 +64,7 @@ namespace SF
 		SharedObjectManager m_SharedObjectManager;
 
 		// component dependency
-		StaticArray<FixedString, 2> m_ComponentDependency;
+		StaticArray<StringCrc64, 2> m_ComponentDependency;
 
 	protected:
 
@@ -83,7 +83,7 @@ namespace SF
 		);
 
 		// Add component dependency
-		void AddDependency(FixedString dependency);
+		void AddDependency(StringCrc64 dependency);
 
 		// Allow to access RegisterSharedObject
 		friend class DeviceResource;
@@ -105,7 +105,7 @@ namespace SF
 		virtual ~GraphicDevice();
 
 		// Get component dependency list
-		const Array<FixedString>& GetComponentDependencies() { return m_ComponentDependency; }
+		const Array<StringCrc64>& GetComponentDependencies() { return m_ComponentDependency; }
 
 		virtual StaticCircularBufferQueue<20 * 1024 * 1024>* GetRenderCommandQueue() override { return &m_RenderCommandQueue; }
 
@@ -163,7 +163,7 @@ namespace SF
 	{
 	public:
 
-		const FixedString TypeName = "GraphicDevice";
+		const StringCrc64 TypeName = "GraphicDevice";
 
 	private:
 
@@ -181,7 +181,7 @@ namespace SF
 
 		~GraphicDeviceComponent() {}
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		// Initialize component
 		virtual Result InitializeComponent() override

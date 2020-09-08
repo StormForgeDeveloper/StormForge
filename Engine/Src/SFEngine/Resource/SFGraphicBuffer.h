@@ -109,7 +109,7 @@ namespace SF
 
 
 	public:
-		GraphicBuffer(IHeap& heap, FixedString name, const CallTrack& callTrack = CallTrack());
+		GraphicBuffer(IHeap& heap, StringCrc64 name, const CallTrack& callTrack = CallTrack());
 		virtual ~GraphicBuffer();
 
 		// Channel descriptor

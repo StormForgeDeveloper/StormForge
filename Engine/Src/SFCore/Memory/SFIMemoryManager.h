@@ -13,7 +13,7 @@
 #include "SFTypedefs.h"
 #include "Container/SFContainerTraitBase.h"
 #include "Container/SFDoubleLinkedListBase.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
 
@@ -84,7 +84,7 @@ namespace SF {
 		IHeap* m_Parent;
 
 		// Heap name
-		FixedString m_NameCrc;
+		StringCrc64 m_NameCrc;
 
 		// You can disable memory leak detection per heap
 		bool m_IgnoreMemoryLeak;
@@ -132,7 +132,7 @@ namespace SF {
 
 
 	public:
-		IHeap(FixedString nameCrc, IHeap* pParent = nullptr);
+		IHeap(StringCrc64 nameCrc, IHeap* pParent = nullptr);
 		virtual ~IHeap();
 
 		// Shared object overrides
@@ -152,7 +152,7 @@ namespace SF {
 		IHeap* GetParent() { return m_Parent; }
 
 		// get heap name
-		FixedString GetNameCrc() { return m_NameCrc; }
+		StringCrc64 GetNameCrc() { return m_NameCrc; }
 
 		// Allocation/Reallocation interface
 		virtual void* Alloc(size_t size, size_t alignment = SF_ALIGN_DOUBLE);

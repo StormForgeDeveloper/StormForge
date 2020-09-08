@@ -29,7 +29,7 @@ namespace SF
 
 
 	public:
-		AssetImporterTexture(IHeap& heap, const FixedString& name);
+		AssetImporterTexture(IHeap& heap, const StringCrc64& name);
 		virtual ~AssetImporterTexture();
 
 	};

@@ -26,16 +26,16 @@ namespace SF
 	private:
 
 		// package name
-		FixedString m_AssetPackageName;
+		StringCrc64 m_AssetPackageName;
 
 		// Name of the resource
-		FixedString m_Name;
+		StringCrc64 m_Name;
 
 		// Source name where the resource comes from. mostly file name
-		FixedString m_SourceName;
+		StringCrc64 m_SourceName;
 
 		// Resource type
-		FixedString m_ResourceType;
+		StringCrc64 m_ResourceType;
 
 		// heap for resource
 		IHeap& m_Heap;
@@ -44,20 +44,20 @@ namespace SF
 		CallTrack m_CallTrack;
 
 	public:
-		Resource(IHeap& heap, FixedString resType, const CallTrack& callTrack);
+		Resource(IHeap& heap, StringCrc64 resType, const CallTrack& callTrack);
 		virtual ~Resource();
 
-		FixedString GetPackageName() const { return m_AssetPackageName; }
+		StringCrc64 GetPackageName() const { return m_AssetPackageName; }
 
-		FixedString GetName() const { return m_Name; }
-		void SetName(FixedString name) { m_Name = name; }
+		StringCrc64 GetName() const { return m_Name; }
+		void SetName(StringCrc64 name) { m_Name = name; }
 
-		FixedString GetResourceType() const { return m_ResourceType; }
+		StringCrc64 GetResourceType() const { return m_ResourceType; }
 
 		// set source name
-		void SetSourceName(FixedString sourceName) { m_SourceName = sourceName; }
+		void SetSourceName(StringCrc64 sourceName) { m_SourceName = sourceName; }
 		// Get source name
-		FixedString GetSourceName() const { return m_SourceName; }
+		StringCrc64 GetSourceName() const { return m_SourceName; }
 
 		// Get heap
 		IHeap& GetHeap() { return m_Heap; }

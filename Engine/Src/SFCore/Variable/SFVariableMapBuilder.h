@@ -15,7 +15,7 @@
 #include "SFTypedefs.h"
 #include "Types/SFEngineTypedefs.h"
 #include "SFAssert.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 #include "String/SFString.h"
 
 
@@ -55,7 +55,7 @@ namespace SF {
 		virtual void SetVariable(const char* varName, uint128_t value) = 0;
 		virtual void SetVariable(const char* varName, float value) = 0;
 		virtual void SetVariable(const char* varName, double value) = 0;
-		virtual void SetVariable(const char* varName, const FixedString& value) = 0;
+		virtual void SetVariable(const char* varName, const StringCrc64& value) = 0;
 		virtual void SetVariable(const char* varName, const char* value) = 0;
 
 		virtual void SetVariable(const char* varName, const RouteContext& value) = 0;

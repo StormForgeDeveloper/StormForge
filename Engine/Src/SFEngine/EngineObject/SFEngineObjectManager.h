@@ -42,7 +42,7 @@ namespace SF {
 	class EngineObjectManager : public LibraryComponent, public EngineObjectManagerService
 	{
 	public:
-		static constexpr FixedString TypeName = "EngineObjectManager";
+		static constexpr StringCrc64 TypeName = "EngineObjectManager";
 
 	private:
 
@@ -60,7 +60,7 @@ namespace SF {
 		EngineObjectManager();
 		virtual ~EngineObjectManager();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		// Initialize EngineObjectManager
 		virtual Result InitializeComponent() override;

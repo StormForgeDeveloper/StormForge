@@ -14,7 +14,7 @@
 #include "SFTypedefs.h"
 #include "Container/SFHashTable2.h"
 #include "Object/SFSharedPointer.h"
-#include "String/SFFixedStringDB.h"
+#include "String/SFStringCrcDB.h"
 #include "Net/SFNetDef.h"
 #include "Task/SFTask.h"
 

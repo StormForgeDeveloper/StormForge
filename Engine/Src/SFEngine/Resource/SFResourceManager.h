@@ -38,8 +38,8 @@ namespace SF
 			AssetLoadingTaskImpl(IHeap& heap, TaskEventHandler* pEventHandler);
 			~AssetLoadingTaskImpl();
 
-			Result LoadPackage(FixedString assetType, IInputStream& stream);
-			Result LoadAsset(FixedString assetType, IInputStream& stream);
+			Result LoadPackage(StringCrc64 assetType, IInputStream& stream);
+			Result LoadAsset(StringCrc64 assetType, IInputStream& stream);
 
 			virtual void Run() override;
 		};
@@ -86,7 +86,7 @@ namespace SF
 	class ResourceManagerComponent : public LibraryComponent
 	{
 	public:
-		static constexpr FixedString TypeName = "ResourceManager";
+		static constexpr StringCrc64 TypeName = "ResourceManager";
 
 		ResourceManager m_ResourceManager;
 
@@ -95,7 +95,7 @@ namespace SF
 		ResourceManagerComponent();
 		~ResourceManagerComponent();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		// Initialize component
 		virtual Result InitializeComponent() override;

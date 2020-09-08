@@ -29,7 +29,7 @@ namespace SF
 	//
 
 
-	AssetSerializer::AssetSerializer(IHeap& heap, const FixedString& name)
+	AssetSerializer::AssetSerializer(IHeap& heap, const StringCrc64& name)
 		: m_Name(name)
 		, m_Heap(heap)
 		, m_AssetTypes(m_Heap)
@@ -40,7 +40,7 @@ namespace SF
 	{
 	}
 
-	Result AssetSerializer::AddHandlingAssetType(FixedString assetType)
+	Result AssetSerializer::AddHandlingAssetType(StringCrc64 assetType)
 	{
 		return m_AssetTypes.push_back(assetType);
 	}
@@ -60,7 +60,7 @@ namespace SF
 	// Desterialize stream
 	Result AssetSerializer::Deserialize(IHeap& heap, IInputStream& stream, ResourcePtr& res)
 	{
-		FixedString sourceName;
+		StringCrc64 sourceName;
 		Result result = stream.Read(sourceName);
 		if (!result)
 			return result;

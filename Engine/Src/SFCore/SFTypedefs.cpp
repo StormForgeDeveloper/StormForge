@@ -13,10 +13,11 @@
 #include "SFCorePCH.h"
 #include "SFAssert.h"
 #include "String/SFStrUtil.h"
+#include "SFTypedefs.h"
 #include "ResultCode/SFResultCodeSystem.h"
 
 
-constexpr int NetAddress::MAX_NETNAME;
+constexpr int SF::NetAddress::MAX_NETNAME;
 
 
 /////////////////////////////////////////////////////////////////////

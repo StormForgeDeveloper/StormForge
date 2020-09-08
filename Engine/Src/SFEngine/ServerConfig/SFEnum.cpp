@@ -12,7 +12,7 @@
 
 #include "SFEnginePCH.h"
 #include "SFEnum.h"
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc32.h"
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -37,7 +37,7 @@ namespace SF
 		"Sharding",
 	};
 
-	static constexpr FixedString __DBClusterType_NameCrcList[] =
+	static constexpr StringCrc64 __DBClusterType_NameCrcList[] =
 	{
 		"Normal",
 		"Sharding",
@@ -61,20 +61,20 @@ namespace SF
 	}
 
 
-	FixedString Enum<DBClusterType>::GetValueNameCrc(DBClusterType value) const
+	StringCrc64 Enum<DBClusterType>::GetValueNameCrc(DBClusterType value) const
 	{
 		return __DBClusterType_NameCrcList[(int)value];
 	}
 
 	DBClusterType Enum<DBClusterType>::GetValue(const char* valueName) const
 	{
-		FixedString valueNameCrc = valueName;
+		StringCrc64 valueNameCrc = valueName;
 		return GetValue(valueNameCrc);
 	}
 
-	DBClusterType Enum<DBClusterType>::GetValue(FixedString valueName) const
+	DBClusterType Enum<DBClusterType>::GetValue(StringCrc64 valueName) const
 	{
-		FixedString valueNameCrc = valueName;
+		StringCrc64 valueNameCrc = valueName;
 		for (unsigned iEnum = 0; iEnum < countof(__DBClusterType_NameList); iEnum++)
 		{
 			if (__DBClusterType_NameCrcList[iEnum] == valueNameCrc)
@@ -132,7 +132,7 @@ namespace SF
 		__CLUSTERID_NAMES__
 	};
 
-	static constexpr FixedString __ClusterID_NameCrcList[] =
+	static constexpr StringCrc64 __ClusterID_NameCrcList[] =
 	{
 		__CLUSTERID_NAMES__
 	};
@@ -154,20 +154,20 @@ namespace SF
 	}
 
 
-	FixedString Enum<ClusterID>::GetValueNameCrc(ClusterID value) const
+	StringCrc64 Enum<ClusterID>::GetValueNameCrc(ClusterID value) const
 	{
 		return __ClusterID_NameCrcList[(int)value];
 	}
 
 	ClusterID Enum<ClusterID>::GetValue(const char* valueName) const
 	{
-		FixedString valueNameCrc = valueName;
+		StringCrc64 valueNameCrc = valueName;
 		return GetValue(valueNameCrc);
 	}
 
-	ClusterID Enum<ClusterID>::GetValue(FixedString valueName) const
+	ClusterID Enum<ClusterID>::GetValue(StringCrc64 valueName) const
 	{
-		FixedString valueNameCrc = valueName;
+		StringCrc64 valueNameCrc = valueName;
 		for (unsigned iEnum = 0; iEnum < countof(__ClusterID_NameList); iEnum++)
 		{
 			if (__ClusterID_NameCrcList[iEnum] == valueNameCrc)

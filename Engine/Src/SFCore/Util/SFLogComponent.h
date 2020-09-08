@@ -46,12 +46,12 @@ namespace SF {
 
 	public:
 
-		static constexpr FixedString TypeName = "LogOutputConsoleComponent";
+		static constexpr StringCrc64 TypeName = "LogOutputConsoleComponent";
 
 		LogOutputConsoleComponent(const LogChannelMask& logMask);
 		~LogOutputConsoleComponent();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		MyOutputHandler& GetHandler() { return m_Handler; }
 
@@ -66,7 +66,7 @@ namespace SF {
 	class LogOutputDebuggerComponent : public LibraryComponent
 	{
 	public:
-		static constexpr FixedString TypeName = "LogOutputDebuggerComponent";
+		static constexpr StringCrc64 TypeName = "LogOutputDebuggerComponent";
 
 	private:
 
@@ -83,7 +83,7 @@ namespace SF {
 		LogOutputDebuggerComponent(const LogChannelMask& logMask);
 		~LogOutputDebuggerComponent();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		MyOutputHandler& GetHandler() { return m_Handler; }
 
@@ -98,7 +98,7 @@ namespace SF {
 	class LogOutputFileComponent : public LibraryComponent
 	{
 	public:
-		static constexpr FixedString TypeName = "LogOutputFileComponent";
+		static constexpr StringCrc64 TypeName = "LogOutputFileComponent";
 
 	private:
 
@@ -130,7 +130,7 @@ namespace SF {
 		LogOutputFileComponent(const LogChannelMask& logMask, const String& filePath, bool bOpenNewHourly);
 		~LogOutputFileComponent();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		MyOutputHandler& GetHandler() { return m_Handler; }
 

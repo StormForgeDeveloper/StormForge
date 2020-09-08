@@ -35,7 +35,7 @@ namespace SF
 		Heap m_Heap;
 
 		// Registered importers by type
-		SortedArray<FixedString, AssetSerializer*> m_AssetSerializerByType;
+		SortedArray<StringCrc64, AssetSerializer*> m_AssetSerializerByType;
 
 		// registered importers
 		DynamicArray<AssetSerializer*> m_AssetSerializers;
@@ -57,7 +57,7 @@ namespace SF
 		virtual Result RegisterSerializer(AssetSerializer* pSerializer) override;
 
 		// Find importer with type
-		virtual Result FindSerializer(FixedString type, AssetSerializer* &pSerializer) override;
+		virtual Result FindSerializer(StringCrc64 type, AssetSerializer* &pSerializer) override;
 
 
 	};
@@ -71,7 +71,7 @@ namespace SF
 	class AssetSerializerFactoryComponent : public LibraryComponent
 	{
 	public:
-		static constexpr FixedString TypeName = "AssetSerializerFactory";
+		static constexpr StringCrc64 TypeName = "AssetSerializerFactory";
 
 		AssetSerializerFactory m_AssetSerializerFactory;
 
@@ -80,7 +80,7 @@ namespace SF
 		AssetSerializerFactoryComponent();
 		~AssetSerializerFactoryComponent();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		// Initialize component
 		virtual Result InitializeComponent() override;

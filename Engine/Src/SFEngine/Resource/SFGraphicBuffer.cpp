@@ -73,7 +73,7 @@ namespace SF
 	//	Graphic buffer
 	//
 
-	GraphicBuffer::GraphicBuffer(IHeap& heap, FixedString name, const CallTrack& callTrack)
+	GraphicBuffer::GraphicBuffer(IHeap& heap, StringCrc64 name, const CallTrack& callTrack)
 		: Resource(heap, name, callTrack)
 		, m_ChannelDescriptors(heap)
 	{

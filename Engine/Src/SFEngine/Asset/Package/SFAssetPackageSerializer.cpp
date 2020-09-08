@@ -28,7 +28,7 @@ namespace SF
 	//	AssetPackageSerializer
 	//
 
-	constexpr FixedString AssetPackageSerializer::HEADER_MAGIC;
+	constexpr StringCrc64 AssetPackageSerializer::HEADER_MAGIC;
 	constexpr uint32_t AssetPackageSerializer::HEADER_VERSION;
 
 
@@ -52,7 +52,7 @@ namespace SF
 		header.Magic = HEADER_MAGIC;
 		header.Version = HEADER_VERSION;
 		header.OffsetToDependency = sizeof(PackageHeader);
-		header.OffsetToData = (decltype(header.OffsetToData))(header.OffsetToDependency + package.GetDependencies().size() * sizeof(FixedString));
+		header.OffsetToData = (decltype(header.OffsetToData))(header.OffsetToDependency + package.GetDependencies().size() * sizeof(StringCrc64));
 		header.NumberOfDependency = (decltype(header.NumberOfDependency))(package.GetDependencies().size());
 		header.NumberOfObject = (decltype(header.NumberOfObject))(package.GetAssetList().size());
 
@@ -136,7 +136,7 @@ namespace SF
 
 		for (int iDep = 0; iDep < header.NumberOfDependency; iDep++)
 		{
-			FixedString dependencyName;
+			StringCrc64 dependencyName;
 			result = stream.Read(dependencyName);
 			if (!result)
 				return result;

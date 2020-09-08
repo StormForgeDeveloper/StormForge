@@ -22,9 +22,9 @@ namespace SF {
 	// base object
 	//
 
-	constexpr FixedString ObjectManager::TypeName;
+	constexpr StringCrc64 ObjectManager::TypeName;
 
-	ObjectManager::ObjectManager(IHeap& memoryManager, const FixedString& name)
+	ObjectManager::ObjectManager(IHeap& memoryManager, const StringCrc64& name)
 		: LibraryComponent(name)
 		, m_SharedObjectManager(memoryManager)
 	{

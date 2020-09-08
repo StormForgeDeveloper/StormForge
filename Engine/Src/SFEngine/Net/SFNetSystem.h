@@ -66,7 +66,7 @@ namespace Net {
 	{
 	public:
 
-		static constexpr FixedString TypeName = "NetSystem";
+		static constexpr StringCrc64 TypeName = "NetSystem";
 
 	private:
 
@@ -97,7 +97,7 @@ namespace Net {
 		NetSystem(uint recvBufferSize, uint sendBufferSize, uint numThread, uint gatheringBufferSize);
 		~NetSystem();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 		
 		// Initialize component
 		virtual Result InitializeComponent() override;

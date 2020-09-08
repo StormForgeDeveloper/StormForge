@@ -35,7 +35,7 @@ namespace SF {
 
 	public:
 		// Constructor
-		Scene(IHeap& heap, const FixedString& name = "");
+		Scene(IHeap& heap, const StringCrc64& name = "");
 		virtual ~Scene();
 
 		virtual void Dispose() override;

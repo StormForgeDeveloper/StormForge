@@ -21,7 +21,7 @@ namespace SF {
 	//
 
 	template< size_t BufferSize, size_t DefaultAlignment >
-	StackHeap<BufferSize, DefaultAlignment>::StackHeap(FixedString name, IHeap& overflowHeap)
+	StackHeap<BufferSize, DefaultAlignment>::StackHeap(StringCrc64 name, IHeap& overflowHeap)
 		: IHeap(name, &overflowHeap)
 	{
 		// Because of the chunk header uses 32bit integer, the limit will be maximum of int32. Actually it's uint32_t, but it's not a big deal

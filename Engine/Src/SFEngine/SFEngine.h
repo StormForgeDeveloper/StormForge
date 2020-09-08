@@ -30,7 +30,7 @@ namespace SF {
 		void* Context = nullptr;
 
 		// Network system  name
-		FixedString NetworkSystem = "MUDP";
+		StringCrc64 NetworkSystem = "MUDP";
 
 		// Network send buffer size
 		int NetSendBufferSize = 8 * 1024;
@@ -42,7 +42,7 @@ namespace SF {
 		int NetworkThreadCount = 1;
 
 		// Graphic system name. nullptr means the graphic engine will not be initialized
-		FixedString GraphicSystem = nullptr;
+		StringCrc64 GraphicSystem = nullptr;
 
 		// Engine tick interval, for low performance system you would want to use less tick per second. 
 		DurationMS TickInterval = DurationMS(1000 / 60);

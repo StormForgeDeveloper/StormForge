@@ -4,7 +4,7 @@
 // 
 // Author : KyungKun Ko
 //
-// Description : FixedString
+// Description : StringCrc64
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -14,22 +14,22 @@
 #include <fstream>
 #include <algorithm>
 
-#include "String/SFFixedString32.h"
-#include "String/SFFixedString.h"
-#include "String/SFFixedStringDB.h"
+#include "String/SFStringCrc32.h"
+#include "String/SFStringCrc64.h"
+#include "String/SFStringCrcDB.h"
 #include "Service/SFService.h"
 
 
 namespace SF
 {
 
-	const char* FixedString32::ToString() const
+	const char* StringCrc32::ToString() const
 	{
 		return Service::StringDB->GetString(m_Crc);
 	}
 
 
-	const char* FixedString::ToString() const
+	const char* StringCrc64::ToString() const
 	{
 		return Service::StringDB->GetString(m_Hash);
 	}

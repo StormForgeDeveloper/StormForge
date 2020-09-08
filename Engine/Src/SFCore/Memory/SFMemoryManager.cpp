@@ -15,7 +15,7 @@
 #include "Memory/SFMemoryManager.h"
 #include "Memory/SFMemoryPool.h"
 #include "String/SFString.h"
-#include "String/SFFixedString.h"
+#include "String/SFStringCrc64.h"
 
 
 

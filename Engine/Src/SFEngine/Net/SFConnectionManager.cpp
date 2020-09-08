@@ -133,7 +133,7 @@ namespace Net {
 	//
 	//	ConnectionManager
 	//
-	constexpr FixedString ConnectionManager::TypeName;
+	constexpr StringCrc64 ConnectionManager::TypeName;
 
 	ConnectionManager::ConnectionManager(uint uiBucketSize )
 		: LibraryComponent("ConnectionManager")

@@ -41,7 +41,7 @@ namespace Log {
 	class LogModule : public LibraryComponent, public LogService
 	{
 	public:
-		static constexpr FixedString TypeName = "LogModule";
+		static constexpr StringCrc64 TypeName = "LogModule";
 
 		//Struct for Spin Buffer
 		struct LogItem
@@ -81,7 +81,7 @@ namespace Log {
 		LogModule(const LogChannelParameter& printMask = LogChannelParameter());
 		~LogModule();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		virtual Result InitializeComponent() override;
 		virtual void DeinitializeComponent() override;

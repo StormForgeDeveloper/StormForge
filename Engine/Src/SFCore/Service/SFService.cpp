@@ -27,7 +27,7 @@ namespace SF
 
 	namespace Service
 	{
-		ServiceInstance<FixedStringDB> StringDB;
+		ServiceInstance<StringCrcDB> StringDB;
 		ServiceInstance<AsyncTaskService> AsyncTaskManager;
 		ServiceInstance<LogService> LogModule;
 		ServiceInstance<AsyncIOPortService> AsyncIOPort;

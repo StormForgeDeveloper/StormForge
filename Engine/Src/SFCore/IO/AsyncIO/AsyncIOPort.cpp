@@ -37,7 +37,7 @@ namespace SF {
 		//	AsyncIOPortSystem
 		//
 
-		constexpr FixedString AsyncIOPortSystem::TypeName;
+		constexpr StringCrc64 AsyncIOPortSystem::TypeName;
 
 
 		AsyncIOPortSystem::AsyncIOPortSystem(uint numThread)

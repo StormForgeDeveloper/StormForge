@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "Types/SFEngineTypedefs.h"
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc32.h"
 #include "String/SFString.h"
 
 
@@ -342,8 +342,8 @@ namespace SF
 		const Array<DBCluster*>& GetDBClusters() const { return m_DBClusters; }
 		Array<DBCluster*>& GetDBClusters() { return m_DBClusters; }
 
-		const DBCluster* FindDBCluster(FixedString clusterName) const;
-		DBCluster* FindDBCluster(FixedString clusterName);
+		const DBCluster* FindDBCluster(StringCrc64 clusterName) const;
+		DBCluster* FindDBCluster(StringCrc64 clusterName);
 
 		const Array<ModuleServer*>& GetServers() const { return m_Servers; }
 		Array<ModuleServer*>& GetServers() { return m_Servers; }

@@ -13,7 +13,8 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "String/SFFixedString32.h"
+#include "String/SFStringCrc32.h"
+#include "String/SFStringCrc64.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -24,7 +25,7 @@
 namespace SF {
 
 
-	using GameID = FixedString32;
+	using GameID = StringCrc32;
 
 
 	// context ID type
@@ -91,6 +92,7 @@ namespace SF {
 		GamePartyManager,
 		Ranking,
 		ChatChannelManager,
+		CharacterData,
 
 		PurchaseValidateGoogle,
 		PurchaseValidateIOS,
@@ -116,11 +118,12 @@ namespace SF {
 		MatchingQueue_Game_8x1S,
 		MatchingQueue_Game_8x1W,
 
-		Relay,
-
-		Max,
-		MatchingQueue_Max = MatchingQueue_Game_8x1W,
+		Relay
+		
 	};
+
+	static constexpr uint32_t MatchingQueue_Max = static_cast<uint32_t>(ClusterID::MatchingQueue_Game_8x1W);
+
 
 	inline ClusterID operator++(ClusterID clusterID)
 	{
@@ -227,8 +230,9 @@ namespace SF {
 #endif
 	};
 
-	typedef EntityUID	GameInsUID;
-	typedef EntityUID	PartyUID;
+	using GameInsUID = EntityUID;
+	using PartyUID = EntityUID;
+	using PlayerUID = EntityUID;
 
 
 

@@ -131,7 +131,7 @@ namespace SF
 	}
 
 
-	void GraphicDevice::AddDependency(FixedString dependency)
+	void GraphicDevice::AddDependency(StringCrc64 dependency)
 	{
 		m_ComponentDependency.push_back(dependency);
 	}
