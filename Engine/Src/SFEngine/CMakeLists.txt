@@ -7,6 +7,7 @@ include_directories(AFTER
 set(SFENGINE_LIB_FILES
   	Application/Android/AndroidApp.cpp
 	Application/Android/AndroidAppTasks.cpp
+	Application/Linux/LinuxApp.h
   	Application/Linux/LinuxApp.cpp
 	Application/Linux/LinuxAppTasks.cpp
 	Application/SFApplicationBase.cpp

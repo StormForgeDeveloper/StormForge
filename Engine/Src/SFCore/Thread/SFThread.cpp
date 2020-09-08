@@ -184,7 +184,7 @@ namespace SF {
 		auto nativeHandle = thread::native_handle();
 		pSetThreadDescription((HANDLE)nativeHandle, m_wThreadName);
 #else
-		pthread_setname_np(native_handle(), threadName);
+		pthread_setname_np(native_handle(), m_ThreadName);
 #endif
 	}
 

@@ -18,7 +18,7 @@
 #include "Util/SFUtility.h"
 #include "String/SFStringCrc64.h"
 #include "Service/SFService.h"
-
+#include "Variable/SFVariableBoxing.h"
 
 
 namespace SF {

@@ -14,35 +14,36 @@
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
 #include "String/SFStrFormat.h"
-//#include "Variable/SFVariableBoxing.h"
 #include "String/SFStringCrc64.h"
 #include "String/SFString.h"
+#include "String/SFString_internal.h"
 #include "Util/SFUtility.h"
 
 
 namespace SF {
-	
+
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	TString
 	//
 
-	const TString<char> TString<char>::Empty(GetSystemHeap());
-	const TString<char> TString<char>::True(GetSystemHeap(), "true");
-	const TString<char> TString<char>::False(GetSystemHeap(), "false");
-	const TString<char> TString<char>::Success(GetSystemHeap(), "Success");
-	const TString<char> TString<char>::Fail(GetSystemHeap(), "Fail");
+	
+	template<> const TString<char> TString<char>::Empty(GetSystemHeap());
+	template<> const TString<char> TString<char>::True(GetSystemHeap(), "true");
+	template<> const TString<char> TString<char>::False(GetSystemHeap(), "false");
+	template<> const TString<char> TString<char>::Success(GetSystemHeap(), "Success");
+	template<> const TString<char> TString<char>::Fail(GetSystemHeap(), "Fail");
 
-	const TString<wchar_t> TString<wchar_t>::Empty(GetSystemHeap());
-	const TString<wchar_t> TString<wchar_t>::True(GetSystemHeap(), L"true");
-	const TString<wchar_t> TString<wchar_t>::False(GetSystemHeap(), L"false");
-	const TString<wchar_t> TString<wchar_t>::Success(GetSystemHeap(), L"Success");
-	const TString<wchar_t> TString<wchar_t>::Fail(GetSystemHeap(), L"Fail");
+	template<> const TString<wchar_t> TString<wchar_t>::Empty(GetSystemHeap());
+	template<> const TString<wchar_t> TString<wchar_t>::True(GetSystemHeap(), L"true");
+	template<> const TString<wchar_t> TString<wchar_t>::False(GetSystemHeap(), L"false");
+	template<> const TString<wchar_t> TString<wchar_t>::Success(GetSystemHeap(), L"Success");
+	template<> const TString<wchar_t> TString<wchar_t>::Fail(GetSystemHeap(), L"Fail");
 
 
-	template TString<char>;
-	template TString<wchar_t>;
+	template class TString<char>;
+	template class TString<wchar_t>;
 
 
 	/////////////////////////////////////////////////////////////////////////////////////

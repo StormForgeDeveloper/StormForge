@@ -31,7 +31,7 @@ namespace SF
 	{
 	public:
 
-		static constexpr FixedString TypeName = "LinuxApp";
+		static constexpr StringCrc64 TypeName = "LinuxApp";
 
 
 	private:
@@ -41,7 +41,7 @@ namespace SF
 		LinuxApp();
 		~LinuxApp();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		virtual Result InitializeComponent() override;
 		virtual void DeinitializeComponent() override;
@@ -68,9 +68,6 @@ namespace SF
 
 
 	};
-
-
-
 
 }
 

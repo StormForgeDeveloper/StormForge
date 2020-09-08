@@ -15,9 +15,9 @@
 #include "SFResult.h"
 #include "String/SFStringCrc64.h"
 #include "String/SFStringCrc32.h"
-#include "String/SFString.h"
-#include "String/SFPathString.h"
 #include "Variable/SFVariableBoxing.h"
+#include "String/SFPathString.h"
+#include "String/SFString.h"
 #include "Memory/SFMemoryManager.h"
 
 namespace SF

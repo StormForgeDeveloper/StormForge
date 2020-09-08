@@ -20,6 +20,7 @@
 namespace SF {
 
 	class IHeap;
+	class VariableBox;
 
 namespace StrUtil
 {
@@ -274,6 +275,18 @@ namespace StrUtil
 	inline Result UTF8ToUTF8Bin( uint8_t (&UTF8BinBuff)[iBuffLen], const char* strSrc );
 
 	inline Result UTF8BinToUTF8( char* strDst, int dstLen, const uint8_t* strSrc );
+
+
+	////////////////////////////////////////////////////////////////////////////////
+	//
+	//	String formating helper
+	//
+
+	// Format string with argument list
+	// Modified buffer pointer and remain buffer size returned to original parameter
+	// return used or required string buffer length
+	size_t Format_Internal(char*& szBuffer, int& BuffLen, const char* szFormating, int iNumArg, VariableBox* Args);
+	size_t Format_Internal(wchar_t*& szBuffer, int& BuffLen, const wchar_t* szFormating, int iNumArg, VariableBox* Args);
 
 
 	/////////////////////////////////////////////////////////////////////////////

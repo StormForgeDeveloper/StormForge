@@ -17,6 +17,7 @@
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
 #include "String/SFStrUtil.h"
+#include "String/SFToStringBase.h"
 #include "Container/SFArray.h"
 
 
@@ -1031,21 +1032,21 @@ namespace SF {
 
 		// Format string
 		template< class ...ArgTypes >
-		inline StringType& Format(const CharType* strFormat, ArgTypes... args)
-		{
-			VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
-			Format_Internal(strFormat, sizeof...(args), arguments);
-			return *this;
-		}
+		StringType& Format(const CharType* strFormat, ArgTypes... args);
+		//{
+		//	VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
+		//	Format_Internal(strFormat, sizeof...(args), arguments);
+		//	return *this;
+		//}
 
 		// Format string
 		template< class ...ArgTypes >
-		inline StringType& AppendFormat(const CharType* strFormat, ArgTypes... args)
-		{
-			VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
-			AppendFormat_Internal(strFormat, sizeof...(args), arguments);
-			return *this;
-		}
+		StringType& AppendFormat(const CharType* strFormat, ArgTypes... args);
+		//{
+		//	VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
+		//	AppendFormat_Internal(strFormat, sizeof...(args), arguments);
+		//	return *this;
+		//}
 
 		const CharType* data() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
 		operator const CharType*() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
@@ -1126,8 +1127,8 @@ namespace SF {
 	};
 
 
-	extern template TString<char>;
-	extern template TString<wchar_t>;
+	extern template class TString<char>;
+	extern template class TString<wchar_t>;
 
 
 	using String = TString<char>;
