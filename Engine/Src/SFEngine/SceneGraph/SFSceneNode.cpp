@@ -53,7 +53,7 @@ namespace SF {
 
 		for(auto component : m_NodeComponents)
 		{
-			component->Dispose();
+			component.GetValue()->Dispose();
 		}
 		m_NodeComponents.Clear();
 
@@ -218,7 +218,7 @@ namespace SF {
 
 		for (auto component : m_NodeComponents)
 		{
-			component->InitializeComponent(rootNode);
+			component.GetValue()->InitializeComponent(rootNode);
 		}
 
 		for (auto child : m_Children)
@@ -281,7 +281,7 @@ namespace SF {
 
 		for (auto component : m_NodeComponents)
 		{
-			auto clonedComponent = component->Clone(cloneFlags, newNode);
+			auto clonedComponent = component.GetValue()->Clone(cloneFlags, newNode);
 			Assert(clonedComponent->GetOwner() == newNode);
 			newNode->AddComponent(clonedComponent);
 		}
