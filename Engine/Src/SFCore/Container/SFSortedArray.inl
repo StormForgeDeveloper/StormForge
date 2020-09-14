@@ -60,7 +60,7 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
-		KeyType SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Iterator::GetKey() const
+		const KeyType& SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Iterator::GetKey() const
 		{
 			if (!IsValid())
 			{
@@ -71,12 +71,13 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
-		ValueType SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Iterator::GetValue() const
+		const ValueType& SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Iterator::GetValue() const
 		{
+			static ValueType DummyValue{};
 			if (!IsValid())
 			{
 				assert(m_Container != nullptr && m_CurrentIndex >= 0 && m_CurrentIndex < (int)m_Container->size());
-				return ValueType{};
+				return DummyValue;
 			}
 
 			return m_Container->GetValueAt(m_CurrentIndex);
@@ -376,20 +377,22 @@ namespace SF {
 
 
 		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
-		KeyType SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::GetKeyAt(int64_t index)
+		const KeyType& SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::GetKeyAt(int64_t index)
 		{
+			static KeyType DummyValue{};
 			if (index < 0 || index >= (int64_t)m_ItemCount)
-				return KeyType{};
+				return DummyValue;
 
 			return m_KeyArray[index];
 		}
 
 
 		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
-		ValueType SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::GetValueAt(int64_t index)
+		const ValueType& SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::GetValueAt(int64_t index)
 		{
+			static ValueType DummyValue{};
 			if (index < 0 || index >= (decltype(index))m_ItemCount)
-				return ValueType{};
+				return DummyValue;
 
 			return m_ValueArray[index];
 		}

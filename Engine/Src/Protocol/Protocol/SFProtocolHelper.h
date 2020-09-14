@@ -18,6 +18,7 @@
 #include "Net/SFNetDef.h"
 #include "String/SFStrUtil.h"
 #include "String/SFString.h"
+#include "Variable/SFVariableToString.h"
 #include "String/SFStringSerialization.h"
 #include "Variable/SFVariableSerialization.h"
 #include "Container/SFArraySerialization.h"

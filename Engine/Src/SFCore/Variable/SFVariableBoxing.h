@@ -210,7 +210,15 @@ namespace SF {
 #endif
 	Result _ToString(ToStringContext& context, const char* value);
 	Result _ToString(ToStringContext& context, const wchar_t* value);
+
 	Result _ToString(ToStringContext& context, const std::string& value);
+	Result _ToString(ToStringContext& context, const NetAddress& value);
+	Result _ToString(ToStringContext& context, const TimeStampMS& value);
+	Result _ToString(ToStringContext& context, const DurationMS& value);
+	Result _ToString(ToStringContext& context, const TimeStampSec& value);
+	Result _ToString(ToStringContext& context, const DurationSec& value);
+	Result _ToString(ToStringContext& context, const sockaddr_in6& value);
+	Result _ToString(ToStringContext& context, const sockaddr_storage& value);
 
 
 
@@ -309,6 +317,15 @@ namespace SF {
 	DEFINE_BOXING_TEMPLETE(long, VariableInt);
 	DEFINE_BOXING_TEMPLETE(unsigned long, VariableUInt);
 #endif
+
+
+	DEFINE_BOXING_TEMPLETE_BYREFERENCE(NetAddress);
+	DEFINE_BOXING_TEMPLETE_BYVALUE(TimeStampMS);
+	DEFINE_BOXING_TEMPLETE_BYVALUE(DurationMS);
+	DEFINE_BOXING_TEMPLETE_BYVALUE(TimeStampSec);
+	DEFINE_BOXING_TEMPLETE_BYVALUE(DurationSec);
+	DEFINE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_in6);
+	DEFINE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_storage);
 
 
 } // namespace SF

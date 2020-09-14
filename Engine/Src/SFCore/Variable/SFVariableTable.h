@@ -97,7 +97,7 @@ namespace SF {
 			if (size() != src.size())
 				return false;
 
-			for (auto itItem : m_VairableTable)
+			for (auto& itItem : m_VairableTable)
 			{
 				auto pSrcVar = src.GetVariable(itItem.GetKey());
 				if (*pSrcVar != *itItem.GetValue())

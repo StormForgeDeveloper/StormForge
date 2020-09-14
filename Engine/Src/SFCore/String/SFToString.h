@@ -14,34 +14,27 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 #include "Variable/SFVariableBoxing.h"
-#include "Variable/SFNamedVariableBox.h"
-#include "Variable/SFVariableTable.h"
-
 
 
 namespace SF {
 
-
-	Result _ToString(ToStringContext& context, const NetAddress& value);
-	Result _ToString(ToStringContext& context, const TimeStampMS& value);
-	Result _ToString(ToStringContext& context, const DurationMS& value);
-	Result _ToString(ToStringContext& context, const TimeStampSec& value);
-	Result _ToString(ToStringContext& context, const DurationSec& value);
-	Result _ToString(ToStringContext& context, const sockaddr_in6& value);
-	Result _ToString(ToStringContext& context, const sockaddr_storage& value);
-	Result _ToString(ToStringContext& context, const NamedVariableBox& value);
-	Result _ToString(ToStringContext& context, const VariableTable& value);
+	// Moved to SFVariableBoxing.h. Looks like we have include issue
+	//Result _ToString(ToStringContext& context, const NetAddress& value);
+	//Result _ToString(ToStringContext& context, const TimeStampMS& value);
+	//Result _ToString(ToStringContext& context, const DurationMS& value);
+	//Result _ToString(ToStringContext& context, const TimeStampSec& value);
+	//Result _ToString(ToStringContext& context, const DurationSec& value);
+	//Result _ToString(ToStringContext& context, const sockaddr_in6& value);
+	//Result _ToString(ToStringContext& context, const sockaddr_storage& value);
 
 
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(NetAddress);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(TimeStampMS);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(DurationMS);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(TimeStampSec);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(DurationSec);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_in6);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_storage);
-	DEFINE_BOXING_TEMPLETE_BYVALUE(NamedVariableBox);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(VariableTable);
+	//DEFINE_BOXING_TEMPLETE_BYREFERENCE(NetAddress);
+	//DEFINE_BOXING_TEMPLETE_BYVALUE(TimeStampMS);
+	//DEFINE_BOXING_TEMPLETE_BYVALUE(DurationMS);
+	//DEFINE_BOXING_TEMPLETE_BYVALUE(TimeStampSec);
+	//DEFINE_BOXING_TEMPLETE_BYVALUE(DurationSec);
+	//DEFINE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_in6);
+	//DEFINE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_storage);
 
 }; // namespace SF
 

@@ -562,16 +562,16 @@ namespace SF {
 
 	using std::atomic;
 
-	typedef std::chrono::steady_clock ClockType;
-	typedef std::chrono::duration<uint> DurationSec;
-	typedef std::chrono::time_point<ClockType, DurationSec> TimeStampSec;
+	using ClockType = std::chrono::steady_clock;
+	using DurationSec = std::chrono::duration<uint>;
+	using TimeStampSec = std::chrono::time_point<ClockType, DurationSec>;
 
-	typedef std::chrono::duration<uint, std::milli> DurationMS;
-	typedef std::chrono::time_point<ClockType, DurationMS> TimeStampMS;
-	typedef std::chrono::system_clock::time_point SystemTimeStampMS;
+	using DurationMS = std::chrono::duration<uint, std::milli>;
+	using TimeStampMS = std::chrono::time_point<ClockType, DurationMS>;
+	using SystemTimeStampMS = std::chrono::system_clock::time_point;
 
-	typedef std::chrono::duration<uint64_t, std::micro> DurationMicro;
-	typedef std::chrono::time_point<ClockType, DurationMicro> TimeStampMicro;
+	using DurationMicro = std::chrono::duration<uint64_t, std::micro>;
+	using TimeStampMicro = std::chrono::time_point<ClockType, DurationMicro>;
 
 
 	extern const TimeStampMS TimeStampMS_Zero;
@@ -687,10 +687,6 @@ namespace SF {
 	{
 	public:
 
-		using ResultType = decltype(auto);
-
-	public:
-
 		FunctionContext() = default;
 		FunctionContext(Result src) : m_Hr(src) {}
 		FunctionContext(ExitFunc&& errorFunc)
@@ -710,7 +706,7 @@ namespace SF {
 		FunctionContext& operator = (Result src) { m_Hr = src; return *this; }
 
 		operator Result() const { return m_Hr; }
-		operator ResultType() const { m_ExitFuncHasCalled = true;  return m_ExitFunc(m_Hr); }
+		operator decltype(auto)() const { m_ExitFuncHasCalled = true;  return m_ExitFunc(m_Hr); }
 		explicit operator bool() const { return m_Hr; }
 
 	private:
