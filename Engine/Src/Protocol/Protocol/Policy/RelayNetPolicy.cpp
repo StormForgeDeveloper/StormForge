@@ -26,7 +26,7 @@ namespace SF
  		// C2S: Event for Player Join request.
 		Result NetPolicyRelay::JoinRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -36,15 +36,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyRelay::JoinRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 		// C2S: Event for Player Join request.
 		Result NetPolicyRelay::LeaveRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -54,15 +52,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyRelay::LeaveRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
 		// C2S: Relay packet
 		Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -72,8 +68,6 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
@@ -82,7 +76,7 @@ namespace SF
 		// S2C: Event for joined player
 		Result NetSvrPolicyRelay::JoinRelayInstanceResS2CEvt( const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -92,15 +86,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetSvrPolicyRelay::JoinRelayInstanceResS2CEvt( const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 		// S2C: Event for Player joined.
 		Result NetSvrPolicyRelay::PlayerJoinS2CEvt( const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -110,15 +102,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetSvrPolicyRelay::PlayerJoinS2CEvt( const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo )
 		// S2C: Event for Player left.
 		Result NetSvrPolicyRelay::PlayerLeftS2CEvt( const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -127,8 +117,6 @@ namespace SF
 			 protocolChkPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
-
-		Proc_End:
 
 			return hr;
 

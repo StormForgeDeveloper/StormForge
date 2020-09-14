@@ -48,6 +48,12 @@ namespace Protocol {
 #define protocolMem(a)			do{ if( (a) == nullptr ) SFErrJmp(Net,ResultCode::OUT_OF_MEMORY); } while(0)
 
 
+#define protocolCheck(e)			do{ hr = e; if(!(hr)) return hr; } while(0)
+#define protocolCheckPtr(e)		do{ if( e == nullptr ) { hr = ResultCode::INVALID_POINTER; return hr; } } while(0)
+#define protocolCheckMem(a)			do{ if( (a) == nullptr ) { hr = ResultCode::OUT_OF_MEMORY; return hr; } } while(0)
+
+
+
 }; // namespace Protocol
 }; // SF
 

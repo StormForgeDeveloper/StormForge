@@ -488,7 +488,7 @@ namespace ProtocolCompiler
             }
 
             NewLine();
-            MatchIndent(); OutStream.WriteLine("protocolChkPtr(pIMsg);");
+            MatchIndent(); OutStream.WriteLine("protocolCheckPtr(pIMsg);");
             NewLine();
 
             if (bHasParameter)
@@ -509,7 +509,7 @@ namespace ProtocolCompiler
             if (parameters == null)
             {
                 // nothing to process
-                MatchIndent(); OutStream.WriteLine("goto Proc_End;");
+                MatchIndent(); OutStream.WriteLine("return hr;");
             }
             else
             {
@@ -520,29 +520,28 @@ namespace ProtocolCompiler
                     {
                         case ParameterType.String:
                             //MatchIndent(); OutStream.WriteLine("{0} {1} = 0;", ArrayLenType, ArrayLenName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("protocolChk( Protocol::StreamParamCopy( &{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, ArrayLenName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("protocolChk( Protocol::StreamParamLnk( m_{0}, pCur, iMsgSize, sizeof(char)*{1} ) );", param.Name, ArrayLenName(param.Name));
+                            MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamCopy( &{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, ArrayLenName(param.Name));
+                            MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamLnk( m_{0}, pCur, iMsgSize, sizeof(char)*{1} ) );", param.Name, ArrayLenName(param.Name));
                             break;
                         default:
                             if (param.IsArray)
                             {
                                 //MatchIndent(); OutStream.WriteLine("{0} numberof{1} = 0; {2}* p{1} = nullptr;", ArrayLenType, param.Name, param.Type.ToString());
-                                MatchIndent(); OutStream.WriteLine("protocolChk( Protocol::StreamParamCopy( &numberof{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, param.Name);
-                                MatchIndent(); OutStream.WriteLine("protocolChk( Protocol::StreamParamLnk( p{0}, pCur, iMsgSize, sizeof({1})*numberof{0} ) );", param.Name, ToTargetTypeName(param.Type));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamCopy( &numberof{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, param.Name);
+                                MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamLnk( p{0}, pCur, iMsgSize, sizeof({1})*numberof{0} ) );", param.Name, ToTargetTypeName(param.Type));
                                 MatchIndent(); OutStream.WriteLine("m_{0}.SetLinkedBuffer(numberof{0}, numberof{0}, p{0});", param.Name);
                             }
                             else
                             {
-                                MatchIndent(); OutStream.WriteLine("protocolChk( Protocol::StreamParamCopy( &m_{0}, pCur, iMsgSize, sizeof({1}) ) );", param.Name, ToTargetTypeName(param.Type));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamCopy( &m_{0}, pCur, iMsgSize, sizeof({1}) ) );", param.Name, ToTargetTypeName(param.Type));
                             }
                             break;
                     }
                 }
             }
 
-            NewLine(2);
+            NewLine();
 
-            ProcEnd(); NewLine();
             ReturnHR(); NewLine();
 
             CloseSection();
@@ -565,7 +564,7 @@ namespace ProtocolCompiler
 
             NewLine();
             MatchIndent(); OutStream.WriteLine("{0} parser;", strClassName);
-            MatchIndent(); OutStream.WriteLine("protocolChk(parser.ParseMessage(*pIMsg));");
+            MatchIndent(); OutStream.WriteLine("protocolCheck(parser.ParseMessage(*pIMsg));");
             NewLine();
 
             if (parameters != null)
@@ -596,9 +595,8 @@ namespace ProtocolCompiler
                 }
             }
 
-            NewLine(2);
+            NewLine();
 
-            ProcEnd(); NewLine();
             ReturnHR(); NewLine();
 
             CloseSection();
@@ -615,11 +613,10 @@ namespace ProtocolCompiler
             bool bHasParameter = parameters != null && parameters.Length > 0;
 
             NewLine();
-            MatchIndent(); OutStream.WriteLine("protocolMem(pMessageBase = new(memHeap) {0}(std::forward<MessageDataPtr>(pIMsg)));", strClassName);
-            MatchIndent(); OutStream.WriteLine("protocolChk(pMessageBase->ParseMsg());", strClassName);
+            MatchIndent(); OutStream.WriteLine("protocolCheckMem(pMessageBase = new(memHeap) {0}(std::forward<MessageDataPtr>(pIMsg)));", strClassName);
+            MatchIndent(); OutStream.WriteLine("protocolCheck(pMessageBase->ParseMsg());", strClassName);
             NewLine();
 
-            ProcEnd();
             ReturnHR(); NewLine();
 
             CloseSection();
@@ -642,7 +639,7 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("MessageData* pIMsg = GetMessage();");
             MatchIndent(); OutStream.WriteLine("RouteContext routeContext;");
             NewLine();
-            MatchIndent(); OutStream.WriteLine("protocolChkPtr(pIMsg);");
+            MatchIndent(); OutStream.WriteLine("protocolCheckPtr(pIMsg);");
             NewLine();
 
             // array len types
@@ -672,7 +669,7 @@ namespace ProtocolCompiler
                     {
                         case ParameterType.String:
                             MatchIndent(); OutStream.WriteLine("{0} {1} = 0;", ArrayLenType, ArrayLenName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("protocolChk( Protocol::StreamParamCopy( &{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, ArrayLenName(param.Name));
+                            MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamCopy( &{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, ArrayLenName(param.Name));
                             MatchIndent(); OutStream.WriteLine("pCur += sizeof(char)*{1}; iMsgSize -= sizeof(char)*{1};", ArrayLenName(param.Name));
                             break;
                         case ParameterType.RouteContext:
@@ -703,9 +700,8 @@ namespace ProtocolCompiler
                 }
             }
 
-            NewLine(2);
+            NewLine();
 
-            ProcEnd(); NewLine();
             ReturnHR(); NewLine();
 
             CloseSection();
@@ -728,7 +724,7 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("MessageData* pIMsg = GetMessage();");
             MatchIndent(); OutStream.WriteLine("RouteContext routeContext;");
             NewLine();
-            MatchIndent(); OutStream.WriteLine("protocolChkPtr(pIMsg);");
+            MatchIndent(); OutStream.WriteLine("protocolCheckPtr(pIMsg);");
             NewLine();
 
             // array len types
@@ -758,7 +754,7 @@ namespace ProtocolCompiler
                     {
                         case ParameterType.String:
                             MatchIndent(); OutStream.WriteLine("{0} {1} = 0;", ArrayLenType, ArrayLenName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("protocolChk( Protocol::StreamParamCopy( &{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, ArrayLenName(param.Name));
+                            MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamCopy( &{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, ArrayLenName(param.Name));
                             MatchIndent(); OutStream.WriteLine("pCur += sizeof(char)*{1}; iMsgSize -= sizeof(char)*{1};", ArrayLenName(param.Name));
                             break;
                         default:
@@ -796,9 +792,8 @@ namespace ProtocolCompiler
                 }
             }
 
-            NewLine(2);
+            NewLine();
 
-            ProcEnd(); NewLine();
             ReturnHR(); NewLine();
 
             CloseSection();
@@ -911,7 +906,17 @@ namespace ProtocolCompiler
             OpenSection("MessageData*", strClassName + string.Format("::Create( {0} )", BuilderParamString(parameters)));
 
             MatchIndent(); OutStream.WriteLine("MessageData *pNewMsg = nullptr;");
-            DefaultHRESULT(); NewLine();
+
+            OpenSection("FunctionContext", "hr([pNewMsg](Result hr) -> MessageData*");
+            MatchIndent(); OutStream.WriteLine("if(!hr && pNewMsg != nullptr)");
+                OpenSection();
+                MatchIndent(); OutStream.WriteLine("delete pNewMsg;");
+            MatchIndent(); OutStream.WriteLine("return nullptr;");
+            CloseSection();
+            MatchIndent(); OutStream.WriteLine("return pNewMsg;");
+            CloseSection("});");
+
+            NewLine();
 
 
             if (bHasParameters)
@@ -928,7 +933,7 @@ namespace ProtocolCompiler
             BuildParamCpyPreamble(parameters);
 
             MatchIndent(); OutStream.WriteLine(
-                string.Format("protocolMem( pNewMsg = MessageData::NewMessage( memHeap, {0}::{1}{2}::MID, __uiMessageSize ) );", Group.Name, Name, typeName));
+                string.Format("protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, {0}::{1}{2}::MID, __uiMessageSize ) );", Group.Name, Name, typeName));
             NewLine();
 
             if (bHasParameters)
@@ -938,19 +943,9 @@ namespace ProtocolCompiler
             }
 
             BuildParamCpy(parameters);
-            NewLine(2);
-
-            ProcEnd(); NewLine();
-
-            MatchIndent(); OutStream.WriteLine("if(!hr)");
-            OpenSection();
-            MatchIndent(); OutStream.WriteLine("if(pNewMsg != nullptr) delete pNewMsg;");
-            MatchIndent(); OutStream.WriteLine("pNewMsg = nullptr;");
-            CloseSection();
-
-            MatchIndent(); OutStream.WriteLine("return pNewMsg;");
             NewLine();
 
+            MatchIndent(); OutStream.WriteLine("return hr;");
 
             CloseSection();
         }

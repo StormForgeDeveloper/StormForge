@@ -221,7 +221,6 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine(" return m_pConnection->Send( pMessage );");
             NewLine();
             
-            ProcEnd(); NewLine();
             ReturnHR(); NewLine();
 
             CloseSection();

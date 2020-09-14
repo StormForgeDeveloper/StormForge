@@ -52,7 +52,7 @@ namespace Message {
 		// Encryption status
 
 	private:
-		MessageData(uint uiMsgBufSize, const uint8_t* pData = NULL);
+		MessageData(uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData = NULL);
 
 	public:
 		virtual ~MessageData();
@@ -80,7 +80,7 @@ namespace Message {
 		virtual MessageData* Clone(IHeap& memoryManager);
 
 
-		// Update checksume and encrypt
+		// Update checksum and encrypt
 		void UpdateChecksum();
 		void UpdateChecksumNEncrypt();
 

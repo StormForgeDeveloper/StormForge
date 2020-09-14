@@ -381,7 +381,7 @@ namespace ProtocolXml {
         NotificationType,
         
         /// <remarks/>
-        VariableBox,
+        Variable,
         
         /// <remarks/>
         VariableTable,

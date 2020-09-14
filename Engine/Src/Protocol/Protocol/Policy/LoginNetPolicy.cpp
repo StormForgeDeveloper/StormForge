@@ -26,7 +26,7 @@ namespace SF
  		// Cmd: Login request
 		Result NetPolicyLogin::LoginCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -36,15 +36,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyLogin::LoginCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 		// Cmd: Login request with Facebook UID
 		Result NetPolicyLogin::LoginByFacebookCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -54,15 +52,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyLogin::LoginByFacebookCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 		// Cmd: Login request
 		Result NetPolicyLogin::CreateRandomUserCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -72,15 +68,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyLogin::CreateRandomUserCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 		// Cmd: Update my score and Get Ranking list
 		Result NetPolicyLogin::UpdateMyScoreCmd( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -90,15 +84,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyLogin::UpdateMyScoreCmd( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 		// Cmd: Get Ranking lise
 		Result NetPolicyLogin::GetRankingListCmd( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -108,15 +100,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyLogin::GetRankingListCmd( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 		// Cmd: For network test
 		Result NetPolicyLogin::DataTestCmd( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -126,15 +116,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyLogin::DataTestCmd( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
 		// C2S: Heartbit
 		Result NetPolicyLogin::HeartBitC2SEvt(  )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -144,15 +132,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyLogin::HeartBitC2SEvt(  )
 		// Cmd: Write All!! User Score and Ranking list
 		Result NetPolicyLogin::DebugPrintALLRankingCmd( const uint64_t &InTransactionID, const char* InFileName )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -162,8 +148,6 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetPolicyLogin::DebugPrintALLRankingCmd( const uint64_t &InTransactionID, const char* InFileName )
@@ -172,7 +156,7 @@ namespace SF
 		// Cmd: Login request
 		Result NetSvrPolicyLogin::LoginRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -182,15 +166,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetSvrPolicyLogin::LoginRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 		// Cmd: Login request with Facebook UID
 		Result NetSvrPolicyLogin::LoginByFacebookRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -200,15 +182,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetSvrPolicyLogin::LoginByFacebookRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 		// Cmd: Login request
 		Result NetSvrPolicyLogin::CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -218,15 +198,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetSvrPolicyLogin::CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 		// Cmd: Update my score and Get Ranking list
 		Result NetSvrPolicyLogin::UpdateMyScoreRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -236,15 +214,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetSvrPolicyLogin::UpdateMyScoreRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 		// Cmd: Get Ranking lise
 		Result NetSvrPolicyLogin::GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -254,15 +230,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetSvrPolicyLogin::GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 		// Cmd: For network test
 		Result NetSvrPolicyLogin::DataTestRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -272,15 +246,13 @@ namespace SF
 
 			 return m_pConnection->Send( pMessage );
 
-		Proc_End:
-
 			return hr;
 
 		}; // Result NetSvrPolicyLogin::DataTestRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 		// Cmd: Write All!! User Score and Ranking list
 		Result NetSvrPolicyLogin::DebugPrintALLRankingRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			Result hr;
+ 			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolChkPtr(m_pConnection);
@@ -289,8 +261,6 @@ namespace SF
 			 protocolChkPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
-
-		Proc_End:
 
 			return hr;
 

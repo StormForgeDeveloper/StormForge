@@ -45,13 +45,20 @@ namespace SF {
 
 		~VariableBox();
 
+
 		// Set variable type. It will destroy previous variable
 		bool SetVariableType(StringCrc32 TypeName);
 
 		Variable* GetVariable() const { return m_pVariable; }
 
+		explicit operator Variable*() { return m_pVariable; }
+
 		VariableBox& operator = (const VariableBox& src);
 	};
+
+
+	template<>
+	inline size_t SerializedSizeOf(const VariableBox& Value) { auto pVariable = Value.GetVariable(); return pVariable != nullptr ? pVariable->GetSerializedSize() : sizeof(nullptr); }
 
 
 

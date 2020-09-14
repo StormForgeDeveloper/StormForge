@@ -29,24 +29,21 @@ namespace SF
 			const MessageID JoinRelayInstanceC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 0);
 			Result JoinRelayInstanceC2SEvt::ParseMessage( MessageData* pIMsg )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 				int iMsgSize;
 				uint8_t* pCur;
 				uint16_t uiSizeOfPlayerIdentifier = 0;
 
-				protocolChkPtr(pIMsg);
+				protocolCheckPtr(pIMsg);
 
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(PlayerID) ) );
-				protocolChk( Protocol::StreamParamCopy( &uiSizeOfPlayerIdentifier, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolChk( Protocol::StreamParamLnk( m_PlayerIdentifier, pCur, iMsgSize, sizeof(char)*uiSizeOfPlayerIdentifier ) );
-
-
-			Proc_End:
+				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(PlayerID) ) );
+				protocolCheck( Protocol::StreamParamCopy( &uiSizeOfPlayerIdentifier, pCur, iMsgSize, sizeof(uint16_t) ) );
+				protocolCheck( Protocol::StreamParamLnk( m_PlayerIdentifier, pCur, iMsgSize, sizeof(char)*uiSizeOfPlayerIdentifier ) );
 
 				return hr;
 
@@ -54,18 +51,15 @@ namespace SF
 
 			Result JoinRelayInstanceC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 
 				JoinRelayInstanceC2SEvt parser;
-				protocolChk(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("RelayInstanceID", parser.GetRelayInstanceID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariable("PlayerIdentifier", parser.GetPlayerIdentifier());
-
-
-			Proc_End:
 
 				return hr;
 
@@ -73,12 +67,11 @@ namespace SF
 
 			Result JoinRelayInstanceC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
-				protocolMem(pMessageBase = new(memHeap) JoinRelayInstanceC2SEvt(std::forward<MessageDataPtr>(pIMsg)));
-				protocolChk(pMessageBase->ParseMsg());
+				protocolCheckMem(pMessageBase = new(memHeap) JoinRelayInstanceC2SEvt(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
 
-			Proc_End:
 				return hr;
 
 			}; // Result JoinRelayInstanceC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
@@ -86,7 +79,15 @@ namespace SF
 			MessageData* JoinRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 			{
  				MessageData *pNewMsg = nullptr;
-				Result hr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
 
 				uint8_t *pMsgData = nullptr;
 
@@ -96,7 +97,7 @@ namespace SF
 					+ sizeof(PlayerID));
 
 
-				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::JoinRelayInstanceC2SEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::JoinRelayInstanceC2SEvt::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
@@ -105,16 +106,7 @@ namespace SF
 				Protocol::PackParamCopy( pMsgData, &__uiInPlayerIdentifierLength, sizeof(uint16_t) );
 				Protocol::PackParamCopy( pMsgData, InPlayerIdentifier ? InPlayerIdentifier : "", __uiInPlayerIdentifierLength );
 
-
-			Proc_End:
-
-				if(!hr)
-				{
- 					if(pNewMsg != nullptr) delete pNewMsg;
-					pNewMsg = nullptr;
-				}
-				return pNewMsg;
-
+				return hr;
 			}; // MessageData* JoinRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 
 
@@ -132,26 +124,23 @@ namespace SF
 			const MessageID JoinRelayInstanceResS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 1);
 			Result JoinRelayInstanceResS2CEvt::ParseMessage( MessageData* pIMsg )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 				int iMsgSize;
 				uint8_t* pCur;
 				uint16_t numberofMemberInfos = 0; RelayPlayerInfo* pMemberInfos = nullptr;
 
-				protocolChkPtr(pIMsg);
+				protocolCheckPtr(pIMsg);
 
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_MyEndpointID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &numberofMemberInfos, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolChk( Protocol::StreamParamLnk( pMemberInfos, pCur, iMsgSize, sizeof(RelayPlayerInfo)*numberofMemberInfos ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_MyEndpointID, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolCheck( Protocol::StreamParamCopy( &numberofMemberInfos, pCur, iMsgSize, sizeof(uint16_t) ) );
+				protocolCheck( Protocol::StreamParamLnk( pMemberInfos, pCur, iMsgSize, sizeof(RelayPlayerInfo)*numberofMemberInfos ) );
 				m_MemberInfos.SetLinkedBuffer(numberofMemberInfos, numberofMemberInfos, pMemberInfos);
-
-
-			Proc_End:
 
 				return hr;
 
@@ -159,19 +148,16 @@ namespace SF
 
 			Result JoinRelayInstanceResS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 
 				JoinRelayInstanceResS2CEvt parser;
-				protocolChk(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("RelayInstanceID", parser.GetRelayInstanceID());
 				variableBuilder.SetVariable("MyEndpointID", parser.GetMyEndpointID());
 				variableBuilder.SetVariable("MemberInfos", parser.GetMemberInfos());
-
-
-			Proc_End:
 
 				return hr;
 
@@ -179,12 +165,11 @@ namespace SF
 
 			Result JoinRelayInstanceResS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
-				protocolMem(pMessageBase = new(memHeap) JoinRelayInstanceResS2CEvt(std::forward<MessageDataPtr>(pIMsg)));
-				protocolChk(pMessageBase->ParseMsg());
+				protocolCheckMem(pMessageBase = new(memHeap) JoinRelayInstanceResS2CEvt(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
 
-			Proc_End:
 				return hr;
 
 			}; // Result JoinRelayInstanceResS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
@@ -192,7 +177,15 @@ namespace SF
 			MessageData* JoinRelayInstanceResS2CEvt::Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 			{
  				MessageData *pNewMsg = nullptr;
-				Result hr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
 
 				uint8_t *pMsgData = nullptr;
 
@@ -204,7 +197,7 @@ namespace SF
 
 
 				uint16_t numberOfInMemberInfos = (uint16_t)InMemberInfos.size(); 
-				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::JoinRelayInstanceResS2CEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::JoinRelayInstanceResS2CEvt::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
@@ -214,16 +207,7 @@ namespace SF
 				Protocol::PackParamCopy( pMsgData, &numberOfInMemberInfos, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InMemberInfos.data(), (INT)(sizeof(RelayPlayerInfo)*InMemberInfos.size())); 
 
-
-			Proc_End:
-
-				if(!hr)
-				{
- 					if(pNewMsg != nullptr) delete pNewMsg;
-					pNewMsg = nullptr;
-				}
-				return pNewMsg;
-
+				return hr;
 			}; // MessageData* JoinRelayInstanceResS2CEvt::Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 
 
@@ -241,21 +225,18 @@ namespace SF
 			const MessageID LeaveRelayInstanceC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 2);
 			Result LeaveRelayInstanceC2SEvt::ParseMessage( MessageData* pIMsg )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 				int iMsgSize;
 				uint8_t* pCur;
 
-				protocolChkPtr(pIMsg);
+				protocolCheckPtr(pIMsg);
 
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(PlayerID) ) );
-
-
-			Proc_End:
+				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(PlayerID) ) );
 
 				return hr;
 
@@ -263,17 +244,14 @@ namespace SF
 
 			Result LeaveRelayInstanceC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 
 				LeaveRelayInstanceC2SEvt parser;
-				protocolChk(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("RelayInstanceID", parser.GetRelayInstanceID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-
-
-			Proc_End:
 
 				return hr;
 
@@ -281,12 +259,11 @@ namespace SF
 
 			Result LeaveRelayInstanceC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
-				protocolMem(pMessageBase = new(memHeap) LeaveRelayInstanceC2SEvt(std::forward<MessageDataPtr>(pIMsg)));
-				protocolChk(pMessageBase->ParseMsg());
+				protocolCheckMem(pMessageBase = new(memHeap) LeaveRelayInstanceC2SEvt(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
 
-			Proc_End:
 				return hr;
 
 			}; // Result LeaveRelayInstanceC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
@@ -294,7 +271,15 @@ namespace SF
 			MessageData* LeaveRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
-				Result hr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
 
 				uint8_t *pMsgData = nullptr;
 
@@ -303,23 +288,14 @@ namespace SF
 					+ sizeof(PlayerID));
 
 
-				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::LeaveRelayInstanceC2SEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::LeaveRelayInstanceC2SEvt::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
 				Protocol::PackParamCopy( pMsgData, &InRelayInstanceID, sizeof(uint32_t));
 				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(PlayerID));
 
-
-			Proc_End:
-
-				if(!hr)
-				{
- 					if(pNewMsg != nullptr) delete pNewMsg;
-					pNewMsg = nullptr;
-				}
-				return pNewMsg;
-
+				return hr;
 			}; // MessageData* LeaveRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
 
 
@@ -337,21 +313,18 @@ namespace SF
 			const MessageID PlayerJoinS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 3);
 			Result PlayerJoinS2CEvt::ParseMessage( MessageData* pIMsg )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 				int iMsgSize;
 				uint8_t* pCur;
 
-				protocolChkPtr(pIMsg);
+				protocolCheckPtr(pIMsg);
 
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_JoinedPlayerInfo, pCur, iMsgSize, sizeof(RelayPlayerInfo) ) );
-
-
-			Proc_End:
+				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_JoinedPlayerInfo, pCur, iMsgSize, sizeof(RelayPlayerInfo) ) );
 
 				return hr;
 
@@ -359,17 +332,14 @@ namespace SF
 
 			Result PlayerJoinS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 
 				PlayerJoinS2CEvt parser;
-				protocolChk(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("RelayInstanceID", parser.GetRelayInstanceID());
 				variableBuilder.SetVariable("JoinedPlayerInfo", parser.GetJoinedPlayerInfo());
-
-
-			Proc_End:
 
 				return hr;
 
@@ -377,12 +347,11 @@ namespace SF
 
 			Result PlayerJoinS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
-				protocolMem(pMessageBase = new(memHeap) PlayerJoinS2CEvt(std::forward<MessageDataPtr>(pIMsg)));
-				protocolChk(pMessageBase->ParseMsg());
+				protocolCheckMem(pMessageBase = new(memHeap) PlayerJoinS2CEvt(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
 
-			Proc_End:
 				return hr;
 
 			}; // Result PlayerJoinS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
@@ -390,7 +359,15 @@ namespace SF
 			MessageData* PlayerJoinS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo )
 			{
  				MessageData *pNewMsg = nullptr;
-				Result hr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
 
 				uint8_t *pMsgData = nullptr;
 
@@ -399,23 +376,14 @@ namespace SF
 					+ sizeof(RelayPlayerInfo));
 
 
-				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::PlayerJoinS2CEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::PlayerJoinS2CEvt::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
 				Protocol::PackParamCopy( pMsgData, &InRelayInstanceID, sizeof(uint32_t));
 				Protocol::PackParamCopy( pMsgData, &InJoinedPlayerInfo, sizeof(RelayPlayerInfo));
 
-
-			Proc_End:
-
-				if(!hr)
-				{
- 					if(pNewMsg != nullptr) delete pNewMsg;
-					pNewMsg = nullptr;
-				}
-				return pNewMsg;
-
+				return hr;
 			}; // MessageData* PlayerJoinS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo )
 
 
@@ -433,22 +401,19 @@ namespace SF
 			const MessageID PlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 4);
 			Result PlayerLeftS2CEvt::ParseMessage( MessageData* pIMsg )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 				int iMsgSize;
 				uint8_t* pCur;
 
-				protocolChkPtr(pIMsg);
+				protocolCheckPtr(pIMsg);
 
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_LeftPlayerID, pCur, iMsgSize, sizeof(PlayerID) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_KickedReason, pCur, iMsgSize, sizeof(uint32_t) ) );
-
-
-			Proc_End:
+				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_LeftPlayerID, pCur, iMsgSize, sizeof(PlayerID) ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_KickedReason, pCur, iMsgSize, sizeof(uint32_t) ) );
 
 				return hr;
 
@@ -456,18 +421,15 @@ namespace SF
 
 			Result PlayerLeftS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 
 				PlayerLeftS2CEvt parser;
-				protocolChk(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("RelayInstanceID", parser.GetRelayInstanceID());
 				variableBuilder.SetVariable("LeftPlayerID", parser.GetLeftPlayerID());
 				variableBuilder.SetVariable("KickedReason", parser.GetKickedReason());
-
-
-			Proc_End:
 
 				return hr;
 
@@ -475,12 +437,11 @@ namespace SF
 
 			Result PlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
-				protocolMem(pMessageBase = new(memHeap) PlayerLeftS2CEvt(std::forward<MessageDataPtr>(pIMsg)));
-				protocolChk(pMessageBase->ParseMsg());
+				protocolCheckMem(pMessageBase = new(memHeap) PlayerLeftS2CEvt(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
 
-			Proc_End:
 				return hr;
 
 			}; // Result PlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
@@ -488,7 +449,15 @@ namespace SF
 			MessageData* PlayerLeftS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
 			{
  				MessageData *pNewMsg = nullptr;
-				Result hr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
 
 				uint8_t *pMsgData = nullptr;
 
@@ -498,7 +467,7 @@ namespace SF
 					+ sizeof(uint32_t));
 
 
-				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::PlayerLeftS2CEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::PlayerLeftS2CEvt::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
@@ -506,16 +475,7 @@ namespace SF
 				Protocol::PackParamCopy( pMsgData, &InLeftPlayerID, sizeof(PlayerID));
 				Protocol::PackParamCopy( pMsgData, &InKickedReason, sizeof(uint32_t));
 
-
-			Proc_End:
-
-				if(!hr)
-				{
- 					if(pNewMsg != nullptr) delete pNewMsg;
-					pNewMsg = nullptr;
-				}
-				return pNewMsg;
-
+				return hr;
 			}; // MessageData* PlayerLeftS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
 
 
@@ -533,26 +493,23 @@ namespace SF
 			const MessageID RelayPacketC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 5);
 			Result RelayPacketC2SEvt::ParseMessage( MessageData* pIMsg )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 				int iMsgSize;
 				uint8_t* pCur;
 				uint16_t numberofPayload = 0; uint8_t* pPayload = nullptr;
 
-				protocolChkPtr(pIMsg);
+				protocolCheckPtr(pIMsg);
 
 				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
 				pCur = pIMsg->GetMessageData();
 
-				protocolChk( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_SenderEndpointID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &m_TargetEndpointMask, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolChk( Protocol::StreamParamCopy( &numberofPayload, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolChk( Protocol::StreamParamLnk( pPayload, pCur, iMsgSize, sizeof(uint8_t)*numberofPayload ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_SenderEndpointID, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolCheck( Protocol::StreamParamCopy( &m_TargetEndpointMask, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolCheck( Protocol::StreamParamCopy( &numberofPayload, pCur, iMsgSize, sizeof(uint16_t) ) );
+				protocolCheck( Protocol::StreamParamLnk( pPayload, pCur, iMsgSize, sizeof(uint8_t)*numberofPayload ) );
 				m_Payload.SetLinkedBuffer(numberofPayload, numberofPayload, pPayload);
-
-
-			Proc_End:
 
 				return hr;
 
@@ -560,19 +517,16 @@ namespace SF
 
 			Result RelayPacketC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
 
 				RelayPacketC2SEvt parser;
-				protocolChk(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("RelayInstanceID", parser.GetRelayInstanceID());
 				variableBuilder.SetVariable("SenderEndpointID", parser.GetSenderEndpointID());
 				variableBuilder.SetVariable("TargetEndpointMask", parser.GetTargetEndpointMask());
 				variableBuilder.SetVariable("Payload", parser.GetPayload());
-
-
-			Proc_End:
 
 				return hr;
 
@@ -580,12 +534,11 @@ namespace SF
 
 			Result RelayPacketC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
- 				Result hr;
+ 				FunctionContext hr;
 
-				protocolMem(pMessageBase = new(memHeap) RelayPacketC2SEvt(std::forward<MessageDataPtr>(pIMsg)));
-				protocolChk(pMessageBase->ParseMsg());
+				protocolCheckMem(pMessageBase = new(memHeap) RelayPacketC2SEvt(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
 
-			Proc_End:
 				return hr;
 
 			}; // Result RelayPacketC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
@@ -593,7 +546,15 @@ namespace SF
 			MessageData* RelayPacketC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 			{
  				MessageData *pNewMsg = nullptr;
-				Result hr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
 
 				uint8_t *pMsgData = nullptr;
 
@@ -605,7 +566,7 @@ namespace SF
 
 
 				uint16_t numberOfInPayload = (uint16_t)InPayload.size(); 
-				protocolMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::RelayPacketC2SEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::RelayPacketC2SEvt::MID, __uiMessageSize ) );
 
 				pMsgData = pNewMsg->GetMessageData();
 
@@ -615,16 +576,7 @@ namespace SF
 				Protocol::PackParamCopy( pMsgData, &numberOfInPayload, sizeof(uint16_t)); 
 				Protocol::PackParamCopy( pMsgData, InPayload.data(), (INT)(sizeof(uint8_t)*InPayload.size())); 
 
-
-			Proc_End:
-
-				if(!hr)
-				{
- 					if(pNewMsg != nullptr) delete pNewMsg;
-					pNewMsg = nullptr;
-				}
-				return pNewMsg;
-
+				return hr;
 			}; // MessageData* RelayPacketC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 
 

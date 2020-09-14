@@ -279,6 +279,16 @@ namespace ProtocolCompiler
             NewLine();
         }
 
+        public void CloseSection(string strSectionClose)
+        {
+            string strSection = m_SectionStack.Pop();
+
+            IndentDec();
+
+            MatchIndent(); m_OutStream.Write(strSectionClose);
+            NewLine();
+        }
+
         public void CloseAllSection()
         {
             while (m_SectionStack.Count > 0)
@@ -288,13 +298,7 @@ namespace ProtocolCompiler
         public void DefaultHRESULT()
         {
             MatchIndent();
-            OutStream.WriteLine("Result hr;");
-        }
-
-        public void ProcEnd()
-        {
-            MatchIndent(-1);
-            OutStream.WriteLine("Proc_End:");
+            OutStream.WriteLine("FunctionContext hr;");
         }
 
         public void ReturnHR()

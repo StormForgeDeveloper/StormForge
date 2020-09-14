@@ -685,6 +685,10 @@ namespace SF {
 	{
 	public:
 
+		using ResultType = decltype(auto);
+
+	public:
+
 		FunctionContext() = default;
 		FunctionContext(Result src) : m_Hr(src) {}
 		FunctionContext(ExitFunc&& errorFunc)
@@ -694,17 +698,23 @@ namespace SF {
 
 		~FunctionContext()
 		{
-			m_ExitFunc(m_Hr);
+			if (!m_ExitFuncHasCalled)
+			{
+				m_ExitFuncHasCalled = true;
+				m_ExitFunc(m_Hr);
+			}
 		}
 
 		FunctionContext& operator = (Result src) { m_Hr = src; return *this; }
 
 		operator Result() const { return m_Hr; }
+		operator ResultType() const { m_ExitFuncHasCalled = true;  return m_ExitFunc(m_Hr); }
 		explicit operator bool() const { return m_Hr; }
 
 	private:
 
 		// function will be invoked when it has error
+		mutable bool m_ExitFuncHasCalled = false;
 		ExitFunc m_ExitFunc;
 		Result m_Hr;
 	};
@@ -716,6 +726,12 @@ namespace SF {
 
 	#define OffsetOf(s,m) ((size_t)&reinterpret_cast<char const volatile&>((((s*)0)->m)))
 	#define ContainerPtrFromMember(ContainerTypeT, member, memberPtr) ((ContainerTypeT*)((uint8_t*)(memberPtr) - OffsetOf(ContainerTypeT,member)))
+
+
+
+	// Returns serialized size
+	template<class DataType>
+	inline size_t SerializedSizeOf(const DataType& Value)	{ return sizeof(DataType); }
 
 
 #ifndef SWIG

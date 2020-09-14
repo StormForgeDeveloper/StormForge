@@ -11,7 +11,6 @@
 
 
 
-
 // parsing helper
 template< class SrcType >
 void PackParamCopy( uint8_t* &pMsgCur, SrcType* pSrc, size_t iParamSize )

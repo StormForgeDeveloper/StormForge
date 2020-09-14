@@ -35,7 +35,7 @@ namespace Message {
 	//	Network Message wrapper class
 	//
 	
-	MessageData::MessageData( uint uiMsgBufSize, const uint8_t* pData )
+	MessageData::MessageData(uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData )
 		:m_bIsSequenceAssigned(false)
 	{
 		m_pMsgHeader = (MessageHeader*)(this+1);
@@ -51,6 +51,8 @@ namespace Message {
 			// Make sure the sequence is cleared
 			Assert(GetMessageHeader()->msgID.IDSeq.Sequence == 0);
 		}
+
+		GetMessageHeader()->SetIDNLen(uiMsgID, uiMsgBufSize);
 	}
 
 	MessageData::~MessageData()
@@ -149,12 +151,6 @@ namespace Message {
 		}
 
 		void *pPtr = nullptr;
-		// TODO: use regular allocation until memory pool is fixed
-		//MemoryPool *pMemPool = memoryManager.GetMemoryPoolBySize(szAllocate);
-		//if(pMemPool == nullptr)
-		//	return nullptr;
-
-		//pPtr = pMemPool->Alloc("MessageData::NewMessage");
 		pPtr = new(heap) uint8_t[szAllocate];
 		if (pPtr == nullptr)
 			return nullptr;
@@ -163,9 +159,7 @@ namespace Message {
 		if (pBuffer == nullptr)
 			return nullptr;
 
-		MessageData *pMsg = new(pBuffer) MessageData(uiMsgBufSize, pData);
-
-		pMsg->GetMessageHeader()->SetIDNLen(uiMsgID, uiMsgBufSize);
+		MessageData *pMsg = new(pBuffer) MessageData(uiMsgID, uiMsgBufSize, pData);
 
 		return pMsg;
 	}
@@ -215,7 +209,7 @@ namespace Message {
 	}
 
 	
-	// Update checksume
+	// Update checksum
 	void MessageData::UpdateChecksum()
 	{
 		uint length = 0;
@@ -239,7 +233,7 @@ namespace Message {
 			m_pMsgHeader->Crc32 = ~m_pMsgHeader->Crc32;
 	}
 	
-	// Update checksume
+	// Update checksum
 	void MessageData::UpdateChecksumNEncrypt()
 	{
 		uint length = 0;

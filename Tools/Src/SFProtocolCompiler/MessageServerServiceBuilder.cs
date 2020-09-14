@@ -195,7 +195,6 @@ namespace ProtocolCompiler
 
             NewLine();
 
-            ProcEnd(); NewLine();
             ReturnHR(); NewLine();
 
             CloseSection();

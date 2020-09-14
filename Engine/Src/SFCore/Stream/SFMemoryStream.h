@@ -41,13 +41,13 @@ namespace SF
 		// Reset position to begin
 		void Reset();
 
-		const uint8_t* GetBufferPtr() const { return m_Buffer->data(); }
-		uint8_t* GetBufferPtr() { return const_cast<uint8_t*>(m_Buffer->data()); }
-
 		size_t GetBufferSize() const { return m_Buffer == nullptr ? 0 : m_Buffer->GetAllocatedSize(); }
 
 		// return true if the stream is valid and have something read
 		virtual bool CanRead() override { return m_Buffer != nullptr && m_Position < m_Buffer->size(); }
+
+		virtual uint8_t* GetBufferPtr() override { return const_cast<uint8_t*>(m_Buffer->data()); }
+		virtual const uint8_t* GetBufferPtr() const override { return m_Buffer->data(); }
 
 		virtual size_t Seek(SeekMode seekPos, int64_t offset) override;
 

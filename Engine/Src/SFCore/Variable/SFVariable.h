@@ -35,7 +35,9 @@ namespace SF {
 
 	class Variable
 	{
-	private:
+	public:
+
+		using TypeNameType = StringCrc32;
 
 	public:
 
@@ -47,7 +49,7 @@ namespace SF {
 		{
 		}
 
-		virtual StringCrc32 GetTypeName() const = 0;
+		virtual TypeNameType GetTypeName() const = 0;
 
 
 		virtual void SetValue(bool value) { unused(value); }
@@ -135,6 +137,10 @@ namespace SF {
 	template<> inline StringCrc64 Variable::GetValue<StringCrc64>() { return GetValueStringCrc64(); }
 	//template<> inline Array<uint8_t> Variable::GetValue<Array<uint8_t>>() { return GetValueBLOB(); }
 
+
+
+	template<>
+	inline size_t SerializedSizeOf(const Variable& Value) { return Value.GetSerializedSize(); }
 
 
 

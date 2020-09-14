@@ -242,7 +242,8 @@ namespace SF
             new TypeMap( ParameterType.MatchingQueueTicket, 8, typeof(MatchingQueueTicket) ),
             new TypeMap( ParameterType.LocalUID, 8, typeof(LocalUID), cppTypeName:"uint64_t" ),
 
-            new TypeMap( ParameterType.VariableBox, -1, typeof(object), cppTypeName:"VariableBox" ),
+            new TypeMap( ParameterType.Variable, -1, typeof(object), cppTypeName:"Variable" ),
+            //new TypeMap( ParameterType.VariableBox, -1, typeof(object), cppTypeName:"VariableBox" ),
             new TypeMap( ParameterType.VariableTable, -1, typeof(VariableTable), cppTypeName:"VariableTable" ),
 
             new TypeMap( ParameterType.Vector2, 8, typeof(Vector2) ),

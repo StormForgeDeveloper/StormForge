@@ -80,6 +80,10 @@ namespace SF
 
 		virtual size_t GetRemainSize() const { return GetSize() - GetPosition(); }
 
+		// returns buffer pointer if it supports
+		virtual uint8_t* GetBufferPtr() { assert(false); return nullptr; }
+		virtual const uint8_t* GetBufferPtr() const { assert(false); return nullptr; }
+
 		virtual Result Read(void* buffer, size_t readSize) = 0;
 
 		template<class DataType>
