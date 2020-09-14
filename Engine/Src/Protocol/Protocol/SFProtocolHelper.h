@@ -20,6 +20,7 @@
 #include "String/SFString.h"
 #include "String/SFStringSerialization.h"
 #include "Variable/SFVariableSerialization.h"
+#include "Container/SFArraySerialization.h"
 #include "Util/SFLog.h"
 #include "String/SFToStringEngineTypes.h"
 

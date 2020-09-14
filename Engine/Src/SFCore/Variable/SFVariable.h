@@ -139,9 +139,6 @@ namespace SF {
 
 
 
-	template<>
-	inline size_t SerializedSizeOf(const Variable& Value) { return Value.GetSerializedSize(); }
-
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////

@@ -33,6 +33,7 @@ namespace SF {
 	{
 	public:
 
+		using KeyType = StringCrc64;
 		using Iterator = SortedArray<StringCrc64, Variable*, true, false>::Iterator;
 
 	private:
@@ -43,7 +44,7 @@ namespace SF {
 		IHeap& m_Heap;
 
 		// Variable 
-		SortedArray<StringCrc64, Variable*, true, false> m_VairableTable;
+		SortedArray<KeyType, Variable*, true, false> m_VairableTable;
 
 	public:
 

@@ -26,8 +26,13 @@ namespace SF {
 	// 
 	class NamedVariableBox : public VariableBox
 	{
+	public:
+
+		using NameType = StringCrc32;
+
+
 	private:
-		StringCrc32 m_Name;
+		NameType m_Name;
 
 	public:
 
@@ -35,8 +40,8 @@ namespace SF {
 		NamedVariableBox(const NamedVariableBox& src);
 		NamedVariableBox(StringCrc32 name, const Variable& src);
 
-		void SetName(StringCrc32 Name) { m_Name = Name; }
-		StringCrc32 GetName() const { return m_Name; }
+		void SetName(NameType Name) { m_Name = Name; }
+		NameType GetName() const { return m_Name; }
 
 		~NamedVariableBox() = default;
 

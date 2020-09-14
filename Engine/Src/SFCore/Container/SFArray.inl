@@ -494,7 +494,7 @@ namespace SF {
 		}
 
 		template< class DataType >
-		void ArrayView<DataType>::SetLinkedBuffer(uint maxDataCount, uint dataCount, DataType* pDataPtr)
+		void ArrayView<DataType>::SetLinkedBuffer(size_t maxDataCount, size_t dataCount, DataType* pDataPtr)
 		{
 			Array<DataType>::SetBuffPtr(maxDataCount, pDataPtr);
 			Array<DataType>::resize(dataCount);

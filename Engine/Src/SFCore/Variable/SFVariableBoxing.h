@@ -57,10 +57,6 @@ namespace SF {
 	};
 
 
-	template<>
-	inline size_t SerializedSizeOf(const VariableBox& Value) { auto pVariable = Value.GetVariable(); return pVariable != nullptr ? pVariable->GetSerializedSize() : sizeof(nullptr); }
-
-
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//

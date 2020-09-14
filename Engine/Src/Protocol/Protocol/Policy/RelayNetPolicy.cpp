@@ -29,10 +29,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Relay::JoinRelayInstanceC2SEvt::Create(m_pConnection->GetIOHeap(), InRelayInstanceID, InPlayerID, InPlayerIdentifier);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -45,10 +45,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Relay::LeaveRelayInstanceC2SEvt::Create(m_pConnection->GetIOHeap(), InRelayInstanceID, InPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -61,10 +61,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Relay::RelayPacketC2SEvt::Create(m_pConnection->GetIOHeap(), InRelayInstanceID, InSenderEndpointID, InTargetEndpointMask, InPayload);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -79,10 +79,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Relay::JoinRelayInstanceResS2CEvt::Create(m_pConnection->GetIOHeap(), InResult, InRelayInstanceID, InMyEndpointID, InMemberInfos);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -95,10 +95,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Relay::PlayerJoinS2CEvt::Create(m_pConnection->GetIOHeap(), InRelayInstanceID, InJoinedPlayerInfo);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -111,10 +111,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Relay::PlayerLeftS2CEvt::Create(m_pConnection->GetIOHeap(), InRelayInstanceID, InLeftPlayerID, InKickedReason);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 

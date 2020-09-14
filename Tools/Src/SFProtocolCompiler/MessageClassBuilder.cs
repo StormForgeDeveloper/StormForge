@@ -307,8 +307,16 @@ namespace ProtocolCompiler
                         default:
                             if (param.IsArray)
                             {
-                                MatchIndent(); OutStream.WriteLine(
-                                    string.Format("ArrayView<{0}> m_{1};", ToTargetTypeName(param.Type), param.Name));
+                                if (IsVariableSizeType(param.Type))
+                                {
+                                    MatchIndent(); OutStream.WriteLine(
+                                        string.Format("DynamicArray<{0}*> m_{1};", ToTargetTypeName(param.Type), param.Name));
+                                }
+                                else
+                                {
+                                    MatchIndent(); OutStream.WriteLine(
+                                        string.Format("ArrayView<{0}> m_{1};", ToTargetTypeName(param.Type), param.Name));
+                                }
                             }
                             else
                             {
@@ -464,29 +472,6 @@ namespace ProtocolCompiler
 
             bool bHasParameter = parameters != null && parameters.Length > 0;
 
-            if (bHasParameter)
-            {
-                MatchIndent(); OutStream.WriteLine("int iMsgSize;");
-                MatchIndent(); OutStream.WriteLine("uint8_t* pCur;");
-
-                // define variable first
-                foreach (Parameter param in parameters)
-                {
-                    switch (param.Type)
-                    {
-                        case ParameterType.String:
-                            MatchIndent(); OutStream.WriteLine("{0} {1} = 0;", ArrayLenType, ArrayLenName(param.Name));
-                            break;
-                        default:
-                            if (param.IsArray)
-                            {
-                                MatchIndent(); OutStream.WriteLine("{0} numberof{1} = 0; {2}* p{1} = nullptr;", ArrayLenType, param.Name, ToTargetTypeName(param.Type));
-                            }
-                            break;
-                    }
-                }
-            }
-
             NewLine();
             MatchIndent(); OutStream.WriteLine("protocolCheckPtr(pIMsg);");
             NewLine();
@@ -496,20 +481,23 @@ namespace ProtocolCompiler
                 // array len types
                 if (Group.IsMobile)
                 {
-                    MatchIndent(); OutStream.WriteLine("iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
+                    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
                 }
                 else
                 {
-                    MatchIndent(); OutStream.WriteLine("iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
+                    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
                 }
-                MatchIndent(); OutStream.WriteLine("pCur = pIMsg->GetMessageData();");
+                MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
+                MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
+                MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
+                MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;");
             }
             NewLine();
 
             if (parameters == null)
             {
                 // nothing to process
-                MatchIndent(); OutStream.WriteLine("return hr;");
+                MatchIndent(); ReturnHR();
             }
             else
             {
@@ -519,21 +507,27 @@ namespace ProtocolCompiler
                     switch (param.Type)
                     {
                         case ParameterType.String:
-                            //MatchIndent(); OutStream.WriteLine("{0} {1} = 0;", ArrayLenType, ArrayLenName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamCopy( &{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, ArrayLenName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamLnk( m_{0}, pCur, iMsgSize, sizeof(char)*{1} ) );", param.Name, ArrayLenName(param.Name));
+                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink(m_{0}, ArrayLen * sizeof(char)));", param.Name);
                             break;
                         default:
                             if (param.IsArray)
                             {
-                                //MatchIndent(); OutStream.WriteLine("{0} numberof{1} = 0; {2}* p{1} = nullptr;", ArrayLenType, param.Name, param.Type.ToString());
-                                MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamCopy( &numberof{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, param.Name);
-                                MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamLnk( p{0}, pCur, iMsgSize, sizeof({1})*numberof{0} ) );", param.Name, ToTargetTypeName(param.Type));
-                                MatchIndent(); OutStream.WriteLine("m_{0}.SetLinkedBuffer(numberof{0}, numberof{0}, p{0});", param.Name);
+                                if (IsVariableSizeType(param.Type))
+                                {
+                                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink(m_{0}));", param.Name);
+                                }
+                                else
+                                {
+                                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+                                    MatchIndent(); OutStream.WriteLine("{1}* {0}Ptr = nullptr;", param.Name, ToTargetTypeName(param.Type));
+                                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink({0}Ptr, ArrayLen * sizeof({1})));", param.Name, ToTargetTypeName(param.Type));
+                                    MatchIndent(); OutStream.WriteLine("m_{0}.SetLinkedBuffer(ArrayLen, {0}Ptr);", param.Name);
+                                }
                             }
                             else
                             {
-                                MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamCopy( &m_{0}, pCur, iMsgSize, sizeof({1}) ) );", param.Name, ToTargetTypeName(param.Type));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(m_{0}));", param.Name);
                             }
                             break;
                     }
@@ -634,8 +628,6 @@ namespace ProtocolCompiler
 
             DefaultHRESULT(); NewLine();
 
-            MatchIndent(); OutStream.WriteLine("int iMsgSize;");
-            MatchIndent(); OutStream.WriteLine("uint8_t* pCur;");
             MatchIndent(); OutStream.WriteLine("MessageData* pIMsg = GetMessage();");
             MatchIndent(); OutStream.WriteLine("RouteContext routeContext;");
             NewLine();
@@ -645,20 +637,22 @@ namespace ProtocolCompiler
             // array len types
             if (Group.IsMobile)
             {
-                MatchIndent(); OutStream.WriteLine("iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
+                MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
             }
             else
             {
-                MatchIndent(); OutStream.WriteLine("iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
+                MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
             }
 
-            MatchIndent(); OutStream.WriteLine("pCur = pIMsg->GetMessageData();");
+            MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
+            MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
+            MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
+            MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;");
             NewLine();
 
             if (parameters == null)
             {
                 // nothing to process
-                MatchIndent(); OutStream.WriteLine("goto Proc_End;");
             }
             else
             {
@@ -668,22 +662,20 @@ namespace ProtocolCompiler
                     switch (param.Type)
                     {
                         case ParameterType.String:
-                            MatchIndent(); OutStream.WriteLine("{0} {1} = 0;", ArrayLenType, ArrayLenName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamCopy( &{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, ArrayLenName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("pCur += sizeof(char)*{1}; iMsgSize -= sizeof(char)*{1};", ArrayLenName(param.Name));
+                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof(char));");
                             break;
                         case ParameterType.RouteContext:
                             break;
                         default:
                             if (param.IsArray)
                             {
-                                MatchIndent(); OutStream.WriteLine("pCur += sizeof({0}); iMsgSize -= sizeof({0});", ArrayLenType);
-                                MatchIndent(); OutStream.WriteLine("pCur += sizeof({0})*m_{1}.size(); iMsgSize -= (INT)(sizeof({0})*m_{1}.size());", ToTargetTypeName(param.Type), param.Name);
-                                //MatchIndent(); OutStream.WriteLine("pCur += sizeof({0})*m_{1}; iMsgSize -= sizeof({0})*m_{1};", param.Type.ToString(), ArrayLenName(param.Name));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof({0}));", ToTargetTypeName(param.Type));
                             }
                             else
                             {
-                                MatchIndent(); OutStream.WriteLine("pCur += sizeof({0}); iMsgSize -= sizeof({0});", param.Type);
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({0}));", ToTargetTypeName(param.Type));
                             }
                             break;
                     }
@@ -701,8 +693,8 @@ namespace ProtocolCompiler
             }
 
             NewLine();
-
-            ReturnHR(); NewLine();
+            ReturnHR();
+            NewLine();
 
             CloseSection();
         }
@@ -719,8 +711,6 @@ namespace ProtocolCompiler
 
             DefaultHRESULT(); NewLine();
 
-            MatchIndent(); OutStream.WriteLine("int iMsgSize;");
-            MatchIndent(); OutStream.WriteLine("uint8_t* pCur;");
             MatchIndent(); OutStream.WriteLine("MessageData* pIMsg = GetMessage();");
             MatchIndent(); OutStream.WriteLine("RouteContext routeContext;");
             NewLine();
@@ -730,56 +720,55 @@ namespace ProtocolCompiler
             // array len types
             if (Group.IsMobile)
             {
-                MatchIndent(); OutStream.WriteLine("iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
+                MatchIndent(); OutStream.WriteLine("size_t iMsgSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
             }
             else
             {
-                MatchIndent(); OutStream.WriteLine("iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
+                MatchIndent(); OutStream.WriteLine("size_t iMsgSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
             }
 
-            MatchIndent(); OutStream.WriteLine("pCur = pIMsg->GetMessageData();");
+            MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
+            MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
+            MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToOutputStream();");
+            MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;");
+            MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr");
             NewLine();
 
-            if (parameters == null)
+            // Skip until we meet route context
+            if (parameters != null)
             {
-                // nothing to process
-                MatchIndent(); OutStream.WriteLine("goto Proc_End;");
-            }
-            else
-            {
-                // Just follow the same process to parsing
                 foreach (Parameter param in parameters)
                 {
                     switch (param.Type)
                     {
                         case ParameterType.String:
-                            MatchIndent(); OutStream.WriteLine("{0} {1} = 0;", ArrayLenType, ArrayLenName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("protocolCheck( Protocol::StreamParamCopy( &{1}, pCur, iMsgSize, sizeof({0}) ) );", ArrayLenType, ArrayLenName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("pCur += sizeof(char)*{1}; iMsgSize -= sizeof(char)*{1};", ArrayLenName(param.Name));
+                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof(char);");
                             break;
                         default:
                             if (param.Type == ParameterType.RouteContext && param.Name == ParamRouteContext.Name)
                             {
-                                MatchIndent(); OutStream.WriteLine("Assert( iMsgSize >= (INT)sizeof(RouteContext) );");
+                                MatchIndent(); OutStream.WriteLine("pCur = input->GetBufferPtr() + input->GetPosition();");
+                                MatchIndent(); OutStream.WriteLine("Assert(input->GetRemainSize() >= sizeof(RouteContext));");
                                 MatchIndent(); OutStream.WriteLine("memcpy( &routeContext, pCur, sizeof(RouteContext) );");
                                 MatchIndent(); OutStream.WriteLine("routeContext.Components.To = to;");
                                 MatchIndent(); OutStream.WriteLine("memcpy( pCur, &routeContext, sizeof(RouteContext) );");
                             }
                             else if (param.Name == ParamRouteHopCount.Name)
                             {
-                                MatchIndent(); OutStream.WriteLine("Assert( iMsgSize >= (INT)sizeof({0}) );", ToTargetTypeName(ParamRouteHopCount.Type));
+                                MatchIndent(); OutStream.WriteLine("Assert(input->GetRemainSize() >= sizeof({0}));", ToTargetTypeName(ParamRouteHopCount.Type));
+                                MatchIndent(); OutStream.WriteLine("pCur = input->GetBufferPtr() + input->GetPosition();");
                                 MatchIndent(); OutStream.WriteLine("*({0}*)pCur = hopCount;", ToTargetTypeName(ParamRouteHopCount.Type));
                             }
 
                             if (param.IsArray)
                             {
-                                MatchIndent(); OutStream.WriteLine("pCur += sizeof({0}); iMsgSize -= sizeof({0});", ArrayLenType);
-                                MatchIndent(); OutStream.WriteLine("pCur += sizeof({0})*m_{1}.size(); iMsgSize -= (INT)(sizeof({0})*m_{1}.size());", ToTargetTypeName(param.Type), param.Name);
-                                //MatchIndent(); OutStream.WriteLine("pCur += sizeof({0})*m_{1}; iMsgSize -= sizeof({0})*m_{1};", param.Type.ToString(), ArrayLenName(param.Name));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof({0});", ToTargetTypeName(param.Type));
                             }
                             else
                             {
-                                MatchIndent(); OutStream.WriteLine("pCur += sizeof({0}); iMsgSize -= sizeof({0});", ToTargetTypeName(param.Type));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({});", ToTargetTypeName(param.Type));
                             }
                             break;
                     }
@@ -799,62 +788,6 @@ namespace ProtocolCompiler
             CloseSection();
         }
 
-        // Builder params size
-        public void BuildBuilderMessageSize(Parameter[] parameters, string strSizeVarName)
-        {
-            // size calculation
-            string strSize = "";
-            if (parameters != null)
-            {
-                foreach (Parameter param in parameters)
-                {
-                    string strLenName;
-                    switch (param.Type)
-                    {
-                        case ParameterType.String:
-                            strLenName = string.Format("__ui{0}Length", InParamName(param.Name));
-                            MatchIndent(); OutStream.WriteLine("{2} {0} = {1} ? ({2})(strlen({1})+1) : 1;", strLenName, InParamName(param.Name), ArrayLenType);
-                            strSize += string.Format(" + sizeof(uint16_t) + {0}", strLenName);
-                            break;
-                    }
-                }
-            }
-
-            MatchIndent();
-            string strMessageHeader = Group.IsMobile ? "MobileMessageHeader" : "MessageHeader";
-
-            if (strSize.Length > 0)
-                OutStream.Write(string.Format("unsigned {0} = (unsigned)(sizeof({1}) + {2} ", strSizeVarName, strMessageHeader, strSize));
-            else
-                OutStream.Write(string.Format("unsigned {0} = (unsigned)(sizeof({1}) ", strSizeVarName, strMessageHeader));
-
-            if (parameters != null)
-            {
-                foreach (Parameter param in parameters)
-                {
-                    switch (param.Type)
-                    {
-                        case ParameterType.String:
-                            continue;
-                    }
-
-                    NewLine();
-                    MatchIndent(1);
-                    if (param.IsArray)
-                    {
-                        OutStream.Write("+ sizeof({0})*{1}.size() + sizeof({2})", ToTargetTypeName(param.Type), InParamName(param.Name), ArrayLenType);
-                    }
-                    else
-                    {
-                        OutStream.Write("+ sizeof({0})", ToTargetTypeName(param.Type));
-                    }
-                }
-                OutStream.WriteLine(");");
-            }
-            else
-                OutStream.WriteLine(");");
-        }
-
         void BuildParamCpyPreamble(Parameter[] parameters)
         {
             if (parameters == null)
@@ -868,32 +801,6 @@ namespace ProtocolCompiler
                 else if (param.IsArray) // array
                 {
                     MatchIndent(); OutStream.WriteLine("{1} numberOf{0} = ({1}){0}.size(); ", InParamName(param.Name), ArrayLenType);
-                }
-            }
-        }
-
-        void BuildParamCpy(Parameter[] parameters)
-        {
-            if (parameters == null)
-                return;
-
-            foreach (Parameter param in parameters)
-            {
-                string strLenName;
-                if (IsStrType(param)) // string type
-                {
-                    strLenName = string.Format("__ui{0}Length", InParamName(param.Name));
-                    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, &{0}, sizeof(uint16_t) );", strLenName);
-                    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, {0} ? {0} : \"\", {1} );", InParamName(param.Name), strLenName);
-                }
-                else if (param.IsArray) // array
-                {
-                    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, &numberOf{0}, sizeof({1})); ", InParamName(param.Name), ArrayLenType);
-                    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, {0}.data(), (INT)(sizeof({1})*{0}.size())); ", InParamName(param.Name), ToTargetTypeName(param.Type));
-                }
-                else // generic type
-                {
-                    MatchIndent(); OutStream.Write("Protocol::PackParamCopy( pMsgData, &{0}, sizeof({1}));", InParamName(param.Name), ToTargetTypeName(param.Type)); NewLine();
                 }
             }
         }
@@ -925,24 +832,60 @@ namespace ProtocolCompiler
                 NewLine();
             }
 
-            BuildBuilderMessageSize(parameters, "__uiMessageSize");
-            NewLine();
-
-            NewLine();
-
             BuildParamCpyPreamble(parameters);
+
+            //BuildBuilderMessageSize(parameters, "__uiMessageSize");
+            string strSizeVarName = "__uiMessageSize";
+            string strMessageHeader = Group.IsMobile ? "MobileMessageHeader" : "MessageHeader";
+            MatchIndent(); OutStream.WriteLine(string.Format("unsigned {0} = (unsigned)(sizeof({1}) ", strSizeVarName, strMessageHeader));
+            if (parameters != null)
+            {
+                foreach (Parameter param in parameters)
+                {
+                    MatchIndent(1); OutStream.WriteLine(", SerializedSizeOf({0})", InParamName(param.Name));
+                }
+            }
+
+            MatchIndent(); OutStream.WriteLine(");");
+            NewLine();
 
             MatchIndent(); OutStream.WriteLine(
                 string.Format("protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, {0}::{1}{2}::MID, __uiMessageSize ) );", Group.Name, Name, typeName));
-            NewLine();
 
             if (bHasParameters)
             {
-                MatchIndent(); OutStream.WriteLine("pMsgData = pNewMsg->GetMessageData();");
+                if (Group.IsMobile)
+                {
+                    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
+                }
+                else
+                {
+                    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));");
+                }
+                MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());");
+                MatchIndent(); OutStream.WriteLine("OutputMemoryStream outputStream(BufferView);");
+                MatchIndent(); OutStream.WriteLine("auto* output = outputStream.ToOutputStream();");
                 NewLine();
-            }
 
-            BuildParamCpy(parameters);
+                foreach (Parameter param in parameters)
+                {
+                    // TODO: maybe avoid multiple strlen?
+                    //if (IsStrType(param)) // string type
+                    //{
+                    //    string strLenName = string.Format("__ui{0}Length", InParamName(param.Name));
+                    //    MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write({0}, {1}));", InParamName(param.Name), strLenName);
+                    //}
+                    //else if (param.IsArray) // array
+                    //{
+                    //    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, &numberOf{0}, sizeof({1})); ", InParamName(param.Name), ArrayLenType);
+                    //    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, {0}.data(), (INT)(sizeof({1})*{0}.size())); ", InParamName(param.Name), ToTargetTypeName(param.Type));
+                    //}
+                    //else
+                    {
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write({0}));", InParamName(param.Name));
+                    }
+                }
+            }
             NewLine();
 
             MatchIndent(); OutStream.WriteLine("return hr;");

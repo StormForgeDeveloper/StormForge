@@ -29,10 +29,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::LoginCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGameID, InID, InPassword);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -45,10 +45,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::LoginByFacebookCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGameID, InUID, InFaceBookName, InEMail, InFacebookToken);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -61,10 +61,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::CreateRandomUserCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGameID, InCellPhone);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -77,10 +77,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::UpdateMyScoreCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InRankingScore, InRankingType, InCount);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -93,10 +93,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::GetRankingListCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InRankingType, InBaseRanking, InCount);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -109,10 +109,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::DataTestCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InTestData);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -125,10 +125,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::HeartBitC2SEvt::Create(m_pConnection->GetIOHeap());
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -141,10 +141,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::DebugPrintALLRankingCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InFileName);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -159,10 +159,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::LoginRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InGameServerAddr, InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -175,10 +175,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::LoginByFacebookRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InGameServerAddr, InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -191,10 +191,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::CreateRandomUserRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InGameServerAddr, InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -207,10 +207,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::UpdateMyScoreRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InRanking);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -223,10 +223,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::GetRankingListRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InRanking);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -239,10 +239,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::DataTestRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InTestData);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -255,10 +255,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Login::DebugPrintALLRankingRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 

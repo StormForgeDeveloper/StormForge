@@ -100,6 +100,7 @@ set(SFCORE_LIB_FILES
 	Container/SFPageQueue.h
 	Container/SFPageQueue.inl
 	Container/SFArray.h
+	Container/SFArraySerialization.h
 	Container/SFSortedSet.h
 	Container/SFSortedArray.h
 	Container/SFSortedMap.h

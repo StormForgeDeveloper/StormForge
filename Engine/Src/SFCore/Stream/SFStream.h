@@ -13,7 +13,7 @@
 #include "SFTypedefs.h"
 #include "Object/SFSharedObject.h"
 #include "String/SFStringCrc64.h"
-
+#include "Container/SFArray.h"
 
 namespace SF
 {
@@ -92,6 +92,28 @@ namespace SF
 			return Read(&data, sizeof(data));
 		}
 
+		template<class DataType>
+		inline Result Read(Array<DataType>& data)
+		{
+			uint16_t NumItems{};
+			if (!Read(NumItems))
+				return ResultCode::END_OF_STREAM;
+
+			data.reserve(NumItems);
+
+			for (uint32_t iItem = 0; iItem < NumItems; iItem++)
+			{
+				DataType Item;
+				auto Ret = Read(Item);
+				if (!Ret)
+					return Ret;
+
+				data.push_back(Item);
+			}
+
+			return ResultCode::SUCCESS;
+		}
+
 
 		template< class DataType >
 		Result ReadLink(DataType*& pDst, size_t readSize)
@@ -106,6 +128,36 @@ namespace SF
 			}
 			else
 				pDst = nullptr;
+
+			return ResultCode::SUCCESS;
+		}
+
+		template< class DataType >
+		Result ReadLink(Array<std::decay_t<DataType>*>& data, size_t readSize)
+		{
+			uint16_t NumItems{};
+			if (!Read(NumItems))
+				return ResultCode::END_OF_STREAM;
+
+			data.reserve(NumItems);
+
+			for (uint32_t iItem = 0; iItem < NumItems; iItem++)
+			{
+				DataType* Item;
+				auto Ret = ReadLink(Item);
+				if (!Ret)
+					return Ret;
+
+				data.push_back(Item);
+
+				// if variable size data. the data should be bigger than type size
+				auto expectedSize = SerializedSizeOf(*Item);
+				assert(expectedSize >= sizeof(DataType));
+				if (expectedSize > sizeof(DataType))
+				{
+					Skip(expectedSize - sizeof(DataType));
+				}
+			}
 
 			return ResultCode::SUCCESS;
 		}

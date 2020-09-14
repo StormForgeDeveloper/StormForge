@@ -581,6 +581,8 @@ namespace SF {
 	typedef std::thread::id ThreadID;
 	typedef std::thread::native_handle_type			ThreadHandle;
 
+	typedef char* CharPtr;
+	typedef wchar_t* WCharPtr;
 
 	struct uint128_t
 	{
@@ -731,7 +733,7 @@ namespace SF {
 
 	// Returns serialized size
 	template<class DataType>
-	inline size_t SerializedSizeOf(const DataType& Value)	{ return sizeof(DataType); }
+	inline size_t SerializedSizeOf(const DataType& Value) { return sizeof(DataType); }
 
 
 #ifndef SWIG

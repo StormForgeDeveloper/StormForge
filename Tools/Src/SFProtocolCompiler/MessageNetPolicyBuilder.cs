@@ -203,7 +203,7 @@ namespace ProtocolCompiler
             DefaultHRESULT(); NewLine();
 
             MatchIndent(); OutStream.WriteLine(" MessageDataPtr pMessage;");
-            MatchIndent(); OutStream.WriteLine(" protocolChkPtr(m_pConnection);");
+            MatchIndent(); OutStream.WriteLine(" protocolCheckPtr(m_pConnection);");
             NewLine();
 
             if (parameters != null && parameters.Length > 0)
@@ -215,7 +215,7 @@ namespace ProtocolCompiler
                 MatchIndent(); OutStream.WriteLine(" pMessage = SF::Message::{0}::{1}{2}::Create(m_pConnection->GetIOHeap());", Group.Name, Name, typeName);
             }
 
-            MatchIndent(); OutStream.WriteLine(" protocolChkPtr(*pMessage);");
+            MatchIndent(); OutStream.WriteLine(" protocolCheckPtr(*pMessage);");
             NewLine();
 
             MatchIndent(); OutStream.WriteLine(" return m_pConnection->Send( pMessage );");

@@ -349,6 +349,13 @@ namespace ProtocolCompiler
             return csType.ToString();
         }
 
+        public virtual bool IsVariableSizeType(ParameterType type)
+        {
+            var paramInfo = SystemTypeInfo.GetParameterInfo(type);
+            
+            return paramInfo.ByteSize < 0;
+        }
+
         public bool IsEnum(Type csType)
         {
             return csType.IsEnum;

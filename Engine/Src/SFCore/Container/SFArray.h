@@ -54,6 +54,9 @@ namespace SF {
 		class Array
 		{
 		public:
+
+			using DataTypeDecay = std::decay_t<DataType>;
+
 #pragma pack(push)
 #pragma pack(4)
 
@@ -258,7 +261,7 @@ namespace SF {
 			constexpr Array(size_t allocatedSize, const DataType *pDataPtr);
 
 			template<size_t dataCount>
-			constexpr Array(const DataType pDataPtr[dataCount])
+			constexpr Array(const DataTypeDecay pDataPtr[dataCount])
 				: m_Heap(nullptr)
 			{
 				SetBuffPtr(dataCount, pDataPtr);
@@ -451,7 +454,7 @@ namespace SF {
 			constexpr ArrayView(size_t dataCount, const DataType* pDataPtr);
 			virtual ~ArrayView();
 
-			void SetLinkedBuffer(uint maxDataCount, uint dataCount, DataType* pDataPtr);
+			void SetLinkedBuffer(size_t maxDataCount, size_t dataCount, DataType* pDataPtr);
 			constexpr void SetLinkedBuffer(size_t dataCount, const DataType* pDataPtr);
 			void SetLinkedBuffer(const Array<DataType>& srcLink);
 

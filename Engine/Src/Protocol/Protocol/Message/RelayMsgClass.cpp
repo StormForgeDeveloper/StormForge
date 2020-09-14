@@ -31,19 +31,19 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t uiSizeOfPlayerIdentifier = 0;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(PlayerID) ) );
-				protocolCheck( Protocol::StreamParamCopy( &uiSizeOfPlayerIdentifier, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( m_PlayerIdentifier, pCur, iMsgSize, sizeof(char)*uiSizeOfPlayerIdentifier ) );
+				protocolCheck(input->Read(m_RelayInstanceID));
+				protocolCheck(input->Read(m_PlayerID));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_PlayerIdentifier, ArrayLen * sizeof(char)));
 
 				return hr;
 
@@ -91,20 +91,21 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t __uiInPlayerIdentifierLength = InPlayerIdentifier ? (uint16_t)(strlen(InPlayerIdentifier)+1) : 1;
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) +  + sizeof(uint16_t) + __uiInPlayerIdentifierLength 
-					+ sizeof(uint32_t)
-					+ sizeof(PlayerID));
-
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					, SerializedSizeOf(InRelayInstanceID)
+					, SerializedSizeOf(InPlayerID)
+					, SerializedSizeOf(InPlayerIdentifier)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::JoinRelayInstanceC2SEvt::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InRelayInstanceID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(PlayerID));
-				Protocol::PackParamCopy( pMsgData, &__uiInPlayerIdentifierLength, sizeof(uint16_t) );
-				Protocol::PackParamCopy( pMsgData, InPlayerIdentifier ? InPlayerIdentifier : "", __uiInPlayerIdentifierLength );
+				protocolCheck(output->Write(InRelayInstanceID));
+				protocolCheck(output->Write(InPlayerID));
+				protocolCheck(output->Write(InPlayerIdentifier));
 
 				return hr;
 			}; // MessageData* JoinRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
@@ -126,21 +127,22 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t numberofMemberInfos = 0; RelayPlayerInfo* pMemberInfos = nullptr;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_MyEndpointID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &numberofMemberInfos, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( pMemberInfos, pCur, iMsgSize, sizeof(RelayPlayerInfo)*numberofMemberInfos ) );
-				m_MemberInfos.SetLinkedBuffer(numberofMemberInfos, numberofMemberInfos, pMemberInfos);
+				protocolCheck(input->Read(m_Result));
+				protocolCheck(input->Read(m_RelayInstanceID));
+				protocolCheck(input->Read(m_MyEndpointID));
+				protocolCheck(input->Read(ArrayLen));
+				RelayPlayerInfo* MemberInfosPtr = nullptr;
+				protocolCheck(input->ReadLink(MemberInfosPtr, ArrayLen * sizeof(RelayPlayerInfo)));
+				m_MemberInfos.SetLinkedBuffer(ArrayLen, MemberInfosPtr);
 
 				return hr;
 
@@ -189,23 +191,24 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					+ sizeof(Result)
-					+ sizeof(uint32_t)
-					+ sizeof(uint32_t)
-					+ sizeof(RelayPlayerInfo)*InMemberInfos.size() + sizeof(uint16_t));
-
-
 				uint16_t numberOfInMemberInfos = (uint16_t)InMemberInfos.size(); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					, SerializedSizeOf(InResult)
+					, SerializedSizeOf(InRelayInstanceID)
+					, SerializedSizeOf(InMyEndpointID)
+					, SerializedSizeOf(InMemberInfos)
+				);
+
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::JoinRelayInstanceResS2CEvt::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
-				Protocol::PackParamCopy( pMsgData, &InRelayInstanceID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InMyEndpointID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &numberOfInMemberInfos, sizeof(uint16_t)); 
-				Protocol::PackParamCopy( pMsgData, InMemberInfos.data(), (INT)(sizeof(RelayPlayerInfo)*InMemberInfos.size())); 
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(InRelayInstanceID));
+				protocolCheck(output->Write(InMyEndpointID));
+				protocolCheck(output->Write(InMemberInfos));
 
 				return hr;
 			}; // MessageData* JoinRelayInstanceResS2CEvt::Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
@@ -227,16 +230,17 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_PlayerID, pCur, iMsgSize, sizeof(PlayerID) ) );
+				protocolCheck(input->Read(m_RelayInstanceID));
+				protocolCheck(input->Read(m_PlayerID));
 
 				return hr;
 
@@ -284,16 +288,18 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					+ sizeof(uint32_t)
-					+ sizeof(PlayerID));
-
+					, SerializedSizeOf(InRelayInstanceID)
+					, SerializedSizeOf(InPlayerID)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::LeaveRelayInstanceC2SEvt::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InRelayInstanceID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InPlayerID, sizeof(PlayerID));
+				protocolCheck(output->Write(InRelayInstanceID));
+				protocolCheck(output->Write(InPlayerID));
 
 				return hr;
 			}; // MessageData* LeaveRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
@@ -315,16 +321,17 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_JoinedPlayerInfo, pCur, iMsgSize, sizeof(RelayPlayerInfo) ) );
+				protocolCheck(input->Read(m_RelayInstanceID));
+				protocolCheck(input->Read(m_JoinedPlayerInfo));
 
 				return hr;
 
@@ -372,16 +379,18 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					+ sizeof(uint32_t)
-					+ sizeof(RelayPlayerInfo));
-
+					, SerializedSizeOf(InRelayInstanceID)
+					, SerializedSizeOf(InJoinedPlayerInfo)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::PlayerJoinS2CEvt::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InRelayInstanceID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InJoinedPlayerInfo, sizeof(RelayPlayerInfo));
+				protocolCheck(output->Write(InRelayInstanceID));
+				protocolCheck(output->Write(InJoinedPlayerInfo));
 
 				return hr;
 			}; // MessageData* PlayerJoinS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo )
@@ -403,17 +412,18 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_LeftPlayerID, pCur, iMsgSize, sizeof(PlayerID) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_KickedReason, pCur, iMsgSize, sizeof(uint32_t) ) );
+				protocolCheck(input->Read(m_RelayInstanceID));
+				protocolCheck(input->Read(m_LeftPlayerID));
+				protocolCheck(input->Read(m_KickedReason));
 
 				return hr;
 
@@ -462,18 +472,20 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					+ sizeof(uint32_t)
-					+ sizeof(PlayerID)
-					+ sizeof(uint32_t));
-
+					, SerializedSizeOf(InRelayInstanceID)
+					, SerializedSizeOf(InLeftPlayerID)
+					, SerializedSizeOf(InKickedReason)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::PlayerLeftS2CEvt::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InRelayInstanceID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InLeftPlayerID, sizeof(PlayerID));
-				Protocol::PackParamCopy( pMsgData, &InKickedReason, sizeof(uint32_t));
+				protocolCheck(output->Write(InRelayInstanceID));
+				protocolCheck(output->Write(InLeftPlayerID));
+				protocolCheck(output->Write(InKickedReason));
 
 				return hr;
 			}; // MessageData* PlayerLeftS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
@@ -495,21 +507,22 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t numberofPayload = 0; uint8_t* pPayload = nullptr;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_RelayInstanceID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_SenderEndpointID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_TargetEndpointMask, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &numberofPayload, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( pPayload, pCur, iMsgSize, sizeof(uint8_t)*numberofPayload ) );
-				m_Payload.SetLinkedBuffer(numberofPayload, numberofPayload, pPayload);
+				protocolCheck(input->Read(m_RelayInstanceID));
+				protocolCheck(input->Read(m_SenderEndpointID));
+				protocolCheck(input->Read(m_TargetEndpointMask));
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* PayloadPtr = nullptr;
+				protocolCheck(input->ReadLink(PayloadPtr, ArrayLen * sizeof(uint8_t)));
+				m_Payload.SetLinkedBuffer(ArrayLen, PayloadPtr);
 
 				return hr;
 
@@ -558,23 +571,24 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					+ sizeof(uint32_t)
-					+ sizeof(uint32_t)
-					+ sizeof(uint32_t)
-					+ sizeof(uint8_t)*InPayload.size() + sizeof(uint16_t));
-
-
 				uint16_t numberOfInPayload = (uint16_t)InPayload.size(); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					, SerializedSizeOf(InRelayInstanceID)
+					, SerializedSizeOf(InSenderEndpointID)
+					, SerializedSizeOf(InTargetEndpointMask)
+					, SerializedSizeOf(InPayload)
+				);
+
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::RelayPacketC2SEvt::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InRelayInstanceID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InSenderEndpointID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InTargetEndpointMask, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &numberOfInPayload, sizeof(uint16_t)); 
-				Protocol::PackParamCopy( pMsgData, InPayload.data(), (INT)(sizeof(uint8_t)*InPayload.size())); 
+				protocolCheck(output->Write(InRelayInstanceID));
+				protocolCheck(output->Write(InSenderEndpointID));
+				protocolCheck(output->Write(InTargetEndpointMask));
+				protocolCheck(output->Write(InPayload));
 
 				return hr;
 			}; // MessageData* RelayPacketC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )

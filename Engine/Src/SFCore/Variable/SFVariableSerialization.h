@@ -25,6 +25,73 @@
 namespace SF {
 
 
+
+	////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Variable serialization size calculations
+	//
+
+
+
+	template<>
+	inline size_t SerializedSizeOf(const Variable& Value) { return Value.GetSerializedSize(); }
+
+	//template<>
+	//inline size_t SerializedSizeOf(const Array<Variable>& Value)
+	//{
+	//	size_t Size = sizeof(uint16_t);
+	//	for (auto& itVar : Value)
+	//	{
+	//		Size += SerializedSizeOf(itVar);
+	//	}
+	//}
+
+	template<>
+	inline size_t SerializedSizeOf(const VariableBox& Value)
+	{
+		auto pVariable = Value.GetVariable();
+		return pVariable ? pVariable->GetSerializedSize() : sizeof(Variable::TypeNameType);
+	}
+
+	//template<>
+	//inline size_t SerializedSizeOf(const Array<VariableBox>& Value)
+	//{
+	//	size_t Size = sizeof(uint16_t);
+	//	for (auto& itVar : Value)
+	//	{
+	//		Size += SerializedSizeOf(itVar);
+	//	}
+	//}
+
+	template<>
+	inline size_t SerializedSizeOf(const NamedVariableBox& Value) { auto pVariable = Value.GetVariable(); return sizeof(NamedVariableBox::NameType) + pVariable ? pVariable->GetSerializedSize() : sizeof(Variable::TypeNameType); }
+
+	//template<>
+	//inline size_t SerializedSizeOf(const Array<NamedVariableBox>& Value)
+	//{
+	//	size_t Size = sizeof(uint16_t);
+	//	for (auto& itVar : Value)
+	//	{
+	//		Size += SerializedSizeOf(itVar);
+	//	}
+	//}
+
+	template<>
+	inline size_t SerializedSizeOf(const VariableTable& Value)
+	{
+		size_t Size = sizeof(uint16_t);
+		for (auto& itVar : Value)
+		{
+			Size += SerializedSizeOf(itVar.GetKey());
+			auto* pVariable = itVar.GetValue();
+			if (pVariable != nullptr)
+				Size += SerializedSizeOf(*pVariable);
+			else
+				Size += sizeof(Variable::TypeNameType);
+		}
+	}
+
+
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	String stream IO util
@@ -78,8 +145,11 @@ namespace SF {
 				return ResultCode::END_OF_STREAM;
 
 			std::unique_ptr<Variable> pVariable;
-			pVariable.reset(Service::VariableFactory->CreateVariable(data.GetHeap(), TypeName));
-			pVariable->Deserialize(*this);
+			if (TypeName != nullptr)
+			{
+				pVariable.reset(Service::VariableFactory->CreateVariable(data.GetHeap(), TypeName));
+				pVariable->Deserialize(*this);
+			}
 
 			data.SetVariable(VariableName, pVariable);
 		}

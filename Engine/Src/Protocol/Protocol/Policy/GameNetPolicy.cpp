@@ -29,10 +29,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::HeartBitC2SEvt::Create(m_pConnection->GetIOHeap());
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -45,10 +45,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::JoinGameServerCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InAccID, InTicket, InLoginEntityUID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -61,10 +61,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetComplitionStateCmd::Create(m_pConnection->GetIOHeap(), InTransactionID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -77,10 +77,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::SetComplitionStateCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InComplitionState);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -93,10 +93,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::RegisterGCMCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGCMRegisteredID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -109,10 +109,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::UnregisterGCMCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGCMRegisteredID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -125,10 +125,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::InviteFriendCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InFriendID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -141,10 +141,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::AcceptFriendRequestCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InInviterID, InInviterFacebookUID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -157,10 +157,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::RemoveFriendCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InFriendID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -173,10 +173,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetFriendListCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InStartIndex, InCount);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -189,10 +189,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetNotificationListCmd::Create(m_pConnection->GetIOHeap(), InTransactionID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -205,10 +205,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::DeleteNotificationCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InNotificationID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -221,10 +221,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::SetNotificationReadCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InNotificationID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -237,10 +237,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::AcceptNotificationCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InNotificationID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -253,10 +253,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::FindPlayerByEMailCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InPlayerEMail);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -269,10 +269,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::FindPlayerByPlayerIDCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -285,10 +285,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::RequestPlayerStatusUpdateCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InTargetPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -301,10 +301,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetRankingListCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InRankingType, InBaseRanking, InCount);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -317,10 +317,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetUserGamePlayerInfoCmd::Create(m_pConnection->GetIOHeap(), InTransactionID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -333,10 +333,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetGamePlayerInfoCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -349,10 +349,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::SetNickNameCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InNickName, InIsCostFree);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -365,10 +365,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::CreatePartyCmd::Create(m_pConnection->GetIOHeap(), InTransactionID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -381,10 +381,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::JoinPartyCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InPartyUID, InInviterID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -397,10 +397,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::LeavePartyCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InPartyUID, InPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -413,10 +413,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyKickPlayerCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InPartyUID, InPlayerID, InPlayerToKick);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -429,10 +429,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyInviteCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InInviteTargetID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -445,10 +445,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyQuickChatMessageCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InQuickChatID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -461,10 +461,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyChatMessageCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InChatMessage);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -477,10 +477,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::JoinGameCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InPlayerID, InTicket, InInsUID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -493,10 +493,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::LeaveGameCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGameInsUID, InPlayerID, InTicket);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -509,10 +509,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::KickPlayerCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGameInsUID, InPlayerID, InPlayerToKick);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -525,10 +525,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::AssignRoleCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGameInsUID, InPlayerID, InTicket);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -541,10 +541,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatMessageCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InChatMessage, InRole);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -557,10 +557,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::AdvanceGameCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGameInsUID, InPlayerID, InTicket);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -573,10 +573,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::VoteGameAdvanceCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGameInsUID, InPlayerID, InTicket);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -589,10 +589,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::VoteCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InGameInsUID, InPlayerID, InTicket, InVoteTarget, InActionSerial);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -605,10 +605,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GamePlayAgainCmd::Create(m_pConnection->GetIOHeap(), InTransactionID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -621,10 +621,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GameRevealPlayerCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InTargetPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -637,10 +637,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GamePlayerReviveCmd::Create(m_pConnection->GetIOHeap(), InTransactionID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -653,10 +653,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GamePlayerResetRankCmd::Create(m_pConnection->GetIOHeap(), InTransactionID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -669,10 +669,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::RequestGameMatchCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InNumPlayer, InRequestRole);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -685,10 +685,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::CancelGameMatchCmd::Create(m_pConnection->GetIOHeap(), InTransactionID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -701,10 +701,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::BuyShopItemPrepareCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InShopItemID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -717,10 +717,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::BuyShopItemCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InShopItemID, InPlatform, InPackageName, InPurchaseTransactionID, InPurchaseToken);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -733,10 +733,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::CreateOrJoinChatChannelCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InChannelName, InPasscode);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -749,10 +749,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::JoinChatChannelCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InChatUID, InInviterID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -765,10 +765,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::LeaveChatChannelCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InChatUID, InPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -781,10 +781,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatChannelKickPlayerCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InChatUID, InPlayerID, InPlayerToKick);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -797,10 +797,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatChannelChatMessageCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InChatUID, InChatMessage);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -813,10 +813,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GiveStaminaCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InTargetPlayer);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -829,10 +829,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::SetPresetGameConfigIDCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InPresetID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -845,10 +845,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GainGameResourceCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InResource, InValue);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -863,10 +863,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::JoinGameServerRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InNickName, InGameUID, InPartyUID, InPartyLeaderID, InMatchingTicket);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -879,10 +879,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetComplitionStateRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InComplitionState);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -895,10 +895,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::SetComplitionStateRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -911,10 +911,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::RegisterGCMRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -927,10 +927,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::UnregisterGCMRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -943,10 +943,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::InviteFriendRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -959,10 +959,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::AcceptFriendRequestRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InNewFriend);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -975,10 +975,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::FriendRequestAcceptedS2CEvt::Create(m_pConnection->GetIOHeap(), InAccepter);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -991,10 +991,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::RemoveFriendRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InFriendID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1007,10 +1007,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::FriendRemovedS2CEvt::Create(m_pConnection->GetIOHeap(), InFriendID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1023,10 +1023,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetFriendListRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InMaxFriendSlot, InTotalNumberOfFriends, InStartIndex, InFriendList);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1039,10 +1039,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetNotificationListRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1055,10 +1055,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::DeleteNotificationRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InNotificationID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1071,10 +1071,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::SetNotificationReadRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InNotificationID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1087,10 +1087,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::AcceptNotificationRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InNotificationID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1103,10 +1103,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::NotifyS2CEvt::Create(m_pConnection->GetIOHeap(), InNotificationID, InNotificationType, InMessageParam0, InMessageParam1, InMessageText, InIsRead, InTimeStamp);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1119,10 +1119,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::FindPlayerByEMailRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InPlayer);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1135,10 +1135,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::FindPlayerByPlayerIDRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InPlayer);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1151,10 +1151,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::RequestPlayerStatusUpdateRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1167,10 +1167,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::NotifyPlayerStatusUpdatedS2CEvt::Create(m_pConnection->GetIOHeap(), InPlayerID, InLatestActiveTime, InIsInGame);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1183,10 +1183,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetRankingListRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InRanking);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1199,10 +1199,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetUserGamePlayerInfoRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InLevel, InExp, InGameMoney, InGem, InStamina, InLastUpdateTime, InTotalPlayed, InWinPlaySC, InWinPlaySM, InWinPlaySS, InLosePlaySC, InLosePlaySM, InLosePlaySS, InWinPlayNC, InWinPlayNM, InWinPlayNS, InLosePlayNC, InLosePlayNM, InLosePlayNS, InWeeklyWin, InWeeklyLose);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1215,10 +1215,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GetGamePlayerInfoRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InPlayerID, InLevel, InTotalPlayed, InWinPlaySC, InWinPlaySM, InWinPlaySS, InLosePlaySC, InLosePlaySM, InLosePlaySS, InWinPlayNC, InWinPlayNM, InWinPlayNS, InLosePlayNC, InLosePlayNM, InLosePlayNS, InWeeklyWin, InWeeklyLose);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1231,10 +1231,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::LevelUpS2CEvt::Create(m_pConnection->GetIOHeap(), InCurrentTotalExp, InCurrentLevel);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1247,10 +1247,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::SetNickNameRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InTotalGem, InTotalGameMoney);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1263,10 +1263,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::CreatePartyRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InPartyUID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1279,10 +1279,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::JoinPartyRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InPartyUID, InPartyLeaderID, InChatHistoryData);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1295,10 +1295,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyPlayerJoinedS2CEvt::Create(m_pConnection->GetIOHeap(), InPartyUID, InJoinedPlayer);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1311,10 +1311,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyLeaderChangedS2CEvt::Create(m_pConnection->GetIOHeap(), InPartyUID, InNewLeaderID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1327,10 +1327,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::LeavePartyRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1343,10 +1343,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyPlayerLeftS2CEvt::Create(m_pConnection->GetIOHeap(), InPartyUID, InLeftPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1359,10 +1359,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyKickPlayerRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1375,10 +1375,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyPlayerKickedS2CEvt::Create(m_pConnection->GetIOHeap(), InPartyUID, InKickedPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1391,10 +1391,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyInviteRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1407,10 +1407,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyInviteRequestedS2CEvt::Create(m_pConnection->GetIOHeap(), InInviterID, InInviterName, InPartyToJoinUID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1423,10 +1423,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyQuickChatMessageRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1439,10 +1439,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyQuickChatMessageS2CEvt::Create(m_pConnection->GetIOHeap(), InSenderID, InQuickChatID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1455,10 +1455,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyChatMessageRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1471,10 +1471,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PartyChatMessageS2CEvt::Create(m_pConnection->GetIOHeap(), InSenderID, InSenderName, InChatMessage);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1487,10 +1487,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::JoinGameRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InInsUID, InTimeStamp, InGameState, InDay, InMaxPlayer, InPlayerIndex, InPlayerCharacter, InRole, InDead, InChatHistoryData, InGameLogData);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1503,10 +1503,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PlayerJoinedS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InJoinedPlayer, InJoinedPlayerRole, InJoinedPlayerDead, InJoinedPlayerIndex, InJoinedPlayerCharacter);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1519,10 +1519,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::LeaveGameRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1535,10 +1535,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PlayerLeftS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InLeftPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1551,10 +1551,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::KickPlayerRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1567,10 +1567,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PlayerKickedS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InKickedPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1583,10 +1583,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::AssignRoleRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1599,10 +1599,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::RoleAssignedS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InPlayerID, InRole);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1615,10 +1615,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatMessageRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1631,10 +1631,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatMessageS2CEvt::Create(m_pConnection->GetIOHeap(), InSenderID, InRole, InSenderName, InChatMessage);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1647,10 +1647,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::AdvanceGameRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1663,10 +1663,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GameAdvancedS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InTimeStamp, InGameState, InDay);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1679,10 +1679,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GameEndedS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InWinner, InGainedExp, InGainedGameMoney);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1695,10 +1695,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::VoteGameAdvanceRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1711,10 +1711,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GameAdvanceVotedS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InVoter);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1727,10 +1727,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::VoteRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1743,10 +1743,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::VotedS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InVoter, InVotedTarget);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1759,10 +1759,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::VoteEndS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InVoted);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1775,10 +1775,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PlayerKilledS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InKilledPlayer, InReason);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1791,10 +1791,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::PlayerRevealedS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InRevealedPlayerID, InRole, InReason);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1807,10 +1807,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GamePlayAgainRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InTotalGem, InTotalGameMoney);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1823,10 +1823,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GamePlayAgainS2CEvt::Create(m_pConnection->GetIOHeap(), InPartyUID, InLeadPlayer);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1839,10 +1839,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GameRevealPlayerRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InRevealedPlayerID, InRevealedRole, InTotalGem, InTotalGameMoney);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1855,10 +1855,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GamePlayerReviveRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InTotalGem, InTotalGameMoney);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1871,10 +1871,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GamePlayerRevivedS2CEvt::Create(m_pConnection->GetIOHeap(), InRevivedPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1887,10 +1887,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GamePlayerResetRankRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InTotalGem, InTotalGameMoney);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1903,10 +1903,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::RequestGameMatchRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InTotalGem, InTotalGameMoney);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1919,10 +1919,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GameMatchedS2CEvt::Create(m_pConnection->GetIOHeap(), InInsUID, InTimeStamp, InGameState, InDay, InMaxPlayer, InPlayerIndex, InPlayerCharacter, InRole, InDead, InChatHistoryData, InGameLogData, InStamina, InTotalGem, InTotalGameMoney);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1935,10 +1935,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GameMatchFailedS2CEvt::Create(m_pConnection->GetIOHeap(), InFailedReason);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1951,10 +1951,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GameMatchingStartedS2CEvt::Create(m_pConnection->GetIOHeap());
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1967,10 +1967,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::CancelGameMatchRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1983,10 +1983,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GameMatchingCanceledS2CEvt::Create(m_pConnection->GetIOHeap());
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -1999,10 +1999,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::BuyShopItemPrepareRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InShopItemID, InPurchaseID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2015,10 +2015,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::BuyShopItemRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InShopItemID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2031,10 +2031,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::CreateOrJoinChatChannelRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InChatUID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2047,10 +2047,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::JoinChatChannelRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InPartyUID, InPartyLeaderID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2063,10 +2063,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatChannelPlayerJoinedS2CEvt::Create(m_pConnection->GetIOHeap(), InChatUID, InJoinedPlayer);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2079,10 +2079,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatChannelLeaderChangedS2CEvt::Create(m_pConnection->GetIOHeap(), InChatUID, InNewLeaderID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2095,10 +2095,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::LeaveChatChannelRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2111,10 +2111,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatChannelPlayerLeftS2CEvt::Create(m_pConnection->GetIOHeap(), InChatUID, InLeftPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2127,10 +2127,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatChannelKickPlayerRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2143,10 +2143,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatChannelPlayerKickedS2CEvt::Create(m_pConnection->GetIOHeap(), InChatUID, InKickedPlayerID);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2159,10 +2159,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatChannelChatMessageRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2175,10 +2175,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::ChatChannelChatMessageS2CEvt::Create(m_pConnection->GetIOHeap(), InSenderID, InSenderName, InChatMessage);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2191,10 +2191,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GiveStaminaRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InTargetPlayer, InTimeStamp);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2207,10 +2207,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::SetPresetGameConfigIDRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
@@ -2223,10 +2223,10 @@ namespace SF
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
-			 protocolChkPtr(m_pConnection);
+			 protocolCheckPtr(m_pConnection);
 
 			 pMessage = SF::Message::Game::GainGameResourceRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolChkPtr(*pMessage);
+			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 

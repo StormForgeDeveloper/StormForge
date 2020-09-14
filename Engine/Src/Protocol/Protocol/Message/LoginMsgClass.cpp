@@ -31,22 +31,21 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t uiSizeOfID = 0;
-				uint16_t uiSizeOfPassword = 0;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_GameID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &uiSizeOfID, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( m_ID, pCur, iMsgSize, sizeof(char)*uiSizeOfID ) );
-				protocolCheck( Protocol::StreamParamCopy( &uiSizeOfPassword, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( m_Password, pCur, iMsgSize, sizeof(char)*uiSizeOfPassword ) );
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_GameID));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_ID, ArrayLen * sizeof(char)));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_Password, ArrayLen * sizeof(char)));
 
 				return hr;
 
@@ -95,23 +94,23 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t __uiInIDLength = InID ? (uint16_t)(strlen(InID)+1) : 1;
-				uint16_t __uiInPasswordLength = InPassword ? (uint16_t)(strlen(InPassword)+1) : 1;
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInIDLength + sizeof(uint16_t) + __uiInPasswordLength 
-					+ sizeof(uint64_t)
-					+ sizeof(uint32_t));
-
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InGameID)
+					, SerializedSizeOf(InID)
+					, SerializedSizeOf(InPassword)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginCmd::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InGameID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &__uiInIDLength, sizeof(uint16_t) );
-				Protocol::PackParamCopy( pMsgData, InID ? InID : "", __uiInIDLength );
-				Protocol::PackParamCopy( pMsgData, &__uiInPasswordLength, sizeof(uint16_t) );
-				Protocol::PackParamCopy( pMsgData, InPassword ? InPassword : "", __uiInPasswordLength );
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InGameID));
+				protocolCheck(output->Write(InID));
+				protocolCheck(output->Write(InPassword));
 
 				return hr;
 			}; // MessageData* LoginCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
@@ -132,21 +131,22 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_GameServerAddr, pCur, iMsgSize, sizeof(NetAddress) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_GameServerAddrIPV4, pCur, iMsgSize, sizeof(NetAddress) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_AccID, pCur, iMsgSize, sizeof(AccountID) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Ticket, pCur, iMsgSize, sizeof(AuthTicket) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_LoginEntityUID, pCur, iMsgSize, sizeof(uint64_t) ) );
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_Result));
+				protocolCheck(input->Read(m_GameServerAddr));
+				protocolCheck(input->Read(m_GameServerAddrIPV4));
+				protocolCheck(input->Read(m_AccID));
+				protocolCheck(input->Read(m_Ticket));
+				protocolCheck(input->Read(m_LoginEntityUID));
 
 				return hr;
 
@@ -199,26 +199,28 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(uint64_t)
-					+ sizeof(Result)
-					+ sizeof(NetAddress)
-					+ sizeof(NetAddress)
-					+ sizeof(AccountID)
-					+ sizeof(AuthTicket)
-					+ sizeof(uint64_t));
-
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InResult)
+					, SerializedSizeOf(InGameServerAddr)
+					, SerializedSizeOf(InGameServerAddrIPV4)
+					, SerializedSizeOf(InAccID)
+					, SerializedSizeOf(InTicket)
+					, SerializedSizeOf(InLoginEntityUID)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
-				Protocol::PackParamCopy( pMsgData, &InGameServerAddr, sizeof(NetAddress));
-				Protocol::PackParamCopy( pMsgData, &InGameServerAddrIPV4, sizeof(NetAddress));
-				Protocol::PackParamCopy( pMsgData, &InAccID, sizeof(AccountID));
-				Protocol::PackParamCopy( pMsgData, &InTicket, sizeof(AuthTicket));
-				Protocol::PackParamCopy( pMsgData, &InLoginEntityUID, sizeof(uint64_t));
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(InGameServerAddr));
+				protocolCheck(output->Write(InGameServerAddrIPV4));
+				protocolCheck(output->Write(InAccID));
+				protocolCheck(output->Write(InTicket));
+				protocolCheck(output->Write(InLoginEntityUID));
 
 				return hr;
 			}; // MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
@@ -240,26 +242,24 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t uiSizeOfFaceBookName = 0;
-				uint16_t uiSizeOfEMail = 0;
-				uint16_t uiSizeOfFacebookToken = 0;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_GameID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_UID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &uiSizeOfFaceBookName, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( m_FaceBookName, pCur, iMsgSize, sizeof(char)*uiSizeOfFaceBookName ) );
-				protocolCheck( Protocol::StreamParamCopy( &uiSizeOfEMail, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( m_EMail, pCur, iMsgSize, sizeof(char)*uiSizeOfEMail ) );
-				protocolCheck( Protocol::StreamParamCopy( &uiSizeOfFacebookToken, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( m_FacebookToken, pCur, iMsgSize, sizeof(char)*uiSizeOfFacebookToken ) );
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_GameID));
+				protocolCheck(input->Read(m_UID));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_FaceBookName, ArrayLen * sizeof(char)));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_EMail, ArrayLen * sizeof(char)));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_FacebookToken, ArrayLen * sizeof(char)));
 
 				return hr;
 
@@ -310,28 +310,27 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t __uiInFaceBookNameLength = InFaceBookName ? (uint16_t)(strlen(InFaceBookName)+1) : 1;
-				uint16_t __uiInEMailLength = InEMail ? (uint16_t)(strlen(InEMail)+1) : 1;
-				uint16_t __uiInFacebookTokenLength = InFacebookToken ? (uint16_t)(strlen(InFacebookToken)+1) : 1;
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInFaceBookNameLength + sizeof(uint16_t) + __uiInEMailLength + sizeof(uint16_t) + __uiInFacebookTokenLength 
-					+ sizeof(uint64_t)
-					+ sizeof(uint32_t)
-					+ sizeof(uint64_t));
-
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InGameID)
+					, SerializedSizeOf(InUID)
+					, SerializedSizeOf(InFaceBookName)
+					, SerializedSizeOf(InEMail)
+					, SerializedSizeOf(InFacebookToken)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginByFacebookCmd::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InGameID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &InUID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &__uiInFaceBookNameLength, sizeof(uint16_t) );
-				Protocol::PackParamCopy( pMsgData, InFaceBookName ? InFaceBookName : "", __uiInFaceBookNameLength );
-				Protocol::PackParamCopy( pMsgData, &__uiInEMailLength, sizeof(uint16_t) );
-				Protocol::PackParamCopy( pMsgData, InEMail ? InEMail : "", __uiInEMailLength );
-				Protocol::PackParamCopy( pMsgData, &__uiInFacebookTokenLength, sizeof(uint16_t) );
-				Protocol::PackParamCopy( pMsgData, InFacebookToken ? InFacebookToken : "", __uiInFacebookTokenLength );
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InGameID));
+				protocolCheck(output->Write(InUID));
+				protocolCheck(output->Write(InFaceBookName));
+				protocolCheck(output->Write(InEMail));
+				protocolCheck(output->Write(InFacebookToken));
 
 				return hr;
 			}; // MessageData* LoginByFacebookCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
@@ -352,21 +351,22 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_GameServerAddr, pCur, iMsgSize, sizeof(NetAddress) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_GameServerAddrIPV4, pCur, iMsgSize, sizeof(NetAddress) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_AccID, pCur, iMsgSize, sizeof(AccountID) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Ticket, pCur, iMsgSize, sizeof(AuthTicket) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_LoginEntityUID, pCur, iMsgSize, sizeof(uint64_t) ) );
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_Result));
+				protocolCheck(input->Read(m_GameServerAddr));
+				protocolCheck(input->Read(m_GameServerAddrIPV4));
+				protocolCheck(input->Read(m_AccID));
+				protocolCheck(input->Read(m_Ticket));
+				protocolCheck(input->Read(m_LoginEntityUID));
 
 				return hr;
 
@@ -419,26 +419,28 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(uint64_t)
-					+ sizeof(Result)
-					+ sizeof(NetAddress)
-					+ sizeof(NetAddress)
-					+ sizeof(AccountID)
-					+ sizeof(AuthTicket)
-					+ sizeof(uint64_t));
-
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InResult)
+					, SerializedSizeOf(InGameServerAddr)
+					, SerializedSizeOf(InGameServerAddrIPV4)
+					, SerializedSizeOf(InAccID)
+					, SerializedSizeOf(InTicket)
+					, SerializedSizeOf(InLoginEntityUID)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginByFacebookRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
-				Protocol::PackParamCopy( pMsgData, &InGameServerAddr, sizeof(NetAddress));
-				Protocol::PackParamCopy( pMsgData, &InGameServerAddrIPV4, sizeof(NetAddress));
-				Protocol::PackParamCopy( pMsgData, &InAccID, sizeof(AccountID));
-				Protocol::PackParamCopy( pMsgData, &InTicket, sizeof(AuthTicket));
-				Protocol::PackParamCopy( pMsgData, &InLoginEntityUID, sizeof(uint64_t));
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(InGameServerAddr));
+				protocolCheck(output->Write(InGameServerAddrIPV4));
+				protocolCheck(output->Write(InAccID));
+				protocolCheck(output->Write(InTicket));
+				protocolCheck(output->Write(InLoginEntityUID));
 
 				return hr;
 			}; // MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
@@ -460,19 +462,19 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t uiSizeOfCellPhone = 0;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_GameID, pCur, iMsgSize, sizeof(uint32_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &uiSizeOfCellPhone, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( m_CellPhone, pCur, iMsgSize, sizeof(char)*uiSizeOfCellPhone ) );
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_GameID));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_CellPhone, ArrayLen * sizeof(char)));
 
 				return hr;
 
@@ -520,20 +522,21 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t __uiInCellPhoneLength = InCellPhone ? (uint16_t)(strlen(InCellPhone)+1) : 1;
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInCellPhoneLength 
-					+ sizeof(uint64_t)
-					+ sizeof(uint32_t));
-
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InGameID)
+					, SerializedSizeOf(InCellPhone)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::CreateRandomUserCmd::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InGameID, sizeof(uint32_t));
-				Protocol::PackParamCopy( pMsgData, &__uiInCellPhoneLength, sizeof(uint16_t) );
-				Protocol::PackParamCopy( pMsgData, InCellPhone ? InCellPhone : "", __uiInCellPhoneLength );
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InGameID));
+				protocolCheck(output->Write(InCellPhone));
 
 				return hr;
 			}; // MessageData* CreateRandomUserCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
@@ -554,21 +557,22 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_GameServerAddr, pCur, iMsgSize, sizeof(NetAddress) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_GameServerAddrIPV4, pCur, iMsgSize, sizeof(NetAddress) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_AccID, pCur, iMsgSize, sizeof(AccountID) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Ticket, pCur, iMsgSize, sizeof(AuthTicket) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_LoginEntityUID, pCur, iMsgSize, sizeof(uint64_t) ) );
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_Result));
+				protocolCheck(input->Read(m_GameServerAddr));
+				protocolCheck(input->Read(m_GameServerAddrIPV4));
+				protocolCheck(input->Read(m_AccID));
+				protocolCheck(input->Read(m_Ticket));
+				protocolCheck(input->Read(m_LoginEntityUID));
 
 				return hr;
 
@@ -621,26 +625,28 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(uint64_t)
-					+ sizeof(Result)
-					+ sizeof(NetAddress)
-					+ sizeof(NetAddress)
-					+ sizeof(AccountID)
-					+ sizeof(AuthTicket)
-					+ sizeof(uint64_t));
-
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InResult)
+					, SerializedSizeOf(InGameServerAddr)
+					, SerializedSizeOf(InGameServerAddrIPV4)
+					, SerializedSizeOf(InAccID)
+					, SerializedSizeOf(InTicket)
+					, SerializedSizeOf(InLoginEntityUID)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::CreateRandomUserRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
-				Protocol::PackParamCopy( pMsgData, &InGameServerAddr, sizeof(NetAddress));
-				Protocol::PackParamCopy( pMsgData, &InGameServerAddrIPV4, sizeof(NetAddress));
-				Protocol::PackParamCopy( pMsgData, &InAccID, sizeof(AccountID));
-				Protocol::PackParamCopy( pMsgData, &InTicket, sizeof(AuthTicket));
-				Protocol::PackParamCopy( pMsgData, &InLoginEntityUID, sizeof(uint64_t));
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(InGameServerAddr));
+				protocolCheck(output->Write(InGameServerAddrIPV4));
+				protocolCheck(output->Write(InAccID));
+				protocolCheck(output->Write(InTicket));
+				protocolCheck(output->Write(InLoginEntityUID));
 
 				return hr;
 			}; // MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
@@ -662,18 +668,19 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_RankingScore, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_RankingType, pCur, iMsgSize, sizeof(RankingType) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Count, pCur, iMsgSize, sizeof(uint16_t) ) );
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_RankingScore));
+				protocolCheck(input->Read(m_RankingType));
+				protocolCheck(input->Read(m_Count));
 
 				return hr;
 
@@ -723,20 +730,22 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(uint64_t)
-					+ sizeof(uint64_t)
-					+ sizeof(RankingType)
-					+ sizeof(uint16_t));
-
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InRankingScore)
+					, SerializedSizeOf(InRankingType)
+					, SerializedSizeOf(InCount)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::UpdateMyScoreCmd::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InRankingScore, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InRankingType, sizeof(RankingType));
-				Protocol::PackParamCopy( pMsgData, &InCount, sizeof(uint16_t));
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InRankingScore));
+				protocolCheck(output->Write(InRankingType));
+				protocolCheck(output->Write(InCount));
 
 				return hr;
 			}; // MessageData* UpdateMyScoreCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
@@ -757,20 +766,21 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t numberofRanking = 0; TotalRankingPlayerInformation* pRanking = nullptr;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
-				protocolCheck( Protocol::StreamParamCopy( &numberofRanking, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( pRanking, pCur, iMsgSize, sizeof(TotalRankingPlayerInformation)*numberofRanking ) );
-				m_Ranking.SetLinkedBuffer(numberofRanking, numberofRanking, pRanking);
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_Result));
+				protocolCheck(input->Read(ArrayLen));
+				TotalRankingPlayerInformation* RankingPtr = nullptr;
+				protocolCheck(input->ReadLink(RankingPtr, ArrayLen * sizeof(TotalRankingPlayerInformation)));
+				m_Ranking.SetLinkedBuffer(ArrayLen, RankingPtr);
 
 				return hr;
 
@@ -818,21 +828,22 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(uint64_t)
-					+ sizeof(Result)
-					+ sizeof(TotalRankingPlayerInformation)*InRanking.size() + sizeof(uint16_t));
-
-
 				uint16_t numberOfInRanking = (uint16_t)InRanking.size(); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InResult)
+					, SerializedSizeOf(InRanking)
+				);
+
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::UpdateMyScoreRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
-				Protocol::PackParamCopy( pMsgData, &numberOfInRanking, sizeof(uint16_t)); 
-				Protocol::PackParamCopy( pMsgData, InRanking.data(), (INT)(sizeof(TotalRankingPlayerInformation)*InRanking.size())); 
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(InRanking));
 
 				return hr;
 			}; // MessageData* UpdateMyScoreRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
@@ -854,18 +865,19 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_RankingType, pCur, iMsgSize, sizeof(RankingType) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_BaseRanking, pCur, iMsgSize, sizeof(uint8_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Count, pCur, iMsgSize, sizeof(uint8_t) ) );
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_RankingType));
+				protocolCheck(input->Read(m_BaseRanking));
+				protocolCheck(input->Read(m_Count));
 
 				return hr;
 
@@ -915,20 +927,22 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(uint64_t)
-					+ sizeof(RankingType)
-					+ sizeof(uint8_t)
-					+ sizeof(uint8_t));
-
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InRankingType)
+					, SerializedSizeOf(InBaseRanking)
+					, SerializedSizeOf(InCount)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::GetRankingListCmd::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InRankingType, sizeof(RankingType));
-				Protocol::PackParamCopy( pMsgData, &InBaseRanking, sizeof(uint8_t));
-				Protocol::PackParamCopy( pMsgData, &InCount, sizeof(uint8_t));
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InRankingType));
+				protocolCheck(output->Write(InBaseRanking));
+				protocolCheck(output->Write(InCount));
 
 				return hr;
 			}; // MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
@@ -949,20 +963,21 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t numberofRanking = 0; TotalRankingPlayerInformation* pRanking = nullptr;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
-				protocolCheck( Protocol::StreamParamCopy( &numberofRanking, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( pRanking, pCur, iMsgSize, sizeof(TotalRankingPlayerInformation)*numberofRanking ) );
-				m_Ranking.SetLinkedBuffer(numberofRanking, numberofRanking, pRanking);
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_Result));
+				protocolCheck(input->Read(ArrayLen));
+				TotalRankingPlayerInformation* RankingPtr = nullptr;
+				protocolCheck(input->ReadLink(RankingPtr, ArrayLen * sizeof(TotalRankingPlayerInformation)));
+				m_Ranking.SetLinkedBuffer(ArrayLen, RankingPtr);
 
 				return hr;
 
@@ -1010,21 +1025,22 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(uint64_t)
-					+ sizeof(Result)
-					+ sizeof(TotalRankingPlayerInformation)*InRanking.size() + sizeof(uint16_t));
-
-
 				uint16_t numberOfInRanking = (uint16_t)InRanking.size(); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InResult)
+					, SerializedSizeOf(InRanking)
+				);
+
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::GetRankingListRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
-				Protocol::PackParamCopy( pMsgData, &numberOfInRanking, sizeof(uint16_t)); 
-				Protocol::PackParamCopy( pMsgData, InRanking.data(), (INT)(sizeof(TotalRankingPlayerInformation)*InRanking.size())); 
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(InRanking));
 
 				return hr;
 			}; // MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
@@ -1046,19 +1062,20 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t numberofTestData = 0; uint8_t* pTestData = nullptr;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &numberofTestData, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( pTestData, pCur, iMsgSize, sizeof(uint8_t)*numberofTestData ) );
-				m_TestData.SetLinkedBuffer(numberofTestData, numberofTestData, pTestData);
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* TestDataPtr = nullptr;
+				protocolCheck(input->ReadLink(TestDataPtr, ArrayLen * sizeof(uint8_t)));
+				m_TestData.SetLinkedBuffer(ArrayLen, TestDataPtr);
 
 				return hr;
 
@@ -1105,19 +1122,20 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(uint64_t)
-					+ sizeof(uint8_t)*InTestData.size() + sizeof(uint16_t));
-
-
 				uint16_t numberOfInTestData = (uint16_t)InTestData.size(); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InTestData)
+				);
+
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DataTestCmd::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &numberOfInTestData, sizeof(uint16_t)); 
-				Protocol::PackParamCopy( pMsgData, InTestData.data(), (INT)(sizeof(uint8_t)*InTestData.size())); 
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InTestData));
 
 				return hr;
 			}; // MessageData* DataTestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
@@ -1138,20 +1156,21 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t numberofTestData = 0; uint8_t* pTestData = nullptr;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
-				protocolCheck( Protocol::StreamParamCopy( &numberofTestData, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( pTestData, pCur, iMsgSize, sizeof(uint8_t)*numberofTestData ) );
-				m_TestData.SetLinkedBuffer(numberofTestData, numberofTestData, pTestData);
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_Result));
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* TestDataPtr = nullptr;
+				protocolCheck(input->ReadLink(TestDataPtr, ArrayLen * sizeof(uint8_t)));
+				m_TestData.SetLinkedBuffer(ArrayLen, TestDataPtr);
 
 				return hr;
 
@@ -1199,21 +1218,22 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(uint64_t)
-					+ sizeof(Result)
-					+ sizeof(uint8_t)*InTestData.size() + sizeof(uint16_t));
-
-
 				uint16_t numberOfInTestData = (uint16_t)InTestData.size(); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InResult)
+					, SerializedSizeOf(InTestData)
+				);
+
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DataTestRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
-				Protocol::PackParamCopy( pMsgData, &numberOfInTestData, sizeof(uint16_t)); 
-				Protocol::PackParamCopy( pMsgData, InTestData.data(), (INT)(sizeof(uint8_t)*InTestData.size())); 
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(InTestData));
 
 				return hr;
 			}; // MessageData* DataTestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
@@ -1281,11 +1301,10 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) );
-
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::HeartBitC2SEvt::MID, __uiMessageSize ) );
-
 
 				return hr;
 			}; // MessageData* HeartBitC2SEvt::Create( IHeap& memHeap )
@@ -1307,18 +1326,18 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
-				uint16_t uiSizeOfFileName = 0;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &uiSizeOfFileName, pCur, iMsgSize, sizeof(uint16_t) ) );
-				protocolCheck( Protocol::StreamParamLnk( m_FileName, pCur, iMsgSize, sizeof(char)*uiSizeOfFileName ) );
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_FileName, ArrayLen * sizeof(char)));
 
 				return hr;
 
@@ -1365,18 +1384,19 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t __uiInFileNameLength = InFileName ? (uint16_t)(strlen(InFileName)+1) : 1;
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) +  + sizeof(uint16_t) + __uiInFileNameLength 
-					+ sizeof(uint64_t));
-
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InFileName)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DebugPrintALLRankingCmd::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &__uiInFileNameLength, sizeof(uint16_t) );
-				Protocol::PackParamCopy( pMsgData, InFileName ? InFileName : "", __uiInFileNameLength );
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InFileName));
 
 				return hr;
 			}; // MessageData* DebugPrintALLRankingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InFileName )
@@ -1397,16 +1417,17 @@ namespace SF
 			{
  				FunctionContext hr;
 
-				int iMsgSize;
-				uint8_t* pCur;
 
 				protocolCheckPtr(pIMsg);
 
-				iMsgSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				pCur = pIMsg->GetMessageData();
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
 
-				protocolCheck( Protocol::StreamParamCopy( &m_TransactionID, pCur, iMsgSize, sizeof(uint64_t) ) );
-				protocolCheck( Protocol::StreamParamCopy( &m_Result, pCur, iMsgSize, sizeof(Result) ) );
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_Result));
 
 				return hr;
 
@@ -1454,16 +1475,18 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ sizeof(uint64_t)
-					+ sizeof(Result));
-
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InResult)
+				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DebugPrintALLRankingRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
 
-				pMsgData = pNewMsg->GetMessageData();
-
-				Protocol::PackParamCopy( pMsgData, &InTransactionID, sizeof(uint64_t));
-				Protocol::PackParamCopy( pMsgData, &InResult, sizeof(Result));
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
 
 				return hr;
 			}; // MessageData* DebugPrintALLRankingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
