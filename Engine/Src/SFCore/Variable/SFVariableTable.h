@@ -31,6 +31,10 @@ namespace SF {
 
 	class VariableTable
 	{
+	public:
+
+		using Iterator = SortedArray<StringCrc64, Variable*, true, false>::Iterator;
+
 	private:
 
 		// TODO: memory optimization, use heap
@@ -48,8 +52,20 @@ namespace SF {
 
 		IHeap& GetHeap() { return m_Heap; }
 
-		// Get/Set variable
+		size_t size() const { return m_VairableTable.size(); }
+		Iterator begin() { return m_VairableTable.begin(); }
+		const Iterator begin() const { return m_VairableTable.begin(); }
+		Iterator end() { return m_VairableTable.end(); }
+		const Iterator end() const { return m_VairableTable.end(); }
+
+		// Set variable, contents will be copied
 		virtual Result SetVariable(StringCrc64 name, const Variable& variable);
+
+		// Set variable, it will take over the pointer owner ship
+		virtual Result SetVariable(StringCrc64 name, std::unique_ptr<Variable>& variable);
+		virtual Result SetVariable(StringCrc64 name, Variable*& variable);
+
+		// Get variable
 		Variable* GetVariable(StringCrc64 name);
 
 		// Get/Set values

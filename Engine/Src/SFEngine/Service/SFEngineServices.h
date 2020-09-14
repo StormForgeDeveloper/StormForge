@@ -24,7 +24,6 @@
 #include "Service/SFIGraphicDevice.h"
 
 
-
 namespace SF {
 
 

@@ -15,6 +15,7 @@
 #include "Service/SFServices.h"
 #include "Service/SFAsyncIOPortService.h"
 #include "Service/SFScriptService.h"
+#include "Variable/SFVariableFactoryService.h"
 
 
 //////////////////////////////////////////////////////////////////////
@@ -105,6 +106,7 @@ namespace SF {
 		extern ServiceInstance<LogService> LogModule;
 		extern ServiceInstance<AsyncIOPortService> AsyncIOPort;
 		extern ServiceInstance <ScriptEngineService> ScriptEngine;
+		extern ServiceInstance<VariableFactoryService> VariableFactory;
 	};
 
 

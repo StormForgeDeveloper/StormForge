@@ -375,7 +375,7 @@ namespace ProtocolCompiler
         }
         public string OutArrayTypeName(Parameter param)
         {
-            return string.Format("ExternalBufferArray<{0}>", ToTargetTypeName(param.Type));
+            return string.Format("ArrayView<{0}>", ToTargetTypeName(param.Type));
         }
 
 

@@ -162,7 +162,9 @@
 					<xs:enumeration value="PartyUID"/>
 
 					<xs:enumeration value="NotificationType"/>
-					<xs:enumeration value="FieldSet"/>
+					
+					<xs:enumeration value="VariableBox"/>
+					<xs:enumeration value="VariableTable"/>
 
 					<xs:enumeration value="RankingType"/>
 					<xs:enumeration value="PlayerRole"/>

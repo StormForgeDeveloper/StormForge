@@ -159,7 +159,7 @@ SFDLL_EXPORT int SFZooKeeper_NativeCreateNode(intptr_t nativeHandle, const char*
 	if (!StrUtil::IsNullOrEmpty(nodeValue))
 	{
 		auto strLen = (uint)strlen(nodeValue) + 1;
-		ExternalBufferArray<uint8_t> valueBuffer(strLen, strLen, (uint8_t*)nodeValue);
+		ArrayView<uint8_t> valueBuffer(strLen, strLen, (uint8_t*)nodeValue);
 		return (int32_t)pZKInstance->Create(path, valueBuffer, nullptr, flags, outPath);
 	}
 	else

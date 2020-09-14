@@ -60,13 +60,13 @@ namespace SF {
 			bool IsValid() const;
 
 			int GetIndex() const { return m_CurrentIndex; }
-			KeyType GetKey();
+			KeyType GetKey() const;
 			ValueType GetValue() const;
 
 			const ValueType* operator -> () { return &GetValue(); }
 			const ValueType* operator -> () const { return &GetValue(); }
-			ValueType operator * () { return GetValue(); }
-			ValueType operator * () const { return GetValue(); }
+			Iterator& operator * () { return *this; }
+			Iterator& operator * () const { return *this; }
 
 			// compare item
 			bool operator == (const Iterator& op);

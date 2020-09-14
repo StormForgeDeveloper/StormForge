@@ -13,6 +13,7 @@
 #include "Protocol/SFProtocol.h"
 #include "Net/SFMessage.h"
 #include "Types/SFEngineTypedefs.h"
+#include "Container/SFArray.h"
 #include "Variable/SFVariableMapBuilder.h"
 
 
@@ -416,7 +417,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID;
 				Result m_Result;
-				ExternalBufferArray<TotalRankingPlayerInformation> m_Ranking;
+				ArrayView<TotalRankingPlayerInformation> m_Ranking;
 			public:
 				UpdateMyScoreRes()
 					{}
@@ -511,7 +512,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID;
 				Result m_Result;
-				ExternalBufferArray<TotalRankingPlayerInformation> m_Ranking;
+				ArrayView<TotalRankingPlayerInformation> m_Ranking;
 			public:
 				GetRankingListRes()
 					{}
@@ -557,7 +558,7 @@ namespace SF
 				uint64_t GetSender() { return 0; }
 			private:
 				uint64_t m_TransactionID;
-				ExternalBufferArray<uint8_t> m_TestData;
+				ArrayView<uint8_t> m_TestData;
 			public:
 				DataTestCmd()
 					{}
@@ -602,7 +603,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID;
 				Result m_Result;
-				ExternalBufferArray<uint8_t> m_TestData;
+				ArrayView<uint8_t> m_TestData;
 			public:
 				DataTestRes()
 					{}

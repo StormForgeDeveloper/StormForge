@@ -16,7 +16,7 @@
 #include "String/SFStrFormat.h"
 #include "String/SFStringCrc64.h"
 #include "String/SFString.h"
-#include "String/SFString_internal.h"
+#include "String/SFStringFormat.h"
 #include "Util/SFUtility.h"
 
 

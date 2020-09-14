@@ -60,7 +60,7 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
-		KeyType SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Iterator::GetKey()
+		KeyType SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Iterator::GetKey() const
 		{
 			if (!IsValid())
 			{
@@ -561,7 +561,7 @@ namespace SF {
 		const typename SortedArray<KeyType, ValueType, UseUniqueKey, UseBulkCopy>::Iterator SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::begin() const
 		{
 			if(m_ItemCount > 0)
-				return Iterator(this, 0);
+				return Iterator(const_cast<SortedArray<KeyType, ValueType, UseUniqueKey, UseBulkCopy>*>(this), 0);
 
 			return Iterator();
 		}

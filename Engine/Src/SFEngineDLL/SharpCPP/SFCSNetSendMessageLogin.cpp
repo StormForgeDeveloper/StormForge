@@ -84,7 +84,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginDataTestCmd( intptr_t InNativeConnectionHa
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::DataTestCmd::Create(pConnection->GetHeap(), InTransactionID,SF::ExternalBufferArray<uint8_t>(_sizeOfInTestData, _sizeOfInTestData, const_cast<uint8_t*>(InTestData)));
+	MessageDataPtr pMessage = SF::Message::Login::DataTestCmd::Create(pConnection->GetHeap(), InTransactionID,SF::ArrayView<uint8_t>(_sizeOfInTestData, _sizeOfInTestData, const_cast<uint8_t*>(InTestData)));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
@@ -163,7 +163,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginUpdateMyScoreRes( intptr_t InNativeConnect
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::UpdateMyScoreRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ExternalBufferArray<TotalRankingPlayerInformation>(_sizeOfInRanking, _sizeOfInRanking, const_cast<TotalRankingPlayerInformation*>(InRanking)));
+	MessageDataPtr pMessage = SF::Message::Login::UpdateMyScoreRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ArrayView<TotalRankingPlayerInformation>(_sizeOfInRanking, _sizeOfInRanking, const_cast<TotalRankingPlayerInformation*>(InRanking)));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
@@ -176,7 +176,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginGetRankingListRes( intptr_t InNativeConnec
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::GetRankingListRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ExternalBufferArray<TotalRankingPlayerInformation>(_sizeOfInRanking, _sizeOfInRanking, const_cast<TotalRankingPlayerInformation*>(InRanking)));
+	MessageDataPtr pMessage = SF::Message::Login::GetRankingListRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ArrayView<TotalRankingPlayerInformation>(_sizeOfInRanking, _sizeOfInRanking, const_cast<TotalRankingPlayerInformation*>(InRanking)));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
@@ -189,7 +189,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginDataTestRes( intptr_t InNativeConnectionHa
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::DataTestRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ExternalBufferArray<uint8_t>(_sizeOfInTestData, _sizeOfInTestData, const_cast<uint8_t*>(InTestData)));
+	MessageDataPtr pMessage = SF::Message::Login::DataTestRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ArrayView<uint8_t>(_sizeOfInTestData, _sizeOfInTestData, const_cast<uint8_t*>(InTestData)));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;

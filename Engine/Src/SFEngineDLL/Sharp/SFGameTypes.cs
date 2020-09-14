@@ -250,33 +250,34 @@ namespace SF
         }
     }
 
-    public class BoxedValue
-    {
-        public object Value;
 
-        public BoxedValue()
-        {
-        }
-
-        public BoxedValue(object InValue)
-        {
-            Value = InValue;
-        }
-    }
-
-    public class BoxedValueWithName
+    public class NamedVariableBox
     {
         public UInt32 NameCrc;
         public object Value;
 
-        public BoxedValueWithName()
+        public NamedVariableBox()
         {
         }
 
-        public BoxedValueWithName(UInt32 InNameCrc, object InValue = null)
+        public NamedVariableBox(UInt32 InNameCrc, object InValue = null)
         {
             NameCrc = InNameCrc;
             Value = InValue;
+        }
+    }
+
+    public class VariableTable
+    {
+        public Dictionary<UInt32,object> Values;
+
+        public VariableTable()
+        {
+        }
+
+        public VariableTable(Dictionary<UInt32, object> InValues)
+        {
+            Values = InValues;
         }
     }
 

@@ -14,13 +14,18 @@
 #include "SFTypedefs.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "ResultCode/SFResultCodeLibrary.h"
+#include "Stream/SFMemoryStream.h"
 #include "Net/SFNetDef.h"
 #include "String/SFStrUtil.h"
+#include "String/SFString.h"
+#include "String/SFStringSerialization.h"
+#include "Variable/SFVariableSerialization.h"
 #include "Util/SFLog.h"
 #include "String/SFToStringEngineTypes.h"
 
 namespace SF {
 namespace Protocol {
+
 
 	// parsing helper
 	template< class SrcType >

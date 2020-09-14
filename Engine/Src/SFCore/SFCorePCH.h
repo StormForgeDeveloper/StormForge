@@ -13,3 +13,5 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
+#include "SFTypedefs.h"
+#include "Util/SFLog.h"

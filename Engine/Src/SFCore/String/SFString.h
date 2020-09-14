@@ -292,6 +292,12 @@ namespace SF {
 		size_t GetLength() const { auto bufferLen = GetBufferLength();  return bufferLen > 0 ? bufferLen - 1 : 0; }
 		size_t size() const { return GetLength(); }
 		size_t length() const { return GetLength(); }
+
+
+		// Reserve buffer and set size. filled data will be garbage
+		void Resize(size_t newStrLen) { m_Buffer->Resize(newStrLen); }
+		// Reserver buffer
+		void Reserve(size_t newStrLen) { m_Buffer->Reserve(newStrLen); }
 		// Check whether it's null or empty string
 		bool IsNullOrEmpty() const { return m_Buffer == nullptr || m_Buffer->GetStringLength() == 0; }
 
@@ -1048,6 +1054,7 @@ namespace SF {
 		//	return *this;
 		//}
 
+		CharType* data() { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
 		const CharType* data() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
 		operator const CharType*() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
 
@@ -1187,7 +1194,9 @@ namespace SF {
 	};
 
 
+
 }; // namespace SF
+
 
 
 #include "SFString.inl"

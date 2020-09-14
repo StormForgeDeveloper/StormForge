@@ -15,7 +15,7 @@
 #include "Util/SFLog.h"
 #include "Variable/SFVariable.h"
 #include "String/SFToString.h"
-
+#include "String/SFStringFormat.h"
 
 
 namespace SF

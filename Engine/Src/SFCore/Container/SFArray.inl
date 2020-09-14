@@ -103,7 +103,7 @@ namespace SF {
 
 		// ConserveDataOnResize
 		template< class DataType >
-		bool Array<DataType>::GetConserveDataOnResize() const
+		bool Array<DataType>::GetPreserveDataOnResize() const
 		{
 			return m_PreserveDataOnResize;
 		}
@@ -147,6 +147,7 @@ namespace SF {
 		{
 			return m_pDataPtr;
 		}
+
 		template< class DataType >
 		DataType* Array<DataType>::data()
 		{
@@ -189,7 +190,6 @@ namespace SF {
 			return hr;
 		}
 
-		// push_back
 
 		// push_back
 		template< class DataType >
@@ -229,24 +229,6 @@ namespace SF {
 			return hr;
 		}
 
-		//
-		//template< class DataType >
-		//Result Array<DataType>::operator +=( const DataType& NewData )
-		//{
-		//	Result hr = ResultCode::SUCCESS;
-		//	if( size() ==  GetAllocatedSize() )
-		//	{
-		//		hr = IncreaseSize();
-		//		if( !(hr) ) return hr;
-		//	}
-		//
-		//	Assert( size() <  GetAllocatedSize() );
-		//
-		//	m_pDataPtr[m_Size] = NewData;
-		//	m_Size++;
-		//
-		//	return hr;
-		//}
 
 		template< class DataType >
 		inline Result Array<DataType>::push_back(size_t numItems, const DataType* NewData)
@@ -483,49 +465,49 @@ namespace SF {
 
 
 		template< class DataType >
-		ExternalBufferArray<DataType>::ExternalBufferArray()
+		ArrayView<DataType>::ArrayView()
 		{
 
 		}
 
 		template< class DataType >
-		ExternalBufferArray<DataType>::ExternalBufferArray(uint maxDataCount, uint dataCount, DataType* pDataPtr)
+		ArrayView<DataType>::ArrayView(uint maxDataCount, uint dataCount, DataType* pDataPtr)
 		{
 			SetLinkedBuffer(maxDataCount, dataCount, pDataPtr);
 		}
 
 		template< class DataType >
-		ExternalBufferArray<DataType>::ExternalBufferArray(size_t dataCount, DataType* pDataPtr)
+		ArrayView<DataType>::ArrayView(size_t dataCount, DataType* pDataPtr)
 		{
 			SetLinkedBuffer(dataCount, dataCount, pDataPtr);
 		}
 
 		template< class DataType >
-		constexpr ExternalBufferArray<DataType>::ExternalBufferArray(size_t dataCount, const DataType* pDataPtr)
+		constexpr ArrayView<DataType>::ArrayView(size_t dataCount, const DataType* pDataPtr)
 		{
 			SetLinkedBuffer(dataCount, pDataPtr);
 		}
 
 		template< class DataType >
-		ExternalBufferArray<DataType>::~ExternalBufferArray()
+		ArrayView<DataType>::~ArrayView()
 		{
 		}
 
 		template< class DataType >
-		void ExternalBufferArray<DataType>::SetLinkedBuffer(uint maxDataCount, uint dataCount, DataType* pDataPtr)
+		void ArrayView<DataType>::SetLinkedBuffer(uint maxDataCount, uint dataCount, DataType* pDataPtr)
 		{
 			Array<DataType>::SetBuffPtr(maxDataCount, pDataPtr);
 			Array<DataType>::resize(dataCount);
 		}
 
 		template< class DataType >
-		constexpr void ExternalBufferArray<DataType>::SetLinkedBuffer(size_t dataCount, const DataType* pDataPtr)
+		constexpr void ArrayView<DataType>::SetLinkedBuffer(size_t dataCount, const DataType* pDataPtr)
 		{
 			Array<DataType>::SetBuffPtr(dataCount, pDataPtr);
 		}
 
 		template< class DataType >
-		void ExternalBufferArray<DataType>::SetLinkedBuffer(const Array<DataType>& srcLink)
+		void ArrayView<DataType>::SetLinkedBuffer(const Array<DataType>& srcLink)
 		{
 			Array<DataType>::SetBuffPtr(srcLink.GetAllocatedSize(), const_cast<uint8_t*>(srcLink.data()));
 			Array<DataType>::resize(srcLink.size());
@@ -533,7 +515,7 @@ namespace SF {
 		}
 
 		template< class DataType >
-		Result ExternalBufferArray<DataType>::reserve(size_t szReserv)
+		Result ArrayView<DataType>::reserve(size_t szReserv)
 		{
 			if (szReserv <= Array<DataType>::GetAllocatedSize())
 				return ResultCode::SUCCESS;

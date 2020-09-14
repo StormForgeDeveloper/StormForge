@@ -45,6 +45,9 @@ namespace SF {
 
 		~VariableBox();
 
+		// Set variable type. It will destroy previous variable
+		bool SetVariableType(StringCrc32 TypeName);
+
 		Variable* GetVariable() const { return m_pVariable; }
 
 		VariableBox& operator = (const VariableBox& src);
@@ -254,6 +257,8 @@ namespace SF {
 	template<> inline int64_t VariableValueReference<DataType>::GetValueInt64() const { return (int64_t)*reinterpret_cast<DataType*>(GetDataPtr()); }\
 	template<> inline uint64_t VariableValueReference<DataType>::GetValueUInt64() const { return (uint64_t)*reinterpret_cast<DataType*>(GetDataPtr()); }\
 
+
+
 	BR_VARIABLEBYREFERENCE_NUMERIC_SPECIALIZE(int8_t)
 	BR_VARIABLEBYREFERENCE_NUMERIC_SPECIALIZE(uint8_t)
 	BR_VARIABLEBYREFERENCE_NUMERIC_SPECIALIZE(int16_t)
@@ -303,7 +308,7 @@ namespace SF {
 #endif
 
 
-}; // namespace StrUtil
+} // namespace SF
 
 
 

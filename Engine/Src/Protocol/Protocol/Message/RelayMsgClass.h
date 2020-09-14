@@ -13,6 +13,7 @@
 #include "Protocol/SFProtocol.h"
 #include "Net/SFMessage.h"
 #include "Types/SFEngineTypedefs.h"
+#include "Container/SFArray.h"
 #include "Variable/SFVariableMapBuilder.h"
 
 
@@ -96,7 +97,7 @@ namespace SF
 				Result m_Result;
 				uint32_t m_RelayInstanceID;
 				uint32_t m_MyEndpointID;
-				ExternalBufferArray<RelayPlayerInfo> m_MemberInfos;
+				ArrayView<RelayPlayerInfo> m_MemberInfos;
 			public:
 				JoinRelayInstanceResS2CEvt()
 					{}
@@ -285,7 +286,7 @@ namespace SF
 				uint32_t m_RelayInstanceID;
 				uint32_t m_SenderEndpointID;
 				uint32_t m_TargetEndpointMask;
-				ExternalBufferArray<uint8_t> m_Payload;
+				ArrayView<uint8_t> m_Payload;
 			public:
 				RelayPacketC2SEvt()
 					{}

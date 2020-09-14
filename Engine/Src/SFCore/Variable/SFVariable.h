@@ -17,12 +17,15 @@
 #include "String/SFStringCrc64.h"
 #include "String/SFStringCrc32.h"
 #include "String/SFString.h"
-
+#include "String/SFStringSerialization.h"
+#include "Stream/SFStream.h"
 
 namespace SF {
 
 
 	struct ToStringContext;
+	class IOutputStream;
+	class IInputStream;
 
 
 	/////////////////////////////////////////////////////////////////////////////////
@@ -92,6 +95,11 @@ namespace SF {
 
 		// Variable instance size
 		virtual size_t GetVariableSize() const { return sizeof(Variable); }
+
+		// Serialization
+		virtual size_t GetSerializedSize() const { return sizeof(StringCrc32); }
+		virtual Result Serialize(IOutputStream& output) const { return output.Write(GetTypeName()); }
+		virtual Result Deserialize(IInputStream& input)	{ return ResultCode::FAIL; }
 
 		// Clone variable into given buffer, the buffer should have enough space for the variable instance.
 		// To get variable instance size call GetVariableSize
@@ -192,6 +200,16 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
 
 		virtual bool operator == (const Variable& op) const override;
 	};
@@ -304,6 +322,16 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
 	};
 
 
@@ -367,6 +395,16 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
 	};
 
 
@@ -427,6 +465,16 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
 	};
 
 
@@ -493,6 +541,16 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
 	};
 
 
@@ -556,6 +614,16 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
 	};
 
 
@@ -622,6 +690,16 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
+
 		virtual bool operator == (const Variable& op) const override;
 	};
 
@@ -686,6 +764,16 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
 
 		virtual bool operator == (const Variable& op) const override;
 	};
@@ -921,6 +1009,16 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(uint16_t) + m_Value.size() * sizeof(char); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
+
 		virtual bool operator == (const Variable& op) const override;
 	};
 
@@ -936,7 +1034,7 @@ namespace SF {
 	{
 	public:
 
-		static constexpr StringCrc32 TYPE_NAME = "StringCrc64"_crc32c;
+		static constexpr StringCrc32 TYPE_NAME = "StringCrc32"_crc32c;
 
 	private:
 		StringCrc32 m_Value;
@@ -980,6 +1078,17 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
+
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
 	};
 
 
@@ -1035,6 +1144,17 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
+
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
+		}
 	};
 
 
@@ -1097,6 +1217,29 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
+
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(uint16_t) + m_Value.size(); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			uint16_t dataSize = static_cast<uint16_t>(m_Value.size());
+			return Variable::Serialize(output)
+				&& output.Write(dataSize)
+				&& output.Write(m_Value.data());
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			if (!Variable::Deserialize(input))
+				return false;
+
+			uint16_t dataSize = 0;
+			if (!input.Read(dataSize))
+				return false;
+
+			m_Value.resize(dataSize);
+
+			return input.Read(m_Value.data(), dataSize);
+		}
 	};
 
 
@@ -1158,6 +1301,16 @@ namespace SF {
 				return false;
 
 			return m_Value == *reinterpret_cast<ValueTypeDecay*>(op.GetDataPtr());
+		}
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(m_Value);
 		}
 
 	};
@@ -1271,7 +1424,20 @@ namespace SF {
 
 			return memcmp(GetDataPtr(), op.GetDataPtr(), sizeof(ValueType));
 		}
+
+
+		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(*m_Value); }
+		virtual Result Serialize(IOutputStream& output) const
+		{
+			return Variable::Serialize(output) && output.Write(*m_Value);
+		}
+		virtual Result Deserialize(IInputStream& input)
+		{
+			return Variable::Deserialize(input) && input.Read(*m_Value);
+		}
+
 	};
+
 
 
 } // namespace SF

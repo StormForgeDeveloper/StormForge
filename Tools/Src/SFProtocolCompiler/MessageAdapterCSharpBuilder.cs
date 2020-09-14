@@ -212,7 +212,7 @@ namespace ProtocolCompiler
                 {
                     if (from == TypeUsage.CPPForSharp)
                     {
-                        strParams.AppendFormat("SF::ExternalBufferArray<{2}>({0}_sizeOf{1}, {0}_sizeOf{1}, const_cast<{3}>({0}{1}))", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
+                        strParams.AppendFormat("SF::ArrayView<{2}>({0}_sizeOf{1}, {0}_sizeOf{1}, const_cast<{3}>({0}{1}))", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
                     }
                     else
                     {

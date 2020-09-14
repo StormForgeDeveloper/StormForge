@@ -176,7 +176,7 @@ namespace SF
 		// 
 		inline Result Call() const
 		{
-			return CallWithParam(ExternalBufferArray<VariableBox>(0, 0, nullptr));
+			return CallWithParam(ArrayView<VariableBox>(0, 0, nullptr));
 		}
 
 		// 
@@ -184,7 +184,7 @@ namespace SF
 		inline Result Call(const ArgTypes&... args) const
 		{
 			VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
-			return CallWithParam(ExternalBufferArray<VariableBox>(sizeof...(args), sizeof...(args), arguments));
+			return CallWithParam(ArrayView<VariableBox>(sizeof...(args), sizeof...(args), arguments));
 		}
 	};
 

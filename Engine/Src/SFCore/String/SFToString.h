@@ -14,6 +14,7 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 #include "Variable/SFVariableBoxing.h"
+#include "Variable/SFNamedVariableBox.h"
 
 
 
@@ -27,6 +28,7 @@ namespace SF {
 	Result _ToString(ToStringContext& context, const DurationSec& value);
 	Result _ToString(ToStringContext& context, const sockaddr_in6& value);
 	Result _ToString(ToStringContext& context, const sockaddr_storage& value);
+	Result _ToString(ToStringContext& context, const NamedVariableBox& value);
 
 
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(NetAddress);
@@ -36,6 +38,7 @@ namespace SF {
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(DurationSec);
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_in6);
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_storage);
+	DEFINE_BOXING_TEMPLETE_BYVALUE(NamedVariableBox);
 
 }; // namespace SF
 

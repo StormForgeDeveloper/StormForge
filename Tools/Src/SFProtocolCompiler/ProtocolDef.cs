@@ -381,10 +381,10 @@ namespace ProtocolXml {
         NotificationType,
         
         /// <remarks/>
-        BoxedValue,
+        VariableBox,
         
         /// <remarks/>
-        BoxedValueWithName,
+        VariableTable,
         
         /// <remarks/>
         RankingType,

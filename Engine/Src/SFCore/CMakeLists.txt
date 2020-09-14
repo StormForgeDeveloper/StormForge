@@ -51,14 +51,6 @@ set(SFCORE_LIB_FILES
 	SFTypedefs.cpp
 	Stream/SFCompressedStream.cpp
 	Stream/SFMemoryStream.cpp
-	String/SFStringCrc64.cpp
-	String/SFStringCrcDB.cpp
-	String/SFPathString.cpp
-	String/SFString.cpp
-	String/SFStrParserUtil.cpp
-	String/SFStrUtil.cpp
-	String/SFToString.cpp
-	String/SFToStringBase.cpp
 	Task/SFAsyncTaskManager.cpp
 	Task/SFTask.cpp
 	Task/SFTimerScheduler.cpp
@@ -76,11 +68,20 @@ set(SFCORE_LIB_FILES
 	Util/SFTimeUtil.cpp
 	Util/SFUniqueIDGenerator.cpp
 	Util/SFUtility.cpp
+	Variable/SFNamedVariableBox.h
+	Variable/SFNamedVariableBox.cpp
 	Variable/SFVariable.cpp
 	Variable/SFVariableBoxing.cpp
 	Variable/SFVariableStack.cpp
 	Variable/SFVariableTable.cpp
-
+	Variable/SFVariableSerialization.h
+	Variable/SFVariableFactoryService.h
+	Variable/SFVariableFactoryService.cpp
+	Variable/SFVariable.h
+	Variable/SFVariableBoxing.h
+	Variable/SFVariableMapBuilder.h
+	Variable/SFVariableStack.h
+	Variable/SFVariableTable.h
   	Component/SFUnhandledExceptionHandlerComponent.h
 	Container/SFCircularBuffer.h
 	Container/SFCircularBufferQueue.h
@@ -181,9 +182,19 @@ set(SFCORE_LIB_FILES
 	String/SFString.h
 	String/SFStrFormat.h
 	String/SFStrParserUtil.h
+	String/SFStringSerialization.h
 	String/SFStrUtil.h
 	String/SFToString.h
 	String/SFToStringBase.h
+	String/SFStringCrc64.cpp
+	String/SFStringCrcDB.cpp
+	String/SFPathString.cpp
+	String/SFString.cpp
+	String/SFStrParserUtil.cpp
+	String/SFStrUtil.cpp
+	String/SFToString.cpp
+	String/SFToStringBase.cpp
+
 	Task/SFAsyncTaskManager.h
 	Task/SFTask.h
 	Task/SFTimerScheduler.h
@@ -198,11 +209,6 @@ set(SFCORE_LIB_FILES
 	Util/SFTimeUtil.h
 	Util/SFUniqueIDGenerator.h
 	Util/SFUtility.h
-	Variable/SFVariable.h
-	Variable/SFVariableBoxing.h
-	Variable/SFVariableMapBuilder.h
-	Variable/SFVariableStack.h
-	Variable/SFVariableTable.h
 	Container/SFCircularPageQueue.inl
 	Container/SFDualSortedMap.inl
 	Container/SFArray.inl

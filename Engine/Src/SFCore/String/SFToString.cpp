@@ -95,6 +95,30 @@ namespace SF {
 	}
 
 
+	Result _ToString(ToStringContext& context, const NamedVariableBox& value)
+	{
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, static_cast<const char*>(value.GetName().ToString()))))
+			return ResultCode::FAIL;
+
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+			return ResultCode::FAIL;
+
+		auto Variable = value.GetVariable();
+		if (Variable == nullptr)
+		{
+			if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(null)")))
+				return ResultCode::FAIL;
+		}
+		else
+		{
+			if (!Variable->ToString(context))
+				return ResultCode::FAIL;
+		}
+
+		return ResultCode::SUCCESS;
+	}
+
+
 
 }
 

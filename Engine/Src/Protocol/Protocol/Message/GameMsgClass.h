@@ -13,6 +13,7 @@
 #include "Protocol/SFProtocol.h"
 #include "Net/SFMessage.h"
 #include "Types/SFEngineTypedefs.h"
+#include "Container/SFArray.h"
 #include "Variable/SFVariableMapBuilder.h"
 
 
@@ -966,7 +967,7 @@ namespace SF
 				uint16_t m_MaxFriendSlot;
 				uint16_t m_TotalNumberOfFriends;
 				uint16_t m_StartIndex;
-				ExternalBufferArray<FriendInformation> m_FriendList;
+				ArrayView<FriendInformation> m_FriendList;
 			public:
 				GetFriendListRes()
 					{}
@@ -1616,7 +1617,7 @@ namespace SF
 				uint64_t GetSender() { return 0; }
 			private:
 				uint64_t m_TransactionID;
-				ExternalBufferArray<AccountID> m_TargetPlayerID;
+				ArrayView<AccountID> m_TargetPlayerID;
 			public:
 				RequestPlayerStatusUpdateCmd()
 					{}
@@ -1801,7 +1802,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID;
 				Result m_Result;
-				ExternalBufferArray<TotalRankingPlayerInformation> m_Ranking;
+				ArrayView<TotalRankingPlayerInformation> m_Ranking;
 			public:
 				GetRankingListRes()
 					{}
@@ -2378,7 +2379,7 @@ namespace SF
 				Result m_Result;
 				uint64_t m_PartyUID;
 				AccountID m_PartyLeaderID;
-				ExternalBufferArray<uint8_t> m_ChatHistoryData;
+				ArrayView<uint8_t> m_ChatHistoryData;
 			public:
 				JoinPartyRes()
 					{}
@@ -3266,8 +3267,8 @@ namespace SF
 				uint8_t m_PlayerCharacter;
 				uint8_t m_Role;
 				uint8_t m_Dead;
-				ExternalBufferArray<uint8_t> m_ChatHistoryData;
-				ExternalBufferArray<uint8_t> m_GameLogData;
+				ArrayView<uint8_t> m_ChatHistoryData;
+				ArrayView<uint8_t> m_GameLogData;
 			public:
 				JoinGameRes()
 					{}
@@ -4414,7 +4415,7 @@ namespace SF
 				uint64_t GetSender() { return 0; }
 			private:
 				uint64_t m_GameInsUID;
-				ExternalBufferArray<AccountID> m_Voted;
+				ArrayView<AccountID> m_Voted;
 			public:
 				VoteEndS2CEvt()
 					{}
@@ -4694,7 +4695,7 @@ namespace SF
 				uint64_t GetSender() { return 0; }
 			private:
 				uint64_t m_TransactionID;
-				ExternalBufferArray<AccountID> m_TargetPlayerID;
+				ArrayView<AccountID> m_TargetPlayerID;
 			public:
 				GameRevealPlayerCmd()
 					{}
@@ -4739,8 +4740,8 @@ namespace SF
 			private:
 				uint64_t m_TransactionID;
 				Result m_Result;
-				ExternalBufferArray<AccountID> m_RevealedPlayerID;
-				ExternalBufferArray<uint8_t> m_RevealedRole;
+				ArrayView<AccountID> m_RevealedPlayerID;
+				ArrayView<uint8_t> m_RevealedRole;
 				uint64_t m_TotalGem;
 				uint64_t m_TotalGameMoney;
 			public:
@@ -5121,8 +5122,8 @@ namespace SF
 				uint8_t m_PlayerCharacter;
 				uint8_t m_Role;
 				uint8_t m_Dead;
-				ExternalBufferArray<uint8_t> m_ChatHistoryData;
-				ExternalBufferArray<uint8_t> m_GameLogData;
+				ArrayView<uint8_t> m_ChatHistoryData;
+				ArrayView<uint8_t> m_GameLogData;
 				uint32_t m_Stamina;
 				uint64_t m_TotalGem;
 				uint64_t m_TotalGameMoney;
@@ -5496,7 +5497,7 @@ namespace SF
 				const char* m_Platform;
 				const char* m_PackageName;
 				const char* m_PurchaseTransactionID;
-				ExternalBufferArray<uint8_t> m_PurchaseToken;
+				ArrayView<uint8_t> m_PurchaseToken;
 			public:
 				BuyShopItemCmd()
 				:m_Platform(nullptr)

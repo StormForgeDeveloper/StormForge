@@ -15,6 +15,8 @@
 #include "SFTypedefs.h"
 #include "Variable/SFVariableBoxing.h"
 #include "String/SFToString.h"
+#include "Variable/SFVariableFactoryService.h"
+#include "Service/SFService.h"
 
 
 namespace SF
@@ -59,6 +61,18 @@ namespace SF
 	//	}
 
 	//}
+
+	// Set variable type. It will destroy previous variable
+	bool VariableBox::SetVariableType(StringCrc32 TypeName)
+	{
+		if (m_pVariable != nullptr)
+			m_pVariable->~Variable();
+
+		m_pVariable = Service::VariableFactory->CreateVariable(m_DataBuffer, TypeName);
+
+		return m_pVariable != nullptr;
+	}
+
 	VariableBox& VariableBox::operator = (const VariableBox& src)
 	{
 		if (m_pVariable != nullptr)

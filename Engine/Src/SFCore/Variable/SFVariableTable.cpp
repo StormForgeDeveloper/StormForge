@@ -60,6 +60,42 @@ namespace SF {
 		return m_VairableTable.Set(name, newVariable);
 	}
 
+	Result VariableTable::SetVariable(StringCrc64 name, std::unique_ptr<Variable>& variable)
+	{
+		Variable* pVariable = nullptr;
+		m_VairableTable.Remove(name, pVariable);
+		if (pVariable != nullptr)
+		{
+			delete pVariable;
+		}
+
+		auto Ret = m_VairableTable.Set(name, variable.get());
+		if (Ret)
+		{
+			variable.release();
+		}
+		return Ret;
+	}
+
+	Result VariableTable::SetVariable(StringCrc64 name, Variable*& variable)
+	{
+		Variable* pVariable = nullptr;
+		m_VairableTable.Remove(name, pVariable);
+		if (pVariable != nullptr)
+		{
+			delete pVariable;
+		}
+
+		if (variable == nullptr)
+			return ResultCode::INVALID_ARG;
+
+		auto Ret = m_VairableTable.Set(name, variable);
+		if (Ret)
+		{
+			variable = nullptr;
+		}
+		return Ret;
+	}
 
 
 	Variable* VariableTable::GetVariable(StringCrc64 name)

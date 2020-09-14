@@ -78,6 +78,8 @@ namespace SF
 		// return true if the stream is valid and have something read
 		virtual bool CanRead() = 0;
 
+		virtual size_t GetRemainSize() const { return GetSize() - GetPosition(); }
+
 		virtual Result Read(void* buffer, size_t readSize) = 0;
 
 		template<class DataType>
@@ -85,6 +87,25 @@ namespace SF
 		{
 			return Read(&data, sizeof(data));
 		}
+
+
+		template< class DataType >
+		Result ReadLink(DataType*& pDst, size_t readSize)
+		{
+			if (GetRemainSize() < readSize)
+				return ResultCode::IO_BADPACKET_SIZE;// sizeCheck
+
+			if (readSize > 0)
+			{
+				pDst = reinterpret_cast<DataType*>(GetBufferPtr() + GetPosition());
+				Skip(readSize);
+			}
+			else
+				pDst = nullptr;
+
+			return ResultCode::SUCCESS;
+		}
+
 	};
 
 
@@ -101,13 +122,46 @@ namespace SF
 		// return true if the stream is valid and able to be written
 		virtual bool CanWrite() = 0;
 
-		virtual Result Write(const void* buffer, size_t readSize) = 0;
+		virtual Result Write(const void* buffer, size_t writeSize) = 0;
 
 		template<class DataType>
 		inline Result Write(const DataType& data)
 		{
 			return Write(&data, sizeof(data));
 		}
+	};
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////
+	// Null output stream. only calculate output size
+	class NullOutputStream : public IOutputStream
+	{
+	private:
+
+		size_t OutputSize = 0;
+
+	public:
+
+		NullOutputStream() = default;
+		virtual ~NullOutputStream() = default;
+
+		virtual size_t GetPosition() const override { return OutputSize; }
+		virtual size_t GetSize() const override { return OutputSize; }
+
+		virtual size_t Seek(SeekMode seekPos, int64_t offset)
+		{
+			switch (seekPos)
+			{
+			case SeekMode::Begin: OutputSize = offset; break;
+			case SeekMode::Current: OutputSize += offset; break;
+			case SeekMode::End: OutputSize += offset; break;
+			}
+		}
+
+		// return true if the stream is valid and able to be written
+		virtual bool CanWrite() override { return true; }
+
+		virtual Result Write(const void* buffer, size_t writeSize)  override { OutputSize += writeSize; }
 	};
 
 } // namespace SF

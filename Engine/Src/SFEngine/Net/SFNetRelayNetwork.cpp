@@ -367,7 +367,7 @@ namespace Net {
 			GetRelayInstanceID(), 
 			GetLocalEndpointID(), 
 			targetEndpointMask, 
-			ExternalBufferArray(payloadSize, static_cast<const uint8_t*>(payloadData))
+			ArrayView(payloadSize, static_cast<const uint8_t*>(payloadData))
 		);
 		if (pMessage == nullptr)
 			return hr = ResultCode::OUT_OF_MEMORY;

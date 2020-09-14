@@ -81,7 +81,7 @@ namespace SF
 		// Serialize stream
 		virtual Result Serialize(IOutputStream& stream, AssetPackage& package);
 
-		// Desterialize stream
+		// Deserialize stream
 		virtual Result Deserialize(IHeap& heap, IInputStream& stream, AssetPackage& package);
 	};
 

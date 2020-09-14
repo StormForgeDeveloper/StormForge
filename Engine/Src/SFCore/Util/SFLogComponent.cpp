@@ -17,6 +17,7 @@
 #include "Util/SFTimeUtil.h"
 #include "Util/SFUtility.h"
 #include "String/SFStringCrc64.h"
+#include "String/SFStringFormat.h"
 #include "Service/SFService.h"
 #include "Variable/SFVariableBoxing.h"
 

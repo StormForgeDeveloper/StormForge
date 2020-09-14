@@ -25,7 +25,7 @@ namespace SF
 
 	class InputMemoryStream : public IInputStream
 	{
-	public:
+	protected:
 
 		const Array<uint8_t>* m_Buffer = nullptr;
 

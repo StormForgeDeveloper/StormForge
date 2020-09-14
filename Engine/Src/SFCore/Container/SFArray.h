@@ -234,7 +234,7 @@ namespace SF {
 			size_t m_IncreaseSize = 10;
 
 			// Data pointer
-			DataType*	m_pDataPtr = nullptr;
+			DataType* m_pDataPtr = nullptr;
 
 			// Preserve data on resize by copying back
 			bool m_PreserveDataOnResize = true;
@@ -242,7 +242,9 @@ namespace SF {
 			// Heap for memory management
 			IHeap* m_Heap = nullptr;
 
+
 		protected:
+
 			// Update Data pointer
 			void SetBuffPtr(size_t AllocatedSize, DataType *pDataPtr);
 			constexpr void SetBuffPtr(size_t AllocatedSize, const DataType *pDataPtr);
@@ -276,8 +278,8 @@ namespace SF {
 			// Clear array, buffer size not reallocated, buffer data didn't erased, clear manually if need
 			inline void Clear();
 
-			// ConserveDataOnResize
-			inline bool GetConserveDataOnResize() const;
+			// PreserveDataOnResize
+			inline bool GetPreserveDataOnResize() const;
 			inline void SetPreserveDataOnResize(bool conserveDataOnResize);
 
 			// Get Current allocated Size
@@ -291,21 +293,18 @@ namespace SF {
 			// set Reserve size
 			virtual Result reserve(size_t szReserv) { return ResultCode::SUCCESS; }
 
-#if !defined(SWIG)
 			// Get data pointer
 			inline const DataType* data() const;
-#endif
 			inline DataType* data();
 
 			// Insert an item
 			Result insert(int index, const DataType& NewData);
 
 			// push_back
-#if !defined(SWIG)
 			Result push_back(size_t numItems, const DataType* NewData);
 			Result push_back(DataType&& NewData);
 			Result push_back(const DataType& NewData);
-#endif
+
 			DataType pop_back();
 
 			// Remove element
@@ -316,26 +315,13 @@ namespace SF {
 			inline INT FindItem(const DataType& FindData);
 
 			// Element access operator
-#if !defined(SWIG)
 			inline DataType& operator [](size_t iElement) const;
 			inline DataType& operator [](size_t iElement);
-#endif
 			inline const DataType& GetAt(uint iElement) const; // for swig
 
 
 			// Get binary size
 			//size_t GetBinSize() const;
-
-#ifdef SWIG
-
-		//%extend{
-		//	DataType* ToArray()
-		//	{
-		//		return $self->get(index);
-		//	}
-		//}
-
-#else
 
 			iterator begin() { return iterator(this, size() == 0 ? iterator::END_IDX : 0); }
 			const iterator begin() const { return iterator(const_cast<Array<DataType>*>(this), size() == 0 ? iterator::END_IDX : 0); }
@@ -384,7 +370,6 @@ namespace SF {
 
 				return hr;
 			}
-#endif
 
 			// copy operator
 			Array<DataType>& operator = (const Array<DataType>& src);
@@ -456,16 +441,15 @@ namespace SF {
 		//		Use externally allocated buffer only
 		//
 
-		// TODO: find better name
 		template< class DataType >
-		class ExternalBufferArray : public Array<DataType>
+		class ArrayView : public Array<DataType>
 		{
 		public:
-			ExternalBufferArray();
-			ExternalBufferArray(uint maxDataCount, uint dataCount, DataType* pDataPtr);
-			ExternalBufferArray(size_t dataCount, DataType* pDataPtr);
-			constexpr ExternalBufferArray(size_t dataCount, const DataType* pDataPtr);
-			virtual ~ExternalBufferArray();
+			ArrayView();
+			ArrayView(uint maxDataCount, uint dataCount, DataType* pDataPtr);
+			ArrayView(size_t dataCount, DataType* pDataPtr);
+			constexpr ArrayView(size_t dataCount, const DataType* pDataPtr);
+			virtual ~ArrayView();
 
 			void SetLinkedBuffer(uint maxDataCount, uint dataCount, DataType* pDataPtr);
 			constexpr void SetLinkedBuffer(size_t dataCount, const DataType* pDataPtr);
@@ -474,7 +458,7 @@ namespace SF {
 			Result reserve(size_t szReserv) override;
 
 			// copy operator
-			ExternalBufferArray<DataType>& operator = (const Array<DataType>& src) { Array<DataType>::operator = (src); return *this; }
+			ArrayView<DataType>& operator = (const Array<DataType>& src) { Array<DataType>::operator = (src); return *this; }
 		};
 
 

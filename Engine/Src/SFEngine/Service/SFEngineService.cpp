@@ -41,6 +41,8 @@ namespace SF {
 		ServiceInstance<IAssetImporterFactory> AssetImporterFactory;
 		ServiceInstance<IAssetSerializerFactory> AssetSerializerFactory;
 		ServiceInstance<IResourceManagerService> ResourceManager;
+
+		ServiceInstance<VariableFactoryService> VariableFactory;
 	}
 
 

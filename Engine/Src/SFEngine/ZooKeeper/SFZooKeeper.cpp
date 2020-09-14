@@ -12,6 +12,7 @@
 #include "SFEnginePCH.h"
 
 #include "ZooKeeper/SFZooKeeper.h"
+#include "String/SFStringFormat.h"
 
 #ifdef USE_ZOOKEEPER
 

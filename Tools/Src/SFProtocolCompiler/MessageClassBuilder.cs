@@ -85,6 +85,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
             OutStream.WriteLine("#include \"Net/SFMessage.h\"");
             OutStream.WriteLine("#include \"Types/SFEngineTypedefs.h\"");
+            OutStream.WriteLine("#include \"Container/SFArray.h\"");
             if (AppConfig.GetValue("VariableMapParser", false))
             {
                 OutStream.WriteLine("#include \"Variable/SFVariableMapBuilder.h\"");
@@ -307,7 +308,7 @@ namespace ProtocolCompiler
                             if (param.IsArray)
                             {
                                 MatchIndent(); OutStream.WriteLine(
-                                    string.Format("ExternalBufferArray<{0}> m_{1};", ToTargetTypeName(param.Type), param.Name));
+                                    string.Format("ArrayView<{0}> m_{1};", ToTargetTypeName(param.Type), param.Name));
                             }
                             else
                             {

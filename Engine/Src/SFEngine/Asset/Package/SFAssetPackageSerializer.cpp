@@ -62,7 +62,7 @@ namespace SF
 
 		for (auto itDependency : package.GetDependencies())
 		{
-			result = stream.Write(itDependency->GetName());
+			result = stream.Write(itDependency.GetValue()->GetName());
 			if (!result)
 				return result;
 		}
@@ -72,8 +72,8 @@ namespace SF
 		{
 			ObjectHeader objHeader;
 
-			objHeader.ObjectType = itAsset->GetResourceType();
-			objHeader.ObjectName = itAsset->GetName();
+			objHeader.ObjectType = itAsset.GetValue()->GetResourceType();
+			objHeader.ObjectName = itAsset.GetValue()->GetName();
 			objHeader.Version = 1;
 			objHeader.Encoding = 1; // compressed
 
@@ -81,12 +81,12 @@ namespace SF
 			CompressedOutputStream objectStream(GetHeap(), memoryStream);
 
 			AssetSerializer *pSerializer = nullptr;
-			result = Service::AssetSerializerFactory->FindSerializer(itAsset->GetResourceType(), pSerializer);
+			result = Service::AssetSerializerFactory->FindSerializer(itAsset.GetValue()->GetResourceType(), pSerializer);
 			if(!result)
 				return result;
 
 			// serialize object data
-			result = pSerializer->Serialize(objectStream, itAsset);
+			result = pSerializer->Serialize(objectStream, itAsset.GetValue());
 			if (!result)
 				return result;
 
@@ -107,7 +107,7 @@ namespace SF
 
 
 
-	// Desterialize stream
+	// Deserialize stream
 	Result AssetPackageSerializer::Deserialize(IHeap& heap, IInputStream& stream, AssetPackage& package)
 	{
 		PackageHeader header;
