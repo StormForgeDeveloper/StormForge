@@ -648,6 +648,7 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
             MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
             MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;");
+            MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr;");
             NewLine();
 
             if (parameters == null)
@@ -683,7 +684,8 @@ namespace ProtocolCompiler
                     // All other process is same
                     if (param.Type == ParameterType.RouteContext)
                     {
-                        MatchIndent(); OutStream.WriteLine("Assert( iMsgSize >= (INT)sizeof(RouteContext) );");
+                        MatchIndent(); OutStream.WriteLine("pCur = input->GetBufferPtr() + input->GetPosition();");
+                        MatchIndent(); OutStream.WriteLine("Assert(input->GetRemainSize() >= sizeof(RouteContext));");
                         MatchIndent(); OutStream.WriteLine("memcpy( &routeContext, pCur, sizeof(RouteContext) );");
                         MatchIndent(); OutStream.WriteLine("routeContext.Components.To = to;");
                         MatchIndent(); OutStream.WriteLine("memcpy( pCur, &routeContext, sizeof(RouteContext) );");
@@ -731,7 +733,7 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
             MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToOutputStream();");
             MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;");
-            MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr");
+            MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr;");
             NewLine();
 
             // Skip until we meet route context
@@ -768,7 +770,7 @@ namespace ProtocolCompiler
                             }
                             else
                             {
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({});", ToTargetTypeName(param.Type));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({0});", ToTargetTypeName(param.Type));
                             }
                             break;
                     }

@@ -120,6 +120,20 @@ namespace SF {
 
 
 
+	Result _ToString(ToStringContext& context, const VariableTable& value)
+	{
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Tbl:(")))
+			return ResultCode::FAIL;
+
+		if (!(_IToA(context, (uint32_t)value.size())))
+			return ResultCode::FAIL;
+
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")")))
+			return ResultCode::FAIL;
+
+		return ResultCode::SUCCESS;
+	}
+
 }
 
 

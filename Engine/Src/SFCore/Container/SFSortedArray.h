@@ -151,9 +151,9 @@ namespace SF {
 		Result Remove(const KeyType& key, ValueType& value);
 
 		// Find a key value
-		Result Find(const KeyType& key, ValueType& value, int64_t *pOrder = nullptr);
-		Result find(const KeyType& key, ValueType& value, int64_t *pOrder = nullptr) { return Find(key, value, pOrder); }
-		ValueType find(const KeyType& key) { ValueType value{};  Find(key, value); return value; }
+		Result Find(const KeyType& key, ValueType& value, int64_t *pOrder = nullptr) const;
+		Result find(const KeyType& key, ValueType& value, int64_t *pOrder = nullptr) const { return Find(key, value, pOrder); }
+		ValueType find(const KeyType& key) const { ValueType value{};  Find(key, value); return value; }
 
 		Iterator operator[](const KeyType& key);
 
@@ -192,7 +192,7 @@ namespace SF {
 	private:
 
 		// find parent node or candidate
-		bool FindIndex(const KeyType& key, int& index);
+		bool FindIndex(const KeyType& key, int& index) const;
 
 		void SetValue(int index, const ValueType& value);
 

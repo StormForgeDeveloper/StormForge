@@ -89,6 +89,8 @@ namespace SF {
 			else
 				Size += sizeof(Variable::TypeNameType);
 		}
+
+		return Size;
 	}
 
 

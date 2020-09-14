@@ -115,6 +115,7 @@ namespace SF {
 
 		virtual bool IsEqualTypeNValue (const Variable& op) const;
 		virtual bool operator == (const Variable& op) const;
+		virtual bool operator != (const Variable& op) const;
 	};
 
 

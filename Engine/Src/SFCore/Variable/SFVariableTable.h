@@ -48,7 +48,7 @@ namespace SF {
 
 	public:
 
-		VariableTable(IHeap& heap);
+		VariableTable(IHeap& heap = GetEngineHeap());
 		virtual ~VariableTable();
 
 		IHeap& GetHeap() { return m_Heap; }
@@ -68,6 +68,7 @@ namespace SF {
 
 		// Get variable
 		Variable* GetVariable(StringCrc64 name);
+		const Variable* GetVariable(StringCrc64 name) const;
 
 		// Get/Set values
 		template<class ValueType>
@@ -90,6 +91,23 @@ namespace SF {
 			return pVariable->GetValue<ValueType>();
 		}
 
+
+		bool operator == (const VariableTable& src) const
+		{
+			if (size() != src.size())
+				return false;
+
+			for (auto itItem : m_VairableTable)
+			{
+				auto pSrcVar = src.GetVariable(itItem.GetKey());
+				if (*pSrcVar != *itItem.GetValue())
+					return false;
+			}
+
+			return true;
+		}
+
+		VariableTable& operator = (const VariableTable& src) { assert(false);  return *this; } // Not implemented
 	};
 
 
@@ -143,6 +161,7 @@ namespace SF {
 
 			return pVariable->GetValue<ValueType>();
 		}
+
 
 	};
 

@@ -107,6 +107,15 @@ namespace SF {
 		return pVariable;
 	}
 
+	const Variable* VariableTable::GetVariable(StringCrc64 name) const
+	{
+		Variable* pVariable = nullptr;
+
+		m_VairableTable.Find(name, pVariable);
+
+		return pVariable;
+	}
+
 
 
 	/////////////////////////////////////////////////////////////////////////////////

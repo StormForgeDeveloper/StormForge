@@ -84,7 +84,12 @@ namespace SF
 
 	bool Variable::operator == (const Variable& op) const
 	{
-		return GetValueUInt64() == op.GetValueUInt64();
+		return GetTypeName() == op.GetTypeName() && GetValueUInt64() == op.GetValueUInt64();
+	}
+
+	bool Variable::operator != (const Variable& op) const
+	{
+		return GetTypeName() != op.GetTypeName() || GetValueUInt64() != op.GetValueUInt64();
 	}
 
 

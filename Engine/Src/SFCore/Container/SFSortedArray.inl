@@ -521,7 +521,7 @@ namespace SF {
 
 		// Find a key value
 		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
-		Result SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Find(const KeyType& key, ValueType& value, int64_t *pOrder)
+		Result SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::Find(const KeyType& key, ValueType& value, int64_t *pOrder) const
 		{
 			int index = -1;
 			if (!FindIndex(key, index))
@@ -589,7 +589,7 @@ namespace SF {
 
 		// find index of the object or insertion index
 		template<class KeyType, class ValueType, bool UseUniqueKey, bool UseBulkCopy>
-		bool SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::FindIndex(const KeyType& keyValue, int& index)
+		bool SortedArray<KeyType,ValueType, UseUniqueKey, UseBulkCopy>::FindIndex(const KeyType& keyValue, int& index) const
 		{
 			int Low = 0;
 			int High = (int)m_ItemCount;
