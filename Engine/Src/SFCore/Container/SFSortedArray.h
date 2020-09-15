@@ -62,6 +62,7 @@ namespace SF {
 			int GetIndex() const { return m_CurrentIndex; }
 			const KeyType& GetKey() const;
 			const ValueType& GetValue() const;
+			ValueType& GetValue();
 
 			const ValueType* operator -> () { return &GetValue(); }
 			const ValueType* operator -> () const { return &GetValue(); }
@@ -138,8 +139,9 @@ namespace SF {
 		bool resize(size_t newSize, bool dropLow = false);
 
 		// Get key or value at
-		const KeyType& GetKeyAt(int64_t index);
-		const ValueType& GetValueAt(int64_t index);
+		const KeyType& GetKeyAt(int64_t index) const;
+		ValueType& GetValueAt(int64_t index);
+		const ValueType& GetValueAt(int64_t index) const;
 
 		// Insert a key
 		Result Insert(const KeyType& key, const ValueType& value, int64_t *insertedOrder = nullptr);

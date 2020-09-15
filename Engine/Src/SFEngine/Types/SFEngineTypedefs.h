@@ -122,7 +122,7 @@ namespace SF {
 		
 	};
 
-	static constexpr uint32_t MatchingQueue_Max = static_cast<uint32_t>(ClusterID::MatchingQueue_Game_8x1W);
+	static constexpr uint32_t ClusterID_MatchingQueue_Max = static_cast<uint32_t>(ClusterID::MatchingQueue_Game_8x1W);
 
 
 	inline ClusterID operator++(ClusterID clusterID)

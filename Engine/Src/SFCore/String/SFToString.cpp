@@ -41,15 +41,27 @@ namespace SF {
 	}
 
 
-	Result _ToString(ToStringContext& context, const DurationMS& value)
-	{
-		return _IToA(context, value.count());
-	}
-
-
 	Result _ToString(ToStringContext& context, const TimeStampSec& value)
 	{
 		return _IToA(context, value.time_since_epoch().count());
+	}
+
+
+	Result _ToString(ToStringContext& context, const UTCTimeStampMS& value)
+	{
+		return _IToA(context, value.time_since_epoch().count());
+	}
+
+
+	Result _ToString(ToStringContext& context, const UTCTimeStampSec& value)
+	{
+		return _IToA(context, value.time_since_epoch().count());
+	}
+
+
+	Result _ToString(ToStringContext& context, const DurationMS& value)
+	{
+		return _IToA(context, value.count());
 	}
 
 
