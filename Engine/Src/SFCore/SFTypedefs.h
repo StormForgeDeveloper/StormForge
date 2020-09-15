@@ -579,6 +579,9 @@ namespace SF {
 	using DurationMicro = std::chrono::duration<uint64_t, std::micro>;
 	using TimeStampMicro = std::chrono::time_point<ClockType, DurationMicro>;
 
+	template<class ToDurationType, class InputType>
+	ToDurationType DurationCast(InputType Value) { return std::chrono::duration_cast<ToDurationType>(Value); }
+
 
 	extern const TimeStampMS TimeStampMS_Zero;
 	extern const DurationMS  DurationMS_Zero;

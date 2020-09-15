@@ -181,6 +181,7 @@ namespace SF {
 		inline DurationMS TimeSinceRaw(TimeStampMS timeMs) { auto timeCur = Time.GetRawTimeMs(); return (timeCur > timeMs) ? (timeCur - timeMs) : DurationMS(0); }
 		inline DurationMS TimeSince(TimeStampMS timeMs) { auto timeCur = Time.GetTimeMs(); return (timeCur > timeMs) ? (timeCur - timeMs) : DurationMS(0); }
 		inline DurationSec TimeSinceUTC(UTCTimeStampSec timeUTC) { auto timeCur = Time.GetTimeUTCSec(); return (timeCur > timeUTC) ? (timeCur - timeUTC) : DurationSec(0); }
+		inline DurationMS TimeSinceUTC(UTCTimeStampMS timeUTC) { auto timeCur = Time.GetRawUTCMs(); return (timeCur > timeUTC) ? (timeCur - timeUTC) : DurationSec(0); }
 
 
 
