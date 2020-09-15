@@ -176,7 +176,7 @@ namespace ProtocolCompiler
                     parameters = MakeParameters(type, originalParameters);
                     ParamRouteContext = null;
 
-                    MatchIndent(); OutStream.WriteLine("svrChk({0}.{1}{2}( {3} ) );", NetInterfaceString, Name, typeName, ParamArgument(parameters));
+                    MatchIndent(); OutStream.WriteLine("svrCheck({0}.{1}{2}( {3} ) );", NetInterfaceString, Name, typeName, ParamArgument(parameters));
                 }
                 else if (type == MsgType.Evt)
                 {
@@ -185,17 +185,17 @@ namespace ProtocolCompiler
                     parameters = MakeParameters(type, originalParameters);
                     ParamRouteContext = null;
 
-                    MatchIndent(); OutStream.WriteLine("svrChk({0}.{1}{2}( {3} ) );", NetInterfaceString, Name, typeName, ParamArgument(parameters));
+                    MatchIndent(); OutStream.WriteLine("svrCheck({0}.{1}{2}( {3} ) );", NetInterfaceString, Name, typeName, ParamArgument(parameters));
                 }
             }
             else
             {
-                MatchIndent(); OutStream.WriteLine(" svrChk({0}.{1}{2}( {3} ) );", NetInterfaceString, Name, typeName, ParamArgument(parameters));
+                MatchIndent(); OutStream.WriteLine(" svrCheck({0}.{1}{2}( {3} ) );", NetInterfaceString, Name, typeName, ParamArgument(parameters));
             }
 
             NewLine();
-
-            ReturnHR(); NewLine();
+            ReturnHR();
+            NewLine();
 
             CloseSection();
         }

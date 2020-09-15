@@ -61,8 +61,8 @@ namespace SF
 
 		virtual size_t GetPosition() const = 0;
 		virtual size_t GetSize() const = 0;
-		void Skip(size_t skipOffset) { Seek(SeekMode::Current, skipOffset); }
-		virtual size_t Seek(SeekMode seekPos, int64_t offset) { unused(seekPos); unused(offset); return 0; }
+		Result Skip(size_t skipOffset) { return Seek(SeekMode::Current, skipOffset); }
+		virtual Result Seek(SeekMode seekPos, int64_t offset) { unused(seekPos); unused(offset); return 0; }
 	};
 
 
@@ -204,14 +204,18 @@ namespace SF
 		virtual size_t GetPosition() const override { return OutputSize; }
 		virtual size_t GetSize() const override { return OutputSize; }
 
-		virtual size_t Seek(SeekMode seekPos, int64_t offset)
+		virtual Result Seek(SeekMode seekPos, int64_t offset) override
 		{
 			switch (seekPos)
 			{
 			case SeekMode::Begin: OutputSize = offset; break;
 			case SeekMode::Current: OutputSize += offset; break;
 			case SeekMode::End: OutputSize += offset; break;
+			default:
+				return ResultCode::INVALID_ARG;
 			}
+
+			return ResultCode::SUCCESS;
 		}
 
 		// return true if the stream is valid and able to be written

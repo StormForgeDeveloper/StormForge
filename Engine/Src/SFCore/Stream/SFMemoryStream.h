@@ -49,7 +49,7 @@ namespace SF
 		virtual uint8_t* GetBufferPtr() override { return const_cast<uint8_t*>(m_Buffer->data()); }
 		virtual const uint8_t* GetBufferPtr() const override { return m_Buffer->data(); }
 
-		virtual size_t Seek(SeekMode seekPos, int64_t offset) override;
+		virtual Result Seek(SeekMode seekPos, int64_t offset) override;
 
 		virtual size_t GetPosition() const override { return m_Position; }
 

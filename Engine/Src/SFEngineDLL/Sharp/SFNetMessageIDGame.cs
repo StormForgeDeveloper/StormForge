@@ -424,6 +424,18 @@ namespace SF.Net
 		// S2C: ChatChannel Chatting message event
 		public static int ChatChannelChatMessageS2CEvt { get { return CSSFNetMessageID_GameChatChannelChatMessageS2CEvt(); } }
 
+		// Cmd: Create or Join Chat channel
+		public static int GetCharacterListCmd { get { return CSSFNetMessageID_GameGetCharacterListCmd(); } }
+
+		public static int GetCharacterListRes { get { return CSSFNetMessageID_GameGetCharacterListRes(); } }
+
+
+		// Cmd: Create or Join Chat channel
+		public static int CreateCharacterCmd { get { return CSSFNetMessageID_GameCreateCharacterCmd(); } }
+
+		public static int CreateCharacterRes { get { return CSSFNetMessageID_GameCreateCharacterRes(); } }
+
+
 		// Cmd: Give my stamina to other player
 		public static int GiveStaminaCmd { get { return CSSFNetMessageID_GameGiveStaminaCmd(); } }
 
@@ -1101,6 +1113,26 @@ namespace SF.Net
 		// S2C: ChatChannel Chatting message event
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameChatChannelChatMessageS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameChatChannelChatMessageS2CEvt();
+
+
+		// Cmd: Create or Join Chat channel
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetCharacterListCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameGetCharacterListCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetCharacterListRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameGetCharacterListRes();
+
+
+
+		// Cmd: Create or Join Chat channel
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameCreateCharacterCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameCreateCharacterCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameCreateCharacterRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameCreateCharacterRes();
+
 
 
 		// Cmd: Give my stamina to other player

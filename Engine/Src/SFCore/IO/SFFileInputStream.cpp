@@ -68,10 +68,9 @@ namespace SF {
 		return m_File.GetPosition();
 	}
 
-	size_t FileInputStream::Seek(SeekMode seekPos, int64_t offset)
+	Result FileInputStream::Seek(SeekMode seekPos, int64_t offset)
 	{
-		m_File.Seek(seekPos, offset);
-		return m_File.GetPosition();
+		return m_File.Seek(seekPos, offset);
 	}
 
 	// Read data

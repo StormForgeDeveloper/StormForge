@@ -42,7 +42,7 @@ namespace SF {
 		m_Position = 0;
 	}
 
-	size_t InputMemoryStream::Seek(SeekMode seekPos, int64_t offset)
+	Result InputMemoryStream::Seek(SeekMode seekPos, int64_t offset)
 	{
 		int64_t newPos;
 		switch (seekPos)
@@ -56,13 +56,15 @@ namespace SF {
 		case SeekMode::End:
 			newPos = (int64_t)GetSize() - offset;
 			break;
+		default:
+			return ResultCode::INVALID_ARG;
 		}
 
 		if (newPos > (int64_t)GetSize()) newPos = GetSize();
 		if (newPos < 0) newPos = 0;
 		m_Position = static_cast<size_t>(newPos);
 
-		return m_Position;
+		return ResultCode::SUCCESS;
 	}
 
 	Result InputMemoryStream::Read(void* buffer, size_t readSize)

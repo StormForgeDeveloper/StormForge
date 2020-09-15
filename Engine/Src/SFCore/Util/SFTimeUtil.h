@@ -42,10 +42,10 @@ namespace SF {
 
 			ClockType::duration				m_ullTimeStampPrevious;
 			std::atomic<TimeStampMS>		m_ulTimeStampMs;
-			std::atomic<TimeStampSec>		m_ullTimeStampUTC;
+			std::atomic<UTCTimeStampSec>		m_ullTimeStampUTC;
 
 			// Default UTC offset
-			DurationMS					m_ullUTCOffset;
+			DurationMSDouble				m_ullUTCOffset;
 
 
 		protected:
@@ -68,7 +68,7 @@ namespace SF {
 			TimeStampMS		GetTimeMs();
 
 			// Get UTC time stamp
-			TimeStampSec	GetTimeUTCSec();
+			UTCTimeStampSec	GetTimeUTCSec();
 
 
 
@@ -81,8 +81,8 @@ namespace SF {
 			TimeStampMS		GetRawTimeMs();
 
 			// Get current UTC sec
-			TimeStampSec	GetRawUTCSec();
-			TimeStampMS		GetRawUTCMs();
+			UTCTimeStampSec	GetRawUTCSec();
+			UTCTimeStampMS	GetRawUTCMs();
 
 			DurationSec		GetUTCSecOffset() { return std::chrono::duration_cast<DurationSec>(m_ullUTCOffset); }
 
@@ -180,7 +180,7 @@ namespace SF {
 
 		inline DurationMS TimeSinceRaw(TimeStampMS timeMs) { auto timeCur = Time.GetRawTimeMs(); return (timeCur > timeMs) ? (timeCur - timeMs) : DurationMS(0); }
 		inline DurationMS TimeSince(TimeStampMS timeMs) { auto timeCur = Time.GetTimeMs(); return (timeCur > timeMs) ? (timeCur - timeMs) : DurationMS(0); }
-		inline DurationSec TimeSinceUTC(TimeStampSec timeUTC) { auto timeCur = Time.GetTimeUTCSec(); return (timeCur > timeUTC) ? (timeCur - timeUTC) : DurationSec(0); }
+		inline DurationSec TimeSinceUTC(UTCTimeStampSec timeUTC) { auto timeCur = Time.GetTimeUTCSec(); return (timeCur > timeUTC) ? (timeCur - timeUTC) : DurationSec(0); }
 
 
 

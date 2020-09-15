@@ -57,7 +57,7 @@ namespace SF
 		// return true if the stream is valid and have something read
 		virtual bool CanRead() override { return m_Stream.CanRead() || m_DecompressedSize > m_Position; }
 
-		virtual size_t Seek(SeekMode seekPos, int64_t offset) override;
+		virtual Result Seek(SeekMode seekPos, int64_t offset) override;
 
 		virtual size_t GetPosition() const override { return m_Position; }
 

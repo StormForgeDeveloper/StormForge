@@ -567,6 +567,12 @@ namespace SF {
 	using TimeStampSec = std::chrono::time_point<ClockType, DurationSec>;
 
 	using DurationMS = std::chrono::duration<uint, std::milli>;
+	using DurationMSDouble = std::chrono::duration<uint64_t, std::milli>;
+
+	using UTCClockType = std::chrono::system_clock;
+	using UTCTimeStampMS = std::chrono::time_point<UTCClockType, DurationMSDouble>;
+	using UTCTimeStampSec = std::chrono::time_point<UTCClockType, DurationSec>;
+
 	using TimeStampMS = std::chrono::time_point<ClockType, DurationMS>;
 	using SystemTimeStampMS = std::chrono::system_clock::time_point;
 

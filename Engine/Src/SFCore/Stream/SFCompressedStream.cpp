@@ -74,12 +74,12 @@ namespace SF {
 		m_CompressionInfo = nullptr;
 	}
 
-	size_t CompressedInputStream::Seek(SeekMode seekPos, int64_t offset)
+	Result CompressedInputStream::Seek(SeekMode seekPos, int64_t offset)
 	{
 		if (seekPos != SeekMode::Current)
 		{
 			Assert(false); // not supported
-			return GetPosition();
+			return ResultCode::INVALID_ARG;
 		}
 
 		uint8_t decompressBuffer[128];
@@ -90,7 +90,8 @@ namespace SF {
 			Read(decompressBuffer, static_cast<size_t>(readSize));
 			offset -= readSize;
 		}
-		return GetPosition();
+
+		return ResultCode::SUCCESS;
 	}
 
 	// Read data

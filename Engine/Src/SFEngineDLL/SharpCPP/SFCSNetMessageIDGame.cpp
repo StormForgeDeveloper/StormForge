@@ -895,6 +895,32 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameChatChannelChatMessageS2CEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameChatChannelChatMessageS2CEvt()
 
 
+// Cmd: Create or Join Chat channel
+SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterListCmd()
+{
+ 	return SF::Message::Game::GetCharacterListCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterListCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterListRes()
+{
+ 	return SF::Message::Game::GetCharacterListRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterListRes()
+
+
+// Cmd: Create or Join Chat channel
+SFDLL_EXPORT int  CSSFNetMessageID_GameCreateCharacterCmd()
+{
+ 	return SF::Message::Game::CreateCharacterCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameCreateCharacterCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameCreateCharacterRes()
+{
+ 	return SF::Message::Game::CreateCharacterRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameCreateCharacterRes()
+
+
 // Cmd: Give my stamina to other player
 SFDLL_EXPORT int  CSSFNetMessageID_GameGiveStaminaCmd()
 {

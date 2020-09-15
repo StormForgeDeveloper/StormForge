@@ -88,7 +88,7 @@ namespace SF {
 
 		Time_Chrono::Time_Chrono()
 			: m_ulTimeStampMs(TimeStampMS())
-			, m_ullTimeStampUTC(TimeStampSec())
+			, m_ullTimeStampUTC(UTCTimeStampSec())
 		{
 			auto timeStamp = ClockType::now().time_since_epoch();
 			m_ullTimeStamp.store(timeStamp.count(), std::memory_order_relaxed);
@@ -101,7 +101,7 @@ namespace SF {
 			timeStruct.tm_year = UTC_REFERENCE_YEAR - 1900;
 			timeStruct.tm_mday = 1;
 
-			m_ullUTCOffset = DurationMS((uint64_t)timegm(&timeStruct) * 1000 + std::chrono::duration_cast<DurationMS>(ClockType::now().time_since_epoch()).count());
+			m_ullUTCOffset = DurationMSDouble((uint64_t)timegm(&timeStruct) * 1000 + std::chrono::duration_cast<DurationMSDouble>(UTCClockType::now().time_since_epoch()).count());
 
 			UpdateTimer();
 		}
@@ -138,7 +138,7 @@ namespace SF {
 		}
 
 		// Get UTC time stamp
-		TimeStampSec Time_Chrono::GetTimeUTCSec()
+		UTCTimeStampSec Time_Chrono::GetTimeUTCSec()
 		{
 			return m_ullTimeStampUTC.load(std::memory_order_relaxed);
 		}
@@ -158,15 +158,15 @@ namespace SF {
 
 
 		// Get current UTC sec
-		TimeStampSec Time_Chrono::GetRawUTCSec()
+		UTCTimeStampSec Time_Chrono::GetRawUTCSec()
 		{
-			TimeStampMS utcMS = GetRawUTCMs();
-			return std::chrono::time_point_cast<std::chrono::seconds>(utcMS);
+			UTCTimeStampMS utcMS = GetRawUTCMs();
+			return UTCTimeStampSec(std::chrono::duration_cast<std::chrono::seconds>(utcMS.time_since_epoch()));
 		}
 
-		TimeStampMS Time_Chrono::GetRawUTCMs()
+		UTCTimeStampMS Time_Chrono::GetRawUTCMs()
 		{
-			return TimeStampMS(GetRawTimeMs() - m_ullUTCOffset);
+			return UTCTimeStampMS(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()) - m_ullUTCOffset);
 		}
 
 

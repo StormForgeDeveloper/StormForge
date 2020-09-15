@@ -807,6 +807,38 @@ namespace SF
 			return hr;
 
 		}; // Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
+		// Cmd: Create or Join Chat channel
+		Result NetPolicyGame::GetCharacterListCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
+		{
+ 			FunctionContext hr;
+
+			 MessageDataPtr pMessage;
+			 protocolCheckPtr(m_pConnection);
+
+			 pMessage = SF::Message::Game::GetCharacterListCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InChannelName, InPasscode);
+			 protocolCheckPtr(*pMessage);
+
+			 return m_pConnection->Send( pMessage );
+
+			return hr;
+
+		}; // Result NetPolicyGame::GetCharacterListCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
+		// Cmd: Create or Join Chat channel
+		Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
+		{
+ 			FunctionContext hr;
+
+			 MessageDataPtr pMessage;
+			 protocolCheckPtr(m_pConnection);
+
+			 pMessage = SF::Message::Game::CreateCharacterCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InChannelName, InPasscode);
+			 protocolCheckPtr(*pMessage);
+
+			 return m_pConnection->Send( pMessage );
+
+			return hr;
+
+		}; // Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 		// Cmd: Give my stamina to other player
 		Result NetPolicyGame::GiveStaminaCmd( const uint64_t &InTransactionID, const AccountID &InTargetPlayer )
 		{
@@ -2185,6 +2217,38 @@ namespace SF
 			return hr;
 
 		}; // Result NetSvrPolicyGame::ChatChannelChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
+		// Cmd: Create or Join Chat channel
+		Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+		{
+ 			FunctionContext hr;
+
+			 MessageDataPtr pMessage;
+			 protocolCheckPtr(m_pConnection);
+
+			 pMessage = SF::Message::Game::GetCharacterListRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InChatUID);
+			 protocolCheckPtr(*pMessage);
+
+			 return m_pConnection->Send( pMessage );
+
+			return hr;
+
+		}; // Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+		// Cmd: Create or Join Chat channel
+		Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+		{
+ 			FunctionContext hr;
+
+			 MessageDataPtr pMessage;
+			 protocolCheckPtr(m_pConnection);
+
+			 pMessage = SF::Message::Game::CreateCharacterRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InChatUID);
+			 protocolCheckPtr(*pMessage);
+
+			 return m_pConnection->Send( pMessage );
+
+			return hr;
+
+		}; // Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
 		// Cmd: Give my stamina to other player
 		Result NetSvrPolicyGame::GiveStaminaRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp )
 		{

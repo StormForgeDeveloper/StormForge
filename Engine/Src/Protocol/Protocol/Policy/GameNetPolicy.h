@@ -129,6 +129,10 @@ namespace SF
 			Result ChatChannelKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 			// Cmd: Party chatting
 			Result ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage );
+			// Cmd: Create or Join Chat channel
+			Result GetCharacterListCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode );
+			// Cmd: Create or Join Chat channel
+			Result CreateCharacterCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode );
 			// Cmd: Give my stamina to other player
 			Result GiveStaminaCmd( const uint64_t &InTransactionID, const AccountID &InTargetPlayer );
 			// Cmd: For debug, Change configue preset
@@ -316,6 +320,10 @@ namespace SF
 			Result ChatChannelChatMessageRes( const uint64_t &InTransactionID, const Result &InResult );
 			// S2C: ChatChannel Chatting message event
 			Result ChatChannelChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage );
+			// Cmd: Create or Join Chat channel
+			Result GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID );
+			// Cmd: Create or Join Chat channel
+			Result CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID );
 			// Cmd: Give my stamina to other player
 			Result GiveStaminaRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp );
 			// Cmd: For debug, Change configue preset

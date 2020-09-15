@@ -376,9 +376,9 @@
       <Params Type="String" Name="ChatMessage" Desc="Message text"/>
     </S2CEvent>
 
-    	
-    
-    <!-- ===================================================  Game instance ================================================== -->
+
+	<!-- ===================================================  Game instance(TODO: legacy packets don't use) ================================================== -->
+		
 	<Command Name="JoinGame" Reliable="true" Crypto="No" Trace="Debug1" Desc="Join to a game">
 		<Cmd>
 			<Params Type="AccountID" Name="PlayerID" Desc="Player ID of the player"/>
@@ -752,9 +752,31 @@
     </S2CEvent>
 
 
+	<!-- ===================================================  Character ================================================== -->
+
+	<Command Name="GetCharacterList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create or Join Chat channel">
+		<Cmd>
+			<Params Type="String" Name="ChannelName"/>
+			<Params Type="String" Name="Passcode"/>
+		</Cmd>
+		<Res>
+			<Params Type="EntityUID" Name="ChatUID" Desc="Created/Joined Chat channel UID"/>
+		</Res>
+	</Command>
+
+	<Command Name="CreateCharacter" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create or Join Chat channel">
+		<Cmd>
+			<Params Type="String" Name="ChannelName"/>
+			<Params Type="String" Name="Passcode"/>
+		</Cmd>
+		<Res>
+			<Params Type="EntityUID" Name="ChatUID" Desc="Created/Joined Chat channel UID"/>
+		</Res>
+   	</Command>
 
 
-    <!-- ===================================================  Give Stamina ================================================== -->
+
+	<!-- ===================================================  Give Stamina ================================================== -->
 
     <Command Name="GiveStamina" Reliable="true" Crypto="No" Trace="Debug1" Desc="Give my stamina to other player">
       <Cmd>

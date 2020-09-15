@@ -23,26 +23,25 @@ namespace Message {
 		// S2C: Used for sending generial failure for not started transaction messages
 		Result FailResultS2CEvt::ParseMessage( MessageData* pIMsg )
 		{
- 			Result hr = ResultCode::SUCCESS;
-			int iMsgSize;
-			uint8_t* pCur;
+ 			FunctionContext hr = ResultCode::SUCCESS;
 
-			protocolChkPtr(pIMsg);
+			protocolCheckPtr(pIMsg);
 
-			iMsgSize = (int)pIMsg->GetMessageSize() - sizeof(MessageHeader);
-			pCur = pIMsg->GetMessageData();
+			size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+			ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+			InputMemoryStream inputStream(bufferView);
+			auto* input = inputStream.ToInputStream();
 
-			if( iMsgSize == sizeof(Result) ) // if result only
+
+			if(MsgDataSize == sizeof(Result)) // if result only
 			{
 				m_Context = 0;
 			}
 			else
 			{
-				protocolChk( Protocol::StreamParamCopy( &m_Context, pCur, iMsgSize, sizeof(Context) ) );
+				protocolCheck( input->Read(m_Context) );
 			}
-			protocolChk( Protocol::StreamParamCopy( &m_hrRes, pCur, iMsgSize, sizeof(Result) ) );
-
-		Proc_End:
+			protocolCheck(input->Read(m_hrRes));
 
 			return hr;
 

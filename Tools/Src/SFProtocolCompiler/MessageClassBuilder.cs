@@ -722,16 +722,16 @@ namespace ProtocolCompiler
             // array len types
             if (Group.IsMobile)
             {
-                MatchIndent(); OutStream.WriteLine("size_t iMsgSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
+                MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
             }
             else
             {
-                MatchIndent(); OutStream.WriteLine("size_t iMsgSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
+                MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
             }
 
             MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
             MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
-            MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToOutputStream();");
+            MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
             MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;");
             MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr;");
             NewLine();
@@ -745,7 +745,7 @@ namespace ProtocolCompiler
                     {
                         case ParameterType.String:
                             MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof(char);");
+                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof(char)));");
                             break;
                         default:
                             if (param.Type == ParameterType.RouteContext && param.Name == ParamRouteContext.Name)
@@ -766,11 +766,11 @@ namespace ProtocolCompiler
                             if (param.IsArray)
                             {
                                 MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof({0});", ToTargetTypeName(param.Type));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof({0})));", ToTargetTypeName(param.Type));
                             }
                             else
                             {
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({0});", ToTargetTypeName(param.Type));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({0})));", ToTargetTypeName(param.Type));
                             }
                             break;
                     }

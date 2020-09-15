@@ -12621,8 +12621,390 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
+			// Cmd: Create or Join Chat channel
+			const MessageID GetCharacterListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 84);
+			Result GetCharacterListCmd::ParseMessage( MessageData* pIMsg )
+			{
+ 				FunctionContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
+
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_ChannelName, ArrayLen * sizeof(char)));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_Passcode, ArrayLen * sizeof(char)));
+
+				return hr;
+
+			}; // Result GetCharacterListCmd::ParseMessage( MessageData* pIMsg )
+
+			Result GetCharacterListCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				FunctionContext hr;
+
+
+				GetCharacterListCmd parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("ChannelName", parser.GetChannelName());
+				variableBuilder.SetVariable("Passcode", parser.GetPasscode());
+
+				return hr;
+
+			}; // Result GetCharacterListCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result GetCharacterListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				FunctionContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterListCmd(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result GetCharacterListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+
+			MessageData* GetCharacterListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InChannelName)
+					, SerializedSizeOf(InPasscode)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterListCmd::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InChannelName));
+				protocolCheck(output->Write(InPasscode));
+
+				return hr;
+			}; // MessageData* GetCharacterListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
+
+
+
+			Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				GetCharacterListCmd parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "GetCharacterList:{0}:{1} , TransactionID:{2}, ChannelName:{3,60}, Passcode:{4,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChannelName(), parser.GetPasscode()); 
+				return ResultCode::SUCCESS;
+			}; // Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			const MessageID GetCharacterListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 84);
+			Result GetCharacterListRes::ParseMessage( MessageData* pIMsg )
+			{
+ 				FunctionContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
+
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_Result));
+				protocolCheck(input->Read(m_ChatUID));
+
+				return hr;
+
+			}; // Result GetCharacterListRes::ParseMessage( MessageData* pIMsg )
+
+			Result GetCharacterListRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				FunctionContext hr;
+
+
+				GetCharacterListRes parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
+
+				return hr;
+
+			}; // Result GetCharacterListRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				FunctionContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterListRes(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+
+			MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InResult)
+					, SerializedSizeOf(InChatUID)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterListRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(InChatUID));
+
+				return hr;
+			}; // MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+
+
+
+			Result GetCharacterListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				GetCharacterListRes parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "GetCharacterList:{0}:{1} , TransactionID:{2}, Result:{3:X8}, ChatUID:{4}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetChatUID()); 
+				return ResultCode::SUCCESS;
+			}; // Result GetCharacterListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			// Cmd: Create or Join Chat channel
+			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 85);
+			Result CreateCharacterCmd::ParseMessage( MessageData* pIMsg )
+			{
+ 				FunctionContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
+
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_ChannelName, ArrayLen * sizeof(char)));
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_Passcode, ArrayLen * sizeof(char)));
+
+				return hr;
+
+			}; // Result CreateCharacterCmd::ParseMessage( MessageData* pIMsg )
+
+			Result CreateCharacterCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				FunctionContext hr;
+
+
+				CreateCharacterCmd parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("ChannelName", parser.GetChannelName());
+				variableBuilder.SetVariable("Passcode", parser.GetPasscode());
+
+				return hr;
+
+			}; // Result CreateCharacterCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result CreateCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				FunctionContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) CreateCharacterCmd(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result CreateCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+
+			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InChannelName)
+					, SerializedSizeOf(InPasscode)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateCharacterCmd::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InChannelName));
+				protocolCheck(output->Write(InPasscode));
+
+				return hr;
+			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
+
+
+
+			Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				CreateCharacterCmd parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "CreateCharacter:{0}:{1} , TransactionID:{2}, ChannelName:{3,60}, Passcode:{4,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChannelName(), parser.GetPasscode()); 
+				return ResultCode::SUCCESS;
+			}; // Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			const MessageID CreateCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 85);
+			Result CreateCharacterRes::ParseMessage( MessageData* pIMsg )
+			{
+ 				FunctionContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;
+
+				protocolCheck(input->Read(m_TransactionID));
+				protocolCheck(input->Read(m_Result));
+				protocolCheck(input->Read(m_ChatUID));
+
+				return hr;
+
+			}; // Result CreateCharacterRes::ParseMessage( MessageData* pIMsg )
+
+			Result CreateCharacterRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				FunctionContext hr;
+
+
+				CreateCharacterRes parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
+
+				return hr;
+
+			}; // Result CreateCharacterRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result CreateCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				FunctionContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) CreateCharacterRes(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result CreateCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+
+			MessageData* CreateCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					, SerializedSizeOf(InTransactionID)
+					, SerializedSizeOf(InResult)
+					, SerializedSizeOf(InChatUID)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateCharacterRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(InChatUID));
+
+				return hr;
+			}; // MessageData* CreateCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+
+
+
+			Result CreateCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				CreateCharacterRes parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "CreateCharacter:{0}:{1} , TransactionID:{2}, Result:{3:X8}, ChatUID:{4}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetChatUID()); 
+				return ResultCode::SUCCESS;
+			}; // Result CreateCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
 			// Cmd: Give my stamina to other player
-			const MessageID GiveStaminaCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 84);
+			const MessageID GiveStaminaCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 86);
 			Result GiveStaminaCmd::ParseMessage( MessageData* pIMsg )
 			{
  				FunctionContext hr;
@@ -12712,7 +13094,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GiveStaminaCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GiveStaminaRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 84);
+			const MessageID GiveStaminaRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 86);
 			Result GiveStaminaRes::ParseMessage( MessageData* pIMsg )
 			{
  				FunctionContext hr;
@@ -12811,7 +13193,7 @@ namespace SF
 			}; // Result GiveStaminaRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: For debug, Change configue preset
-			const MessageID SetPresetGameConfigIDCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 85);
+			const MessageID SetPresetGameConfigIDCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 87);
 			Result SetPresetGameConfigIDCmd::ParseMessage( MessageData* pIMsg )
 			{
  				FunctionContext hr;
@@ -12901,7 +13283,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result SetPresetGameConfigIDCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID SetPresetGameConfigIDRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 85);
+			const MessageID SetPresetGameConfigIDRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 87);
 			Result SetPresetGameConfigIDRes::ParseMessage( MessageData* pIMsg )
 			{
  				FunctionContext hr;
@@ -12992,7 +13374,7 @@ namespace SF
 			}; // Result SetPresetGameConfigIDRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: For Debug
-			const MessageID GainGameResourceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 86);
+			const MessageID GainGameResourceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 88);
 			Result GainGameResourceCmd::ParseMessage( MessageData* pIMsg )
 			{
  				FunctionContext hr;
@@ -13086,7 +13468,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GainGameResourceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GainGameResourceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 86);
+			const MessageID GainGameResourceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 88);
 			Result GainGameResourceRes::ParseMessage( MessageData* pIMsg )
 			{
  				FunctionContext hr;

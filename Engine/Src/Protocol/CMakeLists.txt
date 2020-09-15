@@ -33,7 +33,6 @@ set(SFPROTOCOL_LIB_FILES
 	Protocol/SFGenericMessageClass.h
 	Protocol/SFProtocolHelper.h
 	Protocol/SFProtocol.h
-	Protocol/SFProtocolHelper.inl
   	SFProtocolPCH.h
   )
 

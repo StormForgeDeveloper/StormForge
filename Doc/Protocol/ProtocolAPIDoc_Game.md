@@ -1678,6 +1678,56 @@ ChatChannel Chatting message event
 		- OutInChatMessage: String type. Message text
 
 
+## GetCharacterList Request
+Create or Join Chat channel
+
+1. Command interface
+
+        Result GetCharacterListCmd(const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInChannelName: String type. 
+
+		- OutInPasscode: String type. 
+
+2. Result interface
+
+C++: Cast message to GetCharacterListRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutChatUID: EntityUID type. Created/Joined Chat channel UID
+
+
+## CreateCharacter Request
+Create or Join Chat channel
+
+1. Command interface
+
+        Result CreateCharacterCmd(const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInChannelName: String type. 
+
+		- OutInPasscode: String type. 
+
+2. Result interface
+
+C++: Cast message to CreateCharacterRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutChatUID: EntityUID type. Created/Joined Chat channel UID
+
+
 ## GiveStamina Request
 Give my stamina to other player
 
