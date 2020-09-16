@@ -84,6 +84,7 @@ set(SFCORE_LIB_FILES
 	Variable/SFVariableTable.h
 	Variable/SFVariableToString.h
 	Variable/SFVariableToString.cpp
+	Variable/SFVariableCommonDefs.h
   	Component/SFUnhandledExceptionHandlerComponent.h
 	Container/SFCircularBuffer.h
 	Container/SFCircularBufferQueue.h

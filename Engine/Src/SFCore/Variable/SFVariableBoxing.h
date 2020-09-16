@@ -15,7 +15,7 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 #include "String/SFToStringBase.h"
-#include "Variable/SFVariable.h"
+#include "Variable/SFVariableCommonDefs.h"
 
 
 

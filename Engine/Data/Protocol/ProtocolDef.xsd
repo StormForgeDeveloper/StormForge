@@ -148,7 +148,7 @@
 					<xs:enumeration value="WORD"/>
 					<xs:enumeration value="DWORD"/>
 					<xs:enumeration value="QWORD"/>
-					<xs:enumeration value="FLOAT"/>
+					<xs:enumeration value="float"/>
 					<xs:enumeration value="TransactionID"/>
 					<xs:enumeration value="StringCrc32"/>
 					<xs:enumeration value="StringCrc64"/>

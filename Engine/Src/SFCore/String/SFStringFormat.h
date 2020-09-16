@@ -44,8 +44,14 @@ namespace SF {
 	}
 
 
+	template< class ...ArgTypes >
+	inline StringBuilder& StringBuilder::AppendFormat(const CharType* strFormat, ArgTypes... args)
+	{
+		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
+		AppendFormat_Internal(strFormat, sizeof...(args), arguments);
+		return *this;
+	}
 
 }; // namespace SF
 
 
-#include "SFString.inl"

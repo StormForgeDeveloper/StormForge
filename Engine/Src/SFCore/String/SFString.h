@@ -1177,12 +1177,7 @@ namespace SF {
 
 		// Format string
 		template< class ...ArgTypes >
-		inline StringBuilder& AppendFormat(const CharType* strFormat, ArgTypes... args)
-		{
-			VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
-			AppendFormat_Internal(strFormat, sizeof...(args), arguments);
-			return *this;
-		}
+		StringBuilder& AppendFormat(const CharType* strFormat, ArgTypes... args);
 
 
 		// Convert to string object
@@ -1201,4 +1196,3 @@ namespace SF {
 
 
 
-#include "SFString.inl"

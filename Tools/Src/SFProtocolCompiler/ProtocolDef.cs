@@ -342,7 +342,7 @@ namespace ProtocolXml {
         QWORD,
         
         /// <remarks/>
-        FLOAT,
+        @float,
         
         /// <remarks/>
         TransactionID,
