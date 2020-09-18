@@ -35,9 +35,12 @@ if [ "$IS_WINDOWS" = "" ]; then
 	echo Running on Linux
 else
 	echo Running on Linux subsystem.
-	cmd.exe /C "cd > pwd.obj"
-	WINCWD=$(<pwd.obj)
-	cmd.exe /C "$FBX_SDK_INSTALL_FILE_WIN /D=$WINCWD\\FBXSDK"
+	
+	if [ ! -d "FBXSDK" ]; then
+		cmd.exe /C "cd > pwd.obj"
+		WINCWD=$(<pwd.obj)
+		cmd.exe /C "$FBX_SDK_INSTALL_FILE_WIN /D=$WINCWD\\FBXSDK"
+	fi
 fi
 
 # linux version install doesn't work
@@ -60,9 +63,11 @@ if [ "$IS_WINDOWS" = "" ]; then
 	echo Running on Linux
 else
 	echo Running on Linux subsystem.
-	cmd.exe /C "cd > pwd.obj"
-	WINCWD=$(<pwd.obj)
-	cmd.exe /C "$VULKAN_SDK_WIN /D=$WINCWD\\VulkanSDK"
+	if [ ! -d "VulkanSDK" ]; then
+		cmd.exe /C "cd > pwd.obj"
+		WINCWD=$(<pwd.obj)
+		cmd.exe /C "$VULKAN_SDK_WIN /D=$WINCWD\\VulkanSDK"
+	fi
 fi
 
 
@@ -76,7 +81,7 @@ sudo apt install vulkan-sdk
 
 
 pushd src/mysql/
-setup_ubuntu.sh
+./setup_ubuntu.sh
 popd
 
 
