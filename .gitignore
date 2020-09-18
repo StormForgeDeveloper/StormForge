@@ -23,6 +23,8 @@
 # Executables
 *.out
 *.app
+*.exe
+*.dll
 
 # Project temp
 *.user
@@ -41,5 +43,6 @@
 
 
 Intermediate/
-3rdParties/
 ATF/
+FBXSDK/
+VulkanSDK/
