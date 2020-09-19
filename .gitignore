@@ -46,3 +46,7 @@ Intermediate/
 ATF/
 FBXSDK/
 VulkanSDK/
+buildLinux/
+buildWindows/
+buildAndroid/
+buildIOS/
