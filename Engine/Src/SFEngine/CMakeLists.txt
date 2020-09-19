@@ -1,7 +1,7 @@
 ﻿
 
 include_directories(AFTER 
-	../../../3rdParties/FBXSDK/2019.0/include
+	../../../3rdParties/FBXSDK/include
 )
 
 set(SFENGINE_LIB_FILES

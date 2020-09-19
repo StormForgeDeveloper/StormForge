@@ -1,4 +1,4 @@
-# Automatically generated from ./asm/pptok.dat by ./asm/pptok.pl
+# Automatically generated from .\asm\pptok.dat by .\asm\pptok.pl
 # Do not edit
 
 %pptok_hash = (

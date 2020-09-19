@@ -79,12 +79,13 @@ if(WIN32)
 
 	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc")
 
+	set(ARTECTURE x64)
+
 	include_directories(AFTER 
-		3rdParties/VulkanSDK/1.1.82.1/include
+		3rdParties/VulkanSDK/include
 		3rdParties/src/mysql-connector-c++-8.0.18-winx64/include
 	)
 	
-	set(ARTECTURE x64)
 
 	set(PLATFORM_LIBS Ws2_32 Mswsock)
 	
@@ -153,7 +154,7 @@ elseif(UNIX)
 
 	include_directories(AFTER 
 		/usr/include/mysql--cppconn-8
-		#3rdParties/VulkanSDK/1.1.82.1/include
+		/usr/include/vulkan
 	)
 	
 	#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})

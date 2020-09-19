@@ -1,4 +1,4 @@
-/* automatically generated from ./x86/regs.dat - do not edit */
+/* automatically generated from .\x86\regs.dat - do not edit */
 
 #ifndef NASM_REGDIS_H
 #define NASM_REGDIS_H

@@ -102,27 +102,28 @@ namespace SF
 
 
 		// Initially fifo mode(vsync)
-		static const int PresentModePriority[VK_PRESENT_MODE_RANGE_SIZE_KHR] =
+		static const VkPresentModeKHR PresentModePriority[] =
 		{
-			2, //VK_PRESENT_MODE_IMMEDIATE_KHR = 0,
-			1, //VK_PRESENT_MODE_MAILBOX_KHR = 1,
-			3, //VK_PRESENT_MODE_FIFO_KHR = 2,
-			4, //VK_PRESENT_MODE_FIFO_RELAXED_KHR = 3,
+			VK_PRESENT_MODE_MAILBOX_KHR,
+			VK_PRESENT_MODE_FIFO_RELAXED_KHR,
+			VK_PRESENT_MODE_FIFO_KHR,
+			VK_PRESENT_MODE_IMMEDIATE_KHR,
+			VK_PRESENT_MODE_SHARED_DEMAND_REFRESH_KHR,
+			VK_PRESENT_MODE_SHARED_CONTINUOUS_REFRESH_KHR,
 		};
 
 		m_SelectedPresentMode = m_VSync ? VK_PRESENT_MODE_FIFO_KHR : VK_PRESENT_MODE_FIFO_RELAXED_KHR;
-		int selectedPriority = PresentModePriority[m_SelectedPresentMode];
 		if (!m_VSync)
 		{
-			for (auto itPresentMode : m_PresentModes)
+			for (auto priorityMode : PresentModePriority)
 			{
-				if ((int)itPresentMode < 0 || itPresentMode > countof(PresentModePriority))
-					continue;
-
-				if (selectedPriority < PresentModePriority[itPresentMode])
+				for (auto itSupportedMode : m_PresentModes)
 				{
-					m_SelectedPresentMode = itPresentMode;
-					selectedPriority = PresentModePriority[itPresentMode];
+					if (priorityMode == itSupportedMode)
+					{
+						m_SelectedPresentMode = itSupportedMode;
+						break;
+					}
 				}
 			}
 		}
