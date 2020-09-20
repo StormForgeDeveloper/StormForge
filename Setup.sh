@@ -37,7 +37,7 @@ if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-1.2.148-bionic.list" ]; then
 	sudo apt update
 fi
 
-sudo apt install vulkan-sdk libssl-dev 
+sudo apt install vulkan-sdk libssl-dev perl
 
 
 pushd src/mysql/

@@ -47,8 +47,8 @@ if not exist %VULKAN_SDK_WIN% (
 cd %SF_PATH%
 
 set PERL_INSTALL=ActivePerl-5.28.msi
-if not exist %VULKAN_SDK_WIN% (
-	echo downloading VulkanSDK
+if not exist %PERL_INSTALL% (
+	echo downloading Perl
 	call %TOOL_PATH%\httpget +url:https://cli-msi.s3.amazonaws.com/%PERL_INSTALL%
 	%PERL_INSTALL%
 )
