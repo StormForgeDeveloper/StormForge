@@ -14,5 +14,3 @@ set MYSQL_DIR=3rdParties\src\mysql
 cmd /c "cd %MYSQL_DIR% & WinGen.cmd"
 
 
-
-pause

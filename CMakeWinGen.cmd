@@ -19,6 +19,5 @@ cmake ../../ -G %VCCMAKEGENERATOR% -A %PROCESS_ARCHITECTUR%  ^
 
 cd %~dp0
 
-pause
 
 
