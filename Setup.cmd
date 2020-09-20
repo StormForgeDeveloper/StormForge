@@ -44,8 +44,6 @@ if not exist %VULKAN_SDK_WIN% (
 )
 
 
-cd %SF_PATH%
-
 set PERL_INSTALL=ActivePerl-5.28.msi
 if not exist %PERL_INSTALL% (
 	echo downloading Perl
@@ -53,6 +51,8 @@ if not exist %PERL_INSTALL% (
 	%PERL_INSTALL%
 )
 
+
+cd %SF_PATH%
 
 set NASM_DIR=3rdParties\src\nasm
 cmd /c "cd %NASM_DIR% & buildNASM.cmd"
