@@ -6,7 +6,7 @@ set VC2017COMBAT="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\
 set VC2019PROBAT="C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvars64.bat"
 set VC2019COMBAT="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 
-if not %VCBAT% == "" goto exit:
+if DEFINED VCBAT goto exit
 
 set VCBAT=""
 
