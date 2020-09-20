@@ -9,7 +9,7 @@ endif
 
 ###################################################
 
-BUILD_LIBS = toolLib CreatePath copyfile shellbridge
+BUILD_LIBS = toolLib CreatePath copyfile shellbridge, httpget
 SHARP_FLAGS = 
 
 ifeq ($(BUILD_CONFIGURATION), 'DEBUG')

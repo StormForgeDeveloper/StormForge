@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{678BBA7C-BCC9-4C2F-AB82-8E701FE70378}</ProjectGuid>
+    <ProjectGuid>{1A2AFC0B-9685-46AE-87EE-59675B695FB0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>shellbridge</RootNamespace>
-    <AssemblyName>shellbridge</AssemblyName>
+    <RootNamespace>httpget</RootNamespace>
+    <AssemblyName>httpget</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

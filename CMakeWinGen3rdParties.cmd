@@ -1,4 +1,6 @@
 
+cd %~d0
+cd %~dp0
 
 call 3rdParties\FindVC.cmd
 

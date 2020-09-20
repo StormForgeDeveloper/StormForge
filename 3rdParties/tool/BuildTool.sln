@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30503.244
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CreatePath", "CreatePath\CreatePath.csproj", "{0F0012A2-FA82-46BB-8136-2F2655665DD2}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "toolLib", "toolLib\toolLib.csproj", "{20A96D9B-67CB-413A-A6CA-6D77DF4F8DFD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "shellbridge", "shellbridge\shellbridge.csproj", "{678BBA7C-BCC9-4C2F-AB82-8E701FE70378}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "httpget", "httpget\httpget.csproj", "{1A2AFC0B-9685-46AE-87EE-59675B695FB0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +35,15 @@ Global
 		{678BBA7C-BCC9-4C2F-AB82-8E701FE70378}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{678BBA7C-BCC9-4C2F-AB82-8E701FE70378}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{678BBA7C-BCC9-4C2F-AB82-8E701FE70378}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A2AFC0B-9685-46AE-87EE-59675B695FB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A2AFC0B-9685-46AE-87EE-59675B695FB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A2AFC0B-9685-46AE-87EE-59675B695FB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A2AFC0B-9685-46AE-87EE-59675B695FB0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {66A00C91-E53B-4D59-8594-BAC172377BC7}
 	EndGlobalSection
 EndGlobal

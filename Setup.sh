@@ -15,9 +15,6 @@ if [ ! -d "$ATF_PATH" ]; then
 fi
 
 
-#git clone https://github.com/blue3k/StormForge3rdParties.git $SF_PATH/../StormForge3rdParties
-
-#ln -s $SF_PATH/../StormForge3rdParties/3rdParties $SF_PATH/3rdParties 
 pushd $SF_PATH/3rdParties 
 
 

@@ -6,7 +6,7 @@ For now the development is still going on and have many missing modules, however
 # Prerequisites
 1. Linux sub system for WIndows. 
 	- It's tested on Ubuntu 18.04.
-1. Visual Studio 17
+1. Visual Studio 19
 1. CMake 3.10 or later
 
 

@@ -43,6 +43,8 @@ goto exit:
 
 :vcfound
 
+echo Setting up VC
 call %VCBAT%
 
+echo Setting up VC2
 :exit
