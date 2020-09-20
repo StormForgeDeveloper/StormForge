@@ -35,4 +35,4 @@ robocopy Engine\Src\Protocol\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_
 cd %~dp0
 
 
-pause
+
