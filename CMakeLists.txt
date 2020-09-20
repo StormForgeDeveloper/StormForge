@@ -82,7 +82,7 @@ if(WIN32)
 	set(ARTECTURE x64)
 
 	include_directories(AFTER 
-		3rdParties/VulkanSDK/include
+		../VulkanSDK/include
 		3rdParties/src/mysql-connector-c++-8.0.18-winx64/include
 	)
 	
