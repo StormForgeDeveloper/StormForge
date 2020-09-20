@@ -44,6 +44,32 @@ if not exist %VULKAN_SDK_WIN% (
 )
 
 
-cd ..
+cd %SF_PATH%
+
+set PERL_INSTALL=ActivePerl-5.28.msi
+if not exist %VULKAN_SDK_WIN% (
+	echo downloading VulkanSDK
+	call %TOOL_PATH%\httpget +url:https://cli-msi.s3.amazonaws.com/%PERL_INSTALL%
+	%PERL_INSTALL%
+)
+
+
+set NASM_DIR=3rdParties\src\nasm
+cmd /c "cd %NASM_DIR% & buildNASM.cmd"
+
+set OPENSSL_DIR=3rdParties\src\openssl
+cmd /c "cd %OPENSSL_DIR% & config1.1_Winx64.cmd"
+
+set MYSQL_DIR=3rdParties\src\mysql
+cmd /c "cd %MYSQL_DIR% & WinGen.cmd"
+
+
+set OPENSSL_DIR=3rdParties\src\openssl
+cmd /c "cd %OPENSSL_DIR% & build1.1_Winx64.cmd"
+
+
+set MYSQL_DIR=3rdParties\src\mysql
+cmd /c "cd %MYSQL_DIR% & WinBuild.cmd"
+
 
 pause
