@@ -114,7 +114,8 @@ set(SFENGINE_LIB_FILES
 	ServerConfig/SFEnum.cpp
 	ServerConfig/SFServerConfig.cpp
 	ServerConfig/SFServerConfigXML.cpp
-	ServerConfig/SFServerConfigZooKeeper.cpp
+	ServerConfig/SFServerConfigZookeeper.h
+	ServerConfig/SFServerConfigZookeeper.cpp
 	Service/SFEngineService.cpp
 	SFEngine.Android.cpp
 	SFEngine.cpp
@@ -123,7 +124,6 @@ set(SFENGINE_LIB_FILES
 	SFEngine.Linux.cpp
 	String/SFToStringEngineTypes.cpp
 	Types/SFEngineTypedefs.cpp
-	ZooKeeper/SFZooKeeper.cpp
 
   	Application/Android/AndroidApp.h
 	Application/Android/AndroidAppTasks.h
@@ -230,7 +230,6 @@ set(SFENGINE_LIB_FILES
 	ServerConfig/SFEnum.h
 	ServerConfig/SFServerConfig.h
 	ServerConfig/SFServerConfigXML.h
-	ServerConfig/SFServerConfigZooKeeper.h
 	Service/SFConnectionManagerService.h
 	Service/SFEngineService.h
 	Service/SFEngineServices.h
@@ -243,7 +242,8 @@ set(SFENGINE_LIB_FILES
 	SFEnginePCH.h
 	String/SFToStringEngineTypes.h
 	Types/SFEngineTypedefs.h
-	ZooKeeper/SFZooKeeper.h
+	Zookeeper/SFZookeeper.cpp
+	Zookeeper/SFZookeeper.h
 	Net/SFConnection.inl
 	Net/SFConnectionManager.inl
 	Net/SFMessage.inl
