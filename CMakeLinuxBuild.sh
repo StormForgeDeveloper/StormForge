@@ -18,7 +18,7 @@ cd x64$CMAKE_BUILD_TYPE
 cmake --build .   --target install  --config Debug
 
 if [ $? -ne 0 ] then
-	exit $?
+	exit 1
 fi
 
 
@@ -27,7 +27,7 @@ cd ../x64$CMAKE_BUILD_TYPE
 cmake --build .   --target install --config Release
 
 if [ $? -ne 0 ] then
-	exit $?
+	exit 2
 fi
 
 
