@@ -50,7 +50,7 @@ include_directories(AFTER
 	3rdParties/src/jsoncpp/jsoncpp/include
 	3rdParties/src/zookeeper/zookeeperConnector/include
 	3rdParties/src/rdkafka
-	3rdParties/src/rdkafka/rdkafka/include
+	3rdParties/src/rdkafka/librdkafka/src
 	3rdParties/src/PlayFab/XPlatCppSdk/code/include
 	Engine/Src/SFCore
 	Engine/Src/SFEngine
