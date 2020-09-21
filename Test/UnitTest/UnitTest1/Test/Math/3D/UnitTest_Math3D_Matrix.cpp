@@ -478,7 +478,7 @@ TEST_F(MathTest, SSE_Matrix4_Simple)
 	auto nyAxis = SF::Vector4SSE(0, -1, 0, 1);
 	auto zAxis = SF::Vector4SSE(0, 0, 1, 1);
 	auto nzAxis = SF::Vector4SSE(0, 0, -1, 1);
-	SF::Matrix4SSE rotMat;.xyzwkkk=>
+	SF::Matrix4SSE rotMat;.
 
 	auto randRot = SF::Vector4SSE(1, 0, 0, C_HALF_PI);
 	Matrix4Soft<float> rotMatSoft;
