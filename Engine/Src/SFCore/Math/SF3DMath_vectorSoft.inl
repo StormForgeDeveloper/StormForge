@@ -110,7 +110,7 @@ namespace SF {
 
 
 	template<>
-	Vector2Soft<unsigned int> Vector2Soft<unsigned int>::operator - () const
+	inline Vector2Soft<unsigned int> Vector2Soft<unsigned int>::operator - () const
 	{
 		return Vector2Soft<unsigned int>(x, y);
 	}
@@ -629,7 +629,7 @@ namespace SF {
 	}
 
 	template<>
-	Vector4Soft<unsigned int> Vector4Soft<unsigned int>::operator - () const
+	inline Vector4Soft<unsigned int> Vector4Soft<unsigned int>::operator - () const
 	{
 		return Vector4Soft<unsigned int>(x, y, z, w);
 	}

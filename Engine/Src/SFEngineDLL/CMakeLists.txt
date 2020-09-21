@@ -18,7 +18,7 @@ set(SFENGINEDLL_LIB_FILES
 	SharpCPP/SFCSTongScript.cpp
 	SharpCPP/SFCSTongScriptBytecode.cpp
 	SharpCPP/SFCSUtil.cpp
-	SharpCPP/SFCSZooKeeper.cpp
+	SharpCPP/SFCSZookeeper.cpp
 	Win/dllmain.cpp
 	SFEngineDLLPCH.cpp
 	Java/JniConnection.cpp

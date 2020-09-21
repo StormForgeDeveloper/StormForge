@@ -17,7 +17,7 @@
 #include "String/SFString.h"
 
 
-#include "ZooKeeper/SFZooKeeper.h"
+#include "Zookeeper/SFZookeeper.h"
 #include "SFEnum.h"
 
 

@@ -14,7 +14,7 @@
 #include "String/SFStringCrc32.h"
 #include "String/SFString.h"
 
-#include "ZooKeeper/SFZooKeeper.h"
+#include "Zookeeper/SFZookeeper.h"
 #include "ServerConfig/SFEnum.h"
 #include "ServerConfig/SFServerConfig.h"
 

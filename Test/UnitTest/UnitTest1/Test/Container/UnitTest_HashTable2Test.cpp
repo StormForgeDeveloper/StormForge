@@ -694,7 +694,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 	AssertRel(TestMap.size() == 0);
 	EXPECT_EQ(0, TestMap.size());
 
-	printf("Read: %llu, Write: %llu\n", readCount.load(std::memory_order_acquire), writeCount.load(std::memory_order_acquire));
+	printf("Read: %llu, Write: %llu\n", static_cast<unsigned long long>(readCount.load(std::memory_order_acquire)), static_cast<unsigned long long>(writeCount.load(std::memory_order_acquire)));
 }
 
 

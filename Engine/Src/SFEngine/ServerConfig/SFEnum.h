@@ -18,7 +18,7 @@
 #include "Container/SFCircularPageQueue.h"
 #include "Task/SFTask.h"
 
-#include "ZooKeeper/SFZooKeeper.h"
+#include "Zookeeper/SFZookeeper.h"
 
 
 typedef struct _xmlNode xmlNode;

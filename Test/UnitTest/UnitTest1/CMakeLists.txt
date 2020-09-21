@@ -83,7 +83,7 @@ add_executable(SFUnitTest ${SF_UNIT_TEST_FILES})
 #add_dependencies(BRUnitTest BRServerSystem BRDB BRServerProtocol BRTable)
 
 
-target_link_libraries(SFUnitTest ${ENGINE_LINK_LIBS} ${PLATFORM_LIBS} gtest)
+target_link_libraries(SFUnitTest ${ENGINE_LINK_LIBS} ${PLATFORM_LIBS} SFProtocol gtest)
 
 
 install (TARGETS SFUnitTest
