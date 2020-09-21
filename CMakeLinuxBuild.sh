@@ -1,6 +1,7 @@
 #!/bin/bash
 
-
+# exit when any command fails
+set -e
 
 export CMAKE_SYSTEM_NAME=Linux
 

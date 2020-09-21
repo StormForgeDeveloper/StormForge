@@ -155,11 +155,8 @@ namespace SF
 	//	PreferencePlayer for matchmaking system
 	//
 
-	class PreferencePlayer
+	class PreferencePlayer : protected StaticDoubleLinkedList::Node
     {
-	public:
-
-
     public:
 
 		// Constructor
@@ -192,7 +189,7 @@ namespace SF
 		bool SetCurrentShellID(uint shellID);
 
 		// Get listnode
-		StaticDoubleLinkedList::Node& GetListNode() { return m_ListNode; }
+		StaticDoubleLinkedList::Node& GetListNode() { return *this; }
 
 		// Get player id
 		uint GetPlayerID() const { return m_PlayerID; }
@@ -201,7 +198,7 @@ namespace SF
 		// helper util
 		static PreferencePlayer* ToPlayerPtr(StaticDoubleLinkedList::Node* nodePtr)
 		{
-			return reinterpret_cast<PreferencePlayer*>(((intptr_t)nodePtr - offsetof(PreferencePlayer, m_ListNode)));
+			return static_cast<PreferencePlayer*>(nodePtr);
 		}
 
 
@@ -216,9 +213,6 @@ namespace SF
 
 		// preference vector
 		UserPreference m_Preference;
-
-		// Listnode
-		StaticDoubleLinkedList::Node m_ListNode;
 
 		// current Shell Index, if belong to a Shell
 		uint m_CurrentShellID = -1;
