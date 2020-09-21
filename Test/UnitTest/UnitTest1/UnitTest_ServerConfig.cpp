@@ -48,10 +48,10 @@ GTEST_TEST(ServerConfig, XMLLoad)
 }
 
 
-GTEST_TEST(ServerConfig, ZooKeeperStore)
+GTEST_TEST(ServerConfig, ZookeeperStore)
 {
 	Heap testHeap("test", GetSystemHeap());
-	ZooKeeper zkInstance(testHeap);
+	Zookeeper zkInstance(testHeap);
 	ServerConfig serverConfig(testHeap);
 	ServerConfig serverConfigXML(testHeap);
 	const char* zkConfigNodeName = "/ServerConfig";
@@ -62,7 +62,7 @@ GTEST_TEST(ServerConfig, ZooKeeperStore)
 	ServerConfigXML serverConfigXMLLoader(serverConfigXML);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig("ServerConfig_StressTest.xml"));
 
-	ServerConfigZooKeeper zookeeperStore(serverConfigXML, zkInstance);
+	ServerConfigZookeeper zookeeperStore(serverConfigXML, zkInstance);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperStore.StoreConfig(zkConfigNodeName));
 
 
@@ -73,13 +73,13 @@ GTEST_TEST(ServerConfig, ZooKeeperStore)
 }
 
 
-GTEST_TEST(ServerConfig, ZooKeeperLoad)
+GTEST_TEST(ServerConfig, ZookeeperLoad)
 {
 	Heap testHeap("test", GetSystemHeap());
-	ZooKeeper zkInstance(testHeap);
+	Zookeeper zkInstance(testHeap);
 	ServerConfig serverConfig(testHeap);
 	ServerConfig serverConfigXML(testHeap);
-	const char* zkConfigNodeName = "/UnitTest_ServerConfig_ZooKeeperStore";
+	const char* zkConfigNodeName = "/UnitTest_ServerConfig_ZookeeperStore";
 	zkInstance.Connect("127.0.0.1:2181");
 	zkInstance.WaitForConnected();
 
@@ -87,7 +87,7 @@ GTEST_TEST(ServerConfig, ZooKeeperLoad)
 	ServerConfigXML serverConfigXMLLoader(serverConfigXML);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig("ServerConfig_StressTest.xml"));
 
-	ServerConfigZooKeeper zookeeperLoader(serverConfig, zkInstance);
+	ServerConfigZookeeper zookeeperLoader(serverConfig, zkInstance);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperLoader.LoadConfig(zkConfigNodeName));
 	GTEST_ASSERT_EQ(serverConfigXML, serverConfig);
 
@@ -98,13 +98,13 @@ GTEST_TEST(ServerConfig, ZooKeeperLoad)
 	Engine::GetEngineComponent<Log::LogModule>()->Flush();
 }
 
-GTEST_TEST(ServerConfig, ZooKeeper)
+GTEST_TEST(ServerConfig, Zookeeper)
 {
 	Heap testHeap("test", GetSystemHeap());
-	ZooKeeper zkInstance(testHeap);
+	Zookeeper zkInstance(testHeap);
 	ServerConfig serverConfig(testHeap);
 	ServerConfig serverConfigXML(testHeap);
-	const char* zkConfigNodeName = "/UnitTest_ServerConfig_ZooKeeper";
+	const char* zkConfigNodeName = "/UnitTest_ServerConfig_Zookeeper";
 	zkInstance.Connect("127.0.0.1:2181");
 	zkInstance.WaitForConnected();
 
@@ -112,10 +112,10 @@ GTEST_TEST(ServerConfig, ZooKeeper)
 	ServerConfigXML serverConfigXMLLoader(serverConfigXML);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig("ServerConfig_StressTest.xml"));
 
-	ServerConfigZooKeeper zookeeperStore(serverConfigXML, zkInstance);
+	ServerConfigZookeeper zookeeperStore(serverConfigXML, zkInstance);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperStore.StoreConfig(zkConfigNodeName));
 
-	ServerConfigZooKeeper zookeeperLoad(serverConfig, zkInstance);
+	ServerConfigZookeeper zookeeperLoad(serverConfig, zkInstance);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperLoad.LoadConfig(zkConfigNodeName));
 	GTEST_ASSERT_EQ(serverConfigXML, serverConfig);
 

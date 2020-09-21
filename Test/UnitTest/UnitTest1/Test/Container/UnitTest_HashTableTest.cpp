@@ -70,8 +70,8 @@ TEST_F(HashTableTest, HashTable_NonUnique)
 			checkSet[value] = Count+1;
 		}
 		Result hrRes = TestMap.insert(pNewNode->Value,pNewNode);
-		EXPECT_HRESULT_SUCCEEDED(hrRes);
-		AssertRel(SUCCEEDED(hrRes));
+		EXPECT_TRUE(hrRes);
+		AssertRel((hrRes));
 	}
 
 	
@@ -82,28 +82,28 @@ TEST_F(HashTableTest, HashTable_NonUnique)
 
 		if( itFound == checkSet.end() )
 		{
-			EXPECT_HRESULT_FAILED( TestMap.find( value, itCur) );
+			EXPECT_FALSE( TestMap.find( value, itCur) );
 		}
 		else
 		{
-			EXPECT_HRESULT_SUCCEEDED( TestMap.find( value, itCur) );
+			EXPECT_TRUE( TestMap.find( value, itCur) );
 		}
 	}
 
 	auto itCheck = checkSet.begin();
 	for( ; itCheck != checkSet.end(); itCheck++ )
 	{
-		Result hr = S_OK;
+		Result hr;
 		hr = TestMap.find( itCheck->first, itCur);
-		EXPECT_HRESULT_SUCCEEDED(  hr );
+		EXPECT_TRUE(  hr );
 
-		if( FAILED(hr) )
+		if( !(hr) )
 			continue;
 		TestMapNode *pNode = *itCur;
 
 		hr = TestMap.erase( itCur );
-		EXPECT_HRESULT_SUCCEEDED( hr );
-		if( FAILED(hr) )
+		EXPECT_TRUE( hr );
+		if( !(hr) )
 			continue;
 		delete pNode;
 	}
@@ -144,7 +144,7 @@ TEST_F(HashTableTest, HashTable_Unique)
 			memset( pNewNode, 0, sizeof(TestMapNode) );
 			pNewNode->Value = value;
 			checkSet.insert( value );
-			EXPECT_HRESULT_SUCCEEDED( TestMap.insert(pNewNode->Value, pNewNode ) );
+			EXPECT_TRUE( TestMap.insert(pNewNode->Value, pNewNode ) );
 		}
 	}
 
@@ -156,20 +156,20 @@ TEST_F(HashTableTest, HashTable_Unique)
 
 		if( itFound == checkSet.end() )
 		{
-			EXPECT_HRESULT_FAILED( TestMap.find( value, itCur) );
+			EXPECT_FALSE( TestMap.find( value, itCur) );
 		}
 		else
 		{
-			EXPECT_HRESULT_SUCCEEDED( TestMap.find( value, itCur) );
+			EXPECT_TRUE( TestMap.find( value, itCur) );
 		}
 	}
 
 	auto itCheck = checkSet.begin();
 	for( ; itCheck != checkSet.end(); itCheck++ )
 	{
-		EXPECT_HRESULT_SUCCEEDED( TestMap.find( *itCheck, itCur) );
+		EXPECT_TRUE( TestMap.find( *itCheck, itCur) );
 		TestMapNode *pNode = *itCur;
-		EXPECT_HRESULT_SUCCEEDED( TestMap.erase( itCur ) );
+		EXPECT_TRUE( TestMap.erase( itCur ) );
 		delete pNode;
 	}
 
@@ -202,7 +202,7 @@ TEST_F(HashTableTest, HashTable_UniqueMT)
 	TestTableType TestMap;
 	TestTableType::iterator itCur;
 
-	for( INT64 ID = 0; ID < READ_THREAD_COUNT; ID++ )
+	for( int64_t ID = 0; ID < READ_THREAD_COUNT; ID++ )
 	{
 		FunctorThread *pTask = new FunctorThread([&, ID](Thread *pThread)
 		{
@@ -213,7 +213,7 @@ TEST_F(HashTableTest, HashTable_UniqueMT)
 				int value = rand() % MAX_NUMBER;
 				TestTableType::iterator itFound;
 
-				if( SUCCEEDED(TestMap.find( value, itFound )) )
+				if( (TestMap.find( value, itFound )) )
 				{
 					ThisThread::SleepFor(DurationMS(10));
 					EXPECT_EQ(value,itFound->Value);
@@ -229,7 +229,7 @@ TEST_F(HashTableTest, HashTable_UniqueMT)
 	};
 
 	
-	for( INT64 ID = 0; ID < WRITE_THREAD_COUNT; ID++ )
+	for(int64_t ID = 0; ID < WRITE_THREAD_COUNT; ID++ )
 	{
 		auto pTask = new FunctorThread([&, ID](Thread* pThread)
 		{
@@ -241,7 +241,7 @@ TEST_F(HashTableTest, HashTable_UniqueMT)
 				TestMapNode *pNewNode = new TestMapNode;
 				memset( pNewNode, 0, sizeof(TestMapNode) );
 				pNewNode->Value = value;
-				if( SUCCEEDED(TestMap.insert(pNewNode->Value, pNewNode )) )
+				if( (TestMap.insert(pNewNode->Value, pNewNode )) )
 				{
 					numberOfItems.fetch_add(1,std::memory_order_relaxed);
 				}
@@ -257,7 +257,7 @@ TEST_F(HashTableTest, HashTable_UniqueMT)
 	
 	ThisThread::SleepFor(DurationMS(2000));
 
-	for( INT64 ID = 0; ID < WRITE_THREAD_COUNT; ID++ )
+	for(int64_t ID = 0; ID < WRITE_THREAD_COUNT; ID++ )
 	{
 		auto pTask = new FunctorThread([&, ID](Thread* pThread)
 		{
@@ -269,12 +269,12 @@ TEST_F(HashTableTest, HashTable_UniqueMT)
 
 				TestTableType::iterator itFound;
 
-				if( SUCCEEDED(TestMap.find( value, itFound )) )
+				if( (TestMap.find( value, itFound )) )
 				{
 					EXPECT_EQ(value,itFound->Value);
 					AssertRel(value == itFound->Value);
 
-					if (SUCCEEDED(TestMap.erase(itFound)))
+					if ((TestMap.erase(itFound)))
 						numberOfItems.fetch_sub(1,std::memory_order_relaxed);
 				}
 

@@ -57,7 +57,8 @@ TEST_F(NetTest, RecvMessageWindowSimple)
 
 	for (int iTest = 0; iTest < 1024; iTest++)
 	{
-		auto hr = recvMessage.AddMsg(NewMessage(testHeap, uiSequence++));
+		auto NewMsg = NewMessage(testHeap, uiSequence++);
+		auto hr = recvMessage.AddMsg(NewMsg);
 		if (iTest < recvMessage.GetWindowSize())
 		{
 			ASSERT_EQ(SF::ResultCode::SUCCESS, hr);
@@ -94,7 +95,7 @@ TEST_F(NetTest, RecvMessageWindowSimple2)
 	Net::RecvMsgWindow recvMessage(testHeap);
 	uint16_t uiSequence = 0;
 	uint16_t releaseSequence = 0;
-	MessageDataPtr pResult;
+	MessageDataPtr pResult, pNewMsg;
 	Result hr;
 
 	for (unsigned iTest = 0; iTest < TEST_COUNT; iTest++)
@@ -103,7 +104,8 @@ TEST_F(NetTest, RecvMessageWindowSimple2)
 		switch (random)
 		{
 		case 0: // add
-			hr = recvMessage.AddMsg(NewMessage(testHeap, uiSequence));
+			pNewMsg = NewMessage(testHeap, uiSequence);
+			hr = recvMessage.AddMsg(pNewMsg);
 			if (Message::SequenceDifference(uiSequence, recvMessage.GetBaseSequence()) < recvMessage.GetWindowSize())
 			{
 				AssertRel(hr);
@@ -158,7 +160,8 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 			{
 				testSequence = std::abs(rand());
 			}
-			hr = recvMessage.AddMsg(NewMessage(testHeap, testSequence));
+			auto pNewMsg = NewMessage(testHeap, testSequence);
+			hr = recvMessage.AddMsg(pNewMsg);
 			auto seqOffset = Message::SequenceDifference(testSequence, recvMessage.GetBaseSequence());
 			if (seqOffset < recvMessage.GetWindowSize() && seqOffset >= 0)
 			{
@@ -241,7 +244,8 @@ TEST_F(NetTest, RecvMessageWindowOutOfRange)
 		for (int testSequenceOffset = -MaxSequenceOffset; testSequenceOffset < MaxSequenceOffset; testSequenceOffset++)
 		{
 			auto testSequence = (int)uiSequence + testSequenceOffset;
-			auto hr = recvMessage.AddMsg(NewMessage(testHeap, testSequence));
+			auto pNewMsg = NewMessage(testHeap, testSequence);
+			auto hr = recvMessage.AddMsg(pNewMsg);
 			if (testSequenceOffset < 0)
 			{
 				GTEST_ASSERT_EQ(hr, ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE);
@@ -425,7 +429,7 @@ TEST_F(NetTest, RecvMessageWindowMT2)
 					pResult = nullptr;
 					if ((sequence % 10000) == 0)
 					{
-						printf("Read Sequence: %lld\n", sequence);
+						printf("Read Sequence: %lld\n", static_cast<unsigned long long>(sequence));
 					}
 					sequence = releaseSequence.fetch_add(1, std::memory_order_relaxed);
 				}
@@ -463,7 +467,8 @@ TEST_F(NetTest, SendMessageWindowSimple)
 
 		for (int iTest = 0; iTest < Net::MessageWindow::MESSAGE_QUEUE_SIZE; iTest++)
 		{
-			auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), NewMessage(testHeap));
+			auto pNewMsg = NewMessage(testHeap);
+			auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), pNewMsg);
 			if (iTest < msgWindow.GetWindowSize())
 			{
 				ASSERT_EQ(SF::ResultCode::SUCCESS, hr);
@@ -494,7 +499,8 @@ TEST_F(NetTest, SendMessageWindowSimple2)
 		auto randNum = Util::Random.Rand(Net::MessageWindow::MESSAGE_QUEUE_SIZE);
 		for (int iTest = 0; (uint)iTest < randNum; iTest++)
 		{
-			auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), NewMessage(testHeap));
+			auto pNewMsg = NewMessage(testHeap);
+			auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), pNewMsg);
 			if (iTest < msgWindow.GetWindowSize())
 			{
 				ASSERT_EQ(SF::ResultCode::SUCCESS, hr);

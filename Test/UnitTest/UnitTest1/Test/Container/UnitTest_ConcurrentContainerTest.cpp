@@ -77,7 +77,7 @@ TEST_F(ConcurrentContainerTest, SpinBufferMT_IN)
 
 	struct TestDataType
 	{
-		ThreadID ThreadID;
+		ThreadID TID;
 		int WorkerID;
 		int Value;
 	};
@@ -96,7 +96,7 @@ TEST_F(ConcurrentContainerTest, SpinBufferMT_IN)
 			for (int iTest = 0; iTest < TEST_LENGTH; iTest++)
 			{
 				TestDataType data;
-				data.ThreadID = pThread->GetThreadID();
+				data.TID = pThread->GetThreadID();
 				data.WorkerID = worker;
 				data.Value = iTest;
 				auto lockedBlock = spinBuffer.Write_Lock();
@@ -161,7 +161,7 @@ TEST_F(ConcurrentContainerTest, SpinBufferMT_INOUT)
 
 	struct TestDataType
 	{
-		ThreadID ThreadID;
+		ThreadID TID;
 		int WorkerID;
 		int Value;
 	};
@@ -181,7 +181,7 @@ TEST_F(ConcurrentContainerTest, SpinBufferMT_INOUT)
 			for (int iTest = 0; iTest < TEST_LENGTH; iTest++)
 			{
 				TestDataType data;
-				data.ThreadID = pThread->GetThreadID();
+				data.TID = pThread->GetThreadID();
 				data.WorkerID = worker;
 				data.Value = iTest;
 				auto lockedBlock = spinBuffer.Write_Lock();

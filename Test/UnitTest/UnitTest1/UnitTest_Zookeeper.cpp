@@ -16,7 +16,7 @@
 #include "Container/SFCircularPageQueue.h"
 
 #include "zookeeper.h"
-#include "ZooKeeper/SFZooKeeper.h"
+#include "Zookeeper/SFZookeeper.h"
 
 
 
@@ -38,7 +38,7 @@ const uint TEST_COUNT = 4000000 * TestScale;
 GTEST_TEST(Zookeeper, Simple)
 {
 	Heap testHeap("test", GetSystemHeap());
-	ZooKeeper zkInstance(testHeap);
+	Zookeeper zkInstance(testHeap);
 
 	zkInstance.Connect("127.0.0.1:2181");
 	zkInstance.WaitForConnected();
@@ -63,7 +63,7 @@ GTEST_TEST(Zookeeper, Simple)
 GTEST_TEST(Zookeeper, SimpleData)
 {
 	Heap testHeap("test", GetSystemHeap());
-	ZooKeeper zkInstance(testHeap);
+	Zookeeper zkInstance(testHeap);
 
 	zkInstance.Connect("127.0.0.1:2181");
 	zkInstance.WaitForConnected();

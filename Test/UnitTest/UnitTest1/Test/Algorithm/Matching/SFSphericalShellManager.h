@@ -18,7 +18,7 @@
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
 #include "Util/SFRandom.h"
-
+#include "Math/SF3DMath.h"
 
 
 
@@ -40,7 +40,7 @@ namespace SF
 		static constexpr float MAX_PREFERENCE_LENGTH = 2.9f;
 
 		union {
-			__m128 PackedFactors[MAX_PREFERENCE_DIMENSION/4];
+			Vector4 PackedFactors[MAX_PREFERENCE_DIMENSION/4];
 			float PreferenceFactors[MAX_PREFERENCE_DIMENSION];
 		};
 
@@ -94,7 +94,7 @@ namespace SF
 
 			for (int iPack = 0; iPack < countof(PackedFactors); iPack++)
 			{
-				dist += _mm_cvtss_f32(_mm_dp_ps(PackedFactors[iPack], op2.PackedFactors[iPack], 0xF1));
+				dist += PackedFactors[iPack].Dot4(op2.PackedFactors[iPack]);
 			}
 
 			//for (int i = 0; i < MAX_PREFERENCE_DIMENSION; i++)
@@ -108,11 +108,10 @@ namespace SF
 		{
 			float dist = 0.0f;
 
-			// TODO: SIMD branch
 			for (int iPack = 0; iPack < countof(PackedFactors); iPack++)
 			{
-				__m128 diff = _mm_sub_ps(PackedFactors[iPack], op2.PackedFactors[iPack]);
-				dist += _mm_cvtss_f32(_mm_dp_ps(diff, diff, 0xF1));
+				auto diff = PackedFactors[iPack] - op2.PackedFactors[iPack];
+				dist += diff.Dot4(diff);
 			}
 
 #if 0 //defined(_DEBUG)
@@ -130,7 +129,7 @@ namespace SF
 		{
 			for (int iPack = 0; iPack < countof(PackedFactors); iPack++)
 			{
-				PackedFactors[iPack] = _mm_set_ps(Util::Random.RandF(), Util::Random.RandF(), Util::Random.RandF(), Util::Random.RandF());
+				PackedFactors[iPack] = Vector4(Util::Random.RandF(), Util::Random.RandF(), Util::Random.RandF(), Util::Random.RandF());
 			}
 			//for (int i = 0; i < countof(PreferenceFactors); i++)
 			//	PreferenceFactors[i] = (float)Util::Random.RandF();

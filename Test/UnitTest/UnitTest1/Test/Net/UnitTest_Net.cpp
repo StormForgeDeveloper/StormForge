@@ -130,7 +130,7 @@ using ::testing::UnitTest;
 //	const int TestCaseCount = 4;
 //	SF::Message::MessageData *pMsgData[TestCaseCount];
 //	SF::NetAddress InGameServerAddr;
-//	UINT64 InLoginEntityUID;
+//	uint64_t InLoginEntityUID;
 //
 //	memset(pMsgData,0,sizeof(pMsgData));
 //	EXPECT_HRESULT_SUCCEEDED(SF::Message::Login::LoginCmd::BuildIMsg(pMsgData[0], GameID::Conspiracy, strID, strPassword));

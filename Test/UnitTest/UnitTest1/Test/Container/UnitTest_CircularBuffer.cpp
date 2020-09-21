@@ -337,7 +337,7 @@ void Container_CircularBufferQueue_ThreadTest(size_t testDataCount, int allocSiz
 				if (pBuffer == nullptr)
 				{
 					// wait a bit and try again
-					Sleep(0);
+					ThisThread::SleepFor(DurationMS(0));
 					continue;
 				}
 
@@ -368,7 +368,7 @@ void Container_CircularBufferQueue_ThreadTest(size_t testDataCount, int allocSiz
 				auto pReadItem = circularBuffer.DequeueRead();
 				if (pReadItem == nullptr)
 				{
-					Sleep(0);
+					ThisThread::SleepFor(DurationMS(0));
 					continue;
 				}
 
@@ -398,7 +398,7 @@ void Container_CircularBufferQueue_ThreadTest(size_t testDataCount, int allocSiz
 
 	while (enqueuedCount.load(std::memory_order_relaxed) < TestDataCount)
 	{
-		Sleep(100);
+		ThisThread::SleepFor(DurationMS(100));
 	}
 
 	for (auto itThread : writeThreads)
@@ -791,7 +791,7 @@ void Container_CircularBuffer_ThreadTest(std::vector<SF::Thread*>& threadArray, 
 				if (pBuffer == nullptr)
 				{
 					// wait a bit and try again
-					Sleep(0);
+					ThisThread::SleepFor(DurationMS(0));
 					continue;
 				}
 
@@ -826,7 +826,7 @@ void Container_CircularBuffer_ThreadTest(std::vector<SF::Thread*>& threadArray, 
 
 	while (finishedCount < ThreadCount)
 	{
-		Sleep(500);
+		ThisThread::SleepFor(DurationMS(500));
 	}
 
 }

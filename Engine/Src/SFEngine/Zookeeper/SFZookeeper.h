@@ -4,7 +4,7 @@
 // 
 // Author : KyungKun Ko
 //
-// Description : ZooKeeper warper
+// Description : Zookeeper warper
 //	
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -37,15 +37,15 @@ namespace SF
 	constexpr size_t ZOOKEEPER_CLIENTID_BUFFER_SIZE = 32;
 
 
-	class ZooKeeper;
+	class Zookeeper;
 
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
-	//	Watcher class for the ZooKeeper
+	//	Watcher class for the Zookeeper
 	//
 
-	class ZooKeeperWatcher
+	class ZookeeperWatcher
 	{
 	public:
 
@@ -71,13 +71,13 @@ namespace SF
 		//	Tasks for each result type
 		//
 
-		class ZooKeeperTask : public Task
+		class ZookeeperTask : public Task
 		{
 		public:
-			ZooKeeperWatcher& ZKWatcher;
+			ZookeeperWatcher& ZKWatcher;
 			Result ZKResult;
 
-			ZooKeeperTask(ZooKeeperWatcher& watcher)
+			ZookeeperTask(ZookeeperWatcher& watcher)
 				: ZKWatcher(watcher)
 			{}
 
@@ -87,31 +87,31 @@ namespace SF
 		};
 
 
-		class StringTask : public ZooKeeperTask
+		class StringTask : public ZookeeperTask
 		{
 		public:
 			String ResultString;
 
-			StringTask(IHeap& memoryManager, ZooKeeperWatcher& watcher)
-				: ZooKeeperTask(watcher)
+			StringTask(IHeap& memoryManager, ZookeeperWatcher& watcher)
+				: ZookeeperTask(watcher)
 				, ResultString(memoryManager)
 			{}
 		};
 
 
-		class StringsTask : public ZooKeeperTask
+		class StringsTask : public ZookeeperTask
 		{
 		public:
 			DynamicArray<String> ResultStrings;
 
-			StringsTask(IHeap& memoryManager, ZooKeeperWatcher& watcher)
-				: ZooKeeperTask(watcher)
+			StringsTask(IHeap& memoryManager, ZookeeperWatcher& watcher)
+				: ZookeeperTask(watcher)
 				, ResultStrings(memoryManager)
 			{}
 		};
 
 
-		class StringsStatTask : public ZooKeeperTask
+		class StringsStatTask : public ZookeeperTask
 		{
 		public:
 			DynamicArray<String> ResultStrings;
@@ -119,8 +119,8 @@ namespace SF
 			Stat* ResultStat;
 
 
-			StringsStatTask(IHeap& memoryManager, ZooKeeperWatcher& watcher)
-				: ZooKeeperTask(watcher)
+			StringsStatTask(IHeap& memoryManager, ZookeeperWatcher& watcher)
+				: ZookeeperTask(watcher)
 				, ResultStrings(memoryManager)
 			{
 				ResultStat = (Stat*)ResultStatBuffer;
@@ -129,14 +129,14 @@ namespace SF
 		};
 
 
-		class StatTask : public ZooKeeperTask
+		class StatTask : public ZookeeperTask
 		{
 		public:
 			uint8_t ResultStatBuffer[ZOOKEEPER_STAT_BUFFER_SIZE];
 			Stat *ResultStat;
 
-			StatTask(ZooKeeperWatcher& watcher)
-				: ZooKeeperTask(watcher)
+			StatTask(ZookeeperWatcher& watcher)
+				: ZookeeperTask(watcher)
 			{
 				ResultStat = (Stat*)ResultStatBuffer;
 				memset(ResultStatBuffer, 0, sizeof(ResultStatBuffer));
@@ -144,25 +144,25 @@ namespace SF
 		};
 
 
-		class DataTask : public ZooKeeperTask
+		class DataTask : public ZookeeperTask
 		{
 		public:
 			DynamicArray<uint8_t> ResultData;
 
-			DataTask(IHeap& memoryManager, ZooKeeperWatcher& watcher)
-				: ZooKeeperTask(watcher)
+			DataTask(IHeap& memoryManager, ZookeeperWatcher& watcher)
+				: ZookeeperTask(watcher)
 				, ResultData(memoryManager)
 			{}
 		};
 
 /*
-		class ACLTask : public ZooKeeperTask
+		class ACLTask : public ZookeeperTask
 		{
 		public:
 			StaticArray<ACL, 10> ResultACL;
 
-			ACLTask(IHeap& memoryManager, ZooKeeperWatcher& watcher)
-				: ZooKeeperTask(watcher)
+			ACLTask(IHeap& memoryManager, ZookeeperWatcher& watcher)
+				: ZookeeperTask(watcher)
 				, ResultACL(memoryManager)
 			{}
 		};
@@ -175,11 +175,11 @@ namespace SF
 		// Zookeeper event queue
 		CircularPageQueueAtomic<uint64_t> m_EventQueue;
 
-		ZooKeeper *m_ZKInstance = nullptr;
+		Zookeeper *m_ZKInstance = nullptr;
 
 	private:
 
-		void SetZKInstance(ZooKeeper* pZKInstance) { m_ZKInstance = pZKInstance; }
+		void SetZKInstance(Zookeeper* pZKInstance) { m_ZKInstance = pZKInstance; }
 
 		static void ZKWatcherCB(zhandle_t *zkHandle, int type, int state, const char *path, void*v);
 		static void ZKWatcherCBComplition(int rc, const void *data);
@@ -190,19 +190,19 @@ namespace SF
 		static void ZKWatcherCBStringComplition(int rc, const char *value, const void *data);
 		//static void ZKWatcherCBACLComplition(int rc, ACL_vector *acl, Stat *stat, const void *data);
 
-		friend class ZooKeeper;
+		friend class Zookeeper;
 
 	public:
 
-		ZooKeeperWatcher(IHeap& memoryManager);
-		virtual ~ZooKeeperWatcher() {}
+		ZookeeperWatcher(IHeap& memoryManager);
+		virtual ~ZookeeperWatcher() {}
 
-		ZooKeeper* GetZKInstance() { return m_ZKInstance; }
+		Zookeeper* GetZKInstance() { return m_ZKInstance; }
 
 
 		int GetState() const { return m_State.load(std::memory_order_relaxed); }
 
-		// Dequeue ZooKeeper event
+		// Dequeue Zookeeper event
 		Result DequeueEvent(ZKEvent& eventOut);
 
 		/////////////////////////////////////////////
@@ -211,7 +211,7 @@ namespace SF
 		//
 
 		virtual Result OnNewEvent(const ZKEvent& eventOut);
-		virtual void OnComplition(ZooKeeperTask& pTask);
+		virtual void OnComplition(ZookeeperTask& pTask);
 		virtual void OnStatComplition(StatTask& pTask);
 		virtual void OnDataComplition(DataTask& pTask);
 		virtual void OnStringsComplition(StringsTask& pTask);
@@ -224,21 +224,21 @@ namespace SF
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
-	//	ZooKeeper API wrapper
+	//	Zookeeper API wrapper
 	//
 
-	class ZooKeeper
+	class Zookeeper
 	{
 	public:
 
-		typedef ZooKeeperWatcher::ZKEvent			ZKEvent;
-		typedef ZooKeeperWatcher::ZooKeeperTask		ZooKeeperTask;
-		//typedef ZooKeeperWatcher::ACLTask			ACLTask;
-		typedef ZooKeeperWatcher::StringTask		StringTask;
-		typedef ZooKeeperWatcher::StringsTask		StringsTask;
-		typedef ZooKeeperWatcher::StringsStatTask	StringsStatTask;
-		typedef ZooKeeperWatcher::StatTask			StatTask;
-		typedef ZooKeeperWatcher::DataTask			DataTask;
+		typedef ZookeeperWatcher::ZKEvent			ZKEvent;
+		typedef ZookeeperWatcher::ZookeeperTask		ZookeeperTask;
+		//typedef ZookeeperWatcher::ACLTask			ACLTask;
+		typedef ZookeeperWatcher::StringTask		StringTask;
+		typedef ZookeeperWatcher::StringsTask		StringsTask;
+		typedef ZookeeperWatcher::StringsStatTask	StringsStatTask;
+		typedef ZookeeperWatcher::StatTask			StatTask;
+		typedef ZookeeperWatcher::DataTask			DataTask;
 
 		// constants
 
@@ -264,32 +264,32 @@ namespace SF
 		// ZK handle lock
 		CriticalSection m_handleLock;
 
-		// ZooKeeper handle
+		// Zookeeper handle
 		zhandle_t* m_ZKHandle = nullptr;
 
 		// State of zoo keeper server
 		//std::atomic<int> m_State;
 
-		// ZooKeeper client id
+		// Zookeeper client id
 		uint8_t ClientIDBuffer[ZOOKEEPER_STAT_BUFFER_SIZE];
 		clientid_t* m_ClientID;
 
 		// Watcher for main Zookeeper connection
-		ZooKeeperWatcher m_ZKWatcher;
+		ZookeeperWatcher m_ZKWatcher;
 
 		// Zookeeper log level
 		uint32_t m_LogLevel;
 
-		SortedSet<ZooKeeperWatcher*> m_RegisteredWatcher;
+		SortedSet<ZookeeperWatcher*> m_RegisteredWatcher;
 
 	private:
 
-		void AddWatcher(ZooKeeperWatcher* pWatcher);
+		void AddWatcher(ZookeeperWatcher* pWatcher);
 
 	public:
 
-		ZooKeeper(IHeap& memoryManager, uint32_t debugLogLevel = 0);
-		~ZooKeeper();
+		Zookeeper(IHeap& memoryManager, uint32_t debugLogLevel = 0);
+		~Zookeeper();
 
 		IHeap& GetHeap() { return m_Heap; }
 
@@ -298,9 +298,9 @@ namespace SF
 		//	
 		//
 
-		ZooKeeperWatcher& GetWatcher() { return m_ZKWatcher; }
+		ZookeeperWatcher& GetWatcher() { return m_ZKWatcher; }
 
-		SortedSet<ZooKeeperWatcher*>& GetRegisteredWatchers() { return m_RegisteredWatcher; }
+		SortedSet<ZookeeperWatcher*>& GetRegisteredWatchers() { return m_RegisteredWatcher; }
 
 
 
@@ -311,10 +311,10 @@ namespace SF
 		// Close
 		void Close();
 
-		// Connect to ZooKeeper server
+		// Connect to Zookeeper server
 		Result Connect(const char* connectionString);
 
-		// Dequeue ZooKeeper event
+		// Dequeue Zookeeper event
 		Result DequeueEvent(ZKEvent& eventOut) { return m_ZKWatcher.DequeueEvent(eventOut); }
 
 		// Yield until it has something or time out
@@ -344,16 +344,16 @@ namespace SF
 		SharedPointerT<StringTask> ACreate(const char* path, const Json::Value& value, const struct ACL_vector *acl, int flags);
 
 		Result Delete(const char* path, int version = -1);
-		SharedPointerT<ZooKeeperTask> ADelete(const char* path, int version = -1);
+		SharedPointerT<ZookeeperTask> ADelete(const char* path, int version = -1);
 
 		Result DeleteTree(const char* path);
 
 		Result Exists(const char* path);
-		SharedPointerT<StatTask> AExists(const char* path, ZooKeeperWatcher* watcher = nullptr);
+		SharedPointerT<StatTask> AExists(const char* path, ZookeeperWatcher* watcher = nullptr);
 
 		Result Get(const char *path, Array<uint8_t>& valueBuffer, struct Stat *stat = nullptr);
 		Result Get(const char *path, Json::Value& jsonValue);
-		SharedPointerT<DataTask> AGet(const char *path, ZooKeeperWatcher* watcher = nullptr);
+		SharedPointerT<DataTask> AGet(const char *path, ZookeeperWatcher* watcher = nullptr);
 
 		Result Set(const char *path, const Array<uint8_t>& valueBuffer, int version = -1);
 		Result Set(const char *path, const Json::Value& value, int version = -1);
@@ -361,8 +361,8 @@ namespace SF
 		SharedPointerT<StatTask> ASet(const char *path, const Json::Value& value, int version = -1);
 
 		Result GetChildren(const char *path, Array<String>& strings, bool watch = false);
-		SharedPointerT<StringsTask> AGetChildren(const char *path, ZooKeeperWatcher* watcher = nullptr);
-		SharedPointerT<StringsStatTask> AGetChildren2(const char *path, ZooKeeperWatcher* watcher = nullptr);
+		SharedPointerT<StringsTask> AGetChildren(const char *path, ZookeeperWatcher* watcher = nullptr);
+		SharedPointerT<StringsStatTask> AGetChildren2(const char *path, ZookeeperWatcher* watcher = nullptr);
 
 		Result GetAcl(const char *path, struct ACL_vector *acl, struct Stat *stat);
 

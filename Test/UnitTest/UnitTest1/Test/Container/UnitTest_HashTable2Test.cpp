@@ -77,8 +77,8 @@ TEST_F(HashTableTest, HashTable2_NonUnique)
 			checkSet[value] = Count + 1;
 		}
 		Result hrRes = TestMap.Insert(pNewNode->Value, pNewNode);
-		AssertRel(SUCCEEDED(hrRes));
-		AssertRel(SUCCEEDED(hrRes));
+		AssertRel(hrRes);
+		AssertRel(hrRes);
 	}
 
 
@@ -90,11 +90,11 @@ TEST_F(HashTableTest, HashTable2_NonUnique)
 
 		if (itFound == checkSet.end())
 		{
-			AssertRel(FAILED(TestMap.Find(value, pNode)));
+			AssertRel(!(TestMap.Find(value, pNode)));
 		}
 		else
 		{
-			AssertRel(SUCCEEDED(TestMap.Find(value, pNode)));
+			AssertRel((TestMap.Find(value, pNode)));
 			AssertRel(value == pNode->Value);
 			EXPECT_EQ(value, pNode->Value);
 		}
@@ -103,18 +103,18 @@ TEST_F(HashTableTest, HashTable2_NonUnique)
 	auto itCheck = checkSet.begin();
 	for (; itCheck != checkSet.end(); itCheck++)
 	{
-		Result hr = S_OK;
+		Result hr;
 		TestMapNode2* pNode = nullptr;
 		hr = TestMap.Find(itCheck->first, pNode);
-		AssertRel(SUCCEEDED(hr));
+		AssertRel((hr));
 
-		if (FAILED(hr))
+		if (!(hr))
 			continue;
 		TestMapNode2* pErased = nullptr;
 		hr = TestMap.Erase(pNode->Value, pErased);
 		AssertRel(pNode == pErased);
-		AssertRel(SUCCEEDED(hr));
-		if (FAILED(hr))
+		AssertRel((hr));
+		if (!(hr))
 			continue;
 		delete pNode;
 	}
@@ -143,7 +143,7 @@ TEST_F(HashTableTest, HashTable2_Unique)
 			memset(pNewNode, 0, sizeof(TestMapNode2));
 			pNewNode->Value = value;
 			checkSet.insert(value);
-			AssertRel(SUCCEEDED(TestMap.Insert(value, pNewNode)));
+			AssertRel((TestMap.Insert(value, pNewNode)));
 		}
 	}
 
@@ -154,20 +154,20 @@ TEST_F(HashTableTest, HashTable2_Unique)
 
 		if (itFound == checkSet.end())
 		{
-			AssertRel(FAILED(TestMap.Find(value, pNode)));
+			AssertRel(!(TestMap.Find(value, pNode)));
 		}
 		else
 		{
-			AssertRel(SUCCEEDED(TestMap.Find(value, pNode)));
+			AssertRel((TestMap.Find(value, pNode)));
 		}
 	}
 
 	auto itCheck = checkSet.begin();
 	for (; itCheck != checkSet.end(); itCheck++)
 	{
-		AssertRel(SUCCEEDED(TestMap.Find(*itCheck, pNode)));
+		AssertRel((TestMap.Find(*itCheck, pNode)));
 		TestMapNode2 *pErased;
-		AssertRel(SUCCEEDED(TestMap.Erase(pNode->Value, pErased)));
+		AssertRel((TestMap.Erase(pNode->Value, pErased)));
 		AssertRel(pNode == pErased);
 		delete pNode;
 	}
@@ -200,7 +200,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 				int value = rand() % MAX_NUMBER;
 				SharedPointerT<TestMapNodeShared> pFound = nullptr;
 
-				if (SUCCEEDED(TestMap.Find(value, pFound)))
+				if ((TestMap.Find(value, pFound)))
 				{
 					ThisThread::SleepFor(DurationMS(10));
 					AssertRel(value == pFound->Value);
@@ -222,7 +222,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 		int64_t value = (rand() % MAX_NUMBER) + 1;
 		TestMapNodeShared *pNewNode = new TestMapNodeShared;
 		pNewNode->Value = value;
-		if (SUCCEEDED(TestMap.Insert(value, pNewNode)))
+		if ((TestMap.Insert(value, pNewNode)))
 		{
 			m_TestMap.insert(std::make_pair(value, pNewNode));
 			numberOfItems.fetch_add(1, std::memory_order_relaxed);
@@ -248,15 +248,15 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 
 		SharedPointerT<TestMapNodeShared> pFound = nullptr;
 
-		if (SUCCEEDED(TestMap.Find(value, pFound)))
+		if ((TestMap.Find(value, pFound)))
 		{
 			EXPECT_EQ(value, pFound->Value);
 			AssertRel(value == pFound->Value);
 			SharedPointerT<TestMapNodeShared> pErased = nullptr;
-			if (SUCCEEDED(TestMap.Erase((int64_t)pFound->Value, pErased)))
+			if ((TestMap.Erase((int64_t)pFound->Value, pErased)))
 			{
 				SharedPointerT<TestMapNodeShared> pErased2 = nullptr;
-				AssertRel(FAILED(TestMap.Erase((int64_t)pFound->Value, pErased2)));
+				AssertRel(!(TestMap.Erase((int64_t)pFound->Value, pErased2)));
 				AssertRel(pErased == pFound);
 				AssertRel(pErased->Value == pFound->Value);
 
@@ -276,7 +276,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 		{
 			TestMapNodeShared *pNewNode = new TestMapNodeShared;
 			pNewNode->Value = value;
-			if (SUCCEEDED(TestMap.Insert(value, pNewNode)))
+			if ((TestMap.Insert(value, pNewNode)))
 			{
 				m_TestMap.insert(std::make_pair(value, pNewNode));
 				numberOfItems.fetch_add(1, std::memory_order_relaxed);
@@ -331,7 +331,7 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 				int value = rand() % MAX_NUMBER;
 				SharedPointerT<TestMapNodeShared> pFound = nullptr;
 
-				if (SUCCEEDED(TestMap.Find(value, pFound)))
+				if ((TestMap.Find(value, pFound)))
 				{
 					ThisThread::SleepFor(DurationMS(10));
 					AssertRel(value == pFound->Value);
@@ -355,7 +355,7 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 		int64_t value = (rand() % MAX_NUMBER) + 1;
 		TestMapNodeShared *pNewNode = new TestMapNodeShared;
 		pNewNode->Value = value;
-		if (SUCCEEDED(TestMap.Insert(value, pNewNode)))
+		if ((TestMap.Insert(value, pNewNode)))
 		{
 			numberOfItems.fetch_add(1, std::memory_order_relaxed);
 		}
@@ -389,13 +389,13 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 
 				SharedPointerT<TestMapNodeShared> pFound = nullptr;
 
-				if (SUCCEEDED(TestMap.Find(value, pFound)))
+				if ((TestMap.Find(value, pFound)))
 				{
 					AssertRel(pFound != nullptr);
 					EXPECT_EQ(value, pFound->Value);
 					AssertRel(value == pFound->Value);
 					SharedPointerT<TestMapNodeShared> pErased = nullptr;
-					if (SUCCEEDED(TestMap.Erase((int64_t)pFound->Value, pErased)))
+					if ((TestMap.Erase((int64_t)pFound->Value, pErased)))
 					{
 						AssertRel(pErased->Value == pFound->Value);
 						numberOfItems.fetch_sub(1, std::memory_order_relaxed);
@@ -410,7 +410,7 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 				{
 					TestMapNodeShared *pNewNode = new TestMapNodeShared;
 					pNewNode->Value = value;
-					if (SUCCEEDED(TestMap.Insert(value, pNewNode)))
+					if ((TestMap.Insert(value, pNewNode)))
 					{
 						numberOfItems.fetch_add(1, std::memory_order_relaxed);
 					}
@@ -462,7 +462,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 				int value = rand() % MAX_NUMBER;
 				SharedPointerT<TestMapNodeShared> pFound = nullptr;
 
-				if (SUCCEEDED(TestMap.Find(value, pFound)))
+				if ((TestMap.Find(value, pFound)))
 				{
 					AssertRel(value == pFound->Value);
 					EXPECT_EQ(value, pFound->Value);
@@ -484,7 +484,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 		int value = rand() % MAX_NUMBER;
 		TestMapNodeShared *pNewNode = new TestMapNodeShared;
 		pNewNode->Value = value;
-		if (SUCCEEDED(TestMap.Insert(value, pNewNode)))
+		if ((TestMap.Insert(value, pNewNode)))
 		{
 			m_TestMap.insert(std::make_pair(value, pNewNode));
 			numberOfItems.fetch_add(1, std::memory_order_relaxed);
@@ -511,16 +511,16 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 
 		SharedPointerT<TestMapNodeShared> pFound = nullptr;
 
-		if (SUCCEEDED(TestMap.Find(value, pFound)))
+		if ((TestMap.Find(value, pFound)))
 		{
 			AssertRel(pFound != nullptr);
 			EXPECT_EQ(value, pFound->Value);
 			AssertRel(value == pFound->Value);
 			SharedPointerT<TestMapNodeShared> pErased = nullptr;
-			if (SUCCEEDED(TestMap.Erase((int64_t)pFound->Value, pErased)))
+			if ((TestMap.Erase((int64_t)pFound->Value, pErased)))
 			{
 				SharedPointerT<TestMapNodeShared> pErased2 = nullptr;
-				AssertRel(FAILED(TestMap.Erase((int64_t)pFound->Value, pErased2)));
+				AssertRel(!(TestMap.Erase((int64_t)pFound->Value, pErased2)));
 				AssertRel(pErased == pFound);
 				AssertRel(pErased->Value == pFound->Value);
 
@@ -540,7 +540,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 		{
 			TestMapNodeShared *pNewNode = new TestMapNodeShared;
 			pNewNode->Value = value;
-			if (SUCCEEDED(TestMap.Insert(value, pNewNode)))
+			if ((TestMap.Insert(value, pNewNode)))
 			{
 				m_TestMap.insert(std::make_pair(value, pNewNode));
 				numberOfItems.fetch_add(1, std::memory_order_relaxed);
@@ -576,8 +576,8 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 	const int WRITE_THREAD_COUNT = 8;
 
 
-	SyncCounter numberOfItems;
-	SyncCounter readCount(0), writeCount(0);
+	std::atomic<uint64_t> numberOfItems;
+	std::atomic<uint64_t> readCount(0), writeCount(0);
 
 	typedef HashTable2<	int64_t, SharedPointerT<TestMapNodeShared>,
 		UniqueKeyTrait
@@ -597,7 +597,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 				int value = rand() % MAX_NUMBER;
 				SharedPointerT<TestMapNodeShared> pFound = nullptr;
 
-				if (SUCCEEDED(TestMap.Find(value, pFound)))
+				if ((TestMap.Find(value, pFound)))
 				{
 					AssertRel(value == pFound->Value);
 				}
@@ -618,7 +618,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 		int value = rand() % MAX_NUMBER;
 		TestMapNodeShared *pNewNode = new TestMapNodeShared;
 		pNewNode->Value = value;
-		if (SUCCEEDED(TestMap.Insert(value, pNewNode)))
+		if ((TestMap.Insert(value, pNewNode)))
 		{
 			numberOfItems.fetch_add(1, std::memory_order_relaxed);
 		}
@@ -650,12 +650,12 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 
 				SharedPointerT<TestMapNodeShared> pFound = nullptr;
 
-				if (SUCCEEDED(TestMap.Find(value, pFound)))
+				if ((TestMap.Find(value, pFound)))
 				{
 					EXPECT_EQ(value, pFound->Value);
 					AssertRel(value == pFound->Value);
 					SharedPointerT<TestMapNodeShared> pErased = nullptr;
-					if (SUCCEEDED(TestMap.Erase((int64_t)pFound->Value, pErased)))
+					if ((TestMap.Erase((int64_t)pFound->Value, pErased)))
 					{
 						AssertRel(pErased->Value == pFound->Value);
 						numberOfItems.fetch_sub(1, std::memory_order_relaxed);
@@ -670,7 +670,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 				{
 					TestMapNodeShared *pNewNode = new TestMapNodeShared;
 					pNewNode->Value = value;
-					if (SUCCEEDED(TestMap.Insert(value, pNewNode)))
+					if ((TestMap.Insert(value, pNewNode)))
 					{
 						numberOfItems.fetch_add(1, std::memory_order_relaxed);
 					}

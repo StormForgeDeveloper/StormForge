@@ -43,20 +43,20 @@ using namespace ::SF;
 
 TEST_F(SystemSynchronizationTest, Mutex)
 {
-	const UINT64 TEST_LENGTH = TestScale * 999999;
-	const INT64 NUM_THREAD = 10;
+	const uint64_t TEST_LENGTH = TestScale * 999999;
+	const int64_t NUM_THREAD = 10;
 
 	SyncCounter workerCounter(0);
 	std::atomic<int> testData(0);
 	std::atomic<int> testIndex(0);
 	Mutex dataLock;
 
-	for (UINT worker = 0; worker < NUM_THREAD; worker++)
+	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
 		auto pWorker = new FunctorThread([&dataLock, &testData, &testIndex, &workerCounter, worker, TEST_LENGTH](Thread* pThread)
 		{
 			workerCounter.fetch_add(1, std::memory_order_relaxed);
-			for (UINT64 iTest = 0; iTest < TEST_LENGTH; iTest++)
+			for (uint64_t iTest = 0; iTest < TEST_LENGTH; iTest++)
 			{
 				MutexScopeLock scopeLock(dataLock);
 				auto read = testData.load(std::memory_order_acquire);
@@ -85,20 +85,20 @@ TEST_F(SystemSynchronizationTest, Mutex)
 
 TEST_F(SystemSynchronizationTest, CriticalSection)
 {
-	const UINT64 TEST_LENGTH = TestScale * 999999;
-	const INT64 NUM_THREAD = 10;
+	const uint64_t TEST_LENGTH = TestScale * 999999;
+	const int64_t NUM_THREAD = 10;
 
 	SyncCounter workerCounter(0);
 	std::atomic<int> testData(0);
 	std::atomic<int> testIndex(0);
 	CriticalSection dataLock;
 
-	for (UINT worker = 0; worker < NUM_THREAD; worker++)
+	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
 		auto pWorker = new FunctorThread([&dataLock, &testData, &testIndex, &workerCounter, worker, TEST_LENGTH](Thread* pThread)
 		{
 			workerCounter.fetch_add(1, std::memory_order_relaxed);
-			for (UINT64 iTest = 0; iTest < TEST_LENGTH; iTest++)
+			for (uint64_t iTest = 0; iTest < TEST_LENGTH; iTest++)
 			{
 				MutexScopeLock scopeLock(dataLock);
 				auto read = testData.load(std::memory_order_acquire);
@@ -125,8 +125,8 @@ TEST_F(SystemSynchronizationTest, CriticalSection)
 
 TEST_F(SystemSynchronizationTest, Event)
 {
-	const UINT64 TEST_LENGTH = TestScale * 999999;
-	const INT64 NUM_THREAD = 10;
+	const uint64_t TEST_LENGTH = TestScale * 999999;
+	const int64_t NUM_THREAD = 10;
 
 	SyncCounter workerCounter(0);
 	std::atomic<int> testData(0);
@@ -136,12 +136,12 @@ TEST_F(SystemSynchronizationTest, Event)
 	dataEvent.Reset();
 	workDoneEvent.Reset();
 
-	for (UINT worker = 0; worker < NUM_THREAD; worker++)
+	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
 		auto pWorker = new FunctorThread([&dataEvent, &workDoneEvent, &testData, &testIndex, &workerCounter, worker, TEST_LENGTH](Thread* pThread)
 		{
 			workerCounter.fetch_add(1, std::memory_order_relaxed);
-			for (UINT64 iTest = 0; iTest < TEST_LENGTH; iTest++)
+			for (uint64_t iTest = 0; iTest < TEST_LENGTH; iTest++)
 			{
 				while (!dataEvent.WaitEvent(DurationMS::max()));
 
@@ -163,7 +163,7 @@ TEST_F(SystemSynchronizationTest, Event)
 	ThisThread::SleepFor(DurationMS(10));
 
 
-	for (UINT64 iTest = 0; iTest < (TEST_LENGTH*NUM_THREAD); iTest++)
+	for (uint64_t iTest = 0; iTest < (TEST_LENGTH*NUM_THREAD); iTest++)
 	{
 		dataEvent.Set();
 		while (!workDoneEvent.WaitEvent(DurationMS::max()));

@@ -32,7 +32,7 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 
 	DualSortedMap<uint,uint> sortedMap(GetHeap());
 
-	INT64 order = -1;
+	int64_t order = -1;
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
 		EXPECT_TRUE(sortedMap.Insert(TestValues[iTest], TestValues[iTest], &order));

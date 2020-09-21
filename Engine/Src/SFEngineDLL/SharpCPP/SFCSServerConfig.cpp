@@ -15,12 +15,12 @@
 #include "Util/SFUtility.h"
 
 #include "Util/SFLog.h"
-#include "ZooKeeper/SFZooKeeper.h"
+#include "Zookeeper/SFZookeeper.h"
 
 #ifdef USE_ZOOKEEPER
 #include "ServerConfig//SFServerConfig.h"
 #include "ServerConfig//SFServerConfigXML.h"
-#include "ServerConfig//SFServerConfigZooKeeper.h"
+#include "ServerConfig//SFServerConfigZookeeper.h"
 
 
 using namespace SF;
@@ -55,27 +55,27 @@ SFDLL_EXPORT int SFServerConfig_NativeLoadXML(intptr_t nativeHandle, const char*
 	return (int32_t)xmlLoader.LoadConfig(filePath);
 }
 
-SFDLL_EXPORT int SFServerConfig_NativeLoadZooKeeper(intptr_t nativeHandle, intptr_t nativeHandleZK, const char* zkNodePath)
+SFDLL_EXPORT int SFServerConfig_NativeLoadZookeeper(intptr_t nativeHandle, intptr_t nativeHandleZK, const char* zkNodePath)
 {
 	if (nativeHandle == 0 || nativeHandleZK == 0)
 		return ResultCode::INVALID_ARG;
 
 	auto pServerConfig = (ServerConfig*)nativeHandle;
-	auto pZKInstance = (ZooKeeper*)nativeHandleZK;
+	auto pZKInstance = (Zookeeper*)nativeHandleZK;
 
-	ServerConfigZooKeeper zooKeeperLoader(*pServerConfig, *pZKInstance);
+	ServerConfigZookeeper zooKeeperLoader(*pServerConfig, *pZKInstance);
 	return (int32_t)zooKeeperLoader.LoadConfig(zkNodePath);
 }
 
-SFDLL_EXPORT int SFServerConfig_NativeStoreZooKeeper(intptr_t nativeHandle, intptr_t nativeHandleZK, const char* zkNodePath)
+SFDLL_EXPORT int SFServerConfig_NativeStoreZookeeper(intptr_t nativeHandle, intptr_t nativeHandleZK, const char* zkNodePath)
 {
 	if (nativeHandle == 0 || nativeHandleZK == 0)
 		return ResultCode::INVALID_ARG;
 
 	auto pServerConfig = (ServerConfig*)nativeHandle;
-	auto pZKInstance = (ZooKeeper*)nativeHandleZK;
+	auto pZKInstance = (Zookeeper*)nativeHandleZK;
 
-	ServerConfigZooKeeper zooKeeperLoader(*pServerConfig, *pZKInstance);
+	ServerConfigZookeeper zooKeeperLoader(*pServerConfig, *pZKInstance);
 	return (int32_t)zooKeeperLoader.StoreConfig(zkNodePath);
 }
 

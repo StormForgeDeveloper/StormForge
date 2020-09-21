@@ -98,6 +98,40 @@ public:
 		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.w - b.w));
 	}
 
+	void CompareVector(const SF::Vector4Soft<float>& a, const SF::Vector4Soft<float>& b)
+	{
+		EXPECT_GE(EPSILON_HIGH_PRECISION, SF::Math::Abs(a.x - b.x));
+		EXPECT_GE(EPSILON_HIGH_PRECISION, SF::Math::Abs(a.y - b.y));
+		EXPECT_GE(EPSILON_HIGH_PRECISION, SF::Math::Abs(a.z - b.z));
+		EXPECT_GE(EPSILON_HIGH_PRECISION, SF::Math::Abs(a.w - b.w));
+	}
+
+	void CompareVectorMID(const SF::Vector4Soft<float>& a, const SF::Vector4Soft<float>& b)
+	{
+		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.x - b.x));
+		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.y - b.y));
+		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.z - b.z));
+		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.w - b.w));
+	}
+
+	void CompareVectorLOW(const SF::Vector4Soft<float>& a, const SF::Vector4Soft<float>& b)
+	{
+		EXPECT_GE(EPSILON_LOW_PRECISION, SF::Math::Abs(a.x - b.x));
+		EXPECT_GE(EPSILON_LOW_PRECISION, SF::Math::Abs(a.y - b.y));
+		EXPECT_GE(EPSILON_LOW_PRECISION, SF::Math::Abs(a.z - b.z));
+		EXPECT_GE(EPSILON_LOW_PRECISION, SF::Math::Abs(a.w - b.w));
+	}
+
+	void CompareMatrix(const SF::Matrix4Soft<float>& softMat, const SF::Matrix4Soft<float>& sseMat)
+	{
+		for (int iEle = 0; iEle < 16; iEle++)
+		{
+			EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(softMat.Elements[iEle] - sseMat.Elements[iEle]));
+		}
+	}
+
+
+#ifdef SF_SIMD_SSE
 	void CompareQuaternion(const SF::QuaternionSoft<float>& a, const SF::QuaternionSSE& b)
 	{
 		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.x - b.x));
@@ -120,15 +154,6 @@ public:
 		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.y - b.y));
 		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.z - b.z));
 		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.w - b.w));
-	}
-
-
-	void CompareVector(const SF::Vector4Soft<float>& a, const SF::Vector4Soft<float>& b)
-	{
-		EXPECT_GE(EPSILON_HIGH_PRECISION, SF::Math::Abs(a.x - b.x));
-		EXPECT_GE(EPSILON_HIGH_PRECISION, SF::Math::Abs(a.y - b.y));
-		EXPECT_GE(EPSILON_HIGH_PRECISION, SF::Math::Abs(a.z - b.z));
-		EXPECT_GE(EPSILON_HIGH_PRECISION, SF::Math::Abs(a.w - b.w));
 	}
 
 	void CompareVector(const SF::Vector4Soft<float>& a, const SF::Vector4SSE& b)
@@ -165,14 +190,6 @@ public:
 	}
 
 	void CompareMatrix(const SF::Matrix4SSE& softMat, const SF::Matrix4Soft<float>& sseMat)
-	{
-		for (int iEle = 0; iEle < 16; iEle++)
-		{
-			EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(softMat.Elements[iEle] - sseMat.Elements[iEle]));
-		}
-	}
-
-	void CompareMatrix(const SF::Matrix4Soft<float>& softMat, const SF::Matrix4Soft<float>& sseMat)
 	{
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
@@ -235,6 +252,8 @@ public:
 		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.z - b.z));
 		EXPECT_GE(EPSILON_MID_PRECISION, SF::Math::Abs(a.w - b.w));
 	}
+
+#endif
 
 	SF::QuaternionSoft<float> RandomQuaternionSoft()
 	{

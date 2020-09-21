@@ -4,14 +4,14 @@
 // 
 // Author : KyungKun Ko
 //
-// Description : ZooKeeper warper
+// Description : Zookeeper warper
 //	
 //
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "SFEnginePCH.h"
 
-#include "ZooKeeper/SFZooKeeper.h"
+#include "Zookeeper/SFZookeeper.h"
 #include "String/SFStringFormat.h"
 
 #ifdef USE_ZOOKEEPER
@@ -28,27 +28,27 @@ namespace SF
 {
 
 
-	void ZooKeeperWatcher::ZooKeeperTask::SetResult(int zkResult)
+	void ZookeeperWatcher::ZookeeperTask::SetResult(int zkResult)
 	{
-		ZKResult = ZooKeeper::ToResult(zkResult);
+		ZKResult = Zookeeper::ToResult(zkResult);
 		if (!ZKResult && GetState() == State::Pending)
 		{
 			TaskOperator().Finished(this);
 		}
 	}
 
-	ZooKeeperWatcher::ZooKeeperWatcher(IHeap& memoryManager)
+	ZookeeperWatcher::ZookeeperWatcher(IHeap& memoryManager)
 		: m_EventQueue(memoryManager)
 		, m_State(0)
 	{
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCB(zhandle_t *zkHandle, int type, int state, const char *path, void*v)
+	void ZookeeperWatcher::ZKWatcherCB(zhandle_t *zkHandle, int type, int state, const char *path, void*v)
 	{
-		auto zkWatcher = (ZooKeeperWatcher*)v;
+		auto zkWatcher = (ZookeeperWatcher*)v;
 		ZKEvent evt;
 
-		if (type == ZooKeeper::EVENT_SESSION)
+		if (type == Zookeeper::EVENT_SESSION)
 		{
 			auto previousState = zkWatcher->m_State.exchange(state, std::memory_order_release);
 
@@ -78,21 +78,21 @@ namespace SF
 		}
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBComplition(int rc, const void *data)
+	void ZookeeperWatcher::ZKWatcherCBComplition(int rc, const void *data)
 	{
-		auto pTask = (ZooKeeperTask*)data;
+		auto pTask = (ZookeeperTask*)data;
 		TaskOperator().StartWorking(pTask);
-		pTask->ZKResult = ZooKeeper::ToResult(rc);
+		pTask->ZKResult = Zookeeper::ToResult(rc);
 		TaskOperator().Finished(pTask);
 		pTask->ZKWatcher.OnComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBStatComplition(int rc, const Stat *stat, const void *data)
+	void ZookeeperWatcher::ZKWatcherCBStatComplition(int rc, const Stat *stat, const void *data)
 	{
 		auto pTask = (StatTask*)data;
 		TaskOperator().StartWorking(pTask);
-		pTask->ZKResult = ZooKeeper::ToResult(rc);
+		pTask->ZKResult = Zookeeper::ToResult(rc);
 		if(stat != nullptr)
 			*pTask->ResultStat = *stat;
 		TaskOperator().Finished(pTask);
@@ -100,11 +100,11 @@ namespace SF
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBDataComplition(int rc, const char *value, int value_len, const Stat *stat, const void *data)
+	void ZookeeperWatcher::ZKWatcherCBDataComplition(int rc, const char *value, int value_len, const Stat *stat, const void *data)
 	{
 		auto pTask = (DataTask*)data;
 		TaskOperator().StartWorking(pTask);
-		pTask->ZKResult = ZooKeeper::ToResult(rc);
+		pTask->ZKResult = Zookeeper::ToResult(rc);
 		pTask->ResultData.resize(value_len);
 		memcpy(pTask->ResultData.data(), value, value_len);
 		TaskOperator().Finished(pTask);
@@ -112,11 +112,11 @@ namespace SF
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBStringsComplition(int rc, const String_vector *strings, const void *data)
+	void ZookeeperWatcher::ZKWatcherCBStringsComplition(int rc, const String_vector *strings, const void *data)
 	{
 		auto pTask = (StringsTask*)data;
 		TaskOperator().StartWorking(pTask);
-		pTask->ZKResult = ZooKeeper::ToResult(rc);
+		pTask->ZKResult = Zookeeper::ToResult(rc);
 		if (strings != nullptr)
 		{
 			pTask->ResultStrings.resize(strings->count);
@@ -130,11 +130,11 @@ namespace SF
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBStringsStatComplition(int rc, const String_vector *strings, const Stat *stat, const void *data)
+	void ZookeeperWatcher::ZKWatcherCBStringsStatComplition(int rc, const String_vector *strings, const Stat *stat, const void *data)
 	{
 		auto pTask = (StringsStatTask*)data;
 		TaskOperator().StartWorking(pTask);
-		pTask->ZKResult = ZooKeeper::ToResult(rc);
+		pTask->ZKResult = Zookeeper::ToResult(rc);
 		if (strings != nullptr)
 		{
 			pTask->ResultStrings.resize(strings->count);
@@ -149,22 +149,22 @@ namespace SF
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	void ZooKeeperWatcher::ZKWatcherCBStringComplition(int rc, const char *value, const void *data)
+	void ZookeeperWatcher::ZKWatcherCBStringComplition(int rc, const char *value, const void *data)
 	{
 		auto pTask = (StringTask*)data;
 		TaskOperator().StartWorking(pTask);
-		pTask->ZKResult = ZooKeeper::ToResult(rc);
+		pTask->ZKResult = Zookeeper::ToResult(rc);
 		pTask->ResultString = value;
 		TaskOperator().Finished(pTask);
 		pTask->ZKWatcher.OnStringComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
-	//void ZooKeeperWatcher::ZKWatcherCBACLComplition(int rc, ACL_vector *acl, Stat *stat, const void *data)
+	//void ZookeeperWatcher::ZKWatcherCBACLComplition(int rc, ACL_vector *acl, Stat *stat, const void *data)
 	//{
 	//	auto pTask = (ACLTask*)data;
 	//	TaskOperator().StartWorking(pTask);
-	//	pTask->Result = ZooKeeper::ToResult(rc);
+	//	pTask->Result = Zookeeper::ToResult(rc);
 	//	if (acl != nullptr)
 	//	{
 	//		pTask->ResultACL.resize(acl->count);
@@ -177,41 +177,41 @@ namespace SF
 
 
 
-	Result ZooKeeperWatcher::DequeueEvent(ZKEvent& eventOut)
+	Result ZookeeperWatcher::DequeueEvent(ZKEvent& eventOut)
 	{
 		return m_EventQueue.Dequeue(eventOut.Composited);
 	}
 
-	Result ZooKeeperWatcher::OnNewEvent(const ZKEvent& eventOut)
+	Result ZookeeperWatcher::OnNewEvent(const ZKEvent& eventOut)
 	{
 		return m_EventQueue.Enqueue(eventOut.Composited);
 	}
 
-	void ZooKeeperWatcher::OnComplition(ZooKeeperTask& pTask)
+	void ZookeeperWatcher::OnComplition(ZookeeperTask& pTask)
 	{
 	}
 
-	void ZooKeeperWatcher::OnStatComplition(StatTask& pTask)
+	void ZookeeperWatcher::OnStatComplition(StatTask& pTask)
 	{
 	}
 
-	void ZooKeeperWatcher::OnDataComplition(DataTask& pTask)
+	void ZookeeperWatcher::OnDataComplition(DataTask& pTask)
 	{
 	}
 
-	void ZooKeeperWatcher::OnStringsComplition(StringsTask& pTask)
+	void ZookeeperWatcher::OnStringsComplition(StringsTask& pTask)
 	{
 	}
 
-	void ZooKeeperWatcher::OnStringsStatComplition(StringsStatTask& pTask)
+	void ZookeeperWatcher::OnStringsStatComplition(StringsStatTask& pTask)
 	{
 	}
 
-	void ZooKeeperWatcher::OnStringComplition(StringTask& pTask)
+	void ZookeeperWatcher::OnStringComplition(StringTask& pTask)
 	{
 	}
 
-	//void ZooKeeperWatcher::OnACLComplition(ACLTask& pTask)
+	//void ZookeeperWatcher::OnACLComplition(ACLTask& pTask)
 	//{
 	//}
 
@@ -219,25 +219,25 @@ namespace SF
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	ZooKeeper class
+	//	Zookeeper class
 	//
 
-	const int ZooKeeper::NODE_FLAG_EPHEMERAL = ZOO_EPHEMERAL;
-	const int ZooKeeper::NODE_FLAG_SEQUENCE = ZOO_SEQUENCE;
+	const int Zookeeper::NODE_FLAG_EPHEMERAL = ZOO_EPHEMERAL;
+	const int Zookeeper::NODE_FLAG_SEQUENCE = ZOO_SEQUENCE;
 
-	const int ZooKeeper::STATE_SESSION_EXPIRED = ZOO_EXPIRED_SESSION_STATE;
-	const int ZooKeeper::STATE_CONNECTED = ZOO_CONNECTED_STATE;
-	const int ZooKeeper::STATE_CONNECTING = ZOO_CONNECTING_STATE;
+	const int Zookeeper::STATE_SESSION_EXPIRED = ZOO_EXPIRED_SESSION_STATE;
+	const int Zookeeper::STATE_CONNECTED = ZOO_CONNECTED_STATE;
+	const int Zookeeper::STATE_CONNECTING = ZOO_CONNECTING_STATE;
 
-	const int ZooKeeper::EVENT_CREATED = ZOO_CREATED_EVENT;
-	const int ZooKeeper::EVENT_DELETED = ZOO_DELETED_EVENT;
-	const int ZooKeeper::EVENT_CHANGED = ZOO_CHANGED_EVENT; // value changed
-	const int ZooKeeper::EVENT_CHILD = ZOO_CHILD_EVENT;
-	const int ZooKeeper::EVENT_SESSION = ZOO_SESSION_EVENT;
-	const int ZooKeeper::EVENT_NO_WATCHING = ZOO_NOTWATCHING_EVENT;
+	const int Zookeeper::EVENT_CREATED = ZOO_CREATED_EVENT;
+	const int Zookeeper::EVENT_DELETED = ZOO_DELETED_EVENT;
+	const int Zookeeper::EVENT_CHANGED = ZOO_CHANGED_EVENT; // value changed
+	const int Zookeeper::EVENT_CHILD = ZOO_CHILD_EVENT;
+	const int Zookeeper::EVENT_SESSION = ZOO_SESSION_EVENT;
+	const int Zookeeper::EVENT_NO_WATCHING = ZOO_NOTWATCHING_EVENT;
 
 
-	ZooKeeper::ZooKeeper(IHeap& memoryManager, uint32_t debugLogLevel)
+	Zookeeper::Zookeeper(IHeap& memoryManager, uint32_t debugLogLevel)
 		: m_Heap(memoryManager)
 		, m_ZKHandle(nullptr)
 //		, m_State(0)
@@ -254,12 +254,12 @@ namespace SF
 			m_LogLevel = ZOO_LOG_LEVEL_WARN;
 	}
 
-	ZooKeeper::~ZooKeeper()
+	Zookeeper::~Zookeeper()
 	{
 		Close();
 	}
 
-	void ZooKeeper::AddWatcher(ZooKeeperWatcher* pWatcher)
+	void Zookeeper::AddWatcher(ZookeeperWatcher* pWatcher)
 	{
 		if (pWatcher == nullptr)
 			return;
@@ -275,12 +275,12 @@ namespace SF
 		m_RegisteredWatcher.Insert(pWatcher);
 	}
 
-	bool ZooKeeper::IsConnected() const
+	bool Zookeeper::IsConnected() const
 	{
 		return m_ZKHandle != nullptr && m_ZKWatcher.GetState() == STATE_CONNECTED;
 	}
 
-	void ZooKeeper::Close()
+	void Zookeeper::Close()
 	{
 		MutexScopeLock lock(m_handleLock);
 
@@ -289,7 +289,7 @@ namespace SF
 		m_ZKHandle = nullptr;
 	}
 
-	Result ZooKeeper::Connect(const char* connectionString)
+	Result Zookeeper::Connect(const char* connectionString)
 	{
 		MutexScopeLock lock(m_handleLock);
 
@@ -298,7 +298,7 @@ namespace SF
 		zoo_set_debug_level((ZooLogLevel)m_LogLevel);
 
 		clientid_t* previousClientID = m_ClientID->client_id != 0 ? m_ClientID : nullptr;
-		m_ZKHandle = zookeeper_init(connectionString, ZooKeeperWatcher::ZKWatcherCB, 10000, previousClientID, &m_ZKWatcher, 0);
+		m_ZKHandle = zookeeper_init(connectionString, ZookeeperWatcher::ZKWatcherCB, 10000, previousClientID, &m_ZKWatcher, 0);
 		if (m_ZKHandle == nullptr)
 		{
 			return ResultCode::UNEXPECTED;
@@ -311,7 +311,7 @@ namespace SF
 
 
 
-	void ZooKeeper::yield(DurationMS duration)
+	void Zookeeper::yield(DurationMS duration)
 	{
 		if (m_ZKHandle == nullptr)
 			return;
@@ -374,7 +374,7 @@ namespace SF
 #endif
 	}
 
-	bool ZooKeeper::WaitForConnected()
+	bool Zookeeper::WaitForConnected()
 	{
 		if (m_ZKHandle == nullptr)
 			return false;
@@ -388,7 +388,7 @@ namespace SF
 		return IsConnected();
 	}
 
-	bool ZooKeeper::WaitForDisconnected()
+	bool Zookeeper::WaitForDisconnected()
 	{
 		if (m_ZKHandle == nullptr)
 			return false;
@@ -401,7 +401,7 @@ namespace SF
 		return !IsConnected();
 	}
 
-	Result ZooKeeper::ToResult(int zkResult)
+	Result Zookeeper::ToResult(int zkResult)
 	{
 		switch (zkResult)
 		{
@@ -435,7 +435,7 @@ namespace SF
 		}
 	}
 
-	String ZooKeeper::GetLeapNodeName(const String& nodePath)
+	String Zookeeper::GetLeapNodeName(const String& nodePath)
 	{
 		DynamicArray<String> pathList(GetSystemHeap());
 		nodePath.Split("/", true, pathList);
@@ -454,7 +454,7 @@ namespace SF
 
 	// The one with watcher works as asynchronous
 
-	Result ZooKeeper::Create(const char* path, const Array<uint8_t>& value, const struct ACL_vector *acl, int flags, String& outPath)
+	Result Zookeeper::Create(const char* path, const Array<uint8_t>& value, const struct ACL_vector *acl, int flags, String& outPath)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -476,7 +476,7 @@ namespace SF
 		return ToResult(zkResult);
 	}
 
-	Result ZooKeeper::Create(const char* path, const Json::Value& value, const struct ACL_vector *acl, int flags, String& outPath)
+	Result Zookeeper::Create(const char* path, const Json::Value& value, const struct ACL_vector *acl, int flags, String& outPath)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -499,13 +499,13 @@ namespace SF
 		return ToResult(zkResult);
 	}
 
-	SharedPointerT<ZooKeeper::StringTask> ZooKeeper::ACreate(const char* path, const Array<uint8_t>& value, const struct ACL_vector *acl, int flags)
+	SharedPointerT<Zookeeper::StringTask> Zookeeper::ACreate(const char* path, const Array<uint8_t>& value, const struct ACL_vector *acl, int flags)
 	{
 		if (m_ZKHandle == nullptr)
-			return SharedPointerT<ZooKeeper::StringTask>();
+			return SharedPointerT<Zookeeper::StringTask>();
 
 		if (!IsConnected())
-			return SharedPointerT<ZooKeeper::StringTask>();
+			return SharedPointerT<Zookeeper::StringTask>();
 
 		auto valueData = value.size() > 0 ? value.data() : nullptr;
 		int valueSize = value.size() > 0 ? (int)value.size() : -1;
@@ -516,19 +516,19 @@ namespace SF
 		SharedPointerT<StringTask> pTask = new(m_Heap) StringTask(m_Heap, GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
-		auto zkResult = zoo_acreate(m_ZKHandle, path, (const char*)valueData, valueSize, acl, flags, ZooKeeperWatcher::ZKWatcherCBStringComplition, *pTask);
+		auto zkResult = zoo_acreate(m_ZKHandle, path, (const char*)valueData, valueSize, acl, flags, ZookeeperWatcher::ZKWatcherCBStringComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
 		return std::forward<SharedPointerT<StringTask>>(pTask);
 	}
 
-	SharedPointerT<ZooKeeper::StringTask> ZooKeeper::ACreate(const char* path, const Json::Value& value, const struct ACL_vector *acl, int flags)
+	SharedPointerT<Zookeeper::StringTask> Zookeeper::ACreate(const char* path, const Json::Value& value, const struct ACL_vector *acl, int flags)
 	{
 		if (m_ZKHandle == nullptr)
-			return SharedPointerT<ZooKeeper::StringTask>();
+			return SharedPointerT<Zookeeper::StringTask>();
 
 		if (!IsConnected())
-			return SharedPointerT<ZooKeeper::StringTask>();
+			return SharedPointerT<Zookeeper::StringTask>();
 
 
 		if (acl == nullptr)
@@ -542,13 +542,13 @@ namespace SF
 		builder["indentation"] = "";
 		auto valueBuffer = std::forward<std::string>(Json::writeString(builder, value));
 
-		auto zkResult = zoo_acreate(m_ZKHandle, path, (const char*)valueBuffer.data(), (int)valueBuffer.size(), acl, flags, ZooKeeperWatcher::ZKWatcherCBStringComplition, *pTask);
+		auto zkResult = zoo_acreate(m_ZKHandle, path, (const char*)valueBuffer.data(), (int)valueBuffer.size(), acl, flags, ZookeeperWatcher::ZKWatcherCBStringComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
 		return std::forward<SharedPointerT<StringTask>>(pTask);
 	}
 
-	Result ZooKeeper::Delete(const char* path, int version)
+	Result Zookeeper::Delete(const char* path, int version)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -561,24 +561,24 @@ namespace SF
 		return ToResult(zkResult);
 	}
 
-	SharedPointerT<ZooKeeper::ZooKeeperTask> ZooKeeper::ADelete(const char* path, int version)
+	SharedPointerT<Zookeeper::ZookeeperTask> Zookeeper::ADelete(const char* path, int version)
 	{
 		if (m_ZKHandle == nullptr)
-			return SharedPointerT<ZooKeeper::ZooKeeperTask>();
+			return SharedPointerT<Zookeeper::ZookeeperTask>();
 
 		if (!IsConnected())
-			return SharedPointerT<ZooKeeper::ZooKeeperTask>();
+			return SharedPointerT<Zookeeper::ZookeeperTask>();
 
-		SharedPointerT<ZooKeeperTask> pTask = new(m_Heap) ZooKeeperTask(GetWatcher());
+		SharedPointerT<ZookeeperTask> pTask = new(m_Heap) ZookeeperTask(GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
-		auto zkResult = zoo_adelete(m_ZKHandle, path, version, ZooKeeperWatcher::ZKWatcherCBComplition, *pTask);
+		auto zkResult = zoo_adelete(m_ZKHandle, path, version, ZookeeperWatcher::ZKWatcherCBComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if(zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
-		return std::forward<SharedPointerT<ZooKeeper::ZooKeeperTask>>(pTask);
+		return std::forward<SharedPointerT<Zookeeper::ZookeeperTask>>(pTask);
 	}
 
-	Result ZooKeeper::DeleteTree(const char* path)
+	Result Zookeeper::DeleteTree(const char* path)
 	{
 		DynamicArray<String> children(GetHeap());
 		Result result = GetChildren(path, children);
@@ -599,7 +599,7 @@ namespace SF
 
 
 
-	Result ZooKeeper::Exists(const char* path)
+	Result Zookeeper::Exists(const char* path)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -612,13 +612,13 @@ namespace SF
 		return ToResult(zkResult);
 	}
 
-	SharedPointerT<ZooKeeper::StatTask> ZooKeeper::AExists(const char* path, ZooKeeperWatcher* watcher)
+	SharedPointerT<Zookeeper::StatTask> Zookeeper::AExists(const char* path, ZookeeperWatcher* watcher)
 	{
 		if (m_ZKHandle == nullptr)
-			return SharedPointerT<ZooKeeper::StatTask>();
+			return SharedPointerT<Zookeeper::StatTask>();
 
 		if (!IsConnected())
-			return SharedPointerT<ZooKeeper::StatTask>();
+			return SharedPointerT<Zookeeper::StatTask>();
 
 		SharedPointerT<StatTask> pTask = new(m_Heap) StatTask(*watcher);
 		TaskOperator().Requested(*pTask);
@@ -627,15 +627,15 @@ namespace SF
 
 		AddWatcher(watcher);
 		if (watcher == nullptr)
-			zkResult = zoo_aexists(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBStatComplition, *pTask);
+			zkResult = zoo_aexists(m_ZKHandle, path, 0, ZookeeperWatcher::ZKWatcherCBStatComplition, *pTask);
 		else
-			zkResult = zoo_awexists(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBStatComplition, *pTask);
+			zkResult = zoo_awexists(m_ZKHandle, path, ZookeeperWatcher::ZKWatcherCB, watcher, ZookeeperWatcher::ZKWatcherCBStatComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
-		return std::forward<SharedPointerT<ZooKeeper::StatTask>>(pTask);
+		return std::forward<SharedPointerT<Zookeeper::StatTask>>(pTask);
 	}
 
-	Result ZooKeeper::Get(const char *path, Array<uint8_t>& valueBuffer, struct Stat *stat)
+	Result Zookeeper::Get(const char *path, Array<uint8_t>& valueBuffer, struct Stat *stat)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -650,7 +650,7 @@ namespace SF
 		return ToResult(zkResult);
 	}
 
-	Result ZooKeeper::Get(const char *path, Json::Value& jsonValue)
+	Result Zookeeper::Get(const char *path, Json::Value& jsonValue)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -676,13 +676,13 @@ namespace SF
 		return ToResult(zkResult);
 	}
 
-	SharedPointerT<ZooKeeper::DataTask> ZooKeeper::AGet(const char *path, ZooKeeperWatcher* watcher)
+	SharedPointerT<Zookeeper::DataTask> Zookeeper::AGet(const char *path, ZookeeperWatcher* watcher)
 	{
 		if (m_ZKHandle == nullptr)
-			return SharedPointerT<ZooKeeper::DataTask>();
+			return SharedPointerT<Zookeeper::DataTask>();
 
 		if (!IsConnected())
-			return SharedPointerT<ZooKeeper::DataTask>();
+			return SharedPointerT<Zookeeper::DataTask>();
 
 		SharedPointerT<DataTask> pTask = new(m_Heap) DataTask(m_Heap, *watcher);
 		TaskOperator().Requested(*pTask);
@@ -691,15 +691,15 @@ namespace SF
 
 		AddWatcher(watcher);
 		if (watcher == nullptr)
-			zkResult = zoo_aget(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBDataComplition, *pTask);
+			zkResult = zoo_aget(m_ZKHandle, path, 0, ZookeeperWatcher::ZKWatcherCBDataComplition, *pTask);
 		else
-			zkResult = zoo_awget(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBDataComplition, *pTask);
+			zkResult = zoo_awget(m_ZKHandle, path, ZookeeperWatcher::ZKWatcherCB, watcher, ZookeeperWatcher::ZKWatcherCBDataComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
-		return std::forward<SharedPointerT<ZooKeeper::DataTask>>(pTask);
+		return std::forward<SharedPointerT<Zookeeper::DataTask>>(pTask);
 	}
 
-	Result ZooKeeper::Set(const char *path, const Array<uint8_t>& valueBuffer, int version)
+	Result Zookeeper::Set(const char *path, const Array<uint8_t>& valueBuffer, int version)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -712,7 +712,7 @@ namespace SF
 		return ToResult(zkResult);
 	}
 
-	Result ZooKeeper::Set(const char *path, const Json::Value& value, int version)
+	Result Zookeeper::Set(const char *path, const Json::Value& value, int version)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -729,31 +729,31 @@ namespace SF
 		return ToResult(zkResult);
 	}
 
-	SharedPointerT<ZooKeeper::StatTask> ZooKeeper::ASet(const char *path, const Array<uint8_t>& valueBuffer, int version)
+	SharedPointerT<Zookeeper::StatTask> Zookeeper::ASet(const char *path, const Array<uint8_t>& valueBuffer, int version)
 	{
 		if (m_ZKHandle == nullptr)
-			return SharedPointerT<ZooKeeper::StatTask>();
+			return SharedPointerT<Zookeeper::StatTask>();
 
 		if (!IsConnected())
-			return SharedPointerT<ZooKeeper::StatTask>();
+			return SharedPointerT<Zookeeper::StatTask>();
 
 		SharedPointerT<StatTask> pTask = new(m_Heap) StatTask(GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		int zkResult = 0;
-		zkResult = zoo_aset(m_ZKHandle, path, (char*)valueBuffer.data(), (int)valueBuffer.size(), version, ZooKeeperWatcher::ZKWatcherCBStatComplition, *pTask);
+		zkResult = zoo_aset(m_ZKHandle, path, (char*)valueBuffer.data(), (int)valueBuffer.size(), version, ZookeeperWatcher::ZKWatcherCBStatComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
-		return std::forward<SharedPointerT<ZooKeeper::StatTask>>(pTask);
+		return std::forward<SharedPointerT<Zookeeper::StatTask>>(pTask);
 	}
 
-	SharedPointerT<ZooKeeper::StatTask> ZooKeeper::ASet(const char *path, const Json::Value& value, int version)
+	SharedPointerT<Zookeeper::StatTask> Zookeeper::ASet(const char *path, const Json::Value& value, int version)
 	{
 		if (m_ZKHandle == nullptr)
-			return SharedPointerT<ZooKeeper::StatTask>();
+			return SharedPointerT<Zookeeper::StatTask>();
 
 		if (!IsConnected())
-			return SharedPointerT<ZooKeeper::StatTask>();
+			return SharedPointerT<Zookeeper::StatTask>();
 
 		SharedPointerT<StatTask> pTask = new(m_Heap) StatTask(GetWatcher());
 		TaskOperator().Requested(*pTask);
@@ -763,14 +763,14 @@ namespace SF
 		Json::StreamWriterBuilder builder;
 		builder["indentation"] = "";
 		auto valueBuffer = std::forward<std::string>(Json::writeString(builder, value));
-		zkResult = zoo_aset(m_ZKHandle, path, (char*)valueBuffer.data(), (int)valueBuffer.size(), version, ZooKeeperWatcher::ZKWatcherCBStatComplition, *pTask);
+		zkResult = zoo_aset(m_ZKHandle, path, (char*)valueBuffer.data(), (int)valueBuffer.size(), version, ZookeeperWatcher::ZKWatcherCBStatComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
-		return std::forward<SharedPointerT<ZooKeeper::StatTask>>(pTask);
+		return std::forward<SharedPointerT<Zookeeper::StatTask>>(pTask);
 	}
 
 
-	Result ZooKeeper::GetChildren(const char *path, Array<String>& strings, bool watch)
+	Result Zookeeper::GetChildren(const char *path, Array<String>& strings, bool watch)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -790,13 +790,13 @@ namespace SF
 		return ToResult(zkResult);
 	}
 
-	SharedPointerT<ZooKeeper::StringsTask> ZooKeeper::AGetChildren(const char *path, ZooKeeperWatcher* watcher)
+	SharedPointerT<Zookeeper::StringsTask> Zookeeper::AGetChildren(const char *path, ZookeeperWatcher* watcher)
 	{
 		if (m_ZKHandle == nullptr)
-			return SharedPointerT<ZooKeeper::StringsTask>();
+			return SharedPointerT<Zookeeper::StringsTask>();
 
 		if (!IsConnected())
-			return SharedPointerT<ZooKeeper::StringsTask>();
+			return SharedPointerT<Zookeeper::StringsTask>();
 
 		SharedPointerT<StringsTask> pTask = new(m_Heap) StringsTask(m_Heap, *watcher);
 		TaskOperator().Requested(*pTask);
@@ -805,21 +805,21 @@ namespace SF
 
 		AddWatcher(watcher);
 		if (watcher == nullptr)
-			zkResult = zoo_aget_children(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBStringsComplition, *pTask);
+			zkResult = zoo_aget_children(m_ZKHandle, path, 0, ZookeeperWatcher::ZKWatcherCBStringsComplition, *pTask);
 		else
-			zkResult = zoo_awget_children(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBStringsComplition, *pTask);
+			zkResult = zoo_awget_children(m_ZKHandle, path, ZookeeperWatcher::ZKWatcherCB, watcher, ZookeeperWatcher::ZKWatcherCBStringsComplition, *pTask);
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
-		return std::forward<SharedPointerT<ZooKeeper::StringsTask>>(pTask);
+		return std::forward<SharedPointerT<Zookeeper::StringsTask>>(pTask);
 	}
 
-	SharedPointerT<ZooKeeper::StringsStatTask> ZooKeeper::AGetChildren2(const char *path, ZooKeeperWatcher* watcher)
+	SharedPointerT<Zookeeper::StringsStatTask> Zookeeper::AGetChildren2(const char *path, ZookeeperWatcher* watcher)
 	{
 		if (m_ZKHandle == nullptr)
-			return SharedPointerT<ZooKeeper::StringsStatTask>();
+			return SharedPointerT<Zookeeper::StringsStatTask>();
 
 		if (!IsConnected())
-			return SharedPointerT<ZooKeeper::StringsStatTask>();
+			return SharedPointerT<Zookeeper::StringsStatTask>();
 
 		SharedPointerT<StringsStatTask> pTask = new(m_Heap) StringsStatTask(m_Heap, *watcher);
 		TaskOperator().Requested(*pTask);
@@ -828,18 +828,18 @@ namespace SF
 
 		AddWatcher(watcher);
 		if (watcher == nullptr)
-			zkResult = zoo_aget_children2(m_ZKHandle, path, 0, ZooKeeperWatcher::ZKWatcherCBStringsStatComplition, *pTask);
+			zkResult = zoo_aget_children2(m_ZKHandle, path, 0, ZookeeperWatcher::ZKWatcherCBStringsStatComplition, *pTask);
 		else
-			zkResult = zoo_awget_children2(m_ZKHandle, path, ZooKeeperWatcher::ZKWatcherCB, watcher, ZooKeeperWatcher::ZKWatcherCBStringsStatComplition, *pTask);
+			zkResult = zoo_awget_children2(m_ZKHandle, path, ZookeeperWatcher::ZKWatcherCB, watcher, ZookeeperWatcher::ZKWatcherCBStringsStatComplition, *pTask);
 
 		pTask->SetResult(zkResult);
 		if (zkResult != ZOK) SharedReferenceDec(static_cast<SharedObject*>(*pTask));
-		return std::forward<SharedPointerT<ZooKeeper::StringsStatTask>>(pTask);
+		return std::forward<SharedPointerT<Zookeeper::StringsStatTask>>(pTask);
 	}
 
 
 
-	Result ZooKeeper::GetAcl(const char *path, struct ACL_vector *acl, struct Stat *stat)
+	Result Zookeeper::GetAcl(const char *path, struct ACL_vector *acl, struct Stat *stat)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -853,7 +853,7 @@ namespace SF
 	}
 
 
-	Result ZooKeeper::SetAcl(const char *path, int version, struct ACL_vector *acl)
+	Result Zookeeper::SetAcl(const char *path, int version, struct ACL_vector *acl)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -867,7 +867,7 @@ namespace SF
 	}
 
 
-	Result ZooKeeper::BatchRun(int count, const zoo_op_t *ops, zoo_op_result_t *results)
+	Result Zookeeper::BatchRun(int count, const zoo_op_t *ops, zoo_op_result_t *results)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;

@@ -65,11 +65,11 @@ public:
 	Result AssignWorkerThreadID(uint workerThreadID)
 	{
 		if (m_WorkerThreadID != 0)
-			return E_UNEXPECTED;
+			return ResultCode::UNEXPECTED;
 
 		m_WorkerThreadID = workerThreadID;
 
-		return S_OK;
+		return ResultCode::SUCCESS;
 	}
 
 	virtual void Dispose() override
@@ -109,7 +109,7 @@ public:
 	Result PushTask(WeakPointerT<WorkingEntity> taskItem)
 	{
 		if (taskItem == nullptr)
-			return E_INVALIDARG;
+			return ResultCode::INVALID_ARG;
 
 		return m_WorkItemQueue.Enqueue(taskItem);
 	}
@@ -136,7 +136,7 @@ public:
 			}
 
 			WeakPointerT<WorkingEntity> workItem;
-			while (SUCCEEDED(m_WorkItemQueue.Dequeue(workItem)))
+			while ((m_WorkItemQueue.Dequeue(workItem)))
 			{
 				SharedPointerT<WorkingEntity> workObj;
 				workItem.GetSharedPointer(workObj);
@@ -237,7 +237,7 @@ public:
 			m_EntityManager.insert(std::make_pair(entityID, entityPtr));
 		}
 
-		return S_OK;
+		return ResultCode::SUCCESS;
 	}
 
 	void TerminateTaskManager()
@@ -300,7 +300,7 @@ public:
 			}
 		}
 
-		return S_OK;
+		return ResultCode::SUCCESS;
 	}
 
 	void Update()
@@ -355,7 +355,7 @@ TEST_F(ThreadTest, PagedQueue)
 
 	int64_t testID = 1;
 	int64_t item;
-	while (SUCCEEDED(queue.Dequeue(item)) )
+	while ((queue.Dequeue(item)) )
 	{
 		EXPECT_EQ(item, testID);
 		Assert(item == testID);
@@ -400,7 +400,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueue)
 
 
 	int64_t item;
-	while (SUCCEEDED(queue.Dequeue(item)))
+	while ((queue.Dequeue(item)))
 	{
 		AssertRel(testArray[item-1] == 0);
 		testArray[item-1] = 1;
@@ -451,7 +451,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 	uint64_t readCount = 0;
 	while (readCount < TEST_LENGTH || workDone.load(std::memory_order_relaxed) < NUM_THREAD)
 	{
-		if (SUCCEEDED(queue.Dequeue(item)))
+		if ((queue.Dequeue(item)))
 		{
 			item--;
 			AssertRel(testArray[item] == 0);
@@ -516,7 +516,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueThreadDequeue)
 			auto readOrder = readCount.fetch_add(1,std::memory_order_relaxed);
 			while (readOrder < TEST_LENGTH)
 			{
-				if (SUCCEEDED(queue.DequeueMT(item)))
+				if ((queue.DequeueMT(item)))
 				{
 					item--;
 					CounterType expected = 0;
@@ -579,7 +579,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
 			{
 				auto count = itemCounter.fetch_add(1, std::memory_order_relaxed) + 1;
 				if (count <= TEST_LENGTH)
-					AssertRel(SUCCEEDED(queue.Enqueue(count)));
+					AssertRel((queue.Enqueue(count)));
 			} while (itemCounter < TEST_LENGTH);
 
 			workDone.fetch_add(1);
@@ -594,7 +594,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
 	uint64_t readCount = 0;
 	while (readCount < TEST_LENGTH || workDone.load(std::memory_order_relaxed) < NUM_THREAD)
 	{
-		if (SUCCEEDED(queue.Dequeue(item)))
+		if ((queue.Dequeue(item)))
 		{
 			item--;
 			AssertRel(testArray[item] == 0);

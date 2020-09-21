@@ -124,7 +124,7 @@ public:
 			if (expected != defaultValue)
 			{
 				expected = {};
-				Sleep(0);
+				ThisThread::SleepFor(DurationMS(0));
 			}
 		}
 
