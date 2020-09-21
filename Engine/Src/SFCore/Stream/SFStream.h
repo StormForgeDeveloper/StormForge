@@ -221,7 +221,7 @@ namespace SF
 		// return true if the stream is valid and able to be written
 		virtual bool CanWrite() override { return true; }
 
-		virtual Result Write(const void* buffer, size_t writeSize)  override { OutputSize += writeSize; }
+		virtual Result Write(const void* buffer, size_t writeSize)  override { OutputSize += writeSize; return ResultCode::SUCCESS; }
 	};
 
 } // namespace SF
