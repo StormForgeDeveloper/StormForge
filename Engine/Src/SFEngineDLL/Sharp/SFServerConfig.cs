@@ -96,12 +96,12 @@ namespace SF
             return NativeLoadXML(NativeHandle, filePath);
         }
 
-        public int LoadZooKeeper(SFZooKeeper zkInstance, string rootNodePath)
+        public int LoadZooKeeper(SFZookeeper zkInstance, string rootNodePath)
         {
             return NativeLoadZooKeeper(NativeHandle, zkInstance.NativeHandle, rootNodePath);
         }
 
-        public int StoreZooKeeper(SFZooKeeper zkInstance, string rootNodePath)
+        public int StoreZooKeeper(SFZookeeper zkInstance, string rootNodePath)
         {
             return NativeStoreZooKeeper(NativeHandle, zkInstance.NativeHandle, rootNodePath);
         }

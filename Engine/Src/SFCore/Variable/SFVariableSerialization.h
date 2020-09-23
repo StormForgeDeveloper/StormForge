@@ -36,15 +36,7 @@ namespace SF {
 	template<>
 	inline size_t SerializedSizeOf(const Variable& Value) { return Value.GetSerializedSize(); }
 
-	//template<>
-	//inline size_t SerializedSizeOf(const Array<Variable>& Value)
-	//{
-	//	size_t Size = sizeof(uint16_t);
-	//	for (auto& itVar : Value)
-	//	{
-	//		Size += SerializedSizeOf(itVar);
-	//	}
-	//}
+
 
 	template<>
 	inline size_t SerializedSizeOf(const VariableBox& Value)
@@ -53,28 +45,24 @@ namespace SF {
 		return pVariable ? pVariable->GetSerializedSize() : sizeof(Variable::TypeNameType);
 	}
 
-	//template<>
-	//inline size_t SerializedSizeOf(const Array<VariableBox>& Value)
-	//{
-	//	size_t Size = sizeof(uint16_t);
-	//	for (auto& itVar : Value)
-	//	{
-	//		Size += SerializedSizeOf(itVar);
-	//	}
-	//}
 
 	template<>
 	inline size_t SerializedSizeOf(const NamedVariableBox& Value) { auto pVariable = Value.GetVariable(); return sizeof(NamedVariableBox::NameType) + pVariable ? pVariable->GetSerializedSize() : sizeof(Variable::TypeNameType); }
 
-	//template<>
-	//inline size_t SerializedSizeOf(const Array<NamedVariableBox>& Value)
-	//{
-	//	size_t Size = sizeof(uint16_t);
-	//	for (auto& itVar : Value)
-	//	{
-	//		Size += SerializedSizeOf(itVar);
-	//	}
-	//}
+
+
+	template<>
+	inline size_t SerializedSizeOf(const NamedVariable& Value) { return sizeof(NamedVariableBox) + NamedVariable::SerializedSizeByTypeName(Value.TypeCrc); }
+
+	template<>
+	inline size_t SerializedSizeOf(const Array<NamedVariable>& Value)
+	{
+		size_t Size = sizeof(uint16_t);
+		for (auto& itVar : Value)
+		{
+			Size += SerializedSizeOf(itVar);
+		}
+	}
 
 	template<>
 	inline size_t SerializedSizeOf(const VariableTable& Value)

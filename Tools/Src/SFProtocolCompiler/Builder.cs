@@ -331,7 +331,19 @@ namespace ProtocolCompiler
             Type csType = SystemTypeInfo.ToCSharpType(type);
             if (IsCPPOut)
             {
-                return SystemTypeInfo.ToCPPType(type);
+                //if (IsVariableSizeType(type))
+                //{
+                //    return SystemTypeInfo.ToCPPType(type) + "*";
+                //}
+                //if (csType.IsArray)
+                //{
+                //    var elementType = SystemTypeInfo.FindParameterTypeFromCSharpType(csType.GetElementType());
+                //    return SystemTypeInfo.ToCPPType(elementType) + "*";
+                //}
+                //else
+                {
+                    return SystemTypeInfo.ToCPPType(type);
+                }
             }
 
             if (IsCSharpNative)

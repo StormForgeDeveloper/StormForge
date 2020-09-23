@@ -164,7 +164,7 @@
 					<xs:enumeration value="NotificationType"/>
 					
 					<xs:enumeration value="Variable"/>
-					<!--<xs:enumeration value="VariableBox"/>-->
+					<xs:enumeration value="NamedVariable"/>
 					<xs:enumeration value="VariableTable"/>
 
 					<xs:enumeration value="RankingType"/>

@@ -43,9 +43,9 @@ namespace SF
 				protocolCheck(input->Read(m_TransactionID));
 				protocolCheck(input->Read(m_GameID));
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_ID, ArrayLen * sizeof(char)));
+				protocolCheck(input->ReadLink(m_ID, ArrayLen));
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_Password, ArrayLen * sizeof(char)));
+				protocolCheck(input->ReadLink(m_Password, ArrayLen));
 
 				return hr;
 
@@ -255,11 +255,11 @@ namespace SF
 				protocolCheck(input->Read(m_GameID));
 				protocolCheck(input->Read(m_UID));
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_FaceBookName, ArrayLen * sizeof(char)));
+				protocolCheck(input->ReadLink(m_FaceBookName, ArrayLen));
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_EMail, ArrayLen * sizeof(char)));
+				protocolCheck(input->ReadLink(m_EMail, ArrayLen));
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_FacebookToken, ArrayLen * sizeof(char)));
+				protocolCheck(input->ReadLink(m_FacebookToken, ArrayLen));
 
 				return hr;
 
@@ -474,7 +474,7 @@ namespace SF
 				protocolCheck(input->Read(m_TransactionID));
 				protocolCheck(input->Read(m_GameID));
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_CellPhone, ArrayLen * sizeof(char)));
+				protocolCheck(input->ReadLink(m_CellPhone, ArrayLen));
 
 				return hr;
 
@@ -779,7 +779,7 @@ namespace SF
 				protocolCheck(input->Read(m_Result));
 				protocolCheck(input->Read(ArrayLen));
 				TotalRankingPlayerInformation* RankingPtr = nullptr;
-				protocolCheck(input->ReadLink(RankingPtr, ArrayLen * sizeof(TotalRankingPlayerInformation)));
+				protocolCheck(input->ReadLink(RankingPtr, ArrayLen));
 				m_Ranking.SetLinkedBuffer(ArrayLen, RankingPtr);
 
 				return hr;
@@ -976,7 +976,7 @@ namespace SF
 				protocolCheck(input->Read(m_Result));
 				protocolCheck(input->Read(ArrayLen));
 				TotalRankingPlayerInformation* RankingPtr = nullptr;
-				protocolCheck(input->ReadLink(RankingPtr, ArrayLen * sizeof(TotalRankingPlayerInformation)));
+				protocolCheck(input->ReadLink(RankingPtr, ArrayLen));
 				m_Ranking.SetLinkedBuffer(ArrayLen, RankingPtr);
 
 				return hr;
@@ -1074,7 +1074,7 @@ namespace SF
 				protocolCheck(input->Read(m_TransactionID));
 				protocolCheck(input->Read(ArrayLen));
 				uint8_t* TestDataPtr = nullptr;
-				protocolCheck(input->ReadLink(TestDataPtr, ArrayLen * sizeof(uint8_t)));
+				protocolCheck(input->ReadLink(TestDataPtr, ArrayLen));
 				m_TestData.SetLinkedBuffer(ArrayLen, TestDataPtr);
 
 				return hr;
@@ -1169,7 +1169,7 @@ namespace SF
 				protocolCheck(input->Read(m_Result));
 				protocolCheck(input->Read(ArrayLen));
 				uint8_t* TestDataPtr = nullptr;
-				protocolCheck(input->ReadLink(TestDataPtr, ArrayLen * sizeof(uint8_t)));
+				protocolCheck(input->ReadLink(TestDataPtr, ArrayLen));
 				m_TestData.SetLinkedBuffer(ArrayLen, TestDataPtr);
 
 				return hr;
@@ -1337,7 +1337,7 @@ namespace SF
 
 				protocolCheck(input->Read(m_TransactionID));
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_FileName, ArrayLen * sizeof(char)));
+				protocolCheck(input->ReadLink(m_FileName, ArrayLen));
 
 				return hr;
 

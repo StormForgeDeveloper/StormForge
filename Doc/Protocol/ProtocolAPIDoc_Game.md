@@ -1678,43 +1678,18 @@ ChatChannel Chatting message event
 		- OutInChatMessage: String type. Message text
 
 
-## GetCharacterList Request
-Create or Join Chat channel
-
-1. Command interface
-
-        Result GetCharacterListCmd(const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode)
-
-		- OutInTransactionID: TransactionID type. 
-
-		- OutInChannelName: String type. 
-
-		- OutInPasscode: String type. 
-
-2. Result interface
-
-C++: Cast message to GetCharacterListRes to access values
-
-
-		- OutTransactionID: TransactionID type. 
-
-		- OutResult: Result type. 
-
-		- OutChatUID: EntityUID type. Created/Joined Chat channel UID
-
-
 ## CreateCharacter Request
-Create or Join Chat channel
+Create character
 
 1. Command interface
 
-        Result CreateCharacterCmd(const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode)
+        Result CreateCharacterCmd(const uint64_t &InTransactionID, const char* InCharacterName, const Array<NamedVariable>& InAttributes)
 
 		- OutInTransactionID: TransactionID type. 
 
-		- OutInChannelName: String type. 
+		- OutInCharacterName: String type. 
 
-		- OutInPasscode: String type. 
+		- OutInAttributes: NamedVariable type. 
 
 2. Result interface
 
@@ -1725,7 +1700,74 @@ C++: Cast message to CreateCharacterRes to access values
 
 		- OutResult: Result type. 
 
-		- OutChatUID: EntityUID type. Created/Joined Chat channel UID
+		- OutCharacterID: int32 type. Created character ID
+
+
+## RemoveCharacter Request
+Remove character
+
+1. Command interface
+
+        Result RemoveCharacterCmd(const uint64_t &InTransactionID, const int32_t &InCharacterID)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInCharacterID: int32 type. Character ID to remove
+
+2. Result interface
+
+C++: Cast message to RemoveCharacterRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+
+## GetCharacterList Request
+Get character list
+
+1. Command interface
+
+        Result GetCharacterListCmd(const uint64_t &InTransactionID)
+
+		- OutInTransactionID: TransactionID type. 
+
+2. Result interface
+
+C++: Cast message to GetCharacterListRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutCharacterIDs: int32 type. Character id list
+
+
+## GetCharacterData Request
+
+
+1. Command interface
+
+        Result GetCharacterDataCmd(const uint64_t &InTransactionID, const int32_t &InCharacterID, const char* InAttributeNames)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInCharacterID: int32 type. Character ID to get
+
+		- OutInAttributeNames: String type. attribute names to query
+
+2. Result interface
+
+C++: Cast message to GetCharacterDataRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutAttributes: NamedVariable type. Character attributes
 
 
 ## GiveStamina Request

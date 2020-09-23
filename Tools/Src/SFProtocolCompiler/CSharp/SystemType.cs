@@ -242,9 +242,9 @@ namespace SF
             new TypeMap( ParameterType.MatchingQueueTicket, 8, typeof(MatchingQueueTicket) ),
             new TypeMap( ParameterType.LocalUID, 8, typeof(LocalUID), cppTypeName:"uint64_t" ),
 
-            new TypeMap( ParameterType.Variable, -1, typeof(object), cppTypeName:"Variable" ),
-            //new TypeMap( ParameterType.VariableBox, -1, typeof(object), cppTypeName:"VariableBox" ),
-            new TypeMap( ParameterType.VariableTable, -1, typeof(VariableTable), cppTypeName:"VariableTable" ),
+            new TypeMap( ParameterType.Variable, -1, typeof(Variable), cppTypeName:"Variable" ),
+            new TypeMap( ParameterType.NamedVariable, -1, typeof(NamedVariable), cppTypeName:"NamedVariable" ),
+            new TypeMap( ParameterType.VariableTable, -1, typeof(NamedVariable[]), cppTypeName:"VariableTable" ),
 
             new TypeMap( ParameterType.Vector2, 8, typeof(Vector2) ),
             new TypeMap( ParameterType.Vector3, 12, typeof(Vector3) ),
@@ -270,6 +270,21 @@ namespace SF
             {
                 MapToCSharp.Add(typeMap.XMLType, typeMap);
             }
+        }
+
+        public static ParameterType FindParameterTypeFromCSharpType(Type csType)
+        {
+            foreach(var itTypeInfo in MapToCSharp)
+            {
+                if (itTypeInfo.Value.CSharpType == csType)
+                {
+                    return itTypeInfo.Key;
+                }
+            }
+
+            Console.Error.WriteLine("Can't find related cstype for {0}", csType.ToString());
+
+            return ParameterType.intptr;
         }
 
         public static Type ToCSharpType(ParameterType type)
@@ -318,6 +333,19 @@ namespace SF
             return bIsStruct;
         }
 
+        public static string ToCPPTypeFromCSharp(Type csharpType)
+        {
+            foreach(var itTypeInfo in MapToCSharp)
+            {
+                if (itTypeInfo.Value.CSharpType == csharpType)
+                {
+                    return itTypeInfo.Value.CPPTypeName;
+                }
+            }
+
+            throw new Exception(string.Format("Can't find cpp type for {0}", csharpType.ToString()));
+        }
+
         // Ignore array option
         public static string ElementTypeNameFor(TypeUsage usage, Parameter param)
         {
@@ -331,9 +359,9 @@ namespace SF
                 case TypeUsage.CPPForSharp:
                     {
                         var cppTypeName = SystemTypeInfo.ToCPPType(param.Type);
-                        //if (csType.IsEnum)
-                        //    return "int";
-                        //else
+                        if (csType.IsArray)
+                            return ToCPPTypeFromCSharp(csType.GetElementType());
+                        else
                             return cppTypeName;
                     }
                 case TypeUsage.CSharp:
@@ -353,7 +381,7 @@ namespace SF
         public static string TypeNameOnlyFor(TypeUsage usage, Parameter param)
         {
             string elementTypeName = ElementTypeNameFor(usage, param);
-            //Type csType = SystemTypeInfo.ToCSharpType(param.Type);
+            Type csType = SystemTypeInfo.ToCSharpType(param.Type);
             bool bIsStruct = IsStruct(param.Type);
 
             switch (usage)
@@ -369,7 +397,7 @@ namespace SF
                     else
                         return elementTypeName;
                 case TypeUsage.CPPForSharp:
-                    if (param.IsArray)
+                    if (param.IsArray || csType.IsArray)
                         return elementTypeName + "*";
                     else
                         return elementTypeName;

@@ -155,13 +155,21 @@ namespace ProtocolCompiler
                     strComma = ", ";
 
                 var typeName = ToTargetTypeName(param);
+                Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
                 bool bIsStruct = IsStruct(param.Type);
+                bool IsArray = param.IsArray;
+                if(csharpType.IsArray)
+                {
+                    IsArray = true;
+                    if (ParameterMode == TypeUsage.CPPForSharp)
+                        typeName = csharpType.GetElementType().Name + "*";
+                }
 
                 if (IsStrType(param)) // string type
                 {
                     strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
                 }
-                else if (param.IsArray) // array
+                else if (IsArray) // array
                 {
                     if(ParameterMode == TypeUsage.CSharpNative || ParameterMode == TypeUsage.CPPForSharp)
                     {
@@ -196,9 +204,10 @@ namespace ProtocolCompiler
                 string paramTypeNameOnly = SystemTypeInfo.TypeNameOnlyFor(from, param);
                 string paramTypeFrom = SystemTypeInfo.TypeNameFor(from, param);
                 string paramTypeTo = SystemTypeInfo.TypeNameFor(to, param);
-                Type scharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
                 bool paramTypeEquality = paramTypeFrom == paramTypeTo;
 
+                bool IsArray = param.IsArray | csharpType.IsArray;
                 bool bIsStruct = IsStruct(param.Type);
 
                 if (IsStrType(param)) // string type
@@ -208,7 +217,7 @@ namespace ProtocolCompiler
                     else
                         strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
                 }
-                else if (param.IsArray) // array
+                else if (IsArray) // array
                 {
                     if (from == TypeUsage.CPPForSharp)
                     {
@@ -221,7 +230,7 @@ namespace ProtocolCompiler
                             strParams.AppendFormat("(ushort){0}{1}.Length, ", strPrefix, InParamName(param.Name));
                         }
 
-                        if (from == TypeUsage.CSharp && scharpType.IsEnum)
+                        if (from == TypeUsage.CSharp && csharpType.IsEnum)
                             strParams.AppendFormat("GameTypes.ToIntArray({0}{1})", strPrefix, InParamName(param.Name));
                         else
                             strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));

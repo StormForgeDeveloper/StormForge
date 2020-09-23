@@ -384,6 +384,9 @@ namespace ProtocolXml {
         Variable,
         
         /// <remarks/>
+        NamedVariable,
+        
+        /// <remarks/>
         VariableTable,
         
         /// <remarks/>

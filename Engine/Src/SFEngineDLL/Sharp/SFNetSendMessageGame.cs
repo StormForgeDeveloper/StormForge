@@ -430,21 +430,37 @@ namespace SF.Net
 			return result;
 		} // public int  ChatChannelChatMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.String InChatMessage )
 
-		// Cmd: Create or Join Chat channel
-		public int  GetCharacterListCmd( System.UInt64 InTransactionID, System.String InChannelName, System.String InPasscode )
+		// Cmd: Create character
+		public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.NamedVariable[] InAttributes )
 		{
- 			var result = CSSFNetAdapter_GameGetCharacterListCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InChannelName + "\0"),System.Text.Encoding.UTF8.GetBytes(InPasscode + "\0"));
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterListCmd);
-			return result;
-		} // public int  GetCharacterListCmd( System.UInt64 InTransactionID, System.String InChannelName, System.String InPasscode )
-
-		// Cmd: Create or Join Chat channel
-		public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InChannelName, System.String InPasscode )
-		{
- 			var result = CSSFNetAdapter_GameCreateCharacterCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InChannelName + "\0"),System.Text.Encoding.UTF8.GetBytes(InPasscode + "\0"));
+ 			var result = CSSFNetAdapter_GameCreateCharacterCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InCharacterName + "\0"),(ushort)InAttributes.Length, InAttributes);
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CreateCharacterCmd);
 			return result;
-		} // public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InChannelName, System.String InPasscode )
+		} // public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.NamedVariable[] InAttributes )
+
+		// Cmd: Remove character
+		public int  RemoveCharacterCmd( System.UInt64 InTransactionID, System.Int32 InCharacterID )
+		{
+ 			var result = CSSFNetAdapter_GameRemoveCharacterCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID);
+			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RemoveCharacterCmd);
+			return result;
+		} // public int  RemoveCharacterCmd( System.UInt64 InTransactionID, System.Int32 InCharacterID )
+
+		// Cmd: Get character list
+		public int  GetCharacterListCmd( System.UInt64 InTransactionID )
+		{
+ 			var result = CSSFNetAdapter_GameGetCharacterListCmd(m_Connection.NativeHandle, InTransactionID);
+			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterListCmd);
+			return result;
+		} // public int  GetCharacterListCmd( System.UInt64 InTransactionID )
+
+		// Cmd: 
+		public int  GetCharacterDataCmd( System.UInt64 InTransactionID, System.Int32 InCharacterID, System.String[] InAttributeNames )
+		{
+ 			var result = CSSFNetAdapter_GameGetCharacterDataCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID,System.Text.Encoding.UTF8.GetBytes(InAttributeNames + "\0"));
+			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterDataCmd);
+			return result;
+		} // public int  GetCharacterDataCmd( System.UInt64 InTransactionID, System.Int32 InCharacterID, System.String[] InAttributeNames )
 
 		// Cmd: Give my stamina to other player
 		public int  GiveStaminaCmd( System.UInt64 InTransactionID, System.UInt64 InTargetPlayer )
@@ -717,14 +733,24 @@ namespace SF.Net
 		static extern int CSSFNetAdapter_GameChatChannelChatMessageCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InChatUID, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
-		// Cmd: Create or Join Chat channel
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterListCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetCharacterListCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InChannelName, [MarshalAs(UnmanagedType.LPArray)] byte[] InPasscode );
-
-
-		// Cmd: Create or Join Chat channel
+		// Cmd: Create character
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameCreateCharacterCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameCreateCharacterCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InChannelName, [MarshalAs(UnmanagedType.LPArray)] byte[] InPasscode );
+		static extern int CSSFNetAdapter_GameCreateCharacterCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InCharacterName, System.UInt16 _sizeOfInAttributes,SF.NamedVariable[] InAttributes );
+
+
+		// Cmd: Remove character
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRemoveCharacterCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameRemoveCharacterCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InCharacterID );
+
+
+		// Cmd: Get character list
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterListCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameGetCharacterListCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID );
+
+
+		// Cmd: 
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterDataCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameGetCharacterDataCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InCharacterID, [MarshalAs(UnmanagedType.LPArray)] byte[] InAttributeNames );
 
 
 		// Cmd: Give my stamina to other player
@@ -1508,22 +1534,40 @@ namespace SF.Net
 		} // public int  ChatChannelChatMessageS2CEvt( System.UInt64 InSenderID, System.String InSenderName, System.String InChatMessage )
 
 
-		// Cmd: Create or Join Chat channel
-		public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID )
+		// Cmd: Create character
+		public int  CreateCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.Int32 InCharacterID )
 		{
- 			var result = CSSFNetAdapter_GameGetCharacterListRes(m_Connection.NativeHandle, InTransactionID, InResult, InChatUID);
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterListRes);
-			return result;
-		} // public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID )
-
-
-		// Cmd: Create or Join Chat channel
-		public int  CreateCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID )
-		{
- 			var result = CSSFNetAdapter_GameCreateCharacterRes(m_Connection.NativeHandle, InTransactionID, InResult, InChatUID);
+ 			var result = CSSFNetAdapter_GameCreateCharacterRes(m_Connection.NativeHandle, InTransactionID, InResult, InCharacterID);
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CreateCharacterRes);
 			return result;
-		} // public int  CreateCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID )
+		} // public int  CreateCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.Int32 InCharacterID )
+
+
+		// Cmd: Remove character
+		public int  RemoveCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		{
+ 			var result = CSSFNetAdapter_GameRemoveCharacterRes(m_Connection.NativeHandle, InTransactionID, InResult);
+			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RemoveCharacterRes);
+			return result;
+		} // public int  RemoveCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult )
+
+
+		// Cmd: Get character list
+		public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.Int32[] InCharacterIDs )
+		{
+ 			var result = CSSFNetAdapter_GameGetCharacterListRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InCharacterIDs.Length, InCharacterIDs);
+			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterListRes);
+			return result;
+		} // public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.Int32[] InCharacterIDs )
+
+
+		// Cmd: 
+		public int  GetCharacterDataRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NamedVariable[] InAttributes )
+		{
+ 			var result = CSSFNetAdapter_GameGetCharacterDataRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InAttributes.Length, InAttributes);
+			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterDataRes);
+			return result;
+		} // public int  GetCharacterDataRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NamedVariable[] InAttributes )
 
 
 		// Cmd: Give my stamina to other player
@@ -2052,15 +2096,27 @@ namespace SF.Net
 
 
 
-		// Cmd: Create or Join Chat channel
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterListRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetCharacterListRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID );
-
-
-
-		// Cmd: Create or Join Chat channel
+		// Cmd: Create character
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameCreateCharacterRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameCreateCharacterRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID );
+		static extern int CSSFNetAdapter_GameCreateCharacterRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.Int32 InCharacterID );
+
+
+
+		// Cmd: Remove character
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRemoveCharacterRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameRemoveCharacterRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
+
+
+
+		// Cmd: Get character list
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterListRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameGetCharacterListRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInCharacterIDs,System.Int32[] InCharacterIDs );
+
+
+
+		// Cmd: 
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterDataRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameGetCharacterDataRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInAttributes,SF.NamedVariable[] InAttributes );
 
 
 

@@ -116,8 +116,9 @@ namespace SF
 
 
 		template< class DataType >
-		Result ReadLink(DataType*& pDst, size_t readSize)
+		Result ReadLink(DataType*& pDst, size_t readCount)
 		{
+			auto readSize = readCount * sizeof(DataType);
 			if (GetRemainSize() < readSize)
 				return ResultCode::IO_BADPACKET_SIZE;// sizeCheck
 
@@ -133,7 +134,33 @@ namespace SF
 		}
 
 		template< class DataType >
-		Result ReadLink(Array<std::decay_t<DataType>*>& data, size_t readSize)
+		Result ReadLink(ArrayView<DataType>& data)
+		{
+			uint16_t NumItems{};
+			if (!Read(NumItems))
+				return ResultCode::END_OF_STREAM;
+
+			DataType* pData = nullptr;
+			auto ret = ReadLink(pData, NumItems);
+			if (!ret)
+				return ret;
+
+			data.SetLinkedBuffer(NumItems, NumItems, pData);
+
+			int32_t SizeRemain = -static_cast<int32_t>(NumItems * sizeof(DataType));
+			for (auto& itData : data)
+			{
+				SizeRemain += static_cast<int32_t>(SerializedSizeOf(itData));
+			}
+
+			if (SizeRemain > 0)
+				Skip(SizeRemain);
+
+			return ResultCode::SUCCESS;
+		}
+
+		template< class DataType >
+		Result ReadLink(Array<std::decay_t<DataType>*>& data)
 		{
 			uint16_t NumItems{};
 			if (!Read(NumItems))

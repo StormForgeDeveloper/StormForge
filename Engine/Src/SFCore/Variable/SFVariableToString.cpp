@@ -43,6 +43,20 @@ namespace SF {
 		return ResultCode::SUCCESS;
 	}
 
+	Result _ToString(ToStringContext& context, const NamedVariable& value)
+	{
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, value.NameCrc.ToString())))
+			return ResultCode::FAIL;
+
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+			return ResultCode::FAIL;
+
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, value.TypeCrc.ToString())))
+			return ResultCode::FAIL;
+
+		return ResultCode::SUCCESS;
+	}
+
 
 
 	Result _ToString(ToStringContext& context, const VariableTable& value)

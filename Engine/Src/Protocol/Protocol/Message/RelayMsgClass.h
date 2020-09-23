@@ -13,6 +13,7 @@
 #include "Protocol/SFProtocol.h"
 #include "Net/SFMessage.h"
 #include "Types/SFEngineTypedefs.h"
+#include "Variable/SFVariableTable.h"
 #include "Container/SFArray.h"
 #include "Variable/SFVariableMapBuilder.h"
 

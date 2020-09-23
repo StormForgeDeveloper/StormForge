@@ -339,6 +339,25 @@ namespace SF {
 
 
 
+#pragma pack(push,1)
+
+	// Named variable serialization helper structure
+	struct NamedVariable
+	{
+		StringCrc32 NameCrc;
+		StringCrc32 TypeCrc;
+		// TypeCrc will decide minimum size. if data type can bigger than 64bit, Data holds 32bit offset to the data(msb) and 32bit size of the data(lsb)
+		uint64_t Data;
+
+		static size_t SerializedSizeByTypeName(StringCrc32 TypeCrc);
+
+		bool operator == (const NamedVariable& src) const;
+		bool operator != (const NamedVariable& src) const;
+	};
+
+#pragma pack(pop)
+
+
 } // namespace SF
 
 

@@ -43,7 +43,7 @@ namespace SF
 				protocolCheck(input->Read(m_RelayInstanceID));
 				protocolCheck(input->Read(m_PlayerID));
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_PlayerIdentifier, ArrayLen * sizeof(char)));
+				protocolCheck(input->ReadLink(m_PlayerIdentifier, ArrayLen));
 
 				return hr;
 
@@ -141,7 +141,7 @@ namespace SF
 				protocolCheck(input->Read(m_MyEndpointID));
 				protocolCheck(input->Read(ArrayLen));
 				RelayPlayerInfo* MemberInfosPtr = nullptr;
-				protocolCheck(input->ReadLink(MemberInfosPtr, ArrayLen * sizeof(RelayPlayerInfo)));
+				protocolCheck(input->ReadLink(MemberInfosPtr, ArrayLen));
 				m_MemberInfos.SetLinkedBuffer(ArrayLen, MemberInfosPtr);
 
 				return hr;
@@ -521,7 +521,7 @@ namespace SF
 				protocolCheck(input->Read(m_TargetEndpointMask));
 				protocolCheck(input->Read(ArrayLen));
 				uint8_t* PayloadPtr = nullptr;
-				protocolCheck(input->ReadLink(PayloadPtr, ArrayLen * sizeof(uint8_t)));
+				protocolCheck(input->ReadLink(PayloadPtr, ArrayLen));
 				m_Payload.SetLinkedBuffer(ArrayLen, PayloadPtr);
 
 				return hr;

@@ -379,16 +379,26 @@ namespace SF
 			// S2C: ChatChannel Chatting message event
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::ChatChannelChatMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::ChatChannelChatMessageS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::ChatChannelChatMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::ChatChannelChatMessageS2CEvt::ParseMessageToMessageBase));
-			// Cmd: Create or Join Chat channel
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetCharacterListCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterListCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetCharacterListCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterListCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetCharacterListRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterListRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetCharacterListRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterListRes::ParseMessageToMessageBase));
-			// Cmd: Create or Join Chat channel
+			// Cmd: Create character
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::CreateCharacterCmd::MID.IDSeq.MsgID,&Message::Game::CreateCharacterCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::CreateCharacterCmd::MID.IDSeq.MsgID,&Message::Game::CreateCharacterCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::CreateCharacterRes::MID.IDSeq.MsgID,&Message::Game::CreateCharacterRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::CreateCharacterRes::MID.IDSeq.MsgID,&Message::Game::CreateCharacterRes::ParseMessageToMessageBase));
+			// Cmd: Remove character
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RemoveCharacterCmd::MID.IDSeq.MsgID,&Message::Game::RemoveCharacterCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RemoveCharacterCmd::MID.IDSeq.MsgID,&Message::Game::RemoveCharacterCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RemoveCharacterRes::MID.IDSeq.MsgID,&Message::Game::RemoveCharacterRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RemoveCharacterRes::MID.IDSeq.MsgID,&Message::Game::RemoveCharacterRes::ParseMessageToMessageBase));
+			// Cmd: Get character list
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetCharacterListCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterListCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetCharacterListCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterListCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetCharacterListRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterListRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetCharacterListRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterListRes::ParseMessageToMessageBase));
+			// Cmd: 
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetCharacterDataCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetCharacterDataCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetCharacterDataRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetCharacterDataRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataRes::ParseMessageToMessageBase));
 			// Cmd: Give my stamina to other player
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GiveStaminaCmd::MID.IDSeq.MsgID,&Message::Game::GiveStaminaCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GiveStaminaCmd::MID.IDSeq.MsgID,&Message::Game::GiveStaminaCmd::ParseMessageToMessageBase));

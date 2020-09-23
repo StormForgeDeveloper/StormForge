@@ -16,7 +16,7 @@
 #include "Variable/SFVariable.h"
 #include "String/SFToString.h"
 #include "String/SFStringFormat.h"
-
+#include "String/SFHasher32C.h"
 
 namespace SF
 {
@@ -1031,6 +1031,40 @@ namespace SF
 	}
 
 
+
+
+	size_t NamedVariable::SerializedSizeByTypeName(StringCrc32 TypeCrc)
+	{
+		switch (TypeCrc)
+		{
+			case "bool"_crc32c: return sizeof(bool);
+			case "void*"_crc32c: return sizeof(void*);
+			case "int"_crc32c: return sizeof(int);
+			case "uint"_crc32c: return sizeof(uint);
+			case "Result"_crc32c: return sizeof(Result);
+			case "int64"_crc32c: return sizeof(int64_t);
+			case "uint64"_crc32c: return sizeof(uint64_t);
+			case "float"_crc32c: return sizeof(float);
+			case "double"_crc32c: return sizeof(double);
+			case "hex32"_crc32c: return sizeof(uint32_t);
+			case "hex64"_crc32c: return sizeof(uint64_t);
+			case "StringCrc32"_crc32c: return sizeof(StringCrc32);
+			case "StringCrc64"_crc32c: return sizeof(StringCrc64);
+		default:
+			// for all other dynamic size types
+			return 0;
+		}
+	}
+
+	bool NamedVariable::operator == (const NamedVariable& src) const
+	{
+		return NameCrc == src.NameCrc && TypeCrc == src.TypeCrc && Data == src.Data;
+	}
+
+	bool NamedVariable::operator != (const NamedVariable& src) const
+	{
+		return NameCrc != src.NameCrc || TypeCrc != src.TypeCrc || Data != src.Data;
+	}
 
 
 } // namespace SF

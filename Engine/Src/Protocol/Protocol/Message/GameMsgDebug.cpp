@@ -244,12 +244,18 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ChatChannelChatMessageRes::MID.IDSeq.MsgID,&Message::Game::ChatChannelChatMessageRes::TraceOut));
 			// S2C: ChatChannel Chatting message event
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ChatChannelChatMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::ChatChannelChatMessageS2CEvt::TraceOut));
-			// Cmd: Create or Join Chat channel
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetCharacterListCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterListCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetCharacterListRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterListRes::TraceOut));
-			// Cmd: Create or Join Chat channel
+			// Cmd: Create character
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::CreateCharacterCmd::MID.IDSeq.MsgID,&Message::Game::CreateCharacterCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::CreateCharacterRes::MID.IDSeq.MsgID,&Message::Game::CreateCharacterRes::TraceOut));
+			// Cmd: Remove character
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RemoveCharacterCmd::MID.IDSeq.MsgID,&Message::Game::RemoveCharacterCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RemoveCharacterRes::MID.IDSeq.MsgID,&Message::Game::RemoveCharacterRes::TraceOut));
+			// Cmd: Get character list
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetCharacterListCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterListCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetCharacterListRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterListRes::TraceOut));
+			// Cmd: 
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetCharacterDataCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetCharacterDataRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataRes::TraceOut));
 			// Cmd: Give my stamina to other player
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GiveStaminaCmd::MID.IDSeq.MsgID,&Message::Game::GiveStaminaCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GiveStaminaRes::MID.IDSeq.MsgID,&Message::Game::GiveStaminaRes::TraceOut));

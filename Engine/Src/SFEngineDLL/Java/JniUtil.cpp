@@ -209,6 +209,16 @@ namespace SF
 		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
 	}
 
+	void VariableMapBuilderJObject::SetVariable(const char* varName, const VariableTable& value)
+	{
+		// TODO:
+		assert(false);
+		//jobject jobj = ToJavaObject(value);
+
+		//jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+		//m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
+	}
+
 
 
 

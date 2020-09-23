@@ -85,6 +85,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
             OutStream.WriteLine("#include \"Net/SFMessage.h\"");
             OutStream.WriteLine("#include \"Types/SFEngineTypedefs.h\"");
+            OutStream.WriteLine("#include \"Variable/SFVariableTable.h\"");
             OutStream.WriteLine("#include \"Container/SFArray.h\"");
             if (AppConfig.GetValue("VariableMapParser", false))
             {
@@ -307,12 +308,12 @@ namespace ProtocolCompiler
                         default:
                             if (param.IsArray)
                             {
-                                if (IsVariableSizeType(param.Type))
-                                {
-                                    MatchIndent(); OutStream.WriteLine(
-                                        string.Format("DynamicArray<{0}*> m_{1};", ToTargetTypeName(param.Type), param.Name));
-                                }
-                                else
+                                //if (IsVariableSizeType(param.Type))
+                                //{
+                                //    MatchIndent(); OutStream.WriteLine(
+                                //        string.Format("DynamicArray<{0}*> m_{1};", ToTargetTypeName(param.Type), param.Name));
+                                //}
+                                //else
                                 {
                                     MatchIndent(); OutStream.WriteLine(
                                         string.Format("ArrayView<{0}> m_{1};", ToTargetTypeName(param.Type), param.Name));
@@ -508,7 +509,7 @@ namespace ProtocolCompiler
                     {
                         case ParameterType.String:
                             MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink(m_{0}, ArrayLen * sizeof(char)));", param.Name);
+                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink(m_{0}, ArrayLen));", param.Name);
                             break;
                         default:
                             if (param.IsArray)
@@ -521,7 +522,7 @@ namespace ProtocolCompiler
                                 {
                                     MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
                                     MatchIndent(); OutStream.WriteLine("{1}* {0}Ptr = nullptr;", param.Name, ToTargetTypeName(param.Type));
-                                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink({0}Ptr, ArrayLen * sizeof({1})));", param.Name, ToTargetTypeName(param.Type));
+                                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink({0}Ptr, ArrayLen));", param.Name);
                                     MatchIndent(); OutStream.WriteLine("m_{0}.SetLinkedBuffer(ArrayLen, {0}Ptr);", param.Name);
                                 }
                             }

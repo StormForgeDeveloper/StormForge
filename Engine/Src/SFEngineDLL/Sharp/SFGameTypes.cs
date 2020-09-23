@@ -21,6 +21,10 @@ namespace SF
     {
     }
 
+    public class NativeWrapperAttribute : Attribute
+    {
+    }
+
 
     // Player Role
     public enum PlayerRole
@@ -251,35 +255,36 @@ namespace SF
     }
 
 
-    public class NamedVariableBox
+    [Struct]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Variable
+    {
+        public UInt32 TypeCrc;
+        public IntPtr DataPtr;
+
+        public Variable(UInt32 InTypeCrc, IntPtr InDataPtr)
+        {
+            TypeCrc = InTypeCrc;
+            DataPtr = InDataPtr;
+        }
+    }
+
+    [Struct]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct NamedVariable
     {
         public UInt32 NameCrc;
-        public object Value;
+        public UInt32 TypeCrc;
+        public IntPtr Data;
 
-        public NamedVariableBox()
-        {
-        }
-
-        public NamedVariableBox(UInt32 InNameCrc, object InValue = null)
+        public NamedVariable(UInt32 InNameCrc, UInt32 InTypeCrc, IntPtr InData)
         {
             NameCrc = InNameCrc;
-            Value = InValue;
+            TypeCrc = InTypeCrc;
+            Data = InData;
         }
     }
 
-    public class VariableTable
-    {
-        public Dictionary<UInt32,object> Values;
-
-        public VariableTable()
-        {
-        }
-
-        public VariableTable(Dictionary<UInt32, object> InValues)
-        {
-            Values = InValues;
-        }
-    }
 
     [Struct]
     [StructLayout(LayoutKind.Sequential)]

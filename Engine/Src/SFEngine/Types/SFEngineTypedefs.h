@@ -237,8 +237,8 @@ namespace SF {
 
 
 
-#pragma pack(push)
-#pragma pack(4)
+//#pragma pack(push)
+#pragma pack(push,4)
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -573,7 +573,7 @@ namespace SF {
 
 
 
-#pragma pack(4)
+#pragma pack(push,4)
 
 	// Relay player information 
 	struct RelayPlayerInfo
@@ -585,17 +585,16 @@ namespace SF {
 		bool operator != (const RelayPlayerInfo& op1) const { return EndpointID != op1.EndpointID || RelayPlayerID != op1.RelayPlayerID; }
 	};
 
-
-
 #pragma pack(pop)
 
 
 
-	typedef EntityID	PartyID;
+
+
+	using PartyID = EntityID;
 
 	// Game Instance
-	typedef EntityID	GameInsID;
-
+	using GameInsID = EntityID;
 
 };
 
