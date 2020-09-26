@@ -42,6 +42,11 @@ namespace SF
             return NativeAddNGetString(strValue);
         }
 
+        public override int GetHashCode()
+        {
+            return (int)StringHash;
+        }
+
 
         #region Native interfaces 
 

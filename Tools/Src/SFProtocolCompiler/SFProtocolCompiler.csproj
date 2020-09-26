@@ -69,6 +69,12 @@
     <Compile Include="..\..\..\Engine\Src\SFEngineDLL\Sharp\SFGameTypes.cs">
       <Link>CSharp\SFGameTypes.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\Engine\Src\SFEngineDLL\Sharp\SFStringCrc32.cs">
+      <Link>CSharp\SFStringCrc32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Engine\Src\SFEngineDLL\Sharp\SFStringCrc64.cs">
+      <Link>CSharp\SFStringCrc64.cs</Link>
+    </Compile>
     <Compile Include="Builder.cs" />
     <Compile Include="MessageDebugBuilder.cs" />
     <Compile Include="MessageClassBuilder.cs" />

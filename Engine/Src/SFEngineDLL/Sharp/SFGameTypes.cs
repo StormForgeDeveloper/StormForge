@@ -10,7 +10,9 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using System;
+using System.CodeDom;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 
 namespace SF
@@ -313,21 +315,120 @@ namespace SF
         }
     }
 
-    public class VariableTable : Dictionary<UInt32, object>
+    public class VariableTable : Dictionary<StringCrc32, object>
     {
+        struct TypeInfo
+        {
+            public delegate void SerializerFunc(BinaryWriter writer, object value);
+            public delegate object DeserializerFunc(BinaryReader reader);
+
+            public readonly StringCrc32 TypeNameCrc;
+            public readonly SerializerFunc Serializer;
+            public readonly DeserializerFunc Deserializer;
+
+
+            public TypeInfo(StringCrc32 InTypeNameCrc, SerializerFunc InSerializer, DeserializerFunc InDeserializer)
+            {
+                TypeNameCrc = InTypeNameCrc;
+                Serializer = InSerializer;
+                Deserializer = InDeserializer;
+            }
+
+            public TypeInfo(string InTypeName, SerializerFunc InSerializer, DeserializerFunc InDeserializer)
+                : this(new StringCrc32(InTypeName), InSerializer, InDeserializer)
+            {
+            }
+
+        };
+
+        static Dictionary<Type, TypeInfo> TypeInfoByType;
+        static Dictionary<UInt32, TypeInfo> TypeInfoByTypeName;
+
+        static VariableTable()
+        {
+            TypeInfoByType = new Dictionary<Type, TypeInfo>();
+            TypeInfoByType.Add(typeof(int), new TypeInfo(
+                "int",
+                (writer,value)=> { writer.Write((int)value); },
+                (reader) => { return reader.ReadInt32(); }));
+
+            TypeInfoByTypeName = new Dictionary<uint, TypeInfo>();
+            foreach(var itItem in TypeInfoByType)
+            {
+                TypeInfoByTypeName.Add(itItem.Value.TypeNameCrc.StringHash, itItem.Value);
+            }
+        }
+
         public VariableTable()
         {
         }
 
+        TypeInfo GetTypeInfo(object value)
+        {
+            TypeInfo typeInfo;
+            if (!TypeInfoByType.TryGetValue(value.GetType(), out typeInfo))
+                throw new Exception(string.Format("Unknown type {0}", value.GetType().Name));
+
+            return typeInfo;
+        }
+
+        TypeInfo GetTypeInfo(StringCrc32 typeName)
+        {
+            TypeInfo typeInfo;
+            if (!TypeInfoByTypeName.TryGetValue(typeName.StringHash, out typeInfo))
+                throw new Exception(string.Format("Unknown type {0}", typeName));
+
+            return typeInfo;
+        }
+
         public byte[] ToByteArray()
         {
-            // TODO:
-            return new byte[10];
+            UInt16 NumItems = (UInt16)Count;
+            using (MemoryStream outputStream = new MemoryStream())
+            using (BinaryWriter writer = new BinaryWriter(outputStream))
+            {
+                writer.Write(NumItems);
+
+                foreach (var itItem in this)
+                {
+                    writer.Write(itItem.Key.StringHash);
+
+                    var typeInfo = GetTypeInfo(itItem.Value);
+                    writer.Write(typeInfo.TypeNameCrc.StringHash);
+
+                    typeInfo.Serializer(writer, itItem.Value);
+                }
+
+                writer.Flush();
+                return outputStream.ToArray();
+            }
+
+
         }
 
         public void FromSerializedMemory(IntPtr InDataPtr)
         {
-            // TODO:
+            Clear();
+
+            UInt16 byteSize = (UInt16)Marshal.ReadInt16(InDataPtr); InDataPtr = (IntPtr)(InDataPtr.ToInt64() + sizeof(UInt16));
+            byte[] byteData = new byte[byteSize];
+            Marshal.Copy(InDataPtr, byteData, 0, byteData.Length);
+
+            using (BinaryReader reader = new BinaryReader(new MemoryStream(byteData)))
+            {
+                var numItems = reader.ReadUInt16();
+
+                for (UInt16 iItem = 0; iItem < numItems; iItem++)
+                {
+                    var variableName = new StringCrc32(reader.ReadUInt32());
+                    var typeName = new StringCrc32(reader.ReadUInt32());
+
+                    var typeInfo = GetTypeInfo(typeName);
+                    var value = typeInfo.Deserializer(reader);
+                    Add(variableName, value);
+                }
+
+            }
         }
     }
 
