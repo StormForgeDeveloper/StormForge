@@ -25,6 +25,34 @@ namespace SF
     {
     }
 
+    // Manages pinned byte buffer
+    public class PinnedByteBuffer : IDisposable
+    {
+        public GCHandle Handle { get; }
+        public byte[] Data { get; private set; }
+
+        public IntPtr Ptr
+        {
+            get
+            {
+                return Handle.AddrOfPinnedObject();
+            }
+        }
+
+        public PinnedByteBuffer(byte[] bytes)
+        {
+            Data = bytes;
+            Handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+        }
+
+        public void Dispose()
+        {
+            Handle.Free();
+            Data = null;
+            GC.SuppressFinalize(this);
+        }
+    }
+
 
     // Player Role
     public enum PlayerRole
@@ -282,6 +310,24 @@ namespace SF
             NameCrc = InNameCrc;
             TypeCrc = InTypeCrc;
             Data = InData;
+        }
+    }
+
+    public class VariableTable : Dictionary<UInt32, object>
+    {
+        public VariableTable()
+        {
+        }
+
+        public byte[] ToByteArray()
+        {
+            // TODO:
+            return new byte[10];
+        }
+
+        public void FromSerializedMemory(IntPtr InDataPtr)
+        {
+            // TODO:
         }
     }
 

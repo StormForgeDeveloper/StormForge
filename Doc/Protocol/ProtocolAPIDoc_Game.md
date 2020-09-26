@@ -487,47 +487,7 @@ C++: Cast message to GetUserGamePlayerInfoRes to access values
 
 		- OutResult: Result type. 
 
-		- OutLevel: int16 type. 
-
-		- OutExp: int64 type. 
-
-		- OutGameMoney: int64 type. 
-
-		- OutGem: int64 type. 
-
-		- OutStamina: int16 type. 
-
-		- OutLastUpdateTime: uint32 type. 
-
-		- OutTotalPlayed: int32 type. 
-
-		- OutWinPlaySC: int32 type. 
-
-		- OutWinPlaySM: int32 type. 
-
-		- OutWinPlaySS: int32 type. 
-
-		- OutLosePlaySC: int32 type. 
-
-		- OutLosePlaySM: int32 type. 
-
-		- OutLosePlaySS: int32 type. 
-
-		- OutWinPlayNC: int32 type. 
-
-		- OutWinPlayNM: int32 type. 
-
-		- OutWinPlayNS: int32 type. 
-
-		- OutLosePlayNC: int32 type. 
-
-		- OutLosePlayNM: int32 type. 
-
-		- OutLosePlayNS: int32 type. 
-
-		- OutWeeklyWin: int32 type. 
-
-		- OutWeeklyLose: int32 type. 
+		- OutAttributes: VariableTable type. 
 
 
 ## GetGamePlayerInfo Request
@@ -552,37 +512,7 @@ C++: Cast message to GetGamePlayerInfoRes to access values
 
 		- OutPlayerID: AccountID type. Game player ID
 
-		- OutLevel: int16 type. Player lever
-
-		- OutTotalPlayed: int32 type. Total play time
-
-		- OutWinPlaySC: int32 type. 
-
-		- OutWinPlaySM: int32 type. 
-
-		- OutWinPlaySS: int32 type. 
-
-		- OutLosePlaySC: int32 type. 
-
-		- OutLosePlaySM: int32 type. 
-
-		- OutLosePlaySS: int32 type. 
-
-		- OutWinPlayNC: int32 type. 
-
-		- OutWinPlayNM: int32 type. 
-
-		- OutWinPlayNS: int32 type. 
-
-		- OutLosePlayNC: int32 type. 
-
-		- OutLosePlayNM: int32 type. 
-
-		- OutLosePlayNS: int32 type. 
-
-		- OutWeeklyWin: int32 type. 
-
-		- OutWeeklyLose: int32 type. 
+		- OutAttributes: VariableTable type. 
 
 
 ## LevelUpS2CEvt
@@ -1683,13 +1613,13 @@ Create character
 
 1. Command interface
 
-        Result CreateCharacterCmd(const uint64_t &InTransactionID, const char* InCharacterName, const Array<NamedVariable>& InAttributes)
+        Result CreateCharacterCmd(const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes)
 
 		- OutInTransactionID: TransactionID type. 
 
 		- OutInCharacterName: String type. 
 
-		- OutInAttributes: NamedVariable type. 
+		- OutInAttributes: VariableTable type. 
 
 2. Result interface
 
@@ -1767,7 +1697,7 @@ C++: Cast message to GetCharacterDataRes to access values
 
 		- OutResult: Result type. 
 
-		- OutAttributes: NamedVariable type. Character attributes
+		- OutAttributes: VariableTable type. Character attributes
 
 
 ## GiveStamina Request

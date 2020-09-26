@@ -1892,27 +1892,8 @@ namespace SF
 			private:
 				uint64_t m_TransactionID;
 				Result m_Result;
-				int16_t m_Level;
-				int64_t m_Exp;
-				int64_t m_GameMoney;
-				int64_t m_Gem;
-				int16_t m_Stamina;
-				uint32_t m_LastUpdateTime;
-				int32_t m_TotalPlayed;
-				int32_t m_WinPlaySC;
-				int32_t m_WinPlaySM;
-				int32_t m_WinPlaySS;
-				int32_t m_LosePlaySC;
-				int32_t m_LosePlaySM;
-				int32_t m_LosePlaySS;
-				int32_t m_WinPlayNC;
-				int32_t m_WinPlayNM;
-				int32_t m_WinPlayNS;
-				int32_t m_LosePlayNC;
-				int32_t m_LosePlayNM;
-				int32_t m_LosePlayNS;
-				int32_t m_WeeklyWin;
-				int32_t m_WeeklyLose;
+				ArrayView<uint8_t> m_AttributesRaw;
+				VariableTable m_Attributes;
 			public:
 				GetUserGamePlayerInfoRes()
 					{}
@@ -1925,27 +1906,8 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const int16_t& GetLevel() const	{ return m_Level; };
-				const int64_t& GetExp() const	{ return m_Exp; };
-				const int64_t& GetGameMoney() const	{ return m_GameMoney; };
-				const int64_t& GetGem() const	{ return m_Gem; };
-				const int16_t& GetStamina() const	{ return m_Stamina; };
-				const uint32_t& GetLastUpdateTime() const	{ return m_LastUpdateTime; };
-				const int32_t& GetTotalPlayed() const	{ return m_TotalPlayed; };
-				const int32_t& GetWinPlaySC() const	{ return m_WinPlaySC; };
-				const int32_t& GetWinPlaySM() const	{ return m_WinPlaySM; };
-				const int32_t& GetWinPlaySS() const	{ return m_WinPlaySS; };
-				const int32_t& GetLosePlaySC() const	{ return m_LosePlaySC; };
-				const int32_t& GetLosePlaySM() const	{ return m_LosePlaySM; };
-				const int32_t& GetLosePlaySS() const	{ return m_LosePlaySS; };
-				const int32_t& GetWinPlayNC() const	{ return m_WinPlayNC; };
-				const int32_t& GetWinPlayNM() const	{ return m_WinPlayNM; };
-				const int32_t& GetWinPlayNS() const	{ return m_WinPlayNS; };
-				const int32_t& GetLosePlayNC() const	{ return m_LosePlayNC; };
-				const int32_t& GetLosePlayNM() const	{ return m_LosePlayNM; };
-				const int32_t& GetLosePlayNS() const	{ return m_LosePlayNS; };
-				const int32_t& GetWeeklyWin() const	{ return m_WeeklyWin; };
-				const int32_t& GetWeeklyLose() const	{ return m_WeeklyLose; };
+				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
+				const VariableTable& GetAttributes() const	{ return m_Attributes; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -1953,7 +1915,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const int16_t &InLevel, const int64_t &InExp, const int64_t &InGameMoney, const int64_t &InGem, const int16_t &InStamina, const uint32_t &InLastUpdateTime, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes );
 
 			}; // class GetUserGamePlayerInfoRes : public MessageBase
 
@@ -2022,22 +1984,8 @@ namespace SF
 				uint64_t m_TransactionID;
 				Result m_Result;
 				AccountID m_PlayerID;
-				int16_t m_Level;
-				int32_t m_TotalPlayed;
-				int32_t m_WinPlaySC;
-				int32_t m_WinPlaySM;
-				int32_t m_WinPlaySS;
-				int32_t m_LosePlaySC;
-				int32_t m_LosePlaySM;
-				int32_t m_LosePlaySS;
-				int32_t m_WinPlayNC;
-				int32_t m_WinPlayNM;
-				int32_t m_WinPlayNS;
-				int32_t m_LosePlayNC;
-				int32_t m_LosePlayNM;
-				int32_t m_LosePlayNS;
-				int32_t m_WeeklyWin;
-				int32_t m_WeeklyLose;
+				ArrayView<uint8_t> m_AttributesRaw;
+				VariableTable m_Attributes;
 			public:
 				GetGamePlayerInfoRes()
 					{}
@@ -2051,22 +1999,8 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
-				const int16_t& GetLevel() const	{ return m_Level; };
-				const int32_t& GetTotalPlayed() const	{ return m_TotalPlayed; };
-				const int32_t& GetWinPlaySC() const	{ return m_WinPlaySC; };
-				const int32_t& GetWinPlaySM() const	{ return m_WinPlaySM; };
-				const int32_t& GetWinPlaySS() const	{ return m_WinPlaySS; };
-				const int32_t& GetLosePlaySC() const	{ return m_LosePlaySC; };
-				const int32_t& GetLosePlaySM() const	{ return m_LosePlaySM; };
-				const int32_t& GetLosePlaySS() const	{ return m_LosePlaySS; };
-				const int32_t& GetWinPlayNC() const	{ return m_WinPlayNC; };
-				const int32_t& GetWinPlayNM() const	{ return m_WinPlayNM; };
-				const int32_t& GetWinPlayNS() const	{ return m_WinPlayNS; };
-				const int32_t& GetLosePlayNC() const	{ return m_LosePlayNC; };
-				const int32_t& GetLosePlayNM() const	{ return m_LosePlayNM; };
-				const int32_t& GetLosePlayNS() const	{ return m_LosePlayNS; };
-				const int32_t& GetWeeklyWin() const	{ return m_WeeklyWin; };
-				const int32_t& GetWeeklyLose() const	{ return m_WeeklyLose; };
+				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
+				const VariableTable& GetAttributes() const	{ return m_Attributes; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -2074,7 +2008,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const int16_t &InLevel, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes );
 
 			}; // class GetGamePlayerInfoRes : public MessageBase
 
@@ -6303,7 +6237,8 @@ namespace SF
 			private:
 				uint64_t m_TransactionID;
 				const char* m_CharacterName;
-				ArrayView<NamedVariable> m_Attributes;
+				ArrayView<uint8_t> m_AttributesRaw;
+				VariableTable m_Attributes;
 			public:
 				CreateCharacterCmd()
 				:m_CharacterName(nullptr)
@@ -6318,7 +6253,8 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetCharacterName() const	{ return m_CharacterName; };
-				const Array<NamedVariable>& GetAttributes() const	{ return m_Attributes; };
+				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
+				const VariableTable& GetAttributes() const	{ return m_Attributes; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -6326,7 +6262,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<NamedVariable>& InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes );
 
 			}; // class CreateCharacterCmd : public MessageBase
 
@@ -6624,7 +6560,8 @@ namespace SF
 			private:
 				uint64_t m_TransactionID;
 				Result m_Result;
-				ArrayView<NamedVariable> m_Attributes;
+				ArrayView<uint8_t> m_AttributesRaw;
+				VariableTable m_Attributes;
 			public:
 				GetCharacterDataRes()
 					{}
@@ -6637,7 +6574,8 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const Array<NamedVariable>& GetAttributes() const	{ return m_Attributes; };
+				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
+				const VariableTable& GetAttributes() const	{ return m_Attributes; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -6645,7 +6583,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<NamedVariable>& InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes );
 
 			}; // class GetCharacterDataRes : public MessageBase
 

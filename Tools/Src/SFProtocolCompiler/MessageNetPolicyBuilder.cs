@@ -15,7 +15,7 @@ using ProtocolXml;
 
 namespace ProtocolCompiler
 {
-    class MessageNetPolicyBuilder : Builder
+    class MessageNetPolicyBuilder : CppBuilder
     { 
         // constructor
         public MessageNetPolicyBuilder(string strBasePath)

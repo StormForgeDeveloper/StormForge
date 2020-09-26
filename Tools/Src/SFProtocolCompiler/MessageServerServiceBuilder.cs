@@ -16,7 +16,7 @@ using ProtocolXml;
 
 namespace ProtocolCompiler
 {
-    class MessageServerServiceBuilder : Builder
+    class MessageServerServiceBuilder : CppBuilder
     {
         Parameter m_ParameterRouteHopContext;
 

@@ -36,7 +36,7 @@ namespace SF {
 	VariableTable::~VariableTable()
 	{
 		m_VairableTable.CommitChanges();
-		m_VairableTable.ForeachOrder(0, (uint)m_VairableTable.size(), [](StringCrc64 name, Variable* pValue)
+		m_VairableTable.ForeachOrder(0, (uint)m_VairableTable.size(), [](KeyType name, Variable* pValue)
 		{
 			unused(name);
 			delete pValue;
@@ -46,7 +46,7 @@ namespace SF {
 		m_VairableTable.Clear();
 	}
 
-	Result VariableTable::SetVariable(StringCrc64 name, const Variable& variable)
+	Result VariableTable::SetVariable(KeyType name, const Variable& variable)
 	{
 		Variable* pVariable = nullptr;
 		m_VairableTable.Remove(name, pVariable);
@@ -60,7 +60,7 @@ namespace SF {
 		return m_VairableTable.Set(name, newVariable);
 	}
 
-	Result VariableTable::SetVariable(StringCrc64 name, std::unique_ptr<Variable>& variable)
+	Result VariableTable::SetVariable(KeyType name, std::unique_ptr<Variable>& variable)
 	{
 		Variable* pVariable = nullptr;
 		m_VairableTable.Remove(name, pVariable);
@@ -77,7 +77,7 @@ namespace SF {
 		return Ret;
 	}
 
-	Result VariableTable::SetVariable(StringCrc64 name, Variable*& variable)
+	Result VariableTable::SetVariable(KeyType name, Variable*& variable)
 	{
 		Variable* pVariable = nullptr;
 		m_VairableTable.Remove(name, pVariable);
@@ -98,7 +98,7 @@ namespace SF {
 	}
 
 
-	Variable* VariableTable::GetVariable(StringCrc64 name)
+	Variable* VariableTable::GetVariable(KeyType name)
 	{
 		Variable* pVariable = nullptr;
 
@@ -107,7 +107,7 @@ namespace SF {
 		return pVariable;
 	}
 
-	const Variable* VariableTable::GetVariable(StringCrc64 name) const
+	const Variable* VariableTable::GetVariable(KeyType name) const
 	{
 		Variable* pVariable = nullptr;
 
@@ -132,7 +132,7 @@ namespace SF {
 	VariableTableMT::~VariableTableMT()
 	{
 		m_VairableTable.CommitChanges();
-		m_VairableTable.ForeachOrder(0, (uint)m_VairableTable.size(), [](StringCrc64 name, Variable* pValue)
+		m_VairableTable.ForeachOrder(0, (uint)m_VairableTable.size(), [](KeyType name, Variable* pValue)
 		{
 			unused(name);
 			IHeap::Delete(pValue);
@@ -140,7 +140,7 @@ namespace SF {
 		});
 	}
 
-	Result VariableTableMT::SetVariable(StringCrc64 name, const Variable& variable)
+	Result VariableTableMT::SetVariable(KeyType name, const Variable& variable)
 	{
 		// TODO: need to be thread safe
 		Variable* pVariable = nullptr;
@@ -174,7 +174,7 @@ namespace SF {
 	}
 
 
-	Variable* VariableTableMT::GetVariable(StringCrc64 name)
+	Variable* VariableTableMT::GetVariable(KeyType name)
 	{
 		Variable* pVariable = nullptr;
 

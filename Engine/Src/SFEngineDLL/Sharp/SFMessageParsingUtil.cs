@@ -113,6 +113,11 @@ namespace SF
                 case "RelayPlayerInfo":
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(RelayPlayerInfo)));
                     break;
+                case "VariableTable":
+                    VariableTable parsedValue = new VariableTable();
+                    parsedValue.FromSerializedMemory(Value);
+                    stm_ParsingMessage.SetValue(stringHash, parsedValue);
+                    break;
                 default:
                     System.Diagnostics.Debug.Assert(false);
                     break;
@@ -258,6 +263,15 @@ namespace SF
                         stm_ParsingMessage.SetValue(stringHash, newArray);
                     }
                     break;
+                // TODO:
+                //case "VariableTable":
+                //    {
+                //        VariableTable parsedValue = new VariableTable();
+                //        parsedValue.FromSerializedMemory(Value);
+                //        stm_ParsingMessage.SetValue(stringHash, parsedValue);
+                //    }
+                //    break;
+
                 default:
                     System.Diagnostics.Debug.Assert(false);
                     break;

@@ -3763,27 +3763,12 @@ namespace SF
 
 				protocolCheck(input->Read(m_TransactionID));
 				protocolCheck(input->Read(m_Result));
-				protocolCheck(input->Read(m_Level));
-				protocolCheck(input->Read(m_Exp));
-				protocolCheck(input->Read(m_GameMoney));
-				protocolCheck(input->Read(m_Gem));
-				protocolCheck(input->Read(m_Stamina));
-				protocolCheck(input->Read(m_LastUpdateTime));
-				protocolCheck(input->Read(m_TotalPlayed));
-				protocolCheck(input->Read(m_WinPlaySC));
-				protocolCheck(input->Read(m_WinPlaySM));
-				protocolCheck(input->Read(m_WinPlaySS));
-				protocolCheck(input->Read(m_LosePlaySC));
-				protocolCheck(input->Read(m_LosePlaySM));
-				protocolCheck(input->Read(m_LosePlaySS));
-				protocolCheck(input->Read(m_WinPlayNC));
-				protocolCheck(input->Read(m_WinPlayNM));
-				protocolCheck(input->Read(m_WinPlayNS));
-				protocolCheck(input->Read(m_LosePlayNC));
-				protocolCheck(input->Read(m_LosePlayNM));
-				protocolCheck(input->Read(m_LosePlayNS));
-				protocolCheck(input->Read(m_WeeklyWin));
-				protocolCheck(input->Read(m_WeeklyLose));
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* AttributesPtr = nullptr;
+				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
+				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
+				InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
+				protocolCheck(Attributes_ReadStream.ToInputStream()->Read(m_Attributes));
 
 				return hr;
 
@@ -3799,27 +3784,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("Level", parser.GetLevel());
-				variableBuilder.SetVariable("Exp", parser.GetExp());
-				variableBuilder.SetVariable("GameMoney", parser.GetGameMoney());
-				variableBuilder.SetVariable("Gem", parser.GetGem());
-				variableBuilder.SetVariable("Stamina", parser.GetStamina());
-				variableBuilder.SetVariable("LastUpdateTime", parser.GetLastUpdateTime());
-				variableBuilder.SetVariable("TotalPlayed", parser.GetTotalPlayed());
-				variableBuilder.SetVariable("WinPlaySC", parser.GetWinPlaySC());
-				variableBuilder.SetVariable("WinPlaySM", parser.GetWinPlaySM());
-				variableBuilder.SetVariable("WinPlaySS", parser.GetWinPlaySS());
-				variableBuilder.SetVariable("LosePlaySC", parser.GetLosePlaySC());
-				variableBuilder.SetVariable("LosePlaySM", parser.GetLosePlaySM());
-				variableBuilder.SetVariable("LosePlaySS", parser.GetLosePlaySS());
-				variableBuilder.SetVariable("WinPlayNC", parser.GetWinPlayNC());
-				variableBuilder.SetVariable("WinPlayNM", parser.GetWinPlayNM());
-				variableBuilder.SetVariable("WinPlayNS", parser.GetWinPlayNS());
-				variableBuilder.SetVariable("LosePlayNC", parser.GetLosePlayNC());
-				variableBuilder.SetVariable("LosePlayNM", parser.GetLosePlayNM());
-				variableBuilder.SetVariable("LosePlayNS", parser.GetLosePlayNS());
-				variableBuilder.SetVariable("WeeklyWin", parser.GetWeeklyWin());
-				variableBuilder.SetVariable("WeeklyLose", parser.GetWeeklyLose());
+				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -3836,7 +3801,7 @@ namespace SF
 
 			}; // Result GetUserGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const int16_t &InLevel, const int64_t &InExp, const int64_t &InGameMoney, const int64_t &InGem, const int16_t &InStamina, const uint32_t &InLastUpdateTime, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
+			MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
 			{
  				MessageData *pNewMsg = nullptr;
 				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
@@ -3854,27 +3819,7 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					, SerializedSizeOf(InTransactionID)
 					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InLevel)
-					, SerializedSizeOf(InExp)
-					, SerializedSizeOf(InGameMoney)
-					, SerializedSizeOf(InGem)
-					, SerializedSizeOf(InStamina)
-					, SerializedSizeOf(InLastUpdateTime)
-					, SerializedSizeOf(InTotalPlayed)
-					, SerializedSizeOf(InWinPlaySC)
-					, SerializedSizeOf(InWinPlaySM)
-					, SerializedSizeOf(InWinPlaySS)
-					, SerializedSizeOf(InLosePlaySC)
-					, SerializedSizeOf(InLosePlaySM)
-					, SerializedSizeOf(InLosePlaySS)
-					, SerializedSizeOf(InWinPlayNC)
-					, SerializedSizeOf(InWinPlayNM)
-					, SerializedSizeOf(InWinPlayNS)
-					, SerializedSizeOf(InLosePlayNC)
-					, SerializedSizeOf(InLosePlayNM)
-					, SerializedSizeOf(InLosePlayNS)
-					, SerializedSizeOf(InWeeklyWin)
-					, SerializedSizeOf(InWeeklyLose)
+					, SerializedSizeOf(InAttributes)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetUserGamePlayerInfoRes::MID, __uiMessageSize ) );
@@ -3885,30 +3830,10 @@ namespace SF
 
 				protocolCheck(output->Write(InTransactionID));
 				protocolCheck(output->Write(InResult));
-				protocolCheck(output->Write(InLevel));
-				protocolCheck(output->Write(InExp));
-				protocolCheck(output->Write(InGameMoney));
-				protocolCheck(output->Write(InGem));
-				protocolCheck(output->Write(InStamina));
-				protocolCheck(output->Write(InLastUpdateTime));
-				protocolCheck(output->Write(InTotalPlayed));
-				protocolCheck(output->Write(InWinPlaySC));
-				protocolCheck(output->Write(InWinPlaySM));
-				protocolCheck(output->Write(InWinPlaySS));
-				protocolCheck(output->Write(InLosePlaySC));
-				protocolCheck(output->Write(InLosePlaySM));
-				protocolCheck(output->Write(InLosePlaySS));
-				protocolCheck(output->Write(InWinPlayNC));
-				protocolCheck(output->Write(InWinPlayNM));
-				protocolCheck(output->Write(InWinPlayNS));
-				protocolCheck(output->Write(InLosePlayNC));
-				protocolCheck(output->Write(InLosePlayNM));
-				protocolCheck(output->Write(InLosePlayNS));
-				protocolCheck(output->Write(InWeeklyWin));
-				protocolCheck(output->Write(InWeeklyLose));
+				protocolCheck(output->Write(InAttributes));
 
 				return hr;
-			}; // MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const int16_t &InLevel, const int64_t &InExp, const int64_t &InGameMoney, const int64_t &InGem, const int16_t &InStamina, const uint32_t &InLastUpdateTime, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
+			}; // MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
 
 
 
@@ -3916,8 +3841,8 @@ namespace SF
 			{
  				GetUserGamePlayerInfoRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetUserGamePlayerInfo:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Level:{4}, Exp:{5}, GameMoney:{6}, Gem:{7}, Stamina:{8}, LastUpdateTime:{9}, TotalPlayed:{10}, WinPlaySC:{11}, WinPlaySM:{12}, WinPlaySS:{13}, LosePlaySC:{14}, LosePlaySM:{15}, LosePlaySS:{16}, WinPlayNC:{17}, WinPlayNM:{18}, WinPlayNS:{19}, LosePlayNC:{20}, LosePlayNM:{21}, LosePlayNS:{22}, WeeklyWin:{23}, WeeklyLose:{24}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetLevel(), parser.GetExp(), parser.GetGameMoney(), parser.GetGem(), parser.GetStamina(), parser.GetLastUpdateTime(), parser.GetTotalPlayed(), parser.GetWinPlaySC(), parser.GetWinPlaySM(), parser.GetWinPlaySS(), parser.GetLosePlaySC(), parser.GetLosePlaySM(), parser.GetLosePlaySS(), parser.GetWinPlayNC(), parser.GetWinPlayNM(), parser.GetWinPlayNS(), parser.GetLosePlayNC(), parser.GetLosePlayNM(), parser.GetLosePlayNS(), parser.GetWeeklyWin(), parser.GetWeeklyLose()); 
+				SFLog(Net, Debug1, "GetUserGamePlayerInfo:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Attributes:{4}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetAttributes()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetUserGamePlayerInfoRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -4029,22 +3954,12 @@ namespace SF
 				protocolCheck(input->Read(m_TransactionID));
 				protocolCheck(input->Read(m_Result));
 				protocolCheck(input->Read(m_PlayerID));
-				protocolCheck(input->Read(m_Level));
-				protocolCheck(input->Read(m_TotalPlayed));
-				protocolCheck(input->Read(m_WinPlaySC));
-				protocolCheck(input->Read(m_WinPlaySM));
-				protocolCheck(input->Read(m_WinPlaySS));
-				protocolCheck(input->Read(m_LosePlaySC));
-				protocolCheck(input->Read(m_LosePlaySM));
-				protocolCheck(input->Read(m_LosePlaySS));
-				protocolCheck(input->Read(m_WinPlayNC));
-				protocolCheck(input->Read(m_WinPlayNM));
-				protocolCheck(input->Read(m_WinPlayNS));
-				protocolCheck(input->Read(m_LosePlayNC));
-				protocolCheck(input->Read(m_LosePlayNM));
-				protocolCheck(input->Read(m_LosePlayNS));
-				protocolCheck(input->Read(m_WeeklyWin));
-				protocolCheck(input->Read(m_WeeklyLose));
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* AttributesPtr = nullptr;
+				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
+				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
+				InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
+				protocolCheck(Attributes_ReadStream.ToInputStream()->Read(m_Attributes));
 
 				return hr;
 
@@ -4061,22 +3976,7 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-				variableBuilder.SetVariable("Level", parser.GetLevel());
-				variableBuilder.SetVariable("TotalPlayed", parser.GetTotalPlayed());
-				variableBuilder.SetVariable("WinPlaySC", parser.GetWinPlaySC());
-				variableBuilder.SetVariable("WinPlaySM", parser.GetWinPlaySM());
-				variableBuilder.SetVariable("WinPlaySS", parser.GetWinPlaySS());
-				variableBuilder.SetVariable("LosePlaySC", parser.GetLosePlaySC());
-				variableBuilder.SetVariable("LosePlaySM", parser.GetLosePlaySM());
-				variableBuilder.SetVariable("LosePlaySS", parser.GetLosePlaySS());
-				variableBuilder.SetVariable("WinPlayNC", parser.GetWinPlayNC());
-				variableBuilder.SetVariable("WinPlayNM", parser.GetWinPlayNM());
-				variableBuilder.SetVariable("WinPlayNS", parser.GetWinPlayNS());
-				variableBuilder.SetVariable("LosePlayNC", parser.GetLosePlayNC());
-				variableBuilder.SetVariable("LosePlayNM", parser.GetLosePlayNM());
-				variableBuilder.SetVariable("LosePlayNS", parser.GetLosePlayNS());
-				variableBuilder.SetVariable("WeeklyWin", parser.GetWeeklyWin());
-				variableBuilder.SetVariable("WeeklyLose", parser.GetWeeklyLose());
+				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -4093,7 +3993,7 @@ namespace SF
 
 			}; // Result GetGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const int16_t &InLevel, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
+			MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes )
 			{
  				MessageData *pNewMsg = nullptr;
 				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
@@ -4112,22 +4012,7 @@ namespace SF
 					, SerializedSizeOf(InTransactionID)
 					, SerializedSizeOf(InResult)
 					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InLevel)
-					, SerializedSizeOf(InTotalPlayed)
-					, SerializedSizeOf(InWinPlaySC)
-					, SerializedSizeOf(InWinPlaySM)
-					, SerializedSizeOf(InWinPlaySS)
-					, SerializedSizeOf(InLosePlaySC)
-					, SerializedSizeOf(InLosePlaySM)
-					, SerializedSizeOf(InLosePlaySS)
-					, SerializedSizeOf(InWinPlayNC)
-					, SerializedSizeOf(InWinPlayNM)
-					, SerializedSizeOf(InWinPlayNS)
-					, SerializedSizeOf(InLosePlayNC)
-					, SerializedSizeOf(InLosePlayNM)
-					, SerializedSizeOf(InLosePlayNS)
-					, SerializedSizeOf(InWeeklyWin)
-					, SerializedSizeOf(InWeeklyLose)
+					, SerializedSizeOf(InAttributes)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetGamePlayerInfoRes::MID, __uiMessageSize ) );
@@ -4139,25 +4024,10 @@ namespace SF
 				protocolCheck(output->Write(InTransactionID));
 				protocolCheck(output->Write(InResult));
 				protocolCheck(output->Write(InPlayerID));
-				protocolCheck(output->Write(InLevel));
-				protocolCheck(output->Write(InTotalPlayed));
-				protocolCheck(output->Write(InWinPlaySC));
-				protocolCheck(output->Write(InWinPlaySM));
-				protocolCheck(output->Write(InWinPlaySS));
-				protocolCheck(output->Write(InLosePlaySC));
-				protocolCheck(output->Write(InLosePlaySM));
-				protocolCheck(output->Write(InLosePlaySS));
-				protocolCheck(output->Write(InWinPlayNC));
-				protocolCheck(output->Write(InWinPlayNM));
-				protocolCheck(output->Write(InWinPlayNS));
-				protocolCheck(output->Write(InLosePlayNC));
-				protocolCheck(output->Write(InLosePlayNM));
-				protocolCheck(output->Write(InLosePlayNS));
-				protocolCheck(output->Write(InWeeklyWin));
-				protocolCheck(output->Write(InWeeklyLose));
+				protocolCheck(output->Write(InAttributes));
 
 				return hr;
-			}; // MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const int16_t &InLevel, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose )
+			}; // MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes )
 
 
 
@@ -4165,8 +4035,8 @@ namespace SF
 			{
  				GetGamePlayerInfoRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetGamePlayerInfo:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayerID:{4}, Level:{5}, TotalPlayed:{6}, WinPlaySC:{7}, WinPlaySM:{8}, WinPlaySS:{9}, LosePlaySC:{10}, LosePlaySM:{11}, LosePlaySS:{12}, WinPlayNC:{13}, WinPlayNM:{14}, WinPlayNS:{15}, LosePlayNC:{16}, LosePlayNM:{17}, LosePlayNS:{18}, WeeklyWin:{19}, WeeklyLose:{20}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerID(), parser.GetLevel(), parser.GetTotalPlayed(), parser.GetWinPlaySC(), parser.GetWinPlaySM(), parser.GetWinPlaySS(), parser.GetLosePlaySC(), parser.GetLosePlaySM(), parser.GetLosePlaySS(), parser.GetWinPlayNC(), parser.GetWinPlayNM(), parser.GetWinPlayNS(), parser.GetLosePlayNC(), parser.GetLosePlayNM(), parser.GetLosePlayNS(), parser.GetWeeklyWin(), parser.GetWeeklyLose()); 
+				SFLog(Net, Debug1, "GetGamePlayerInfo:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayerID:{4}, Attributes:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerID(), parser.GetAttributes()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetGamePlayerInfoRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -12639,7 +12509,12 @@ namespace SF
 				protocolCheck(input->Read(m_TransactionID));
 				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_CharacterName, ArrayLen));
-				protocolCheck(input->ReadLink(m_Attributes));
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* AttributesPtr = nullptr;
+				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
+				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
+				InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
+				protocolCheck(Attributes_ReadStream.ToInputStream()->Read(m_Attributes));
 
 				return hr;
 
@@ -12655,7 +12530,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("CharacterName", parser.GetCharacterName());
-				variableBuilder.SetVariable("Attributes", parser.GetAttributes());
+				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -12672,7 +12547,7 @@ namespace SF
 
 			}; // Result CreateCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<NamedVariable>& InAttributes )
+			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes )
 			{
  				MessageData *pNewMsg = nullptr;
 				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
@@ -12687,7 +12562,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInAttributes = (uint16_t)InAttributes.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					, SerializedSizeOf(InTransactionID)
 					, SerializedSizeOf(InCharacterName)
@@ -12705,7 +12579,7 @@ namespace SF
 				protocolCheck(output->Write(InAttributes));
 
 				return hr;
-			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<NamedVariable>& InAttributes )
+			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes )
 
 
 
@@ -12713,7 +12587,7 @@ namespace SF
 			{
  				CreateCharacterCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateCharacter:{0}:{1} , TransactionID:{2}, CharacterName:{3,60}, Attributes:{4,30}",
+				SFLog(Net, Debug1, "CreateCharacter:{0}:{1} , TransactionID:{2}, CharacterName:{3,60}, Attributes:{4}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetCharacterName(), parser.GetAttributes()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -13290,7 +13164,12 @@ namespace SF
 
 				protocolCheck(input->Read(m_TransactionID));
 				protocolCheck(input->Read(m_Result));
-				protocolCheck(input->ReadLink(m_Attributes));
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* AttributesPtr = nullptr;
+				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
+				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
+				InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
+				protocolCheck(Attributes_ReadStream.ToInputStream()->Read(m_Attributes));
 
 				return hr;
 
@@ -13306,7 +13185,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("Attributes", parser.GetAttributes());
+				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -13323,7 +13202,7 @@ namespace SF
 
 			}; // Result GetCharacterDataRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<NamedVariable>& InAttributes )
+			MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
 			{
  				MessageData *pNewMsg = nullptr;
 				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
@@ -13338,7 +13217,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInAttributes = (uint16_t)InAttributes.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					, SerializedSizeOf(InTransactionID)
 					, SerializedSizeOf(InResult)
@@ -13356,7 +13234,7 @@ namespace SF
 				protocolCheck(output->Write(InAttributes));
 
 				return hr;
-			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<NamedVariable>& InAttributes )
+			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
 
 
 
@@ -13364,7 +13242,7 @@ namespace SF
 			{
  				GetCharacterDataRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetCharacterData:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Attributes:{4,30}",
+				SFLog(Net, Debug1, "GetCharacterData:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Attributes:{4}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetAttributes()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)

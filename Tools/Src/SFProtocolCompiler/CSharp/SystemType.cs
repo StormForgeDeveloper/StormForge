@@ -243,8 +243,8 @@ namespace SF
             new TypeMap( ParameterType.LocalUID, 8, typeof(LocalUID), cppTypeName:"uint64_t" ),
 
             new TypeMap( ParameterType.Variable, -1, typeof(Variable), cppTypeName:"Variable" ),
-            new TypeMap( ParameterType.NamedVariable, -1, typeof(NamedVariable), cppTypeName:"NamedVariable" ),
-            new TypeMap( ParameterType.VariableTable, -1, typeof(NamedVariable[]), cppTypeName:"VariableTable" ),
+            //new TypeMap( ParameterType.NamedVariable, -1, typeof(IntPtr), cppTypeName:"NamedVariable" ),
+            new TypeMap( ParameterType.VariableTable, -1, typeof(VariableTable), cppTypeName:"VariableTable" ),
 
             new TypeMap( ParameterType.Vector2, 8, typeof(Vector2) ),
             new TypeMap( ParameterType.Vector3, 12, typeof(Vector3) ),

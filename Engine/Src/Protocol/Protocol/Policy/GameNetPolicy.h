@@ -130,7 +130,7 @@ namespace SF
 			// Cmd: Party chatting
 			Result ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage );
 			// Cmd: Create character
-			Result CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const Array<NamedVariable>& InAttributes );
+			Result CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes );
 			// Cmd: Remove character
 			Result RemoveCharacterCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID );
 			// Cmd: Get character list
@@ -201,9 +201,9 @@ namespace SF
 			// Cmd: Get Ranking lise
 			Result GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 			// Cmd: Game user game play information
-			Result GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const int16_t &InLevel, const int64_t &InExp, const int64_t &InGameMoney, const int64_t &InGem, const int16_t &InStamina, const uint32_t &InLastUpdateTime, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose );
+			Result GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes );
 			// Cmd: Game game play information
-			Result GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const int16_t &InLevel, const int32_t &InTotalPlayed, const int32_t &InWinPlaySC, const int32_t &InWinPlaySM, const int32_t &InWinPlaySS, const int32_t &InLosePlaySC, const int32_t &InLosePlaySM, const int32_t &InLosePlaySS, const int32_t &InWinPlayNC, const int32_t &InWinPlayNM, const int32_t &InWinPlayNS, const int32_t &InLosePlayNC, const int32_t &InLosePlayNM, const int32_t &InLosePlayNS, const int32_t &InWeeklyWin, const int32_t &InWeeklyLose );
+			Result GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes );
 			// S2C: Player level up event
 			Result LevelUpS2CEvt( const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel );
 			// Cmd: Change NickName
@@ -331,7 +331,7 @@ namespace SF
 			// Cmd: Get character list
 			Result GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<int32_t>& InCharacterIDs );
 			// Cmd: 
-			Result GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const Array<NamedVariable>& InAttributes );
+			Result GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes );
 			// Cmd: Give my stamina to other player
 			Result GiveStaminaRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp );
 			// Cmd: For debug, Change configue preset

@@ -14,6 +14,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
+#include "String/SFStringCrc32.h"
 #include "String/SFStringCrc64.h"
 #include "String/SFString.h"
 #include "Variable/SFVariable.h"
@@ -33,8 +34,8 @@ namespace SF {
 	{
 	public:
 
-		using KeyType = StringCrc64;
-		using Iterator = SortedArray<StringCrc64, Variable*, true, false>::Iterator;
+		using KeyType = StringCrc32;
+		using Iterator = SortedArray<KeyType, Variable*, true, false>::Iterator;
 
 	private:
 
@@ -60,19 +61,19 @@ namespace SF {
 		const Iterator end() const { return m_VairableTable.end(); }
 
 		// Set variable, contents will be copied
-		virtual Result SetVariable(StringCrc64 name, const Variable& variable);
+		virtual Result SetVariable(KeyType name, const Variable& variable);
 
 		// Set variable, it will take over the pointer owner ship
-		virtual Result SetVariable(StringCrc64 name, std::unique_ptr<Variable>& variable);
-		virtual Result SetVariable(StringCrc64 name, Variable*& variable);
+		virtual Result SetVariable(KeyType name, std::unique_ptr<Variable>& variable);
+		virtual Result SetVariable(KeyType name, Variable*& variable);
 
 		// Get variable
-		Variable* GetVariable(StringCrc64 name);
-		const Variable* GetVariable(StringCrc64 name) const;
+		Variable* GetVariable(KeyType name);
+		const Variable* GetVariable(KeyType name) const;
 
 		// Get/Set values
 		template<class ValueType>
-		Result SetValue(StringCrc64 name, ValueType value)
+		Result SetValue(KeyType name, ValueType value)
 		{
 			auto boxedValue = Boxing(value);
 			if (boxedValue.GetVariable() == nullptr)
@@ -82,7 +83,7 @@ namespace SF {
 		}
 
 		template<class ValueType>
-		ValueType GetValue(StringCrc64 name)
+		ValueType GetValue(KeyType name)
 		{
 			Variable* pVariable = GetVariable(name);
 			if (pVariable == nullptr)
@@ -118,6 +119,10 @@ namespace SF {
 
 	class VariableTableMT
 	{
+	public:
+
+		using KeyType = StringCrc32;
+
 	private:
 
 		// TODO: memory optimize
@@ -126,7 +131,7 @@ namespace SF {
 		IHeap& m_Heap;
 
 		// Variable 
-		DualSortedMap<StringCrc64, Variable*> m_VairableTable;
+		DualSortedMap<KeyType, Variable*> m_VairableTable;
 
 	public:
 
@@ -136,11 +141,11 @@ namespace SF {
 
 		IHeap& GetHeap() { return m_Heap; }
 
-		virtual Result SetVariable(StringCrc64 name, const Variable& variable);
+		virtual Result SetVariable(KeyType name, const Variable& variable);
 
 
 		template<class ValueType>
-		Result SetValue(StringCrc64 name, ValueType value)
+		Result SetValue(KeyType name, ValueType value)
 		{
 			auto boxedValue = Boxing(value);
 			if (boxedValue.GetVariable() == nullptr)
@@ -150,10 +155,10 @@ namespace SF {
 		}
 
 
-		Variable* GetVariable(StringCrc64 name);
+		Variable* GetVariable(KeyType name);
 
 		template<class ValueType>
-		ValueType GetValue(StringCrc64 name)
+		ValueType GetValue(KeyType name)
 		{
 			Variable* pVariable = GetVariable(name);
 			if (pVariable == nullptr)

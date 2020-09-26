@@ -118,7 +118,6 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginDebugPrintALLRankingCmd( intptr_t InNative
 
 
 
-
 // Cmd: Login request
 SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID )
 {

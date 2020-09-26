@@ -147,6 +147,7 @@ extern "C"
 		static jclass jcls = env->FindClass("java/com/sf/SFMessage");
 		static jmethodID constructorID = env->GetMethodID(jcls, "<init>", "(I)V");
 		static jmethodID setValueID = env->GetMethodID(jcls, "SetValue", "(Ljava/lang/String;Ljava/lang/Object)V");
+		static jmethodID setVariableSizeValueID = env->GetMethodID(jcls, "SetValue", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/Object)V");
 		//static jmethodID getValuesID = env->GetMethodID(jcls, "GetValues", "()Ljava/lang/Object");
 		//jobject jobj = env->AllocObject(jcls);
 
@@ -157,7 +158,7 @@ extern "C"
 		jobject jobj = env->NewObject(jcls, constructorID, pIMsg->GetMessageHeader()->msgID.ID);
 
 		// Fill parameters
-		VariableMapBuilderJObject builder(env, jobj, setValueID);
+		VariableMapBuilderJObject builder(env, jobj, setValueID, setVariableSizeValueID);
 		if (!SF::Protocol::ParseMessage(pIMsg, builder))
 			return nullptr;
 

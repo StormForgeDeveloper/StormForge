@@ -346,8 +346,6 @@ namespace SF {
 	{
 		StringCrc32 NameCrc;
 		StringCrc32 TypeCrc;
-		// TypeCrc will decide minimum size. if data type can bigger than 64bit, Data holds 32bit offset to the data(msb) and 32bit size of the data(lsb)
-		uint64_t Data;
 
 		static size_t SerializedSizeByTypeName(StringCrc32 TypeCrc);
 

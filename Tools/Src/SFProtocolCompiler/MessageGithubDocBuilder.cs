@@ -16,7 +16,7 @@ using SF.Tool;
 
 namespace ProtocolCompiler
 {
-    class MessageGithubDocBuilder : Builder
+    class MessageGithubDocBuilder : CppBuilder
     {
         // constructor
         public MessageGithubDocBuilder(string strBasePath)

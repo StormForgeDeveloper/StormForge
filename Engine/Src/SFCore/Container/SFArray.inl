@@ -310,7 +310,7 @@ namespace SF {
 
 		// Element access operator
 		template< class DataType >
-		DataType& Array<DataType>::operator [](size_t iElement) const
+		const DataType& Array<DataType>::operator [](size_t iElement) const
 		{
 			// This is abnormal operation
 			AssertRel(iElement < m_Size);

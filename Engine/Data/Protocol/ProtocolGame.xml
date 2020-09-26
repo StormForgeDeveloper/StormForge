@@ -201,27 +201,7 @@
 			<Cmd>
 			</Cmd>
 			<Res>
-				<Params Type="int16" Name="Level"/>
-				<Params Type="int64" Name="Exp"/>
-				<Params Type="int64" Name="GameMoney"/>
-				<Params Type="int64" Name="Gem"/>
-				<Params Type="int16" Name="Stamina"/>
-				<Params Type="uint32" Name="LastUpdateTime"/>
-				<Params Type="int32" Name="TotalPlayed"/>
-				<Params Type="int32" Name="WinPlaySC"/>
-				<Params Type="int32" Name="WinPlaySM"/>
-				<Params Type="int32" Name="WinPlaySS"/>
-				<Params Type="int32" Name="LosePlaySC"/>
-				<Params Type="int32" Name="LosePlaySM"/>
-				<Params Type="int32" Name="LosePlaySS"/>
-				<Params Type="int32" Name="WinPlayNC"/>
-				<Params Type="int32" Name="WinPlayNM"/>
-				<Params Type="int32" Name="WinPlayNS"/>
-				<Params Type="int32" Name="LosePlayNC"/>
-				<Params Type="int32" Name="LosePlayNM"/>
-				<Params Type="int32" Name="LosePlayNS"/>
-				<Params Type="int32" Name="WeeklyWin"/>
-				<Params Type="int32" Name="WeeklyLose"/>
+				<Params Type="VariableTable" Name="Attributes"/>
 			</Res>
 		</Command>
 
@@ -231,22 +211,7 @@
 			</Cmd>
 			<Res>
 				<Params Type="AccountID" Name="PlayerID" Desc="Game player ID"/>
-				<Params Type="int16" Name="Level" Desc="Player lever"/>
-				<Params Type="int32" Name="TotalPlayed" Desc="Total play time"/>
-				<Params Type="int32" Name="WinPlaySC" Desc=""/>
-				<Params Type="int32" Name="WinPlaySM"/>
-				<Params Type="int32" Name="WinPlaySS"/>
-				<Params Type="int32" Name="LosePlaySC"/>
-				<Params Type="int32" Name="LosePlaySM"/>
-				<Params Type="int32" Name="LosePlaySS"/>
-				<Params Type="int32" Name="WinPlayNC"/>
-				<Params Type="int32" Name="WinPlayNM"/>
-				<Params Type="int32" Name="WinPlayNS"/>
-				<Params Type="int32" Name="LosePlayNC"/>
-				<Params Type="int32" Name="LosePlayNM"/>
-				<Params Type="int32" Name="LosePlayNS"/>
-				<Params Type="int32" Name="WeeklyWin"/>
-				<Params Type="int32" Name="WeeklyLose"/>
+				<Params Type="VariableTable" Name="Attributes"/>
 			</Res>
 		</Command>
 
@@ -757,7 +722,7 @@
 	    <Command Name="CreateCharacter" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create character">
 		    <Cmd>
 			    <Params Type="String" Name="CharacterName"/>
-			    <Params Type="NamedVariable" IsArray="true" Name="Attributes"/>
+			    <Params Type="VariableTable" Name="Attributes"/>
 		    </Cmd>
 		    <Res>
 			    <Params Type="int32" Name="CharacterID" Desc="Created character ID"/>
@@ -786,7 +751,7 @@
 				<Params Type="String" IsArray="true" Name="AttributeNames" Desc="attribute names to query"/>
 			</Cmd>
 			<Res>
-				<Params Type="NamedVariable" IsArray="true" Name="Attributes" Desc="Character attributes"/>
+				<Params Type="VariableTable" Name="Attributes" Desc="Character attributes"/>
 			</Res>
 	    </Command>
 

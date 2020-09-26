@@ -127,21 +127,68 @@ namespace ProtocolCompiler
                 Name = "NativeConnectionHandle",
                 Type = ParameterType.intptr,
             });
-            return ParamInString("", newParameters.ToArray());
+            return ParamInStringNative("", newParameters.ToArray());
         }
-        string ParamInListStringNative(TypeUsage from, Parameter[] parameter)
+
+        string CallNativeParamterString(Parameter[] parameter)
         {
             if(parameter == null || parameter.Length == 0)
             {
                 return "m_Connection.NativeHandle";
             }
             else
-                return "m_Connection.NativeHandle" + ParamInListString(from, "", parameter);
+                return "m_Connection.NativeHandle" + CallNativeParameterString(parameter);
         }
 
 
         // Builder parameter string
-        public string ParamInString( string strPrefix, Parameter[] parameter)
+        public string ParamInString(string strPrefix, Parameter[] parameter)
+        {
+            string strParams = "", strComma = "";
+
+            if (parameter == null)
+                return strParams;
+
+            foreach (Parameter param in parameter)
+            {
+                strParams += strComma;
+                if (strComma.Length == 0)
+                    strComma = ", ";
+
+                var typeName = ToTargetTypeName(param);
+                Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                bool bIsStruct = IsStruct(param.Type);
+                bool IsArray = param.IsArray;
+                if (csharpType.IsArray)
+                {
+                    IsArray = true;
+                    if (ParameterMode == TypeUsage.CPPForSharp)
+                        typeName = csharpType.GetElementType().Name + "*";
+                }
+
+                if (IsStrType(param)) // string type
+                {
+                    strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
+                }
+                else if (IsArray) // array
+                {
+                    if (ParameterMode == TypeUsage.CSharpNative || ParameterMode == TypeUsage.CPPForSharp)
+                    {
+                        strParams += string.Format("{0} {1}_sizeOf{2},", ToTargetTypeName(m_ArraySizeParam), strPrefix, InParamName(param.Name));
+                    }
+                    strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
+                }
+                else // generic type
+                {
+                    strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
+                }
+            }
+
+            return strParams;
+        }
+
+        // Builder parameter string
+        public string ParamInStringNative( string strPrefix, Parameter[] parameter)
         {
             string strParams = "", strComma = "";
 
@@ -158,12 +205,6 @@ namespace ProtocolCompiler
                 Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
                 bool bIsStruct = IsStruct(param.Type);
                 bool IsArray = param.IsArray;
-                if(csharpType.IsArray)
-                {
-                    IsArray = true;
-                    if (ParameterMode == TypeUsage.CPPForSharp)
-                        typeName = csharpType.GetElementType().Name + "*";
-                }
 
                 if (IsStrType(param)) // string type
                 {
@@ -171,7 +212,20 @@ namespace ProtocolCompiler
                 }
                 else if (IsArray) // array
                 {
-                    if(ParameterMode == TypeUsage.CSharpNative || ParameterMode == TypeUsage.CPPForSharp)
+                    if (ParameterMode == TypeUsage.CSharpNative || ParameterMode == TypeUsage.CPPForSharp)
+                    {
+                        strParams += string.Format("{0} {1}_sizeOf{2},", ToTargetTypeName(m_ArraySizeParam), strPrefix, InParamName(param.Name));
+                    }
+                    strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
+                }
+                else if (IsVariableSizeType(param.Type))
+                {
+                    if (ParameterMode == TypeUsage.CPPForSharp)
+                        typeName = "uint8_t*";
+                    else
+                        typeName = "IntPtr";
+
+                    if (ParameterMode == TypeUsage.CSharpNative || ParameterMode == TypeUsage.CPPForSharp)
                     {
                         strParams += string.Format("{0} {1}_sizeOf{2},", ToTargetTypeName(m_ArraySizeParam), strPrefix, InParamName(param.Name));
                     }
@@ -186,12 +240,64 @@ namespace ProtocolCompiler
             return strParams;
         }
 
-        // Builder parameter string
-        public string ParamInListString(TypeUsage from, string strPrefix, Parameter[] parameter)
+        public void PrepareCallNative(Parameter[] parameter)
         {
+            string strPrefix = "";
+
+            if (parameter == null)
+                return ;
+
+
+            //strParams.AppendFormat("// Prepare local variables\n");
+            foreach (Parameter param in parameter)
+            {
+                Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
+
+                bool IsArray = param.IsArray | csharpType.IsArray;
+
+                if (IsStrType(param)) // string type
+                {
+                    // Nothing for now
+                }
+                else if (IsArray) // array
+                {
+                    // Nothing for now
+                }
+                else if (IsVariableSizeType(param.Type))
+                {
+                    MatchIndent(); OutStream.WriteLine("var {0}{1}_ = {0}{1}.ToByteArray();", strPrefix, InParamName(param.Name));
+                }
+            }
+
+            //strParams.AppendFormat("// Prepare pinned variables\n");
+            foreach (Parameter param in parameter)
+            {
+                Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
+
+                bool IsArray = param.IsArray | csharpType.IsArray;
+
+                if (IsStrType(param)) // string type
+                {
+                    // Nothing for now
+                }
+                else if (IsArray) // array
+                {
+                    // Nothing for now
+                }
+                else if (IsVariableSizeType(param.Type))
+                {
+                    MatchIndent(); OutStream.WriteLine("using (var {0}{1}_PinnedPtr_ = new PinnedByteBuffer({0}{1}_))", strPrefix, InParamName(param.Name));
+                }
+            }
+        }
+
+        public string CallNativeParameterString(Parameter[] parameter)
+        {
+            TypeUsage from = TypeUsage.CSharp;
             TypeUsage to = ParameterMode;
             StringBuilder strParams = new StringBuilder(512);
             string strComma = ",";
+            string strPrefix = "";
 
             if (parameter == null)
                 return strParams.ToString();
@@ -212,38 +318,88 @@ namespace ProtocolCompiler
 
                 if (IsStrType(param)) // string type
                 {
-                    if (from == TypeUsage.CSharp)
-                        strParams.AppendFormat("System.Text.Encoding.UTF8.GetBytes({0}{1} + \"\\0\")", strPrefix, InParamName(param.Name));
-                    else
-                        strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
+                    strParams.AppendFormat("System.Text.Encoding.UTF8.GetBytes({0}{1} + \"\\0\")", strPrefix, InParamName(param.Name));
                 }
                 else if (IsArray) // array
                 {
-                    if (from == TypeUsage.CPPForSharp)
-                    {
-                        strParams.AppendFormat("SF::ArrayView<{2}>({0}_sizeOf{1}, {0}_sizeOf{1}, const_cast<{3}>({0}{1}))", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
-                    }
-                    else
-                    {
-                        if (from == TypeUsage.CSharp)
-                        {
-                            strParams.AppendFormat("(ushort){0}{1}.Length, ", strPrefix, InParamName(param.Name));
-                        }
+                    strParams.AppendFormat("(ushort){0}{1}.Length, ", strPrefix, InParamName(param.Name));
 
-                        if (from == TypeUsage.CSharp && csharpType.IsEnum)
-                            strParams.AppendFormat("GameTypes.ToIntArray({0}{1})", strPrefix, InParamName(param.Name));
-                        else
-                            strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
-                    }
+                    if (csharpType.IsEnum)
+                        strParams.AppendFormat("GameTypes.ToIntArray({0}{1})", strPrefix, InParamName(param.Name));
+                    else
+                        strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
+                }
+                else if (IsVariableSizeType(param.Type))
+                {
+                    strParams.AppendFormat("(ushort){0}{1}_.Length, ", strPrefix, InParamName(param.Name));
+                    strParams.AppendFormat("{0}{1}_PinnedPtr_.Ptr", strPrefix, InParamName(param.Name));
                 }
                 else // generic type
                 {
                     if (bIsStruct)
                     {
-                        if(ParameterMode == TypeUsage.CSharp || ParameterMode == TypeUsage.CSharpNative)
+                        if (ParameterMode == TypeUsage.CSharp || ParameterMode == TypeUsage.CSharpNative)
                             strParams.AppendFormat("ref {0}{1}", strPrefix, InParamName(param.Name));
                         else
                             strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
+                    }
+                    else
+                    {
+                        if (paramTypeEquality)
+                        {
+                            strParams.AppendFormat(" {0}{1}", strPrefix, InParamName(param.Name));
+                        }
+                        else
+                        {
+                            strParams.AppendFormat("({2}) {0}{1}", strPrefix, InParamName(param.Name), paramTypeTo);
+                        }
+                    }
+                }
+            }
+
+            return strParams.ToString();
+        }
+
+
+        // Builder parameter string
+        public string CallCreateNativeParameterString(TypeUsage from, string strPrefix, Parameter[] parameter)
+        {
+            TypeUsage to = ParameterMode;
+            StringBuilder strParams = new StringBuilder(512);
+            string strComma = ",";
+
+            if (parameter == null)
+                return strParams.ToString();
+
+            foreach (Parameter param in parameter)
+            {
+                strParams.Append(strComma);
+
+                string paramElementTypeName = SystemTypeInfo.ElementTypeNameFor(from, param);
+                string paramTypeNameOnly = SystemTypeInfo.TypeNameOnlyFor(from, param);
+                string paramTypeFrom = SystemTypeInfo.TypeNameFor(from, param);
+                string paramTypeTo = SystemTypeInfo.TypeNameFor(to, param);
+                bool paramTypeEquality = paramTypeFrom == paramTypeTo;
+
+                bool bIsStruct = IsStruct(param.Type);
+
+                if (IsStrType(param)) // string type
+                {
+                    strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
+                }
+                else if (param.IsArray) // array
+                {
+                    strParams.AppendFormat("SF::ArrayView<{2}>({0}_sizeOf{1}, {0}_sizeOf{1}, const_cast<{3}>({0}{1}))", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
+                }
+                else if (IsVariableSizeType(param.Type))
+                {
+                    strParams.AppendFormat("SF::ArrayView<uint8_t>({0}_sizeOf{1}, {0}_sizeOf{1}, {0}{1})", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
+                }
+                else // generic type
+                {
+                    if (bIsStruct)
+                    {
+                        strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
                     }
                     else
                     {
@@ -306,7 +462,14 @@ namespace ProtocolCompiler
                 false);
 
             ParameterMode = TypeUsage.CSharpNative;
-            MatchIndent(); OutStream.WriteLine("var result = {0}({1});", NativeFuncName(baseMsg, msgTypeName), ParamInListStringNative(TypeUsage.CSharp,parameters));
+
+            MatchIndent(); OutStream.WriteLine("int result;");
+
+            PrepareCallNative(parameters);
+
+            MatchIndent(); OutStream.WriteLine("{");
+            MatchIndent(); OutStream.WriteLine("result = {0}({1});", NativeFuncName(baseMsg, msgTypeName), CallNativeParamterString(parameters));
+            MatchIndent(); OutStream.WriteLine("}");
             MatchIndent(); OutStream.WriteLine("m_Connection.MessageRouter.HandleSentMessage(result, MessageID{0}.{1}{2});", Group.Name, baseMsg.Name, msgTypeName);
             MatchIndent(); OutStream.WriteLine("return result;");
 
@@ -333,7 +496,7 @@ namespace ProtocolCompiler
             ParameterMode = TypeUsage.CPP;
             string createParamString = "pConnection->GetHeap()";
             if (parameters.Length > 0)
-                createParamString += ParamInListString(TypeUsage.CPPForSharp, "", parameters);
+                createParamString += CallCreateNativeParameterString(TypeUsage.CPPForSharp, "", parameters);
 
 
             ParameterMode = TypeUsage.CPPForSharp;
@@ -529,7 +692,6 @@ namespace ProtocolCompiler
                 }
             }
 
-            NewLine();
             NewLine();
             NewLine();
 

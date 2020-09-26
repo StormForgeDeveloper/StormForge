@@ -16,7 +16,7 @@ using SF.Tool;
 
 namespace ProtocolCompiler
 {
-    class MessageClassBuilder : Builder
+    class MessageClassBuilder : CppBuilder
     {
         // Msg type string
         static string[] MsgTypeString = new string[] {
@@ -299,32 +299,22 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
-                    switch (param.Type)
+                    if (IsStrType(param))
                     {
-                        case ParameterType.String:
-                            MatchIndent(); OutStream.WriteLine(
-                                string.Format("const {0} m_{1};", StrTypeString(param), param.Name));
-                            break;
-                        default:
-                            if (param.IsArray)
-                            {
-                                //if (IsVariableSizeType(param.Type))
-                                //{
-                                //    MatchIndent(); OutStream.WriteLine(
-                                //        string.Format("DynamicArray<{0}*> m_{1};", ToTargetTypeName(param.Type), param.Name));
-                                //}
-                                //else
-                                {
-                                    MatchIndent(); OutStream.WriteLine(
-                                        string.Format("ArrayView<{0}> m_{1};", ToTargetTypeName(param.Type), param.Name));
-                                }
-                            }
-                            else
-                            {
-                                MatchIndent(); OutStream.WriteLine(
-                                    string.Format("{0} m_{1};", ToTargetTypeName(param.Type), param.Name));
-                            }
-                            break;
+                        MatchIndent(); OutStream.WriteLine("const {0} m_{1};", StrTypeString(param), param.Name);
+                    }
+                    else if (param.IsArray)
+                    {
+                        MatchIndent(); OutStream.WriteLine("ArrayView<{0}> m_{1};", ToTargetTypeName(param.Type), param.Name);
+                    }
+                    else if (IsVariableSizeType(param.Type))
+                    {
+                        MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> m_{1}Raw;", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("{0} m_{1};", ToTargetTypeName(param.Type), param.Name);
+                    }
+                    else
+                    {
+                        MatchIndent(); OutStream.WriteLine("{0} m_{1};", ToTargetTypeName(param.Type), param.Name);
                     }
 
                 }
@@ -353,28 +343,22 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
-                    switch (param.Type)
+                    if (IsStrType(param))
                     {
-                    case ParameterType.String:
-                        MatchIndent(); OutStream.WriteLine(
-                            string.Format("const {0} Get{1}() const\t{{ return m_{1}; }};", StrTypeString(param), param.Name));
-                        break;
-                    default:
-                        if (param.IsArray)
-                        {
-                            MatchIndent(); OutStream.WriteLine(
-                                string.Format("const Array<{0}>& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name));
-                            //MatchIndent(); OutStream.WriteLine(
-                            //    string.Format("const {0}& Get{1}() const\t{{ return m_{1}; }};", ArrayLenType, ArrayLenName(param.Name)));
-                            //MatchIndent(); OutStream.WriteLine(
-                            //    string.Format("const {0}* Get{1}() const\t{{ return m_{1}; }};", param.Type.ToString(), param.Name));
-                        }
-                        else
-                        {
-                            MatchIndent(); OutStream.WriteLine(
-                                string.Format("const {0}& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name));
-                        }
-                        break;
+                        MatchIndent(); OutStream.WriteLine("const {0} Get{1}() const\t{{ return m_{1}; }};", StrTypeString(param), param.Name);
+                    }
+                    else if (param.IsArray)
+                    {
+                        MatchIndent(); OutStream.WriteLine("const Array<{0}>& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name);
+                    }
+                    else if (IsVariableSizeType(param.Type))
+                    {
+                        MatchIndent(); OutStream.WriteLine("const Array<uint8_t>& Get{1}Raw() const\t{{ return m_{1}Raw; }};", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("const {0}& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name);
+                    }
+                    else
+                    {
+                        MatchIndent(); OutStream.WriteLine("const {0}& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name);
                     }
                 }
             }
@@ -502,35 +486,32 @@ namespace ProtocolCompiler
             }
             else
             {
-
                 foreach (Parameter param in parameters)
                 {
-                    switch (param.Type)
+                    if (IsStrType(param))
                     {
-                        case ParameterType.String:
-                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink(m_{0}, ArrayLen));", param.Name);
-                            break;
-                        default:
-                            if (param.IsArray)
-                            {
-                                if (IsVariableSizeType(param.Type))
-                                {
-                                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink(m_{0}));", param.Name);
-                                }
-                                else
-                                {
-                                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                                    MatchIndent(); OutStream.WriteLine("{1}* {0}Ptr = nullptr;", param.Name, ToTargetTypeName(param.Type));
-                                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink({0}Ptr, ArrayLen));", param.Name);
-                                    MatchIndent(); OutStream.WriteLine("m_{0}.SetLinkedBuffer(ArrayLen, {0}Ptr);", param.Name);
-                                }
-                            }
-                            else
-                            {
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(m_{0}));", param.Name);
-                            }
-                            break;
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink(m_{0}, ArrayLen));", param.Name);
+                    }
+                    else if(param.IsArray)
+                    {
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+                        MatchIndent(); OutStream.WriteLine("{1}* {0}Ptr = nullptr;", param.Name, ToTargetTypeName(param.Type));
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink({0}Ptr, ArrayLen));", param.Name);
+                        MatchIndent(); OutStream.WriteLine("m_{0}.SetLinkedBuffer(ArrayLen, {0}Ptr);", param.Name);
+                    }
+                    else if (IsVariableSizeType(param.Type))
+                    {
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+                        MatchIndent(); OutStream.WriteLine("uint8_t* {0}Ptr = nullptr;", param.Name, ToTargetTypeName(param.Type));
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink({0}Ptr, ArrayLen));", param.Name);
+                        MatchIndent(); OutStream.WriteLine("m_{0}Raw.SetLinkedBuffer(ArrayLen, {0}Ptr);", param.Name);
+                        MatchIndent(); OutStream.WriteLine("InputMemoryStream {0}_ReadStream(m_{0}Raw);", param.Name);
+                        MatchIndent(); OutStream.WriteLine("protocolCheck({0}_ReadStream.ToInputStream()->Read(m_{0}));", param.Name);
+                    }
+                    else
+                    {
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(m_{0}));", param.Name);
                     }
                 }
             }
@@ -567,25 +548,22 @@ namespace ProtocolCompiler
                 foreach (Parameter param in parameters)
                 {
                     var csharpType = SystemTypeInfo.ToCSharpType(param.Type);
-                    
 
-                    switch (param.Type)
+                    if (param.IsArray)
                     {
-                        default:
-                            if (param.IsArray)
-                            {
-                                var cppTypeName = SystemTypeInfo.ElementTypeNameFor(TypeUsage.CPP, param);
-                                MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name, cppTypeName);
-                            }
-                            else if(csharpType.IsEnum)
-                            {
-                                MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", (int)parser.Get{0}());", param.Name);
-                            }
-                            else
-                            {
-                                MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name);
-                            }
-                            break;
+                        MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name);
+                    }
+                    else if(csharpType.IsEnum)
+                    {
+                        MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", (int)parser.Get{0}());", param.Name);
+                    }
+                    else if(!IsStrType(param) && IsVariableSizeType(param.Type))
+                    {
+                        MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", \"{1}\", parser.Get{0}Raw());", param.Name, param.Type);
+                    }
+                    else
+                    {
+                        MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name);
                     }
                 }
             }

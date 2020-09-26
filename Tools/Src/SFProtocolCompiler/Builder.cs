@@ -407,11 +407,6 @@ namespace ProtocolCompiler
             return "In" + Name;
         }
 
-        public virtual string PolicyClassName
-        {
-            get { return "NetPolicy" + Group.Name; }
-        }
-
         // Message parser class name
         public string MsgClassName(string Name, string typeName)
         {
@@ -419,27 +414,6 @@ namespace ProtocolCompiler
         }
 
 
-        public string StrTypeString(Parameter param)
-        {
-            switch (param.Type)
-            {
-                case ParameterType.String:
-                    return "char*";
-                default:
-                    return null;
-            }
-        }
-
-        public string IsVariableSize(Parameter param)
-        {
-            switch (param.Type)
-            {
-                case ParameterType.String:
-                    return "char*";
-                default:
-                    return null;
-            }
-        }
 
         virtual public Parameter[] MakeParameters(MsgType type, Parameter[] parameter)
         {
@@ -482,67 +456,6 @@ namespace ProtocolCompiler
             return newParams.ToArray();
         }
 
-        public virtual string ParamInString(Parameter[] parameter)
-        {
-            string strParams = "";
-
-            if (parameter == null)
-                return strParams;
-
-            string Separator = "";
-            foreach (Parameter param in parameter)
-            {
-                strParams += Separator;
-                Separator = ", ";
-
-                if (IsStrType(param)) // string type
-                {
-                    strParams += string.Format("const {0} {1}", StrTypeString(param), InParamName(param.Name));
-                }
-                else if (param.IsArray) // array
-                {
-                    strParams += string.Format("const {0}& {1}", InArrayTypeName(param), InParamName(param.Name));
-                }
-                else // generic type
-                {
-                    strParams += string.Format("const {0} &{1}", ToTargetTypeName(param.Type), InParamName(param.Name));
-                }
-            }
-
-            return strParams;
-        }
-
-        public string ParamOutString(Parameter[] parameter)
-        {
-            string strParams = "";
-
-            if (parameter == null)
-                return strParams;
-
-
-            string Separator = "";
-            foreach (Parameter param in parameter)
-            {
-                strParams += Separator;
-                Separator = ", ";
-
-                if (IsStrType(param)) // string type
-                {
-                    strParams += string.Format("{0} &{1}", StrTypeString(param), "Out" + param.Name);
-                }
-                else if (param.IsArray) // array
-                {
-                    strParams += string.Format("{0} &{1}", OutArrayTypeName(param), "Out" + param.Name);
-                }
-                else // generic type
-                {
-                    strParams += string.Format("{0} &{1}", ToTargetTypeName(param.Type), "Out" + param.Name);
-                }
-            }
-
-            return strParams;
-        }
-
         public string ParamArgument(Parameter[] parameter)
         {
             string strParams = "";
@@ -582,4 +495,68 @@ namespace ProtocolCompiler
 
 
     }
+
+
+
+    abstract class CppBuilder : Builder
+    {
+        public CppBuilder(string strBasePath)
+            : base(strBasePath)
+        {
+
+        }
+
+
+        public virtual string PolicyClassName
+        {
+            get { return "NetPolicy" + Group.Name; }
+        }
+
+        public string StrTypeString(Parameter param)
+        {
+            switch (param.Type)
+            {
+                case ParameterType.String:
+                    return "char*";
+                default:
+                    return null;
+            }
+        }
+
+        public virtual string ParamInString(Parameter[] parameter)
+        {
+            string strParams = "";
+
+            if (parameter == null)
+                return strParams;
+
+            string Separator = "";
+            foreach (Parameter param in parameter)
+            {
+                strParams += Separator;
+                Separator = ", ";
+
+                if (IsStrType(param)) // string type
+                {
+                    strParams += string.Format("const {0} {1}", StrTypeString(param), InParamName(param.Name));
+                }
+                else if (param.IsArray) // array
+                {
+                    strParams += string.Format("const {0}& {1}", InArrayTypeName(param), InParamName(param.Name));
+                }
+                else if (IsVariableSizeType(param.Type))
+                {
+                    strParams += string.Format("const Array<uint8_t>& {0}", InParamName(param.Name));
+                }
+                else // generic type
+                {
+                    strParams += string.Format("const {0} &{1}", ToTargetTypeName(param.Type), InParamName(param.Name));
+                }
+            }
+
+            return strParams;
+        }
+
+    }
+
 }

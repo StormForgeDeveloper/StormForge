@@ -52,7 +52,7 @@ namespace SF {
 
 
 	template<>
-	inline size_t SerializedSizeOf(const NamedVariable& Value) { return sizeof(NamedVariableBox) + NamedVariable::SerializedSizeByTypeName(Value.TypeCrc); }
+	inline size_t SerializedSizeOf(const NamedVariable& Value) { return sizeof(NamedVariable) + NamedVariable::SerializedSizeByTypeName(Value.TypeCrc); }
 
 	template<>
 	inline size_t SerializedSizeOf(const Array<NamedVariable>& Value)
@@ -126,7 +126,7 @@ namespace SF {
 
 		for (uint32_t iItem = 0; iItem < NumItems; iItem++)
 		{
-			StringCrc64 VariableName;
+			VariableTable::KeyType VariableName;
 			if (!Read(VariableName))
 				return ResultCode::END_OF_STREAM;
 
@@ -186,7 +186,7 @@ namespace SF {
 
 		for (auto itItem : data)
 		{
-			StringCrc64 VariableName = itItem.GetKey();
+			VariableTable::KeyType VariableName = itItem.GetKey();
 			if (!Write(VariableName))
 				return ResultCode::END_OF_STREAM;
 

@@ -1052,18 +1052,19 @@ namespace SF
 			case "StringCrc64"_crc32c: return sizeof(StringCrc64);
 		default:
 			// for all other dynamic size types
+			assert(!"Missing type handler");
 			return 0;
 		}
 	}
 
 	bool NamedVariable::operator == (const NamedVariable& src) const
 	{
-		return NameCrc == src.NameCrc && TypeCrc == src.TypeCrc && Data == src.Data;
+		return NameCrc == src.NameCrc && TypeCrc == src.TypeCrc;
 	}
 
 	bool NamedVariable::operator != (const NamedVariable& src) const
 	{
-		return NameCrc != src.NameCrc || TypeCrc != src.TypeCrc || Data != src.Data;
+		return NameCrc != src.NameCrc || TypeCrc != src.TypeCrc;
 	}
 
 

@@ -376,6 +376,18 @@ namespace SF
 		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, valueArray);
 	}
 
+	void VariableMapBuilderJObject::SetVariable(const char* varName, const char* TypeName, const Array<uint8_t>& value)
+	{
+		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+		jstring jstrBufType = m_Env->NewStringUTF((const char*)TypeName);
+
+		auto valueArray = m_Env->NewByteArray(value.size());
+		m_Env->SetByteArrayRegion(valueArray, 0, value.size(), (int8_t*)value.data());
+
+		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jstrBufType, valueArray);
+	}
+
+
 
 
 	jobject VariableMapBuilderJObject::ToJavaObject(const FriendInformation& value)

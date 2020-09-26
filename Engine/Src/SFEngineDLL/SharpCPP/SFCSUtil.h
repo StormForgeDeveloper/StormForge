@@ -71,7 +71,6 @@ namespace SF
 		virtual void SetVariable(const char* varName, const FriendInformation& value) override;
 		virtual void SetVariable(const char* varName, const TotalRankingPlayerInformation& value) override;
 		virtual void SetVariable(const char* varName, const RelayPlayerInfo& value) override;
-		virtual void SetVariable(const char* varName, const NamedVariable& value) override;
 
 		virtual void SetVariable(const char* varName, const Array<bool>& value) override;
 		virtual void SetVariable(const char* varName, const Array<int8_t>& value) override;
@@ -87,7 +86,8 @@ namespace SF
 		virtual void SetVariable(const char* varName, const Array<FriendInformation>& value) override;
 		virtual void SetVariable(const char* varName, const Array<TotalRankingPlayerInformation>& value) override;
 		virtual void SetVariable(const char* varName, const Array<RelayPlayerInfo>& value) override;
-		virtual void SetVariable(const char* varName, const Array<NamedVariable>& value) override;
+
+		virtual void SetVariable(const char* varName, const char* typeName, const Array<uint8_t>& value) override;
 
 	};
 

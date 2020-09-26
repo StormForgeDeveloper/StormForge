@@ -48,7 +48,7 @@ namespace SF
 			if (path.size() == 0)
 				return nullptr;
 			else if (path.size() == 1)
-				return m_VairableTable.GetVariable(StringCrc64(path[0]));
+				return m_VairableTable.GetVariable(VariableTable::KeyType(path[0]));
 			else
 				return GetEnvironment().GetVariable(path);
 		}

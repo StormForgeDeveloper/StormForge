@@ -15,7 +15,7 @@ using ProtocolXml;
 
 namespace ProtocolCompiler
 {
-    class MessageDebugBuilder : Builder
+    class MessageDebugBuilder : CppBuilder
     {
 
         // constructor

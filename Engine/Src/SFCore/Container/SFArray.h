@@ -318,7 +318,7 @@ namespace SF {
 			inline INT FindItem(const DataType& FindData);
 
 			// Element access operator
-			inline DataType& operator [](size_t iElement) const;
+			inline const DataType& operator [](size_t iElement) const;
 			inline DataType& operator [](size_t iElement);
 			inline const DataType& GetAt(uint iElement) const; // for swig
 
@@ -344,6 +344,28 @@ namespace SF {
 			Result for_each(std::function<Result(DataType&)> functor) const
 			{
 				return const_cast<Array<DataType>*>(this)->for_each(functor);
+			}
+
+			template<typename PredicatorType>
+			iterator Find(const PredicatorType& predicator)
+			{
+				for (size_t iData = 0; iData < size(); iData++)
+				{
+					if (predicator(m_pDataPtr[iData]))
+						return iterator(this, iData);
+				}
+				return end();
+			}
+
+			template<typename PredicatorType>
+			int FindIndex(const PredicatorType& predicator)
+			{
+				for (size_t iData = 0; iData < size(); iData++)
+				{
+					if (predicator(m_pDataPtr[iData]))
+						return iData;
+				}
+				return iterator::END_IDX;
 			}
 
 			// TODO: this interface should be separated

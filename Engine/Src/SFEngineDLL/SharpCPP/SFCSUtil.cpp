@@ -13,7 +13,8 @@
 #include "SFEngineDLLPCH.h"
 #include "SFAssert.h"
 #include "Util/SFUtility.h"
-
+#include "Stream/SFMemoryStream.h"
+#include "Variable/SFVariableSerialization.h"
 #include "SFCSUtil.h"
 
 
@@ -146,11 +147,6 @@ namespace SF
 		m_SetFunc(varName, "RelayPlayerInfo", &value);
 	}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const NamedVariable& value)
-	{
-		m_SetFunc(varName, "NamedVariable", &value);
-	}
-
 	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<bool>& value)
 	{
 		m_SetArrayFunc(varName, "bool", (int)value.size(), value.data());
@@ -221,11 +217,11 @@ namespace SF
 		m_SetArrayFunc(varName, "RelayPlayerInfo", (int)value.size(), value.data());
 	}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<NamedVariable>& value)
-	{
-		m_SetArrayFunc(varName, "NamedVariable", (int)value.size(), value.data());
-	}
 
+	void VariableMapBuilderCS::SetVariable(const char* varName, const char* typeName, const Array<uint8_t>& value)
+	{
+		m_SetArrayFunc(varName, typeName, (int)value.size(), value.data());
+	}
 
 
 }
