@@ -69,24 +69,6 @@ namespace SF
 	};
 
 
-    [Struct()]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Vector2
-    {
-        public float x;
-        public float y;
-    };
-
-    [Struct()]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct Vector3
-    {
-        public float x;
-        public float y;
-        public float z;
-    };
-
-
 
     [StructLayout(LayoutKind.Sequential)]
     public class ServerFriendInformation : FriendInformation

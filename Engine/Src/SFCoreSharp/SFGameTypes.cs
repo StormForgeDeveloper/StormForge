@@ -15,6 +15,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 
+
 namespace SF
 {
 
@@ -26,6 +27,24 @@ namespace SF
     public class NativeWrapperAttribute : Attribute
     {
     }
+
+    [Struct()]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Vector2
+    {
+        public float x;
+        public float y;
+    };
+
+    [Struct()]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Vector3
+    {
+        public float x;
+        public float y;
+        public float z;
+    };
+
 
     // Manages pinned byte buffer
     public class PinnedByteBuffer : IDisposable
@@ -347,6 +366,11 @@ namespace SF
         static VariableTable()
         {
             TypeInfoByType = new Dictionary<Type, TypeInfo>();
+
+            TypeInfoByType.Add(typeof(Result), new TypeInfo("Result",
+                (writer, value) => { writer.Write(((Result)value).Code); },
+                (reader) => { return new Result(reader.ReadInt32()); }));
+
             TypeInfoByType.Add(typeof(int), new TypeInfo("int",
                 (writer,value)=> { writer.Write((int)value); },
                 (reader) => { return reader.ReadInt32(); }));
@@ -355,9 +379,75 @@ namespace SF
                 (writer, value) => { writer.Write((uint)value); },
                 (reader) => { return reader.ReadUInt32(); }));
 
-            TypeInfoByType.Add(typeof(Int32), new TypeInfo("Result",
+            TypeInfoByType.Add(typeof(SByte), new TypeInfo("int8",
+                (writer, value) => { writer.Write((SByte)value); },
+                (reader) => { return reader.ReadSByte(); }));
+
+            TypeInfoByType.Add(typeof(Byte), new TypeInfo("uint8",
+                (writer, value) => { writer.Write((Byte)value); },
+                (reader) => { return reader.ReadByte(); }));
+
+            TypeInfoByType.Add(typeof(Int16), new TypeInfo("int16",
+                (writer, value) => { writer.Write((Int16)value); },
+                (reader) => { return reader.ReadInt16(); }));
+
+            TypeInfoByType.Add(typeof(UInt16), new TypeInfo("uint16",
+                (writer, value) => { writer.Write((UInt16)value); },
+                (reader) => { return reader.ReadUInt16(); }));
+
+            TypeInfoByType.Add(typeof(Int32), new TypeInfo("int32",
                 (writer, value) => { writer.Write((Int32)value); },
                 (reader) => { return reader.ReadInt32(); }));
+
+            TypeInfoByType.Add(typeof(UInt32), new TypeInfo("uint32",
+                (writer, value) => { writer.Write((UInt32)value); },
+                (reader) => { return reader.ReadUInt32(); }));
+
+            TypeInfoByType.Add(typeof(Int64), new TypeInfo("int64",
+                (writer, value) => { writer.Write((Int64)value); },
+                (reader) => { return reader.ReadInt64(); }));
+
+            TypeInfoByType.Add(typeof(UInt64), new TypeInfo("uint64",
+                (writer, value) => { writer.Write((UInt64)value); },
+                (reader) => { return reader.ReadUInt64(); }));
+
+            TypeInfoByType.Add(typeof(SFUInt128), new TypeInfo("uint128",
+                (writer, value) => { var valueTemp = (SFUInt128)value; writer.Write(valueTemp.Low); writer.Write(valueTemp.High); },
+                (reader) => { return new SFUInt128() { Low = reader.ReadUInt64(), High = reader.ReadUInt64() }; }));
+
+            TypeInfoByType.Add(typeof(float), new TypeInfo("float",
+                (writer, value) => { writer.Write((float)value); },
+                (reader) => { return reader.ReadSingle(); }));
+
+            TypeInfoByType.Add(typeof(double), new TypeInfo("double",
+                (writer, value) => { writer.Write((double)value); },
+                (reader) => { return reader.ReadDouble(); }));
+
+            TypeInfoByType.Add(typeof(string), 
+                new TypeInfo("String",
+                    (writer, value) =>
+                    {
+                        var valueTemp = (string)value;
+                        writer.Write((UInt16)(valueTemp.Length+1));
+                        writer.Write(System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0"));
+                    },
+                    (reader) =>
+                    {
+                        var strLen = reader.ReadUInt16();
+                        byte[] byteBuffer = reader.ReadBytes(strLen);
+                        return System.Text.Encoding.UTF8.GetString(byteBuffer, 0, strLen);
+                    }
+                )
+            );
+
+            TypeInfoByType.Add(typeof(Vector2), new TypeInfo("Vector2",
+                (writer, value) => { var valueTemp = (Vector2)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); },
+                (reader) => { return new Vector2() { x = reader.ReadSingle(), y = reader.ReadSingle() }; }));
+
+            TypeInfoByType.Add(typeof(Vector3), new TypeInfo("Vector3",
+                (writer, value) => { var valueTemp = (Vector3)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); },
+                (reader) => { return new Vector3() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle() }; }));
+
 
             TypeInfoByTypeName = new Dictionary<uint, TypeInfo>();
             foreach(var itItem in TypeInfoByType)
