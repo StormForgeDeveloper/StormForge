@@ -79,6 +79,7 @@ namespace SF
 
 			}; // Result LoginCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LoginCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -95,10 +96,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGameID)
-					, SerializedSizeOf(InID)
-					, SerializedSizeOf(InPassword)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameID)
+					+ SerializedSizeOf(InID)
+					+ SerializedSizeOf(InPassword)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginCmd::MID, __uiMessageSize ) );
@@ -183,6 +184,7 @@ namespace SF
 
 			}; // Result LoginRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -199,13 +201,13 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InGameServerAddr)
-					, SerializedSizeOf(InGameServerAddrIPV4)
-					, SerializedSizeOf(InAccID)
-					, SerializedSizeOf(InTicket)
-					, SerializedSizeOf(InLoginEntityUID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InGameServerAddr)
+					+ SerializedSizeOf(InGameServerAddrIPV4)
+					+ SerializedSizeOf(InAccID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InLoginEntityUID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginRes::MID, __uiMessageSize ) );
@@ -295,6 +297,7 @@ namespace SF
 
 			}; // Result LoginByFacebookCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LoginByFacebookCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -311,12 +314,12 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGameID)
-					, SerializedSizeOf(InUID)
-					, SerializedSizeOf(InFaceBookName)
-					, SerializedSizeOf(InEMail)
-					, SerializedSizeOf(InFacebookToken)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameID)
+					+ SerializedSizeOf(InUID)
+					+ SerializedSizeOf(InFaceBookName)
+					+ SerializedSizeOf(InEMail)
+					+ SerializedSizeOf(InFacebookToken)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginByFacebookCmd::MID, __uiMessageSize ) );
@@ -403,6 +406,7 @@ namespace SF
 
 			}; // Result LoginByFacebookRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -419,13 +423,13 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InGameServerAddr)
-					, SerializedSizeOf(InGameServerAddrIPV4)
-					, SerializedSizeOf(InAccID)
-					, SerializedSizeOf(InTicket)
-					, SerializedSizeOf(InLoginEntityUID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InGameServerAddr)
+					+ SerializedSizeOf(InGameServerAddrIPV4)
+					+ SerializedSizeOf(InAccID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InLoginEntityUID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginByFacebookRes::MID, __uiMessageSize ) );
@@ -507,6 +511,7 @@ namespace SF
 
 			}; // Result CreateRandomUserCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* CreateRandomUserCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -523,9 +528,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGameID)
-					, SerializedSizeOf(InCellPhone)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameID)
+					+ SerializedSizeOf(InCellPhone)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::CreateRandomUserCmd::MID, __uiMessageSize ) );
@@ -609,6 +614,7 @@ namespace SF
 
 			}; // Result CreateRandomUserRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -625,13 +631,13 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InGameServerAddr)
-					, SerializedSizeOf(InGameServerAddrIPV4)
-					, SerializedSizeOf(InAccID)
-					, SerializedSizeOf(InTicket)
-					, SerializedSizeOf(InLoginEntityUID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InGameServerAddr)
+					+ SerializedSizeOf(InGameServerAddrIPV4)
+					+ SerializedSizeOf(InAccID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InLoginEntityUID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::CreateRandomUserRes::MID, __uiMessageSize ) );
@@ -714,6 +720,7 @@ namespace SF
 
 			}; // Result UpdateMyScoreCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* UpdateMyScoreCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -730,10 +737,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InRankingScore)
-					, SerializedSizeOf(InRankingType)
-					, SerializedSizeOf(InCount)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InRankingScore)
+					+ SerializedSizeOf(InRankingType)
+					+ SerializedSizeOf(InCount)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::UpdateMyScoreCmd::MID, __uiMessageSize ) );
@@ -813,6 +820,7 @@ namespace SF
 
 			}; // Result UpdateMyScoreRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* UpdateMyScoreRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -830,9 +838,9 @@ namespace SF
 
 				uint16_t numberOfInRanking = (uint16_t)InRanking.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InRanking)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InRanking)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::UpdateMyScoreRes::MID, __uiMessageSize ) );
@@ -911,6 +919,7 @@ namespace SF
 
 			}; // Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -927,10 +936,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InRankingType)
-					, SerializedSizeOf(InBaseRanking)
-					, SerializedSizeOf(InCount)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InRankingType)
+					+ SerializedSizeOf(InBaseRanking)
+					+ SerializedSizeOf(InCount)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::GetRankingListCmd::MID, __uiMessageSize ) );
@@ -1010,6 +1019,7 @@ namespace SF
 
 			}; // Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1027,9 +1037,9 @@ namespace SF
 
 				uint16_t numberOfInRanking = (uint16_t)InRanking.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InRanking)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InRanking)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::GetRankingListRes::MID, __uiMessageSize ) );
@@ -1107,6 +1117,7 @@ namespace SF
 
 			}; // Result DataTestCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* DataTestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1124,8 +1135,8 @@ namespace SF
 
 				uint16_t numberOfInTestData = (uint16_t)InTestData.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InTestData)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTestData)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DataTestCmd::MID, __uiMessageSize ) );
@@ -1203,6 +1214,7 @@ namespace SF
 
 			}; // Result DataTestRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* DataTestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1220,9 +1232,9 @@ namespace SF
 
 				uint16_t numberOfInTestData = (uint16_t)InTestData.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InTestData)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTestData)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DataTestRes::MID, __uiMessageSize ) );
@@ -1287,6 +1299,7 @@ namespace SF
 				return hr;
 
 			}; // Result HeartBitC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+
 
 			MessageData* HeartBitC2SEvt::Create( IHeap& memHeap )
 			{
@@ -1369,6 +1382,7 @@ namespace SF
 
 			}; // Result DebugPrintALLRankingCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* DebugPrintALLRankingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InFileName )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1385,8 +1399,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InFileName)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InFileName)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DebugPrintALLRankingCmd::MID, __uiMessageSize ) );
@@ -1459,6 +1473,7 @@ namespace SF
 
 			}; // Result DebugPrintALLRankingRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* DebugPrintALLRankingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1475,8 +1490,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DebugPrintALLRankingRes::MID, __uiMessageSize ) );

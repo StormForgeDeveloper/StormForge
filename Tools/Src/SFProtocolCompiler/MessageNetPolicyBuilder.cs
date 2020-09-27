@@ -54,8 +54,10 @@ namespace ProtocolCompiler
             OutStream.WriteLine("");
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
             OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
-
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
+            NewLine(3);
+
+            OutStream.WriteLine("class VariableTable;");
             NewLine(3);
 
             // namespace definition
@@ -97,9 +99,34 @@ namespace ProtocolCompiler
             OpenSection("namespace", "Policy");
         }
 
-        protected string ParamString(Parameter[] parameter)
+        public override string ParamInString(Parameter[] parameter, bool bUseOriginalType = false)
         {
-            return ParamInString(parameter);
+            string strParams = "";
+
+            if (parameter == null)
+                return strParams;
+
+            string Separator = "";
+            foreach (Parameter param in parameter)
+            {
+                strParams += Separator;
+                Separator = ", ";
+
+                if (IsStrType(param)) // string type
+                {
+                    strParams += string.Format("const {0} {1}", StrTypeString(param), InParamName(param.Name));
+                }
+                else if (param.IsArray) // array
+                {
+                    strParams += string.Format("const {0}& {1}", InArrayTypeName(param), InParamName(param.Name));
+                }
+                else // generic type
+                {
+                    strParams += string.Format("const {0} &{1}", ToTargetTypeName(param.Type), InParamName(param.Name));
+                }
+            }
+
+            return strParams;
         }
 
         protected virtual void BuildServerPolicyH()
@@ -128,7 +155,7 @@ namespace ProtocolCompiler
 
                     newparams = MakeParameters(MsgType.Res, msg.Res);
                     MatchIndent(); OutStream.WriteLine(
-                        string.Format("Result {0}Res( {1} );", msg.Name, ParamString(newparams)));
+                        string.Format("Result {0}Res( {1} );", msg.Name, ParamInString(newparams)));
                 }
 
                 if (baseMsg is ProtocolsProtocolGroupS2CEvent)
@@ -138,7 +165,7 @@ namespace ProtocolCompiler
 
                     newparams = MakeParameters(MsgType.Evt, msg.Params);
                     MatchIndent(); OutStream.WriteLine(
-                        string.Format("Result {0}S2CEvt( {1} );", msg.Name, ParamString(newparams)));
+                        string.Format("Result {0}S2CEvt( {1} );", msg.Name, ParamInString(newparams)));
                 }
             }
 

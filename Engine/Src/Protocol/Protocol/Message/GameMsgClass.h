@@ -1893,7 +1893,8 @@ namespace SF
 				uint64_t m_TransactionID;
 				Result m_Result;
 				ArrayView<uint8_t> m_AttributesRaw;
-				VariableTable m_Attributes;
+				mutable bool m_AttributesHasParsed = false;
+				mutable VariableTable m_Attributes;
 			public:
 				GetUserGamePlayerInfoRes()
 					{}
@@ -1907,7 +1908,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
-				const VariableTable& GetAttributes() const	{ return m_Attributes; };
+				const VariableTable& GetAttributes() const;
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -1916,6 +1917,7 @@ namespace SF
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
 
 			}; // class GetUserGamePlayerInfoRes : public MessageBase
 
@@ -1985,7 +1987,8 @@ namespace SF
 				Result m_Result;
 				AccountID m_PlayerID;
 				ArrayView<uint8_t> m_AttributesRaw;
-				VariableTable m_Attributes;
+				mutable bool m_AttributesHasParsed = false;
+				mutable VariableTable m_Attributes;
 			public:
 				GetGamePlayerInfoRes()
 					{}
@@ -2000,7 +2003,7 @@ namespace SF
 				const Result& GetResult() const	{ return m_Result; };
 				const AccountID& GetPlayerID() const	{ return m_PlayerID; };
 				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
-				const VariableTable& GetAttributes() const	{ return m_Attributes; };
+				const VariableTable& GetAttributes() const;
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -2009,6 +2012,7 @@ namespace SF
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes );
 
 			}; // class GetGamePlayerInfoRes : public MessageBase
 
@@ -6238,7 +6242,8 @@ namespace SF
 				uint64_t m_TransactionID;
 				const char* m_CharacterName;
 				ArrayView<uint8_t> m_AttributesRaw;
-				VariableTable m_Attributes;
+				mutable bool m_AttributesHasParsed = false;
+				mutable VariableTable m_Attributes;
 			public:
 				CreateCharacterCmd()
 				:m_CharacterName(nullptr)
@@ -6254,7 +6259,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetCharacterName() const	{ return m_CharacterName; };
 				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
-				const VariableTable& GetAttributes() const	{ return m_Attributes; };
+				const VariableTable& GetAttributes() const;
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -6263,6 +6268,7 @@ namespace SF
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes );
 
 			}; // class CreateCharacterCmd : public MessageBase
 
@@ -6561,7 +6567,8 @@ namespace SF
 				uint64_t m_TransactionID;
 				Result m_Result;
 				ArrayView<uint8_t> m_AttributesRaw;
-				VariableTable m_Attributes;
+				mutable bool m_AttributesHasParsed = false;
+				mutable VariableTable m_Attributes;
 			public:
 				GetCharacterDataRes()
 					{}
@@ -6575,7 +6582,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
-				const VariableTable& GetAttributes() const	{ return m_Attributes; };
+				const VariableTable& GetAttributes() const;
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -6584,6 +6591,7 @@ namespace SF
 				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
 
 			}; // class GetCharacterDataRes : public MessageBase
 

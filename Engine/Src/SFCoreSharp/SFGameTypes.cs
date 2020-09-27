@@ -318,22 +318,6 @@ namespace SF
         }
     }
 
-    [Struct]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct NamedVariable
-    {
-        public UInt32 NameCrc;
-        public UInt32 TypeCrc;
-        public IntPtr Data;
-
-        public NamedVariable(UInt32 InNameCrc, UInt32 InTypeCrc, IntPtr InData)
-        {
-            NameCrc = InNameCrc;
-            TypeCrc = InTypeCrc;
-            Data = InData;
-        }
-    }
-
     public class VariableTable : Dictionary<StringCrc32, object>
     {
         struct TypeInfo
@@ -524,7 +508,6 @@ namespace SF
                     var value = typeInfo.Deserializer(reader);
                     Add(variableName, value);
                 }
-
             }
         }
     }

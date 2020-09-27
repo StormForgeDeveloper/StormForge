@@ -50,20 +50,6 @@ namespace SF {
 	inline size_t SerializedSizeOf(const NamedVariableBox& Value) { auto pVariable = Value.GetVariable(); return sizeof(NamedVariableBox::NameType) + pVariable ? pVariable->GetSerializedSize() : sizeof(Variable::TypeNameType); }
 
 
-
-	template<>
-	inline size_t SerializedSizeOf(const NamedVariable& Value) { return sizeof(NamedVariable) + NamedVariable::SerializedSizeByTypeName(Value.TypeCrc); }
-
-	template<>
-	inline size_t SerializedSizeOf(const Array<NamedVariable>& Value)
-	{
-		size_t Size = sizeof(uint16_t);
-		for (auto& itVar : Value)
-		{
-			Size += SerializedSizeOf(itVar);
-		}
-	}
-
 	template<>
 	inline size_t SerializedSizeOf(const VariableTable& Value)
 	{
@@ -206,6 +192,29 @@ namespace SF {
 		return ResultCode::SUCCESS;
 	}
 
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	VariableTableWriter
+	//		Helper class to help send message
+	//
+
+	//template<typename DataType, typename ArrayType = DynamicArray<uint8_t>>
+	//class BinarySerializer : public ArrayType
+	//{
+	//public:
+
+	//	BinarySerializer(const DataType& src)
+	//	{
+	//		OutputMemoryStream outputStream(*this);
+	//		auto* output = outputStream.ToOutputStream();
+	//		output->Write(src);
+	//	}
+
+
+	//};
 
 } // namespace SF
 

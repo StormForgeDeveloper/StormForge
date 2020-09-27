@@ -339,22 +339,6 @@ namespace SF {
 
 
 
-#pragma pack(push,1)
-
-	// Named variable serialization helper structure
-	struct NamedVariable
-	{
-		StringCrc32 NameCrc;
-		StringCrc32 TypeCrc;
-
-		static size_t SerializedSizeByTypeName(StringCrc32 TypeCrc);
-
-		bool operator == (const NamedVariable& src) const;
-		bool operator != (const NamedVariable& src) const;
-	};
-
-#pragma pack(pop)
-
 
 } // namespace SF
 

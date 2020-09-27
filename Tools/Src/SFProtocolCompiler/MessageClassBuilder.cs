@@ -225,9 +225,9 @@ namespace ProtocolCompiler
         }
 
         // Builder parameter string
-        string BuilderParamString(Parameter[] parameter)
+        string BuilderParamString(Parameter[] parameter, bool bUseOriginalType = false)
         {
-            string param = ParamInString(parameter);
+            string param = ParamInString(parameter, bUseOriginalType);
             if (param.Length > 0)
                 return "IHeap& memHeap, " + param;
             else
@@ -254,6 +254,20 @@ namespace ProtocolCompiler
             new Parameter() { Name = "RouteHopCount", Type = ParameterType.uint32 },
             new Parameter() { Name = "Sender", Type = ParameterType.uint64 },
         };
+
+        bool HasInternalTypeOverride(Parameter[] parameters)
+        {
+            bool bHas = false;
+
+            if (parameters == null)
+                return bHas;
+
+            foreach (Parameter param in parameters)
+            {
+                bHas |= !IsStrType(param) && IsVariableSizeType(param.Type);
+            }
+            return bHas;
+        }
 
         // build parser class
         void BuildParserClass(ProtocolXml.MessageBase msg, MsgType msgType, string typeName, Parameter[] parameters)
@@ -291,6 +305,7 @@ namespace ProtocolCompiler
                 MatchIndent(); OutStream.WriteLine("{1} Get{0}() {{ return 0; }}", parameterName.Name, ToTargetTypeName(parameterName.Type));
             }
 
+            bool bHasInternalTypeOverride = HasInternalTypeOverride(parameters);
 
             // Generate parameter variables
             MatchIndent(-1); OutStream.WriteLine("private:");
@@ -310,7 +325,8 @@ namespace ProtocolCompiler
                     else if (IsVariableSizeType(param.Type))
                     {
                         MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> m_{1}Raw;", ToTargetTypeName(param.Type), param.Name);
-                        MatchIndent(); OutStream.WriteLine("{0} m_{1};", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("mutable bool m_{1}HasParsed = false;", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("mutable {0} m_{1};", ToTargetTypeName(param.Type), param.Name);
                     }
                     else
                     {
@@ -354,7 +370,9 @@ namespace ProtocolCompiler
                     else if (IsVariableSizeType(param.Type))
                     {
                         MatchIndent(); OutStream.WriteLine("const Array<uint8_t>& Get{1}Raw() const\t{{ return m_{1}Raw; }};", ToTargetTypeName(param.Type), param.Name);
-                        MatchIndent(); OutStream.WriteLine("const {0}& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name);
+                        //MatchIndent(); OutStream.WriteLine("const {0}& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("const {0}& Get{1}() const;", ToTargetTypeName(param.Type), param.Name);
+
                     }
                     else
                     {
@@ -380,6 +398,10 @@ namespace ProtocolCompiler
 
             // Build function
             MatchIndent(); OutStream.WriteLine("static MessageData* Create( {0} );", BuilderParamString(parameters));
+            if (bHasInternalTypeOverride)
+            {
+                MatchIndent(); OutStream.WriteLine("static MessageData* Create( {0} );", BuilderParamString(parameters, bUseOriginalType:true));
+            }
             NewLine();
 
             // Override route context function
@@ -447,6 +469,29 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("const MessageID {0}::MID = {1};", MsgClassName(msg.Name, typeName), MakeMsgIDStr(msgType, msg.Reliable, Group.IsMobile, msg.Name));
         }
         
+        void BuildGetFunctionImpl(string Name, string typeName, Parameter[] parameters)
+        {
+            string strClassName = MsgClassName(Name, typeName);
+
+            foreach(var param in parameters)
+            {
+                if (IsStrType(param))
+                    continue;
+
+                if (IsVariableSizeType(param.Type))
+                {
+                    OpenSection(string.Format("const {0}&", ToTargetTypeName(param.Type)), string.Format("{0}::Get{1}() const", strClassName, param.Name), bUseTerminator: false);
+                    OpenSection("if", string.Format("(!m_{0}HasParsed)", param.Name), bUseTerminator: false);
+                    MatchIndent(); OutStream.WriteLine("m_{0}HasParsed = true;", param.Name);
+                    MatchIndent(); OutStream.WriteLine("InputMemoryStream {0}_ReadStream(m_{0}Raw);", param.Name);
+                    MatchIndent(); OutStream.WriteLine("{0}_ReadStream.ToInputStream()->Read(m_{0});", param.Name);
+                    CloseSection();
+                    MatchIndent(); OutStream.WriteLine("return m_{0};", param.Name);
+                    CloseSection();
+                }
+            }
+        }
+
         // Build parser class implementation
         void BuildParserImpl(string Name, string typeName, Parameter[] parameters)
         {
@@ -506,8 +551,6 @@ namespace ProtocolCompiler
                         MatchIndent(); OutStream.WriteLine("uint8_t* {0}Ptr = nullptr;", param.Name, ToTargetTypeName(param.Type));
                         MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink({0}Ptr, ArrayLen));", param.Name);
                         MatchIndent(); OutStream.WriteLine("m_{0}Raw.SetLinkedBuffer(ArrayLen, {0}Ptr);", param.Name);
-                        MatchIndent(); OutStream.WriteLine("InputMemoryStream {0}_ReadStream(m_{0}Raw);", param.Name);
-                        MatchIndent(); OutStream.WriteLine("protocolCheck({0}_ReadStream.ToInputStream()->Read(m_{0}));", param.Name);
                     }
                     else
                     {
@@ -769,7 +812,7 @@ namespace ProtocolCompiler
             CloseSection();
         }
 
-        void BuildParamCpyPreamble(Parameter[] parameters)
+        void BuildCreatePreamble(Parameter[] parameters)
         {
             if (parameters == null)
                 return;
@@ -783,15 +826,24 @@ namespace ProtocolCompiler
                 {
                     MatchIndent(); OutStream.WriteLine("{1} numberOf{0} = ({1}){0}.size(); ", InParamName(param.Name), ArrayLenType);
                 }
+                else if (IsVariableSizeType(param.Type))
+                {
+                    MatchIndent(); OutStream.WriteLine("{1} serializedSizeOf{0} = static_cast<{1}>(SerializedSizeOf({0})); ", InParamName(param.Name), ArrayLenType);
+                }
             }
         }
 
         // Build parser class implementation
-        void BuildBuilderImpl(string Name, string typeName, Parameter[] parameters)
+        void BuildCreateImpl(string Name, string typeName, Parameter[] parameters, bool bUseOriginalType = false)
         {
+            bool bHasInternalTypeOverride = HasInternalTypeOverride(parameters);
+            if (!bUseOriginalType && !bHasInternalTypeOverride)
+                return;
+
+
             string strClassName = MsgClassName(Name, typeName);
             bool bHasParameters = parameters != null && parameters.Length > 0;
-            OpenSection("MessageData*", strClassName + string.Format("::Create( {0} )", BuilderParamString(parameters)));
+            OpenSection("MessageData*", strClassName + string.Format("::Create( {0} )", BuilderParamString(parameters, bUseOriginalType: bUseOriginalType)));
 
             MatchIndent(); OutStream.WriteLine("MessageData *pNewMsg = nullptr;");
 
@@ -813,9 +865,8 @@ namespace ProtocolCompiler
                 NewLine();
             }
 
-            BuildParamCpyPreamble(parameters);
+            BuildCreatePreamble(parameters);
 
-            //BuildBuilderMessageSize(parameters, "__uiMessageSize");
             string strSizeVarName = "__uiMessageSize";
             string strMessageHeader = Group.IsMobile ? "MobileMessageHeader" : "MessageHeader";
             MatchIndent(); OutStream.WriteLine(string.Format("unsigned {0} = (unsigned)(sizeof({1}) ", strSizeVarName, strMessageHeader));
@@ -823,15 +874,26 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
-                    MatchIndent(1); OutStream.WriteLine(", SerializedSizeOf({0})", InParamName(param.Name));
+                    if (!IsStrType(param) && IsVariableSizeType(param.Type))
+                    {
+                        // Original type will use binary conversion, so has extra array length parameter
+                        if (bUseOriginalType)
+                        {
+                            MatchIndent(1); OutStream.WriteLine("+ sizeof({0})", ArrayLenType);
+                        }
+                        MatchIndent(1); OutStream.WriteLine("+ serializedSizeOf{0}", InParamName(param.Name));
+                    }
+                    else
+                    {
+                        MatchIndent(1); OutStream.WriteLine("+ SerializedSizeOf({0})", InParamName(param.Name));
+                    }
                 }
             }
 
             MatchIndent(); OutStream.WriteLine(");");
             NewLine();
 
-            MatchIndent(); OutStream.WriteLine(
-                string.Format("protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, {0}::{1}{2}::MID, __uiMessageSize ) );", Group.Name, Name, typeName));
+            MatchIndent(); OutStream.WriteLine("protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, {0}::{1}{2}::MID, __uiMessageSize ) );", Group.Name, Name, typeName);
 
             if (bHasParameters)
             {
@@ -851,17 +913,24 @@ namespace ProtocolCompiler
                 foreach (Parameter param in parameters)
                 {
                     // TODO: maybe avoid multiple strlen?
-                    //if (IsStrType(param)) // string type
-                    //{
-                    //    string strLenName = string.Format("__ui{0}Length", InParamName(param.Name));
-                    //    MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write({0}, {1}));", InParamName(param.Name), strLenName);
-                    //}
+                    if (IsStrType(param)) // string type
+                    {
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write({0}));", InParamName(param.Name));
+                    }
                     //else if (param.IsArray) // array
                     //{
                     //    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, &numberOf{0}, sizeof({1})); ", InParamName(param.Name), ArrayLenType);
                     //    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, {0}.data(), (INT)(sizeof({1})*{0}.size())); ", InParamName(param.Name), ToTargetTypeName(param.Type));
                     //}
-                    //else
+                    else if (IsVariableSizeType(param.Type))
+                    {
+                        if (bUseOriginalType)
+                        {
+                            MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write(serializedSizeOf{0}));", InParamName(param.Name));
+                        }
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write({0}));", InParamName(param.Name));
+                    }
+                    else
                     {
                         MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write({0}));", InParamName(param.Name));
                     }
@@ -873,6 +942,7 @@ namespace ProtocolCompiler
 
             CloseSection();
         }
+
 
         void BuildMessageParserClassCPP()
         {
@@ -888,20 +958,24 @@ namespace ProtocolCompiler
 
                     BuildMessageIDImpl( msg, MsgType.Cmd, "Cmd" );
                     newparams = MakeParameters(MsgType.Cmd, msg.Cmd);
+                    BuildGetFunctionImpl(msg.Name, "Cmd", newparams);
                     BuildParserImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildParserToVariableBuilderImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildParserToMessageBaseImpl(msg.Name, "Cmd", newparams); NewLine();
-                    BuildBuilderImpl(msg.Name, "Cmd", newparams); NewLine();
+                    BuildCreateImpl(msg.Name, "Cmd", newparams); NewLine();
+                    BuildCreateImpl(msg.Name, "Cmd", newparams, bUseOriginalType:true); NewLine();
                     BuildOverrideRouteContextImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildOverrideRouteHopCountImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildMessageTrace(msg.Name, "Cmd", msg.Trace.ToString(), newparams);
 
                     BuildMessageIDImpl( msg, MsgType.Res, "Res" );
                     newparams = MakeParameters(MsgType.Res, msg.Res);
+                    BuildGetFunctionImpl(msg.Name, "Res", newparams);
                     BuildParserImpl(msg.Name, "Res", newparams); NewLine();
                     BuildParserToVariableBuilderImpl(msg.Name, "Res", newparams); NewLine();
                     BuildParserToMessageBaseImpl(msg.Name, "Res", newparams); NewLine();
-                    BuildBuilderImpl(msg.Name, "Res", newparams); NewLine();
+                    BuildCreateImpl(msg.Name, "Res", newparams); NewLine();
+                    BuildCreateImpl(msg.Name, "Res", newparams, bUseOriginalType: true); NewLine();
                     BuildOverrideRouteContextImpl(msg.Name, "Res", newparams); NewLine();
                     BuildOverrideRouteHopCountImpl(msg.Name, "Res", newparams); NewLine();
                     BuildMessageTrace(msg.Name, "Res", msg.Trace.ToString(), newparams);
@@ -914,10 +988,12 @@ namespace ProtocolCompiler
 
                     BuildMessageIDImpl( msg, MsgType.Evt, "C2SEvt" );
                     newparams = MakeParameters(MsgType.Evt, msg.Params);
+                    BuildGetFunctionImpl(msg.Name, "C2SEvt", newparams);
                     BuildParserImpl(msg.Name, "C2SEvt", newparams); NewLine();
                     BuildParserToVariableBuilderImpl(msg.Name, "C2SEvt", newparams); NewLine();
                     BuildParserToMessageBaseImpl(msg.Name, "C2SEvt", newparams); NewLine();
-                    BuildBuilderImpl(msg.Name, "C2SEvt", newparams); NewLine();
+                    BuildCreateImpl(msg.Name, "C2SEvt", newparams); NewLine();
+                    BuildCreateImpl(msg.Name, "C2SEvt", newparams, bUseOriginalType: true); NewLine();
                     BuildOverrideRouteContextImpl(msg.Name, "C2SEvt", newparams); NewLine();
                     BuildOverrideRouteHopCountImpl(msg.Name, "C2SEvt", newparams); NewLine();
                     BuildMessageTrace(msg.Name, "C2SEvt", msg.Trace.ToString(), newparams);
@@ -930,10 +1006,12 @@ namespace ProtocolCompiler
 
                     BuildMessageIDImpl(msg, MsgType.Evt, "S2CEvt");
                     newparams = MakeParameters(MsgType.Evt, msg.Params);
+                    BuildGetFunctionImpl(msg.Name, "S2CEvt", newparams);
                     BuildParserImpl(msg.Name, "S2CEvt", newparams); NewLine();
                     BuildParserToVariableBuilderImpl(msg.Name, "S2CEvt", newparams); NewLine();
                     BuildParserToMessageBaseImpl(msg.Name, "S2CEvt", newparams); NewLine();
-                    BuildBuilderImpl(msg.Name, "S2CEvt", newparams); NewLine();
+                    BuildCreateImpl(msg.Name, "S2CEvt", newparams); NewLine();
+                    BuildCreateImpl(msg.Name, "S2CEvt", newparams, bUseOriginalType: true); NewLine();
                     BuildOverrideRouteContextImpl(msg.Name, "S2CEvt", newparams); NewLine();
                     BuildOverrideRouteHopCountImpl(msg.Name, "S2CEvt", newparams); NewLine();
                     BuildMessageTrace(msg.Name, "S2CEvt", msg.Trace.ToString(), newparams);

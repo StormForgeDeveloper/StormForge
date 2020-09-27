@@ -456,43 +456,6 @@ namespace ProtocolCompiler
             return newParams.ToArray();
         }
 
-        public string ParamArgument(Parameter[] parameter)
-        {
-            string strParams = "";
-            bool bIsFirst = true;
-
-            if (parameter == null)
-                return strParams;
-
-            foreach (Parameter param in parameter)
-            {
-                if (bIsFirst)
-                {
-                    bIsFirst = false;
-                }
-                else
-                {
-                    strParams += ", ";
-                }
-
-                if (IsStrType(param)) // string type
-                {
-                    strParams += string.Format("{0}", InParamName(param.Name));
-                }
-                else if (param.IsArray) // array
-                {
-                    strParams += string.Format("{0}", InParamName(param.Name));
-                }
-                else // generic type
-                {
-                    strParams += string.Format("{0}", InParamName(param.Name));
-                }
-            }
-
-            return strParams;
-        }  // 
-
-
 
     }
 
@@ -523,7 +486,7 @@ namespace ProtocolCompiler
             }
         }
 
-        public virtual string ParamInString(Parameter[] parameter)
+        public virtual string ParamInString(Parameter[] parameter, bool bUseOriginalType = false)
         {
             string strParams = "";
 
@@ -544,7 +507,7 @@ namespace ProtocolCompiler
                 {
                     strParams += string.Format("const {0}& {1}", InArrayTypeName(param), InParamName(param.Name));
                 }
-                else if (IsVariableSizeType(param.Type))
+                else if (!bUseOriginalType && IsVariableSizeType(param.Type))
                 {
                     strParams += string.Format("const Array<uint8_t>& {0}", InParamName(param.Name));
                 }
@@ -556,6 +519,48 @@ namespace ProtocolCompiler
 
             return strParams;
         }
+
+
+        public virtual string ParamArgument(Parameter[] parameter)
+        {
+            string strParams = "";
+            bool bIsFirst = true;
+
+            if (parameter == null)
+                return strParams;
+
+            foreach (Parameter param in parameter)
+            {
+                if (bIsFirst)
+                {
+                    bIsFirst = false;
+                }
+                else
+                {
+                    strParams += ", ";
+                }
+
+                if (IsStrType(param)) // string type
+                {
+                    strParams += string.Format("{0}", InParamName(param.Name));
+                }
+                else if (param.IsArray) // array
+                {
+                    strParams += string.Format("{0}", InParamName(param.Name));
+                }
+                else if (IsVariableSizeType(param.Type))
+                {
+                    strParams += string.Format("{0}", InParamName(param.Name));
+                }
+                else // generic type
+                {
+                    strParams += string.Format("{0}", InParamName(param.Name));
+                }
+            }
+
+            return strParams;
+        }  // 
+
 
     }
 

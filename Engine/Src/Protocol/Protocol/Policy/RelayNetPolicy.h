@@ -16,6 +16,10 @@
 
 
 
+class VariableTable;
+
+
+
 namespace SF
 {
  	namespace Policy

@@ -76,6 +76,7 @@ namespace SF
 
 			}; // Result JoinRelayInstanceC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* JoinRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -92,9 +93,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					, SerializedSizeOf(InRelayInstanceID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InPlayerIdentifier)
+					+ SerializedSizeOf(InRelayInstanceID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InPlayerIdentifier)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::JoinRelayInstanceC2SEvt::MID, __uiMessageSize ) );
@@ -176,6 +177,7 @@ namespace SF
 
 			}; // Result JoinRelayInstanceResS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* JoinRelayInstanceResS2CEvt::Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -193,10 +195,10 @@ namespace SF
 
 				uint16_t numberOfInMemberInfos = (uint16_t)InMemberInfos.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InRelayInstanceID)
-					, SerializedSizeOf(InMyEndpointID)
-					, SerializedSizeOf(InMemberInfos)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InRelayInstanceID)
+					+ SerializedSizeOf(InMyEndpointID)
+					+ SerializedSizeOf(InMemberInfos)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::JoinRelayInstanceResS2CEvt::MID, __uiMessageSize ) );
@@ -272,6 +274,7 @@ namespace SF
 
 			}; // Result LeaveRelayInstanceC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LeaveRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -288,8 +291,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					, SerializedSizeOf(InRelayInstanceID)
-					, SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InRelayInstanceID)
+					+ SerializedSizeOf(InPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::LeaveRelayInstanceC2SEvt::MID, __uiMessageSize ) );
@@ -363,6 +366,7 @@ namespace SF
 
 			}; // Result PlayerJoinS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PlayerJoinS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -379,8 +383,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					, SerializedSizeOf(InRelayInstanceID)
-					, SerializedSizeOf(InJoinedPlayerInfo)
+					+ SerializedSizeOf(InRelayInstanceID)
+					+ SerializedSizeOf(InJoinedPlayerInfo)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::PlayerJoinS2CEvt::MID, __uiMessageSize ) );
@@ -456,6 +460,7 @@ namespace SF
 
 			}; // Result PlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PlayerLeftS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -472,9 +477,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					, SerializedSizeOf(InRelayInstanceID)
-					, SerializedSizeOf(InLeftPlayerID)
-					, SerializedSizeOf(InKickedReason)
+					+ SerializedSizeOf(InRelayInstanceID)
+					+ SerializedSizeOf(InLeftPlayerID)
+					+ SerializedSizeOf(InKickedReason)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::PlayerLeftS2CEvt::MID, __uiMessageSize ) );
@@ -556,6 +561,7 @@ namespace SF
 
 			}; // Result RelayPacketC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RelayPacketC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -573,10 +579,10 @@ namespace SF
 
 				uint16_t numberOfInPayload = (uint16_t)InPayload.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					, SerializedSizeOf(InRelayInstanceID)
-					, SerializedSizeOf(InSenderEndpointID)
-					, SerializedSizeOf(InTargetEndpointMask)
-					, SerializedSizeOf(InPayload)
+					+ SerializedSizeOf(InRelayInstanceID)
+					+ SerializedSizeOf(InSenderEndpointID)
+					+ SerializedSizeOf(InTargetEndpointMask)
+					+ SerializedSizeOf(InPayload)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::RelayPacketC2SEvt::MID, __uiMessageSize ) );

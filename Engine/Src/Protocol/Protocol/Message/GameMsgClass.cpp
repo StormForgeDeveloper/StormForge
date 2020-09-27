@@ -64,6 +64,7 @@ namespace SF
 
 			}; // Result HeartBitC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* HeartBitC2SEvt::Create( IHeap& memHeap )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -148,6 +149,7 @@ namespace SF
 
 			}; // Result JoinGameServerCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* JoinGameServerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -164,10 +166,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InAccID)
-					, SerializedSizeOf(InTicket)
-					, SerializedSizeOf(InLoginEntityUID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InAccID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InLoginEntityUID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinGameServerCmd::MID, __uiMessageSize ) );
@@ -253,6 +255,7 @@ namespace SF
 
 			}; // Result JoinGameServerRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* JoinGameServerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -269,13 +272,13 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InNickName)
-					, SerializedSizeOf(InGameUID)
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InPartyLeaderID)
-					, SerializedSizeOf(InMatchingTicket)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InNickName)
+					+ SerializedSizeOf(InGameUID)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InPartyLeaderID)
+					+ SerializedSizeOf(InMatchingTicket)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinGameServerRes::MID, __uiMessageSize ) );
@@ -352,6 +355,7 @@ namespace SF
 
 			}; // Result GetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -368,7 +372,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTransactionID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetComplitionStateCmd::MID, __uiMessageSize ) );
@@ -443,6 +447,7 @@ namespace SF
 
 			}; // Result GetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -459,9 +464,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InComplitionState)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InComplitionState)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetComplitionStateRes::MID, __uiMessageSize ) );
@@ -537,6 +542,7 @@ namespace SF
 
 			}; // Result SetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* SetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InComplitionState )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -553,8 +559,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InComplitionState)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InComplitionState)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetComplitionStateCmd::MID, __uiMessageSize ) );
@@ -627,6 +633,7 @@ namespace SF
 
 			}; // Result SetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* SetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -643,8 +650,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetComplitionStateRes::MID, __uiMessageSize ) );
@@ -719,6 +726,7 @@ namespace SF
 
 			}; // Result RegisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RegisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -735,8 +743,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGCMRegisteredID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGCMRegisteredID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RegisterGCMCmd::MID, __uiMessageSize ) );
@@ -809,6 +817,7 @@ namespace SF
 
 			}; // Result RegisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RegisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -825,8 +834,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RegisterGCMRes::MID, __uiMessageSize ) );
@@ -901,6 +910,7 @@ namespace SF
 
 			}; // Result UnregisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* UnregisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -917,8 +927,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGCMRegisteredID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGCMRegisteredID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::UnregisterGCMCmd::MID, __uiMessageSize ) );
@@ -991,6 +1001,7 @@ namespace SF
 
 			}; // Result UnregisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* UnregisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1007,8 +1018,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::UnregisterGCMRes::MID, __uiMessageSize ) );
@@ -1082,6 +1093,7 @@ namespace SF
 
 			}; // Result InviteFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* InviteFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1098,8 +1110,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InFriendID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InFriendID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::InviteFriendCmd::MID, __uiMessageSize ) );
@@ -1172,6 +1184,7 @@ namespace SF
 
 			}; // Result InviteFriendRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* InviteFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1188,8 +1201,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::InviteFriendRes::MID, __uiMessageSize ) );
@@ -1265,6 +1278,7 @@ namespace SF
 
 			}; // Result AcceptFriendRequestCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* AcceptFriendRequestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1281,9 +1295,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InInviterID)
-					, SerializedSizeOf(InInviterFacebookUID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InInviterID)
+					+ SerializedSizeOf(InInviterFacebookUID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AcceptFriendRequestCmd::MID, __uiMessageSize ) );
@@ -1359,6 +1373,7 @@ namespace SF
 
 			}; // Result AcceptFriendRequestRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* AcceptFriendRequestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1375,9 +1390,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InNewFriend)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InNewFriend)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AcceptFriendRequestRes::MID, __uiMessageSize ) );
@@ -1450,6 +1465,7 @@ namespace SF
 
 			}; // Result FriendRequestAcceptedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* FriendRequestAcceptedS2CEvt::Create( IHeap& memHeap, const FriendInformation &InAccepter )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1466,7 +1482,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InAccepter)
+					+ SerializedSizeOf(InAccepter)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FriendRequestAcceptedS2CEvt::MID, __uiMessageSize ) );
@@ -1539,6 +1555,7 @@ namespace SF
 
 			}; // Result RemoveFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RemoveFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1555,8 +1572,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InFriendID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InFriendID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RemoveFriendCmd::MID, __uiMessageSize ) );
@@ -1631,6 +1648,7 @@ namespace SF
 
 			}; // Result RemoveFriendRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RemoveFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1647,9 +1665,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InFriendID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InFriendID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RemoveFriendRes::MID, __uiMessageSize ) );
@@ -1722,6 +1740,7 @@ namespace SF
 
 			}; // Result FriendRemovedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* FriendRemovedS2CEvt::Create( IHeap& memHeap, const AccountID &InFriendID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1738,7 +1757,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InFriendID)
+					+ SerializedSizeOf(InFriendID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FriendRemovedS2CEvt::MID, __uiMessageSize ) );
@@ -1813,6 +1832,7 @@ namespace SF
 
 			}; // Result GetFriendListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetFriendListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1829,9 +1849,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InStartIndex)
-					, SerializedSizeOf(InCount)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InStartIndex)
+					+ SerializedSizeOf(InCount)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetFriendListCmd::MID, __uiMessageSize ) );
@@ -1916,6 +1936,7 @@ namespace SF
 
 			}; // Result GetFriendListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetFriendListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1933,12 +1954,12 @@ namespace SF
 
 				uint16_t numberOfInFriendList = (uint16_t)InFriendList.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InMaxFriendSlot)
-					, SerializedSizeOf(InTotalNumberOfFriends)
-					, SerializedSizeOf(InStartIndex)
-					, SerializedSizeOf(InFriendList)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InMaxFriendSlot)
+					+ SerializedSizeOf(InTotalNumberOfFriends)
+					+ SerializedSizeOf(InStartIndex)
+					+ SerializedSizeOf(InFriendList)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetFriendListRes::MID, __uiMessageSize ) );
@@ -2014,6 +2035,7 @@ namespace SF
 
 			}; // Result GetNotificationListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetNotificationListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2030,7 +2052,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTransactionID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetNotificationListCmd::MID, __uiMessageSize ) );
@@ -2102,6 +2124,7 @@ namespace SF
 
 			}; // Result GetNotificationListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetNotificationListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2118,8 +2141,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetNotificationListRes::MID, __uiMessageSize ) );
@@ -2193,6 +2216,7 @@ namespace SF
 
 			}; // Result DeleteNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* DeleteNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2209,8 +2233,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InNotificationID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InNotificationID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::DeleteNotificationCmd::MID, __uiMessageSize ) );
@@ -2285,6 +2309,7 @@ namespace SF
 
 			}; // Result DeleteNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* DeleteNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2301,9 +2326,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InNotificationID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InNotificationID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::DeleteNotificationRes::MID, __uiMessageSize ) );
@@ -2378,6 +2403,7 @@ namespace SF
 
 			}; // Result SetNotificationReadCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* SetNotificationReadCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2394,8 +2420,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InNotificationID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InNotificationID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetNotificationReadCmd::MID, __uiMessageSize ) );
@@ -2470,6 +2496,7 @@ namespace SF
 
 			}; // Result SetNotificationReadRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* SetNotificationReadRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2486,9 +2513,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InNotificationID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InNotificationID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetNotificationReadRes::MID, __uiMessageSize ) );
@@ -2563,6 +2590,7 @@ namespace SF
 
 			}; // Result AcceptNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* AcceptNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2579,8 +2607,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InNotificationID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InNotificationID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AcceptNotificationCmd::MID, __uiMessageSize ) );
@@ -2655,6 +2683,7 @@ namespace SF
 
 			}; // Result AcceptNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* AcceptNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2671,9 +2700,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InNotificationID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InNotificationID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AcceptNotificationRes::MID, __uiMessageSize ) );
@@ -2759,6 +2788,7 @@ namespace SF
 
 			}; // Result NotifyS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const uint32_t &InNotificationType, const uint64_t &InMessageParam0, const uint64_t &InMessageParam1, const char* InMessageText, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2775,13 +2805,13 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InNotificationID)
-					, SerializedSizeOf(InNotificationType)
-					, SerializedSizeOf(InMessageParam0)
-					, SerializedSizeOf(InMessageParam1)
-					, SerializedSizeOf(InMessageText)
-					, SerializedSizeOf(InIsRead)
-					, SerializedSizeOf(InTimeStamp)
+					+ SerializedSizeOf(InNotificationID)
+					+ SerializedSizeOf(InNotificationType)
+					+ SerializedSizeOf(InMessageParam0)
+					+ SerializedSizeOf(InMessageParam1)
+					+ SerializedSizeOf(InMessageText)
+					+ SerializedSizeOf(InIsRead)
+					+ SerializedSizeOf(InTimeStamp)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::NotifyS2CEvt::MID, __uiMessageSize ) );
@@ -2861,6 +2891,7 @@ namespace SF
 
 			}; // Result FindPlayerByEMailCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* FindPlayerByEMailCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InPlayerEMail )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2877,8 +2908,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InPlayerEMail)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayerEMail)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByEMailCmd::MID, __uiMessageSize ) );
@@ -2953,6 +2984,7 @@ namespace SF
 
 			}; // Result FindPlayerByEMailRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* FindPlayerByEMailRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2969,9 +3001,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InPlayer)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayer)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByEMailRes::MID, __uiMessageSize ) );
@@ -3046,6 +3078,7 @@ namespace SF
 
 			}; // Result FindPlayerByPlayerIDCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* FindPlayerByPlayerIDCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3062,8 +3095,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByPlayerIDCmd::MID, __uiMessageSize ) );
@@ -3138,6 +3171,7 @@ namespace SF
 
 			}; // Result FindPlayerByPlayerIDRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* FindPlayerByPlayerIDRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3154,9 +3188,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InPlayer)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayer)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::FindPlayerByPlayerIDRes::MID, __uiMessageSize ) );
@@ -3234,6 +3268,7 @@ namespace SF
 
 			}; // Result RequestPlayerStatusUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RequestPlayerStatusUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3251,8 +3286,8 @@ namespace SF
 
 				uint16_t numberOfInTargetPlayerID = (uint16_t)InTargetPlayerID.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InTargetPlayerID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTargetPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestPlayerStatusUpdateCmd::MID, __uiMessageSize ) );
@@ -3325,6 +3360,7 @@ namespace SF
 
 			}; // Result RequestPlayerStatusUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RequestPlayerStatusUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3341,8 +3377,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestPlayerStatusUpdateRes::MID, __uiMessageSize ) );
@@ -3418,6 +3454,7 @@ namespace SF
 
 			}; // Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* NotifyPlayerStatusUpdatedS2CEvt::Create( IHeap& memHeap, const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3434,9 +3471,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InLatestActiveTime)
-					, SerializedSizeOf(InIsInGame)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InLatestActiveTime)
+					+ SerializedSizeOf(InIsInGame)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::NotifyPlayerStatusUpdatedS2CEvt::MID, __uiMessageSize ) );
@@ -3515,6 +3552,7 @@ namespace SF
 
 			}; // Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3531,10 +3569,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InRankingType)
-					, SerializedSizeOf(InBaseRanking)
-					, SerializedSizeOf(InCount)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InRankingType)
+					+ SerializedSizeOf(InBaseRanking)
+					+ SerializedSizeOf(InCount)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetRankingListCmd::MID, __uiMessageSize ) );
@@ -3614,6 +3652,7 @@ namespace SF
 
 			}; // Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3631,9 +3670,9 @@ namespace SF
 
 				uint16_t numberOfInRanking = (uint16_t)InRanking.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InRanking)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InRanking)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetRankingListRes::MID, __uiMessageSize ) );
@@ -3706,6 +3745,7 @@ namespace SF
 
 			}; // Result GetUserGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetUserGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3722,7 +3762,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTransactionID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetUserGamePlayerInfoCmd::MID, __uiMessageSize ) );
@@ -3748,6 +3788,16 @@ namespace SF
 			}; // Result GetUserGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GetUserGamePlayerInfoRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 22);
+			const VariableTable& GetUserGamePlayerInfoRes::GetAttributes() const
+			{
+ 				if (!m_AttributesHasParsed)
+				{
+ 					m_AttributesHasParsed = true;
+					InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
+					Attributes_ReadStream.ToInputStream()->Read(m_Attributes);
+				} // if (!m_AttributesHasParsed)
+				return m_Attributes;
+			} // const VariableTable& GetUserGamePlayerInfoRes::GetAttributes() const
 			Result GetUserGamePlayerInfoRes::ParseMessage( MessageData* pIMsg )
 			{
  				FunctionContext hr;
@@ -3767,8 +3817,6 @@ namespace SF
 				uint8_t* AttributesPtr = nullptr;
 				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
 				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
-				InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
-				protocolCheck(Attributes_ReadStream.ToInputStream()->Read(m_Attributes));
 
 				return hr;
 
@@ -3816,10 +3864,11 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
+				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InAttributes)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ serializedSizeOfInAttributes
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetUserGamePlayerInfoRes::MID, __uiMessageSize ) );
@@ -3834,6 +3883,43 @@ namespace SF
 
 				return hr;
 			}; // MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
+
+			MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInAttributes
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetUserGamePlayerInfoRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(serializedSizeOfInAttributes));
+				protocolCheck(output->Write(InAttributes));
+
+				return hr;
+			}; // MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 
 
 
@@ -3894,6 +3980,7 @@ namespace SF
 
 			}; // Result GetGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3910,8 +3997,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetGamePlayerInfoCmd::MID, __uiMessageSize ) );
@@ -3938,6 +4025,16 @@ namespace SF
 			}; // Result GetGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GetGamePlayerInfoRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 23);
+			const VariableTable& GetGamePlayerInfoRes::GetAttributes() const
+			{
+ 				if (!m_AttributesHasParsed)
+				{
+ 					m_AttributesHasParsed = true;
+					InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
+					Attributes_ReadStream.ToInputStream()->Read(m_Attributes);
+				} // if (!m_AttributesHasParsed)
+				return m_Attributes;
+			} // const VariableTable& GetGamePlayerInfoRes::GetAttributes() const
 			Result GetGamePlayerInfoRes::ParseMessage( MessageData* pIMsg )
 			{
  				FunctionContext hr;
@@ -3958,8 +4055,6 @@ namespace SF
 				uint8_t* AttributesPtr = nullptr;
 				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
 				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
-				InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
-				protocolCheck(Attributes_ReadStream.ToInputStream()->Read(m_Attributes));
 
 				return hr;
 
@@ -4008,11 +4103,12 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
+				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InAttributes)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInAttributes
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetGamePlayerInfoRes::MID, __uiMessageSize ) );
@@ -4028,6 +4124,45 @@ namespace SF
 
 				return hr;
 			}; // MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes )
+
+			MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInAttributes
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetGamePlayerInfoRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(InPlayerID));
+				protocolCheck(output->Write(serializedSizeOfInAttributes));
+				protocolCheck(output->Write(InAttributes));
+
+				return hr;
+			}; // MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
 
 
 
@@ -4088,6 +4223,7 @@ namespace SF
 
 			}; // Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LevelUpS2CEvt::Create( IHeap& memHeap, const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -4104,8 +4240,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InCurrentTotalExp)
-					, SerializedSizeOf(InCurrentLevel)
+					+ SerializedSizeOf(InCurrentTotalExp)
+					+ SerializedSizeOf(InCurrentLevel)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LevelUpS2CEvt::MID, __uiMessageSize ) );
@@ -4182,6 +4318,7 @@ namespace SF
 
 			}; // Result SetNickNameCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* SetNickNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -4198,9 +4335,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InNickName)
-					, SerializedSizeOf(InIsCostFree)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InNickName)
+					+ SerializedSizeOf(InIsCostFree)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetNickNameCmd::MID, __uiMessageSize ) );
@@ -4278,6 +4415,7 @@ namespace SF
 
 			}; // Result SetNickNameRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* SetNickNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -4294,10 +4432,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InTotalGem)
-					, SerializedSizeOf(InTotalGameMoney)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTotalGem)
+					+ SerializedSizeOf(InTotalGameMoney)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetNickNameRes::MID, __uiMessageSize ) );
@@ -4371,6 +4509,7 @@ namespace SF
 
 			}; // Result CreatePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* CreatePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -4387,7 +4526,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTransactionID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreatePartyCmd::MID, __uiMessageSize ) );
@@ -4461,6 +4600,7 @@ namespace SF
 
 			}; // Result CreatePartyRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* CreatePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -4477,9 +4617,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPartyUID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreatePartyRes::MID, __uiMessageSize ) );
@@ -4556,6 +4696,7 @@ namespace SF
 
 			}; // Result JoinPartyCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* JoinPartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -4572,9 +4713,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InInviterID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InInviterID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinPartyCmd::MID, __uiMessageSize ) );
@@ -4657,6 +4798,7 @@ namespace SF
 
 			}; // Result JoinPartyRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* JoinPartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -4674,11 +4816,11 @@ namespace SF
 
 				uint16_t numberOfInChatHistoryData = (uint16_t)InChatHistoryData.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InPartyLeaderID)
-					, SerializedSizeOf(InChatHistoryData)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InPartyLeaderID)
+					+ SerializedSizeOf(InChatHistoryData)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinPartyRes::MID, __uiMessageSize ) );
@@ -4755,6 +4897,7 @@ namespace SF
 
 			}; // Result PartyPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyPlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -4771,8 +4914,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InJoinedPlayer)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InJoinedPlayer)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyPlayerJoinedS2CEvt::MID, __uiMessageSize ) );
@@ -4846,6 +4989,7 @@ namespace SF
 
 			}; // Result PartyLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyLeaderChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InNewLeaderID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -4862,8 +5006,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InNewLeaderID)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InNewLeaderID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyLeaderChangedS2CEvt::MID, __uiMessageSize ) );
@@ -4939,6 +5083,7 @@ namespace SF
 
 			}; // Result LeavePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LeavePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -4955,9 +5100,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeavePartyCmd::MID, __uiMessageSize ) );
@@ -5031,6 +5176,7 @@ namespace SF
 
 			}; // Result LeavePartyRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LeavePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5047,8 +5193,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeavePartyRes::MID, __uiMessageSize ) );
@@ -5122,6 +5268,7 @@ namespace SF
 
 			}; // Result PartyPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyPlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InLeftPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5138,8 +5285,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InLeftPlayerID)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InLeftPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyPlayerLeftS2CEvt::MID, __uiMessageSize ) );
@@ -5217,6 +5364,7 @@ namespace SF
 
 			}; // Result PartyKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5233,10 +5381,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InPlayerToKick)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InPlayerToKick)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyKickPlayerCmd::MID, __uiMessageSize ) );
@@ -5311,6 +5459,7 @@ namespace SF
 
 			}; // Result PartyKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5327,8 +5476,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyKickPlayerRes::MID, __uiMessageSize ) );
@@ -5402,6 +5551,7 @@ namespace SF
 
 			}; // Result PartyPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyPlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InKickedPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5418,8 +5568,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InKickedPlayerID)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InKickedPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyPlayerKickedS2CEvt::MID, __uiMessageSize ) );
@@ -5493,6 +5643,7 @@ namespace SF
 
 			}; // Result PartyInviteCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyInviteCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5509,8 +5660,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InInviteTargetID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InInviteTargetID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyInviteCmd::MID, __uiMessageSize ) );
@@ -5583,6 +5734,7 @@ namespace SF
 
 			}; // Result PartyInviteRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyInviteRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5599,8 +5751,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyInviteRes::MID, __uiMessageSize ) );
@@ -5677,6 +5829,7 @@ namespace SF
 
 			}; // Result PartyInviteRequestedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyInviteRequestedS2CEvt::Create( IHeap& memHeap, const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5693,9 +5846,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InInviterID)
-					, SerializedSizeOf(InInviterName)
-					, SerializedSizeOf(InPartyToJoinUID)
+					+ SerializedSizeOf(InInviterID)
+					+ SerializedSizeOf(InInviterName)
+					+ SerializedSizeOf(InPartyToJoinUID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyInviteRequestedS2CEvt::MID, __uiMessageSize ) );
@@ -5770,6 +5923,7 @@ namespace SF
 
 			}; // Result PartyQuickChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyQuickChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5786,8 +5940,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InQuickChatID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InQuickChatID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyQuickChatMessageCmd::MID, __uiMessageSize ) );
@@ -5860,6 +6014,7 @@ namespace SF
 
 			}; // Result PartyQuickChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyQuickChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5876,8 +6031,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyQuickChatMessageRes::MID, __uiMessageSize ) );
@@ -5951,6 +6106,7 @@ namespace SF
 
 			}; // Result PartyQuickChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyQuickChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const uint32_t &InQuickChatID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -5967,8 +6123,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InSenderID)
-					, SerializedSizeOf(InQuickChatID)
+					+ SerializedSizeOf(InSenderID)
+					+ SerializedSizeOf(InQuickChatID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyQuickChatMessageS2CEvt::MID, __uiMessageSize ) );
@@ -6043,6 +6199,7 @@ namespace SF
 
 			}; // Result PartyChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -6059,8 +6216,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InChatMessage)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InChatMessage)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyChatMessageCmd::MID, __uiMessageSize ) );
@@ -6133,6 +6290,7 @@ namespace SF
 
 			}; // Result PartyChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -6149,8 +6307,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyChatMessageRes::MID, __uiMessageSize ) );
@@ -6228,6 +6386,7 @@ namespace SF
 
 			}; // Result PartyChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PartyChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -6244,9 +6403,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InSenderID)
-					, SerializedSizeOf(InSenderName)
-					, SerializedSizeOf(InChatMessage)
+					+ SerializedSizeOf(InSenderID)
+					+ SerializedSizeOf(InSenderName)
+					+ SerializedSizeOf(InChatMessage)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PartyChatMessageS2CEvt::MID, __uiMessageSize ) );
@@ -6325,6 +6484,7 @@ namespace SF
 
 			}; // Result JoinGameCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* JoinGameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -6341,10 +6501,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InTicket)
-					, SerializedSizeOf(InInsUID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InInsUID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinGameCmd::MID, __uiMessageSize ) );
@@ -6447,6 +6607,7 @@ namespace SF
 
 			}; // Result JoinGameRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* JoinGameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -6465,19 +6626,19 @@ namespace SF
 				uint16_t numberOfInChatHistoryData = (uint16_t)InChatHistoryData.size(); 
 				uint16_t numberOfInGameLogData = (uint16_t)InGameLogData.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InInsUID)
-					, SerializedSizeOf(InTimeStamp)
-					, SerializedSizeOf(InGameState)
-					, SerializedSizeOf(InDay)
-					, SerializedSizeOf(InMaxPlayer)
-					, SerializedSizeOf(InPlayerIndex)
-					, SerializedSizeOf(InPlayerCharacter)
-					, SerializedSizeOf(InRole)
-					, SerializedSizeOf(InDead)
-					, SerializedSizeOf(InChatHistoryData)
-					, SerializedSizeOf(InGameLogData)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InInsUID)
+					+ SerializedSizeOf(InTimeStamp)
+					+ SerializedSizeOf(InGameState)
+					+ SerializedSizeOf(InDay)
+					+ SerializedSizeOf(InMaxPlayer)
+					+ SerializedSizeOf(InPlayerIndex)
+					+ SerializedSizeOf(InPlayerCharacter)
+					+ SerializedSizeOf(InRole)
+					+ SerializedSizeOf(InDead)
+					+ SerializedSizeOf(InChatHistoryData)
+					+ SerializedSizeOf(InGameLogData)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinGameRes::MID, __uiMessageSize ) );
@@ -6570,6 +6731,7 @@ namespace SF
 
 			}; // Result PlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer, const uint8_t &InJoinedPlayerRole, const uint8_t &InJoinedPlayerDead, const uint8_t &InJoinedPlayerIndex, const uint8_t &InJoinedPlayerCharacter )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -6586,12 +6748,12 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InJoinedPlayer)
-					, SerializedSizeOf(InJoinedPlayerRole)
-					, SerializedSizeOf(InJoinedPlayerDead)
-					, SerializedSizeOf(InJoinedPlayerIndex)
-					, SerializedSizeOf(InJoinedPlayerCharacter)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InJoinedPlayer)
+					+ SerializedSizeOf(InJoinedPlayerRole)
+					+ SerializedSizeOf(InJoinedPlayerDead)
+					+ SerializedSizeOf(InJoinedPlayerIndex)
+					+ SerializedSizeOf(InJoinedPlayerCharacter)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PlayerJoinedS2CEvt::MID, __uiMessageSize ) );
@@ -6673,6 +6835,7 @@ namespace SF
 
 			}; // Result LeaveGameCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LeaveGameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -6689,10 +6852,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTicket)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeaveGameCmd::MID, __uiMessageSize ) );
@@ -6767,6 +6930,7 @@ namespace SF
 
 			}; // Result LeaveGameRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LeaveGameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -6783,8 +6947,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeaveGameRes::MID, __uiMessageSize ) );
@@ -6858,6 +7022,7 @@ namespace SF
 
 			}; // Result PlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const AccountID &InLeftPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -6874,8 +7039,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InLeftPlayerID)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InLeftPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PlayerLeftS2CEvt::MID, __uiMessageSize ) );
@@ -6953,6 +7118,7 @@ namespace SF
 
 			}; // Result KickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* KickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -6969,10 +7135,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InPlayerToKick)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InPlayerToKick)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::KickPlayerCmd::MID, __uiMessageSize ) );
@@ -7047,6 +7213,7 @@ namespace SF
 
 			}; // Result KickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* KickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -7063,8 +7230,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::KickPlayerRes::MID, __uiMessageSize ) );
@@ -7138,6 +7305,7 @@ namespace SF
 
 			}; // Result PlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const AccountID &InKickedPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -7154,8 +7322,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InKickedPlayerID)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InKickedPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PlayerKickedS2CEvt::MID, __uiMessageSize ) );
@@ -7233,6 +7401,7 @@ namespace SF
 
 			}; // Result AssignRoleCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* AssignRoleCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -7249,10 +7418,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTicket)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AssignRoleCmd::MID, __uiMessageSize ) );
@@ -7327,6 +7496,7 @@ namespace SF
 
 			}; // Result AssignRoleRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* AssignRoleRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -7343,8 +7513,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AssignRoleRes::MID, __uiMessageSize ) );
@@ -7420,6 +7590,7 @@ namespace SF
 
 			}; // Result RoleAssignedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RoleAssignedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const uint8_t &InRole )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -7436,9 +7607,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InRole)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InRole)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RoleAssignedS2CEvt::MID, __uiMessageSize ) );
@@ -7516,6 +7687,7 @@ namespace SF
 
 			}; // Result ChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage, const uint8_t &InRole )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -7532,9 +7704,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InChatMessage)
-					, SerializedSizeOf(InRole)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InChatMessage)
+					+ SerializedSizeOf(InRole)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatMessageCmd::MID, __uiMessageSize ) );
@@ -7608,6 +7780,7 @@ namespace SF
 
 			}; // Result ChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -7624,8 +7797,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatMessageRes::MID, __uiMessageSize ) );
@@ -7705,6 +7878,7 @@ namespace SF
 
 			}; // Result ChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const uint8_t &InRole, const char* InSenderName, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -7721,10 +7895,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InSenderID)
-					, SerializedSizeOf(InRole)
-					, SerializedSizeOf(InSenderName)
-					, SerializedSizeOf(InChatMessage)
+					+ SerializedSizeOf(InSenderID)
+					+ SerializedSizeOf(InRole)
+					+ SerializedSizeOf(InSenderName)
+					+ SerializedSizeOf(InChatMessage)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatMessageS2CEvt::MID, __uiMessageSize ) );
@@ -7804,6 +7978,7 @@ namespace SF
 
 			}; // Result AdvanceGameCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* AdvanceGameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -7820,10 +7995,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTicket)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AdvanceGameCmd::MID, __uiMessageSize ) );
@@ -7898,6 +8073,7 @@ namespace SF
 
 			}; // Result AdvanceGameRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* AdvanceGameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -7914,8 +8090,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::AdvanceGameRes::MID, __uiMessageSize ) );
@@ -7993,6 +8169,7 @@ namespace SF
 
 			}; // Result GameAdvancedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GameAdvancedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8009,10 +8186,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InTimeStamp)
-					, SerializedSizeOf(InGameState)
-					, SerializedSizeOf(InDay)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InTimeStamp)
+					+ SerializedSizeOf(InGameState)
+					+ SerializedSizeOf(InDay)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameAdvancedS2CEvt::MID, __uiMessageSize ) );
@@ -8092,6 +8269,7 @@ namespace SF
 
 			}; // Result GameEndedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GameEndedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const uint8_t &InWinner, const uint32_t &InGainedExp, const uint32_t &InGainedGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8108,10 +8286,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InWinner)
-					, SerializedSizeOf(InGainedExp)
-					, SerializedSizeOf(InGainedGameMoney)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InWinner)
+					+ SerializedSizeOf(InGainedExp)
+					+ SerializedSizeOf(InGainedGameMoney)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameEndedS2CEvt::MID, __uiMessageSize ) );
@@ -8191,6 +8369,7 @@ namespace SF
 
 			}; // Result VoteGameAdvanceCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* VoteGameAdvanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8207,10 +8386,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTicket)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::VoteGameAdvanceCmd::MID, __uiMessageSize ) );
@@ -8285,6 +8464,7 @@ namespace SF
 
 			}; // Result VoteGameAdvanceRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* VoteGameAdvanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8301,8 +8481,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::VoteGameAdvanceRes::MID, __uiMessageSize ) );
@@ -8376,6 +8556,7 @@ namespace SF
 
 			}; // Result GameAdvanceVotedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GameAdvanceVotedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const AccountID &InVoter )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8392,8 +8573,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InVoter)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InVoter)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameAdvanceVotedS2CEvt::MID, __uiMessageSize ) );
@@ -8475,6 +8656,7 @@ namespace SF
 
 			}; // Result VoteCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* VoteCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8491,12 +8673,12 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InTicket)
-					, SerializedSizeOf(InVoteTarget)
-					, SerializedSizeOf(InActionSerial)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InVoteTarget)
+					+ SerializedSizeOf(InActionSerial)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::VoteCmd::MID, __uiMessageSize ) );
@@ -8573,6 +8755,7 @@ namespace SF
 
 			}; // Result VoteRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* VoteRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8589,8 +8772,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::VoteRes::MID, __uiMessageSize ) );
@@ -8666,6 +8849,7 @@ namespace SF
 
 			}; // Result VotedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* VotedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const AccountID &InVoter, const AccountID &InVotedTarget )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8682,9 +8866,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InVoter)
-					, SerializedSizeOf(InVotedTarget)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InVoter)
+					+ SerializedSizeOf(InVotedTarget)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::VotedS2CEvt::MID, __uiMessageSize ) );
@@ -8762,6 +8946,7 @@ namespace SF
 
 			}; // Result VoteEndS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* VoteEndS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const Array<AccountID>& InVoted )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8779,8 +8964,8 @@ namespace SF
 
 				uint16_t numberOfInVoted = (uint16_t)InVoted.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InVoted)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InVoted)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::VoteEndS2CEvt::MID, __uiMessageSize ) );
@@ -8856,6 +9041,7 @@ namespace SF
 
 			}; // Result PlayerKilledS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PlayerKilledS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const AccountID &InKilledPlayer, const uint8_t &InReason )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8872,9 +9058,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InKilledPlayer)
-					, SerializedSizeOf(InReason)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InKilledPlayer)
+					+ SerializedSizeOf(InReason)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PlayerKilledS2CEvt::MID, __uiMessageSize ) );
@@ -8953,6 +9139,7 @@ namespace SF
 
 			}; // Result PlayerRevealedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* PlayerRevealedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const AccountID &InRevealedPlayerID, const uint8_t &InRole, const uint8_t &InReason )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -8969,10 +9156,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InGameInsUID)
-					, SerializedSizeOf(InRevealedPlayerID)
-					, SerializedSizeOf(InRole)
-					, SerializedSizeOf(InReason)
+					+ SerializedSizeOf(InGameInsUID)
+					+ SerializedSizeOf(InRevealedPlayerID)
+					+ SerializedSizeOf(InRole)
+					+ SerializedSizeOf(InReason)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PlayerRevealedS2CEvt::MID, __uiMessageSize ) );
@@ -9046,6 +9233,7 @@ namespace SF
 
 			}; // Result GamePlayAgainCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GamePlayAgainCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -9062,7 +9250,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTransactionID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayAgainCmd::MID, __uiMessageSize ) );
@@ -9138,6 +9326,7 @@ namespace SF
 
 			}; // Result GamePlayAgainRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GamePlayAgainRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -9154,10 +9343,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InTotalGem)
-					, SerializedSizeOf(InTotalGameMoney)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTotalGem)
+					+ SerializedSizeOf(InTotalGameMoney)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayAgainRes::MID, __uiMessageSize ) );
@@ -9233,6 +9422,7 @@ namespace SF
 
 			}; // Result GamePlayAgainS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GamePlayAgainS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InLeadPlayer )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -9249,8 +9439,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InLeadPlayer)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InLeadPlayer)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayAgainS2CEvt::MID, __uiMessageSize ) );
@@ -9327,6 +9517,7 @@ namespace SF
 
 			}; // Result GameRevealPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GameRevealPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -9344,8 +9535,8 @@ namespace SF
 
 				uint16_t numberOfInTargetPlayerID = (uint16_t)InTargetPlayerID.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InTargetPlayerID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTargetPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameRevealPlayerCmd::MID, __uiMessageSize ) );
@@ -9432,6 +9623,7 @@ namespace SF
 
 			}; // Result GameRevealPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GameRevealPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<AccountID>& InRevealedPlayerID, const Array<uint8_t>& InRevealedRole, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -9450,12 +9642,12 @@ namespace SF
 				uint16_t numberOfInRevealedPlayerID = (uint16_t)InRevealedPlayerID.size(); 
 				uint16_t numberOfInRevealedRole = (uint16_t)InRevealedRole.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InRevealedPlayerID)
-					, SerializedSizeOf(InRevealedRole)
-					, SerializedSizeOf(InTotalGem)
-					, SerializedSizeOf(InTotalGameMoney)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InRevealedPlayerID)
+					+ SerializedSizeOf(InRevealedRole)
+					+ SerializedSizeOf(InTotalGem)
+					+ SerializedSizeOf(InTotalGameMoney)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameRevealPlayerRes::MID, __uiMessageSize ) );
@@ -9531,6 +9723,7 @@ namespace SF
 
 			}; // Result GamePlayerReviveCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GamePlayerReviveCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -9547,7 +9740,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTransactionID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayerReviveCmd::MID, __uiMessageSize ) );
@@ -9623,6 +9816,7 @@ namespace SF
 
 			}; // Result GamePlayerReviveRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GamePlayerReviveRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -9639,10 +9833,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InTotalGem)
-					, SerializedSizeOf(InTotalGameMoney)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTotalGem)
+					+ SerializedSizeOf(InTotalGameMoney)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayerReviveRes::MID, __uiMessageSize ) );
@@ -9716,6 +9910,7 @@ namespace SF
 
 			}; // Result GamePlayerRevivedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GamePlayerRevivedS2CEvt::Create( IHeap& memHeap, const AccountID &InRevivedPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -9732,7 +9927,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InRevivedPlayerID)
+					+ SerializedSizeOf(InRevivedPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayerRevivedS2CEvt::MID, __uiMessageSize ) );
@@ -9803,6 +9998,7 @@ namespace SF
 
 			}; // Result GamePlayerResetRankCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GamePlayerResetRankCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -9819,7 +10015,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTransactionID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayerResetRankCmd::MID, __uiMessageSize ) );
@@ -9895,6 +10091,7 @@ namespace SF
 
 			}; // Result GamePlayerResetRankRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GamePlayerResetRankRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -9911,10 +10108,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InTotalGem)
-					, SerializedSizeOf(InTotalGameMoney)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTotalGem)
+					+ SerializedSizeOf(InTotalGameMoney)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GamePlayerResetRankRes::MID, __uiMessageSize ) );
@@ -9992,6 +10189,7 @@ namespace SF
 
 			}; // Result RequestGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RequestGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -10008,9 +10206,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InNumPlayer)
-					, SerializedSizeOf(InRequestRole)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InNumPlayer)
+					+ SerializedSizeOf(InRequestRole)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestGameMatchCmd::MID, __uiMessageSize ) );
@@ -10088,6 +10286,7 @@ namespace SF
 
 			}; // Result RequestGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RequestGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -10104,10 +10303,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InTotalGem)
-					, SerializedSizeOf(InTotalGameMoney)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTotalGem)
+					+ SerializedSizeOf(InTotalGameMoney)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestGameMatchRes::MID, __uiMessageSize ) );
@@ -10213,6 +10412,7 @@ namespace SF
 
 			}; // Result GameMatchedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GameMatchedS2CEvt::Create( IHeap& memHeap, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -10231,20 +10431,20 @@ namespace SF
 				uint16_t numberOfInChatHistoryData = (uint16_t)InChatHistoryData.size(); 
 				uint16_t numberOfInGameLogData = (uint16_t)InGameLogData.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InInsUID)
-					, SerializedSizeOf(InTimeStamp)
-					, SerializedSizeOf(InGameState)
-					, SerializedSizeOf(InDay)
-					, SerializedSizeOf(InMaxPlayer)
-					, SerializedSizeOf(InPlayerIndex)
-					, SerializedSizeOf(InPlayerCharacter)
-					, SerializedSizeOf(InRole)
-					, SerializedSizeOf(InDead)
-					, SerializedSizeOf(InChatHistoryData)
-					, SerializedSizeOf(InGameLogData)
-					, SerializedSizeOf(InStamina)
-					, SerializedSizeOf(InTotalGem)
-					, SerializedSizeOf(InTotalGameMoney)
+					+ SerializedSizeOf(InInsUID)
+					+ SerializedSizeOf(InTimeStamp)
+					+ SerializedSizeOf(InGameState)
+					+ SerializedSizeOf(InDay)
+					+ SerializedSizeOf(InMaxPlayer)
+					+ SerializedSizeOf(InPlayerIndex)
+					+ SerializedSizeOf(InPlayerCharacter)
+					+ SerializedSizeOf(InRole)
+					+ SerializedSizeOf(InDead)
+					+ SerializedSizeOf(InChatHistoryData)
+					+ SerializedSizeOf(InGameLogData)
+					+ SerializedSizeOf(InStamina)
+					+ SerializedSizeOf(InTotalGem)
+					+ SerializedSizeOf(InTotalGameMoney)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameMatchedS2CEvt::MID, __uiMessageSize ) );
@@ -10328,6 +10528,7 @@ namespace SF
 
 			}; // Result GameMatchFailedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GameMatchFailedS2CEvt::Create( IHeap& memHeap, const Result &InFailedReason )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -10344,7 +10545,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InFailedReason)
+					+ SerializedSizeOf(InFailedReason)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameMatchFailedS2CEvt::MID, __uiMessageSize ) );
@@ -10407,6 +10608,7 @@ namespace SF
 				return hr;
 
 			}; // Result GameMatchingStartedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+
 
 			MessageData* GameMatchingStartedS2CEvt::Create( IHeap& memHeap )
 			{
@@ -10486,6 +10688,7 @@ namespace SF
 
 			}; // Result CancelGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* CancelGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -10502,7 +10705,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTransactionID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CancelGameMatchCmd::MID, __uiMessageSize ) );
@@ -10574,6 +10777,7 @@ namespace SF
 
 			}; // Result CancelGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* CancelGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -10590,8 +10794,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CancelGameMatchRes::MID, __uiMessageSize ) );
@@ -10655,6 +10859,7 @@ namespace SF
 				return hr;
 
 			}; // Result GameMatchingCanceledS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+
 
 			MessageData* GameMatchingCanceledS2CEvt::Create( IHeap& memHeap )
 			{
@@ -10736,6 +10941,7 @@ namespace SF
 
 			}; // Result BuyShopItemPrepareCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* BuyShopItemPrepareCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -10752,8 +10958,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InShopItemID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InShopItemID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::BuyShopItemPrepareCmd::MID, __uiMessageSize ) );
@@ -10831,6 +11037,7 @@ namespace SF
 
 			}; // Result BuyShopItemPrepareRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* BuyShopItemPrepareRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -10847,10 +11054,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InShopItemID)
-					, SerializedSizeOf(InPurchaseID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InShopItemID)
+					+ SerializedSizeOf(InPurchaseID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::BuyShopItemPrepareRes::MID, __uiMessageSize ) );
@@ -10940,6 +11147,7 @@ namespace SF
 
 			}; // Result BuyShopItemCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* BuyShopItemCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -10957,12 +11165,12 @@ namespace SF
 
 				uint16_t numberOfInPurchaseToken = (uint16_t)InPurchaseToken.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InShopItemID)
-					, SerializedSizeOf(InPlatform)
-					, SerializedSizeOf(InPackageName)
-					, SerializedSizeOf(InPurchaseTransactionID)
-					, SerializedSizeOf(InPurchaseToken)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InShopItemID)
+					+ SerializedSizeOf(InPlatform)
+					+ SerializedSizeOf(InPackageName)
+					+ SerializedSizeOf(InPurchaseTransactionID)
+					+ SerializedSizeOf(InPurchaseToken)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::BuyShopItemCmd::MID, __uiMessageSize ) );
@@ -11041,6 +11249,7 @@ namespace SF
 
 			}; // Result BuyShopItemRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* BuyShopItemRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11057,9 +11266,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InShopItemID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InShopItemID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::BuyShopItemRes::MID, __uiMessageSize ) );
@@ -11138,6 +11347,7 @@ namespace SF
 
 			}; // Result CreateOrJoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* CreateOrJoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11154,9 +11364,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InChannelName)
-					, SerializedSizeOf(InPasscode)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InChannelName)
+					+ SerializedSizeOf(InPasscode)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateOrJoinChatChannelCmd::MID, __uiMessageSize ) );
@@ -11232,6 +11442,7 @@ namespace SF
 
 			}; // Result CreateOrJoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11248,9 +11459,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InChatUID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateOrJoinChatChannelRes::MID, __uiMessageSize ) );
@@ -11327,6 +11538,7 @@ namespace SF
 
 			}; // Result JoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11343,9 +11555,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InChatUID)
-					, SerializedSizeOf(InInviterID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InInviterID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinChatChannelCmd::MID, __uiMessageSize ) );
@@ -11423,6 +11635,7 @@ namespace SF
 
 			}; // Result JoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11439,10 +11652,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InPartyUID)
-					, SerializedSizeOf(InPartyLeaderID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPartyUID)
+					+ SerializedSizeOf(InPartyLeaderID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinChatChannelRes::MID, __uiMessageSize ) );
@@ -11518,6 +11731,7 @@ namespace SF
 
 			}; // Result ChatChannelPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatChannelPlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11534,8 +11748,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InChatUID)
-					, SerializedSizeOf(InJoinedPlayer)
+					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InJoinedPlayer)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelPlayerJoinedS2CEvt::MID, __uiMessageSize ) );
@@ -11609,6 +11823,7 @@ namespace SF
 
 			}; // Result ChatChannelLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatChannelLeaderChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InNewLeaderID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11625,8 +11840,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InChatUID)
-					, SerializedSizeOf(InNewLeaderID)
+					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InNewLeaderID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelLeaderChangedS2CEvt::MID, __uiMessageSize ) );
@@ -11702,6 +11917,7 @@ namespace SF
 
 			}; // Result LeaveChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LeaveChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11718,9 +11934,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InChatUID)
-					, SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeaveChatChannelCmd::MID, __uiMessageSize ) );
@@ -11794,6 +12010,7 @@ namespace SF
 
 			}; // Result LeaveChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* LeaveChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11810,8 +12027,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::LeaveChatChannelRes::MID, __uiMessageSize ) );
@@ -11885,6 +12102,7 @@ namespace SF
 
 			}; // Result ChatChannelPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatChannelPlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InLeftPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11901,8 +12119,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InChatUID)
-					, SerializedSizeOf(InLeftPlayerID)
+					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InLeftPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelPlayerLeftS2CEvt::MID, __uiMessageSize ) );
@@ -11980,6 +12198,7 @@ namespace SF
 
 			}; // Result ChatChannelKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatChannelKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -11996,10 +12215,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InChatUID)
-					, SerializedSizeOf(InPlayerID)
-					, SerializedSizeOf(InPlayerToKick)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InPlayerToKick)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelKickPlayerCmd::MID, __uiMessageSize ) );
@@ -12074,6 +12293,7 @@ namespace SF
 
 			}; // Result ChatChannelKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatChannelKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -12090,8 +12310,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelKickPlayerRes::MID, __uiMessageSize ) );
@@ -12165,6 +12385,7 @@ namespace SF
 
 			}; // Result ChatChannelPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatChannelPlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -12181,8 +12402,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InChatUID)
-					, SerializedSizeOf(InKickedPlayerID)
+					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InKickedPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelPlayerKickedS2CEvt::MID, __uiMessageSize ) );
@@ -12259,6 +12480,7 @@ namespace SF
 
 			}; // Result ChatChannelChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -12275,9 +12497,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InChatUID)
-					, SerializedSizeOf(InChatMessage)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InChatMessage)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelChatMessageCmd::MID, __uiMessageSize ) );
@@ -12351,6 +12573,7 @@ namespace SF
 
 			}; // Result ChatChannelChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatChannelChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -12367,8 +12590,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelChatMessageRes::MID, __uiMessageSize ) );
@@ -12446,6 +12669,7 @@ namespace SF
 
 			}; // Result ChatChannelChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -12462,9 +12686,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InSenderID)
-					, SerializedSizeOf(InSenderName)
-					, SerializedSizeOf(InChatMessage)
+					+ SerializedSizeOf(InSenderID)
+					+ SerializedSizeOf(InSenderName)
+					+ SerializedSizeOf(InChatMessage)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelChatMessageS2CEvt::MID, __uiMessageSize ) );
@@ -12493,6 +12717,16 @@ namespace SF
 
 			// Cmd: Create character
 			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 84);
+			const VariableTable& CreateCharacterCmd::GetAttributes() const
+			{
+ 				if (!m_AttributesHasParsed)
+				{
+ 					m_AttributesHasParsed = true;
+					InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
+					Attributes_ReadStream.ToInputStream()->Read(m_Attributes);
+				} // if (!m_AttributesHasParsed)
+				return m_Attributes;
+			} // const VariableTable& CreateCharacterCmd::GetAttributes() const
 			Result CreateCharacterCmd::ParseMessage( MessageData* pIMsg )
 			{
  				FunctionContext hr;
@@ -12513,8 +12747,6 @@ namespace SF
 				uint8_t* AttributesPtr = nullptr;
 				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
 				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
-				InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
-				protocolCheck(Attributes_ReadStream.ToInputStream()->Read(m_Attributes));
 
 				return hr;
 
@@ -12562,10 +12794,11 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
+				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InCharacterName)
-					, SerializedSizeOf(InAttributes)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InCharacterName)
+					+ serializedSizeOfInAttributes
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateCharacterCmd::MID, __uiMessageSize ) );
@@ -12580,6 +12813,43 @@ namespace SF
 
 				return hr;
 			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes )
+
+			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InCharacterName)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInAttributes
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateCharacterCmd::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InCharacterName));
+				protocolCheck(output->Write(serializedSizeOfInAttributes));
+				protocolCheck(output->Write(InAttributes));
+
+				return hr;
+			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes )
 
 
 
@@ -12641,6 +12911,7 @@ namespace SF
 
 			}; // Result CreateCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* CreateCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const int32_t &InCharacterID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -12657,9 +12928,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InCharacterID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InCharacterID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateCharacterRes::MID, __uiMessageSize ) );
@@ -12734,6 +13005,7 @@ namespace SF
 
 			}; // Result RemoveCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RemoveCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const int32_t &InCharacterID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -12750,8 +13022,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InCharacterID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InCharacterID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RemoveCharacterCmd::MID, __uiMessageSize ) );
@@ -12824,6 +13096,7 @@ namespace SF
 
 			}; // Result RemoveCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* RemoveCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -12840,8 +13113,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RemoveCharacterRes::MID, __uiMessageSize ) );
@@ -12913,6 +13186,7 @@ namespace SF
 
 			}; // Result GetCharacterListCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetCharacterListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -12929,7 +13203,7 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTransactionID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterListCmd::MID, __uiMessageSize ) );
@@ -13006,6 +13280,7 @@ namespace SF
 
 			}; // Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<int32_t>& InCharacterIDs )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -13023,9 +13298,9 @@ namespace SF
 
 				uint16_t numberOfInCharacterIDs = (uint16_t)InCharacterIDs.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InCharacterIDs)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InCharacterIDs)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterListRes::MID, __uiMessageSize ) );
@@ -13103,6 +13378,7 @@ namespace SF
 
 			}; // Result GetCharacterDataCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GetCharacterDataCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const int32_t &InCharacterID, const char* InAttributeNames )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -13119,9 +13395,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InCharacterID)
-					, SerializedSizeOf(InAttributeNames)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InCharacterID)
+					+ SerializedSizeOf(InAttributeNames)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataCmd::MID, __uiMessageSize ) );
@@ -13149,6 +13425,16 @@ namespace SF
 			}; // Result GetCharacterDataCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GetCharacterDataRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 87);
+			const VariableTable& GetCharacterDataRes::GetAttributes() const
+			{
+ 				if (!m_AttributesHasParsed)
+				{
+ 					m_AttributesHasParsed = true;
+					InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
+					Attributes_ReadStream.ToInputStream()->Read(m_Attributes);
+				} // if (!m_AttributesHasParsed)
+				return m_Attributes;
+			} // const VariableTable& GetCharacterDataRes::GetAttributes() const
 			Result GetCharacterDataRes::ParseMessage( MessageData* pIMsg )
 			{
  				FunctionContext hr;
@@ -13168,8 +13454,6 @@ namespace SF
 				uint8_t* AttributesPtr = nullptr;
 				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
 				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
-				InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
-				protocolCheck(Attributes_ReadStream.ToInputStream()->Read(m_Attributes));
 
 				return hr;
 
@@ -13217,10 +13501,11 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
+				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InAttributes)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ serializedSizeOfInAttributes
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataRes::MID, __uiMessageSize ) );
@@ -13235,6 +13520,43 @@ namespace SF
 
 				return hr;
 			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
+
+			MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						delete pNewMsg;
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInAttributes
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataRes::MID, __uiMessageSize ) );
+				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(output->Write(InTransactionID));
+				protocolCheck(output->Write(InResult));
+				protocolCheck(output->Write(serializedSizeOfInAttributes));
+				protocolCheck(output->Write(InAttributes));
+
+				return hr;
+			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 
 
 
@@ -13295,6 +13617,7 @@ namespace SF
 
 			}; // Result GiveStaminaCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GiveStaminaCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InTargetPlayer )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -13311,8 +13634,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InTargetPlayer)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTargetPlayer)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GiveStaminaCmd::MID, __uiMessageSize ) );
@@ -13389,6 +13712,7 @@ namespace SF
 
 			}; // Result GiveStaminaRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GiveStaminaRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -13405,10 +13729,10 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
-					, SerializedSizeOf(InTargetPlayer)
-					, SerializedSizeOf(InTimeStamp)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTargetPlayer)
+					+ SerializedSizeOf(InTimeStamp)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GiveStaminaRes::MID, __uiMessageSize ) );
@@ -13484,6 +13808,7 @@ namespace SF
 
 			}; // Result SetPresetGameConfigIDCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* SetPresetGameConfigIDCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InPresetID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -13500,8 +13825,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InPresetID)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPresetID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetPresetGameConfigIDCmd::MID, __uiMessageSize ) );
@@ -13574,6 +13899,7 @@ namespace SF
 
 			}; // Result SetPresetGameConfigIDRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* SetPresetGameConfigIDRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -13590,8 +13916,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SetPresetGameConfigIDRes::MID, __uiMessageSize ) );
@@ -13667,6 +13993,7 @@ namespace SF
 
 			}; // Result GainGameResourceCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GainGameResourceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const int32_t &InResource, const int32_t &InValue )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -13683,9 +14010,9 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResource)
-					, SerializedSizeOf(InValue)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResource)
+					+ SerializedSizeOf(InValue)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GainGameResourceCmd::MID, __uiMessageSize ) );
@@ -13759,6 +14086,7 @@ namespace SF
 
 			}; // Result GainGameResourceRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
+
 			MessageData* GainGameResourceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -13775,8 +14103,8 @@ namespace SF
 				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					, SerializedSizeOf(InTransactionID)
-					, SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GainGameResourceRes::MID, __uiMessageSize ) );

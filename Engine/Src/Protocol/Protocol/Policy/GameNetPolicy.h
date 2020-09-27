@@ -16,6 +16,10 @@
 
 
 
+class VariableTable;
+
+
+
 namespace SF
 {
  	namespace Policy
@@ -130,7 +134,7 @@ namespace SF
 			// Cmd: Party chatting
 			Result ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage );
 			// Cmd: Create character
-			Result CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes );
+			Result CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes );
 			// Cmd: Remove character
 			Result RemoveCharacterCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID );
 			// Cmd: Get character list
@@ -201,9 +205,9 @@ namespace SF
 			// Cmd: Get Ranking lise
 			Result GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 			// Cmd: Game user game play information
-			Result GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes );
+			Result GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
 			// Cmd: Game game play information
-			Result GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes );
+			Result GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes );
 			// S2C: Player level up event
 			Result LevelUpS2CEvt( const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel );
 			// Cmd: Change NickName
@@ -331,7 +335,7 @@ namespace SF
 			// Cmd: Get character list
 			Result GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<int32_t>& InCharacterIDs );
 			// Cmd: 
-			Result GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes );
+			Result GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
 			// Cmd: Give my stamina to other player
 			Result GiveStaminaRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp );
 			// Cmd: For debug, Change configue preset

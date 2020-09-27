@@ -808,7 +808,7 @@ namespace SF
 
 		}; // Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
 		// Cmd: Create character
-		Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes )
+		Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes )
 		{
  			FunctionContext hr;
 
@@ -822,7 +822,7 @@ namespace SF
 
 			return hr;
 
-		}; // Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes )
+		}; // Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes )
 		// Cmd: Remove character
 		Result NetPolicyGame::RemoveCharacterCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID )
 		{
@@ -1258,7 +1258,7 @@ namespace SF
 
 		}; // Result NetSvrPolicyGame::GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 		// Cmd: Game user game play information
-		Result NetSvrPolicyGame::GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
+		Result NetSvrPolicyGame::GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 		{
  			FunctionContext hr;
 
@@ -1272,9 +1272,9 @@ namespace SF
 
 			return hr;
 
-		}; // Result NetSvrPolicyGame::GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
+		}; // Result NetSvrPolicyGame::GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 		// Cmd: Game game play information
-		Result NetSvrPolicyGame::GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes )
+		Result NetSvrPolicyGame::GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
 		{
  			FunctionContext hr;
 
@@ -1288,7 +1288,7 @@ namespace SF
 
 			return hr;
 
-		}; // Result NetSvrPolicyGame::GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes )
+		}; // Result NetSvrPolicyGame::GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
 		// S2C: Player level up event
 		Result NetSvrPolicyGame::LevelUpS2CEvt( const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
 		{
@@ -2298,7 +2298,7 @@ namespace SF
 
 		}; // Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<int32_t>& InCharacterIDs )
 		// Cmd: 
-		Result NetSvrPolicyGame::GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
+		Result NetSvrPolicyGame::GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 		{
  			FunctionContext hr;
 
@@ -2312,7 +2312,7 @@ namespace SF
 
 			return hr;
 
-		}; // Result NetSvrPolicyGame::GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
+		}; // Result NetSvrPolicyGame::GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 		// Cmd: Give my stamina to other player
 		Result NetSvrPolicyGame::GiveStaminaRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp )
 		{
