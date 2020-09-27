@@ -58,7 +58,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sharp\ResultCode\SFResult.cs" />
     <Compile Include="Sharp\ResultCode\SFResultCodeDB.cs" />
     <Compile Include="Sharp\ResultCode\SFResultCodeEngine.cs" />
     <Compile Include="Sharp\ResultCode\SFResultCodeGame.cs" />
@@ -68,7 +67,6 @@
     <Compile Include="Sharp\ResultCode\SFResultCodeSystem.cs" />
     <Compile Include="Sharp\SFConnection.cs" />
     <Compile Include="Sharp\SFConnectionGroup.cs" />
-    <Compile Include="Sharp\SFGameTypes.cs" />
     <Compile Include="Sharp\SFIMessageRouter.cs" />
     <Compile Include="Sharp\SFMessage.cs" />
     <Compile Include="Sharp\SFMessageParsingUtil.cs" />
@@ -82,13 +80,16 @@
     <Compile Include="Sharp\Properties\AssemblyInfo.cs" />
     <Compile Include="Sharp\SFServerConfig.cs" />
     <Compile Include="Sharp\SFMemoryStream.cs" />
-    <Compile Include="Sharp\SFStringCrc32.cs" />
-    <Compile Include="Sharp\SFStringCrc64.cs" />
     <Compile Include="Sharp\SFTimeUtil.cs" />
     <Compile Include="Sharp\SFZooKeeper.cs" />
     <Compile Include="Sharp\Tong\SFTongScriptBytecodeBuilder.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\SFCoreSharp\SFCoreSharp.csproj">
+      <Project>{de89b4bf-feb7-4fee-ab5f-85d286295bd7}</Project>
+      <Name>SFCoreSharp</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

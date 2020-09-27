@@ -183,10 +183,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Engine\Src\CoreSharp\CoreSharp.csproj">
-      <Project>{DE89B4BF-FEB7-4FEE-AB5F-85D286295BD7}</Project>
-      <Name>CoreSharp</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LibSharp\SFToolLibSharp\SFToolLibSharp.csproj">
       <Project>{4b5d5c7a-8b72-4c1f-bdaa-fa252bb8be92}</Project>
       <Name>SFToolLibSharp</Name>

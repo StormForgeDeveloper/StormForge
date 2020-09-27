@@ -44,6 +44,7 @@ namespace SF
 
         public override int GetHashCode()
         {
+            // TODO: is it enough?
             return (int)StringHash;
         }
 

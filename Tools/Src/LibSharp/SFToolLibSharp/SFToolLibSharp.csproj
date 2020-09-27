@@ -177,9 +177,9 @@
       <Project>{c7a306e0-32ae-4053-8882-e1a1e702c139}</Project>
       <Name>Atf.Perforce</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\..\Engine\Src\CoreSharp\CoreSharp.csproj">
+    <ProjectReference Include="..\..\..\..\Engine\Src\SFCoreSharp\SFCoreSharp.csproj">
       <Project>{de89b4bf-feb7-4fee-ab5f-85d286295bd7}</Project>
-      <Name>CoreSharp</Name>
+      <Name>SFCoreSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

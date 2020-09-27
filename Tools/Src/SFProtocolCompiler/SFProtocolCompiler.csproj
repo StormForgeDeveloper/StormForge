@@ -66,15 +66,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Engine\Src\SFEngineDLL\Sharp\SFGameTypes.cs">
-      <Link>CSharp\SFGameTypes.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Engine\Src\SFEngineDLL\Sharp\SFStringCrc32.cs">
-      <Link>CSharp\SFStringCrc32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Engine\Src\SFEngineDLL\Sharp\SFStringCrc64.cs">
-      <Link>CSharp\SFStringCrc64.cs</Link>
-    </Compile>
     <Compile Include="Builder.cs" />
     <Compile Include="MessageDebugBuilder.cs" />
     <Compile Include="MessageClassBuilder.cs" />
@@ -122,6 +113,10 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Engine\Src\SFCoreSharp\SFCoreSharp.csproj">
+      <Project>{de89b4bf-feb7-4fee-ab5f-85d286295bd7}</Project>
+      <Name>SFCoreSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LibSharp\SFToolLibSharp\SFToolLibSharp.csproj">
       <Project>{4b5d5c7a-8b72-4c1f-bdaa-fa252bb8be92}</Project>
       <Name>SFToolLibSharp</Name>

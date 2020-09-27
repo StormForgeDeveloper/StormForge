@@ -347,9 +347,16 @@ namespace SF
         static VariableTable()
         {
             TypeInfoByType = new Dictionary<Type, TypeInfo>();
-            TypeInfoByType.Add(typeof(int), new TypeInfo(
-                "int",
+            TypeInfoByType.Add(typeof(int), new TypeInfo("int",
                 (writer,value)=> { writer.Write((int)value); },
+                (reader) => { return reader.ReadInt32(); }));
+
+            TypeInfoByType.Add(typeof(uint), new TypeInfo("uint",
+                (writer, value) => { writer.Write((uint)value); },
+                (reader) => { return reader.ReadUInt32(); }));
+
+            TypeInfoByType.Add(typeof(Int32), new TypeInfo("Result",
+                (writer, value) => { writer.Write((Int32)value); },
                 (reader) => { return reader.ReadInt32(); }));
 
             TypeInfoByTypeName = new Dictionary<uint, TypeInfo>();
