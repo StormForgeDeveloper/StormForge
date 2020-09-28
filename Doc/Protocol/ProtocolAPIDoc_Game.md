@@ -1746,29 +1746,6 @@ C++: Cast message to SetPresetGameConfigIDRes to access values
 		- OutResult: Result type. 
 
 
-## GainGameResource Request
-For Debug
-
-1. Command interface
-
-        Result GainGameResourceCmd(const uint64_t &InTransactionID, const int32_t &InResource, const int32_t &InValue)
-
-		- OutInTransactionID: TransactionID type. 
-
-		- OutInResource: int32 type. 
-
-		- OutInValue: int32 type. 
-
-2. Result interface
-
-C++: Cast message to GainGameResourceRes to access values
-
-
-		- OutTransactionID: TransactionID type. 
-
-		- OutResult: Result type. 
-
-
 
 
 

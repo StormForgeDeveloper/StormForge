@@ -645,17 +645,6 @@ namespace SF.Net
 			return result;
 		} // public int  SetPresetGameConfigIDCmd( System.UInt64 InTransactionID, System.UInt32 InPresetID )
 
-		// Cmd: For Debug
-		public int  GainGameResourceCmd( System.UInt64 InTransactionID, System.Int32 InResource, System.Int32 InValue )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGainGameResourceCmd(m_Connection.NativeHandle, InTransactionID, InResource, InValue);
-			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GainGameResourceCmd);
-			return result;
-		} // public int  GainGameResourceCmd( System.UInt64 InTransactionID, System.Int32 InResource, System.Int32 InValue )
-
 		#region Native Interfaces 
 		// C2S: Client heart bit
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameHeartBitC2SEvt", CharSet = CharSet.Ansi)]
@@ -931,11 +920,6 @@ namespace SF.Net
 		// Cmd: For debug, Change configue preset
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSetPresetGameConfigIDCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameSetPresetGameConfigIDCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InPresetID );
-
-
-		// Cmd: For Debug
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGainGameResourceCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGainGameResourceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResource, System.Int32 InValue );
 
 
 		#endregion //Native Interfaces 
@@ -2031,18 +2015,6 @@ namespace SF.Net
 		} // public int  SetPresetGameConfigIDRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
 
-		// Cmd: For Debug
-		public int  GainGameResourceRes( System.UInt64 InTransactionID, System.Int32 InResult )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGainGameResourceRes(m_Connection.NativeHandle, InTransactionID, InResult);
-			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GainGameResourceRes);
-			return result;
-		} // public int  GainGameResourceRes( System.UInt64 InTransactionID, System.Int32 InResult )
-
-
 		#region Native Interfaces 
 		// Cmd: Player connected from a login server and moved to game server
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameJoinGameServerRes", CharSet = CharSet.Ansi)]
@@ -2575,12 +2547,6 @@ namespace SF.Net
 		// Cmd: For debug, Change configue preset
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSetPresetGameConfigIDRes", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameSetPresetGameConfigIDRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
-
-
-
-		// Cmd: For Debug
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGainGameResourceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGainGameResourceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
 
 
 

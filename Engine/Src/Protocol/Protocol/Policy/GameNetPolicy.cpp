@@ -903,22 +903,6 @@ namespace SF
 			return hr;
 
 		}; // Result NetPolicyGame::SetPresetGameConfigIDCmd( const uint64_t &InTransactionID, const uint32_t &InPresetID )
-		// Cmd: For Debug
-		Result NetPolicyGame::GainGameResourceCmd( const uint64_t &InTransactionID, const int32_t &InResource, const int32_t &InValue )
-		{
- 			FunctionContext hr;
-
-			 MessageDataPtr pMessage;
-			 protocolCheckPtr(m_pConnection);
-
-			 pMessage = SF::Message::Game::GainGameResourceCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InResource, InValue);
-			 protocolCheckPtr(*pMessage);
-
-			 return m_pConnection->Send( pMessage );
-
-			return hr;
-
-		}; // Result NetPolicyGame::GainGameResourceCmd( const uint64_t &InTransactionID, const int32_t &InResource, const int32_t &InValue )
 
 
 		// Cmd: Player connected from a login server and moved to game server
@@ -2345,22 +2329,6 @@ namespace SF
 			return hr;
 
 		}; // Result NetSvrPolicyGame::SetPresetGameConfigIDRes( const uint64_t &InTransactionID, const Result &InResult )
-		// Cmd: For Debug
-		Result NetSvrPolicyGame::GainGameResourceRes( const uint64_t &InTransactionID, const Result &InResult )
-		{
- 			FunctionContext hr;
-
-			 MessageDataPtr pMessage;
-			 protocolCheckPtr(m_pConnection);
-
-			 pMessage = SF::Message::Game::GainGameResourceRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
-			 protocolCheckPtr(*pMessage);
-
-			 return m_pConnection->Send( pMessage );
-
-			return hr;
-
-		}; // Result NetSvrPolicyGame::GainGameResourceRes( const uint64_t &InTransactionID, const Result &InResult )
 
 
 	}; // namespace Policy

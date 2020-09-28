@@ -680,18 +680,6 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameSetPresetGameConfigIDCmd( intptr_t InNative
 } // SFDLL_EXPORT int  CSSFNetAdapter_GameSetPresetGameConfigIDCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InPresetID )
 
 
-// Cmd: For Debug
-SFDLL_EXPORT int  CSSFNetAdapter_GameGainGameResourceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, int32_t InResource, int32_t InValue )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::GainGameResourceCmd::Create(pConnection->GetHeap(), InTransactionID, InResource, InValue);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameGainGameResourceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, int32_t InResource, int32_t InValue )
-
-
 
 
 // Cmd: Player connected from a login server and moved to game server
@@ -1848,19 +1836,6 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameSetPresetGameConfigIDRes( intptr_t InNative
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
 } // SFDLL_EXPORT int  CSSFNetAdapter_GameSetPresetGameConfigIDRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
-
-
-
-// Cmd: For Debug
-SFDLL_EXPORT int  CSSFNetAdapter_GameGainGameResourceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::GainGameResourceRes::Create(pConnection->GetHeap(), InTransactionID, InResult);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameGainGameResourceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
 
 
 

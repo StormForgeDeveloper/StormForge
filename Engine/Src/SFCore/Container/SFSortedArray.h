@@ -123,6 +123,7 @@ namespace SF {
 		int GetAllocatedItemCount() const { return m_AllocatedItemCount; }
 		size_t size() const { return m_ItemCount; }
 
+		// Check if key exists
 		bool Contains(const KeyType& keyValue);
 
 		// Clear array

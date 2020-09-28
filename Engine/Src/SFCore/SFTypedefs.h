@@ -712,6 +712,9 @@ namespace SF {
 			}
 		}
 
+		bool operator == (Result hr) const { return m_Hr == hr; }
+		bool operator != (Result hr) const { return m_Hr != hr; }
+
 		FunctionContext& operator = (Result src) { m_Hr = src; return *this; }
 
 		operator Result() const { return m_Hr; }

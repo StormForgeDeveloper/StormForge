@@ -145,8 +145,6 @@ namespace SF
 			Result GiveStaminaCmd( const uint64_t &InTransactionID, const AccountID &InTargetPlayer );
 			// Cmd: For debug, Change configue preset
 			Result SetPresetGameConfigIDCmd( const uint64_t &InTransactionID, const uint32_t &InPresetID );
-			// Cmd: For Debug
-			Result GainGameResourceCmd( const uint64_t &InTransactionID, const int32_t &InResource, const int32_t &InValue );
 
 		}; // class NetPolicyGame 
 
@@ -340,8 +338,6 @@ namespace SF
 			Result GiveStaminaRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp );
 			// Cmd: For debug, Change configue preset
 			Result SetPresetGameConfigIDRes( const uint64_t &InTransactionID, const Result &InResult );
-			// Cmd: For Debug
-			Result GainGameResourceRes( const uint64_t &InTransactionID, const Result &InResult );
 
 		}; // class NetSvrPolicyGame
 

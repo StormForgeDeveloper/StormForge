@@ -460,12 +460,6 @@ namespace SF.Net
 		public static int SetPresetGameConfigIDRes { get { return CSSFNetMessageID_GameSetPresetGameConfigIDRes(); } }
 
 
-		// Cmd: For Debug
-		public static int GainGameResourceCmd { get { return CSSFNetMessageID_GameGainGameResourceCmd(); } }
-
-		public static int GainGameResourceRes { get { return CSSFNetMessageID_GameGainGameResourceRes(); } }
-
-
 		#region Native Interfaces 
 		// C2S: Client heart bit
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameHeartBitC2SEvt", CharSet = CharSet.Auto)]
@@ -1184,16 +1178,6 @@ namespace SF.Net
 
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSetPresetGameConfigIDRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameSetPresetGameConfigIDRes();
-
-
-
-		// Cmd: For Debug
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGainGameResourceCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGainGameResourceCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGainGameResourceRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGainGameResourceRes();
 
 
 

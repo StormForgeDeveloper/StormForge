@@ -973,19 +973,6 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameSetPresetGameConfigIDRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameSetPresetGameConfigIDRes()
 
 
-// Cmd: For Debug
-SFDLL_EXPORT int  CSSFNetMessageID_GameGainGameResourceCmd()
-{
- 	return SF::Message::Game::GainGameResourceCmd::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameGainGameResourceCmd()
-
-
-SFDLL_EXPORT int  CSSFNetMessageID_GameGainGameResourceRes()
-{
- 	return SF::Message::Game::GainGameResourceRes::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameGainGameResourceRes()
-
-
 
 
 

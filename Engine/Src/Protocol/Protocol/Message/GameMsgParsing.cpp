@@ -409,11 +409,6 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SetPresetGameConfigIDCmd::MID.IDSeq.MsgID,&Message::Game::SetPresetGameConfigIDCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::SetPresetGameConfigIDRes::MID.IDSeq.MsgID,&Message::Game::SetPresetGameConfigIDRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SetPresetGameConfigIDRes::MID.IDSeq.MsgID,&Message::Game::SetPresetGameConfigIDRes::ParseMessageToMessageBase));
-			// Cmd: For Debug
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GainGameResourceCmd::MID.IDSeq.MsgID,&Message::Game::GainGameResourceCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GainGameResourceCmd::MID.IDSeq.MsgID,&Message::Game::GainGameResourceCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GainGameResourceRes::MID.IDSeq.MsgID,&Message::Game::GainGameResourceRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GainGameResourceRes::MID.IDSeq.MsgID,&Message::Game::GainGameResourceRes::ParseMessageToMessageBase));
 		}; // void RegisterParserGame()
 
 

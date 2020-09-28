@@ -262,9 +262,6 @@ namespace SF
 			// Cmd: For debug, Change configue preset
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SetPresetGameConfigIDCmd::MID.IDSeq.MsgID,&Message::Game::SetPresetGameConfigIDCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SetPresetGameConfigIDRes::MID.IDSeq.MsgID,&Message::Game::SetPresetGameConfigIDRes::TraceOut));
-			// Cmd: For Debug
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GainGameResourceCmd::MID.IDSeq.MsgID,&Message::Game::GainGameResourceCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GainGameResourceRes::MID.IDSeq.MsgID,&Message::Game::GainGameResourceRes::TraceOut));
 		}; // void RegisterDebugTraceGame()
 
 

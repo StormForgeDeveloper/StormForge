@@ -780,15 +780,6 @@
 			</Res>
 		</Command>
 
-		<Command Name="GainGameResource" Reliable="true" Crypto="No" Trace="Debug1" Desc="For Debug">
-			<Cmd>
-				<Params Type="int32" Name="Resource"/>
-				<Params Type="int32" Name="Value"/>
-			</Cmd>
-			<Res>
-			</Res>
-		</Command>
-
 
 
 	</ProtocolGroup>
