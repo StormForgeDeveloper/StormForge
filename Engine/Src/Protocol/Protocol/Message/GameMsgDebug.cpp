@@ -135,6 +135,26 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::PartyChatMessageRes::MID.IDSeq.MsgID,&Message::Game::PartyChatMessageRes::TraceOut));
 			// S2C: Party Chatting message event
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::PartyChatMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::PartyChatMessageS2CEvt::TraceOut));
+			// Cmd: Join to a game instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::JoinGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameInstanceCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::JoinGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::JoinGameInstanceRes::TraceOut));
+			// Cmd: Leave game instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::LeaveGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::LeaveGameInstanceCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::LeaveGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::LeaveGameInstanceRes::TraceOut));
+			// Cmd: Search game instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SearchGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::SearchGameInstanceCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SearchGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::SearchGameInstanceRes::TraceOut));
+			// Cmd: Search game instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceRes::TraceOut));
+			// S2C: New Player in get view
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID,&Message::Game::NewPlayerInViewS2CEvt::TraceOut));
+			// S2C: Remove player from view
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID,&Message::Game::RemovePlayerFromViewS2CEvt::TraceOut));
+			// C2S: Player Movement
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::PlayerMovementC2SEvt::MID.IDSeq.MsgID,&Message::Game::PlayerMovementC2SEvt::TraceOut));
+			// S2C: Player Movement
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::PlayerMovementS2CEvt::MID.IDSeq.MsgID,&Message::Game::PlayerMovementS2CEvt::TraceOut));
 			// Cmd: Join to a game
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::JoinGameCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::JoinGameRes::MID.IDSeq.MsgID,&Message::Game::JoinGameRes::TraceOut));

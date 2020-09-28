@@ -787,6 +787,158 @@ Party Chatting message event
 		- OutInChatMessage: String type. Message text
 
 
+## JoinGameInstance Request
+Join to a game instance
+
+1. Command interface
+
+        Result JoinGameInstanceCmd(const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInPlayerID: AccountID type. Player ID of the player
+
+		- OutInTicket: AuthTicket type. Login session ID
+
+		- OutInInsUID: GameInsUID type. Game instance ID to join
+
+2. Result interface
+
+C++: Cast message to JoinGameInstanceRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutInsUID: GameInsUID type. Game instance ID
+
+
+## LeaveGameInstance Request
+Leave game instance
+
+1. Command interface
+
+        Result LeaveGameInstanceCmd(const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInPlayerID: AccountID type. Player ID of the player
+
+		- OutInTicket: AuthTicket type. Login session ID
+
+		- OutInInsUID: GameInsUID type. Game instance ID to join
+
+2. Result interface
+
+C++: Cast message to LeaveGameInstanceRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutInsUID: GameInsUID type. Game instance ID
+
+
+## SearchGameInstance Request
+Search game instance
+
+1. Command interface
+
+        Result SearchGameInstanceCmd(const uint64_t &InTransactionID, const char* InSearchKeyword)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInSearchKeyword: String type. Search keyword
+
+2. Result interface
+
+C++: Cast message to SearchGameInstanceRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutGameInstances: GameInsUID type. Game instance ID
+
+
+## GetCharacterDataInGameInstance Request
+Search game instance
+
+1. Command interface
+
+        Result GetCharacterDataInGameInstanceCmd(const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInGameInsUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. Player Id to get
+
+2. Result interface
+
+C++: Cast message to GetCharacterDataInGameInstanceRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutPlayerID: PlayerID type. Player Movement
+
+		- OutGameInstances: VariableTable type. Game instance ID
+
+
+## NewPlayerInViewS2CEvt
+New Player in get view
+
+        Result NewPlayerInViewS2CEvt(const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes)
+
+		- OutInGameInsUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. Player Id
+
+		- OutInAttributes: VariableTable type. Movement attributes
+
+
+## RemovePlayerFromViewS2CEvt
+Remove player from view
+
+        Result RemovePlayerFromViewS2CEvt(const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes)
+
+		- OutInGameInsUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. Player Id
+
+		- OutInAttributes: VariableTable type. Movement attributes
+
+
+## PlayerMovementC2SEvt
+Player Movement
+
+        Result PlayerMovementC2SEvt(const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes)
+
+		- OutInGameInsUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. Player Id
+
+		- OutInAttributes: VariableTable type. Movement attributes
+
+
+## PlayerMovementS2CEvt
+Player Movement
+
+        Result PlayerMovementS2CEvt(const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes)
+
+		- OutInGameInsUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. Player Movement
+
+		- OutInAttributes: VariableTable type. Movement attributes
+
+
 ## JoinGame Request
 Join to a game
 

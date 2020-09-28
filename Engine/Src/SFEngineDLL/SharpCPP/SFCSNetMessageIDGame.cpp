@@ -461,6 +461,86 @@ SFDLL_EXPORT int  CSSFNetMessageID_GamePartyChatMessageS2CEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_GamePartyChatMessageS2CEvt()
 
 
+// Cmd: Join to a game instance
+SFDLL_EXPORT int  CSSFNetMessageID_GameJoinGameInstanceCmd()
+{
+ 	return SF::Message::Game::JoinGameInstanceCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameJoinGameInstanceCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameJoinGameInstanceRes()
+{
+ 	return SF::Message::Game::JoinGameInstanceRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameJoinGameInstanceRes()
+
+
+// Cmd: Leave game instance
+SFDLL_EXPORT int  CSSFNetMessageID_GameLeaveGameInstanceCmd()
+{
+ 	return SF::Message::Game::LeaveGameInstanceCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameLeaveGameInstanceCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameLeaveGameInstanceRes()
+{
+ 	return SF::Message::Game::LeaveGameInstanceRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameLeaveGameInstanceRes()
+
+
+// Cmd: Search game instance
+SFDLL_EXPORT int  CSSFNetMessageID_GameSearchGameInstanceCmd()
+{
+ 	return SF::Message::Game::SearchGameInstanceCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameSearchGameInstanceCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameSearchGameInstanceRes()
+{
+ 	return SF::Message::Game::SearchGameInstanceRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameSearchGameInstanceRes()
+
+
+// Cmd: Search game instance
+SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterDataInGameInstanceCmd()
+{
+ 	return SF::Message::Game::GetCharacterDataInGameInstanceCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterDataInGameInstanceCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes()
+{
+ 	return SF::Message::Game::GetCharacterDataInGameInstanceRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes()
+
+
+// S2C: New Player in get view
+SFDLL_EXPORT int  CSSFNetMessageID_GameNewPlayerInViewS2CEvt()
+{
+ 	return SF::Message::Game::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameNewPlayerInViewS2CEvt()
+
+
+// S2C: Remove player from view
+SFDLL_EXPORT int  CSSFNetMessageID_GameRemovePlayerFromViewS2CEvt()
+{
+ 	return SF::Message::Game::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameRemovePlayerFromViewS2CEvt()
+
+
+// C2S: Player Movement
+SFDLL_EXPORT int  CSSFNetMessageID_GamePlayerMovementC2SEvt()
+{
+ 	return SF::Message::Game::PlayerMovementC2SEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GamePlayerMovementC2SEvt()
+
+
+// S2C: Player Movement
+SFDLL_EXPORT int  CSSFNetMessageID_GamePlayerMovementS2CEvt()
+{
+ 	return SF::Message::Game::PlayerMovementS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GamePlayerMovementS2CEvt()
+
+
 // Cmd: Join to a game
 SFDLL_EXPORT int  CSSFNetMessageID_GameJoinGameCmd()
 {

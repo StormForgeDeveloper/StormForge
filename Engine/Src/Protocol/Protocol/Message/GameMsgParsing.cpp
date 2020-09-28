@@ -205,6 +205,38 @@ namespace SF
 			// S2C: Party Chatting message event
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::PartyChatMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::PartyChatMessageS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::PartyChatMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::PartyChatMessageS2CEvt::ParseMessageToMessageBase));
+			// Cmd: Join to a game instance
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::JoinGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameInstanceCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::JoinGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameInstanceCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::JoinGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::JoinGameInstanceRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::JoinGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::JoinGameInstanceRes::ParseMessageToMessageBase));
+			// Cmd: Leave game instance
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::LeaveGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::LeaveGameInstanceCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::LeaveGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::LeaveGameInstanceCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::LeaveGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::LeaveGameInstanceRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::LeaveGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::LeaveGameInstanceRes::ParseMessageToMessageBase));
+			// Cmd: Search game instance
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::SearchGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::SearchGameInstanceCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SearchGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::SearchGameInstanceCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::SearchGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::SearchGameInstanceRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SearchGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::SearchGameInstanceRes::ParseMessageToMessageBase));
+			// Cmd: Search game instance
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceRes::ParseMessageToMessageBase));
+			// S2C: New Player in get view
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID,&Message::Game::NewPlayerInViewS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID,&Message::Game::NewPlayerInViewS2CEvt::ParseMessageToMessageBase));
+			// S2C: Remove player from view
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID,&Message::Game::RemovePlayerFromViewS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID,&Message::Game::RemovePlayerFromViewS2CEvt::ParseMessageToMessageBase));
+			// C2S: Player Movement
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::PlayerMovementC2SEvt::MID.IDSeq.MsgID,&Message::Game::PlayerMovementC2SEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::PlayerMovementC2SEvt::MID.IDSeq.MsgID,&Message::Game::PlayerMovementC2SEvt::ParseMessageToMessageBase));
+			// S2C: Player Movement
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::PlayerMovementS2CEvt::MID.IDSeq.MsgID,&Message::Game::PlayerMovementS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::PlayerMovementS2CEvt::MID.IDSeq.MsgID,&Message::Game::PlayerMovementS2CEvt::ParseMessageToMessageBase));
 			// Cmd: Join to a game
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::JoinGameCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::JoinGameCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameCmd::ParseMessageToMessageBase));

@@ -229,6 +229,42 @@ namespace SF.Net
 		// S2C: Party Chatting message event
 		public static int PartyChatMessageS2CEvt { get { return CSSFNetMessageID_GamePartyChatMessageS2CEvt(); } }
 
+		// Cmd: Join to a game instance
+		public static int JoinGameInstanceCmd { get { return CSSFNetMessageID_GameJoinGameInstanceCmd(); } }
+
+		public static int JoinGameInstanceRes { get { return CSSFNetMessageID_GameJoinGameInstanceRes(); } }
+
+
+		// Cmd: Leave game instance
+		public static int LeaveGameInstanceCmd { get { return CSSFNetMessageID_GameLeaveGameInstanceCmd(); } }
+
+		public static int LeaveGameInstanceRes { get { return CSSFNetMessageID_GameLeaveGameInstanceRes(); } }
+
+
+		// Cmd: Search game instance
+		public static int SearchGameInstanceCmd { get { return CSSFNetMessageID_GameSearchGameInstanceCmd(); } }
+
+		public static int SearchGameInstanceRes { get { return CSSFNetMessageID_GameSearchGameInstanceRes(); } }
+
+
+		// Cmd: Search game instance
+		public static int GetCharacterDataInGameInstanceCmd { get { return CSSFNetMessageID_GameGetCharacterDataInGameInstanceCmd(); } }
+
+		public static int GetCharacterDataInGameInstanceRes { get { return CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes(); } }
+
+
+		// S2C: New Player in get view
+		public static int NewPlayerInViewS2CEvt { get { return CSSFNetMessageID_GameNewPlayerInViewS2CEvt(); } }
+
+		// S2C: Remove player from view
+		public static int RemovePlayerFromViewS2CEvt { get { return CSSFNetMessageID_GameRemovePlayerFromViewS2CEvt(); } }
+
+		// C2S: Player Movement
+		public static int PlayerMovementC2SEvt { get { return CSSFNetMessageID_GamePlayerMovementC2SEvt(); } }
+
+		// S2C: Player Movement
+		public static int PlayerMovementS2CEvt { get { return CSSFNetMessageID_GamePlayerMovementS2CEvt(); } }
+
 		// Cmd: Join to a game
 		public static int JoinGameCmd { get { return CSSFNetMessageID_GameJoinGameCmd(); } }
 
@@ -794,6 +830,66 @@ namespace SF.Net
 		// S2C: Party Chatting message event
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GamePartyChatMessageS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GamePartyChatMessageS2CEvt();
+
+
+		// Cmd: Join to a game instance
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameJoinGameInstanceCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameJoinGameInstanceCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameJoinGameInstanceRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameJoinGameInstanceRes();
+
+
+
+		// Cmd: Leave game instance
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameLeaveGameInstanceCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameLeaveGameInstanceCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameLeaveGameInstanceRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameLeaveGameInstanceRes();
+
+
+
+		// Cmd: Search game instance
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSearchGameInstanceCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameSearchGameInstanceCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSearchGameInstanceRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameSearchGameInstanceRes();
+
+
+
+		// Cmd: Search game instance
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetCharacterDataInGameInstanceCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameGetCharacterDataInGameInstanceCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes();
+
+
+
+		// S2C: New Player in get view
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameNewPlayerInViewS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameNewPlayerInViewS2CEvt();
+
+
+		// S2C: Remove player from view
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRemovePlayerFromViewS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameRemovePlayerFromViewS2CEvt();
+
+
+		// C2S: Player Movement
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GamePlayerMovementC2SEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GamePlayerMovementC2SEvt();
+
+
+		// S2C: Player Movement
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GamePlayerMovementS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GamePlayerMovementS2CEvt();
 
 
 		// Cmd: Join to a game
