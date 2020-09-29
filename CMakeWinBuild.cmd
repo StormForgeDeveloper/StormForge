@@ -39,3 +39,6 @@ cd %~dp0
 :exit
 
 
+if not "%1" == "nopause" pause
+
+

@@ -19,5 +19,5 @@ cmake ../../ -G %VCCMAKEGENERATOR% -A %PROCESS_ARCHITECTUR%  ^
 
 cd %~dp0
 
-
+if not "%1" == "nopause" pause
 
