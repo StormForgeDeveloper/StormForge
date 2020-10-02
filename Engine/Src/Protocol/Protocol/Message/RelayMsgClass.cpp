@@ -27,7 +27,7 @@ namespace SF
 		{
  			// C2S: Event for Player Join request.
 			const MessageID JoinRelayInstanceC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 0);
-			Result JoinRelayInstanceC2SEvt::ParseMessage( MessageData* pIMsg )
+			Result JoinRelayInstanceC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -47,7 +47,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinRelayInstanceC2SEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinRelayInstanceC2SEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinRelayInstanceC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -124,7 +124,7 @@ namespace SF
 
 			// S2C: Event for joined player
 			const MessageID JoinRelayInstanceResS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 1);
-			Result JoinRelayInstanceResS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result JoinRelayInstanceResS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -147,7 +147,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinRelayInstanceResS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinRelayInstanceResS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinRelayInstanceResS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -228,7 +228,7 @@ namespace SF
 
 			// C2S: Event for Player Join request.
 			const MessageID LeaveRelayInstanceC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 2);
-			Result LeaveRelayInstanceC2SEvt::ParseMessage( MessageData* pIMsg )
+			Result LeaveRelayInstanceC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -246,7 +246,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveRelayInstanceC2SEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result LeaveRelayInstanceC2SEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result LeaveRelayInstanceC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -320,7 +320,7 @@ namespace SF
 
 			// S2C: Event for Player joined.
 			const MessageID PlayerJoinS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 3);
-			Result PlayerJoinS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PlayerJoinS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -338,7 +338,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerJoinS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PlayerJoinS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PlayerJoinS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -412,7 +412,7 @@ namespace SF
 
 			// S2C: Event for Player left.
 			const MessageID PlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 4);
-			Result PlayerLeftS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -431,7 +431,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerLeftS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PlayerLeftS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -508,7 +508,7 @@ namespace SF
 
 			// C2S: Relay packet
 			const MessageID RelayPacketC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_RELAY, 5);
-			Result RelayPacketC2SEvt::ParseMessage( MessageData* pIMsg )
+			Result RelayPacketC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -531,7 +531,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RelayPacketC2SEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result RelayPacketC2SEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result RelayPacketC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{

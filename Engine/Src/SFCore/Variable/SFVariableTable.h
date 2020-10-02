@@ -83,9 +83,9 @@ namespace SF {
 		}
 
 		template<class ValueType>
-		ValueType GetValue(KeyType name)
+		ValueType GetValue(KeyType name) const
 		{
-			Variable* pVariable = GetVariable(name);
+			auto* pVariable = GetVariable(name);
 			if (pVariable == nullptr)
 				return ValueType{};
 

@@ -61,7 +61,7 @@ namespace Message {
 		MobileMessageHeader* GetMobileMessageHeader();
 		uint8_t*	GetMessageBuff(); // data include header
 		uint		GetMessageSize() const; // total length
-		uint8_t*	GetMessageData();       // data except header
+		const uint8_t* GetMessageData() const;       // data except header
 
 		// Data except header
 		void GetLengthNDataPtr(uint& length, uint8_t* &pDataPtr);
@@ -126,7 +126,7 @@ namespace Message {
 		virtual Result ParseMsg();
 
 		// Parsing message data
-		virtual Result ParseMessage(MessageData* pIMsg) = 0;
+		virtual Result ParseMessage(const MessageData* pIMsg) = 0;
 
 		virtual Result OverrideRouteContextDestination(EntityUID to) { unused(to); AssertRel(false); return ResultCode::SUCCESS; }
 		virtual Result OverrideRouteInfomation(EntityUID to, uint hopCount) { unused(to, hopCount); AssertRel(false); return ResultCode::SUCCESS; }

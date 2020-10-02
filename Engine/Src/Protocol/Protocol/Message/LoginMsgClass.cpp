@@ -27,7 +27,7 @@ namespace SF
 		{
  			// Cmd: Login request
 			const MessageID LoginCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 0);
-			Result LoginCmd::ParseMessage( MessageData* pIMsg )
+			Result LoginCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -49,7 +49,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LoginCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result LoginCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result LoginCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -128,7 +128,7 @@ namespace SF
 			}; // Result LoginCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID LoginRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 0);
-			Result LoginRes::ParseMessage( MessageData* pIMsg )
+			Result LoginRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -151,7 +151,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LoginRes::ParseMessage( MessageData* pIMsg )
+			}; // Result LoginRes::ParseMessage(const MessageData* pIMsg)
 
 			Result LoginRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -240,7 +240,7 @@ namespace SF
 
 			// Cmd: Login request with Facebook UID
 			const MessageID LoginByFacebookCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 1);
-			Result LoginByFacebookCmd::ParseMessage( MessageData* pIMsg )
+			Result LoginByFacebookCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -265,7 +265,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LoginByFacebookCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result LoginByFacebookCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result LoginByFacebookCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -350,7 +350,7 @@ namespace SF
 			}; // Result LoginByFacebookCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID LoginByFacebookRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 1);
-			Result LoginByFacebookRes::ParseMessage( MessageData* pIMsg )
+			Result LoginByFacebookRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -373,7 +373,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LoginByFacebookRes::ParseMessage( MessageData* pIMsg )
+			}; // Result LoginByFacebookRes::ParseMessage(const MessageData* pIMsg)
 
 			Result LoginByFacebookRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -462,7 +462,7 @@ namespace SF
 
 			// Cmd: Login request
 			const MessageID CreateRandomUserCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 2);
-			Result CreateRandomUserCmd::ParseMessage( MessageData* pIMsg )
+			Result CreateRandomUserCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -482,7 +482,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateRandomUserCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result CreateRandomUserCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result CreateRandomUserCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -558,7 +558,7 @@ namespace SF
 			}; // Result CreateRandomUserCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID CreateRandomUserRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 2);
-			Result CreateRandomUserRes::ParseMessage( MessageData* pIMsg )
+			Result CreateRandomUserRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -581,7 +581,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateRandomUserRes::ParseMessage( MessageData* pIMsg )
+			}; // Result CreateRandomUserRes::ParseMessage(const MessageData* pIMsg)
 
 			Result CreateRandomUserRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -670,7 +670,7 @@ namespace SF
 
 			// Cmd: Update my score and Get Ranking list
 			const MessageID UpdateMyScoreCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 3);
-			Result UpdateMyScoreCmd::ParseMessage( MessageData* pIMsg )
+			Result UpdateMyScoreCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -690,7 +690,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result UpdateMyScoreCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result UpdateMyScoreCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result UpdateMyScoreCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -769,7 +769,7 @@ namespace SF
 			}; // Result UpdateMyScoreCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID UpdateMyScoreRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 3);
-			Result UpdateMyScoreRes::ParseMessage( MessageData* pIMsg )
+			Result UpdateMyScoreRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -791,7 +791,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result UpdateMyScoreRes::ParseMessage( MessageData* pIMsg )
+			}; // Result UpdateMyScoreRes::ParseMessage(const MessageData* pIMsg)
 
 			Result UpdateMyScoreRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -869,7 +869,7 @@ namespace SF
 
 			// Cmd: Get Ranking lise
 			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 4);
-			Result GetRankingListCmd::ParseMessage( MessageData* pIMsg )
+			Result GetRankingListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -889,7 +889,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetRankingListCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GetRankingListCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GetRankingListCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -968,7 +968,7 @@ namespace SF
 			}; // Result GetRankingListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GetRankingListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 4);
-			Result GetRankingListRes::ParseMessage( MessageData* pIMsg )
+			Result GetRankingListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -990,7 +990,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetRankingListRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GetRankingListRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GetRankingListRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1068,7 +1068,7 @@ namespace SF
 
 			// Cmd: For network test
 			const MessageID DataTestCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 5);
-			Result DataTestCmd::ParseMessage( MessageData* pIMsg )
+			Result DataTestCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1089,7 +1089,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result DataTestCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result DataTestCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result DataTestCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1163,7 +1163,7 @@ namespace SF
 			}; // Result DataTestCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID DataTestRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 5);
-			Result DataTestRes::ParseMessage( MessageData* pIMsg )
+			Result DataTestRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1185,7 +1185,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result DataTestRes::ParseMessage( MessageData* pIMsg )
+			}; // Result DataTestRes::ParseMessage(const MessageData* pIMsg)
 
 			Result DataTestRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1263,7 +1263,7 @@ namespace SF
 
 			// C2S: Heartbit
 			const MessageID HeartBitC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 6);
-			Result HeartBitC2SEvt::ParseMessage( MessageData* pIMsg )
+			Result HeartBitC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1274,7 +1274,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result HeartBitC2SEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result HeartBitC2SEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result HeartBitC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1335,7 +1335,7 @@ namespace SF
 
 			// Cmd: Write All!! User Score and Ranking list
 			const MessageID DebugPrintALLRankingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 7);
-			Result DebugPrintALLRankingCmd::ParseMessage( MessageData* pIMsg )
+			Result DebugPrintALLRankingCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1354,7 +1354,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result DebugPrintALLRankingCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result DebugPrintALLRankingCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result DebugPrintALLRankingCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1427,7 +1427,7 @@ namespace SF
 			}; // Result DebugPrintALLRankingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID DebugPrintALLRankingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 7);
-			Result DebugPrintALLRankingRes::ParseMessage( MessageData* pIMsg )
+			Result DebugPrintALLRankingRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1445,7 +1445,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result DebugPrintALLRankingRes::ParseMessage( MessageData* pIMsg )
+			}; // Result DebugPrintALLRankingRes::ParseMessage(const MessageData* pIMsg)
 
 			Result DebugPrintALLRankingRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{

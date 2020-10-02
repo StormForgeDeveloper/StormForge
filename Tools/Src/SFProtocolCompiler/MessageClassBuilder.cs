@@ -387,13 +387,13 @@ namespace ProtocolCompiler
             NewLine();
 
             // Parse function
-            MatchIndent(); OutStream.WriteLine("virtual Result ParseMessage( MessageData* pIMsg );");
+            MatchIndent(); OutStream.WriteLine("virtual Result ParseMessage(const MessageData* pIMsg);");
             if(AppConfig.GetValue("VariableMapParser", false))
             {
                 MatchIndent(); OutStream.WriteLine("static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );");
             }
 
-            MatchIndent(); OutStream.WriteLine("static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );");
+            MatchIndent(); OutStream.WriteLine("static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);");
             NewLine();
 
             // Build function
@@ -496,7 +496,7 @@ namespace ProtocolCompiler
         void BuildParserImpl(string Name, string typeName, Parameter[] parameters)
         {
             string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::ParseMessage( MessageData* pIMsg )");
+            OpenSection("Result", strClassName + "::ParseMessage(const MessageData* pIMsg)");
 
             DefaultHRESULT(); NewLine();
 

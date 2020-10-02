@@ -66,9 +66,9 @@ namespace SF
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
-				virtual Result ParseMessage( MessageData* pIMsg );
+				virtual Result ParseMessage(const MessageData* pIMsg);
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
 
@@ -116,9 +116,9 @@ namespace SF
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
-				virtual Result ParseMessage( MessageData* pIMsg );
+				virtual Result ParseMessage(const MessageData* pIMsg);
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos );
 
@@ -161,9 +161,9 @@ namespace SF
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
-				virtual Result ParseMessage( MessageData* pIMsg );
+				virtual Result ParseMessage(const MessageData* pIMsg);
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID );
 
@@ -207,9 +207,9 @@ namespace SF
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
-				virtual Result ParseMessage( MessageData* pIMsg );
+				virtual Result ParseMessage(const MessageData* pIMsg);
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo );
 
@@ -255,9 +255,9 @@ namespace SF
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
-				virtual Result ParseMessage( MessageData* pIMsg );
+				virtual Result ParseMessage(const MessageData* pIMsg);
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason );
 
@@ -305,9 +305,9 @@ namespace SF
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
-				virtual Result ParseMessage( MessageData* pIMsg );
+				virtual Result ParseMessage(const MessageData* pIMsg);
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
 

@@ -562,6 +562,9 @@ namespace SF {
 
 	using std::atomic;
 
+	template<typename DataType, typename D = std::default_delete<DataType>>
+	using UniquePtr = std::unique_ptr<DataType,D>;
+
 	using ClockType = std::chrono::steady_clock;
 	using DurationSec = std::chrono::duration<uint>;
 	using TimeStampSec = std::chrono::time_point<ClockType, DurationSec>;

@@ -21,13 +21,13 @@
 
 namespace SF
 {
- 	namespace Message
+	namespace Message
 	{
  		namespace Game
 		{
  			// C2S: Client heart bit
 			const MessageID HeartBitC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 0);
-			Result HeartBitC2SEvt::ParseMessage( MessageData* pIMsg )
+			Result HeartBitC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -38,7 +38,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result HeartBitC2SEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result HeartBitC2SEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result HeartBitC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -99,7 +99,7 @@ namespace SF
 
 			// Cmd: Player connected from a login server and moved to game server
 			const MessageID JoinGameServerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 1);
-			Result JoinGameServerCmd::ParseMessage( MessageData* pIMsg )
+			Result JoinGameServerCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -119,7 +119,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameServerCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinGameServerCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinGameServerCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -198,7 +198,7 @@ namespace SF
 			}; // Result JoinGameServerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID JoinGameServerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 1);
-			Result JoinGameServerRes::ParseMessage( MessageData* pIMsg )
+			Result JoinGameServerRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -222,7 +222,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameServerRes::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinGameServerRes::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinGameServerRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -311,7 +311,7 @@ namespace SF
 
 			// Cmd: player complition statues
 			const MessageID GetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 2);
-			Result GetComplitionStateCmd::ParseMessage( MessageData* pIMsg )
+			Result GetComplitionStateCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -328,7 +328,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetComplitionStateCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GetComplitionStateCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GetComplitionStateCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -398,7 +398,7 @@ namespace SF
 			}; // Result GetComplitionStateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 2);
-			Result GetComplitionStateRes::ParseMessage( MessageData* pIMsg )
+			Result GetComplitionStateRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -418,7 +418,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetComplitionStateRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GetComplitionStateRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GetComplitionStateRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -495,7 +495,7 @@ namespace SF
 
 			// Cmd: Player complition state
 			const MessageID SetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 3);
-			Result SetComplitionStateCmd::ParseMessage( MessageData* pIMsg )
+			Result SetComplitionStateCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -514,7 +514,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetComplitionStateCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result SetComplitionStateCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result SetComplitionStateCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -587,7 +587,7 @@ namespace SF
 			}; // Result SetComplitionStateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID SetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 3);
-			Result SetComplitionStateRes::ParseMessage( MessageData* pIMsg )
+			Result SetComplitionStateRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -605,7 +605,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetComplitionStateRes::ParseMessage( MessageData* pIMsg )
+			}; // Result SetComplitionStateRes::ParseMessage(const MessageData* pIMsg)
 
 			Result SetComplitionStateRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -679,7 +679,7 @@ namespace SF
 
 			// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 			const MessageID RegisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 4);
-			Result RegisterGCMCmd::ParseMessage( MessageData* pIMsg )
+			Result RegisterGCMCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -698,7 +698,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RegisterGCMCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result RegisterGCMCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result RegisterGCMCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -771,7 +771,7 @@ namespace SF
 			}; // Result RegisterGCMCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID RegisterGCMRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 4);
-			Result RegisterGCMRes::ParseMessage( MessageData* pIMsg )
+			Result RegisterGCMRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -789,7 +789,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RegisterGCMRes::ParseMessage( MessageData* pIMsg )
+			}; // Result RegisterGCMRes::ParseMessage(const MessageData* pIMsg)
 
 			Result RegisterGCMRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -863,7 +863,7 @@ namespace SF
 
 			// Cmd: Unregister Google notification service ID
 			const MessageID UnregisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 5);
-			Result UnregisterGCMCmd::ParseMessage( MessageData* pIMsg )
+			Result UnregisterGCMCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -882,7 +882,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result UnregisterGCMCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result UnregisterGCMCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result UnregisterGCMCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -955,7 +955,7 @@ namespace SF
 			}; // Result UnregisterGCMCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID UnregisterGCMRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 5);
-			Result UnregisterGCMRes::ParseMessage( MessageData* pIMsg )
+			Result UnregisterGCMRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -973,7 +973,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result UnregisterGCMRes::ParseMessage( MessageData* pIMsg )
+			}; // Result UnregisterGCMRes::ParseMessage(const MessageData* pIMsg)
 
 			Result UnregisterGCMRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1047,7 +1047,7 @@ namespace SF
 
 			// Cmd: Invite friend
 			const MessageID InviteFriendCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 6);
-			Result InviteFriendCmd::ParseMessage( MessageData* pIMsg )
+			Result InviteFriendCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1065,7 +1065,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result InviteFriendCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result InviteFriendCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result InviteFriendCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1138,7 +1138,7 @@ namespace SF
 			}; // Result InviteFriendCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID InviteFriendRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 6);
-			Result InviteFriendRes::ParseMessage( MessageData* pIMsg )
+			Result InviteFriendRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1156,7 +1156,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result InviteFriendRes::ParseMessage( MessageData* pIMsg )
+			}; // Result InviteFriendRes::ParseMessage(const MessageData* pIMsg)
 
 			Result InviteFriendRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1230,7 +1230,7 @@ namespace SF
 
 			// Cmd: Accept friend request
 			const MessageID AcceptFriendRequestCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 7);
-			Result AcceptFriendRequestCmd::ParseMessage( MessageData* pIMsg )
+			Result AcceptFriendRequestCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1249,7 +1249,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptFriendRequestCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result AcceptFriendRequestCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result AcceptFriendRequestCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1325,7 +1325,7 @@ namespace SF
 			}; // Result AcceptFriendRequestCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID AcceptFriendRequestRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 7);
-			Result AcceptFriendRequestRes::ParseMessage( MessageData* pIMsg )
+			Result AcceptFriendRequestRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1344,7 +1344,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptFriendRequestRes::ParseMessage( MessageData* pIMsg )
+			}; // Result AcceptFriendRequestRes::ParseMessage(const MessageData* pIMsg)
 
 			Result AcceptFriendRequestRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1421,7 +1421,7 @@ namespace SF
 
 			// S2C: Notification for friend request is accepted
 			const MessageID FriendRequestAcceptedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 8);
-			Result FriendRequestAcceptedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result FriendRequestAcceptedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1438,7 +1438,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result FriendRequestAcceptedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result FriendRequestAcceptedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result FriendRequestAcceptedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1509,7 +1509,7 @@ namespace SF
 
 			// Cmd: Remove friden form the friend list
 			const MessageID RemoveFriendCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 9);
-			Result RemoveFriendCmd::ParseMessage( MessageData* pIMsg )
+			Result RemoveFriendCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1527,7 +1527,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RemoveFriendCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result RemoveFriendCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result RemoveFriendCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1600,7 +1600,7 @@ namespace SF
 			}; // Result RemoveFriendCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID RemoveFriendRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 9);
-			Result RemoveFriendRes::ParseMessage( MessageData* pIMsg )
+			Result RemoveFriendRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1619,7 +1619,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RemoveFriendRes::ParseMessage( MessageData* pIMsg )
+			}; // Result RemoveFriendRes::ParseMessage(const MessageData* pIMsg)
 
 			Result RemoveFriendRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1696,7 +1696,7 @@ namespace SF
 
 			// S2C: Friend removed
 			const MessageID FriendRemovedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 10);
-			Result FriendRemovedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result FriendRemovedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1713,7 +1713,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result FriendRemovedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result FriendRemovedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result FriendRemovedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1784,7 +1784,7 @@ namespace SF
 
 			// Cmd: Get friend list
 			const MessageID GetFriendListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 11);
-			Result GetFriendListCmd::ParseMessage( MessageData* pIMsg )
+			Result GetFriendListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1803,7 +1803,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetFriendListCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GetFriendListCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GetFriendListCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1879,7 +1879,7 @@ namespace SF
 			}; // Result GetFriendListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GetFriendListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 11);
-			Result GetFriendListRes::ParseMessage( MessageData* pIMsg )
+			Result GetFriendListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -1904,7 +1904,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetFriendListRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GetFriendListRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GetFriendListRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -1991,7 +1991,7 @@ namespace SF
 
 			// Cmd: Query notification list
 			const MessageID GetNotificationListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 12);
-			Result GetNotificationListCmd::ParseMessage( MessageData* pIMsg )
+			Result GetNotificationListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2008,7 +2008,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetNotificationListCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GetNotificationListCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GetNotificationListCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -2078,7 +2078,7 @@ namespace SF
 			}; // Result GetNotificationListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GetNotificationListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 12);
-			Result GetNotificationListRes::ParseMessage( MessageData* pIMsg )
+			Result GetNotificationListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2096,7 +2096,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetNotificationListRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GetNotificationListRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GetNotificationListRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -2170,7 +2170,7 @@ namespace SF
 
 			// Cmd: Delete notification
 			const MessageID DeleteNotificationCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 13);
-			Result DeleteNotificationCmd::ParseMessage( MessageData* pIMsg )
+			Result DeleteNotificationCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2188,7 +2188,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteNotificationCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result DeleteNotificationCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result DeleteNotificationCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -2261,7 +2261,7 @@ namespace SF
 			}; // Result DeleteNotificationCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID DeleteNotificationRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 13);
-			Result DeleteNotificationRes::ParseMessage( MessageData* pIMsg )
+			Result DeleteNotificationRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2280,7 +2280,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteNotificationRes::ParseMessage( MessageData* pIMsg )
+			}; // Result DeleteNotificationRes::ParseMessage(const MessageData* pIMsg)
 
 			Result DeleteNotificationRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -2357,7 +2357,7 @@ namespace SF
 
 			// Cmd: Set notification is read
 			const MessageID SetNotificationReadCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 14);
-			Result SetNotificationReadCmd::ParseMessage( MessageData* pIMsg )
+			Result SetNotificationReadCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2375,7 +2375,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNotificationReadCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result SetNotificationReadCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result SetNotificationReadCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -2448,7 +2448,7 @@ namespace SF
 			}; // Result SetNotificationReadCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID SetNotificationReadRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 14);
-			Result SetNotificationReadRes::ParseMessage( MessageData* pIMsg )
+			Result SetNotificationReadRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2467,7 +2467,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNotificationReadRes::ParseMessage( MessageData* pIMsg )
+			}; // Result SetNotificationReadRes::ParseMessage(const MessageData* pIMsg)
 
 			Result SetNotificationReadRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -2544,7 +2544,7 @@ namespace SF
 
 			// Cmd: Accept notification
 			const MessageID AcceptNotificationCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 15);
-			Result AcceptNotificationCmd::ParseMessage( MessageData* pIMsg )
+			Result AcceptNotificationCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2562,7 +2562,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptNotificationCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result AcceptNotificationCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result AcceptNotificationCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -2635,7 +2635,7 @@ namespace SF
 			}; // Result AcceptNotificationCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID AcceptNotificationRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 15);
-			Result AcceptNotificationRes::ParseMessage( MessageData* pIMsg )
+			Result AcceptNotificationRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2654,7 +2654,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptNotificationRes::ParseMessage( MessageData* pIMsg )
+			}; // Result AcceptNotificationRes::ParseMessage(const MessageData* pIMsg)
 
 			Result AcceptNotificationRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -2731,7 +2731,7 @@ namespace SF
 
 			// S2C: Notify new notification
 			const MessageID NotifyS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 16);
-			Result NotifyS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result NotifyS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2755,7 +2755,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result NotifyS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result NotifyS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result NotifyS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -2844,7 +2844,7 @@ namespace SF
 
 			// Cmd: Query playerID list
 			const MessageID FindPlayerByEMailCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 17);
-			Result FindPlayerByEMailCmd::ParseMessage( MessageData* pIMsg )
+			Result FindPlayerByEMailCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2863,7 +2863,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByEMailCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result FindPlayerByEMailCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result FindPlayerByEMailCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -2936,7 +2936,7 @@ namespace SF
 			}; // Result FindPlayerByEMailCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID FindPlayerByEMailRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 17);
-			Result FindPlayerByEMailRes::ParseMessage( MessageData* pIMsg )
+			Result FindPlayerByEMailRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -2955,7 +2955,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByEMailRes::ParseMessage( MessageData* pIMsg )
+			}; // Result FindPlayerByEMailRes::ParseMessage(const MessageData* pIMsg)
 
 			Result FindPlayerByEMailRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -3032,7 +3032,7 @@ namespace SF
 
 			// Cmd: Query playerID list
 			const MessageID FindPlayerByPlayerIDCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 18);
-			Result FindPlayerByPlayerIDCmd::ParseMessage( MessageData* pIMsg )
+			Result FindPlayerByPlayerIDCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -3050,7 +3050,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlayerIDCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result FindPlayerByPlayerIDCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result FindPlayerByPlayerIDCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -3123,7 +3123,7 @@ namespace SF
 			}; // Result FindPlayerByPlayerIDCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID FindPlayerByPlayerIDRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 18);
-			Result FindPlayerByPlayerIDRes::ParseMessage( MessageData* pIMsg )
+			Result FindPlayerByPlayerIDRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -3142,7 +3142,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlayerIDRes::ParseMessage( MessageData* pIMsg )
+			}; // Result FindPlayerByPlayerIDRes::ParseMessage(const MessageData* pIMsg)
 
 			Result FindPlayerByPlayerIDRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -3219,7 +3219,7 @@ namespace SF
 
 			// Cmd: *Request Player Status Update
 			const MessageID RequestPlayerStatusUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 19);
-			Result RequestPlayerStatusUpdateCmd::ParseMessage( MessageData* pIMsg )
+			Result RequestPlayerStatusUpdateCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -3240,7 +3240,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestPlayerStatusUpdateCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result RequestPlayerStatusUpdateCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result RequestPlayerStatusUpdateCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -3314,7 +3314,7 @@ namespace SF
 			}; // Result RequestPlayerStatusUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID RequestPlayerStatusUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 19);
-			Result RequestPlayerStatusUpdateRes::ParseMessage( MessageData* pIMsg )
+			Result RequestPlayerStatusUpdateRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -3332,7 +3332,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestPlayerStatusUpdateRes::ParseMessage( MessageData* pIMsg )
+			}; // Result RequestPlayerStatusUpdateRes::ParseMessage(const MessageData* pIMsg)
 
 			Result RequestPlayerStatusUpdateRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -3406,7 +3406,7 @@ namespace SF
 
 			// S2C: *Notify Player Status Updated
 			const MessageID NotifyPlayerStatusUpdatedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 20);
-			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -3425,7 +3425,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -3502,7 +3502,7 @@ namespace SF
 
 			// Cmd: Get Ranking lise
 			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 21);
-			Result GetRankingListCmd::ParseMessage( MessageData* pIMsg )
+			Result GetRankingListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -3522,7 +3522,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetRankingListCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GetRankingListCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GetRankingListCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -3601,7 +3601,7 @@ namespace SF
 			}; // Result GetRankingListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GetRankingListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 21);
-			Result GetRankingListRes::ParseMessage( MessageData* pIMsg )
+			Result GetRankingListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -3623,7 +3623,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetRankingListRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GetRankingListRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GetRankingListRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -3701,7 +3701,7 @@ namespace SF
 
 			// Cmd: Game user game play information
 			const MessageID GetUserGamePlayerInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 22);
-			Result GetUserGamePlayerInfoCmd::ParseMessage( MessageData* pIMsg )
+			Result GetUserGamePlayerInfoCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -3718,7 +3718,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetUserGamePlayerInfoCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GetUserGamePlayerInfoCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GetUserGamePlayerInfoCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -3798,7 +3798,7 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& GetUserGamePlayerInfoRes::GetAttributes() const
-			Result GetUserGamePlayerInfoRes::ParseMessage( MessageData* pIMsg )
+			Result GetUserGamePlayerInfoRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -3820,7 +3820,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetUserGamePlayerInfoRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GetUserGamePlayerInfoRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GetUserGamePlayerInfoRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -3934,7 +3934,7 @@ namespace SF
 
 			// Cmd: Game game play information
 			const MessageID GetGamePlayerInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 23);
-			Result GetGamePlayerInfoCmd::ParseMessage( MessageData* pIMsg )
+			Result GetGamePlayerInfoCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -3952,7 +3952,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetGamePlayerInfoCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GetGamePlayerInfoCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GetGamePlayerInfoCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -4035,7 +4035,7 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& GetGamePlayerInfoRes::GetAttributes() const
-			Result GetGamePlayerInfoRes::ParseMessage( MessageData* pIMsg )
+			Result GetGamePlayerInfoRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -4058,7 +4058,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetGamePlayerInfoRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GetGamePlayerInfoRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GetGamePlayerInfoRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -4177,7 +4177,7 @@ namespace SF
 
 			// S2C: Player level up event
 			const MessageID LevelUpS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 24);
-			Result LevelUpS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result LevelUpS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -4195,7 +4195,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LevelUpS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result LevelUpS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result LevelUpS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -4269,7 +4269,7 @@ namespace SF
 
 			// Cmd: Change NickName
 			const MessageID SetNickNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 25);
-			Result SetNickNameCmd::ParseMessage( MessageData* pIMsg )
+			Result SetNickNameCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -4289,7 +4289,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNickNameCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result SetNickNameCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result SetNickNameCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -4365,7 +4365,7 @@ namespace SF
 			}; // Result SetNickNameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID SetNickNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 25);
-			Result SetNickNameRes::ParseMessage( MessageData* pIMsg )
+			Result SetNickNameRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -4385,7 +4385,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNickNameRes::ParseMessage( MessageData* pIMsg )
+			}; // Result SetNickNameRes::ParseMessage(const MessageData* pIMsg)
 
 			Result SetNickNameRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -4465,7 +4465,7 @@ namespace SF
 
 			// Cmd: Create Party
 			const MessageID CreatePartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 26);
-			Result CreatePartyCmd::ParseMessage( MessageData* pIMsg )
+			Result CreatePartyCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -4482,7 +4482,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreatePartyCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result CreatePartyCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result CreatePartyCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -4552,7 +4552,7 @@ namespace SF
 			}; // Result CreatePartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID CreatePartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 26);
-			Result CreatePartyRes::ParseMessage( MessageData* pIMsg )
+			Result CreatePartyRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -4571,7 +4571,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreatePartyRes::ParseMessage( MessageData* pIMsg )
+			}; // Result CreatePartyRes::ParseMessage(const MessageData* pIMsg)
 
 			Result CreatePartyRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -4648,7 +4648,7 @@ namespace SF
 
 			// Cmd: Join party
 			const MessageID JoinPartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 27);
-			Result JoinPartyCmd::ParseMessage( MessageData* pIMsg )
+			Result JoinPartyCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -4667,7 +4667,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinPartyCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinPartyCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinPartyCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -4743,7 +4743,7 @@ namespace SF
 			}; // Result JoinPartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID JoinPartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 27);
-			Result JoinPartyRes::ParseMessage( MessageData* pIMsg )
+			Result JoinPartyRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -4767,7 +4767,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinPartyRes::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinPartyRes::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinPartyRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -4851,7 +4851,7 @@ namespace SF
 
 			// S2C: Player Joined event
 			const MessageID PartyPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 28);
-			Result PartyPlayerJoinedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PartyPlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -4869,7 +4869,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyPlayerJoinedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyPlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyPlayerJoinedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -4943,7 +4943,7 @@ namespace SF
 
 			// S2C: Party leader changed event
 			const MessageID PartyLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 29);
-			Result PartyLeaderChangedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PartyLeaderChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -4961,7 +4961,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyLeaderChangedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyLeaderChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyLeaderChangedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5035,7 +5035,7 @@ namespace SF
 
 			// Cmd: Leave party command
 			const MessageID LeavePartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 30);
-			Result LeavePartyCmd::ParseMessage( MessageData* pIMsg )
+			Result LeavePartyCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5054,7 +5054,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeavePartyCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result LeavePartyCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result LeavePartyCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5130,7 +5130,7 @@ namespace SF
 			}; // Result LeavePartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID LeavePartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 30);
-			Result LeavePartyRes::ParseMessage( MessageData* pIMsg )
+			Result LeavePartyRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5148,7 +5148,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeavePartyRes::ParseMessage( MessageData* pIMsg )
+			}; // Result LeavePartyRes::ParseMessage(const MessageData* pIMsg)
 
 			Result LeavePartyRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5222,7 +5222,7 @@ namespace SF
 
 			// S2C: Party Player left event
 			const MessageID PartyPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 31);
-			Result PartyPlayerLeftS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PartyPlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5240,7 +5240,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyPlayerLeftS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyPlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyPlayerLeftS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5314,7 +5314,7 @@ namespace SF
 
 			// Cmd: Kick player from the party
 			const MessageID PartyKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 32);
-			Result PartyKickPlayerCmd::ParseMessage( MessageData* pIMsg )
+			Result PartyKickPlayerCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5334,7 +5334,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyKickPlayerCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyKickPlayerCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyKickPlayerCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5413,7 +5413,7 @@ namespace SF
 			}; // Result PartyKickPlayerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID PartyKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 32);
-			Result PartyKickPlayerRes::ParseMessage( MessageData* pIMsg )
+			Result PartyKickPlayerRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5431,7 +5431,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyKickPlayerRes::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyKickPlayerRes::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyKickPlayerRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5505,7 +5505,7 @@ namespace SF
 
 			// S2C: Party Player kicked message
 			const MessageID PartyPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 33);
-			Result PartyPlayerKickedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PartyPlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5523,7 +5523,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyPlayerKickedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyPlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyPlayerKickedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5597,7 +5597,7 @@ namespace SF
 
 			// Cmd: Invite a player to the party
 			const MessageID PartyInviteCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 34);
-			Result PartyInviteCmd::ParseMessage( MessageData* pIMsg )
+			Result PartyInviteCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5615,7 +5615,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyInviteCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyInviteCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyInviteCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5688,7 +5688,7 @@ namespace SF
 			}; // Result PartyInviteCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID PartyInviteRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 34);
-			Result PartyInviteRes::ParseMessage( MessageData* pIMsg )
+			Result PartyInviteRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5706,7 +5706,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyInviteRes::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyInviteRes::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyInviteRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5780,7 +5780,7 @@ namespace SF
 
 			// S2C: Party invite requested
 			const MessageID PartyInviteRequestedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 35);
-			Result PartyInviteRequestedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PartyInviteRequestedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5800,7 +5800,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyInviteRequestedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyInviteRequestedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyInviteRequestedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5877,7 +5877,7 @@ namespace SF
 
 			// Cmd: Send Party quick chat message
 			const MessageID PartyQuickChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 36);
-			Result PartyQuickChatMessageCmd::ParseMessage( MessageData* pIMsg )
+			Result PartyQuickChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5895,7 +5895,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyQuickChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyQuickChatMessageCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -5968,7 +5968,7 @@ namespace SF
 			}; // Result PartyQuickChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID PartyQuickChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 36);
-			Result PartyQuickChatMessageRes::ParseMessage( MessageData* pIMsg )
+			Result PartyQuickChatMessageRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -5986,7 +5986,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageRes::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyQuickChatMessageRes::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyQuickChatMessageRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -6060,7 +6060,7 @@ namespace SF
 
 			// S2C: Party Chatting message event
 			const MessageID PartyQuickChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 37);
-			Result PartyQuickChatMessageS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PartyQuickChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -6078,7 +6078,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyQuickChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyQuickChatMessageS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -6152,7 +6152,7 @@ namespace SF
 
 			// Cmd: Party chatting
 			const MessageID PartyChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 38);
-			Result PartyChatMessageCmd::ParseMessage( MessageData* pIMsg )
+			Result PartyChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -6171,7 +6171,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyChatMessageCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyChatMessageCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -6244,7 +6244,7 @@ namespace SF
 			}; // Result PartyChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID PartyChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 38);
-			Result PartyChatMessageRes::ParseMessage( MessageData* pIMsg )
+			Result PartyChatMessageRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -6262,7 +6262,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyChatMessageRes::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyChatMessageRes::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyChatMessageRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -6336,7 +6336,7 @@ namespace SF
 
 			// S2C: Party Chatting message event
 			const MessageID PartyChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 39);
-			Result PartyChatMessageS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PartyChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -6357,7 +6357,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyChatMessageS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PartyChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PartyChatMessageS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -6434,7 +6434,7 @@ namespace SF
 
 			// Cmd: Join to a game instance
 			const MessageID JoinGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 40);
-			Result JoinGameInstanceCmd::ParseMessage( MessageData* pIMsg )
+			Result JoinGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -6454,7 +6454,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameInstanceCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinGameInstanceCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -6533,7 +6533,7 @@ namespace SF
 			}; // Result JoinGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID JoinGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 40);
-			Result JoinGameInstanceRes::ParseMessage( MessageData* pIMsg )
+			Result JoinGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -6552,7 +6552,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameInstanceRes::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinGameInstanceRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -6629,7 +6629,7 @@ namespace SF
 
 			// Cmd: Leave game instance
 			const MessageID LeaveGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 41);
-			Result LeaveGameInstanceCmd::ParseMessage( MessageData* pIMsg )
+			Result LeaveGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -6649,7 +6649,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveGameInstanceCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result LeaveGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result LeaveGameInstanceCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -6728,7 +6728,7 @@ namespace SF
 			}; // Result LeaveGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID LeaveGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 41);
-			Result LeaveGameInstanceRes::ParseMessage( MessageData* pIMsg )
+			Result LeaveGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -6747,7 +6747,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveGameInstanceRes::ParseMessage( MessageData* pIMsg )
+			}; // Result LeaveGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 
 			Result LeaveGameInstanceRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -6824,7 +6824,7 @@ namespace SF
 
 			// Cmd: Search game instance
 			const MessageID SearchGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 42);
-			Result SearchGameInstanceCmd::ParseMessage( MessageData* pIMsg )
+			Result SearchGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -6843,7 +6843,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result SearchGameInstanceCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result SearchGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result SearchGameInstanceCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -6916,7 +6916,7 @@ namespace SF
 			}; // Result SearchGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID SearchGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 42);
-			Result SearchGameInstanceRes::ParseMessage( MessageData* pIMsg )
+			Result SearchGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -6938,7 +6938,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result SearchGameInstanceRes::ParseMessage( MessageData* pIMsg )
+			}; // Result SearchGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 
 			Result SearchGameInstanceRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -7016,7 +7016,7 @@ namespace SF
 
 			// Cmd: Search game instance
 			const MessageID GetCharacterDataInGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 43);
-			Result GetCharacterDataInGameInstanceCmd::ParseMessage( MessageData* pIMsg )
+			Result GetCharacterDataInGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -7035,7 +7035,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataInGameInstanceCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GetCharacterDataInGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GetCharacterDataInGameInstanceCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -7121,7 +7121,7 @@ namespace SF
 				} // if (!m_GameInstancesHasParsed)
 				return m_GameInstances;
 			} // const VariableTable& GetCharacterDataInGameInstanceRes::GetGameInstances() const
-			Result GetCharacterDataInGameInstanceRes::ParseMessage( MessageData* pIMsg )
+			Result GetCharacterDataInGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -7144,7 +7144,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataInGameInstanceRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GetCharacterDataInGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GetCharacterDataInGameInstanceRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -7273,7 +7273,7 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& NewPlayerInViewS2CEvt::GetAttributes() const
-			Result NewPlayerInViewS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result NewPlayerInViewS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -7295,7 +7295,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result NewPlayerInViewS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result NewPlayerInViewS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result NewPlayerInViewS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -7419,7 +7419,7 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& RemovePlayerFromViewS2CEvt::GetAttributes() const
-			Result RemovePlayerFromViewS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result RemovePlayerFromViewS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -7441,7 +7441,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RemovePlayerFromViewS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result RemovePlayerFromViewS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result RemovePlayerFromViewS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -7565,7 +7565,7 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& PlayerMovementC2SEvt::GetAttributes() const
-			Result PlayerMovementC2SEvt::ParseMessage( MessageData* pIMsg )
+			Result PlayerMovementC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -7587,7 +7587,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerMovementC2SEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PlayerMovementC2SEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PlayerMovementC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -7711,7 +7711,7 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& PlayerMovementS2CEvt::GetAttributes() const
-			Result PlayerMovementS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PlayerMovementS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -7733,7 +7733,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerMovementS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PlayerMovementS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PlayerMovementS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -7847,7 +7847,7 @@ namespace SF
 
 			// Cmd: Join to a game
 			const MessageID JoinGameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 48);
-			Result JoinGameCmd::ParseMessage( MessageData* pIMsg )
+			Result JoinGameCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -7867,7 +7867,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinGameCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinGameCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -7946,7 +7946,7 @@ namespace SF
 			}; // Result JoinGameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID JoinGameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 48);
-			Result JoinGameRes::ParseMessage( MessageData* pIMsg )
+			Result JoinGameRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -7981,7 +7981,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameRes::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinGameRes::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinGameRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -8090,7 +8090,7 @@ namespace SF
 
 			// S2C: Player Joined in the game
 			const MessageID PlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 49);
-			Result PlayerJoinedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -8112,7 +8112,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerJoinedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PlayerJoinedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -8198,7 +8198,7 @@ namespace SF
 
 			// Cmd: Leave Game
 			const MessageID LeaveGameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 50);
-			Result LeaveGameCmd::ParseMessage( MessageData* pIMsg )
+			Result LeaveGameCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -8218,7 +8218,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveGameCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result LeaveGameCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result LeaveGameCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -8297,7 +8297,7 @@ namespace SF
 			}; // Result LeaveGameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID LeaveGameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 50);
-			Result LeaveGameRes::ParseMessage( MessageData* pIMsg )
+			Result LeaveGameRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -8315,7 +8315,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveGameRes::ParseMessage( MessageData* pIMsg )
+			}; // Result LeaveGameRes::ParseMessage(const MessageData* pIMsg)
 
 			Result LeaveGameRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -8389,7 +8389,7 @@ namespace SF
 
 			// S2C: Player left event
 			const MessageID PlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 51);
-			Result PlayerLeftS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -8407,7 +8407,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerLeftS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PlayerLeftS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -8481,7 +8481,7 @@ namespace SF
 
 			// Cmd: Kick player
 			const MessageID KickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 52);
-			Result KickPlayerCmd::ParseMessage( MessageData* pIMsg )
+			Result KickPlayerCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -8501,7 +8501,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result KickPlayerCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result KickPlayerCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result KickPlayerCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -8580,7 +8580,7 @@ namespace SF
 			}; // Result KickPlayerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID KickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 52);
-			Result KickPlayerRes::ParseMessage( MessageData* pIMsg )
+			Result KickPlayerRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -8598,7 +8598,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result KickPlayerRes::ParseMessage( MessageData* pIMsg )
+			}; // Result KickPlayerRes::ParseMessage(const MessageData* pIMsg)
 
 			Result KickPlayerRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -8672,7 +8672,7 @@ namespace SF
 
 			// S2C: Player kicked
 			const MessageID PlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 53);
-			Result PlayerKickedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -8690,7 +8690,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerKickedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PlayerKickedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -8764,7 +8764,7 @@ namespace SF
 
 			// Cmd: Assign role + Game state reset
 			const MessageID AssignRoleCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 54);
-			Result AssignRoleCmd::ParseMessage( MessageData* pIMsg )
+			Result AssignRoleCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -8784,7 +8784,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result AssignRoleCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result AssignRoleCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result AssignRoleCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -8863,7 +8863,7 @@ namespace SF
 			}; // Result AssignRoleCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID AssignRoleRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 54);
-			Result AssignRoleRes::ParseMessage( MessageData* pIMsg )
+			Result AssignRoleRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -8881,7 +8881,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result AssignRoleRes::ParseMessage( MessageData* pIMsg )
+			}; // Result AssignRoleRes::ParseMessage(const MessageData* pIMsg)
 
 			Result AssignRoleRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -8955,7 +8955,7 @@ namespace SF
 
 			// S2C: Role assigned event
 			const MessageID RoleAssignedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 55);
-			Result RoleAssignedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result RoleAssignedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -8974,7 +8974,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RoleAssignedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result RoleAssignedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result RoleAssignedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -9051,7 +9051,7 @@ namespace SF
 
 			// Cmd: Send chatting message to the game
 			const MessageID ChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 56);
-			Result ChatMessageCmd::ParseMessage( MessageData* pIMsg )
+			Result ChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -9071,7 +9071,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatMessageCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatMessageCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -9147,7 +9147,7 @@ namespace SF
 			}; // Result ChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID ChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 56);
-			Result ChatMessageRes::ParseMessage( MessageData* pIMsg )
+			Result ChatMessageRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -9165,7 +9165,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatMessageRes::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatMessageRes::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatMessageRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -9239,7 +9239,7 @@ namespace SF
 
 			// S2C: Chatting message event 
 			const MessageID ChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 57);
-			Result ChatMessageS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result ChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -9261,7 +9261,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatMessageS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatMessageS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -9341,7 +9341,7 @@ namespace SF
 
 			// Cmd: Advance game
 			const MessageID AdvanceGameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 58);
-			Result AdvanceGameCmd::ParseMessage( MessageData* pIMsg )
+			Result AdvanceGameCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -9361,7 +9361,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result AdvanceGameCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result AdvanceGameCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result AdvanceGameCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -9440,7 +9440,7 @@ namespace SF
 			}; // Result AdvanceGameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID AdvanceGameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 58);
-			Result AdvanceGameRes::ParseMessage( MessageData* pIMsg )
+			Result AdvanceGameRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -9458,7 +9458,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result AdvanceGameRes::ParseMessage( MessageData* pIMsg )
+			}; // Result AdvanceGameRes::ParseMessage(const MessageData* pIMsg)
 
 			Result AdvanceGameRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -9532,7 +9532,7 @@ namespace SF
 
 			// S2C: The game state is advanced
 			const MessageID GameAdvancedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 59);
-			Result GameAdvancedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result GameAdvancedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -9552,7 +9552,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameAdvancedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result GameAdvancedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result GameAdvancedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -9632,7 +9632,7 @@ namespace SF
 
 			// S2C: Game is ended
 			const MessageID GameEndedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 60);
-			Result GameEndedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result GameEndedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -9652,7 +9652,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameEndedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result GameEndedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result GameEndedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -9732,7 +9732,7 @@ namespace SF
 
 			// Cmd: Vote game advance
 			const MessageID VoteGameAdvanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 61);
-			Result VoteGameAdvanceCmd::ParseMessage( MessageData* pIMsg )
+			Result VoteGameAdvanceCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -9752,7 +9752,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result VoteGameAdvanceCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result VoteGameAdvanceCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result VoteGameAdvanceCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -9831,7 +9831,7 @@ namespace SF
 			}; // Result VoteGameAdvanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID VoteGameAdvanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 61);
-			Result VoteGameAdvanceRes::ParseMessage( MessageData* pIMsg )
+			Result VoteGameAdvanceRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -9849,7 +9849,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result VoteGameAdvanceRes::ParseMessage( MessageData* pIMsg )
+			}; // Result VoteGameAdvanceRes::ParseMessage(const MessageData* pIMsg)
 
 			Result VoteGameAdvanceRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -9923,7 +9923,7 @@ namespace SF
 
 			// S2C: GameAdvance is Voted
 			const MessageID GameAdvanceVotedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 62);
-			Result GameAdvanceVotedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result GameAdvanceVotedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -9941,7 +9941,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameAdvanceVotedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result GameAdvanceVotedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result GameAdvanceVotedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10015,7 +10015,7 @@ namespace SF
 
 			// Cmd: Vote
 			const MessageID VoteCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 63);
-			Result VoteCmd::ParseMessage( MessageData* pIMsg )
+			Result VoteCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -10037,7 +10037,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result VoteCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result VoteCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result VoteCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10122,7 +10122,7 @@ namespace SF
 			}; // Result VoteCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID VoteRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 63);
-			Result VoteRes::ParseMessage( MessageData* pIMsg )
+			Result VoteRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -10140,7 +10140,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result VoteRes::ParseMessage( MessageData* pIMsg )
+			}; // Result VoteRes::ParseMessage(const MessageData* pIMsg)
 
 			Result VoteRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10214,7 +10214,7 @@ namespace SF
 
 			// S2C: Player Voted
 			const MessageID VotedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 64);
-			Result VotedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result VotedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -10233,7 +10233,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result VotedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result VotedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result VotedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10310,7 +10310,7 @@ namespace SF
 
 			// S2C: Vote is ended
 			const MessageID VoteEndS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 65);
-			Result VoteEndS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result VoteEndS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -10331,7 +10331,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result VoteEndS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result VoteEndS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result VoteEndS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10406,7 +10406,7 @@ namespace SF
 
 			// S2C: Player Killed
 			const MessageID PlayerKilledS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 66);
-			Result PlayerKilledS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PlayerKilledS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -10425,7 +10425,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerKilledS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PlayerKilledS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PlayerKilledS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10502,7 +10502,7 @@ namespace SF
 
 			// S2C: Player Voted
 			const MessageID PlayerRevealedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 67);
-			Result PlayerRevealedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result PlayerRevealedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -10522,7 +10522,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerRevealedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result PlayerRevealedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result PlayerRevealedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10602,7 +10602,7 @@ namespace SF
 
 			// Cmd: Play again with the current players
 			const MessageID GamePlayAgainCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 68);
-			Result GamePlayAgainCmd::ParseMessage( MessageData* pIMsg )
+			Result GamePlayAgainCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -10619,7 +10619,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GamePlayAgainCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GamePlayAgainCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GamePlayAgainCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10689,7 +10689,7 @@ namespace SF
 			}; // Result GamePlayAgainCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GamePlayAgainRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 68);
-			Result GamePlayAgainRes::ParseMessage( MessageData* pIMsg )
+			Result GamePlayAgainRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -10709,7 +10709,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GamePlayAgainRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GamePlayAgainRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GamePlayAgainRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10789,7 +10789,7 @@ namespace SF
 
 			// S2C: Somebody pressed play again. Only one of PartyUID and GameInsUID can have a value
 			const MessageID GamePlayAgainS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 69);
-			Result GamePlayAgainS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result GamePlayAgainS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -10807,7 +10807,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GamePlayAgainS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result GamePlayAgainS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result GamePlayAgainS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10881,7 +10881,7 @@ namespace SF
 
 			// Cmd: Player. reveal a player
 			const MessageID GameRevealPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 70);
-			Result GameRevealPlayerCmd::ParseMessage( MessageData* pIMsg )
+			Result GameRevealPlayerCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -10902,7 +10902,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameRevealPlayerCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GameRevealPlayerCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GameRevealPlayerCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -10976,7 +10976,7 @@ namespace SF
 			}; // Result GameRevealPlayerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GameRevealPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 70);
-			Result GameRevealPlayerRes::ParseMessage( MessageData* pIMsg )
+			Result GameRevealPlayerRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11004,7 +11004,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameRevealPlayerRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GameRevealPlayerRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GameRevealPlayerRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -11092,7 +11092,7 @@ namespace SF
 
 			// Cmd: Player. revive himself
 			const MessageID GamePlayerReviveCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 71);
-			Result GamePlayerReviveCmd::ParseMessage( MessageData* pIMsg )
+			Result GamePlayerReviveCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11109,7 +11109,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GamePlayerReviveCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GamePlayerReviveCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GamePlayerReviveCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -11179,7 +11179,7 @@ namespace SF
 			}; // Result GamePlayerReviveCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GamePlayerReviveRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 71);
-			Result GamePlayerReviveRes::ParseMessage( MessageData* pIMsg )
+			Result GamePlayerReviveRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11199,7 +11199,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GamePlayerReviveRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GamePlayerReviveRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GamePlayerReviveRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -11279,7 +11279,7 @@ namespace SF
 
 			// S2C: Player is revived
 			const MessageID GamePlayerRevivedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 72);
-			Result GamePlayerRevivedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result GamePlayerRevivedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11296,7 +11296,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GamePlayerRevivedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result GamePlayerRevivedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result GamePlayerRevivedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -11367,7 +11367,7 @@ namespace SF
 
 			// Cmd: Player. reset ranking
 			const MessageID GamePlayerResetRankCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 73);
-			Result GamePlayerResetRankCmd::ParseMessage( MessageData* pIMsg )
+			Result GamePlayerResetRankCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11384,7 +11384,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GamePlayerResetRankCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GamePlayerResetRankCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GamePlayerResetRankCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -11454,7 +11454,7 @@ namespace SF
 			}; // Result GamePlayerResetRankCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GamePlayerResetRankRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 73);
-			Result GamePlayerResetRankRes::ParseMessage( MessageData* pIMsg )
+			Result GamePlayerResetRankRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11474,7 +11474,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GamePlayerResetRankRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GamePlayerResetRankRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GamePlayerResetRankRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -11554,7 +11554,7 @@ namespace SF
 
 			// Cmd: Request Game match
 			const MessageID RequestGameMatchCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 74);
-			Result RequestGameMatchCmd::ParseMessage( MessageData* pIMsg )
+			Result RequestGameMatchCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11573,7 +11573,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestGameMatchCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result RequestGameMatchCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result RequestGameMatchCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -11649,7 +11649,7 @@ namespace SF
 			}; // Result RequestGameMatchCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID RequestGameMatchRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 74);
-			Result RequestGameMatchRes::ParseMessage( MessageData* pIMsg )
+			Result RequestGameMatchRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11669,7 +11669,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestGameMatchRes::ParseMessage( MessageData* pIMsg )
+			}; // Result RequestGameMatchRes::ParseMessage(const MessageData* pIMsg)
 
 			Result RequestGameMatchRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -11749,7 +11749,7 @@ namespace SF
 
 			// S2C: Game matched
 			const MessageID GameMatchedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 75);
-			Result GameMatchedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result GameMatchedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11785,7 +11785,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameMatchedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result GameMatchedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result GameMatchedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -11897,7 +11897,7 @@ namespace SF
 
 			// S2C: Game match failed
 			const MessageID GameMatchFailedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 76);
-			Result GameMatchFailedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result GameMatchFailedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11914,7 +11914,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameMatchFailedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result GameMatchFailedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result GameMatchFailedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -11985,7 +11985,7 @@ namespace SF
 
 			// S2C: Game matching started
 			const MessageID GameMatchingStartedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 77);
-			Result GameMatchingStartedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result GameMatchingStartedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -11996,7 +11996,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameMatchingStartedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result GameMatchingStartedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result GameMatchingStartedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12057,7 +12057,7 @@ namespace SF
 
 			// Cmd: Cancel Game match
 			const MessageID CancelGameMatchCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 78);
-			Result CancelGameMatchCmd::ParseMessage( MessageData* pIMsg )
+			Result CancelGameMatchCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -12074,7 +12074,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result CancelGameMatchCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result CancelGameMatchCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result CancelGameMatchCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12144,7 +12144,7 @@ namespace SF
 			}; // Result CancelGameMatchCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID CancelGameMatchRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 78);
-			Result CancelGameMatchRes::ParseMessage( MessageData* pIMsg )
+			Result CancelGameMatchRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -12162,7 +12162,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result CancelGameMatchRes::ParseMessage( MessageData* pIMsg )
+			}; // Result CancelGameMatchRes::ParseMessage(const MessageData* pIMsg)
 
 			Result CancelGameMatchRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12236,7 +12236,7 @@ namespace SF
 
 			// S2C: game matching canceled
 			const MessageID GameMatchingCanceledS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 79);
-			Result GameMatchingCanceledS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result GameMatchingCanceledS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -12247,7 +12247,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameMatchingCanceledS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result GameMatchingCanceledS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result GameMatchingCanceledS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12308,7 +12308,7 @@ namespace SF
 
 			// Cmd: Buy shop item prepare
 			const MessageID BuyShopItemPrepareCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 80);
-			Result BuyShopItemPrepareCmd::ParseMessage( MessageData* pIMsg )
+			Result BuyShopItemPrepareCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -12326,7 +12326,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemPrepareCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result BuyShopItemPrepareCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result BuyShopItemPrepareCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12399,7 +12399,7 @@ namespace SF
 			}; // Result BuyShopItemPrepareCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID BuyShopItemPrepareRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 80);
-			Result BuyShopItemPrepareRes::ParseMessage( MessageData* pIMsg )
+			Result BuyShopItemPrepareRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -12420,7 +12420,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemPrepareRes::ParseMessage( MessageData* pIMsg )
+			}; // Result BuyShopItemPrepareRes::ParseMessage(const MessageData* pIMsg)
 
 			Result BuyShopItemPrepareRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12500,7 +12500,7 @@ namespace SF
 
 			// Cmd: Buy shop item
 			const MessageID BuyShopItemCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 81);
-			Result BuyShopItemCmd::ParseMessage( MessageData* pIMsg )
+			Result BuyShopItemCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -12528,7 +12528,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result BuyShopItemCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result BuyShopItemCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12614,7 +12614,7 @@ namespace SF
 			}; // Result BuyShopItemCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID BuyShopItemRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 81);
-			Result BuyShopItemRes::ParseMessage( MessageData* pIMsg )
+			Result BuyShopItemRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -12633,7 +12633,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemRes::ParseMessage( MessageData* pIMsg )
+			}; // Result BuyShopItemRes::ParseMessage(const MessageData* pIMsg)
 
 			Result BuyShopItemRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12710,7 +12710,7 @@ namespace SF
 
 			// Cmd: Create or Join Chat channel
 			const MessageID CreateOrJoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 82);
-			Result CreateOrJoinChatChannelCmd::ParseMessage( MessageData* pIMsg )
+			Result CreateOrJoinChatChannelCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -12731,7 +12731,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateOrJoinChatChannelCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result CreateOrJoinChatChannelCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result CreateOrJoinChatChannelCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12807,7 +12807,7 @@ namespace SF
 			}; // Result CreateOrJoinChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID CreateOrJoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 82);
-			Result CreateOrJoinChatChannelRes::ParseMessage( MessageData* pIMsg )
+			Result CreateOrJoinChatChannelRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -12826,7 +12826,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateOrJoinChatChannelRes::ParseMessage( MessageData* pIMsg )
+			}; // Result CreateOrJoinChatChannelRes::ParseMessage(const MessageData* pIMsg)
 
 			Result CreateOrJoinChatChannelRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12903,7 +12903,7 @@ namespace SF
 
 			// Cmd: Join
 			const MessageID JoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 83);
-			Result JoinChatChannelCmd::ParseMessage( MessageData* pIMsg )
+			Result JoinChatChannelCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -12922,7 +12922,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinChatChannelCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinChatChannelCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinChatChannelCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -12998,7 +12998,7 @@ namespace SF
 			}; // Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID JoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 83);
-			Result JoinChatChannelRes::ParseMessage( MessageData* pIMsg )
+			Result JoinChatChannelRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13018,7 +13018,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinChatChannelRes::ParseMessage( MessageData* pIMsg )
+			}; // Result JoinChatChannelRes::ParseMessage(const MessageData* pIMsg)
 
 			Result JoinChatChannelRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -13098,7 +13098,7 @@ namespace SF
 
 			// S2C: Player Joined event
 			const MessageID ChatChannelPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 84);
-			Result ChatChannelPlayerJoinedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result ChatChannelPlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13116,7 +13116,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelPlayerJoinedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatChannelPlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatChannelPlayerJoinedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -13190,7 +13190,7 @@ namespace SF
 
 			// S2C: ChatChannel leader changed event
 			const MessageID ChatChannelLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 85);
-			Result ChatChannelLeaderChangedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result ChatChannelLeaderChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13208,7 +13208,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelLeaderChangedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatChannelLeaderChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatChannelLeaderChangedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -13282,7 +13282,7 @@ namespace SF
 
 			// Cmd: Leave ChatChannel command
 			const MessageID LeaveChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 86);
-			Result LeaveChatChannelCmd::ParseMessage( MessageData* pIMsg )
+			Result LeaveChatChannelCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13301,7 +13301,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveChatChannelCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result LeaveChatChannelCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result LeaveChatChannelCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -13377,7 +13377,7 @@ namespace SF
 			}; // Result LeaveChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID LeaveChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 86);
-			Result LeaveChatChannelRes::ParseMessage( MessageData* pIMsg )
+			Result LeaveChatChannelRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13395,7 +13395,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveChatChannelRes::ParseMessage( MessageData* pIMsg )
+			}; // Result LeaveChatChannelRes::ParseMessage(const MessageData* pIMsg)
 
 			Result LeaveChatChannelRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -13469,7 +13469,7 @@ namespace SF
 
 			// S2C: ChatChannel Player left event
 			const MessageID ChatChannelPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 87);
-			Result ChatChannelPlayerLeftS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result ChatChannelPlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13487,7 +13487,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelPlayerLeftS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatChannelPlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatChannelPlayerLeftS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -13561,7 +13561,7 @@ namespace SF
 
 			// Cmd: Kick player from the ChatChannel
 			const MessageID ChatChannelKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 88);
-			Result ChatChannelKickPlayerCmd::ParseMessage( MessageData* pIMsg )
+			Result ChatChannelKickPlayerCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13581,7 +13581,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelKickPlayerCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatChannelKickPlayerCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatChannelKickPlayerCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -13660,7 +13660,7 @@ namespace SF
 			}; // Result ChatChannelKickPlayerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID ChatChannelKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 88);
-			Result ChatChannelKickPlayerRes::ParseMessage( MessageData* pIMsg )
+			Result ChatChannelKickPlayerRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13678,7 +13678,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelKickPlayerRes::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatChannelKickPlayerRes::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatChannelKickPlayerRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -13752,7 +13752,7 @@ namespace SF
 
 			// S2C: ChatChannel Player kicked message
 			const MessageID ChatChannelPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 89);
-			Result ChatChannelPlayerKickedS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result ChatChannelPlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13770,7 +13770,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelPlayerKickedS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatChannelPlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatChannelPlayerKickedS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -13844,7 +13844,7 @@ namespace SF
 
 			// Cmd: Party chatting
 			const MessageID ChatChannelChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 90);
-			Result ChatChannelChatMessageCmd::ParseMessage( MessageData* pIMsg )
+			Result ChatChannelChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13864,7 +13864,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatChannelChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatChannelChatMessageCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -13940,7 +13940,7 @@ namespace SF
 			}; // Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID ChatChannelChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 90);
-			Result ChatChannelChatMessageRes::ParseMessage( MessageData* pIMsg )
+			Result ChatChannelChatMessageRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -13958,7 +13958,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageRes::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatChannelChatMessageRes::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatChannelChatMessageRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -14032,7 +14032,7 @@ namespace SF
 
 			// S2C: ChatChannel Chatting message event
 			const MessageID ChatChannelChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 91);
-			Result ChatChannelChatMessageS2CEvt::ParseMessage( MessageData* pIMsg )
+			Result ChatChannelChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -14053,7 +14053,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageS2CEvt::ParseMessage( MessageData* pIMsg )
+			}; // Result ChatChannelChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 
 			Result ChatChannelChatMessageS2CEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -14140,7 +14140,7 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& CreateCharacterCmd::GetAttributes() const
-			Result CreateCharacterCmd::ParseMessage( MessageData* pIMsg )
+			Result CreateCharacterCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -14163,7 +14163,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateCharacterCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result CreateCharacterCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result CreateCharacterCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -14276,7 +14276,7 @@ namespace SF
 			}; // Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID CreateCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 92);
-			Result CreateCharacterRes::ParseMessage( MessageData* pIMsg )
+			Result CreateCharacterRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -14295,7 +14295,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateCharacterRes::ParseMessage( MessageData* pIMsg )
+			}; // Result CreateCharacterRes::ParseMessage(const MessageData* pIMsg)
 
 			Result CreateCharacterRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -14372,7 +14372,7 @@ namespace SF
 
 			// Cmd: Remove character
 			const MessageID RemoveCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 93);
-			Result RemoveCharacterCmd::ParseMessage( MessageData* pIMsg )
+			Result RemoveCharacterCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -14390,7 +14390,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RemoveCharacterCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result RemoveCharacterCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result RemoveCharacterCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -14463,7 +14463,7 @@ namespace SF
 			}; // Result RemoveCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID RemoveCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 93);
-			Result RemoveCharacterRes::ParseMessage( MessageData* pIMsg )
+			Result RemoveCharacterRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -14481,7 +14481,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result RemoveCharacterRes::ParseMessage( MessageData* pIMsg )
+			}; // Result RemoveCharacterRes::ParseMessage(const MessageData* pIMsg)
 
 			Result RemoveCharacterRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -14555,7 +14555,7 @@ namespace SF
 
 			// Cmd: Get character list
 			const MessageID GetCharacterListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 94);
-			Result GetCharacterListCmd::ParseMessage( MessageData* pIMsg )
+			Result GetCharacterListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -14572,7 +14572,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterListCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GetCharacterListCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GetCharacterListCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -14642,7 +14642,7 @@ namespace SF
 			}; // Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GetCharacterListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 94);
-			Result GetCharacterListRes::ParseMessage( MessageData* pIMsg )
+			Result GetCharacterListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -14664,7 +14664,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterListRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GetCharacterListRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GetCharacterListRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -14742,7 +14742,7 @@ namespace SF
 
 			// Cmd: 
 			const MessageID GetCharacterDataCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 95);
-			Result GetCharacterDataCmd::ParseMessage( MessageData* pIMsg )
+			Result GetCharacterDataCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -14762,7 +14762,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GetCharacterDataCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GetCharacterDataCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -14848,7 +14848,7 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& GetCharacterDataRes::GetAttributes() const
-			Result GetCharacterDataRes::ParseMessage( MessageData* pIMsg )
+			Result GetCharacterDataRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -14870,7 +14870,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GetCharacterDataRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GetCharacterDataRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -14984,7 +14984,7 @@ namespace SF
 
 			// Cmd: Give my stamina to other player
 			const MessageID GiveStaminaCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 96);
-			Result GiveStaminaCmd::ParseMessage( MessageData* pIMsg )
+			Result GiveStaminaCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -15002,7 +15002,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GiveStaminaCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result GiveStaminaCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result GiveStaminaCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -15075,7 +15075,7 @@ namespace SF
 			}; // Result GiveStaminaCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GiveStaminaRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 96);
-			Result GiveStaminaRes::ParseMessage( MessageData* pIMsg )
+			Result GiveStaminaRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -15095,7 +15095,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result GiveStaminaRes::ParseMessage( MessageData* pIMsg )
+			}; // Result GiveStaminaRes::ParseMessage(const MessageData* pIMsg)
 
 			Result GiveStaminaRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -15175,7 +15175,7 @@ namespace SF
 
 			// Cmd: For debug, Change configue preset
 			const MessageID SetPresetGameConfigIDCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 97);
-			Result SetPresetGameConfigIDCmd::ParseMessage( MessageData* pIMsg )
+			Result SetPresetGameConfigIDCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -15193,7 +15193,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetPresetGameConfigIDCmd::ParseMessage( MessageData* pIMsg )
+			}; // Result SetPresetGameConfigIDCmd::ParseMessage(const MessageData* pIMsg)
 
 			Result SetPresetGameConfigIDCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
@@ -15266,7 +15266,7 @@ namespace SF
 			}; // Result SetPresetGameConfigIDCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID SetPresetGameConfigIDRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 97);
-			Result SetPresetGameConfigIDRes::ParseMessage( MessageData* pIMsg )
+			Result SetPresetGameConfigIDRes::ParseMessage(const MessageData* pIMsg)
 			{
  				FunctionContext hr;
 
@@ -15284,7 +15284,7 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetPresetGameConfigIDRes::ParseMessage( MessageData* pIMsg )
+			}; // Result SetPresetGameConfigIDRes::ParseMessage(const MessageData* pIMsg)
 
 			Result SetPresetGameConfigIDRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{

@@ -80,12 +80,12 @@ namespace Message {
 		return m_pMsgHeader ? m_pMsgHeader->Length : 0;
 	}
 
-	uint8_t* MessageData::GetMessageData()
+	const uint8_t* MessageData::GetMessageData() const
 	{
 		if (m_pMsgHeader->msgID.IDs.Mobile)
-			return (uint8_t*)(m_pMobileMsgHeader + 1);
+			return (const uint8_t*)(m_pMobileMsgHeader + 1);
 		else
-			return (uint8_t*)(m_pMsgHeader + 1);
+			return (const uint8_t*)(m_pMsgHeader + 1);
 	}
 
 	void MessageData::AssignSequence( uint sequence )

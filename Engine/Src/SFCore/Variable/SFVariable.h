@@ -93,7 +93,7 @@ namespace SF {
 
 		// Template implementation for type based GetValue access
 		template<class ValueType>
-		ValueType GetValue();
+		ValueType GetValue() const;
 
 		// Variable instance size
 		virtual size_t GetVariableSize() const { return sizeof(Variable); }
@@ -120,23 +120,23 @@ namespace SF {
 
 
 
-	template<> inline bool Variable::GetValue<bool>() { return GetValueBool(); }
-	template<> inline int8_t Variable::GetValue<int8_t>() { return GetValueInt8(); }
-	template<> inline uint8_t Variable::GetValue<uint8_t>() { return GetValueUInt8(); }
-	template<> inline int16_t Variable::GetValue<int16_t>() { return GetValueInt16(); }
-	template<> inline uint16_t Variable::GetValue<uint16_t>() { return GetValueUInt16(); }
-	template<> inline int32_t Variable::GetValue<int32_t>() { return GetValueInt32(); }
-	template<> inline uint32_t Variable::GetValue<uint32_t>() { return GetValueUInt32(); }
-	template<> inline int64_t Variable::GetValue<int64_t>() { return GetValueInt64(); }
-	template<> inline uint64_t Variable::GetValue<uint64_t>() { return GetValueUInt64(); }
-	template<> inline float Variable::GetValue<float>() { return GetValueFloat(); }
-	template<> inline double Variable::GetValue<double>() { return GetValueDouble(); }
-	template<> inline String Variable::GetValue<String>() { return GetValueString(); }
-	template<> inline const char* Variable::GetValue<const char*>() { return GetValueCharString(); }
-	template<> inline const wchar_t* Variable::GetValue<const wchar_t*>() { return GetValueWCharString(); }
-	template<> inline StringCrc32 Variable::GetValue<StringCrc32>() { return GetValueStringCrc32(); }
-	template<> inline StringCrc64 Variable::GetValue<StringCrc64>() { return GetValueStringCrc64(); }
-	//template<> inline Array<uint8_t> Variable::GetValue<Array<uint8_t>>() { return GetValueBLOB(); }
+	template<> inline bool Variable::GetValue<bool>() const { return GetValueBool(); }
+	template<> inline int8_t Variable::GetValue<int8_t>() const { return GetValueInt8(); }
+	template<> inline uint8_t Variable::GetValue<uint8_t>() const { return GetValueUInt8(); }
+	template<> inline int16_t Variable::GetValue<int16_t>() const { return GetValueInt16(); }
+	template<> inline uint16_t Variable::GetValue<uint16_t>() const { return GetValueUInt16(); }
+	template<> inline int32_t Variable::GetValue<int32_t>() const { return GetValueInt32(); }
+	template<> inline uint32_t Variable::GetValue<uint32_t>() const { return GetValueUInt32(); }
+	template<> inline int64_t Variable::GetValue<int64_t>() const { return GetValueInt64(); }
+	template<> inline uint64_t Variable::GetValue<uint64_t>() const { return GetValueUInt64(); }
+	template<> inline float Variable::GetValue<float>() const { return GetValueFloat(); }
+	template<> inline double Variable::GetValue<double>() const { return GetValueDouble(); }
+	template<> inline String Variable::GetValue<String>() const { return GetValueString(); }
+	template<> inline const char* Variable::GetValue<const char*>() const { return GetValueCharString(); }
+	template<> inline const wchar_t* Variable::GetValue<const wchar_t*>() const { return GetValueWCharString(); }
+	template<> inline StringCrc32 Variable::GetValue<StringCrc32>() const { return GetValueStringCrc32(); }
+	template<> inline StringCrc64 Variable::GetValue<StringCrc64>() const { return GetValueStringCrc64(); }
+	//template<> inline Array<uint8_t> Variable::GetValue<Array<uint8_t>>() const { return GetValueBLOB(); }
 
 
 
