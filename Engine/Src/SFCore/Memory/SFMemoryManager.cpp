@@ -16,7 +16,7 @@
 #include "Memory/SFMemoryPool.h"
 #include "String/SFString.h"
 #include "String/SFStringCrc64.h"
-
+#include "Util/SFUtility.h"
 
 
 namespace SF {
@@ -180,7 +180,8 @@ namespace SF {
 		size_t spaceForHeader = AlignUp(sizeof(MemBlockHdr) + 1, alignment);
 		auto allocSize = newSize + spaceForHeader;
 
-		MemBlockHdr* pMemBlock;
+		MemBlockHdr* pMemBlock = nullptr;
+		MemBlockHdr* oldPtr = ptr;
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		void *newPtr = (MemBlockHdr*)_aligned_realloc(ptr, allocSize, alignment);
@@ -195,7 +196,9 @@ namespace SF {
 			if (newPtr2 == nullptr)
 				return nullptr;
 
-			memcpy(newPtr2, newPtr, orgSize);
+			if (oldPtr != nullptr)
+				memcpy(newPtr2, oldPtr + 1, Util::Min(orgSize, newSize));
+
 			SystemAlignedFree(newPtr);
 			newPtr = newPtr2;
 		}

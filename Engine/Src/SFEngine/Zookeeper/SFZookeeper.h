@@ -74,10 +74,10 @@ namespace SF
 		class ZookeeperTask : public Task
 		{
 		public:
-			ZookeeperWatcher& ZKWatcher;
+			ZookeeperWatcher* ZKWatcher;
 			Result ZKResult;
 
-			ZookeeperTask(ZookeeperWatcher& watcher)
+			ZookeeperTask(ZookeeperWatcher* watcher)
 				: ZKWatcher(watcher)
 			{}
 
@@ -92,9 +92,9 @@ namespace SF
 		public:
 			String ResultString;
 
-			StringTask(IHeap& memoryManager, ZookeeperWatcher& watcher)
+			StringTask(IHeap& heap, ZookeeperWatcher* watcher)
 				: ZookeeperTask(watcher)
-				, ResultString(memoryManager)
+				, ResultString(heap)
 			{}
 		};
 
@@ -104,7 +104,7 @@ namespace SF
 		public:
 			DynamicArray<String> ResultStrings;
 
-			StringsTask(IHeap& memoryManager, ZookeeperWatcher& watcher)
+			StringsTask(IHeap& memoryManager, ZookeeperWatcher* watcher)
 				: ZookeeperTask(watcher)
 				, ResultStrings(memoryManager)
 			{}
@@ -119,7 +119,7 @@ namespace SF
 			Stat* ResultStat;
 
 
-			StringsStatTask(IHeap& memoryManager, ZookeeperWatcher& watcher)
+			StringsStatTask(IHeap& memoryManager, ZookeeperWatcher* watcher)
 				: ZookeeperTask(watcher)
 				, ResultStrings(memoryManager)
 			{
@@ -135,7 +135,7 @@ namespace SF
 			uint8_t ResultStatBuffer[ZOOKEEPER_STAT_BUFFER_SIZE];
 			Stat *ResultStat;
 
-			StatTask(ZookeeperWatcher& watcher)
+			StatTask(ZookeeperWatcher* watcher)
 				: ZookeeperTask(watcher)
 			{
 				ResultStat = (Stat*)ResultStatBuffer;
@@ -149,9 +149,9 @@ namespace SF
 		public:
 			DynamicArray<uint8_t> ResultData;
 
-			DataTask(IHeap& memoryManager, ZookeeperWatcher& watcher)
+			DataTask(IHeap& heap, ZookeeperWatcher* watcher)
 				: ZookeeperTask(watcher)
-				, ResultData(memoryManager)
+				, ResultData(heap)
 			{}
 		};
 

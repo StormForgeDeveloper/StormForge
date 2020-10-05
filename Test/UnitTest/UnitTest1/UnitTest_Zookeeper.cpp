@@ -33,7 +33,7 @@ using namespace ::SF;
 
 const uint TestScale = 5;
 const uint TEST_COUNT = 4000000 * TestScale;
-static const char* ZookeeperTestServer = "127.0.0.1:2181";
+static const char* ZookeeperTestServer = "144.202.92.57:41181";
 
 GTEST_TEST(Zookeeper, Simple)
 {

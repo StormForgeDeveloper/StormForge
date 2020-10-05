@@ -788,24 +788,24 @@ namespace SF {
 			}
 		}
 
-		WeakPointer()
+		WeakPointer() noexcept
 			:m_pObject(nullptr)
 		{
 		}
 
-		WeakPointer(const WeakPointer& src)
+		WeakPointer(const WeakPointer& src) noexcept
 			:m_pObject(src.m_pObject)
 		{
 			if (m_pObject != nullptr)
 				m_pObject->AddWeakReference();
 		}
-#ifndef SWIG
-		WeakPointer(WeakPointer&& src)
+
+		WeakPointer(WeakPointer&& src) noexcept
 			:m_pObject(src.m_pObject)
 		{
 			src.m_pObject = nullptr;
 		}
-#endif
+
 		virtual ~WeakPointer()
 		{
 			ReleaseReference();

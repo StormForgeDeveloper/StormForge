@@ -252,7 +252,7 @@ namespace SF {
 			case 4: h ^= uint64_t(data2[3]) << 24; [[fallthrough]];
 			case 3: h ^= uint64_t(data2[2]) << 16; [[fallthrough]];
 			case 2: h ^= uint64_t(data2[1]) << 8; [[fallthrough]];
-			case 1: h ^= uint64_t(data2[0]); [[fallthrough]];
+			case 1: h ^= uint64_t(data2[0]);
 				h *= m;
 			};
 

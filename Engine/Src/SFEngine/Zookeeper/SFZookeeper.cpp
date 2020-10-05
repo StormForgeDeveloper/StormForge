@@ -84,7 +84,8 @@ namespace SF
 		TaskOperator().StartWorking(pTask);
 		pTask->ZKResult = Zookeeper::ToResult(rc);
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnComplition(*pTask);
+		if (pTask->ZKWatcher)
+			pTask->ZKWatcher->OnComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
@@ -96,7 +97,8 @@ namespace SF
 		if(stat != nullptr)
 			*pTask->ResultStat = *stat;
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnStatComplition(*pTask);
+		if (pTask->ZKWatcher)
+			pTask->ZKWatcher->OnStatComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
@@ -108,7 +110,8 @@ namespace SF
 		pTask->ResultData.resize(value_len);
 		memcpy(pTask->ResultData.data(), value, value_len);
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnDataComplition(*pTask);
+		if (pTask->ZKWatcher)
+			pTask->ZKWatcher->OnDataComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
@@ -126,7 +129,9 @@ namespace SF
 			}
 		}
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnStringsComplition(*pTask);
+
+		if (pTask->ZKWatcher)
+			pTask->ZKWatcher->OnStringsComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
@@ -145,7 +150,8 @@ namespace SF
 		}
 		*pTask->ResultStat = *stat;
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnStringsStatComplition(*pTask);
+		if (pTask->ZKWatcher)
+			pTask->ZKWatcher->OnStringsStatComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
@@ -156,7 +162,9 @@ namespace SF
 		pTask->ZKResult = Zookeeper::ToResult(rc);
 		pTask->ResultString = value;
 		TaskOperator().Finished(pTask);
-		pTask->ZKWatcher.OnStringComplition(*pTask);
+
+		if (pTask->ZKWatcher)
+			pTask->ZKWatcher->OnStringComplition(*pTask);
 		SharedReferenceDec(static_cast<SharedObject*>(pTask));
 	}
 
@@ -513,7 +521,7 @@ namespace SF
 		if (acl == nullptr)
 			acl = &ZOO_OPEN_ACL_UNSAFE;
 
-		SharedPointerT<StringTask> pTask = new(m_Heap) StringTask(m_Heap, GetWatcher());
+		SharedPointerT<StringTask> pTask = new(m_Heap) StringTask(m_Heap, &GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		auto zkResult = zoo_acreate(m_ZKHandle, path, (const char*)valueData, valueSize, acl, flags, ZookeeperWatcher::ZKWatcherCBStringComplition, *pTask);
@@ -534,7 +542,7 @@ namespace SF
 		if (acl == nullptr)
 			acl = &ZOO_OPEN_ACL_UNSAFE;
 
-		SharedPointerT<StringTask> pTask = new(m_Heap) StringTask(m_Heap, GetWatcher());
+		SharedPointerT<StringTask> pTask = new(m_Heap) StringTask(m_Heap, &GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 
@@ -569,7 +577,7 @@ namespace SF
 		if (!IsConnected())
 			return SharedPointerT<Zookeeper::ZookeeperTask>();
 
-		SharedPointerT<ZookeeperTask> pTask = new(m_Heap) ZookeeperTask(GetWatcher());
+		SharedPointerT<ZookeeperTask> pTask = new(m_Heap) ZookeeperTask(&GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		auto zkResult = zoo_adelete(m_ZKHandle, path, version, ZookeeperWatcher::ZKWatcherCBComplition, *pTask);
@@ -620,7 +628,7 @@ namespace SF
 		if (!IsConnected())
 			return SharedPointerT<Zookeeper::StatTask>();
 
-		SharedPointerT<StatTask> pTask = new(m_Heap) StatTask(*watcher);
+		SharedPointerT<StatTask> pTask = new(m_Heap) StatTask(watcher);
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		int zkResult = 0;
@@ -684,7 +692,7 @@ namespace SF
 		if (!IsConnected())
 			return SharedPointerT<Zookeeper::DataTask>();
 
-		SharedPointerT<DataTask> pTask = new(m_Heap) DataTask(m_Heap, *watcher);
+		SharedPointerT<DataTask> pTask = new(m_Heap) DataTask(m_Heap, watcher);
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		int zkResult = 0;
@@ -737,7 +745,7 @@ namespace SF
 		if (!IsConnected())
 			return SharedPointerT<Zookeeper::StatTask>();
 
-		SharedPointerT<StatTask> pTask = new(m_Heap) StatTask(GetWatcher());
+		SharedPointerT<StatTask> pTask = new(m_Heap) StatTask(&GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		int zkResult = 0;
@@ -755,7 +763,7 @@ namespace SF
 		if (!IsConnected())
 			return SharedPointerT<Zookeeper::StatTask>();
 
-		SharedPointerT<StatTask> pTask = new(m_Heap) StatTask(GetWatcher());
+		SharedPointerT<StatTask> pTask = new(m_Heap) StatTask(&GetWatcher());
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		int zkResult = 0;
@@ -798,7 +806,7 @@ namespace SF
 		if (!IsConnected())
 			return SharedPointerT<Zookeeper::StringsTask>();
 
-		SharedPointerT<StringsTask> pTask = new(m_Heap) StringsTask(m_Heap, *watcher);
+		SharedPointerT<StringsTask> pTask = new(m_Heap) StringsTask(m_Heap, watcher);
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		int zkResult = 0;
@@ -821,7 +829,7 @@ namespace SF
 		if (!IsConnected())
 			return SharedPointerT<Zookeeper::StringsStatTask>();
 
-		SharedPointerT<StringsStatTask> pTask = new(m_Heap) StringsStatTask(m_Heap, *watcher);
+		SharedPointerT<StringsStatTask> pTask = new(m_Heap) StringsStatTask(m_Heap, watcher);
 		TaskOperator().Requested(*pTask);
 		SharedReferenceInc(static_cast<SharedObject*>(*pTask));
 		int zkResult = 0;
