@@ -33,14 +33,14 @@ using namespace ::SF;
 
 const uint TestScale = 5;
 const uint TEST_COUNT = 4000000 * TestScale;
-
+static const char* ZookeeperTestServer = "127.0.0.1:2181";
 
 GTEST_TEST(Zookeeper, Simple)
 {
 	Heap testHeap("test", GetSystemHeap());
 	Zookeeper zkInstance(testHeap);
 
-	zkInstance.Connect("127.0.0.1:2181");
+	zkInstance.Connect(ZookeeperTestServer);
 	zkInstance.WaitForConnected();
 	StaticArray<uint8_t, 128> valueBuffer(testHeap);
 	String outPath;
@@ -65,7 +65,7 @@ GTEST_TEST(Zookeeper, SimpleData)
 	Heap testHeap("test", GetSystemHeap());
 	Zookeeper zkInstance(testHeap);
 
-	zkInstance.Connect("127.0.0.1:2181");
+	zkInstance.Connect(ZookeeperTestServer);
 	zkInstance.WaitForConnected();
 	StaticArray<uint8_t, 128> valueBuffer(testHeap);
 
