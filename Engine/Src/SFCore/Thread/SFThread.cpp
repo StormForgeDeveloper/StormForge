@@ -346,14 +346,8 @@ namespace SF {
 	FunctorThread::FunctorThread(Func func)
 		: m_Func(func)
 	{
-		assert(_CrtCheckMemory());
 	}
 
 
-
-
-
 } // namespace SF
-
-
 
