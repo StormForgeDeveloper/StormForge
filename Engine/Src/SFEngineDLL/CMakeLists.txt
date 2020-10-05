@@ -51,7 +51,9 @@ install (TARGETS SFEngineDLL
          ARCHIVE DESTINATION lib COMPONENT StormForge
          LIBRARY DESTINATION lib COMPONENT StormForge
          RUNTIME DESTINATION bin COMPONENT StormForge)
-		 
-install (FILES $<TARGET_PDB_FILE:SFEngineDLL> DESTINATION bin COMPONENT StormForge)
+
+if(WIN32)
+	install (FILES $<TARGET_PDB_FILE:SFEngineDLL> DESTINATION bin COMPONENT StormForge)
+endif()
 
 
