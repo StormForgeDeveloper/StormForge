@@ -73,8 +73,7 @@ namespace SF
 
 
 
-#pragma pack(push)
-#pragma pack(2)
+#pragma pack(push, 2)
 		struct BlockData
 		{
 			int Width		: 16;

@@ -52,6 +52,7 @@ namespace SF
 			return Engine::GetInstance();
 
 		auto pEngine = new(GetSystemHeap()) SF::Engine;
+
 		pEngine->m_InitParameter = initParam;
 		pEngine->RegisterBasicComponents();
 

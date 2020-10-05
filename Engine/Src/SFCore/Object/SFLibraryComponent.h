@@ -42,7 +42,7 @@ namespace SF {
 		SortedSet<StringCrc64> m_Dependencies;
 
 	public:
-		LibraryComponent(const StringCrc64& name) : m_Name(name), m_IsInitialized(false), m_Dependencies(GetSystemHeap()){}
+		LibraryComponent(const StringCrc64& name);
 		virtual ~LibraryComponent() {}
 
 		const StringCrc64& GetName() { return m_Name; }

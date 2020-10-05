@@ -91,6 +91,9 @@ namespace SF {
 		STDMemoryManager();
 		virtual ~STDMemoryManager();
 
+		static void* SystemAllignedAlloc(size_t size, size_t alignment);
+		static void SystemAlignedFree(void* pPtr);
+
 		static STDMemoryManager* GetInstance();
 	};
 

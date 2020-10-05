@@ -260,8 +260,7 @@ namespace StrUtil
 	//	UTF8 binary string
 	//
 
-#pragma pack (push)
-#pragma pack (1)
+#pragma pack (push, 1)
 	struct UTF8Bin
 	{
 		uint8_t IsNull;

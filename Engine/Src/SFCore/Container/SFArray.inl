@@ -426,6 +426,7 @@ namespace SF {
 			, m_pAllocatedBuffer(nullptr)
 		{
 			Array<DataType>::SetIncreaseSize(increaseSize);
+			CheckCtrMemory();
 		}
 
 
@@ -449,6 +450,8 @@ namespace SF {
 			pNewBuffer = new(super::GetHeap()) DataType[szNewSize];
 			if (pNewBuffer == nullptr)
 				return ResultCode::OUT_OF_MEMORY;
+
+			CheckCtrMemory();
 
 			Array<DataType>::SetBuffPtr(szNewSize, pNewBuffer);
 

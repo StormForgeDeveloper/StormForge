@@ -148,9 +148,7 @@ namespace SF {
 		FunctorThread()
 		{}
 
-		FunctorThread(Func func)
-			: m_Func(func)
-		{}
+		FunctorThread(Func func);
 
 		void SetFunc(Func func)
 		{

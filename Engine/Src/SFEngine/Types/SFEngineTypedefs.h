@@ -25,6 +25,7 @@
 
 namespace SF {
 
+#pragma pack(push, 4)
 
 	using GameID = StringCrc32;
 
@@ -238,8 +239,6 @@ namespace SF {
 
 
 
-//#pragma pack(push)
-#pragma pack(push,4)
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -574,8 +573,6 @@ namespace SF {
 
 
 
-#pragma pack(push,4)
-
 	// Relay player information 
 	struct RelayPlayerInfo
 	{
@@ -586,7 +583,6 @@ namespace SF {
 		bool operator != (const RelayPlayerInfo& op1) const { return EndpointID != op1.EndpointID || RelayPlayerID != op1.RelayPlayerID; }
 	};
 
-#pragma pack(pop)
 
 
 
@@ -596,6 +592,8 @@ namespace SF {
 
 	// Game Instance
 	using GameInsID = EntityID;
+
+#pragma pack(pop)
 
 };
 

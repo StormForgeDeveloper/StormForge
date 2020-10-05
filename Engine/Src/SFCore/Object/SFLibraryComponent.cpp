@@ -26,6 +26,14 @@
 namespace SF {
 
 
+	LibraryComponent::LibraryComponent(const StringCrc64& name)
+		: m_Name(name)
+		, m_IsInitialized(false)
+		, m_Dependencies(GetSystemHeap())
+	{
+		CheckCtrMemory();
+	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Component career base class

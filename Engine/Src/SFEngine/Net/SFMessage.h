@@ -140,8 +140,7 @@ namespace Message {
 	//	Network Message Interface
 	//
 
-#pragma pack(push)
-#pragma pack(4)
+#pragma pack(push, 4)
 
 
 	////////////////////////////////////////////////////////////////////////////////

@@ -79,10 +79,6 @@ namespace SF {
 		return m_pHeap->Realloc(ptr, newSize, alignment);
 	}
 
-	//void Heap::Free(void* ptr)
-	//{
-	//	IHeap::Free(ptr);
-	//}
 
 
 
@@ -122,7 +118,7 @@ namespace SF {
 	{
 	}
 
-	static void* SystemAllignedAlloc(size_t size, size_t alignment)
+	void* STDMemoryManager::SystemAllignedAlloc(size_t size, size_t alignment)
 	{
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		return _aligned_malloc(size, alignment);
@@ -135,6 +131,15 @@ namespace SF {
 		return pPtr;
 #else
 		return aligned_alloc(alignment, size);
+#endif
+	}
+
+	void STDMemoryManager::SystemAlignedFree(void* pPtr)
+	{
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+		return _aligned_free(pPtr);
+#else
+		return free(pPtr);
 #endif
 	}
 
@@ -162,11 +167,7 @@ namespace SF {
 	{
 		m_AllocatedDRAM.fetch_add(ptr->Size, std::memory_order_relaxed);
 
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS
-		return _aligned_free(ptr);
-#else
-		return free(ptr);
-#endif
+		return SystemAlignedFree(ptr);
 	}
 
 	MemBlockHdr* STDMemoryManager::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment)
@@ -187,7 +188,7 @@ namespace SF {
 		{
 			auto newPtr2 = SystemAllignedAlloc(allocSize, alignment);
 			memcpy(newPtr2, newPtr, orgSize);
-			_aligned_free(newPtr);
+			SystemAlignedFree(newPtr);
 			newPtr = newPtr2;
 		}
 #else
@@ -197,7 +198,7 @@ namespace SF {
 		{
 			auto newPtr2 = SystemAllignedAlloc(allocSize, alignment);
 			memcpy(newPtr2, newPtr, orgSize);
-			free(newPtr);
+			SystemAlignedFree(newPtr);
 			newPtr = newPtr2;
 		}
 #endif

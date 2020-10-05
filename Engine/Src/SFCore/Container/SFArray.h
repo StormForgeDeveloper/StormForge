@@ -22,8 +22,7 @@ namespace SF {
 
 	class IHeap;
 
-#pragma pack(push)
-#pragma pack(2)
+#pragma pack(push, 2)
 	struct BinaryHeader
 	{
 		uint16_t Magic;		// Binary magic
@@ -57,8 +56,7 @@ namespace SF {
 
 			using DataTypeDecay = std::decay_t<DataType>;
 
-#pragma pack(push)
-#pragma pack(4)
+#pragma pack(push, 4)
 
 #if !defined(SWIG)
 			// Binary Type

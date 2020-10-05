@@ -243,7 +243,6 @@ namespace SF {
 #endif
 		// We only support specific alignment range
 		Assert(alignment <= SF_ALIGN_DOUBLE);
-
 		// change heap to this
 		pMemBlock->pHeap = this;
 
@@ -304,7 +303,7 @@ namespace SF {
 		if (pMemBlock == nullptr)
 		{
 			// should be allocated from other system
-			free(ptr);
+			STDMemoryManager::SystemAlignedFree(ptr);
 			return;
 		}
 

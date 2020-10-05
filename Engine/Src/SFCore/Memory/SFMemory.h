@@ -51,8 +51,7 @@ namespace SF {
 
 
 
-#pragma pack(push)
-#pragma pack(1)
+#pragma pack(push, 1)
 	struct MemBlockHdr
 	{
 		static constexpr uint16_t MEM_MAGIC = 0x187e;

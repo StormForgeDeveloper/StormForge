@@ -44,8 +44,7 @@ namespace SF {
 			Allocated,
 		};
 
-#pragma pack(push)
-#pragma pack(4)
+#pragma pack(push, 4)
 		typedef MemBlockHdr MemoryChunkHeader;
 		//struct MemoryChunkHeader : public MemBlockHdr
 		//{

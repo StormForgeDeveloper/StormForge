@@ -62,7 +62,6 @@ namespace SF {
 
 		IHeap::SetMemoryLeakDetection(m_InitParameter.EnableMemoryLeakDetection);
 
-
 		if(AddComponent<Log::LogModule>(m_InitParameter.LogChannel) == nullptr)
 			return ResultCode::FAIL;
 

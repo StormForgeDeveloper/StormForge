@@ -43,32 +43,31 @@ namespace Log {
 	public:
 		static constexpr StringCrc64 TypeName = "LogModule";
 
-		//Struct for Spin Buffer
+		//Structure for Spin Buffer
 		struct LogItem
 		{
-			LogMainChannelType		MainChannel;
-			LogSubChannelType		SubChannel;
-			LogChannelMask		ChannelMask;
-			SystemTimeStampMS	TimeStamp;
+			LogMainChannelType		MainChannel{};
+			LogSubChannelType		SubChannel{};
+			LogChannelMask		ChannelMask{};
+			SystemTimeStampMS	TimeStamp{};
 			size_t LogStringSize = 0;
-			char	LogBuff[3 * 1024];
+			char	LogBuff[3 * 1024]{};
 
 			LogItem()
 			{
-				LogBuff[0] = 0;
 			}
 		};
 
-		typedef SpinBufferMT<LogItem, 256> LogSpinBuffer;
+		typedef SpinBufferMT<LogItem, 128> LogSpinBuffer;
 
 	private:
 
 		FunctorThread m_Thread;
 
-		LogSpinBuffer m_LogSpinBuffer;
-
 		// output handler array
 		DynamicArray<LogOutputHandler*> m_OutputHandlers;
+
+		LogSpinBuffer m_LogSpinBuffer;
 
 		TimeStampMS m_LogTimeMS;
 

@@ -66,9 +66,10 @@ namespace Log {
 		, m_OutputHandlers(GetSystemHeap())
 	{
 		Service::LogModule = this;
+
+		m_Thread.SetThreadName("LogModule");
 		m_Thread.Start();
 		m_Thread.SetPriority(Thread::PRIORITY::HIGHEST);
-		m_Thread.SetThreadName("LogModule");
 	}
 
 
