@@ -7,6 +7,9 @@ FBX_SDK_INSTALL_FILE_LINUX=fbx20201_fbxsdk_linux.tar.gz
 ATF_PATH=$SF_PATH/../ATF
 
 
+sudo apt-get install git-lfs
+
+
 if [ ! -d "$ATF_PATH" ]; then
 	echo $ATF_PATH
 	git clone https://github.com/blue3k/ATFClone.git $ATF_PATH

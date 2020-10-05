@@ -96,14 +96,14 @@ namespace SF
             return NativeLoadXML(NativeHandle, filePath);
         }
 
-        public int LoadZooKeeper(SFZookeeper zkInstance, string rootNodePath)
+        public int LoadZookeeper(SFZookeeper zkInstance, string rootNodePath)
         {
-            return NativeLoadZooKeeper(NativeHandle, zkInstance.NativeHandle, rootNodePath);
+            return NativeLoadZookeeper(NativeHandle, zkInstance.NativeHandle, rootNodePath);
         }
 
-        public int StoreZooKeeper(SFZookeeper zkInstance, string rootNodePath)
+        public int StoreZookeeper(SFZookeeper zkInstance, string rootNodePath)
         {
-            return NativeStoreZooKeeper(NativeHandle, zkInstance.NativeHandle, rootNodePath);
+            return NativeStoreZookeeper(NativeHandle, zkInstance.NativeHandle, rootNodePath);
         }
 
         //public delegate void FOREACH_CB_FUNCTION(GenericServer pGenericServer);
@@ -144,11 +144,11 @@ namespace SF
         [DllImport(NativeDLLName, EntryPoint = "SFServerConfig_NativeLoadXML", CharSet = CharSet.Auto)]
         static extern int NativeLoadXML(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string filePath);
 
-        [DllImport(NativeDLLName, EntryPoint = "SFServerConfig_NativeLoadZooKeeper", CharSet = CharSet.Auto)]
-        static extern int NativeLoadZooKeeper(IntPtr nativeHandle, IntPtr nativeHandleZooKeeper, [MarshalAs(UnmanagedType.LPStr)] string filePath);
+        [DllImport(NativeDLLName, EntryPoint = "SFServerConfig_NativeLoadZookeeper", CharSet = CharSet.Auto)]
+        static extern int NativeLoadZookeeper(IntPtr nativeHandle, IntPtr nativeHandleZookeeper, [MarshalAs(UnmanagedType.LPStr)] string filePath);
 
-        [DllImport(NativeDLLName, EntryPoint = "SFServerConfig_NativeStoreZooKeeper", CharSet = CharSet.Auto)]
-        static extern int NativeStoreZooKeeper(IntPtr nativeHandle, IntPtr nativeHandleZooKeeper, [MarshalAs(UnmanagedType.LPStr)] string filePath);
+        [DllImport(NativeDLLName, EntryPoint = "SFServerConfig_NativeStoreZookeeper", CharSet = CharSet.Auto)]
+        static extern int NativeStoreZookeeper(IntPtr nativeHandle, IntPtr nativeHandleZookeeper, [MarshalAs(UnmanagedType.LPStr)] string filePath);
 
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]

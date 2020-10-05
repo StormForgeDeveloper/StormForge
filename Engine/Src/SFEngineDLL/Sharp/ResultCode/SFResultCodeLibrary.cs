@@ -482,7 +482,7 @@ namespace SF {
 		// Zookeeper Client authentication failed 
 		public const int ZK_ZAUTHFAILED =                                   unchecked((int)0xE701009B); 
 
-		// Zookeeper ZooKeeper is closing 
+		// Zookeeper Zookeeper is closing 
 		public const int ZK_ZCLOSING =                                      unchecked((int)0xE701009C); 
 
 		// Zookeeper (not error) no server responses to process 

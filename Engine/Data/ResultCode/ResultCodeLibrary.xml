@@ -147,7 +147,7 @@
   <ResultCodeItem Severity="Error" CodeName="IO_DISCONNECTED" Desc="Disconnected"/>
   <ResultCodeItem Severity="Error" CodeName="IO_CANCELED" Desc="Canceled"/>
 
-  <!-- ZooKeeper -->
+  <!-- Zookeeper -->
   <ResultCodeItem Severity="Error" CodeName="ZK_SYSTEM" Desc="Zookeeper System and server-side errors."/>
   <ResultCodeItem Severity="Error" CodeName="ZK_ZRUNTIMEINCONSISTENCY" Desc="Zookeeper  A runtime inconsistency was found"/>
   <ResultCodeItem Severity="Error" CodeName="ZK_ZDATAINCONSISTENCY" Desc="Zookeeper A data inconsistency was found"/>
@@ -168,7 +168,7 @@
   <ResultCodeItem Severity="Error" CodeName="ZK_ZINVALIDCALLBACK" Desc="Zookeeper Invalid callback specified"/>
   <ResultCodeItem Severity="Error" CodeName="ZK_ZINVALIDACL" Desc="Zookeeper Invalid ACL specified"/>
   <ResultCodeItem Severity="Error" CodeName="ZK_ZAUTHFAILED" Desc="Zookeeper Client authentication failed"/>
-  <ResultCodeItem Severity="Error" CodeName="ZK_ZCLOSING" Desc="Zookeeper ZooKeeper is closing"/>
+  <ResultCodeItem Severity="Error" CodeName="ZK_ZCLOSING" Desc="Zookeeper Zookeeper is closing"/>
   <ResultCodeItem Severity="Error" CodeName="ZK_ZNOTHING" Desc="Zookeeper (not error) no server responses to process"/>
   <ResultCodeItem Severity="Error" CodeName="ZK_ZSESSIONMOVED" Desc="Zookeeper session moved to another server, so operation is ignored"/>
   

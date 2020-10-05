@@ -184,24 +184,21 @@ namespace SF {
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		void *newPtr = (MemBlockHdr*)_aligned_realloc(ptr, allocSize, alignment);
+#else
+		void* newPtr = realloc(ptr, newSize);
+		auto remain = ((int64_t)newPtr) % alignment;
+		if (newPtr == nullptr || remain != 0)
+#endif
 		if (newPtr == nullptr)
 		{
 			auto newPtr2 = SystemAllignedAlloc(allocSize, alignment);
+			if (newPtr2 == nullptr)
+				return nullptr;
+
 			memcpy(newPtr2, newPtr, orgSize);
 			SystemAlignedFree(newPtr);
 			newPtr = newPtr2;
 		}
-#else
-		void *newPtr = realloc(ptr, newSize);
-		auto remain = ((int64_t)newPtr) % alignment;
-		if (remain != 0)
-		{
-			auto newPtr2 = SystemAllignedAlloc(allocSize, alignment);
-			memcpy(newPtr2, newPtr, orgSize);
-			SystemAlignedFree(newPtr);
-			newPtr = newPtr2;
-		}
-#endif
 
 
 		pMemBlock = reinterpret_cast<MemBlockHdr*>(newPtr);

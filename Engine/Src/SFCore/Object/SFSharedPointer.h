@@ -49,15 +49,14 @@ namespace SF {
 				m_pObject->AddReference();
 		}
 
-#ifndef SWIG
-		SharedPointer(SharedPointer&& src)
+		SharedPointer(SharedPointer&& src) noexcept
 			: m_pObject(src.m_pObject)
 		{
 			src.m_pObject = nullptr;
 		}
 
 		SharedPointer(SharedPointerAtomic&& src);
-#endif
+
 		SharedPointer(SharedObject* pRef)
 			: m_pObject(pRef)
 		{
@@ -117,8 +116,7 @@ namespace SF {
 			m_pObject = pPtr;
 		}
 
-#ifndef SWIG
-		SharedPointer& operator = (SharedPointer&& src)
+		SharedPointer& operator = (SharedPointer&& src) noexcept
 		{
 			ReleaseReference();
 
@@ -128,8 +126,7 @@ namespace SF {
 			return *this;
 		}
 
-		SharedPointer& operator = (SharedPointerAtomic&& src);
-#endif
+		SharedPointer& operator = (SharedPointerAtomic&& src) noexcept;
 
 		bool operator == (const SharedPointer& src) const
 		{
@@ -368,12 +365,12 @@ namespace SF {
 		friend class SharedPointer;
 	public:
 
-		constexpr SharedPointerAtomic()
+		constexpr SharedPointerAtomic() noexcept
 			: m_pObject(nullptr)
 		{
 		}
 
-		SharedPointerAtomic(const SharedPointer& src)
+		SharedPointerAtomic(const SharedPointer& src) noexcept
 			: m_pObject(nullptr)
 		{
 			auto pObject = const_cast<SharedObject*>((const SharedObject*)src);
@@ -382,7 +379,7 @@ namespace SF {
 			m_pObject = pObject;
 		}
 
-		SharedPointerAtomic(const SharedPointerAtomic& src)
+		SharedPointerAtomic(const SharedPointerAtomic& src) noexcept
 			: m_pObject(nullptr)
 		{
 			auto pObject = src.m_pObject.load(std::memory_order_relaxed);
@@ -391,21 +388,20 @@ namespace SF {
 			m_pObject = pObject;
 		}
 
-#ifndef SWIG
-		SharedPointerAtomic(SharedPointerAtomic&& src)
+		SharedPointerAtomic(SharedPointerAtomic&& src) noexcept
 			:m_pObject(nullptr)
 		{
 			m_pObject = src.m_pObject.exchange(nullptr,std::memory_order_release);
 		}
 
-		SharedPointerAtomic(SharedPointer&& src)
+		SharedPointerAtomic(SharedPointer&& src) noexcept
 			:m_pObject(nullptr)
 		{
 			m_pObject = const_cast<SharedObject*>((const SharedObject*)src);
 			src.m_pObject = nullptr;
 		}
-#endif
-		SharedPointerAtomic(SharedObject* pRef)
+
+		SharedPointerAtomic(SharedObject* pRef) noexcept
 			:m_pObject(pRef)
 		{
 			if (pRef != nullptr)
@@ -414,7 +410,7 @@ namespace SF {
 			}
 		}
 
-		constexpr SharedPointerAtomic(std::nullptr_t)
+		constexpr SharedPointerAtomic(std::nullptr_t) noexcept
 			: m_pObject(nullptr)
 		{
 		}
@@ -497,7 +493,6 @@ namespace SF {
 			pOldObject->ReleaseReference();
 		}
 
-#ifndef SWIG
 		void operator = (SharedPointer&& src)
 		{
 			auto pObject = const_cast<SharedObject*>((const SharedObject*)src);
@@ -514,7 +509,7 @@ namespace SF {
 			pOldObject->ReleaseReference();
 		}
 
-		void operator = (SharedPointerAtomic&& src)
+		void operator = (SharedPointerAtomic&& src) noexcept
 		{
 			auto pObject = const_cast<SharedObject*>((const SharedObject*)src);
 			src.m_pObject = nullptr;
@@ -525,7 +520,6 @@ namespace SF {
 
 			pOldObject->ReleaseReference();
 		}
-#endif
 
 		bool operator == (const SharedPointerAtomic& src) const
 		{
@@ -920,8 +914,8 @@ namespace SF {
 
 			return *this;
 		}
-#ifndef SWIG
-		WeakPointer& operator = (WeakPointer&& src)
+
+		WeakPointer& operator = (WeakPointer&& src) noexcept
 		{
 			ReleaseReference();
 
@@ -940,7 +934,6 @@ namespace SF {
 
 		//	return *this;
 		//}
-#endif
 	};
 
 	template<class ClassType>
@@ -1087,7 +1080,7 @@ namespace SF {
 	}
 
 
-	inline SharedPointer& SharedPointer::operator = (SharedPointerAtomic&& src)
+	inline SharedPointer& SharedPointer::operator = (SharedPointerAtomic&& src) noexcept
 	{
 		ReleaseReference();
 
