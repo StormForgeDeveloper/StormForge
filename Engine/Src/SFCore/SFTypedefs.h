@@ -698,8 +698,15 @@ namespace SF {
 	{
 	public:
 
-		FunctionContext() = default;
-		FunctionContext(Result src) : m_Hr(src) {}
+		FunctionContext()
+			: m_ExitFunc([](Result hr) { return hr; })
+		{
+		}
+
+		FunctionContext(Result src)
+			: m_ExitFunc([](Result hr) { return hr; })
+			, m_Hr(src)
+		{}
 		FunctionContext(ExitFunc&& errorFunc)
 			: m_ExitFunc(errorFunc)
 		{
@@ -720,7 +727,7 @@ namespace SF {
 		FunctionContext& operator = (Result src) { m_Hr = src; return *this; }
 
 		operator Result() const { return m_Hr; }
-		operator decltype(auto)() const { m_ExitFuncHasCalled = true;  return m_ExitFunc(m_Hr); }
+		operator decltype(auto)() const{ m_ExitFuncHasCalled = true;  return m_ExitFunc(m_Hr); }
 		explicit operator bool() const { return m_Hr; }
 
 	private:

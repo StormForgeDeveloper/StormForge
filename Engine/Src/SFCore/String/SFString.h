@@ -139,8 +139,7 @@ namespace SF {
 			auto copyStart = m_StringValue + GetStringLength();
 			memcpy(copyStart, src, sizeof(CharType) * strLen);
 			copyStart[strLen] = {};
-			m_StringLength = m_StringLength + strLen;
-			assert(m_StringLength == StrUtil::StringLen(m_StringValue));
+			m_StringLength = m_StringLength + StrUtil::StringLen(copyStart); // Make sure string has correct length
 			return true;
 		}
 
@@ -1019,18 +1018,10 @@ namespace SF {
 			if (starIndex >= length) return TString(GetHeap());
 
 			auto newBuffer = new(GetEngineHeap()) SharedStringBufferType(GetHeap(), count + 1);
-			auto pDest = newBuffer->GetBufferPointer();
-			//int bufferSize = (int)newBuffer->GetAllocatedSize();
+
 			auto pSrc = m_Buffer->GetBufferPointer() + starIndex;
 
-			// clip to the string boundary
-			if ((starIndex + count) > (length + 1))
-			{
-				count -= (starIndex + count) - (length + 1);
-			}
-
-			memcpy(pDest, pSrc, count * sizeof(CharType));
-			pDest[count] = {};
+			newBuffer->Append(pSrc, count);
 
 			return TString(GetHeap(), newBuffer);
 		}

@@ -425,8 +425,8 @@ namespace SF
 		case (int)ZOO_ERRORS::ZINVALIDSTATE:			return ResultCode::ZK_ZINVALIDSTATE;
 
 		case (int)ZOO_ERRORS::ZAPIERROR:				return ResultCode::ZK_ZAPIERROR;
-		case (int)ZOO_ERRORS::ZNONODE:					return ResultCode::ZK_ZNONODE;
-		case (int)ZOO_ERRORS::ZNOAUTH:					return ResultCode::ZK_ZNOAUTH;
+		case (int)ZOO_ERRORS::ZNONODE:					return ResultCode::ZK_ZNONODE; // Node does not exist
+		case (int)ZOO_ERRORS::ZNOAUTH:					return ResultCode::ZK_ZNOAUTH; // Not authenticated
 		case (int)ZOO_ERRORS::ZBADVERSION:				return ResultCode::ZK_ZBADVERSION;
 		case (int)ZOO_ERRORS::ZNOCHILDRENFOREPHEMERALS:	return ResultCode::ZK_ZNOCHILDRENFOREPHEMERALS;
 		case (int)ZOO_ERRORS::ZNODEEXISTS:				return ResultCode::ZK_ZNODEEXISTS;

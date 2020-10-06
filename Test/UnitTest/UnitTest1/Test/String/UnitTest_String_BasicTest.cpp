@@ -64,6 +64,31 @@ TEST_F(StringTest, CharBasic)
 }
 
 
+TEST_F(StringTest, Substring)
+{
+	String A("Test1Test2Test3Abcdefg");
+	String B, C;
+
+	B = A.SubString(0, 5);
+	EXPECT_EQ(B.IsEqual("Test1"), true);
+
+	C = A.SubString(5, 10);
+	EXPECT_EQ(C.IsEqual("Test2Test3"), true);
+
+	// over copy test
+	C = A.SubString(15, 7);
+	EXPECT_EQ(C.IsEqual("Abcdefg"), true);
+	EXPECT_EQ(C.length(), 7);
+
+	C = A.SubString(15, 8);
+	EXPECT_EQ(C.IsEqual("Abcdefg"), true);
+	EXPECT_EQ(C.length(), 7);
+
+	C = A.SubString(15, 20);
+	EXPECT_EQ(C.IsEqual("Abcdefg"), true);
+	EXPECT_EQ(C.length(), 7);
+}
+
 TEST_F(StringTest, Format)
 {
 	String A("Test1");

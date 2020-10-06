@@ -34,7 +34,6 @@ namespace SF
 		: m_pHeap(&GetSystemHeap())
 		, m_DecomposedPath(GetHeap())
 	{
-
 	}
 
 	PathString::PathString(const char* strPath)
@@ -65,7 +64,6 @@ namespace SF
 		: m_pHeap(&heap)
 		, m_DecomposedPath(GetHeap())
 	{
-
 	}
 
 	PathString::PathString(IHeap& heap, const char* strPath)
@@ -94,7 +92,6 @@ namespace SF
 
 	PathString::~PathString()
 	{
-
 	}
 
 	void PathString::SetHeap(IHeap& heap)
