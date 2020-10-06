@@ -1098,7 +1098,7 @@ namespace SF {
 			int buffLen = -1;
 			size_t requiredSize = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args) + 1;
 			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), requiredSize);
-			if (m_Buffer->GetAllocatedSize() != requiredSize)
+			if (m_Buffer->GetAllocatedSize() >= requiredSize)
 				return 0;
 
 			szBuffer = m_Buffer->GetBufferPointer();
