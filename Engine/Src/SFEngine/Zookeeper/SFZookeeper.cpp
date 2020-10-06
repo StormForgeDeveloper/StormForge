@@ -667,21 +667,21 @@ namespace SF
 			return ResultCode::INVALID_STATE;
 
 		StaticArray<uint8_t,2048> valueBuffer(GetHeap());
-		int buffLen = (int)valueBuffer.GetAllocatedSize();
+		int buffLen = (int)valueBuffer.GetAllocatedSize() - 1;
 		auto zkResult = zoo_get(m_ZKHandle, path, 0, (char*)valueBuffer.data(), &buffLen, nullptr);
 		valueBuffer.resize(buffLen);
 
+		auto res = ToResult(zkResult);
+
+		valueBuffer.push_back('\0');
 		std::stringstream inputStream(std::string(reinterpret_cast<const char*>(valueBuffer.data()), valueBuffer.size()), std::ios_base::in);
-		Json::Value jsonData;
 		Json::CharReaderBuilder jsonReader;
 		std::string errs;
-		auto bRes = Json::parseFromStream(jsonReader, inputStream, &jsonData, &errs);
-		//Json::Reader reader;
-		//auto bRes = reader.parse(reinterpret_cast<const char*>(valueBuffer.data()), reinterpret_cast<const char*>(valueBuffer.data()) + valueBuffer.size(), jsonValue, false);
+		auto bRes = Json::parseFromStream(jsonReader, inputStream, &jsonValue, &errs);
 		if (!bRes)
 			return ResultCode::FAIL;
 
-		return ToResult(zkResult);
+		return res;
 	}
 
 	SharedPointerT<Zookeeper::DataTask> Zookeeper::AGet(const char *path, ZookeeperWatcher* watcher)
