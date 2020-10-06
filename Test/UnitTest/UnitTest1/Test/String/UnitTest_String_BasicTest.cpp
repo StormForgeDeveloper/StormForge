@@ -63,3 +63,17 @@ TEST_F(StringTest, CharBasic)
 	EXPECT_EQ(D.length(), 3);
 }
 
+
+TEST_F(StringTest, Format)
+{
+	String A("Test1");
+	String B("B");
+	String C;
+
+	C.Format("{0}/{1}", A, "DBInstance");
+	EXPECT_EQ(C.IsEqual("Test1/DBInstance"), true);
+
+	C.Format("{0}/{1}", A, B);
+	EXPECT_EQ(C.IsEqual("Test1/B"), true);
+}
+
