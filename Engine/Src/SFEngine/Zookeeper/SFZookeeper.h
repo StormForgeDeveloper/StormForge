@@ -26,7 +26,6 @@ struct ACL_vector;
 struct String_vector;
 struct Stat;
 typedef struct _zhandle zhandle_t;
-typedef struct clientid clientid_t;
 typedef struct zoo_op_result zoo_op_result_t;
 typedef struct zoo_op zoo_op_t;
 
@@ -272,7 +271,7 @@ namespace SF
 
 		// Zookeeper client id
 		uint8_t ClientIDBuffer[ZOOKEEPER_STAT_BUFFER_SIZE];
-		clientid_t* m_ClientID;
+		void* m_ClientID;
 
 		// Watcher for main Zookeeper connection
 		ZookeeperWatcher m_ZKWatcher;

@@ -304,14 +304,14 @@ namespace SF
 
 		zoo_set_debug_level((ZooLogLevel)m_LogLevel);
 
-		clientid_t* previousClientID = m_ClientID->client_id != 0 ? m_ClientID : nullptr;
+		clientid_t* previousClientID = reinterpret_cast<clientid_t*>(m_ClientID)->client_id != 0 ? reinterpret_cast<clientid_t*>(m_ClientID) : nullptr;
 		m_ZKHandle = zookeeper_init(connectionString, ZookeeperWatcher::ZKWatcherCB, 10000, previousClientID, &m_ZKWatcher, 0);
 		if (m_ZKHandle == nullptr)
 		{
 			return ResultCode::UNEXPECTED;
 		}
 
-		*m_ClientID = *zoo_client_id(m_ZKHandle);
+		*reinterpret_cast<clientid_t*>(m_ClientID) = *zoo_client_id(m_ZKHandle);
 
 		return ResultCode::SUCCESS;
 	}
