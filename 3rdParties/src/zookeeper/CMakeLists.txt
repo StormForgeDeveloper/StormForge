@@ -21,13 +21,20 @@ add_definitions(-DTHREADED)
 set(SRC_FILES
     zookeeperConnector/generated/zookeeper.jute.c
 	zookeeperConnector/include/zookeeper.jute.h
+	zookeeperConnector/src/hashtable/hashtable.h
 	zookeeperConnector/src/hashtable/hashtable.c
+	zookeeperConnector/src/hashtable/hashtable_itr.h
 	zookeeperConnector/src/hashtable/hashtable_itr.c
+	zookeeperConnector/src/hashtable/hashtable_private.h
 	#zookeeperConnector/src/cli.c
 	zookeeperConnector/src/mt_adaptor.c
 	zookeeperConnector/src/recordio.c
 	#zookeeperConnector/src/st_adaptor.c
+	zookeeperConnector/src/addrvec.h
+	zookeeperConnector/src/addrvec.c
+	zookeeperConnector/src/winport.h
 	zookeeperConnector/src/winport.c
+	zookeeperConnector/src/zk_hashtable.h
 	zookeeperConnector/src/zk_hashtable.c
 	zookeeperConnector/src/zk_log.c
 	zookeeperConnector/src/zookeeper.c
