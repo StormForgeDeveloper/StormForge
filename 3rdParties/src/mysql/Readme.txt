@@ -1,2 +1,2 @@
 
-Use Install_ubuntu.sh for linux
+Use setup_ubuntu.sh for linux
