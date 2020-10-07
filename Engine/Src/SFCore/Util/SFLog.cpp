@@ -228,7 +228,7 @@ namespace Log {
 
 		std::time_t logTime = std::chrono::system_clock::to_time_t(pLogItem->TimeStamp);
 		auto tm = std::localtime(&logTime);
-		pLogItem->LogStringSize = StrUtil::Format(pLogItem->LogBuff, "{0}:{1}:{2} {3}", tm->tm_hour, tm->tm_min, tm->tm_sec, MainChannelNames[(int)pLogItem->MainChannel]);
+		pLogItem->LogStringSize = StrUtil::Format(pLogItem->LogBuff, "{0}:{1}:{2} {3}: ", tm->tm_hour, tm->tm_min, tm->tm_sec, MainChannelNames[(int)pLogItem->MainChannel]);
 		
 		return pLogItem->LogStringSize;
 	}
