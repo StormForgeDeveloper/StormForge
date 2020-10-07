@@ -1107,19 +1107,33 @@ namespace SF {
 			CharType* szBuffer = nullptr;
 			int buffLen = -1;
 			size_t requiredSize = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args) + 1;
+			if (requiredSize == 0)
+				return 0;
+
 			size_t currentStringLen = m_Buffer->GetStringLength();
-			size_t totalSize = currentStringLen + requiredSize;
-			if (m_Buffer->GetAllocatedSize() < totalSize)
-				m_Buffer->Resize(totalSize);
+			size_t newTotalSize = currentStringLen + requiredSize + 1;
+
+			if (m_Buffer.IsUnique())
+			{
+				if (m_Buffer->GetAllocatedSize() < newTotalSize)
+					m_Buffer->Resize(newTotalSize);
+			}
+			else
+			{
+				auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), newTotalSize);
+				newBuffer->Append(m_Buffer->GetBufferPointer(), currentStringLen);
+				m_Buffer = newBuffer;
+			}
 
 			szBuffer = m_Buffer->GetBufferPointer() + currentStringLen;
 			buffLen = (int)requiredSize;
-			auto length = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
-			m_Buffer->Resize(totalSize);
+			StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
+			auto addedSize = StrUtil::StringLen(m_Buffer->GetBufferPointer() + currentStringLen);
+			m_Buffer->Resize(currentStringLen + addedSize);
 
 			m_StringValue = m_Buffer->GetBufferPointer();
 
-			return length;
+			return addedSize;
 		}
 
 	};

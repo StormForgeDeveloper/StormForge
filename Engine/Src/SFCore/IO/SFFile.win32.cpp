@@ -177,7 +177,10 @@ namespace SF {
 			nullptr);
 
 		if (m_FileHandle == INVALID_NATIVE_HANDLE_VALUE)
-			return ResultCode::FAIL;
+		{
+			Result hr = GetLastResultCode();
+			return hr;
+		}
 
 		m_OpenMode = openMode;
 		m_SharingMode = sharingMode;

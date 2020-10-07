@@ -33,10 +33,12 @@ namespace Util {
 
 	// Path separator
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
+	const char* Path::DirectorySeparatorCharString = "\\";
 	const char Path::DirectorySeparatorChar = '\\';
 	const char Path::AltDirectorySeparatorChar = '/';
 	const char* Path::DirectorySeparatorChars = "\\/";
 #else
+	const char* Path::DirectorySeparatorCharString = "/";
 	const char Path::DirectorySeparatorChar = '/';
 	const char Path::AltDirectorySeparatorChar = '\\';
 	const char* Path::DirectorySeparatorChars = "/\\";

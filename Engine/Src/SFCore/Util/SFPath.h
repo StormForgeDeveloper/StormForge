@@ -32,6 +32,7 @@ namespace Util {
 	public:
 
 		// System path separator
+		static const char* DirectorySeparatorCharString;
 		static const char DirectorySeparatorChar;
 		static const char AltDirectorySeparatorChar;
 		static const char* DirectorySeparatorChars;

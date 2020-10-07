@@ -243,6 +243,11 @@ namespace SF {
 			return SharedPointer::operator != (pRef);
 		}
 
+		bool IsUnique() const
+		{
+			return m_pObject != nullptr && m_pObject->GetReferenceCount() == 1;
+		}
+
 #ifndef SWIG
 		SharedPointerT<ClassType>& operator = (const SharedPointer& src)
 		{
@@ -448,7 +453,6 @@ namespace SF {
 			auto pOldObject = m_pObject.exchange(pObject, std::memory_order_relaxed);
 			src.m_pObject.exchange(pOldObject, std::memory_order_release);
 		}
-
 
 #ifndef SWIG
 

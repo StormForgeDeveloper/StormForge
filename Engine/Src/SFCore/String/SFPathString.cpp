@@ -19,7 +19,7 @@
 #include "String/SFString.h"
 #include "String/SFPathString.h"
 #include "Util/SFUtility.h"
-
+#include "Util/SFPath.h"
 
 namespace SF
 {
@@ -139,7 +139,7 @@ namespace SF
 	Result PathString::Combine(const String& pathString)
 	{
 		StaticArray<String, 10> inputPath(GetHeap());
-		if (!String(GetHeap(), pathString).SplitAny("/\\", inputPath))
+		if (!String(GetHeap(), pathString).SplitAny(Util::Path::DirectorySeparatorChars, inputPath))
 			return ResultCode::FAIL;
 
 		for (auto& itIter : inputPath)
@@ -153,7 +153,7 @@ namespace SF
 	Result PathString::Combine(const char* pathString)
 	{
 		StaticArray<String, 10> inputPath(GetHeap());
-		if (!String(GetHeap(), pathString).SplitAny("/\\", inputPath))
+		if (!String(GetHeap(), pathString).SplitAny(Util::Path::DirectorySeparatorChars, inputPath))
 			return ResultCode::FAIL;
 
 		for (auto& itIter : inputPath)
@@ -226,10 +226,16 @@ namespace SF
 		return false;
 	}
 
+	const String& PathString::ToString() const
+	{
+		m_FullPath = String::Join(m_DecomposedPath, Util::Path::DirectorySeparatorCharString);
+
+		return m_FullPath;
+	}
 
 	PathString::operator const String&() const
 	{
-		m_FullPath = String::Join(m_DecomposedPath, "/");
+		m_FullPath = String::Join(m_DecomposedPath, Util::Path::DirectorySeparatorCharString);
 
 		return m_FullPath;
 	}

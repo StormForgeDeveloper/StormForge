@@ -85,6 +85,7 @@ namespace SF {
 		String& operator[](int iIndex);
 		const String& operator[](int iIndex) const;
 
+		const String& ToString() const;
 		operator const String&() const;
 
 		bool operator == (const PathString& src) const;

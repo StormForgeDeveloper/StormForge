@@ -106,7 +106,7 @@ namespace SF {
 		{
 		private:
 
-			String m_FilePrefix;
+			PathString m_FilePrefix;
 			bool m_OpenNewFileHourly = false;
 			File  m_File;
 			int m_LogFileCreatedHour = 0;

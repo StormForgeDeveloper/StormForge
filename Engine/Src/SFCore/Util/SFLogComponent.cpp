@@ -16,6 +16,7 @@
 #include "Util/SFLogComponent.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFUtility.h"
+#include "IO/SFFileUtil.h"
 #include "String/SFStringCrc64.h"
 #include "String/SFStringFormat.h"
 #include "Service/SFService.h"
@@ -168,13 +169,12 @@ namespace SF {
 		, m_FilePrefix(filePrefix)
 		, m_OpenNewFileHourly(bOpenNewHourly)
 	{
-
+		FileUtil::CreatePath(m_FilePrefix, 1);
 		OpenLogFile();
 	}
 
 	void LogOutputFileComponent::MyOutputHandler::OpenLogFile()
 	{
-
 		String filePath;
 
 		auto logFileCreated = std::chrono::system_clock::now();
@@ -182,7 +182,7 @@ namespace SF {
 		auto timeStruct = std::localtime(&createdTimet);
 		m_LogFileCreatedHour = timeStruct->tm_hour;
 
-		filePath.Format("{0}_{1}{2}{3}_{4}.log", m_FilePrefix, timeStruct->tm_year + 1900, timeStruct->tm_mon + 1, timeStruct->tm_mday, timeStruct->tm_hour);
+		filePath.Format("{0}_{1}{2}{3}_{4}.log", m_FilePrefix.ToString(), timeStruct->tm_year + 1900, timeStruct->tm_mon + 1, timeStruct->tm_mday, timeStruct->tm_hour);
 		m_File.Open(filePath, File::OpenMode::Create);
 		if (m_File.IsOpened())
 		{

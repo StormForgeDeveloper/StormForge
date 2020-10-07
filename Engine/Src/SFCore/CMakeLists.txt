@@ -19,6 +19,8 @@ set(SFCORE_LIB_FILES
 	IO/SFFile.win32.cpp
 	IO/SFFileInputStream.cpp
 	IO/SFFileOutputStream.cpp
+	IO/SFFileUtil.h
+	IO/SFFileUtil.cpp
 	IO/SharedMemory/SFSharedMemory.cpp
 	IO/SharedMemory/SFSharedMemory_linux.cpp
 	IO/SharedMemory/SFSharedMemory_win.cpp
