@@ -48,7 +48,7 @@ namespace SF {
 		StaticArray<String,10> m_DecomposedPath;
 
 		// full path string
-		String m_FullPath;
+		mutable String m_FullPath;
 
 	private:
 

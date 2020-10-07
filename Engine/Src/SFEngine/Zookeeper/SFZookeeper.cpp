@@ -16,7 +16,6 @@
 
 #ifdef USE_ZOOKEEPER
 
-
 #include "zookeeper.h"
 
 
@@ -477,6 +476,7 @@ namespace SF
 			acl = &ZOO_OPEN_ACL_UNSAFE;
 
 		StaticArray<char, 1024> nameBuffer(m_Heap);
+
 		auto zkResult = zoo_create(m_ZKHandle, path, (const char*)valueData, valueSize, acl, flags, nameBuffer.data(), (int)nameBuffer.GetAllocatedSize());
 		if (zkResult == ZOK)
 			outPath = nameBuffer.data();

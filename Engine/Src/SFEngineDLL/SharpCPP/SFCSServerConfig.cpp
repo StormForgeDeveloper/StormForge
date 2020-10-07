@@ -147,13 +147,22 @@ SFDLL_EXPORT uint SFServerConfig_GenericServer_NativeUID(intptr_t nativeHandle)
 	return pObject->UID;
 }
 
-SFDLL_EXPORT const char* SFServerConfig_NetPrivate_NativeName(intptr_t nativeHandle)
+SFDLL_EXPORT const char* SFServerConfig_GenericServer_NativeName(intptr_t nativeHandle)
 {
 	if (nativeHandle == 0)
 		return 0;
 
 	auto pObject = (ServerConfig::GenericServer*)nativeHandle;
 	return pObject->Name;
+}
+
+SFDLL_EXPORT const char* SFServerConfig_GenericServer_NativeExecutable(intptr_t nativeHandle)
+{
+	if (nativeHandle == 0)
+		return 0;
+
+	auto pObject = (ServerConfig::GenericServer*)nativeHandle;
+	return pObject->Executable;
 }
 
 SFDLL_EXPORT ServerConfig::NetPrivate* SFServerConfig_GenericServer_NativePrivateNet(intptr_t nativeHandle)

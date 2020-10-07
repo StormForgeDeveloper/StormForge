@@ -7,7 +7,7 @@
 # aminclude.m4 file and a compatible doxygen configuration file. Defines the
 # following public macros:
 #
-# DX_???_FEATURE(ON|OFF) - control the default setting fo a Doxygen feature.
+# DX_???_FEATURE(ON|OFF) - control the default setting of a Doxygen feature.
 # Supported features are 'DOXYGEN' itself, 'DOT' for generating graphics,
 # 'HTML' for plain HTML, 'CHM' for compressed HTML help (for MS users), 'CHI'
 # for generating a seperate .chi file by the .chm file, and 'MAN', 'RTF',
@@ -309,4 +309,19 @@ esac
 #echo DX_FLAG_pdf=$DX_FLAG_pdf
 #echo DX_FLAG_ps=$DX_FLAG_ps
 #echo DX_ENV=$DX_ENV
+])
+
+# CHECK_CPPUNIT
+# ------------------
+# Check for cppunit presence.
+AC_DEFUN([CHECK_CPPUNIT], [
+  ifdef(
+    [AM_PATH_CPPUNIT],
+    [AM_PATH_CPPUNIT($1)],
+    [ifdef(
+      [PKG_CHECK_MODULES],
+      [PKG_CHECK_MODULES([CPPUNIT], [cppunit >= $1])],
+      [m4_fatal([Missing AM_PATH_CPPUNIT or PKG_CHECK_MODULES m4 macro.])]
+    )]
+  )
 ])

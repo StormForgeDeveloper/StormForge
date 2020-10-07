@@ -31,6 +31,8 @@ add_definitions(-DHAVE_SYS_TYPES_H=1)
 add_definitions(-DSF_USE_MBEDTLS)
 #add_definitions(-DLIBICONV_PLUG)
 add_definitions(-DENABLE_PLAYFABSERVER_API)
+add_definitions(-DTHREADED) # for zookeeper
+add_definitions(-DUSE_STATIC_LIB) # for zookeeper
 
 SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG=1")
 SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG=1")

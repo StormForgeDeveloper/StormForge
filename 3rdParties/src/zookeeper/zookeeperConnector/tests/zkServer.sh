@@ -17,28 +17,31 @@
 # limitations under the License.
 
 # This is the port where zookeeper server runs on.
-ZOOPORT=22181
+ZOOPORT=${ZOOPORT:-"22181"}
+
+# Some tests are setting the maxClientConnections. When it is not set, we fallback to default 100
+ZKMAXCNXNS=${ZKMAXCNXNS:-"100"}
+
+EXTRA_JVM_ARGS=${EXTRA_JVM_ARGS:-""}
 
 if [ "x$1" == "x" ]
 then
-    echo "USAGE: $0 startClean|start|stop hostPorts"
+    echo "USAGE: $0 startClean|start|startCleanReadOnly|startRequireSASLAuth|stop"
     exit 2
 fi
+
+
+
+
+# =====
+# ===== cleanup old executions
+# =====
 
 case "`uname`" in
     CYGWIN*) cygwin=true ;;
     *) cygwin=false ;;
 esac
 
-if [ "x$1" == "xstartClean" ]
-then
-    if [ "x${base_dir}" == "x" ]
-    then
-    rm -rf /tmp/zkdata
-    else
-    rm -rf "${base_dir}/build/tmp"
-    fi
-fi
 
 if $cygwin
 then
@@ -75,71 +78,154 @@ then
     fi
 fi
 
+
+
+# =====
+# ===== build classpath
+# =====
+
 if [ "x${base_dir}" == "x" ]
 then
-zk_base="../../"
+zk_base="../../../"
 else
 zk_base="${base_dir}"
 fi
 
 CLASSPATH="$CLASSPATH:${zk_base}/build/classes"
 CLASSPATH="$CLASSPATH:${zk_base}/conf"
+CLASSPATH="$CLASSPATH:${zk_base}/zookeeper-server/target/classes"
 
 for i in "${zk_base}"/build/lib/*.jar
 do
     CLASSPATH="$CLASSPATH:$i"
 done
 
-for i in "${zk_base}"/src/java/lib/*.jar
+for d in "${zk_base}"/zookeeper-server/target/lib/*.jar
+do
+    CLASSPATH="$d:$CLASSPATH"
+done
+
+for i in "${zk_base}"/zookeeper-server/src/main/resource/lib/*.jar
 do
     CLASSPATH="$CLASSPATH:$i"
 done
 
-CLASSPATH="$CLASSPATH:${CLOVER_HOME}/lib/clover.jar"
+CLASSPATH="$CLASSPATH:${CLOVER_HOME}/lib/clover*.jar"
 
 if $cygwin
 then
     CLASSPATH=`cygpath -wp "$CLASSPATH"`
 fi
 
+
+
+# =====
+# ===== initialize JVM arguments
+# =====
+
+PROPERTIES="$EXTRA_JVM_ARGS -Dzookeeper.extendedTypesEnabled=true -Dznode.container.checkIntervalMs=100"
+if [ "x$1" == "xstartRequireSASLAuth" ]
+then
+    PROPERTIES="-Dzookeeper.sessionRequireClientSASLAuth=true $PROPERTIES"
+fi
+if [ "x$1" == "xstartCleanReadOnly" ]
+then
+    PROPERTIES="-Dreadonlymode.enabled=true $PROPERTIES"
+fi
+
+
+
+# =====
+# ===== initialize data and test directories
+# =====
+
+if [ "x${base_dir}" == "x" ]
+then
+    tmp_dir="/tmp"
+    tests_dir="tests"
+else
+    tmp_dir="${base_dir}/build/tmp"
+    tests_dir=${base_dir}/zookeeper-client/zookeeper-client-c/tests
+fi
+
+
+
+
+# =====
+# ===== start the ZooKeeper server
+# =====
+
 case $1 in
-start|startClean)
-    if [ "x${base_dir}" == "x" ]
-        then
-        mkdir -p /tmp/zkdata
-        java -cp "$CLASSPATH" org.apache.zookeeper.server.ZooKeeperServerMain $ZOOPORT /tmp/zkdata 3000 $ZKMAXCNXNS &> /tmp/zk.log &
-        pid=$!
-        echo -n $! > /tmp/zk.pid
-        else
-        mkdir -p "${base_dir}/build/tmp/zkdata"
-        java -cp "$CLASSPATH" org.apache.zookeeper.server.ZooKeeperServerMain $ZOOPORT "${base_dir}/build/tmp/zkdata" 3000 $ZKMAXCNXNS &> "${base_dir}/build/tmp/zk.log" &
-        pid=$!
-        echo -n $pid > "${base_dir}/build/tmp/zk.pid"
+start|startClean|startRequireSASLAuth|startCleanReadOnly)
+
+    if [ "x$1" == "xstartClean" ] || [ "x$1" == "xstartCleanReadOnly" ]
+    then
+        rm -rf "${tmp_dir}/zkdata"
+    fi
+    mkdir -p "${tmp_dir}/zkdata"
+
+
+    # ===== initialize certificates
+    certs_dir="/tmp/certs"
+    rm -rf "${certs_dir}"
+    mkdir -p "${certs_dir}"
+    cp ${tests_dir}/../ssl/gencerts.sh "${certs_dir}/"  > /dev/null
+    cd ${certs_dir} > /dev/null
+    ./gencerts.sh > ./gencerts.stdout 2> ./gencerts.stderr
+    cd - > /dev/null
+
+
+    # ===== prepare the configs
+    sed "s#TMPDIR#${tmp_dir}#g;s#CERTDIR#${certs_dir}#g;s#MAXCLIENTCONNECTIONS#${ZKMAXCNXNS}#g;s#CLIENTPORT#${ZOOPORT}#g" ${tests_dir}/zoo.cfg > "${tmp_dir}/zoo.cfg"
+    if [ "x$1" == "xstartCleanReadOnly" ]
+    then
+        # we can put the new server to read-only mode by starting only a single instance of a three node server
+        echo "server.1=localhost:22881:33881" >> ${tmp_dir}/zoo.cfg
+        echo "server.2=localhost:22882:33882" >> ${tmp_dir}/zoo.cfg
+        echo "server.3=localhost:22883:33883" >> ${tmp_dir}/zoo.cfg
+        echo "1" > ${tmp_dir}/zkdata/myid
+        main_class="org.apache.zookeeper.server.quorum.QuorumPeerMain"
+    else
+        main_class="org.apache.zookeeper.server.ZooKeeperServerMain"
     fi
 
-    # wait max 120 seconds for server to be ready to server clients
-    # this handles testing on slow hosts
-    success=false
-    for i in {1..120}
-    do
-        if ps -p $pid > /dev/null
-        then
-            java -cp "$CLASSPATH" org.apache.zookeeper.ZooKeeperMain -server localhost:$ZOOPORT ls / > /dev/null 2>&1
-            if [ $? -ne 0  ]
+
+    # ===== start the server
+    java -cp "$CLASSPATH" $PROPERTIES ${main_class} ${tmp_dir}/zoo.cfg &> "${tmp_dir}/zk.log" &
+    pid=$!
+    echo -n $! > /tmp/zk.pid
+
+
+    # ===== wait for the server to start
+    if [ "x$1" == "xstartRequireSASLAuth" ] || [ "x$1" == "xstartCleanReadOnly" ]
+    then
+       # ===== in these cases we can not connect simply with the java client, so we are just waiting...
+       sleep 4
+       success=true
+    else
+        # ===== wait max 120 seconds for server to be ready to server clients (this handles testing on slow hosts)
+        success=false
+        for i in {1..120}
+        do
+            if ps -p $pid > /dev/null
             then
-                # server not up yet - wait
-                sleep 1
+                java -cp "$CLASSPATH" $PROPERTIES org.apache.zookeeper.ZooKeeperMain -server localhost:$ZOOPORT ls / > /dev/null 2>&1
+                if [ $? -ne 0  ]
+                then
+                    # server not up yet - wait
+                    sleep 1
+                else
+                    # server is up and serving client connections
+                    success=true
+                    break
+                fi
             else
-                # server is up and serving client connections
-                success=true
+                # server died - exit now
+                echo -n " ZooKeeper server process failed"
                 break
             fi
-        else
-            # server died - exit now
-            echo -n " ZooKeeper server process failed"
-            break
-        fi
-    done
+        done
+    fi
 
     if $success
     then

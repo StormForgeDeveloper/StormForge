@@ -54,6 +54,7 @@ namespace SF
             public UInt64 GameID { get { return NativeGameID(NativeHandle); } }
             public uint UID { get { return NativeUID(NativeHandle); } }
             public string Name { get { return Marshal.PtrToStringAnsi(NativeName(NativeHandle)); } }
+            public string Executable { get { return Marshal.PtrToStringAnsi(NativeExecutable(NativeHandle)); } }
             public NetPrivate PrivateNet {
                 get { var value = new NetPrivate() { NativeHandle = NativePrivateNet(NativeHandle) }; return value; }
             }
@@ -65,8 +66,11 @@ namespace SF
             [DllImport(NativeDLLName, EntryPoint = "SFServerConfig_GenericServer_NativeUID", CharSet = CharSet.Auto)]
             static extern uint NativeUID(IntPtr nativeHandle);
 
-            [DllImport(NativeDLLName, EntryPoint = "SFServerConfig_NetPrivate_NativeName", CharSet = CharSet.Auto)]
+            [DllImport(NativeDLLName, EntryPoint = "SFServerConfig_GenericServer_NativeName", CharSet = CharSet.Auto)]
             static extern IntPtr NativeName(IntPtr nativeHandle);
+
+            [DllImport(NativeDLLName, EntryPoint = "SFServerConfig_GenericServer_NativeExecutable", CharSet = CharSet.Auto)]
+            static extern IntPtr NativeExecutable(IntPtr nativeHandle);
 
             [DllImport(NativeDLLName, EntryPoint = "SFServerConfig_GenericServer_NativePrivateNet", CharSet = CharSet.Auto)]
             static extern IntPtr NativePrivateNet(IntPtr nativeHandle);

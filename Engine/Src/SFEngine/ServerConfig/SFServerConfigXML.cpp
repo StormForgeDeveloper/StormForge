@@ -99,6 +99,7 @@ namespace SF
 		auto WorkerThreadCount = (const char*)xmlGetProp(pNode, (xmlChar*)"WorkerThreadCount");
 		auto NetIOThreadCount = (const char*)xmlGetProp(pNode, (xmlChar*)"NetIOThreadCount");
 		auto Name = (const char*)xmlGetProp(pNode, (xmlChar*)"Name");
+		auto Executable = (const char*)xmlGetProp(pNode, (xmlChar*)"Executable");
 		const String privateNetString = String(GetHeap(), "NetPrivate");
 
 		pGenericServer->UID = atoi(UID);
@@ -107,6 +108,7 @@ namespace SF
 		if(NetIOThreadCount != nullptr)
 			pGenericServer->NetIOThreadCount = atoi(NetIOThreadCount);
 		pGenericServer->Name = String(GetHeap(), Name);
+		pGenericServer->Executable = String(GetHeap(), Executable);
 
 		Result result = ForeachElement(pNode->children, [&](xmlNode* pCurNode)
 		{

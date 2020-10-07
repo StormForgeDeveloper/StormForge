@@ -229,7 +229,7 @@ namespace SF
 
 	PathString::operator const String&() const
 	{
-		m_FullPath.Join(m_DecomposedPath, "/");
+		m_FullPath = String::Join(m_DecomposedPath, "/");
 
 		return m_FullPath;
 	}

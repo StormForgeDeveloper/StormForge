@@ -168,6 +168,7 @@ namespace SF
 			GameCluster* pGameCluster = nullptr; // Game Cluster pointer if it's under game cluster
 			uint32_t UID = 0;
 			String Name;
+			String Executable;
 			NetPrivate PrivateNet;
 			uint WorkerThreadCount = 4;
 			uint NetIOThreadCount = 4;
@@ -175,6 +176,7 @@ namespace SF
 
 			GenericServer(IHeap& heap)
 				: Name(heap)
+				, Executable(heap)
 				, PrivateNet(heap)
 				, Modules(heap)
 			{}

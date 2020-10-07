@@ -16,6 +16,7 @@
 #include "String/SFString.h"
 #include "Container/SFCircularPageQueue.h"
 
+#define THREADED 1
 #include "zookeeper.h"
 #include "ServerConfig/SFServerConfig.h"
 #include "ServerConfig/SFServerConfigXML.h"

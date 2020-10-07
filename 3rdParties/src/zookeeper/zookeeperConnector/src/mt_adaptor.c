@@ -19,7 +19,7 @@
 #define THREADED
 #endif
 
-#ifndef DLL_EXPORT
+#if !defined(DLL_EXPORT) && !defined(USE_STATIC_LIB)
 #  define USE_STATIC_LIB
 #endif
 
@@ -56,7 +56,7 @@ int lock_buffer_list(buffer_head_t *l)
 {
     return pthread_mutex_lock(&l->lock);
 }
-int  unlock_buffer_list(buffer_head_t *l)
+int unlock_buffer_list(buffer_head_t *l)
 {
     return pthread_mutex_unlock(&l->lock);
 }
@@ -114,15 +114,15 @@ int process_async(int outstanding_sync)
 unsigned __stdcall do_io( void * );
 unsigned __stdcall do_completion( void * );
 
-int handle_error(SOCKET sock, char* message)
+int handle_error(zhandle_t* zh, SOCKET sock, char* message)
 {
-       LOG_ERROR(("%s. %d",message, WSAGetLastError()));
+       LOG_ERROR(LOGCALLBACK(zh), "%s. %d",message, WSAGetLastError());
        closesocket (sock);
        return -1;
 }
 
 //--create socket pair for interupting selects.
-int create_socket_pair(SOCKET fds[2]) 
+int create_socket_pair(zhandle_t* zh, SOCKET fds[2]) 
 { 
     struct sockaddr_in inaddr; 
     struct sockaddr addr; 
@@ -131,7 +131,7 @@ int create_socket_pair(SOCKET fds[2])
        
     SOCKET lst=socket(AF_INET, SOCK_STREAM,IPPROTO_TCP); 
     if (lst ==  INVALID_SOCKET ){
-       LOG_ERROR(("Error creating socket. %d",WSAGetLastError()));
+       LOG_ERROR(LOGCALLBACK(zh), "Error creating socket. %d",WSAGetLastError());
        return -1;
     }
     memset(&inaddr, 0, sizeof(inaddr)); 
@@ -141,23 +141,23 @@ int create_socket_pair(SOCKET fds[2])
     inaddr.sin_port = 0; //--system assigns the port
 
     if ( setsockopt(lst,SOL_SOCKET,SO_REUSEADDR,(char*)&yes,sizeof(yes)) == SOCKET_ERROR  ) {
-       return handle_error(lst,"Error trying to set socket option.");          
+       return handle_error(zh, lst,"Error trying to set socket option.");          
     }  
     if (bind(lst,(struct sockaddr *)&inaddr,sizeof(inaddr)) == SOCKET_ERROR){
-       return handle_error(lst,"Error trying to bind socket.");                
+       return handle_error(zh, lst,"Error trying to bind socket.");                
     }
     if (listen(lst,1) == SOCKET_ERROR){
-       return handle_error(lst,"Error trying to listen on socket.");
+       return handle_error(zh, lst,"Error trying to listen on socket.");
     }
     len=sizeof(inaddr); 
     getsockname(lst, &addr,&len); 
     fds[0]=socket(AF_INET, SOCK_STREAM,0); 
     if (connect(fds[0],&addr,len) == SOCKET_ERROR){
-       return handle_error(lst, "Error while connecting to socket.");
+       return handle_error(zh, lst, "Error while connecting to socket.");
     }
     if ((fds[1]=accept(lst,0,0)) == INVALID_SOCKET){
        closesocket(fds[0]);
-       return handle_error(lst, "Error while accepting socket connection.");
+       return handle_error(zh, lst, "Error while accepting socket connection.");
     }
     closesocket(lst);  
     return 0;
@@ -218,7 +218,7 @@ void start_threads(zhandle_t* zh)
     // use api_prolog() to make sure zhandle doesn't get destroyed
     // while initialization is in progress
     api_prolog(zh);
-    LOG_DEBUG(("starting threads..."));
+    LOG_DEBUG(LOGCALLBACK(zh), "starting threads...");
     rc=pthread_create(&adaptor->io, 0, do_io, zh);
     assert("pthread_create() failed for the IO thread"&&!rc);
     rc=pthread_create(&adaptor->completion, 0, do_completion, zh);
@@ -232,17 +232,17 @@ int adaptor_init(zhandle_t *zh)
     pthread_mutexattr_t recursive_mx_attr;
     struct adaptor_threads *adaptor_threads = calloc(1, sizeof(*adaptor_threads));
     if (!adaptor_threads) {
-        LOG_ERROR(("Out of memory"));
+        LOG_ERROR(LOGCALLBACK(zh), "Out of memory");
         return -1;
     }
 
     /* We use a pipe for interrupting select() in unix/sol and socketpair in windows. */
 #ifdef WIN32   
-    if (create_socket_pair(adaptor_threads->self_pipe) == -1){
-       LOG_ERROR(("Can't make a socket."));
+    if (create_socket_pair(zh, adaptor_threads->self_pipe) == -1){
+       LOG_ERROR(LOGCALLBACK(zh), "Can't make a socket.");
 #else
     if(pipe(adaptor_threads->self_pipe)==-1) {
-        LOG_ERROR(("Can't make a pipe %d",errno));
+        LOG_ERROR(LOGCALLBACK(zh), "Can't make a pipe %d",errno);
 #endif
         free(adaptor_threads);
         return -1;
@@ -255,12 +255,14 @@ int adaptor_init(zhandle_t *zh)
     zh->adaptor_priv = adaptor_threads;
     pthread_mutex_init(&zh->to_process.lock,0);
     pthread_mutex_init(&adaptor_threads->zh_lock,0);
-    // to_send must be recursive mutex    
+    pthread_mutex_init(&adaptor_threads->reconfig_lock,0);
+    pthread_mutex_init(&adaptor_threads->watchers_lock,0);
+    // to_send must be recursive mutex
     pthread_mutexattr_init(&recursive_mx_attr);
     pthread_mutexattr_settype(&recursive_mx_attr, PTHREAD_MUTEX_RECURSIVE);
     pthread_mutex_init(&zh->to_send.lock,&recursive_mx_attr);
     pthread_mutexattr_destroy(&recursive_mx_attr);
-    
+
     pthread_mutex_init(&zh->sent_requests.lock,0);
     pthread_cond_init(&zh->sent_requests.cond,0);
     pthread_mutex_init(&zh->completions_to_process.lock,0);
@@ -364,17 +366,17 @@ void *do_io(void *v)
 
     api_prolog(zh);
     notify_thread_ready(zh);
-    LOG_DEBUG(("started IO thread"));
+    LOG_DEBUG(LOGCALLBACK(zh), "started IO thread");
     fds[0].fd=adaptor_threads->self_pipe[0];
     fds[0].events=POLLIN;
     while(!zh->close_requested) {
+        zh->io_count++;
         struct timeval tv;
         int fd;
         int interest;
         int timeout;
         int maxfd=1;
-        int rc;
-        
+
         zookeeper_interest(zh, &fd, &interest, &tv);
         if (fd != -1) {
             fds[1].fd=fd;
@@ -395,55 +397,66 @@ void *do_io(void *v)
             while(read(adaptor_threads->self_pipe[0],b,sizeof(b))==sizeof(b)){}
         }        
 #else
-    fd_set rfds, wfds, efds;
+    fd_set rfds, wfds;
     struct adaptor_threads *adaptor_threads = zh->adaptor_priv;
     api_prolog(zh);
     notify_thread_ready(zh);
-    LOG_DEBUG(("started IO thread"));
-    FD_ZERO(&rfds);   FD_ZERO(&wfds);    FD_ZERO(&efds);
+    LOG_DEBUG(LOGCALLBACK(zh), "started IO thread");
+    
     while(!zh->close_requested) {      
         struct timeval tv;
         SOCKET fd;
-        SOCKET maxfd=adaptor_threads->self_pipe[0];
-        int interest;        
+        int interest;
         int rc;
-               
-       zookeeper_interest(zh, &fd, &interest, &tv);
-       if (fd != -1) {
-           if (interest&ZOOKEEPER_READ) {
+
+        zookeeper_interest(zh, &fd, &interest, &tv);
+
+        // FD_ZERO is cheap on Win32, it just sets count of elements to zero.
+        // It needs to be done to ensure no stale entries.
+        FD_ZERO(&rfds);
+        FD_ZERO(&wfds);
+
+        if (fd != -1) {
+            if (interest&ZOOKEEPER_READ) {
                 FD_SET(fd, &rfds);
-            } else {
-                FD_CLR(fd, &rfds);
             }
-           if (interest&ZOOKEEPER_WRITE) {
+
+            if (interest&ZOOKEEPER_WRITE) {
                 FD_SET(fd, &wfds);
-            } else {
-                FD_CLR(fd, &wfds);
-            }                  
+            }
         }
-       FD_SET( adaptor_threads->self_pipe[0] ,&rfds );        
-       rc = select((int)maxfd, &rfds, &wfds, &efds, &tv);
-       if (fd != -1) 
-       {
-           interest = (FD_ISSET(fd, &rfds))? ZOOKEEPER_READ:0;
-           interest|= (FD_ISSET(fd, &wfds))? ZOOKEEPER_WRITE:0;
+
+        // Always interested in self_pipe.
+        FD_SET(adaptor_threads->self_pipe[0], &rfds);
+
+        rc = select(/* unused */0, &rfds, &wfds, NULL, &tv);
+        if (rc > 0) {
+            interest=(FD_ISSET(fd, &rfds))? ZOOKEEPER_READ: 0;
+            interest|=(FD_ISSET(fd, &wfds))? ZOOKEEPER_WRITE: 0;
+
+            if (FD_ISSET(adaptor_threads->self_pipe[0], &rfds)){
+                // flush the pipe/socket
+                char b[128];
+                while(recv(adaptor_threads->self_pipe[0],b,sizeof(b), 0)==sizeof(b)){}
+            }
         }
-               
-       if (FD_ISSET(adaptor_threads->self_pipe[0], &rfds)){
-            // flush the pipe/socket
-            char b[128];
-           while(recv(adaptor_threads->self_pipe[0],b,sizeof(b), 0)==sizeof(b)){}
-       }
+        else if (rc < 0) {
+            LOG_ERROR(LOGCALLBACK(zh), ("select() failed %d [%d].", rc, WSAGetLastError()));
+
+            // Clear interest events for zookeeper_process if select() fails.
+            interest = 0;
+        }
+
 #endif
         // dispatch zookeeper events
-        rc = zookeeper_process(zh, interest);
+        zookeeper_process(zh, interest);
         // check the current state of the zhandle and terminate 
         // if it is_unrecoverable()
         if(is_unrecoverable(zh))
             break;
     }
     api_epilog(zh, 0);    
-    LOG_DEBUG(("IO thread terminated"));
+    LOG_DEBUG(LOGCALLBACK(zh), "IO thread terminated");
     return 0;
 }
 
@@ -456,7 +469,7 @@ void *do_completion(void *v)
     zhandle_t *zh = v;
     api_prolog(zh);
     notify_thread_ready(zh);
-    LOG_DEBUG(("started completion thread"));
+    LOG_DEBUG(LOGCALLBACK(zh), "started completion thread");
     while(!zh->close_requested) {
         pthread_mutex_lock(&zh->completions_to_process.lock);
         while(!zh->completions_to_process.head && !zh->close_requested) {
@@ -466,7 +479,7 @@ void *do_completion(void *v)
         process_completions(zh);
     }
     api_epilog(zh, 0);    
-    LOG_DEBUG(("completion thread terminated"));
+    LOG_DEBUG(LOGCALLBACK(zh), "completion thread terminated");
     return 0;
 }
 
@@ -483,16 +496,9 @@ int32_t inc_ref_counter(zhandle_t* zh,int i)
 int32_t fetch_and_add(volatile int32_t* operand, int incr)
 {
 #ifndef WIN32
-    //int32_t result;
-    //asm __volatile__(
-    //     "lock xaddl %0,%1\n"
-    //     : "=r"(result), "=m"(*(int *)operand)
-    //     : "0"(incr)
-    //     : "memory");
-   //return result;
-   return __sync_fetch_and_add(operand, incr);
+    return __sync_fetch_and_add(operand, incr);
 #else
-	return InterlockedAdd(operand, incr);
+    return InterlockedExchangeAdd(operand, incr);
 #endif
 }
 
@@ -504,6 +510,44 @@ __attribute__((constructor)) int32_t get_xid()
         xid = time(0);
     }
     return fetch_and_add(&xid,1);
+}
+
+int lock_reconfig(struct _zhandle *zh)
+{
+    struct adaptor_threads *adaptor = zh->adaptor_priv;
+    if (adaptor) {
+        return pthread_mutex_lock(&adaptor->reconfig_lock);
+    } else {
+        return 0;
+    }
+}
+int unlock_reconfig(struct _zhandle *zh)
+{
+    struct adaptor_threads *adaptor = zh->adaptor_priv;
+    if (adaptor) {
+        return pthread_mutex_unlock(&adaptor->reconfig_lock);
+    } else {
+        return 0;
+    }
+}
+
+int lock_watchers(struct _zhandle *zh)
+{
+    struct adaptor_threads *adaptor = zh->adaptor_priv;
+    if (adaptor) {
+        return pthread_mutex_lock(&adaptor->watchers_lock);
+    } else {
+        return 0;
+    }
+}
+int unlock_watchers(struct _zhandle *zh)
+{
+    struct adaptor_threads *adaptor = zh->adaptor_priv;
+    if (adaptor) {
+        return pthread_mutex_unlock(&adaptor->watchers_lock);
+    } else {
+        return 0;
+    }
 }
 
 int enter_critical(zhandle_t* zh)

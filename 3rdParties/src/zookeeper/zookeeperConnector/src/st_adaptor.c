@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-#ifndef DLL_EXPORT
+#if !defined(DLL_EXPORT) && !defined(USE_STATIC_LIB)
 #  define USE_STATIC_LIB
 #endif
 
@@ -26,46 +26,28 @@
 
 int zoo_lock_auth(zhandle_t *zh)
 {
-	return 0;
+    return 0;
 }
 int zoo_unlock_auth(zhandle_t *zh)
 {
-	return 0;
+    return 0;
 }
 int lock_buffer_list(buffer_head_t *l)
 {
-	return 0;
+    return 0;
 }
 int unlock_buffer_list(buffer_head_t *l)
 {
-	return 0;
+    return 0;
 }
 int lock_completion_list(completion_head_t *l)
 {
-	return 0;
+    return 0;
 }
 int unlock_completion_list(completion_head_t *l)
 {
-	return 0;
-}
-struct sync_completion *alloc_sync_completion(void)
-{
-    return (struct sync_completion*)calloc(1, sizeof(struct sync_completion));
-}
-int wait_sync_completion(struct sync_completion *sc)
-{
     return 0;
 }
-
-void free_sync_completion(struct sync_completion *sc)
-{
-    free(sc);
-}
-
-void notify_sync_completion(struct sync_completion *sc)
-{
-}
-
 int process_async(int outstanding_sync)
 {
     return outstanding_sync == 0;
@@ -102,12 +84,32 @@ int32_t get_xid()
     return xid++;
 }
 
+int lock_reconfig(struct _zhandle *zh)
+{
+    return 0;
+}
+
+int unlock_reconfig(struct _zhandle *zh)
+{
+    return 0;
+}
+
+int lock_watchers(struct _zhandle *zh)
+{
+    return 0;
+}
+
+int unlock_watchers(struct _zhandle *zh)
+{
+    return 0;
+}
+
 int enter_critical(zhandle_t* zh)
 {
-	return 0;
+    return 0;
 }
 
 int leave_critical(zhandle_t* zh)
 {
-	return 0;
+    return 0;
 }

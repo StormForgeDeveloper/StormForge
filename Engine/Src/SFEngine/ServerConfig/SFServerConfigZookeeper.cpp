@@ -124,6 +124,7 @@ namespace SF
 		pGenericServer->UID = itemValue.get("UID", Json::Value("")).asUInt();
 		pGenericServer->WorkerThreadCount = itemValue.get("WorkerThreadCount", Json::Value(4)).asUInt();
 		pGenericServer->NetIOThreadCount = itemValue.get("NetIOThreadCount", Json::Value(4)).asUInt();
+		pGenericServer->Executable = itemValue.get("Executable", Json::Value("")).asCString();
 		//pGenericServer->Name = itemValue["Name"].asCString();
 		Result result = ParseNetPrivate(itemValue.get("NetPrivate",Json::Value(Json::objectValue)), pGenericServer->PrivateNet);
 		if (!result) return result;
@@ -612,6 +613,7 @@ namespace SF
 
 		itemValue["UID"] = Json::Value(pGenericServer->UID);
 		//itemValue["Name"] = ToJsonSafeString(pGenericServer->Name);
+		itemValue["Executable"] = ToJsonSafeString(pGenericServer->Executable);
 		itemValue["NetPrivate"] = ToJsonNetPrivate(pGenericServer->PrivateNet);
 		itemValue["WorkerThreadCount"] = Json::Value(pGenericServer->WorkerThreadCount);
 		itemValue["NetIOThreadCount"] = Json::Value(pGenericServer->NetIOThreadCount);

@@ -68,19 +68,6 @@ struct StatPersisted {
 int serialize_StatPersisted(struct oarchive *out, const char *tag, struct StatPersisted *v);
 int deserialize_StatPersisted(struct iarchive *in, const char *tag, struct StatPersisted*v);
 void deallocate_StatPersisted(struct StatPersisted*);
-struct StatPersistedV1 {
-    int64_t czxid;
-    int64_t mzxid;
-    int64_t ctime;
-    int64_t mtime;
-    int32_t version;
-    int32_t cversion;
-    int32_t aversion;
-    int64_t ephemeralOwner;
-};
-int serialize_StatPersistedV1(struct oarchive *out, const char *tag, struct StatPersistedV1 *v);
-int deserialize_StatPersistedV1(struct iarchive *in, const char *tag, struct StatPersistedV1*v);
-void deallocate_StatPersistedV1(struct StatPersistedV1*);
 struct ConnectRequest {
     int32_t protocolVersion;
     int64_t lastZxidSeen;
@@ -118,6 +105,17 @@ struct SetWatches {
 int serialize_SetWatches(struct oarchive *out, const char *tag, struct SetWatches *v);
 int deserialize_SetWatches(struct iarchive *in, const char *tag, struct SetWatches*v);
 void deallocate_SetWatches(struct SetWatches*);
+struct SetWatches2 {
+    int64_t relativeZxid;
+    struct String_vector dataWatches;
+    struct String_vector existWatches;
+    struct String_vector childWatches;
+    struct String_vector persistentWatches;
+    struct String_vector persistentRecursiveWatches;
+};
+int serialize_SetWatches2(struct oarchive *out, const char *tag, struct SetWatches2 *v);
+int deserialize_SetWatches2(struct iarchive *in, const char *tag, struct SetWatches2*v);
+void deallocate_SetWatches2(struct SetWatches2*);
 struct RequestHeader {
     int32_t xid;
     int32_t type;
@@ -164,6 +162,15 @@ struct SetDataRequest {
 int serialize_SetDataRequest(struct oarchive *out, const char *tag, struct SetDataRequest *v);
 int deserialize_SetDataRequest(struct iarchive *in, const char *tag, struct SetDataRequest*v);
 void deallocate_SetDataRequest(struct SetDataRequest*);
+struct ReconfigRequest {
+    char * joiningServers;
+    char * leavingServers;
+    char * newMembers;
+    int64_t curConfigId;
+};
+int serialize_ReconfigRequest(struct oarchive *out, const char *tag, struct ReconfigRequest *v);
+int deserialize_ReconfigRequest(struct iarchive *in, const char *tag, struct ReconfigRequest*v);
+void deallocate_ReconfigRequest(struct ReconfigRequest*);
 struct SetDataResponse {
     struct Stat stat;
 };
@@ -206,6 +213,16 @@ struct CreateRequest {
 int serialize_CreateRequest(struct oarchive *out, const char *tag, struct CreateRequest *v);
 int deserialize_CreateRequest(struct iarchive *in, const char *tag, struct CreateRequest*v);
 void deallocate_CreateRequest(struct CreateRequest*);
+struct CreateTTLRequest {
+    char * path;
+    struct buffer data;
+    struct ACL_vector acl;
+    int32_t flags;
+    int64_t ttl;
+};
+int serialize_CreateTTLRequest(struct oarchive *out, const char *tag, struct CreateTTLRequest *v);
+int deserialize_CreateTTLRequest(struct iarchive *in, const char *tag, struct CreateTTLRequest*v);
+void deallocate_CreateTTLRequest(struct CreateTTLRequest*);
 struct DeleteRequest {
     char * path;
     int32_t version;
@@ -220,6 +237,12 @@ struct GetChildrenRequest {
 int serialize_GetChildrenRequest(struct oarchive *out, const char *tag, struct GetChildrenRequest *v);
 int deserialize_GetChildrenRequest(struct iarchive *in, const char *tag, struct GetChildrenRequest*v);
 void deallocate_GetChildrenRequest(struct GetChildrenRequest*);
+struct GetAllChildrenNumberRequest {
+    char * path;
+};
+int serialize_GetAllChildrenNumberRequest(struct oarchive *out, const char *tag, struct GetAllChildrenNumberRequest *v);
+int deserialize_GetAllChildrenNumberRequest(struct iarchive *in, const char *tag, struct GetAllChildrenNumberRequest*v);
+void deallocate_GetAllChildrenNumberRequest(struct GetAllChildrenNumberRequest*);
 struct GetChildren2Request {
     char * path;
     int32_t watch;
@@ -285,6 +308,13 @@ struct SetACLResponse {
 int serialize_SetACLResponse(struct oarchive *out, const char *tag, struct SetACLResponse *v);
 int deserialize_SetACLResponse(struct iarchive *in, const char *tag, struct SetACLResponse*v);
 void deallocate_SetACLResponse(struct SetACLResponse*);
+struct AddWatchRequest {
+    char * path;
+    int32_t mode;
+};
+int serialize_AddWatchRequest(struct oarchive *out, const char *tag, struct AddWatchRequest *v);
+int deserialize_AddWatchRequest(struct iarchive *in, const char *tag, struct AddWatchRequest*v);
+void deallocate_AddWatchRequest(struct AddWatchRequest*);
 struct WatcherEvent {
     int32_t type;
     int32_t state;
@@ -305,6 +335,13 @@ struct CreateResponse {
 int serialize_CreateResponse(struct oarchive *out, const char *tag, struct CreateResponse *v);
 int deserialize_CreateResponse(struct iarchive *in, const char *tag, struct CreateResponse*v);
 void deallocate_CreateResponse(struct CreateResponse*);
+struct Create2Response {
+    char * path;
+    struct Stat stat;
+};
+int serialize_Create2Response(struct oarchive *out, const char *tag, struct Create2Response *v);
+int deserialize_Create2Response(struct iarchive *in, const char *tag, struct Create2Response*v);
+void deallocate_Create2Response(struct Create2Response*);
 struct ExistsRequest {
     char * path;
     int32_t watch;
@@ -331,6 +368,12 @@ struct GetChildrenResponse {
 int serialize_GetChildrenResponse(struct oarchive *out, const char *tag, struct GetChildrenResponse *v);
 int deserialize_GetChildrenResponse(struct iarchive *in, const char *tag, struct GetChildrenResponse*v);
 void deallocate_GetChildrenResponse(struct GetChildrenResponse*);
+struct GetAllChildrenNumberResponse {
+    int32_t totalNumber;
+};
+int serialize_GetAllChildrenNumberResponse(struct oarchive *out, const char *tag, struct GetAllChildrenNumberResponse *v);
+int deserialize_GetAllChildrenNumberResponse(struct iarchive *in, const char *tag, struct GetAllChildrenNumberResponse*v);
+void deallocate_GetAllChildrenNumberResponse(struct GetAllChildrenNumberResponse*);
 struct GetChildren2Response {
     struct String_vector children;
     struct Stat stat;
@@ -345,9 +388,36 @@ struct GetACLResponse {
 int serialize_GetACLResponse(struct oarchive *out, const char *tag, struct GetACLResponse *v);
 int deserialize_GetACLResponse(struct iarchive *in, const char *tag, struct GetACLResponse*v);
 void deallocate_GetACLResponse(struct GetACLResponse*);
+struct CheckWatchesRequest {
+    char * path;
+    int32_t type;
+};
+int serialize_CheckWatchesRequest(struct oarchive *out, const char *tag, struct CheckWatchesRequest *v);
+int deserialize_CheckWatchesRequest(struct iarchive *in, const char *tag, struct CheckWatchesRequest*v);
+void deallocate_CheckWatchesRequest(struct CheckWatchesRequest*);
+struct RemoveWatchesRequest {
+    char * path;
+    int32_t type;
+};
+int serialize_RemoveWatchesRequest(struct oarchive *out, const char *tag, struct RemoveWatchesRequest *v);
+int deserialize_RemoveWatchesRequest(struct iarchive *in, const char *tag, struct RemoveWatchesRequest*v);
+void deallocate_RemoveWatchesRequest(struct RemoveWatchesRequest*);
+struct GetEphemeralsRequest {
+    char * prefixPath;
+};
+int serialize_GetEphemeralsRequest(struct oarchive *out, const char *tag, struct GetEphemeralsRequest *v);
+int deserialize_GetEphemeralsRequest(struct iarchive *in, const char *tag, struct GetEphemeralsRequest*v);
+void deallocate_GetEphemeralsRequest(struct GetEphemeralsRequest*);
+struct GetEphemeralsResponse {
+    struct String_vector ephemerals;
+};
+int serialize_GetEphemeralsResponse(struct oarchive *out, const char *tag, struct GetEphemeralsResponse *v);
+int deserialize_GetEphemeralsResponse(struct iarchive *in, const char *tag, struct GetEphemeralsResponse*v);
+void deallocate_GetEphemeralsResponse(struct GetEphemeralsResponse*);
 struct LearnerInfo {
     int64_t serverid;
     int32_t protocolVersion;
+    int64_t configVersion;
 };
 int serialize_LearnerInfo(struct oarchive *out, const char *tag, struct LearnerInfo *v);
 int deserialize_LearnerInfo(struct iarchive *in, const char *tag, struct LearnerInfo*v);
@@ -386,6 +456,13 @@ struct FileHeader {
 int serialize_FileHeader(struct oarchive *out, const char *tag, struct FileHeader *v);
 int deserialize_FileHeader(struct iarchive *in, const char *tag, struct FileHeader*v);
 void deallocate_FileHeader(struct FileHeader*);
+struct TxnDigest {
+    int32_t version;
+    int64_t treeDigest;
+};
+int serialize_TxnDigest(struct oarchive *out, const char *tag, struct TxnDigest *v);
+int deserialize_TxnDigest(struct iarchive *in, const char *tag, struct TxnDigest*v);
+void deallocate_TxnDigest(struct TxnDigest*);
 struct TxnHeader {
     int64_t clientId;
     int32_t cxid;
@@ -415,6 +492,25 @@ struct CreateTxn {
 int serialize_CreateTxn(struct oarchive *out, const char *tag, struct CreateTxn *v);
 int deserialize_CreateTxn(struct iarchive *in, const char *tag, struct CreateTxn*v);
 void deallocate_CreateTxn(struct CreateTxn*);
+struct CreateTTLTxn {
+    char * path;
+    struct buffer data;
+    struct ACL_vector acl;
+    int32_t parentCVersion;
+    int64_t ttl;
+};
+int serialize_CreateTTLTxn(struct oarchive *out, const char *tag, struct CreateTTLTxn *v);
+int deserialize_CreateTTLTxn(struct iarchive *in, const char *tag, struct CreateTTLTxn*v);
+void deallocate_CreateTTLTxn(struct CreateTTLTxn*);
+struct CreateContainerTxn {
+    char * path;
+    struct buffer data;
+    struct ACL_vector acl;
+    int32_t parentCVersion;
+};
+int serialize_CreateContainerTxn(struct oarchive *out, const char *tag, struct CreateContainerTxn *v);
+int deserialize_CreateContainerTxn(struct iarchive *in, const char *tag, struct CreateContainerTxn*v);
+void deallocate_CreateContainerTxn(struct CreateContainerTxn*);
 struct DeleteTxn {
     char * path;
 };
@@ -457,6 +553,12 @@ struct CreateSessionTxn {
 int serialize_CreateSessionTxn(struct oarchive *out, const char *tag, struct CreateSessionTxn *v);
 int deserialize_CreateSessionTxn(struct iarchive *in, const char *tag, struct CreateSessionTxn*v);
 void deallocate_CreateSessionTxn(struct CreateSessionTxn*);
+struct CloseSessionTxn {
+    struct String_vector paths2Delete;
+};
+int serialize_CloseSessionTxn(struct oarchive *out, const char *tag, struct CloseSessionTxn *v);
+int deserialize_CloseSessionTxn(struct iarchive *in, const char *tag, struct CloseSessionTxn*v);
+void deallocate_CloseSessionTxn(struct CloseSessionTxn*);
 struct ErrorTxn {
     int32_t err;
 };

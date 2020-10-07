@@ -17,8 +17,10 @@ add_definitions(-DPACKAGE_BUGREPORT="user@zookeeper.apache.org")
 add_definitions(-DPACKAGE_URL="")
 add_definitions(-DTHREADED)
 
+
 set(SRC_FILES
     zookeeperConnector/generated/zookeeper.jute.c
+	zookeeperConnector/include/zookeeper.jute.h
 	zookeeperConnector/src/hashtable/hashtable.c
 	zookeeperConnector/src/hashtable/hashtable_itr.c
 	#zookeeperConnector/src/cli.c

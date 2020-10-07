@@ -44,7 +44,7 @@ add_subdirectory(src/zlib)
 add_subdirectory(src/yaml)
 add_subdirectory(src/zookeeper)
 add_subdirectory(src/SFWinport)
-add_subdirectory(src/PlayFab)
+#add_subdirectory(src/PlayFab)
 
 
 #install(TARGETS src/libiconv/iconv curl freetype gtest jasper jpeg jsoncpp lcms mng tiff xml png mbedtls rdkafka tinyxml zlib yaml DESTINATION bin/lib)

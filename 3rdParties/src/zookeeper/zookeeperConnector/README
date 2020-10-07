@@ -39,9 +39,10 @@ follow the steps outlined below. If you're building from a release
 tar downloaded from Apache please skip to step 2.
 
 1) do a "ant compile_jute" from the zookeeper top level directory (.../trunk).
-   This will create a directory named "generated" under src/c.  Skip to step 3.
-2) unzip/untar the source tarball and cd to the zookeeper-x.x.x/src/c directory
-3) change directory to src/c and do a "autoreconf -if" to bootstrap
+   This will create a directory named "generated" under zookeeper-client/zookeeper-client-c.
+   Skip to step 3.
+2) unzip/untar the source tarball and cd to the zookeeper-x.x.x/zookeeper-client/zookeeper-client-c directory
+3) change directory to zookeeper-client/zookeeper-client-c and do a "autoreconf -if" to bootstrap
    autoconf, automake and libtool. Please make sure you have autoconf
    version 2.59 or greater installed. If cppunit is installed in a non-standard
    directory, you need to specify where to find cppunit.m4. For example, if
@@ -64,13 +65,39 @@ tar downloaded from Apache please skip to step 2.
    Alternatively, you can also build and run a unit test suite (and
    you probably should).  Please make sure you have cppunit-1.10.x or
    higher installed before you execute step 4.  Once ./configure has
-   finished, do a "make run-check". It will build the libraries, build
+   finished, do a "make check". It will build the libraries, build
    the tests and run them.
 6) to generate doxygen documentation do a "make doxygen-doc". All
    documentations will be placed to a new subfolder named docs. By
    default only HTML documentation is generated.  For information on
    other document formats please use "./configure --help"
 
+Alternatively you can use the CMake build system. On Windows, this is required.
+Follow steps 1 and 2 above, and then continue here.
+
+1) do a "cmake [OPTIONS]" to generate the makefile or msbuild files (the correct
+   build system will be generated based on your platform). Some options from above
+   are supported:
+   -DCMAKE_BUILD_TYPE  Debug by default, Release enables optimzation etc.
+   -DWANT_SYNCAPI      ON by default, OFF disables the Sync API support
+   -DWANT_CPPUNIT      ON except on Windows, OFF disables the tests
+   -DWITH_OPENSSL      ON by default, OFF disables the SSL support. You can also
+                       specify a custom path by -DWITH_OPENSSL=/path/to/openssl/
+   -DWITH_CYRUS_SASL   ON by default, OFF disables SASL support. You can also
+                       specify a custom path by -DWITH_CYRUS_SASL=/path/to/cyrus-sasl/
+   -DBUILD_SHARED_LIBS not yet supported, only static libraries are built
+   other CMake options see "cmake --help" for generic options, such as generator
+
+2) do a "cmake --build ." to build the default targets. Alternatively you can
+   invoke "make" or "msbuild" manually. If the tests were enabled, use "ctest -V"
+   to run them.
+
+Current limitations of the CMake build system include lack of Solaris support,
+no shared library option, no explicitly exported symbols (all are exported by
+default), no versions on the libraries, and no documentation generation.
+Features of CMake include a single, easily consumed cross-platform build system
+to generate the ZooKeeper C Client libraries for any project, with little to no
+configuration.
 
 EXAMPLE/SAMPLE C CLIENT SHELL
 
@@ -89,6 +116,10 @@ this example, but you could also use cli_st (singlethreaded, built
 against zookeeper_st library):
 
 $ cli_mt zookeeper_host:9876
+
+To start a client with read-only mode enabled, use the -r flag:
+
+$ cli_mt -r zookeeper_host:9876
 
 This is a client application that gives you a shell for executing
 simple zookeeper commands. Once successfully started and connected to

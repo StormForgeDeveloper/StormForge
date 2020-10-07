@@ -52,7 +52,6 @@ using namespace std;
         int interest;
         int events;
         struct timeval tv;
-        int rc;
         time_t expires = time(0) + seconds;
         time_t timeLeft = seconds;
         fd_set rfds, wfds, efds;
@@ -80,7 +79,7 @@ using namespace std;
             if (tv.tv_sec > timeLeft) {
                 tv.tv_sec = timeLeft;
             }
-            rc = select(fd+1, &rfds, &wfds, &efds, &tv);
+            select(fd+1, &rfds, &wfds, &efds, &tv);
             timeLeft = expires - time(0);
             events = 0;
             if (FD_ISSET(fd, &rfds)) {
@@ -160,12 +159,12 @@ public:
     }
 } watchctx_t;
 
+#ifdef THREADED
 class Zookeeper_multi : public CPPUNIT_NS::TestFixture
 {
     CPPUNIT_TEST_SUITE(Zookeeper_multi);
 //FIXME: None of these tests pass in single-threaded mode. It seems to be a
 //flaw in the test suite setup.
-#ifdef THREADED
     CPPUNIT_TEST(testCreate);
     CPPUNIT_TEST(testCreateDelete);
     CPPUNIT_TEST(testInvalidVersion);
@@ -178,7 +177,7 @@ class Zookeeper_multi : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCheck);
     CPPUNIT_TEST(testWatch);
     CPPUNIT_TEST(testSequentialNodeCreateInAsyncMulti);
-#endif
+    CPPUNIT_TEST(testBigAsyncMulti);
     CPPUNIT_TEST_SUITE_END();
 
     static void watcher(zhandle_t *, int type, int state, const char *path,void*v){
@@ -249,6 +248,16 @@ public:
         count++;
     }
 
+    static void multi_completion_fn_rc(int rc, const void *data) {
+        count++;
+        *((int*) data) = rc;
+    }
+    
+    static void create_completion_fn_rc(int rc, const char* value, const void *data) {
+        count++;
+        *((int*) data) = rc;
+    }
+    
     static void waitForMultiCompletion(int seconds) {
         time_t expires = time(0) + seconds;
         while(count == 0 && time(0) < expires) {
@@ -655,6 +664,63 @@ public:
         // wait for multi completion in doMultiInWatch
         waitForMultiCompletion(5);
      }
+    
+    /**
+     * ZOOKEEPER-1636: If request is too large, the server will cut the
+     * connection without sending response packet. The client will try to
+     * process completion on multi request and eventually cause SIGSEGV
+     */
+    void testBigAsyncMulti() {
+        int rc;
+        int callback_rc = (int) ZOK;
+        watchctx_t ctx;
+        zhandle_t *zk = createClient(&ctx);
+        
+        // The request should be more than 1MB which exceeds the default
+        // jute.maxbuffer and causes the server to drop client connection
+        const int iteration = 500;
+        const int type_count = 3;
+        const int nops = iteration * type_count;
+        char buff[1024];
+
+        zoo_op_result_t results[nops];
+        zoo_op_t ops[nops];
+        struct Stat* s[nops];
+        int index = 0;
+
+        // Test that we deliver error to 3 types of sub-request
+        for (int i = 0; i < iteration; ++i) {
+            zoo_set_op_init(&ops[index++], "/x", buff, sizeof(buff), -1, s[i]);
+            zoo_create_op_init(&ops[index++], "/x", buff, sizeof(buff),
+                               &ZOO_OPEN_ACL_UNSAFE, ZOO_SEQUENCE, NULL, 0);
+            zoo_delete_op_init(&ops[index++], "/x", -1);
+        }
+        
+        rc = zoo_amulti(zk, nops, ops, results, multi_completion_fn_rc,
+                                  +                         &callback_rc);
+        CPPUNIT_ASSERT_EQUAL((int) ZOK, rc);
+        
+        waitForMultiCompletion(10);
+        // With the bug, we will get SIGSEGV before reaching this point
+        CPPUNIT_ASSERT_EQUAL((int) ZCONNECTIONLOSS, callback_rc);
+        
+        // Make sure that all sub-request completions get processed
+        for (int i = 0; i < nops; ++i) {
+            CPPUNIT_ASSERT_EQUAL((int) ZCONNECTIONLOSS, results[i].err);
+        }
+
+        // The handle should be able to recover itself.
+        ctx.waitForConnected(zk);
+
+        // Try to submit another async request to see if it get processed
+        // correctly
+        rc = zoo_acreate(zk, "/target", "", 0, &ZOO_OPEN_ACL_UNSAFE, 0,
+                         create_completion_fn_rc, &callback_rc);
+        CPPUNIT_ASSERT_EQUAL((int) ZOK, rc);
+
+        waitForMultiCompletion(10);
+        CPPUNIT_ASSERT_EQUAL((int) ZOK, callback_rc);
+    }
 
      /**
       * ZOOKEEPER-1624: PendingChanges of create sequential node request didn't
@@ -701,3 +767,4 @@ public:
 volatile int Zookeeper_multi::count;
 const char Zookeeper_multi::hostPorts[] = "127.0.0.1:22181";
 CPPUNIT_TEST_SUITE_REGISTRATION(Zookeeper_multi);
+#endif
