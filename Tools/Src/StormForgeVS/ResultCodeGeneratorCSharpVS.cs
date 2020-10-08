@@ -19,7 +19,6 @@ using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 using VSLangProj80;
-using SF.Asset.Build;
 using SF;
 using SF.Tool;
 

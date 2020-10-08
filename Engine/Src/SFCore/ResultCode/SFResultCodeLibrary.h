@@ -486,7 +486,7 @@ namespace SF {
 			// Zookeeper Client authentication failed 
 			constexpr Result 			ZK_ZAUTHFAILED                                                     ((int32_t)0xE701009BL);
 
-			// Zookeeper ZooKeeper is closing 
+			// Zookeeper Zookeeper is closing 
 			constexpr Result 			ZK_ZCLOSING                                                        ((int32_t)0xE701009CL);
 
 			// Zookeeper (not error) no server responses to process 

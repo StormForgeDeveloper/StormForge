@@ -22,6 +22,14 @@
 namespace SF
 {
 
+	inline Result operator >> (IInputStream& input, AssetPackageSerializer::PackageHeader& data) { return input.Read(&data, sizeof(data)); }
+	inline Result operator << (IOutputStream& output, const AssetPackageSerializer::PackageHeader& data) { return output.Write(&data, sizeof(data)); }
+
+	inline Result operator >> (IInputStream& input, AssetPackageSerializer::ObjectHeader& data) { return input.Read(&data, sizeof(data)); }
+	inline Result operator << (IOutputStream& output, const AssetPackageSerializer::ObjectHeader& data) { return output.Write(&data, sizeof(data)); }
+
+	
+
 
 	////////////////////////////////////////////////////////////////////
 	//
@@ -56,7 +64,7 @@ namespace SF
 		header.NumberOfDependency = (decltype(header.NumberOfDependency))(package.GetDependencies().size());
 		header.NumberOfObject = (decltype(header.NumberOfObject))(package.GetAssetList().size());
 
-		Result result = stream.Write(header);
+		Result result = stream << header;
 		if (!result)
 			return result;
 
@@ -94,7 +102,7 @@ namespace SF
 			objectStream.Flush();
 			objHeader.DataSize = (decltype(objHeader.DataSize))(objectStream.GetCompressedSize());
 
-			result = stream.Write(objHeader);
+			result = stream << objHeader;
 			if (!result)
 				return result;
 
@@ -115,7 +123,7 @@ namespace SF
 
 		auto startPos = stream.GetPosition();
 
-		Result result = stream.Read(header);
+		Result result = stream >> header;
 		if (!result)
 			return result;
 
@@ -138,7 +146,7 @@ namespace SF
 		for (int iDep = 0; iDep < header.NumberOfDependency; iDep++)
 		{
 			StringCrc64 dependencyName;
-			result = stream.Read(dependencyName);
+			result = stream >> dependencyName;
 			if (!result)
 				return result;
 
@@ -159,7 +167,7 @@ namespace SF
 			auto objStartPos = stream.GetPosition();
 
 			ObjectHeader objHeader;
-			result = stream.Read(objHeader);
+			result = stream >> objHeader;
 			if (!result)
 				return result;
 

@@ -21,6 +21,9 @@
 
 
 namespace SF {
+
+	class IHeap;
+
 namespace Message {
 
 	struct MessageHeader;
@@ -61,6 +64,7 @@ namespace Message {
 		MobileMessageHeader* GetMobileMessageHeader();
 		uint8_t*	GetMessageBuff(); // data include header
 		uint		GetMessageSize() const; // total length
+		uint8_t* GetMessageData();       // data except header
 		const uint8_t* GetMessageData() const;       // data except header
 
 		// Data except header

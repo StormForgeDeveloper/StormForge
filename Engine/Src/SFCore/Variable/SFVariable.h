@@ -17,8 +17,9 @@
 #include "String/SFStringCrc64.h"
 #include "String/SFStringCrc32.h"
 #include "String/SFString.h"
-#include "String/SFStringSerialization.h"
 #include "Stream/SFStream.h"
+#include "String/SFStringSerialization.h"
+
 
 namespace SF {
 
@@ -205,11 +206,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 
 	};
@@ -328,11 +329,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(*m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(*m_Value);
+			return Variable::Serialize(output) && output << *m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(*m_Value);
+			return Variable::Deserialize(input) && input >> *m_Value;
 		}
 
 	};

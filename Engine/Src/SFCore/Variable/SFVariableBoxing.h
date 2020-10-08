@@ -16,7 +16,7 @@
 #include "SFAssert.h"
 #include "String/SFToStringBase.h"
 #include "Variable/SFVariableCommonDefs.h"
-
+#include "Stream/SFStream.h"
 
 
 namespace SF {

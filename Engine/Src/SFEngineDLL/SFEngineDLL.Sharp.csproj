@@ -58,13 +58,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Sharp\ResultCode\SFResultCodeDB.cs" />
-    <Compile Include="Sharp\ResultCode\SFResultCodeEngine.cs" />
-    <Compile Include="Sharp\ResultCode\SFResultCodeGame.cs" />
-    <Compile Include="Sharp\ResultCode\SFResultCodeLibrary.cs" />
-    <Compile Include="Sharp\ResultCode\SFResultCodeLogin.cs" />
-    <Compile Include="Sharp\ResultCode\SFResultCodeSvr.cs" />
-    <Compile Include="Sharp\ResultCode\SFResultCodeSystem.cs" />
     <Compile Include="Sharp\SFConnection.cs" />
     <Compile Include="Sharp\SFConnectionGroup.cs" />
     <Compile Include="Sharp\SFIMessageRouter.cs" />

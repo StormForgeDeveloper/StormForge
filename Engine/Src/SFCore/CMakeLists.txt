@@ -51,6 +51,7 @@ set(SFCORE_LIB_FILES
 	Service/SFService.cpp
 	SFNetAddress.cpp
 	SFTypedefs.cpp
+	Stream/SFStream.cpp
 	Stream/SFCompressedStream.cpp
 	Stream/SFMemoryStream.cpp
 	Task/SFAsyncTaskManager.cpp
@@ -77,6 +78,7 @@ set(SFCORE_LIB_FILES
 	Variable/SFVariableStack.cpp
 	Variable/SFVariableTable.cpp
 	Variable/SFVariableSerialization.h
+	Variable/SFVariableSerialization.cpp
 	Variable/SFVariableFactoryService.h
 	Variable/SFVariableFactoryService.cpp
 	Variable/SFVariable.h

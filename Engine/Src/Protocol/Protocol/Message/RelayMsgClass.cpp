@@ -40,8 +40,8 @@ namespace SF
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;
 
-				protocolCheck(input->Read(m_RelayInstanceID));
-				protocolCheck(input->Read(m_PlayerID));
+				protocolCheck(*input >> m_RelayInstanceID);
+				protocolCheck(*input >> m_PlayerID);
 				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_PlayerIdentifier, ArrayLen));
 
@@ -80,7 +80,7 @@ namespace SF
 			MessageData* JoinRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 			{
  				MessageData *pNewMsg = nullptr;
-				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				FunctionContext hr([&pNewMsg](Result hr) -> MessageData*
 				{
  					if(!hr && pNewMsg != nullptr)
 					{
@@ -99,14 +99,14 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::JoinRelayInstanceC2SEvt::MID, __uiMessageSize ) );
-				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
 				auto* output = outputStream.ToOutputStream();
 
-				protocolCheck(output->Write(InRelayInstanceID));
-				protocolCheck(output->Write(InPlayerID));
-				protocolCheck(output->Write(InPlayerIdentifier));
+				protocolCheck(*output << InRelayInstanceID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InPlayerIdentifier);
 
 				return hr;
 			}; // MessageData* JoinRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
@@ -137,9 +137,9 @@ namespace SF
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;
 
-				protocolCheck(input->Read(m_Result));
-				protocolCheck(input->Read(m_RelayInstanceID));
-				protocolCheck(input->Read(m_MyEndpointID));
+				protocolCheck(*input >> m_Result);
+				protocolCheck(*input >> m_RelayInstanceID);
+				protocolCheck(*input >> m_MyEndpointID);
 				protocolCheck(input->Read(ArrayLen));
 				RelayPlayerInfo* MemberInfosPtr = nullptr;
 				protocolCheck(input->ReadLink(MemberInfosPtr, ArrayLen));
@@ -181,7 +181,7 @@ namespace SF
 			MessageData* JoinRelayInstanceResS2CEvt::Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 			{
  				MessageData *pNewMsg = nullptr;
-				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				FunctionContext hr([&pNewMsg](Result hr) -> MessageData*
 				{
  					if(!hr && pNewMsg != nullptr)
 					{
@@ -202,15 +202,15 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::JoinRelayInstanceResS2CEvt::MID, __uiMessageSize ) );
-				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
 				auto* output = outputStream.ToOutputStream();
 
-				protocolCheck(output->Write(InResult));
-				protocolCheck(output->Write(InRelayInstanceID));
-				protocolCheck(output->Write(InMyEndpointID));
-				protocolCheck(output->Write(InMemberInfos));
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InRelayInstanceID);
+				protocolCheck(*output << InMyEndpointID);
+				protocolCheck(*output << InMemberInfos);
 
 				return hr;
 			}; // MessageData* JoinRelayInstanceResS2CEvt::Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
@@ -241,8 +241,8 @@ namespace SF
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;
 
-				protocolCheck(input->Read(m_RelayInstanceID));
-				protocolCheck(input->Read(m_PlayerID));
+				protocolCheck(*input >> m_RelayInstanceID);
+				protocolCheck(*input >> m_PlayerID);
 
 				return hr;
 
@@ -278,7 +278,7 @@ namespace SF
 			MessageData* LeaveRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
-				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				FunctionContext hr([&pNewMsg](Result hr) -> MessageData*
 				{
  					if(!hr && pNewMsg != nullptr)
 					{
@@ -296,13 +296,13 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::LeaveRelayInstanceC2SEvt::MID, __uiMessageSize ) );
-				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
 				auto* output = outputStream.ToOutputStream();
 
-				protocolCheck(output->Write(InRelayInstanceID));
-				protocolCheck(output->Write(InPlayerID));
+				protocolCheck(*output << InRelayInstanceID);
+				protocolCheck(*output << InPlayerID);
 
 				return hr;
 			}; // MessageData* LeaveRelayInstanceC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
@@ -333,8 +333,8 @@ namespace SF
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;
 
-				protocolCheck(input->Read(m_RelayInstanceID));
-				protocolCheck(input->Read(m_JoinedPlayerInfo));
+				protocolCheck(*input >> m_RelayInstanceID);
+				protocolCheck(*input >> m_JoinedPlayerInfo);
 
 				return hr;
 
@@ -370,7 +370,7 @@ namespace SF
 			MessageData* PlayerJoinS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo )
 			{
  				MessageData *pNewMsg = nullptr;
-				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				FunctionContext hr([&pNewMsg](Result hr) -> MessageData*
 				{
  					if(!hr && pNewMsg != nullptr)
 					{
@@ -388,13 +388,13 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::PlayerJoinS2CEvt::MID, __uiMessageSize ) );
-				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
 				auto* output = outputStream.ToOutputStream();
 
-				protocolCheck(output->Write(InRelayInstanceID));
-				protocolCheck(output->Write(InJoinedPlayerInfo));
+				protocolCheck(*output << InRelayInstanceID);
+				protocolCheck(*output << InJoinedPlayerInfo);
 
 				return hr;
 			}; // MessageData* PlayerJoinS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo )
@@ -425,9 +425,9 @@ namespace SF
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;
 
-				protocolCheck(input->Read(m_RelayInstanceID));
-				protocolCheck(input->Read(m_LeftPlayerID));
-				protocolCheck(input->Read(m_KickedReason));
+				protocolCheck(*input >> m_RelayInstanceID);
+				protocolCheck(*input >> m_LeftPlayerID);
+				protocolCheck(*input >> m_KickedReason);
 
 				return hr;
 
@@ -464,7 +464,7 @@ namespace SF
 			MessageData* PlayerLeftS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
 			{
  				MessageData *pNewMsg = nullptr;
-				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				FunctionContext hr([&pNewMsg](Result hr) -> MessageData*
 				{
  					if(!hr && pNewMsg != nullptr)
 					{
@@ -483,14 +483,14 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::PlayerLeftS2CEvt::MID, __uiMessageSize ) );
-				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
 				auto* output = outputStream.ToOutputStream();
 
-				protocolCheck(output->Write(InRelayInstanceID));
-				protocolCheck(output->Write(InLeftPlayerID));
-				protocolCheck(output->Write(InKickedReason));
+				protocolCheck(*output << InRelayInstanceID);
+				protocolCheck(*output << InLeftPlayerID);
+				protocolCheck(*output << InKickedReason);
 
 				return hr;
 			}; // MessageData* PlayerLeftS2CEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
@@ -521,9 +521,9 @@ namespace SF
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;
 
-				protocolCheck(input->Read(m_RelayInstanceID));
-				protocolCheck(input->Read(m_SenderEndpointID));
-				protocolCheck(input->Read(m_TargetEndpointMask));
+				protocolCheck(*input >> m_RelayInstanceID);
+				protocolCheck(*input >> m_SenderEndpointID);
+				protocolCheck(*input >> m_TargetEndpointMask);
 				protocolCheck(input->Read(ArrayLen));
 				uint8_t* PayloadPtr = nullptr;
 				protocolCheck(input->ReadLink(PayloadPtr, ArrayLen));
@@ -565,7 +565,7 @@ namespace SF
 			MessageData* RelayPacketC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 			{
  				MessageData *pNewMsg = nullptr;
-				FunctionContext hr([pNewMsg](Result hr) -> MessageData*
+				FunctionContext hr([&pNewMsg](Result hr) -> MessageData*
 				{
  					if(!hr && pNewMsg != nullptr)
 					{
@@ -586,15 +586,15 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::RelayPacketC2SEvt::MID, __uiMessageSize ) );
-				size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
 				auto* output = outputStream.ToOutputStream();
 
-				protocolCheck(output->Write(InRelayInstanceID));
-				protocolCheck(output->Write(InSenderEndpointID));
-				protocolCheck(output->Write(InTargetEndpointMask));
-				protocolCheck(output->Write(InPayload));
+				protocolCheck(*output << InRelayInstanceID);
+				protocolCheck(*output << InSenderEndpointID);
+				protocolCheck(*output << InTargetEndpointMask);
+				protocolCheck(*output << InPayload);
 
 				return hr;
 			}; // MessageData* RelayPacketC2SEvt::Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )

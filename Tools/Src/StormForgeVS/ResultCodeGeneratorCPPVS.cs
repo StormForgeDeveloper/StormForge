@@ -17,7 +17,6 @@ using System.Xml.Serialization;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using SF.Asset.Build;
 using SF.Tool;
 
 namespace SF.Tool

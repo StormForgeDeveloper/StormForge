@@ -16,7 +16,7 @@
 #include "Variable/SFVariableBoxing.h"
 #include "Variable/SFNamedVariableBox.h"
 #include "Variable/SFVariableTable.h"
-
+#include "Variable/SFVariableSerialization.h"
 
 
 namespace SF {

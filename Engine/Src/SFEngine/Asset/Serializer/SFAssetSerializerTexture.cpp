@@ -19,6 +19,9 @@
 
 namespace SF
 {
+	inline Result operator >> (IInputStream& input, AssetSerializerTexture::TextureHeader& data) { return input.Read(&data, sizeof(data)); }
+	inline Result operator << (IOutputStream& output, const AssetSerializerTexture::TextureHeader& data) { return output.Write(&data, sizeof(data)); }
+
 
 
 	////////////////////////////////////////////////////////////////////
@@ -62,7 +65,7 @@ namespace SF
 		header.FaceCount = resource->GetFaceCount();
 		header.MipmapCount = resource->GetMipmapCount();
 
-		Result result = stream.Write(header);
+		Result result = stream << header;
 		if (!result)
 			return result;
 
@@ -84,7 +87,7 @@ namespace SF
 		TexturePtr resource = new(heap) Texture(heap);
 
 		TextureHeader header;
-		Result result = stream.Read(header);
+		Result result = stream >> header;
 		if (!result)
 			return result;
 

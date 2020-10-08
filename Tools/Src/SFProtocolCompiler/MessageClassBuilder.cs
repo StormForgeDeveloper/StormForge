@@ -484,7 +484,7 @@ namespace ProtocolCompiler
                     OpenSection("if", string.Format("(!m_{0}HasParsed)", param.Name), bUseTerminator: false);
                     MatchIndent(); OutStream.WriteLine("m_{0}HasParsed = true;", param.Name);
                     MatchIndent(); OutStream.WriteLine("InputMemoryStream {0}_ReadStream(m_{0}Raw);", param.Name);
-                    MatchIndent(); OutStream.WriteLine("{0}_ReadStream.ToInputStream()->Read(m_{0});", param.Name);
+                    MatchIndent(); OutStream.WriteLine("*{0}_ReadStream.ToInputStream() >> m_{0};", param.Name);
                     CloseSection();
                     MatchIndent(); OutStream.WriteLine("return m_{0};", param.Name);
                     CloseSection();
@@ -554,7 +554,7 @@ namespace ProtocolCompiler
                     }
                     else
                     {
-                        MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(m_{0}));", param.Name);
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(*input >> m_{0});", param.Name);
                     }
                 }
             }
@@ -847,7 +847,7 @@ namespace ProtocolCompiler
 
             MatchIndent(); OutStream.WriteLine("MessageData *pNewMsg = nullptr;");
 
-            OpenSection("FunctionContext", "hr([pNewMsg](Result hr) -> MessageData*");
+            OpenSection("FunctionContext", "hr([&pNewMsg](Result hr) -> MessageData*");
             MatchIndent(); OutStream.WriteLine("if(!hr && pNewMsg != nullptr)");
                 OpenSection();
                 MatchIndent(); OutStream.WriteLine("delete pNewMsg;");
@@ -899,13 +899,13 @@ namespace ProtocolCompiler
             {
                 if (Group.IsMobile)
                 {
-                    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
+                    MatchIndent(); OutStream.WriteLine("auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
                 }
                 else
                 {
-                    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));");
+                    MatchIndent(); OutStream.WriteLine("auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));");
                 }
-                MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> BufferView(MsgDataSize, pNewMsg->GetMessageData());");
+                MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());");
                 MatchIndent(); OutStream.WriteLine("OutputMemoryStream outputStream(BufferView);");
                 MatchIndent(); OutStream.WriteLine("auto* output = outputStream.ToOutputStream();");
                 NewLine();
@@ -915,7 +915,7 @@ namespace ProtocolCompiler
                     // TODO: maybe avoid multiple strlen?
                     if (IsStrType(param)) // string type
                     {
-                        MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write({0}));", InParamName(param.Name));
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(*output << {0});", InParamName(param.Name));
                     }
                     //else if (param.IsArray) // array
                     //{
@@ -928,11 +928,11 @@ namespace ProtocolCompiler
                         {
                             MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write(serializedSizeOf{0}));", InParamName(param.Name));
                         }
-                        MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write({0}));", InParamName(param.Name));
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(*output << {0});", InParamName(param.Name));
                     }
                     else
                     {
-                        MatchIndent(); OutStream.WriteLine("protocolCheck(output->Write({0}));", InParamName(param.Name));
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(*output << {0});", InParamName(param.Name));
                     }
                 }
             }

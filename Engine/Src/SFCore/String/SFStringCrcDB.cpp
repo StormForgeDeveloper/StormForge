@@ -15,6 +15,8 @@
 #include "String/SFStringCrcDB.h"
 #include "String/SFStrFormat.h"
 #include "Service/SFService.h"
+#include "Stream/SFStream.h"
+#include "Types/SFEngineTypeSerialization.h"
 
 
 namespace SF

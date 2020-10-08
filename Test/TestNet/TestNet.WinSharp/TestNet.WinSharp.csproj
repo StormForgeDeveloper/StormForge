@@ -52,7 +52,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
     <DebugSymbols>true</DebugSymbols>
-    <OutputPath>..\..\..\bin\Win\x64Debug\</OutputPath>
+    <OutputPath>..\..\..\buildWindows\x64Debug\bin\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <DebugType>full</DebugType>
     <PlatformTarget>x64</PlatformTarget>
@@ -169,6 +169,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Engine\Src\SFCoreSharp\SFCoreSharp.csproj">
+      <Project>{de89b4bf-feb7-4fee-ab5f-85d286295bd7}</Project>
+      <Name>SFCoreSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Engine\Src\SFEngineDLL\SFEngineDLL.Sharp.csproj">
       <Project>{3ad8ffe5-eb9c-4086-b344-ad1c15eb8856}</Project>
       <Name>SFEngineDLL.Sharp</Name>

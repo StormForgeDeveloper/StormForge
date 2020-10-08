@@ -171,6 +171,7 @@ namespace TestNet.WinSharp
             // TODO: Iterate all game types
             cb.Items.Add("MyTownHero");
             cb.Items.Add("Conspiracy");
+            cb.Items.Add("FishingOnline");
 
             cb.SelectedItem = gID.ToString();
 

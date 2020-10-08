@@ -18,7 +18,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -28,7 +28,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
+    <PlatformTarget>x64</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -183,6 +183,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Engine\Src\SFCoreSharp\SFCoreSharp.csproj">
+      <Project>{de89b4bf-feb7-4fee-ab5f-85d286295bd7}</Project>
+      <Name>SFCoreSharp</Name>
+    </ProjectReference>
     <ProjectReference Include="..\LibSharp\SFToolLibSharp\SFToolLibSharp.csproj">
       <Project>{4b5d5c7a-8b72-4c1f-bdaa-fa252bb8be92}</Project>
       <Name>SFToolLibSharp</Name>

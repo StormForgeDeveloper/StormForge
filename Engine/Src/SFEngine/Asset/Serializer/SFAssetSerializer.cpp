@@ -61,7 +61,7 @@ namespace SF
 	Result AssetSerializer::Deserialize(IHeap& heap, IInputStream& stream, ResourcePtr& res)
 	{
 		StringCrc64 sourceName;
-		Result result = stream.Read(sourceName);
+		Result result = stream >> sourceName;
 		if (!result)
 			return result;
 

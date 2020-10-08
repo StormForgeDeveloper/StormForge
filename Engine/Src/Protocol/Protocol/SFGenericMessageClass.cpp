@@ -41,7 +41,7 @@ namespace Message {
 			{
 				protocolCheck( input->Read(m_Context) );
 			}
-			protocolCheck(input->Read(m_hrRes));
+			protocolCheck(*input >> m_hrRes);
 
 			return hr;
 

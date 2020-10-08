@@ -29,7 +29,6 @@ namespace SF
 	{
 	public:
 
-	private:
 
 #pragma pack(push,4)
 

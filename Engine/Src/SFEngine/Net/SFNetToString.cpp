@@ -16,6 +16,7 @@
 
 namespace SF {
 	
+
 	Result _ToString(ToStringContext& context, Net::ConnectionState value)
 	{
 		return _IToA(context, (uint32_t)value);

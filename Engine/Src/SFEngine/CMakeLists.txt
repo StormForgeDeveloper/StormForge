@@ -242,6 +242,8 @@ set(SFENGINE_LIB_FILES
 	SFEnginePCH.h
 	String/SFToStringEngineTypes.h
 	Types/SFEngineTypedefs.h
+	Types/SFEngineTypeSerialization.h
+	Types/SFEngineTypeSerialization.cpp
 	Zookeeper/SFZookeeper.cpp
 	Zookeeper/SFZookeeper.h
 	Net/SFConnection.inl

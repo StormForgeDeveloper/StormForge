@@ -12,13 +12,14 @@
 
 #include "SFTypedefs.h"
 #include "Memory/SFMemoryManager.h"
-#include "Stream/SFStream.h"
 #include "Container/SFDualSortedMap.h"
 
 
 
 namespace SF
 {
+	class IInputStream;
+	class IOutputStream;
 
 	class StringCrcDB
 	{

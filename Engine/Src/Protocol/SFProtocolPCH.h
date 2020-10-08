@@ -15,6 +15,7 @@
 #include "SFTypedefs.h"
 #include "Util/SFUtility.h"
 #include "String/SFStrUtil.h"
+#include "Types/SFEngineTypeSerialization.h"
 #include "Net/SFMessage.h"
 #include "Util/SFLog.h"
 #include "Thread/SFSynchronization.h"

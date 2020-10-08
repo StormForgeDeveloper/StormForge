@@ -16,6 +16,7 @@
 #include "SFAssert.h"
 #include "Variable/SFVariable.h"
 
+
 namespace SF {
 
 
@@ -111,11 +112,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 
 		virtual bool operator == (const Variable& op) const override;
@@ -233,11 +234,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 	};
 
@@ -306,11 +307,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 	};
 
@@ -376,11 +377,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 	};
 
@@ -452,11 +453,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 	};
 
@@ -525,11 +526,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 	};
 
@@ -600,11 +601,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 
 		virtual bool operator == (const Variable& op) const override;
@@ -675,11 +676,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 
 		virtual bool operator == (const Variable& op) const override;
@@ -919,11 +920,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(uint16_t) + m_Value.size() * sizeof(char); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 
 		virtual bool operator == (const Variable& op) const override;
@@ -990,11 +991,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 	};
 
@@ -1056,11 +1057,11 @@ namespace SF {
 		virtual size_t GetSerializedSize() const { return Variable::GetSerializedSize() + sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const
 		{
-			return Variable::Serialize(output) && output.Write(m_Value);
+			return Variable::Serialize(output) && output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input)
 		{
-			return Variable::Deserialize(input) && input.Read(m_Value);
+			return Variable::Deserialize(input) && input >> m_Value;
 		}
 	};
 
