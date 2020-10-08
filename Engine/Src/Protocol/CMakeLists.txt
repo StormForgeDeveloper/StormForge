@@ -39,7 +39,7 @@ set(SFPROTOCOL_LIB_FILES
 
 
 add_library(SFProtocol STATIC ${SFPROTOCOL_LIB_FILES})
-
+#target_precompile_headers(SFProtocol PRIVATE SFProtocolPCH.h)
 target_include_directories (SFProtocol PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
 
 #set_target_properties(SFProtocol PROPERTIES LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/)

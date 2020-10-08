@@ -49,12 +49,7 @@
 //     ex)		static ServiceInstance<SampleService> SampleService;
 
 
-
-
-
 namespace SF {
-
-
 
 
 	//////////////////////////////////////////////////////////////////////
@@ -111,5 +106,5 @@ namespace SF {
 
 
 
-}; // namespace SF
+} // namespace SF
 

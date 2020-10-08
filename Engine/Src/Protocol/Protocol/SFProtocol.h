@@ -27,9 +27,9 @@ namespace SF
 	//	class MessageBase;
 	//}
 
-	enum {
-		SF_PROTOCOL_VERSION = 10
-	};
+	
+	constexpr int SF_PROTOCOL_VERSION = 11;
+
 
 
 	enum ProtocolID

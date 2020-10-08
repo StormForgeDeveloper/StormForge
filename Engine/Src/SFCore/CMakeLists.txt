@@ -253,6 +253,7 @@ include_directories(./)
 
 add_library(SFCore STATIC ${SFCORE_LIB_FILES})
 
+target_precompile_headers(SFCore PUBLIC SFCorePCH.h)
 target_include_directories (SFCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
 install (TARGETS SFCore

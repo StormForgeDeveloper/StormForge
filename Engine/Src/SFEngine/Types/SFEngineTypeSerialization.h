@@ -78,6 +78,8 @@ namespace SF {
 	inline Result operator >> (IInputStream& input, Net::ConnectionState& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const Net::ConnectionState& data) { return output.Write(&data, sizeof(data)); }
 
+	inline Result operator >> (IInputStream& input, LocalUID& data) { return input.Read(&data, sizeof(data)); }
+	inline Result operator << (IOutputStream& output, const LocalUID& data) { return output.Write(&data, sizeof(data)); }
 
 };
 

@@ -66,7 +66,7 @@ namespace Net {
 	{
 	public:
 
-		static constexpr StringCrc64 TypeName = "NetSystem";
+		static const StringCrc64 TypeName;
 
 	private:
 
