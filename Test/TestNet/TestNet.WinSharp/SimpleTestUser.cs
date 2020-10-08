@@ -122,6 +122,7 @@ namespace TestNet.WinSharp
                     if (conEvent.HResult.IsSucceeded)
                     {
                         m_Login = new SF.Net.SendMessageLogin(m_ConnectionLogin);
+                        //m_Login.CreateRandomUserCmd(0, StringCrc32.HashString(m_GameID), m_LoginID);
                         m_Login.CreateRandomUserCmd(0, StringCrc32.HashString(m_GameID), m_LoginID);
                     }
                     break;
@@ -233,11 +234,11 @@ namespace TestNet.WinSharp
 
             if (m_ConnectionLogin != null) m_ConnectionLogin.LocalPeerID = m_LoginTicket;
 
-
+            PrintStatus("Login success Ticket:{0}, Acc:{1}, GameSvr:{2}, LoginEntity:{3}", m_LoginTicket, m_AccountID, m_GameServerAddress, m_LoginEntityID);
             //Random rand = new Random();
             //m_Login.UpdateMyScoreCmd((ulong)rand.Next() % 5000, RankingType.World, 10);
 
-                // If the game has game servers, we need to connect to the game server
+            // If the game has game servers, we need to connect to the game server
             if (!string.IsNullOrEmpty(m_GameServerAddress.Address))
             {
                 if (m_ConnectionManagermentGroup != null)

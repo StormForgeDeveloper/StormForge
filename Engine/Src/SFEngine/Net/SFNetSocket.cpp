@@ -196,11 +196,20 @@ namespace Net {
 	// Pending recv New one
 	Result SocketIOUDP::PendingRecv(IOBUFFER_READ *pRecvBuffer)
 	{
-		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
+		FunctionContext hr([&pRecvBuffer](Result hr)
+			{
+				delete pRecvBuffer;
+			});
+		Result hrErr = ResultCode::SUCCESS;
 		m_LastPendingRecvResult = ResultCode::SUCCESS;
 
 		if (!NetSystem::IsProactorSystem())
 			return ResultCode::SUCCESS;
+
+		if (pRecvBuffer != nullptr)
+		{
+			netCheck(pRecvBuffer->SetPendingTrue());
+		}
 
 		// This function can be called from net IO thread, so increasing first is required so that the SocketIO isn't released during pendingRecv handling
 		IncPendingRecvCount();
@@ -218,7 +227,15 @@ namespace Net {
 			}
 
 			if (pRecvBuffer == nullptr)
+			{
 				pRecvBuffer = new(GetIOHeap()) IOBUFFER_READ;
+				hr = pRecvBuffer->SetPendingTrue();
+				if (!hr)
+				{
+					DecPendingRecvCount();
+					break;
+				}
+			}
 
 			if (pRecvBuffer == nullptr)
 			{
@@ -228,30 +245,22 @@ namespace Net {
 				break;
 			}
 
-			netChk(pRecvBuffer->SetPendingTrue());
 			hrErr = Recv(pRecvBuffer);
 			switch ((uint32_t)hrErr)
 			{
-			case (uint32_t)ResultCode::SUCCESS:
-			case (uint32_t)ResultCode::IO_IO_PENDING:
+			case (uint32_t)ResultCode::SUCCESS: [[fallthrough]];
+			case (uint32_t)ResultCode::IO_IO_PENDING: [[fallthrough]];
 			case (uint32_t)ResultCode::IO_WOULDBLOCK:
 				pRecvBuffer = nullptr;
-				goto Proc_End;// success let's break out
+				return hr;// success let's break out
 				break;
-			case (uint32_t)ResultCode::IO_TRY_AGAIN:
+			case (uint32_t)ResultCode::IO_TRY_AGAIN: [[fallthrough]];
 			default:
 				// some error, we need to try again
-				//DecPendingRecvCount(); // Don't decrease pending count
 				m_LastPendingRecvResult = hrErr;
-				//m_Owner.Disconnect("Failed to pending recv");
 				break;
 			}
 		}
-
-
-	Proc_End:
-
-		Util::SafeDelete(pRecvBuffer);
 
 		return hr;
 	}
