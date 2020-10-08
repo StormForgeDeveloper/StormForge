@@ -301,8 +301,8 @@ namespace SF
 		inline Result Write(const float& data) { return Write(&data, sizeof(data)); }
 		inline Result Write(const double& data) { return Write(&data, sizeof(data)); }
 
-		Result Write(const CharPtr& data);
-		Result Write(const WCharPtr& data);
+		Result Write(const char* data);
+		Result Write(const wchar_t* data);
 
 		Result Write(const String& data);
 		Result Write(const StringW& data);
@@ -447,12 +447,12 @@ namespace SF
 	inline Result operator >> (IInputStream& input, double& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const double& data) { return output.Write(data); }
 
-	inline Result operator >> (IInputStream& input, CharPtr& data) { return input.Read(data); }
-	inline Result operator << (IOutputStream& output, const CharPtr& data) { return output.Write(data); }
+	inline Result operator >> (IInputStream& input, char*& data) { return input.Read(data); }
+	inline Result operator << (IOutputStream& output, const char* data) { return output.Write(data); }
 
 	
-	inline Result operator >> (IInputStream& input, WCharPtr& data) { return input.Read(data); }
-	inline Result operator << (IOutputStream& output, const WCharPtr& data) { return output.Write(data); }
+	inline Result operator >> (IInputStream& input, wchar_t*& data) { return input.Read(data); }
+	inline Result operator << (IOutputStream& output, const wchar_t* data) { return output.Write(data); }
 
 	inline Result operator >> (IInputStream& input, String& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const String& data) { return output.Write(data); }

@@ -138,17 +138,6 @@ namespace SF {
 	}
 
 
-	//Result IInputStream::Read(Result& data) { return Read(&data, sizeof(data)); }
-	//Result IInputStream::Read(StringCrc32& data) { return Read(&data, sizeof(data)); }
-	//Result IInputStream::Read(StringCrc64& data) { return Read(&data, sizeof(data)); }
-	//Result IInputStream::Read(NetAddress& data) { return Read(&data, sizeof(data)); }
-	//Result IInputStream::Read(NetClass& data) { return Read(&data, sizeof(data)); }
-	//Result IInputStream::Read(DurationMS& data) { return Read(&data, sizeof(data)); }
-	//Result IInputStream::Read(DurationSec& data) { return Read(&data, sizeof(data)); }
-	//Result IInputStream::Read(sockaddr_in6& data) { return Read(&data, sizeof(data)); }
-	//Result IInputStream::Read(sockaddr_storage& data) { return Read(&data, sizeof(data)); }
-
-
 
 
 	/////////////////////////////////////////////////////////////////////////////
@@ -157,7 +146,7 @@ namespace SF {
 	//
 
 
-	Result IOutputStream::Write(const CharPtr& data)
+	Result IOutputStream::Write(const char* data)
 	{
 		uint16_t NumChar = static_cast<uint16_t>(StrUtil::StringLen(data) + 1);
 		if (!Write(&NumChar, sizeof(NumChar)))
@@ -176,7 +165,7 @@ namespace SF {
 		return ResultCode::SUCCESS;
 	}
 
-	Result IOutputStream::Write(const WCharPtr& data)
+	Result IOutputStream::Write(const wchar_t* data)
 	{
 		uint16_t NumChar = static_cast<uint16_t>(StrUtil::StringLen(data) + 1);
 		if (!Write(&NumChar, sizeof(NumChar)))
@@ -249,17 +238,6 @@ namespace SF {
 			return Write(wchar_t{});
 		}
 	}
-
-
-	//Result IOutputStream::Write(const DurationMS& data) { return Write(&data, sizeof(data)); }
-	//Result IOutputStream::Write(const DurationSec& data) { return Write(&data, sizeof(data)); }
-	//Result IOutputStream::Write(const sockaddr_in6& data) { return Write(&data, sizeof(data)); }
-	//Result IOutputStream::Write(const sockaddr_storage& data) { return Write(&data, sizeof(data)); }
-	//Result IOutputStream::Write(const Result& data) { return Write(&data, sizeof(data)); }
-	//Result IOutputStream::Write(const StringCrc32& data) { return Write(&data, sizeof(data)); }
-	//Result IOutputStream::Write(const StringCrc64& data) { return Write(&data, sizeof(data)); }
-	//Result IOutputStream::Write(const NetClass& data) { return Write(&data, sizeof(data)); }
-	//Result IOutputStream::Write(const NetAddress& data) { return Write(&data, sizeof(data)); }
 
 
 
