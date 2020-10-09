@@ -747,12 +747,6 @@ namespace SF {
 	#define ContainerPtrFromMember(ContainerTypeT, member, memberPtr) ((ContainerTypeT*)((uint8_t*)(memberPtr) - OffsetOf(ContainerTypeT,member)))
 
 
-
-	// Returns serialized size
-	template<class DataType>
-	inline size_t SerializedSizeOf(const DataType& Value) { return sizeof(DataType); }
-
-
 #ifndef SWIG
 
 	template<class ... ArgTypes>

@@ -33,12 +33,10 @@ namespace SF {
 
 
 
-	template<>
 	inline size_t SerializedSizeOf(const Variable& Value) { return Value.GetSerializedSize(); }
 
 
 
-	template<>
 	inline size_t SerializedSizeOf(const VariableBox& Value)
 	{
 		auto pVariable = Value.GetVariable();
@@ -46,11 +44,9 @@ namespace SF {
 	}
 
 
-	template<>
 	inline size_t SerializedSizeOf(const NamedVariableBox& Value) { auto pVariable = Value.GetVariable(); return sizeof(NamedVariableBox::NameType) + pVariable ? pVariable->GetSerializedSize() : sizeof(Variable::TypeNameType); }
 
 
-	template<>
 	inline size_t SerializedSizeOf(const VariableTable& Value)
 	{
 		size_t Size = sizeof(uint16_t);

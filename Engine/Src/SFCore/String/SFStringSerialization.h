@@ -28,17 +28,6 @@ namespace SF {
 	//
 
 
-	template<>
-	inline size_t SerializedSizeOf(const CharPtr& Value) { return sizeof(uint16_t) + (StrUtil::StringLen(Value) + 1) * sizeof(char); }
-
-	template<>
-	inline size_t SerializedSizeOf(const WCharPtr& Value) { return sizeof(uint16_t) + (StrUtil::StringLen(Value) + 1) * sizeof(wchar_t); }
-
-	template<>
-	inline size_t SerializedSizeOf(const String& Value) { return sizeof(uint16_t) + (Value.GetLength() + 1) * sizeof(char); }
-
-	template<>
-	inline size_t SerializedSizeOf(const StringW& Value) { return sizeof(uint16_t) + (Value.GetLength() + 1) * sizeof(wchar_t); }
 
 
 

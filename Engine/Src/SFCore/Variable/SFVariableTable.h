@@ -79,7 +79,7 @@ namespace SF {
 			if (boxedValue.GetVariable() == nullptr)
 				return ResultCode::NOT_SUPPORTED;
 
-			return SetVariable(*boxedValue.GetVariable());
+			return SetVariable(name , *boxedValue.GetVariable());
 		}
 
 		template<class ValueType>

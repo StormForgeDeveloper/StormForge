@@ -32,30 +32,8 @@ namespace SF {
 			{
 				Size += SerializedSizeOf(itVar);
 			}
-			return ResultCode::SUCCESS;
+			return Size;
 		}
-
-		//template<class DataType>
-		//inline Result IInputStream::Read(Array<DataType>& data)
-		//{
-		//	uint16_t NumItems{};
-		//	if (!Read(NumItems))
-		//		return ResultCode::END_OF_STREAM;
-
-		//	data.reserve(NumItems);
-
-		//	for (uint32_t iItem = 0; iItem < NumItems; iItem++)
-		//	{
-		//		DataType Item;
-		//		auto Ret = Read(Item);
-		//		if (!Ret)
-		//			return Ret;
-
-		//		data.push_back(Item);
-		//	}
-
-		//	return ResultCode::SUCCESS;
-		//}
 
 
 

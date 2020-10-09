@@ -22,29 +22,6 @@ namespace SF
 {
 	class Result;
 
-	//enum class RankingType : uint8_t;
-	//enum class NotificationType : uint16_t;
-	//enum class ClusterType : uint32_t;
-	//enum class ClusterMembership : uint32_t;
-	//enum class ClusterID : uint32_t;
-	//enum class NetClass : uint32_t;
-	//union TransactionID;
-	//union EntityUID;
-	//union RouteContext;
-	//struct PlayerInformation;
-	//struct RankingPlayerInformation;
-	//struct FriendInformation;
-	//struct TotalRankingPlayerInformation;
-	//struct MatchingQueueTicket;
-	//class StringCrc32;
-	//class StringCrc64;
-	//struct NetAddress;
-	//struct RelayPlayerInfo;
-
-	//class VariableBox;
-	//class NamedVariableBox;
-	//class VariableTable;
-
 
 
 	// Seek position
@@ -407,102 +384,132 @@ namespace SF
 	inline Result operator >> (IInputStream& input, void* data) { assert(false); return ResultCode::NOT_SUPPORTED; }
 	inline Result operator >> (IInputStream& input, const void* data) { assert(false); return ResultCode::NOT_SUPPORTED; }
 
-
+	inline size_t SerializedSizeOf(const bool& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, bool& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const bool& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const char& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, char& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const char& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const wchar_t& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, wchar_t& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const wchar_t& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const int8_t& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, int8_t& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const int8_t& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const uint8_t& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, uint8_t& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const uint8_t& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const int16_t& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, int16_t& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const int16_t& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const uint16_t& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, uint16_t& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const uint16_t& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const int32_t& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, int32_t& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const int32_t& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const uint32_t& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, uint32_t& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const uint32_t& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const int64_t& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, int64_t& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const int64_t& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const uint64_t& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, uint64_t& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const uint64_t& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const float& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, float& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const float& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const double& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, double& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const double& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const char* Value) { return sizeof(uint16_t) + (StrUtil::StringLen(Value) + 1) * sizeof(char); }
 	inline Result operator >> (IInputStream& input, char*& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const char* data) { return output.Write(data); }
 
-	
+	inline size_t SerializedSizeOf(const wchar_t* Value) { return sizeof(uint16_t) + (StrUtil::StringLen(Value) + 1) * sizeof(wchar_t); }
 	inline Result operator >> (IInputStream& input, wchar_t*& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const wchar_t* data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const String& Value) { return sizeof(uint16_t) + (Value.length() + 1) * sizeof(char); }
 	inline Result operator >> (IInputStream& input, String& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const String& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const StringW& Value) { return sizeof(uint16_t) + (Value.length() + 1) * sizeof(wchar_t); }
 	inline Result operator >> (IInputStream& input, StringW& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const StringW& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const Result& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, Result& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const Result& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const StringCrc32& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, StringCrc32& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const StringCrc32& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const StringCrc64& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, StringCrc64& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const StringCrc64& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const sockaddr_storage& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, sockaddr_storage& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const sockaddr_storage& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const sockaddr_in& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, sockaddr_in& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const sockaddr_in& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const sockaddr_in6& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, sockaddr_in6& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const sockaddr_in6& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const DurationMS& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, DurationMS& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const DurationMS& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const TimeStampMS& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, TimeStampMS& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const TimeStampMS& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const DurationSec& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, DurationSec& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const DurationSec& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const TimeStampSec& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, TimeStampSec& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const TimeStampSec& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const UTCTimeStampMS& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, UTCTimeStampMS& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const UTCTimeStampMS& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const UTCTimeStampSec& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, UTCTimeStampSec& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const UTCTimeStampSec& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const NetAddress& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, NetAddress& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const NetAddress& data) { return output.Write(&data, sizeof(data)); }
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
+	inline size_t SerializedSizeOf(const long& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, long& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const long& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const unsigned long& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, unsigned long& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const unsigned long& data) { return output.Write(&data, sizeof(data)); }
 #endif
@@ -513,12 +520,15 @@ namespace SF
 	//inline Result operator >> (IInputStream& input, unsigned long long& data) { return input.Read(&data, sizeof(data)); }
 	//inline Result operator << (IOutputStream& output, const unsigned long long& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const std::string& Value) { return sizeof(uint16_t) + (Value.length() + 1) * sizeof(char); }
 	inline Result operator >> (IInputStream& input, std::string& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const std::string& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const std::wstring& Value) { return sizeof(uint16_t) + (Value.length() + 1) * sizeof(wchar_t); }
 	inline Result operator >> (IInputStream& input, std::wstring& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const std::wstring& data) { return output.Write(data); }
 
+	inline size_t SerializedSizeOf(const NetClass& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, NetClass& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const NetClass& data) { return output.Write(&data, sizeof(data)); }
 

@@ -861,7 +861,7 @@ namespace StrUtil {
 			return ResultCode::SUCCESS;
 		}
 
-		Result hr = ModuleIconv.Convert("UTF-8", (char*)stringBuffer, countof(stringBuffer), "UTF-16LE", (const char*)strWCS.c_str(), strWCS.length(), convertedSize);
+		Result hr = ModuleIconv.Convert("UTF-8", (char*)stringBuffer, countof(stringBuffer), "UTF-16LE", (const char*)strWCS.c_str(), strWCS.length() * sizeof(wchar_t), convertedSize);
 		if (!(hr)) return hr;
 
 		auto lastPos = std::min(convertedSize + 1, countof(stringBuffer)) - 1;

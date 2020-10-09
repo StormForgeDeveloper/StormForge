@@ -105,6 +105,8 @@ namespace SF
 	"GameInstanceManager",\
 	"GamePartyManager",\
 	"Ranking",\
+	"ChatChannelManager",\
+	"CharacterData",\
 	"PurchaseValidateGoogle",\
 	"PurchaseValidateIOS",\
 	"Matching_Game_4",\
@@ -123,6 +125,7 @@ namespace SF
 	"MatchingQueue_Game_8x7",\
 	"MatchingQueue_Game_8x1S",\
 	"MatchingQueue_Game_8x1W",\
+	"Relay",\
 	"Max",\
 
 
