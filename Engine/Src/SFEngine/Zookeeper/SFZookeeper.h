@@ -256,6 +256,10 @@ namespace SF
 		static const int EVENT_NO_WATCHING;
 
 
+		static const char* FlagToString(int iFlag);
+		static const char* StateToString(int iState);
+		static const char* EventToString(int iEvent);
+
 	private:
 
 		IHeap& m_Heap;

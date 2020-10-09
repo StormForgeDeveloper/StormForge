@@ -340,7 +340,7 @@ namespace Net {
 		if( pNetCtrlMsg->Crc32 == 0 ) pNetCtrlMsg->Crc32 = ~pNetCtrlMsg->Crc32;
 
 		//AssertRel(m_RecvReliableWindow.GetBaseSequence() != 1 && uiSequence != 1 || uiSyncMask == 0);
-		SFLog(Net, Custom10, "NetCtrl Send MyRecvMask : CID:{0} mySeq:{1}, mask:{2:X8}",
+		SFLog(Net, Debug2, "NetCtrl Send MyRecvMask : CID:{0} mySeq:{1}, mask:{2:X8}",
 			GetCID(), uiSequence, uiSyncMask);
 
 		m_uiGatheredSize += pNetCtrlMsg->Length;

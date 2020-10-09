@@ -96,8 +96,15 @@ namespace Net {
 			&& GetMyNetIOAdapter().GetPendingRecvCount() == 0
 			&& GetConnectionState() != ConnectionState::DISCONNECTED)
 		{
-			if(GetNetIOHandler() != nullptr)
-				GetNetIOHandler()->PendingRecv();
+			if (GetNetIOHandler() != nullptr)
+			{
+				hr = GetNetIOHandler()->PendingRecv();
+				if (hr == ResultCode::IO_NOTCONN)
+				{
+					SFLog(Net, Info, "Connection not connected CID:{0}", GetCID());
+					CloseConnection("Can't recv if not connected");
+				}
+			}
 		}
 
 		// connect/disconnect process

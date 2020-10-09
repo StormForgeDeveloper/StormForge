@@ -55,7 +55,7 @@ namespace SF
 			evt.Components.EventType = type;
 			zkWatcher->OnNewEvent(evt);
 
-			SFLog(System, Info, "ZK Connected prev:{0}, new:{1}", previousState, state);
+			SFLog(System, Info, "ZK Connected prev:{0}, new:{1}", Zookeeper::StateToString(previousState), Zookeeper::StateToString(state));
 
 			auto zkInstance = zkWatcher->GetZKInstance();
 			for (auto itRegistered : zkInstance->GetRegisteredWatchers())
@@ -72,7 +72,7 @@ namespace SF
 			evt.Components.NodePath = Service::StringDB->AddNGetString32(path);
 			evt.Components.State = state;
 			evt.Components.EventType = type;
-			SFLog(System, Info, "ZK Event node:{0}, event:{1}", path, type);
+			SFLog(System, Info, "ZK Event node:{0}, event:{1}", path, Zookeeper::EventToString(type));
 			zkWatcher->OnNewEvent(evt);
 		}
 	}
@@ -242,6 +242,57 @@ namespace SF
 	const int Zookeeper::EVENT_CHILD = ZOO_CHILD_EVENT;
 	const int Zookeeper::EVENT_SESSION = ZOO_SESSION_EVENT;
 	const int Zookeeper::EVENT_NO_WATCHING = ZOO_NOTWATCHING_EVENT;
+
+
+	const char* Zookeeper::FlagToString(int iFlag)
+	{
+		static char FlagString[128];
+
+		if (iFlag == ZOO_EPHEMERAL) return "ZOO_EPHEMERAL";
+		else if (iFlag == ZOO_SEQUENCE) return "ZOO_SEQUENCE";
+		else
+		{
+			StrUtil::Format(FlagString, "Flag({0})", iFlag);
+			return FlagString;
+		}
+	}
+
+
+	const char* Zookeeper::StateToString(int iState)
+	{
+		static char StateString[128];
+
+		if (iState == STATE_SESSION_EXPIRED) return "STATE_SESSION_EXPIRED";
+		else if (iState == STATE_CONNECTED) return "STATE_CONNECTED";
+		else if (iState == STATE_CONNECTING) return "STATE_CONNECTING";
+		else if (iState == ZOO_EXPIRED_SESSION_STATE) return "ZOO_EXPIRED_SESSION_STATE";
+		else if (iState == ZOO_AUTH_FAILED_STATE) return "ZOO_AUTH_FAILED_STATE";
+		else if (iState == ZOO_ASSOCIATING_STATE) return "ZOO_ASSOCIATING_STATE";
+		else if (iState == ZOO_READONLY_STATE) return "ZOO_READONLY_STATE";
+		else if (iState == ZOO_NOTCONNECTED_STATE) return "ZOO_NOTCONNECTED_STATE";
+		else
+		{
+			StrUtil::Format(StateString, "State({0})", iState);
+			return StateString;
+		}
+	}
+
+	const char* Zookeeper::EventToString(int iEvent)
+	{
+		static char EventString[128];
+
+		if (iEvent == ZOO_CREATED_EVENT) return "ZOO_CREATED_EVENT";
+		else if (iEvent == ZOO_DELETED_EVENT) return "ZOO_DELETED_EVENT";
+		else if (iEvent == ZOO_CHANGED_EVENT) return "ZOO_CHANGED_EVENT";
+		else if (iEvent == ZOO_CHILD_EVENT) return "ZOO_CHILD_EVENT";
+		else if (iEvent == ZOO_SESSION_EVENT) return "ZOO_SESSION_EVENT";
+		else if (iEvent == ZOO_NOTWATCHING_EVENT) return "ZOO_NOTWATCHING_EVENT";
+		else
+		{
+			StrUtil::Format(EventString, "Event({0})", iEvent);
+			return EventString;
+		}
+	}
 
 
 	Zookeeper::Zookeeper(IHeap& memoryManager, uint32_t debugLogLevel)
