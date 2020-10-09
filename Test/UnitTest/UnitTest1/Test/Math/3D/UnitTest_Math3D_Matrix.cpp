@@ -480,7 +480,7 @@ TEST_F(MathTest, SSE_Matrix4_Simple)
 	auto nzAxis = SF::Vector4SSE(0, 0, -1, 1);
 	SF::Matrix4SSE rotMat;
 
-	auto randRot = SF::Vector4SSE(1, 0, 0, C_HALF_PI);
+	auto randRot = SF::Vector4SSE(1, 0, 0, C_FHALF_PI);
 	Matrix4Soft<float> rotMatSoft;
 	rotMat.InitRotationMatrix(randRot);
 	rotMatSoft.InitRotationMatrix(Vector4Soft<float>(randRot.x, randRot.y, randRot.z, randRot.w));
@@ -495,7 +495,7 @@ TEST_F(MathTest, SSE_Matrix4_Simple)
 	resVec = rotMat * zAxis;
 	CompareVector(resVec, nyAxis);
 
-	randRot = SF::Vector4SSE(-1, 0, 0, C_HALF_PI);
+	randRot = SF::Vector4SSE(-1, 0, 0, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	rotMatSoft.InitRotationMatrix(Vector4Soft<float>(randRot.x, randRot.y, randRot.z, randRot.w));
 	CompareMatrix(rotMatSoft, rotMat);
@@ -507,7 +507,7 @@ TEST_F(MathTest, SSE_Matrix4_Simple)
 	resVec = rotMat * zAxis;
 	CompareVector(resVec, yAxis);
 
-	randRot = SF::Vector4SSE(0, 1, 0, C_HALF_PI);
+	randRot = SF::Vector4SSE(0, 1, 0, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	rotMatSoft.InitRotationMatrix(Vector4Soft<float>(randRot.x, randRot.y, randRot.z, randRot.w));
 	CompareMatrix(rotMatSoft, rotMat);
@@ -519,7 +519,7 @@ TEST_F(MathTest, SSE_Matrix4_Simple)
 	resVec = rotMat * zAxis;
 	CompareVector(resVec, xAxis);
 
-	randRot = SF::Vector4SSE(0, -1, 0, C_HALF_PI);
+	randRot = SF::Vector4SSE(0, -1, 0, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	rotMatSoft.InitRotationMatrix(Vector4Soft<float>(randRot.x, randRot.y, randRot.z, randRot.w));
 	CompareMatrix(rotMatSoft, rotMat);
@@ -531,7 +531,7 @@ TEST_F(MathTest, SSE_Matrix4_Simple)
 	resVec = rotMat * zAxis;
 	CompareVector(resVec, nxAxis);
 
-	randRot = SF::Vector4SSE(0, 0, 1, C_HALF_PI);
+	randRot = SF::Vector4SSE(0, 0, 1, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	rotMatSoft.InitRotationMatrix(Vector4Soft<float>(randRot.x, randRot.y, randRot.z, randRot.w));
 	CompareMatrix(rotMatSoft, rotMat);
@@ -543,7 +543,7 @@ TEST_F(MathTest, SSE_Matrix4_Simple)
 	resVec = rotMat * zAxis;
 	CompareVector(resVec, zAxis);
 
-	randRot = SF::Vector4SSE(0, 0, 1, C_HALF_PI);
+	randRot = SF::Vector4SSE(0, 0, 1, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	rotMatSoft.InitRotationMatrix(Vector4Soft<float>(randRot.x, randRot.y, randRot.z, randRot.w));
 	CompareMatrix(rotMatSoft, rotMat);
