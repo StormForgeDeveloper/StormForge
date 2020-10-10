@@ -30,7 +30,7 @@ namespace SF
  
 	Result VariableBool::ToString(ToStringContext& context) const
 	{
-		const String& valueString = m_Value ? String::True : String::False;;
+		const String& valueString = m_Value ? String_True : String_False;;
 		return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, (const char*)valueString);
 	}
 
@@ -762,7 +762,7 @@ namespace SF
 
 	void VariableString::SetValue(bool value)
 	{
-		m_Value = value ? String::True : String::False;
+		m_Value = value ? String_True : String_False;
 	}
 
 	void VariableString::SetValue(int8_t value)
@@ -832,7 +832,7 @@ namespace SF
 
 	bool VariableString::GetValueBool() const
 	{
-		if (m_Value.IsEqualIgnoreCase(String::True))
+		if (m_Value.IsEqualIgnoreCase(String_True))
 			return true;
 
 		return false;

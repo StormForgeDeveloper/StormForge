@@ -44,7 +44,7 @@ namespace SF {
 	}
 
 
-	inline size_t SerializedSizeOf(const NamedVariableBox& Value) { auto pVariable = Value.GetVariable(); return sizeof(NamedVariableBox::NameType) + pVariable ? pVariable->GetSerializedSize() : sizeof(Variable::TypeNameType); }
+	inline size_t SerializedSizeOf(const NamedVariableBox& Value) { auto pVariable = Value.GetVariable(); return sizeof(NamedVariableBox::NameType) + (pVariable ? pVariable->GetSerializedSize() : sizeof(Variable::TypeNameType)); }
 
 
 	inline size_t SerializedSizeOf(const VariableTable& Value)

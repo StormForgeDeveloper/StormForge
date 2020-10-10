@@ -28,18 +28,18 @@ namespace SF {
 	//	TString
 	//
 
-	
-	template<> const TString<char> TString<char>::Empty(GetSystemHeap());
-	template<> const TString<char> TString<char>::True(GetSystemHeap(), "true");
-	template<> const TString<char> TString<char>::False(GetSystemHeap(), "false");
-	template<> const TString<char> TString<char>::Success(GetSystemHeap(), "Success");
-	template<> const TString<char> TString<char>::Fail(GetSystemHeap(), "Fail");
 
-	template<> const TString<wchar_t> TString<wchar_t>::Empty(GetSystemHeap());
-	template<> const TString<wchar_t> TString<wchar_t>::True(GetSystemHeap(), L"true");
-	template<> const TString<wchar_t> TString<wchar_t>::False(GetSystemHeap(), L"false");
-	template<> const TString<wchar_t> TString<wchar_t>::Success(GetSystemHeap(), L"Success");
-	template<> const TString<wchar_t> TString<wchar_t>::Fail(GetSystemHeap(), L"Fail");
+	const String String_Empty(GetSystemHeap());
+	const String String_True(GetSystemHeap(), "true");
+	const String String_False(GetSystemHeap(), "false");
+	const String String_Success(GetSystemHeap(), "Success");
+	const String String_Fail(GetSystemHeap(), "Fail");
+
+	const StringW StringW_Empty(GetSystemHeap());
+	const StringW StringW_True(GetSystemHeap(), L"true");
+	const StringW StringW_False(GetSystemHeap(), L"false");
+	const StringW StringW_Success(GetSystemHeap(), L"Success");
+	const StringW StringW_Fail(GetSystemHeap(), L"Fail");
 
 
 	template class TString<char>;

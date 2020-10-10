@@ -166,19 +166,13 @@ namespace SF {
 	//     - Shared string buffer system like C# string
 	//
 
+
 	template<typename CharType, typename SharedStringBufferType = TSharedStringBuffer<CharType>>
 	class TString
 	{
 	public:
 
 		using StringType = TString<CharType, SharedStringBufferType>;
-
-		static const StringType Empty;
-		static const StringType True;
-		static const StringType False;
-		static const StringType Success;
-		static const StringType Fail;
-
 
 	private:
 
@@ -1145,6 +1139,19 @@ namespace SF {
 
 	using String = TString<char>;
 	using StringW = TString<wchar_t>;
+
+
+	extern const String String_Empty;
+	extern const String String_True;
+	extern const String String_False;
+	extern const String String_Success;
+	extern const String String_Fail;
+
+	extern const StringW StringW_Empty;
+	extern const StringW StringW_True;
+	extern const StringW StringW_False;
+	extern const StringW StringW_Success;
+	extern const StringW StringW_Fail;
 
 
 

@@ -412,7 +412,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueue)
 		AssertRel(testArray[item] == 1);
 	}
 
-	delete testArray;
+	delete[] testArray;
 }
 
 
@@ -475,7 +475,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 		AssertRel(testArray[item] == 1);
 	}
 
-	delete testArray;
+	delete[] testArray;
 }
 
 TEST_F(ThreadTest, PagedQueueThreadEnqueueThreadDequeue)
@@ -551,7 +551,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueThreadDequeue)
 		AssertRel(testArray[item] == 1);
 	}
 
-	delete testArray;
+	delete[] testArray;
 }
 
 
@@ -613,7 +613,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
 	auto end = Util::Time.GetRawTimeMs();
 	printf("PageQueue Execution Time:      %15d\n", (end - start).count());
 
-	delete testArray;
+	delete[] testArray;
 }
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS

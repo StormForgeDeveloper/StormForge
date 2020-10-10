@@ -25,9 +25,9 @@ TEST_F(MathTest, Soft_Quaternion_Simple)
 	QuaternionSoft<float> quat, quat2;
 
 
-	auto randRot = SF::Vector4Soft<float>(1, 0, 0, C_HALF_PI);
+	auto randRot = SF::Vector4Soft<float>(1, 0, 0, C_FHALF_PI);
 	quat = QuaternionSoft<float>(randRot);
-	randRot = SF::Vector4Soft<float>(-1, 0, 0, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(-1, 0, 0, C_FHALF_PI);
 	quat2 = QuaternionSoft<float>(randRot);
 
 	auto quat3 = quat * quat2;
@@ -64,7 +64,7 @@ TEST_F(MathTest, Soft_Quaternion_Rotation)
 	auto zAxis = SF::Vector4Soft<float>(0, 0, 1, 1);
 	auto nzAxis = SF::Vector4Soft<float>(0, 0, -1, 1);
 
-	auto randRot = SF::Vector4Soft<float>(1, 0, 0, C_HALF_PI);
+	auto randRot = SF::Vector4Soft<float>(1, 0, 0, C_FHALF_PI);
 	quat = QuaternionSoft<float>(randRot);
 	auto resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, xAxis);
@@ -73,7 +73,7 @@ TEST_F(MathTest, Soft_Quaternion_Rotation)
 	resVec = quat.RotateVector(zAxis);
 	CompareVector(resVec, nyAxis);
 
-	randRot = SF::Vector4Soft<float>(-1, 0, 0, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(-1, 0, 0, C_FHALF_PI);
 	quat = QuaternionSoft<float>(randRot);
 	resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, xAxis);
@@ -82,7 +82,7 @@ TEST_F(MathTest, Soft_Quaternion_Rotation)
 	resVec = quat.RotateVector(zAxis);
 	CompareVector(resVec, yAxis);
 
-	randRot = SF::Vector4Soft<float>(0, 1, 0, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(0, 1, 0, C_FHALF_PI);
 	quat = QuaternionSoft<float>(randRot);
 	resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, nzAxis);
@@ -91,7 +91,7 @@ TEST_F(MathTest, Soft_Quaternion_Rotation)
 	resVec = quat.RotateVector(zAxis);
 	CompareVector(resVec, xAxis);
 
-	randRot = SF::Vector4Soft<float>(0, -1, 0, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(0, -1, 0, C_FHALF_PI);
 	quat = QuaternionSoft<float>(randRot);
 	resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, zAxis);
@@ -100,7 +100,7 @@ TEST_F(MathTest, Soft_Quaternion_Rotation)
 	resVec = quat.RotateVector(zAxis);
 	CompareVector(resVec, nxAxis);
 
-	randRot = SF::Vector4Soft<float>(0, 0, 1, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(0, 0, 1, C_FHALF_PI);
 	quat = QuaternionSoft<float>(randRot);
 	resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, yAxis);
@@ -109,7 +109,7 @@ TEST_F(MathTest, Soft_Quaternion_Rotation)
 	resVec = quat.RotateVector(zAxis);
 	CompareVector(resVec, zAxis);
 
-	randRot = SF::Vector4Soft<float>(0, 0, 1, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(0, 0, 1, C_FHALF_PI);
 	quat = QuaternionSoft<float>(randRot);
 	resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, yAxis);
@@ -129,9 +129,9 @@ TEST_F(MathTest, SSE_Quaternion_Simple)
 
 
 	// for reference
-	auto randRotSoft = SF::Vector4Soft<float>(1, 0, 0, C_HALF_PI);
+	auto randRotSoft = SF::Vector4Soft<float>(1, 0, 0, C_FHALF_PI);
 	auto quatSoft = QuaternionSoft<float>(randRotSoft);
-	randRotSoft = SF::Vector4Soft<float>(-1, 0, 0, C_HALF_PI);
+	randRotSoft = SF::Vector4Soft<float>(-1, 0, 0, C_FHALF_PI);
 	auto quat2Soft = QuaternionSoft<float>(randRotSoft);
 
 	auto quat3Soft = quatSoft * quat2Soft;
@@ -139,9 +139,9 @@ TEST_F(MathTest, SSE_Quaternion_Simple)
 	auto resVecSoft = quat3Soft.RotateVector(randVectorSoft);
 
 
-	auto randRot = SF::Vector4SSE(1, 0, 0, C_HALF_PI);
+	auto randRot = SF::Vector4SSE(1, 0, 0, C_FHALF_PI);
 	quat = QuaternionSSE(randRot);
-	randRot = SF::Vector4SSE(-1, 0, 0, C_HALF_PI);
+	randRot = SF::Vector4SSE(-1, 0, 0, C_FHALF_PI);
 	quat2 = QuaternionSSE(randRot);
 	auto randVector = SF::Vector4SSE(randVectorSoft.x, randVectorSoft.y, randVectorSoft.z, randVectorSoft.w);
 
@@ -193,7 +193,7 @@ TEST_F(MathTest, SSE_Quaternion_Rotation)
 	auto zAxis = SF::Vector4SSE(0, 0, 1, 1);
 	auto nzAxis = SF::Vector4SSE(0, 0, -1, 1);
 
-	auto randRot = SF::Vector4SSE(1, 0, 0, C_HALF_PI);
+	auto randRot = SF::Vector4SSE(1, 0, 0, C_FHALF_PI);
 	quat = QuaternionSSE(randRot);
 	auto resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, xAxis);
@@ -202,7 +202,7 @@ TEST_F(MathTest, SSE_Quaternion_Rotation)
 	resVec = quat.RotateVector(zAxis);
 	CompareVector(resVec, nyAxis);
 
-	randRot = SF::Vector4SSE(-1, 0, 0, C_HALF_PI);
+	randRot = SF::Vector4SSE(-1, 0, 0, C_FHALF_PI);
 	quat = QuaternionSSE(randRot);
 	resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, xAxis);
@@ -211,7 +211,7 @@ TEST_F(MathTest, SSE_Quaternion_Rotation)
 	resVec = quat.RotateVector(zAxis);
 	CompareVector(resVec, yAxis);
 
-	randRot = SF::Vector4SSE(0, 1, 0, C_HALF_PI);
+	randRot = SF::Vector4SSE(0, 1, 0, C_FHALF_PI);
 	quat = QuaternionSSE(randRot);
 	resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, nzAxis);
@@ -220,7 +220,7 @@ TEST_F(MathTest, SSE_Quaternion_Rotation)
 	resVec = quat.RotateVector(zAxis);
 	CompareVector(resVec, xAxis);
 
-	randRot = SF::Vector4SSE(0, -1, 0, C_HALF_PI);
+	randRot = SF::Vector4SSE(0, -1, 0, C_FHALF_PI);
 	quat = QuaternionSSE(randRot);
 	resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, zAxis);
@@ -229,7 +229,7 @@ TEST_F(MathTest, SSE_Quaternion_Rotation)
 	resVec = quat.RotateVector(zAxis);
 	CompareVector(resVec, nxAxis);
 
-	randRot = SF::Vector4SSE(0, 0, 1, C_HALF_PI);
+	randRot = SF::Vector4SSE(0, 0, 1, C_FHALF_PI);
 	quat = QuaternionSSE(randRot);
 	resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, yAxis);
@@ -238,7 +238,7 @@ TEST_F(MathTest, SSE_Quaternion_Rotation)
 	resVec = quat.RotateVector(zAxis);
 	CompareVector(resVec, zAxis);
 
-	randRot = SF::Vector4SSE(0, 0, 1, C_HALF_PI);
+	randRot = SF::Vector4SSE(0, 0, 1, C_FHALF_PI);
 	quat = QuaternionSSE(randRot);
 	resVec = quat.RotateVector(xAxis);
 	CompareVector(resVec, yAxis);
