@@ -33,7 +33,7 @@ namespace SF
 		class ScriptEngine : public ScriptEngineService, public LibraryComponent
 		{
 		public:
-			static constexpr StringCrc64 TypeName = "ScriptEngine";
+			static constexpr StringCrc64 TypeName = "ScriptEngine"_crc64;
 
 		private:
 
