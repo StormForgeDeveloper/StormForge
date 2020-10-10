@@ -294,11 +294,11 @@ namespace Net {
 	// gathering
 	Result ConnectionMUDP::SendPending( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID )
 	{
-		Result hr = ResultCode::SUCCESS;
+		FunctionContext hr;
 
 		MsgMobileNetCtrl *pNetCtrlMsg = nullptr;
 
-		netChk( PrepareGatheringBuffer(sizeof(MsgNetCtrlBuffer)) );
+		netCheck( PrepareGatheringBuffer(sizeof(MsgNetCtrlBuffer)) );
 
 		pNetCtrlMsg = (MsgMobileNetCtrl*)(m_pGatheringBuffer+m_uiGatheredSize);
 		pNetCtrlMsg->msgID.ID = uiCtrlCode;
@@ -314,18 +314,15 @@ namespace Net {
 
 		m_uiGatheredSize += pNetCtrlMsg->Length;
 
-
-	Proc_End:
-
 		return hr;
 	}
 
 	Result ConnectionMUDP::SendSync( uint uiSequence, uint64_t uiSyncMask )
 	{
-		Result hr = ResultCode::SUCCESS;
-		MsgMobileNetCtrlSync *pNetCtrlMsg = NULL;
+		FunctionContext hr;
+		MsgMobileNetCtrlSync *pNetCtrlMsg = nullptr;
 
-		netChk( PrepareGatheringBuffer(sizeof(MsgMobileNetCtrlSync)) );
+		netCheck( PrepareGatheringBuffer(sizeof(MsgMobileNetCtrlSync)) );
 
 		pNetCtrlMsg = (MsgMobileNetCtrlSync*)(m_pGatheringBuffer+m_uiGatheredSize);
 		pNetCtrlMsg->msgID = PACKET_NETCTRL_SYNCRELIABLE;
@@ -344,9 +341,6 @@ namespace Net {
 			GetCID(), uiSequence, uiSyncMask);
 
 		m_uiGatheredSize += pNetCtrlMsg->Length;
-
-
-	Proc_End:
 
 		return hr;
 	}
