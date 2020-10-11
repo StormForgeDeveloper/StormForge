@@ -35,6 +35,11 @@ namespace SF {
 
 	VariableTable::~VariableTable()
 	{
+		Clear();
+	}
+
+	void  VariableTable::Clear()
+	{
 		m_VairableTable.CommitChanges();
 		m_VairableTable.ForeachOrder(0, (uint)m_VairableTable.size(), [](KeyType name, Variable* pValue)
 		{
