@@ -1355,15 +1355,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameJoinGameRes( intptr_t InNativeConnectionHan
 
 
 // S2C: Player Joined in the game
-SFDLL_EXPORT int  CSSFNetAdapter_GamePlayerJoinedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, const PlayerInformation& InJoinedPlayer, uint8_t InJoinedPlayerRole, uint8_t InJoinedPlayerDead, uint8_t InJoinedPlayerIndex, uint8_t InJoinedPlayerCharacter )
+SFDLL_EXPORT int  CSSFNetAdapter_GamePlayerJoinedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, const PlayerInformation& InJoinedPlayer )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::PlayerJoinedS2CEvt::Create(pConnection->GetHeap(), InGameInsUID,InJoinedPlayer, InJoinedPlayerRole, InJoinedPlayerDead, InJoinedPlayerIndex, InJoinedPlayerCharacter);
+	MessageDataPtr pMessage = SF::Message::Game::PlayerJoinedS2CEvt::Create(pConnection->GetHeap(), InGameInsUID,InJoinedPlayer);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GamePlayerJoinedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, const PlayerInformation& InJoinedPlayer, uint8_t InJoinedPlayerRole, uint8_t InJoinedPlayerDead, uint8_t InJoinedPlayerIndex, uint8_t InJoinedPlayerCharacter )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GamePlayerJoinedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, const PlayerInformation& InJoinedPlayer )
 
 
 

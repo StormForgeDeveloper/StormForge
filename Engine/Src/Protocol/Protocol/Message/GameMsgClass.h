@@ -3847,10 +3847,6 @@ namespace SF
 			private:
 				uint64_t m_GameInsUID;
 				PlayerInformation m_JoinedPlayer;
-				uint8_t m_JoinedPlayerRole;
-				uint8_t m_JoinedPlayerDead;
-				uint8_t m_JoinedPlayerIndex;
-				uint8_t m_JoinedPlayerCharacter;
 			public:
 				PlayerJoinedS2CEvt()
 					{}
@@ -3863,10 +3859,6 @@ namespace SF
 
 				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
 				const PlayerInformation& GetJoinedPlayer() const	{ return m_JoinedPlayer; };
-				const uint8_t& GetJoinedPlayerRole() const	{ return m_JoinedPlayerRole; };
-				const uint8_t& GetJoinedPlayerDead() const	{ return m_JoinedPlayerDead; };
-				const uint8_t& GetJoinedPlayerIndex() const	{ return m_JoinedPlayerIndex; };
-				const uint8_t& GetJoinedPlayerCharacter() const	{ return m_JoinedPlayerCharacter; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -3874,7 +3866,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer, const uint8_t &InJoinedPlayerRole, const uint8_t &InJoinedPlayerDead, const uint8_t &InJoinedPlayerIndex, const uint8_t &InJoinedPlayerCharacter );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer );
 
 			}; // class PlayerJoinedS2CEvt : public MessageBase
 

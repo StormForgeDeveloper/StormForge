@@ -24,6 +24,9 @@ namespace SF
 {
 	namespace Tong
 	{
+
+		const StringCrc64 ScriptEngine::TypeName = "ScriptEngine"_crc64;
+
 		ScriptEngine::ScriptEngine(IHeap& heap)
 			: LibraryComponent(TypeName)
 			, m_Heap("ScriptEngine", heap)

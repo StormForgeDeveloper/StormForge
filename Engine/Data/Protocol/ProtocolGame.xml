@@ -386,6 +386,7 @@
 			</Res>
 		</Command>
 
+
 		<S2CEvent Name="NewPlayerInView" Reliable="true" Crypto="No" Trace="Debug1" Desc="New Player in get view">
 			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance UID"/>
 			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
@@ -439,10 +440,6 @@
 		<S2CEvent Name="PlayerJoined" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player Joined in the game">
 			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance UID"/>
 			<Params Type="PlayerInformation" Name="JoinedPlayer" Desc="Joined player information"/>
-			<Params Type="uint8" Name="JoinedPlayerRole" Desc="Joinged player role"/>
-			<Params Type="uint8" Name="JoinedPlayerDead" Desc="Joined player dead status"/>
-			<Params Type="uint8" Name="JoinedPlayerIndex" Desc="Joined player index"/>
-			<Params Type="uint8" Name="JoinedPlayerCharacter" Desc="Joined player character"/>
 		</S2CEvent>
 
 		<Command Name="LeaveGame" Reliable="true" Crypto="No" Trace="Debug1" Desc="Leave Game">

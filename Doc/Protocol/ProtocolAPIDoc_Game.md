@@ -989,19 +989,11 @@ C++: Cast message to JoinGameRes to access values
 ## PlayerJoinedS2CEvt
 Player Joined in the game
 
-        Result PlayerJoinedS2CEvt(const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer, const uint8_t &InJoinedPlayerRole, const uint8_t &InJoinedPlayerDead, const uint8_t &InJoinedPlayerIndex, const uint8_t &InJoinedPlayerCharacter)
+        Result PlayerJoinedS2CEvt(const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer)
 
 		- OutInGameInsUID: GameInsUID type. Game instance UID
 
 		- OutInJoinedPlayer: PlayerInformation type. Joined player information
-
-		- OutInJoinedPlayerRole: uint8 type. Joinged player role
-
-		- OutInJoinedPlayerDead: uint8 type. Joined player dead status
-
-		- OutInJoinedPlayerIndex: uint8 type. Joined player index
-
-		- OutInJoinedPlayerCharacter: uint8 type. Joined player character
 
 
 ## LeaveGame Request

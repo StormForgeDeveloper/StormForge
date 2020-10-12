@@ -111,16 +111,19 @@ namespace SF {
 			}
 
 			unsigned int rrMax = (unsigned)sched_get_priority_max(SCHED_RR);
-			unsigned int fifoMax = (unsigned)sched_get_priority_max(SCHED_FIFO);
 			if (rrMax > limit.rlim_cur || rrMax > limit.rlim_max)
 			{
-				std::cout << "rtpio RR limit: min:" << (int)sched_get_priority_min(SCHED_RR) << " max:" << (int)sched_get_priority_max(SCHED_RR) << std::endl;
-				assert(!"Invalid rtpio RR limits:");
+				//std::cout << "rtpio RR Current limit: min:" << (int)limit.rlim_cur << " max:" << (int)limit.rlim_max << std::endl;
+				std::cout << "rtpio RR Required limit: min:" << (int)sched_get_priority_min(SCHED_RR) << " max:" << (int)rrMax << std::endl;
+				//assert(!"Invalid rtpio RR limits:");
 			}
+
+			unsigned int fifoMax = (unsigned)sched_get_priority_max(SCHED_FIFO);
 			if (fifoMax > limit.rlim_cur || fifoMax > limit.rlim_max)
 			{
-				std::cout << "rtpio FIFO limit: min:" << (int)sched_get_priority_min(SCHED_FIFO) << " max:" << (int)sched_get_priority_max(SCHED_FIFO) << std::endl;
-				assert(!"Invalid rtpio FIFO limits:");
+				//std::cout << "rtpio FIFO Current limit: min:" << (int)limit.rlim_cur << " max:" << (int)limit.rlim_max << std::endl;
+				std::cout << "rtpio FIFO Required limit: min:" << (int)sched_get_priority_min(SCHED_FIFO) << " max:" << (int)fifoMax << std::endl;
+				//assert(!"Invalid rtpio FIFO limits:");
 			}
 			std::cout << "TestThreadLimits - OK" << std::endl;
 #endif
@@ -218,12 +221,12 @@ namespace SF {
 
 #elif SF_PLATFORM == SF_PLATFORM_LINUX
 
-		sched_param sch_params;
+		sched_param sch_params{};
 		sch_params.sched_priority = ThreadSchedulingTable[(int)priority].Priority;
 		if (pthread_setschedparam(native_handle(), ThreadSchedulingTable[(int)priority].Policy, &sch_params))
 		{
 			std::cerr << "Failed to set Thread scheduling : " << errno << std::endl;
-			assert(false);
+			//assert(false);
 		}
 
 #elif SF_PLATFORM == SF_PLATFORM_ANDROID

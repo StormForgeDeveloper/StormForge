@@ -8105,10 +8105,6 @@ namespace SF
 
 				protocolCheck(*input >> m_GameInsUID);
 				protocolCheck(*input >> m_JoinedPlayer);
-				protocolCheck(*input >> m_JoinedPlayerRole);
-				protocolCheck(*input >> m_JoinedPlayerDead);
-				protocolCheck(*input >> m_JoinedPlayerIndex);
-				protocolCheck(*input >> m_JoinedPlayerCharacter);
 
 				return hr;
 
@@ -8124,10 +8120,6 @@ namespace SF
 
 				variableBuilder.SetVariable("GameInsUID", parser.GetGameInsUID());
 				variableBuilder.SetVariable("JoinedPlayer", parser.GetJoinedPlayer());
-				variableBuilder.SetVariable("JoinedPlayerRole", parser.GetJoinedPlayerRole());
-				variableBuilder.SetVariable("JoinedPlayerDead", parser.GetJoinedPlayerDead());
-				variableBuilder.SetVariable("JoinedPlayerIndex", parser.GetJoinedPlayerIndex());
-				variableBuilder.SetVariable("JoinedPlayerCharacter", parser.GetJoinedPlayerCharacter());
 
 				return hr;
 
@@ -8145,7 +8137,7 @@ namespace SF
 			}; // Result PlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* PlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer, const uint8_t &InJoinedPlayerRole, const uint8_t &InJoinedPlayerDead, const uint8_t &InJoinedPlayerIndex, const uint8_t &InJoinedPlayerCharacter )
+			MessageData* PlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer )
 			{
  				MessageData *pNewMsg = nullptr;
 				FunctionContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -8163,10 +8155,6 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InGameInsUID)
 					+ SerializedSizeOf(InJoinedPlayer)
-					+ SerializedSizeOf(InJoinedPlayerRole)
-					+ SerializedSizeOf(InJoinedPlayerDead)
-					+ SerializedSizeOf(InJoinedPlayerIndex)
-					+ SerializedSizeOf(InJoinedPlayerCharacter)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::PlayerJoinedS2CEvt::MID, __uiMessageSize ) );
@@ -8177,13 +8165,9 @@ namespace SF
 
 				protocolCheck(*output << InGameInsUID);
 				protocolCheck(*output << InJoinedPlayer);
-				protocolCheck(*output << InJoinedPlayerRole);
-				protocolCheck(*output << InJoinedPlayerDead);
-				protocolCheck(*output << InJoinedPlayerIndex);
-				protocolCheck(*output << InJoinedPlayerCharacter);
 
 				return hr;
-			}; // MessageData* PlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer, const uint8_t &InJoinedPlayerRole, const uint8_t &InJoinedPlayerDead, const uint8_t &InJoinedPlayerIndex, const uint8_t &InJoinedPlayerCharacter )
+			}; // MessageData* PlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer )
 
 
 
@@ -8191,8 +8175,8 @@ namespace SF
 			{
  				PlayerJoinedS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "PlayerJoined:{0}:{1} , GameInsUID:{2}, JoinedPlayer:{3}, JoinedPlayerRole:{4}, JoinedPlayerDead:{5}, JoinedPlayerIndex:{6}, JoinedPlayerCharacter:{7}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetGameInsUID(), parser.GetJoinedPlayer(), parser.GetJoinedPlayerRole(), parser.GetJoinedPlayerDead(), parser.GetJoinedPlayerIndex(), parser.GetJoinedPlayerCharacter()); 
+				SFLog(Net, Debug1, "PlayerJoined:{0}:{1} , GameInsUID:{2}, JoinedPlayer:{3}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetGameInsUID(), parser.GetJoinedPlayer()); 
 				return ResultCode::SUCCESS;
 			}; // Result PlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

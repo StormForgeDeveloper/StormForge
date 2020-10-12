@@ -1602,15 +1602,15 @@ namespace SF.Net
 
 
 		// S2C: Player Joined in the game
-		public int  PlayerJoinedS2CEvt( System.UInt64 InGameInsUID, SF.PlayerInformation InJoinedPlayer, System.Byte InJoinedPlayerRole, System.Byte InJoinedPlayerDead, System.Byte InJoinedPlayerIndex, System.Byte InJoinedPlayerCharacter )
+		public int  PlayerJoinedS2CEvt( System.UInt64 InGameInsUID, SF.PlayerInformation InJoinedPlayer )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GamePlayerJoinedS2CEvt(m_Connection.NativeHandle, InGameInsUID,ref InJoinedPlayer, InJoinedPlayerRole, InJoinedPlayerDead, InJoinedPlayerIndex, InJoinedPlayerCharacter);
+			result = CSSFNetAdapter_GamePlayerJoinedS2CEvt(m_Connection.NativeHandle, InGameInsUID,ref InJoinedPlayer);
 			}
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PlayerJoinedS2CEvt);
 			return result;
-		} // public int  PlayerJoinedS2CEvt( System.UInt64 InGameInsUID, SF.PlayerInformation InJoinedPlayer, System.Byte InJoinedPlayerRole, System.Byte InJoinedPlayerDead, System.Byte InJoinedPlayerIndex, System.Byte InJoinedPlayerCharacter )
+		} // public int  PlayerJoinedS2CEvt( System.UInt64 InGameInsUID, SF.PlayerInformation InJoinedPlayer )
 
 
 		// Cmd: Leave Game
@@ -2476,7 +2476,7 @@ namespace SF.Net
 
 		// S2C: Player Joined in the game
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GamePlayerJoinedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GamePlayerJoinedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, ref SF.PlayerInformation InJoinedPlayer, System.Byte InJoinedPlayerRole, System.Byte InJoinedPlayerDead, System.Byte InJoinedPlayerIndex, System.Byte InJoinedPlayerCharacter );
+		static extern int CSSFNetAdapter_GamePlayerJoinedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, ref SF.PlayerInformation InJoinedPlayer );
 
 
 

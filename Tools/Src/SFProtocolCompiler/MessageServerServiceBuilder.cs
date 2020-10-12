@@ -110,7 +110,7 @@ namespace ProtocolCompiler
 
         protected string ParamString(Parameter[] parameter)
         {
-            return ParamInString(parameter);
+            return ParamInString(parameter, true);
         }
 
         Parameter[] MakeParametersForEvent(Parameter[] parameter)
@@ -163,7 +163,7 @@ namespace ProtocolCompiler
         // Build parser class implementation
         void BuildServerServiceMethodImpl(MsgType type, Parameter[] originalParameters, string Name, string typeName, Parameter[] parameters)
         {
-            OpenSection("Result", string.Format("{0}::{1}{2}( {3} )", ServiceClassName, Name, typeName, ParamInString(parameters)));
+            OpenSection("Result", string.Format("{0}::{1}{2}( {3} )", ServiceClassName, Name, typeName, ParamInString(parameters, true)));
 
             DefaultHRESULT(); NewLine();
 

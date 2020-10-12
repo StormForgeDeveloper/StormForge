@@ -1738,21 +1738,21 @@ namespace SF
 
 		}; // Result NetSvrPolicyGame::JoinGameRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData )
 		// S2C: Player Joined in the game
-		Result NetSvrPolicyGame::PlayerJoinedS2CEvt( const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer, const uint8_t &InJoinedPlayerRole, const uint8_t &InJoinedPlayerDead, const uint8_t &InJoinedPlayerIndex, const uint8_t &InJoinedPlayerCharacter )
+		Result NetSvrPolicyGame::PlayerJoinedS2CEvt( const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer )
 		{
  			FunctionContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
 
-			 pMessage = SF::Message::Game::PlayerJoinedS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InJoinedPlayer, InJoinedPlayerRole, InJoinedPlayerDead, InJoinedPlayerIndex, InJoinedPlayerCharacter);
+			 pMessage = SF::Message::Game::PlayerJoinedS2CEvt::Create(m_pConnection->GetIOHeap(), InGameInsUID, InJoinedPlayer);
 			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
 			return hr;
 
-		}; // Result NetSvrPolicyGame::PlayerJoinedS2CEvt( const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer, const uint8_t &InJoinedPlayerRole, const uint8_t &InJoinedPlayerDead, const uint8_t &InJoinedPlayerIndex, const uint8_t &InJoinedPlayerCharacter )
+		}; // Result NetSvrPolicyGame::PlayerJoinedS2CEvt( const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer )
 		// Cmd: Leave Game
 		Result NetSvrPolicyGame::LeaveGameRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
