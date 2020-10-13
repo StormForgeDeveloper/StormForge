@@ -1642,7 +1642,7 @@ namespace SF
 
 		}; // Result NetSvrPolicyGame::LeaveGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID )
 		// Cmd: Search game instance
-		Result NetSvrPolicyGame::SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint64_t>& InGameInstances )
+		Result NetSvrPolicyGame::SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<GameInstanceInfo>& InGameInstances )
 		{
  			FunctionContext hr;
 
@@ -1656,7 +1656,7 @@ namespace SF
 
 			return hr;
 
-		}; // Result NetSvrPolicyGame::SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint64_t>& InGameInstances )
+		}; // Result NetSvrPolicyGame::SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<GameInstanceInfo>& InGameInstances )
 		// Cmd: Search game instance
 		Result NetSvrPolicyGame::GetCharacterDataInGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
 		{

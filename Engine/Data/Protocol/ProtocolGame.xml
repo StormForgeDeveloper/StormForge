@@ -371,7 +371,7 @@
 				<Params Type="String" Name="SearchKeyword" Desc="Search keyword"/>
 			</Cmd>
 			<Res>
-				<Params Type="GameInsUID" IsArray="true" Name="GameInstances" Desc="Game instance ID"/>
+				<Params Type="GameInstanceInfo" IsArray="true" Name="GameInstances" Desc="Game instance informations"/>
 			</Res>
 		</Command>
 

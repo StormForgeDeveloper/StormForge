@@ -50,6 +50,10 @@ namespace SF {
 	inline Result operator >> (IInputStream& input, NotificationType& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const NotificationType& data) { return output.Write(&data, sizeof(data)); }
 
+	inline size_t SerializedSizeOf(const GameInstanceInfo& Value) { return sizeof(Value); }
+	inline Result operator >> (IInputStream& input, GameInstanceInfo& data) { return input.Read(&data, sizeof(data)); }
+	inline Result operator << (IOutputStream& output, const GameInstanceInfo& data) { return output.Write(&data, sizeof(data)); }
+
 	inline size_t SerializedSizeOf(const PlayerInformation& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, PlayerInformation& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const PlayerInformation& data) { return output.Write(&data, sizeof(data)); }

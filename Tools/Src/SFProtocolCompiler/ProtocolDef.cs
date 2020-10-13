@@ -387,6 +387,9 @@ namespace ProtocolXml {
         VariableTable,
         
         /// <remarks/>
+        GameInstanceInfo,
+        
+        /// <remarks/>
         RankingType,
         
         /// <remarks/>

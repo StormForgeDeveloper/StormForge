@@ -253,7 +253,7 @@ namespace SF
 			// Cmd: Leave game instance
 			Result LeaveGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID );
 			// Cmd: Search game instance
-			Result SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint64_t>& InGameInstances );
+			Result SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<GameInstanceInfo>& InGameInstances );
 			// Cmd: Search game instance
 			Result GetCharacterDataInGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances );
 			// S2C: New Player in get view

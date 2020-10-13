@@ -145,6 +145,14 @@ namespace SF {
 		return ResultCode::SUCCESS;
 	}
 
+	Result _ToString(ToStringContext& context, const GameInstanceInfo& value)
+	{
+		if (!(_IToA(context, value.GameInstanceUID)))
+			return ResultCode::FAIL;
+
+		return ResultCode::SUCCESS;
+	}
+
 
 	void TestEngineTypes()
 	{

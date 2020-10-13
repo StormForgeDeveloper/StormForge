@@ -305,8 +305,11 @@ namespace SF {
 
 	};
 
-
-
+	using AccountID = uint64_t;
+	using AuthTicket = uint64_t;
+	using PartyID = EntityID;
+	using GameInsID = EntityID;
+	using GameInsUID = EntityUID;
 
 
 
@@ -324,6 +327,23 @@ namespace SF {
 		MessageNotify,
 		FriendRequest,
 		GiftStamina,
+	};
+
+
+	// Game Instance info
+	struct GameInstanceInfo
+	{
+		GameInsUID GameInstanceUID;
+		StringCrc32 TypeName;
+		StringCrc32 DataID;
+
+
+		GameInstanceInfo() {}
+		GameInstanceInfo(const GameInstanceInfo& src);
+		GameInstanceInfo(GameInsUID InGameInstanceUID, StringCrc32 InTypeName, StringCrc32 InDataID);
+
+		GameInstanceInfo& operator = (const GameInstanceInfo& src);
+		bool operator == (const GameInstanceInfo& src) const;
 	};
 
 
@@ -415,8 +435,7 @@ namespace SF {
 
 	////////////////////////////////////////////////////////////////////////////
 	// TODO : temp types
-	typedef uint64_t AccountID;
-	typedef uint64_t AuthTicket;
+
 
 
 	// Player Role
@@ -585,13 +604,6 @@ namespace SF {
 
 
 
-
-
-
-	using PartyID = EntityID;
-
-	// Game Instance
-	using GameInsID = EntityID;
 
 #pragma pack(pop)
 

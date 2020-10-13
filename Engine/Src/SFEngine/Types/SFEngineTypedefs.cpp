@@ -26,15 +26,42 @@ namespace SF {
 	//	Type utility
 	//
 
-	//constexpr uint32_t MatchingQueue_Max;
+	GameInstanceInfo::GameInstanceInfo(const GameInstanceInfo& src)
+		: GameInstanceUID(src.GameInstanceUID)
+		, TypeName(src.TypeName)
+		, DataID(src.DataID)
+	{
+	}
+
+	GameInstanceInfo::GameInstanceInfo(GameInsUID InGameInstanceUID, StringCrc32 InTypeName, StringCrc32 InDataID)
+		: GameInstanceUID(InGameInstanceUID)
+		, TypeName(InTypeName)
+		, DataID(InDataID)
+	{
+	}
+
+	GameInstanceInfo& GameInstanceInfo::operator = (const GameInstanceInfo& src)
+	{
+		GameInstanceUID = src.GameInstanceUID;
+		TypeName = src.TypeName;
+		DataID = src.DataID;
+
+		return *this;
+	}
+
+	bool GameInstanceInfo::operator == (const GameInstanceInfo& src) const
+	{
+		return GameInstanceUID == src.GameInstanceUID
+			&& TypeName == src.TypeName
+			&& DataID == src.DataID;
+	}
+
 
 
 	////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Player informations
 	//
-
-
 
 	PlayerInformation::PlayerInformation(const PlayerInformation& src)
 	{

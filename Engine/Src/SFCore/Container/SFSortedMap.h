@@ -173,7 +173,7 @@ namespace SF {
 
 		public:
 
-			SortedMap(IHeap& memoryManager);
+			SortedMap(IHeap& heap);
 			~SortedMap();
 
 			IHeap& GetHeap() { return m_Heap; }

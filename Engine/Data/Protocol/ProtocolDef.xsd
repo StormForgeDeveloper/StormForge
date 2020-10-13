@@ -165,6 +165,8 @@
 					
 					<xs:enumeration value="Variable"/>
 					<xs:enumeration value="VariableTable"/>
+					
+					<xs:enumeration value="GameInstanceInfo"/>
 
 					<xs:enumeration value="RankingType"/>
 					<xs:enumeration value="PlayerRole"/>

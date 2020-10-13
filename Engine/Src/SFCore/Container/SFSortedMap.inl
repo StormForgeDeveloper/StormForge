@@ -77,17 +77,17 @@ namespace SF {
 		//
 
 		template<class KeyType, class ValueType>
-		SortedMap<KeyType, ValueType>::SortedMap(IHeap& memoryManager)
+		SortedMap<KeyType, ValueType>::SortedMap(IHeap& heap)
 			: m_Root(nullptr)
 			, m_ItemCount(0)
 			, m_DeleteNodePool(false)
-			, m_Heap(memoryManager)
+			, m_Heap(heap)
 			, m_pNodePool(nullptr)
 		{
 			if (m_pNodePool == nullptr)
 			{
 				m_DeleteNodePool = true;
-				m_pNodePool = new(memoryManager) ObjectPoolT<MapNode>(memoryManager);
+				m_pNodePool = new(heap) ObjectPoolT<MapNode>(heap);
 			}
 		}
 

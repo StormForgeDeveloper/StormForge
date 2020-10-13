@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 
 namespace SF
 {
+    using GameInstanceID = System.UInt64;
 
     // structure data type attribute, this is used for message builder
     public class StructAttribute : Attribute
@@ -158,6 +159,8 @@ namespace SF
         System,         // System
         Role,           // Role chat in game
     };
+
+
 
 
     public static class GameTypes
@@ -301,6 +304,16 @@ namespace SF
             Level = level;
             IsPlayingGame = playingGame;
         }
+    }
+
+
+    [Struct]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct GameInstanceInfo
+    {
+        GameInstanceID GameInstanceID;
+        StringCrc32 Type;
+        StringCrc32 Name;
     }
 
 

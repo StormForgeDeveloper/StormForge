@@ -113,6 +113,9 @@ namespace SF
                 case "RelayPlayerInfo":
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(RelayPlayerInfo)));
                     break;
+                case "GameInstanceInfo":
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(GameInstanceInfo)));
+                    break;
                 case "VariableTable":
                     VariableTable parsedValue = new VariableTable();
                     parsedValue.FromSerializedMemory(Value);
@@ -259,6 +262,13 @@ namespace SF
                 case "RelayPlayerInfo":
                     {
                         var newArray = new RelayPlayerInfo[arrayCount];
+                        MarshalCopy(Value, newArray, 0, arrayCount);
+                        stm_ParsingMessage.SetValue(stringHash, newArray);
+                    }
+                    break;
+                case "GameInstanceInfo":
+                    {
+                        var newArray = new GameInstanceInfo[arrayCount];
                         MarshalCopy(Value, newArray, 0, arrayCount);
                         stm_ParsingMessage.SetValue(stringHash, newArray);
                     }
