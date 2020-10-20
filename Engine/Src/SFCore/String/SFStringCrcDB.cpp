@@ -22,10 +22,6 @@
 namespace SF
 {
 
-
-
-
-
 	const StringCrcDB::StringItem* StringCrcDB::StringBuffer::AddString(uint64_t hash64, uint32_t hash32, const char* string, size_t strLen)
 	{
 		auto requiredSize = strLen + 1;
@@ -264,8 +260,6 @@ namespace SF
 
 		return nullptr;
 	}
-
-
 
 }
 

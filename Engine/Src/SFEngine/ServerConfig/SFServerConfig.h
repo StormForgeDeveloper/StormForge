@@ -154,6 +154,16 @@ namespace SF
 			{}
 		};
 
+		struct ServerModuleGameInstanceManager : public ServerModulePublicService
+		{
+			String Name;
+			String DataTable;
+
+			ServerModuleGameInstanceManager(IHeap& heap)
+				: ServerModulePublicService(heap)
+			{}
+		};
+
 		struct ServerModuleRelayService : public ServerModulePublicService
 		{
 			uint32_t MaximumRelayInstances = 1000;

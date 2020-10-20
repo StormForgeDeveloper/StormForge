@@ -188,11 +188,15 @@ namespace SF
 			((ServerConfig::ServerModuleMatching_4*)pServerModule)->UseBot = ParseXMLBool((const char*)xmlGetProp(pNode, (xmlChar*)"UseBot"));
 			break;
 		case "ModPurchaseValidateGoogle"_crc:
-			pServerModule = new(GetHeap()) ServerConfig::ServerModuleGooglePurchaseValidate(GetHeap());
-			((ServerConfig::ServerModuleGooglePurchaseValidate*)pServerModule)->Account = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"Account"));
-			((ServerConfig::ServerModuleGooglePurchaseValidate*)pServerModule)->P12KeyFile = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"P12KeyFile"));
-			((ServerConfig::ServerModuleGooglePurchaseValidate*)pServerModule)->AuthScopes = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"AuthScopes"));
+		{
+			auto pGoogleValidate = new(GetHeap()) ServerConfig::ServerModuleGooglePurchaseValidate(GetHeap());
+			pServerModule = pGoogleValidate;
+
+			pGoogleValidate->Account = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"Account"));
+			pGoogleValidate->P12KeyFile = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"P12KeyFile"));
+			pGoogleValidate->AuthScopes = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"AuthScopes"));
 			break;
+		}
 		case "ModPurchaseValidateIOS"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModuleIOSPurchaseValidate(GetHeap());
 			((ServerConfig::ServerModuleIOSPurchaseValidate*)pServerModule)->URL = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"URL"));
@@ -208,6 +212,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			});
 			break;
+
 		case "ModGame"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ForeachElement(pNode->children, [&](xmlNode* pChild)
@@ -218,6 +223,25 @@ namespace SF
 				return ResultCode::SUCCESS;
 			});
 			break;
+
+		case "ModGameInstanceManager"_crc:
+		{
+			auto pInstanceManagerConfig = new(GetHeap()) ServerConfig::ServerModuleGameInstanceManager(GetHeap());
+			pServerModule = pInstanceManagerConfig;
+
+			pInstanceManagerConfig->Name = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"Name"));
+			pInstanceManagerConfig->DataTable = String(GetHeap(), (const char*)xmlGetProp(pNode, (xmlChar*)"DataTable"));
+
+			result = ForeachElement(pNode->children, [&](xmlNode* pChild)
+				{
+					if (StringCrc32((const char*)pChild->name) == "NetPublic"_crc32c)
+						return ParseXMLNetPublic(pChild, pInstanceManagerConfig->PublicNet);
+
+					return ResultCode::SUCCESS;
+				});
+			break;
+		}
+
 		case "ModRelay"_crc:
 			pServerModule = new(GetHeap()) ServerConfig::ServerModuleRelayService(GetHeap());
 			result = ForeachElement(pNode->children, [&](xmlNode* pChild)

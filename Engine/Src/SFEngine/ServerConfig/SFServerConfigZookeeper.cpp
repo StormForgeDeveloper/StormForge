@@ -203,37 +203,41 @@ namespace SF
 			pModule->URL = URL.asCString();
 			pModule->AltURL = AltURL.asCString();
 			pServerModule = pModule;
-		}
 			break;
+		}
 		case "ModLogin"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ParseNetPublic(itemValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pServerModule = pModule;
-		}
 			break;
-		case "ModGameInstanceManager"_crc:
-		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
-			result = ParseNetPublic(itemValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
-			pServerModule = pModule;
 		}
-		break;
 		case "ModGame"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
 			result = ParseNetPublic(itemValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pServerModule = pModule;
-		}
 			break;
+		}
+		case "ModGameInstanceManager"_crc:
+		{
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleGameInstanceManager(GetHeap());
+
+			pModule->Name = itemValue.get("Name", Json::Value("")).asCString();
+			pModule->DataTable = itemValue.get("DataTable", Json::Value("")).asCString();
+
+			result = ParseNetPublic(itemValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
+			pServerModule = pModule;
+			break;
+		}
 		case "ModRelay"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModuleRelayService(GetHeap());
 			result = ParseNetPublic(itemValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pModule->MaximumRelayInstances = itemValue.get("MaximumRelayInstances", Json::Value(pModule->MaximumRelayInstances)).asUInt();
 			pServerModule = pModule;
+			break;
 		}
-		break;
 		case "NetPrivate"_crc:
 			break;
 
@@ -685,15 +689,23 @@ namespace SF
 		{
 			auto pModule = static_cast<const ServerConfig::ServerModulePublicService*>(pServerModule);
 			itemValue["NetPublic"] = ToJsonNetPublic(pModule->PublicNet);
+			break;
 		}
-		break;
+		case "ModGameInstanceManager"_crc:
+		{
+			auto pModule = static_cast<const ServerConfig::ServerModuleGameInstanceManager*>(pServerModule);
+			itemValue["Name"] = ToJsonSafeString(pModule->Name);
+			itemValue["DataTable"] = ToJsonSafeString(pModule->DataTable);
+			itemValue["NetPublic"] = ToJsonNetPublic(pModule->PublicNet);
+			break;
+		}
 		case "ModRelay"_crc:
 		{
 			auto pModule = static_cast<const ServerConfig::ServerModuleRelayService*>(pServerModule);
 			itemValue["NetPublic"] = ToJsonNetPublic(pModule->PublicNet);
 			itemValue["MaximumRelayInstances"] = Json::Value(pModule->MaximumRelayInstances);
+			break;
 		}
-		break;
 		case "NetPrivate"_crc:
 			break;
 		case "ModMatchingQueue_Game_8x1"_crc:

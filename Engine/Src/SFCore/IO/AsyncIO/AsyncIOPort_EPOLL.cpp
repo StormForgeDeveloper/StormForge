@@ -97,12 +97,11 @@ namespace AsyncIO {
 
 	Result IOWorkerEPOLL::HandleRW(unsigned int events, AsyncIOAdapter* pCallBack)
 	{
-		Result hr = ResultCode::SUCCESS;// , hrErr = ResultCode::SUCCESS;
+		Result hr = ResultCode::SUCCESS;
 
 		//  skip when the socket value is different
 		if (pCallBack == nullptr)
 			return ResultCode::INVALID_POINTER;
-
 
 		if (events & EPOLLIN)
 		{
@@ -115,8 +114,7 @@ namespace AsyncIO {
 			hr = pCallBack->OnWriteReady();
 		}
 
-
-		if (!(hr))
+		if (!hr)
 		{
 			char stringBuffer[512];
 			SFLog(System, Info, "ERROR Epoll RW fail nativeHandle:{0}, events:{1} hr:{2}", pCallBack->GetIOHandle(), GetOwner()->EventFlagToString(sizeof(stringBuffer), stringBuffer, events), hr);
