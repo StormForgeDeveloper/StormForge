@@ -510,7 +510,7 @@ namespace SF {
 			//	Insert/erase/clear
 			//
 
-			Result insert( const KeyType& inKey, const ItemType &data )
+			Result insert(const KeyType& inKey, const ItemType &data)
 			{
 				size_t hashVal = Hasher()( inKey );
 				size_t iBucket = hashVal%m_Bucket.size();
@@ -567,6 +567,30 @@ namespace SF {
 				Assert( bucket.Validate(iBucket, m_Bucket.size()) );
 #endif
 				return ResultCode::SUCCESS;
+			}
+
+			Result emplace(const KeyType& inKey, const ItemType& data)
+			{
+				size_t hashVal = Hasher()(inKey);
+				size_t iBucket = hashVal % m_Bucket.size();
+
+				{ // Scope for the lock
+					Bucket& bucket = m_Bucket[iBucket];
+					TicketScopeLockT<TicketLockType> scopeLock(TicketLock::LockMode::NonExclusive, bucket.m_Lock);
+
+					auto iter = bucket.m_Items.begin();
+					for (; iter != bucket.m_Items.end(); ++iter)
+					{
+						if (equal_to<KeyType>()(inKey, iter->Key))
+						{
+							iter->Data = data;
+							return ResultCode::SUCCESS;
+						}
+					}
+				}
+
+				// If we reach here it means we failed to find
+				return insert(inKey, data);
 			}
 
 			Result find( const KeyType& keyVal, ItemType &data )

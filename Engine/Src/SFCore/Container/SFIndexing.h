@@ -14,7 +14,8 @@
 
 #include "SFTypedefs.h"
 #include "String/SFStrUtil.h"
-
+#include "String/SFStringCrc32.h"
+#include "String/SFStringCrc64.h"
 
 
 namespace SF {
@@ -221,6 +222,31 @@ namespace SF {
 			}
 		};
 
+
+		template<>
+		class hash<StringCrc32>
+		{
+		public:
+			typedef StringCrc32 KeyType;
+
+			size_t operator()(const KeyType& _Keyval) const
+			{
+				return _Keyval.GetHash();
+			}
+		};
+
+
+		template<>
+		class hash<StringCrc64>
+		{
+		public:
+			typedef StringCrc64 KeyType;
+
+			size_t operator()(const KeyType& _Keyval) const
+			{
+				return _Keyval.GetHash();
+			}
+		};
 
 
 
