@@ -49,8 +49,6 @@ set(SFCORE_LIB_FILES
 	Script/Tong/SFTongScriptVariable.cpp
 	Service/SFScriptService.cpp
 	Service/SFService.cpp
-	SFNetAddress.cpp
-	SFTypedefs.cpp
 	Stream/SFStream.cpp
 	Stream/SFCompressedStream.cpp
 	Stream/SFMemoryStream.cpp
@@ -176,7 +174,11 @@ set(SFCORE_LIB_FILES
 	Service/SFServices.h
 	SFAssert.h
 	SFResult.h
+	SFNetAddress.h
+	SFNetAddress.cpp
+	SFScopeContext.h
 	SFTypedefs.h
+	SFTypedefs.cpp
 	Stream/SFCompressedStream.h
 	Stream/SFMemoryStream.h
 	Stream/SFStream.h
@@ -250,6 +252,7 @@ set(SFCORE_LIB_FILES
 include_directories(./)
 
 
+add_definitions(-DSF_BUILD_ENGINE_DLL) #for dll exports
 
 add_library(SFCore STATIC ${SFCORE_LIB_FILES})
 

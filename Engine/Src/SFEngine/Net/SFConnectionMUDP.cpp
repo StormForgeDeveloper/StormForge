@@ -294,7 +294,7 @@ namespace Net {
 	// gathering
 	Result ConnectionMUDP::SendPending( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID )
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 
 		MsgMobileNetCtrl *pNetCtrlMsg = nullptr;
 
@@ -319,7 +319,7 @@ namespace Net {
 
 	Result ConnectionMUDP::SendSync( uint uiSequence, uint64_t uiSyncMask )
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 		MsgMobileNetCtrlSync *pNetCtrlMsg = nullptr;
 
 		netCheck( PrepareGatheringBuffer(sizeof(MsgMobileNetCtrlSync)) );

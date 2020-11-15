@@ -26,7 +26,7 @@ namespace SF
  		// C2S: Client heart bit
 		Result NetPolicyGame::HeartBitC2SEvt(  )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -42,7 +42,7 @@ namespace SF
 		// Cmd: Player connected from a login server and moved to game server
 		Result NetPolicyGame::JoinGameServerCmd( const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -58,7 +58,7 @@ namespace SF
 		// Cmd: player complition statues
 		Result NetPolicyGame::GetComplitionStateCmd( const uint64_t &InTransactionID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -74,7 +74,7 @@ namespace SF
 		// Cmd: Player complition state
 		Result NetPolicyGame::SetComplitionStateCmd( const uint64_t &InTransactionID, const char* InComplitionState )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -90,7 +90,7 @@ namespace SF
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 		Result NetPolicyGame::RegisterGCMCmd( const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -106,7 +106,7 @@ namespace SF
 		// Cmd: Unregister Google notification service ID
 		Result NetPolicyGame::UnregisterGCMCmd( const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -122,7 +122,7 @@ namespace SF
 		// Cmd: Invite friend
 		Result NetPolicyGame::InviteFriendCmd( const uint64_t &InTransactionID, const AccountID &InFriendID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -138,7 +138,7 @@ namespace SF
 		// Cmd: Accept friend request
 		Result NetPolicyGame::AcceptFriendRequestCmd( const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -154,7 +154,7 @@ namespace SF
 		// Cmd: Remove friden form the friend list
 		Result NetPolicyGame::RemoveFriendCmd( const uint64_t &InTransactionID, const AccountID &InFriendID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -170,7 +170,7 @@ namespace SF
 		// Cmd: Get friend list
 		Result NetPolicyGame::GetFriendListCmd( const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -186,7 +186,7 @@ namespace SF
 		// Cmd: Query notification list
 		Result NetPolicyGame::GetNotificationListCmd( const uint64_t &InTransactionID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -202,7 +202,7 @@ namespace SF
 		// Cmd: Delete notification
 		Result NetPolicyGame::DeleteNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -218,7 +218,7 @@ namespace SF
 		// Cmd: Set notification is read
 		Result NetPolicyGame::SetNotificationReadCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -234,7 +234,7 @@ namespace SF
 		// Cmd: Accept notification
 		Result NetPolicyGame::AcceptNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -250,7 +250,7 @@ namespace SF
 		// Cmd: Query playerID list
 		Result NetPolicyGame::FindPlayerByEMailCmd( const uint64_t &InTransactionID, const char* InPlayerEMail )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -266,7 +266,7 @@ namespace SF
 		// Cmd: Query playerID list
 		Result NetPolicyGame::FindPlayerByPlayerIDCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -282,7 +282,7 @@ namespace SF
 		// Cmd: *Request Player Status Update
 		Result NetPolicyGame::RequestPlayerStatusUpdateCmd( const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -298,7 +298,7 @@ namespace SF
 		// Cmd: Get Ranking lise
 		Result NetPolicyGame::GetRankingListCmd( const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -314,7 +314,7 @@ namespace SF
 		// Cmd: Game user game play information
 		Result NetPolicyGame::GetUserGamePlayerInfoCmd( const uint64_t &InTransactionID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -330,7 +330,7 @@ namespace SF
 		// Cmd: Game game play information
 		Result NetPolicyGame::GetGamePlayerInfoCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -346,7 +346,7 @@ namespace SF
 		// Cmd: Change NickName
 		Result NetPolicyGame::SetNickNameCmd( const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -362,7 +362,7 @@ namespace SF
 		// Cmd: Create Party
 		Result NetPolicyGame::CreatePartyCmd( const uint64_t &InTransactionID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -378,7 +378,7 @@ namespace SF
 		// Cmd: Join party
 		Result NetPolicyGame::JoinPartyCmd( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -394,7 +394,7 @@ namespace SF
 		// Cmd: Leave party command
 		Result NetPolicyGame::LeavePartyCmd( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -410,7 +410,7 @@ namespace SF
 		// Cmd: Kick player from the party
 		Result NetPolicyGame::PartyKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -426,7 +426,7 @@ namespace SF
 		// Cmd: Invite a player to the party
 		Result NetPolicyGame::PartyInviteCmd( const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -442,7 +442,7 @@ namespace SF
 		// Cmd: Send Party quick chat message
 		Result NetPolicyGame::PartyQuickChatMessageCmd( const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -458,7 +458,7 @@ namespace SF
 		// Cmd: Party chatting
 		Result NetPolicyGame::PartyChatMessageCmd( const uint64_t &InTransactionID, const char* InChatMessage )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -474,7 +474,7 @@ namespace SF
 		// Cmd: Join to a game instance
 		Result NetPolicyGame::JoinGameInstanceCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -490,7 +490,7 @@ namespace SF
 		// Cmd: Leave game instance
 		Result NetPolicyGame::LeaveGameInstanceCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -506,7 +506,7 @@ namespace SF
 		// Cmd: Search game instance
 		Result NetPolicyGame::SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -522,7 +522,7 @@ namespace SF
 		// Cmd: Search game instance
 		Result NetPolicyGame::GetCharacterDataInGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -538,7 +538,7 @@ namespace SF
 		// C2S: Player Movement
 		Result NetPolicyGame::PlayerMovementC2SEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -554,7 +554,7 @@ namespace SF
 		// Cmd: Join to a game
 		Result NetPolicyGame::JoinGameCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -570,7 +570,7 @@ namespace SF
 		// Cmd: Leave Game
 		Result NetPolicyGame::LeaveGameCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -586,7 +586,7 @@ namespace SF
 		// Cmd: Kick player
 		Result NetPolicyGame::KickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -602,7 +602,7 @@ namespace SF
 		// Cmd: Assign role + Game state reset
 		Result NetPolicyGame::AssignRoleCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -618,7 +618,7 @@ namespace SF
 		// Cmd: Send chatting message to the game
 		Result NetPolicyGame::ChatMessageCmd( const uint64_t &InTransactionID, const char* InChatMessage, const uint8_t &InRole )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -634,7 +634,7 @@ namespace SF
 		// Cmd: Advance game
 		Result NetPolicyGame::AdvanceGameCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -650,7 +650,7 @@ namespace SF
 		// Cmd: Vote game advance
 		Result NetPolicyGame::VoteGameAdvanceCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -666,7 +666,7 @@ namespace SF
 		// Cmd: Vote
 		Result NetPolicyGame::VoteCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -682,7 +682,7 @@ namespace SF
 		// Cmd: Play again with the current players
 		Result NetPolicyGame::GamePlayAgainCmd( const uint64_t &InTransactionID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -698,7 +698,7 @@ namespace SF
 		// Cmd: Player. reveal a player
 		Result NetPolicyGame::GameRevealPlayerCmd( const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -714,7 +714,7 @@ namespace SF
 		// Cmd: Player. revive himself
 		Result NetPolicyGame::GamePlayerReviveCmd( const uint64_t &InTransactionID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -730,7 +730,7 @@ namespace SF
 		// Cmd: Player. reset ranking
 		Result NetPolicyGame::GamePlayerResetRankCmd( const uint64_t &InTransactionID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -746,7 +746,7 @@ namespace SF
 		// Cmd: Request Game match
 		Result NetPolicyGame::RequestGameMatchCmd( const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -762,7 +762,7 @@ namespace SF
 		// Cmd: Cancel Game match
 		Result NetPolicyGame::CancelGameMatchCmd( const uint64_t &InTransactionID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -778,7 +778,7 @@ namespace SF
 		// Cmd: Buy shop item prepare
 		Result NetPolicyGame::BuyShopItemPrepareCmd( const uint64_t &InTransactionID, const uint32_t &InShopItemID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -794,7 +794,7 @@ namespace SF
 		// Cmd: Buy shop item
 		Result NetPolicyGame::BuyShopItemCmd( const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -810,7 +810,7 @@ namespace SF
 		// Cmd: Create or Join Chat channel
 		Result NetPolicyGame::CreateOrJoinChatChannelCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -826,7 +826,7 @@ namespace SF
 		// Cmd: Join
 		Result NetPolicyGame::JoinChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -842,7 +842,7 @@ namespace SF
 		// Cmd: Leave ChatChannel command
 		Result NetPolicyGame::LeaveChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -858,7 +858,7 @@ namespace SF
 		// Cmd: Kick player from the ChatChannel
 		Result NetPolicyGame::ChatChannelKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -874,7 +874,7 @@ namespace SF
 		// Cmd: Party chatting
 		Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -890,7 +890,7 @@ namespace SF
 		// Cmd: Create character
 		Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -906,7 +906,7 @@ namespace SF
 		// Cmd: Remove character
 		Result NetPolicyGame::RemoveCharacterCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -922,7 +922,7 @@ namespace SF
 		// Cmd: Get character list
 		Result NetPolicyGame::GetCharacterListCmd( const uint64_t &InTransactionID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -938,7 +938,7 @@ namespace SF
 		// Cmd: 
 		Result NetPolicyGame::GetCharacterDataCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID, const char* InAttributeNames )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -954,7 +954,7 @@ namespace SF
 		// Cmd: Give my stamina to other player
 		Result NetPolicyGame::GiveStaminaCmd( const uint64_t &InTransactionID, const AccountID &InTargetPlayer )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -970,7 +970,7 @@ namespace SF
 		// Cmd: For debug, Change configue preset
 		Result NetPolicyGame::SetPresetGameConfigIDCmd( const uint64_t &InTransactionID, const uint32_t &InPresetID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -988,7 +988,7 @@ namespace SF
 		// Cmd: Player connected from a login server and moved to game server
 		Result NetSvrPolicyGame::JoinGameServerRes( const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1004,7 +1004,7 @@ namespace SF
 		// Cmd: player complition statues
 		Result NetSvrPolicyGame::GetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1020,7 +1020,7 @@ namespace SF
 		// Cmd: Player complition state
 		Result NetSvrPolicyGame::SetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1036,7 +1036,7 @@ namespace SF
 		// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 		Result NetSvrPolicyGame::RegisterGCMRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1052,7 +1052,7 @@ namespace SF
 		// Cmd: Unregister Google notification service ID
 		Result NetSvrPolicyGame::UnregisterGCMRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1068,7 +1068,7 @@ namespace SF
 		// Cmd: Invite friend
 		Result NetSvrPolicyGame::InviteFriendRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1084,7 +1084,7 @@ namespace SF
 		// Cmd: Accept friend request
 		Result NetSvrPolicyGame::AcceptFriendRequestRes( const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1100,7 +1100,7 @@ namespace SF
 		// S2C: Notification for friend request is accepted
 		Result NetSvrPolicyGame::FriendRequestAcceptedS2CEvt( const FriendInformation &InAccepter )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1116,7 +1116,7 @@ namespace SF
 		// Cmd: Remove friden form the friend list
 		Result NetSvrPolicyGame::RemoveFriendRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1132,7 +1132,7 @@ namespace SF
 		// S2C: Friend removed
 		Result NetSvrPolicyGame::FriendRemovedS2CEvt( const AccountID &InFriendID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1148,7 +1148,7 @@ namespace SF
 		// Cmd: Get friend list
 		Result NetSvrPolicyGame::GetFriendListRes( const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1164,7 +1164,7 @@ namespace SF
 		// Cmd: Query notification list
 		Result NetSvrPolicyGame::GetNotificationListRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1180,7 +1180,7 @@ namespace SF
 		// Cmd: Delete notification
 		Result NetSvrPolicyGame::DeleteNotificationRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1196,7 +1196,7 @@ namespace SF
 		// Cmd: Set notification is read
 		Result NetSvrPolicyGame::SetNotificationReadRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1212,7 +1212,7 @@ namespace SF
 		// Cmd: Accept notification
 		Result NetSvrPolicyGame::AcceptNotificationRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1228,7 +1228,7 @@ namespace SF
 		// S2C: Notify new notification
 		Result NetSvrPolicyGame::NotifyS2CEvt( const uint32_t &InNotificationID, const uint32_t &InNotificationType, const uint64_t &InMessageParam0, const uint64_t &InMessageParam1, const char* InMessageText, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1244,7 +1244,7 @@ namespace SF
 		// Cmd: Query playerID list
 		Result NetSvrPolicyGame::FindPlayerByEMailRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1260,7 +1260,7 @@ namespace SF
 		// Cmd: Query playerID list
 		Result NetSvrPolicyGame::FindPlayerByPlayerIDRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1276,7 +1276,7 @@ namespace SF
 		// Cmd: *Request Player Status Update
 		Result NetSvrPolicyGame::RequestPlayerStatusUpdateRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1292,7 +1292,7 @@ namespace SF
 		// S2C: *Notify Player Status Updated
 		Result NetSvrPolicyGame::NotifyPlayerStatusUpdatedS2CEvt( const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1308,7 +1308,7 @@ namespace SF
 		// Cmd: Get Ranking lise
 		Result NetSvrPolicyGame::GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1324,7 +1324,7 @@ namespace SF
 		// Cmd: Game user game play information
 		Result NetSvrPolicyGame::GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1340,7 +1340,7 @@ namespace SF
 		// Cmd: Game game play information
 		Result NetSvrPolicyGame::GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1356,7 +1356,7 @@ namespace SF
 		// S2C: Player level up event
 		Result NetSvrPolicyGame::LevelUpS2CEvt( const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1372,7 +1372,7 @@ namespace SF
 		// Cmd: Change NickName
 		Result NetSvrPolicyGame::SetNickNameRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1388,7 +1388,7 @@ namespace SF
 		// Cmd: Create Party
 		Result NetSvrPolicyGame::CreatePartyRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1404,7 +1404,7 @@ namespace SF
 		// Cmd: Join party
 		Result NetSvrPolicyGame::JoinPartyRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1420,7 +1420,7 @@ namespace SF
 		// S2C: Player Joined event
 		Result NetSvrPolicyGame::PartyPlayerJoinedS2CEvt( const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1436,7 +1436,7 @@ namespace SF
 		// S2C: Party leader changed event
 		Result NetSvrPolicyGame::PartyLeaderChangedS2CEvt( const uint64_t &InPartyUID, const AccountID &InNewLeaderID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1452,7 +1452,7 @@ namespace SF
 		// Cmd: Leave party command
 		Result NetSvrPolicyGame::LeavePartyRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1468,7 +1468,7 @@ namespace SF
 		// S2C: Party Player left event
 		Result NetSvrPolicyGame::PartyPlayerLeftS2CEvt( const uint64_t &InPartyUID, const AccountID &InLeftPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1484,7 +1484,7 @@ namespace SF
 		// Cmd: Kick player from the party
 		Result NetSvrPolicyGame::PartyKickPlayerRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1500,7 +1500,7 @@ namespace SF
 		// S2C: Party Player kicked message
 		Result NetSvrPolicyGame::PartyPlayerKickedS2CEvt( const uint64_t &InPartyUID, const AccountID &InKickedPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1516,7 +1516,7 @@ namespace SF
 		// Cmd: Invite a player to the party
 		Result NetSvrPolicyGame::PartyInviteRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1532,7 +1532,7 @@ namespace SF
 		// S2C: Party invite requested
 		Result NetSvrPolicyGame::PartyInviteRequestedS2CEvt( const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1548,7 +1548,7 @@ namespace SF
 		// Cmd: Send Party quick chat message
 		Result NetSvrPolicyGame::PartyQuickChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1564,7 +1564,7 @@ namespace SF
 		// S2C: Party Chatting message event
 		Result NetSvrPolicyGame::PartyQuickChatMessageS2CEvt( const AccountID &InSenderID, const uint32_t &InQuickChatID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1580,7 +1580,7 @@ namespace SF
 		// Cmd: Party chatting
 		Result NetSvrPolicyGame::PartyChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1596,7 +1596,7 @@ namespace SF
 		// S2C: Party Chatting message event
 		Result NetSvrPolicyGame::PartyChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1612,7 +1612,7 @@ namespace SF
 		// Cmd: Join to a game instance
 		Result NetSvrPolicyGame::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1628,7 +1628,7 @@ namespace SF
 		// Cmd: Leave game instance
 		Result NetSvrPolicyGame::LeaveGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1644,7 +1644,7 @@ namespace SF
 		// Cmd: Search game instance
 		Result NetSvrPolicyGame::SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<GameInstanceInfo>& InGameInstances )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1660,7 +1660,7 @@ namespace SF
 		// Cmd: Search game instance
 		Result NetSvrPolicyGame::GetCharacterDataInGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1676,7 +1676,7 @@ namespace SF
 		// S2C: New Player in get view
 		Result NetSvrPolicyGame::NewPlayerInViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1692,7 +1692,7 @@ namespace SF
 		// S2C: Remove player from view
 		Result NetSvrPolicyGame::RemovePlayerFromViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1708,7 +1708,7 @@ namespace SF
 		// S2C: Player Movement
 		Result NetSvrPolicyGame::PlayerMovementS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1724,7 +1724,7 @@ namespace SF
 		// Cmd: Join to a game
 		Result NetSvrPolicyGame::JoinGameRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1740,7 +1740,7 @@ namespace SF
 		// S2C: Player Joined in the game
 		Result NetSvrPolicyGame::PlayerJoinedS2CEvt( const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1756,7 +1756,7 @@ namespace SF
 		// Cmd: Leave Game
 		Result NetSvrPolicyGame::LeaveGameRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1772,7 +1772,7 @@ namespace SF
 		// S2C: Player left event
 		Result NetSvrPolicyGame::PlayerLeftS2CEvt( const uint64_t &InGameInsUID, const AccountID &InLeftPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1788,7 +1788,7 @@ namespace SF
 		// Cmd: Kick player
 		Result NetSvrPolicyGame::KickPlayerRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1804,7 +1804,7 @@ namespace SF
 		// S2C: Player kicked
 		Result NetSvrPolicyGame::PlayerKickedS2CEvt( const uint64_t &InGameInsUID, const AccountID &InKickedPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1820,7 +1820,7 @@ namespace SF
 		// Cmd: Assign role + Game state reset
 		Result NetSvrPolicyGame::AssignRoleRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1836,7 +1836,7 @@ namespace SF
 		// S2C: Role assigned event
 		Result NetSvrPolicyGame::RoleAssignedS2CEvt( const uint64_t &InGameInsUID, const AccountID &InPlayerID, const uint8_t &InRole )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1852,7 +1852,7 @@ namespace SF
 		// Cmd: Send chatting message to the game
 		Result NetSvrPolicyGame::ChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1868,7 +1868,7 @@ namespace SF
 		// S2C: Chatting message event 
 		Result NetSvrPolicyGame::ChatMessageS2CEvt( const AccountID &InSenderID, const uint8_t &InRole, const char* InSenderName, const char* InChatMessage )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1884,7 +1884,7 @@ namespace SF
 		// Cmd: Advance game
 		Result NetSvrPolicyGame::AdvanceGameRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1900,7 +1900,7 @@ namespace SF
 		// S2C: The game state is advanced
 		Result NetSvrPolicyGame::GameAdvancedS2CEvt( const uint64_t &InGameInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1916,7 +1916,7 @@ namespace SF
 		// S2C: Game is ended
 		Result NetSvrPolicyGame::GameEndedS2CEvt( const uint64_t &InGameInsUID, const uint8_t &InWinner, const uint32_t &InGainedExp, const uint32_t &InGainedGameMoney )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1932,7 +1932,7 @@ namespace SF
 		// Cmd: Vote game advance
 		Result NetSvrPolicyGame::VoteGameAdvanceRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1948,7 +1948,7 @@ namespace SF
 		// S2C: GameAdvance is Voted
 		Result NetSvrPolicyGame::GameAdvanceVotedS2CEvt( const uint64_t &InGameInsUID, const AccountID &InVoter )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1964,7 +1964,7 @@ namespace SF
 		// Cmd: Vote
 		Result NetSvrPolicyGame::VoteRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1980,7 +1980,7 @@ namespace SF
 		// S2C: Player Voted
 		Result NetSvrPolicyGame::VotedS2CEvt( const uint64_t &InGameInsUID, const AccountID &InVoter, const AccountID &InVotedTarget )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -1996,7 +1996,7 @@ namespace SF
 		// S2C: Vote is ended
 		Result NetSvrPolicyGame::VoteEndS2CEvt( const uint64_t &InGameInsUID, const Array<AccountID>& InVoted )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2012,7 +2012,7 @@ namespace SF
 		// S2C: Player Killed
 		Result NetSvrPolicyGame::PlayerKilledS2CEvt( const uint64_t &InGameInsUID, const AccountID &InKilledPlayer, const uint8_t &InReason )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2028,7 +2028,7 @@ namespace SF
 		// S2C: Player Voted
 		Result NetSvrPolicyGame::PlayerRevealedS2CEvt( const uint64_t &InGameInsUID, const AccountID &InRevealedPlayerID, const uint8_t &InRole, const uint8_t &InReason )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2044,7 +2044,7 @@ namespace SF
 		// Cmd: Play again with the current players
 		Result NetSvrPolicyGame::GamePlayAgainRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2060,7 +2060,7 @@ namespace SF
 		// S2C: Somebody pressed play again. Only one of PartyUID and GameInsUID can have a value
 		Result NetSvrPolicyGame::GamePlayAgainS2CEvt( const uint64_t &InPartyUID, const AccountID &InLeadPlayer )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2076,7 +2076,7 @@ namespace SF
 		// Cmd: Player. reveal a player
 		Result NetSvrPolicyGame::GameRevealPlayerRes( const uint64_t &InTransactionID, const Result &InResult, const Array<AccountID>& InRevealedPlayerID, const Array<uint8_t>& InRevealedRole, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2092,7 +2092,7 @@ namespace SF
 		// Cmd: Player. revive himself
 		Result NetSvrPolicyGame::GamePlayerReviveRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2108,7 +2108,7 @@ namespace SF
 		// S2C: Player is revived
 		Result NetSvrPolicyGame::GamePlayerRevivedS2CEvt( const AccountID &InRevivedPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2124,7 +2124,7 @@ namespace SF
 		// Cmd: Player. reset ranking
 		Result NetSvrPolicyGame::GamePlayerResetRankRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2140,7 +2140,7 @@ namespace SF
 		// Cmd: Request Game match
 		Result NetSvrPolicyGame::RequestGameMatchRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2156,7 +2156,7 @@ namespace SF
 		// S2C: Game matched
 		Result NetSvrPolicyGame::GameMatchedS2CEvt( const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2172,7 +2172,7 @@ namespace SF
 		// S2C: Game match failed
 		Result NetSvrPolicyGame::GameMatchFailedS2CEvt( const Result &InFailedReason )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2188,7 +2188,7 @@ namespace SF
 		// S2C: Game matching started
 		Result NetSvrPolicyGame::GameMatchingStartedS2CEvt(  )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2204,7 +2204,7 @@ namespace SF
 		// Cmd: Cancel Game match
 		Result NetSvrPolicyGame::CancelGameMatchRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2220,7 +2220,7 @@ namespace SF
 		// S2C: game matching canceled
 		Result NetSvrPolicyGame::GameMatchingCanceledS2CEvt(  )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2236,7 +2236,7 @@ namespace SF
 		// Cmd: Buy shop item prepare
 		Result NetSvrPolicyGame::BuyShopItemPrepareRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2252,7 +2252,7 @@ namespace SF
 		// Cmd: Buy shop item
 		Result NetSvrPolicyGame::BuyShopItemRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2268,7 +2268,7 @@ namespace SF
 		// Cmd: Create or Join Chat channel
 		Result NetSvrPolicyGame::CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2284,7 +2284,7 @@ namespace SF
 		// Cmd: Join
 		Result NetSvrPolicyGame::JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2300,7 +2300,7 @@ namespace SF
 		// S2C: Player Joined event
 		Result NetSvrPolicyGame::ChatChannelPlayerJoinedS2CEvt( const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2316,7 +2316,7 @@ namespace SF
 		// S2C: ChatChannel leader changed event
 		Result NetSvrPolicyGame::ChatChannelLeaderChangedS2CEvt( const uint64_t &InChatUID, const AccountID &InNewLeaderID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2332,7 +2332,7 @@ namespace SF
 		// Cmd: Leave ChatChannel command
 		Result NetSvrPolicyGame::LeaveChatChannelRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2348,7 +2348,7 @@ namespace SF
 		// S2C: ChatChannel Player left event
 		Result NetSvrPolicyGame::ChatChannelPlayerLeftS2CEvt( const uint64_t &InChatUID, const AccountID &InLeftPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2364,7 +2364,7 @@ namespace SF
 		// Cmd: Kick player from the ChatChannel
 		Result NetSvrPolicyGame::ChatChannelKickPlayerRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2380,7 +2380,7 @@ namespace SF
 		// S2C: ChatChannel Player kicked message
 		Result NetSvrPolicyGame::ChatChannelPlayerKickedS2CEvt( const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2396,7 +2396,7 @@ namespace SF
 		// Cmd: Party chatting
 		Result NetSvrPolicyGame::ChatChannelChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2412,7 +2412,7 @@ namespace SF
 		// S2C: ChatChannel Chatting message event
 		Result NetSvrPolicyGame::ChatChannelChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2428,7 +2428,7 @@ namespace SF
 		// Cmd: Create character
 		Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const int32_t &InCharacterID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2444,7 +2444,7 @@ namespace SF
 		// Cmd: Remove character
 		Result NetSvrPolicyGame::RemoveCharacterRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2460,7 +2460,7 @@ namespace SF
 		// Cmd: Get character list
 		Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<int32_t>& InCharacterIDs )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2476,7 +2476,7 @@ namespace SF
 		// Cmd: 
 		Result NetSvrPolicyGame::GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2492,7 +2492,7 @@ namespace SF
 		// Cmd: Give my stamina to other player
 		Result NetSvrPolicyGame::GiveStaminaRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -2508,7 +2508,7 @@ namespace SF
 		// Cmd: For debug, Change configue preset
 		Result NetSvrPolicyGame::SetPresetGameConfigIDRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);

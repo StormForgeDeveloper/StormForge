@@ -555,6 +555,8 @@ typedef unsigned int		SysUInt;
 //
 
 #include "SFResult.h"
+#include "SFNetAddress.h"
+#include "SFScopeContext.h"
 #include "Interfaces/SFPublicInterface.h"
 
 namespace SF {
@@ -604,7 +606,6 @@ namespace SF {
 
 
 
-
 	// Network class definition
 	enum class NetClass : uint32_t
 	{
@@ -619,124 +620,10 @@ namespace SF {
 		Max
 	};
 
-#pragma pack(push, 4)
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Network Address information
-	//
-
-
-	enum class SockFamily : uint8_t
-	{
-		None = 0,
-		IPV4,// = AF_INET,
-		IPV6,// = AF_INET6
-	};
-
-	enum class SockType
-	{
-		Stream,// = SOCK_STREAM,       // TCP
-		DataGram,// = SOCK_DGRAM,     // UDP
-	};
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Network Address information
-	//
-
-	struct NetAddress
-	{
-		static constexpr int MAX_NETNAME = 70;
-
-		char Address[MAX_NETNAME] = {};
-		uint16_t Port = 0;
-		SockFamily SocketFamily = SockFamily::None;
-
-		NetAddress() = default;
-		NetAddress(SockFamily sockFamily, const char* strAdr, uint16_t port = 0);
-		NetAddress(const char* strAdr, uint16_t port = 0);
-		NetAddress(const sockaddr_in& sockAddr);
-		NetAddress(const sockaddr_in6& sockAddr);
-		NetAddress(const sockaddr_storage& sockAddr);
-
-		explicit operator sockaddr_in() const;
-		explicit operator sockaddr_in6() const;
-		explicit operator sockaddr_storage() const;
-
-        // sizeof(sockaddr_in) for IPV4, and sizeof(sockaddr_in6) for IPV6 socket
-        size_t GetSockAddrSize() const;
-
-		NetAddress& operator = (const sockaddr_in& sockAddr);
-		NetAddress& operator = (const sockaddr_in6& sockAddr);
-		NetAddress& operator = (const sockaddr_storage& sockAddr);
-		NetAddress& operator = (const NetAddress& src);
-
-		bool operator == (const NetAddress& op) const;
-		bool operator != (const NetAddress& op) const;
-	};
-
-
-
-#pragma pack(pop)
 
 
 
 
-	//////////////////////////////////////////////////////////////////////////////////////
-	//
-	//  Function context
-	//
-
-
-	// Intended to replace goto Proc_End style with c++ way
-	// Function Result handling. If error Func has assigned, it will run the error function on failure when the function scope is finished.
-	template<typename ExitFunc = std::function<void(Result result)>>
-	class FunctionContext
-	{
-	public:
-
-		FunctionContext()
-			: m_ExitFunc([](Result hr) { return hr; })
-		{
-		}
-
-		FunctionContext(Result src)
-			: m_ExitFunc([](Result hr) { return hr; })
-			, m_Hr(src)
-		{}
-		FunctionContext(ExitFunc&& errorFunc)
-			: m_ExitFunc(errorFunc)
-		{
-		}
-
-		~FunctionContext()
-		{
-			if (!m_ExitFuncHasCalled)
-			{
-				m_ExitFuncHasCalled = true;
-				m_ExitFunc(m_Hr);
-			}
-		}
-
-		bool operator == (Result hr) const { return m_Hr == hr; }
-		bool operator != (Result hr) const { return m_Hr != hr; }
-
-		FunctionContext& operator = (Result src) { m_Hr = src; return *this; }
-
-		operator Result() const { return m_Hr; }
-		operator decltype(auto)() const{ m_ExitFuncHasCalled = true;  return m_ExitFunc(m_Hr); }
-		explicit operator bool() const { return m_Hr; }
-
-	private:
-
-		// function will be invoked when it has error
-		mutable bool m_ExitFuncHasCalled = false;
-		ExitFunc m_ExitFunc;
-		Result m_Hr;
-	};
 
 
 

@@ -18,12 +18,12 @@
 
 
 namespace SF {
-namespace Message {
+	namespace Message {
 
 		// S2C: Used for sending general failure for not started transaction messages
 		Result FailResultS2CEvt::ParseMessage(const MessageData* pIMsg)
 		{
- 			FunctionContext hr = ResultCode::SUCCESS;
+			ScopeContext hr = ResultCode::SUCCESS;
 
 			protocolCheckPtr(pIMsg);
 
@@ -33,13 +33,13 @@ namespace Message {
 			auto* input = inputStream.ToInputStream();
 
 
-			if(MsgDataSize == sizeof(Result)) // if result only
+			if (MsgDataSize == sizeof(Result)) // if result only
 			{
 				m_Context = 0;
 			}
 			else
 			{
-				protocolCheck( input->Read(m_Context) );
+				protocolCheck(input->Read(m_Context));
 			}
 			protocolCheck(*input >> m_hrRes);
 
@@ -49,13 +49,13 @@ namespace Message {
 
 		void FailResultS2CEvt::OutputMessage(const char* Prefix)
 		{
- 			unused(Prefix);
+			unused(Prefix);
 			SFLog(Net, Debug1, "{0}:FailResultS2CEvt: , Context:{1}, hrRes:{2:X8}",
-											Prefix, m_Context, m_hrRes); 
+				Prefix, m_Context, m_hrRes);
 		}; // VOID MsgFailResultS2CEvt::OutputMessage(const char* Prefix)
 
 
-}; // namespace Message
-}; // namespace SF
+	} // namespace Message
+} // namespace SF
 
 

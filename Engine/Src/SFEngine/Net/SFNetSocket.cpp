@@ -196,7 +196,7 @@ namespace Net {
 	// Pending recv New one
 	Result SocketIOUDP::PendingRecv(IOBUFFER_READ *pRecvBuffer)
 	{
-		FunctionContext hr([&pRecvBuffer](Result hr)
+		ScopeContext hr([&pRecvBuffer](Result hr)
 			{
 				delete pRecvBuffer;
 			});

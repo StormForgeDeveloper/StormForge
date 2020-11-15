@@ -257,7 +257,7 @@ namespace Net {
 
 	Result RawUDP::TerminateNet()
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 
 		m_NetIOAdapter.CloseSocket();
 

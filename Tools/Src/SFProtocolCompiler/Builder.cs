@@ -298,7 +298,7 @@ namespace ProtocolCompiler
         public void DefaultHRESULT()
         {
             MatchIndent();
-            OutStream.WriteLine("FunctionContext hr;");
+            OutStream.WriteLine("ScopeContext hr;");
         }
 
         public void ReturnHR()

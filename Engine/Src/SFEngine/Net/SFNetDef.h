@@ -120,12 +120,12 @@ namespace Net {
 	{
 		// Local address
 		NetAddress		PeerAddress;
-		NetClass		PeerClass;
+		NetClass		PeerClass = NetClass::Unknown;
 
 		// Local identification ID
-		uint64_t		PeerID;
+		uint64_t		PeerID = 0;
 
-		PeerInfo();
+		PeerInfo() = default;
 		PeerInfo(const NetAddress& Addr);
 		PeerInfo(NetClass Class, const NetAddress& Addr, uint64_t UID);
 		PeerInfo(NetClass Class, uint64_t UID);

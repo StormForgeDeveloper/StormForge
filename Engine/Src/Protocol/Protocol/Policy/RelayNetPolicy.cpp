@@ -26,7 +26,7 @@ namespace SF
  		// C2S: Event for Player Join request.
 		Result NetPolicyRelay::JoinRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -42,7 +42,7 @@ namespace SF
 		// C2S: Event for Player Join request.
 		Result NetPolicyRelay::LeaveRelayInstanceC2SEvt( const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -58,7 +58,7 @@ namespace SF
 		// C2S: Relay packet
 		Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -74,7 +74,7 @@ namespace SF
 		// Cmd: Create stream instance
 		Result NetPolicyRelay::CreateStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -90,7 +90,7 @@ namespace SF
 		// Cmd: Open stream instance
 		Result NetPolicyRelay::OpenStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -106,7 +106,7 @@ namespace SF
 		// Cmd: Delete stream instance
 		Result NetPolicyRelay::DeleteStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -122,7 +122,7 @@ namespace SF
 		// Cmd: Create stream instance
 		Result NetPolicyRelay::GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -140,7 +140,7 @@ namespace SF
 		// S2C: Event for joined player
 		Result NetSvrPolicyRelay::JoinRelayInstanceResS2CEvt( const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -156,7 +156,7 @@ namespace SF
 		// S2C: Event for Player joined.
 		Result NetSvrPolicyRelay::PlayerJoinS2CEvt( const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -172,7 +172,7 @@ namespace SF
 		// S2C: Event for Player left.
 		Result NetSvrPolicyRelay::PlayerLeftS2CEvt( const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -188,7 +188,7 @@ namespace SF
 		// Cmd: Create stream instance
 		Result NetSvrPolicyRelay::CreateStreamingRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -204,7 +204,7 @@ namespace SF
 		// Cmd: Open stream instance
 		Result NetSvrPolicyRelay::OpenStreamingRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -220,7 +220,7 @@ namespace SF
 		// Cmd: Delete stream instance
 		Result NetSvrPolicyRelay::DeleteStreamingRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
@@ -236,7 +236,7 @@ namespace SF
 		// Cmd: Create stream instance
 		Result NetSvrPolicyRelay::GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamNames )
 		{
- 			FunctionContext hr;
+ 			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);

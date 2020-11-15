@@ -10,20 +10,11 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-
-inline PeerInfo::PeerInfo()
-	: PeerClass(NetClass::Unknown)
-	, PeerID(0)
-{
-
-}
-
 inline PeerInfo::PeerInfo(NetClass Class, const NetAddress& Addr, uint64_t UID)
 	: PeerAddress(Addr)
 	, PeerClass(Class)
 	, PeerID(UID)
 {
-
 }
 
 inline PeerInfo::PeerInfo(NetClass Class, uint64_t UID)

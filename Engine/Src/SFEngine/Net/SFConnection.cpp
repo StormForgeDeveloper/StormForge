@@ -446,7 +446,7 @@ namespace Net {
 
 	Result Connection::OnRecv( SharedPointerT<Message::MessageData>& pMsg )
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 	
 		if (pMsg == nullptr)
 			return hr;

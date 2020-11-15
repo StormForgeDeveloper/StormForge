@@ -37,6 +37,7 @@ set(SFPROTOCOL_LIB_FILES
   )
 
 
+add_definitions(-DSF_BUILD_ENGINE_DLL) #for dll exports
 
 add_library(SFProtocol STATIC ${SFPROTOCOL_LIB_FILES})
 #target_precompile_headers(SFProtocol PRIVATE SFProtocolPCH.h)

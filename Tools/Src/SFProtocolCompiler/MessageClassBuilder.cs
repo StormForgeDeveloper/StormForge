@@ -846,7 +846,7 @@ namespace ProtocolCompiler
 
             MatchIndent(); OutStream.WriteLine("MessageData *pNewMsg = nullptr;");
 
-            OpenSection("FunctionContext", "hr([&pNewMsg](Result hr) -> MessageData*");
+            OpenSection("ScopeContext", "hr([&pNewMsg](Result hr) -> MessageData*");
             MatchIndent(); OutStream.WriteLine("if(!hr && pNewMsg != nullptr)");
                 OpenSection();
                 MatchIndent(); OutStream.WriteLine("delete pNewMsg;");

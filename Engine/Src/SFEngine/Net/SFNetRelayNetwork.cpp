@@ -82,7 +82,7 @@ namespace Net {
 
 	Result RelayNetwork::Connect(const NetAddress& relayServerAddr, uint32_t relayInstanceID, PlayerID myPlayerID)
 	{
-		FunctionContext hr([this](Result result)
+		ScopeContext hr([this](Result result)
 		{
 			if (!result && GetRelayNetworkState() == RelayNetworkState::Connecting)
 				m_RelayNetworkState = RelayNetworkState::Disconnected;
@@ -136,7 +136,7 @@ namespace Net {
 	// Disconnect RelayNetwork
 	Result RelayNetwork::Disconnect(const char* reason)
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 
 		if( GetRelayNetworkState() != RelayNetworkState::Disconnected)
 		{
@@ -172,7 +172,7 @@ namespace Net {
 	// Close RelayNetwork
 	Result RelayNetwork::CloseConnection(const char* reason)
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 		auto orgState = GetRelayNetworkState();
 
 		if (orgState == RelayNetworkState::Disconnected)
@@ -205,7 +205,7 @@ namespace Net {
 
 	Result RelayNetwork::OnRecv(const sockaddr_storage& remoteAddr, SharedPointerT<Message::MessageData>& pMsg)
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 	
 		if (pMsg == nullptr)
 			return hr;
@@ -247,7 +247,7 @@ namespace Net {
 
 	Result RelayNetwork::OnJoinRelayInstanceResS2CEvt(MessageDataPtr&& pMsg)
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 		if (GetRelayNetworkState() != RelayNetworkState::Connecting)
 			return hr;
 
@@ -282,7 +282,7 @@ namespace Net {
 
 	Result RelayNetwork::OnPlayerJoinS2CEvt(MessageDataPtr&& pMsg)
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 		if (GetRelayNetworkState() != RelayNetworkState::Connecting)
 			return hr;
 
@@ -308,7 +308,7 @@ namespace Net {
 
 	Result RelayNetwork::OnPlayerLeftS2CEvt(MessageDataPtr&& pMsg)
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 		if (GetRelayNetworkState() != RelayNetworkState::Connecting)
 			return hr;
 
@@ -334,7 +334,7 @@ namespace Net {
 
 	Result RelayNetwork::OnRelayPacketC2SEvt(MessageDataPtr&& pMsg)
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 		if (GetRelayNetworkState() != RelayNetworkState::Connecting)
 			return hr;
 
@@ -361,7 +361,7 @@ namespace Net {
 	// Send message to connected entity
 	Result RelayNetwork::Send(uint32_t targetEndpointMask, size_t payloadSize, const void* payloadData)
 	{
-		FunctionContext hr;
+		ScopeContext hr;
 
 		MessageDataPtr pMessage = Message::Relay::RelayPacketC2SEvt::Create(m_RawUDP.GetHeap(), 
 			GetRelayInstanceID(), 

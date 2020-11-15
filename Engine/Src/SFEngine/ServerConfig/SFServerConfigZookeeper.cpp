@@ -510,7 +510,7 @@ namespace SF
 
 	Result ServerConfigZookeeper::LoadConfig(const String& nodePath)
 	{
-		FunctionContext result([](Result result) 
+		ScopeContext result([](Result result) 
 		{
 			if (!result)
 			{
