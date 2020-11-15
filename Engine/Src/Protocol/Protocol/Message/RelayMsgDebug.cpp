@@ -40,6 +40,18 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::PlayerLeftS2CEvt::MID.IDSeq.MsgID,&Message::Relay::PlayerLeftS2CEvt::TraceOut));
 			// C2S: Relay packet
 			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::RelayPacketC2SEvt::MID.IDSeq.MsgID,&Message::Relay::RelayPacketC2SEvt::TraceOut));
+			// Cmd: Create stream instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::CreateStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::CreateStreamingCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::CreateStreamingRes::MID.IDSeq.MsgID,&Message::Relay::CreateStreamingRes::TraceOut));
+			// Cmd: Open stream instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::OpenStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::OpenStreamingCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::OpenStreamingRes::MID.IDSeq.MsgID,&Message::Relay::OpenStreamingRes::TraceOut));
+			// Cmd: Delete stream instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::DeleteStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamingCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::DeleteStreamingRes::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamingRes::TraceOut));
+			// Cmd: Create stream instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::GetStreamListCmd::MID.IDSeq.MsgID,&Message::Relay::GetStreamListCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::GetStreamListRes::MID.IDSeq.MsgID,&Message::Relay::GetStreamListRes::TraceOut));
 		}; // void RegisterDebugTraceRelay()
 
 
