@@ -252,8 +252,6 @@ set(SFCORE_LIB_FILES
 include_directories(./)
 
 
-add_definitions(-DSF_BUILD_ENGINE_DLL) #for dll exports
-
 add_library(SFCore STATIC ${SFCORE_LIB_FILES})
 
 target_precompile_headers(SFCore PUBLIC SFCorePCH.h)

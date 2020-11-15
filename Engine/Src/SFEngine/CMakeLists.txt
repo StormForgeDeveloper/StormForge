@@ -259,8 +259,6 @@ set(SFENGINE_LIB_FILES
   )
 
 
-add_definitions(-DSF_BUILD_ENGINE_DLL) #for dll exports
-
 
 add_library(SFEngine STATIC ${SFENGINE_LIB_FILES})
 
