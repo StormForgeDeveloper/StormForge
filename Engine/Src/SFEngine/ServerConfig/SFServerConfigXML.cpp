@@ -156,6 +156,7 @@ namespace SF
 
 	Result ServerConfigXML::ParseXMLDBCluster(xmlNode* pNode, ServerConfig::DBCluster* &pDBCluster)
 	{
+		auto ClusterName = (const char*)xmlGetProp(pNode, (xmlChar*)"ClusterName");
 		auto ClusterType = (const char*)xmlGetProp(pNode, (xmlChar*)"ClusterType");
 		auto DBInstanceName = (const char*)xmlGetProp(pNode, (xmlChar*)"DBInstanceName");
 		auto DBName = (const char*)xmlGetProp(pNode, (xmlChar*)"DBName");
@@ -165,6 +166,7 @@ namespace SF
 			return ResultCode::INVALID_VALUE;
 
 		pDBCluster = new(GetHeap()) ServerConfig::DBCluster(GetHeap());
+		pDBCluster->ClusterName = String(GetHeap(), ClusterName);
 		pDBCluster->DBInstanceName = String(GetHeap(), DBInstanceName);
 		pDBCluster->DBName = String(GetHeap(), DBName);
 		if(ClusterType != nullptr)
@@ -375,7 +377,6 @@ namespace SF
 				if (pDBCluster != nullptr)
 				{
 					pDBCluster->pGameCluster = pGameCluster;
-					pDBCluster->ClusterName = (const char*)pChild->name;
 					pGameCluster->DBClusters.push_back(pDBCluster);
 				}
 			}
@@ -451,7 +452,6 @@ namespace SF
 				result = ParseXMLDBCluster(pCurNode, pDBCluster);
 				if (result)
 				{
-					pDBCluster->ClusterName = (const char*)pCurNode->name;
 					m_Config.GetDBClusters().push_back(pDBCluster);
 				}
 			}

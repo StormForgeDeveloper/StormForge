@@ -70,6 +70,7 @@ namespace SF {
 		MatchInstance,		// Faculty Match Instance
 		Manager,			// Faculty Manager Instance
 		ChatChannel,
+		ServiceInstance,		// Faculty generic service Instance
 		Max,
 	};
 
@@ -120,11 +121,12 @@ namespace SF {
 		MatchingQueue_Game_8x1S,
 		MatchingQueue_Game_8x1W,
 
-		Relay
-		
+		Relay,
+		StreamCollection,
+		Stream
 	};
 
-	static constexpr uint32_t ClusterID_MatchingQueue_Max = static_cast<uint32_t>(ClusterID::MatchingQueue_Game_8x1W);
+	static constexpr uint32_t ClusterID_MatchingQueue_Max = static_cast<uint32_t>(ClusterID::Stream);
 
 
 	inline ClusterID operator++(ClusterID clusterID)
