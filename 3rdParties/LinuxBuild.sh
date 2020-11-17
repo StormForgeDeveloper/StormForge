@@ -12,7 +12,6 @@ mkdir $BUILD_DIR/x64Release
 cd $BUILD_DIR
 
 
-
 export CMAKE_BUILD_TYPE=Debug
 cd x64$CMAKE_BUILD_TYPE
 cmake --build .   --target install  --config Debug
