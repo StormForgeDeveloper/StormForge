@@ -39,7 +39,7 @@ add_definitions(-DSF_BUILD_ENGINE_DLL)
 add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES})
 
 
-add_dependencies(SFEngineDLL SFCore SFEngine SFProtocol curl iconv zookeeper)
+add_dependencies(SFEngineDLL SFCore SFEngine SFProtocol)
 
 
 target_link_libraries(SFEngineDLL ${ENGINE_LINK_LIBS} ${PLATFORM_LIBS})

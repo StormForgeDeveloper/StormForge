@@ -12,7 +12,7 @@
 #include "Container/SFCircularPageQueue.h"
 #include "UnitTest_Kafka.h"
 
-#include "rdkafka.h"
+#include "rdkafka/rdkafka.h"
 
 
 

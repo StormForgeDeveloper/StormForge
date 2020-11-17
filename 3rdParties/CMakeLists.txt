@@ -1,26 +1,44 @@
 
+cmake_minimum_required(VERSION 3.16)
+include(../build/StormForge.cmake)
 
+
+project(SF3rdParties C CXX)
 
 
 set(CMAKE_USE_MBEDTLS ON)
 
-set(LIB_INSTALL_DIR bin/lib)
-
-add_definitions(-DNOMINMAX)
-add_definitions(-DHAVE_CONFIG_H)
-add_definitions(-DCURL_STATICLIB)
-add_definitions(-DHAVE_STDDEF_H=1)
-add_definitions(-DHAVE_SYS_TYPES_H=1)
-
+set(LIB_INSTALL_DIR lib)
 
 
 include_directories(AFTER 
-	src/curl/curl
-	src/libiconv/libiconv-1.15/include
 	src/mbedtls/mbedtls-2.16.0/include
+	src/libiconv/libiconv-1.15/include
 	src/libpng/lpng1617
+	src/jpeg/jpeg-9a
+	src/libxml/libxml2/include
+	src/curl/curl/include
 	src/zlib/zlib-1.2.8
+	src/jsoncpp/jsoncpp/include
+	src/zookeeper/zookeeperConnector/include
+	#src/PlayFab/XPlatCppSdk/code/include
 )
+
+
+
+if(WIN32)
+
+	include_directories(AFTER 
+		src/mysql-connector-c++-8.0.18-winx64/include
+	)
+
+elseif(ANDROID_PLATFORM)
+
+elseif(IOS)
+
+elseif(UNIX)
+
+endif()
 
 
 
@@ -48,5 +66,4 @@ add_subdirectory(src/SFWinport)
 
 
 #install(TARGETS src/libiconv/iconv curl freetype gtest jasper jpeg jsoncpp lcms mng tiff xml png mbedtls rdkafka tinyxml zlib yaml DESTINATION bin/lib)
-
 
