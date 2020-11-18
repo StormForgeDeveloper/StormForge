@@ -314,7 +314,7 @@ namespace SF
 			}; // class RelayPacketC2SEvt : public MessageBase
 
 			// Cmd: Create stream instance
-			class CreateStreamingCmd : public MessageBase
+			class CreateStreamCmd : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -337,11 +337,11 @@ namespace SF
 				AuthTicket m_Ticket;
 				const char* m_StreamName;
 			public:
-				CreateStreamingCmd()
+				CreateStreamCmd()
 				:m_StreamName(nullptr)
 					{}
 
-				CreateStreamingCmd( MessageDataPtr &&pMsg )
+				CreateStreamCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 				,m_StreamName(nullptr)
 					{}
@@ -360,9 +360,9 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 
-			}; // class CreateStreamingCmd : public MessageBase
+			}; // class CreateStreamCmd : public MessageBase
 
-			class CreateStreamingRes : public MessageBase
+			class CreateStreamRes : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -387,11 +387,11 @@ namespace SF
 				NetAddress m_StreamServerAddrIPV4;
 				const char* m_StreamUID;
 			public:
-				CreateStreamingRes()
+				CreateStreamRes()
 				:m_StreamUID(nullptr)
 					{}
 
-				CreateStreamingRes( MessageDataPtr &&pMsg )
+				CreateStreamRes( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 				,m_StreamUID(nullptr)
 					{}
@@ -412,10 +412,10 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
 
-			}; // class CreateStreamingRes : public MessageBase
+			}; // class CreateStreamRes : public MessageBase
 
 			// Cmd: Open stream instance
-			class OpenStreamingCmd : public MessageBase
+			class FindStreamCmd : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -438,11 +438,11 @@ namespace SF
 				AuthTicket m_Ticket;
 				const char* m_StreamName;
 			public:
-				OpenStreamingCmd()
+				FindStreamCmd()
 				:m_StreamName(nullptr)
 					{}
 
-				OpenStreamingCmd( MessageDataPtr &&pMsg )
+				FindStreamCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 				,m_StreamName(nullptr)
 					{}
@@ -461,9 +461,9 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 
-			}; // class OpenStreamingCmd : public MessageBase
+			}; // class FindStreamCmd : public MessageBase
 
-			class OpenStreamingRes : public MessageBase
+			class FindStreamRes : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -488,11 +488,11 @@ namespace SF
 				NetAddress m_StreamServerAddrIPV4;
 				const char* m_StreamUID;
 			public:
-				OpenStreamingRes()
+				FindStreamRes()
 				:m_StreamUID(nullptr)
 					{}
 
-				OpenStreamingRes( MessageDataPtr &&pMsg )
+				FindStreamRes( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 				,m_StreamUID(nullptr)
 					{}
@@ -513,10 +513,10 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
 
-			}; // class OpenStreamingRes : public MessageBase
+			}; // class FindStreamRes : public MessageBase
 
 			// Cmd: Delete stream instance
-			class DeleteStreamingCmd : public MessageBase
+			class DeleteStreamCmd : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -537,22 +537,22 @@ namespace SF
 			private:
 				uint64_t m_TransactionID;
 				AuthTicket m_Ticket;
-				const char* m_StreamUID;
+				const char* m_StreamName;
 			public:
-				DeleteStreamingCmd()
-				:m_StreamUID(nullptr)
+				DeleteStreamCmd()
+				:m_StreamName(nullptr)
 					{}
 
-				DeleteStreamingCmd( MessageDataPtr &&pMsg )
+				DeleteStreamCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_StreamUID(nullptr)
+				,m_StreamName(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
-				const char* GetStreamUID() const	{ return m_StreamUID; };
+				const char* GetStreamName() const	{ return m_StreamName; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -560,11 +560,11 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamUID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 
-			}; // class DeleteStreamingCmd : public MessageBase
+			}; // class DeleteStreamCmd : public MessageBase
 
-			class DeleteStreamingRes : public MessageBase
+			class DeleteStreamRes : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -586,10 +586,10 @@ namespace SF
 				uint64_t m_TransactionID;
 				Result m_Result;
 			public:
-				DeleteStreamingRes()
+				DeleteStreamRes()
 					{}
 
-				DeleteStreamingRes( MessageDataPtr &&pMsg )
+				DeleteStreamRes( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
@@ -606,9 +606,9 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
-			}; // class DeleteStreamingRes : public MessageBase
+			}; // class DeleteStreamRes : public MessageBase
 
-			// Cmd: Create stream instance
+			// Cmd: Get stream list
 			class GetStreamListCmd : public MessageBase
 			{
  			public:

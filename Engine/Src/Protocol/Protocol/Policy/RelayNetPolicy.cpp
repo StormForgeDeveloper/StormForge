@@ -72,54 +72,54 @@ namespace SF
 
 		}; // Result NetPolicyRelay::RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 		// Cmd: Create stream instance
-		Result NetPolicyRelay::CreateStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+		Result NetPolicyRelay::CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 		{
  			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
 
-			 pMessage = SF::Message::Relay::CreateStreamingCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InTicket, InStreamName);
+			 pMessage = SF::Message::Relay::CreateStreamCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InTicket, InStreamName);
 			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
 			return hr;
 
-		}; // Result NetPolicyRelay::CreateStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+		}; // Result NetPolicyRelay::CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 		// Cmd: Open stream instance
-		Result NetPolicyRelay::OpenStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+		Result NetPolicyRelay::FindStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 		{
  			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
 
-			 pMessage = SF::Message::Relay::OpenStreamingCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InTicket, InStreamName);
+			 pMessage = SF::Message::Relay::FindStreamCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InTicket, InStreamName);
 			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
 			return hr;
 
-		}; // Result NetPolicyRelay::OpenStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+		}; // Result NetPolicyRelay::FindStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 		// Cmd: Delete stream instance
-		Result NetPolicyRelay::DeleteStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamUID )
+		Result NetPolicyRelay::DeleteStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 		{
  			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
 
-			 pMessage = SF::Message::Relay::DeleteStreamingCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InTicket, InStreamUID);
+			 pMessage = SF::Message::Relay::DeleteStreamCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InTicket, InStreamName);
 			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
 			return hr;
 
-		}; // Result NetPolicyRelay::DeleteStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamUID )
-		// Cmd: Create stream instance
+		}; // Result NetPolicyRelay::DeleteStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+		// Cmd: Get stream list
 		Result NetPolicyRelay::GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket )
 		{
  			ScopeContext hr;
@@ -186,54 +186,54 @@ namespace SF
 
 		}; // Result NetSvrPolicyRelay::PlayerLeftS2CEvt( const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
 		// Cmd: Create stream instance
-		Result NetSvrPolicyRelay::CreateStreamingRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
+		Result NetSvrPolicyRelay::CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 		{
  			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
 
-			 pMessage = SF::Message::Relay::CreateStreamingRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InStreamServerAddr, InStreamServerAddrIPV4, InStreamUID);
+			 pMessage = SF::Message::Relay::CreateStreamRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InStreamServerAddr, InStreamServerAddrIPV4, InStreamUID);
 			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
 			return hr;
 
-		}; // Result NetSvrPolicyRelay::CreateStreamingRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
+		}; // Result NetSvrPolicyRelay::CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 		// Cmd: Open stream instance
-		Result NetSvrPolicyRelay::OpenStreamingRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
+		Result NetSvrPolicyRelay::FindStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 		{
  			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
 
-			 pMessage = SF::Message::Relay::OpenStreamingRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InStreamServerAddr, InStreamServerAddrIPV4, InStreamUID);
+			 pMessage = SF::Message::Relay::FindStreamRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InStreamServerAddr, InStreamServerAddrIPV4, InStreamUID);
 			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
 			return hr;
 
-		}; // Result NetSvrPolicyRelay::OpenStreamingRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
+		}; // Result NetSvrPolicyRelay::FindStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 		// Cmd: Delete stream instance
-		Result NetSvrPolicyRelay::DeleteStreamingRes( const uint64_t &InTransactionID, const Result &InResult )
+		Result NetSvrPolicyRelay::DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult )
 		{
  			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
 
-			 pMessage = SF::Message::Relay::DeleteStreamingRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
+			 pMessage = SF::Message::Relay::DeleteStreamRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult);
 			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
 			return hr;
 
-		}; // Result NetSvrPolicyRelay::DeleteStreamingRes( const uint64_t &InTransactionID, const Result &InResult )
-		// Cmd: Create stream instance
+		}; // Result NetSvrPolicyRelay::DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult )
+		// Cmd: Get stream list
 		Result NetSvrPolicyRelay::GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamNames )
 		{
  			ScopeContext hr;

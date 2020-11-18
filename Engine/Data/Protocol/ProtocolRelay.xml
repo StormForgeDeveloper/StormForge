@@ -47,7 +47,7 @@
 
     <!-- ============================  Streaming ============================================ -->
 
-    <Command Name="CreateStreaming" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">
+    <Command Name="CreateStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">
       <Cmd>
         <Params Type="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
         <Params Type="String" Name="StreamName" Desc="Stream name"/>
@@ -59,7 +59,7 @@
       </Res>
     </Command>
 
-    <Command Name="OpenStreaming" Reliable="true" Crypto="No" Trace="Debug1" Desc="Open stream instance">
+    <Command Name="FindStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Open stream instance">
       <Cmd>
         <Params Type="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
         <Params Type="String" Name="StreamName" Desc="Stream name"/>
@@ -71,16 +71,16 @@
       </Res>
     </Command>
 
-    <Command Name="DeleteStreaming" Reliable="true" Crypto="No" Trace="Debug1" Desc="Delete stream instance">
+    <Command Name="DeleteStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Delete stream instance">
       <Cmd>
         <Params Type="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-        <Params Type="String" Name="StreamUID" Desc="Unique stream Id to delete"/>
+        <Params Type="String" Name="StreamName" Desc="stream name to delete"/>
       </Cmd>
       <Res>
       </Res>
     </Command>
 
-    <Command Name="GetStreamList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">
+    <Command Name="GetStreamList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get stream list">
       <Cmd>
         <Params Type="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
       </Cmd>

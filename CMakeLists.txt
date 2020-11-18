@@ -35,7 +35,8 @@ elseif(ANDROID_PLATFORM)
 elseif(IOS)
 
 elseif(UNIX)
-	
+
+	link_directories(BEFORE 3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib)	
 endif()
 
 

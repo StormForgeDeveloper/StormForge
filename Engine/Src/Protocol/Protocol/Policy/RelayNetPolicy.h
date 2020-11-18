@@ -42,12 +42,12 @@ namespace SF
 			// C2S: Relay packet
 			Result RelayPacketC2SEvt( const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
 			// Cmd: Create stream instance
-			Result CreateStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+			Result CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 			// Cmd: Open stream instance
-			Result OpenStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+			Result FindStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 			// Cmd: Delete stream instance
-			Result DeleteStreamingCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamUID );
-			// Cmd: Create stream instance
+			Result DeleteStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
+			// Cmd: Get stream list
 			Result GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket );
 
 		}; // class NetPolicyRelay 
@@ -71,12 +71,12 @@ namespace SF
 			// S2C: Event for Player left.
 			Result PlayerLeftS2CEvt( const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason );
 			// Cmd: Create stream instance
-			Result CreateStreamingRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
+			Result CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
 			// Cmd: Open stream instance
-			Result OpenStreamingRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
+			Result FindStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
 			// Cmd: Delete stream instance
-			Result DeleteStreamingRes( const uint64_t &InTransactionID, const Result &InResult );
-			// Cmd: Create stream instance
+			Result DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult );
+			// Cmd: Get stream list
 			Result GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamNames );
 
 		}; // class NetSvrPolicyRelay

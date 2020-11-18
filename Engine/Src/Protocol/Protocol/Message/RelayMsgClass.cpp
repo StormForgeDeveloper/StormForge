@@ -611,8 +611,8 @@ namespace SF
 			}; // Result RelayPacketC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Create stream instance
-			const MessageID CreateStreamingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 6);
-			Result CreateStreamingCmd::ParseMessage(const MessageData* pIMsg)
+			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 6);
+			Result CreateStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -632,14 +632,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateStreamingCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result CreateStreamCmd::ParseMessage(const MessageData* pIMsg)
 
-			Result CreateStreamingCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CreateStreamCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				CreateStreamingCmd parser;
+				CreateStreamCmd parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
@@ -648,21 +648,21 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateStreamingCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CreateStreamCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result CreateStreamingCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamingCmd(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamCmd(std::forward<MessageDataPtr>(pIMsg)));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CreateStreamingCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* CreateStreamingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			MessageData* CreateStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -683,7 +683,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamName)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::CreateStreamingCmd::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::CreateStreamCmd::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -694,21 +694,21 @@ namespace SF
 				protocolCheck(*output << InStreamName);
 
 				return hr;
-			}; // MessageData* CreateStreamingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			}; // MessageData* CreateStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 
 
 
-			Result CreateStreamingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CreateStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				CreateStreamingCmd parser;
+ 				CreateStreamCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateStreaming:{0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
+				SFLog(Net, Debug1, "CreateStream:{0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
-			}; // Result CreateStreamingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CreateStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CreateStreamingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 6);
-			Result CreateStreamingRes::ParseMessage(const MessageData* pIMsg)
+			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 6);
+			Result CreateStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -730,14 +730,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateStreamingRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result CreateStreamRes::ParseMessage(const MessageData* pIMsg)
 
-			Result CreateStreamingRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CreateStreamRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				CreateStreamingRes parser;
+				CreateStreamRes parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
@@ -748,21 +748,21 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateStreamingRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CreateStreamRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result CreateStreamingRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamingRes(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamRes(std::forward<MessageDataPtr>(pIMsg)));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CreateStreamingRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* CreateStreamingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
+			MessageData* CreateStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -785,7 +785,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamUID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::CreateStreamingRes::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::CreateStreamRes::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -798,22 +798,22 @@ namespace SF
 				protocolCheck(*output << InStreamUID);
 
 				return hr;
-			}; // MessageData* CreateStreamingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
+			}; // MessageData* CreateStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 
 
 
-			Result CreateStreamingRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CreateStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				CreateStreamingRes parser;
+ 				CreateStreamRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateStreaming:{0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamServerAddr:{4}, StreamServerAddrIPV4:{5}, StreamUID:{6,60}",
+				SFLog(Net, Debug1, "CreateStream:{0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamServerAddr:{4}, StreamServerAddrIPV4:{5}, StreamUID:{6,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamServerAddr(), parser.GetStreamServerAddrIPV4(), parser.GetStreamUID()); 
 				return ResultCode::SUCCESS;
-			}; // Result CreateStreamingRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CreateStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Open stream instance
-			const MessageID OpenStreamingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 7);
-			Result OpenStreamingCmd::ParseMessage(const MessageData* pIMsg)
+			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 7);
+			Result FindStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -833,14 +833,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result OpenStreamingCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindStreamCmd::ParseMessage(const MessageData* pIMsg)
 
-			Result OpenStreamingCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindStreamCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				OpenStreamingCmd parser;
+				FindStreamCmd parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
@@ -849,21 +849,21 @@ namespace SF
 
 				return hr;
 
-			}; // Result OpenStreamingCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindStreamCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result OpenStreamingCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) OpenStreamingCmd(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheckMem(pMessageBase = new(memHeap) FindStreamCmd(std::forward<MessageDataPtr>(pIMsg)));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result OpenStreamingCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* OpenStreamingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			MessageData* FindStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -884,7 +884,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamName)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::OpenStreamingCmd::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::FindStreamCmd::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -895,21 +895,21 @@ namespace SF
 				protocolCheck(*output << InStreamName);
 
 				return hr;
-			}; // MessageData* OpenStreamingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			}; // MessageData* FindStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 
 
 
-			Result OpenStreamingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				OpenStreamingCmd parser;
+ 				FindStreamCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "OpenStreaming:{0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
+				SFLog(Net, Debug1, "FindStream:{0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
-			}; // Result OpenStreamingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID OpenStreamingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 7);
-			Result OpenStreamingRes::ParseMessage(const MessageData* pIMsg)
+			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 7);
+			Result FindStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -931,14 +931,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result OpenStreamingRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindStreamRes::ParseMessage(const MessageData* pIMsg)
 
-			Result OpenStreamingRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindStreamRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				OpenStreamingRes parser;
+				FindStreamRes parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
@@ -949,21 +949,21 @@ namespace SF
 
 				return hr;
 
-			}; // Result OpenStreamingRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindStreamRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result OpenStreamingRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) OpenStreamingRes(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheckMem(pMessageBase = new(memHeap) FindStreamRes(std::forward<MessageDataPtr>(pIMsg)));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result OpenStreamingRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* OpenStreamingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
+			MessageData* FindStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -986,7 +986,7 @@ namespace SF
 					+ SerializedSizeOf(InStreamUID)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::OpenStreamingRes::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::FindStreamRes::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -999,22 +999,22 @@ namespace SF
 				protocolCheck(*output << InStreamUID);
 
 				return hr;
-			}; // MessageData* OpenStreamingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
+			}; // MessageData* FindStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 
 
 
-			Result OpenStreamingRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				OpenStreamingRes parser;
+ 				FindStreamRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "OpenStreaming:{0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamServerAddr:{4}, StreamServerAddrIPV4:{5}, StreamUID:{6,60}",
+				SFLog(Net, Debug1, "FindStream:{0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamServerAddr:{4}, StreamServerAddrIPV4:{5}, StreamUID:{6,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamServerAddr(), parser.GetStreamServerAddrIPV4(), parser.GetStreamUID()); 
 				return ResultCode::SUCCESS;
-			}; // Result OpenStreamingRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Delete stream instance
-			const MessageID DeleteStreamingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 8);
-			Result DeleteStreamingCmd::ParseMessage(const MessageData* pIMsg)
+			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 8);
+			Result DeleteStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -1030,41 +1030,41 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Ticket);
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_StreamUID, ArrayLen));
+				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
 
 				return hr;
 
-			}; // Result DeleteStreamingCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result DeleteStreamCmd::ParseMessage(const MessageData* pIMsg)
 
-			Result DeleteStreamingCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result DeleteStreamCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				DeleteStreamingCmd parser;
+				DeleteStreamCmd parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
-				variableBuilder.SetVariable("StreamUID", parser.GetStreamUID());
+				variableBuilder.SetVariable("StreamName", parser.GetStreamName());
 
 				return hr;
 
-			}; // Result DeleteStreamingCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result DeleteStreamCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result DeleteStreamingCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamingCmd(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamCmd(std::forward<MessageDataPtr>(pIMsg)));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result DeleteStreamingCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			}; // Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* DeleteStreamingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamUID )
+			MessageData* DeleteStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1082,10 +1082,10 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTicket)
-					+ SerializedSizeOf(InStreamUID)
+					+ SerializedSizeOf(InStreamName)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::DeleteStreamingCmd::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::DeleteStreamCmd::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -1093,24 +1093,24 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InTicket);
-				protocolCheck(*output << InStreamUID);
+				protocolCheck(*output << InStreamName);
 
 				return hr;
-			}; // MessageData* DeleteStreamingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamUID )
+			}; // MessageData* DeleteStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 
 
 
-			Result DeleteStreamingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				DeleteStreamingCmd parser;
+ 				DeleteStreamCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DeleteStreaming:{0}:{1} , TransactionID:{2}, Ticket:{3}, StreamUID:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamUID()); 
+				SFLog(Net, Debug1, "DeleteStream:{0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
-			}; // Result DeleteStreamingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID DeleteStreamingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 8);
-			Result DeleteStreamingRes::ParseMessage(const MessageData* pIMsg)
+			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 8);
+			Result DeleteStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -1128,14 +1128,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteStreamingRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result DeleteStreamRes::ParseMessage(const MessageData* pIMsg)
 
-			Result DeleteStreamingRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result DeleteStreamRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				DeleteStreamingRes parser;
+				DeleteStreamRes parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
@@ -1143,21 +1143,21 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteStreamingRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result DeleteStreamRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result DeleteStreamingRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamingRes(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamRes(std::forward<MessageDataPtr>(pIMsg)));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result DeleteStreamingRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			}; // Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* DeleteStreamingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			MessageData* DeleteStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1177,7 +1177,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::DeleteStreamingRes::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Relay::DeleteStreamRes::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -1187,20 +1187,20 @@ namespace SF
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* DeleteStreamingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // MessageData* DeleteStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
 
 
-			Result DeleteStreamingRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result DeleteStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				DeleteStreamingRes parser;
+ 				DeleteStreamRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DeleteStreaming:{0}:{1} , TransactionID:{2}, Result:{3:X8}",
+				SFLog(Net, Debug1, "DeleteStream:{0}:{1} , TransactionID:{2}, Result:{3:X8}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result DeleteStreamingRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result DeleteStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			// Cmd: Create stream instance
+			// Cmd: Get stream list
 			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_RELAY, 9);
 			Result GetStreamListCmd::ParseMessage(const MessageData* pIMsg)
 			{

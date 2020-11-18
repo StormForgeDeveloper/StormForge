@@ -41,15 +41,15 @@ namespace SF
 			// C2S: Relay packet
 			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::RelayPacketC2SEvt::MID.IDSeq.MsgID,&Message::Relay::RelayPacketC2SEvt::TraceOut));
 			// Cmd: Create stream instance
-			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::CreateStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::CreateStreamingCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::CreateStreamingRes::MID.IDSeq.MsgID,&Message::Relay::CreateStreamingRes::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::CreateStreamCmd::MID.IDSeq.MsgID,&Message::Relay::CreateStreamCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::CreateStreamRes::MID.IDSeq.MsgID,&Message::Relay::CreateStreamRes::TraceOut));
 			// Cmd: Open stream instance
-			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::OpenStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::OpenStreamingCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::OpenStreamingRes::MID.IDSeq.MsgID,&Message::Relay::OpenStreamingRes::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::FindStreamCmd::MID.IDSeq.MsgID,&Message::Relay::FindStreamCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::FindStreamRes::MID.IDSeq.MsgID,&Message::Relay::FindStreamRes::TraceOut));
 			// Cmd: Delete stream instance
-			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::DeleteStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamingCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::DeleteStreamingRes::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamingRes::TraceOut));
-			// Cmd: Create stream instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::DeleteStreamCmd::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::DeleteStreamRes::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamRes::TraceOut));
+			// Cmd: Get stream list
 			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::GetStreamListCmd::MID.IDSeq.MsgID,&Message::Relay::GetStreamListCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Relay::GetStreamListRes::MID.IDSeq.MsgID,&Message::Relay::GetStreamListRes::TraceOut));
 		}; // void RegisterDebugTraceRelay()

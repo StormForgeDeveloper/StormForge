@@ -50,21 +50,21 @@ namespace SF
 			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::RelayPacketC2SEvt::MID.IDSeq.MsgID,&Message::Relay::RelayPacketC2SEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::RelayPacketC2SEvt::MID.IDSeq.MsgID,&Message::Relay::RelayPacketC2SEvt::ParseMessageToMessageBase));
 			// Cmd: Create stream instance
-			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::CreateStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::CreateStreamingCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::CreateStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::CreateStreamingCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::CreateStreamingRes::MID.IDSeq.MsgID,&Message::Relay::CreateStreamingRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::CreateStreamingRes::MID.IDSeq.MsgID,&Message::Relay::CreateStreamingRes::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::CreateStreamCmd::MID.IDSeq.MsgID,&Message::Relay::CreateStreamCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::CreateStreamCmd::MID.IDSeq.MsgID,&Message::Relay::CreateStreamCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::CreateStreamRes::MID.IDSeq.MsgID,&Message::Relay::CreateStreamRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::CreateStreamRes::MID.IDSeq.MsgID,&Message::Relay::CreateStreamRes::ParseMessageToMessageBase));
 			// Cmd: Open stream instance
-			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::OpenStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::OpenStreamingCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::OpenStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::OpenStreamingCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::OpenStreamingRes::MID.IDSeq.MsgID,&Message::Relay::OpenStreamingRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::OpenStreamingRes::MID.IDSeq.MsgID,&Message::Relay::OpenStreamingRes::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::FindStreamCmd::MID.IDSeq.MsgID,&Message::Relay::FindStreamCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::FindStreamCmd::MID.IDSeq.MsgID,&Message::Relay::FindStreamCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::FindStreamRes::MID.IDSeq.MsgID,&Message::Relay::FindStreamRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::FindStreamRes::MID.IDSeq.MsgID,&Message::Relay::FindStreamRes::ParseMessageToMessageBase));
 			// Cmd: Delete stream instance
-			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::DeleteStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamingCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::DeleteStreamingCmd::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamingCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::DeleteStreamingRes::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamingRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::DeleteStreamingRes::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamingRes::ParseMessageToMessageBase));
-			// Cmd: Create stream instance
+			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::DeleteStreamCmd::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::DeleteStreamCmd::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::DeleteStreamRes::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::DeleteStreamRes::MID.IDSeq.MsgID,&Message::Relay::DeleteStreamRes::ParseMessageToMessageBase));
+			// Cmd: Get stream list
 			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::GetStreamListCmd::MID.IDSeq.MsgID,&Message::Relay::GetStreamListCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Relay::GetStreamListCmd::MID.IDSeq.MsgID,&Message::Relay::GetStreamListCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Relay::GetStreamListRes::MID.IDSeq.MsgID,&Message::Relay::GetStreamListRes::ParseMessageTo));
