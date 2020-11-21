@@ -56,10 +56,17 @@ namespace SF
 
 		NetAddress() = default;
 		NetAddress(SockFamily sockFamily, const char* strAdr, uint16_t port = 0);
-		NetAddress(const char* strAdr, uint16_t port = 0);
+		NetAddress(const char* strAdr);
+		NetAddress(const char* strAdr, uint16_t port);
 		NetAddress(const sockaddr_in& sockAddr);
 		NetAddress(const sockaddr_in6& sockAddr);
 		NetAddress(const sockaddr_storage& sockAddr);
+
+
+		void FromString(const char* strAddress);
+		void FromString(const char* strAddress, uint16_t port);
+
+		void DetectSockFamily();
 
 		explicit operator sockaddr_in() const;
 		explicit operator sockaddr_in6() const;

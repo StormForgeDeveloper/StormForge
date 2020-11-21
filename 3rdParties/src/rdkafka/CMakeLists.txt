@@ -177,11 +177,11 @@ set(INSTALL_FILES
 add_definitions(-DLIBRDKAFKA_STATICLIB)
 
 
-add_library(librdkafka ${SRC_FILES})
+add_library(rdkafka ${SRC_FILES})
 
 
 
-install (TARGETS librdkafka
+install (TARGETS rdkafka
          ARCHIVE DESTINATION lib COMPONENT SF3rdParties
          LIBRARY DESTINATION lib COMPONENT SF3rdParties
          RUNTIME DESTINATION bin COMPONENT SF3rdParties)

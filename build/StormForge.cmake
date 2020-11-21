@@ -28,6 +28,7 @@ add_definitions(-DSF_USE_MBEDTLS)
 add_definitions(-DENABLE_PLAYFABSERVER_API)
 add_definitions(-DTHREADED) # for zookeeper
 add_definitions(-DUSE_STATIC_LIB) # for zookeeper
+add_definitions(-DLIBRDKAFKA_STATICLIB) # for rdkafka static lib
 
 add_definitions(-DSF_USE_MBEDTLS)
 
@@ -35,7 +36,7 @@ SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG=1")
 SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG=1")
 
 
-set(ENGINE_LINK_LIBS SFProtocol SFEngine  SFCore  curl iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 zlib)
+set(ENGINE_LINK_LIBS SFProtocol SFEngine  SFCore  curl rdkafka iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 zlib)
 
 
 if(WIN32)

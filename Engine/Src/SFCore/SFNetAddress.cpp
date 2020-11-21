@@ -67,24 +67,18 @@ namespace SF {
 	//
 
 	NetAddress::NetAddress(const sockaddr_in& sockAddr)
-		: Port(0)
-		, SocketFamily(SockFamily::None)
 	{
 		Address[0] = '\0';
 		*this = sockAddr;
 	}
 
 	NetAddress::NetAddress(const sockaddr_in6& sockAddr)
-		: Port(0)
-		, SocketFamily(SockFamily::None)
 	{
 		Address[0] = '\0';
 		*this = sockAddr;
 	}
 
 	NetAddress::NetAddress(const sockaddr_storage& sockAddr)
-		: Port(0)
-		, SocketFamily(SockFamily::None)
 	{
 		Address[0] = '\0';
 		*this = sockAddr;
@@ -102,19 +96,72 @@ namespace SF {
 	
 	NetAddress::NetAddress(const char* strAdr, uint16_t port)
 		: Port(port)
-		, SocketFamily(SockFamily::None)
 	{
-		Assert(strAdr);
+		FromString(strAdr, port);
+	}
+
+	NetAddress::NetAddress(const char* strAddress)
+	{
+		FromString(strAddress);
+	}
+
+	void NetAddress::FromString(const char* strAddress)
+	{
+		Assert(strAddress);
+		if (strAddress == nullptr)
+		{
+			Address[0] = '\0';
+			Port = 0;
+			SocketFamily = SockFamily::None;
+			return;
+		}
+
+		auto sepratorIndex = StrUtil::IndexofAnyFromBack(strAddress, ":,");
+		if (sepratorIndex < 0)
+		{
+			// No Port
+			FromString(strAddress, 0);
+		}
+		else
+		{
+			Address[0] = '\0';
+			StrUtil::StringCopy(Address, strAddress);
+			Address[sepratorIndex] = '\0';
+
+			DetectSockFamily();
+
+			Port = atoi(strAddress + sepratorIndex + 1);
+		}
+	}
+
+	void NetAddress::FromString(const char* strAddress, uint16_t port)
+	{
+		Assert(strAddress);
+		if (strAddress == nullptr)
+		{
+			Address[0] = '\0';
+			Port = 0;
+			SocketFamily = SockFamily::None;
+			return;
+		}
+
 		Address[0] = '\0';
-		StrUtil::StringCopy(Address, strAdr);
-		
+		StrUtil::StringCopy(Address, strAddress);
+
+		DetectSockFamily();
+
+		Port = port;
+	}
+
+	void NetAddress::DetectSockFamily()
+	{
 		// Detect sock family
 		sockaddr_storage sockAddr;
 		auto result = SockAddrFromAddress(*(sockaddr_in6*)&sockAddr, Address, Port);
 		if (!result)
 		{
 			result = SockAddrFromAddress(*(sockaddr_in*)&sockAddr, Address, Port);
-			if(result)
+			if (result)
 			{
 				SocketFamily = SockFamily::IPV4;
 			}
@@ -128,8 +175,8 @@ namespace SF {
 		{
 			SocketFamily = SockFamily::IPV6;
 		}
-
 	}
+
 
 	//NetAddress::NetAddress(int iVal)
 	//	: SocketFamily(SockFamily::None)
