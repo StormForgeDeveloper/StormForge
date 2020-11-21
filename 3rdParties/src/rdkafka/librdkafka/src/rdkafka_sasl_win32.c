@@ -178,7 +178,7 @@ static int rd_kafka_sasl_sspi_continue (rd_kafka_transport_t *rktrans,
                 ctx = rd_calloc(1, sizeof(*ctx));
         }
 
-        sr = InitializeSecurityContext(
+        sr = InitializeSecurityContextW(
                 state->cred, state->ctx, state->principal,
                 RD_KAFKA_SASL_SSPI_CTX_ATTRS |
                 (state->ctx ? 0 : ISC_REQ_MUTUAL_AUTH | ISC_REQ_IDENTIFY),
