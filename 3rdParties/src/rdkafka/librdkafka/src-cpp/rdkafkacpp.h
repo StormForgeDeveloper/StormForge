@@ -2818,6 +2818,23 @@ class RD_EXPORT Producer : public virtual Handle {
                              const void *key, size_t key_len,
                              void *msg_opaque) = 0;
 
+  // KKO - Adding interface  ===================================================================================
+    /**
+   * @brief produce() variant that that allows for Header and timestamp support on produce
+   *        Otherwise identical to produce() above.
+   *
+   * @warning The \p headers will be freed/deleted if the produce() call
+   *          succeeds, or left untouched if produce() fails.
+   */
+  virtual ErrorCode produce(Topic* topic, int32_t partition,
+	  int msgflags,
+	  void* payload, size_t len,
+	  const void* key, size_t key_len,
+	  int64_t timestamp,
+	  RdKafka::Headers* headers,
+	  void* msg_opaque) = 0;
+  // KKO - Adding interface ===================================================================================
+
   /**
    * @brief produce() variant that takes topic as a string (no need for
    *        creating a Topic object), and also allows providing the

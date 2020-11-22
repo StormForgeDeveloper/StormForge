@@ -1210,6 +1210,15 @@ class ProducerImpl : virtual public Producer, virtual public HandleImpl {
                      const std::vector<char> *payload,
                      const std::vector<char> *key,
                      void *msg_opaque);
+  // KKO - Adding interface  ===================================================================================
+  ErrorCode produce(Topic* topic, int32_t partition,
+	  int msgflags,
+	  void* payload, size_t len,
+	  const void* key, size_t key_len,
+	  int64_t timestamp,
+	  RdKafka::Headers* headers,
+	  void* msg_opaque);
+  // KKO - Adding interface ===================================================================================
 
   ErrorCode produce (const std::string topic_name, int32_t partition,
                      int msgflags,

@@ -1,16 +1,14 @@
 
 
 set(WITH_ZLIB ON)
-
 set(WITH_SNAPPY ON)
 set(WITH_LIBDL OFF)
 set(WITH_PLUGINS OFF)
+set(WITH_ZSTD_STATIC ON)
+set(WITH_SASL_OAUTHBEARER ON)
+set(WITH_HDRHISTOGRAM ON)
 
-add_definitions("-DWITH_ZSTD_STATIC=1")
-add_definitions("-DWITH_SASL_OAUTHBEARER=1")
-add_definitions("-DWITH_HDRHISTOGRAM=1")
-
-#set(ENABLE_DEVEL=1")
+#set(ENABLE_DEVEL ON)
 
 
 include_directories(AFTER 
@@ -192,6 +190,22 @@ endif()
 
 if(NOT HAVE_REGEX)
   list(APPEND SRC_FILES librdkafka/src/regexp.c)
+endif()
+
+if(WITH_ZSTD_STATIC)
+    add_definitions("-DWITH_ZSTD_STATIC=1")
+endif()
+
+if(WITH_SASL_OAUTHBEARER)
+    add_definitions("-DWITH_SASL_OAUTHBEARER=1")
+endif()
+
+if(WITH_HDRHISTOGRAM)
+    add_definitions("-DWITH_HDRHISTOGRAM=1")
+endif()
+
+if(ENABLE_DEVEL)
+    add_definitions("-DENABLE_DEVEL=1")
 endif()
 
 

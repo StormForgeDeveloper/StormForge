@@ -123,6 +123,48 @@ RdKafka::ErrorCode RdKafka::ProducerImpl::produce (RdKafka::Topic *topic,
   return RdKafka::ERR_NO_ERROR;
 }
 
+RdKafka::ErrorCode RdKafka::ProducerImpl::produce(RdKafka::Topic* topic,
+	int32_t partition,
+	int msgflags,
+	void* payload, size_t len,
+	const void* key, size_t key_len,
+	int64_t timestamp,
+	RdKafka::Headers* headers,
+	void* msg_opaque)
+{
+	RdKafka::TopicImpl* topicimpl = dynamic_cast<RdKafka::TopicImpl*>(topic);
+    if (topicimpl == nullptr)
+        return RdKafka::ErrorCode::ERR__INVALID_ARG;
+
+	rd_kafka_headers_t* hdrs = NULL;
+	RdKafka::HeadersImpl* headersimpl = NULL;
+	rd_kafka_resp_err_t err;
+
+	if (headers) {
+		headersimpl = static_cast<RdKafka::HeadersImpl*>(headers);
+		hdrs = headersimpl->c_ptr();
+	}
+
+	err = rd_kafka_producev(rk_,
+        RD_KAFKA_V_RKT(topicimpl->rkt_),
+		RD_KAFKA_V_PARTITION(partition),
+		RD_KAFKA_V_MSGFLAGS(msgflags),
+		RD_KAFKA_V_VALUE(payload, len),
+		RD_KAFKA_V_KEY(key, key_len),
+		RD_KAFKA_V_TIMESTAMP(timestamp),
+		RD_KAFKA_V_OPAQUE(msg_opaque),
+		RD_KAFKA_V_HEADERS(hdrs),
+		RD_KAFKA_V_END);
+
+	if (!err && headersimpl) {
+		/* A successful producev() call will destroy the C headers. */
+		headersimpl->c_headers_destroyed();
+		delete headers;
+	}
+
+	return static_cast<RdKafka::ErrorCode>(err);
+}
+
 
 RdKafka::ErrorCode
 RdKafka::ProducerImpl::produce (RdKafka::Topic *topic,
