@@ -102,19 +102,25 @@ namespace SF
 			m_EnabledLayers.push_back("VK_LAYER_GOOGLE_unique_objects");
 #else
 			// On other platform, lunarG has a package layer
-			m_EnabledLayers.push_back("VK_LAYER_LUNARG_standard_validation");
+			//m_EnabledLayers.push_back("VK_LAYER_LUNARG_standard_validation"); // TODO: Not supported with new SDK
 #endif
 
 			instanceCreateInfo.enabledLayerCount = (decltype(instanceCreateInfo.enabledLayerCount))m_EnabledLayers.size();
 			instanceCreateInfo.ppEnabledLayerNames = m_EnabledLayers.data();
 		}
-		return vkCreateInstance(&instanceCreateInfo, nullptr, &m_VKInstance);
+
+		VkResult vkRes = vkCreateInstance(&instanceCreateInfo, nullptr, &m_VKInstance);
+
+		return vkRes;
 	}
 
 
 	VkResult VulkanSystem::EnumerateDeviceList()
 	{
 		uint32_t enumCount = 0;
+
+		if (m_VKInstance == nullptr)
+			return VK_NOT_READY;
 
 		// Physics devices
 		// Get number of available physical devices
@@ -213,10 +219,12 @@ namespace SF
 			return ResultCode::ENGINE_INITIALIZATION_FAILED;
 
 #if defined(_DEBUG) || defined(DEBUG)
-		CreateVKInstance(true);
+		vkResult = CreateVKInstance(true);
 #else
-		CreateVKInstance(false);
+		vkResult = CreateVKInstance(false);
 #endif
+		if (vkResult != VK_SUCCESS)
+			return ResultCode::ENGINE_INITIALIZATION_FAILED;
 
 		GetEngineHeap().Delete(m_VulkanDebug);
 		m_VulkanDebug = new(GetHeap()) VulkanDebug(m_VKInstance);

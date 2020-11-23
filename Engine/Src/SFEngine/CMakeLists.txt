@@ -238,6 +238,8 @@ set(SFENGINE_LIB_FILES
 	Service/SFIGraphicDevice.h
 	Service/SFNetSystemService.h
 	Service/SFResourceManagerService.h
+	StreamDB/SFStreamDB.h
+	StreamDB/SFStreamDB.cpp
 	SFEngine.h
 	SFEnginePCH.h
 	String/SFToStringEngineTypes.h

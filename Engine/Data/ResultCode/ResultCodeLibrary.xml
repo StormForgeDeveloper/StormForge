@@ -187,6 +187,9 @@
   <ResultCodeItem Severity="Error" CodeName="VARIABLE_NOT_FOUND" Desc="Specific variable not found"/>
   <ResultCodeItem Severity="Error" CodeName="FUNCTION_NOT_FOUND" Desc="Specific function not found"/>
   <ResultCodeItem Severity="Error" CodeName="OBJECT_NOT_FOUND" Desc="Specific object not found"/>
+
+
+  <ResultCodeItem Severity="Error" CodeName="INVALID_STREAMID" Desc="Invalid stream ID"/>
   
 </ResultCodes>
 

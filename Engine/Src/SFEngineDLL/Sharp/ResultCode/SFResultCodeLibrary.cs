@@ -527,6 +527,9 @@ namespace SF {
 		// Specific object not found 
 		public const int OBJECT_NOT_FOUND =                                 unchecked((int)0xE70100AA); 
 
+		// Invalid stream ID 
+		public const int INVALID_STREAMID =                                 unchecked((int)0xE70100AB); 
+
 	}
 }
 

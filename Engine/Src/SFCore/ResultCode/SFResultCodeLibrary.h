@@ -531,6 +531,9 @@ namespace SF {
 			// Specific object not found 
 			constexpr Result 			OBJECT_NOT_FOUND                                                   ((int32_t)0xE70100AAL);
 
+			// Invalid stream ID 
+			constexpr Result 			INVALID_STREAMID                                                   ((int32_t)0xE70100ABL);
+
 	}//namespace ResultCode 
 }//namespace SF 
 
