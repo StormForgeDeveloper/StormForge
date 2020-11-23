@@ -36,7 +36,7 @@ SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG=1")
 SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG=1")
 
 
-set(ENGINE_LINK_LIBS SFProtocol SFEngine  SFCore  curl rdkafka iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 zlib ssl crypto)
+set(ENGINE_LINK_LIBS SFProtocol SFEngine  SFCore  curl rdkafka iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 zlib)
 
 
 if(WIN32)
@@ -62,10 +62,14 @@ if(WIN32)
 	set(ARTECTURE x64)
 
 	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi)
+	list(APPEND ENGINE_LINK_LIBS libssl libcrypto)
+	
+	link_directories(
+		../StormForge/3rdParties/src/openssl/buildWIndows/openssl/lib
+	)
 	
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
 	#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}$(Configuration))
-	
 
 elseif(ANDROID_PLATFORM)
 
@@ -83,8 +87,8 @@ elseif(ANDROID_PLATFORM)
 
 	#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
 
-
 	set(PLATFORM_LIBS android jnigraphics log GLESv1_CM GLESv2 EGL)
+	list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 	set(ARTECTURE ${CMAKE_ANDROID_ARCH_ABI})
 
@@ -102,6 +106,9 @@ elseif(IOS)
 
 	add_definitions(-D__IOS__=1)
 	add_definitions(-DKQUEUE)
+
+
+	list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 	#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
 
@@ -125,6 +132,7 @@ elseif(UNIX)
 	add_definitions(-DEPOLL)
 
 	set(PLATFORM_LIBS rt m)
+	list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 	include_directories(AFTER 
 		/usr/include/mysql--cppconn-8
