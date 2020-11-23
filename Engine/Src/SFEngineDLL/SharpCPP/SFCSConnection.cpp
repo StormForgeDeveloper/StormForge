@@ -21,6 +21,7 @@
 #include "Service/SFEngineService.h"
 #include "Net/SFConnectionMUDP.h"
 #include "Net/SFConnectionGroup.h"
+#include "Net/SFConnectionTCP.h"
 #include "Net/SFMessage.h"
 #include "Protocol/SFProtocol.h"
 
@@ -59,6 +60,14 @@ SFDLL_EXPORT Net::Connection* SFConnection_NativeCreateConnectionWithGroup(intpt
 	SharedReferenceInc inc(pConnection);;
 	pConnection->RegisterToEngineObjectManager();
 
+	return pConnection;
+}
+
+SFDLL_EXPORT SharedObject* SFConnection_NativeCreateConnectionTCP()
+{
+	auto pConnection = new(Service::NetSystem->GetHeap()) Net::ConnectionTCPClient(Service::NetSystem->GetHeap());
+	SharedReferenceInc inc(pConnection);
+	pConnection->RegisterToEngineObjectManager();
 	return pConnection;
 }
 

@@ -42,9 +42,17 @@ endif()
 
 include_directories(AFTER 
 	3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/include
+	3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include
 )
 	
-link_directories(BEFORE 3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib)
+link_directories(BEFORE 
+	3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
+	3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/lib
+)
+
+
+#message("3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/lib")
+
 
 #set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
 

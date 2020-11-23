@@ -56,7 +56,6 @@ GTEST_TEST(Kafka, Consumer)
 
 	GTEST_ASSERT_EQ(streamDB.Initialize("139.162.111.45:19092", topic), ResultCode::SUCCESS);
 
-
     GTEST_ASSERT_EQ(streamDB.RequestData(), ResultCode::SUCCESS);
 
     Result hr;

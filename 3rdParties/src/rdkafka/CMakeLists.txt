@@ -43,7 +43,6 @@ elseif(UNIX)
 endif()
 
 
-
 set(SRC_FILES
     librdkafka/src/crc32c.h
     librdkafka/src/crc32c.c

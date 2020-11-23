@@ -50,6 +50,12 @@ namespace SF
             EVT_TIMESYNC_RESULT,
         };
 
+        public enum ProtocolType
+        {
+            MRUDP,
+            TCP
+        };
+
 
         public struct Event
 	    {
@@ -86,10 +92,13 @@ namespace SF
         // Local loopback message queue
         Queue<SFMessage> m_LoopBackQueue = new Queue<SFMessage>();
 
-        public SFConnection(SFIMessageRouter messageRouter)
+        public SFConnection(SFIMessageRouter messageRouter, ProtocolType protocolType = ProtocolType.MRUDP)
 	    {
             // Don't use constructor of SFObject, it will increase reference count of the object
-            NativeHandle = NativeCreateConnection();
+            if (protocolType == ProtocolType.MRUDP)
+                NativeHandle = NativeCreateConnection();
+            else
+                NativeHandle = NativeCreateConnectionTCP();
             m_MessageRouter = messageRouter;
         }
 
@@ -123,7 +132,7 @@ namespace SF
         public override void Dispose()
         {
             Disconnect();
-            // Connection uses diferred dispose
+            // Connection uses deferred dispose
             NativeDispose(NativeHandle);
             NativeHandle = IntPtr.Zero;
             //base.Dispose();
@@ -237,6 +246,9 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeCreateConnectionWithGroup", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateConnectionWithGroup(IntPtr groupNativeHandle);
+
+        [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeCreateConnectionTCP", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeCreateConnectionTCP();
 
         [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeDispose", CharSet = CharSet.Auto)]
         static extern int NativeDispose(IntPtr nativeHandle);
