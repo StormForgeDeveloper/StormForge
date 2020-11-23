@@ -66,7 +66,7 @@ if(WIN32)
 	add_definitions(-DWIN64)
 	add_definitions(-DWIN32)
 	add_definitions(-D_WINDOWS)
-
+	add_definitions(-DSTATIC_CONCPP) # mysql cpp conn static
 
 	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Od")
 	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Od")
@@ -78,18 +78,19 @@ if(WIN32)
 
 	set(ARTECTURE x64)
 
-	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi)
+	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi mysqlcppconn8-static Dnsapi)
 	list(APPEND ENGINE_LINK_LIBS libssl libcrypto)
-	
 	
 	include_directories(AFTER 
 		../VulkanSDK/include
-		#../StormForge/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
+		../StormForge/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
 	)
 
 	link_directories(
 		../StormForge/3rdParties/src/openssl/buildWIndows/openssl/lib
-	)
+		../StormForge/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14/$(Configuration)
+		../StormForge/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14
+)
 	
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
 	#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}$(Configuration))
@@ -158,7 +159,7 @@ elseif(UNIX)
 	list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 	include_directories(AFTER 
-		/usr/include/mysql--cppconn-8
+		/usr/include/mysql-cppconn-8
 		/usr/include/vulkan
 	)
 	
@@ -186,7 +187,7 @@ include_directories(AFTER
 	../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include
 )
 
-message ("../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include")
+#message ("../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include")
 	
 link_directories(BEFORE 
 	../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
