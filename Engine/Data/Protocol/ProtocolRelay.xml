@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Protocols xmlns="http://www.StormForge.com/XMLProtocol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.StormForge.com/XMLProtocol ../../StormForge/Engine/Data/Protocol/ProtocolDef.xsd">
-	<ProtocolGroup Name="Relay" IsMobile="false" Desc="Relay Protocol">
+	<ProtocolGroup Name="Relay" IsMobile="false" GenCSharp="true" Desc="Relay Protocol">
 
     <!-- ============================  Relay ============================================ -->
 

@@ -66,8 +66,10 @@
     <Compile Include="Sharp\SFMessageRouter.cs" />
     <Compile Include="Sharp\SFNetMessageIDGame.cs" />
     <Compile Include="Sharp\SFNetMessageIDLogin.cs" />
+    <Compile Include="Sharp\SFNetMessageIDRelay.cs" />
     <Compile Include="Sharp\SFNetSendMessageGame.cs" />
     <Compile Include="Sharp\SFNetSendMessageLogin.cs" />
+    <Compile Include="Sharp\SFNetSendMessageRelay.cs" />
     <Compile Include="Sharp\SFObject.cs" />
     <Compile Include="Sharp\SFEngine.cs" />
     <Compile Include="Sharp\Properties\AssemblyInfo.cs" />
