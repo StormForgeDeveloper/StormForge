@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2017 StromForge
+// CopyRight (c) StromForge
 // 
 // Author : Generated
 // 
@@ -18,7 +18,6 @@ using SF;
 
 namespace SF.Net
 {
- 
 
 	public class SendMessageRelay
 	{

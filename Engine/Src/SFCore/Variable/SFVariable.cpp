@@ -691,7 +691,7 @@ namespace SF
 		if(m_Value != nullptr)
 			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, m_Value);
 		else
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "NullString");
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(null)");
 	}
 
 	Variable* VariableCharString::Clone(Array<uint8_t>& buffer) const
@@ -731,7 +731,7 @@ namespace SF
 			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, destBuff);
 		}
 		else
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "NullString");
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(null)");
 	}
 
 	Variable* VariableWCharString::Clone(Array<uint8_t>& buffer) const
@@ -904,7 +904,7 @@ namespace SF
 		if (m_Value.GetLength() != 0)
 			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, (const char*)m_Value);
 		else
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "NullString");
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(null)");
 	}
 
 

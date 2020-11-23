@@ -6,7 +6,7 @@ set(CMAKE_C_COMPILER clang)
 
 
 
-message ( "Input system = ${CMAKE_SYSTEM_NAME}" )
+message ( "Platform=${CMAKE_SYSTEM_NAME}, Config=${CMAKE_BUILD_TYPE}" )
 
 
 set(CMAKE_CXX_STANDARD 17)
@@ -34,6 +34,23 @@ add_definitions(-DSF_USE_MBEDTLS)
 
 SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -DDEBUG=1")
 SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG=1")
+
+
+include_directories(AFTER 
+	../StormForge/3rdParties/src/mbedtls/mbedtls-2.16.0/include
+	../StormForge/3rdParties/src/libiconv/libiconv-1.15/include
+	../StormForge/3rdParties/src/libpng/lpng1617
+	../StormForge/3rdParties/src/jpeg/jpeg-9a
+	../StormForge/3rdParties/src/libxml/libxml2/include
+	../StormForge/3rdParties/src/curl/curl/include
+	../StormForge/3rdParties/src/zlib/zlib-1.2.8
+	../StormForge/3rdParties/src/jsoncpp/jsoncpp/include
+	../StormForge/3rdParties/src/zookeeper/zookeeperConnector/include
+	../StormForge/3rdParties/src/PlayFab/XPlatCppSdk/code/include
+	../StormForge/Engine/Src/SFCore
+	../StormForge/Engine/Src/SFEngine
+	../StormForge/Engine/Src/Protocol
+)
 
 
 set(ENGINE_LINK_LIBS SFProtocol SFEngine  SFCore  curl rdkafka iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 zlib)
@@ -64,6 +81,12 @@ if(WIN32)
 	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi)
 	list(APPEND ENGINE_LINK_LIBS libssl libcrypto)
 	
+	
+	include_directories(AFTER 
+		../VulkanSDK/include
+		#../StormForge/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
+	)
+
 	link_directories(
 		../StormForge/3rdParties/src/openssl/buildWIndows/openssl/lib
 	)
@@ -144,6 +167,7 @@ elseif(UNIX)
 		/usr/lib/x86_64-linux-gnu/
 		#/usr/local/mysql/connector-c++-8.0/lib64/debug
 		#../StormForge/3rdParties/src/mysql/linuxLib/lib64
+		../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
 		../StormForge/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE}/lib
 		)
 
@@ -156,4 +180,16 @@ elseif(UNIX)
 
 endif()
 
+
+include_directories(AFTER 
+	../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/include
+	../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include
+)
+
+message ("../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include")
+	
+link_directories(BEFORE 
+	../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
+	../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/lib
+)
 

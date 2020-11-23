@@ -166,16 +166,12 @@ namespace SF
 					SFLog(Net, Debug, "     Replica:{0}", *ir);
 				}
 
-				///* Iterate partition's ISRs */
-				//std::cout << ", isrs: ";
-				//RdKafka::PartitionMetadata::ISRSIterator iis;
-				//for (iis = (*ip)->isrs()->begin(); iis != (*ip)->isrs()->end(); ++iis)
-				//	std::cout << (iis == (*ip)->isrs()->begin() ? "" : ",") << *iis;
-
-				//if ((*ip)->err() != RdKafka::ERR_NO_ERROR)
-				//	std::cout << ", " << RdKafka::err2str((*ip)->err()) << std::endl;
-				//else
-				//	std::cout << std::endl;
+				// Iterate partition's ISRs 
+				RdKafka::PartitionMetadata::ISRSIterator iis;
+				for (iis = (*ip)->isrs()->begin(); iis != (*ip)->isrs()->end(); ++iis)
+				{
+					SFLog(Net, Debug2, "     ISR:{0}", *iis);
+				}
 			}
 		}
 
@@ -195,6 +191,100 @@ namespace SF
 	}
 
 
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	class StreamDBDirectory
+	//
+
+	StreamDBDirectory::StreamDBDirectory()
+	{
+
+	}
+
+	StreamDBDirectory::~StreamDBDirectory()
+	{
+		Clear_Internal(); // Unlike regular cases, parent stuffs should be released first
+		m_Consumer.reset();
+	}
+
+	Result StreamDBDirectory::Initialize(const String& brokers, const String& topic)
+	{
+		std::string errstr;
+
+		Result hr = super::Initialize(brokers, topic);
+		if (!hr)
+			return hr;
+
+		RdKafka::Consumer* consumer = RdKafka::Consumer::create(GetConfig().get(), errstr);
+		if (!consumer)
+		{
+			SFLog(Net, Error, "Kafka consumer creation has failed: {0}", errstr);
+			return ResultCode::OUT_OF_MEMORY;
+		}
+
+		m_Consumer.reset(consumer);
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result StreamDBDirectory::RefreshTopicList()
+	{
+		if (m_Consumer == nullptr)
+			return ResultCode::NOT_INITIALIZED;
+
+		RdKafka::Metadata* metadata = nullptr;
+		int32_t metadataTimeout = 15 * 1000;
+		RdKafka::ErrorCode errorCode = m_Consumer->metadata(true, GetTopicHandle().get(), &metadata, metadataTimeout);
+		if (errorCode != RdKafka::ErrorCode::ERR_NO_ERROR)
+		{
+			SFLog(Net, Error, "Kafka getting metadata has failed: {0}", RdKafka::err2str(errorCode));
+			return ResultCode::FAIL;
+		}
+
+		if (metadata == nullptr)
+		{
+			SFLog(Net, Error, "Kafka getting metadata has failed: nullptr returned");
+			return ResultCode::UNEXPECTED;
+		}
+
+		SFLog(Net, Debug, "Metadata for {0}, brokerId:{1}, {2}", GetTopic(), metadata->orig_broker_id(), metadata->orig_broker_name());
+
+		//std::cout << " " << metadata->brokers()->size() << " brokers:" << std::endl;
+		//RdKafka::Metadata::BrokerMetadataIterator ib;
+		//for (ib = metadata->brokers()->begin();
+		//	ib != metadata->brokers()->end();
+		//	++ib) {
+		//	std::cout << "  broker " << (*ib)->id() << " at "
+		//		<< (*ib)->host() << ":" << (*ib)->port() << std::endl;
+		//}
+
+		m_TopicList.Clear();
+
+		// Iterate topics
+		//std::cout << metadata->topics()->size() << " topics:" << std::endl;
+		RdKafka::Metadata::TopicMetadataIterator it;
+		for (it = metadata->topics()->begin();
+			it != metadata->topics()->end();
+			++it)
+		{
+			//std::cout << "  topic \"" << (*it)->topic() << "\" with "
+			//	<< (*it)->partitions()->size() << " partitions:";
+
+			if ((*it)->err() != RdKafka::ERR_NO_ERROR)
+			{
+				SFLog(Net, Debug, "Topic metadata error, topic:{0}, {1}", (*it)->topic(), err2str((*it)->err()));
+				continue;
+			}
+
+			SFLog(Net, Debug, "Topic metadata, topic:{0}", (*it)->topic());
+
+			m_TopicList.push_back((*it)->topic().c_str());
+		}
+
+		return ResultCode::SUCCESS;
+	}
 
 
 	////////////////////////////////////////////////////////////////////////////////////////////////

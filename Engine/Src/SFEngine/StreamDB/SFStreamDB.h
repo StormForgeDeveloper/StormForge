@@ -87,6 +87,9 @@ namespace SF
 
         void Clear_Internal();
 
+	protected:
+		DynamicArray<int32_t> m_PartitionIds;
+
     private:
 
         String m_StreamName;
@@ -97,8 +100,6 @@ namespace SF
         UniquePtr<RdKafka::Topic> m_TopicHandle;
 
         UniquePtr<RdKafka::Metadata> m_TopicMetadata;
-
-        DynamicArray<int32_t> m_PartitionIds;
     };
 
 
@@ -129,6 +130,31 @@ namespace SF
 
     };
 
+
+	class StreamDBDirectory : public StreamDB
+	{
+	public:
+
+		using super = StreamDB;
+
+	public:
+
+        StreamDBDirectory();
+
+		virtual ~StreamDBDirectory();
+
+		virtual Result Initialize(const String& brokers, const String& topic = "") override;
+
+        Result RefreshTopicList();
+
+        const Array<String>& GetTopicList() const { return m_TopicList; }
+
+	private:
+
+		UniquePtr<RdKafka::Consumer> m_Consumer;
+
+        DynamicArray<String> m_TopicList;
+	};
 
 
     class StreamDBConsumer : public StreamDB
