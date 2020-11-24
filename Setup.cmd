@@ -23,11 +23,12 @@ if not exist %ATF_PATH% (
 	git clone https://github.com/blue3k/ATFClone.git %ATF_PATH%
 )
 
-
+rem move to %SF_3RDPARTY%\tool
 cd %SF_3RDPARTY%\tool
 
 msbuild -m BuildTool.sln /property:Configuration=Release /p:Platform="Any CPU"
 
+rem move to %SF_SDK%
 cd %SF_SDK%
 
 if not exist %FBX_SDK_INSTALL_FILE_WIN% (
@@ -53,6 +54,7 @@ if not exist %PERL_INSTALL% (
 )
 
 
+rem move to %SF_PATH%
 cd %SF_PATH%
 
 set NASM_DIR=3rdParties\src\nasm
