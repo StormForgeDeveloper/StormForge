@@ -7,6 +7,8 @@ set PROCESS_ARCHITECTUR=x64
 set BUILD_DIR=build%CMAKE_SYSTEM_NAME%
 
 
+for %%I in (.) do set SF_FOLDER=%%~nxI
+
 
 set CMAKE_BUILD_TYPE=Debug
 cd %BUILD_DIR%\%PROCESS_ARCHITECTUR%
