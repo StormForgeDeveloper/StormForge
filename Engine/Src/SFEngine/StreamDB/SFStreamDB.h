@@ -41,7 +41,7 @@ namespace SF
 	//	class StreamDB
 	//
 
-    class StreamDB
+    class StreamDB : public SharedObject
     {
     public:
 
@@ -172,10 +172,6 @@ namespace SF
 
             virtual ~StreamMessageData();
 
-            //virtual size_t size() const;
-
-            //virtual const uint8_t* data() const;
-
         private:
 
             UniquePtr<RdKafka::Message> m_MessageData;
@@ -193,12 +189,18 @@ namespace SF
         Result RequestData(int64_t start_offset = OFFSET_BEGINNING);
 
         Result PollData(UniquePtr<ArrayView<uint8_t>>& receivedMessageData, int32_t timeoutMS = 0);
+		Result PollData(int32_t timeoutMS = 0);
+
+        const UniquePtr<ArrayView<uint8_t>>& GetLatestReceivedData() const { return m_ReceivedMessageData; }
 
     private:
 
         int32_t m_Partition;
 
         UniquePtr<RdKafka::Consumer> m_Consumer;
+
+        // Locally cached data
+        UniquePtr<ArrayView<uint8_t>> m_ReceivedMessageData;
     };
 
 }

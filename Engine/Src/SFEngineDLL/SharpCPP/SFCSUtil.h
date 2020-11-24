@@ -97,7 +97,7 @@ namespace SF
 	template<class Type>
 	Type* NativeToObject(intptr_t pObj)
 	{
-		return (Type*)(SF::SharedObject*)pObj;
+		return static_cast<Type*>((SF::SharedObject*)pObj);
 	}
 
 }

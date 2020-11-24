@@ -14,6 +14,7 @@ set(SFENGINEDLL_LIB_FILES
 	SharpCPP/SFCSNetSendMessageLogin.cpp
 	SharpCPP/SFCSObject.cpp
 	SharpCPP/SFCSServerConfig.cpp
+	SharpCPP/SFCSStreamDB.cpp
 	SharpCPP/SFCSTimeUtil.cpp
 	SharpCPP/SFCSTongScript.cpp
 	SharpCPP/SFCSTongScriptBytecode.cpp

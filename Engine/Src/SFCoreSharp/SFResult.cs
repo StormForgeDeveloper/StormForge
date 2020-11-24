@@ -94,6 +94,16 @@ namespace SF {
         {
             return a.Code != b.Code;
         }
+
+        public static bool operator ==(Result a, Int32 b)
+        {
+            return a.Code == b;
+        }
+
+        public static bool operator !=(Result a, Int32 b)
+        {
+            return a.Code != b;
+        }
     }
 
 

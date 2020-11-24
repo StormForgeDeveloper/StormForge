@@ -75,6 +75,7 @@
     <Compile Include="Sharp\Properties\AssemblyInfo.cs" />
     <Compile Include="Sharp\SFServerConfig.cs" />
     <Compile Include="Sharp\SFMemoryStream.cs" />
+    <Compile Include="Sharp\SFStreamDB.cs" />
     <Compile Include="Sharp\SFTimeUtil.cs" />
     <Compile Include="Sharp\SFZooKeeper.cs" />
     <Compile Include="Sharp\Tong\SFTongScriptBytecodeBuilder.cs" />

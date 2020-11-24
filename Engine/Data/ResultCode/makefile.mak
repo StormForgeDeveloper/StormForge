@@ -11,7 +11,7 @@ ENGINE_OUTPUT_PATH=../../Src/SFEngine/ResultCode
 ENGINE_SOURCES=ResultCodeEngine.xml \
 
 
-ENGINE_SHARP_OUTPUT_PATH=../../Src/SFEngineDLL/Sharp/ResultCode
+ENGINE_SHARP_OUTPUT_PATH=../../Src/SFCoreSharp/ResultCode
 
 
 	

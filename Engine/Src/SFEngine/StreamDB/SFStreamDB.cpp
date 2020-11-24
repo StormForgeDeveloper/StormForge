@@ -598,6 +598,11 @@ namespace SF
 		}
 
 
+		Result StreamDBConsumer::PollData(int32_t timeoutMS)
+		{
+			m_ReceivedMessageData.reset();
+			return PollData(m_ReceivedMessageData, timeoutMS);
+		}
 }
 
 #endif
