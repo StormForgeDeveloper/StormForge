@@ -42,7 +42,7 @@ protected:
 	
 	const char* m_StreamServerAddress = 
 		// copy serveraddress_sample.txt to serveraddress.txt and edit to your server address
-		#include "serveraddress.txt"
+		#include "LocalData/serveraddress.txt"
 	;
 
 public:

@@ -534,8 +534,10 @@ typedef unsigned int		SysUInt;
 
 
 // disable unreferenced label warning (Proc_End)
-#pragma warning( disable : 4102 )
-#pragma warning( disable : 4996 )
+#pragma warning(disable: 4102)
+#pragma warning(disable: 4996)
+#pragma warning(disable: 4091) // disable warning 4091
+
 
 #define SF_DO_PRAGMA(x) __pragma(#x)
 #define SF_COMPILETIME_TODO(x) SF_DO_PRAGMA(comment ("TODO - " #x))

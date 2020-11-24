@@ -41,7 +41,7 @@
 *.xcuserstate
 .DS_Store
 
-
+LocalData/
 Intermediate/
 buildLinux/
 buildWindows/
