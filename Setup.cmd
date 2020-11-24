@@ -49,6 +49,7 @@ if not exist %PERL_INSTALL% (
 	echo downloading Perl
 	call %TOOL_PATH%\httpget +url:http://strawberryperl.com/download/5.32.0.1/%PERL_INSTALL%
 	%PERL_INSTALL%
+	PATH=%PATH%;C:\Strawberry\c\bin
 )
 
 
