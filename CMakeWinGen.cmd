@@ -6,6 +6,8 @@ call 3rdParties\FindVC.cmd
 
 for %%I in (.) do set SF_FOLDER=%%~nxI
 
+
+
 if not exist build%CMAKE_SYSTEM_NAME% mkdir build%CMAKE_SYSTEM_NAME%
 set BUILD_DIR=build%CMAKE_SYSTEM_NAME%\%PROCESS_ARCHITECTUR%
 

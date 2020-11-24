@@ -86,7 +86,7 @@ if(WIN32)
 	list(APPEND ENGINE_LINK_LIBS libssl libcrypto)
 	
 	include_directories(AFTER 
-		../VulkanSDK/include
+		$ENV{VK_SDK_PATH}/include
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
 	)
 
