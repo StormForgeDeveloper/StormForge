@@ -1,12 +1,16 @@
 
 cmake_minimum_required(VERSION 3.16)
 
+message ( "Platform=${CMAKE_SYSTEM_NAME}, Config=${CMAKE_BUILD_TYPE}" )
+
+
 set(CMAKE_C_COMPILER clang)
 #set(CMAKE_CXX_COMPILER clang++)
 
 
-
-message ( "Platform=${CMAKE_SYSTEM_NAME}, Config=${CMAKE_BUILD_TYPE}" )
+IF(NOT SF_FOLDER)
+   SET(SF_FOLDER StormForge)
+ENDIF()
 
 
 set(CMAKE_CXX_STANDARD 17)
@@ -37,19 +41,19 @@ SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -DDEBUG=1")
 
 
 include_directories(AFTER 
-	../StormForge/3rdParties/src/mbedtls/mbedtls-2.16.0/include
-	../StormForge/3rdParties/src/libiconv/libiconv-1.15/include
-	../StormForge/3rdParties/src/libpng/lpng1617
-	../StormForge/3rdParties/src/jpeg/jpeg-9a
-	../StormForge/3rdParties/src/libxml/libxml2/include
-	../StormForge/3rdParties/src/curl/curl/include
-	../StormForge/3rdParties/src/zlib/zlib-1.2.8
-	../StormForge/3rdParties/src/jsoncpp/jsoncpp/include
-	../StormForge/3rdParties/src/zookeeper/zookeeperConnector/include
-	../StormForge/3rdParties/src/PlayFab/XPlatCppSdk/code/include
-	../StormForge/Engine/Src/SFCore
-	../StormForge/Engine/Src/SFEngine
-	../StormForge/Engine/Src/Protocol
+	../${SF_FOLDER}/3rdParties/src/mbedtls/mbedtls-2.16.0/include
+	../${SF_FOLDER}/3rdParties/src/libiconv/libiconv-1.15/include
+	../${SF_FOLDER}/3rdParties/src/libpng/lpng1617
+	../${SF_FOLDER}/3rdParties/src/jpeg/jpeg-9a
+	../${SF_FOLDER}/3rdParties/src/libxml/libxml2/include
+	../${SF_FOLDER}/3rdParties/src/curl/curl/include
+	../${SF_FOLDER}/3rdParties/src/zlib/zlib-1.2.8
+	../${SF_FOLDER}/3rdParties/src/jsoncpp/jsoncpp/include
+	../${SF_FOLDER}/3rdParties/src/zookeeper/zookeeperConnector/include
+	../${SF_FOLDER}/3rdParties/src/PlayFab/XPlatCppSdk/code/include
+	../${SF_FOLDER}/Engine/Src/SFCore
+	../${SF_FOLDER}/Engine/Src/SFEngine
+	../${SF_FOLDER}/Engine/Src/Protocol
 )
 
 
@@ -83,13 +87,13 @@ if(WIN32)
 	
 	include_directories(AFTER 
 		../VulkanSDK/include
-		../StormForge/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
+		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
 	)
 
 	link_directories(
-		../StormForge/3rdParties/src/openssl/buildWIndows/openssl/lib
-		../StormForge/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14/$(Configuration)
-		../StormForge/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14
+		../${SF_FOLDER}/3rdParties/src/openssl/buildWIndows/openssl/lib
+		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14/$(Configuration)
+		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14
 )
 	
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
@@ -167,9 +171,9 @@ elseif(UNIX)
 		/usr/lib
 		/usr/lib/x86_64-linux-gnu/
 		#/usr/local/mysql/connector-c++-8.0/lib64/debug
-		#../StormForge/3rdParties/src/mysql/linuxLib/lib64
-		../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
-		../StormForge/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE}/lib
+		#../${SF_FOLDER}/3rdParties/src/mysql/linuxLib/lib64
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
+		../${SF_FOLDER}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE}/lib
 		)
 
 	set(PLATFORM_LIBS mysqlcppconn8 rt m)
@@ -183,14 +187,14 @@ endif()
 
 
 include_directories(AFTER 
-	../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/include
-	../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include
+	../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/include
+	../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include
 )
 
-#message ("../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include")
+#message ("../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include")
 	
 link_directories(BEFORE 
-	../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
-	../StormForge/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/lib
+	../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
+	../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/lib
 )
 
