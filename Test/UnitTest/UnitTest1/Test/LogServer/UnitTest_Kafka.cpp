@@ -27,6 +27,7 @@ using namespace ::SF;
 
 
 
+
 GTEST_TEST(Kafka, Producer)
 {
     const char* topic = "MyTestTopic1";
@@ -36,7 +37,7 @@ GTEST_TEST(Kafka, Producer)
 
     StreamDBProducer streamDB;
 
-    GTEST_ASSERT_EQ(streamDB.Initialize("139.162.111.45:19092", topic), ResultCode::SUCCESS);
+    GTEST_ASSERT_EQ(streamDB.Initialize(StreamServerAddress, topic), ResultCode::SUCCESS);
 
     GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<uint8_t>(testData)), ResultCode::SUCCESS);
 	GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<uint8_t>(testData1)), ResultCode::SUCCESS);
@@ -53,7 +54,7 @@ GTEST_TEST(Kafka, Consumer)
 
     StreamDBConsumer streamDB;
 
-	GTEST_ASSERT_EQ(streamDB.Initialize("139.162.111.45:19092", topic), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.Initialize(StreamServerAddress, topic), ResultCode::SUCCESS);
 
     GTEST_ASSERT_EQ(streamDB.RequestData(), ResultCode::SUCCESS);
 
@@ -87,7 +88,7 @@ GTEST_TEST(Kafka, Directory)
 {
 	StreamDBDirectory streamDB;
 
-	GTEST_ASSERT_EQ(streamDB.Initialize("139.162.111.45:19092", ""), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.Initialize(StreamServerAddress, ""), ResultCode::SUCCESS);
 
 	GTEST_ASSERT_EQ(streamDB.RefreshTopicList(), ResultCode::SUCCESS);
 }

@@ -39,6 +39,11 @@ protected:
 
 	unsigned m_NumberOfTest;
 	int *m_TestValues;
+	
+	const char* StreamServerAddress = 
+		// copy serveraddress_sample.txt to serveraddress.txt and edit to your server address
+		#include "serveraddress.txt"
+	;
 
 public:
 
