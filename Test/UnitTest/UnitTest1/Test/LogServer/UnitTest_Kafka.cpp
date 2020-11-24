@@ -28,7 +28,7 @@ using namespace ::SF;
 
 
 
-GTEST_TEST(Kafka, Producer)
+TEST_F(KafkaTest, Producer)
 {
     const char* topic = "MyTestTopic1";
     uint8_t testData[] = {1,2,3,4,5,6,7,8,9};
@@ -37,7 +37,7 @@ GTEST_TEST(Kafka, Producer)
 
     StreamDBProducer streamDB;
 
-    GTEST_ASSERT_EQ(streamDB.Initialize(StreamServerAddress, topic), ResultCode::SUCCESS);
+    GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress, topic), ResultCode::SUCCESS);
 
     GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<uint8_t>(testData)), ResultCode::SUCCESS);
 	GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<uint8_t>(testData1)), ResultCode::SUCCESS);
@@ -48,13 +48,13 @@ GTEST_TEST(Kafka, Producer)
 }
 
 
-GTEST_TEST(Kafka, Consumer)
+TEST_F(KafkaTest, Consumer)
 {
 	const char* topic = "MyTestTopic1";
 
     StreamDBConsumer streamDB;
 
-	GTEST_ASSERT_EQ(streamDB.Initialize(StreamServerAddress, topic), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress, topic), ResultCode::SUCCESS);
 
     GTEST_ASSERT_EQ(streamDB.RequestData(), ResultCode::SUCCESS);
 
@@ -84,11 +84,11 @@ GTEST_TEST(Kafka, Consumer)
 
 }
 
-GTEST_TEST(Kafka, Directory)
+TEST_F(KafkaTest, Directory)
 {
 	StreamDBDirectory streamDB;
 
-	GTEST_ASSERT_EQ(streamDB.Initialize(StreamServerAddress, ""), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress, ""), ResultCode::SUCCESS);
 
 	GTEST_ASSERT_EQ(streamDB.RefreshTopicList(), ResultCode::SUCCESS);
 }
