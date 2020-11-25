@@ -103,6 +103,43 @@ namespace SF
     };
 
 
+	////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    //  class StreamDBDirectory
+    //
+
+	class StreamDBDirectory : public StreamDB
+	{
+	public:
+
+		using super = StreamDB;
+
+	public:
+
+		StreamDBDirectory();
+
+		virtual ~StreamDBDirectory();
+
+		virtual Result Initialize(const String& brokers, const String& topic = "") override;
+
+		Result RefreshTopicList();
+
+		const Array<String>& GetTopicList() const { return m_TopicList; }
+
+	private:
+
+		UniquePtr<RdKafka::Consumer> m_Consumer;
+
+		DynamicArray<String> m_TopicList;
+	};
+
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    //  class StreamDBProducer
+    //
     class StreamDBProducer : public StreamDB
     {
     public:
@@ -131,31 +168,10 @@ namespace SF
     };
 
 
-	class StreamDBDirectory : public StreamDB
-	{
-	public:
-
-		using super = StreamDB;
-
-	public:
-
-        StreamDBDirectory();
-
-		virtual ~StreamDBDirectory();
-
-		virtual Result Initialize(const String& brokers, const String& topic = "") override;
-
-        Result RefreshTopicList();
-
-        const Array<String>& GetTopicList() const { return m_TopicList; }
-
-	private:
-
-		UniquePtr<RdKafka::Consumer> m_Consumer;
-
-        DynamicArray<String> m_TopicList;
-	};
-
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//  class StreamDBConsumer
+	//
 
     class StreamDBConsumer : public StreamDB
     {

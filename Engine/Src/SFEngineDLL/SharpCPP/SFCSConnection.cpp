@@ -38,18 +38,18 @@ using namespace SF;
 //	Connection interface
 //
 
-SFDLL_EXPORT SharedObject* SFConnection_NativeCreateConnection()
+SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnection()
 {
 	auto pConnection = new(Service::NetSystem->GetHeap()) Net::ConnectionMUDPClient(Service::NetSystem->GetHeap());
 	SharedReferenceInc inc(pConnection);
 	pConnection->RegisterToEngineObjectManager();
-	return pConnection;
+	return NativeObjectToIntptr(pConnection);
 }
 
-SFDLL_EXPORT Net::Connection* SFConnection_NativeCreateConnectionWithGroup(intptr_t groupNativeHandler)
+SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnectionWithGroup(intptr_t groupNativeHandler)
 {
 	if (groupNativeHandler == 0)
-		return nullptr;
+		return 0;
 
 	auto pGroup = SF::NativeToObject<Net::ConnectionGroup>(groupNativeHandler);
 
@@ -59,15 +59,15 @@ SFDLL_EXPORT Net::Connection* SFConnection_NativeCreateConnectionWithGroup(intpt
 	SharedReferenceInc inc(pConnection);;
 	pConnection->RegisterToEngineObjectManager();
 
-	return pConnection;
+	return NativeObjectToIntptr(pConnection);
 }
 
-SFDLL_EXPORT SharedObject* SFConnection_NativeCreateConnectionTCP()
+SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnectionTCP()
 {
 	auto pConnection = new(Service::NetSystem->GetHeap()) Net::ConnectionTCPClient(Service::NetSystem->GetHeap());
 	SharedReferenceInc inc(pConnection);
 	pConnection->RegisterToEngineObjectManager();
-	return pConnection;
+	return NativeObjectToIntptr(pConnection);
 }
 
 SFDLL_EXPORT int SFConnection_NativeConnect(intptr_t nativeHandle, uint64_t authTicket, const char* address, int port)

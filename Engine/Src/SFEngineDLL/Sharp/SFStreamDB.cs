@@ -23,10 +23,8 @@ namespace SF
 
     public class StreamDB : SFObject
     {
-
         public StreamDB()
         {
-
         }
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -74,15 +72,18 @@ namespace SF
     }
 
 
-    public class StreamDBDirectory : StreamDB
+    public class StreamDBDirectory : SFObject
     {
         public StreamDBDirectory()
         {
             NativeHandle = NativeCreateDirectory();
         }
 
-
-
+        public virtual Result Initialize(string brokers)
+        {
+            var result = NativeInitialize(NativeHandle, System.Text.Encoding.UTF8.GetBytes(brokers + "\0"));
+            return new Result(result);
+        }
 
         public Result RefreshTopicList()
         {
@@ -113,6 +114,9 @@ namespace SF
 #else
             "SFEngineDLL";
 #endif
+
+        [DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeInitialize", CharSet = CharSet.Auto)]
+        static extern Int32 NativeInitialize(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPArray)] byte[] strBrokers);
 
         [DllImport(NativeDllName, EntryPoint = "StreamDB_NativeCreateDirectory", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateDirectory();

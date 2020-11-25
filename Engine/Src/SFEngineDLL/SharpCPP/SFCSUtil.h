@@ -100,5 +100,11 @@ namespace SF
 		return static_cast<Type*>((SF::SharedObject*)pObj);
 	}
 
+	template<class Type>
+	intptr_t NativeObjectToIntptr(Type* pObj)
+	{
+		return reinterpret_cast<intptr_t>(static_cast<SharedObject*>(pObj));
+	}
+
 }
 

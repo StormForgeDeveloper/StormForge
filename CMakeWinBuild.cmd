@@ -12,7 +12,7 @@ for %%I in (.) do set SF_FOLDER=%%~nxI
 
 set CMAKE_BUILD_TYPE=Debug
 cd %BUILD_DIR%\%PROCESS_ARCHITECTUR%
-cmake --build . --parallel --target install  -- /p:Configuration=%CMAKE_BUILD_TYPE% 
+cmake --build . --parallel --target install -- /p:Configuration=%CMAKE_BUILD_TYPE% 
 
 if ERRORLEVEL 1 goto exit
 

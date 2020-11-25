@@ -15,6 +15,7 @@
 
 #ifdef USE_STREAMDB
 
+
 using namespace SF;
 
 
@@ -22,19 +23,19 @@ using namespace SF;
 SFDLL_EXPORT intptr_t StreamDB_NativeCreateDirectory()
 {
 	auto streamDBInstance = new(GetSystemHeap()) StreamDBDirectory;
-	return reinterpret_cast<intptr_t>(static_cast<SharedObject*>(streamDBInstance));
+	return NativeObjectToIntptr(streamDBInstance);
 }
 
 SFDLL_EXPORT intptr_t StreamDB_NativeCreateProducer()
 {
 	auto streamDBInstance = new(GetSystemHeap()) StreamDBProducer;
-	return reinterpret_cast<intptr_t>(static_cast<SharedObject*>(streamDBInstance));
+	return NativeObjectToIntptr(streamDBInstance);
 }
 
 SFDLL_EXPORT intptr_t StreamDB_NativeCreateConsumer()
 {
 	auto streamDBInstance = new(GetSystemHeap()) StreamDBConsumer;
-	return reinterpret_cast<intptr_t>(static_cast<SharedObject*>(streamDBInstance));
+	return NativeObjectToIntptr(streamDBInstance);
 }
 
 
@@ -55,6 +56,15 @@ SFDLL_EXPORT const char* StreamDB_NativeGetTopic(intptr_t nativeHandle, const ch
 		return nullptr;
 
 	return pStreamInstance->GetTopic().data();
+}
+
+SFDLL_EXPORT int32_t StreamDBDirectory_NativeInitialize(intptr_t nativeHandle, const char* strBrokers)
+{
+	auto pStreamInstance = NativeToObject<StreamDB>(nativeHandle);
+	if (pStreamInstance == nullptr)
+		return (int32_t)ResultCode::UNEXPECTED;
+
+	return (int32_t)pStreamInstance->Initialize(strBrokers, nullptr);
 }
 
 SFDLL_EXPORT int32_t StreamDBDirectory_NativeRefreshTopicList(intptr_t nativeHandle)

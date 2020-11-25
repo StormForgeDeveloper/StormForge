@@ -69,7 +69,7 @@ namespace TestStream.WinSharp
             if (m_Directory == null)
             {
                 m_Directory = new SF.StreamDBDirectory();
-                var result = m_Directory.Initialize(serverAddress, "");
+                var result = m_Directory.Initialize(serverAddress);
             }
 
             SF.ServerAddressRegistry.AddServerAddress(serverAddress);
