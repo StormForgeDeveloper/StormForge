@@ -74,10 +74,9 @@ TEST_F(KafkaTest, Consumer)
 			break;
         }
 
-
         if (messageData)
         {
-            
+            // do your job
         }
 
     } while (true);

@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="Sharp\SFConnection.cs" />
     <Compile Include="Sharp\SFConnectionGroup.cs" />
+    <Compile Include="Sharp\SFGlobalEngine.cs" />
     <Compile Include="Sharp\SFIMessageRouter.cs" />
     <Compile Include="Sharp\SFMessage.cs" />
     <Compile Include="Sharp\SFMessageParsingUtil.cs" />

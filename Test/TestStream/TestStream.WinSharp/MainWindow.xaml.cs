@@ -23,8 +23,6 @@ namespace TestStream.WinSharp
     public partial class MainWindow : Window
     {
 
-        SF.Engine m_Engine = null;
-
         SF.StreamDBDirectory m_Directory;
         SF.StreamDBProducer m_Producer;
         SF.StreamDBConsumer m_Consumer;
@@ -33,8 +31,7 @@ namespace TestStream.WinSharp
         {
             InitializeComponent();
 
-            m_Engine = new SF.Engine();
-            m_Engine.StartEngine();
+            SF.GlobalEngine.Start();
 
             SF.ServerAddressRegistry.ReadServerAddress();
             var serverAddresses = SF.ServerAddressRegistry.GetServerAddresses();
@@ -44,9 +41,7 @@ namespace TestStream.WinSharp
 
         protected override void OnClosed(EventArgs e)
         {
-            if (m_Engine != null)
-                m_Engine.StopEngine();
-            m_Engine = null;
+            SF.GlobalEngine.Stop();
 
             SF.ServerAddressRegistry.SaveServerAddressToRegistry();
 
