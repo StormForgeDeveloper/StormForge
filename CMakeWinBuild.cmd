@@ -2,7 +2,7 @@
 
 set CMAKE_SYSTEM_NAME=Windows
 set PROCESS_ARCHITECTUR=x64
-
+set OPENSSL_DIR=3rdParties\src\openssl
 
 set BUILD_DIR=build%CMAKE_SYSTEM_NAME%
 
@@ -25,8 +25,7 @@ robocopy Engine\Src\Protocol\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_
 
 
 rem copy openssl dlls
-set OPENSSL_DIR=3rdParties\src\openssl
-robocopy %~dp0\%OPENSSL_DIR%\buildWindows\openssl\bin %~dp0\%BUILD_DIR%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin *.dll *.pdb /purge
+robocopy %~dp0\%OPENSSL_DIR%\buildWindows\openssl\bin %~dp0\%BUILD_DIR%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin *.dll *.pdb
 
 
 set CMAKE_BUILD_TYPE=RelWithDebInfo
@@ -42,8 +41,7 @@ robocopy Engine\Src\Protocol\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_
 
 
 rem copy openssl dlls
-set OPENSSL_DIR=3rdParties\src\openssl
-robocopy %~dp0\%OPENSSL_DIR%\buildWindows\openssl\bin %~dp0\%BUILD_DIR%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin *.dll *.pdb /purge
+robocopy %~dp0\%OPENSSL_DIR%\buildWindows\openssl\bin %~dp0\%BUILD_DIR%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin *.dll *.pdb
 
 
 
