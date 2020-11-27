@@ -24,6 +24,11 @@ robocopy Engine\Src\Protocol\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_
 
 
 
+rem copy openssl dlls
+set OPENSSL_DIR=3rdParties\src\openssl
+robocopy %~dp0\%OPENSSL_DIR%\buildWindows\openssl\bin %~dp0\%BUILD_DIR%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin *.dll *.pdb /purge
+
+
 set CMAKE_BUILD_TYPE=RelWithDebInfo
 cmake --build . --parallel --target install -- /p:Configuration=%CMAKE_BUILD_TYPE% 
 
@@ -36,7 +41,14 @@ robocopy Engine\Src\SFEngine\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_
 robocopy Engine\Src\Protocol\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib *.pdb
 
 
+rem copy openssl dlls
+set OPENSSL_DIR=3rdParties\src\openssl
+robocopy %~dp0\%OPENSSL_DIR%\buildWindows\openssl\bin %~dp0\%BUILD_DIR%\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin *.dll *.pdb /purge
+
+
+
 cd %~dp0
+
 
 :exit
 
