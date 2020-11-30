@@ -194,7 +194,7 @@ namespace SF {
 #endif
 
 		SharedPointerT(ClassType* pRef)
-			:SharedPointer(pRef)
+			:SharedPointer(static_cast<SharedObject*>(pRef))
 		{
 		}
 
@@ -210,6 +210,12 @@ namespace SF {
 		}
 
 		ClassType* GetObjectPtr()
+		{
+			return (ClassType*)m_pObject;
+		}
+
+		// supporting std style interface
+		ClassType* get() const
 		{
 			return (ClassType*)m_pObject;
 		}

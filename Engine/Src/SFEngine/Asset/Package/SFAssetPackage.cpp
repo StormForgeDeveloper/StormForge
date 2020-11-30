@@ -23,8 +23,8 @@ namespace SF
 	AssetPackage::AssetPackage(IHeap& heap, const StringCrc64& name)
 		: m_Name(name)
 		, m_Heap("name", heap)
-		, m_Assets(m_Heap)
-		, m_References(m_Heap)
+		, m_Assets(GetHeap())
+		, m_References(GetHeap())
 	{
 	}
 

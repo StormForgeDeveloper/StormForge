@@ -19,6 +19,7 @@
 #include "String/SFStringCrc32.h"
 #include "String/SFString.h"
 #include "Task/SFTask.h"
+#include "EngineObject/SFEngineObject.h"
 
 
 namespace RdKafka
@@ -108,7 +109,7 @@ namespace SF
     //  class StreamDBDirectory
     //
 
-	class StreamDBDirectory : public StreamDB
+	class StreamDBDirectory : public EngineObject
 	{
 	public:
 
@@ -117,10 +118,9 @@ namespace SF
 	public:
 
 		StreamDBDirectory();
+        virtual ~StreamDBDirectory();
 
-		virtual ~StreamDBDirectory();
-
-		virtual Result Initialize(const String& brokers, const String& topic = "") override;
+		virtual Result Initialize(const String& brokers);
 
 		Result RefreshTopicList();
 
@@ -128,6 +128,10 @@ namespace SF
 
 	private:
 
+		UniquePtr<RdKafka::Conf> m_Config;
+		UniquePtr<RdKafka::Conf> m_TopicConfig;
+
+		UniquePtr<RdKafka::Topic> m_TopicHandle;
 		UniquePtr<RdKafka::Consumer> m_Consumer;
 
 		DynamicArray<String> m_TopicList;

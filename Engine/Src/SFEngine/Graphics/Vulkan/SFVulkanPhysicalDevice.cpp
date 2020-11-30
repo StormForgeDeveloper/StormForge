@@ -76,14 +76,14 @@ namespace SF
 		vkGetPhysicalDeviceMemoryProperties(m_VKPhysicalDevice, &m_VKDeviceMemoryProperties);
 
 		m_DeviceMemoryTypes.Clear();
-		m_DeviceMemoryTypes.resize(m_VKDeviceMemoryProperties.memoryTypeCount);
+		m_DeviceMemoryTypes.reserve(m_VKDeviceMemoryProperties.memoryTypeCount);
 		for (unsigned iItem = 0; iItem < m_VKDeviceMemoryProperties.memoryTypeCount; iItem++)
 		{
 			m_DeviceMemoryTypes.push_back(m_VKDeviceMemoryProperties.memoryTypes[iItem]);
 		}
 
 		m_DeviceHeaps.Clear();
-		m_DeviceHeaps.resize(m_VKDeviceMemoryProperties.memoryHeapCount);
+		m_DeviceHeaps.reserve(m_VKDeviceMemoryProperties.memoryHeapCount);
 		for (unsigned iItem = 0; iItem < m_VKDeviceMemoryProperties.memoryHeapCount; iItem++)
 		{
 			m_DeviceHeaps.push_back(m_VKDeviceMemoryProperties.memoryHeaps[iItem]);

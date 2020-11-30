@@ -47,7 +47,7 @@ namespace SF
 
 
 		// Get heap for importers
-		virtual IHeap& GetHeap() override { return m_Heap; }
+		virtual IHeap& GetHeap() override { return *m_Heap.get(); }
 
 		// Clear factory and all registered importers
 		void Clear();

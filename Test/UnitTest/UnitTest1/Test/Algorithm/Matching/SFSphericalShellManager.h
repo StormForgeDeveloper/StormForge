@@ -315,7 +315,7 @@ namespace SF
 		virtual ~SphericalShellManager();
 
 		// Get heap
-		IHeap& GetHeap() { return m_Heap; }
+		IHeap& GetHeap() { return *m_Heap.get(); }
 
 		// initialize
 		Result Initialize(uint numberOfShell);

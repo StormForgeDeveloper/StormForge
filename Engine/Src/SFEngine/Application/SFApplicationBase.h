@@ -41,7 +41,7 @@ namespace SF
 		ApplicationBase();
 		~ApplicationBase();
 
-		IHeap& GetHeap() { return m_Heap; }
+		IHeap& GetHeap() { return *m_Heap.get(); }
 
 
 		virtual Result InitializeComponent() override;

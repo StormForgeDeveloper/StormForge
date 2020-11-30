@@ -29,16 +29,18 @@ namespace SF {
 
 
 
-	class UpdateObjectTickFlagTask : public EngineTask
+	class SetObjectTickFlagTask : public EngineTask
 	{
 	private:
 		// object pointer 
 		SharedPointerT<EngineObject>	m_ObjectPtr;
+		uint32_t m_TickFlag = 0;
 
 	public:
-		UpdateObjectTickFlagTask(EngineObject* pObj)
+		SetObjectTickFlagTask(EngineObject* pObj, uint32_t tickFlag)
 			: EngineTask()
 			, m_ObjectPtr(pObj)
+			, m_TickFlag(tickFlag)
 		{
 
 		}
@@ -47,7 +49,7 @@ namespace SF {
 		{
 			if (m_ObjectPtr != nullptr)
 			{
-				Service::EngineTaskManager->UpdateTickFlagsInternal(*m_ObjectPtr);
+				Service::EngineTaskManager->SetTickFlagsInternal(*m_ObjectPtr, m_TickFlag);
 			}
 			m_ObjectPtr = nullptr;
 		}
@@ -107,14 +109,16 @@ namespace SF {
 		LibraryComponent::DeinitializeComponent();
 	}
 
-	void EngineTaskManager::UpdateObjectList(EngineTaskTick tick, EngineObject* pObj)
+	void EngineTaskManager::UpdateObjectTickList(EngineTaskTick tick, uint32_t newTickFlag, EngineObject* pObj)
 	{
+		assert((int)tick >= 0 && (int)tick < countof(m_Objects));
+
 		auto& tickList = m_Objects[(int)tick];
 		auto& objNode = pObj->GetListNode(tick);
 
 		auto mask = 1 << (int)tick;
-		bool oldValue = (pObj->m_ActiveTickFlags & mask) != 0;
-		bool newValue = (pObj->GetTickFlags() & mask) != 0;
+		bool oldValue = (pObj->m_TickFlags & mask) != 0;
+		bool newValue = (newTickFlag & mask) != 0;
 
 		if (oldValue == newValue) return;
 
@@ -127,38 +131,40 @@ namespace SF {
 			tickList.Add(&objNode);
 	}
 
-	EngineTaskPtr EngineTaskManager::UpdateTickFlags(EngineObject* pObj)
+	EngineTaskPtr EngineTaskManager::SetTickFlags(EngineObject* pObj, uint32_t tickFlag)
 	{
-        if(ThisThread::GetThreadID() == GetEngineThreadID())
-        {
-            UpdateTickFlagsInternal(pObj);
-            return EngineTaskPtr();
-        }
-        else
-        {
-			assert(pObj->IsDisposed() || pObj->GetReferenceCount()>0);
+		if (ThisThread::GetThreadID() == GetEngineThreadID())
+		{
+			SetTickFlagsInternal(pObj, tickFlag);
+			return EngineTaskPtr();
+		}
+		else
+		{
+			assert(pObj->IsDisposed() || pObj->GetReferenceCount() > 0);
 
-            // This function can be called in the object destructor, so we need to use some global memory manager
-            EngineTaskPtr pNewTask = new(GetEngineHeap()) UpdateObjectTickFlagTask(pObj);
-            pNewTask->Request();
-            return std::forward<EngineTaskPtr>(pNewTask);
-        }
+			// This function can be called in the object destructor, so we need to use some global memory manager
+			EngineTaskPtr pNewTask = new(GetEngineHeap()) SetObjectTickFlagTask(pObj, tickFlag);
+			pNewTask->Request();
+			return std::forward<EngineTaskPtr>(pNewTask);
+		}
 	}
 
-
-
-	void EngineTaskManager::UpdateTickFlagsInternal(EngineObject* pObj)
+	void EngineTaskManager::SetTickFlagsInternal(EngineObject* pObj, uint32_t tickFlag)
 	{
-		if (pObj->m_ActiveTickFlags.load(std::memory_order_consume) == pObj->GetTickFlags())
+		assert(ThisThread::GetThreadID() == GetEngineThreadID());
+
+		auto curTickFlag = pObj->m_TickFlags.load(std::memory_order_acquire);
+		if (curTickFlag == tickFlag)
 			return;
 
-		UpdateObjectList(EngineTaskTick::SyncSystemTick, pObj);
-		UpdateObjectList(EngineTaskTick::SyncPreTick, pObj);
-		UpdateObjectList(EngineTaskTick::SyncTick, pObj);
-		UpdateObjectList(EngineTaskTick::AsyncTick, pObj);
-		UpdateObjectList(EngineTaskTick::SyncPostTick, pObj);
+		UpdateObjectTickList(EngineTaskTick::SyncSystemTick, tickFlag, pObj);
+		UpdateObjectTickList(EngineTaskTick::SyncPreTick, tickFlag, pObj);
+		UpdateObjectTickList(EngineTaskTick::SyncTick, tickFlag, pObj);
+		UpdateObjectTickList(EngineTaskTick::AsyncTick, tickFlag, pObj);
+		UpdateObjectTickList(EngineTaskTick::SyncPostTick, tickFlag, pObj);
 
-        pObj->m_ActiveTickFlags.store(pObj->GetTickFlags(), std::memory_order_release);
+		// 
+		pObj->m_TickFlags.store(tickFlag, std::memory_order_release);
 	}
 
 

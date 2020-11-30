@@ -31,7 +31,12 @@ namespace SF {
 	// System memory manager
 	IHeap& GetSystemHeap()
 	{
-		return *STDMemoryManager::GetInstance();
+		return *GetSystemHeapPtr().get();
+	}
+
+	const IHeapPtr& GetSystemHeapPtr()
+	{
+		return STDMemoryManager::GetInstance();
 	}
 
 
@@ -39,7 +44,12 @@ namespace SF {
 	// Engine memory manager
 	IHeap& GetEngineHeap()
 	{
-		return *EngineMemoryManager::GetInstance();
+		return *GetEngineHeapPtr().get();
+	}
+
+	const IHeapPtr& GetEngineHeapPtr()
+	{
+		return EngineMemoryManager::GetInstance();
 	}
 
 
@@ -50,34 +60,34 @@ namespace SF {
 	//    - Hierarchical memory heap
 	//
 
-	Heap::Heap(const char* name, IHeap& parent)
-		: m_pHeap(new(GetSystemHeap()) IHeap(name, &parent))
-	{
-	}
+	//Heap::Heap(const char* name, IHeap& parent)
+	//	: m_pHeap(new(GetSystemHeap()) IHeap(name, &parent))
+	//{
+	//}
 
-	Heap::~Heap()
-	{
-		// All memory related to the heap should be reported
-		if (m_pHeap != nullptr)
-			m_pHeap->ReportLeak();
-	}
+	//Heap::~Heap()
+	//{
+	//	// All memory related to the heap should be reported
+	//	if (m_pHeap != nullptr)
+	//		m_pHeap->ReportLeak();
+	//}
 
-	// Allocation/Reallocation interface
-	void* Heap::Alloc(size_t size, size_t alignment)
-	{
-		if (m_pHeap == nullptr)
-			return nullptr;
+	//// Allocation/Reallocation interface
+	//void* Heap::Alloc(size_t size, size_t alignment)
+	//{
+	//	if (m_pHeap == nullptr)
+	//		return nullptr;
 
-		return m_pHeap->Alloc(size, alignment);
-	}
+	//	return m_pHeap->Alloc(size, alignment);
+	//}
 
-	void* Heap::Realloc(void* ptr, size_t newSize, size_t alignment)
-	{
-		if (m_pHeap == nullptr)
-			return nullptr;
+	//void* Heap::Realloc(void* ptr, size_t newSize, size_t alignment)
+	//{
+	//	if (m_pHeap == nullptr)
+	//		return nullptr;
 
-		return m_pHeap->Realloc(ptr, newSize, alignment);
-	}
+	//	return m_pHeap->Realloc(ptr, newSize, alignment);
+	//}
 
 
 
@@ -88,21 +98,21 @@ namespace SF {
 	//	STDMemoryManager
 	//
 
-	STDMemoryManager* STDMemoryManager::stm_Instance = nullptr;
+	SharedPointerT<IHeap> STDMemoryManager::stm_Instance;
 
-	STDMemoryManager* STDMemoryManager::GetInstance()
+	const SharedPointerT<IHeap>& STDMemoryManager::GetInstance()
 	{
 		static CriticalSection g_StdHeapLock;
-		// This condition will be true most of time, and early return will be faster if the compiler is not inteligent enough.
+		// This condition will be true most of time, and early return will be faster if the compiler is not intelligent enough.
 		if (stm_Instance != nullptr) 
 			return stm_Instance;
 
 		MutexScopeLock lock(g_StdHeapLock);
 		if (stm_Instance == nullptr) // Need to check again after lock
 		{
-			void* pBuffer = malloc(sizeof(STDMemoryManager));
+			// Using malloc to avoid recursive memory allocation
+			void* pBuffer = STDMemoryManager::SystemAllignedAlloc(sizeof(STDMemoryManager), sizeof(int));
 			stm_Instance = new(pBuffer) STDMemoryManager;
-			SharedReferenceInc inc(stm_Instance); // we need to manage the reference count manually because it wasn't techinically not allocated in regualr way
 		}
 
 		return stm_Instance;
@@ -158,6 +168,8 @@ namespace SF {
 		MemBlockHdr* pMemBlock;
 		pMemBlock = (MemBlockHdr*)SystemAllignedAlloc(allocSize, alignment);
 
+		AddAllocSize(size);
+
 		pMemBlock->Init(this, (uint32_t)size, (uint32_t)spaceForHeader);
 
 		return pMemBlock;
@@ -165,7 +177,7 @@ namespace SF {
 
 	void STDMemoryManager::FreeInternal(MemBlockHdr* ptr)
 	{
-		m_AllocatedDRAM.fetch_add(ptr->Size, std::memory_order_relaxed);
+		SubAllocSize(ptr->Size);
 
 		return SystemAlignedFree(ptr);
 	}
@@ -217,15 +229,27 @@ namespace SF {
 	//	EngineMemoryManager
 	//
 
-	EngineMemoryManager EngineMemoryManager::stm_Instance;
+	SharedPointerT<IHeap> EngineMemoryManager::stm_Instance;
 
-	EngineMemoryManager* EngineMemoryManager::GetInstance()
+	const SharedPointerT<IHeap>& EngineMemoryManager::GetInstance()
 	{
-		return &stm_Instance;
+		static CriticalSection g_StdHeapLock;
+		// This condition will be true most of time, and early return will be faster if the compiler is not intelligent enough.
+		if (stm_Instance != nullptr)
+			return stm_Instance;
+
+		MutexScopeLock lock(g_StdHeapLock);
+		if (stm_Instance == nullptr) // Need to check again after lock
+		{
+			// Using malloc to avoid recursive memory allocation
+			stm_Instance = new(GetSystemHeap()) EngineMemoryManager;
+		}
+
+		return stm_Instance;
 	}
 
 	EngineMemoryManager::EngineMemoryManager()
-		: Heap("Engine", GetSystemHeap())
+		: IHeap("Engine", GetSystemHeapPtr().get())
 	{
 	}
 

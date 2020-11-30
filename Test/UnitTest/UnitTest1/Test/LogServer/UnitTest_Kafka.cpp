@@ -87,7 +87,7 @@ TEST_F(KafkaTest, Directory)
 {
 	StreamDBDirectory streamDB;
 
-	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress, ""), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress), ResultCode::SUCCESS);
 
 	GTEST_ASSERT_EQ(streamDB.RefreshTopicList(), ResultCode::SUCCESS);
 }

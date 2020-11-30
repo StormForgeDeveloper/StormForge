@@ -81,6 +81,8 @@ namespace SF
 		// Clear and release all memory
 		void Clear();
 
+		IHeap& GetHeap() { return *m_Heap.get(); }
+
 		size_t GetStringCount() {
 			return std::max(m_StringMap32.size(), m_StringMap64.size());
 		}

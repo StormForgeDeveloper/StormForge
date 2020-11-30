@@ -20,10 +20,6 @@
 
 
 
-
-
-
-
 namespace SF {
 
 
@@ -50,10 +46,7 @@ namespace SF {
 #endif
 	}
 
-
-	
-	
-};	// namespace SF
+}	// namespace SF
 
 
 
@@ -94,19 +87,17 @@ void* operator new( size_t size )
 	return SF::GetSystemHeap().Alloc(size);
 }
 
+void* operator new[](size_t size)
+{
+	return SF::GetSystemHeap().Alloc(size);
+}
+
 void operator delete( void* pBuff ) noexcept
 {
 	return SF::GetSystemHeap().Free(pBuff);
-}
-
-void* operator new[]( size_t size )
-{
-	return SF::GetSystemHeap().Alloc(size);
 }
 
 void operator delete[]( void* pBuff ) noexcept
 {
 	return SF::GetSystemHeap().Free(pBuff);
 }
-
-

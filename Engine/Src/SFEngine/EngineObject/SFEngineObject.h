@@ -17,6 +17,8 @@
 #include "EngineObject/SFEngineTask.h"
 #include "Task/SFTimerScheduler.h"
 #include "Container/SFDoubleLinkedList.h"
+#include "Container/SFCircularQueue.h"
+
 
 namespace SF {
 
@@ -41,8 +43,10 @@ namespace SF {
 
 		SharedPointerT<TimerAction> m_TimerAction;
 
+		// Queued Actions to run on object tick on game thread
+		CircularQueue<std::function<void()>, 64> m_PendingObjectTickActions;
+
         // TODO: Actually tick flag should be queue style as tick flags change task will be queued to task manager.
-        std::atomic<uint32_t> m_ActiveTickFlags;
 		std::atomic<uint32_t> m_TickFlags;
         
 		bool m_Registered = false;
@@ -82,8 +86,7 @@ namespace SF {
 
 		// Change tick flag
 		// Any combination of EngineTaskTick are acceptable
-		uint32_t GetTickFlags() { return m_TickFlags; }
-		uint32_t GetActiveTickFlags() { return m_ActiveTickFlags.load(std::memory_order_relaxed); }
+		uint32_t GetTickFlags() { return m_TickFlags.load(std::memory_order_relaxed); }
 		EngineTaskPtr SetTickFlags(uint32_t tickFlag);
 		EngineTaskPtr SetTickGroup(EngineTaskTick tickGroup);
 

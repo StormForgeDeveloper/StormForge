@@ -68,7 +68,6 @@ namespace SF {
 	// Constructor
 	EngineObject::EngineObject(IHeap* heap, const StringCrc64& name)
 		: Object(heap, name)
-		, m_ActiveTickFlags(0)
 		, m_TickFlags(0)
 		, m_ActuallyRegistered(false)
 		, m_ManagerListNodes(this)
@@ -83,7 +82,7 @@ namespace SF {
 	EngineObject::~EngineObject()
 	{
 		// The object need to be unregistered from the task manager
-		Assert(m_ActiveTickFlags == 0);
+		Assert(m_TickFlags == 0);
 
 		// Engine object is a shared object with shared object manager
 		if(m_Registered)
@@ -111,13 +110,9 @@ namespace SF {
 	{
 		if (!Object::CanDelete()) return false;
 
-		if (m_ActiveTickFlags.load(std::memory_order_relaxed) != 0)
+		if (m_TickFlags.load(std::memory_order_relaxed) != 0)
 		{
-			if (m_TickFlags != 0) // if it's not requested
-			{
-				assert(false); // this shouldn't be occure
-				SetTickFlags(0);
-			}
+			assert(!m_Disposed); // this shouldn't happen
 			return false;
 		}
 
@@ -145,12 +140,7 @@ namespace SF {
 
 	EngineTaskPtr EngineObject::SetTickFlags(uint32_t tickFlag)
 	{
-        // Calling SetTickFlags before any shared pointer is created is dangerous
-		if (m_TickFlags.load(std::memory_order_consume) == tickFlag)
-			return EngineTaskPtr();
-
-		m_TickFlags = tickFlag;
-        return std::forward<EngineTaskPtr>(Service::EngineTaskManager->UpdateTickFlags(this));
+		return std::forward<EngineTaskPtr>(Service::EngineTaskManager->SetTickFlags(this, tickFlag));
 	}
 
 	EngineTaskPtr EngineObject::SetTickGroup(EngineTaskTick tickGroup)

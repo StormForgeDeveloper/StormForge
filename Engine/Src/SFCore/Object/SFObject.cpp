@@ -33,7 +33,10 @@ namespace SF {
 		: m_Name(name)
 		, m_Heap(heap)
 	{
-		AssertRel(heap != nullptr);
+		if (m_Heap == nullptr)
+		{
+			m_Heap = GetEngineHeapPtr();
+		}
 	}
 
 	Object::~Object()

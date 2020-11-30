@@ -64,7 +64,7 @@ namespace SF
 		// Destructor
 		virtual ~ResourceManager();
 
-		IHeap& GetHeap() { return m_Heap; }
+		IHeap& GetHeap() { return *m_Heap.get(); }
 
 		// for internal
 		virtual void RegisterLoadedPackage(AssetPackage* pPackage) override;

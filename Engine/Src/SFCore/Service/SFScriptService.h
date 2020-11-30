@@ -214,7 +214,7 @@ namespace SF
 		virtual ~ScriptEnvironment();
 
 		// Get Heap
-		IHeap& GetHeap() { return m_Heap; }
+		IHeap& GetHeap() { return *m_Heap.get(); }
 
 		// Get parent script environment
 		ScriptEnvironment* GetParent() { return m_pParent; }
@@ -222,7 +222,7 @@ namespace SF
 		// Environment name
 		const String& GetName() const { return m_Name; }
 
-		// Get script object - Searchs local first and extend search to the parent environment
+		// Get script object - Searches local first and extend search to the parent environment
 		virtual ScriptObject* GetScriptObject(StringCrc64 objectType, StringCrc64 variableName, bool searchLocalOnly = false) { unused(objectType, variableName); return nullptr; }
 
 		// Get variable - Takes full/partial path of the function

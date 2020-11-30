@@ -22,8 +22,8 @@ namespace SF
 
 	AssetSerializerFactory::AssetSerializerFactory()
 		: m_Heap("AssetSerializerFactory", GetEngineHeap())
-		, m_AssetSerializerByType(m_Heap)
-		, m_AssetSerializers(m_Heap)
+		, m_AssetSerializerByType(GetHeap())
+		, m_AssetSerializers(GetHeap())
 	{
 	}
 

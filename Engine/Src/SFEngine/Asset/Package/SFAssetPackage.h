@@ -53,7 +53,7 @@ namespace SF
 		virtual void Dispose() override;
 
 		// Heap for this package
-		IHeap& GetHeap() { return m_Heap; }
+		IHeap& GetHeap() { return *m_Heap.get(); }
 
 		// Get name
 		StringCrc64 GetName() const { return m_Name; }

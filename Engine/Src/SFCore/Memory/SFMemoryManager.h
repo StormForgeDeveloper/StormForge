@@ -11,6 +11,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
+#include "Memory/SFMemory.h"
 #include "Memory/SFIMemoryManager.h"
 #include "Container/SFContainerTraitBase.h"
 #include "Container/SFDoubleLinkedListBase.h"
@@ -23,47 +24,24 @@
 namespace SF {
 
 	class MemoryPool;
-	//class MemoryPoolManager;
-	//class IHeap;
-
 
 
 
 	///////////////////////////////////////////////////////////
 	// 
 	//	Heap
-	//    - Hierarchical memory heap
+	//    - Deprecated. just a wrapper now
 	//
-	class Heap
+
+	class Heap : public SharedPointerT<IHeap>
 	{
 	public:
 
-	private:
+		Heap(const char* name, IHeap& parent) 
+			: SharedPointerT<IHeap>(new(parent) IHeap(name, &parent))
+		{}
 
-		// heap pointer
-		SharedPointerT<IHeap> m_pHeap;
-
-
-	protected:
-
-	public:
-
-		Heap(const char* name, IHeap& parent);
-		virtual ~Heap();
-
-		// Get parent heap
-		IHeap* GetParent() { return m_pHeap != nullptr ? m_pHeap->GetParent() : nullptr; }
-
-		// get heap name
-		StringCrc64 GetNameCrc() { return m_pHeap != nullptr ? m_pHeap->GetNameCrc() : ""; }
-
-		// Allocation/Reallocation interface
-		void* Alloc(size_t size, size_t alignment = SF_ALIGN_DOUBLE);
-		void* Realloc(void* ptr, size_t newSize, size_t alignment = SF_ALIGN_DOUBLE);
-		//static void Free(void* ptr);
-
-		// Casting
-		operator IHeap&() { return **m_pHeap; }
+		operator IHeap& () { return *get(); }
 	};
 
 
@@ -79,7 +57,7 @@ namespace SF {
 	{
 	private:
 
-		static STDMemoryManager* stm_Instance;
+		static SharedPointerT<IHeap> stm_Instance;
 
 	protected:
 
@@ -94,7 +72,7 @@ namespace SF {
 		static void* SystemAllignedAlloc(size_t size, size_t alignment);
 		static void SystemAlignedFree(void* pPtr);
 
-		static STDMemoryManager* GetInstance();
+		static const SharedPointerT<IHeap>& GetInstance();
 	};
 
 
@@ -103,18 +81,18 @@ namespace SF {
 	// 
 	//	EngineMemoryManager
 	//
-	class EngineMemoryManager : public Heap
+	class EngineMemoryManager : public IHeap
 	{
 	private:
 
-		static EngineMemoryManager stm_Instance;
+		static SharedPointerT<IHeap> stm_Instance;
 
 	public:
 
 		EngineMemoryManager();
 		virtual ~EngineMemoryManager();
 
-		static EngineMemoryManager* GetInstance();
+		static const SharedPointerT<IHeap>& GetInstance();
 	};
 
 

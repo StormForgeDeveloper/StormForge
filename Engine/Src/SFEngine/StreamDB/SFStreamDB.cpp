@@ -199,25 +199,45 @@ namespace SF
 	//
 
 	StreamDBDirectory::StreamDBDirectory()
+		: EngineObject(nullptr, "StreamDBDirectory"_crc)
 	{
 
 	}
 
 	StreamDBDirectory::~StreamDBDirectory()
 	{
-		Clear_Internal(); // Unlike regular cases, parent stuffs should be released first
+		m_TopicHandle.reset();
+		m_Config.reset();
+		m_TopicConfig.reset();
 		m_Consumer.reset();
 	}
 
-	Result StreamDBDirectory::Initialize(const String& brokers, const String& topic)
+	Result StreamDBDirectory::Initialize(const String& brokers)
 	{
 		std::string errstr;
 
-		Result hr = super::Initialize(brokers, topic);
-		if (!hr)
-			return hr;
+		m_Config.reset(RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL));
+		if (!m_Config)
+			return ResultCode::OUT_OF_MEMORY;
 
-		RdKafka::Consumer* consumer = RdKafka::Consumer::create(GetConfig().get(), errstr);
+		if (m_Config->set("bootstrap.servers", brokers.data(), errstr) != RdKafka::Conf::CONF_OK)
+		{
+			SFLog(Net, Error, "Kafka server configuration has failed: {0}", errstr);
+			return ResultCode::INVALID_ARG;
+		}
+
+		m_TopicConfig.reset(RdKafka::Conf::create(RdKafka::Conf::CONF_TOPIC));
+
+		if (!m_TopicConfig)
+			return ResultCode::OUT_OF_MEMORY;
+
+		if (m_Config->set("default_topic_conf", m_TopicConfig.get(), errstr) != RdKafka::Conf::CONF_OK)
+		{
+			SFLog(Net, Error, "Kafka configuration has failed: {0}", errstr);
+			return ResultCode::INVALID_ARG;
+		}
+
+		RdKafka::Consumer* consumer = RdKafka::Consumer::create(m_Config.get(), errstr);
 		if (!consumer)
 		{
 			SFLog(Net, Error, "Kafka consumer creation has failed: {0}", errstr);
@@ -231,12 +251,13 @@ namespace SF
 
 	Result StreamDBDirectory::RefreshTopicList()
 	{
+
 		if (m_Consumer == nullptr)
 			return ResultCode::NOT_INITIALIZED;
 
 		RdKafka::Metadata* metadata = nullptr;
 		int32_t metadataTimeout = 15 * 1000;
-		RdKafka::ErrorCode errorCode = m_Consumer->metadata(true, GetTopicHandle().get(), &metadata, metadataTimeout);
+		RdKafka::ErrorCode errorCode = m_Consumer->metadata(true, nullptr, &metadata, metadataTimeout);
 		if (errorCode != RdKafka::ErrorCode::ERR_NO_ERROR)
 		{
 			SFLog(Net, Error, "Kafka getting metadata has failed: {0}", RdKafka::err2str(errorCode));
@@ -249,29 +270,16 @@ namespace SF
 			return ResultCode::UNEXPECTED;
 		}
 
-		SFLog(Net, Debug, "Metadata for {0}, brokerId:{1}, {2}", GetTopic(), metadata->orig_broker_id(), metadata->orig_broker_name());
-
-		//std::cout << " " << metadata->brokers()->size() << " brokers:" << std::endl;
-		//RdKafka::Metadata::BrokerMetadataIterator ib;
-		//for (ib = metadata->brokers()->begin();
-		//	ib != metadata->brokers()->end();
-		//	++ib) {
-		//	std::cout << "  broker " << (*ib)->id() << " at "
-		//		<< (*ib)->host() << ":" << (*ib)->port() << std::endl;
-		//}
+		SFLog(Net, Debug, "Metadata for brokerId:{0}, {1}", metadata->orig_broker_id(), metadata->orig_broker_name());
 
 		m_TopicList.Clear();
 
 		// Iterate topics
-		//std::cout << metadata->topics()->size() << " topics:" << std::endl;
 		RdKafka::Metadata::TopicMetadataIterator it;
 		for (it = metadata->topics()->begin();
 			it != metadata->topics()->end();
 			++it)
 		{
-			//std::cout << "  topic \"" << (*it)->topic() << "\" with "
-			//	<< (*it)->partitions()->size() << " partitions:";
-
 			if ((*it)->err() != RdKafka::ERR_NO_ERROR)
 			{
 				SFLog(Net, Debug, "Topic metadata error, topic:{0}, {1}", (*it)->topic(), err2str((*it)->err()));

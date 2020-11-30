@@ -92,13 +92,13 @@ namespace SF
 	{
 		GraphicDevice::Deinitialize();
 
-		IHeap::Delete(m_RenderPass);
+		delete m_RenderPass;
 		m_RenderPass = nullptr;
 
 		m_LogicalDevice = nullptr;
 
 		if (m_PhysicalDevice != nullptr)
-			IHeap::Delete(m_PhysicalDevice);
+			delete m_PhysicalDevice;
 		m_PhysicalDevice = nullptr;
 
 		m_VKSystem = nullptr;

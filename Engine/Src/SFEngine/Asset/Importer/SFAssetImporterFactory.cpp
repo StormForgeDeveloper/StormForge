@@ -25,8 +25,8 @@ namespace SF
 
 	AssetImporterFactory::AssetImporterFactory()
 		: m_Heap("AssetImporterFactory", GetEngineHeap())
-		, m_AssetImporterByType(m_Heap)
-		, m_AssetImporters(m_Heap)
+		, m_AssetImporterByType(GetHeap())
+		, m_AssetImporters(GetHeap())
 	{
 	}
 

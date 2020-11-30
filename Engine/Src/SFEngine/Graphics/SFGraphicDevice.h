@@ -118,10 +118,10 @@ namespace SF
 		RenderTargetChain* GetRenderTargetChain() { return m_RenderTargetChain.GetObjectPtr(); }
 
 		// Memory manager for the device
-		virtual IHeap& GetHeap() override { return m_Heap; }
+		virtual IHeap& GetHeap() override { return *m_Heap.get(); }
 
 		// command memeory manager, use same memory heap for now(TODO)
-		virtual IHeap& GetCommandHeap() override { return m_Heap; }
+		virtual IHeap& GetCommandHeap() override { return *m_Heap.get(); }
 
 		// Initialize component
 		virtual Result Initialize();

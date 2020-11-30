@@ -22,7 +22,7 @@ namespace SF
 	ApplicationBase::ApplicationBase()
 		: LibraryComponent("Application")
 		, m_Heap("AppHeap", GetSystemHeap())
-		, m_CommandQueue(m_Heap)
+		, m_CommandQueue(GetHeap())
 	{
 	}
 

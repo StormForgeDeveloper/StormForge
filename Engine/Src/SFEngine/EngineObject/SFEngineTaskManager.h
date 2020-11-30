@@ -65,8 +65,8 @@ namespace SF {
 
 	private:
 
-		void UpdateObjectList(EngineTaskTick tick, EngineObject* pObj);
-		virtual void UpdateTickFlagsInternal(EngineObject* pObj) override;
+		void UpdateObjectTickList(EngineTaskTick tick, uint32_t newTickFlag, EngineObject* pObj);
+		virtual void SetTickFlagsInternal(EngineObject* pObj, uint32_t tickFlag) override;
 
 
 		void TickSyncObjectList(EngineTaskTick tick, DoubleLinkedListStaticT<EngineObject*>& objectList);
@@ -102,7 +102,7 @@ namespace SF {
 		virtual void DeinitializeComponent() override;
 
 		// Update tick flags, internal use
-		virtual EngineTaskPtr UpdateTickFlags(EngineObject* pObj) override;
+		virtual EngineTaskPtr SetTickFlags(EngineObject* pObj, uint32_t tickFlag) override;
 
 		// Schedule Async task for this tick
 		virtual Result ScheduleTaskForThisTick(Task* pTask) override;

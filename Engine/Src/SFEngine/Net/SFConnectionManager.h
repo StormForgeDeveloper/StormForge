@@ -80,7 +80,7 @@ namespace Net {
 
 		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
-		virtual IHeap& GetHeap() override { return m_Heap; }
+		virtual IHeap& GetHeap() override { return *m_Heap.get(); }
 
 
 		// Initialize component

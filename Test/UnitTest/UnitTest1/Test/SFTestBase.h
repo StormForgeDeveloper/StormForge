@@ -74,7 +74,7 @@ public:
 	}
 
 
-	SF::IHeap& GetHeap() { return m_Heap; }
+	SF::IHeap& GetHeap() { return *m_Heap.get(); }
 
 	// Remember that SetUp() is run immediately before a test starts.
 	virtual void SetUp();

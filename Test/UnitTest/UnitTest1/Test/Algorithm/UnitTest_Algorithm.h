@@ -56,7 +56,7 @@ public:
 	}
 
 	// Heap interface
-	SF::IHeap& GetHeap() { return m_Heap; }
+	SF::IHeap& GetHeap() { return *m_Heap.get(); }
 
 
 	void SetupRandomTestValue()

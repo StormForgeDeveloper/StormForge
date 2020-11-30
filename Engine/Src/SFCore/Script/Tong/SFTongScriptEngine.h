@@ -52,7 +52,7 @@ namespace SF
 
 
 			// Heap for engine
-			IHeap& GetHeap() { return m_Heap; }
+			IHeap& GetHeap() { return *m_Heap.get(); }
 
 
 			// Initialize component

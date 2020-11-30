@@ -26,7 +26,7 @@ namespace SF
 	ScriptEnvironment::ScriptEnvironment(IHeap& heap, ScriptEnvironment* pParent, const String& name)
 		: m_Heap("ScriptEnvironment", heap)
 		, m_pParent(pParent)
-		, m_Name(m_Heap, name)
+		, m_Name(GetHeap(), name)
 	{
 	}
 

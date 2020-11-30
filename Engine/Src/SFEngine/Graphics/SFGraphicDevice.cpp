@@ -31,7 +31,7 @@ namespace SF
 		, m_RenderThread(this)
 		, m_DrawingFrameIndex(0)
 		, m_SharedObjectManager(GetEngineHeap())
-		, m_ComponentDependency(m_Heap)
+		, m_ComponentDependency(GetHeap())
 	{
 	}
 

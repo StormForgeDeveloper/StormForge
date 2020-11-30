@@ -92,6 +92,7 @@ namespace SF {
 		, m_AllocatedDRAM(0)
 		, m_AllocatedVRAM(0)
 	{
+		assert(pParent != this);
 	}
 
 	IHeap::~IHeap()
@@ -141,6 +142,7 @@ namespace SF {
 		int64_t orgSize = m_AllocatedDRAM.fetch_add(size, std::memory_order_relaxed);
 		if (orgSize == 0)
 		{
+			// Keep extra reference count while this object has allocated memory block
 			SharedReferenceInc(this);
 		}
 	}
@@ -152,10 +154,12 @@ namespace SF {
 		{
 			assert(false);
 			m_AllocatedDRAM = 0;
+			// You can remove reference count
 			SharedReferenceDec(this);
 		}
 		else if (remainAllocated == 0)
 		{
+			// You can remove reference count
 			SharedReferenceDec(this);
 		}
 	}

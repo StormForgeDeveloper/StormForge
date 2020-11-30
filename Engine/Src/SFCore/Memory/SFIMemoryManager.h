@@ -58,6 +58,10 @@ namespace SF {
 	class IHeap;
 	class IHeapImpl;
 
+	typedef SharedPointerT<IHeap> IHeapPtr;
+	typedef SharedPointerAtomicT<IHeap> IHeapAtomicPtr;
+
+
 	///////////////////////////////////////////////////////////////
 	//
 	//	Memory manager interfaces
@@ -65,9 +69,11 @@ namespace SF {
 
 	// System memory manager
 	IHeap& GetSystemHeap();
+	const IHeapPtr& GetSystemHeapPtr();
 
 	// Engine memory manager
 	IHeap& GetEngineHeap();
+	const IHeapPtr& GetEngineHeapPtr();
 
 
 
@@ -81,7 +87,7 @@ namespace SF {
 	{
 	private:
 		// parent memory heap, used for overflow allocation or propagate allocation size calculation
-		IHeap* m_Parent;
+		IHeapPtr m_Parent;
 
 		// Heap name
 		StringCrc64 m_NameCrc;
@@ -149,7 +155,7 @@ namespace SF {
 
 
 		// Get parent heap
-		IHeap* GetParent() { return m_Parent; }
+		IHeap* GetParent() { return m_Parent.get(); }
 
 		// get heap name
 		StringCrc64 GetNameCrc() { return m_NameCrc; }
@@ -173,8 +179,6 @@ namespace SF {
 
 	};
 
-	typedef SharedPointerT<IHeap> IHeapPtr;
-	typedef SharedPointerAtomicT<IHeap> IHeapAtomicPtr;
 
 
 

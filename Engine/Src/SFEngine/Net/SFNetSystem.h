@@ -109,7 +109,7 @@ namespace Net {
 		///////////////////////////////////////////////////////////////////////////////
 		// 
 
-		virtual IHeap& GetHeap() override { return m_Heap; }
+		virtual IHeap& GetHeap() override { return *m_Heap.get(); }
 		
 		virtual NetIOSystem& GetNetIOSystem() override { return m_NetIOSystem == nullptr ? NetSystemService::GetNetIOSystem() : *m_NetIOSystem; }
 		

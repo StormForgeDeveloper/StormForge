@@ -78,7 +78,7 @@ namespace Net {
 		RawUDP(IHeap& heap);
 		virtual ~RawUDP();
 
-		IHeap& GetHeap() { return m_Heap; }
+		IHeap& GetHeap() { return *m_Heap.get(); }
 
 		bool CanDelete() { return m_NetIOAdapter.CanDelete(); }
 

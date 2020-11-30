@@ -45,8 +45,8 @@ namespace SF
 
 	StringCrcDB::StringCrcDB()
 		: m_Heap("StringCrcDB", GetSystemHeap())
-		, m_StringMap32(m_Heap)
-		, m_StringMap64(m_Heap)
+		, m_StringMap32(GetHeap())
+		, m_StringMap64(GetHeap())
 	{
 		Service::StringDB = this;
 	}

@@ -46,9 +46,9 @@ namespace SF {
 
 
 	private:
-		virtual void UpdateTickFlagsInternal(EngineObject* pObj) { unused(pObj); }
+		virtual void SetTickFlagsInternal(EngineObject* pObj, uint32_t tickFlag) { unused(pObj); }
 
-		friend class UpdateObjectTickFlagTask;
+		friend class SetObjectTickFlagTask;
 
 
 		void SetEngineThreadID(ThreadID threadID) { m_EngineThreadID = threadID; }
@@ -70,7 +70,7 @@ namespace SF {
 		ThreadID GetRenderThreadID() { return m_RenderThreadID; }
 
 
-		virtual EngineTaskPtr UpdateTickFlags(EngineObject* pObj) { unused(pObj); return EngineTaskPtr(); }
+		virtual EngineTaskPtr SetTickFlags(EngineObject* pObj, uint32_t tickFlag) { unused(pObj); unused(tickFlag); return EngineTaskPtr(); }
 
 
 		// Schedule Async task for this tick, for one time running
