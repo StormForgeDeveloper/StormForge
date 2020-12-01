@@ -75,9 +75,10 @@ namespace Log {
 
 	LogModule::~LogModule()
 	{
-		m_Thread.SetKillEvent();
-		// Print a message so that the thread can terminated
 		SFLog(System, Info, "Logging system terminated");
+
+		Flush();
+		m_Thread.SetKillEvent();
 		Service::LogModule = nullptr;
 	}
 

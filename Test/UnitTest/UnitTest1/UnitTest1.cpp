@@ -28,17 +28,24 @@ using namespace ::SF;
 int main(int argc, char** argv)
 {
 	EngineInitParam initParam;
+	initParam.GlobalLogOutputMask.Assert = 1;
+	initParam.GlobalLogOutputMask.Error = 1;
+	initParam.GlobalLogOutputMask.Warning = 1;
+	initParam.GlobalLogOutputMask.Info = 1;
+	initParam.LogOutputDebugger.Composited = -1;
+	initParam.LogOutputConsole.Composited = -1;
 	initParam.EnableMemoryLeakDetection = true;
 	initParam.GraphicSystem = "Vulkan";
 
 	Engine::Start(initParam);
-
 
 	InitGoogleTest(&argc, argv);
 
 	UnitTest& unit_test = *UnitTest::GetInstance();
 
 	int iRes = RUN_ALL_TESTS();
+
+	SF::Service::LogModule->Flush();
 
 	Engine::Stop();
 

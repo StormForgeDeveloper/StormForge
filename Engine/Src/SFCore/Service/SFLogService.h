@@ -58,9 +58,9 @@ namespace SF {
 		struct
 		{
 			// Generic trace
+			uint32_t Assert : 1;
 			uint32_t Error : 1;
 			uint32_t Warning : 1;
-			uint32_t Assert : 1;
 			uint32_t Info : 1;
 
 			// Module additional traces
@@ -193,14 +193,17 @@ namespace SF {
 
 	public:
 
-		LogService(const LogOutputMask& logMask = LogOutputMask()) { m_GlobalOutputMask = logMask; }
+		LogService(const LogOutputMask& logMask = LogOutputMask())
+		{
+			m_GlobalOutputMask = logMask;
+		}
 		virtual ~LogService() {}
 
 		// Check input mask
 		bool ShouldPrint(const LogOutputMask& mainChannelMask, const LogOutputMask& channelMask)
 		{
 			auto filterMask = mainChannelMask.Composited & m_GlobalOutputMask.Composited;
-			return (filterMask & channelMask.Composited) == channelMask.Composited;
+			return filterMask & channelMask.Composited;
 		}
 
 		LogOutputMask ToChannelMask(const Log::LogChannel& mainChannel)

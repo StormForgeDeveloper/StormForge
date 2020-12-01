@@ -90,7 +90,7 @@ TEST_F(KafkaTest, DirectoryBroker)
 
 	GTEST_ASSERT_EQ(streamDB.FindStream(), ResultCode::SUCCESS);
 
-    SFLog(Net, Info, "Stream count:%d", streamDB.GetStreamList().size());
+    SFLog(Net, Info, "Stream count:{0}", streamDB.GetStreamList().size());
 }
 
 TEST_F(KafkaTest, DirectoryClient)
@@ -101,6 +101,6 @@ TEST_F(KafkaTest, DirectoryClient)
 
 	GTEST_ASSERT_EQ(streamDB.FindStream(), ResultCode::SUCCESS);
 
-    SFLog(Net, Info, "Stream count:%d", streamDB.GetStreamList().size());
+    SFLog(Net, Info, "Stream count:{0}", streamDB.GetStreamList().size());
 }
 
