@@ -13,6 +13,7 @@
 #include "UnitTest_Kafka.h"
 
 #include "StreamDB/SFStreamDB.h"
+#include "StreamDB/SFStreamDBDirectory.h"
 
 
 using ::testing::EmptyTestEventListener;
@@ -90,9 +91,7 @@ TEST_F(KafkaTest, DirectoryBroker)
 	GTEST_ASSERT_EQ(streamDB.FindStream(), ResultCode::SUCCESS);
 
     SFLog(Net, Info, "Stream count:%d", streamDB.GetStreamList().size());
-
 }
-
 
 TEST_F(KafkaTest, DirectoryClient)
 {

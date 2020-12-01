@@ -240,6 +240,8 @@ set(SFENGINE_LIB_FILES
 	Service/SFResourceManagerService.h
 	StreamDB/SFStreamDB.h
 	StreamDB/SFStreamDB.cpp
+	StreamDB/SFStreamDBDirectory.h
+	StreamDB/SFStreamDBDirectory.cpp
 	SFEngine.h
 	SFEnginePCH.h
 	String/SFToStringEngineTypes.h
