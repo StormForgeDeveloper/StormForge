@@ -62,7 +62,7 @@ namespace SF {
 
 		IHeap::SetMemoryLeakDetection(m_InitParameter.EnableMemoryLeakDetection);
 
-		if(AddComponent<Log::LogModule>(m_InitParameter.LogChannel) == nullptr)
+		if(AddComponent<Log::LogModule>(m_InitParameter.GlobalLogOutputMask) == nullptr)
 			return ResultCode::FAIL;
 
 		if (AddComponent<StackWalker>() == nullptr)

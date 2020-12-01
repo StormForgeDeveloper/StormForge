@@ -22,7 +22,7 @@ using namespace SF;
 
 SFDLL_EXPORT intptr_t StreamDB_NativeCreateDirectory()
 {
-	auto streamDBInstance = new(GetSystemHeap()) StreamDBDirectory;
+	auto streamDBInstance = new(GetSystemHeap()) StreamDBDirectoryBroker;
 	return NativeObjectToIntptr(streamDBInstance);
 }
 
@@ -69,29 +69,29 @@ SFDLL_EXPORT int32_t StreamDBDirectory_NativeInitialize(intptr_t nativeHandle, c
 
 SFDLL_EXPORT int32_t StreamDBDirectory_NativeRefreshTopicList(intptr_t nativeHandle)
 {
-	auto pStreamInstance = NativeToObject<StreamDBDirectory>(nativeHandle);
+	auto pStreamInstance = NativeToObject<StreamDBDirectoryBroker>(nativeHandle);
 	if (pStreamInstance == nullptr)
 		return (int32_t)ResultCode::INVALID_POINTER;
 
-	return (int32_t)pStreamInstance->RefreshTopicList();
+	return (int32_t)pStreamInstance->FindStream();
 }
 
 SFDLL_EXPORT int32_t StreamDBDirectory_NativeGetTopicCount(intptr_t nativeHandle)
 {
-	auto pStreamInstance = NativeToObject<StreamDBDirectory>(nativeHandle);
+	auto pStreamInstance = NativeToObject<StreamDBDirectoryBroker>(nativeHandle);
 	if (pStreamInstance == nullptr)
 		return 0;
 
-	return static_cast<int32_t>(pStreamInstance->GetTopicList().size());
+	return static_cast<int32_t>(pStreamInstance->GetStreamList().size());
 }
 
 SFDLL_EXPORT const char* StreamDBDirectory_NativeGetTopic(intptr_t nativeHandle, int32_t index)
 {
-	auto pStreamInstance = NativeToObject<StreamDBDirectory>(nativeHandle);
+	auto pStreamInstance = NativeToObject<StreamDBDirectoryBroker>(nativeHandle);
 	if (pStreamInstance == nullptr)
 		return "";
 
-	return pStreamInstance->GetTopicList()[index].data();
+	return pStreamInstance->GetStreamList()[index].data();
 }
 
 SFDLL_EXPORT int32_t StreamDBProducer_NativeSendRecord(intptr_t nativeHandle, int32_t dataSize, const uint8_t* data)

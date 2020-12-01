@@ -26,8 +26,6 @@ using ::testing::UnitTest;
 using namespace ::SF;
 
 
-
-
 TEST_F(KafkaTest, Producer)
 {
     const char* topic = "MyTestTopic1";
@@ -37,7 +35,7 @@ TEST_F(KafkaTest, Producer)
 
     StreamDBProducer streamDB;
 
-    GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress, topic), ResultCode::SUCCESS);
+    GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress[0], topic), ResultCode::SUCCESS);
 
     GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<uint8_t>(testData)), ResultCode::SUCCESS);
 	GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<uint8_t>(testData1)), ResultCode::SUCCESS);
@@ -54,7 +52,7 @@ TEST_F(KafkaTest, Consumer)
 
     StreamDBConsumer streamDB;
 
-	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress, topic), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress[0], topic), ResultCode::SUCCESS);
 
     GTEST_ASSERT_EQ(streamDB.RequestData(), ResultCode::SUCCESS);
 
@@ -83,13 +81,27 @@ TEST_F(KafkaTest, Consumer)
 
 }
 
-TEST_F(KafkaTest, Directory)
+TEST_F(KafkaTest, DirectoryBroker)
 {
-	StreamDBDirectory streamDB;
+	StreamDBDirectoryBroker streamDB;
 
-	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress[0]), ResultCode::SUCCESS);
 
-	GTEST_ASSERT_EQ(streamDB.RefreshTopicList(), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.FindStream(), ResultCode::SUCCESS);
+
+    SFLog(Net, Info, "Stream count:%d", streamDB.GetStreamList().size());
+
 }
 
+
+TEST_F(KafkaTest, DirectoryClient)
+{
+	StreamDBDirectoryClient streamDB;
+
+	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress[1]), ResultCode::SUCCESS);
+
+	GTEST_ASSERT_EQ(streamDB.FindStream(), ResultCode::SUCCESS);
+
+    SFLog(Net, Info, "Stream count:%d", streamDB.GetStreamList().size());
+}
 

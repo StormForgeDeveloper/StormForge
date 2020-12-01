@@ -35,7 +35,7 @@ namespace SF {
 			NativeHandle m_hConsole = INVALID_NATIVE_HANDLE_VALUE;
 #endif
 		public:
-			MyOutputHandler(const LogChannelMask& logMask) : LogOutputHandler(logMask) {}
+			MyOutputHandler(const LogOutputMask& logMask) : LogOutputHandler(logMask) {}
 
 			void InitConsole();
 
@@ -48,7 +48,7 @@ namespace SF {
 
 		static constexpr StringCrc64 TypeName = "LogOutputConsoleComponent";
 
-		LogOutputConsoleComponent(const LogChannelMask& logMask);
+		LogOutputConsoleComponent(const LogOutputMask& logMask);
 		~LogOutputConsoleComponent();
 
 		virtual const StringCrc64& GetTypeName() override { return TypeName; }
@@ -73,14 +73,14 @@ namespace SF {
 		class MyOutputHandler : public Log::LogOutputHandler
 		{
 		public:
-			MyOutputHandler(const LogChannelMask& logMask) : LogOutputHandler(logMask) {}
+			MyOutputHandler(const LogOutputMask& logMask) : LogOutputHandler(logMask) {}
 			virtual void PrintOutput(const Log::LogModule::LogItem* logMessage) override;
 		};
 
 		MyOutputHandler m_Handler;
 
 	public:
-		LogOutputDebuggerComponent(const LogChannelMask& logMask);
+		LogOutputDebuggerComponent(const LogOutputMask& logMask);
 		~LogOutputDebuggerComponent();
 
 		virtual const StringCrc64& GetTypeName() override { return TypeName; }
@@ -113,7 +113,7 @@ namespace SF {
 
 
 		public:
-			MyOutputHandler(const LogChannelMask& logMask, const String& filePrefix, bool bOpenNewHourly);
+			MyOutputHandler(const LogOutputMask& logMask, const String& filePrefix, bool bOpenNewHourly);
 
 			void OpenLogFile();
 
@@ -127,7 +127,7 @@ namespace SF {
 
 	public:
 
-		LogOutputFileComponent(const LogChannelMask& logMask, const String& filePath, bool bOpenNewHourly);
+		LogOutputFileComponent(const LogOutputMask& logMask, const String& filePath, bool bOpenNewHourly);
 		~LogOutputFileComponent();
 
 		virtual const StringCrc64& GetTypeName() override { return TypeName; }

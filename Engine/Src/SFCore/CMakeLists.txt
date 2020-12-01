@@ -169,6 +169,7 @@ set(SFCORE_LIB_FILES
 	Script/Tong/SFTongScriptVariable.h
 	Service/SFAsyncIOPortService.h
 	Service/SFLogService.h
+	Service/SFLogService.cpp
 	Service/SFScriptService.h
 	Service/SFService.h
 	Service/SFServices.h

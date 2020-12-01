@@ -40,7 +40,7 @@ protected:
 	unsigned m_NumberOfTest;
 	int *m_TestValues;
 	
-	const char* m_StreamServerAddress = 
+	const char* m_StreamServerAddress[2] = 
 		// copy serveraddress_sample.txt to serveraddress.txt and edit to your server address
 		#include "LocalData/serveraddress.txt"
 	;

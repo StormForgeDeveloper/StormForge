@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
-// Description : EngineObject manager
+// Description : Log service
 //
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -12,58 +12,14 @@
 #pragma once 
 
 #include "SFTypedefs.h"
-
-
+#include "String/SFStringCrc32.h"
+#include "String/SFStrUtil.h"
 
 namespace SF {
 
-
-	//////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	class LogService
-	//
-	namespace Log
-	{
-		class LogOutputHandler;
-	}
-
-
-	// Main channel
-	enum class LogMainChannelType : uint32_t
-	{
-		System,
-		Net,
-		IO,
-		ThirdParty,
-		Engine,
-		DB,
-		Protocol,
-		Svr,
-		Editor,
-		Game,
-
-		Custom,
-		Max,
-	};
-
-	namespace LogMainChannels
-	{
-		constexpr LogMainChannelType System			= LogMainChannelType::System;
-		constexpr LogMainChannelType Net			= LogMainChannelType::Net;
-		constexpr LogMainChannelType IO				= LogMainChannelType::IO;
-		constexpr LogMainChannelType ThirdParty		= LogMainChannelType::ThirdParty;
-		constexpr LogMainChannelType Engine			= LogMainChannelType::Engine;
-		constexpr LogMainChannelType DB				= LogMainChannelType::DB;
-		constexpr LogMainChannelType Protocol		= LogMainChannelType::Protocol;
-		constexpr LogMainChannelType Svr			= LogMainChannelType::Svr;
-		constexpr LogMainChannelType Editor			= LogMainChannelType::Editor;
-		constexpr LogMainChannelType Game			= LogMainChannelType::Game;
-
-		constexpr LogMainChannelType Custom			= LogMainChannelType::Custom;
-	}
-
+	//////////////////////////////////////////////////////////////////////////
 	// sub channel
-	enum class LogSubChannelType : uint32_t
+	enum class LogOutputType : uint32_t
 	{
 		// Generic trace
 		Error,
@@ -96,38 +52,8 @@ namespace SF {
 		Max,
 	};
 
-	namespace LogSubChannels
-	{
-		constexpr LogSubChannelType Error		= LogSubChannelType::Error;
-		constexpr LogSubChannelType Warning		= LogSubChannelType::Warning;
-		constexpr LogSubChannelType Assert		= LogSubChannelType::Assert;
-		constexpr LogSubChannelType Info		= LogSubChannelType::Info;
 
-		// Module additional traces
-		constexpr LogSubChannelType Custom1		= LogSubChannelType::Custom1;
-		constexpr LogSubChannelType Custom2		= LogSubChannelType::Custom2;
-		constexpr LogSubChannelType Custom3		= LogSubChannelType::Custom3;
-		constexpr LogSubChannelType Custom4		= LogSubChannelType::Custom4;
-		constexpr LogSubChannelType Custom5		= LogSubChannelType::Custom5;
-		constexpr LogSubChannelType Custom6		= LogSubChannelType::Custom6;
-		constexpr LogSubChannelType Custom7		= LogSubChannelType::Custom7;
-		constexpr LogSubChannelType Custom8		= LogSubChannelType::Custom8;
-		constexpr LogSubChannelType Custom9		= LogSubChannelType::Custom9;
-		constexpr LogSubChannelType Custom10	= LogSubChannelType::Custom10;
-
-		constexpr LogSubChannelType Debug = LogSubChannelType::Debug;
-		constexpr LogSubChannelType Debug1 = LogSubChannelType::Debug1;
-		constexpr LogSubChannelType Debug2 = LogSubChannelType::Debug2;
-		constexpr LogSubChannelType Debug3 = LogSubChannelType::Debug3;
-		constexpr LogSubChannelType Debug4 = LogSubChannelType::Debug4;
-		constexpr LogSubChannelType Debug5 = LogSubChannelType::Debug5;
-		constexpr LogSubChannelType Debug6 = LogSubChannelType::Debug6;
-		constexpr LogSubChannelType Debug7 = LogSubChannelType::Debug7;
-		constexpr LogSubChannelType Debug8 = LogSubChannelType::Debug8;
-
-	}
-
-	union LogChannelMask
+	union LogOutputMask
 	{
 		struct
 		{
@@ -163,83 +89,133 @@ namespace SF {
 		};
 		uint32_t Composited = std::numeric_limits<uint32_t>::max();
 
-		LogChannelMask() {}
-		LogChannelMask(uint32_t composited) :Composited(composited) {}
-	};
+		LogOutputMask() : Composited(0) {}
+		LogOutputMask(uint32_t composited) :Composited(composited) {}
 
-
-	union LogMainChannelMask
-	{
-		struct
+		LogOutputMask operator &(const LogOutputMask& op2) const
 		{
-			uint32_t System : 1;
-			uint32_t Net : 1;
-			uint32_t IO : 1;
-			uint32_t ThirdParty : 1;
-			uint32_t Engine : 1;
-			uint32_t DB : 1;
-			uint32_t Protocol : 1;
-			uint32_t Svr : 1;
-			uint32_t Editor : 1;
-			uint32_t Game : 1;
+			return LogOutputMask(Composited & op2.Composited);
+		}
 
-			uint32_t Custom : 1;
-			uint32_t : 0;
-		};
-		uint32_t Composited = std::numeric_limits<uint32_t>::max();
-
-
+		LogOutputMask operator |(const LogOutputMask& op2) const
+		{
+			return LogOutputMask(Composited | op2.Composited);
+		}
 	};
 
-
-
-#pragma pack(push, 4)
-
-	struct LogChannelParameter
+	//////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	class LogService
+	//
+	namespace Log
 	{
-		LogChannelMask MainChannelMasks[(int)LogMainChannelType::Max];
-		LogChannelMask SubChannelMask;
-	};
+		class LogOutputHandler;
 
-#pragma pack(pop)
+
+		struct LogChannel
+		{
+			char ChannelName[128]{};
+			LogOutputMask ChannelMask{};
+
+			LogChannel(const char* channelName, LogOutputType defaultLogLevel)
+			{
+				StrUtil::StringCopy(ChannelName, channelName);
+				ChannelMask.Composited = static_cast<uint32_t>((1 << (static_cast<uint32_t>(defaultLogLevel) + 1)) - 1);
+			}
+			LogChannel(const char* channelName, uint32_t channelMask)
+			{
+				StrUtil::StringCopy(ChannelName, channelName);
+				ChannelMask.Composited = channelMask;
+			}
+
+			LogChannel& operator = (const LogChannel& src)
+			{
+				ChannelMask = src.ChannelMask;
+				return *this;
+			}
+
+			void EnableChannel(LogOutputType subChannel, bool enable)
+			{
+				auto channelMask = 1 << static_cast<uint32_t>(subChannel);
+				if (enable)
+					ChannelMask.Composited |= channelMask;
+				else
+					ChannelMask.Composited &= (~channelMask);
+			}
+		};
+
+
+
+		constexpr LogOutputType Error = LogOutputType::Error;
+		constexpr LogOutputType Warning = LogOutputType::Warning;
+		constexpr LogOutputType Assert = LogOutputType::Assert;
+		constexpr LogOutputType Info = LogOutputType::Info;
+
+		// Module additional traces
+		constexpr LogOutputType Custom1 = LogOutputType::Custom1;
+		constexpr LogOutputType Custom2 = LogOutputType::Custom2;
+		constexpr LogOutputType Custom3 = LogOutputType::Custom3;
+		constexpr LogOutputType Custom4 = LogOutputType::Custom4;
+		constexpr LogOutputType Custom5 = LogOutputType::Custom5;
+		constexpr LogOutputType Custom6 = LogOutputType::Custom6;
+		constexpr LogOutputType Custom7 = LogOutputType::Custom7;
+		constexpr LogOutputType Custom8 = LogOutputType::Custom8;
+		constexpr LogOutputType Custom9 = LogOutputType::Custom9;
+		constexpr LogOutputType Custom10 = LogOutputType::Custom10;
+
+		constexpr LogOutputType Debug = LogOutputType::Debug;
+		constexpr LogOutputType Debug1 = LogOutputType::Debug1;
+		constexpr LogOutputType Debug2 = LogOutputType::Debug2;
+		constexpr LogOutputType Debug3 = LogOutputType::Debug3;
+		constexpr LogOutputType Debug4 = LogOutputType::Debug4;
+		constexpr LogOutputType Debug5 = LogOutputType::Debug5;
+		constexpr LogOutputType Debug6 = LogOutputType::Debug6;
+		constexpr LogOutputType Debug7 = LogOutputType::Debug7;
+		constexpr LogOutputType Debug8 = LogOutputType::Debug8;
+
+		// Predefined Log channels
+		extern LogChannel System;
+		extern LogChannel Net;
+		extern LogChannel IO;
+		extern LogChannel ThirdParty;
+		extern LogChannel Engine;
+		extern LogChannel Protocol;
+		extern LogChannel Editor;
+		extern LogChannel Game;
+	}
+
 
 	class LogService
 	{
 	protected:
 
-		LogChannelParameter m_PrintParameter;
+		LogOutputMask m_GlobalOutputMask;
 
 	public:
 
-		LogService(const LogChannelParameter& logMask = LogChannelParameter()) { m_PrintParameter = logMask; }
+		LogService(const LogOutputMask& logMask = LogOutputMask()) { m_GlobalOutputMask = logMask; }
 		virtual ~LogService() {}
 
 		// Check input mask
-
-		// Check input mask
-		bool ShouldPrint(const LogChannelMask& mainChannelMask, const LogChannelMask& channelMask)
+		bool ShouldPrint(const LogOutputMask& mainChannelMask, const LogOutputMask& channelMask)
 		{
-			auto filterMask = mainChannelMask.Composited & m_PrintParameter.SubChannelMask.Composited;
+			auto filterMask = mainChannelMask.Composited & m_GlobalOutputMask.Composited;
 			return (filterMask & channelMask.Composited) == channelMask.Composited;
 		}
 
-		LogChannelMask ToChannelMask(LogMainChannelType mainChannel)
+		LogOutputMask ToChannelMask(const Log::LogChannel& mainChannel)
 		{
-			return m_PrintParameter.MainChannelMasks[(int)mainChannel];
+			return mainChannel.ChannelMask;
 		}
 
-		static LogChannelMask ToChannelMask(LogSubChannelType subChannel)
+		static LogOutputMask ToChannelMask(LogOutputType subChannel)
 		{
-			LogChannelMask channelMask;
+			LogOutputMask channelMask;
 			channelMask.Composited = (((uint32_t)1) << (int)subChannel);
 			return channelMask;
 		}
 
-		void SetPrintParameter(const LogChannelParameter& parameter) { m_PrintParameter = parameter; }
-
-		// enable channel
-		virtual void EnableChannel(LogMainChannelType mainChannel, LogSubChannelType subChannel, bool enable) {}
-		virtual void EnableChannel(LogSubChannelType subChannel, bool enable) {}
+		void SetGlobalOutputMask(const LogOutputMask& outputMask) { m_GlobalOutputMask = outputMask; }
 
 		// output handler
 		virtual void RegisterOutputHandler(Log::LogOutputHandler* output) {}
@@ -254,5 +230,5 @@ namespace SF {
 		virtual void Flush() {}
 	};
 
-}; // namespace SF
+} // namespace SF
 

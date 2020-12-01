@@ -19,7 +19,7 @@
 #include "Application/Win/WindowsApp.h"
 #include "Application/Win/WindowsAppTasks.h"
 
-
+#include "Service/SFLogService.h"
 #include "Task/SFAsyncTaskManager.h"
 #include "Util/SFLog.h"
 #include "Util/SFLogComponent.h"
@@ -46,30 +46,29 @@
 
 SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineEmpty()
 {
-	SF::LogChannelParameter logChannelParameter;
+	SF::LogOutputMask logOutputMask;
 
 	SF::EngineInitParam initParam;
 #ifdef _DEBUG
 	initParam.EnableMemoryLeakDetection = false;
-	logChannelParameter.MainChannelMasks[(int)SF::LogMainChannels::Net] = { 0, };
-	logChannelParameter.MainChannelMasks[(int)SF::LogMainChannels::Net].Info = 1;
-	logChannelParameter.MainChannelMasks[(int)SF::LogMainChannels::Net].Warning = 1;
-	logChannelParameter.MainChannelMasks[(int)SF::LogMainChannels::Net].Error = 1;
-	logChannelParameter.MainChannelMasks[(int)SF::LogMainChannels::Net].Assert = 1;
-	logChannelParameter.MainChannelMasks[(int)SF::LogMainChannels::Net].Debug1 = 1;
-	logChannelParameter.SubChannelMask.Custom1 = 1;
-	logChannelParameter.SubChannelMask.Custom2 = 1;
-	logChannelParameter.SubChannelMask.Custom3 = 1;
-	logChannelParameter.SubChannelMask.Custom4 = 1;
-	logChannelParameter.SubChannelMask.Custom5 = 1;
-	logChannelParameter.SubChannelMask.Custom6 = 1;
-	logChannelParameter.SubChannelMask.Custom7 = 1;
-	logChannelParameter.SubChannelMask.Custom8 = 1;
-	logChannelParameter.SubChannelMask.Custom9 = 1;
-	logChannelParameter.SubChannelMask.Custom10 = 1;
-	logChannelParameter.SubChannelMask.Debug1 = 1;
-	logChannelParameter.SubChannelMask.Debug2 = 0;
-	logChannelParameter.SubChannelMask.Debug3 = 0;
+	SF::Log::Net.ChannelMask.Info = 1;
+	SF::Log::Net.ChannelMask.Warning = 1;
+	SF::Log::Net.ChannelMask.Error = 1;
+	SF::Log::Net.ChannelMask.Assert = 1;
+	SF::Log::Net.ChannelMask.Debug1 = 1;
+	logOutputMask.Custom1 = 1;
+	logOutputMask.Custom2 = 1;
+	logOutputMask.Custom3 = 1;
+	logOutputMask.Custom4 = 1;
+	logOutputMask.Custom5 = 1;
+	logOutputMask.Custom6 = 1;
+	logOutputMask.Custom7 = 1;
+	logOutputMask.Custom8 = 1;
+	logOutputMask.Custom9 = 1;
+	logOutputMask.Custom10 = 1;
+	logOutputMask.Debug1 = 1;
+	logOutputMask.Debug2 = 0;
+	logOutputMask.Debug3 = 0;
 #else
 
 	logChannelParameter.MainChannelMasks[(int)SF::LogMainChannels::Net] = { 0, };
@@ -93,11 +92,11 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineEmpty()
 	static char InstanceName[128];
 	srand(clock());
 	SF::StrUtil::Format(InstanceName, "StormForge");
-	initParam.LogChannel = logChannelParameter;
+	initParam.GlobalLogOutputMask = logOutputMask;
 	initParam.LogOutputConsole = { 0, };
 	initParam.LogOutputDebugger = { 0, };
 	initParam.LogFilePrefix = InstanceName;
-	initParam.LogOutputFile = SF::LogChannelMask(); // print all
+	initParam.LogOutputFile = SF::LogOutputMask(-1); // print all
 	// For stress test
 	initParam.AsyncTaskThreadCount = 6;
 	initParam.NetworkThreadCount = 4;

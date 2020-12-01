@@ -12,7 +12,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Service/SFService.h"
+#include "Service/SFLogService.h"
 #include "String/SFStrUtil.h"
 #include "Container/SFArray.h"
 #include "Container/SFSpinBufferMT.h"
@@ -46,9 +46,9 @@ namespace Log {
 		//Structure for Spin Buffer
 		struct LogItem
 		{
-			LogMainChannelType		MainChannel{};
-			LogSubChannelType		SubChannel{};
-			LogChannelMask		ChannelMask{};
+			LogChannel* Channel = nullptr;
+			LogOutputType		OutputType{};
+			LogOutputMask		OutputMask{}; // GlobalMask & LogChannelMask
 			SystemTimeStampMS	TimeStamp{};
 			size_t LogStringSize = 0;
 			char	LogBuff[3 * 1024]{};
@@ -77,17 +77,13 @@ namespace Log {
 
 	public:
 
-		LogModule(const LogChannelParameter& printMask = LogChannelParameter());
+		LogModule(const LogOutputMask& logOutputGlobalMask = LogOutputMask());
 		~LogModule();
 
 		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		virtual Result InitializeComponent() override;
 		virtual void DeinitializeComponent() override;
-
-		// enable channel
-		virtual void EnableChannel(LogMainChannelType mainChannel, LogSubChannelType subChannel, bool enable) override;
-		virtual void EnableChannel(LogSubChannelType subChannel, bool enable) override;
 
 
 		// output handler
@@ -116,15 +112,15 @@ namespace Log {
 	{
 	private:
 
-		LogChannelMask m_OutputMask;
+		LogOutputMask m_OutputMask;
 
 	public:
 
-		LogOutputHandler(const LogChannelMask& outputMask);
+		LogOutputHandler(const LogOutputMask& outputMask);
 		virtual ~LogOutputHandler();
 
-		const LogChannelMask& GetOutputMask() { return m_OutputMask; }
-		void SetOutputMask(const LogChannelMask& value) { m_OutputMask = value; }
+		const LogOutputMask& GetOutputMask() { return m_OutputMask; }
+		void SetOutputMask(const LogOutputMask& value) { m_OutputMask = value; }
 
 		virtual void PrintOutput(const LogModule::LogItem* logMessage) = 0;
 
@@ -148,20 +144,23 @@ namespace Log {
 //  Declare trace module
 //
 
-#define SFLog(mainChannel,subChannel, ...) \
+#define SFLog(channel,outputType, ...) SFLog2(::SF::Log::channel, ::SF::LogOutputType::outputType, __VA_ARGS__)
+
+
+#define SFLog2(channel,outputType, ...) \
 		do{\
 			auto* pLogService = *::SF::Service::LogModule;\
 			if( (pLogService != nullptr) )\
 			{\
-				auto mainChannelMask = pLogService->ToChannelMask(::SF::LogMainChannels::mainChannel);\
-				auto subChannelMask = pLogService->ToChannelMask(::SF::LogSubChannels::subChannel);\
-				if (pLogService->ShouldPrint(mainChannelMask, subChannelMask))\
+				auto channelMask = channel.ChannelMask;\
+				auto outputMask = ::SF::LogService::ToChannelMask(outputType);\
+				if (pLogService->ShouldPrint(channelMask, outputMask))\
 				{\
 					auto block = (::SF::Log::LogModule::LogSpinBuffer::BLOCK*)pLogService->ReserveWriteBuffer(); \
 					if (block == nullptr) break; \
-					block->Data.MainChannel = ::SF::LogMainChannels::mainChannel;\
-					block->Data.SubChannel = ::SF::LogSubChannels::subChannel;\
-					block->Data.ChannelMask = subChannelMask; \
+					block->Data.Channel = &channel;\
+					block->Data.OutputType = outputType;\
+					block->Data.OutputMask = outputMask & channelMask; \
 					auto messageSize = pLogService->WriteTimeTag(&block->Data); if(messageSize > 0) messageSize--; \
 					auto remainBuffSize = static_cast<int>(sizeof(block->Data.LogBuff) - messageSize);\
 					messageSize += SF::StrUtil::Format(block->Data.LogBuff + messageSize, remainBuffSize, __VA_ARGS__) - 1; \
@@ -173,9 +172,9 @@ namespace Log {
 
 
 #ifdef DEBUG
-#define SFLogDebug(mainChannel,subChannel, ...) SFLog(mainChannel,Debug,__VA_ARGS__)
+#define SFLogDebug(channel,outputType, ...) SFLog(channel,Debug,__VA_ARGS__)
 #else
-#define SFLogDebug(mainChannel,subChannel, ...)
+#define SFLogDebug(channel,outputType, ...)
 #endif
 
 
@@ -187,10 +186,10 @@ namespace Log {
 /////////////////////////////////////////////////
 
 // gradually deprecated
-#define SFErrJmp(mainChannel, errval) \
+#define SFErrJmp(channel, errval) \
 	do {\
 		hr = errval;\
-		SFLog(mainChannel, Error, "{0}({1}): {2}", (const char*)__FILE__, __LINE__, hr ); \
+		SFLog(channel, Error, "{0}({1}): {2}", (const char*)__FILE__, __LINE__, hr ); \
 		goto Proc_End;\
 	} while(0);
 

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -40,7 +40,7 @@ namespace Log {
 	// Trace Log Module
 	//
 
-	LogOutputHandler::LogOutputHandler(const LogChannelMask& outputMask)
+	LogOutputHandler::LogOutputHandler(const LogOutputMask& outputMask)
 		: m_OutputMask(outputMask)
 	{
 	}
@@ -59,9 +59,9 @@ namespace Log {
 	constexpr StringCrc64 LogModule::TypeName;
 
 
-	LogModule::LogModule(const LogChannelParameter& printMask)
+	LogModule::LogModule(const LogOutputMask& logOutputGlobalMask)
 		: LibraryComponent("Log")
-		, LogService(printMask)
+		, LogService(logOutputGlobalMask)
 		, m_Thread([&](Thread* pThread) { Run(pThread); })
 		, m_OutputHandlers(GetSystemHeap())
 	{
@@ -81,35 +81,6 @@ namespace Log {
 		Service::LogModule = nullptr;
 	}
 
-
-	void LogModule::EnableChannel(LogMainChannelType mainChannel, LogSubChannelType subChannel, bool enable)
-	{
-		uint32_t mask = (uint32_t)(((uint64_t)1) << (32 + (int)mainChannel));
-
-		if (enable)
-		{
-			m_PrintParameter.MainChannelMasks[(int)mainChannel].Composited |= mask;
-		}
-		else
-		{
-			m_PrintParameter.MainChannelMasks[(int)mainChannel].Composited &= ~mask;
-		}
-	}
-
-
-	void LogModule::EnableChannel(LogSubChannelType subChannel, bool enable)
-	{
-		auto mask = (uint32_t)(((uint64_t)1) << (int)subChannel);
-
-		if (enable)
-		{
-			m_PrintParameter.SubChannelMask.Composited |= mask;
-		}
-		else
-		{
-			m_PrintParameter.SubChannelMask.Composited &= ~mask;
-		}
-	}
 
 
 	void LogModule::Run(Thread* pThread)
@@ -144,7 +115,7 @@ namespace Log {
 
 				for (auto itOutput : m_OutputHandlers)
 				{
-					if ((itOutput->GetOutputMask().Composited & logItem.ChannelMask.Composited) != logItem.ChannelMask.Composited)
+					if ((itOutput->GetOutputMask().Composited & logItem.OutputMask.Composited) != logItem.OutputMask.Composited)
 						continue;
 
 					itOutput->PrintOutput(&logItem);
@@ -208,27 +179,11 @@ namespace Log {
 
 	size_t LogModule::WriteTimeTag(void* pLogItemBuff)
 	{
-		static const char* MainChannelNames[] =
-		{
-			"System",
-			"Net",
-			"IO",
-			"ThirdParty",
-			"Engine",
-			"DB",
-			"Protocol",
-			"Svr",
-			"Editor",
-			"Game",
-
-			"Custom",
-		};
-
 		auto pLogItem = (LogItem*)pLogItemBuff;
 
 		std::time_t logTime = std::chrono::system_clock::to_time_t(pLogItem->TimeStamp);
 		auto tm = std::localtime(&logTime);
-		pLogItem->LogStringSize = StrUtil::Format(pLogItem->LogBuff, "{0}:{1}:{2} {3}: ", tm->tm_hour, tm->tm_min, tm->tm_sec, MainChannelNames[(int)pLogItem->MainChannel]);
+		pLogItem->LogStringSize = StrUtil::Format(pLogItem->LogBuff, "{0}:{1}:{2} {3}: ", tm->tm_hour, tm->tm_min, tm->tm_sec, pLogItem->Channel->ChannelName);
 		
 		return pLogItem->LogStringSize;
 	}

@@ -192,19 +192,45 @@ namespace SF
 
 
 
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	class StreamDBDirectoryBase
+	//
+
+	StreamDBDirectoryBase::StreamDBDirectoryBase(const StringCrc64& name)
+		: EngineObject(nullptr, name)
+	{
+
+	}
+
+	StreamDBDirectoryBase::~StreamDBDirectoryBase()
+	{
+
+	}
+
+	Result StreamDBDirectoryBase::Initialize(const String& serverAddress)
+	{
+		return ResultCode::SUCCESS;
+	}
+
+	Result StreamDBDirectoryBase::FindStream()
+	{
+		return ResultCode::NOT_IMPLEMENTED;
+	}
+
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	class StreamDBDirectory
 	//
 
-	StreamDBDirectory::StreamDBDirectory()
-		: EngineObject(nullptr, "StreamDBDirectory"_crc)
+	StreamDBDirectoryBroker::StreamDBDirectoryBroker()
+		: StreamDBDirectoryBase("StreamDBDirectoryBroker"_crc)
 	{
 
 	}
 
-	StreamDBDirectory::~StreamDBDirectory()
+	StreamDBDirectoryBroker::~StreamDBDirectoryBroker()
 	{
 		m_TopicHandle.reset();
 		m_Config.reset();
@@ -212,7 +238,7 @@ namespace SF
 		m_Consumer.reset();
 	}
 
-	Result StreamDBDirectory::Initialize(const String& brokers)
+	Result StreamDBDirectoryBroker::Initialize(const String& brokers)
 	{
 		std::string errstr;
 
@@ -249,7 +275,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result StreamDBDirectory::RefreshTopicList()
+	Result StreamDBDirectoryBroker::FindStream()
 	{
 
 		if (m_Consumer == nullptr)
@@ -292,6 +318,35 @@ namespace SF
 		}
 
 		return ResultCode::SUCCESS;
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	class StreamDBDirectoryClient
+	//
+
+	StreamDBDirectoryClient::StreamDBDirectoryClient()
+		: StreamDBDirectoryBase("StreamDBDirectoryClient"_crc)
+	{
+
+	}
+
+	StreamDBDirectoryClient::~StreamDBDirectoryClient()
+	{
+
+	}
+
+	Result StreamDBDirectoryClient::Initialize(const String& serverAddress)
+	{
+		// TODO
+		return ResultCode::NOT_IMPLEMENTED;
+	}
+
+	Result StreamDBDirectoryClient::FindStream()
+	{
+		// TODO
+		return ResultCode::NOT_IMPLEMENTED;
 	}
 
 

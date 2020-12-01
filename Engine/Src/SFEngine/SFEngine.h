@@ -61,19 +61,19 @@ namespace SF {
 		int AsyncTaskThreadCount = 2;
 
 		// Log system filter
-		LogChannelParameter LogChannel;
+		LogOutputMask GlobalLogOutputMask;
 
 		// Log filter mask for console output.
-		LogChannelMask LogOutputConsole;
+		LogOutputMask LogOutputConsole;
 
 		// Log filter mask for debugger output. works only with windows
-		LogChannelMask LogOutputDebugger;
+		LogOutputMask LogOutputDebugger;
 
 		// Log filter mask for file output
-		LogChannelMask LogOutputFile = { 0 };
+		LogOutputMask LogOutputFile{};
 
 		// Log filter mask for file output
-		LogChannelMask LogOutputCommon = { 0 };
+		LogOutputMask LogOutputCommon{};
 
 		// Log file name prefix
 		const char* LogFilePrefix = nullptr;
