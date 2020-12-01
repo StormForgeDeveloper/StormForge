@@ -71,21 +71,24 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineEmpty()
 	logOutputMask.Debug3 = 0;
 #else
 
-	logChannelParameter.MainChannelMasks[(int)SF::LogMainChannels::Net] = { 0, };
-	logChannelParameter.SubChannelMask.Custom1 = 0;
-	logChannelParameter.SubChannelMask.Custom2 = 0;
-	logChannelParameter.SubChannelMask.Custom3 = 0;
-	logChannelParameter.SubChannelMask.Custom4 = 0;
-	logChannelParameter.SubChannelMask.Custom5 = 0;
-	logChannelParameter.SubChannelMask.Custom6 = 0;
-	logChannelParameter.SubChannelMask.Custom7 = 0;
-	logChannelParameter.SubChannelMask.Custom8 = 0;
-	logChannelParameter.SubChannelMask.Custom9 = 0;
-	logChannelParameter.SubChannelMask.Custom10 = 0;
-	logChannelParameter.SubChannelMask.Debug = 0;
-	logChannelParameter.SubChannelMask.Debug1 = 0;
-	logChannelParameter.SubChannelMask.Debug2 = 0;
-	logChannelParameter.SubChannelMask.Debug3 = 0;
+	SF::Log::Net.ChannelMask.Info = 1;
+	SF::Log::Net.ChannelMask.Warning = 1;
+	SF::Log::Net.ChannelMask.Error = 1;
+	SF::Log::Net.ChannelMask.Assert = 1;
+	SF::Log::Net.ChannelMask.Debug1 = 0;
+	logOutputMask.Custom1 = 0;
+	logOutputMask.Custom2 = 0;
+	logOutputMask.Custom3 = 0;
+	logOutputMask.Custom4 = 0;
+	logOutputMask.Custom5 = 0;
+	logOutputMask.Custom6 = 0;
+	logOutputMask.Custom7 = 0;
+	logOutputMask.Custom8 = 0;
+	logOutputMask.Custom9 = 0;
+	logOutputMask.Custom10 = 0;
+	logOutputMask.Debug1 = 0;
+	logOutputMask.Debug2 = 0;
+	logOutputMask.Debug3 = 0;
 #endif
 	initParam.EnableMemoryLeakDetection = false;
 
