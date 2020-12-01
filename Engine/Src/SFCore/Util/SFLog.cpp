@@ -104,6 +104,11 @@ namespace Log {
 						itOutput->Flush();
 					}
 				}
+
+				// stop waiting if kill event has set
+				if (pThread->CheckKillEvent(DurationMS(0)))
+					return false;
+
 				return true;
 			});
 
