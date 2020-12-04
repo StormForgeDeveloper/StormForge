@@ -77,6 +77,7 @@ namespace SF {
 			m_ListNodes[iNode].Data = this;
 		}
 
+		RegisterToEngineObjectManager();
 	}
 
 	EngineObject::~EngineObject()

@@ -41,7 +41,6 @@ SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnection()
 {
 	auto pConnection = new(Service::NetSystem->GetHeap()) Net::ConnectionMUDPClient(Service::NetSystem->GetHeap());
 	SharedReferenceInc inc(pConnection);
-	pConnection->RegisterToEngineObjectManager();
 	return NativeObjectToIntptr(pConnection);
 }
 
@@ -56,7 +55,6 @@ SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnectionWithGroup(intptr_t grou
 	pConnection->SetEventHandler(pGroup);
 
 	SharedReferenceInc inc(pConnection);;
-	pConnection->RegisterToEngineObjectManager();
 
 	return NativeObjectToIntptr(pConnection);
 }
@@ -65,7 +63,7 @@ SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnectionTCP()
 {
 	auto pConnection = new(Service::NetSystem->GetHeap()) Net::ConnectionTCPClient(Service::NetSystem->GetHeap());
 	SharedReferenceInc inc(pConnection);
-	pConnection->RegisterToEngineObjectManager();
+
 	return NativeObjectToIntptr(pConnection);
 }
 

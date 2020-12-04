@@ -181,7 +181,16 @@ namespace SF
 			if (!RequestStreamListInternal())
 			{
 				m_ResultMessage = Message::Relay::GetStreamListRes::Create(GetHeap(), 0, ResultCode::NO_DATA_EXIST,
-					"", ArrayView<const char*>());
+					ArrayView<const char*>());
+			}
+			else
+			{
+				DynamicArray<const char*> TopicList;
+				for (auto& itString : m_TopicList)
+					TopicList.push_back(itString.data());
+
+				m_ResultMessage = Message::Relay::GetStreamListRes::Create(GetHeap(), 0, ResultCode::NO_DATA_EXIST,
+					TopicList);
 			}
 		}
 

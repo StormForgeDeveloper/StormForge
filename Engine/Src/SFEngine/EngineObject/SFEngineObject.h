@@ -70,6 +70,7 @@ namespace SF {
 		friend class EngineObjectManager;
 		friend class EngineTaskManager;
 
+		void RegisterToEngineObjectManager();
 
 
 	public:
@@ -77,7 +78,6 @@ namespace SF {
 		EngineObject(IHeap* heap, const StringCrc64& name);
 		virtual ~EngineObject();
 
-		void RegisterToEngineObjectManager();
 
 		virtual bool CanDelete() override;
 		virtual void Dispose() override;

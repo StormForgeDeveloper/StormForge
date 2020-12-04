@@ -33,7 +33,6 @@ namespace SF
 	{
 		m_Impl = new(Service::NetSystem->GetHeap()) Net::RelayNetwork(Service::NetSystem->GetHeap());
 		SharedReferenceInc inc(m_Impl);
-		m_Impl->RegisterToEngineObjectManager();
 	}
 
 	NetRelayNetwork::~NetRelayNetwork()

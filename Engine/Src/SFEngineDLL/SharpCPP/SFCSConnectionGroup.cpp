@@ -47,7 +47,7 @@ SFDLL_EXPORT SharedObject* SFConnectionGroup_NativeCreateConnectionGroup(int32_t
 {
 	auto pGroup = new(Service::NetSystem->GetHeap()) Net::ConnectionGroup(Service::NetSystem->GetHeap(), maximumQueueBufferSize);
 	SharedReferenceInc inc(pGroup);
-	//pGroup->RegisterToEngineObjectManager();
+
 	return pGroup;
 }
 

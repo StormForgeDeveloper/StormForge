@@ -89,8 +89,10 @@ namespace Message {
 
 		void SetSequence(uint sequence) { IDSeq.Sequence = sequence; }
 
-		// Only MsgID part, no sequence or length
+		// Only MsgID part, no sequence or length. result will be shifted
 		uint GetMsgID() const { return IDSeq.MsgID; }
+
+		uint GetMsgIDOnly() const { return static_cast<uint32_t>(IDSeq.MsgID) << NET_SEQUENCE_BITS; }
 #ifndef SWIG
 		operator uint32_t() const { return ID; }
 #endif
