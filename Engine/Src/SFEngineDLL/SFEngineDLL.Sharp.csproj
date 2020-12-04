@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Sharp\SFArrayObject.cs" />
     <Compile Include="Sharp\SFConnection.cs" />
     <Compile Include="Sharp\SFConnectionGroup.cs" />
     <Compile Include="Sharp\SFGlobalEngine.cs" />

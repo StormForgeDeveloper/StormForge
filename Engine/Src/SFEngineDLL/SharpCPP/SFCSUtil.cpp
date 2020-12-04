@@ -114,11 +114,6 @@ namespace SF
 
 	void VariableMapBuilderCS::SetVariable(const char* varName, const NetAddress& value)
 	{
-		//uint8_t buffer[1024];
-		//for (int iIndex = 0; iIndex < countof(buffer); iIndex++)
-		//{
-		//	buffer[iIndex] = iIndex;
-		//}
 		m_SetFunc(varName, "NetAddress", &value);
 	}
 
@@ -227,11 +222,18 @@ namespace SF
 		m_SetArrayFunc(varName, "GameInstanceInfo", (int)value.size(), value.data());
 	}
 
+	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<const char*>& value)
+	{
+		m_SetArrayFunc(varName, "string", (int)value.size(), value.data());
+	}
+
 
 	void VariableMapBuilderCS::SetVariable(const char* varName, const char* typeName, const Array<uint8_t>& value)
 	{
 		m_SetArrayFunc(varName, typeName, (int)value.size(), value.data());
 	}
+
+
 
 
 }

@@ -28,6 +28,8 @@ namespace SF
 		constexpr Result UNEXPECTED((int32_t)0xC0000006L);
 		constexpr Result INVALID_ARG((int32_t)0xC0000007L);
 
+		constexpr Result NO_DATA_EXIST((int32_t)0xC0001008L);
+
 	};
 }
 

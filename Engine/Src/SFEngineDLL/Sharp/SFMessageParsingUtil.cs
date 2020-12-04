@@ -368,12 +368,23 @@ namespace SF
 
         internal static void MarshalCopy(IntPtr source, string[] destination, int startIndex, int length)
         {
-            // TODO: this method doesn't support encoding
             unsafe
             {
-                IntPtr* pCur = (IntPtr*)source;
-                for (int iIndex = 0; iIndex < length; iIndex++, pCur++)
-                    destination[iIndex] = Marshal.PtrToStringAnsi(*pCur);
+                IntPtr* pCurStrStart = (IntPtr*)source;
+                for (int iIndex = 0; iIndex < length; iIndex++, pCurStrStart++)
+                {
+                    IntPtr CurStrStart = *pCurStrStart;
+                    int strLen = 0;
+                    for (; strLen < StringDecodeBuffer.Length; strLen++)
+                    {
+                        var curByte = Marshal.ReadByte(CurStrStart, strLen);
+                        StringDecodeBuffer[strLen] = curByte;
+                        if (curByte == 0)
+                            break;
+                    }
+
+                    destination[iIndex] = Encoding.UTF8.GetString(StringDecodeBuffer, 0, strLen);
+                }
             }
         }
 
@@ -392,6 +403,7 @@ namespace SF
         }
 
         // IOS IL2CPP doesn't support native callback of instance, so it has to be static
+        static internal byte[] StringDecodeBuffer = new byte[32 * 1024];
         static internal SFMessage stm_ParsingMessage = null;
         static internal object stm_ParsingLock = new object();
         static internal SFConnection.Event stm_Event;

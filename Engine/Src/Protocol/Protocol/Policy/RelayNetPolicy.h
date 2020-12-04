@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 The Braves
+// CopyRight (c) The Braves
 // 
 // Author : Generated
 // 
@@ -77,7 +77,7 @@ namespace SF
 			// Cmd: Delete stream instance
 			Result DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult );
 			// Cmd: Get stream list
-			Result GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamNames );
+			Result GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
 
 		}; // class NetSvrPolicyRelay
 

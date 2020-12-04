@@ -251,8 +251,9 @@ namespace SF.Net
 		public int  GetStreamListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String[] InStreamNames )
 		{
  			int result;
+			using (var InStreamNamesArray = new ArrayObjectString(InStreamNames))
 			{
-			result = CSSFNetAdapter_RelayGetStreamListRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamNames + "\0"));
+			result = CSSFNetAdapter_RelayGetStreamListRes(m_Connection.NativeHandle, InTransactionID, InResult,InStreamNamesArray.NativeHandle);
 			}
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDRelay.GetStreamListRes);
 			return result;
@@ -298,7 +299,7 @@ namespace SF.Net
 
 		// Cmd: Get stream list
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_RelayGetStreamListRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_RelayGetStreamListRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamNames );
+		static extern int CSSFNetAdapter_RelayGetStreamListRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, IntPtr InStreamNames );
 
 
 

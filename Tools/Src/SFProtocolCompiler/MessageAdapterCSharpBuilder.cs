@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2017 Kyungkun Ko.
+// CopyRight (c) Kyungkun Ko.
 // 
 // Author : KyungKun Ko
 //
@@ -206,16 +206,23 @@ namespace ProtocolCompiler
                 bool bIsStruct = IsStruct(param.Type);
                 bool IsArray = param.IsArray;
 
-                if (IsStrType(param)) // string type
+                if (IsArray) // array
                 {
-                    strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
-                }
-                else if (IsArray) // array
-                {
-                    if (ParameterMode == TypeUsage.CSharpNative || ParameterMode == TypeUsage.CPPForSharp)
+                    if (IsStrType(param)) // string type
                     {
-                        strParams += string.Format("{0} {1}_sizeOf{2},", ToTargetTypeName(m_ArraySizeParam), strPrefix, InParamName(param.Name));
+                        strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
                     }
+                    else
+                    {
+                        if (ParameterMode == TypeUsage.CSharpNative || ParameterMode == TypeUsage.CPPForSharp)
+                        {
+                            strParams += string.Format("{0} {1}_sizeOf{2},", ToTargetTypeName(m_ArraySizeParam), strPrefix, InParamName(param.Name));
+                        }
+                        strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
+                    }
+                }
+                else if (IsStrType(param)) // string type
+                {
                     strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
                 }
                 else if (IsVariableSizeType(param.Type))
@@ -248,18 +255,18 @@ namespace ProtocolCompiler
                 return ;
 
 
-            //strParams.AppendFormat("// Prepare local variables\n");
+            // 1. Prepare local variables;
             foreach (Parameter param in parameter)
             {
                 Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
 
                 bool IsArray = param.IsArray | csharpType.IsArray;
 
-                if (IsStrType(param)) // string type
+                if (IsArray) // array
                 {
                     // Nothing for now
                 }
-                else if (IsArray) // array
+                else if (IsStrType(param)) // string type
                 {
                     // Nothing for now
                 }
@@ -269,18 +276,21 @@ namespace ProtocolCompiler
                 }
             }
 
-            //strParams.AppendFormat("// Prepare pinned variables\n");
+            //2. Prepare pinned variables or something with using statement
             foreach (Parameter param in parameter)
             {
                 Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
 
                 bool IsArray = param.IsArray | csharpType.IsArray;
 
-                if (IsStrType(param)) // string type
+                if (IsArray) // array
                 {
-                    // Nothing for now
+                    if (IsStrType(param)) // string type
+                    {
+                        MatchIndent(); OutStream.WriteLine("using (var {0}{1}Array = new ArrayObjectString({0}{1}))", strPrefix, InParamName(param.Name));
+                    }
                 }
-                else if (IsArray) // array
+                else if (IsStrType(param)) // string type
                 {
                     // Nothing for now
                 }
@@ -316,18 +326,25 @@ namespace ProtocolCompiler
                 bool IsArray = param.IsArray | csharpType.IsArray;
                 bool bIsStruct = IsStruct(param.Type);
 
-                if (IsStrType(param)) // string type
+                if (IsArray) // array
+                {
+                    if (IsStrType(param)) // string type
+                    {
+                        strParams.AppendFormat("{0}{1}Array.NativeHandle", strPrefix, InParamName(param.Name));
+                    }
+                    else
+                    {
+                        strParams.AppendFormat("(ushort){0}{1}.Length, ", strPrefix, InParamName(param.Name));
+
+                        if (csharpType.IsEnum)
+                            strParams.AppendFormat("GameTypes.ToIntArray({0}{1})", strPrefix, InParamName(param.Name));
+                        else
+                            strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
+                    }
+                }
+                else if (IsStrType(param)) // string type
                 {
                     strParams.AppendFormat("System.Text.Encoding.UTF8.GetBytes({0}{1} + \"\\0\")", strPrefix, InParamName(param.Name));
-                }
-                else if (IsArray) // array
-                {
-                    strParams.AppendFormat("(ushort){0}{1}.Length, ", strPrefix, InParamName(param.Name));
-
-                    if (csharpType.IsEnum)
-                        strParams.AppendFormat("GameTypes.ToIntArray({0}{1})", strPrefix, InParamName(param.Name));
-                    else
-                        strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
                 }
                 else if (IsVariableSizeType(param.Type))
                 {
@@ -383,13 +400,16 @@ namespace ProtocolCompiler
 
                 bool bIsStruct = IsStruct(param.Type);
 
-                if (IsStrType(param)) // string type
+                if (param.IsArray) // array
+                {
+                    if (IsStrType(param)) // string type
+                        strParams.AppendFormat("{0}{1}Array_", strPrefix, InParamName(param.Name));
+                    else
+                        strParams.AppendFormat("SF::ArrayView<{2}>({0}_sizeOf{1}, {0}_sizeOf{1}, const_cast<{3}>({0}{1}))", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
+                }
+                else if (IsStrType(param)) // string type
                 {
                     strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
-                }
-                else if (param.IsArray) // array
-                {
-                    strParams.AppendFormat("SF::ArrayView<{2}>({0}_sizeOf{1}, {0}_sizeOf{1}, const_cast<{3}>({0}{1}))", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
                 }
                 else if (IsVariableSizeType(param.Type))
                 {
@@ -420,7 +440,7 @@ namespace ProtocolCompiler
 
 
         // Builder parameter string
-        public void AddStringParamSwapCPP(string strPrefix, Parameter[] parameter)
+        public void PrepareSendFunctionParametersCPP(string strPrefix, Parameter[] parameter)
         {
             TypeUsage from = TypeUsage.CPPForSharp;
             TypeUsage to = ParameterMode;
@@ -440,15 +460,14 @@ namespace ProtocolCompiler
                 bool bIsStruct = IsStruct(param.Type);
 
                 // Disable native conversion
-                //if (IsStrType(param)) // string type
-                //{
-                //    string varName = string.Format("{0}{1}", strPrefix, InParamName(param.Name));
-                //    string tempBuffName = string.Format("{0}{1}_TempEncodingBuff", strPrefix, InParamName(param.Name));
-
-                //    MatchIndent(); OutStream.WriteLine("char {0}[Net::MAX_STRING_TEMP_BUFF_SIZE];", tempBuffName);
-                //    MatchIndent(); OutStream.WriteLine("StrUtil::ANSIToUTF8({0}, {1}, (int)countof({1}));", varName, tempBuffName);
-                //    MatchIndent(); OutStream.WriteLine("{0} = {1};", varName, tempBuffName);
-                //}
+                if (param.IsArray) // string type
+                {
+                    if (IsStrType(param))
+                    {
+                        string varName = string.Format("{0}{1}", strPrefix, InParamName(param.Name));
+                        MatchIndent(); OutStream.WriteLine("auto& {0}Array_ = *NativeToObject<SF::ArrayObject<const char*>>({0});", varName);
+                    }
+                }
             }
         }
 
@@ -508,11 +527,11 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);");
             MatchIndent(); OutStream.WriteLine("if(pConnection == nullptr) return ResultCode::INVALID_POINTER;");
 
-            AddStringParamSwapCPP("", parameters);
+            PrepareSendFunctionParametersCPP("", parameters);
 
             MatchIndent(); OutStream.WriteLine("MessageDataPtr pMessage = SF::Message::{0}::{1}{2}::Create({3});", Group.Name, baseMsg.Name, msgTypeName, createParamString);
             MatchIndent(); OutStream.WriteLine("if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;");
-            MatchIndent(); OutStream.WriteLine("auto res = pConnection->Send(pMessage);", SendFuncName(baseMsg, msgTypeName));
+            MatchIndent(); OutStream.WriteLine("auto res = pConnection->Send(pMessage);");
             MatchIndent(); OutStream.WriteLine("return (uint32_t)res;");
 
             CloseSection();

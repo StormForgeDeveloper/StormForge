@@ -706,15 +706,16 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameGetCharacterListCmd( intptr_t InNativeConne
 
 
 // Cmd: 
-SFDLL_EXPORT int  CSSFNetAdapter_GameGetCharacterDataCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, int32_t InCharacterID, const char* InAttributeNames )
+SFDLL_EXPORT int  CSSFNetAdapter_GameGetCharacterDataCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, int32_t InCharacterID, intptr_t InAttributeNames )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::GetCharacterDataCmd::Create(pConnection->GetHeap(), InTransactionID, InCharacterID,InAttributeNames);
+	auto& InAttributeNamesArray_ = *NativeToObject<SF::ArrayObject<const char*>>(InAttributeNames);
+	MessageDataPtr pMessage = SF::Message::Game::GetCharacterDataCmd::Create(pConnection->GetHeap(), InTransactionID, InCharacterID,InAttributeNamesArray_);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetCharacterDataCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, int32_t InCharacterID, const char* InAttributeNames )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetCharacterDataCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, int32_t InCharacterID, intptr_t InAttributeNames )
 
 
 // Cmd: Give my stamina to other player

@@ -1,5 +1,13 @@
-// UnitTest_Zookeeper.cpp : Defines the entry point for the console application.
+////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) StormForge
+// 
+// Author : KyungKun Ko
 //
+// Description : Stream test
+//	
+//
+////////////////////////////////////////////////////////////////////////////////
 
 #include "UnitTest1PCH.h"
 #include <gtest/gtest.h>
@@ -10,6 +18,7 @@
 #include "String/SFStringCrc32.h"
 #include "String/SFString.h"
 #include "Container/SFCircularPageQueue.h"
+#include "Util/SFTimeUtil.h"
 #include "UnitTest_Kafka.h"
 
 #include "StreamDB/SFStreamDB.h"
@@ -84,23 +93,45 @@ TEST_F(KafkaTest, Consumer)
 
 TEST_F(KafkaTest, DirectoryBroker)
 {
-	StreamDBDirectoryBroker streamDB;
+	SharedPointerT<StreamDBDirectoryBroker> streamDB = new(GetHeap()) StreamDBDirectoryBroker();
 
-	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress[0]), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB->Initialize(m_StreamServerAddress[0]), ResultCode::SUCCESS);
 
-	GTEST_ASSERT_EQ(streamDB.FindStream(), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB->RequestStreamList(), ResultCode::SUCCESS);
 
-    SFLog(Net, Info, "Stream count:{0}", streamDB.GetStreamList().size());
+    SF::MessageDataPtr pMsg;
+    auto StartTime = SF::Util::Time.GetRawTimeMs();
+    while (!streamDB->PollMessage(pMsg))
+    {
+        auto CurTime = SF::Util::Time.GetRawTimeMs();
+        GTEST_ASSERT_GE(DurationMS(2 * 60 * 1000), (CurTime - StartTime));
+        ThisThread::SleepFor(DurationMS(100));
+    }
+
+
+
+    SFLog(Net, Info, "Stream count:{0}", streamDB->GetStreamList().size());
 }
 
 TEST_F(KafkaTest, DirectoryClient)
 {
-	StreamDBDirectoryClient streamDB;
+	SharedPointerT<StreamDBDirectoryClient> streamDB = new(GetHeap()) StreamDBDirectoryClient();
 
-	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress[1]), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB->Initialize(m_StreamServerAddress[0]), ResultCode::SUCCESS);
 
-	GTEST_ASSERT_EQ(streamDB.FindStream(), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB->RequestStreamList(), ResultCode::SUCCESS);
 
-    SFLog(Net, Info, "Stream count:{0}", streamDB.GetStreamList().size());
+	SF::MessageDataPtr pMsg;
+	auto StartTime = SF::Util::Time.GetRawTimeMs();
+	while (!streamDB->PollMessage(pMsg))
+	{
+		auto CurTime = SF::Util::Time.GetRawTimeMs();
+		GTEST_ASSERT_GE(DurationMS(2 * 60 * 1000), (CurTime - StartTime));
+		ThisThread::SleepFor(DurationMS(100));
+	}
+
+
+
+	SFLog(Net, Info, "Stream count:{0}", streamDB->GetStreamList().size());
 }
 

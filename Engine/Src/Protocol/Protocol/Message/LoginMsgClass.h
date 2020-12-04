@@ -45,20 +45,16 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint32_t m_GameID;
-				const char* m_ID;
-				const char* m_Password;
+				uint64_t m_TransactionID{};
+				uint32_t m_GameID{};
+				const char* m_ID{};
+				const char* m_Password{};
 			public:
 				LoginCmd()
-				:m_ID(nullptr)
-				,m_Password(nullptr)
 					{}
 
 				LoginCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_ID(nullptr)
-				,m_Password(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -97,13 +93,13 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				NetAddress m_GameServerAddr;
-				NetAddress m_GameServerAddrIPV4;
-				AccountID m_AccID;
-				AuthTicket m_Ticket;
-				uint64_t m_LoginEntityUID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				NetAddress m_GameServerAddr{};
+				NetAddress m_GameServerAddrIPV4{};
+				AccountID m_AccID{};
+				AuthTicket m_Ticket{};
+				uint64_t m_LoginEntityUID{};
 			public:
 				LoginRes()
 					{}
@@ -152,24 +148,18 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint32_t m_GameID;
-				uint64_t m_UID;
-				const char* m_FaceBookName;
-				const char* m_EMail;
-				const char* m_FacebookToken;
+				uint64_t m_TransactionID{};
+				uint32_t m_GameID{};
+				uint64_t m_UID{};
+				const char* m_FaceBookName{};
+				const char* m_EMail{};
+				const char* m_FacebookToken{};
 			public:
 				LoginByFacebookCmd()
-				:m_FaceBookName(nullptr)
-				,m_EMail(nullptr)
-				,m_FacebookToken(nullptr)
 					{}
 
 				LoginByFacebookCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_FaceBookName(nullptr)
-				,m_EMail(nullptr)
-				,m_FacebookToken(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -210,13 +200,13 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				NetAddress m_GameServerAddr;
-				NetAddress m_GameServerAddrIPV4;
-				AccountID m_AccID;
-				AuthTicket m_Ticket;
-				uint64_t m_LoginEntityUID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				NetAddress m_GameServerAddr{};
+				NetAddress m_GameServerAddrIPV4{};
+				AccountID m_AccID{};
+				AuthTicket m_Ticket{};
+				uint64_t m_LoginEntityUID{};
 			public:
 				LoginByFacebookRes()
 					{}
@@ -265,17 +255,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint32_t m_GameID;
-				const char* m_CellPhone;
+				uint64_t m_TransactionID{};
+				uint32_t m_GameID{};
+				const char* m_CellPhone{};
 			public:
 				CreateRandomUserCmd()
-				:m_CellPhone(nullptr)
 					{}
 
 				CreateRandomUserCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_CellPhone(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -313,13 +301,13 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				NetAddress m_GameServerAddr;
-				NetAddress m_GameServerAddrIPV4;
-				AccountID m_AccID;
-				AuthTicket m_Ticket;
-				uint64_t m_LoginEntityUID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				NetAddress m_GameServerAddr{};
+				NetAddress m_GameServerAddrIPV4{};
+				AccountID m_AccID{};
+				AuthTicket m_Ticket{};
+				uint64_t m_LoginEntityUID{};
 			public:
 				CreateRandomUserRes()
 					{}
@@ -368,10 +356,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_RankingScore;
-				RankingType m_RankingType;
-				uint16_t m_Count;
+				uint64_t m_TransactionID{};
+				uint64_t m_RankingScore{};
+				RankingType m_RankingType{};
+				uint16_t m_Count{};
 			public:
 				UpdateMyScoreCmd()
 					{}
@@ -416,8 +404,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 				ArrayView<TotalRankingPlayerInformation> m_Ranking;
 			public:
 				UpdateMyScoreRes()
@@ -463,10 +451,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				RankingType m_RankingType;
-				uint8_t m_BaseRanking;
-				uint8_t m_Count;
+				uint64_t m_TransactionID{};
+				RankingType m_RankingType{};
+				uint8_t m_BaseRanking{};
+				uint8_t m_Count{};
 			public:
 				GetRankingListCmd()
 					{}
@@ -511,8 +499,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 				ArrayView<TotalRankingPlayerInformation> m_Ranking;
 			public:
 				GetRankingListRes()
@@ -558,7 +546,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 				ArrayView<uint8_t> m_TestData;
 			public:
 				DataTestCmd()
@@ -602,8 +590,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 				ArrayView<uint8_t> m_TestData;
 			public:
 				DataTestRes()
@@ -691,16 +679,14 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_FileName;
+				uint64_t m_TransactionID{};
+				const char* m_FileName{};
 			public:
 				DebugPrintALLRankingCmd()
-				:m_FileName(nullptr)
 					{}
 
 				DebugPrintALLRankingCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_FileName(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -737,8 +723,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				DebugPrintALLRankingRes()
 					{}

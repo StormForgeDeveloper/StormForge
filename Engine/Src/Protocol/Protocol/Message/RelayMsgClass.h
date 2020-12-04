@@ -45,17 +45,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint32_t m_RelayInstanceID;
-				PlayerID m_PlayerID;
-				const char* m_PlayerIdentifier;
+				uint32_t m_RelayInstanceID{};
+				PlayerID m_PlayerID{};
+				const char* m_PlayerIdentifier{};
 			public:
 				JoinRelayInstanceC2SEvt()
-				:m_PlayerIdentifier(nullptr)
 					{}
 
 				JoinRelayInstanceC2SEvt( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_PlayerIdentifier(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -95,9 +93,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				Result m_Result;
-				uint32_t m_RelayInstanceID;
-				uint32_t m_MyEndpointID;
+				Result m_Result{};
+				uint32_t m_RelayInstanceID{};
+				uint32_t m_MyEndpointID{};
 				ArrayView<RelayPlayerInfo> m_MemberInfos;
 			public:
 				JoinRelayInstanceResS2CEvt()
@@ -144,8 +142,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint32_t m_RelayInstanceID;
-				PlayerID m_PlayerID;
+				uint32_t m_RelayInstanceID{};
+				PlayerID m_PlayerID{};
 			public:
 				LeaveRelayInstanceC2SEvt()
 					{}
@@ -190,8 +188,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint32_t m_RelayInstanceID;
-				RelayPlayerInfo m_JoinedPlayerInfo;
+				uint32_t m_RelayInstanceID{};
+				RelayPlayerInfo m_JoinedPlayerInfo{};
 			public:
 				PlayerJoinS2CEvt()
 					{}
@@ -236,9 +234,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint32_t m_RelayInstanceID;
-				PlayerID m_LeftPlayerID;
-				uint32_t m_KickedReason;
+				uint32_t m_RelayInstanceID{};
+				PlayerID m_LeftPlayerID{};
+				uint32_t m_KickedReason{};
 			public:
 				PlayerLeftS2CEvt()
 					{}
@@ -284,9 +282,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint32_t m_RelayInstanceID;
-				uint32_t m_SenderEndpointID;
-				uint32_t m_TargetEndpointMask;
+				uint32_t m_RelayInstanceID{};
+				uint32_t m_SenderEndpointID{};
+				uint32_t m_TargetEndpointMask{};
 				ArrayView<uint8_t> m_Payload;
 			public:
 				RelayPacketC2SEvt()
@@ -333,17 +331,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AuthTicket m_Ticket;
-				const char* m_StreamName;
+				uint64_t m_TransactionID{};
+				AuthTicket m_Ticket{};
+				const char* m_StreamName{};
 			public:
 				CreateStreamCmd()
-				:m_StreamName(nullptr)
 					{}
 
 				CreateStreamCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_StreamName(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -381,19 +377,17 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				NetAddress m_StreamServerAddr;
-				NetAddress m_StreamServerAddrIPV4;
-				const char* m_StreamUID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				NetAddress m_StreamServerAddr{};
+				NetAddress m_StreamServerAddrIPV4{};
+				const char* m_StreamUID{};
 			public:
 				CreateStreamRes()
-				:m_StreamUID(nullptr)
 					{}
 
 				CreateStreamRes( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_StreamUID(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -434,17 +428,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AuthTicket m_Ticket;
-				const char* m_StreamName;
+				uint64_t m_TransactionID{};
+				AuthTicket m_Ticket{};
+				const char* m_StreamName{};
 			public:
 				FindStreamCmd()
-				:m_StreamName(nullptr)
 					{}
 
 				FindStreamCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_StreamName(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -482,19 +474,17 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				NetAddress m_StreamServerAddr;
-				NetAddress m_StreamServerAddrIPV4;
-				const char* m_StreamUID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				NetAddress m_StreamServerAddr{};
+				NetAddress m_StreamServerAddrIPV4{};
+				const char* m_StreamUID{};
 			public:
 				FindStreamRes()
-				:m_StreamUID(nullptr)
 					{}
 
 				FindStreamRes( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_StreamUID(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -535,17 +525,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AuthTicket m_Ticket;
-				const char* m_StreamName;
+				uint64_t m_TransactionID{};
+				AuthTicket m_Ticket{};
+				const char* m_StreamName{};
 			public:
 				DeleteStreamCmd()
-				:m_StreamName(nullptr)
 					{}
 
 				DeleteStreamCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_StreamName(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -583,8 +571,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				DeleteStreamRes()
 					{}
@@ -628,8 +616,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AuthTicket m_Ticket;
+				uint64_t m_TransactionID{};
+				AuthTicket m_Ticket{};
 			public:
 				GetStreamListCmd()
 					{}
@@ -672,24 +660,22 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				const char* m_StreamNames;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				DynamicArray<const char*> m_StreamNames;
 			public:
 				GetStreamListRes()
-				:m_StreamNames(nullptr)
 					{}
 
 				GetStreamListRes( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_StreamNames(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const char* GetStreamNames() const	{ return m_StreamNames; };
+				const Array<const char*>& GetStreamNames() const	{ return m_StreamNames; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -697,7 +683,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamNames );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
 
 			}; // class GetStreamListRes : public MessageBase
 

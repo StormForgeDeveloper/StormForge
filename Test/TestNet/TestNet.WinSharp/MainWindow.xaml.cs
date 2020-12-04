@@ -30,9 +30,6 @@ namespace TestNet.WinSharp
 
         public static MainWindow Instance { get; private set; }
 
-        Engine m_Engine = null;
-
-
 
         public MainWindow()
         {
@@ -40,8 +37,7 @@ namespace TestNet.WinSharp
 
             Instance = this;
 
-            m_Engine = new Engine();
-            m_Engine.StartEngine();
+            SF.GlobalEngine.Start();
 
 
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName))
@@ -109,10 +105,7 @@ namespace TestNet.WinSharp
             mSimpleTestWin.OnClosed(e);
             mStressTestWin.OnClosed();
 
-            if (m_Engine != null)
-                m_Engine.StopEngine();
-            m_Engine = null;
-
+            SF.GlobalEngine.Stop();
 
             var StresssTestGameID1 = MainWindow.GetGameIDFromUI(MainWindow.Instance.stress_comboBoxGameID_10KB);
             var StresssTestGameID2 = MainWindow.GetGameIDFromUI(MainWindow.Instance.stress_comboBoxGameID_Match);

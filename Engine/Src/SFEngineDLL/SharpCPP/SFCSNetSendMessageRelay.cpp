@@ -187,15 +187,16 @@ SFDLL_EXPORT int  CSSFNetAdapter_RelayDeleteStreamRes( intptr_t InNativeConnecti
 
 
 // Cmd: Get stream list
-SFDLL_EXPORT int  CSSFNetAdapter_RelayGetStreamListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamNames )
+SFDLL_EXPORT int  CSSFNetAdapter_RelayGetStreamListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, intptr_t InStreamNames )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Relay::GetStreamListRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InStreamNames);
+	auto& InStreamNamesArray_ = *NativeToObject<SF::ArrayObject<const char*>>(InStreamNames);
+	MessageDataPtr pMessage = SF::Message::Relay::GetStreamListRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InStreamNamesArray_);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_RelayGetStreamListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamNames )
+} // SFDLL_EXPORT int  CSSFNetAdapter_RelayGetStreamListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, intptr_t InStreamNames )
 
 
 

@@ -471,7 +471,6 @@ namespace Net {
 		int flag = 1;
 		int result;
 
-
 		if (StrUtil::IsNullOrEmpty(local.PeerAddress.Address))
 		{
 			if (remote.PeerAddress.SocketFamily == SockFamily::IPV4)
@@ -480,7 +479,6 @@ namespace Net {
 				Net::GetLocalAddressIPv6(local.PeerAddress);
 		}
 
-
 		socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SockType::Stream);
 		if (socket == INVALID_SOCKET)
 		{
@@ -488,9 +486,7 @@ namespace Net {
 			netErr(ResultCode::UNEXPECTED);
 		}
 
-
 		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::Stream, local.PeerAddress.SocketFamily, socket));
-
 
 		netChk(InitConnection(local, remote));
 
@@ -518,17 +514,25 @@ namespace Net {
 
 	Result ConnectionTCP::Connect()
 	{
-		Result hr = ResultCode::SUCCESS;
 		Result hrConResult;
 		int connResult;
+		ScopeContext hr([this, &hrConResult](Result hr)
+			{
+				SFLog(Net, Debug, "Connect sock:{0}, to:{1}, hrCon:{2}, hr:{3}", GetSocket(), GetRemoteInfo().PeerAddress, hrConResult, hr);
+
+				if (!hr)
+				{
+					SetConnectionState(ConnectionState::DISCONNECTED);
+					m_NetIOAdapter.CloseSocket();
+				}
+			});
 
 		ResetZeroRecvCount();
 
 		if (GetConnectionState() != ConnectionState::CONNECTING && GetConnectionState() != ConnectionState::DISCONNECTED)
 		{
 			SFLog(Net, Error, "Invalid connection state to try connect {0}", GetConnectionState());
-			hr = ResultCode::IO_INVALID_CONNECTION_STATE;
-			goto Proc_End;
+			return hr = ResultCode::IO_INVALID_CONNECTION_STATE;
 		}
 
 		connResult = connect(GetSocket(), (sockaddr*)&GetRemoteSockAddr(), GetRemoteSockAddrSize());
@@ -542,7 +546,7 @@ namespace Net {
 			case (uint32_t)ResultCode::IO_ALREADY:		// called again, still need to wait
 				hr = ResultCode::SUCCESS_FALSE;
 				break;
-			case (uint32_t)ResultCode::IO_ISCONN:		// Connection estabalished
+			case (uint32_t)ResultCode::IO_ISCONN:		// Connection established
 				hr = ResultCode::SUCCESS;
 				break;
 			default:
@@ -554,18 +558,7 @@ namespace Net {
 		m_IsClientConnection = true;
 		m_IsTCPSocketConnectionEstablished = false; // only client side need to check this condition
 
-	Proc_End:
-
-		SFLog(Net, Debug, "Connect sock:{0}, to:{1}, hrCon:{2}, hr:{3}", GetSocket(), GetRemoteInfo().PeerAddress, hrConResult, hr);
-
-		if (!(hr))
-		{
-			SetConnectionState(ConnectionState::DISCONNECTED);
-			m_NetIOAdapter.CloseSocket();
-		}
-
 		return hr;
-
 	}
 
 	// Close connection

@@ -162,8 +162,6 @@ SFDLL_EXPORT bool SFConnection_NativeDequeueEvent(intptr_t nativeHandle, Net::Co
 }
 
 
-typedef void(*SET_MESSAGE_FUNCTION)(uint32_t messageID);
-
 SFDLL_EXPORT bool SFConnection_NativeDequeueMessage(intptr_t nativeHandle, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc)
 {
 	if (nativeHandle == 0)

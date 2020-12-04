@@ -20,6 +20,7 @@
 #include "String/SFString.h"
 #include "Task/SFTask.h"
 #include "EngineObject/SFEngineObject.h"
+#include "Net/SFConnection.h"
 
 
 namespace RdKafka
@@ -40,24 +41,40 @@ namespace SF
 	//  class StreamDBDirectory
 	//
 
-	class StreamDBDirectoryBase : public EngineObject
+	class StreamDBDirectory : public EngineObject
 	{
 	public:
 
 		using super = EngineObject;
 
+		enum class Event
+		{
+			Connected,
+			ConnectionFailed,
+			Disconnected
+		};
+
+
 	public:
 
-        StreamDBDirectoryBase(const StringCrc64& name);
-		virtual ~StreamDBDirectoryBase();
+        StreamDBDirectory(const StringCrc32& directoryType, const StringCrc64& name);
+		virtual ~StreamDBDirectory();
+
+		StringCrc32 GetDirectoryType() const { return m_DirectoryType; }
 
 		virtual Result Initialize(const String& serverAddress);
 
-		virtual Result FindStream();
+		virtual Result RequestStreamList();
+
+		virtual Result PollEvent(Event& evt) { return ResultCode::NO_DATA_EXIST; }
+		virtual Result PollMessage(MessageDataPtr& pMsg) { return ResultCode::NO_DATA_EXIST; }
+
 
 		const Array<String>& GetStreamList() const { return m_TopicList; }
 
 	protected:
+
+		StringCrc32 m_DirectoryType;
 
 		DynamicArray<String> m_TopicList;
 	};
@@ -67,11 +84,11 @@ namespace SF
     //  class StreamDBDirectoryBroker
     //
 
-	class StreamDBDirectoryBroker : public StreamDBDirectoryBase
+	class StreamDBDirectoryBroker : public StreamDBDirectory
 	{
 	public:
 
-		using super = StreamDBDirectoryBase;
+		using super = StreamDBDirectory;
 
 	public:
 
@@ -80,7 +97,16 @@ namespace SF
 
 		virtual Result Initialize(const String& serverAddress) override;
 
-		virtual Result FindStream() override;
+		virtual Result RequestStreamList() override;
+
+		Result OnTick(EngineTaskTick tick) override;
+
+		virtual Result PollEvent(Event& evt) override;
+		virtual Result PollMessage(MessageDataPtr& pIMsg) override;
+
+	private:
+
+		Result RequestStreamListInternal();
 
 
 	private:
@@ -90,6 +116,9 @@ namespace SF
 
 		UniquePtr<RdKafka::Topic> m_TopicHandle;
 		UniquePtr<RdKafka::Consumer> m_Consumer;
+
+		bool m_FindRequested = false;
+		MessageDataPtr m_ResultMessage;
 	};
 
 
@@ -98,11 +127,11 @@ namespace SF
 	//  class StreamDBDirectoryClient
 	//
 
-	class StreamDBDirectoryClient : public StreamDBDirectoryBase
+	class StreamDBDirectoryClient : public StreamDBDirectory
 	{
 	public:
 
-		using super = StreamDBDirectoryBase;
+		using super = StreamDBDirectory;
 
 	public:
 
@@ -111,11 +140,14 @@ namespace SF
 
 		virtual Result Initialize(const String& serverAddress) override;
 
-		virtual Result FindStream() override;
+		virtual Result RequestStreamList() override;
 
+		virtual Result PollEvent(Event& evt) override;
+		virtual Result PollMessage(MessageDataPtr& pIMsg) override;
 
 	private:
 
+		Net::ConnectionPtr m_ConnectionDirectory;
 
 	};
 

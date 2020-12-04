@@ -83,6 +83,9 @@ namespace SF {
 		virtual void SetVariable(const char* varName, const Array<RelayPlayerInfo>& value) = 0;
 		virtual void SetVariable(const char* varName, const Array<GameInstanceInfo>& value) = 0;
 
+		virtual void SetVariable(const char* varName, const Array<const char*>& value) = 0;
+
+
 		// Variable size uses raw binary format
 		virtual void SetVariable(const char* varName, const char* TypeName, const Array<uint8_t>& value) = 0;
 	};

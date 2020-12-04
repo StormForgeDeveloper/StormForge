@@ -674,8 +674,9 @@ namespace SF.Net
 		public int  GetCharacterDataCmd( System.UInt64 InTransactionID, System.Int32 InCharacterID, System.String[] InAttributeNames )
 		{
  			int result;
+			using (var InAttributeNamesArray = new ArrayObjectString(InAttributeNames))
 			{
-			result = CSSFNetAdapter_GameGetCharacterDataCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID,System.Text.Encoding.UTF8.GetBytes(InAttributeNames + "\0"));
+			result = CSSFNetAdapter_GameGetCharacterDataCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID,InAttributeNamesArray.NativeHandle);
 			}
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterDataCmd);
 			return result;
@@ -993,7 +994,7 @@ namespace SF.Net
 
 		// Cmd: 
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterDataCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetCharacterDataCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InCharacterID, [MarshalAs(UnmanagedType.LPArray)] byte[] InAttributeNames );
+		static extern int CSSFNetAdapter_GameGetCharacterDataCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InCharacterID, IntPtr InAttributeNames );
 
 
 		// Cmd: Give my stamina to other player

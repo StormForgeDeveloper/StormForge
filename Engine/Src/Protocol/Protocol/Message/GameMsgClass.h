@@ -87,10 +87,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_AccID;
-				AuthTicket m_Ticket;
-				uint64_t m_LoginEntityUID;
+				uint64_t m_TransactionID{};
+				AccountID m_AccID{};
+				AuthTicket m_Ticket{};
+				uint64_t m_LoginEntityUID{};
 			public:
 				JoinGameServerCmd()
 					{}
@@ -135,21 +135,19 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				const char* m_NickName;
-				uint64_t m_GameUID;
-				uint64_t m_PartyUID;
-				AccountID m_PartyLeaderID;
-				MatchingQueueTicket m_MatchingTicket;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				const char* m_NickName{};
+				uint64_t m_GameUID{};
+				uint64_t m_PartyUID{};
+				AccountID m_PartyLeaderID{};
+				MatchingQueueTicket m_MatchingTicket{};
 			public:
 				JoinGameServerRes()
-				:m_NickName(nullptr)
 					{}
 
 				JoinGameServerRes( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_NickName(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -192,7 +190,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 			public:
 				GetComplitionStateCmd()
 					{}
@@ -234,17 +232,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				const char* m_ComplitionState;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				const char* m_ComplitionState{};
 			public:
 				GetComplitionStateRes()
-				:m_ComplitionState(nullptr)
 					{}
 
 				GetComplitionStateRes( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_ComplitionState(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -283,16 +279,14 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_ComplitionState;
+				uint64_t m_TransactionID{};
+				const char* m_ComplitionState{};
 			public:
 				SetComplitionStateCmd()
-				:m_ComplitionState(nullptr)
 					{}
 
 				SetComplitionStateCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_ComplitionState(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -329,8 +323,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				SetComplitionStateRes()
 					{}
@@ -374,16 +368,14 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_GCMRegisteredID;
+				uint64_t m_TransactionID{};
+				const char* m_GCMRegisteredID{};
 			public:
 				RegisterGCMCmd()
-				:m_GCMRegisteredID(nullptr)
 					{}
 
 				RegisterGCMCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_GCMRegisteredID(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -420,8 +412,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				RegisterGCMRes()
 					{}
@@ -465,16 +457,14 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_GCMRegisteredID;
+				uint64_t m_TransactionID{};
+				const char* m_GCMRegisteredID{};
 			public:
 				UnregisterGCMCmd()
-				:m_GCMRegisteredID(nullptr)
 					{}
 
 				UnregisterGCMCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_GCMRegisteredID(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -511,8 +501,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				UnregisterGCMRes()
 					{}
@@ -556,8 +546,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_FriendID;
+				uint64_t m_TransactionID{};
+				AccountID m_FriendID{};
 			public:
 				InviteFriendCmd()
 					{}
@@ -600,8 +590,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				InviteFriendRes()
 					{}
@@ -645,9 +635,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_InviterID;
-				FacebookUID m_InviterFacebookUID;
+				uint64_t m_TransactionID{};
+				AccountID m_InviterID{};
+				FacebookUID m_InviterFacebookUID{};
 			public:
 				AcceptFriendRequestCmd()
 					{}
@@ -691,9 +681,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				FriendInformation m_NewFriend;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				FriendInformation m_NewFriend{};
 			public:
 				AcceptFriendRequestRes()
 					{}
@@ -739,7 +729,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				FriendInformation m_Accepter;
+				FriendInformation m_Accepter{};
 			public:
 				FriendRequestAcceptedS2CEvt()
 					{}
@@ -782,8 +772,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_FriendID;
+				uint64_t m_TransactionID{};
+				AccountID m_FriendID{};
 			public:
 				RemoveFriendCmd()
 					{}
@@ -826,9 +816,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				AccountID m_FriendID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				AccountID m_FriendID{};
 			public:
 				RemoveFriendRes()
 					{}
@@ -874,7 +864,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				AccountID m_FriendID;
+				AccountID m_FriendID{};
 			public:
 				FriendRemovedS2CEvt()
 					{}
@@ -917,9 +907,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint16_t m_StartIndex;
-				uint16_t m_Count;
+				uint64_t m_TransactionID{};
+				uint16_t m_StartIndex{};
+				uint16_t m_Count{};
 			public:
 				GetFriendListCmd()
 					{}
@@ -963,11 +953,11 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint16_t m_MaxFriendSlot;
-				uint16_t m_TotalNumberOfFriends;
-				uint16_t m_StartIndex;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint16_t m_MaxFriendSlot{};
+				uint16_t m_TotalNumberOfFriends{};
+				uint16_t m_StartIndex{};
 				ArrayView<FriendInformation> m_FriendList;
 			public:
 				GetFriendListRes()
@@ -1016,7 +1006,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 			public:
 				GetNotificationListCmd()
 					{}
@@ -1058,8 +1048,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				GetNotificationListRes()
 					{}
@@ -1103,8 +1093,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint32_t m_NotificationID;
+				uint64_t m_TransactionID{};
+				uint32_t m_NotificationID{};
 			public:
 				DeleteNotificationCmd()
 					{}
@@ -1147,9 +1137,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint32_t m_NotificationID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint32_t m_NotificationID{};
 			public:
 				DeleteNotificationRes()
 					{}
@@ -1194,8 +1184,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint32_t m_NotificationID;
+				uint64_t m_TransactionID{};
+				uint32_t m_NotificationID{};
 			public:
 				SetNotificationReadCmd()
 					{}
@@ -1238,9 +1228,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint32_t m_NotificationID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint32_t m_NotificationID{};
 			public:
 				SetNotificationReadRes()
 					{}
@@ -1285,8 +1275,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint32_t m_NotificationID;
+				uint64_t m_TransactionID{};
+				uint32_t m_NotificationID{};
 			public:
 				AcceptNotificationCmd()
 					{}
@@ -1329,9 +1319,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint32_t m_NotificationID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint32_t m_NotificationID{};
 			public:
 				AcceptNotificationRes()
 					{}
@@ -1377,21 +1367,19 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint32_t m_NotificationID;
-				uint32_t m_NotificationType;
-				uint64_t m_MessageParam0;
-				uint64_t m_MessageParam1;
-				const char* m_MessageText;
-				uint8_t m_IsRead;
-				uint64_t m_TimeStamp;
+				uint32_t m_NotificationID{};
+				uint32_t m_NotificationType{};
+				uint64_t m_MessageParam0{};
+				uint64_t m_MessageParam1{};
+				const char* m_MessageText{};
+				uint8_t m_IsRead{};
+				uint64_t m_TimeStamp{};
 			public:
 				NotifyS2CEvt()
-				:m_MessageText(nullptr)
 					{}
 
 				NotifyS2CEvt( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_MessageText(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -1434,16 +1422,14 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_PlayerEMail;
+				uint64_t m_TransactionID{};
+				const char* m_PlayerEMail{};
 			public:
 				FindPlayerByEMailCmd()
-				:m_PlayerEMail(nullptr)
 					{}
 
 				FindPlayerByEMailCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_PlayerEMail(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -1480,9 +1466,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				PlayerInformation m_Player;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				PlayerInformation m_Player{};
 			public:
 				FindPlayerByEMailRes()
 					{}
@@ -1526,8 +1512,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_PlayerID;
+				uint64_t m_TransactionID{};
+				AccountID m_PlayerID{};
 			public:
 				FindPlayerByPlayerIDCmd()
 					{}
@@ -1570,9 +1556,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				PlayerInformation m_Player;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				PlayerInformation m_Player{};
 			public:
 				FindPlayerByPlayerIDRes()
 					{}
@@ -1617,7 +1603,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 				ArrayView<AccountID> m_TargetPlayerID;
 			public:
 				RequestPlayerStatusUpdateCmd()
@@ -1661,8 +1647,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				RequestPlayerStatusUpdateRes()
 					{}
@@ -1706,9 +1692,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				AccountID m_PlayerID;
-				uint32_t m_LatestActiveTime;
-				uint8_t m_IsInGame;
+				AccountID m_PlayerID{};
+				uint32_t m_LatestActiveTime{};
+				uint8_t m_IsInGame{};
 			public:
 				NotifyPlayerStatusUpdatedS2CEvt()
 					{}
@@ -1753,10 +1739,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint8_t m_RankingType;
-				uint8_t m_BaseRanking;
-				uint8_t m_Count;
+				uint64_t m_TransactionID{};
+				uint8_t m_RankingType{};
+				uint8_t m_BaseRanking{};
+				uint8_t m_Count{};
 			public:
 				GetRankingListCmd()
 					{}
@@ -1801,8 +1787,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 				ArrayView<TotalRankingPlayerInformation> m_Ranking;
 			public:
 				GetRankingListRes()
@@ -1848,7 +1834,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 			public:
 				GetUserGamePlayerInfoCmd()
 					{}
@@ -1890,8 +1876,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 				ArrayView<uint8_t> m_AttributesRaw;
 				mutable bool m_AttributesHasParsed = false;
 				mutable VariableTable m_Attributes;
@@ -1940,8 +1926,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_PlayerID;
+				uint64_t m_TransactionID{};
+				AccountID m_PlayerID{};
 			public:
 				GetGamePlayerInfoCmd()
 					{}
@@ -1983,9 +1969,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				AccountID m_PlayerID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				AccountID m_PlayerID{};
 				ArrayView<uint8_t> m_AttributesRaw;
 				mutable bool m_AttributesHasParsed = false;
 				mutable VariableTable m_Attributes;
@@ -2037,8 +2023,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_CurrentTotalExp;
-				uint32_t m_CurrentLevel;
+				uint64_t m_CurrentTotalExp{};
+				uint32_t m_CurrentLevel{};
 			public:
 				LevelUpS2CEvt()
 					{}
@@ -2082,17 +2068,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_NickName;
-				uint8_t m_IsCostFree;
+				uint64_t m_TransactionID{};
+				const char* m_NickName{};
+				uint8_t m_IsCostFree{};
 			public:
 				SetNickNameCmd()
-				:m_NickName(nullptr)
 					{}
 
 				SetNickNameCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_NickName(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -2130,10 +2114,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_TotalGem;
-				uint64_t m_TotalGameMoney;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_TotalGem{};
+				uint64_t m_TotalGameMoney{};
 			public:
 				SetNickNameRes()
 					{}
@@ -2179,7 +2163,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 			public:
 				CreatePartyCmd()
 					{}
@@ -2221,9 +2205,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_PartyUID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_PartyUID{};
 			public:
 				CreatePartyRes()
 					{}
@@ -2268,9 +2252,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_PartyUID;
-				AccountID m_InviterID;
+				uint64_t m_TransactionID{};
+				uint64_t m_PartyUID{};
+				AccountID m_InviterID{};
 			public:
 				JoinPartyCmd()
 					{}
@@ -2314,10 +2298,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_PartyUID;
-				AccountID m_PartyLeaderID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_PartyUID{};
+				AccountID m_PartyLeaderID{};
 				ArrayView<uint8_t> m_ChatHistoryData;
 			public:
 				JoinPartyRes()
@@ -2366,8 +2350,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_PartyUID;
-				PlayerInformation m_JoinedPlayer;
+				uint64_t m_PartyUID{};
+				PlayerInformation m_JoinedPlayer{};
 			public:
 				PartyPlayerJoinedS2CEvt()
 					{}
@@ -2412,8 +2396,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_PartyUID;
-				AccountID m_NewLeaderID;
+				uint64_t m_PartyUID{};
+				AccountID m_NewLeaderID{};
 			public:
 				PartyLeaderChangedS2CEvt()
 					{}
@@ -2456,9 +2440,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_PartyUID;
-				AccountID m_PlayerID;
+				uint64_t m_TransactionID{};
+				uint64_t m_PartyUID{};
+				AccountID m_PlayerID{};
 			public:
 				LeavePartyCmd()
 					{}
@@ -2502,8 +2486,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				LeavePartyRes()
 					{}
@@ -2548,8 +2532,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_PartyUID;
-				AccountID m_LeftPlayerID;
+				uint64_t m_PartyUID{};
+				AccountID m_LeftPlayerID{};
 			public:
 				PartyPlayerLeftS2CEvt()
 					{}
@@ -2592,10 +2576,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_PartyUID;
-				AccountID m_PlayerID;
-				AccountID m_PlayerToKick;
+				uint64_t m_TransactionID{};
+				uint64_t m_PartyUID{};
+				AccountID m_PlayerID{};
+				AccountID m_PlayerToKick{};
 			public:
 				PartyKickPlayerCmd()
 					{}
@@ -2640,8 +2624,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				PartyKickPlayerRes()
 					{}
@@ -2686,8 +2670,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_PartyUID;
-				AccountID m_KickedPlayerID;
+				uint64_t m_PartyUID{};
+				AccountID m_KickedPlayerID{};
 			public:
 				PartyPlayerKickedS2CEvt()
 					{}
@@ -2731,8 +2715,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_InviteTargetID;
+				uint64_t m_TransactionID{};
+				AccountID m_InviteTargetID{};
 			public:
 				PartyInviteCmd()
 					{}
@@ -2775,8 +2759,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				PartyInviteRes()
 					{}
@@ -2821,17 +2805,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				AccountID m_InviterID;
-				const char* m_InviterName;
-				uint64_t m_PartyToJoinUID;
+				AccountID m_InviterID{};
+				const char* m_InviterName{};
+				uint64_t m_PartyToJoinUID{};
 			public:
 				PartyInviteRequestedS2CEvt()
-				:m_InviterName(nullptr)
 					{}
 
 				PartyInviteRequestedS2CEvt( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_InviterName(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -2870,8 +2852,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint32_t m_QuickChatID;
+				uint64_t m_TransactionID{};
+				uint32_t m_QuickChatID{};
 			public:
 				PartyQuickChatMessageCmd()
 					{}
@@ -2914,8 +2896,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				PartyQuickChatMessageRes()
 					{}
@@ -2960,8 +2942,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				AccountID m_SenderID;
-				uint32_t m_QuickChatID;
+				AccountID m_SenderID{};
+				uint32_t m_QuickChatID{};
 			public:
 				PartyQuickChatMessageS2CEvt()
 					{}
@@ -3005,16 +2987,14 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_ChatMessage;
+				uint64_t m_TransactionID{};
+				const char* m_ChatMessage{};
 			public:
 				PartyChatMessageCmd()
-				:m_ChatMessage(nullptr)
 					{}
 
 				PartyChatMessageCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_ChatMessage(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -3051,8 +3031,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				PartyChatMessageRes()
 					{}
@@ -3097,19 +3077,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				AccountID m_SenderID;
-				const char* m_SenderName;
-				const char* m_ChatMessage;
+				AccountID m_SenderID{};
+				const char* m_SenderName{};
+				const char* m_ChatMessage{};
 			public:
 				PartyChatMessageS2CEvt()
-				:m_SenderName(nullptr)
-				,m_ChatMessage(nullptr)
 					{}
 
 				PartyChatMessageS2CEvt( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_SenderName(nullptr)
-				,m_ChatMessage(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -3147,10 +3123,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_PlayerID;
-				AuthTicket m_Ticket;
-				uint64_t m_InsUID;
+				uint64_t m_TransactionID{};
+				AccountID m_PlayerID{};
+				AuthTicket m_Ticket{};
+				uint64_t m_InsUID{};
 			public:
 				JoinGameInstanceCmd()
 					{}
@@ -3195,9 +3171,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_InsUID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_InsUID{};
 			public:
 				JoinGameInstanceRes()
 					{}
@@ -3241,10 +3217,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_PlayerID;
-				AuthTicket m_Ticket;
-				uint64_t m_InsUID;
+				uint64_t m_TransactionID{};
+				AccountID m_PlayerID{};
+				AuthTicket m_Ticket{};
+				uint64_t m_InsUID{};
 			public:
 				LeaveGameInstanceCmd()
 					{}
@@ -3289,9 +3265,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_InsUID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_InsUID{};
 			public:
 				LeaveGameInstanceRes()
 					{}
@@ -3336,16 +3312,14 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_SearchKeyword;
+				uint64_t m_TransactionID{};
+				const char* m_SearchKeyword{};
 			public:
 				SearchGameInstanceCmd()
-				:m_SearchKeyword(nullptr)
 					{}
 
 				SearchGameInstanceCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_SearchKeyword(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -3382,8 +3356,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 				ArrayView<GameInstanceInfo> m_GameInstances;
 			public:
 				SearchGameInstanceRes()
@@ -3428,9 +3402,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_GameInsUID;
-				PlayerID m_PlayerID;
+				uint64_t m_TransactionID{};
+				uint64_t m_GameInsUID{};
+				PlayerID m_PlayerID{};
 			public:
 				GetCharacterDataInGameInstanceCmd()
 					{}
@@ -3473,9 +3447,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				PlayerID m_PlayerID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				PlayerID m_PlayerID{};
 				ArrayView<uint8_t> m_GameInstancesRaw;
 				mutable bool m_GameInstancesHasParsed = false;
 				mutable VariableTable m_GameInstances;
@@ -3526,8 +3500,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				PlayerID m_PlayerID;
+				uint64_t m_GameInsUID{};
+				PlayerID m_PlayerID{};
 				ArrayView<uint8_t> m_AttributesRaw;
 				mutable bool m_AttributesHasParsed = false;
 				mutable VariableTable m_Attributes;
@@ -3577,8 +3551,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				PlayerID m_PlayerID;
+				uint64_t m_GameInsUID{};
+				PlayerID m_PlayerID{};
 				ArrayView<uint8_t> m_AttributesRaw;
 				mutable bool m_AttributesHasParsed = false;
 				mutable VariableTable m_Attributes;
@@ -3628,8 +3602,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				PlayerID m_PlayerID;
+				uint64_t m_GameInsUID{};
+				PlayerID m_PlayerID{};
 				ArrayView<uint8_t> m_AttributesRaw;
 				mutable bool m_AttributesHasParsed = false;
 				mutable VariableTable m_Attributes;
@@ -3679,8 +3653,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				PlayerID m_PlayerID;
+				uint64_t m_GameInsUID{};
+				PlayerID m_PlayerID{};
 				ArrayView<uint8_t> m_AttributesRaw;
 				mutable bool m_AttributesHasParsed = false;
 				mutable VariableTable m_Attributes;
@@ -3729,10 +3703,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_PlayerID;
-				AuthTicket m_Ticket;
-				uint64_t m_InsUID;
+				uint64_t m_TransactionID{};
+				AccountID m_PlayerID{};
+				AuthTicket m_Ticket{};
+				uint64_t m_InsUID{};
 			public:
 				JoinGameCmd()
 					{}
@@ -3777,17 +3751,17 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_InsUID;
-				uint32_t m_TimeStamp;
-				uint8_t m_GameState;
-				uint8_t m_Day;
-				uint8_t m_MaxPlayer;
-				uint8_t m_PlayerIndex;
-				uint8_t m_PlayerCharacter;
-				uint8_t m_Role;
-				uint8_t m_Dead;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_InsUID{};
+				uint32_t m_TimeStamp{};
+				uint8_t m_GameState{};
+				uint8_t m_Day{};
+				uint8_t m_MaxPlayer{};
+				uint8_t m_PlayerIndex{};
+				uint8_t m_PlayerCharacter{};
+				uint8_t m_Role{};
+				uint8_t m_Dead{};
 				ArrayView<uint8_t> m_ChatHistoryData;
 				ArrayView<uint8_t> m_GameLogData;
 			public:
@@ -3845,8 +3819,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				PlayerInformation m_JoinedPlayer;
+				uint64_t m_GameInsUID{};
+				PlayerInformation m_JoinedPlayer{};
 			public:
 				PlayerJoinedS2CEvt()
 					{}
@@ -3889,10 +3863,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_GameInsUID;
-				AccountID m_PlayerID;
-				AuthTicket m_Ticket;
+				uint64_t m_TransactionID{};
+				uint64_t m_GameInsUID{};
+				AccountID m_PlayerID{};
+				AuthTicket m_Ticket{};
 			public:
 				LeaveGameCmd()
 					{}
@@ -3937,8 +3911,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				LeaveGameRes()
 					{}
@@ -3983,8 +3957,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				AccountID m_LeftPlayerID;
+				uint64_t m_GameInsUID{};
+				AccountID m_LeftPlayerID{};
 			public:
 				PlayerLeftS2CEvt()
 					{}
@@ -4027,10 +4001,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_GameInsUID;
-				AccountID m_PlayerID;
-				AccountID m_PlayerToKick;
+				uint64_t m_TransactionID{};
+				uint64_t m_GameInsUID{};
+				AccountID m_PlayerID{};
+				AccountID m_PlayerToKick{};
 			public:
 				KickPlayerCmd()
 					{}
@@ -4075,8 +4049,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				KickPlayerRes()
 					{}
@@ -4121,8 +4095,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				AccountID m_KickedPlayerID;
+				uint64_t m_GameInsUID{};
+				AccountID m_KickedPlayerID{};
 			public:
 				PlayerKickedS2CEvt()
 					{}
@@ -4165,10 +4139,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_GameInsUID;
-				AccountID m_PlayerID;
-				AuthTicket m_Ticket;
+				uint64_t m_TransactionID{};
+				uint64_t m_GameInsUID{};
+				AccountID m_PlayerID{};
+				AuthTicket m_Ticket{};
 			public:
 				AssignRoleCmd()
 					{}
@@ -4213,8 +4187,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				AssignRoleRes()
 					{}
@@ -4258,9 +4232,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				AccountID m_PlayerID;
-				uint8_t m_Role;
+				uint64_t m_GameInsUID{};
+				AccountID m_PlayerID{};
+				uint8_t m_Role{};
 			public:
 				RoleAssignedS2CEvt()
 					{}
@@ -4305,17 +4279,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_ChatMessage;
-				uint8_t m_Role;
+				uint64_t m_TransactionID{};
+				const char* m_ChatMessage{};
+				uint8_t m_Role{};
 			public:
 				ChatMessageCmd()
-				:m_ChatMessage(nullptr)
 					{}
 
 				ChatMessageCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_ChatMessage(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -4353,8 +4325,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				ChatMessageRes()
 					{}
@@ -4399,20 +4371,16 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				AccountID m_SenderID;
-				uint8_t m_Role;
-				const char* m_SenderName;
-				const char* m_ChatMessage;
+				AccountID m_SenderID{};
+				uint8_t m_Role{};
+				const char* m_SenderName{};
+				const char* m_ChatMessage{};
 			public:
 				ChatMessageS2CEvt()
-				:m_SenderName(nullptr)
-				,m_ChatMessage(nullptr)
 					{}
 
 				ChatMessageS2CEvt( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_SenderName(nullptr)
-				,m_ChatMessage(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -4451,10 +4419,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_GameInsUID;
-				AccountID m_PlayerID;
-				AuthTicket m_Ticket;
+				uint64_t m_TransactionID{};
+				uint64_t m_GameInsUID{};
+				AccountID m_PlayerID{};
+				AuthTicket m_Ticket{};
 			public:
 				AdvanceGameCmd()
 					{}
@@ -4499,8 +4467,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				AdvanceGameRes()
 					{}
@@ -4545,10 +4513,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				uint32_t m_TimeStamp;
-				uint8_t m_GameState;
-				uint8_t m_Day;
+				uint64_t m_GameInsUID{};
+				uint32_t m_TimeStamp{};
+				uint8_t m_GameState{};
+				uint8_t m_Day{};
 			public:
 				GameAdvancedS2CEvt()
 					{}
@@ -4595,10 +4563,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				uint8_t m_Winner;
-				uint32_t m_GainedExp;
-				uint32_t m_GainedGameMoney;
+				uint64_t m_GameInsUID{};
+				uint8_t m_Winner{};
+				uint32_t m_GainedExp{};
+				uint32_t m_GainedGameMoney{};
 			public:
 				GameEndedS2CEvt()
 					{}
@@ -4643,10 +4611,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_GameInsUID;
-				AccountID m_PlayerID;
-				AuthTicket m_Ticket;
+				uint64_t m_TransactionID{};
+				uint64_t m_GameInsUID{};
+				AccountID m_PlayerID{};
+				AuthTicket m_Ticket{};
 			public:
 				VoteGameAdvanceCmd()
 					{}
@@ -4691,8 +4659,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				VoteGameAdvanceRes()
 					{}
@@ -4737,8 +4705,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				AccountID m_Voter;
+				uint64_t m_GameInsUID{};
+				AccountID m_Voter{};
 			public:
 				GameAdvanceVotedS2CEvt()
 					{}
@@ -4781,12 +4749,12 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_GameInsUID;
-				AccountID m_PlayerID;
-				AuthTicket m_Ticket;
-				AccountID m_VoteTarget;
-				uint32_t m_ActionSerial;
+				uint64_t m_TransactionID{};
+				uint64_t m_GameInsUID{};
+				AccountID m_PlayerID{};
+				AuthTicket m_Ticket{};
+				AccountID m_VoteTarget{};
+				uint32_t m_ActionSerial{};
 			public:
 				VoteCmd()
 					{}
@@ -4833,8 +4801,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				VoteRes()
 					{}
@@ -4879,9 +4847,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				AccountID m_Voter;
-				AccountID m_VotedTarget;
+				uint64_t m_GameInsUID{};
+				AccountID m_Voter{};
+				AccountID m_VotedTarget{};
 			public:
 				VotedS2CEvt()
 					{}
@@ -4927,7 +4895,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
+				uint64_t m_GameInsUID{};
 				ArrayView<AccountID> m_Voted;
 			public:
 				VoteEndS2CEvt()
@@ -4973,9 +4941,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				AccountID m_KilledPlayer;
-				uint8_t m_Reason;
+				uint64_t m_GameInsUID{};
+				AccountID m_KilledPlayer{};
+				uint8_t m_Reason{};
 			public:
 				PlayerKilledS2CEvt()
 					{}
@@ -5021,10 +4989,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_GameInsUID;
-				AccountID m_RevealedPlayerID;
-				uint8_t m_Role;
-				uint8_t m_Reason;
+				uint64_t m_GameInsUID{};
+				AccountID m_RevealedPlayerID{};
+				uint8_t m_Role{};
+				uint8_t m_Reason{};
 			public:
 				PlayerRevealedS2CEvt()
 					{}
@@ -5070,7 +5038,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 			public:
 				GamePlayAgainCmd()
 					{}
@@ -5112,10 +5080,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_TotalGem;
-				uint64_t m_TotalGameMoney;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_TotalGem{};
+				uint64_t m_TotalGameMoney{};
 			public:
 				GamePlayAgainRes()
 					{}
@@ -5162,8 +5130,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_PartyUID;
-				AccountID m_LeadPlayer;
+				uint64_t m_PartyUID{};
+				AccountID m_LeadPlayer{};
 			public:
 				GamePlayAgainS2CEvt()
 					{}
@@ -5207,7 +5175,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 				ArrayView<AccountID> m_TargetPlayerID;
 			public:
 				GameRevealPlayerCmd()
@@ -5251,12 +5219,12 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 				ArrayView<AccountID> m_RevealedPlayerID;
 				ArrayView<uint8_t> m_RevealedRole;
-				uint64_t m_TotalGem;
-				uint64_t m_TotalGameMoney;
+				uint64_t m_TotalGem{};
+				uint64_t m_TotalGameMoney{};
 			public:
 				GameRevealPlayerRes()
 					{}
@@ -5304,7 +5272,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 			public:
 				GamePlayerReviveCmd()
 					{}
@@ -5346,10 +5314,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_TotalGem;
-				uint64_t m_TotalGameMoney;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_TotalGem{};
+				uint64_t m_TotalGameMoney{};
 			public:
 				GamePlayerReviveRes()
 					{}
@@ -5396,7 +5364,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				AccountID m_RevivedPlayerID;
+				AccountID m_RevivedPlayerID{};
 			public:
 				GamePlayerRevivedS2CEvt()
 					{}
@@ -5439,7 +5407,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 			public:
 				GamePlayerResetRankCmd()
 					{}
@@ -5481,10 +5449,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_TotalGem;
-				uint64_t m_TotalGameMoney;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_TotalGem{};
+				uint64_t m_TotalGameMoney{};
 			public:
 				GamePlayerResetRankRes()
 					{}
@@ -5530,9 +5498,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint8_t m_NumPlayer;
-				uint8_t m_RequestRole;
+				uint64_t m_TransactionID{};
+				uint8_t m_NumPlayer{};
+				uint8_t m_RequestRole{};
 			public:
 				RequestGameMatchCmd()
 					{}
@@ -5576,10 +5544,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_TotalGem;
-				uint64_t m_TotalGameMoney;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_TotalGem{};
+				uint64_t m_TotalGameMoney{};
 			public:
 				RequestGameMatchRes()
 					{}
@@ -5626,20 +5594,20 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_InsUID;
-				uint32_t m_TimeStamp;
-				uint8_t m_GameState;
-				uint8_t m_Day;
-				uint8_t m_MaxPlayer;
-				uint8_t m_PlayerIndex;
-				uint8_t m_PlayerCharacter;
-				uint8_t m_Role;
-				uint8_t m_Dead;
+				uint64_t m_InsUID{};
+				uint32_t m_TimeStamp{};
+				uint8_t m_GameState{};
+				uint8_t m_Day{};
+				uint8_t m_MaxPlayer{};
+				uint8_t m_PlayerIndex{};
+				uint8_t m_PlayerCharacter{};
+				uint8_t m_Role{};
+				uint8_t m_Dead{};
 				ArrayView<uint8_t> m_ChatHistoryData;
 				ArrayView<uint8_t> m_GameLogData;
-				uint32_t m_Stamina;
-				uint64_t m_TotalGem;
-				uint64_t m_TotalGameMoney;
+				uint32_t m_Stamina{};
+				uint64_t m_TotalGem{};
+				uint64_t m_TotalGameMoney{};
 			public:
 				GameMatchedS2CEvt()
 					{}
@@ -5696,7 +5664,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				Result m_FailedReason;
+				Result m_FailedReason{};
 			public:
 				GameMatchFailedS2CEvt()
 					{}
@@ -5781,7 +5749,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 			public:
 				CancelGameMatchCmd()
 					{}
@@ -5823,8 +5791,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				CancelGameMatchRes()
 					{}
@@ -5910,8 +5878,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint32_t m_ShopItemID;
+				uint64_t m_TransactionID{};
+				uint32_t m_ShopItemID{};
 			public:
 				BuyShopItemPrepareCmd()
 					{}
@@ -5954,18 +5922,16 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint32_t m_ShopItemID;
-				const char* m_PurchaseID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint32_t m_ShopItemID{};
+				const char* m_PurchaseID{};
 			public:
 				BuyShopItemPrepareRes()
-				:m_PurchaseID(nullptr)
 					{}
 
 				BuyShopItemPrepareRes( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_PurchaseID(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -6005,24 +5971,18 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint32_t m_ShopItemID;
-				const char* m_Platform;
-				const char* m_PackageName;
-				const char* m_PurchaseTransactionID;
+				uint64_t m_TransactionID{};
+				uint32_t m_ShopItemID{};
+				const char* m_Platform{};
+				const char* m_PackageName{};
+				const char* m_PurchaseTransactionID{};
 				ArrayView<uint8_t> m_PurchaseToken;
 			public:
 				BuyShopItemCmd()
-				:m_Platform(nullptr)
-				,m_PackageName(nullptr)
-				,m_PurchaseTransactionID(nullptr)
 					{}
 
 				BuyShopItemCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_Platform(nullptr)
-				,m_PackageName(nullptr)
-				,m_PurchaseTransactionID(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -6063,9 +6023,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint32_t m_ShopItemID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint32_t m_ShopItemID{};
 			public:
 				BuyShopItemRes()
 					{}
@@ -6110,19 +6070,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_ChannelName;
-				const char* m_Passcode;
+				uint64_t m_TransactionID{};
+				const char* m_ChannelName{};
+				const char* m_Passcode{};
 			public:
 				CreateOrJoinChatChannelCmd()
-				:m_ChannelName(nullptr)
-				,m_Passcode(nullptr)
 					{}
 
 				CreateOrJoinChatChannelCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_ChannelName(nullptr)
-				,m_Passcode(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -6160,9 +6116,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_ChatUID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_ChatUID{};
 			public:
 				CreateOrJoinChatChannelRes()
 					{}
@@ -6207,9 +6163,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_ChatUID;
-				AccountID m_InviterID;
+				uint64_t m_TransactionID{};
+				uint64_t m_ChatUID{};
+				AccountID m_InviterID{};
 			public:
 				JoinChatChannelCmd()
 					{}
@@ -6253,10 +6209,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				uint64_t m_PartyUID;
-				AccountID m_PartyLeaderID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_PartyUID{};
+				AccountID m_PartyLeaderID{};
 			public:
 				JoinChatChannelRes()
 					{}
@@ -6303,8 +6259,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_ChatUID;
-				PlayerInformation m_JoinedPlayer;
+				uint64_t m_ChatUID{};
+				PlayerInformation m_JoinedPlayer{};
 			public:
 				ChatChannelPlayerJoinedS2CEvt()
 					{}
@@ -6349,8 +6305,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_ChatUID;
-				AccountID m_NewLeaderID;
+				uint64_t m_ChatUID{};
+				AccountID m_NewLeaderID{};
 			public:
 				ChatChannelLeaderChangedS2CEvt()
 					{}
@@ -6393,9 +6349,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_ChatUID;
-				AccountID m_PlayerID;
+				uint64_t m_TransactionID{};
+				uint64_t m_ChatUID{};
+				AccountID m_PlayerID{};
 			public:
 				LeaveChatChannelCmd()
 					{}
@@ -6439,8 +6395,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				LeaveChatChannelRes()
 					{}
@@ -6485,8 +6441,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_ChatUID;
-				AccountID m_LeftPlayerID;
+				uint64_t m_ChatUID{};
+				AccountID m_LeftPlayerID{};
 			public:
 				ChatChannelPlayerLeftS2CEvt()
 					{}
@@ -6529,10 +6485,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_ChatUID;
-				AccountID m_PlayerID;
-				AccountID m_PlayerToKick;
+				uint64_t m_TransactionID{};
+				uint64_t m_ChatUID{};
+				AccountID m_PlayerID{};
+				AccountID m_PlayerToKick{};
 			public:
 				ChatChannelKickPlayerCmd()
 					{}
@@ -6577,8 +6533,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				ChatChannelKickPlayerRes()
 					{}
@@ -6623,8 +6579,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_ChatUID;
-				AccountID m_KickedPlayerID;
+				uint64_t m_ChatUID{};
+				AccountID m_KickedPlayerID{};
 			public:
 				ChatChannelPlayerKickedS2CEvt()
 					{}
@@ -6668,17 +6624,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint64_t m_ChatUID;
-				const char* m_ChatMessage;
+				uint64_t m_TransactionID{};
+				uint64_t m_ChatUID{};
+				const char* m_ChatMessage{};
 			public:
 				ChatChannelChatMessageCmd()
-				:m_ChatMessage(nullptr)
 					{}
 
 				ChatChannelChatMessageCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_ChatMessage(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -6716,8 +6670,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				ChatChannelChatMessageRes()
 					{}
@@ -6762,19 +6716,15 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				AccountID m_SenderID;
-				const char* m_SenderName;
-				const char* m_ChatMessage;
+				AccountID m_SenderID{};
+				const char* m_SenderName{};
+				const char* m_ChatMessage{};
 			public:
 				ChatChannelChatMessageS2CEvt()
-				:m_SenderName(nullptr)
-				,m_ChatMessage(nullptr)
 					{}
 
 				ChatChannelChatMessageS2CEvt( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_SenderName(nullptr)
-				,m_ChatMessage(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -6813,19 +6763,17 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				const char* m_CharacterName;
+				uint64_t m_TransactionID{};
+				const char* m_CharacterName{};
 				ArrayView<uint8_t> m_AttributesRaw;
 				mutable bool m_AttributesHasParsed = false;
 				mutable VariableTable m_Attributes;
 			public:
 				CreateCharacterCmd()
-				:m_CharacterName(nullptr)
 					{}
 
 				CreateCharacterCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_CharacterName(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
@@ -6865,9 +6813,9 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				int32_t m_CharacterID;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				int32_t m_CharacterID{};
 			public:
 				CreateCharacterRes()
 					{}
@@ -6912,8 +6860,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				int32_t m_CharacterID;
+				uint64_t m_TransactionID{};
+				int32_t m_CharacterID{};
 			public:
 				RemoveCharacterCmd()
 					{}
@@ -6956,8 +6904,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				RemoveCharacterRes()
 					{}
@@ -7001,7 +6949,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
+				uint64_t m_TransactionID{};
 			public:
 				GetCharacterListCmd()
 					{}
@@ -7043,8 +6991,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 				ArrayView<int32_t> m_CharacterIDs;
 			public:
 				GetCharacterListRes()
@@ -7090,24 +7038,22 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				int32_t m_CharacterID;
-				const char* m_AttributeNames;
+				uint64_t m_TransactionID{};
+				int32_t m_CharacterID{};
+				DynamicArray<const char*> m_AttributeNames;
 			public:
 				GetCharacterDataCmd()
-				:m_AttributeNames(nullptr)
 					{}
 
 				GetCharacterDataCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-				,m_AttributeNames(nullptr)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const int32_t& GetCharacterID() const	{ return m_CharacterID; };
-				const char* GetAttributeNames() const	{ return m_AttributeNames; };
+				const Array<const char*>& GetAttributeNames() const	{ return m_AttributeNames; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -7115,7 +7061,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const int32_t &InCharacterID, const char* InAttributeNames );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const int32_t &InCharacterID, const Array<const char*>& InAttributeNames );
 
 			}; // class GetCharacterDataCmd : public MessageBase
 
@@ -7138,8 +7084,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 				ArrayView<uint8_t> m_AttributesRaw;
 				mutable bool m_AttributesHasParsed = false;
 				mutable VariableTable m_Attributes;
@@ -7189,8 +7135,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				AccountID m_TargetPlayer;
+				uint64_t m_TransactionID{};
+				AccountID m_TargetPlayer{};
 			public:
 				GiveStaminaCmd()
 					{}
@@ -7233,10 +7179,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
-				AccountID m_TargetPlayer;
-				uint64_t m_TimeStamp;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				AccountID m_TargetPlayer{};
+				uint64_t m_TimeStamp{};
 			public:
 				GiveStaminaRes()
 					{}
@@ -7282,8 +7228,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				uint32_t m_PresetID;
+				uint64_t m_TransactionID{};
+				uint32_t m_PresetID{};
 			public:
 				SetPresetGameConfigIDCmd()
 					{}
@@ -7326,8 +7272,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint64_t m_TransactionID;
-				Result m_Result;
+				uint64_t m_TransactionID{};
+				Result m_Result{};
 			public:
 				SetPresetGameConfigIDRes()
 					{}

@@ -14,6 +14,9 @@
 #include "StreamDB/SFStreamDB.h"
 #include "StreamDB/SFStreamDBDirectory.h"
 #include "String/SFStringFormat.h"
+#include "Net/SFConnectionTCP.h"
+#include "Protocol/Policy/RelayNetPolicy.h"
+#include "Protocol/Message/RelayMsgClass.h"
 
 #ifdef USE_STREAMDB
 
@@ -29,26 +32,27 @@ namespace SF
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	class StreamDBDirectoryBase
+	//	class StreamDBDirectory
 	//
 
-	StreamDBDirectoryBase::StreamDBDirectoryBase(const StringCrc64& name)
+	StreamDBDirectory::StreamDBDirectory(const StringCrc32& directoryType, const StringCrc64& name)
 		: EngineObject(nullptr, name)
+		, m_DirectoryType(directoryType)
 	{
 
 	}
 
-	StreamDBDirectoryBase::~StreamDBDirectoryBase()
+	StreamDBDirectory::~StreamDBDirectory()
 	{
 
 	}
 
-	Result StreamDBDirectoryBase::Initialize(const String& serverAddress)
+	Result StreamDBDirectory::Initialize(const String& serverAddress)
 	{
 		return ResultCode::SUCCESS;
 	}
 
-	Result StreamDBDirectoryBase::FindStream()
+	Result StreamDBDirectory::RequestStreamList()
 	{
 		return ResultCode::NOT_IMPLEMENTED;
 	}
@@ -60,7 +64,7 @@ namespace SF
 	//
 
 	StreamDBDirectoryBroker::StreamDBDirectoryBroker()
-		: StreamDBDirectoryBase("StreamDBDirectoryBroker"_crc)
+		: StreamDBDirectory("StreamBroker"_crc, "StreamDBDirectoryBroker"_crc64)
 	{
 
 	}
@@ -107,12 +111,24 @@ namespace SF
 
 		m_Consumer.reset(consumer);
 
+		// Using async tick for 
+		SetTickGroup(EngineTaskTick::AsyncTick);
+
 		return ResultCode::SUCCESS;
 	}
 
-	Result StreamDBDirectoryBroker::FindStream()
+	Result StreamDBDirectoryBroker::RequestStreamList()
 	{
+		if (m_Consumer == nullptr)
+			return ResultCode::NOT_INITIALIZED;
 
+		m_FindRequested = true;
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result StreamDBDirectoryBroker::RequestStreamListInternal()
+	{
 		if (m_Consumer == nullptr)
 			return ResultCode::NOT_INITIALIZED;
 
@@ -155,6 +171,36 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
+	Result StreamDBDirectoryBroker::OnTick(EngineTaskTick tick)
+	{
+		ScopeContext hr;
+
+		if (m_FindRequested)
+		{
+			m_FindRequested = false;
+			if (!RequestStreamListInternal())
+			{
+				m_ResultMessage = Message::Relay::GetStreamListRes::Create(GetHeap(), 0, ResultCode::NO_DATA_EXIST,
+					"", ArrayView<const char*>());
+			}
+		}
+
+		return hr;
+	}
+
+	Result StreamDBDirectoryBroker::PollEvent(Event& evt)
+	{
+		// Nothing to do at this moment
+		return ResultCode::SUCCESS_FALSE;
+	}
+
+	Result StreamDBDirectoryBroker::PollMessage(MessageDataPtr& pIMsg)
+	{
+		pIMsg = std::forward<MessageDataPtr>(m_ResultMessage);
+
+		return pIMsg != nullptr ? ResultCode::SUCCESS : ResultCode::NO_DATA_EXIST;
+	}
+
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -162,28 +208,92 @@ namespace SF
 	//
 
 	StreamDBDirectoryClient::StreamDBDirectoryClient()
-		: StreamDBDirectoryBase("StreamDBDirectoryClient"_crc)
+		: StreamDBDirectory("StreamDirectoryDB"_crc, "StreamDBDirectoryClient"_crc64)
 	{
-
 	}
 
 	StreamDBDirectoryClient::~StreamDBDirectoryClient()
 	{
-
+		if (m_ConnectionDirectory != nullptr)
+		{
+			m_ConnectionDirectory->DisconnectNRelease("StreamDBDirectoryClient Initializing");
+			m_ConnectionDirectory = nullptr;
+		}
 	}
 
 	Result StreamDBDirectoryClient::Initialize(const String& serverAddress)
 	{
-		// TODO
-		return ResultCode::NOT_IMPLEMENTED;
+		if (m_ConnectionDirectory != nullptr)
+		{
+			m_ConnectionDirectory->DisconnectNRelease("StreamDBDirectoryClient Initializing");
+			m_ConnectionDirectory = nullptr;
+		}
+
+		m_ConnectionDirectory = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
+
+		Net::PeerInfo local(NetClass::Client, 0);
+		Net::PeerInfo remote(NetClass::Server, NetAddress(serverAddress), 0);
+		auto result = m_ConnectionDirectory->Connect(local, remote);
+		if (!result)
+		{
+			m_ConnectionDirectory->DisconnectNRelease("StreamDBDirectoryClient Initializing");
+			m_ConnectionDirectory = nullptr;
+			return result;
+		}
+
+		m_ConnectionDirectory->SetTickGroup(EngineTaskTick::AsyncTick);
+
+		return result;
 	}
 
-	Result StreamDBDirectoryClient::FindStream()
+	Result StreamDBDirectoryClient::RequestStreamList()
 	{
-		// TODO
-		return ResultCode::NOT_IMPLEMENTED;
+		if (m_ConnectionDirectory == nullptr)
+			return ResultCode::NOT_INITIALIZED;
+
+		switch (m_ConnectionDirectory->GetConnectionState())
+		{
+		case Net::ConnectionState::DISCONNECTING:
+		case Net::ConnectionState::DISCONNECTED:
+			return ResultCode::IO_DISCONNECTED;
+		case Net::ConnectionState::CONNECTING:
+			return ResultCode::IO_SYSNOTREADY;
+		default:
+			break;
+		}
+
+		return Policy::NetPolicyRelay(m_ConnectionDirectory).GetStreamListCmd(0, 0);
 	}
 
+	Result StreamDBDirectoryClient::PollEvent(Event& evt)
+	{
+		if (m_ConnectionDirectory == nullptr || m_ConnectionDirectory->GetConnectionState() == Net::ConnectionState::DISCONNECTED)
+			return ResultCode::NO_DATA_EXIST;
+
+		Net::ConnectionEvent connEvent;
+		while (m_ConnectionDirectory->DequeueConnectionEvent(connEvent))
+		{
+			switch (connEvent.Components.EventType)
+			{
+			case Net::ConnectionEvent::EVT_CONNECTION_RESULT:
+				evt = connEvent.Components.hr ? Event::Connected : Event::ConnectionFailed;
+				return ResultCode::SUCCESS;
+			case Net::ConnectionEvent::EVT_DISCONNECTED:
+				evt = Event::Disconnected;
+				return ResultCode::SUCCESS;
+			}
+		}
+
+		return ResultCode::NO_DATA_EXIST;
+	}
+
+	Result StreamDBDirectoryClient::PollMessage(MessageDataPtr& pIMsg)
+	{
+		if (m_ConnectionDirectory == nullptr || m_ConnectionDirectory->GetConnectionState() == Net::ConnectionState::DISCONNECTED)
+			return ResultCode::NO_DATA_EXIST;
+
+		return m_ConnectionDirectory->GetRecvMessage(pIMsg);
+	}
 
 }
 

@@ -22,9 +22,15 @@ using namespace SF;
 
 
 
-SFDLL_EXPORT intptr_t StreamDB_NativeCreateDirectory()
+SFDLL_EXPORT intptr_t StreamDB_NativeCreateDirectoryBroker()
 {
 	auto streamDBInstance = new(GetSystemHeap()) StreamDBDirectoryBroker;
+	return NativeObjectToIntptr(streamDBInstance);
+}
+
+SFDLL_EXPORT intptr_t StreamDB_NativeCreateDirectoryClient()
+{
+	auto streamDBInstance = new(GetSystemHeap()) StreamDBDirectoryClient;
 	return NativeObjectToIntptr(streamDBInstance);
 }
 
@@ -62,20 +68,20 @@ SFDLL_EXPORT const char* StreamDB_NativeGetTopic(intptr_t nativeHandle, const ch
 
 SFDLL_EXPORT int32_t StreamDBDirectory_NativeInitialize(intptr_t nativeHandle, const char* strBrokers)
 {
-	auto pStreamInstance = NativeToObject<StreamDB>(nativeHandle);
+	auto pStreamInstance = NativeToObject<StreamDBDirectory>(nativeHandle);
 	if (pStreamInstance == nullptr)
 		return (int32_t)ResultCode::UNEXPECTED;
 
-	return (int32_t)pStreamInstance->Initialize(strBrokers, nullptr);
+	return (int32_t)pStreamInstance->Initialize(strBrokers);
 }
 
-SFDLL_EXPORT int32_t StreamDBDirectory_NativeRefreshTopicList(intptr_t nativeHandle)
+SFDLL_EXPORT int32_t StreamDBDirectory_RequestStreamList(intptr_t nativeHandle)
 {
 	auto pStreamInstance = NativeToObject<StreamDBDirectoryBroker>(nativeHandle);
 	if (pStreamInstance == nullptr)
 		return (int32_t)ResultCode::INVALID_POINTER;
 
-	return (int32_t)pStreamInstance->FindStream();
+	return (int32_t)pStreamInstance->RequestStreamList();
 }
 
 SFDLL_EXPORT int32_t StreamDBDirectory_NativeGetTopicCount(intptr_t nativeHandle)
@@ -95,6 +101,34 @@ SFDLL_EXPORT const char* StreamDBDirectory_NativeGetTopic(intptr_t nativeHandle,
 
 	return pStreamInstance->GetStreamList()[index].data();
 }
+
+
+SFDLL_EXPORT int32_t StreamDBDirectory_NativePollMessage(intptr_t nativeHandle, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc)
+{
+	if (nativeHandle == 0)
+		return ResultCode::INVALID_ARG;
+
+	auto pDirectoryBase = NativeToObject<StreamDBDirectory>(nativeHandle);
+
+	// just to empty event queue, not important at this moment
+	StreamDBDirectory::Event evt;
+	pDirectoryBase->PollEvent(evt);
+
+	MessageDataPtr pIMsg;
+	if (!pDirectoryBase->PollMessage(pIMsg))
+		return ResultCode::NO_DATA_EXIST;
+
+	setMessageFunc(pIMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
+
+	// Fill parameters
+	VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
+	auto result = SF::Protocol::ParseMessage(pIMsg, builder);
+	if (!result)
+		return result;
+
+	return ResultCode::SUCCESS;
+}
+
 
 SFDLL_EXPORT int32_t StreamDBProducer_NativeSendRecord(intptr_t nativeHandle, int32_t dataSize, const uint8_t* data)
 {

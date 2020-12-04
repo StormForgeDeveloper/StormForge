@@ -1824,7 +1824,7 @@ C++: Cast message to GetCharacterListRes to access values
 
 1. Command interface
 
-        Result GetCharacterDataCmd(const uint64_t &InTransactionID, const int32_t &InCharacterID, const char* InAttributeNames)
+        Result GetCharacterDataCmd(const uint64_t &InTransactionID, const int32_t &InCharacterID, const Array<const char*>& InAttributeNames)
 
 		- OutInTransactionID: TransactionID type. 
 

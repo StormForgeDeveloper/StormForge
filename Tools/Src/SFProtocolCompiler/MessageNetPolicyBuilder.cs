@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : Kyungkun Ko
 //
@@ -42,7 +42,7 @@ namespace ProtocolCompiler
         {
             OutStream.WriteLine("////////////////////////////////////////////////////////////////////////////////");
             OutStream.WriteLine("// ");
-            OutStream.WriteLine("// CopyRight (c) 2013 The Braves");
+            OutStream.WriteLine("// CopyRight (c) The Braves");
             OutStream.WriteLine("// ");
             OutStream.WriteLine("// Author : Generated");
             OutStream.WriteLine("// ");
@@ -70,7 +70,7 @@ namespace ProtocolCompiler
         {
             OutStream.WriteLine("////////////////////////////////////////////////////////////////////////////////");
             OutStream.WriteLine("// ");
-            OutStream.WriteLine("// CopyRight (c) 2017 StromFOrge");
+            OutStream.WriteLine("// CopyRight (c) The Braves");
             OutStream.WriteLine("// ");
             OutStream.WriteLine("// Author : Generated");
             OutStream.WriteLine("// ");
@@ -112,13 +112,13 @@ namespace ProtocolCompiler
                 strParams += Separator;
                 Separator = ", ";
 
-                if (IsStrType(param)) // string type
-                {
-                    strParams += string.Format("const {0} {1}", StrTypeString(param), InParamName(param.Name));
-                }
-                else if (param.IsArray) // array
+                if (param.IsArray) // array
                 {
                     strParams += string.Format("const {0}& {1}", InArrayTypeName(param), InParamName(param.Name));
+                }
+                else if (IsStrType(param)) // string type
+                {
+                    strParams += string.Format("const {0} {1}", StrTypeString(param), InParamName(param.Name));
                 }
                 else // generic type
                 {

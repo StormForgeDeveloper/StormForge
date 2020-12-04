@@ -11,7 +11,6 @@ namespace TestNet.WinSharp
 {
     public class StressTest_LoginUser
     {
-        //  SFEngine m_Engine;
         SFMessageRouter m_MessageRouter = new SFMessageRouter();
 
         public SFConnection m_ConnectionLogin;

@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2017 StromFOrge
+// CopyRight (c) The Braves
 // 
 // Author : Generated
 // 
@@ -234,7 +234,7 @@ namespace SF
 
 		}; // Result NetSvrPolicyRelay::DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult )
 		// Cmd: Get stream list
-		Result NetSvrPolicyRelay::GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamNames )
+		Result NetSvrPolicyRelay::GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
 		{
  			ScopeContext hr;
 
@@ -248,7 +248,7 @@ namespace SF
 
 			return hr;
 
-		}; // Result NetSvrPolicyRelay::GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamNames )
+		}; // Result NetSvrPolicyRelay::GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
 
 
 	}; // namespace Policy

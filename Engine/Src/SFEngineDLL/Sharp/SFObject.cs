@@ -17,7 +17,7 @@ namespace SF
     /// <summary>
     /// Engine object interface
     /// </summary>
-    public class SFObject
+    public class SFObject : IDisposable
     {
         // Native handle
         private IntPtr m_NativeHandle = IntPtr.Zero;
@@ -35,7 +35,7 @@ namespace SF
 		    m_NativeHandle = nativeHandle;
 		    NativeAddReference(nativeHandle);
 	    }
-	
+
 	    public virtual void Dispose()
 	    {
             if (m_NativeHandle != IntPtr.Zero)

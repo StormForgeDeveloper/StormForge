@@ -132,7 +132,7 @@ namespace Net {
 		// Initialize connection
 		virtual Result InitConnection(const PeerInfo &local, const PeerInfo &remote) override;
 
-		// Connect to remote. InitConnection + Connect 
+		// Connect to remote. InitConnection + Connect , doest InitConnection inside
 		// Local address will be auto detected
 		// @local: NetClass and ID should be assigned
 		// @remote: remote information. Address should to be assigned

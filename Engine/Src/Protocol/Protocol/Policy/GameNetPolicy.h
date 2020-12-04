@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 The Braves
+// CopyRight (c) The Braves
 // 
 // Author : Generated
 // 
@@ -150,7 +150,7 @@ namespace SF
 			// Cmd: Get character list
 			Result GetCharacterListCmd( const uint64_t &InTransactionID );
 			// Cmd: 
-			Result GetCharacterDataCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID, const char* InAttributeNames );
+			Result GetCharacterDataCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID, const Array<const char*>& InAttributeNames );
 			// Cmd: Give my stamina to other player
 			Result GiveStaminaCmd( const uint64_t &InTransactionID, const AccountID &InTargetPlayer );
 			// Cmd: For debug, Change configue preset

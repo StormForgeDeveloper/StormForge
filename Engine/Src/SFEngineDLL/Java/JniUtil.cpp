@@ -220,6 +220,22 @@ namespace SF
 
 
 
+	void VariableMapBuilderJObject::SetVariable(const char* varName, const Array<const char*>& value)
+	{
+		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+
+		jstring* pValues = new jstring[value.size()];
+		for (int iValue = 0; iValue < value.size(); iValue++)
+			pValues[iValue] = m_Env->NewStringUTF(value[iValue]);
+
+		auto valueArray = m_Env->NewStringArray(value.size());
+		m_Env->SetStringArrayRegion(valueArray, 0, value.size(), pValues);
+
+		delete[] pValues;
+
+		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, valueArray);
+	}
+
 	void VariableMapBuilderJObject::SetVariable(const char* varName, const Array<bool>& value)
 	{
 		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);

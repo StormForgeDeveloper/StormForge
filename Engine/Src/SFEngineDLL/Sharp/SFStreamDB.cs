@@ -74,32 +74,46 @@ namespace SF
 
     public class StreamDBDirectory : SFObject
     {
-        public StreamDBDirectory()
+        public enum DirectoryMode
         {
-            NativeHandle = NativeCreateDirectory();
+            Broker,
+            Client
         }
 
-        public virtual Result Initialize(string brokers)
+        DirectoryMode m_DirectoryMode;
+
+        public StreamDBDirectory(DirectoryMode mode)
         {
-            var result = NativeInitialize(NativeHandle, System.Text.Encoding.UTF8.GetBytes(brokers + "\0"));
+            m_DirectoryMode = mode;
+
+            if (mode == DirectoryMode.Broker)
+                NativeHandle = NativeCreateDirectoryBroker();
+            else
+                NativeHandle = NativeCreateDirectoryClient();
+        }
+
+
+        public virtual Result Initialize(string serverAddress)
+        {
+            var result = NativeInitialize(NativeHandle, System.Text.Encoding.UTF8.GetBytes(serverAddress + "\0"));
             return new Result(result);
         }
 
-        public Result RefreshTopicList()
+        public Result RequestStreamList()
         {
-            return new Result(NativeRefreshTopicList(NativeHandle));
+            return new Result(NativeRequestStreamList(NativeHandle));
         }
 
-        public int GetTopicCount()
-        {
-            return NativeGetTopicCount(NativeHandle);
-        }
+        //public int GetTopicCount()
+        //{
+        //    return NativeGetTopicCount(NativeHandle);
+        //}
 
-        public string GetTopic(int index)
-        {
-            var nativeStr = NativeGetTopic(NativeHandle, index);
-            return Marshal.PtrToStringAnsi(nativeStr);
-        }
+        //public string GetTopic(int index)
+        //{
+        //    var nativeStr = NativeGetTopic(NativeHandle, index);
+        //    return Marshal.PtrToStringAnsi(nativeStr);
+        //}
 
         ////////////////////////////////////////////////////////////////////////////////
         //
@@ -118,17 +132,34 @@ namespace SF
         [DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeInitialize", CharSet = CharSet.Auto)]
         static extern Int32 NativeInitialize(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPArray)] byte[] strBrokers);
 
-        [DllImport(NativeDllName, EntryPoint = "StreamDB_NativeCreateDirectory", CharSet = CharSet.Auto)]
-        static extern IntPtr NativeCreateDirectory();
+        [DllImport(NativeDllName, EntryPoint = "StreamDB_NativeCreateDirectoryBroker", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeCreateDirectoryBroker();
 
-        [DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeRefreshTopicList", CharSet = CharSet.Auto)]
-        static extern Int32 NativeRefreshTopicList(IntPtr nativeHandle);
+        [DllImport(NativeDllName, EntryPoint = "StreamDB_NativeCreateDirectoryClient", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeCreateDirectoryClient();
 
-        [DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeGetTopicCount", CharSet = CharSet.Auto)]
-        static extern Int32 NativeGetTopicCount(IntPtr nativeHandle);
+        [DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeRequestStreamList", CharSet = CharSet.Auto)]
+        static extern Int32 NativeRequestStreamList(IntPtr nativeHandle);
 
-        [DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeGetTopic", CharSet = CharSet.Ansi)]
-        static extern IntPtr NativeGetTopic(IntPtr nativeHandle, Int32 index);
+        //[DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeGetTopicCount", CharSet = CharSet.Auto)]
+        //static extern Int32 NativeGetTopicCount(IntPtr nativeHandle);
+
+        //[DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeGetTopic", CharSet = CharSet.Ansi)]
+        //static extern IntPtr NativeGetTopic(IntPtr nativeHandle, Int32 index);
+
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void SET_MESSAGE_FUNCTION(UInt32 messageID);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void SET_FUNCTION([MarshalAs(UnmanagedType.LPStr)] string stringHash, [MarshalAs(UnmanagedType.LPStr)] string typeNameHash, IntPtr Value);
+
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void SET_ARRAY_FUNCTION([MarshalAs(UnmanagedType.LPStr)] string stringHash, [MarshalAs(UnmanagedType.LPStr)] string typeNameHash, int arrayCount, IntPtr Value);
+
+        [DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativePollMessage", CharSet = CharSet.Auto)]
+        [return: MarshalAs(UnmanagedType.I1)]
+        static extern bool NativePollMessage(IntPtr nativeHandle, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc);
 
         #endregion
     }

@@ -499,13 +499,13 @@ namespace ProtocolCompiler
                 strParams += Separator;
                 Separator = ", ";
 
-                if (IsStrType(param)) // string type
-                {
-                    strParams += string.Format("const {0} {1}", StrTypeString(param), InParamName(param.Name));
-                }
-                else if (param.IsArray) // array
+                if (param.IsArray) // array
                 {
                     strParams += string.Format("const {0}& {1}", InArrayTypeName(param), InParamName(param.Name));
+                }
+                else if (IsStrType(param)) // string type
+                {
+                    strParams += string.Format("const {0} {1}", StrTypeString(param), InParamName(param.Name));
                 }
                 else if (!bUseOriginalType && IsVariableSizeType(param.Type))
                 {

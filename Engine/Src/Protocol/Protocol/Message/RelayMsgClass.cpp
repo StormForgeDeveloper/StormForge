@@ -38,11 +38,10 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_RelayInstanceID);
 				protocolCheck(*input >> m_PlayerID);
-				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_PlayerIdentifier, ArrayLen));
 
 				return hr;
@@ -135,7 +134,7 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_RelayInstanceID);
@@ -239,7 +238,7 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_RelayInstanceID);
 				protocolCheck(*input >> m_PlayerID);
@@ -331,7 +330,7 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_RelayInstanceID);
 				protocolCheck(*input >> m_JoinedPlayerInfo);
@@ -423,7 +422,7 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_RelayInstanceID);
 				protocolCheck(*input >> m_LeftPlayerID);
@@ -519,7 +518,7 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_RelayInstanceID);
 				protocolCheck(*input >> m_SenderEndpointID);
@@ -623,11 +622,10 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Ticket);
-				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
 
 				return hr;
@@ -719,13 +717,12 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_StreamServerAddr);
 				protocolCheck(*input >> m_StreamServerAddrIPV4);
-				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_StreamUID, ArrayLen));
 
 				return hr;
@@ -824,11 +821,10 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Ticket);
-				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
 
 				return hr;
@@ -920,13 +916,12 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_StreamServerAddr);
 				protocolCheck(*input >> m_StreamServerAddrIPV4);
-				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_StreamUID, ArrayLen));
 
 				return hr;
@@ -1025,11 +1020,10 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Ticket);
-				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
 
 				return hr;
@@ -1121,7 +1115,7 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
@@ -1213,7 +1207,7 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Ticket);
@@ -1304,12 +1298,11 @@ namespace SF
 				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
-				uint16_t ArrayLen = 0;
+				uint16_t ArrayLen = 0;(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
-				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_StreamNames, ArrayLen));
+				protocolCheck(input->ReadArrayLink(m_StreamNames));
 
 				return hr;
 
@@ -1343,7 +1336,7 @@ namespace SF
 			}; // Result GetStreamListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* GetStreamListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamNames )
+			MessageData* GetStreamListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1375,7 +1368,7 @@ namespace SF
 				protocolCheck(*output << InStreamNames);
 
 				return hr;
-			}; // MessageData* GetStreamListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamNames )
+			}; // MessageData* GetStreamListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
 
 
 

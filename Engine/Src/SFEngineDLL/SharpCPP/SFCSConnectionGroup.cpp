@@ -52,8 +52,6 @@ SFDLL_EXPORT SharedObject* SFConnectionGroup_NativeCreateConnectionGroup(int32_t
 }
 
 
-typedef void(*SET_MESSAGE_FUNCTION)(uint32_t messageID);
-typedef void(*SET_EVENT_FUNCTION)(Net::ConnectionEvent::EventTypes eventType, int32_t result, Net::ConnectionState state);
 
 SFDLL_EXPORT intptr_t SFConnectionGroup_NativeDequeueEvent(intptr_t nativeHandle, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc)
 {

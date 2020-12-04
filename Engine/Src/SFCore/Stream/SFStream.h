@@ -157,7 +157,7 @@ namespace SF
 
 			for (uint32_t iItem = 0; iItem < NumItems; iItem++)
 			{
-				DataType Item;
+				DataType Item{};
 				auto Ret = (*this) >> Item;
 				if (!Ret)
 					return Ret;
@@ -168,6 +168,26 @@ namespace SF
 			return ResultCode::SUCCESS;
 		}
 
+		Result ReadLink(const char*& pDst)
+		{
+			uint16_t readCount{};
+			if (!Read(readCount))
+				return ResultCode::END_OF_STREAM;
+
+			auto readSize = readCount * sizeof(char);
+			if (GetRemainSize() < readSize)
+				return ResultCode::IO_BADPACKET_SIZE;// sizeCheck
+
+			if (readSize > 0)
+			{
+				pDst = reinterpret_cast<const char*>(GetBufferPtr() + GetPosition());
+				Skip(readSize);
+			}
+			else
+				pDst = nullptr;
+
+			return ResultCode::SUCCESS;
+		}
 
 		template< class DataType >
 		Result ReadLink(DataType*& pDst, size_t readCount)
@@ -188,7 +208,7 @@ namespace SF
 		}
 
 		template< class DataType >
-		Result ReadLink(ArrayView<DataType>& data)
+		Result ReadArrayLink(ArrayView<DataType>& data)
 		{
 			uint16_t NumItems{};
 			if (!Read(NumItems))
@@ -214,7 +234,7 @@ namespace SF
 		}
 
 		template< class DataType >
-		Result ReadLink(Array<std::decay_t<DataType>*>& data)
+		Result ReadArrayLink(DynamicArray<DataType>& data)
 		{
 			uint16_t NumItems{};
 			if (!Read(NumItems))
@@ -224,7 +244,7 @@ namespace SF
 
 			for (uint32_t iItem = 0; iItem < NumItems; iItem++)
 			{
-				DataType* Item;
+				DataType Item;
 				auto Ret = ReadLink(Item);
 				if (!Ret)
 					return Ret;

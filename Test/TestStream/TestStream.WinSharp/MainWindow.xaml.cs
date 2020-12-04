@@ -63,21 +63,22 @@ namespace TestStream.WinSharp
             var serverAddress = textStreamDBServer.Text;
             if (m_Directory == null)
             {
-                m_Directory = new SF.StreamDBDirectory();
+                m_Directory = new SF.StreamDBDirectory(SF.StreamDBDirectory.DirectoryMode.Broker);
                 var result = m_Directory.Initialize(serverAddress);
             }
 
             SF.ServerAddressRegistry.AddServerAddress(serverAddress);
 
-            m_Directory.RefreshTopicList();
+            m_Directory.RequestStreamList();
 
-            comboStreamList.Items.Clear();
-            var topicCount = m_Directory.GetTopicCount();
-            for (int iTopic = 0; iTopic < topicCount; iTopic++)
-            {
-                string topic = m_Directory.GetTopic(iTopic);
-                comboStreamList.Items.Add(topic);
-            }
+            // TODO:
+            //comboStreamList.Items.Clear();
+            //var topicCount = m_Directory.GetTopicCount();
+            //for (int iTopic = 0; iTopic < topicCount; iTopic++)
+            //{
+            //    string topic = m_Directory.GetTopic(iTopic);
+            //    comboStreamList.Items.Add(topic);
+            //}
 
         }
 

@@ -406,12 +406,18 @@ namespace SF
             {
                 case TypeUsage.CPP:
                     if(param.IsArray)
-                        return string.Format("Array<{0}>", MapToCSharp[param.Type].CPPTypeName);
+                        if (param.Type == ParameterType.String)
+                            return string.Format("ArrayObject<{0}>", MapToCSharp[param.Type].CPPTypeName);
+                        else
+                            return string.Format("Array<{0}>", MapToCSharp[param.Type].CPPTypeName);
                     else
                         return MapToCSharp[param.Type].CPPTypeName;
                 case TypeUsage.CPPFunction:
                     if (param.IsArray)
-                        return string.Format("const Array<{0}>&", MapToCSharp[param.Type].CPPTypeName);
+                        if (param.Type == ParameterType.String)
+                            return string.Format("const ArrayObject<{0}>&", MapToCSharp[param.Type].CPPTypeName);
+                        else
+                            return string.Format("const Array<{0}>&", MapToCSharp[param.Type].CPPTypeName);
                     else if(bIsStruct)
                         return string.Format("const {0}&", MapToCSharp[param.Type].CPPTypeName);
                     else
@@ -419,10 +425,13 @@ namespace SF
                 case TypeUsage.CPPForSharp:
                     {
                         var cppTypeName = SystemTypeInfo.ToCPPType(param.Type);
-                        if (csType == typeof(string))
+                        if (param.IsArray)
+                            if (param.Type == ParameterType.String)
+                                return string.Format("intptr_t", MapToCSharp[param.Type].CPPTypeName);
+                            else
+                                return string.Format("const {0}*", cppTypeName);
+                        else if (csType == typeof(string))
                             return cppTypeName;
-                        else if (param.IsArray)
-                            return string.Format("const {0}*", cppTypeName);
                         else if (bIsStruct)
                             return string.Format("const {0}&", cppTypeName);
                         else if (csType.IsEnum)
@@ -447,7 +456,7 @@ namespace SF
                         if (param.IsArray)
                         {
                             if (csType == typeof(string))
-                                return "[MarshalAs(UnmanagedType.LPArray)] byte[]";
+                                return "IntPtr";
                             else if (bIsStruct)
                                 return string.Format("{0}[]", csType.ToString());
                             else if (csType.IsEnum)

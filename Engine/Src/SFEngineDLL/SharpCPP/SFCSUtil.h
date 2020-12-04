@@ -15,13 +15,18 @@
 #include "String/SFStringCrc64.h"
 #include "String/SFString.h"
 #include "Variable/SFVariableMapBuilder.h"
-
+#include "Net/SFNetDef.h"
 
 
 
 
 namespace SF
 {
+	typedef void(*SET_MESSAGE_FUNCTION)(uint32_t messageID);
+	typedef void(*SET_MESSAGE_FUNCTION)(uint32_t messageID);
+	typedef void(*SET_EVENT_FUNCTION)(Net::ConnectionEvent::EventTypes eventType, int32_t result, Net::ConnectionState state);
+
+
 	/////////////////////////////////////////////////////////////////////////////
 	//
 	//	Variable map builder for java map object
@@ -88,9 +93,26 @@ namespace SF
 		virtual void SetVariable(const char* varName, const Array<TotalRankingPlayerInformation>& value) override;
 		virtual void SetVariable(const char* varName, const Array<RelayPlayerInfo>& value) override;
 		virtual void SetVariable(const char* varName, const Array<GameInstanceInfo>& value) override;
+		virtual void SetVariable(const char* varName, const Array<const char*>& value) override;
 
 		virtual void SetVariable(const char* varName, const char* typeName, const Array<uint8_t>& value) override;
 
+	};
+
+
+	template<typename DataType>
+	class ArrayObject : public SharedObject, public DynamicArray<DataType>
+	{
+	public:
+		ArrayObject(IHeap& heap = GetSystemHeap(), size_t increaseSize = 16)
+			: DynamicArray(heap, increaseSize)
+		{
+		}
+
+		virtual ~ArrayObject()
+		{}
+
+		ArrayObject<DataType>& operator = (const Array<DataType>& src) { Array<DataType>::operator = (src); return *this; }
 	};
 
 
