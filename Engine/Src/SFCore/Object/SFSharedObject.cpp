@@ -27,7 +27,7 @@ namespace SF {
 
 	SharedObject::SharedObject()
 		: m_ReferenceCount(0)
-		, m_WeakReferenceCount(1)
+		, m_WeakReferenceCount(0)
 		, m_ManagerReferenceCount(0)
 		, m_ReferenceManagerObject(nullptr)
 	{
@@ -44,11 +44,11 @@ namespace SF {
 
 	CounterType SharedObject::AddReference() const
 	{
-		auto org = m_ReferenceCount.fetch_add(1, std::memory_order_acquire);
+		auto org = m_ReferenceCount.fetch_add(1, std::memory_order_relaxed);
 		if (org == 0)
 		{
-			// First shared reference should have one designated weak reference
-			Assert(GetWeakReferenceCount() == 1);
+			// First shared reference increase weak reference as well
+			AddWeakReference();
 		}
 		return org;
 	}
@@ -69,7 +69,7 @@ namespace SF {
 
 	CounterType SharedObject::AddWeakReference() const
 	{
-		return m_WeakReferenceCount.fetch_add(1, std::memory_order_acquire);
+		return m_WeakReferenceCount.fetch_add(1, std::memory_order_relaxed);
 	}
 
 	CounterType SharedObject::ReleaseWeakReference() const
@@ -91,7 +91,7 @@ namespace SF {
 		}
 		else
 		{
-			auto decValue = org = m_WeakReferenceCount.fetch_sub(1, std::memory_order_acquire);
+			auto decValue = org = m_WeakReferenceCount.fetch_sub(1, std::memory_order_acq_rel);
 			if (decValue <= 1)
 			{
 				AssertRel(decValue == 1);
@@ -103,7 +103,7 @@ namespace SF {
 	}
 
 
-	void SharedObject::GetSharedPointer(SharedPointer& shardPointer) const
+	SharedPointer SharedObject::AsSharedPtr() const
 	{
 		ReferenceCounterType curReference;
 		do
@@ -111,14 +111,13 @@ namespace SF {
 			curReference = m_ReferenceCount.load(std::memory_order_consume);
 			if (curReference <= 0)
 			{
-				shardPointer = SharedPointer();
-				return;
+				return SharedPointer();
 			}
 		} while (!m_ReferenceCount.compare_exchange_weak(curReference, curReference + 1, std::memory_order_relaxed, std::memory_order_relaxed));
 
-		shardPointer.SetPointer(const_cast<SharedObject*>(this));
+		return SharedPointer(const_cast<SharedObject*>(this));
 	}
-
+	
 	///////////////////////////////////////////////////////////////////////////
 	//
 	//

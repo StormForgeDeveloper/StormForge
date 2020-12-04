@@ -250,14 +250,6 @@ namespace SF
 					return Ret;
 
 				data.push_back(Item);
-
-				// if variable size data. the data should be bigger than type size
-				auto expectedSize = SerializedSizeOf(*Item);
-				assert(expectedSize >= sizeof(DataType));
-				if (expectedSize > sizeof(DataType))
-				{
-					Skip(expectedSize - sizeof(DataType));
-				}
 			}
 
 			return ResultCode::SUCCESS;

@@ -139,7 +139,7 @@ public:
 			while ((m_WorkItemQueue.Dequeue(workItem)))
 			{
 				SharedPointerT<WorkingEntity> workObj;
-				workItem.GetSharedPointer(workObj);
+				workObj = workItem.AsSharedPtr();
 
 
 				// If disposed skip item

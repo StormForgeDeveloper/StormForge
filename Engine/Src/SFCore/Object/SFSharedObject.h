@@ -62,6 +62,10 @@ namespace SF {
 
 		inline SharedObjectManager*		GetReferenceManager()					{ return m_ReferenceManagerObject; }
 
+
+		SharedPointer AsSharedPtr() const;
+
+
 		// If your object is added to shared object manager and CanDelete returns false the manager will give more time for the object
 		virtual bool	CanDelete() { return true; }
 		inline bool		IsUniquelyReferenced() const { return m_ReferenceCount.load(std::memory_order_relaxed) == 1; }
@@ -75,8 +79,6 @@ namespace SF {
 
 		CounterType AddWeakReference() const;
 		CounterType ReleaseWeakReference() const;
-
-		void GetSharedPointer(SharedPointer& shardPointer) const;
 
 		friend class SharedReferenceInc;
 		friend class SharedReferenceDec;

@@ -166,6 +166,10 @@ namespace SF {
 	class SharedPointerT : public SharedPointer
 	{
 	public:
+
+		using ObjectType = ClassType;
+
+	public:
 		constexpr SharedPointerT()
 			:SharedPointer()
 		{
@@ -833,29 +837,37 @@ namespace SF {
 			pObject = nullptr;
 		}
 
-		template<class SharedPointerType>
-		void GetSharedPointer(SharedPointerType& pointer) const
+		SharedPointer AsSharedPtr() const
 		{
 			if (m_pObject != nullptr)
-				m_pObject->GetSharedPointer(pointer);
+				return std::forward<SharedPointer>(m_pObject->AsSharedPtr());
 			else
-				pointer = SharedPointerType();
+				return SharedPointer();
+		}
+
+		template<class SharedObjectType>
+		SharedPointerT<SharedObjectType> AsSharedPtr() const
+		{
+			if (m_pObject != nullptr)
+				return SharedPointerT<SharedObjectType>(static_cast<SharedObjectType*>(m_pObject));
+			else
+				return SharedPointerT<SharedObjectType>();
 		}
 
 		explicit operator SharedPointer()
 		{
-			SharedPointer pointer;
-			GetSharedPointer(pointer);
-			return pointer;
+			if (m_pObject != nullptr)
+				return std::forward<SharedPointer>(m_pObject->AsSharedPtr());
+			return SharedPointer();
 		}
-#ifndef SWIG
+
 		explicit operator const SharedPointer() const
 		{
-			SharedPointer pointer;
-			GetSharedPointer(pointer);
-			return pointer;
+			if (m_pObject != nullptr)
+				return std::forward<SharedPointer>(m_pObject->AsSharedPtr());
+			return SharedPointer();
 		}
-#endif
+
 		bool operator == (const SharedPointer& src) const
 		{
 			return m_pObject == (const SharedObject*)src;
@@ -982,16 +994,12 @@ namespace SF {
 
 		explicit operator SharedPointerT<ClassType>()
 		{
-			SharedPointerT<ClassType> pointer;
-			GetSharedPointer(pointer);
-			return pointer;
+			return std::forward<SharedPointerT<ClassType>>(AsSharedPtr<ClassType>());
 		}
 
 		explicit operator const SharedPointerT<ClassType>() const
 		{
-			SharedPointerT<ClassType> pointer;
-			GetSharedPointer(pointer);
-			return pointer;
+			return std::forward<SharedPointerT<ClassType>>(AsSharedPtr<ClassType>());
 		}
 
 		bool operator == (const SharedPointer& src) const
@@ -1119,13 +1127,13 @@ namespace SF {
 	template<class ClassType>
 	SharedPointerT<ClassType>::SharedPointerT(WeakPointerT<ClassType>& src)
 	{
-		src.GetSharedPointer(*this);
+		*this = std::forward<SharedPointerT<ClassType>>(src.AsSharedPtr<ClassType>());
 	}
 
 	template<class ClassType>
 	SharedPointerT<ClassType>& SharedPointerT<ClassType>::operator = (WeakPointerT<ClassType>& src)
 	{
-		src.GetSharedPointer(*this);
+		*this = std::forward<SharedPointerT<ClassType>>(src.AsSharedPtr<ClassType>());
 		return *this;
 	}
 
