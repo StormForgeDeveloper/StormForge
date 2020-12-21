@@ -1201,8 +1201,41 @@ namespace SF {
 	};
 
 
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Utility classes
+	//
 
+	class CStringArrayView : public DynamicArray<const char*>
+	{
+	public:
+		using DataType = const char*;
 
+	public:
+
+		CStringArrayView() = default;
+		CStringArrayView(const Array<String>& src)
+		{
+			for (auto& itItem : src)
+			{
+				push_back(itItem.data());
+			}
+		}
+
+		virtual ~CStringArrayView() = default;
+
+		// copy operator
+		CStringArrayView& operator = (const Array<const char*>& src) { Array<DataType>::operator = (src); return *this; }
+		CStringArrayView& operator = (const Array<String>& src)
+		{
+			Clear();
+			for (auto& itItem : src)
+			{
+				push_back(itItem.data());
+			}
+			return *this;
+		}
+	};
 
 }; // namespace SF
 
