@@ -290,6 +290,9 @@ namespace SF
 			case Net::ConnectionEvent::EVT_DISCONNECTED:
 				evt = Event::Disconnected;
 				return ResultCode::SUCCESS;
+			default:
+				// Skip
+				break;
 			}
 		}
 

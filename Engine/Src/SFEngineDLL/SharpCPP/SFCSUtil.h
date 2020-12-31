@@ -105,7 +105,7 @@ namespace SF
 	{
 	public:
 		ArrayObject(IHeap& heap = GetSystemHeap(), size_t increaseSize = 16)
-			: DynamicArray(heap, increaseSize)
+			: DynamicArray<DataType>(heap, increaseSize)
 		{
 		}
 

@@ -488,7 +488,7 @@ namespace ProtocolCompiler
                 MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
                 MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
                 MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
-                MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(ArrayLen);");
+                MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
             }
             NewLine();
 
@@ -650,8 +650,8 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
             MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
             MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
-            MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(ArrayLen);");
-            MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr;(pCur);");
+            MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
+            MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr;(void)(pCur);");
             NewLine();
 
             if (parameters == null)
@@ -735,8 +735,8 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
             MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
             MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
-            MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(ArrayLen);");
-            MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr;(pCur);");
+            MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
+            MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr;(void)(pCur);");
             NewLine();
 
             // Skip until we meet route context

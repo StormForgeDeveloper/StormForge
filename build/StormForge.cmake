@@ -4,22 +4,27 @@ cmake_minimum_required(VERSION 3.16)
 message ( "Platform=${CMAKE_SYSTEM_NAME}, Config=${CMAKE_BUILD_TYPE}" )
 
 
-set(CMAKE_C_COMPILER clang)
-#set(CMAKE_CXX_COMPILER clang++)
-
-
-IF(NOT SF_FOLDER)
-   SET(SF_FOLDER StormForge)
-ENDIF()
-
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON) #...is required...
 set(CMAKE_CXX_EXTENSIONS OFF) #...without compiler extensions like gnu++11
 
-if(MSVC)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
-endif(MSVC)
+if(WIN32) # MSVC isn't consistent. let's use WIN32 for windows
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /std:c++17")
+	set(ENABLE_CLANG OFF)
+else()
+	set(ENABLE_CLANG ON)
+endif()
+
+
+if(ENABLE_CLANG)
+	set(CMAKE_C_COMPILER clang)
+	set(CMAKE_CXX_COMPILER clang++)
+endif(ENABLE_CLANG)
+
+IF(NOT SF_FOLDER)
+   SET(SF_FOLDER StormForge)
+ENDIF()
 
 
 #add_definitions(-DNOMINMAX)
@@ -72,15 +77,23 @@ if(WIN32)
 	add_definitions(-D_WINDOWS)
 	add_definitions(-DSTATIC_CONCPP) # mysql cpp conn static
 
-	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Od")
-	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Od")
-
-	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O2 -Oy-")
-	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -Oy-")
 
 	#always use debug info
-	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zi")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /Zi")
+	if (ENABLE_CLANG)
+		SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
+		SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+		SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -Oy-")
+		SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Oy-")
+		SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
+		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
+	else()
+		SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Od")
+		SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Od")
+		SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O2 -Oy-")
+		SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -Oy-")
+		SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zi")
+		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /Zi")
+	endif()
 
 	set(ARTECTURE x64)
 
@@ -96,7 +109,7 @@ if(WIN32)
 		../${SF_FOLDER}/3rdParties/src/openssl/buildWIndows/openssl/lib
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14/$(Configuration)
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14
-)
+	)
 	
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
 	#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}$(Configuration))
@@ -112,6 +125,8 @@ elseif(ANDROID_PLATFORM)
 
 	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
 	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+	SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
 
 	add_definitions(-D__ANDROID__=1)
 
@@ -133,6 +148,8 @@ elseif(IOS)
 
 	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
 	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
+	SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
 
 	add_definitions(-D__IOS__=1)
 	add_definitions(-DKQUEUE)
@@ -157,6 +174,8 @@ elseif(UNIX)
 	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -O3")
 	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
 
+	SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
 
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)

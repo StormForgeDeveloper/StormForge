@@ -52,7 +52,7 @@ install (TARGETS SFEngineDLL
          LIBRARY DESTINATION lib COMPONENT StormForge
          RUNTIME DESTINATION bin COMPONENT StormForge)
 
-if(WIN32)
+if(WIN32 AND NOT ENABLE_CLANG)
 	install (FILES $<TARGET_PDB_FILE:SFEngineDLL> DESTINATION bin COMPONENT StormForge)
 endif()
 

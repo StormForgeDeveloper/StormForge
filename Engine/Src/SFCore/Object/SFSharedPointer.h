@@ -1127,13 +1127,13 @@ namespace SF {
 	template<class ClassType>
 	SharedPointerT<ClassType>::SharedPointerT(WeakPointerT<ClassType>& src)
 	{
-		*this = std::forward<SharedPointerT<ClassType>>(src.AsSharedPtr<ClassType>());
+		*this = std::forward<SharedPointerT<ClassType>>(src.template AsSharedPtr<ClassType>());
 	}
 
 	template<class ClassType>
 	SharedPointerT<ClassType>& SharedPointerT<ClassType>::operator = (WeakPointerT<ClassType>& src)
 	{
-		*this = std::forward<SharedPointerT<ClassType>>(src.AsSharedPtr<ClassType>());
+		*this = std::forward<SharedPointerT<ClassType>>(src.template AsSharedPtr<ClassType>());
 		return *this;
 	}
 
