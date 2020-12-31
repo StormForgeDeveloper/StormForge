@@ -5,6 +5,7 @@
 #include <gtest/gtest.h>
 #include "SFAssert.h"
 #include "Util/SFUtility.h"
+#include "Util/SFPath.h"
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "Memory/SFMemoryManager.h"
 #include "Memory/SFMemory.h"
@@ -43,7 +44,11 @@ GTEST_TEST(ServerConfig, XMLLoad)
 	ServerConfig serverConfig(testHeap);
 	ServerConfigXML serverConfigXML(serverConfig);
 
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXML.LoadConfig("ServerConfig_StressTest.xml"));
+	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
+	{
+		auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
+		GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXML.LoadConfig(filePath));
+	}
 
 	Engine::GetEngineComponent<Log::LogModule>()->Flush();
 }
@@ -61,7 +66,9 @@ GTEST_TEST(ServerConfig, ZookeeperStore)
 
 
 	ServerConfigXML serverConfigXMLLoader(serverConfigXML);
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig("ServerConfig_StressTest.xml"));
+	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
+	auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
+	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig(filePath));
 
 	ServerConfigZookeeper zookeeperStore(serverConfigXML, zkInstance);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperStore.StoreConfig(zkConfigNodeName));
@@ -86,7 +93,9 @@ GTEST_TEST(ServerConfig, ZookeeperLoad)
 
 
 	ServerConfigXML serverConfigXMLLoader(serverConfigXML);
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig("ServerConfig_StressTest.xml"));
+	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
+	auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
+	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig(filePath));
 
 	ServerConfigZookeeper zookeeperLoader(serverConfig, zkInstance);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperLoader.LoadConfig(zkConfigNodeName));
@@ -111,7 +120,9 @@ GTEST_TEST(ServerConfig, Zookeeper)
 
 
 	ServerConfigXML serverConfigXMLLoader(serverConfigXML);
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig("ServerConfig_StressTest.xml"));
+	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
+	auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
+	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig(filePath));
 
 	ServerConfigZookeeper zookeeperStore(serverConfigXML, zkInstance);
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperStore.StoreConfig(zkConfigNodeName));

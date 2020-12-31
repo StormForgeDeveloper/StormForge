@@ -192,7 +192,7 @@ namespace SF {
 
 		// Adjust allocation size for header
 		// +1 for reverse offset
-		size_t spaceForHeader = AlignUp(sizeof(MemBlockHdr) + 1, alignment);
+		size_t spaceForHeader = MemBlockHdr::GetHeaderSize();
 		auto allocSize = newSize + spaceForHeader;
 
 		MemBlockHdr* pMemBlock = nullptr;

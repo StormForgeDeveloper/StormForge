@@ -268,8 +268,10 @@ namespace SF {
 		AssertRel(pMemBlock->Magic == MemBlockHdr::MEM_MAGIC);
 		if(pMemBlock->Magic != MemBlockHdr::MEM_MAGIC)
 		{
-			Free(ptr);
-			return Alloc(newSize, alignment);
+			assert(false); // This is unexpected
+			return realloc(ptr, newSize);
+			//Free(ptr);
+			//return Alloc(newSize, alignment);
 		}
 
 		auto orgSize = pMemBlock->Size;

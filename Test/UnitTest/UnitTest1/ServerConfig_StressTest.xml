@@ -1,29 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Servers xmlns="http://www.TheBraves.com/ServerConfig" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.TheBraves.com/ServerConfig ServerConfig.xsd">
-  <DBInstances InstanceName="account00" ConnectionString="192.168.0.101,21022" UserID="blue3k" Password="pious75" />
-  <DBInstances InstanceName="tabledb" ConnectionString="192.168.0.9,21022" UserID="blue3k" Password="pious75" />
-  <DBInstances InstanceName="session00" ConnectionString="192.168.0.9,21022" UserID="blue3k" Password="pious75" />
-  <DBInstances InstanceName="conspiracy00" ConnectionString="192.168.0.9,21022" UserID="blue3k" Password="pious75" />
-  <DBInstances InstanceName="ranking" ConnectionString="192.168.0.9,21022" UserID="blue3k" Password="pious75" />
-  <DBInstances InstanceName="gameTransactionLog00" ConnectionString="192.168.0.9,21022" UserID="blue3k" Password="pious75" />
+  <DBInstances InstanceName="account00" ConnectionString="192.168.50.183,21022" UserID="blue3k" Password="111" />
+  <DBInstances InstanceName="tabledb" ConnectionString="192.168.50.183,21022" UserID="blue3k" Password="111" />
+  <DBInstances InstanceName="session00" ConnectionString="192.168.50.183,21022" UserID="blue3k" Password="111" />
+  <DBInstances InstanceName="conspiracy00" ConnectionString="192.168.50.183,21022" UserID="blue3k" Password="111" />
+  <DBInstances InstanceName="ranking" ConnectionString="192.168.50.183,21022" UserID="blue3k" Password="111" />
+  <DBInstances InstanceName="gameTransactionLog00" ConnectionString="192.168.50.183,21022" UserID="blue3k" Password="111" />
 
-  <TableDB DBInstanceName="tabledb" DBName="dbconspiracytable" />
-  <AccountDB ClusterType="Sharding" DBInstanceName="account00" DBName="dbaccount" />
-  <LoginSessionDB ClusterType="Sharding" DBInstanceName="session00" DBName="dbsession00" />
-  <RankingDB ClusterType="Sharding" DBInstanceName="ranking" DBName="dbconspiracyranking" />
+	<DBCluster ClusterName="TableDB" DBInstanceName="tabledb" DBName="dbconspiracytable" />
+	<DBCluster ClusterName="AccountDB" ClusterType="Sharding" DBInstanceName="account00" DBName="dbaccount" />
+	<DBCluster ClusterName="LoginSessionDB" ClusterType="Sharding" DBInstanceName="session00" DBName="dbsession00" />
+	<DBCluster ClusterName="RankingDB" ClusterType="Sharding" DBInstanceName="ranking" DBName="dbconspiracyranking" />
 
 
-  <ModuleServer UID="11" Name="BRLoginServer01" WorkerThreadCount="4" NetIOThreadCount="4">
-    <NetPrivate IP="192.168.0.100" Port="2011"/>
+  <ModuleServer UID="11" Name="BRLoginServer01" Executable="BRModuleServer" WorkerThreadCount="4" NetIOThreadCount="4">
+    <NetPrivate IP="192.168.50.183" Port="3010"/>
     <ModLogin>
-      <NetPublic IPV4="192.168.0.100" IPV6="192.168.0.100" ListenIP="::" Port="21001" MaxConnection="200000"/>
+      <NetPublic IPV4="192.168.50.183" IPV6="192.168.50.183" ListenIP="::" Port="21001" MaxConnection="200000"/>
     </ModLogin>
   </ModuleServer>
 
   <GameCluster Name="Second Game" GameID="MyTownHero" >
 
-    <ModuleServer UID="220" Name="BRMyTownHeroRanking" WorkerThreadCount="4" NetIOThreadCount="4">
-      <NetPrivate IP="192.168.0.100" Port="3011"/>
+    <ModuleServer UID="220" Name="BRMyTownHeroRanking" Executable="BRModuleServer" WorkerThreadCount="4" NetIOThreadCount="4">
+      <NetPrivate IP="192.168.50.183" Port="3011"/>
       <ModRanking />
     </ModuleServer>
 
@@ -32,11 +32,11 @@
 
   <GameCluster Name="First Game" GameID="Conspiracy" >
 
-    <GameDB ClusterType="Sharding" DBInstanceName="conspiracy00" DBName="dbconspiracy00" />
-    <GameTransactionLogDB ClusterType="Sharding" DBInstanceName="gameTransactionLog00" DBName="dbgametransaction00" />
+	  <DBCluster ClusterName="GameDB" ClusterType="Sharding" DBInstanceName="conspiracy00" DBName="dbconspiracy00" />
+	  <DBCluster ClusterName="GameTransactionLogDB" ClusterType="Sharding" DBInstanceName="gameTransactionLog00" DBName="dbgametransaction00" />
 
-    <ModuleServer UID="120" Name="BRMatchingQueue01" WorkerThreadCount="4" NetIOThreadCount="4" >
-      <NetPrivate IP="192.168.0.100" Port="11000"/>
+    <ModuleServer UID="120" Name="BRMatchingQueue01" Executable="BRModuleServer" WorkerThreadCount="4" NetIOThreadCount="4" >
+      <NetPrivate IP="192.168.50.183" Port="11000"/>
       <ModMatchingQueue_Game_4x1 />
       <ModMatchingQueue_Game_4x2 />
       <ModMatchingQueue_Game_4x3 />
@@ -54,19 +54,20 @@
       <ModMatchingQueue_Game_8x1W/>
       <ModMatching_Game_8 UseBot="true"/>
       <ModGamePartyManager/>
+		<ModChatting/>
     </ModuleServer>
 
-    <Game UID="100" Name="BRConspiracyGameServer01" WorkerThreadCount="4" NetIOThreadCount="4">
-      <NetPrivate IP="192.168.0.100" Port="10000"/>
-      <ModPurchaseValidateGoogle Account="35978052136-02p54tlecq40fnrurg3ci9enarpueadm@developer.gserviceaccount.com" P12KeyFile="conspiracy_google.p12" AuthScopes="https://www.googleapis.com/auth/androidpublisher"/>
-      <ModPurchaseValidateIOS URL="https://buy.itunes.apple.com/verifyReceipt" AltURL="https://sandbox.itunes.apple.com/verifyReceipt"/>
+    <Game UID="100" Name="BRConspiracyGameServer01" Executable="BRGameServerConspriacy" WorkerThreadCount="4" NetIOThreadCount="4">
+      <NetPrivate IP="192.168.50.183" Port="10000"/>
+      <!-- <ModPurchaseValidateGoogle Account="35978052136-02p54tlecq40fnrurg3ci9enarpueadm@developer.gserviceaccount.com" P12KeyFile="conspiracy_google.p12" AuthScopes="https://www.googleapis.com/auth/androidpublisher"/> -->
+      <!-- <ModPurchaseValidateIOS URL="https://buy.itunes.apple.com/verifyReceipt" AltURL="https://sandbox.itunes.apple.com/verifyReceipt"/> -->
       <ModGame>
-        <NetPublic IPV4="192.168.0.100" IPV6="192.168.0.100" ListenIP="::" Port="11000"/>
+        <NetPublic IPV4="192.168.50.183" IPV6="192.168.50.183" ListenIP="::" Port="11000"/>
       </ModGame>
     </Game>
 
-    <GameInstance UID="110" Name="BRConspiracyGameInstanceServer01" WorkerThreadCount="4" NetIOThreadCount="4" >
-      <NetPrivate IP="192.168.0.100" Port="10100"/>
+    <GameInstance UID="110" Name="BRConspiracyGameInstanceServer01" Executable="BRGameInstanceServerConspiracy" WorkerThreadCount="4" NetIOThreadCount="4" >
+      <NetPrivate IP="192.168.50.183" Port="10100"/>
     </GameInstance>
 
   </GameCluster>
