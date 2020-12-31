@@ -10,6 +10,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "SFEngineDLLPCH.h"
+#include "Service/SFEngineService.h"
 #include "StreamDB/SFStreamDB.h"
 #include "StreamDB/SFStreamDBDirectory.h"
 #include "SFCSUtil.h"
@@ -24,14 +25,16 @@ using namespace SF;
 
 SFDLL_EXPORT intptr_t StreamDB_NativeCreateDirectoryBroker()
 {
-	auto streamDBInstance = new(GetSystemHeap()) StreamDBDirectoryBroker;
-	return NativeObjectToIntptr(streamDBInstance);
+	auto streamDBInstance = NewObject<StreamDBDirectoryBroker>(GetSystemHeap());
+	Service::EngineObjectManager->AddToDetainedRelease(streamDBInstance.StaticCast<SharedObject>());
+	return NativeObjectToIntptr(streamDBInstance.get());
 }
 
 SFDLL_EXPORT intptr_t StreamDB_NativeCreateDirectoryClient()
 {
-	auto streamDBInstance = new(GetSystemHeap()) StreamDBDirectoryClient;
-	return NativeObjectToIntptr(streamDBInstance);
+	auto streamDBInstance = NewObject<StreamDBDirectoryClient>(GetSystemHeap());
+	Service::EngineObjectManager->AddToDetainedRelease(streamDBInstance.StaticCast<SharedObject>());
+	return NativeObjectToIntptr(streamDBInstance.get());
 }
 
 SFDLL_EXPORT intptr_t StreamDB_NativeCreateProducer()

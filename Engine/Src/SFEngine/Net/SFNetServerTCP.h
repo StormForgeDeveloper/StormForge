@@ -89,7 +89,7 @@ namespace Net {
 
 
 	public:
-		ServerTCP(ServerID InServerID, NetClass localClass);
+		ServerTCP(IHeap& heap, ServerID InServerID, NetClass localClass);
 		virtual ~ServerTCP();
 
 		/////////////////////////////////////////////////////////////////////////////////////////////

@@ -20,6 +20,7 @@
 #include "Container/SFSortedMap.h"
 #include "Container/SFDualSortedMap.h"
 #include "Container/SFCircularPageQueue.h"
+#include "Container/SFPageQueue.h"
 #include "EngineObject/SFEngineObject.h"
 #include "Util/SFLog.h"
 #include "Container/SFIndexing.h"
@@ -43,6 +44,8 @@ namespace SF {
 	{
 	public:
 		static constexpr StringCrc64 TypeName = "EngineObjectManager";
+		static constexpr uint32_t DetainedRelease_QueueCount = 3;
+		static constexpr uint32_t DetainedRelease_SwapTicks = 5;
 
 	private:
 
@@ -52,6 +55,15 @@ namespace SF {
 		DoubleLinkedListBase<DoubleLinkedListNodeDataT<EngineObject*>>		m_EngineObjectList;
 
 		SharedPointerT<EngineTask> m_TickTask;
+
+
+		// For Detained release
+		Atomic<uint32_t> m_FlushBufferSerial = 0;
+		PageQueue<SharedPointer> m_DetainedReleaseQueue0;
+		PageQueue<SharedPointer> m_DetainedReleaseQueue1;
+		PageQueue<SharedPointer> m_DetainedReleaseQueue2;
+		PageQueue<SharedPointer>* m_DetainedReleaseQueues[DetainedRelease_QueueCount]{ &m_DetainedReleaseQueue0, &m_DetainedReleaseQueue1, &m_DetainedReleaseQueue2 };
+
 
 	public:
 
@@ -76,6 +88,10 @@ namespace SF {
 
 		// Remove Object
 		virtual void RemoveObject(EngineObject* pObject) override;
+
+
+		virtual void AddToDetainedRelease(const SharedPointer& obj) override;
+		virtual void AddToDetainedRelease(SharedPointer&& obj) override;
 
 
 		virtual void Update() override;

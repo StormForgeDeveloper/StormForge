@@ -95,7 +95,7 @@ TEST_F(KafkaTest, Consumer)
 
 TEST_F(KafkaTest, DirectoryBroker)
 {
-	SharedPointerT<StreamDBDirectoryBroker> streamDB = new(GetHeap()) StreamDBDirectoryBroker();
+	SharedPointerT<StreamDBDirectoryBroker> streamDB = NewObject<StreamDBDirectoryBroker>(GetHeap());
 
 	GTEST_ASSERT_EQ(streamDB->Initialize(m_StreamServerAddress[0]), ResultCode::SUCCESS);
 
@@ -134,7 +134,7 @@ TEST_F(KafkaTest, DirectoryBroker)
 
 TEST_F(KafkaTest, DirectoryClient)
 {
-	SharedPointerT<StreamDBDirectoryClient> streamDB = new(GetHeap()) StreamDBDirectoryClient();
+	SharedPointerT<StreamDBDirectoryClient> streamDB = NewObject<StreamDBDirectoryClient>(GetHeap());
 
 	GTEST_ASSERT_EQ(streamDB->Initialize(m_StreamServerAddress[0]), ResultCode::SUCCESS);
 

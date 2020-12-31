@@ -38,8 +38,8 @@ namespace Net {
 	//	Peer network class
 	//
 
-	ServerPeerTCP::ServerPeerTCP(ServerID InServerID, NetClass localClass)
-		:ServerTCP( InServerID, localClass )
+	ServerPeerTCP::ServerPeerTCP(IHeap& heap, ServerID InServerID, NetClass localClass)
+		:ServerTCP(heap, InServerID, localClass )
 	{
 	}
 
@@ -52,7 +52,7 @@ namespace Net {
 	Result ServerPeerTCP::OnAcceptedSocket(SF_SOCKET acceptedSocket, const sockaddr_storage& remoteSockAddr, const PeerInfo& remote, ConnectionPtr &pConn)
 	{
 		Result hr = ResultCode::SUCCESS;
-		ConnectionTCP *pConnection = nullptr;
+		SharedPointerT<ConnectionTCP> pConnection;
 		PeerInfo local;
 		uint64_t cid = 0;
 
@@ -61,7 +61,7 @@ namespace Net {
 		// Connect to IOCP
 		if ((Service::ConnectionManager->GetConnectionByAddr(remoteSockAddr, pConn)))
 		{
-			pConnection = (ConnectionTCP*)*pConn;
+			pConnection = pConn.StaticCast<ConnectionTCP>();
 			pConnection->CloseConnection("Duplicated connection for server peer");
 			Service::ConnectionManager->RemoveConnection(pConn);
 			pConnection->DisconnectNRelease("PeerTCP Duplicated connection");
@@ -72,17 +72,17 @@ namespace Net {
 
 		{
 			// Create New connection for accept
-			pConnection = new(GetHeap()) ConnectionTCPServer(GetHeap());
+			pConnection = NewObject<Net::ConnectionTCPServer>(GetHeap());
+			//pConnection = new(GetHeap()) ConnectionTCPServer(GetHeap());
 			if (pConnection == nullptr)// Maybe max connection ?
 			{
 				SFLog(Net, Error, "Failed to allocate a new connection now active:{0}", Service::ConnectionManager->GetNumActiveConnection());
 				netErr(ResultCode::FAIL);
 			}
 
-			pConn = SharedPointerT<Connection>(pConnection);
+			pConn = pConnection;
 		}
 
-		pConn = pConnection;
 
 		local.SetInfo(GetNetClass(), GetLocalAddress(), GetServerID());
 
@@ -144,11 +144,10 @@ namespace Net {
 	Result ServerPeerTCP::RegisterServerConnection( ServerID serverID, NetClass netClass, const NetAddress& destAddress, Net::ConnectionPtr &pConnection )
 	{
 		Result hr = ResultCode::SUCCESS;
-		ConnectionTCP *pConn = nullptr;
 		uint64_t CID = 0;
 
 
-		pConn = new(GetHeap()) ConnectionPeerTCP(GetHeap());
+		auto pConn = NewObject<ConnectionPeerTCP>(GetHeap());
 		netMem(pConn);
 		pConn->SetCID(Service::ConnectionManager->NewCID());
 
@@ -157,7 +156,7 @@ namespace Net {
 		netChk(pConn->Connect(GetLocalPeerInfo(), PeerInfo(netClass, destAddress, serverID)));
 
 
-		pConnection = pConn;
+		pConnection = std::forward<Net::ConnectionPtr>(pConn.StaticCast<Connection>());
 		pConn = nullptr;
 
 	Proc_End:
@@ -170,7 +169,6 @@ namespace Net {
 		if (pConn != nullptr)
 		{
 			pConn->CloseConnection("Connect failed during registering server entity");
-			SharedReferenceDec dec(pConn);
 		}
 
 		return hr;

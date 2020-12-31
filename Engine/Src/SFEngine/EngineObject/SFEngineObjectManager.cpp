@@ -51,11 +51,17 @@ namespace SF {
 	//
 
 	constexpr StringCrc64 EngineObjectManager::TypeName;
+	constexpr uint32_t EngineObjectManager::DetainedRelease_QueueCount;
+	constexpr uint32_t EngineObjectManager::DetainedRelease_SwapTicks;
+
 
 	// Constructor/Destructor
 	EngineObjectManager::EngineObjectManager()
 		: LibraryComponent("EngineObjectManager")
 		, m_ObjectReferenceManager(GetEngineHeap())
+		, m_DetainedReleaseQueue0(GetEngineHeap())
+		, m_DetainedReleaseQueue1(GetEngineHeap())
+		, m_DetainedReleaseQueue2(GetEngineHeap())
 	{
 		Service::EngineObjectManager = this;
 	}
@@ -106,8 +112,7 @@ namespace SF {
 		}
 		else
 		{
-			assert(pObject->GetReferenceCount() > 0 || pObject->GetWeakReferenceCount() == 1);
-			assert(pObject->GetWeakReferenceCount() > 0);
+			assert(pObject->GetReferenceCount() > 0);
 			SharedPointerT<EngineObject> pShared = pObject;
 			Service::EngineTaskManager->RunOnEngineThread(EngineTaskTick::SyncPreTick, [this, pShared]()
 			{
@@ -157,14 +162,53 @@ namespace SF {
 
 	}
 
+	void EngineObjectManager::AddToDetainedRelease(const SharedPointer& obj)
+	{
+		// Engine tick can update m_FlushBufferSerial after we acquire buffer serial before end of this operation, but we still thread safety because the queue provide thread safety between read and write thread
+		auto bufferSerial = m_FlushBufferSerial.load(MemoryOrder::memory_order_acquire);
+		auto pQueue = m_DetainedReleaseQueues[bufferSerial % countof(m_DetainedReleaseQueues)];
+		if (pQueue == nullptr)
+		{
+			assert(false);
+			return;
+		}
+
+		pQueue->Enqueue(obj);
+	}
+
+	void EngineObjectManager::AddToDetainedRelease(SharedPointer&& obj)
+	{
+		auto bufferSerial = m_FlushBufferSerial.load(MemoryOrder::memory_order_acquire);
+		auto pQueue = m_DetainedReleaseQueues[bufferSerial % countof(m_DetainedReleaseQueues)];
+		if (pQueue == nullptr)
+		{
+			assert(false);
+			return;
+		}
+
+		pQueue->Enqueue(Forward<SharedPointer>(obj));
+	}
+
 
 	void EngineObjectManager::Update()
 	{
 		m_ObjectReferenceManager.Update();
+
+		// Every 5 frame we flip detained queue and empty new one
+		if ((Service::EngineTaskManager->GetFrameNumber() % DetainedRelease_SwapTicks) == 0)
+		{
+			auto newBufferSerial = m_FlushBufferSerial.fetch_add(1, MemoryOrder::memory_order_release) + 1;
+			auto pQueue = m_DetainedReleaseQueues[newBufferSerial % countof(m_DetainedReleaseQueues)];
+
+			// empty items in the queue
+			SharedPointer sharedPtr;
+			while (pQueue->Dequeue(sharedPtr))
+			{
+				sharedPtr.ReleaseReference();
+			}
+		}
 	}
 
 
-
-
-}; // namespace SF
+} // namespace SF
 

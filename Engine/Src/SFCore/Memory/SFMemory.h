@@ -54,11 +54,11 @@ namespace SF {
 #pragma pack(push, 1)
 	struct MemBlockHdr
 	{
-		static constexpr uint16_t MEM_MAGIC = 0x187e;
-		static constexpr uint16_t MEM_MAGIC_FREE = 0xCDCD;
+		static constexpr uint32_t MEM_MAGIC = 0x3E9218AE;
+		static constexpr uint32_t MEM_MAGIC_FREE = 0xCDCDCDCD;
 
-		uint16_t Magic			= MEM_MAGIC_FREE;
-		uint16_t DataOffset		= 0;				// Data offset from the header
+		uint32_t Magic			= MEM_MAGIC_FREE;
+		//uint16_t DataOffset		= 0;				// Data offset from the header
 		uint32_t Size			= 0;				// Allocated memory size. We don't support bigger than 4GB allocation
 		IHeap* pHeap			= nullptr;
 
@@ -71,7 +71,10 @@ namespace SF {
 
 		void Init(IHeap* heap, uint32_t size, uint32_t dataOffset);
 
-		void* GetDataPtr() { return (uint8_t*)this + DataOffset; }
+		// +1 for reserved offset for reverse search
+		static size_t GetHeaderSize() { return AlignUp(sizeof(MemBlockHdr) + 1, 32); }
+
+		void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + GetHeaderSize(); }
 	};
 #pragma pack(pop)
 

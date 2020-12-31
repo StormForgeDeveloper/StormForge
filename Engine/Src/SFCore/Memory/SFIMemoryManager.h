@@ -163,7 +163,7 @@ namespace SF {
 		// Allocation/Reallocation interface
 		virtual void* Alloc(size_t size, size_t alignment = SF_ALIGN_DOUBLE);
 		virtual void* Realloc(void* ptr, size_t newSize, size_t alignment = SF_ALIGN_DOUBLE);
-		static void Free(void* ptr);
+		static bool Free(void* ptr);
 
 
 		static struct MemBlockHdr* GetMemoryBlockHdr(void* ptr);

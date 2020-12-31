@@ -291,7 +291,7 @@ namespace SF
 
 	public:
 
-		Zookeeper(IHeap& memoryManager, uint32_t debugLogLevel = 0);
+		Zookeeper(IHeap& heap, uint32_t debugLogLevel = 0);
 		~Zookeeper();
 
 		IHeap& GetHeap() { return m_Heap; }

@@ -253,38 +253,7 @@ namespace Net {
 		return hr;
 	}
 
-	template<class ConnectionType>
-	void ConnectionManager::NewUDPAddress_Internal(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
-	{
-		Result hr;
-		auto sockAddr = (sockaddr_storage)remote.PeerAddress;
 
-		SharedPointerT<Connection> pFound;
-		if (GetConnectionByAddr(sockAddr, pFound))
-		{
-			// already registered
-			return;
-		}
-
-		ConnectionPtr pNewConnection = new(memMgr) ConnectionType(GetHeap(), pNet->GetSocketIO());
-		Assert(pNewConnection != nullptr);
-		if (pNewConnection == nullptr)
-			return;
-
-		pNewConnection->SetCID(NewCID());
-		netChk(pNewConnection->InitConnection(local, remote));
-
-		pNewConnection->SetTickGroup(EngineTaskTick::AsyncTick);
-
-		AddConnection_Internal(pNewConnection);
-
-		if (pNet != nullptr)
-			pNet->GetNewConnectionHandler()(pNewConnection);
-
-	Proc_End:
-
-		return;
-	}
 
 	void ConnectionManager::NewMUDPAddress(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
 	{

@@ -88,8 +88,8 @@ namespace Net {
 	//	UDP Server class
 	//
 
-	ServerUDPBase::ServerUDPBase(ServerID InServerID, NetClass localClass)
-		: ServerNet(InServerID, localClass)
+	ServerUDPBase::ServerUDPBase(IHeap& heap, ServerID InServerID, NetClass localClass)
+		: ServerNet(heap, InServerID, localClass)
 		, m_pRecvBuffers(nullptr)
 		, m_MySocketIOAdapter(this)
 	{
@@ -237,8 +237,8 @@ namespace Net {
 	//	UDP Server class
 	//
 
-	ServerUDP::ServerUDP(ServerID InServerID, NetClass localClass)
-		:ServerUDPBase(InServerID, localClass)
+	ServerUDP::ServerUDP(IHeap& heap, ServerID InServerID, NetClass localClass)
+		:ServerUDPBase(heap, InServerID, localClass)
 	{
 	}
 

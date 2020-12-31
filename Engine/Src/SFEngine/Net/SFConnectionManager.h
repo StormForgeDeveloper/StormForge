@@ -65,8 +65,42 @@ namespace Net {
 		Result RemoveMap(const ConnectionPtr& pConn );
 
 		Result AddConnection_Internal(const ConnectionPtr& pConn);
-		template<class ConnectionType>
-		void NewUDPAddress_Internal(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote);
+
+		template<class ConnectionType,
+			typename = std::enable_if_t<std::is_base_of<Connection, ConnectionType>::value>
+		>
+		void NewUDPAddress_Internal(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
+		{
+			Result hr;
+			auto sockAddr = (sockaddr_storage)remote.PeerAddress;
+
+			SharedPointerT<Connection> pFound;
+			if (GetConnectionByAddr(sockAddr, pFound))
+			{
+				// already registered
+				return;
+			}
+
+			ConnectionPtr pNewConnection = NewObject<ConnectionType>(memMgr, pNet->GetSocketIO()).StaticCast<Connection>();
+			Assert(pNewConnection != nullptr);
+			if (pNewConnection == nullptr)
+				return;
+
+			pNewConnection->SetCID(NewCID());
+			netChk(pNewConnection->InitConnection(local, remote));
+
+			pNewConnection->SetTickGroup(EngineTaskTick::AsyncTick);
+
+			AddConnection_Internal(pNewConnection);
+
+			if (pNet != nullptr)
+				pNet->GetNewConnectionHandler()(pNewConnection);
+
+		Proc_End:
+
+			return;
+		}
+
 		void RemoveConnection_Internal(const ConnectionPtr& pConn);
 
 		void AddressRemap_Internal(const ConnectionPtr& pConn, const sockaddr_storage &addressOrg, const sockaddr_storage &newAddress);

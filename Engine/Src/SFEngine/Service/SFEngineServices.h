@@ -44,6 +44,10 @@ namespace SF {
 		ThreadID m_EngineThreadID;
 		ThreadID m_RenderThreadID;
 
+	protected:
+		// Engine frame number
+		Atomic<uint32_t> m_FrameNumber = 0;
+
 
 	private:
 		virtual void SetTickFlagsInternal(EngineObject* pObj, uint32_t tickFlag) { unused(pObj); }
@@ -68,6 +72,8 @@ namespace SF {
 
 		ThreadID GetEngineThreadID() { return m_EngineThreadID; }
 		ThreadID GetRenderThreadID() { return m_RenderThreadID; }
+
+		uint32_t GetFrameNumber() const { return m_FrameNumber.load(MemoryOrder::memory_order_relaxed); }
 
 
 		virtual EngineTaskPtr SetTickFlags(EngineObject* pObj, uint32_t tickFlag) { unused(pObj); unused(tickFlag); return EngineTaskPtr(); }
@@ -126,6 +132,10 @@ namespace SF {
 
 		// Remove Object
 		virtual void RemoveObject(EngineObject* pObject) { unused(pObject); }
+
+		// Detained release. They will be kept for few frames and released
+		virtual void AddToDetainedRelease(const SharedPointer& obj) { unused(obj); }
+		virtual void AddToDetainedRelease(SharedPointer&& obj) { unused(obj); }
 
 		virtual void Update() {}
 	};

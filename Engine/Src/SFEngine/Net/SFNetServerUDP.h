@@ -71,7 +71,7 @@ namespace Net {
 		MySocketIOAdapter m_MySocketIOAdapter;
 
 	public:
-		ServerUDPBase(ServerID InServerID, NetClass localClass);
+		ServerUDPBase(IHeap& heap, ServerID InServerID, NetClass localClass);
 		virtual ~ServerUDPBase();
 
 		// Open host and start listen
@@ -99,7 +99,7 @@ namespace Net {
 	private:
 
 	public:
-		ServerUDP(ServerID InServerID, NetClass localClass);
+		ServerUDP(IHeap& heap, ServerID InServerID, NetClass localClass);
 		virtual ~ServerUDP();
 		
 
@@ -124,7 +124,7 @@ namespace Net {
 	private:
 
 	public:
-		ServerMUDP(ServerID InServerID, NetClass localClass);
+		ServerMUDP(IHeap& heap, ServerID InServerID, NetClass localClass);
 		virtual ~ServerMUDP();
 
 		Result SendRaw(const sockaddr_storage& dstAddress, SharedPointerT<Message::MessageData> &pMsg);

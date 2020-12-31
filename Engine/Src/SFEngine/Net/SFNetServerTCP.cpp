@@ -172,8 +172,8 @@ namespace Net {
 	//	TCP Server class
 	//
 
-	ServerTCP::ServerTCP(ServerID InServerID, NetClass localClass)
-		: ServerNet(InServerID, localClass)
+	ServerTCP::ServerTCP(IHeap& heap, ServerID InServerID, NetClass localClass)
+		: ServerNet(heap, InServerID, localClass)
 		, m_MySocketIOAdapter(this)
 	{
 		// ServerTCP listen only for accept
@@ -190,7 +190,7 @@ namespace Net {
 	Result ServerTCP::OnAcceptedSocket(SF_SOCKET acceptedSocket, const sockaddr_storage& remoteSockAddr, const PeerInfo& remote, ConnectionPtr &pConn)
 	{
 		Result hr = ResultCode::SUCCESS;
-		ConnectionTCP *pConnection = nullptr;
+		SharedPointerT<ConnectionTCP> pConnection;
 
 		uint64_t cid = 0;
 		PeerInfo local;
@@ -198,7 +198,8 @@ namespace Net {
 		unused(remoteSockAddr);
 		
 		// Create New connection for accept
-		pConnection = new(GetHeap()) ConnectionTCPServer(GetHeap());
+		pConnection = NewObject<Net::ConnectionTCPServer>(GetHeap());
+		//pConnection = new(GetHeap()) ConnectionTCPServer(GetHeap());
 		if( pConnection == nullptr )// Maybe max connection ?
 		{
 			SFLog(Net, Error, "Failed to allocated new connection now active:{0}", Service::ConnectionManager->GetNumActiveConnection() );

@@ -63,7 +63,7 @@ namespace SF {
 		size_t RecvData(size_t bufferSize, void* dataBuffer);
 
 	private:
-		Net::RelayNetwork* m_Impl = nullptr;
+		SharedPointerT<Net::RelayNetwork> m_Impl;
 	};
 	
 

@@ -35,8 +35,8 @@ namespace SF
 	//	class StreamDBDirectory
 	//
 
-	StreamDBDirectory::StreamDBDirectory(const StringCrc32& directoryType, const StringCrc64& name)
-		: EngineObject(nullptr, name)
+	StreamDBDirectory::StreamDBDirectory(IHeap& heap, const StringCrc32& directoryType, const StringCrc64& name)
+		: EngineObject(&heap, name)
 		, m_DirectoryType(directoryType)
 	{
 
@@ -63,8 +63,8 @@ namespace SF
 	//	class StreamDBDirectory
 	//
 
-	StreamDBDirectoryBroker::StreamDBDirectoryBroker()
-		: StreamDBDirectory("StreamBroker"_crc, "StreamDBDirectoryBroker"_crc64)
+	StreamDBDirectoryBroker::StreamDBDirectoryBroker(IHeap& heap)
+		: StreamDBDirectory(heap, "StreamBroker"_crc, "StreamDBDirectoryBroker"_crc64)
 	{
 
 	}
@@ -216,8 +216,8 @@ namespace SF
 	//	class StreamDBDirectoryClient
 	//
 
-	StreamDBDirectoryClient::StreamDBDirectoryClient()
-		: StreamDBDirectory("StreamDirectoryDB"_crc, "StreamDBDirectoryClient"_crc64)
+	StreamDBDirectoryClient::StreamDBDirectoryClient(IHeap& heap)
+		: StreamDBDirectory(heap, "StreamDirectoryDB"_crc, "StreamDBDirectoryClient"_crc64)
 	{
 	}
 

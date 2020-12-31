@@ -73,6 +73,7 @@ namespace SF {
 		, m_RenderAsyncTaskHandler(m_RenderAsyncTaskCount)
 	{
 		m_EngineAsyncTaskCount = 0;
+		m_FrameNumber = 0;
 	}
 
 	EngineTaskManager::~EngineTaskManager()
@@ -335,7 +336,8 @@ namespace SF {
 
 	void EngineTaskManager::EngineTickUpdate()
 	{
-      
+		m_FrameNumber.fetch_add(1, MemoryOrder::memory_order_release);
+
 		SharedPointerT<EngineTask> task;
 		while (m_EngineNewTask.Dequeue(task))
 		{

@@ -129,7 +129,7 @@ namespace SF
 			if (pHeap == nullptr)
 				return;
 
-			return pHeap->Free(pPtr);
+			pHeap->Free(pPtr);
 		}
 
 

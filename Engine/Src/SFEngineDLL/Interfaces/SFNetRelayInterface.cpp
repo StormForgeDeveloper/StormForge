@@ -31,8 +31,7 @@ namespace SF
 
 	NetRelayNetwork::NetRelayNetwork()
 	{
-		m_Impl = new(Service::NetSystem->GetHeap()) Net::RelayNetwork(Service::NetSystem->GetHeap());
-		SharedReferenceInc inc(m_Impl);
+		m_Impl = NewObject<Net::RelayNetwork>(Service::NetSystem->GetHeap());
 	}
 
 	NetRelayNetwork::~NetRelayNetwork()
@@ -43,8 +42,7 @@ namespace SF
 		m_Impl->Disconnect("Destroy");
 		m_Impl->CloseConnection("Destroy");
 		m_Impl->SetTickFlags(0);
-
-		SharedReferenceDec dec(m_Impl);
+		m_Impl = nullptr;
 	}
 
 
@@ -108,7 +106,7 @@ namespace SF
 		if (!m_Impl->GetFrontRecvMessage(pMsg))
 			return 0;
 
-		// Hum, shouldn't be happended
+		// Hum, shouldn't be happened
 		if (pMsg->GetMessageSize() < sizeof(uint32_t) * 3)
 		{
 			assert(0);

@@ -26,8 +26,8 @@ namespace Net {
 	//	Server network base interface
 	//
 
-	ServerNet::ServerNet( ServerID InServerID, NetClass localClass )
-		: EngineObject(new(Service::NetSystem->GetHeap()) IHeap("ServerNet", &Service::NetSystem->GetHeap()), "ServerNet")
+	ServerNet::ServerNet(IHeap& heap, ServerID InServerID, NetClass localClass )
+		: EngineObject(new(heap) IHeap("ServerNet", &heap), "ServerNet")
 		, m_LocalClass(localClass)
 		, m_ServerID(InServerID)
 		, m_IsEnableAccept(false)

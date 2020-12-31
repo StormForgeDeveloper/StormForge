@@ -160,7 +160,7 @@ namespace SF {
 
 		// Adjust allocation size for header
 		// +1 for reverse offset
-		size_t spaceForHeader = AlignUp(sizeof(MemBlockHdr) + 1, alignment);
+		size_t spaceForHeader = MemBlockHdr::GetHeaderSize();
 		auto allocSize = size + spaceForHeader;
 
 		m_AllocatedDRAM.fetch_add(size, std::memory_order_relaxed);
@@ -179,7 +179,10 @@ namespace SF {
 	{
 		SubAllocSize(ptr->Size);
 
-		return SystemAlignedFree(ptr);
+		ptr->Magic = MemBlockHdr::MEM_MAGIC_FREE;
+
+		SystemAlignedFree(ptr);
+
 	}
 
 	MemBlockHdr* STDMemoryManager::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment)

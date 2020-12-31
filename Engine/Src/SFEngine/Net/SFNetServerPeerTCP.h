@@ -48,7 +48,7 @@ namespace Net {
 	private:
 
 	public:
-		ServerPeerTCP(ServerID InServerID, NetClass localClass);
+		ServerPeerTCP(IHeap& heap, ServerID InServerID, NetClass localClass);
 		virtual ~ServerPeerTCP();
 
 

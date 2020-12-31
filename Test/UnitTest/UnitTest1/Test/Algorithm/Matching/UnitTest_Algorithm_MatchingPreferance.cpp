@@ -37,9 +37,9 @@ TEST_F(AlgorithmTest, MatchingPreference)
 
 	const DurationMS testTime(5 * 60 * 1000);
 	SphericalShellManager matchManager(GetHeap());
-	std::atomic<uint32_t> playerUpdated(0);
-	std::atomic< uint32_t> successfulMatchCount(0);
-	std::atomic< uint32_t> failedMatchCount(0);
+	Atomic<uint32_t> playerUpdated(0);
+	Atomic< uint32_t> successfulMatchCount(0);
+	Atomic< uint32_t> failedMatchCount(0);
 
 
 	auto players = new(GetHeap()) PreferencePlayer[NUM_PLAYER + NUM_PLAYER_VARIATION];

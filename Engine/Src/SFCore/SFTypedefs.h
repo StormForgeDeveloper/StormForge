@@ -568,6 +568,11 @@ namespace SF {
 
 	template<typename DataType, typename D = std::default_delete<DataType>>
 	using UniquePtr = std::unique_ptr<DataType,D>;
+	
+	template<typename DataType>
+	using Atomic = std::atomic<DataType>;
+
+	using MemoryOrder = std::memory_order;
 
 	using ClockType = std::chrono::steady_clock;
 	using DurationSec = std::chrono::duration<uint>;
@@ -631,6 +636,14 @@ namespace SF {
 
 	template <typename T, std::size_t N>
 	constexpr std::size_t countof(T const (&)[N]) noexcept	{ return N; }
+
+	// forward an lvalue as either an lvalue or an rvalue, delegate of std::forward
+	template<typename DataType>
+	[[nodiscard]] constexpr DataType&& Forward(std::remove_reference_t<DataType>& _Arg) noexcept
+	{
+		return static_cast<DataType&&>(_Arg);
+	}
+
 
 	#define OffsetOf(s,m) ((size_t)&reinterpret_cast<char const volatile&>((((s*)0)->m)))
 	#define ContainerPtrFromMember(ContainerTypeT, member, memberPtr) ((ContainerTypeT*)((uint8_t*)(memberPtr) - OffsetOf(ContainerTypeT,member)))

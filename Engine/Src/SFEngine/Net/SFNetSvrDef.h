@@ -68,7 +68,7 @@ namespace Net {
 
 	public:
 
-		ServerNet( ServerID InServerID, NetClass localClass );
+		ServerNet(IHeap& heap, ServerID InServerID, NetClass localClass );
 		virtual ~ServerNet();
 
 		IConnectionEventHandler* GetDefaultConnectionEventHandler() { return m_DefaultConnectionEventHandler; }

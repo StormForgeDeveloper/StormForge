@@ -76,8 +76,6 @@ namespace SF {
 		{
 			m_ListNodes[iNode].Data = this;
 		}
-
-		RegisterToEngineObjectManager();
 	}
 
 	EngineObject::~EngineObject()
@@ -96,6 +94,13 @@ namespace SF {
 			AssertRel(itNode.pNext == nullptr && itNode.pPrev == nullptr);
 		}
 
+	}
+
+	Result EngineObject::InitializeObject()
+	{
+		RegisterToEngineObjectManager();
+
+		return ResultCode::SUCCESS;
 	}
 
 	void EngineObject::RegisterToEngineObjectManager()

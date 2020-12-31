@@ -250,7 +250,7 @@ namespace SF {
 		// change heap to this
 		pMemBlock->pHeap = this;
 
-		return (uint8_t*)pMemBlock + pMemBlock->DataOffset;
+		return (uint8_t*)pMemBlock + pMemBlock->GetHeaderSize();
 	}
 
 	void* IHeap::Realloc(void* ptr, size_t newSize, size_t alignment)
@@ -296,19 +296,19 @@ namespace SF {
 		}
 #endif
 		// we might just don't care realloc
-		return (uint8_t*)pMemBlock + pMemBlock->DataOffset;
+		return (uint8_t*)pMemBlock + pMemBlock->GetHeaderSize();
 	}
 
-	void IHeap::Free(void* ptr)
+	bool IHeap::Free(void* ptr)
 	{
-		if (ptr == nullptr) return;
+		if (ptr == nullptr) return true;
 
 		MemBlockHdr* pMemBlock = GetMemoryBlockHdr(ptr);
 		if (pMemBlock == nullptr)
 		{
 			// should be allocated from other system
-			STDMemoryManager::SystemAlignedFree(ptr);
-			return;
+			free(ptr);
+			return false;
 		}
 
 		auto pHeap = pMemBlock->pHeap;
@@ -319,6 +319,8 @@ namespace SF {
 		//pMemBlock->pHeap = nullptr;
 
 		pHeap->FreeInternal(pMemBlock);
+
+		return true;
 	}
 
 	struct MemBlockHdr* IHeap::GetMemoryBlockHdr(void* ptr)
@@ -328,20 +330,21 @@ namespace SF {
 
 		auto headerOffset = *((uint8_t*)ptr - 1);
 
-		MemBlockHdr* pMemBlock = (MemBlockHdr*)((uint8_t*)(ptr) - headerOffset);
+		MemBlockHdr* pMemBlock = (MemBlockHdr*)(reinterpret_cast<uint8_t*>(ptr) - headerOffset);
 		if (pMemBlock->Magic != MemBlockHdr::MEM_MAGIC) // it could be array header
 		{
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS
-			// On windows there is only count
 			size_t *pSizes = (size_t*)(intptr_t(ptr) - sizeof(size_t));
 			size_t count = pSizes[0];
-#else
-			// On Android there is size of element and count
-			size_t *pSizes = (size_t*)(intptr_t(ptr) - sizeof(size_t) * 2);
-			size_t count = pSizes[1];
-#endif
 			unused(count);
-			pMemBlock = (MemBlockHdr*)((uint8_t*)(pSizes)-headerOffset);
+			// search up to for times, one already counted so 3 more
+			for (int iSearch = 0; iSearch < 3; iSearch++, pSizes--)
+			{
+				headerOffset = *(reinterpret_cast<uint8_t*>(pSizes)-1);
+				pMemBlock = (MemBlockHdr*)(reinterpret_cast<uint8_t*>(pSizes) - headerOffset);
+				if (pMemBlock->Magic == MemBlockHdr::MEM_MAGIC)
+					break;
+			}
+
 			if (pMemBlock->Magic != MemBlockHdr::MEM_MAGIC)
 			{
 				// not a memory header allocated by this system

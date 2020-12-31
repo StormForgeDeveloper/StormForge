@@ -128,7 +128,7 @@ namespace SF
 		auto begin = reinterpret_cast<uintptr_t>(this) + MemBlockHeaderSize;
 		auto end = begin + BlockSize;
 
-		auto nextPos = reinterpret_cast<uintptr_t>(pMemChunk) + pMemChunk->DataOffset + pMemChunk->Size;
+		auto nextPos = reinterpret_cast<uintptr_t>(pMemChunk) + pMemChunk->GetHeaderSize() + pMemChunk->Size;
 		if (nextPos < end)
 		{
 			return reinterpret_cast<HeapTree::MapNode*>(nextPos);
