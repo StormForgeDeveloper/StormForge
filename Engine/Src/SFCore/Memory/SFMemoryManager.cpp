@@ -219,7 +219,6 @@ namespace SF {
 			newPtr = newPtr2;
 		}
 
-
 		pMemBlock = reinterpret_cast<MemBlockHdr*>(newPtr);
 		pMemBlock->Init(this, (uint32_t)newSize, (uint32_t)spaceForHeader);
 

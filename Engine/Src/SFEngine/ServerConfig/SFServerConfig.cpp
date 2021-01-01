@@ -65,6 +65,17 @@ namespace SF
 		return nullptr;
 	}
 
+	ServerConfig::DBInstance::DBInstance(IHeap& heap)
+		: InstanceName(heap)
+		, ConnectionString(heap)
+		, UserID(heap)
+		, Password(heap)
+	{
+		if (InstanceName == "account00")
+		{
+			assert(false);
+		}
+	}
 
 
 

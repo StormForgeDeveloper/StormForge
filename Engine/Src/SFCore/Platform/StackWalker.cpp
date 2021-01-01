@@ -74,11 +74,11 @@ namespace SF {
 		StackWalkerImpl();
 		virtual ~StackWalkerImpl();
 
-		// initialize stace walker
+		// initialize stack walker
 		bool SF_STDCALL Initialize();
 
 		// get current stack trace
-		void SF_STDCALL CaptureCallStack( CallStackTrace& stackTrace, uint skipDepth, uint maxDepth );
+		void SF_STDCALL CaptureCallStack( CallStackTrace& stackTrace, void** stackBuffer, uint bufferCount, uint skipDepth, uint maxDepth );
 
 		// print stack trace
 		void PrintStackTrace();
@@ -92,19 +92,17 @@ namespace SF {
 
 	CallStackTrace::CallStackTrace()
 	{
-		m_StackTraceCount = 0;
-		memset( m_StackTrace, 0, sizeof(m_StackTrace) );
 	}
 
-	void CallStackTrace::CaptureCallStack(uint skipDepth, uint maxDepth)
+	void CallStackTrace::CaptureCallStack(void** stackBuffer, uint bufferCount, uint skipDepth, uint maxDepth)
 	{
 		m_CapturedThreadID = ThisThread::GetThreadID();
 		if(StackWalker::GetImpl() != nullptr)
-			StackWalker::GetImpl()->CaptureCallStack(*this, skipDepth, maxDepth);
+			StackWalker::GetImpl()->CaptureCallStack(*this, stackBuffer, bufferCount, skipDepth, maxDepth);
 	}
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
-	Result CallStackTrace::PrintStackTrace(HANDLE hProcess )
+	Result CallStackTrace::PrintStackTrace(void** stackTrace, HANDLE hProcess )
 	{
 		uint8_t Buffer[1024];
 		memset( Buffer, 0, sizeof(Buffer) );
@@ -118,13 +116,13 @@ namespace SF {
 		lineInfo.SizeOfStruct = sizeof(lineInfo);
 		SFLog(System, Debug, "m_StackTrace:" );
 
-		for( uint stackDepth = 0; stackDepth < m_StackTraceCount && m_StackTrace[stackDepth] != 0; stackDepth++ )
+		for( uint stackDepth = 0; stackDepth < m_StackTraceCount && stackTrace[stackDepth] != 0; stackDepth++ )
 		{
 			DWORD64 offsetFromSymbol;
-			BOOL symbol = SymFromAddr( hProcess, (DWORD64)m_StackTrace[stackDepth], &offsetFromSymbol, &symbolInfo );
+			BOOL symbol = SymFromAddr( hProcess, (DWORD64)stackTrace[stackDepth], &offsetFromSymbol, &symbolInfo );
 
 			DWORD offsetFromLine;
-			if( SymGetLineFromAddr64( hProcess, (DWORD64)m_StackTrace[stackDepth], &offsetFromLine, &lineInfo ) )
+			if( SymGetLineFromAddr64( hProcess, (DWORD64)stackTrace[stackDepth], &offsetFromLine, &lineInfo ) )
 			{
 				if( symbol )
 				{
@@ -139,7 +137,7 @@ namespace SF {
 			{
 				if( !symbol )
 				{
-					DWORD64 relativeAddress = (DWORD64)m_StackTrace[stackDepth] - ((DWORD64)STACKWALKER_MIN_EXE_OFFSET + MIN_EXEOFFSET);
+					DWORD64 relativeAddress = (DWORD64)stackTrace[stackDepth] - ((DWORD64)STACKWALKER_MIN_EXE_OFFSET + MIN_EXEOFFSET);
 					sprintf_s( symbolInfo.Name, symbolInfo.MaxNameLen, "0x%p", (void*)relativeAddress );
 				}
 				SFLog(System, Debug, "{0}", (const wchar_t*)symbolInfo.Name );
@@ -175,7 +173,7 @@ namespace SF {
 		return _URC_NO_REASON;
 	}
 
-	Result CallStackTrace::PrintStackTrace(NativeHandle hProcess)
+	Result CallStackTrace::PrintStackTrace(void** stackTrace, NativeHandle hProcess)
 	{
 		BacktraceState state = { m_StackTrace, m_StackTrace + MAX_CALLSTACK_DEPTH };
 		_Unwind_Backtrace(__UnwindCallback, &state);
@@ -202,18 +200,18 @@ namespace SF {
 
 
 #elif SF_PLATFORM == SF_PLATFORM_IOS
-	Result CallStackTrace::PrintStackTrace(NativeHandle hProcess)
+	Result CallStackTrace::PrintStackTrace(void** stackTrace, NativeHandle hProcess)
 	{
 		SFLog(System, Debug, "StackTrace: NotImpl");
 
 		return ResultCode::SUCCESS;
 	}
 #else
-	Result CallStackTrace::PrintStackTrace(NativeHandle hProcess)
+	Result CallStackTrace::PrintStackTrace(void** stackTrace, NativeHandle hProcess)
 	{
 		char **strings;
 
-		strings = backtrace_symbols(m_StackTrace, (int)m_StackTraceCount);
+		strings = backtrace_symbols(stackTrace, (int)m_StackTraceCount);
 
 		SFLog(System, Debug, "m_StackTrace:" );
 
@@ -589,7 +587,7 @@ bool StackWalkerImpl::Initialize()
 }
 
 // get current stack trace
-void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, uint skipDepth, uint maxDepth)
+void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, void** stackBuffer, uint bufferCount, uint skipDepth, uint maxDepth)
 {
 	// TODO: not impl
 	stackTrace.m_StackTraceCount = 0;
@@ -607,9 +605,9 @@ void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, uint skipDept
 	}
 
 	// get current stack trace
-	void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, uint skipDepth, uint maxDepth)
+	void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, void** stackBuffer, uint bufferCount, uint skipDepth, uint maxDepth)
 	{
-		stackTrace.m_StackTraceCount = backtrace(stackTrace.m_StackTrace, countof(stackTrace.m_StackTrace));
+		stackTrace.m_StackTraceCount = backtrace(stackBuffer, bufferCount);
 	}
 
 
@@ -619,8 +617,8 @@ void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, uint skipDept
 	// print stack trace
 	void StackWalkerImpl::PrintStackTrace()
 	{
-		CallStackTrace stackTrace;
-		CaptureCallStack( stackTrace, 0, CallStackTrace::MAX_CALLSTACK_DEPTH );
+		CallStackTraceT<15> stackTrace;
+		CaptureCallStack(stackTrace, stackTrace.m_StackTrace, 15, 0, 15);
 
 		stackTrace.PrintStackTrace(m_hProcess);
 	}

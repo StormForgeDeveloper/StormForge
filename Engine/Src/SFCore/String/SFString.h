@@ -178,7 +178,7 @@ namespace SF {
 	private:
 
 		// cached string value for debugging
-		CharType* m_StringValue = nullptr;
+		CharType* m_StringView = nullptr;
 
 		// Heap for string operation
 		IHeap* m_pHeap = nullptr;
@@ -196,16 +196,15 @@ namespace SF {
 			: m_pHeap(&GetSystemHeap())
 		{
 			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src);
-			m_StringValue = m_Buffer->GetBufferPointer();
+			m_StringView = m_Buffer->GetBufferPointer();
 		}
 
 		TString(const TString& src)
 			: m_pHeap(src.m_pHeap)
 			, m_Buffer(src.m_Buffer)
-			, m_StringValue(nullptr)
 		{
 			if (m_Buffer != nullptr)
-				m_StringValue = m_Buffer->GetBufferPointer();
+				m_StringView = m_Buffer->GetBufferPointer();
 		}
 
 		TString(IHeap& heap)
@@ -217,7 +216,7 @@ namespace SF {
 			: m_pHeap(&heap)
 		{
 			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src);
-			m_StringValue = m_Buffer->GetBufferPointer();
+			m_StringView = m_Buffer->GetBufferPointer();
 		}
 
 		TString(IHeap& heap, const CharType* src, int startIndex, int size = -1)
@@ -251,7 +250,7 @@ namespace SF {
 
 				m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), size + 1);
 				m_Buffer->Append(src + startIndex, size);
-				m_StringValue = m_Buffer->GetBufferPointer();
+				m_StringView = m_Buffer->GetBufferPointer();
 			}
 		}
 
@@ -259,21 +258,21 @@ namespace SF {
 			: m_pHeap(&heap)
 		{
 			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), src.ToString());
-			m_StringValue = m_Buffer->GetBufferPointer();
+			m_StringView = m_Buffer->GetBufferPointer();
 		}
 
 		TString(IHeap& heap, const TString& src)
 			: m_pHeap(&heap)
 		{
 			m_Buffer = src.m_Buffer;
-			m_StringValue = m_Buffer->GetBufferPointer();
+			m_StringView = m_Buffer->GetBufferPointer();
 		}
 
 		TString(IHeap& heap, SharedPointerT<SharedStringBufferType>&& src)
 			: m_pHeap(&heap)
 		{
 			m_Buffer = std::forward<SharedPointerT<SharedStringBufferType>>(src);
-			m_StringValue = m_Buffer->GetBufferPointer();
+			m_StringView = m_Buffer->GetBufferPointer();
 		}
 
 		~TString() {}
@@ -325,7 +324,7 @@ namespace SF {
 
 				m_Buffer = newBuffer;
 			}
-			m_StringValue = m_Buffer->GetBufferPointer();
+			m_StringView = m_Buffer->GetBufferPointer();
 
 			return *this;
 		}
@@ -341,13 +340,13 @@ namespace SF {
 				auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), addLen + 1);
 				newBuffer->Append(src, addLen);
 				m_Buffer = newBuffer;
+				m_StringView = m_Buffer->GetBufferPointer();
 				return *this;
 			}
 
 			if (m_Buffer->IsUniquelyReferenced())
 			{
 				m_Buffer->Append(src, addLen);
-				malloc(128);
 			}
 			else
 			{
@@ -357,8 +356,8 @@ namespace SF {
 
 				m_Buffer = newBuffer;
 			}
-			malloc(128);
-			m_StringValue = m_Buffer->GetBufferPointer();
+
+			m_StringView = m_Buffer->GetBufferPointer();
 
 			return *this;
 		}
@@ -374,6 +373,7 @@ namespace SF {
 				auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), addLen + 1);
 				newBuffer->Append(src, addLen);
 				m_Buffer = newBuffer;
+				m_StringView = m_Buffer->GetBufferPointer();
 				return *this;
 			}
 
@@ -390,7 +390,7 @@ namespace SF {
 				m_Buffer = newBuffer;
 			}
 
-			m_StringValue = m_Buffer->GetBufferPointer();
+			m_StringView = m_Buffer->GetBufferPointer();
 
 			return *this;
 		}
@@ -1068,10 +1068,7 @@ namespace SF {
 		StringType& operator = (const StringType& src)
 		{
 			m_Buffer = src.m_Buffer;
-			if (m_Buffer != nullptr)
-				m_StringValue = m_Buffer->GetBufferPointer();
-			else
-				m_StringValue = nullptr;
+			m_StringView = m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr;
 
 			return *this;
 		}
@@ -1086,14 +1083,17 @@ namespace SF {
 			size_t requiredSize = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args) + 1;
 			m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), requiredSize);
 			if (m_Buffer->GetAllocatedSize() < requiredSize)
+			{
+				m_StringView = m_Buffer->GetBufferPointer();
 				return 0;
+			}
 
 			szBuffer = m_Buffer->GetBufferPointer();
 			buffLen = (int)requiredSize;
 			auto length = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
 			m_Buffer->Resize(length);
 
-			m_StringValue = m_Buffer->GetBufferPointer();
+			m_StringView = m_Buffer->GetBufferPointer();
 
 			return length;
 		}
@@ -1127,7 +1127,7 @@ namespace SF {
 			auto addedSize = StrUtil::StringLen(m_Buffer->GetBufferPointer() + currentStringLen);
 			m_Buffer->Resize(currentStringLen + addedSize);
 
-			m_StringValue = m_Buffer->GetBufferPointer();
+			m_StringView = m_Buffer->GetBufferPointer();
 
 			return addedSize;
 		}
@@ -1239,7 +1239,7 @@ namespace SF {
 		}
 	};
 
-}; // namespace SF
+} // namespace SF
 
 
 

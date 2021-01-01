@@ -260,6 +260,11 @@ namespace SF {
 			return Alloc(newSize, alignment);
 		}
 
+		if (intptr_t(ptr) == 0x1643EC0 || intptr_t(ptr) == 0x1644530)
+		{
+			assert(false);
+		}
+
 		MemBlockHdr* pMemBlock = GetMemoryBlockHdr(ptr);
 		if (pMemBlock == nullptr)
 		{
@@ -298,6 +303,11 @@ namespace SF {
 	bool IHeap::Free(void* ptr)
 	{
 		if (ptr == nullptr) return true;
+
+		if (intptr_t(ptr) == 0x1643EC0 || intptr_t(ptr) == 0x1644530)
+		{
+			assert(false);
+		}
 
 		MemBlockHdr* pMemBlock = GetMemoryBlockHdr(ptr);
 		if (pMemBlock == nullptr)

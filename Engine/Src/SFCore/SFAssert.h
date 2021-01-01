@@ -30,7 +30,7 @@
 				}while(0); \
 
 
-inline void ReportAssert() { SF::CallStackTrace trace; trace.PrintStackTrace(0); }
+inline void ReportAssert() { SF::CallStackTraceT<15> trace; trace.PrintStackTrace(0); }
 
 
 #if defined(_DEBUG) || defined(DEBUG)

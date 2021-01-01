@@ -130,7 +130,7 @@ namespace SF {
 
 				MapNode* NextPendingFree = nullptr;
 #ifdef DEBUG
-				CallStackTrace StackTrace;
+				CallStackTraceT<6> StackTrace;
 #endif
 				bool IsCloned = false;
 

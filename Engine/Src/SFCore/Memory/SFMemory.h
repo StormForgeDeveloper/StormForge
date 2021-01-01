@@ -65,7 +65,7 @@ namespace SF {
 
 #if ENABLE_MEMORY_TRACE
 		DoubleLinkedListNode ListNode;
-		CallStackTrace StackTrace;
+		CallStackTraceT<5> StackTrace;
 		ThreadID LatestThreadID;
 #endif
 

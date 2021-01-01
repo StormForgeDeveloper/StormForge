@@ -66,12 +66,7 @@ namespace SF
 			String UserID;
 			String Password;
 
-			DBInstance(IHeap& heap)
-				: InstanceName(heap)
-				, ConnectionString(heap)
-				, UserID(heap)
-				, Password(heap)
-			{}
+			DBInstance(IHeap& heap);
 		};
 
 		struct DBCluster
