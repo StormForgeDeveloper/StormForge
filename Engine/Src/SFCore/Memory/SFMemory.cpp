@@ -33,7 +33,6 @@ namespace SF {
 	{
 		memset(this, 0, sizeof(MemBlockHdr));
 		Magic = MemBlockHdr::MEM_MAGIC;
-		//DataOffset = (decltype(DataOffset))dataOffset;
 		Size = (uint32_t)size;
 		pHeap = heap;
 
