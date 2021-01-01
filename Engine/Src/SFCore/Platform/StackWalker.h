@@ -34,7 +34,7 @@ namespace SF {
 	struct CallStackTrace
 	{
 		enum {
-			MAX_CALLSTACK_DEPTH		= 15,
+			MAX_CALLSTACK_DEPTH		= 12,
 			MIN_EXEOFFSET			= 0x100,
 		};
 

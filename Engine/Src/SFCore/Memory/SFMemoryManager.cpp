@@ -193,17 +193,18 @@ namespace SF {
 		// Adjust allocation size for header
 		// +1 for reverse offset
 		size_t spaceForHeader = MemBlockHdr::GetHeaderSize();
-		auto allocSize = newSize + spaceForHeader;
 
 		MemBlockHdr* pMemBlock = nullptr;
 		MemBlockHdr* oldPtr = ptr;
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
+		auto allocSize = newSize + spaceForHeader;
 		void *newPtr = (MemBlockHdr*)_aligned_realloc(ptr, allocSize, alignment);
 #else
-		void* newPtr = realloc(ptr, newSize);
+		assert(alignment <= MemBlockHdr::MaxHeaderAlignment); // We assumed there will be no bigger alignment requirement
+		auto allocSize = AlignUp(newSize + spaceForHeader, alignment);
+		void* newPtr = realloc(ptr, allocSize);
 		auto remain = ((int64_t)newPtr) % alignment;
-		if (newPtr == nullptr || remain != 0)
 #endif
 		if (newPtr == nullptr)
 		{
@@ -214,7 +215,7 @@ namespace SF {
 			if (oldPtr != nullptr)
 				memcpy(newPtr2, oldPtr + 1, Util::Min(orgSize, newSize));
 
-			SystemAlignedFree(newPtr);
+			SystemAlignedFree(oldPtr);
 			newPtr = newPtr2;
 		}
 

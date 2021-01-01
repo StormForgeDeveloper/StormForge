@@ -24,6 +24,7 @@
 
 #include "Net/SFNetToString.h"
 #include "Net/SFConnection.h"
+#include "Net/SFConnectionTCP.h"
 #include "Net/SFNetDef.h"
 #include "Net/SFNetSvrDef.h"
 #include "Net/SFNetCtrl.h"

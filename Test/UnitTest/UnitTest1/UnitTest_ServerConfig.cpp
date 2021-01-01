@@ -45,8 +45,11 @@ GTEST_TEST(ServerConfig, XMLLoad)
 	ServerConfigXML serverConfigXML(serverConfig);
 
 	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
+
 	{
 		auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
+		malloc(128);
+
 		GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXML.LoadConfig(filePath));
 	}
 
@@ -60,8 +63,8 @@ GTEST_TEST(ServerConfig, ZookeeperStore)
 	Zookeeper zkInstance(testHeap);
 	ServerConfig serverConfig(testHeap);
 	ServerConfig serverConfigXML(testHeap);
-	const char* zkConfigNodeName = "/ServerConfig";
-	zkInstance.Connect("127.0.0.1:2181");
+	const char* zkConfigNodeName = "/UnitTest_ServerConfig_ZookeeperStore";
+	zkInstance.Connect("SFTestZookeeper.com:41181");
 	zkInstance.WaitForConnected();
 
 
@@ -88,7 +91,7 @@ GTEST_TEST(ServerConfig, ZookeeperLoad)
 	ServerConfig serverConfig(testHeap);
 	ServerConfig serverConfigXML(testHeap);
 	const char* zkConfigNodeName = "/UnitTest_ServerConfig_ZookeeperStore";
-	zkInstance.Connect("127.0.0.1:2181");
+	zkInstance.Connect("SFTestZookeeper.com:41181");
 	zkInstance.WaitForConnected();
 
 
@@ -115,7 +118,7 @@ GTEST_TEST(ServerConfig, Zookeeper)
 	ServerConfig serverConfig(testHeap);
 	ServerConfig serverConfigXML(testHeap);
 	const char* zkConfigNodeName = "/UnitTest_ServerConfig_Zookeeper";
-	zkInstance.Connect("127.0.0.1:2181");
+	zkInstance.Connect("SFTestZookeeper.com:41181");
 	zkInstance.WaitForConnected();
 
 

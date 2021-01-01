@@ -159,7 +159,7 @@ namespace SF {
 	template<class ObjectType, class ...ArgTypes,
 		typename = std::enable_if_t<std::is_base_of<EngineObject, ObjectType>::value>
 	>
-	inline SharedPointerT<ObjectType>&& NewObject(IHeap& heap, ArgTypes... args)
+	inline SharedPointerT<ObjectType> NewObject(IHeap& heap, ArgTypes... args)
 	{
 		SharedPointerT<ObjectType> ObjectPtr = new(heap) ObjectType(heap, args...);
 		ObjectPtr->InitializeObject();

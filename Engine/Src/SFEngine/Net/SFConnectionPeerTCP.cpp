@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -22,6 +22,7 @@
 #include "Protocol/SFProtocol.h"
 
 #include "Net/SFConnection.h"
+#include "Net/SFConnectionTCP.h"
 #include "Net/SFNetDef.h"
 #include "Net/SFNetSvrDef.h"
 #include "Net/SFNetCtrl.h"

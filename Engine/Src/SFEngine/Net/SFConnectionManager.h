@@ -19,6 +19,8 @@
 #include "Net/SFConnection.h"
 #include "Net/SFConnectionTCP.h"
 #include "Net/SFConnectionUDP.h"
+#include "Net/SFNetSocket.h"
+#include "Net/SFNetSvrDef.h"
 #include "Task/SFAsyncTaskManager.h"
 #include "SFEngine.h"
 #include "Object/SFLibraryComponent.h"
@@ -81,7 +83,8 @@ namespace Net {
 				return;
 			}
 
-			ConnectionPtr pNewConnection = NewObject<ConnectionType>(memMgr, pNet->GetSocketIO()).StaticCast<Connection>();
+			auto pNewConnectionType = NewObject<ConnectionType>(memMgr, pNet->GetSocketIO());
+			ConnectionPtr pNewConnection = pNewConnectionType.template StaticCast<Connection>();
 			Assert(pNewConnection != nullptr);
 			if (pNewConnection == nullptr)
 				return;
@@ -158,15 +161,9 @@ namespace Net {
 	};
 
 
-
-
-
-
 #include "SFConnectionManager.inl"
 
 } // namespace Net
-
-
 } // namespace SF
 
 

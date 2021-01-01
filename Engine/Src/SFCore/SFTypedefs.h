@@ -206,13 +206,15 @@ using SF_SOCKET = SOCKET;
 #include <sys/types.h>
 #include <sys/syscall.h>
 #include <sys/stat.h>
+#include <sys/socket.h>
+#include <netdb.h>
 #include <execinfo.h>
 #include <unistd.h>
 #include <fcntl.h>
 #include <libgen.h>
 #include <errno.h>
 #include <signal.h>
-#include <sys/socket.h>
+
 //#include <linux/in.h>
 //#include <linux/in6.h>
 #include <arpa/inet.h>

@@ -66,7 +66,8 @@ namespace SF
 		void FromString(const char* strAddress);
 		void FromString(const char* strAddress, uint16_t port);
 
-		void DetectSockFamily();
+		void DetectSockFamilyOld();
+		Result DetectSockFamily();
 
 		explicit operator sockaddr_in() const;
 		explicit operator sockaddr_in6() const;

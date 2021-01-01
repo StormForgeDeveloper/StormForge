@@ -139,6 +139,7 @@ namespace SF {
 			auto copyStart = m_StringValue + GetStringLength();
 			memcpy(copyStart, src, sizeof(CharType) * strLen);
 			copyStart[strLen] = {};
+
 			m_StringLength = m_StringLength + StrUtil::StringLen(copyStart); // Make sure string has correct length
 			return true;
 		}
@@ -346,6 +347,7 @@ namespace SF {
 			if (m_Buffer->IsUniquelyReferenced())
 			{
 				m_Buffer->Append(src, addLen);
+				malloc(128);
 			}
 			else
 			{
@@ -355,7 +357,7 @@ namespace SF {
 
 				m_Buffer = newBuffer;
 			}
-
+			malloc(128);
 			m_StringValue = m_Buffer->GetBufferPointer();
 
 			return *this;

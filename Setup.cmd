@@ -49,6 +49,14 @@ if not exist %PERL_INSTALL% (
 
 cd %~dp0
 
-
+@echo ==============================================================
+@echo Register test host names 
+@echo Zookeeper: SFTestZookeeper.com
+@echo Kafka: SFTestKafka.com
+@echo host file location
+@echo   - Windows 10 – “C:\Windows\System32\drivers\etc\hosts”
+@echo   - Linux – “/etc/hosts”
+@echo   - Mac OS X – “/private/etc/hosts”
+@echo ==============================================================
 
 pause

@@ -56,9 +56,9 @@ namespace SF {
 	{
 		static constexpr uint32_t MEM_MAGIC = 0x3E9218AE;
 		static constexpr uint32_t MEM_MAGIC_FREE = 0xCDCDCDCD;
+		static constexpr uint32_t MaxHeaderAlignment = SF_ALIGN_DOUBLE;
 
 		uint32_t Magic			= MEM_MAGIC_FREE;
-		//uint16_t DataOffset		= 0;				// Data offset from the header
 		uint32_t Size			= 0;				// Allocated memory size. We don't support bigger than 4GB allocation
 		IHeap* pHeap			= nullptr;
 
@@ -72,7 +72,7 @@ namespace SF {
 		void Init(IHeap* heap, uint32_t size, uint32_t dataOffset);
 
 		// +1 for reserved offset for reverse search
-		static size_t GetHeaderSize() { return AlignUp(sizeof(MemBlockHdr) + 1, 32); }
+		static size_t GetHeaderSize() { return AlignUp(sizeof(MemBlockHdr) + 1, MaxHeaderAlignment); }
 
 		void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + GetHeaderSize(); }
 	};

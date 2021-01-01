@@ -260,18 +260,11 @@ namespace SF {
 			return Alloc(newSize, alignment);
 		}
 
-		auto offsetToHeader = *((uint8_t*)ptr - 1);
-		MemBlockHdr* pMemBlock = reinterpret_cast<MemBlockHdr*>((uint8_t*)(ptr)-offsetToHeader);
+		MemBlockHdr* pMemBlock = GetMemoryBlockHdr(ptr);
 		if (pMemBlock == nullptr)
-			return nullptr;
-
-		AssertRel(pMemBlock->Magic == MemBlockHdr::MEM_MAGIC);
-		if(pMemBlock->Magic != MemBlockHdr::MEM_MAGIC)
 		{
-			assert(false); // This is unexpected
+			// should be allocated from std
 			return realloc(ptr, newSize);
-			//Free(ptr);
-			//return Alloc(newSize, alignment);
 		}
 
 		auto orgSize = pMemBlock->Size;
@@ -297,6 +290,7 @@ namespace SF {
 			pHeap->AddAllocatedList(pMemBlock);
 		}
 #endif
+
 		// we might just don't care realloc
 		return (uint8_t*)pMemBlock + pMemBlock->GetHeaderSize();
 	}
@@ -330,28 +324,26 @@ namespace SF {
 		if (ptr == nullptr)
 			return nullptr;
 
-		auto headerOffset = *((uint8_t*)ptr - 1);
+		auto ExpectedHeaderSize = MemBlockHdr::GetHeaderSize();
+		MemBlockHdr* pMemBlock = nullptr;
 
-		MemBlockHdr* pMemBlock = (MemBlockHdr*)(reinterpret_cast<uint8_t*>(ptr) - headerOffset);
-		if (pMemBlock->Magic != MemBlockHdr::MEM_MAGIC) // it could be array header
+		uint8_t* pCompilerSizePos = reinterpret_cast<uint8_t*>(ptr); // each compiler has different search length
+		uint8_t headerOffset = 0;
+
+		// search up to for times, one already counted so 3 more
+		for (int iSearch = 0; iSearch < 4; iSearch++, pCompilerSizePos-=sizeof(size_t))
 		{
-			size_t *pSizes = (size_t*)(intptr_t(ptr) - sizeof(size_t));
-			size_t count = pSizes[0];
-			unused(count);
-			// search up to for times, one already counted so 3 more
-			for (int iSearch = 0; iSearch < 3; iSearch++, pSizes--)
-			{
-				headerOffset = *(reinterpret_cast<uint8_t*>(pSizes)-1);
-				pMemBlock = (MemBlockHdr*)(reinterpret_cast<uint8_t*>(pSizes) - headerOffset);
-				if (pMemBlock->Magic == MemBlockHdr::MEM_MAGIC)
-					break;
-			}
+			headerOffset = *(pCompilerSizePos - 1); // The place I stored header offset
+			pMemBlock = reinterpret_cast<MemBlockHdr*>(pCompilerSizePos - headerOffset);
+			if (headerOffset == ExpectedHeaderSize && pMemBlock->Magic == MemBlockHdr::MEM_MAGIC)
+				break;
+		}
 
-			if (pMemBlock->Magic != MemBlockHdr::MEM_MAGIC)
-			{
-				// not a memory header allocated by this system
-				return nullptr;
-			}
+		// Our memory header hasn't found
+		if (pMemBlock->Magic != MemBlockHdr::MEM_MAGIC)
+		{
+			// not a memory header allocated by this system
+			return nullptr;
 		}
 
 		return pMemBlock;

@@ -23,7 +23,6 @@
 #include "Net/SFConnection.h"
 #include "Net/SFNetSvrDef.h"
 #include "Net/SFNetCtrl.h"
-#include "Net/SFNetCtrl.h"
 #include "Util/SFTimeUtil.h"
 #include "Net/SFNetUtil.h"
 #include "Net/SFNetSystem.h"

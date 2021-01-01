@@ -490,7 +490,6 @@ namespace SF
 		xmlNode *root_element = nullptr;
 		Result result;
 
-
 		m_Config.Clear();
 
 		/*parse the file and get the DOM */

@@ -26,6 +26,7 @@ namespace SF {
 
 	constexpr uint32_t MemBlockHdr::MEM_MAGIC;
 	constexpr uint32_t MemBlockHdr::MEM_MAGIC_FREE;
+	constexpr uint32_t MemBlockHdr::MaxHeaderAlignment;
 
 
 	void MemBlockHdr::Init(IHeap* heap, uint32_t size, uint32_t dataOffset)

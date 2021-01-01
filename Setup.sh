@@ -7,7 +7,7 @@ FBX_SDK_INSTALL_FILE_LINUX=fbx20201_fbxsdk_linux.tar.gz
 ATF_PATH=$SF_PATH/../ATF
 
 
-sudo apt-get install git-lfs
+sudo apt-get install git-lfs build-essential clang cmake rsync zip ninja-build
 
 
 if [ ! -d "$ATF_PATH" ]; then
@@ -30,8 +30,6 @@ pushd $SF_PATH/3rdParties
 #./FBXSDK/fbx20201_fbxsdk_linux /usr
 
 
-
-
 # install vulkan SDK
 
 if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-1.2.148-bionic.list" ]; then
@@ -47,6 +45,16 @@ pushd src/mysql/
 ./setup_ubuntu.sh
 popd
 
+
+echo ==============================================================
+echo Register test host names 
+echo Zookeeper: SFTestZookeeper.com
+echo Kafka: SFTestKafka.com
+echo host file location
+echo   - Windows 10 – “C:\Windows\System32\drivers\etc\hosts”
+echo   - Linux – “/etc/hosts”
+echo   - Mac OS X – “/private/etc/hosts”
+echo ==============================================================
 
 # to root
 popd

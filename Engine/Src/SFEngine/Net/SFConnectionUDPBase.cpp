@@ -21,6 +21,7 @@
 
 #include "Net/SFNetToString.h"
 #include "Net/SFConnectionUDPBase.h"
+#include "Net/SFConnectionUDP.h"
 #include "Net/SFNetDef.h"
 #include "Net/SFNetSvrDef.h"
 #include "Net/SFNetCtrl.h"
