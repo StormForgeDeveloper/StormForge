@@ -28,22 +28,50 @@ namespace SF {
 	constexpr uint32_t MemBlockHdr::MEM_MAGIC_FREE;
 	constexpr uint32_t MemBlockHdr::MaxHeaderAlignment;
 
+	size_t MemBlockHdr::GetHeaderSize()
+	{
+		return AlignUp(sizeof(MemBlockHdr) + 1, MaxHeaderAlignment);
+	}
 
-	void MemBlockHdr::Init(IHeap* heap, uint32_t size, uint32_t dataOffset)
+	size_t MemBlockHdr::GetFooterSize()
+	{
+		return AlignUp(sizeof(MemBlockFooter), MaxHeaderAlignment);
+	}
+
+
+	void MemBlockHdr::Init(IHeap* heap, uint32_t size)
 	{
 		memset(this, 0, sizeof(MemBlockHdr));
-		Magic = MemBlockHdr::MEM_MAGIC;
+		Magic = MEM_MAGIC;
 		Size = (uint32_t)size;
 		pHeap = heap;
 
 		// This works because we added +1 before
+		uint32_t dataOffset = GetHeaderSize();
 		auto pReverseOffset = ((uint8_t*)this + dataOffset - 1);
 		*pReverseOffset = static_cast<uint8_t>(dataOffset);
+	}
 
-#if ENABLE_MEMORY_TRACE
+	void MemBlockHdr::Deinit()
+	{
+		GetFooter()->Deinit();
+		Magic = MEM_MAGIC_FREE;
+	}
+
+
+	void MemBlockFooter::Init()
+	{
+		Magic = MEM_MAGIC;
+	#if ENABLE_MEMORY_TRACE
+		memset(&ListNode, 0, sizeof(ListNode));
 		StackTrace.CaptureCallStack(1);
 		LatestThreadID = ThisThread::GetThreadID();
-#endif
+	#endif
+	}
+
+	void MemBlockFooter::Deinit()
+	{
+		Magic = MEM_MAGIC_FREE;
 	}
 
 }	// namespace SF

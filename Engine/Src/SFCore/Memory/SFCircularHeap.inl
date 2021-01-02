@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -82,7 +82,7 @@ namespace SF {
 
 			// Add dummy area
 			pChunk = (MemoryChunkHeader*)(m_AllocationBuffer + m_AllocatePosition);
-			pChunk->Init(this, (uint32_t)remainSize, HEADER_SIZE);
+			pChunk->Init(this, (uint32_t)remainSize);
 			pChunk->pHeap = nullptr; // let's put null here so that we can use it as free block mark
 			m_FreeSize -= remainSize + HEADER_SIZE;
 
@@ -100,7 +100,7 @@ namespace SF {
 
 		AssertRel(this->m_FreeSize <= (decltype(m_FreeSize))BufferSize && this->m_FreeSize >= 0);
 
-		pChunk->Init(this, (uint32_t)allocationSize - HEADER_SIZE, HEADER_SIZE);
+		pChunk->Init(this, (uint32_t)allocationSize - HEADER_SIZE);
 		m_AllocatePosition += allocationSize;
 
 #ifdef DEBUG

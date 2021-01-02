@@ -58,6 +58,24 @@ namespace SF {
 			}
 
 			Assert(T(0) == m_Buffer[m_nWritePtr]);
+			m_Buffer[m_nWritePtr] = Forward<T>(item);
+
+			m_nWritePtr = (m_nWritePtr + 1) % SIZE_BUFFER;
+
+			m_nItemCount++;
+
+			return ResultCode::SUCCESS;
+		}
+
+		template <typename T, int SIZE_BUFFER>
+		Result CircularQueue<T, SIZE_BUFFER>::Enqueue(const T& item)
+		{
+			if (IsFull())
+			{
+				return ResultCode::FAIL;
+			}
+
+			Assert(T(0) == m_Buffer[m_nWritePtr]);
 			m_Buffer[m_nWritePtr] = item;
 
 			m_nWritePtr = (m_nWritePtr + 1) % SIZE_BUFFER;
@@ -83,12 +101,6 @@ namespace SF {
 			m_nItemCount--;
 
 			return ResultCode::SUCCESS;
-		}
-
-		template <typename T, int SIZE_BUFFER>
-		uint CircularQueue<T, SIZE_BUFFER>::GetSize()
-		{
-			return m_nItemCount;
 		}
 
 		// foreach items in queue

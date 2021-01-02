@@ -444,14 +444,14 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 					}
 
 
-					// This will fails when there is multiple comit happened from other thread
+					// This will fails when there is multiple commit happened from other thread
 					long latestValue = -1;
 					uint testIndex = ((uint)rand()) % numberOfTest;
 					sortedMap.ForeachOrder(testIndex, 20, [&](const uint& key, const uint& value)
 					{
 						if (latestValue != -1)
 						{
-							EXPECT_TRUE(value <= (uint)latestValue);
+							EXPECT_LE(value, (uint)latestValue);
 						}
 						latestValue = value;
 						return true;
@@ -466,7 +466,7 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 	auto start = Util::Time.GetRawTimeMs();
 	auto end = Util::Time.GetRawTimeMs();
 #ifdef DEBUG
-	auto runningTime = DurationMS(10 * 60 * 1000);
+	auto runningTime = DurationMS(5 * 60 * 1000);
 #else
 	auto runningTime = DurationMS(30 * 60 * 1000);
 #endif

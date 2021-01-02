@@ -46,9 +46,7 @@ namespace SF {
 				ReferenceAccessPoint Right = nullptr;
 
 				// Same key attached to next
-#if !ENABLE_MEMORY_TRACE
-				DoubleLinkedListNode ListNode;
-#endif
+				DoubleLinkedListNode NextNode;
 
 				// Previous chunk
 				ReferenceAccessPoint PrevChunk = nullptr;

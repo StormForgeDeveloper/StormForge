@@ -128,7 +128,7 @@ namespace SF
 		if (pNode == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		Assert(pNode->ListNode.NotInAnyList());
+		Assert(pNode->NextNode.NotInAnyList());
 
 		KeyType key = pNode->Key();
 		OperationTraversalHistory traversalHistory(GetSystemHeap(), m_Root, m_ItemCount);
@@ -160,9 +160,9 @@ namespace SF
 		else if (key == pFound->Key())
 		{
 			// same key. attach to next
-			pNode->ListNode.pPrev = &pFound->ListNode;
-			pNode->ListNode.pNext = pFound->ListNode.pNext;
-			pFound->ListNode.pNext = &pNode->ListNode;
+			pNode->NextNode.pPrev = &pFound->NextNode;
+			pNode->NextNode.pNext = pFound->NextNode.pNext;
+			pFound->NextNode.pNext = &pNode->NextNode;
 		}
 		else // if (key < pCurNode->Key()) 
 		{
@@ -203,7 +203,7 @@ namespace SF
 			// This node need to be removed
 			//ReferenceAccessPoint *pParentPointer = nullptr;
 			MapNode* replacedChild = nullptr;
-			if (pFound->ListNode.pNext == nullptr)
+			if (pFound->NextNode.pNext == nullptr)
 			{
 				// find replacement from children
 				auto left = pFound->Left;
@@ -275,13 +275,13 @@ namespace SF
 			else
 			{
 				// find replacement from dup key node
-				auto pNewNode = pFound->ListNode.pNext;
+				auto pNewNode = pFound->NextNode.pNext;
 				auto pNext = pNewNode->pNext;
 				memcpy(pNewNode, pFound, sizeof(MapNode));
 				//pNewNode->Prev = nullptr; // it shares with Left
 				pNewNode->pNext = pNext;
-				replacedChild = ContainerPtrFromMember(HeapTree::MapNode, ListNode, pNext);
-				//replacedChild = ((HeapTree::MapNode*)((uint8_t*)(pNext)-offsetof(HeapTree::MapNode, ListNode)));
+				replacedChild = ContainerPtrFromMember(HeapTree::MapNode, NextNode, pNext);
+				//replacedChild = ((HeapTree::MapNode*)((uint8_t*)(pNext)-offsetof(HeapTree::MapNode, NextNode)));
 
 				ReferenceAccessPoint* pParentAccessOfReplaced = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pFound);
 				*pParentAccessOfReplaced = replacedChild;
@@ -292,16 +292,16 @@ namespace SF
 			// The one in duplication list. simple remove the node from the list
 #if 1 || defined(DEBUG)
 			// Linked list Validation
-			auto pCurLink = pFound->ListNode.pNext;
+			auto pCurLink = pFound->NextNode.pNext;
 			bool bIsExist = false;
 			while (pCurLink != nullptr)
 			{
-				bIsExist = bIsExist || pNode == ContainerPtrFromMember(HeapTree::MapNode, ListNode, pCurLink);
+				bIsExist = bIsExist || pNode == ContainerPtrFromMember(HeapTree::MapNode, NextNode, pCurLink);
 				pCurLink = pCurLink->pNext;
 			}
 #endif
-			auto pPrev = pNode->ListNode.pPrev;
-			auto pNext = pNode->ListNode.pNext;
+			auto pPrev = pNode->NextNode.pPrev;
+			auto pNext = pNode->NextNode.pNext;
 
 			Assert(pPrev != nullptr); // pPrev always exist, if the node is in the list
 			if (pPrev == nullptr)
@@ -310,8 +310,8 @@ namespace SF
 			pPrev->pNext = pNext;
 			if (pNext != nullptr) pNext->pPrev = pPrev;
 
-			pNode->ListNode.pPrev = nullptr;
-			pNode->ListNode.pNext = nullptr;
+			pNode->NextNode.pPrev = nullptr;
+			pNode->NextNode.pNext = nullptr;
 		}
 
 		m_ItemCount--;

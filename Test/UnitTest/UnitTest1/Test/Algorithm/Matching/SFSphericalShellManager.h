@@ -188,6 +188,8 @@ namespace SF
 		// set current shell id
 		bool SetCurrentShellID(uint shellID);
 
+		Mutex& GetShellLock() { return m_ShellLock; }
+
 		// Get listnode
 		StaticDoubleLinkedList::Node& GetListNode() { return *this; }
 
@@ -216,6 +218,7 @@ namespace SF
 
 		// current Shell Index, if belong to a Shell
 		uint m_CurrentShellID = -1;
+		Mutex m_ShellLock;
     };
 
 	//typedef SharedPointerAtomicT<PreferencePlayer> PlayerPtr;

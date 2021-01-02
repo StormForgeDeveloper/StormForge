@@ -47,12 +47,14 @@ namespace SF {
 
 			// Enqueue an element
 			inline Result Enqueue(T&& item);
+			inline Result Enqueue(const T& item);
 
 			// Dequeue an element
 			inline Result Dequeue(T& item);
 
 			// Get item count
-			inline uint	GetSize();
+			uint GetSize() const { return m_nItemCount; }
+			size_t size() const { return m_nItemCount; }
 
 			// Clear all items
 			inline void ClearQueue();

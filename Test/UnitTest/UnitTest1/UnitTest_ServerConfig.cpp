@@ -40,16 +40,15 @@ using namespace ::SF;
 
 GTEST_TEST(ServerConfig, XMLLoad)
 {
-	Heap testHeap("test", GetSystemHeap());
-	ServerConfig serverConfig(testHeap);
-	ServerConfigXML serverConfigXML(serverConfig);
 
-	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
-
+	for (int iCount = 0; iCount < 5; iCount++)
 	{
-		auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
-		malloc(128);
+		Heap testHeap("test", GetSystemHeap());
 
+		auto dirPath = Util::Path::GetFileDirectory(__FILE__);
+		auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
+		ServerConfig serverConfig(testHeap);
+		ServerConfigXML serverConfigXML(serverConfig);
 		GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXML.LoadConfig(filePath));
 	}
 
@@ -101,7 +100,10 @@ GTEST_TEST(ServerConfig, ZookeeperLoad)
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig(filePath));
 
 	ServerConfigZookeeper zookeeperLoader(serverConfig, zkInstance);
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperLoader.LoadConfig(zkConfigNodeName));
+	for (int iTest = 0; iTest < 10; iTest++)
+	{
+		GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperLoader.LoadConfig(zkConfigNodeName));
+	}
 	GTEST_ASSERT_EQ(serverConfigXML, serverConfig);
 
 

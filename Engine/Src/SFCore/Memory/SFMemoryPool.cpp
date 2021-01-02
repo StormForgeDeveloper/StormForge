@@ -154,7 +154,6 @@ namespace SF
 		else
 		{
 			MemoryPoolItem *pMemPoolItem = DataPtrToMemoryPoolItem(pMemBlock->GetDataPtr());
-			//memset(pMemPoolItem, 0, sizeof(MemoryPoolItem));
 			if (pMemPoolItem == nullptr)
 			{
 				return;
@@ -186,13 +185,16 @@ namespace SF
 
 		void* pPtr = pMemBlock->GetDataPtr();
 		AssertRel(((int64_t)pPtr & (SF_ALIGN_DOUBLE - 1)) == 0);
-		Assert(pMemBlock->ListNode.pPrev == nullptr);
+	//#if ENABLE_MEMORY_TRACE
+		//Assert(pMemBlock->GetFooter()->ListNode.pPrev == nullptr);
+	//#endif  // ENABLE_MEMORY_TRACE
 
+		// TODO: capture callstack
 		{
-#if ENABLE_MEMORY_TRACE
-			// Refresh call stack
-			pMemBlock->StackTrace.CaptureCallStack(1);
-#endif
+//#if ENABLE_MEMORY_TRACE
+//			// Refresh call stack
+//			pMemBlock->GetFooter()->StackTrace.CaptureCallStack(1);
+//#endif
 		}
 
 		m_AllocatedCount.fetch_add(1, std::memory_order_relaxed);
@@ -292,7 +294,7 @@ namespace SF
 	// Get memory pool by size
 	MemoryPool* MemoryPoolManager::GetMemoryPoolBySize(size_t allocationSize)
 	{
-		// TODO: relelase memory pool manager. use regular heap to allocated it on std heap
+		// TODO: release memory pool manager. use regular heap to allocated it on std heap
 		if (stm_pMemoryPoolManager == nullptr)
 			stm_pMemoryPoolManager = new MemoryPoolManager(GetSystemHeap());
 

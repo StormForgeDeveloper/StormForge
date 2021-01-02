@@ -52,9 +52,11 @@ namespace SF {
 
 
 #pragma pack(push, 1)
+	struct MemBlockFooter;
+
 	struct MemBlockHdr
 	{
-		static constexpr uint32_t MEM_MAGIC = 0x3E9218AE;
+		static constexpr uint32_t MEM_MAGIC = 0xAE9218AE;
 		static constexpr uint32_t MEM_MAGIC_FREE = 0xCDCDCDCD;
 		static constexpr uint32_t MaxHeaderAlignment = SF_ALIGN_DOUBLE;
 
@@ -62,19 +64,35 @@ namespace SF {
 		uint32_t Size			= 0;				// Allocated memory size. We don't support bigger than 4GB allocation
 		IHeap* pHeap			= nullptr;
 
+		void Init(IHeap* heap, uint32_t size);
+		void Deinit();
+
+		// +1 for reserved offset for reverse search
+		static size_t GetHeaderSize();
+		static size_t GetFooterSize();
+		static size_t GetHeaderNFooterSize() { return GetHeaderSize() + GetFooterSize(); }
+
+		static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment) { return GetHeaderSize() + AlignUp(requestedSize, alignment) + GetFooterSize(); }
+
+		void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + GetHeaderSize(); }
+		MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(GetDataPtr()) + Size); }
+	};
+
+	struct MemBlockFooter
+	{
+		static constexpr uint32_t MEM_MAGIC = 0xB2AE3EB2;
+		static constexpr uint32_t MEM_MAGIC_FREE = 0xCDEEEECD;
+
+		uint32_t Magic = MEM_MAGIC_FREE;
 
 #if ENABLE_MEMORY_TRACE
 		DoubleLinkedListNode ListNode;
-		CallStackTraceT<5> StackTrace;
+		CallStackTraceT<5> StackTrace; // Keep it tight, on linux bigger extra allocation was causing memory corruption.
 		ThreadID LatestThreadID;
 #endif
 
-		void Init(IHeap* heap, uint32_t size, uint32_t dataOffset);
-
-		// +1 for reserved offset for reverse search
-		static size_t GetHeaderSize() { return AlignUp(sizeof(MemBlockHdr) + 1, MaxHeaderAlignment); }
-
-		void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + GetHeaderSize(); }
+		void Init();
+		void Deinit();
 	};
 #pragma pack(pop)
 

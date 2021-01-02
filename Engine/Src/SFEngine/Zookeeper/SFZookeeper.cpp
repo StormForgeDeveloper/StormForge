@@ -244,6 +244,9 @@ namespace SF
 	const int Zookeeper::EVENT_NO_WATCHING = ZOO_NOTWATCHING_EVENT;
 
 
+	Json::CharReaderBuilder Zookeeper::stm_JsonBuilder;
+
+
 	const char* Zookeeper::FlagToString(int iFlag)
 	{
 		static char FlagString[128];
@@ -709,7 +712,7 @@ namespace SF
 		return ToResult(zkResult);
 	}
 
-	Result Zookeeper::Get(const char *path, Json::Value& jsonValue)
+	Result Zookeeper::Get(const char *path, Json::Value& jsonValue, std::function<void()> validateFunc)
 	{
 		if (m_ZKHandle == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -717,20 +720,30 @@ namespace SF
 		if (!IsConnected())
 			return ResultCode::INVALID_STATE;
 
+		Result res = ResultCode::SUCCESS;
+
+		//if (validateFunc) validateFunc();
+
 		StaticArray<uint8_t,2048> valueBuffer(GetHeap());
 		int buffLen = (int)valueBuffer.GetAllocatedSize() - 1;
 		auto zkResult = zoo_get(m_ZKHandle, path, 0, (char*)valueBuffer.data(), &buffLen, nullptr);
 		valueBuffer.resize(buffLen);
 
-		auto res = ToResult(zkResult);
+		res = ToResult(zkResult);
 
 		valueBuffer.push_back('\0');
-		std::stringstream inputStream(std::string(reinterpret_cast<const char*>(valueBuffer.data()), valueBuffer.size()), std::ios_base::in);
-		Json::CharReaderBuilder jsonReader;
+
 		std::string errs;
-		auto bRes = Json::parseFromStream(jsonReader, inputStream, &jsonValue, &errs);
+		std::unique_ptr<Json::CharReader> jsonReader(stm_JsonBuilder.newCharReader());
+		auto readStart = reinterpret_cast<const char*>(valueBuffer.data());
+		bool bRes = jsonReader->parse(readStart, readStart + valueBuffer.size(), &jsonValue, &errs);
+		if (validateFunc) validateFunc();
 		if (!bRes)
-			return ResultCode::FAIL;
+		{
+			SFLog(Net, Error, "Zookeeper::Get value parsing error:{0}", errs);
+			return ResultCode::INVALID_STR_DATA;
+		}
+		if (validateFunc) validateFunc();
 
 		return res;
 	}
@@ -837,13 +850,13 @@ namespace SF
 		if (!IsConnected())
 			return ResultCode::INVALID_STATE;
 
-		String_vector tempList;
-		memset(&tempList, 0, sizeof(tempList));
+		String_vector tempList{};
+
 		auto zkResult = zoo_get_children(m_ZKHandle, path, watch ? 1 : 0, &tempList);
 		strings.reserve(strings.size() + tempList.count);
 		for (int iStr = 0; iStr < tempList.count; iStr++)
 		{
-			strings.push_back(String(m_Heap, tempList.data[iStr]));
+			strings.push_back(String(strings.GetHeap(), tempList.data[iStr]));
 		}
 
 		return ToResult(zkResult);

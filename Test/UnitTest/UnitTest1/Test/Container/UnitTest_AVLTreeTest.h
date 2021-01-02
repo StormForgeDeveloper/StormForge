@@ -23,7 +23,7 @@ class AVLTreeTest : public MyTestBase
 protected:
 
 #ifdef DEBUG
-	const int MAX_TEST_VALUE = 10;
+	const int MAX_TEST_VALUE = 100;
 #else
 	const int MAX_TEST_VALUE = 1100000;
 #endif

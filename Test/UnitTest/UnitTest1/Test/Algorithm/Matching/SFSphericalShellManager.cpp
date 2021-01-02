@@ -48,10 +48,14 @@ namespace SF
 
 	bool PreferencePlayer::SetCurrentShellID(uint shellID)
 	{
+		auto curShell = m_CurrentShellID;
+		if (curShell == shellID)
+			return true;
+
 		if (shellID != SphericalShell::InvalidShellID
-			&& m_CurrentShellID != SphericalShell::InvalidShellID)
+			&& curShell != SphericalShell::InvalidShellID)
 		{
-			Assert(false);// invalid
+			Assert(false);// The player already has a shell id assigned
 			return false;
 		}
 
@@ -297,6 +301,8 @@ namespace SF
 
 		if (m_Shells.size() == 0)
 			return ResultCode::FAIL;
+
+		MutexScopeLock lock(pPlayer->GetShellLock());
 
 		auto shellID = pPlayer->GetCurrentShellID();
 		auto newShellID = CalculateShellForPlayer(pPlayer);

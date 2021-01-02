@@ -126,8 +126,8 @@ namespace SF {
 			int printcount = 0;
 			m_AllocatedList.for_each([&printcount](DoubleLinkedListNode* pNode)
 			{
-				MemBlockHdr* pBlockHdr = ContainerPtrFromMember(MemBlockHdr, ListNode, pNode);
-				pBlockHdr->StackTrace.PrintStackTrace(CurrentProcessID);
+				MemBlockFooter* pBlockFooter = ContainerPtrFromMember(MemBlockFooter, ListNode, pNode);
+				pBlockFooter->StackTrace.PrintStackTrace(CurrentProcessID);
 				printcount++;
 				return printcount < 10; // print max 10
 			});
@@ -216,8 +216,9 @@ namespace SF {
 	void IHeap::AddAllocatedList(MemBlockHdr* pMemBlock)
 	{
 #if ENABLE_MEMORY_TRACE
-		pMemBlock->StackTrace.CaptureCallStack(2);
-		m_AllocatedList.Add(&pMemBlock->ListNode);
+		auto pFooter = pMemBlock->GetFooter();
+		pFooter->StackTrace.CaptureCallStack(2);
+		m_AllocatedList.Add(&pFooter->ListNode);
 #else
 		unused(pMemBlock);
 #endif
@@ -226,8 +227,9 @@ namespace SF {
 	void IHeap::RemoveAllocatedList(MemBlockHdr* pMemBlock)
 	{
 #if ENABLE_MEMORY_TRACE
-		pMemBlock->StackTrace.CaptureCallStack(2);
-		m_AllocatedList.Remove(&pMemBlock->ListNode);
+		auto pFooter = pMemBlock->GetFooter();
+		pFooter->StackTrace.CaptureCallStack(2);
+		m_AllocatedList.Remove(&pFooter->ListNode);
 #else
 		unused(pMemBlock);
 #endif
@@ -292,7 +294,7 @@ namespace SF {
 #endif
 
 		// we might just don't care realloc
-		return (uint8_t*)pMemBlock + pMemBlock->GetHeaderSize();
+		return pMemBlock->GetDataPtr();
 	}
 
 	bool IHeap::Free(void* ptr)
@@ -331,7 +333,7 @@ namespace SF {
 		uint8_t headerOffset = 0;
 
 		// search up to for times, one already counted so 3 more
-		for (int iSearch = 0; iSearch < 4; iSearch++, pCompilerSizePos-=sizeof(size_t))
+		for (int iSearch = 0; iSearch < 2; iSearch++, pCompilerSizePos-=sizeof(size_t))
 		{
 			headerOffset = *(pCompilerSizePos - 1); // The place I stored header offset
 			pMemBlock = reinterpret_cast<MemBlockHdr*>(pCompilerSizePos - headerOffset);
@@ -351,12 +353,15 @@ namespace SF {
 
 	bool IHeap::CheckMemoryHeader(void* ptr)
 	{
-		MemBlockHdr* pMemBlock = GetMemoryBlockHdr(ptr);
+		auto* pMemBlock = GetMemoryBlockHdr(ptr);
 		if (pMemBlock == nullptr)
 			return false;
 
-		AssertRel(pMemBlock->Magic == MemBlockHdr::MEM_MAGIC);
-		return pMemBlock->Magic == MemBlockHdr::MEM_MAGIC;
+		auto* pFooter = pMemBlock->GetFooter();
+		if (pFooter == nullptr)
+			return false;
+
+		return pMemBlock->Magic == MemBlockHdr::MEM_MAGIC && pFooter->Magic == MemBlockFooter::MEM_MAGIC;
 	}
 
 

@@ -835,26 +835,26 @@ void Container_CircularBuffer_ThreadTest(std::vector<SF::Thread*>& threadArray, 
 
 TEST_F(CircularBufferTest, CircularBufferThreadR1W1Small)
 {
-	Container_CircularBuffer_ThreadTest<256>(m_Threads, 999999, 30, 128, 1);
+	Container_CircularBuffer_ThreadTest<256>(m_Threads, m_TestCount, 30, 128, 1);
 }
 
 
 TEST_F(CircularBufferTest, CircularBufferThreadR1W1Large)
 {
-	Container_CircularBuffer_ThreadTest<1024>(m_Threads, 999999, 30, 128, 1);
+	Container_CircularBuffer_ThreadTest<1024>(m_Threads, m_TestCount, 30, 128, 1);
 }
 
 
 TEST_F(CircularBufferTest, CircularBufferThreadMultipleR1W2)
 {
-	Container_CircularBuffer_ThreadTest<1024>(m_Threads, 999999, 30, 128, 1);
+	Container_CircularBuffer_ThreadTest<1024>(m_Threads, m_TestCount, 30, 128, 1);
 }
 
 
 
 TEST_F(CircularBufferTest, CircularBufferThreadMultipleR1W4)
 {
-	Container_CircularBuffer_ThreadTest<1024>(m_Threads, 999999, 30, 128, 1);
+	Container_CircularBuffer_ThreadTest<1024>(m_Threads, m_TestCount, 30, 128, 1);
 }
 
 

@@ -127,7 +127,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTest1000)
 		EXPECT_TRUE((sortedMap.Insert(TestValues[iTest], TestValues[iTest])));
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Insert takes %dms\n", (end - start).count());
+	printf("Insert took %dms\n", (end - start).count());
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 
 	start = Util::Time.GetRawTimeMs();
@@ -178,7 +178,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfWithReadThreads)
 		EXPECT_TRUE((sortedMap.Insert(TestValues[iTest], TestValues[iTest])));
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Insert takes %dms\n", (end - start).count());
+	printf("Insert took %dms\n", (end - start).count());
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 
 	// Start read threads

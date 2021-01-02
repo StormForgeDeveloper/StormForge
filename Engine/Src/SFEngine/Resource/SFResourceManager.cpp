@@ -80,6 +80,7 @@ namespace SF
 		Result result = Service::AssetImporterFactory->FindImporter(assetType, pImporter);
 		if (!result)
 		{
+			SFLog(Engine, Error, "Asset importer not found: {0}:{1}", stream.GetName(), stream.GetSourceName());
 			LoadingResult = result;
 			return result;
 		}

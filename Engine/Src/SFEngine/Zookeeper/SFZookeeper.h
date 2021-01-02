@@ -262,6 +262,10 @@ namespace SF
 
 	private:
 
+		// static shared json builder
+		// Deconstructor of reader build is somehow messing with memory on Linux. Putting it to static
+		static Json::CharReaderBuilder stm_JsonBuilder;
+
 		IHeap& m_Heap;
 
 		// ZK handle lock
@@ -355,7 +359,7 @@ namespace SF
 		SharedPointerT<StatTask> AExists(const char* path, ZookeeperWatcher* watcher = nullptr);
 
 		Result Get(const char *path, Array<uint8_t>& valueBuffer, struct Stat *stat = nullptr);
-		Result Get(const char *path, Json::Value& jsonValue);
+		Result Get(const char* path, Json::Value& jsonValue, std::function<void()> validateFunc = {});
 		SharedPointerT<DataTask> AGet(const char *path, ZookeeperWatcher* watcher = nullptr);
 
 		Result Set(const char *path, const Array<uint8_t>& valueBuffer, int version = -1);

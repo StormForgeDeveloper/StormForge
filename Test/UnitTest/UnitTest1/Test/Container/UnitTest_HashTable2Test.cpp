@@ -576,7 +576,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 	const int WRITE_THREAD_COUNT = 8;
 
 
-	std::atomic<uint64_t> numberOfItems;
+	std::atomic<uint64_t> numberOfItems(0);
 	std::atomic<uint64_t> readCount(0), writeCount(0);
 
 	typedef HashTable2<	int64_t, SharedPointerT<TestMapNodeShared>,

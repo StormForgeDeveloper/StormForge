@@ -83,7 +83,7 @@ namespace SF {
 			return pMemBlk;
 		}
 
-		pChunk->Init(this, (uint32_t)allocationSize, HEADER_SIZE);
+		pChunk->Init(this, (uint32_t)allocationSize);
 		pChunk->pHeap = this; // null means free block
 
 #ifdef DEBUG

@@ -40,7 +40,7 @@ namespace SF
 	template<class Func>
 	Result ServerConfigZookeeper::ForeachChild(const String& nodePath, Func func)
 	{
-		StaticArray<String, 32> childList(GetHeap());
+		StaticArray<String, 32> childList(nodePath.GetHeap());
 		Result result = m_zkInstance.GetChildren(nodePath, childList);
 		if (!result)
 			return result;
@@ -55,9 +55,61 @@ namespace SF
 		return result;
 	}
 
-	Result ServerConfigZookeeper::GetNodeValue(const String& nodePath, Json::Value& jsonValue)
+	template<class Func>
+	Result ServerConfigZookeeper::ForeachChildDbg(const String& nodePath, Func func)
 	{
-		Result result = m_zkInstance.Get(nodePath, jsonValue);
+		StaticArray<String, 32> childList(nodePath.GetHeap());
+		Result result = m_zkInstance.GetChildren(nodePath, childList);
+		if (!result)
+			return result;
+
+		bool testEnable = false;
+
+		auto ValidateFunc = [&childList, &testEnable]()
+		{
+			for (auto& itChildPathSub : childList)
+			{
+				auto testPtr = itChildPathSub.data();
+				assert(IHeap::CheckMemoryHeader((void*)testPtr));
+				assert(testPtr[0] > 0 && testPtr[0] < 127);// should be in ascii range
+				assert(!itChildPathSub.IsNullOrEmpty());
+			}
+			if (testEnable)
+			{
+				auto testPtr = ((const char*)0x1644530);
+				assert(IHeap::CheckMemoryHeader((void*)testPtr));
+				assert(testPtr[0] > 0 && testPtr[0] < 127);
+				
+			}
+		};
+
+		ValidateFunc();
+
+		//if ((intptr_t)(childList[3].data()) == 0x1643f60)
+		//{
+		//	testEnable = true;
+		//}
+
+
+		for (auto& itChildPath : childList)
+		{
+			assert(!itChildPath.IsNullOrEmpty()); // not empty
+			assert(itChildPath.data()[0] > 0 && itChildPath.data()[0] < 127);// should be in ascii range
+			result = func(itChildPath, ValidateFunc);
+			assert(!itChildPath.IsNullOrEmpty()); // not empty
+			assert(itChildPath.data()[0] > 0 && itChildPath.data()[0] < 127);// should be in ascii range
+			ValidateFunc();
+			if (!result)
+				break;
+		}
+
+		return result;
+	}
+
+	Result ServerConfigZookeeper::GetNodeValue(const String& nodePath, Json::Value& jsonValue, std::function<void()> validateFunc)
+	{
+		Result result = m_zkInstance.Get(nodePath, jsonValue, validateFunc);
+		if (validateFunc) validateFunc();
 		if (!result) return result;
 		return result;
 	}
@@ -517,7 +569,7 @@ namespace SF
 				SFLog(Engine, Error, "ServerConfigZookeeper::LoadConfig, has failed {0}", result);
 			}
 		});
-		String rootPath;
+		String rootPath(GetHeap());
 
 		m_Config.Clear();
 
@@ -528,7 +580,6 @@ namespace SF
 
 			String childPath(GetHeap());
 			childPath.Format("{0}/{1}", rootPath, nodeName);
-
 			result = GetNodeValue(childPath, nodeValue);
 			if (!result)
 				return result;

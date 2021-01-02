@@ -40,8 +40,10 @@ namespace SF
 
 		template<class Func>
 		Result ForeachChild(const String& nodePath, Func func);
+		template<class Func>
+		Result ForeachChildDbg(const String& nodePath, Func func);
 
-		Result GetNodeValue(const String& nodePath, Json::Value& jsonValue);
+		Result GetNodeValue(const String& nodePath, Json::Value& jsonValue, std::function<void()> validateFunc = {});
 		Result SetNodeValue(const String& nodePath, const Json::Value& jsonValue);
 
 		Result CreateNode(const String& parentNodePath, const char* nodeName, const Json::Value& nodeValue);

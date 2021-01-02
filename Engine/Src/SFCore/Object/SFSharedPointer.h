@@ -604,6 +604,17 @@ namespace SF {
 		{
 		}
 
+		ClassType* get()
+		{
+			return (ClassType*)m_pObject.load(std::memory_order_relaxed);
+		}
+
+		ClassType* get() const
+		{
+			return (ClassType*)m_pObject.load(std::memory_order_relaxed);
+		}
+
+		// deprecated, use std style get()
 		ClassType* GetObjectPtr()
 		{
 			return (ClassType*)m_pObject.load(std::memory_order_relaxed);

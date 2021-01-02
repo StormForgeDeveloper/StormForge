@@ -82,9 +82,15 @@ TEST_F(AlgorithmTest, MatchingRanking)
 {
 	constexpr int NUM_MATCH_THREAD = 4;
 	constexpr int NUM_UPDATE_THREAD = 1;
+#ifdef DEBUG
+	constexpr int NUM_PLAYER = 2000;
+	constexpr int NUM_SHELL = 50;
+	constexpr int MATCHING_VARIATION = 20;
+#else
 	constexpr int NUM_PLAYER = 2000000;
 	constexpr int NUM_SHELL = 5000;
 	constexpr int MATCHING_VARIATION = 100;
+#endif
 
 	const DurationMS testTime(5 * 60 * 1000);
 	std::atomic<uint32_t> playerUpdated(0);
@@ -106,7 +112,7 @@ TEST_F(AlgorithmTest, MatchingRanking)
 		EXPECT_TRUE((rankingMap.Insert(players[iPlayer].GetRankingKey(), &players[iPlayer])));
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Insert takes %dms\n", (end - start).count());
+	printf("Insert took %dms\n", (end - start).count());
 
 	EXPECT_TRUE((rankingMap.CommitChanges()));
 

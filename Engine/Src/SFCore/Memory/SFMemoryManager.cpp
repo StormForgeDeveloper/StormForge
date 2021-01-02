@@ -160,8 +160,7 @@ namespace SF {
 
 		// Adjust allocation size for header
 		// +1 for reverse offset
-		size_t spaceForHeader = MemBlockHdr::GetHeaderSize();
-		auto allocSize = size + spaceForHeader;
+		auto allocSize = MemBlockHdr::CalculateAllocationSize(size, alignment);
 
 		m_AllocatedDRAM.fetch_add(size, std::memory_order_relaxed);
 
@@ -170,7 +169,9 @@ namespace SF {
 
 		AddAllocSize(size);
 
-		pMemBlock->Init(this, (uint32_t)size, (uint32_t)spaceForHeader);
+		pMemBlock->Init(this, (uint32_t)size);
+		auto pFooter = pMemBlock->GetFooter();
+		pFooter->Init();
 
 		return pMemBlock;
 	}
@@ -179,7 +180,8 @@ namespace SF {
 	{
 		SubAllocSize(ptr->Size);
 
-		ptr->Magic = MemBlockHdr::MEM_MAGIC_FREE;
+		ptr->GetFooter()->Deinit();
+		ptr->Deinit();
 
 		SystemAlignedFree(ptr);
 
@@ -190,19 +192,14 @@ namespace SF {
 		if (alignment == 0)
 			alignment = sizeof(int);
 
-		// Adjust allocation size for header
-		// +1 for reverse offset
-		size_t spaceForHeader = MemBlockHdr::GetHeaderSize();
-
 		MemBlockHdr* pMemBlock = nullptr;
 		MemBlockHdr* oldPtr = ptr;
 
+		auto allocSize = MemBlockHdr::CalculateAllocationSize(newSize, alignment);
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
-		auto allocSize = newSize + spaceForHeader;
 		void *newPtr = (MemBlockHdr*)_aligned_realloc(ptr, allocSize, alignment);
 #else
 		assert(alignment <= MemBlockHdr::MaxHeaderAlignment); // We assumed there will be no bigger alignment requirement
-		auto allocSize = AlignUp(newSize + spaceForHeader, alignment);
 		void* newPtr = realloc(ptr, allocSize);
 		auto remain = ((int64_t)newPtr) % alignment;
 #endif
@@ -215,12 +212,16 @@ namespace SF {
 			if (oldPtr != nullptr)
 				memcpy(newPtr2, oldPtr + 1, Util::Min(orgSize, newSize));
 
+			oldPtr->GetFooter()->Deinit();
+			oldPtr->Deinit();
+
 			SystemAlignedFree(oldPtr);
 			newPtr = newPtr2;
 		}
 
 		pMemBlock = reinterpret_cast<MemBlockHdr*>(newPtr);
-		pMemBlock->Init(this, (uint32_t)newSize, (uint32_t)spaceForHeader);
+		pMemBlock->Init(this, (uint32_t)newSize);
+		pMemBlock->GetFooter()->Init();
 
 		return pMemBlock;
 	}

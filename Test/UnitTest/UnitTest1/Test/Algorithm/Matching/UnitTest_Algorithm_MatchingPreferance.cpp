@@ -29,11 +29,18 @@ using namespace ::SF;
 
 TEST_F(AlgorithmTest, MatchingPreference)
 {
-	constexpr int NUM_MATCH_THREAD = 2;
 	constexpr int NUM_UPDATE_THREAD = 4;
+#ifdef DEBUG
+	constexpr int NUM_MATCH_THREAD = 1;
+	constexpr int NUM_PLAYER = 2000;
+	constexpr int NUM_PLAYER_VARIATION = 200;
+	constexpr int NUM_SHELL = 50;
+#else
+	constexpr int NUM_MATCH_THREAD = 2;
 	constexpr int NUM_PLAYER = 2000000;
 	constexpr int NUM_PLAYER_VARIATION = 2000;
 	constexpr int NUM_SHELL = 5000;
+#endif
 
 	const DurationMS testTime(5 * 60 * 1000);
 	SphericalShellManager matchManager(GetHeap());
@@ -101,6 +108,7 @@ TEST_F(AlgorithmTest, MatchingPreference)
 			// add back the players
 			for (auto& itPlayer : matchedPlayer)
 			{
+				MutexScopeLock lock(itPlayer->GetShellLock());
 				matchManager.AddPlayer(itPlayer);
 			}
 

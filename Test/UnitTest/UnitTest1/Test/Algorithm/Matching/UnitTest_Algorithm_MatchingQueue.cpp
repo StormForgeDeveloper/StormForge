@@ -7,6 +7,7 @@
 #include "Thread/SFThread.h"
 #include "Container/SFSortedMap.h"
 #include "Container/SFCircularPageQueue.h"
+#include "Container/SFCircularQueue.h"
 #include "Object/SFObjectPool.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFRandom.h"
@@ -67,93 +68,6 @@ struct QueueItem : public StackPool::Item
 	}
 };
 
-
-
-// free player manager
-class FreeObjects
-{
-public:
-	typedef QueuePlayer* ObjectType;
-
-private:
-
-	uint m_ItemCount = 0;
-
-	std::atomic<uint> m_HeadIndex = 0;
-	std::atomic<uint> m_TailIndex = 0;
-
-	std::atomic<ObjectType>* m_Objects = nullptr;
-
-public:
-
-	FreeObjects(IHeap& heap, uint itemCount)
-	{
-		m_ItemCount = itemCount;
-		m_Objects = new(heap) std::atomic<ObjectType>[itemCount];
-		for (uint iObj = 0; iObj < m_ItemCount; iObj++)
-		{
-			m_Objects[iObj] = {};
-		}
-	}
-
-	~FreeObjects()
-	{
-		Dispose();
-	}
-
-	void Dispose()
-	{
-		IHeap::Delete(m_Objects);
-		m_Objects = nullptr;
-	}
-
-	size_t size()
-	{
-		return m_HeadIndex.load(std::memory_order_relaxed) - m_TailIndex.load(std::memory_order_relaxed);
-	}
-
-	// Enqueue an object
-	Result Enqueue(const ObjectType& pObj)
-	{
-		auto headIndex = m_HeadIndex.fetch_add(1, std::memory_order_relaxed) % m_ItemCount;
-		const ObjectType defaultValue = {};
-		ObjectType expected = {};
-
-		while (!m_Objects[headIndex].compare_exchange_weak(expected, pObj, std::memory_order_release, std::memory_order_relaxed))
-		{
-			if (expected != defaultValue)
-			{
-				expected = {};
-				ThisThread::SleepFor(DurationMS(0));
-			}
-		}
-
-		return ResultCode::SUCCESS;
-	}
-
-	// Dequeue from the queue
-	Result Dequeue(ObjectType& obj)
-	{
-		obj = {};
-		auto head = m_HeadIndex.fetch_add(1, std::memory_order_relaxed);
-		auto tail = m_TailIndex.fetch_add(1, std::memory_order_relaxed);
-		if ((int)(head - tail) <= 0)
-			return ResultCode::FAIL;
-
-		auto tailIndex = tail % m_ItemCount;
-		const ObjectType defaultValue = {};
-		ObjectType expected = {};
-
-		while(true)
-		{
-			obj = m_Objects[tailIndex].exchange(defaultValue, std::memory_order_seq_cst);
-			if (obj != nullptr)
-				return ResultCode::SUCCESS;
-		}
-
-		return ResultCode::SUCCESS;
-	}
-};
 
 
 
@@ -302,7 +216,7 @@ const uint QueueMatchMaker::stm_MatchingPattern4[][3] =
 	{ 4, 0, 0 },
 	{ 2, 1, 0 },
 	{ 1, 0, 1 },
-	// repeteided pattern for matching balance
+	// repeated pattern for matching balance
 	{ 1, 0, 1 },
 	{ 1, 0, 1 },
 	{ 1, 0, 1 },
@@ -311,7 +225,7 @@ const uint QueueMatchMaker::stm_MatchingPattern4[][3] =
 	{ 4, 0, 0 },
 	{ 2, 1, 0 },
 	{ 1, 0, 1 },
-	// repeteided pattern for matching balance
+	// repeated pattern for matching balance
 	{ 1, 0, 1 },
 	{ 1, 0, 1 },
 	{ 1, 0, 1 },
@@ -435,9 +349,15 @@ TEST_F(AlgorithmTest, MatchingQueue)
 {
 	constexpr int NUM_MATCH_THREAD = 1;
 	constexpr int NUM_UPDATE_THREAD = 9;
+#ifdef DEBUG
+	constexpr int NUM_PLAYER = 200;
+	constexpr int NUM_SHELL = 50;
+	constexpr int MATCHING_VARIATION = 10;
+#else
 	constexpr int NUM_PLAYER = 2000000;
 	constexpr int NUM_SHELL = 5000;
 	constexpr int MATCHING_VARIATION = 100;
+#endif
 
 
 	const DurationMS testTime(5 * 60 * 1000);
@@ -447,7 +367,7 @@ TEST_F(AlgorithmTest, MatchingQueue)
 
 	auto players = new(GetHeap()) QueuePlayer[NUM_PLAYER];
 
-	FreeObjects freePlayers(GetHeap(), NUM_PLAYER * 2);
+	CircularQueue<QueuePlayer*, NUM_PLAYER*2> freePlayers;
 	CriticalSection m_UpdateLock;
 	//StackPool freeQueueItemPool(GetHeap());
 
@@ -492,7 +412,7 @@ TEST_F(AlgorithmTest, MatchingQueue)
 				return true;
 
 			{
-				//MutexScopeLock lock(m_UpdateLock); // free player dequeue has to be locked
+				MutexScopeLock lock(m_UpdateLock); // free player dequeue has to be locked
 
 				// If there is not much free players, just do it later
 				if (freePlayers.size() < QueueMatchMaker::MAX_MATCHING_PLAYER)
@@ -534,16 +454,23 @@ TEST_F(AlgorithmTest, MatchingQueue)
 			StaticArray<QueuePlayer*, 4> matchedPlayers(GetHeap());
 
 			if (matchMaker.MatchMake(matchedPlayers))
+			{
 				successfulMatchCount.fetch_add(1, std::memory_order_relaxed);
+			}
 			else
 			{
-				if(matchedPlayers.size() > 0)
+				if (matchedPlayers.size() > 0)
 					failedMatchCount.fetch_add(1, std::memory_order_relaxed);
-			}
 
-			for (auto itPlayer : matchedPlayers)
-			{
-				EXPECT_TRUE(freePlayers.Enqueue(itPlayer));
+				{
+					MutexScopeLock lock(m_UpdateLock); // free player dequeue has to be locked
+
+					for (auto itPlayer : matchedPlayers)
+					{
+						QueuePlayer* pPlayer = itPlayer;
+						EXPECT_TRUE(freePlayers.Enqueue(pPlayer));
+					}
+				}
 			}
 
 			return true;
@@ -566,16 +493,13 @@ TEST_F(AlgorithmTest, MatchingQueue)
 	auto testDuration = Util::TimeSinceRaw(startTime);
 	SFLog(Game, Info, "PlayerUpdated:{0}, Match success/fail:{1}/{2}, duration:{3} min", playerUpdated.load(), successfulMatchCount.load(), failedMatchCount.load(), (float)testDuration.count() / (60000.f));
 	auto testDurationSec = testDuration.count() / 1000;
-	SFLog(Game, Info, "Matched {0} / sec", ((successfulMatchCount.load() + failedMatchCount.load()) / testDurationSec));
+	SFLog(Game, Info, "Matched {0} / sec", ((float)(successfulMatchCount.load() + failedMatchCount.load()) / testDurationSec));
 
 	// Stop all read threads
 	StopAllThread();
 
 	matchMaker.Clear();
-	freePlayers.Dispose();
+	freePlayers.ClearQueue();
 	IHeap::Delete(players);
 }
-
-
-
 

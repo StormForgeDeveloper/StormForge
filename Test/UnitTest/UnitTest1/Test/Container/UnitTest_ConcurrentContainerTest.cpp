@@ -64,6 +64,7 @@ TEST_F(ConcurrentContainerTest, SpinBufferMT_Simple)
 
 		EXPECT_EQ(block->Data, testID);
 		AssertRel(block->Data == testID);
+		spinBuffer.Read_Unlock(block);
 		testID++;
 	}
 

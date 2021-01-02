@@ -22,6 +22,12 @@ class CircularBufferTest : public MyTestBase
 {
 protected:
 
+#ifdef DEBUG
+	uint32_t m_TestCount = 1000;
+#else
+	uint32_t m_TestCount = 999999;
+#endif
+
 
 public:
 
