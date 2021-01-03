@@ -95,7 +95,7 @@ public:
 
 			//ASSERT_EQ(pVar->GetTypeName(), itExpectedVar.GetVariable()->GetTypeName());
 			EXPECT_EQ(*pVar, *itExpectedVar.GetVariable());
-			Assert(*pVar == *itExpectedVar.GetVariable());
+			//Assert(*pVar == *itExpectedVar.GetVariable());
 
 			context.GetVariableStack().Pop();
 		}

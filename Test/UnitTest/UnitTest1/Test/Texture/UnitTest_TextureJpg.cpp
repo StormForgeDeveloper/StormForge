@@ -8,6 +8,7 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "Memory/SFMemoryManager.h"
 #include "Memory/SFMemory.h"
+#include "Util/SFPath.h"
 
 #include "Task/SFTask.h"
 
@@ -41,7 +42,10 @@ GTEST_TEST(Texture, JpgSimple)
 	Heap testHeap("test", GetSystemHeap());
 
 	StaticArray<ResourcePtr, 10> resources(testHeap);
-	FileInputStream inputStream("data/testImage.jpg");
+	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
+	auto filePath = Util::Path::Combine(dirPath, "../../data/testImage.jpg");
+
+	FileInputStream inputStream(filePath);
 
 	AssetImporterTextureJPG* imageImporter = new(testHeap) AssetImporterTextureJPG(testHeap);
 

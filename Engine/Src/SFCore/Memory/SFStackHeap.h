@@ -42,11 +42,11 @@ namespace SF
 		{
 			MemoryChunkHeader* Prev = nullptr;
 
-			static size_t GetHeaderSize() { return AlignUp(sizeof(MemoryChunkHeader) + 1, MaxHeaderAlignment); }
-			static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return MemoryChunkHeader::GetHeaderSize() + AlignUp(requestedSize, alignment) + GetFooterSize(); }
+			static size_t GetHeaderSize() { return AlignUp(sizeof(MemoryChunkHeader), MaxHeaderAlignment); }
+			static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return MemoryChunkHeader::GetHeaderSize() + AlignUp(requestedSize, MaxHeaderAlignment) + GetFooterSize(); }
 
-			void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + MemoryChunkHeader::GetHeaderSize(); }
-			MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(MemoryChunkHeader::GetDataPtr()) + AlignUp(Size, SF_ALIGN_DOUBLE)); }
+			//void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + MemoryChunkHeader::GetHeaderSize(); }
+			//MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(MemoryChunkHeader::GetDataPtr()) + AlignUp(Size, MaxHeaderAlignment)); }
 		};
 #pragma pack(pop)
 

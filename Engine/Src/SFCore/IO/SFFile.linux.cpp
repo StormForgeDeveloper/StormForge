@@ -59,7 +59,7 @@ namespace SF {
 
 		if (FileOpenMode == OpenMode::Read)
 		{
-			assert(OperationSize > 0); // just checking
+			//assert(OperationSize > 0); // just checking
 			Buffer.resize(OperationSize);
 		}
 

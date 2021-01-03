@@ -41,16 +41,16 @@ namespace SF {
 
 	void MemBlockHdr::InitHeader(IHeap* heap, uint32_t size, uint32_t headerSize)
 	{
-		//uint32_t headerSize = GetHeaderSize();
 		memset(this, 0, headerSize);
 		Magic = MEM_MAGIC;
 		Size = (uint32_t)size;
 		pHeap = heap;
 
 		// This works because we added +1 before
+		// storing at both location. extension could have different size, and we need header size at last byte.
 		HeaderSize = headerSize;
-		//auto pReverseOffset = ((uint8_t*)this + headerSize - 1);
-		//*pReverseOffset = static_cast<uint8_t>(headerSize);
+		auto pReverseOffset = ((uint8_t*)this + headerSize - 1);
+		*pReverseOffset = static_cast<uint8_t>(headerSize);
 	}
 
 	void MemBlockHdr::Deinit()

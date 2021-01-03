@@ -252,7 +252,7 @@ namespace SF {
 		// change heap to this
 		pMemBlock->pHeap = this;
 
-		return (uint8_t*)pMemBlock + pMemBlock->GetHeaderSize();
+		return (uint8_t*)pMemBlock->GetDataPtr();
 	}
 
 	void* IHeap::Realloc(void* ptr, size_t newSize, size_t alignment)
@@ -314,7 +314,6 @@ namespace SF {
 		if (pHeap != nullptr && !pHeap->GetIgnoreMemoryLeak())
 			pHeap->RemoveAllocatedList(pMemBlock);
 #endif
-		//pMemBlock->pHeap = nullptr;
 
 		pHeap->FreeInternal(pMemBlock);
 
@@ -326,7 +325,9 @@ namespace SF {
 		if (ptr == nullptr)
 			return nullptr;
 
+		// We have two size types 16bytes for normal header, 32bytes for extended heap
 		auto ExpectedHeaderSize = MemBlockHdr::GetHeaderSize();
+		auto ExpectedHeaderSize2 = ExpectedHeaderSize << 1;
 		MemBlockHdr* pMemBlock = nullptr;
 
 		uint8_t* pCompilerSizePos = reinterpret_cast<uint8_t*>(ptr); // each compiler has different search length
@@ -337,7 +338,8 @@ namespace SF {
 		{
 			headerOffset = *(pCompilerSizePos - 1); // The place I stored header offset
 			pMemBlock = reinterpret_cast<MemBlockHdr*>(pCompilerSizePos - headerOffset);
-			if (headerOffset == ExpectedHeaderSize && pMemBlock->Magic == MemBlockHdr::MEM_MAGIC)
+			if ((headerOffset == ExpectedHeaderSize || headerOffset == ExpectedHeaderSize2)
+				&& pMemBlock->Magic == MemBlockHdr::MEM_MAGIC)
 				break;
 		}
 
@@ -365,49 +367,6 @@ namespace SF {
 	}
 
 
-
-
-	////////////////////////////////////////////////////////////////////////////////////////
-	////
-	////
-	////
-
-	//IHeap::IHeap(const char* name, IHeap* pParent)
-	//	: IHeap(name, pParent)
-	//	, m_Name(name)
-	//	, m_MemoryPoolManager(nullptr)
-	//{
-	//}
-
-	//IHeap::~IHeap()
-	//{
-	//	auto pMemoryPool = m_MemoryPoolManager.exchange(nullptr, std::memory_order_acq_rel);
-	//	if(pMemoryPool != nullptr)
-	//		Delete(pMemoryPool);
-	//}
-
-
-	//MemoryPool* IHeap::GetMemoryPoolBySize(size_t size)
-	//{
-	//	auto pCurManager = m_MemoryPoolManager.load(std::memory_order_relaxed);
-	//	if (pCurManager == nullptr)
-	//	{
-	//		MemoryPoolManager *pNewManager = new(*this) MemoryPoolManager(*this);
-	//		MemoryPoolManager* expected = nullptr;
-	//		while (!m_MemoryPoolManager.compare_exchange_weak(expected, pNewManager, std::memory_order_relaxed))
-	//		{
-	//			if (expected != nullptr)
-	//			{
-	//				Delete(pNewManager);
-	//				break;
-	//			}
-	//		}
-
-	//		pCurManager = m_MemoryPoolManager.load(std::memory_order_acquire);
-	//	}
-
-	//	return pCurManager->GetMemoryPool(size);
-	//}
 
 
 

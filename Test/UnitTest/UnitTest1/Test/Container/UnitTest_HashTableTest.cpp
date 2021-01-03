@@ -25,7 +25,7 @@ using namespace ::SF;
 #ifdef DEBUG
 #define TestScale 1
 #else
-#define TestScale 10
+#define TestScale 100
 #endif
 
 
@@ -181,7 +181,7 @@ TEST_F(HashTableTest, HashTable_UniqueMT)
 	const int READ_THREAD_COUNT = 10;
 	const int WRITE_THREAD_COUNT = 5;
 	const int MAX_NUMBER	= 500;
-	const int TEST_COUNT		= TestScale*9999;
+	const int TEST_COUNT		= TestScale*999;
 
 
 	SyncCounter workCounterRead, workCounterWrite, numberOfItems;
@@ -299,11 +299,12 @@ TEST_F(HashTableTest, HashTable_UniqueMT)
 	//do 
 	{
 		TestTableType::iterator itCur = TestMap.begin();
-		if( itCur.IsValid() )
+		while( itCur.IsValid() )
 		{
 			numberOfItems.fetch_sub(1,std::memory_order_relaxed);
 			delete *itCur;
 			TestMap.erase(itCur);
+			itCur = TestMap.begin();
 		}
 	}
 	EXPECT_EQ(0, TestMap.size());

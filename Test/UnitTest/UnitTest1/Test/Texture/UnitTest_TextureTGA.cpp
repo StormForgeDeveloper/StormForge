@@ -8,6 +8,7 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "Memory/SFMemoryManager.h"
 #include "Memory/SFMemory.h"
+#include "Util/SFPath.h"
 
 #include "Task/SFTask.h"
 
@@ -41,7 +42,10 @@ GTEST_TEST(Texture, TGASimple)
 	Heap testHeap("test", GetSystemHeap());
 
 	StaticArray<ResourcePtr, 10> resources(testHeap);
-	FileInputStream inputStream("data/testImage24.tga");
+	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
+	auto filePath = Util::Path::Combine(dirPath, "../../data/testImage24.tga");
+
+	FileInputStream inputStream(filePath);
 
 	AssetImporterTextureTGA* imageImporter = new(testHeap) AssetImporterTextureTGA(testHeap);
 
@@ -54,8 +58,8 @@ GTEST_TEST(Texture, TGASimple)
 	GTEST_ASSERT_EQ(ResultCode::SUCCESS, result);
 
 
-
-	FileInputStream inputStream32("data/testImage32.tga");
+	auto filePath2 = Util::Path::Combine(dirPath, "../../data/testImage32.tga");
+	FileInputStream inputStream32(filePath2);
 	GTEST_ASSERT_EQ(true, inputStream32.CanRead());
 
 	AssetImportContext context32(testHeap, inputStream32, "testImage32.tga");

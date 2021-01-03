@@ -72,7 +72,7 @@ namespace SF {
 
 		static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return GetHeaderSize() + AlignUp(requestedSize, alignment) + GetFooterSize(); }
 
-		void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + GetHeaderSize(); }
+		void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + HeaderSize; }
 		MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(GetDataPtr()) + AlignUp(Size, MaxHeaderAlignment)); }
 	};
 

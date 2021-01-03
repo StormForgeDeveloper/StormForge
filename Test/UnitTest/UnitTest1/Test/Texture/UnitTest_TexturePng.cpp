@@ -8,7 +8,7 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "Memory/SFMemoryManager.h"
 #include "Memory/SFMemory.h"
-
+#include "Util/SFPath.h"
 #include "Task/SFTask.h"
 
 #include "String/SFStringCrc32.h"
@@ -40,7 +40,10 @@ GTEST_TEST(Texture, PngSimple)
 	Heap testHeap("test", GetSystemHeap());
 	
 	StaticArray<ResourcePtr,10> resources(testHeap);
-	FileInputStream inputStream("data/testImage.png");
+	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
+	auto filePath = Util::Path::Combine(dirPath, "../../data/testImage.png");
+
+	FileInputStream inputStream(filePath);
 
 	AssetImporterTexturePNG* png = new(testHeap) AssetImporterTexturePNG(testHeap);
 
