@@ -37,7 +37,7 @@ namespace SF {
 		// TODO: memory optimization, use heap
 
 		// heap for variables
-		SharedPointerT<StackHeap<2048>> m_Heap;
+		SharedPointerT<StackHeapT<2048>> m_Heap;
 
 		// Variable 
 		StaticArray<Variable*,20> m_Vairables;

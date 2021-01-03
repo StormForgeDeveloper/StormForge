@@ -64,18 +64,18 @@ namespace SF {
 		uint32_t Size			= 0;				// Allocated memory size. We don't support bigger than 4GB allocation
 		IHeap* pHeap			= nullptr;
 
-		void Init(IHeap* heap, uint32_t size);
+		void InitHeader(IHeap* heap, uint32_t size);
 		void Deinit();
 
 		// +1 for reserved offset for reverse search
 		static size_t GetHeaderSize();
 		static size_t GetFooterSize();
-		static size_t GetHeaderNFooterSize() { return GetHeaderSize() + GetFooterSize(); }
+		//static size_t GetHeaderNFooterSize() { return GetHeaderSize() + GetFooterSize(); }
 
-		static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment) { return GetHeaderSize() + AlignUp(requestedSize, alignment) + GetFooterSize(); }
+		static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return GetHeaderSize() + AlignUp(requestedSize, alignment) + GetFooterSize(); }
 
 		void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + GetHeaderSize(); }
-		MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(GetDataPtr()) + Size); }
+		MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(GetDataPtr()) + AlignUp(Size, MaxHeaderAlignment)); }
 	};
 
 	struct MemBlockFooter
@@ -91,7 +91,7 @@ namespace SF {
 		ThreadID LatestThreadID;
 #endif
 
-		void Init();
+		void InitFooter();
 		void Deinit();
 	};
 #pragma pack(pop)

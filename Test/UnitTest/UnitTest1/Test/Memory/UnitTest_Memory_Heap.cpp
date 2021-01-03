@@ -39,7 +39,7 @@ using namespace ::SF;
 TEST_F(MemoryTest, Heap)
 {
 	auto pPtr = (uint8_t*)GetHeap().Alloc(100);
-	EXPECT_EQ(nullptr, pPtr);
+	EXPECT_NE(nullptr, pPtr);
 
 	for (int i = 0; i < 100; i++)
 	{

@@ -64,8 +64,8 @@ namespace SF {
 
 		SF_FORCEINLINE void GetStackFrame( CONTEXT& context, STACKFRAME64& stackFrame, DWORD& imageType );
 
-		void SF_STDCALL CaptureCallStackFast( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth );
-		void SF_STDCALL CaptureCallStackReliable( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth );
+		void SF_STDCALL CaptureCallStackFast( CallStackTrace& stackTrace, void** stackBuffer, uint bufferCount, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth );
+		void SF_STDCALL CaptureCallStackReliable( CallStackTrace& stackTrace, void** stackBuffer, uint bufferCount, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth );
 #else
 #endif
 
@@ -355,7 +355,7 @@ namespace SF {
 	// Find maximum skip depth
 	void StackWalkerImpl::UpdateSkipDepth()
 	{
-		CallStackTrace stackTrace;
+		CallStackTraceT<16> stackTrace;
 		uint MaxSearchDepth = 7;
 		HANDLE hThread = GetCurrentThread();
 		STACKFRAME64 stackFrame;
@@ -372,7 +372,6 @@ namespace SF {
 #if defined(_M_IX86) || defined(_M_X64)
 		// Use fast version stack trace
 		stackTrace.m_StackTraceCount = CaptureStackBackTrace( 1, MaxSearchDepth, stackTrace.m_StackTrace, nullptr );
-		//CaptureCallStackFast( stackTrace, imageType, context, stackFrame, 1, MaxSearchDepth );
 #else
 		CaptureCallStackReliable( stackTrace, imageType, context, stackFrame, 1, MaxSearchDepth );
 #endif
@@ -388,7 +387,7 @@ namespace SF {
 
 			if( strstr( lineInfo.FileName, "stackwalker." ) != NULL )
 			{
-				// Update skippable depth
+				// Update skipable depth
 				m_ModuleStackSkipDepth = stackDepth + 1;
 			}
 		}
@@ -406,7 +405,7 @@ namespace SF {
 	}
 
 	// This implementation tested on x86 and x64
-	void SF_STDCALL StackWalkerImpl::CaptureCallStackFast( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth )
+	void SF_STDCALL StackWalkerImpl::CaptureCallStackFast( CallStackTrace& stackTrace, void** stackBuffer, uint bufferCount, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth )
 	{
 		ULONG_PTR lowLimit, highLimit;
 		HANDLE hThread = GetCurrentThread();
@@ -426,7 +425,7 @@ namespace SF {
 		for( uint frameNumber = 1; 
 			currentStackFrame != nullptr 
 				&& ((frameNumber < m_ModuleStackSkipDepth) || (frameNumber - m_ModuleStackSkipDepth) < maxDepth)
-				&& stackIndex < CallStackTrace::MAX_CALLSTACK_DEPTH;
+				&& stackIndex < bufferCount;
 			++frameNumber )
 		{
 			ULONG_PTR stackFramePtr = (ULONG_PTR)currentStackFrame;
@@ -470,19 +469,19 @@ namespace SF {
 				continue;
 			}
 
-			stackTrace.m_StackTrace[stackIndex++] = currentStackFrame->pReturn;
+			stackBuffer[stackIndex++] = currentStackFrame->pReturn;
 			currentStackFrame = currentStackFrame->pNext;
 		}
 
 		stackTrace.m_StackTraceCount = stackIndex;
 	}
 
-	void SF_STDCALL StackWalkerImpl::CaptureCallStackReliable( CallStackTrace& stackTrace, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth )
+	void SF_STDCALL StackWalkerImpl::CaptureCallStackReliable( CallStackTrace& stackTrace, void** stackBuffer, uint bufferCount, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth )
 	{
 		HANDLE hThread = GetCurrentThread();
 
 		uint stackIndex = 0;
-		for( uint frameNumber = 1; (frameNumber - m_ModuleStackSkipDepth) < maxDepth && stackIndex < CallStackTrace::MAX_CALLSTACK_DEPTH; ++frameNumber )
+		for( uint frameNumber = 1; (frameNumber - m_ModuleStackSkipDepth) < maxDepth && stackIndex < bufferCount; ++frameNumber )
 		{
 			if( !StackWalk64( imageType, m_hProcess, hThread, &stackFrame, &context, NULL, SymFunctionTableAccess64, SymGetModuleBase64, NULL ) )
 				break;
@@ -491,7 +490,7 @@ namespace SF {
 			if( frameNumber < skipDepth )
 				continue;
 
-			stackTrace.m_StackTrace[ stackIndex++ ] = (void*)stackFrame.AddrPC.Offset;
+			stackBuffer[ stackIndex++ ] = (void*)stackFrame.AddrPC.Offset;
 
 			// prevent infinite call
 			if( stackFrame.AddrPC.Offset == stackFrame.AddrReturn.Offset )
@@ -507,7 +506,7 @@ namespace SF {
 
 	// get current stack trace
 	// #pragma optimize("y",off)
-	void SF_STDCALL StackWalkerImpl::CaptureCallStack( CallStackTrace& stackTrace, uint skipDepth, uint maxDepth )
+	void SF_STDCALL StackWalkerImpl::CaptureCallStack( CallStackTrace& stackTrace, void** stackBuffer, uint bufferCount, uint skipDepth, uint maxDepth )
 	{
 		STACKFRAME64 stackFrame;
 		DWORD imageType = 0;
@@ -520,8 +519,8 @@ namespace SF {
 
 #if defined(_M_IX86) || defined(_M_X64)
 		// Use fast version stack trace
-		maxDepth = std::min( maxDepth - skipDepth + m_ModuleStackSkipDepth, (uint)CallStackTrace::MAX_CALLSTACK_DEPTH );
-		stackTrace.m_StackTraceCount = CaptureStackBackTrace( skipDepth + m_ModuleStackSkipDepth, maxDepth, stackTrace.m_StackTrace, nullptr );
+		maxDepth = std::min( maxDepth - skipDepth + m_ModuleStackSkipDepth, bufferCount);
+		stackTrace.m_StackTraceCount = CaptureStackBackTrace( skipDepth + m_ModuleStackSkipDepth, maxDepth, stackBuffer, nullptr );
 		//CaptureCallStackFast( stackTrace, imageType, context, stackFrame, skipDepth + m_ModuleStackSkipDepth, maxDepth );
 #else
 		CaptureCallStackReliable( stackTrace, imageType, context, stackFrame, skipDepth + m_ModuleStackSkipDepth, maxDepth );

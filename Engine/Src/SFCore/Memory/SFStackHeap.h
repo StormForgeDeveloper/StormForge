@@ -31,7 +31,7 @@ namespace SF
 	//	Stack memory allocator
 	//
 
-	template< size_t BufferSize, size_t DefaultAlignment = SF_ALIGN_DOUBLE >
+
 	class StackHeap : public IHeap
 	{
 	public:
@@ -41,18 +41,26 @@ namespace SF
 		struct MemoryChunkHeader : public MemBlockHdr
 		{
 			MemoryChunkHeader* Prev = nullptr;
+
+			static size_t GetHeaderSize() { return AlignUp(sizeof(MemoryChunkHeader) + 1, MaxHeaderAlignment); }
+			static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return MemoryChunkHeader::GetHeaderSize() + AlignUp(requestedSize, alignment) + GetFooterSize(); }
+
+			void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + MemoryChunkHeader::GetHeaderSize(); }
+			MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(MemoryChunkHeader::GetDataPtr()) + AlignUp(Size, SF_ALIGN_DOUBLE)); }
 		};
 #pragma pack(pop)
 
 		// header size
-		static const size_t HEADER_SIZE = AlignUp(sizeof(MemoryChunkHeader), DefaultAlignment);
+		//static const size_t HEADER_SIZE = AlignUp(sizeof(MemoryChunkHeader), DefaultAlignment);
 
 
 		// stack position
 		intptr_t			m_AllocatePosition = 0;
 
-		// Static buffer
-		uint8_t				m_AllocationBuffer[BufferSize];
+		size_t m_AllocationBufferSize = 0;
+
+		// buffer
+		uint8_t				*m_AllocationBuffer = nullptr;
 
 	protected:
 
@@ -62,13 +70,21 @@ namespace SF
 
 	public:
 
-		StackHeap(StringCrc64 name, IHeap& overflowHeap);
+		StackHeap(StringCrc64 name, IHeap& overflowHeap, size_t bufferSize, uint8_t* allocationBuffer);
 		~StackHeap();
 
-		bool GetIsInStaticBuffer(void* pPtr);
+		bool GetIsInStaticBuffer(void* pPtr)
+		{
+			intptr_t ptr = (intptr_t)pPtr;
+			intptr_t staticBuffer = (intptr_t)m_AllocationBuffer;
+			return (ptr >= staticBuffer) && (ptr <= (staticBuffer + (intptr_t)m_AllocationBufferSize));
+		}
 
 		// Get free memory size in static buffer
-		size_t GetFreeMemorySize();
+		size_t GetFreeMemorySize()
+		{
+			return m_AllocationBufferSize - m_AllocatePosition;
+		}
 
 		// Validate allocated chunks for debug
 		Result ValidateAllocatedChunks();
@@ -76,12 +92,23 @@ namespace SF
 	};
 
 
+	template< size_t BufferSize >
+	class StackHeapT : public StackHeap
+	{
+	public:
+
+		// Static buffer
+		uint8_t				m_Buffer[BufferSize];
+
+	public:
+
+		StackHeapT(StringCrc64 name, IHeap& overflowHeap)
+			: StackHeap(name, overflowHeap, BufferSize, m_Buffer)
+		{
+		}
+	};
 
 } // namespace SF
-
-
-#include "SFStackHeap.inl"
-
 
 
 

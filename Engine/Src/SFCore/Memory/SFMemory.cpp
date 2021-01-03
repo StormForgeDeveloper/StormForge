@@ -39,7 +39,7 @@ namespace SF {
 	}
 
 
-	void MemBlockHdr::Init(IHeap* heap, uint32_t size)
+	void MemBlockHdr::InitHeader(IHeap* heap, uint32_t size)
 	{
 		memset(this, 0, sizeof(MemBlockHdr));
 		Magic = MEM_MAGIC;
@@ -59,7 +59,7 @@ namespace SF {
 	}
 
 
-	void MemBlockFooter::Init()
+	void MemBlockFooter::InitFooter()
 	{
 		Magic = MEM_MAGIC;
 	#if ENABLE_MEMORY_TRACE

@@ -169,9 +169,9 @@ namespace SF {
 
 		AddAllocSize(size);
 
-		pMemBlock->Init(this, (uint32_t)size);
+		pMemBlock->InitHeader(this, (uint32_t)size);
 		auto pFooter = pMemBlock->GetFooter();
-		pFooter->Init();
+		pFooter->InitFooter();
 
 		return pMemBlock;
 	}
@@ -201,7 +201,6 @@ namespace SF {
 #else
 		assert(alignment <= MemBlockHdr::MaxHeaderAlignment); // We assumed there will be no bigger alignment requirement
 		void* newPtr = realloc(ptr, allocSize);
-		auto remain = ((int64_t)newPtr) % alignment;
 #endif
 		if (newPtr == nullptr)
 		{
@@ -209,19 +208,19 @@ namespace SF {
 			if (newPtr2 == nullptr)
 				return nullptr;
 
-			if (oldPtr != nullptr)
-				memcpy(newPtr2, oldPtr + 1, Util::Min(orgSize, newSize));
-
 			oldPtr->GetFooter()->Deinit();
 			oldPtr->Deinit();
+
+			if (oldPtr != nullptr)
+				memcpy(newPtr2, oldPtr, Util::Min(allocSize, MemBlockHdr::CalculateAllocationSize(orgSize, alignment)));
 
 			SystemAlignedFree(oldPtr);
 			newPtr = newPtr2;
 		}
 
 		pMemBlock = reinterpret_cast<MemBlockHdr*>(newPtr);
-		pMemBlock->Init(this, (uint32_t)newSize);
-		pMemBlock->GetFooter()->Init();
+		pMemBlock->InitHeader(this, (uint32_t)newSize);
+		pMemBlock->GetFooter()->InitFooter();
 
 		return pMemBlock;
 	}

@@ -165,17 +165,14 @@ elseif(UNIX)
 
 	message ( "Setup UNIX configs" )
 
-	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fexceptions -frtti -pthread -fPIC")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -fexceptions -frtti -pthread -fPIC")
+	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -g -frtti -pthread -fPIC -Wnonportable-include-path")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -g -fexceptions -frtti -pthread -fPIC -Wnonportable-include-path")
 
 	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 
 	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_DEBUG} -O3")
 	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_DEBUG} -O3")
-
-	SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
 
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)

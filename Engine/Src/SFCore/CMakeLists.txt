@@ -146,6 +146,7 @@ set(SFCORE_LIB_FILES
 	Memory/SFMemoryManager.h
 	Memory/SFMemoryPool.h
 	Memory/SFStackHeap.h
+	Memory/SFStackHeap.cpp
 	Object/SFLibraryComponent.h
 	Object/SFLibraryComponentAdapter.h
 	Object/SFLibraryComponentManager.h

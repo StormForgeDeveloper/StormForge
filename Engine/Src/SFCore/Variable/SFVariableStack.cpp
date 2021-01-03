@@ -28,7 +28,7 @@ namespace SF {
 	//
 
 	VariableStack::VariableStack(IHeap& heap)
-		: m_Heap(new(heap) StackHeap<2048>("VariableStack", heap))
+		: m_Heap(new(heap) StackHeapT<2048>("VariableStack", heap))
 		, m_Vairables(heap)
 	{
 	}
