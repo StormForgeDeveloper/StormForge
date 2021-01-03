@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -32,7 +32,6 @@ namespace SF {
 	//	Circular buffer memory allocator
 	//
 
-	template< size_t BufferSize, size_t alignment >
 	class CircularHeap : public IHeap
 	{
 	public:
@@ -45,15 +44,11 @@ namespace SF {
 		};
 
 #pragma pack(push, 4)
-		typedef MemBlockHdr MemoryChunkHeader;
-		//struct MemoryChunkHeader : public MemBlockHdr
-		//{
-		//	ChunkTypes	ChunkType;
-		//};
+		using MemoryChunkHeader = MemBlockHdr;
 #pragma pack(pop)
 
 		// header size
-		static const size_t HEADER_SIZE = AlignUp(sizeof(MemoryChunkHeader), alignment);
+		//static const size_t HEADER_SIZE = AlignUp(sizeof(MemoryChunkHeader), SF_ALIGN_DOUBLE);
 
 
 		intptr_t			m_FreeSize;
@@ -62,7 +57,11 @@ namespace SF {
 		intptr_t			m_FreePosition;
 
 		// Static buffer
-		uint8_t				m_AllocationBuffer[BufferSize];
+		size_t m_AllocationBufferSize = 0;
+
+		uint8_t				*m_AllocationBuffer = nullptr;
+
+		intptr_t m_RedundencySize = 0;
 
 	protected:
 
@@ -72,13 +71,22 @@ namespace SF {
 
 	public:
 
-		CircularHeap(IHeap& overflowHeap);
+		CircularHeap(IHeap& overflowHeap, size_t allocationBufferSize, uint8_t* allocationBuffer);
 		~CircularHeap();
 
-		bool GetIsInStaticBuffer(void* pPtr);
+
+		bool GetIsInStaticBuffer(void* pPtr)
+		{
+			intptr_t ptr = (intptr_t)pPtr;
+			intptr_t staticBuffer = (intptr_t)m_AllocationBuffer;
+			return (ptr >= staticBuffer) && (ptr <= (staticBuffer + (intptr_t)m_AllocationBufferSize));
+		}
 
 		// Get free memory size in static buffer
-		size_t GetFreeMemorySize();
+		size_t GetFreeMemorySize()
+		{
+			return m_FreeSize;
+		}
 
 		// Validate allocated chunks for debug
 		Result ValidateAllocatedChunks();
@@ -86,12 +94,29 @@ namespace SF {
 	};
 
 
+	////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Circular buffer memory allocator
+	//
+
+	template< size_t BufferSize >
+	class CircularHeapT : public CircularHeap
+	{
+	public:
+
+		// Static buffer
+		uint8_t				m_Buffer[BufferSize];
+
+	public:
+
+		CircularHeapT(IHeap& overflowHeap)
+			: CircularHeap(overflowHeap, BufferSize, m_Buffer)
+		{
+		}
+
+	};
+
 
 } // namespace SF
-
-
-#include "SFCircularHeap.inl"
-
-
 
 

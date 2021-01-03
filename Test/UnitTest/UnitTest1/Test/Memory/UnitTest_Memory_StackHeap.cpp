@@ -86,7 +86,7 @@ TEST_F(MemoryTest, StackHeap)
 		}
 		else
 		{
-			auto pPtr = new(**stackHeap) int[randVal % 10];
+			auto pPtr = new(*stackHeap.get()) int[randVal % 10];
 			allocatedList.push_back(pPtr);
 		}
 

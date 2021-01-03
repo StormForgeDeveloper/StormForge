@@ -41,15 +41,15 @@ namespace SF {
 
 	void MemBlockHdr::InitHeader(IHeap* heap, uint32_t size)
 	{
-		memset(this, 0, sizeof(MemBlockHdr));
+		uint32_t headerSize = GetHeaderSize();
+		memset(this, 0, headerSize);
 		Magic = MEM_MAGIC;
 		Size = (uint32_t)size;
 		pHeap = heap;
 
 		// This works because we added +1 before
-		uint32_t dataOffset = GetHeaderSize();
-		auto pReverseOffset = ((uint8_t*)this + dataOffset - 1);
-		*pReverseOffset = static_cast<uint8_t>(dataOffset);
+		auto pReverseOffset = ((uint8_t*)this + headerSize - 1);
+		*pReverseOffset = static_cast<uint8_t>(headerSize);
 	}
 
 	void MemBlockHdr::Deinit()

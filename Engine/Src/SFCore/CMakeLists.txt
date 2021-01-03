@@ -142,6 +142,7 @@ set(SFCORE_LIB_FILES
 	Memory/SFHeapTree.h
 	Memory/SFIMemoryManager.h
 	Memory/SFCircularHeap.h
+	Memory/SFCircularHeap.cpp
 	Memory/SFMemory.h
 	Memory/SFMemoryManager.h
 	Memory/SFMemoryPool.h
