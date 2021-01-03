@@ -30,7 +30,7 @@ namespace SF {
 
 	size_t MemBlockHdr::GetHeaderSize()
 	{
-		return AlignUp(sizeof(MemBlockHdr) + 1, MaxHeaderAlignment);
+		return AlignUp(sizeof(MemBlockHdr), MaxHeaderAlignment);
 	}
 
 	size_t MemBlockHdr::GetFooterSize()
@@ -39,17 +39,18 @@ namespace SF {
 	}
 
 
-	void MemBlockHdr::InitHeader(IHeap* heap, uint32_t size)
+	void MemBlockHdr::InitHeader(IHeap* heap, uint32_t size, uint32_t headerSize)
 	{
-		uint32_t headerSize = GetHeaderSize();
+		//uint32_t headerSize = GetHeaderSize();
 		memset(this, 0, headerSize);
 		Magic = MEM_MAGIC;
 		Size = (uint32_t)size;
 		pHeap = heap;
 
 		// This works because we added +1 before
-		auto pReverseOffset = ((uint8_t*)this + headerSize - 1);
-		*pReverseOffset = static_cast<uint8_t>(headerSize);
+		HeaderSize = headerSize;
+		//auto pReverseOffset = ((uint8_t*)this + headerSize - 1);
+		//*pReverseOffset = static_cast<uint8_t>(headerSize);
 	}
 
 	void MemBlockHdr::Deinit()

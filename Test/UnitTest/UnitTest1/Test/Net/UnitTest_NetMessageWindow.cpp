@@ -29,7 +29,7 @@ using namespace ::SF;
 
 
 //const uint32_t TestScale = 2;
-const uint32_t TEST_COUNT = 4000000 * TestScale;
+const uint32_t TEST_COUNT = 4000 * TestScale;
 
 
 MessageDataPtr NewMessage(IHeap& memoryManager, uint32_t sequenceID)

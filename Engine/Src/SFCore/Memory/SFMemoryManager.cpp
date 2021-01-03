@@ -169,7 +169,7 @@ namespace SF {
 
 		AddAllocSize(size);
 
-		pMemBlock->InitHeader(this, (uint32_t)size);
+		pMemBlock->InitHeader(this, (uint32_t)size, pMemBlock->GetHeaderSize());
 		auto pFooter = pMemBlock->GetFooter();
 		pFooter->InitFooter();
 
@@ -219,7 +219,7 @@ namespace SF {
 		}
 
 		pMemBlock = reinterpret_cast<MemBlockHdr*>(newPtr);
-		pMemBlock->InitHeader(this, (uint32_t)newSize);
+		pMemBlock->InitHeader(this, (uint32_t)newSize, pMemBlock->GetHeaderSize());
 		pMemBlock->GetFooter()->InitFooter();
 
 		return pMemBlock;

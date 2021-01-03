@@ -67,7 +67,7 @@ namespace SF
 			if (!result) return nullptr;
 		}
 
-		pFreeChunk->InitHeader(thisHeap, pFreeChunk->Size);
+		pFreeChunk->InitHeader(thisHeap, pFreeChunk->Size, pFreeChunk->GetHeaderSize());
 		pFreeChunk->State = 1;
 
 		return pFreeChunk;
@@ -103,7 +103,7 @@ namespace SF
 			pMemChunk = MergeChunks(pMemChunk, pNextChunk);
 		}
 
-		// merge prev chunk if possible
+		// merge previous chunk if possible
 		auto pPrevChunk = GetPrevChunk(pMemChunk);
 		if (pPrevChunk != nullptr && pPrevChunk->State == 0)
 		{

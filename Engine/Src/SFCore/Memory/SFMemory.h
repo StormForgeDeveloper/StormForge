@@ -49,28 +49,26 @@ namespace SF {
 #endif
 
 
-
-
 #pragma pack(push, 1)
 	struct MemBlockFooter;
 
 	struct MemBlockHdr
 	{
-		static constexpr uint32_t MEM_MAGIC = 0xAE9218AE;
-		static constexpr uint32_t MEM_MAGIC_FREE = 0xCDCDCDCD;
+		static constexpr uint32_t MEM_MAGIC = 0xAE92AE;// 0xAE9218AE;
+		static constexpr uint32_t MEM_MAGIC_FREE = 0xCDCDCD;
 		static constexpr uint32_t MaxHeaderAlignment = SF_ALIGN_DOUBLE;
 
-		uint32_t Magic			= MEM_MAGIC_FREE;
-		uint32_t Size			= 0;				// Allocated memory size. We don't support bigger than 4GB allocation
-		IHeap* pHeap			= nullptr;
+		IHeap* pHeap = nullptr;
+		uint32_t Size = 0;				// Allocated memory size. We don't support bigger than 4GB allocation
+		uint32_t Magic : 24;
+		uint32_t HeaderSize : 8;
 
-		void InitHeader(IHeap* heap, uint32_t size);
+		void InitHeader(IHeap* heap, uint32_t size, uint32_t headerSize);
 		void Deinit();
 
 		// +1 for reserved offset for reverse search
 		static size_t GetHeaderSize();
 		static size_t GetFooterSize();
-		//static size_t GetHeaderNFooterSize() { return GetHeaderSize() + GetFooterSize(); }
 
 		static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return GetHeaderSize() + AlignUp(requestedSize, alignment) + GetFooterSize(); }
 

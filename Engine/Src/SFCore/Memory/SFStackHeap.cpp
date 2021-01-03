@@ -73,7 +73,7 @@ namespace SF {
 			return pMemBlk;
 		}
 
-		pChunk->InitHeader(this, (uint32_t)size);
+		pChunk->InitHeader(this, (uint32_t)size, MemoryChunkHeader::GetHeaderSize());
 		pChunk->pHeap = this; // null means free block
 		pChunk->GetFooter()->InitFooter();
 

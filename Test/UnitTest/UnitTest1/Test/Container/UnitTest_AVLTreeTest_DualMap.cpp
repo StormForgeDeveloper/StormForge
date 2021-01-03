@@ -467,7 +467,7 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 	auto start = Util::Time.GetRawTimeMs();
 	auto end = Util::Time.GetRawTimeMs();
 #ifdef DEBUG
-	auto runningTime = DurationMS(5 * 60 * 1000);
+	auto runningTime = DurationMS(2 * 60 * 1000);
 #else
 	auto runningTime = DurationMS(30 * 60 * 1000);
 #endif

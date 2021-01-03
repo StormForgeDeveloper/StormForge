@@ -19,7 +19,7 @@
 #ifdef DEBUG
 #define TestScale 1
 #else
-#define TestScale 10
+#define TestScale 100
 #endif
 
 
