@@ -449,7 +449,8 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 					uint testIndex = ((uint)rand()) % numberOfTest;
 					sortedMap.ForeachOrder(testIndex, 20, [&](const uint& key, const uint& value)
 					{
-						if (latestValue != -1)
+						// -1: initial value, 0:some weird case(?)
+						if (latestValue != -1 || latestValue == 0)
 						{
 							EXPECT_LE(value, (uint)latestValue);
 						}
