@@ -368,7 +368,7 @@ namespace SF
 				virtual Result Execute(ScriptContext& context)  const override
 				{
 					context.GetBytecodeContext().CurrentPosition++;
-					auto opB = ParseUInt32(context);
+					auto opB = ParseInt32(context);
 
 					auto pVarA = context.GetVariableStack().GetFromFront(0);
 					if (pVarA == nullptr)
@@ -434,7 +434,7 @@ namespace SF
 				virtual Result Execute(ScriptContext& context)  const override
 				{
 					context.GetBytecodeContext().CurrentPosition++;
-					auto opB = ParseUInt32(context);
+					auto opB = ParseInt32(context);
 
 					auto pVarA = context.GetVariableStack().GetFromFront(0);
 					if (pVarA == nullptr)
@@ -500,7 +500,7 @@ namespace SF
 				virtual Result Execute(ScriptContext& context)  const override
 				{
 					context.GetBytecodeContext().CurrentPosition++;
-					auto opB = ParseUInt32(context);
+					auto opB = ParseInt32(context);
 
 					auto pVarA = context.GetVariableStack().GetFromFront(0);
 					if (pVarA == nullptr)
@@ -567,7 +567,7 @@ namespace SF
 				virtual Result Execute(ScriptContext& context)  const override
 				{
 					context.GetBytecodeContext().CurrentPosition++;
-					auto opB = ParseUInt32(context);
+					auto opB = ParseInt32(context);
 
 					auto pVarA = context.GetVariableStack().GetFromFront(0);
 					if (pVarA == nullptr)
@@ -620,7 +620,7 @@ namespace SF
 			{
 			public:
 				ScriptOpcodeInfoAddF()
-					: ScriptOpcodeInfo(SrciptBytecodeOpCode::AddI, "stack", "float", "stack")
+					: ScriptOpcodeInfo(SrciptBytecodeOpCode::AddF, "stack", "float", "stack")
 				{}
 
 				static ScriptOpcodeInfo* GetInstance() { static ScriptOpcodeInfoAddF instance; return &instance; }
@@ -752,7 +752,7 @@ namespace SF
 			{
 			public:
 				ScriptOpcodeInfoMulF()
-					: ScriptOpcodeInfo(SrciptBytecodeOpCode::MulI, "stack", "float", "stack")
+					: ScriptOpcodeInfo(SrciptBytecodeOpCode::MulF, "stack", "float", "stack")
 				{}
 
 				static ScriptOpcodeInfo* GetInstance() { static ScriptOpcodeInfoMulF instance; return &instance; }
@@ -819,7 +819,7 @@ namespace SF
 			{
 			public:
 				ScriptOpcodeInfoDivF()
-					: ScriptOpcodeInfo(SrciptBytecodeOpCode::DivI, "stack", "float", "stack")
+					: ScriptOpcodeInfo(SrciptBytecodeOpCode::DivF, "stack", "float", "stack")
 				{}
 
 				static ScriptOpcodeInfo* GetInstance() { static ScriptOpcodeInfoDivF instance; return &instance; }
