@@ -318,6 +318,9 @@ namespace SF {
 		// Inverse transform matrix ignoring scale
 		Matrix4SSE GetInverseTransformNoScale();
 
+		// Normalize matrix to a valid transform matrix
+		Matrix4SSE& NormalizeTransform();
+
 
 		Matrix4SSE operator - () const
 		{

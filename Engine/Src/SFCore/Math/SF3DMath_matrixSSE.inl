@@ -723,12 +723,7 @@ namespace SF
 		__m128 B = _SF_SHUFFLE_0101(Packed[2], Packed[3]);
 		__m128 D = _SF_SHUFFLE_2323(Packed[2], Packed[3]);
 
-		__m128 detA = _mm_set1_ps(a00 * a11 - a01 * a10);
-		__m128 detC = _mm_set1_ps(a02 * a13 - a03 * a12);
-		__m128 detB = _mm_set1_ps(a20 * a31 - a21 * a30);
-		__m128 detD = _mm_set1_ps(a22 * a33 - a23 * a32);
-
-#if 0 // for determinant, float version is faster
+#if 1 // for determinant
 		// determinant as (|A| |C| |B| |D|)
 		__m128 detSub = _mm_sub_ps(
 			_mm_mul_ps(_SF_SHUFFLE(Packed[0], Packed[2], 2, 0, 2, 0), _SF_SHUFFLE(Packed[1], Packed[3], 3, 1, 3, 1)),
@@ -738,6 +733,12 @@ namespace SF
 		__m128 detC = _SF_SWIZZLE1(detSub, 1);
 		__m128 detB = _SF_SWIZZLE1(detSub, 2);
 		__m128 detD = _SF_SWIZZLE1(detSub, 3);
+#else
+		// This implementation works on Inter CPU, but has error on AMD CPU
+		__m128 detA = _mm_set1_ps(a00 * a11 - a01 * a10);
+		__m128 detC = _mm_set1_ps(a02 * a13 - a03 * a12);
+		__m128 detB = _mm_set1_ps(a20 * a31 - a21 * a30);
+		__m128 detD = _mm_set1_ps(a22 * a33 - a23 * a32);
 #endif
 
 		// let iM = 1/|M| * | X  Y |
@@ -806,6 +807,29 @@ namespace SF
 		r.Packed[3] = _mm_sub_ps(_mm_set_ps(1, 0, 0, 0), r.Packed[3]);
 
 		return r;
+	}
+
+	inline Matrix4SSE& Matrix4SSE::NormalizeTransform()
+	{
+		if (a33 < std::numeric_limits<float>::epsilon())
+		{
+			assert(false); // can't normalize
+		}
+
+		if (Math::Abs(1.0 - a33) < std::numeric_limits<float>::epsilon())
+		{
+			// doesn't need to be normalized
+			return *this;
+		}
+
+		float inv33 = 1.0 / a33;
+		auto mmInv33 = _mm_set_ps1(inv33);
+		Packed[0] = _mm_mul_ps(Packed[0], mmInv33);
+		Packed[1] = _mm_mul_ps(Packed[1], mmInv33);
+		Packed[2] = _mm_mul_ps(Packed[2], mmInv33);
+		Packed[3] = _mm_mul_ps(Packed[3], mmInv33);
+
+		return *this;
 	}
 
 

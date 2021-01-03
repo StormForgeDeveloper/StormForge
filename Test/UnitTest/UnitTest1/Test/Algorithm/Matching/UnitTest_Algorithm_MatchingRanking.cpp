@@ -86,13 +86,14 @@ TEST_F(AlgorithmTest, MatchingRanking)
 	constexpr int NUM_PLAYER = 2000;
 	constexpr int NUM_SHELL = 50;
 	constexpr int MATCHING_VARIATION = 20;
+	const DurationMS testTime(40 * 1000);
 #else
 	constexpr int NUM_PLAYER = 2000000;
 	constexpr int NUM_SHELL = 5000;
 	constexpr int MATCHING_VARIATION = 100;
+	const DurationMS testTime(5 * 60 * 1000);
 #endif
 
-	const DurationMS testTime(5 * 60 * 1000);
 	std::atomic<uint32_t> playerUpdated(0);
 	std::atomic< uint32_t> successfulMatchCount(0);
 	std::atomic< uint32_t> failedMatchCount(0);

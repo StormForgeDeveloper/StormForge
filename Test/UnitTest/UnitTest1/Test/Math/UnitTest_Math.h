@@ -29,6 +29,7 @@ protected:
 	const float EPSILON_HIGH_PRECISION = 0.0001f;
 	const float EPSILON_MID_PRECISION = 0.001f;
 	const float EPSILON_LOW_PRECISION = 0.2f;
+	const float EPSILON_VERY_LOW_PRECISION = 0.6f;
 
 public:
 

@@ -334,7 +334,7 @@ namespace SF {
 		uint8_t headerOffset = 0;
 
 		// search up to for times, one already counted so 3 more
-		for (int iSearch = 0; iSearch < 2; iSearch++, pCompilerSizePos-=sizeof(size_t))
+		for (int iSearch = 0; iSearch < 3; iSearch++, pCompilerSizePos-=sizeof(size_t))
 		{
 			headerOffset = *(pCompilerSizePos - 1); // The place I stored header offset
 			pMemBlock = reinterpret_cast<MemBlockHdr*>(pCompilerSizePos - headerOffset);

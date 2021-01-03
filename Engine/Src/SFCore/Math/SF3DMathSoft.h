@@ -512,7 +512,8 @@ namespace SF {
 		// Inverse transform matrix ignoring scale
 		Matrix4Soft<T> GetInverseTransformNoScale();
 
-
+		// Normalize matrix to a valid transform matrix
+		Matrix4Soft<T>& NormalizeTransform();
 
 		Matrix4Soft<T> operator - () const
 		{

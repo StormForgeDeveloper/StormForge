@@ -1048,6 +1048,31 @@ namespace SF
 	}
 
 
+	template<class T>
+	inline Matrix4Soft<T>& Matrix4Soft<T>::NormalizeTransform()
+	{
+		if (a33 < std::numeric_limits<float>::epsilon())
+		{
+			assert(false); // can't normalize
+		}
+
+		if (Math::Abs(1.0 - a33) < std::numeric_limits<float>::epsilon())
+		{
+			// doesn't need to be normalized
+			return *this;
+		}
+
+		float inv33 = 1.0 / a33;
+		for (int i = 0; i < 16; i+=4)
+		{
+			Elements[i + 0] *= inv33;
+			Elements[i + 1] *= inv33;
+			Elements[i + 2] *= inv33;
+			Elements[i + 3] *= inv33;
+		}
+
+		return *this;
+	}
 }
 
 

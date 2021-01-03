@@ -445,13 +445,13 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 					}
 
 
-					// This will fails when there is multiple commit happened from other thread
+					// NOTE: This will fails when there is multiple commit happened from other thread. it just matter of statistic
 					long latestValue = -1;
 					uint testIndex = ((uint)rand()) % numberOfTest;
 					sortedMap.ForeachOrder(testIndex, 20, [&](const uint& key, const uint& value)
 					{
-						// -1: initial value, 0:some weird case(?)
-						if (latestValue != -1 || latestValue == 0)
+						// -1: initial value
+						if (latestValue != -1)
 						{
 							EXPECT_LE(value, (uint)latestValue);
 						}

@@ -45,7 +45,7 @@ namespace SF
 	// returns orthogonal length
 	inline void Vector4SSE::Normalize4()
 	{
-#if 0 // faster but slow
+#if 0 // faster but too low precision
 		auto invLength = _mm_rsqrt_ps(_mm_dp_ps(Packed, Packed, 0xFF));
 		Packed = _mm_mul_ps(Packed, invLength);
 #else

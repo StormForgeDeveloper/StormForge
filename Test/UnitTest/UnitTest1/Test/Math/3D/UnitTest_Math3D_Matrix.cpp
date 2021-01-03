@@ -642,13 +642,13 @@ TEST_F(MathTest, SSE_Matrix4_Invert)
 	} TestSetting[] =
 	{
 		{ true, true, false },
-	{ false, false, true },
-	{ true, false, false },
-	{ false, true, false },
-	{},
-	{ true, false, true },
-	{ false, true, true },
-	{ true, true, true },
+		{ false, false, true },
+		{ true, false, false },
+		{ false, true, false },
+		{},
+		{ true, false, true },
+		{ false, true, true },
+		{ true, true, true },
 	};
 
 	Matrix4SSE m2(
@@ -671,19 +671,22 @@ TEST_F(MathTest, SSE_Matrix4_Invert)
 		auto invMul2 = m * invMat;
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_LOW_PRECISION, Math::Abs(m.Elements[iEle] - inv2Mat.Elements[iEle]));
+			auto diff = Math::Abs(m.Elements[iEle] - inv2Mat.Elements[iEle]);
+			EXPECT_GE(EPSILON_LOW_PRECISION, diff);
 		}
 
 		Matrix4SSE identity;
 		identity.InitIdentity();
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(identity.Elements[iEle] - invMul.Elements[iEle]));
+			auto diff = Math::Abs(identity.Elements[iEle] - invMul.Elements[iEle]);
+			EXPECT_GE(EPSILON_MID_PRECISION, diff);
 		}
 
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(identity.Elements[iEle] - invMul2.Elements[iEle]));
+			auto diff = Math::Abs(identity.Elements[iEle] - invMul2.Elements[iEle]);
+			EXPECT_GE(EPSILON_MID_PRECISION, diff);
 		}
 	}
 
@@ -705,7 +708,8 @@ TEST_F(MathTest, SSE_Matrix4_Invert)
 
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(invMat.Elements[iEle] - invMat2.Elements[iEle]));
+			auto diff = Math::Abs(invMat.Elements[iEle] - invMat2.Elements[iEle]);
+			EXPECT_GE(EPSILON_MID_PRECISION, diff);
 		}
 
 		// 
@@ -713,13 +717,15 @@ TEST_F(MathTest, SSE_Matrix4_Invert)
 		{
 			for (int iEle = 0; iEle < 16; iEle++)
 			{
-				EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(inv2Mat.Elements[iEle] - inv2Mat2.Elements[iEle]));
+				auto diff = Math::Abs(inv2Mat.Elements[iEle] - inv2Mat2.Elements[iEle]);
+				EXPECT_GE(EPSILON_MID_PRECISION, diff);
 			}
 
 
 			for (int iEle = 0; iEle < 16; iEle++)
 			{
-				EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(m.Elements[iEle] - inv2Mat.Elements[iEle]));
+				auto diff = Math::Abs(m.Elements[iEle] - inv2Mat.Elements[iEle]);
+				EXPECT_GE(EPSILON_MID_PRECISION, diff);
 			}
 		}
 
@@ -727,12 +733,14 @@ TEST_F(MathTest, SSE_Matrix4_Invert)
 		identity.InitIdentity();
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(identity.Elements[iEle] - invMul.Elements[iEle]));
+			auto diff = Math::Abs(identity.Elements[iEle] - invMul.Elements[iEle]);
+			EXPECT_GE(EPSILON_MID_PRECISION, diff);
 		}
 
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(identity.Elements[iEle] - invMul2.Elements[iEle]));
+			auto diff = Math::Abs(identity.Elements[iEle] - invMul2.Elements[iEle]);
+			EXPECT_GE(EPSILON_MID_PRECISION, diff);
 		}
 	}
 
@@ -754,30 +762,35 @@ TEST_F(MathTest, SSE_Matrix4_Invert)
 
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(invMat.Elements[iEle] - invMat2.Elements[iEle]));
+			auto diff = Math::Abs(invMat.Elements[iEle] - invMat2.Elements[iEle]);
+			EXPECT_GE(EPSILON_MID_PRECISION, diff);
 		}
 
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_HIGH_PRECISION, Math::Abs(inv2Mat.Elements[iEle] - inv2Mat2.Elements[iEle]));
+			auto diff = Math::Abs(inv2Mat.Elements[iEle] - inv2Mat2.Elements[iEle]);
+			EXPECT_GE(EPSILON_HIGH_PRECISION, diff);
 		}
 
 
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(m.Elements[iEle] - inv2Mat.Elements[iEle]));
+			auto diff = Math::Abs(m.Elements[iEle] - inv2Mat.Elements[iEle]);
+			EXPECT_GE(EPSILON_MID_PRECISION, diff);
 		}
 
 		Matrix4SSE identity;
 		identity.InitIdentity();
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(identity.Elements[iEle] - invMul.Elements[iEle]));
+			auto diff = Math::Abs(identity.Elements[iEle] - invMul.Elements[iEle]);
+			EXPECT_GE(EPSILON_MID_PRECISION, diff);
 		}
 
 		for (int iEle = 0; iEle < 16; iEle++)
 		{
-			EXPECT_GE(EPSILON_MID_PRECISION, Math::Abs(identity.Elements[iEle] - invMul2.Elements[iEle]));
+			auto diff = Math::Abs(identity.Elements[iEle] - invMul2.Elements[iEle]);
+			EXPECT_GE(EPSILON_MID_PRECISION, diff);
 		}
 	}
 
