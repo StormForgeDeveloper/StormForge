@@ -345,13 +345,14 @@ TEST_F(AVLTreeTest, DualSortedMapRandomForeach)
 
 #ifdef DEBUG
 	const unsigned offset = 1;
+	DurationMS runningTime = DurationMS(30 * 1000);
 #else
 	const unsigned offset = 611;
+	DurationMS runningTime = DurationMS(2 * 60 * 1000);
 #endif
 
 	TimeStampMS start = Util::Time.GetRawTimeMs();
 	TimeStampMS end = Util::Time.GetRawTimeMs();
-	DurationMS runningTime = DurationMS(2 * 60 * 1000);
 	int *Status = new int[numberOfTest];
 	memset(Status, 0, sizeof(int)*numberOfTest);
 	for (unsigned iTest = 0; (end - start) < runningTime; iTest++)
