@@ -345,7 +345,7 @@ TEST_F(AVLTreeTest, DualSortedMapRandomForeach)
 
 #ifdef DEBUG
 	const unsigned offset = 1;
-	DurationMS runningTime = DurationMS(30 * 1000);
+	DurationMS runningTime = DurationMS(60 * 1000);
 #else
 	const unsigned offset = 611;
 	DurationMS runningTime = DurationMS(2 * 60 * 1000);
@@ -402,7 +402,7 @@ TEST_F(AVLTreeTest, DualSortedMapRandomForeach)
 
 TEST_F(AVLTreeTest, DualSortedMapThread)
 {
-	DualSortedMap<uint,uint> sortedMap(GetHeap());
+	DualSortedMap<uint,Atomic<uint>> sortedMap(GetHeap());
 	int *Status = new int[numberOfTest];
 	const int NUM_THREAD = 10;
 
@@ -418,7 +418,7 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 	{
 		long latestValue = -1;
 		uint testIndex = ((uint)rand()) % numberOfTest;
-		sortedMap.ForeachOrder(testIndex, 1000, [&](const uint& key, const uint& value)
+		sortedMap.ForeachOrder(testIndex, 1000, [&](const uint& key, const Atomic<uint>& value)
 		{
 			if (latestValue != -1)
 			{
@@ -429,6 +429,8 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 		});
 	}
 
+
+	// TODO: broken on Windows
 	for (int iThread = 0; iThread < NUM_THREAD; iThread++)
 	{
 		auto thread = new(GetHeap()) FunctorThread(
@@ -448,7 +450,8 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 					// NOTE: This will fails when there is multiple commit happened from other thread. it just matter of statistic
 					long latestValue = -1;
 					uint testIndex = ((uint)rand()) % numberOfTest;
-					sortedMap.ForeachOrder(testIndex, 20, [&](const uint& key, const uint& value)
+					uint curIndex = testIndex;
+					sortedMap.ForeachOrder(testIndex, 20, [&](const uint& key, const Atomic<uint>& value)
 					{
 						// -1: initial value
 						if (latestValue != -1)
@@ -456,6 +459,7 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 							EXPECT_LE(value, (uint)latestValue);
 						}
 						latestValue = value;
+						curIndex++;
 						return true;
 					});
 				}
@@ -468,13 +472,13 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 	auto start = Util::Time.GetRawTimeMs();
 	auto end = Util::Time.GetRawTimeMs();
 #ifdef DEBUG
-	auto runningTime = DurationMS(2 * 60 * 1000);
+	auto runningTime = DurationMS(60 * 1000);
 #else
 	auto runningTime = DurationMS(30 * 60 * 1000);
 #endif
 	for (unsigned iTest = numberOfTest; (end - start) < runningTime; iTest++)
 	{
-		uint value = -1;
+		Atomic<uint> value = -1;
 		uint testIndex = ((uint)rand()) % numberOfTest;
 		if (Status[testIndex] == 0)
 		{
@@ -487,7 +491,7 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 			Status[testIndex] = 0;
 			EXPECT_TRUE((sortedMap.Insert(TestValues[testIndex], TestValues[testIndex])));
 		}
-		//std::atomic_thread_fence(std::memory_order_acq_rel);
+
 		if ((iTest + 1) % 10)
 		{
 			EXPECT_TRUE((sortedMap.CommitChanges()));

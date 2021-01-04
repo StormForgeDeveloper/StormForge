@@ -171,7 +171,8 @@ namespace SF {
 			}
 
 			MapNode* pInserted = nullptr;
-			if (key > pFound->Key) // duplicate key will be put at the left most side
+			auto foundKey = pFound->Key.load(MemoryOrder::memory_order_acquire);
+			if (key > foundKey) // duplicate key will be put at the left most side
 			{
 				auto right = pFound->Right;
 				if (right != nullptr)
@@ -179,7 +180,7 @@ namespace SF {
 
 				pFound->Right = pInserted = AllocateNode(key, value);
 			}
-			else if (key == pFound->Key)
+			else if (key == foundKey)
 			{
 				auto left = pFound->Left = CloneNode(pFound->Left.load());
 				if (left != nullptr)
@@ -232,10 +233,11 @@ namespace SF {
 				return ResultCode::INVALID_ARG;
 
 			// unique key
-			if (pFound->Key != key)
+			auto foundKey = pFound->Key.load(MemoryOrder::memory_order_acquire);
+			if (foundKey != key)
 				return ResultCode::FAIL;
 
-			value = std::forward<ValueType>(pFound->Value);
+			value = pFound->Value;
 
 
 			MapNode* child = nullptr;
@@ -334,7 +336,8 @@ namespace SF {
 			}
 
 			// unique key
-			if (pFound->Key != key)
+			auto foundKey = pFound->Key.load(MemoryOrder::memory_order_acquire);
+			if (foundKey != key)
 			{
 				return ResultCode::FAIL;
 			}
@@ -441,7 +444,8 @@ namespace SF {
 			}
 
 			// unique key
-			if (pFound->Key != key)
+			auto foundKey = pFound->Key.load(MemoryOrder::memory_order_acquire);
+			if (foundKey != key)
 			{
 				return ResultCode::FAIL;
 			}
@@ -589,13 +593,14 @@ namespace SF {
 				travelHistory.AddHistory(pCurNode);
 
 				// multiple key
-				if (pCurNode->Key == key)
+				auto curKey = pCurNode->Key.load(MemoryOrder::memory_order_acquire);
+				if (curKey == key)
 				{
 					pNode = pCurNode;
 					return ResultCode::SUCCESS;
 				}
 
-				if (key > pCurNode->Key)
+				if (key > curKey)
 				{
 					auto right = pCurNode->Right.load();
 					if (right == nullptr)
@@ -609,7 +614,7 @@ namespace SF {
 						pCurNode = right;
 					}
 				}
-				else // if (key <= pCurNode->Key)
+				else // if (key <= curKey)
 				{
 					auto left = pCurNode->Left.load();
 					left = pCurNode->Left = CloneNode(left);
@@ -623,9 +628,10 @@ namespace SF {
 					{
 						// Handle multiple key
 						// choose left most one
-						if (pCurNode->Key == key)
+						if (curKey == key)
 						{
-							if (left->Key != key)
+							auto leftKey = left->Key.load(MemoryOrder::memory_order_acquire);
+							if (leftKey != key)
 							{
 								pNode = FindBiggestNode(travelHistory, left);
 								return ResultCode::SUCCESS;
@@ -696,13 +702,14 @@ namespace SF {
 				travelHistory.AddHistory(pCurNode);
 
 				// multiple key
-				if (pCurNode->Key == key)
+				auto curKey = pCurNode->Key.load(MemoryOrder::memory_order_acquire);
+				if (curKey == key)
 				{
 					pNode = pCurNode;
 					return ResultCode::SUCCESS;
 				}
 
-				if (key > pCurNode->Key)
+				if (key > curKey)
 				{
 					auto right = pCurNode->Right.load();
 					if (right == nullptr)
@@ -715,7 +722,7 @@ namespace SF {
 						pCurNode = right;
 					}
 				}
-				else // if (key <= pCurNode->Key)
+				else // if (key <= curKey)
 				{
 					auto left = pCurNode->Left.load();
 					if (left == nullptr)
@@ -725,11 +732,12 @@ namespace SF {
 					}
 					else
 					{
-						// Handl multiple key
+						// Handle multiple key
 						// choose left most one
-						if (pCurNode->Key == key)
+						if (curKey == key)
 						{
-							if (left->Key != key)
+							auto leftKey = left->Key.load(MemoryOrder::memory_order_acquire);
+							if (leftKey != key)
 							{
 								pNode = FindBiggestNodeRead(travelHistory, left);
 								return ResultCode::SUCCESS;

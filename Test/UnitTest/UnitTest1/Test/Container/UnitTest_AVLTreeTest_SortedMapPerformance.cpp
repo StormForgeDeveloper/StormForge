@@ -88,7 +88,7 @@ static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int
 
 TEST_F(AVLTreeTest, SortedMapPerformance)
 {
-	TestSortedMap_PerfTest(GetHeap(), MAX_TEST_VALUE, TestValues);
+	TestSortedMap_PerfTest(GetHeap(), MAX_TEST_VALUE, TestValues.data());
 }
 
 

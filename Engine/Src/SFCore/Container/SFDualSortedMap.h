@@ -115,7 +115,7 @@ namespace SF {
 			class MapNode : public ObjectPoolObject
 			{
 			public:
-				KeyType Key{};
+				Atomic<KeyType> Key{};
 				ValueType Value{};
 
 				INT Balance = 0;
@@ -419,10 +419,19 @@ namespace SF {
 					return ResultCode::SUCCESS;
 				}
 
+#ifdef DEBUG
+				int DbgCurTraversalIndex = 0;
+				MapNode* DbgTraversalHistory[32]{};
+#endif
+
 
 				// iterate
 				do
 				{
+#ifdef DEBUG
+					DbgTraversalHistory[DbgCurTraversalIndex] = pCurNode;
+					DbgCurTraversalIndex = (DbgCurTraversalIndex + 1) % countof(DbgTraversalHistory);
+#endif
 					if (!functor(pCurNode->Key, pCurNode->Value))
 						return ResultCode::SUCCESS;
 

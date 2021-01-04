@@ -23,7 +23,6 @@ using namespace ::SF;
 
 
 
-
 TEST_F(AVLTreeTest, DualSortedMapPerfTestSimple)
 {
 	DualSortedMap<uint,uint> sortedMap(GetHeap());

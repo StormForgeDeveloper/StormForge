@@ -571,9 +571,6 @@ namespace SF {
 	template<typename DataType, typename D = std::default_delete<DataType>>
 	using UniquePtr = std::unique_ptr<DataType,D>;
 	
-	template<typename DataType>
-	using Atomic = std::atomic<DataType>;
-
 	using MemoryOrder = std::memory_order;
 
 	using ClockType = std::chrono::steady_clock;
@@ -632,6 +629,44 @@ namespace SF {
 
 
 
+	// Supporting extra accessibility
+	template<typename DataType>
+	class Atomic : public std::atomic<DataType>
+	{
+	public:
+
+		using super = std::atomic<DataType>;
+
+	public:
+		Atomic()
+		{
+			super::store(DataType{}, MemoryOrder::memory_order_release);
+		}
+
+		Atomic(const DataType& value)
+		{
+			super::store(value, MemoryOrder::memory_order_release);
+		}
+
+		Atomic(const Atomic<DataType>& value)
+		{
+			super::store(value, MemoryOrder::memory_order_release);
+		}
+
+
+		Atomic<DataType>& operator = (const Atomic<DataType>& src)
+		{
+			super::store(src.load(MemoryOrder::memory_order_acquire), MemoryOrder::memory_order_release);
+			return *this;
+		}
+
+		Atomic<DataType>& operator = (const DataType& src)
+		{
+			super::store(src, MemoryOrder::memory_order_release);
+			return *this;
+		}
+
+	};
 
 
 

@@ -15,7 +15,8 @@
 #include "Thread/SFThread.h"
 #include "Memory/SFMemoryManager.h"
 #include "../SFTestBase.h"
-
+#include <random>
+#include <algorithm>
 
 
 class AVLTreeTest : public MyTestBase
@@ -39,13 +40,12 @@ protected:
 	SF::SpinLock m_LockObject;
 
 	unsigned numberOfTest;
-	int *TestValues;
+	std::vector<int> TestValues;
 
 public:
 
 	AVLTreeTest()
 		: numberOfTest(0)
-		, TestValues(nullptr)
 	{
 
 	}
@@ -64,11 +64,13 @@ public:
 	virtual void SetUp()
 	{
 		numberOfTest = MAX_TEST_VALUE;
-		TestValues = new int[MAX_TEST_VALUE];
+		TestValues.reserve(MAX_TEST_VALUE);
 		for (int iTest = 0; iTest < MAX_TEST_VALUE; iTest++)
 		{
-			TestValues[iTest] = rand() % MAX_TEST_VALUE;
+			TestValues.push_back(iTest);
 		}
+
+		std::shuffle(TestValues.begin(), TestValues.end(), std::default_random_engine(1));
 
 		MyTestBase::SetUp();
 	}
@@ -79,8 +81,6 @@ public:
 		MyTestBase::TearDown();
 
 		StopAllThread();
-		delete[] TestValues;
-		TestValues = nullptr;
 	}
 };
 
