@@ -59,7 +59,7 @@ TEST_F(NetTest, RecvMessageWindowSimple)
 	{
 		auto NewMsg = NewMessage(testHeap, uiSequence++);
 		auto hr = recvMessage.AddMsg(NewMsg);
-		if (iTest < recvMessage.GetWindowSize())
+		if (iTest < recvMessage.GetAcceptableSequenceRange())
 		{
 			ASSERT_EQ(SF::ResultCode::SUCCESS, hr);
 		}
@@ -74,7 +74,7 @@ TEST_F(NetTest, RecvMessageWindowSimple)
 	{
 		MessageDataPtr pResult;
 		auto hr = recvMessage.PopMsg(pResult);
-		if (iTest < recvMessage.GetWindowSize())
+		if (iTest < recvMessage.GetAcceptableSequenceRange())
 		{
 			AssertRel(pResult != nullptr);
 			AssertRel(hr);
@@ -106,7 +106,7 @@ TEST_F(NetTest, RecvMessageWindowSimple2)
 		case 0: // add
 			pNewMsg = NewMessage(testHeap, uiSequence);
 			hr = recvMessage.AddMsg(pNewMsg);
-			if (Message::SequenceDifference(uiSequence, recvMessage.GetBaseSequence()) < recvMessage.GetWindowSize())
+			if (Message::SequenceDifference(uiSequence, recvMessage.GetBaseSequence()) < recvMessage.GetAcceptableSequenceRange())
 			{
 				AssertRel(hr);
 				uiSequence++;
@@ -163,7 +163,7 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 			auto pNewMsg = NewMessage(testHeap, testSequence);
 			hr = recvMessage.AddMsg(pNewMsg);
 			auto seqOffset = Message::SequenceDifference(testSequence, recvMessage.GetBaseSequence());
-			if (seqOffset < recvMessage.GetWindowSize() && seqOffset >= 0)
+			if (seqOffset < recvMessage.GetAcceptableSequenceRange() && seqOffset >= 0)
 			{
 				AssertRel(hr);
 				uiSequence++;
@@ -252,7 +252,7 @@ TEST_F(NetTest, RecvMessageWindowOutOfRange)
 			}
 			else if (testSequenceOffset > 0)
 			{
-				if (testSequenceOffset >= recvMessage.GetWindowSize())
+				if (testSequenceOffset >= recvMessage.GetAcceptableSequenceRange())
 				{
 					GTEST_ASSERT_EQ(hr, ResultCode::IO_SEQUENCE_OVERFLOW);
 				}
@@ -399,7 +399,7 @@ TEST_F(NetTest, RecvMessageWindowMT2)
 				{
 					AssertRel(pMsg == nullptr);
 					GTEST_ASSERT_EQ(pMsg->GetReferenceCount(), 2);
-					AssertRel(Message::SequenceDifference(recvMessage.GetBaseSequence(), testSequence) <= recvMessage.GetWindowSize());
+					AssertRel(Message::SequenceDifference(recvMessage.GetBaseSequence(), testSequence) <= recvMessage.GetAcceptableSequenceRange());
 				}
 
 				recvMessage.GetSyncMask();
@@ -469,7 +469,7 @@ TEST_F(NetTest, SendMessageWindowSimple)
 		{
 			auto pNewMsg = NewMessage(testHeap);
 			auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), pNewMsg);
-			if (iTest < msgWindow.GetWindowSize())
+			if (iTest < msgWindow.GetAcceptableSequenceRange())
 			{
 				ASSERT_EQ(SF::ResultCode::SUCCESS, hr);
 			}
@@ -501,7 +501,7 @@ TEST_F(NetTest, SendMessageWindowSimple2)
 		{
 			auto pNewMsg = NewMessage(testHeap);
 			auto hr = msgWindow.EnqueueMessage(Util::Time.GetTimeMs(), pNewMsg);
-			if (iTest < msgWindow.GetWindowSize())
+			if (iTest < msgWindow.GetAcceptableSequenceRange())
 			{
 				ASSERT_EQ(SF::ResultCode::SUCCESS, hr);
 			}

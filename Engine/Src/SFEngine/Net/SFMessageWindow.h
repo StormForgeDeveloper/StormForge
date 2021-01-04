@@ -34,7 +34,7 @@ namespace Net {
 	namespace MessageWindow
 	{
 		static constexpr uint32_t MESSAGE_QUEUE_SIZE			= 128;
-		static constexpr uint32_t MESSAGE_WINDOW_SIZE			= MESSAGE_QUEUE_SIZE - 1; // We allow 1 less messages to avoid full state complexity
+		//static constexpr uint32_t MESSAGE_WINDOW_SIZE			= MESSAGE_QUEUE_SIZE - 1; // We allow 1 less messages to avoid full state complexity
 		static constexpr uint32_t SYNC_MASK_BITS_MAX			= 64; // we uses 64bit mask bits for packet
 
 
@@ -83,7 +83,7 @@ namespace Net {
 		~RecvMsgWindow();
 
 		// get window size
-		SF_FORCEINLINE int GetWindowSize()							{ return MessageWindow::MESSAGE_WINDOW_SIZE; }
+		SF_FORCEINLINE int GetAcceptableSequenceRange() const		{ return MessageWindow::MESSAGE_QUEUE_SIZE - 3; }
 
 		// get message count in window
 		SF_FORCEINLINE uint32_t GetMsgCount()						{ return m_uiMsgCount.load(std::memory_order_relaxed); }
@@ -166,8 +166,8 @@ namespace Net {
 		//CriticalSection& GetLock()				{ return m_Lock; }
 
 
-		// get window size
-		int GetWindowSize() { return MessageWindow::MESSAGE_WINDOW_SIZE; }
+		// get acceptable sequence range
+		int GetAcceptableSequenceRange() const { return MessageWindow::MESSAGE_QUEUE_SIZE - 3; }
 
 		// get message count in window
 		uint32_t GetMsgCount() { return m_uiMsgCount; }
@@ -201,7 +201,7 @@ namespace Net {
 
 
 }  // namespace Net
-}; // namespace SF
+} // namespace SF
 
 
 

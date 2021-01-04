@@ -530,7 +530,7 @@ namespace Net {
 		// Guaranteed retry
 		//MutexScopeLock localLock(sendWindow.GetLock());// until ReleaseMsg( uint16_t uiSequence ) is thread safe, we need to lock the window
 		uint uiMaxProcess = Util::Min(sendWindow.GetMsgCount(), GetConnection()->GetMaxGuarantedRetryAtOnce());
-		for (uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)sendWindow.GetWindowSize() && uiMsgProcessed < uiMaxProcess; uiIdx++)
+		for (uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)sendWindow.GetAcceptableSequenceRange() && uiMsgProcessed < uiMaxProcess; uiIdx++)
 		{
 			if (!sendWindow.GetAt(uiIdx, pMessageElement))
 			{

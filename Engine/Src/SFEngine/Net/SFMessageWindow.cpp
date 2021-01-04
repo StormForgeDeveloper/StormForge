@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -64,7 +64,7 @@ namespace Net {
 		//TicketScopeLock scopeLock(TicketLock::LockMode::NonExclusive, m_SequenceLock);
 		int diff = Message::SequenceDifference(msgSeq, m_uiBaseSequence);
 
-		if (diff >= GetWindowSize())
+		if (diff >= GetAcceptableSequenceRange())
 		{
 			return ResultCode::IO_SEQUENCE_OVERFLOW; // No room for new message
 		}
@@ -89,11 +89,9 @@ namespace Net {
 		}
 		else
 		{
-			//SFLog(System, Info, "Added duplicate Message Seq:{0}", pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence);
+			SFLog(Net, Debug3, "Added duplicate Message Seq:{0}", pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence);
 		}
 
-
-	//Proc_End:
 
 		return hr;
 	}
@@ -121,7 +119,7 @@ namespace Net {
 
 		// Between previous exchange and sequence update, the message can be arrived again
 		// This will make sure the message is cleaned up
-		// Circular case will be probited in AddMsg
+		// Circular case will be prohibited in AddMsg
 		m_pMsgWnd[iPosIdx] = nullptr;
 
 		m_uiMsgCount.fetch_sub(1, std::memory_order_relaxed);
@@ -152,7 +150,7 @@ namespace Net {
 
 //#ifdef DEBUG
 		//uint64_t uiSyncMask = 0;
-		//for (int uiIdx = 0, iSeq = baseSeq; uiIdx < GetWindowSize(); uiIdx++, iSeq++)
+		//for (int uiIdx = 0, iSeq = baseSeq; uiIdx < GetAcceptableSequenceRange(); uiIdx++, iSeq++)
 		//{
 		//	int iPosIdx = iSeq % MESSAGE_QUEUE_SIZE;
 		//	if( m_pMsgWnd[ iPosIdx ].load(std::memory_order_relaxed) != nullptr )
@@ -212,7 +210,7 @@ namespace Net {
 			{
 				m_pMsgWnd[iMsg].Clear();
 			}
-			//memset( m_pMsgWnd, 0, sizeof(MessageElement)*GetWindowSize() );
+			//memset( m_pMsgWnd, 0, sizeof(MessageElement)*GetAcceptableSequenceRange() );
 		}
 		m_uiBaseSequence = 0;
 		m_uiMsgCount = 0;
@@ -253,9 +251,9 @@ namespace Net {
 
 		iIdx = Message::SequenceDifference(m_uiHeadSequence, m_uiBaseSequence);
 
-		Assert(iIdx < GetWindowSize());
+		Assert(iIdx < GetAcceptableSequenceRange());
 		Assert(iIdx >= 0);
-		if (iIdx < 0 || iIdx >= GetWindowSize())
+		if (iIdx < 0 || iIdx >= GetAcceptableSequenceRange())
 			return ResultCode::IO_INVALID_SEQUENCE;
 
 		// To window queue array index
@@ -271,8 +269,6 @@ namespace Net {
 		m_uiHeadSequence++;
 		m_uiMsgCount++;
 
-
-
 		return hr;
 	}
 
@@ -282,7 +278,7 @@ namespace Net {
 		// TODO: math this function thread safe because this function can be called from other thread
 		//MutexScopeLock localLock(m_Lock);
 
-		Result hr = ResultCode::SUCCESS;
+		ScopeContext hr;
 		int iIdx;
 		//uint32_t iPosIdx;
 
@@ -292,9 +288,9 @@ namespace Net {
 
 		iIdx = Message::SequenceDifference(uiSequence, m_uiBaseSequence);
 
-		if( iIdx >= GetWindowSize() )
+		if( iIdx >= GetAcceptableSequenceRange() )
 		{
-			netErr( ResultCode::IO_INVALID_SEQUENCE ); // Out of range
+			netCheck( ResultCode::IO_INVALID_SEQUENCE ); // Out of range
 		}
 		else if(  iIdx < 0 )
 		{
@@ -304,8 +300,6 @@ namespace Net {
 		ReleaseMessageInternal(iIdx);
 
 		// No sliding window for this because this can be called from other thread
-
-	Proc_End:
 
 		return hr;
 	}
@@ -338,20 +332,19 @@ namespace Net {
 				if ((uiMsgMask & uiSyncMaskCur) == 0)
 				{
 					// If client use same port for different connect this will be happened, and the connection need to be closed
-					netErr(ResultCode::UNEXPECTED);
+					netCheck(ResultCode::UNEXPECTED);
 				}
 			}
 		}
 		else if (iIdx > 0)
 		{
-			auto maxRelease = std::min((uint32_t)iIdx, MessageWindow::MESSAGE_WINDOW_SIZE);
+			auto maxRelease = std::min(iIdx, GetAcceptableSequenceRange());
 			for (; uiCurBit < maxRelease; uiCurBit++)
 			{
 				ReleaseMessageInternal(uiCurBit);
 			}
 
-
-			if (iIdx >= GetWindowSize())
+			if (iIdx >= GetAcceptableSequenceRange())
 			{
 				SlidWindow();
 				return ResultCode::SUCCESS;
@@ -370,8 +363,6 @@ namespace Net {
 
 		// Slide window
 		SlidWindow();
-
-	Proc_End:
 
 		return hr;
 	}

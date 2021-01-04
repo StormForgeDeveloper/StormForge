@@ -947,7 +947,7 @@ namespace Net {
 		SharedPointerT<Message::MessageData> pIMsg;
 		Message::MessageHeader *pMsgHeader = nullptr;
 		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
-		uint halfWindowSize = m_SendReliableWindow.GetWindowSize() >> 1;
+		uint halfWindowSize = m_SendReliableWindow.GetAcceptableSequenceRange() >> 1;
 		Assert(halfWindowSize >= 16);
 
 		// Send guaranteed message process
@@ -1007,7 +1007,7 @@ namespace Net {
 		// Guaranteed retry
 		// TODO: limit with total data size than count
 		uint uiMaxProcess = Util::Min( m_SendReliableWindow.GetMsgCount(), m_uiMaxGuarantedRetryAtOnce );
-		for( uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)m_SendReliableWindow.GetWindowSize() && uiMsgProcessed < uiMaxProcess; uiIdx++ )
+		for( uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)m_SendReliableWindow.GetAcceptableSequenceRange() && uiMsgProcessed < uiMaxProcess; uiIdx++ )
 		{
 			if( (m_SendReliableWindow.GetAt( uiIdx, pMessageElement ))
 				&& pMessageElement && pMessageElement->pMsg != nullptr)
