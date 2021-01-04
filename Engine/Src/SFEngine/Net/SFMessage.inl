@@ -71,6 +71,13 @@ inline INT SequenceDifference(uint seq1, uint seq2)
 	return diff;
 }
 
+inline uint SequenceNormalize(uint seq)
+{
+	seq = NET_SEQUENCE_MASK & seq;
+
+	return seq;
+}
+
 
 #ifdef __GNUC__
 #pragma GCC diagnostic pop

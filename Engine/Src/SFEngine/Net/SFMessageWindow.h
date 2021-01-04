@@ -34,7 +34,7 @@ namespace Net {
 	namespace MessageWindow
 	{
 		static constexpr uint32_t MESSAGE_QUEUE_SIZE			= 128;
-		//static constexpr uint32_t MESSAGE_WINDOW_SIZE			= MESSAGE_QUEUE_SIZE - 1; // We allow 1 less messages to avoid full state complexity
+		static constexpr uint32_t MESSAGE_ACCEPTABLE_SEQUENCE_RANGE			= MESSAGE_QUEUE_SIZE >> 1;
 		static constexpr uint32_t SYNC_MASK_BITS_MAX			= 64; // we uses 64bit mask bits for packet
 
 
@@ -58,7 +58,11 @@ namespace Net {
 	{
 	public:
 
-		using MessageElement = SharedPointerAtomicT<Message::MessageData>;
+		struct MessageElement
+		{
+			SharedPointerAtomicT<Message::MessageData> pMsg;
+			Atomic<uint32_t> Sequence = 0;
+		};
 		using ItemState = MessageWindow::ItemState;
 
 	private:
@@ -66,16 +70,16 @@ namespace Net {
 		// sequence lock
 		//TicketLock m_SequenceLock;
 
-		atomic<uint64_t>			m_uiSyncMask;
+		Atomic<uint64_t>			m_uiSyncMask;
 
 		// Base sequence value( sequence Head)
-		atomic<uint16_t>			m_uiBaseSequence;
+		Atomic<uint16_t>			m_uiBaseSequence;
 
 		// Message count in window
-		atomic<uint32_t>			m_uiMsgCount;
+		Atomic<uint32_t>			m_uiMsgCount;
 
 		// Message data array
-		MessageElement*				m_pMsgWnd = nullptr;
+		MessageElement*			m_pMsgWnd = nullptr;
 
 	public:
 		// Constructor
@@ -83,7 +87,7 @@ namespace Net {
 		~RecvMsgWindow();
 
 		// get window size
-		SF_FORCEINLINE int GetAcceptableSequenceRange() const		{ return MessageWindow::MESSAGE_QUEUE_SIZE - 3; }
+		SF_FORCEINLINE int GetAcceptableSequenceRange() const		{ return MessageWindow::MESSAGE_ACCEPTABLE_SEQUENCE_RANGE; }
 
 		// get message count in window
 		SF_FORCEINLINE uint32_t GetMsgCount()						{ return m_uiMsgCount.load(std::memory_order_relaxed); }
@@ -167,7 +171,7 @@ namespace Net {
 
 
 		// get acceptable sequence range
-		int GetAcceptableSequenceRange() const { return MessageWindow::MESSAGE_QUEUE_SIZE - 3; }
+		int GetAcceptableSequenceRange() const { return MessageWindow::MESSAGE_ACCEPTABLE_SEQUENCE_RANGE; }
 
 		// get message count in window
 		uint32_t GetMsgCount() { return m_uiMsgCount; }

@@ -101,6 +101,8 @@ namespace SF {
 			return m_pObject;
 		}
 #endif
+		SharedObject* get() const { return m_pObject; }
+
 		void operator = (const SharedPointer& src)
 		{
 			ReleaseReference();
@@ -168,6 +170,7 @@ namespace SF {
 	public:
 
 		using ObjectType = ClassType;
+		using super = SharedPointer;
 
 	public:
 		constexpr SharedPointerT()
@@ -449,6 +452,11 @@ namespace SF {
 			return m_pObject.load(std::memory_order_relaxed);
 		}
 
+		SharedObject* get() const
+		{
+			return m_pObject.load(std::memory_order_relaxed);
+		}
+
 		void Swap(SharedPointer& src)
 		{
 			auto pObject = const_cast<SharedObject*>((const SharedObject*)src);
@@ -463,6 +471,35 @@ namespace SF {
 			auto pOldObject = m_pObject.exchange(pObject, std::memory_order_relaxed);
 			src.m_pObject.exchange(pOldObject, std::memory_order_release);
 		}
+
+		bool ComapreNExchange(SharedObject*& expectedValue, const SharedPointer& newValue)
+		{
+			auto pObject = newValue.get();
+			bool bRet = m_pObject.compare_exchange_strong(expectedValue, pObject);
+			if (bRet)
+			{
+				if (expectedValue)
+					expectedValue->ReleaseReference();
+				pObject->AddReference();
+			}
+
+			return bRet;
+		}
+
+		bool ComapreNExchange(SharedObject*& expectedValue, const SharedPointerAtomic& newValue)
+		{
+			auto pObject = newValue.get();
+			bool bRet = m_pObject.compare_exchange_strong(expectedValue, pObject);
+			if (bRet)
+			{
+				if (expectedValue)
+					expectedValue->ReleaseReference();
+				pObject->AddReference();
+			}
+
+			return bRet;
+		}
+
 
 #ifndef SWIG
 
@@ -571,6 +608,10 @@ namespace SF {
 	class SharedPointerAtomicT : public SharedPointerAtomic
 	{
 	public:
+
+		using super = SharedPointerAtomic;
+
+	public:
 		constexpr SharedPointerAtomicT()
 			:SharedPointerAtomic()
 		{
@@ -670,7 +711,22 @@ namespace SF {
 			return SharedPointerAtomic::operator != (pRef);
 		}
 
+		//template<typename = std::enable_if_t<std::is_base_of_v<SharedObject, ClassType>>>
+		bool ComapreNExchange(ClassType*& expectedValue, const SharedPointerT<ClassType>& newValue)
+		{
+			SharedObject* expectedValueLocal = static_cast<SharedObject*>(expectedValue);
+			bool bRet = super::ComapreNExchange(expectedValueLocal, newValue);
+			expectedValue = static_cast<ClassType*>(expectedValueLocal);;
+			return bRet;
+		}
 
+		//template<typename = std::enable_if_t<std::is_base_of_v<SharedObject, ClassType>>>
+		bool ComapreNExchange(ClassType*& expectedValue, const SharedPointerAtomicT<ClassType>& newValue)
+		{
+			SharedObject* expectedValueLocal = static_cast<SharedObject*>(expectedValue);
+			bool bRet = super::ComapreNExchange(expectedValueLocal, newValue);
+			expectedValue = static_cast<ClassType*>(expectedValueLocal);;
+		}
 
 		template<class TargetObjectType>
 		SharedPointerT<TargetObjectType> Cast() { return SharedPointerT<TargetObjectType>((ClassType*)m_pObject); }

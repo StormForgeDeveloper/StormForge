@@ -43,7 +43,13 @@ namespace Net {
 		, m_uiBaseSequence(0)
 		, m_uiMsgCount(0)
 	{
-		m_pMsgWnd = new(heap) MessageElement[MessageWindow::MESSAGE_QUEUE_SIZE];
+		m_pMsgWnd = new(heap) MessageElement[MessageWindow::MESSAGE_QUEUE_SIZE]{};
+		for (uint32_t iMsg = 0; iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
+		{
+			uint32_t expectedSeq = Message::SequenceNormalize(iMsg - MessageWindow::MESSAGE_QUEUE_SIZE); // using 16bit part only
+			m_pMsgWnd[iMsg].Sequence = expectedSeq;
+			m_pMsgWnd[iMsg].pMsg = nullptr;
+		}
 	}
 
 	RecvMsgWindow::~RecvMsgWindow()
@@ -59,8 +65,7 @@ namespace Net {
 		auto msgSeq = pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence;
 
 		// Base sequence should be locked until actual swap is happened
-		// There is a chance m_uiBaseSequence increase before the message is actually added if same message is added on different thread on the same time.
-		// It will cause way beyond message in the message window
+		// There is a chance m_uiBaseSequence increase before the message is actually added if a message is added on different thread at the same time.
 		//TicketScopeLock scopeLock(TicketLock::LockMode::NonExclusive, m_SequenceLock);
 		int diff = Message::SequenceDifference(msgSeq, m_uiBaseSequence);
 
@@ -74,24 +79,32 @@ namespace Net {
 			return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
 		}
 
-
 		int iPosIdx = msgSeq % MessageWindow::MESSAGE_QUEUE_SIZE;
+
+		uint32_t expectedStoredSeq = Message::SequenceNormalize(msgSeq - MessageWindow::MESSAGE_QUEUE_SIZE); // using 16bit part only
+		bool bExchanged = m_pMsgWnd[iPosIdx].Sequence.compare_exchange_strong(expectedStoredSeq, msgSeq);
+		if (!bExchanged)
+		{
+			// Somebody already took the spot. let's drop it
+			if (Message::SequenceDifference(expectedStoredSeq, msgSeq) <= 0)
+			{
+				// newer message already took place
+				return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
+			}
+			else
+			{
+				// The sequence is way earlier. let's drop it
+				return ResultCode::IO_SEQUENCE_OVERFLOW;
+			}
+		}
+
+		// I have reserved the spot
 		m_uiSyncMask.fetch_or(((uint64_t)1) << iPosIdx, std::memory_order_relaxed);
 
-		// check duplicated transaction
-		m_pMsgWnd[iPosIdx].Swap(pIMsg);
-
-		if (pIMsg == nullptr)
-		{
-			auto messageCount = m_uiMsgCount.fetch_add(1, std::memory_order_release) + 1;
-			unused(messageCount);
-			//AssertRel(messageCount <= MESSAGE_WINDOW_SIZE);
-		}
-		else
-		{
-			SFLog(Net, Debug3, "Added duplicate Message Seq:{0}", pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence);
-		}
-
+		// we already tested validity
+		m_pMsgWnd[iPosIdx].pMsg.Swap(pIMsg);
+		auto messageCount = m_uiMsgCount.fetch_add(1, std::memory_order_release) + 1;
+		unused(messageCount);
 
 		return hr;
 	}
@@ -109,18 +122,24 @@ namespace Net {
 		// Base sequence should be locked during actual pop operation
 		//TicketScopeLock scopeLock(TicketLock::LockMode::Exclusive, m_SequenceLock);
 
-		pIMsg = std::forward<SharedPointerAtomicT<Message::MessageData>>(m_pMsgWnd[iPosIdx]);
+		pIMsg = std::forward<SharedPointerAtomicT<Message::MessageData>>(m_pMsgWnd[iPosIdx].pMsg);
 		if (pIMsg == nullptr)
 			return ResultCode::FAIL;
 
+		// If the message is not the one with correct sequence, it is wrong and need to be dropped
+		if (Message::SequenceDifference(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence, baseSequence) != 0)
+		{
+			pIMsg = nullptr;
+			return ResultCode::FAIL;
+		}
+	
 		auto prevSeq = m_uiBaseSequence.fetch_add(1,std::memory_order_release);// Message window clear can't cross base sequence change, and this will make sure the previous sync mask change is commited.
 		unused(prevSeq);
-		Assert(Message::SequenceDifference(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence, prevSeq) == 0);
 
 		// Between previous exchange and sequence update, the message can be arrived again
 		// This will make sure the message is cleaned up
 		// Circular case will be prohibited in AddMsg
-		m_pMsgWnd[iPosIdx] = nullptr;
+		m_pMsgWnd[iPosIdx].pMsg = nullptr;
 
 		m_uiMsgCount.fetch_sub(1, std::memory_order_relaxed);
 
@@ -169,9 +188,11 @@ namespace Net {
 	{
 		if (m_pMsgWnd)
 		{
-			for (int iMsg = 0; iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
+			for (uint32_t iMsg = 0; iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
 			{
-				m_pMsgWnd[iMsg] = nullptr;
+				uint32_t expectedSeq = Message::SequenceNormalize(iMsg - MessageWindow::MESSAGE_QUEUE_SIZE); // using 16bit part only
+				m_pMsgWnd[iMsg].Sequence = expectedSeq;
+				m_pMsgWnd[iMsg].pMsg = nullptr;
 			}
 		}
 		m_uiBaseSequence.store(0, std::memory_order_release);
@@ -251,7 +272,11 @@ namespace Net {
 
 		iIdx = Message::SequenceDifference(m_uiHeadSequence, m_uiBaseSequence);
 
-		Assert(iIdx < GetAcceptableSequenceRange());
+		if (iIdx >= GetAcceptableSequenceRange())
+		{
+			return ResultCode::IO_NOT_ENOUGH_WINDOWSPACE;
+		}
+
 		Assert(iIdx >= 0);
 		if (iIdx < 0 || iIdx >= GetAcceptableSequenceRange())
 			return ResultCode::IO_INVALID_SEQUENCE;
