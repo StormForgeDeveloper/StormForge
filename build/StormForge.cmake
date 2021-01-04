@@ -177,7 +177,7 @@ elseif(UNIX)
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)
 
-	set(PLATFORM_LIBS rt m)
+	set(PLATFORM_LIBS mysqlcppconn8 rt m atomic)
 	list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 	include_directories(AFTER 
@@ -193,8 +193,6 @@ elseif(UNIX)
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
 		../${SF_FOLDER}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE}/lib
 		)
-
-	set(PLATFORM_LIBS mysqlcppconn8 rt m)
 
 	#set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
 
