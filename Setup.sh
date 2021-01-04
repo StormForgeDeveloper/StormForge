@@ -8,6 +8,7 @@ ATF_PATH=$SF_PATH/../ATF
 
 
 sudo apt-get install git-lfs build-essential clang cmake rsync zip ninja-build
+sudo apt-get install -y libatomic-ops-dev
 
 
 if [ ! -d "$ATF_PATH" ]; then
