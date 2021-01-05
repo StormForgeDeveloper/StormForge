@@ -81,7 +81,7 @@ namespace Net {
 
 		int iPosIdx = msgSeq % MessageWindow::MESSAGE_QUEUE_SIZE;
 
-		uint32_t expectedStoredSeq = Message::SequenceNormalize(msgSeq - MessageWindow::MESSAGE_QUEUE_SIZE); // using 16bit part only
+		uint32_t expectedStoredSeq = Message::SequenceNormalize(msgSeq - MessageWindow::MESSAGE_QUEUE_SIZE); // using 11bit part only
 		bool bExchanged = m_pMsgWnd[iPosIdx].Sequence.compare_exchange_strong(expectedStoredSeq, msgSeq);
 		if (!bExchanged)
 		{
@@ -101,7 +101,7 @@ namespace Net {
 		// I have reserved the spot
 		m_uiSyncMask.fetch_or(((uint64_t)1) << iPosIdx, std::memory_order_relaxed);
 
-		// we already tested validity
+		// we already tested validity, just swap it
 		m_pMsgWnd[iPosIdx].pMsg.Swap(pIMsg);
 		auto messageCount = m_uiMsgCount.fetch_add(1, std::memory_order_release) + 1;
 		unused(messageCount);
@@ -145,8 +145,6 @@ namespace Net {
 
 		auto messageMask = ((uint64_t)1) << iPosIdx;
 		m_uiSyncMask.fetch_and(~messageMask, std::memory_order_release);
-
-	//Proc_End:
 
 		return hr;
 
