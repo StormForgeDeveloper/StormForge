@@ -217,7 +217,7 @@ namespace SF {
 	{
 #if ENABLE_MEMORY_TRACE
 		auto pFooter = pMemBlock->GetFooter();
-		pFooter->StackTrace.CaptureCallStack(2);
+		pFooter->StackTrace.CaptureCallStack(4);
 		m_AllocatedList.Add(&pFooter->ListNode);
 #else
 		unused(pMemBlock);
@@ -228,7 +228,7 @@ namespace SF {
 	{
 #if ENABLE_MEMORY_TRACE
 		auto pFooter = pMemBlock->GetFooter();
-		pFooter->StackTrace.CaptureCallStack(2);
+		pFooter->StackTrace.CaptureCallStack(4);
 		m_AllocatedList.Remove(&pFooter->ListNode);
 #else
 		unused(pMemBlock);

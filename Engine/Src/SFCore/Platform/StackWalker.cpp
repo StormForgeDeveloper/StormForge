@@ -606,7 +606,16 @@ void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, void** stackB
 	// get current stack trace
 	void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, void** stackBuffer, uint bufferCount, uint skipDepth, uint maxDepth)
 	{
-		stackTrace.m_StackTraceCount = backtrace(stackBuffer, bufferCount);
+		void* stackBufferTemp[64]{};
+		int tracedCount = backtrace(stackBufferTemp, countof(stackBufferTemp));
+		stackTrace.m_StackTraceCount = 0;
+		int iStack = 0;
+		for (; iStack < bufferCount && (skipDepth + iStack) < tracedCount; iStack++)
+		{
+			stackBuffer[iStack] = stackBufferTemp[skipDepth + iStack];
+		}
+
+		stackTrace.m_StackTraceCount = iStack;
 	}
 
 

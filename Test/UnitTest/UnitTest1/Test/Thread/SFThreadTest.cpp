@@ -85,7 +85,7 @@ class TaskWorkerThread : public Thread
 {
 private:
 
-	// Task worker mnimum interval
+	// Task worker minimum interval
 	DurationMS m_TaskWorkerInterval;
 
 	// Task queue
@@ -309,11 +309,6 @@ public:
 	}
 
 };
-
-
-
-
-
 
 
 EntityTaskManager* entityManager = nullptr;
