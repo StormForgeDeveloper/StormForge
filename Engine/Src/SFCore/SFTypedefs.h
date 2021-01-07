@@ -641,19 +641,16 @@ namespace SF {
 		Atomic()
 			: super(DataType{})
 		{
-			//super::store(DataType{}, MemoryOrder::memory_order_release);
 		}
 
 		Atomic(const DataType& value)
 			: super(value)
 		{
-			//super::store(value, MemoryOrder::memory_order_release);
 		}
 
 		Atomic(const Atomic<DataType>& value)
 			: super(value.load(MemoryOrder::memory_order_acquire))
 		{
-			//super::store(value, MemoryOrder::memory_order_release);
 		}
 
 

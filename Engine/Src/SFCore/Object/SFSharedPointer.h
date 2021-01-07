@@ -725,7 +725,8 @@ namespace SF {
 		{
 			SharedObject* expectedValueLocal = static_cast<SharedObject*>(expectedValue);
 			bool bRet = super::ComapreNExchange(expectedValueLocal, newValue);
-			expectedValue = static_cast<ClassType*>(expectedValueLocal);;
+			expectedValue = static_cast<ClassType*>(expectedValueLocal);
+			return bRet;
 		}
 
 		template<class TargetObjectType>
