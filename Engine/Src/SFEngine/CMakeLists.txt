@@ -125,6 +125,9 @@ set(SFENGINE_LIB_FILES
 	String/SFToStringEngineTypes.cpp
 	Types/SFEngineTypedefs.cpp
 
+	Actor/Movement/SFActorMovement.h
+	Actor/Movement/SFActorMovement.cpp
+
   	Application/Android/AndroidApp.h
 	Application/Android/AndroidAppTasks.h
 	Application/SFApplicationBase.h
