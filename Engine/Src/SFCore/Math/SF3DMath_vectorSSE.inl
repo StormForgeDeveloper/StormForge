@@ -59,18 +59,15 @@ namespace SF
 
 	inline void Vector4SSE::Normalize3()
 	{
-		auto one = _mm_set1_ps(1);
-#if 0 // faster but slow
+#if 0 // faster but low precision
 		auto invLength = _mm_rsqrt_ps(_mm_dp_ps(Packed, Packed, 0x77));
 		Packed = _mm_blend_ps(_mm_mul_ps(Packed, invLength), zero, 8);
-		// recover w value
-		//w = 1.f;
 #else
 		auto len = _mm_sqrt_ps(_mm_dp_ps(Packed, Packed, 0x7F));
 		if (_mm_cvtss_f32(len) < std::numeric_limits<float>::epsilon())
-			Packed = _mm_set_ps(1, 0, 0, 0);
+			Packed = _mm_set_ps(0, 0, 0, 0);
 		else
-			Packed = _mm_blend_ps(_mm_div_ps(Packed, len), one, 8);
+			Packed = _mm_div_ps(Packed, len);
 #endif
 	}
 
@@ -83,6 +80,13 @@ namespace SF
 		return _mm_cvtss_f32(length);
 	}
 
+	inline Vector4SSE& Vector4SSE::Scale3(float scale)
+	{
+		auto scaleVec = _mm_set_ps(1, scale, scale, scale);
+
+		Packed = _mm_mul_ps(Packed, scaleVec);
+		return *this;
+	}
 
 	
 	inline Vector4SSE Vector4SSE::Abs() const

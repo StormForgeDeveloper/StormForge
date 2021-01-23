@@ -66,13 +66,12 @@ namespace SF {
 	struct Vector4SSE
 	{
 		static const Vector4SSE& Zero() { static const Vector4SSE Value(0, 0, 0, 0); return Value; }
-		static const Vector4SSE& Zero3() { static const Vector4SSE Value(0, 0, 0, 1); return Value; }
 		static const Vector4SSE& One() { static const Vector4SSE Value(1, 1, 1, 1); return Value; }
 
 
 		Vector4SSE() { }
 		Vector4SSE(float x) : Packed(_mm_set_ps1(x)) {  }
-		Vector4SSE(float x, float y, float z, float w = 1.f) : Packed(_mm_set_ps(w, z, y, x)) { }
+		Vector4SSE(float x, float y, float z, float w = 0) : Packed(_mm_set_ps(w, z, y, x)) { }
 		Vector4SSE(const float* xyzw) : Packed(_mm_set_ps(xyzw[3], xyzw[2], xyzw[1], xyzw[0])) { }
 		Vector4SSE(const Vector4SSE& u) : Packed(u.Packed) { }
 		Vector4SSE(const __m128& u) : Packed(u) { }
@@ -122,6 +121,8 @@ namespace SF {
 		void Normalize4();
 		void Normalize3();
 		float Normalize3Hi();
+
+		Vector4SSE& Scale3(float scale);
 
 		Vector4SSE Abs() const;
 

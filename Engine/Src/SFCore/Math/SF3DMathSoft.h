@@ -171,14 +171,13 @@ namespace SF {
 	struct Vector4Soft
 	{
 		static const Vector4Soft<T>& Zero() { static const Vector4Soft<T> Value(0, 0, 0, 0); return Value; }
-		static const Vector4Soft<T>& Zero3() { static const Vector4Soft<T> Value(0, 0, 0, 1); return Value; }
 		static const Vector4Soft<T>& One() { static const Vector4Soft<T> Value(1, 1, 1, 1); return Value; }
 
 
 		Vector4Soft() { }
 		Vector4Soft(T x) : x(T(x)), y(T(x)), z(T(x)), w(T(x)) { }
 		template<typename T0, typename T1, typename T2, typename T3>
-		Vector4Soft(T0 x, T1 y, T2 z, T3 w) : x(T(x)), y(T(y)), z(T(z)), w(T(w)) { }
+		Vector4Soft(T0 x, T1 y, T2 z, T3 w = 0) : x(T(x)), y(T(y)), z(T(z)), w(T(w)) { }
 		Vector4Soft(const T* xyzw) : x(xyzw[0]), y(xyzw[1]), z(xyzw[2]), w(xyzw[3]) { }
 		Vector4Soft(const Vector2Soft<T>& u) : x(u.x), y(u.y), z(0), w(1) { }
 		Vector4Soft(const Vector2Soft<T>& u, const T zz) : x(u.x), y(u.y), z(zz), w(1) { }
@@ -221,6 +220,14 @@ namespace SF {
 		void Normalize4();
 		void Normalize3();
 		T Normalize3Hi();
+
+		Vector4Soft<T>& Scale3(T scale)
+		{
+			x *= scale;
+			y *= scale;
+			z *= scale;
+			return *this;
+		}
 
 		Vector4Soft<T> Abs() const;
 

@@ -25,7 +25,7 @@ namespace SF {
 
 		// Clear all items
 		template <typename T, int SIZE_BUFFER>
-		void CircularQueue<T, SIZE_BUFFER>::ClearQueue()
+		inline void CircularQueue<T, SIZE_BUFFER>::ClearQueue()
 		{
 			m_nReadPtr = m_nWritePtr = m_nItemCount = 0;
 			memset(m_Buffer, 0, sizeof(m_Buffer));
@@ -75,7 +75,7 @@ namespace SF {
 				return ResultCode::FAIL;
 			}
 
-			Assert(T(0) == m_Buffer[m_nWritePtr]);
+			Assert(T{} == m_Buffer[m_nWritePtr]);
 			m_Buffer[m_nWritePtr] = item;
 
 			m_nWritePtr = (m_nWritePtr + 1) % SIZE_BUFFER;
@@ -86,16 +86,16 @@ namespace SF {
 		}
 
 		template <typename T, int SIZE_BUFFER>
-		Result CircularQueue<T, SIZE_BUFFER>::Dequeue(T &item)
+		inline Result CircularQueue<T, SIZE_BUFFER>::Dequeue(T &item)
 		{
 			if (m_nItemCount == 0)
 			{
 				return ResultCode::FAIL;
 			}
 
-			item = m_Buffer[m_nReadPtr];
+			item = Forward<T>(m_Buffer[m_nReadPtr]);
 
-			m_Buffer[m_nReadPtr] = T(0);
+			m_Buffer[m_nReadPtr] = T{};
 
 			m_nReadPtr = (m_nReadPtr + 1) % SIZE_BUFFER;
 			m_nItemCount--;
@@ -103,9 +103,24 @@ namespace SF {
 			return ResultCode::SUCCESS;
 		}
 
+		template <typename T, int SIZE_BUFFER>
+		inline const T& CircularQueue<T, SIZE_BUFFER>::operator[](int iIndex)
+		{
+			static const T dummy{};
+			if (m_nItemCount <= iIndex)
+			{
+				// out of bound
+				assert(false);
+				return dummy;
+			}
+
+			auto readIndex = (m_nReadPtr + iIndex) % SIZE_BUFFER;
+			return m_Buffer[readIndex];
+		}
+
 		// foreach items in queue
 		template <typename T, int SIZE_BUFFER>
-		void CircularQueue<T, SIZE_BUFFER>::ReverseForeach(uint from, uint count, std::function<bool(const T& item)> func)
+		inline void CircularQueue<T, SIZE_BUFFER>::ReverseForeach(uint from, uint count, std::function<bool(const T& item)> func)
 		{
 			// nothing to process
 			if (m_nItemCount <= from)
@@ -131,7 +146,7 @@ namespace SF {
 
 		// foreach items in queue
 		template <typename T, int SIZE_BUFFER>
-		void CircularQueue<T, SIZE_BUFFER>::ReverseForeach(uint from, uint count, std::function<bool(const T& item)> func) const
+		inline void CircularQueue<T, SIZE_BUFFER>::ReverseForeach(uint from, uint count, std::function<bool(const T& item)> func) const
 		{
 			const_cast<CircularQueue<T, SIZE_BUFFER>*>(this)->ReverseForeach(from, count, func);
 		}

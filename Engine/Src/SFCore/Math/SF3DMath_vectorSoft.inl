@@ -442,13 +442,13 @@ namespace SF {
 			x = T(x *invLength);
 			y = T(y *invLength);
 			z = T(z *invLength);
-			w = 1;
+			w = 0;
 		}
 		else
 		{
 			assert(false);
 			x = y = z = 0;
-			w = 1;
+			w = 0;
 		}
 
 		return (T)length;
