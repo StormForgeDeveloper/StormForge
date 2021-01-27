@@ -63,6 +63,10 @@ namespace Net {
 		, m_ConnectionState(ConnectionState::DISCONNECTED)
 		, m_tConnectionTime(DurationMS(0))
 		, m_pEventHandler(nullptr)
+		, m_ConnectionEventDelegates(GetHeap())
+		, m_RecvMessageDelegates(GetHeap())
+		, m_NetSyncMessageDelegates(GetHeap())
+		, m_RecvMessageDelegatesByMsgId(GetHeap())
 		, m_IOHandler(ioHandler)
 		, m_RecvQueue(GetHeap())
 		, m_EventQueue(GetHeap())
@@ -465,7 +469,19 @@ namespace Net {
 
 		if (GetEventHandler() == nullptr )
 		{
-			netCheck(GetRecvQueue().Enqueue(pMsg));
+			if (GetEventFireMode() == EventFireMode::Immediate)
+			{
+				GetRecvMessageDelegates().Invoke(this, pMsg);
+
+				RecvMessageDelegates* pMessageDelegate = nullptr;
+				m_RecvMessageDelegatesByMsgId.Find(pMsg->GetMessageHeader()->msgID.GetMsgID(), pMessageDelegate);
+				if (pMessageDelegate)
+					pMessageDelegate->Invoke(this, pMsg);
+			}
+			else
+			{
+				netCheck(GetRecvQueue().Enqueue(pMsg));
+			}
 		}
 		else if (!(GetEventHandler()->OnRecvMessage(this, pMsg)))
 		{
@@ -499,7 +515,14 @@ namespace Net {
 		}
 		else
 		{
-			return m_EventQueue.Enqueue(evt.Composited);
+			if (GetEventFireMode() == EventFireMode::Immediate)
+			{
+				GetConnectionEventDelegates().Invoke(this, evt);
+			}
+			else
+			{
+				return m_EventQueue.Enqueue(evt.Composited);
+			}
 		}
 
 		return ResultCode::SUCCESS;
@@ -509,14 +532,13 @@ namespace Net {
 	// Get received Message
 	Result Connection::GetRecvMessage( SharedPointerT<Message::MessageData> &pIMsg )
 	{
-		Result hr = ResultCode::SUCCESS;
+		ScopeContext hr;
 
 		pIMsg = nullptr;
 
 		if( !(GetRecvQueue().Dequeue( pIMsg )) )
 		{
-			hr = ResultCode::FAIL;
-			goto Proc_End;
+			netCheck(ResultCode::FAIL);
 		}
 
 		{
@@ -525,13 +547,41 @@ namespace Net {
 			if (uiPolicy == 0
 				|| uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
 			{
-				netErr(ResultCode::IO_BADPACKET_NOTEXPECTED);
+				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 		}
 
-	Proc_End:
-
 		return hr;
+	}
+
+	Result Connection::UpdateGameTick()
+	{
+		uint32_t messageCount = GetRecvMessageCount();
+		for (uint iMessage = 0; iMessage < messageCount; iMessage++)
+		{
+			MessageDataPtr pMsgData;
+			if (!GetRecvMessage(pMsgData))
+				continue;
+
+			GetRecvMessageDelegates().Invoke(this, pMsgData);
+
+			RecvMessageDelegates* pMessageDelegate = nullptr;
+			m_RecvMessageDelegatesByMsgId.Find(pMsgData->GetMessageHeader()->msgID.GetMsgID(), pMessageDelegate);
+			if (pMessageDelegate)
+				pMessageDelegate->Invoke(this, pMsgData);
+		}
+
+		uint32_t eventCount = m_EventQueue.size();
+		for (uint iEvent = 0; iEvent < eventCount; iEvent++)
+		{
+			ConnectionEvent curEvent{};
+			if (!m_EventQueue.Dequeue(curEvent.Composited))
+				continue;
+
+			GetConnectionEventDelegates().Invoke(this, curEvent);
+		}
+
+		return ResultCode::SUCCESS;
 	}
 
 	// Update net ctrl time

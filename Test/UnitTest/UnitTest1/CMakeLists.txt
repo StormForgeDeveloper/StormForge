@@ -65,6 +65,8 @@ set(SF_UNIT_TEST_FILES
 	Test/TongScript/UnitTest_TongScript_FileFormat.cpp
 	Test/Variable/UnitTest_Variable.h
 	Test/Variable/UnitTest_Variable_Table.cpp
+	Test/Movement/UnitTest_Movement.h
+	Test/Movement/UnitTest_Movement.cpp
   )
 
 

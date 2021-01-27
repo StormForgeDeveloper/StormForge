@@ -6,6 +6,7 @@ set(SFCORE_LIB_FILES
 	Container/SFCircularBuffer.cpp
 	Container/SFCircularBufferQueue.cpp
 	Container/SFStackPool.cpp
+	Delegate/SFEventDelegate.h
 	IO/AsyncIO/AsyncIOAdapter.cpp
 	IO/AsyncIO/AsyncIOPort.cpp
 	IO/AsyncIO/AsyncIOPortSystemImpl.cpp

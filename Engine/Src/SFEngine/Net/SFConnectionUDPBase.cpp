@@ -625,8 +625,13 @@ namespace Net {
 
 				// Poke send if there is any message to send and not too many in the queue
 				// Keep poking on bad network situation will make it worse
-				if (GetEventHandler() != nullptr && (m_SendReliableWindow.GetMsgCount() <= Const::AGRESSIVE_SEND_COUNT))
-					GetEventHandler()->OnNetSyncMessage(this);
+				if (m_SendReliableWindow.GetMsgCount() <= Const::AGRESSIVE_SEND_COUNT)
+				{
+					if (GetEventHandler() != nullptr)
+						GetEventHandler()->OnNetSyncMessage(this);
+					else
+						GetNetSyncMessageDelegates().Invoke(this);
+				}
 			}
 		}
 		pMsg = nullptr;

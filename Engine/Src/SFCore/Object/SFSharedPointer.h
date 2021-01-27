@@ -226,16 +226,16 @@ namespace SF {
 		{
 			return (ClassType*)m_pObject;
 		}
-#ifndef SWIG
-		explicit operator ClassType*()		{ return (ClassType*)m_pObject; }
-		explicit operator ClassType*() const 		{ return (ClassType*)m_pObject; }
 
-		ClassType* operator ->() 		{ return (ClassType*)m_pObject; }
+		explicit operator ClassType*()			{ return (ClassType*)m_pObject; }
+		explicit operator ClassType*() const 	{ return (ClassType*)m_pObject; }
+
+		ClassType* operator ->() 			{ return (ClassType*)m_pObject; }
 		ClassType* operator ->() const		{ return (ClassType*)m_pObject; }
 
-		ClassType* operator *()		{ return (ClassType*)m_pObject; }
+		ClassType* operator *()				{ return (ClassType*)m_pObject; }
 		ClassType* operator *() const		{ return (ClassType*)m_pObject; }
-#endif
+
 		bool operator == (const SharedPointer& src) const
 		{
 			return SharedPointer::operator == (src);

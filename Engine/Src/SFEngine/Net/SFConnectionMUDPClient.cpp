@@ -102,12 +102,7 @@ namespace Net {
 
 	Result ConnectionMUDPClient::MyNetSocketIOAdapter::OnWriteReady()
 	{
-		// We will not need this feature
-		//if (m_Owner.GetEventHandler())
-		//	return m_Owner.GetEventHandler()->OnNetSendReadyMessage(&m_Owner);
-		//// process directly
-		//else
-			return ProcessSendQueue();
+		return ProcessSendQueue();
 	}
 
 	// Send message to connection with network device

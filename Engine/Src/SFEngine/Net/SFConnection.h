@@ -22,6 +22,8 @@
 #include "EngineObject/SFEngineObject.h"
 #include "Net/SFConnectionActions.h"
 #include "Net/SFNetSocket.h"
+#include "Delegate/SFEventDelegate.h"
+#include "Container/SFDualSortedMap.h"
 
 
 namespace SF {
@@ -39,6 +41,16 @@ namespace Net {
 	class Connection : public EngineObject
 	{
 	public:
+
+		using ConnectionEventDeletates = EventDelegateList<Connection*, const ConnectionEvent&>;
+		using RecvMessageDelegates = EventDelegateList<Connection*, SharedPointerT<Message::MessageData>&>;
+		using NetSyncMessageDelegates = EventDelegateList<Connection*>;
+
+		enum class EventFireMode : uint8_t
+		{
+			Immediate, // Fire event ASAP regardless of thread
+			OnGameTick, // Fire event on game tick thread, Owner should call UpdateGameTick for event fire
+		};
 
 
 	private:
@@ -255,7 +267,40 @@ namespace Net {
 		void SetEventHandler(IConnectionEventHandler *pEventHandler) { m_pEventHandler = pEventHandler; }
 
 
+		//////////////////////////////////////////////////////////////////////////
+		//
+		//	Event delegates
+		//
 
+		EventFireMode GetEventFireMode() const { return m_DelegateFireMode; }
+		void SetEventFireMode(EventFireMode eventFireMode) { m_DelegateFireMode = eventFireMode; }
+
+		ConnectionEventDeletates& GetConnectionEventDelegates() { return m_ConnectionEventDelegates; }
+		RecvMessageDelegates& GetRecvMessageDelegates() { return m_RecvMessageDelegates; }
+		NetSyncMessageDelegates& GetNetSyncMessageDelegates() { return m_NetSyncMessageDelegates; }
+
+
+		void AddMessageDelegateUnique(void* context, uint32_t msgId, RecvMessageDelegates::CallableType&& func)
+		{
+			RecvMessageDelegates* pDelegateList = nullptr;
+			if (!m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
+			{
+				pDelegateList = new RecvMessageDelegates(GetHeap());
+				m_RecvMessageDelegatesByMsgId.Insert(msgId, pDelegateList);
+				m_RecvMessageDelegatesByMsgId.CommitChanges();
+			}
+
+			pDelegateList->AddDelegateUnique(context, Forward<RecvMessageDelegates::CallableType>(func));
+		}
+
+		void RemoveMessageDelegate(void* context, uint32_t msgId)
+		{
+			RecvMessageDelegates* pDelegateList = nullptr;
+			if (m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
+			{
+				pDelegateList->RemoveDelegateAll(context);
+			}
+		}
 
 
 		//////////////////////////////////////////////////////////////////////////
@@ -332,6 +377,9 @@ namespace Net {
 		// Get received Message
 		virtual Result GetRecvMessage(SharedPointerT<Message::MessageData> &pIMsg);
 
+		// Update function on game tick. provide general implementation of connection tick update.
+		// this function will fire delegate events
+		virtual Result UpdateGameTick();
 
 		Result OnTick(EngineTaskTick tick) override;
 
@@ -342,7 +390,7 @@ namespace Net {
 		//	Overridable
 		//
 
-		// Update net control, process connection heartbit, ... etc
+		// Update net control, process connection heart bit, ... etc
 		virtual Result TickUpdate() = 0;
 
 		// Update send queue, Reliable UDP
@@ -351,6 +399,20 @@ namespace Net {
 		virtual Result UpdateSendBufferQueue() = 0;
 
 
+	private:
+
+		//////////////////////////////////////////////////////////////////////////
+		//
+		//	Event delegates
+		//
+
+		EventFireMode m_DelegateFireMode = EventFireMode::Immediate;
+
+		ConnectionEventDeletates m_ConnectionEventDelegates;
+		NetSyncMessageDelegates m_NetSyncMessageDelegates;
+		RecvMessageDelegates m_RecvMessageDelegates;
+		// Received message handler map by msgId
+		DualSortedMap<uint32_t, RecvMessageDelegates*> m_RecvMessageDelegatesByMsgId;
 	};
 
 	#include "SFConnection.inl"

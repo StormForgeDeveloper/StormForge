@@ -220,6 +220,10 @@ namespace Net {
 				netChk(hrTem);
 			}
 		}
+		else
+		{
+			pConnUDP->GetNetSyncMessageDelegates().Invoke((Connection*)pConnUDP);
+		}
 
 	Proc_End:
 
@@ -458,7 +462,14 @@ namespace Net {
 
 	Proc_End:
 
-		if (GetEventHandler() != nullptr) GetEventHandler()->OnNetSyncMessage(GetConnection());
+		if (GetEventHandler() != nullptr)
+		{
+			GetEventHandler()->OnNetSyncMessage(GetConnection());
+		}
+		else
+		{
+			GetConnection()->GetNetSyncMessageDelegates().Invoke(GetConnection());
+		}
 
 		return hr;
 	}

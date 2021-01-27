@@ -12,14 +12,14 @@
 #pragma once
 
 #include "SFTypedefs.h"
-
+#include "Object/SFSharedObject.h"
 
 
 namespace SF
 {
 
 	#pragma pack(push, 4)
-	struct ActorMovement
+	SF_DECLARE_ALIGN struct ActorMovement
 	{
 		static constexpr size_t MaxSavedMove = 8;
 		static constexpr uint32_t FramesPerSeconds = 60;
@@ -41,8 +41,11 @@ namespace SF
 	};
 	#pragma pack(pop)
 
-
-	class ActorMovementManager
+	////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// actor movement manager base
+	//
+	class ActorMovementManager : public SharedObject
 	{
 	public:
 		static constexpr size_t MaxSavedMove = ActorMovement::MaxSavedMove;
@@ -97,6 +100,10 @@ namespace SF
 	};
 
 
+	////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Received actor movement 
+	//
 	class ReceivedActorMovementManager : public ActorMovementManager
 	{
 	public:
