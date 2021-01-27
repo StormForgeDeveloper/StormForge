@@ -530,7 +530,7 @@ namespace SF {
 	}
 
 	template<class T>
-	inline Vector4Soft<T> Vector4Soft<T>::operator/(const T & scala)
+	inline Vector4Soft<T> Vector4Soft<T>::operator/(const T & scala) const
 	{
 		return Vector4Soft<T>(T(x / scala),
 			T(y / scala),
@@ -539,7 +539,7 @@ namespace SF {
 	}
 
 	template<class T>
-	inline Vector4Soft<T>  Vector4Soft<T>::operator*(const T & scala)
+	inline Vector4Soft<T>  Vector4Soft<T>::operator*(const T & scala) const
 	{
 		return Vector4Soft<T>(T(x * scala),
 			T(y * scala),

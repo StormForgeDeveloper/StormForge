@@ -199,13 +199,13 @@ namespace SF
 	}
 
 	
-	inline Vector4SSE Vector4SSE::operator/(const float & scala)
+	inline Vector4SSE Vector4SSE::operator/(const float & scala) const
 	{
 		return Vector4SSE(_mm_div_ps(Packed, _mm_set_ps1(scala)));
 	}
 
 	
-	inline Vector4SSE Vector4SSE::operator*(const float & scala)
+	inline Vector4SSE Vector4SSE::operator*(const float & scala) const
 	{
 		return Vector4SSE(_mm_mul_ps(Packed, _mm_set_ps1(scala)));
 	}

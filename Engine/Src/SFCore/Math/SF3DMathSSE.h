@@ -94,8 +94,8 @@ namespace SF {
 		Vector4SSE operator*(const Matrix4SSE & M) const;
 		Vector4SSE & operator*=(const Matrix4SSE & M);
 
-		Vector4SSE  operator/(const float & scala);
-		Vector4SSE  operator*(const float & scala);
+		Vector4SSE  operator/(const float & scala) const;
+		Vector4SSE  operator*(const float & scala) const;
 		Vector4SSE & operator/=(const float & scala);
 		Vector4SSE & operator*=(const float & scala);
 

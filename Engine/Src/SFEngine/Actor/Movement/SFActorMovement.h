@@ -19,7 +19,7 @@ namespace SF
 {
 
 	#pragma pack(push, 4)
-	SF_DECLARE_ALIGN struct ActorMovement
+	struct SF_DECLARE_ALIGN ActorMovement
 	{
 		static constexpr size_t MaxSavedMove = 8;
 		static constexpr uint32_t FramesPerSeconds = 60;

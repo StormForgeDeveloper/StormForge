@@ -195,8 +195,8 @@ namespace SF {
 		Vector4Soft<T> operator*(const Matrix4Soft<T> & M) const;
 		Vector4Soft<T> & operator*=(const Matrix4Soft<T> & M);
 
-		Vector4Soft<T>  operator/(const T & scala);
-		Vector4Soft<T>  operator*(const T & scala);
+		Vector4Soft<T>  operator/(const T & scala) const;
+		Vector4Soft<T>  operator*(const T & scala) const;
 		Vector4Soft<T> & operator/=(const T & scala);
 		Vector4Soft<T> & operator*=(const T & scala);
 
