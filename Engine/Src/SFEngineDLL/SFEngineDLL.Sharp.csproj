@@ -75,7 +75,6 @@
     <Compile Include="Sharp\SFObject.cs" />
     <Compile Include="Sharp\SFEngine.cs" />
     <Compile Include="Sharp\Properties\AssemblyInfo.cs" />
-    <Compile Include="Sharp\SFServerConfig.cs" />
     <Compile Include="Sharp\SFMemoryStream.cs" />
     <Compile Include="Sharp\SFStreamDB.cs" />
     <Compile Include="Sharp\SFTimeUtil.cs" />
