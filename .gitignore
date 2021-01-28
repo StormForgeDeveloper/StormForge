@@ -47,3 +47,4 @@ buildLinux/
 buildWindows/
 buildAndroid/
 buildIOS/
+Test/UnitTest/UnitTest1/data/local

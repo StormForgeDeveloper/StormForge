@@ -9,7 +9,7 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "Memory/SFMemoryManager.h"
 #include "Memory/SFMemory.h"
-
+#include "IO/SFFileUtil.h"
 #include "Task/SFTask.h"
 #include "SFEngine.h"
 
@@ -44,7 +44,13 @@ GTEST_TEST(ServerConfig, LoadTest)
 		Heap testHeap("test", GetSystemHeap());
 
 		auto dirPath = Util::Path::GetFileDirectory(__FILE__);
-		auto filePath = Util::Path::Combine(dirPath, "testConfig.cfg");
+		auto filePath = Util::Path::Combine(dirPath, "data/local/testConfig.cfg");
+
+		if (!FileUtil::IsFileExist(filePath))
+		{
+			auto sampleFilePath = Util::Path::Combine(dirPath, "sampledata/testConfig.cfg");
+			FileUtil::CopyFile(sampleFilePath, filePath);
+		}
 
 		ServerConfigJson loader(testHeap);
 		ServerConfig::ServerService config;

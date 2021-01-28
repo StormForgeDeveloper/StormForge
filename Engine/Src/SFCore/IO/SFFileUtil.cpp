@@ -46,6 +46,14 @@ namespace SF {
 		return std::filesystem::exists(strPath);
 	}
 
+	bool FileUtil::IsFileExist(const char* strPath)
+	{
+		if (StrUtil::IsNullOrEmpty(strPath))
+			return ResultCode::INVALID_ARG;
+
+		return std::filesystem::exists(strPath);
+	}
+
 	// Create directory
 	Result FileUtil::CreatePath(const char* strPath, int skipLast)
 	{
@@ -75,4 +83,9 @@ namespace SF {
 		return ResultCode::SUCCESS;
 	}
 
+
+	bool FileUtil::CopyFile(const char* strPathFrom, const char* strPathTo)
+	{
+		return std::filesystem::copy_file(strPathFrom, strPathTo);
+	}
 }
