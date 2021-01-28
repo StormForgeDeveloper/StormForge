@@ -32,8 +32,8 @@
 #include "Protocol/Message/LoginMsgParsing.h"
 #include "Protocol/Message/GameMsgParsing.h"
 
-#include "Protocol/Message/GameInstanceMsgDebug.h"
-#include "Protocol/Message/GameInstanceMsgParsing.h"
+#include "Protocol/Message/PlayInstanceMsgDebug.h"
+#include "Protocol/Message/PlayInstanceMsgParsing.h"
 
 
 namespace SF {
@@ -47,7 +47,7 @@ namespace Protocol {
 		
 		RegisterDebugTraceLogin( );
 		RegisterDebugTraceGame( );
-		RegisterDebugTraceGameInstance();
+		RegisterDebugTracePlayInstance();
 	}
 
 	
@@ -60,7 +60,7 @@ namespace Protocol {
 		
 		RegisterParserLogin();
 		RegisterParserGame();
-		RegisterParserGameInstance();
+		RegisterParserPlayInstance();
 	}
 	
 	void PrintDebugMessage(const char* preFix, const SharedPointerT<Message::MessageData>& pMsg )
