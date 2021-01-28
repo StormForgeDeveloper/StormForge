@@ -18,6 +18,7 @@
 #include "Util/SFTimeUtil.h"
 #include "Util/SFRandom.h"
 #include "String/SFToString.h"
+#include "String/SFStringFormat.h"
 #include "UnitTest_String.h"
 
 

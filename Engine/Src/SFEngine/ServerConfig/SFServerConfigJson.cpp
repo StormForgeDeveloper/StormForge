@@ -24,8 +24,8 @@
 namespace SF
 {
 
-	ServerConfigJson::ServerConfigJson(ServerConfig& config)
-		: m_Config(config)
+	ServerConfigJson::ServerConfigJson(IHeap& heap)
+		: m_Heap(heap)
 	{
 	}
 
@@ -34,14 +34,6 @@ namespace SF
 	}
 
 
-
-	Json::Value ServerConfigJson::ToJsonSafeString(const String& src)
-	{
-		static const char* NullString = "";
-		auto cstr = (const char*)src;
-		assert(cstr != nullptr);
-		return Json::Value(cstr == nullptr ? NullString : cstr);
-	}
 
 
 
@@ -55,7 +47,7 @@ namespace SF
 	{
 		auto IP = itemValue.get("IP", Json::Value(""));
 		privateNet.IP = IP.asCString();
-		privateNet.Port = itemValue.get("Port", Json::Value("")).asUInt();
+		privateNet.Port = itemValue.get("Port", Json::Value(Json::uintValue)).asUInt();
 
 		return ResultCode::SUCCESS;
 	}
@@ -76,12 +68,17 @@ namespace SF
 
 	Result ServerConfigJson::ParseGenericServer(const Json::Value& itemValue, ServerConfig::GenericServer* pGenericServer)
 	{
-		pGenericServer->UID = itemValue.get("UID", Json::Value("")).asUInt();
-		pGenericServer->WorkerThreadCount = itemValue.get("WorkerThreadCount", Json::Value(4)).asUInt();
-		pGenericServer->NetIOThreadCount = itemValue.get("NetIOThreadCount", Json::Value(4)).asUInt();
-		pGenericServer->Executable = itemValue.get("Executable", Json::Value("")).asCString();
-		//pGenericServer->Name = itemValue["Name"].asCString();
-		Result result = ParseNetPrivate(itemValue.get("NetPrivate",Json::Value(Json::objectValue)), pGenericServer->PrivateNet);
+		auto Name = itemValue.get("Name", Json::Value(""));
+		auto UID = itemValue.get("UID", Json::Value(Json::uintValue));
+		auto WorkerThreadCount = itemValue.get("WorkerThreadCount", Json::Value(4));
+		auto NetIOThreadCount = itemValue.get("NetIOThreadCount", Json::Value(4));
+		auto NetPrivate = itemValue.get("NetPrivate", Json::Value(Json::objectValue));
+
+		pGenericServer->Name = Name.asCString();
+		pGenericServer->UID = UID.asUInt();
+		pGenericServer->WorkerThreadCount = WorkerThreadCount.asUInt();
+		pGenericServer->NetIOThreadCount = NetIOThreadCount.asUInt();
+		Result result = ParseNetPrivate(NetPrivate, pGenericServer->PrivateNet);
 		if (!result) return result;
 
 		return ResultCode::SUCCESS;
@@ -90,11 +87,12 @@ namespace SF
 
 	Result ServerConfigJson::ParseDBInstance(const Json::Value& itemValue, ServerConfig::DBInstance* pDBInstance)
 	{
+		auto Name = itemValue.get("Name", Json::Value(""));
 		auto ConnectionString = itemValue.get("ConnectionString", Json::Value(""));
 		auto UserID = itemValue.get("UserID", Json::Value(""));
 		auto Password = itemValue.get("Password", Json::Value(""));
 
-		//pDBInstance->InstanceName = itemValue["InstanceName"].asCString();
+		pDBInstance->InstanceName = Name.asCString();
 		pDBInstance->ConnectionString = ConnectionString.asCString();
 		pDBInstance->UserID = UserID.asCString();
 		pDBInstance->Password = Password.asCString();
@@ -104,11 +102,12 @@ namespace SF
 
 	Result ServerConfigJson::ParseDBCluster(const Json::Value& itemValue, ServerConfig::DBCluster* pDBCluster)
 	{
+		auto Name = itemValue.get("Name", Json::Value("None"));
 		auto ClusterTypeString = itemValue.get("ClusterType", Json::Value("Normal"));
 		auto DBInstanceName = itemValue.get("DBInstanceName", Json::Value(""));
 		auto DBName = itemValue.get("DBName", Json::Value(""));
 
-		pDBCluster->ClusterName = itemValue.get("Name", Json::Value("None")).asCString();
+		pDBCluster->ClusterName = Name.asCString();
 		pDBCluster->ClusterType = Enum<DBClusterType>().GetValue(ClusterTypeString.asCString());
 		pDBCluster->DBInstanceName = DBInstanceName.asCString();
 		pDBCluster->DBName = DBName.asCString();
@@ -233,25 +232,6 @@ namespace SF
 	}
 
 
-	Result ServerConfigJson::ParseGameServer(const Json::Value& itemValue, ServerConfig::GameServer* pGameServer)
-	{
-		Result result = ParseGenericServer(itemValue, pGameServer);
-		if (!result)
-			return result;
-
-		return result;
-	}
-
-	Result ServerConfigJson::ParseGameInstanceServer(const Json::Value& itemValue, ServerConfig::GameInstanceServer* pGameInstanceServer)
-	{
-		Result result = ParseGenericServer(itemValue, pGameInstanceServer);
-		if (!result)
-			return result;
-		
-		return result;
-	}
-
-
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -260,8 +240,8 @@ namespace SF
 
 	Result ServerConfigJson::LoadChildModules(const Json::Value& rootObject, ServerConfig::GenericServer *pServer)
 	{
-		Json::Value ModuleArray;
-		rootObject.get("Module", ModuleArray);
+		Json::Value ModuleArray(Json::arrayValue);
+		ModuleArray = rootObject.get("Module", ModuleArray);
 		if (!ModuleArray.isArray() || ModuleArray.size() == 0)
 			return ResultCode::SUCCESS;
 
@@ -283,10 +263,8 @@ namespace SF
 		return result;
 	}
 
-	Result ServerConfigJson::LoadModuleServer(const Json::Value& nodeObject, ServerConfig::ModuleServer* &pServer)
+	Result ServerConfigJson::LoadGenericServer(const Json::Value& nodeObject, ServerConfig::GenericServer* pServer)
 	{
-		pServer = new(GetHeap()) ServerConfig::ModuleServer(GetHeap());
-
 		auto result = ParseGenericServer(nodeObject, pServer);
 		if (!result) return result;
 
@@ -296,10 +274,34 @@ namespace SF
 		return result;
 	}
 
+	Result ServerConfigJson::LoadDBInstances(const Json::Value& rootObject, Array<ServerConfig::DBInstance*>& dbInstances)
+	{
+		Json::Value DBInstanceArray(Json::arrayValue);
+		DBInstanceArray = rootObject.get("DBInstance", DBInstanceArray);
+		if (!DBInstanceArray.isArray() || DBInstanceArray.size() == 0)
+			return ResultCode::SUCCESS;
+
+		Result result;
+		for (auto& itInstance : DBInstanceArray)
+		{
+			if (!itInstance.isObject())
+				continue;
+
+			auto pDBInstance = new(GetHeap()) ServerConfig::DBInstance(GetHeap());
+			result = ParseDBInstance(itInstance, pDBInstance);
+			if (pDBInstance != nullptr)
+				dbInstances.push_back(pDBInstance);
+
+			return result;
+		}
+
+		return result;
+	}
+
 	Result ServerConfigJson::LoadDBClusters(const Json::Value& rootObject, Array<ServerConfig::DBCluster*>& dbClusters)
 	{
-		Json::Value DBClusterArray;
-		rootObject.get("DBCluster", DBClusterArray);
+		Json::Value DBClusterArray(Json::arrayValue);
+		DBClusterArray = rootObject.get("DBCluster", DBClusterArray);
 		if (!DBClusterArray.isArray() || DBClusterArray.size() == 0)
 			return ResultCode::SUCCESS;
 
@@ -321,26 +323,40 @@ namespace SF
 		return result;
 	}
 
-	Result ServerConfigJson::LoadJsonConfig(const Json::Value& jsonValue)
+	Result ServerConfigJson::LoadJsonConfig(const Json::Value& rootObject, ServerConfig::ServerService* pServer)
 	{
 		Result result;
 
-		auto gameClusterID = jsonValue.get("GameClusterId", Json::Value("")).asCString();
-		ServerConfig::GameCluster gameCluster(GetHeap()); // TODO:
+		auto gameClusterID = rootObject.get("GameClusterId", Json::Value(""));
+		pServer->GameClusterName = gameClusterID.asCString();
+		pServer->GameClusterID = gameClusterID.asCString();
 
-		result = LoadDBClusters(jsonValue, gameCluster.DBClusters);
+		result = LoadDBInstances(rootObject, pServer->DBInstances);
 		if (!result)
 			return result;
 
-		ServerConfig::ModuleServer* pModuleServer = nullptr;
-		result = LoadModuleServer(jsonValue, pModuleServer);
+
+		result = LoadDBClusters(rootObject, pServer->DBClusters);
+		if (!result)
+			return result;
+
+		auto monitoringServer = rootObject.get("MonitoringServer", Json::Value(Json::nullValue));
+		if (!monitoringServer.isNull())
+		{
+			pServer->MonitoringServer = new(GetHeap()) ServerConfig::GenericServer(GetHeap());
+			result = LoadGenericServer(monitoringServer, pServer->MonitoringServer);
+			if (!result)
+				return result;
+		}
+
+		result = LoadGenericServer(rootObject, pServer);
 		if (!result)
 			return result;
 
 		return result;
 	}
 
-	Result ServerConfigJson::LoadConfig(const String& configFilePath)
+	Result ServerConfigJson::LoadConfig(const String& configFilePath, ServerConfig::ServerService* pServerConfig)
 	{
 		ScopeContext result([](Result result) 
 		{
@@ -378,226 +394,11 @@ namespace SF
 			return ResultCode::INVALID_STR_DATA;
 		}
 
-		return LoadJsonConfig(jsonValue);
+
+		return LoadJsonConfig(jsonValue, pServerConfig);
 	}
 
 
-
-	///////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Node setting value generation
-	//
-
-
-	Json::Value ServerConfigJson::ToJsonNetPrivate(const ServerConfig::NetPrivate& privateNet) const
-	{
-		Json::Value itemValue(Json::objectValue);
-
-		itemValue["IP"] = ToJsonSafeString(privateNet.IP);
-		itemValue["Port"] = Json::Value(privateNet.Port);
-
-		return itemValue;
-	}
-
-	Json::Value ServerConfigJson::ToJsonNetPublic(const ServerConfig::NetPublic& publicNet) const
-	{
-		Json::Value itemValue(Json::objectValue);
-
-		itemValue["IPV4"] = ToJsonSafeString(publicNet.IPV4);
-		itemValue["IPV6"] = ToJsonSafeString(publicNet.IPV6);
-		itemValue["ListenIP"] = ToJsonSafeString(publicNet.ListenIP);
-		itemValue["Port"] = Json::Value(publicNet.Port);
-		itemValue["MaxConnection"] = Json::Value(publicNet.MaxConnection);
-
-		return itemValue;
-	}
-
-	Json::Value ServerConfigJson::ToJsonGenericServer(const ServerConfig::GenericServer* pGenericServer) const
-	{
-		Json::Value itemValue(Json::objectValue);
-
-		itemValue["UID"] = Json::Value(pGenericServer->UID);
-		//itemValue["Name"] = ToJsonSafeString(pGenericServer->Name);
-		itemValue["Executable"] = ToJsonSafeString(pGenericServer->Executable);
-		itemValue["NetPrivate"] = ToJsonNetPrivate(pGenericServer->PrivateNet);
-		itemValue["WorkerThreadCount"] = Json::Value(pGenericServer->WorkerThreadCount);
-		itemValue["NetIOThreadCount"] = Json::Value(pGenericServer->NetIOThreadCount);
-
-		return itemValue;
-	}
-
-	Json::Value ServerConfigJson::ToJsonDBInstance(const ServerConfig::DBInstance* pDBInstance) const
-	{
-		Json::Value itemValue(Json::objectValue);
-
-		//itemValue["InstanceName"] = ToJsonSafeString(pDBInstance->InstanceName);
-		itemValue["ConnectionString"] = ToJsonSafeString(pDBInstance->ConnectionString);
-		itemValue["UserID"] = ToJsonSafeString(pDBInstance->UserID);
-		itemValue["Password"] = ToJsonSafeString(pDBInstance->Password);
-
-		return itemValue;
-	}
-
-	Json::Value ServerConfigJson::ToJsonDBCluster(const ServerConfig::DBCluster* pDBCluster) const
-	{
-		Json::Value itemValue(Json::objectValue);
-
-		itemValue["ClusterType"] = ToJsonSafeString(Enum<DBClusterType>().GetValueName(pDBCluster->ClusterType));
-		itemValue["DBInstanceName"] = ToJsonSafeString(pDBCluster->DBInstanceName);
-		itemValue["DBName"] = ToJsonSafeString(pDBCluster->DBName);
-
-		return itemValue;
-	}
-
-	Json::Value ServerConfigJson::ToJsonModule(const ServerConfig::ServerModule* pServerModule) const
-	{
-		Json::Value itemValue(Json::objectValue);
-
-		switch (Crc32C((const char*)pServerModule->ModuleName))
-		{
-		case "ModMatching_Game_8"_crc:
-			itemValue["UseBot"] = Json::Value(((ServerConfig::ServerModuleMatching_8*)pServerModule)->UseBot);
-			break;
-		case "ModMatching_Game_4"_crc:
-			itemValue["UseBot"] = Json::Value(((ServerConfig::ServerModuleMatching_4*)pServerModule)->UseBot);
-			break;
-		case "ModPurchaseValidateGoogle"_crc:
-		{
-			auto pModule = static_cast<const ServerConfig::ServerModuleGooglePurchaseValidate*>(pServerModule);
-			itemValue["Account"] = ToJsonSafeString(pModule->Account);
-			itemValue["P12KeyFile"] = ToJsonSafeString(pModule->P12KeyFile);
-			itemValue["AuthScopes"] = ToJsonSafeString(pModule->AuthScopes);
-		}
-		break;
-		case "ModPurchaseValidateIOS"_crc:
-		{
-			auto pModule = static_cast<const ServerConfig::ServerModuleIOSPurchaseValidate*>(pServerModule);
-			itemValue["URL"] = ToJsonSafeString(pModule->URL);
-			itemValue["AltURL"] = ToJsonSafeString(pModule->AltURL);
-		}
-		break;
-		case "ModMonitoring"_crc:
-			break;
-		case "ModLogin"_crc:
-		{
-			auto pModule = static_cast<const ServerConfig::ServerModulePublicService*>(pServerModule);
-			itemValue["NetPublic"] = ToJsonNetPublic(pModule->PublicNet);
-		}
-		break;
-		case "ModRanking"_crc:
-			break;
-		case "ModGame"_crc:
-		{
-			auto pModule = static_cast<const ServerConfig::ServerModulePublicService*>(pServerModule);
-			itemValue["NetPublic"] = ToJsonNetPublic(pModule->PublicNet);
-			break;
-		}
-		case "ModGameInstanceManager"_crc:
-		{
-			auto pModule = static_cast<const ServerConfig::ServerModuleGameInstanceManager*>(pServerModule);
-			itemValue["Name"] = ToJsonSafeString(pModule->Name);
-			itemValue["DataTable"] = ToJsonSafeString(pModule->DataTable);
-			itemValue["NetPublic"] = ToJsonNetPublic(pModule->PublicNet);
-			break;
-		}
-		case "ModRelay"_crc:
-		{
-			auto pModule = static_cast<const ServerConfig::ServerModuleRelayService*>(pServerModule);
-			itemValue["NetPublic"] = ToJsonNetPublic(pModule->PublicNet);
-			itemValue["MaximumRelayInstances"] = Json::Value(pModule->MaximumRelayInstances);
-			break;
-		}
-		case "NetPrivate"_crc:
-			break;
-		case "ModMatchingQueue_Game_8x1"_crc:
-		case "ModMatchingQueue_Game_8x2"_crc:
-		case "ModMatchingQueue_Game_8x3"_crc:
-		case "ModMatchingQueue_Game_8x4"_crc:
-		case "ModMatchingQueue_Game_8x5"_crc:
-		case "ModMatchingQueue_Game_8x6"_crc:
-		case "ModMatchingQueue_Game_8x7"_crc:
-		case "ModMatchingQueue_Game_8x1S"_crc:
-		case "ModMatchingQueue_Game_8x1W"_crc:
-		case "ModMatchingQueue_Game_4x1"_crc:
-		case "ModMatchingQueue_Game_4x2"_crc:
-		case "ModMatchingQueue_Game_4x3"_crc:
-		case "ModMatchingQueue_Game_4x1S"_crc:
-		case "ModMatchingQueue_Game_4x1W"_crc:
-		case "ModGamePartyManager"_crc:
-		case "ModChatting"_crc:
-			break;
-		default:
-			assert(false);
-			break;
-		}
-
-
-		return itemValue;
-	}
-
-	Json::Value ServerConfigJson::ToJsonServerComponent(const ServerConfig::ServerComponent* pServerComponent) const
-	{
-		Json::Value itemValue(Json::objectValue);
-
-		switch (Crc32C((const char*)pServerComponent->ComponentName))
-		{
-		case "ComponentGoogle"_crc:
-		{
-			auto pComponent = static_cast<const ServerConfig::ServerComponentGoogle*>(pServerComponent);
-			itemValue["Account"] = ToJsonSafeString(pComponent->Account);
-			itemValue["P12KeyFile"] = ToJsonSafeString(pComponent->P12KeyFile);
-			itemValue["AuthScopes"] = ToJsonSafeString(pComponent->AuthScopes);
-		}
-		break;
-		case "ComponentIOS"_crc:
-		{
-			auto pComponent = static_cast<const ServerConfig::ServerComponentIOS*>(pServerComponent);
-			itemValue["URL"] = ToJsonSafeString(pComponent->URL);
-			itemValue["AltURL"] = ToJsonSafeString(pComponent->AltURL);
-		}
-		break;
-		case "NetPrivate"_crc:
-		case "NetPublic"_crc:
-			break;
-		default:
-			assert(false);
-			break;
-		}
-
-		return itemValue;
-	}
-
-	Json::Value ServerConfigJson::ToJsonGameServer(const ServerConfig::GameServer* pGameServer) const
-	{
-		Json::Value itemValue(Json::objectValue);
-
-		itemValue = ToJsonGenericServer(pGameServer);
-
-		return itemValue;
-	}
-
-	Json::Value ServerConfigJson::ToJsonGameInstanceServer(const ServerConfig::GameInstanceServer* pGameInstanceServer) const
-	{
-		Json::Value itemValue(Json::objectValue);
-
-		itemValue = ToJsonGenericServer(pGameInstanceServer);
-
-		return itemValue;
-	}
-
-	Json::Value ServerConfigJson::ToJsonGameCluster(const ServerConfig::GameCluster* pGameCluster) const
-	{
-		Json::Value itemValue(Json::objectValue);
-
-		return itemValue;
-	}
-
-
-	// Load config from server
-	Result ServerConfigJson::LoadConfig(const char* configFile)
-	{
-		return LoadConfig(String(GetHeap(), configFile));
-	}
 
 
 

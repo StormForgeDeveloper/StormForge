@@ -13,7 +13,6 @@ set(SFENGINEDLL_LIB_FILES
 	SharpCPP/SFCSNetSendMessageGame.cpp
 	SharpCPP/SFCSNetSendMessageLogin.cpp
 	SharpCPP/SFCSObject.cpp
-	SharpCPP/SFCSServerConfig.cpp
 	SharpCPP/SFCSStreamDB.cpp
 	SharpCPP/SFCSTimeUtil.cpp
 	SharpCPP/SFCSTongScript.cpp
@@ -31,8 +30,6 @@ set(SFENGINEDLL_LIB_FILES
 	Java/JniUtil.h
 	pch.h
 	Interfaces/SFPublicInterface.cpp
-	#Interfaces/SFNetRelayInterface.h
-	#Interfaces/SFNetRelayInterface.cpp
   )
 
 

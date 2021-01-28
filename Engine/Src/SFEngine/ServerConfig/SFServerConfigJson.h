@@ -28,18 +28,11 @@ namespace SF
 
 	class ServerConfigJson
 	{
-	public:
-
-
 	private:
 
-		ServerConfig& m_Config;
+		IHeap& m_Heap;
 
 	private:
-
-
-
-		static Json::Value ToJsonSafeString(const String& src);
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////
 		//
@@ -53,8 +46,6 @@ namespace SF
 		Result ParseDBInstance(const Json::Value& json, ServerConfig::DBInstance* pDBInstance);
 		Result ParseDBCluster(const Json::Value& json, ServerConfig::DBCluster* pDBCluster);
 		Result ParseModule(const Json::Value& json, ServerConfig::ServerModule* &pServerModule);
-		Result ParseGameServer(const Json::Value& json, ServerConfig::GameServer* pGameServer);
-		Result ParseGameInstanceServer(const Json::Value& json, ServerConfig::GameInstanceServer* pGameInstanceServer);
 
 
 		///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,42 +54,22 @@ namespace SF
 		//
 
 		Result LoadChildModules(const Json::Value& rootObject, ServerConfig::GenericServer *pServer);
-		Result LoadModuleServer(const Json::Value& nodeObject, ServerConfig::ModuleServer* &pServer);
+		Result LoadDBInstances(const Json::Value& rootObject, Array<ServerConfig::DBInstance*>& dbInstances);
 		Result LoadDBClusters(const Json::Value& rootObject, Array<ServerConfig::DBCluster*>& dbClusters);
-		Result LoadJsonConfig(const Json::Value& jsonValue);
-
-
-		///////////////////////////////////////////////////////////////////////////////////////////////////////
-		//
-		//	Node setting value generation
-		//
-
-
-		Json::Value ToJsonNetPrivate(const ServerConfig::NetPrivate& privateNet) const;
-		Json::Value ToJsonNetPublic(const ServerConfig::NetPublic& publicNet) const;
-		Json::Value ToJsonGenericServer(const ServerConfig::GenericServer* pGenericServer) const;
-		Json::Value ToJsonDBInstance(const ServerConfig::DBInstance* pDBInstance) const;
-		Json::Value ToJsonDBCluster(const ServerConfig::DBCluster* pDBCluster) const;
-		Json::Value ToJsonModule(const ServerConfig::ServerModule* pServerModule) const;
-		Json::Value ToJsonServerComponent(const ServerConfig::ServerComponent* pServerComponent) const;
-		Json::Value ToJsonGameServer(const ServerConfig::GameServer* pGameServer) const;
-		Json::Value ToJsonGameInstanceServer(const ServerConfig::GameInstanceServer* pGameInstanceServer) const;
-		Json::Value ToJsonGameCluster(const ServerConfig::GameCluster* pGameCluster) const;
-
-
+		Result LoadJsonConfig(const Json::Value& rootObject, ServerConfig::ServerService* pServer);
+		Result LoadGenericServer(const Json::Value& nodeObject, ServerConfig::GenericServer* pServer);
 
 	public:
 
 		// Constructor
-		ServerConfigJson(ServerConfig& config);
+		ServerConfigJson(IHeap& heap);
 		~ServerConfigJson();
 
 		// Heap
-		IHeap& GetHeap() { return m_Config.GetHeap(); }
+		IHeap& GetHeap() { return m_Heap; }
 
 		// Load config from server
-		Result LoadConfig(const char* configFile);
-		Result LoadConfig(const String& configFile);
+		Result LoadConfig(const String& configFile, ServerConfig::ServerService* pServerConfig);
 
 	};
 }

@@ -451,11 +451,6 @@ namespace SF
 				return;
 			}
 
-			//m_Owner.m_NickName = packet.GetNickName();
-			//m_Owner.m_GameInstanceUID = packet.GetGameUID();
-			//m_Owner.m_PartyUID = packet.GetPartyUID();
-			//m_Owner.m_PartyLeaderId = packet.GetPartyLeaderID();
-			//const MatchingQueueTicket& GetMatchingTicket() const { return m_MatchingTicket; };
 			m_Owner.m_GameInstanceUID = packet.GetInsUID();
 			m_Owner.m_GameInstanceAddress = packet.GetServerAddress();
 			m_Owner.m_GameInstanceAddress4 = packet.GetServerAddress4();
@@ -465,7 +460,7 @@ namespace SF
 			SetOnlineState(OnlineState::InGameConnectingGameInstance);
 
 			auto authTicket = 0;
-			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, m_Owner.GetGameInstanceAddress(), 0));
+			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, m_Owner.GetGameInstanceAddress4(), 0));
 			if (result)
 			{
 				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);

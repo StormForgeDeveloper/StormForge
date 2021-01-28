@@ -154,6 +154,27 @@ namespace SF {
 	}
 
 
+	Result _ToString(ToStringContext& context, const RouteContext& Data)
+	{
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(")))
+			return ResultCode::FAIL;
+
+		if (!(_ToString(context, Data.Components.From)))
+			return ResultCode::FAIL;
+
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+			return ResultCode::FAIL;
+
+		if (!(_ToString(context, Data.Components.To)))
+			return ResultCode::FAIL;
+
+		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")")))
+			return ResultCode::FAIL;
+
+		return ResultCode::SUCCESS;
+	}
+
+
 	void TestEngineTypes()
 	{
 		DynamicArray<FriendInformation> testFriendList(GetSystemHeap());
@@ -167,7 +188,7 @@ namespace SF {
 		char testString[512];
 		StrUtil::Format(testString, "{0}", testFriendList);
 		StrUtil::Format(testString, "{0}", testFriendListC);
-		
+
 
 		auto boxedFriendList = Boxing(testFriendList);
 		auto pFriendList = UnboxingReference<Array<FriendInformation>>(boxedFriendList);

@@ -28,6 +28,7 @@ namespace SF
 	Result _ToString(ToStringContext& context, const NotificationType& value);
 	Result _ToString(ToStringContext& context, const RelayPlayerInfo& value);
 	Result _ToString(ToStringContext& context, const GameInstanceInfo& value);
+	Result _ToString(ToStringContext& context, const RouteContext& Data);
 
 
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(PlayerInformation);
@@ -38,6 +39,7 @@ namespace SF
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(NotificationType);
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(RelayPlayerInfo);
 	DEFINE_BOXING_TEMPLETE_BYREFERENCE(GameInstanceInfo);
+	DEFINE_BOXING_TEMPLETE_BYVALUE(RouteContext);
 
 } // namespace SF
 

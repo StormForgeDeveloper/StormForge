@@ -20,9 +20,7 @@
 #define THREADED 1
 #include "zookeeper.h"
 #include "ServerConfig/SFServerConfig.h"
-#include "ServerConfig/SFServerConfigXML.h"
-#include "ServerConfig/SFServerConfigZookeeper.h"
-
+#include "ServerConfig/SFServerConfigJson.h"
 
 
 using ::testing::EmptyTestEventListener;
@@ -38,7 +36,7 @@ using namespace ::SF;
 
 
 
-GTEST_TEST(ServerConfig, XMLLoad)
+GTEST_TEST(ServerConfig, LoadTest)
 {
 
 	for (int iCount = 0; iCount < 5; iCount++)
@@ -46,102 +44,17 @@ GTEST_TEST(ServerConfig, XMLLoad)
 		Heap testHeap("test", GetSystemHeap());
 
 		auto dirPath = Util::Path::GetFileDirectory(__FILE__);
-		auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
-		ServerConfig serverConfig(testHeap);
-		ServerConfigXML serverConfigXML(serverConfig);
-		GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXML.LoadConfig(filePath));
+		auto filePath = Util::Path::Combine(dirPath, "testConfig.cfg");
+
+		ServerConfigJson loader(testHeap);
+		ServerConfig::ServerService config;
+		auto result = loader.LoadConfig(filePath, &config);
+		EXPECT_EQ(ResultCode::SUCCESS, result);
 	}
 
 	Engine::GetEngineComponent<Log::LogModule>()->Flush();
 }
 
-
-GTEST_TEST(ServerConfig, ZookeeperStore)
-{
-	Heap testHeap("test", GetSystemHeap());
-	Zookeeper zkInstance(testHeap);
-	ServerConfig serverConfig(testHeap);
-	ServerConfig serverConfigXML(testHeap);
-	const char* zkConfigNodeName = "/UnitTest_ServerConfig_ZookeeperStore";
-	zkInstance.Connect("SFTestZookeeper.com:41181");
-	zkInstance.WaitForConnected();
-
-
-	ServerConfigXML serverConfigXMLLoader(serverConfigXML);
-	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
-	auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig(filePath));
-
-	ServerConfigZookeeper zookeeperStore(serverConfigXML, zkInstance);
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperStore.StoreConfig(zkConfigNodeName));
-
-
-	zkInstance.Close();
-	zkInstance.WaitForDisconnected();
-
-	Engine::GetEngineComponent<Log::LogModule>()->Flush();
-}
-
-
-GTEST_TEST(ServerConfig, ZookeeperLoad)
-{
-	Heap testHeap("test", GetSystemHeap());
-	Zookeeper zkInstance(testHeap);
-	ServerConfig serverConfig(testHeap);
-	ServerConfig serverConfigXML(testHeap);
-	const char* zkConfigNodeName = "/UnitTest_ServerConfig_ZookeeperStore";
-	zkInstance.Connect("SFTestZookeeper.com:41181");
-	zkInstance.WaitForConnected();
-
-
-	ServerConfigXML serverConfigXMLLoader(serverConfigXML);
-	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
-	auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig(filePath));
-
-	ServerConfigZookeeper zookeeperLoader(serverConfig, zkInstance);
-	for (int iTest = 0; iTest < 10; iTest++)
-	{
-		GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperLoader.LoadConfig(zkConfigNodeName));
-	}
-	GTEST_ASSERT_EQ(serverConfigXML, serverConfig);
-
-
-	zkInstance.Close();
-	zkInstance.WaitForDisconnected();
-
-	Engine::GetEngineComponent<Log::LogModule>()->Flush();
-}
-
-GTEST_TEST(ServerConfig, Zookeeper)
-{
-	Heap testHeap("test", GetSystemHeap());
-	Zookeeper zkInstance(testHeap);
-	ServerConfig serverConfig(testHeap);
-	ServerConfig serverConfigXML(testHeap);
-	const char* zkConfigNodeName = "/UnitTest_ServerConfig_Zookeeper";
-	zkInstance.Connect("SFTestZookeeper.com:41181");
-	zkInstance.WaitForConnected();
-
-
-	ServerConfigXML serverConfigXMLLoader(serverConfigXML);
-	auto dirPath = Util::Path::GetFileDirectory(__FILE__);
-	auto filePath = Util::Path::Combine(dirPath, "ServerConfig_StressTest.xml");
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, serverConfigXMLLoader.LoadConfig(filePath));
-
-	ServerConfigZookeeper zookeeperStore(serverConfigXML, zkInstance);
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperStore.StoreConfig(zkConfigNodeName));
-
-	ServerConfigZookeeper zookeeperLoad(serverConfig, zkInstance);
-	GTEST_ASSERT_EQ(ResultCode::SUCCESS, zookeeperLoad.LoadConfig(zkConfigNodeName));
-	GTEST_ASSERT_EQ(serverConfigXML, serverConfig);
-
-
-	zkInstance.Close();
-	zkInstance.WaitForDisconnected();
-
-	Engine::GetEngineComponent<Log::LogModule>()->Flush();
-}
 
 
 

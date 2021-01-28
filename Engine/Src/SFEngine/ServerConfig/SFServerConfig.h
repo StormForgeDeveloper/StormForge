@@ -26,10 +26,8 @@
 namespace SF
 {
 
-	class ServerConfig
+	namespace ServerConfig
 	{
-	public:
-
 		struct GameCluster;
 
 		struct NetPrivate
@@ -170,7 +168,6 @@ namespace SF
 
 		struct GenericServer
 		{
-			GameCluster* pGameCluster = nullptr; // Game Cluster pointer if it's under game cluster
 			uint32_t UID = 0;
 			String Name;
 			String Executable;
@@ -196,14 +193,6 @@ namespace SF
 
 		};
 
-
-		struct ModuleServer : public GenericServer
-		{
-
-			ModuleServer(IHeap& heap) : GenericServer(heap) {}
-			virtual ~ModuleServer()
-			{}
-		};
 
 		// deprecated use module
 		struct ServerComponent
@@ -246,126 +235,37 @@ namespace SF
 			virtual ~ServerComponentIOS() {}
 		};
 
-		// Gradually deprecated
-		struct GameServer : public GenericServer
-		{
 
-			GameServer(IHeap& heap)
-				: GenericServer(heap)
-			{}
-			virtual ~GameServer()
-			{
-			}
-		};
-
-		// Gradually deprecated
-		struct GameInstanceServer : public GenericServer
-		{
-			GameInstanceServer(IHeap& heap) : GenericServer(heap) {}
-		};
-
-		struct GameCluster
+		struct ServerService : public GenericServer
 		{
 			GameID GameClusterID;
-			String GameClusterIDName;
+			String GameClusterName;
 
+			GenericServer* MonitoringServer{};
 			DynamicArray<DBCluster*> DBClusters;
-			DynamicArray<ModuleServer*> ModuleServers;
-			DynamicArray<GameServer*> GameServers;
-			DynamicArray<GameInstanceServer*> GameInstanceServers;
+			DynamicArray<DBInstance*> DBInstances;
 
-			GameCluster(IHeap& heap)
-				: GameClusterIDName(heap)
-				, DBClusters(heap)
-				, ModuleServers(heap)
-				, GameServers(heap)
-				, GameInstanceServers(heap)
+			ServerService()
+				: GenericServer(GetEngineHeap())
+				, DBClusters(GetEngineHeap())
+				, DBInstances(GetEngineHeap())
 			{}
 
-			virtual ~GameCluster()
+			virtual ~ServerService()
 			{
 				for (auto& itServer : DBClusters)
 				{
 					IHeap::Delete(itServer);
 				}
 				DBClusters.Clear();
-
-				for (auto& itServer : ModuleServers)
-				{
-					IHeap::Delete(itServer);
-				}
-				ModuleServers.Clear();
-
-				for (auto& itServer : GameServers)
-				{
-					IHeap::Delete(itServer);
-				}
-				GameServers.Clear();
-
-				for (auto& itServer : GameInstanceServers)
-				{
-					IHeap::Delete(itServer);
-				}
-				GameInstanceServers.Clear();
 			}
 
-			void SetGameClusterID(const char* gameID);
-			void SetGameClusterID(GameID gameID);
 
 			const DBCluster* FindDBCluster(const char* serverName) const;
-			const GenericServer* FindGenericServer(const char* serverName) const;
-
+			const DBInstance* FindDBInstance(const char* instanceName) const;
 		};
 
 
-	private:
-
-		// Heap for this instance
-		IHeap& m_Heap;
-
-		DynamicArray<DBInstance*> m_DBInstances;
-		DynamicArray<DBCluster*> m_DBClusters;
-
-		DynamicArray<ModuleServer*> m_Servers;
-		DynamicArray<GameCluster*> m_GameClusters;
-
-
-	public:
-
-		// Constructor
-		ServerConfig();
-		ServerConfig(IHeap& heap);
-		~ServerConfig();
-
-		void Clear();
-
-		// Heap
-		IHeap& GetHeap() { return m_Heap; }
-
-		const Array<DBInstance*>& GetDBInstances() const { return m_DBInstances; }
-		Array<DBInstance*>& GetDBInstances() { return m_DBInstances; }
-		const DBInstance* FindDBInstance(const char* instanceName) const;
-
-		const Array<DBCluster*>& GetDBClusters() const { return m_DBClusters; }
-		Array<DBCluster*>& GetDBClusters() { return m_DBClusters; }
-
-		const DBCluster* FindDBCluster(StringCrc64 clusterName) const;
-		DBCluster* FindDBCluster(StringCrc64 clusterName);
-
-		const Array<ModuleServer*>& GetServers() const { return m_Servers; }
-		Array<ModuleServer*>& GetServers() { return m_Servers; }
-
-		const Array<GameCluster*>& GetGameClusters() const { return m_GameClusters; }
-		Array<GameCluster*>& GetGameClusters() { return m_GameClusters; }
-
-
-
-		const GameCluster* FindGameCluster(GameID game) const;
-
-		const GenericServer* FindGenericServer(const char* serverName) const;
-
-
-		bool operator == (const ServerConfig& src) const;
-	};
+	}
 }
 
