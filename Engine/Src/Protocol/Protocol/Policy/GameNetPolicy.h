@@ -92,15 +92,13 @@ namespace SF
 			// Cmd: Party chatting
 			Result PartyChatMessageCmd( const uint64_t &InTransactionID, const char* InChatMessage );
 			// Cmd: Join to a game instance
-			Result JoinGameInstanceCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID );
+			Result JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InInsUID );
 			// Cmd: Leave game instance
-			Result LeaveGameInstanceCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID );
+			Result LeaveGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InInsUID );
 			// Cmd: Search game instance
 			Result SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword );
 			// Cmd: Search game instance
 			Result GetCharacterDataInGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID );
-			// C2S: Player Movement
-			Result PlayerMovementC2SEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
 			// Cmd: Join to a game
 			Result JoinGameCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID );
 			// Cmd: Leave Game
@@ -249,19 +247,13 @@ namespace SF
 			// S2C: Party Chatting message event
 			Result PartyChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage );
 			// Cmd: Join to a game instance
-			Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID );
+			Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress, const NetAddress &InServerAddress4 );
 			// Cmd: Leave game instance
-			Result LeaveGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID );
+			Result LeaveGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult );
 			// Cmd: Search game instance
 			Result SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<GameInstanceInfo>& InGameInstances );
 			// Cmd: Search game instance
 			Result GetCharacterDataInGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances );
-			// S2C: New Player in get view
-			Result NewPlayerInViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
-			// S2C: Remove player from view
-			Result RemovePlayerFromViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
-			// S2C: Player Movement
-			Result PlayerMovementS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
 			// Cmd: Join to a game
 			Result JoinGameRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData );
 			// S2C: Player Joined in the game

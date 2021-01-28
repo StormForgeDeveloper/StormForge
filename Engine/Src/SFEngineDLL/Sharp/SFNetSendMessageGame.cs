@@ -347,26 +347,26 @@ namespace SF.Net
 		} // public int  PartyChatMessageCmd( System.UInt64 InTransactionID, System.String InChatMessage )
 
 		// Cmd: Join to a game instance
-		public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InInsUID )
+		public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameJoinGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InPlayerID, InTicket, InInsUID);
+			result = CSSFNetAdapter_GameJoinGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InInsUID);
 			}
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinGameInstanceCmd);
 			return result;
-		} // public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InInsUID )
+		} // public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 
 		// Cmd: Leave game instance
-		public int  LeaveGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InInsUID )
+		public int  LeaveGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameLeaveGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InPlayerID, InTicket, InInsUID);
+			result = CSSFNetAdapter_GameLeaveGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InInsUID);
 			}
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LeaveGameInstanceCmd);
 			return result;
-		} // public int  LeaveGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InInsUID )
+		} // public int  LeaveGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 
 		// Cmd: Search game instance
 		public int  SearchGameInstanceCmd( System.UInt64 InTransactionID, System.String InSearchKeyword )
@@ -389,20 +389,6 @@ namespace SF.Net
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterDataInGameInstanceCmd);
 			return result;
 		} // public int  GetCharacterDataInGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID )
-
-		// C2S: Player Movement
-		public int  PlayerMovementC2SEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
-		{
- 			int result;
-			var InAttributes_ = InAttributes.ToByteArray();
-			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
-			{
-			result = CSSFNetAdapter_GamePlayerMovementC2SEvt(m_Connection.NativeHandle, InGameInsUID, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
-			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PlayerMovementC2SEvt);
-			return result;
-		} // public int  PlayerMovementC2SEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
-
 
 		// Cmd: Join to a game
 		public int  JoinGameCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InInsUID )
@@ -848,12 +834,12 @@ namespace SF.Net
 
 		// Cmd: Join to a game instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameJoinGameInstanceCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameJoinGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InInsUID );
+		static extern int CSSFNetAdapter_GameJoinGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InInsUID );
 
 
 		// Cmd: Leave game instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameLeaveGameInstanceCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameLeaveGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InInsUID );
+		static extern int CSSFNetAdapter_GameLeaveGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InInsUID );
 
 
 		// Cmd: Search game instance
@@ -864,12 +850,6 @@ namespace SF.Net
 		// Cmd: Search game instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterDataInGameInstanceCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameGetCharacterDataInGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID );
-
-
-		// C2S: Player Movement
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GamePlayerMovementC2SEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GamePlayerMovementC2SEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt16 _sizeOfInAttributes,IntPtr InAttributes );
-
 
 
 		// Cmd: Join to a game
@@ -1499,27 +1479,27 @@ namespace SF.Net
 
 
 		// Cmd: Join to a game instance
-		public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID )
+		public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, SF.NetAddress InServerAddress, SF.NetAddress InServerAddress4 )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameJoinGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InInsUID);
+			result = CSSFNetAdapter_GameJoinGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InInsUID,ref InServerAddress,ref InServerAddress4);
 			}
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinGameInstanceRes);
 			return result;
-		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID )
+		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, SF.NetAddress InServerAddress, SF.NetAddress InServerAddress4 )
 
 
 		// Cmd: Leave game instance
-		public int  LeaveGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID )
+		public int  LeaveGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameLeaveGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InInsUID);
+			result = CSSFNetAdapter_GameLeaveGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LeaveGameInstanceRes);
 			return result;
-		} // public int  LeaveGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID )
+		} // public int  LeaveGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
 
 		// Cmd: Search game instance
@@ -1546,48 +1526,6 @@ namespace SF.Net
 			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterDataInGameInstanceRes);
 			return result;
 		} // public int  GetCharacterDataInGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerID, SF.VariableTable InGameInstances )
-
-
-		// S2C: New Player in get view
-		public int  NewPlayerInViewS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
-		{
- 			int result;
-			var InAttributes_ = InAttributes.ToByteArray();
-			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
-			{
-			result = CSSFNetAdapter_GameNewPlayerInViewS2CEvt(m_Connection.NativeHandle, InGameInsUID, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
-			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.NewPlayerInViewS2CEvt);
-			return result;
-		} // public int  NewPlayerInViewS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
-
-
-		// S2C: Remove player from view
-		public int  RemovePlayerFromViewS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
-		{
- 			int result;
-			var InAttributes_ = InAttributes.ToByteArray();
-			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
-			{
-			result = CSSFNetAdapter_GameRemovePlayerFromViewS2CEvt(m_Connection.NativeHandle, InGameInsUID, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
-			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RemovePlayerFromViewS2CEvt);
-			return result;
-		} // public int  RemovePlayerFromViewS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
-
-
-		// S2C: Player Movement
-		public int  PlayerMovementS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
-		{
- 			int result;
-			var InAttributes_ = InAttributes.ToByteArray();
-			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
-			{
-			result = CSSFNetAdapter_GamePlayerMovementS2CEvt(m_Connection.NativeHandle, InGameInsUID, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
-			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PlayerMovementS2CEvt);
-			return result;
-		} // public int  PlayerMovementS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
 
 
 		// Cmd: Join to a game
@@ -2429,13 +2367,13 @@ namespace SF.Net
 
 		// Cmd: Join to a game instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameJoinGameInstanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameJoinGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID );
+		static extern int CSSFNetAdapter_GameJoinGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, ref SF.NetAddress InServerAddress, ref SF.NetAddress InServerAddress4 );
 
 
 
 		// Cmd: Leave game instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameLeaveGameInstanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameLeaveGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID );
+		static extern int CSSFNetAdapter_GameLeaveGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
 
 
 
@@ -2448,24 +2386,6 @@ namespace SF.Net
 		// Cmd: Search game instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterDataInGameInstanceRes", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameGetCharacterDataInGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerID, System.UInt16 _sizeOfInGameInstances,IntPtr InGameInstances );
-
-
-
-		// S2C: New Player in get view
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameNewPlayerInViewS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameNewPlayerInViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt16 _sizeOfInAttributes,IntPtr InAttributes );
-
-
-
-		// S2C: Remove player from view
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRemovePlayerFromViewS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameRemovePlayerFromViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt16 _sizeOfInAttributes,IntPtr InAttributes );
-
-
-
-		// S2C: Player Movement
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GamePlayerMovementS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GamePlayerMovementS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt16 _sizeOfInAttributes,IntPtr InAttributes );
 
 
 

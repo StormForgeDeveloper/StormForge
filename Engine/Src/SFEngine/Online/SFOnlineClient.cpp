@@ -14,10 +14,13 @@
 #include "Actor/Movement/SFActorMovement.h"
 #include "Net/SFConnection.h"
 #include "Net/SFConnectionTCP.h"
+#include "Net/SFConnectionUDP.h"
 #include "Protocol/Policy/LoginNetPolicy.h"
 #include "Protocol/Message/LoginMsgClass.h"
 #include "Protocol/Policy/GameNetPolicy.h"
 #include "Protocol/Message/GameMsgClass.h"
+#include "Protocol/Policy/PlayInstanceNetPolicy.h"
+#include "Protocol/Message/PlayInstanceMsgClass.h"
 
 namespace SF
 {
@@ -48,25 +51,43 @@ namespace SF
 	class ClientTask_Login : public OnlineClient::ClientTask
 	{
 	public:
+		using super = ClientTask;
+
+	public:
 
 		ClientTask_Login(OnlineClient& owner)
 			: ClientTask(owner)
 		{
+		}
+
+		const SharedPointerT<Net::Connection>& GetConnection()
+		{
+			return m_Owner.GetConnectionLogin();
+		}
+
+		void Disconnect()
+		{
+			if (m_Owner.m_Login != nullptr)
+				m_Owner.Disconnect(m_Owner.m_Login);
+		}
+
+		void Initialize() override
+		{
+			super::Initialize();
+
 			m_Owner.ClearTasks();
 			m_Owner.DisconnectAll();
 
 			m_Owner.m_Login = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
-			m_Owner.GetConnectionLogin()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
+			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
-
-			m_Owner.GetConnectionLogin()->GetConnectionEventDelegates().AddDelegateUnique(this,
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this,
 				[this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					OnConnectionEvent(evt);
 				});
 
-
-			m_Owner.GetConnectionLogin()->AddMessageDelegateUnique(this,
+			GetConnection()->AddMessageDelegateUnique(this,
 				Message::Login::LoginRes::MID.GetMsgID(),
 				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
 				{
@@ -74,32 +95,32 @@ namespace SF
 				});
 
 
-			m_Owner.GetConnectionLogin()->GetConnectionEventDelegates().AddDelegateUnique(this, [this](Net::Connection*, const Net::ConnectionEvent& evt)
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this, [this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
-						m_Owner.Disconnect(m_Owner.m_Login);
+						Disconnect();
 				});
 
 
 			SetOnlineState(OnlineState::ConnectingToLogin);
-			NetAddress remoteAddress(owner.GetLoginAddresses());
+
+			NetAddress remoteAddress(m_Owner.GetLoginAddresses());
 			auto authTicket = 0;
-			auto result = owner.GetConnectionLogin()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, remoteAddress, 0));
+			auto result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, remoteAddress, 0));
 			if (result)
 			{
-				owner.GetConnectionLogin()->SetTickGroup(EngineTaskTick::AsyncTick);
+				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);
 			}
-
 		}
 
 		virtual ~ClientTask_Login()
 		{
-			if (m_Owner.GetConnectionLogin() == nullptr)
+			if (GetConnection() == nullptr)
 				return;
 
-			m_Owner.GetConnectionLogin()->GetConnectionEventDelegates().RemoveDelegateAll(this);
-			m_Owner.GetConnectionLogin()->GetRecvMessageDelegates().RemoveDelegateAll(this);
-			m_Owner.GetConnectionLogin()->RemoveMessageDelegate(this, Message::Login::LoginRes::MID.GetMsgID());
+			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(this);
+			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(this);
+			GetConnection()->RemoveMessageDelegate(this, Message::Login::LoginRes::MID.GetMsgID());
 		}
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
@@ -109,7 +130,7 @@ namespace SF
 				if (evt.Components.hr)
 				{
 					SetOnlineState(OnlineState::LogingIn);
-					Policy::NetPolicyLogin policy(m_Owner.GetConnectionLogin());
+					Policy::NetPolicyLogin policy(GetConnection());
 					auto res = policy.LoginCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetUserId(), m_Owner.GetPassword());
 					if (!res)
 					{
@@ -120,7 +141,9 @@ namespace SF
 				}
 				else
 				{
-					m_Owner.GetConnectionLogin()->Disconnect("Login failed");
+					GetConnection()->Disconnect("Login failed");
+					Disconnect();
+					SetOnlineState(OnlineState::Disconnected);
 				}
 			}
 		}
@@ -133,6 +156,8 @@ namespace SF
 			{
 				SFLog(Net, Error, "LoginRes: Packet parsing error: {0}", result);
 				SetResult(result);
+				Disconnect();
+				SetOnlineState(OnlineState::Disconnected);
 				return;
 			}
 
@@ -140,6 +165,8 @@ namespace SF
 			{
 				SFLog(Net, Error, "LoginRes: Login failure: {0}", packet.GetResult());
 				SetResult(packet.GetResult());
+				Disconnect();
+				SetOnlineState(OnlineState::Disconnected);
 				return;
 			}
 
@@ -150,6 +177,7 @@ namespace SF
 			m_Owner.m_AuthTicket = packet.GetTicket();
 
 			SFLog(Net, Info, "Logged in: {0},{1}, accountId:{2}", m_Owner.m_GameAddress, m_Owner.m_GameAddress4, m_Owner.m_AccountId);
+
 			SetOnlineState(OnlineState::LoggedIn);
 			SetResult(ResultCode::SUCCESS);
 		}
@@ -160,10 +188,30 @@ namespace SF
 	class ClientTask_JoinGameServer : public OnlineClient::ClientTask
 	{
 	public:
+		using super = ClientTask;
+
+	public:
 
 		ClientTask_JoinGameServer(OnlineClient& owner)
 			: ClientTask(owner)
 		{
+		}
+
+		const SharedPointerT<Net::Connection>& GetConnection()
+		{
+			return m_Owner.GetConnectionGame();
+		}
+
+		void Disconnect()
+		{
+			if (m_Owner.m_Game != nullptr)
+				m_Owner.Disconnect(m_Owner.m_Game);
+		}
+
+		void Initialize() override
+		{
+			super::Initialize();
+
 			if (m_Owner.GetConnectionLogin() == nullptr || m_Owner.GetConnectionLogin()->GetConnectionState() != Net::ConnectionState::CONNECTED)
 			{
 				SFLog(Net, Error, "Join game server has requested without Login connection");
@@ -171,21 +219,18 @@ namespace SF
 				return;
 			}
 
-			if (m_Owner.m_Game != nullptr)
-				m_Owner.Disconnect(m_Owner.m_Game);
+			Disconnect();
 
 			m_Owner.m_Game = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
-			m_Owner.GetConnectionGame()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
+			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
-
-			m_Owner.GetConnectionGame()->GetConnectionEventDelegates().AddDelegateUnique(this,
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this,
 				[this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					OnConnectionEvent(evt);
 				});
 
-
-			m_Owner.GetConnectionLogin()->AddMessageDelegateUnique(this,
+			GetConnection()->AddMessageDelegateUnique(this,
 				Message::Game::JoinGameServerRes::MID.GetMsgID(),
 				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
 				{
@@ -193,30 +238,29 @@ namespace SF
 				});
 
 
-			m_Owner.GetConnectionGame()->GetConnectionEventDelegates().AddDelegateUnique(this, [this](Net::Connection*, const Net::ConnectionEvent& evt)
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this, [this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
-						m_Owner.Disconnect(m_Owner.m_Game);
+						Disconnect();
 				});
 
 			SetOnlineState(OnlineState::ConnectingToGameServer);
-			NetAddress remoteAddress(owner.GetLoginAddresses());
 			auto authTicket = 0;
-			auto result = m_Owner.GetConnectionGame()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, remoteAddress, 0));
+			auto result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, m_Owner.GetGameAddress4(), 0));
 			if (result)
 			{
-				m_Owner.GetConnectionGame()->SetTickGroup(EngineTaskTick::AsyncTick);
+				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);
 			}
 		}
 
 		virtual ~ClientTask_JoinGameServer()
 		{
-			if (m_Owner.GetConnectionGame() == nullptr)
+			if (GetConnection() == nullptr)
 				return;
 
-			m_Owner.GetConnectionGame()->GetConnectionEventDelegates().RemoveDelegateAll(this);
-			m_Owner.GetConnectionGame()->GetRecvMessageDelegates().RemoveDelegateAll(this);
-			m_Owner.GetConnectionGame()->RemoveMessageDelegate(this, Message::Game::JoinGameServerRes::MID.GetMsgID());
+			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(this);
+			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(this);
+			GetConnection()->RemoveMessageDelegate(this, Message::Game::JoinGameServerRes::MID.GetMsgID());
 		}
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
@@ -226,7 +270,7 @@ namespace SF
 				if (evt.Components.hr)
 				{
 					SetOnlineState(OnlineState::JoiningToGameServer);
-					Policy::NetPolicyGame policy(m_Owner.GetConnectionGame());
+					Policy::NetPolicyGame policy(GetConnection());
 					auto res = policy.JoinGameServerCmd(intptr_t(this), m_Owner.GetAccountId(), m_Owner.GetAuthTicket(), m_Owner.GetLoginEntityUID());
 					if (!res)
 					{
@@ -237,7 +281,8 @@ namespace SF
 				}
 				else
 				{
-					m_Owner.GetConnectionLogin()->Disconnect("JoinGameServer failed");
+					GetConnection()->Disconnect("JoinGameServer failed");
+					Disconnect();
 				}
 			}
 		}
@@ -251,6 +296,7 @@ namespace SF
 			{
 				SFLog(Net, Error, "Game::JoinGameServerRes: Packet parsing error: {0}", result);
 				SetResult(result);
+				Disconnect();
 				return;
 			}
 
@@ -258,6 +304,7 @@ namespace SF
 			{
 				SFLog(Net, Error, "Game::JoinGameServerRes: failure: {0}", packet.GetResult());
 				SetResult(packet.GetResult());
+				Disconnect();
 				return;
 			}
 
@@ -273,6 +320,158 @@ namespace SF
 		}
 	};
 
+
+	class ClientTask_JoinGameInstanceServer : public OnlineClient::ClientTask
+	{
+	public:
+		using super = ClientTask;
+
+	public:
+
+		ClientTask_JoinGameInstanceServer(OnlineClient& owner)
+			: ClientTask(owner)
+		{
+		}
+
+		const SharedPointerT<Net::Connection>& GetConnection()
+		{
+			return m_Owner.GetConnectionGameInstance();
+		}
+
+		void Disconnect()
+		{
+			if (m_Owner.m_GameInstance != nullptr)
+				m_Owner.Disconnect(m_Owner.m_GameInstance);
+		}
+
+		void Initialize() override
+		{
+			super::Initialize();
+
+			if (m_Owner.GetConnectionGame() == nullptr || m_Owner.GetConnectionGame()->GetConnectionState() != Net::ConnectionState::CONNECTED)
+			{
+				SFLog(Net, Error, "Join game instance has requested without game connection");
+				SetResult(ResultCode::INVALID_STATE);
+				return;
+			}
+
+			if (m_Owner.GetGameInstanceUID() == 0)
+			{
+				SFLog(Net, Error, "Join game instance has requested without game instance UID");
+				SetResult(ResultCode::INVALID_ARG);
+				return;
+			}
+
+			Disconnect();
+
+			m_Owner.m_GameInstance = new(GetHeap()) Net::ConnectionUDPClient(GetHeap());
+			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
+
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this,
+				[this](Net::Connection*, const Net::ConnectionEvent& evt)
+				{
+					OnConnectionEvent(evt);
+				});
+
+			m_Owner.GetConnectionGame()->AddMessageDelegateUnique(this,
+				Message::Game::JoinGameInstanceRes::MID.GetMsgID(),
+				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				{
+					OnJoinGameInstanceRes(pMsgData);
+				});
+
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this, [this](Net::Connection*, const Net::ConnectionEvent& evt)
+				{
+					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+						Disconnect();
+				});
+
+
+			SetOnlineState(OnlineState::InGameJoiningGameInstance);
+			Policy::NetPolicyGame policy(m_Owner.GetConnectionGame());
+			auto res = policy.JoinGameInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID());
+			if (!res)
+			{
+				Disconnect();
+				SetOnlineState(OnlineState::InGameServer);
+				SFLog(Net, Error, "JoinGameInstance command has failed {0}", res);
+			}
+		}
+
+		virtual ~ClientTask_JoinGameInstanceServer()
+		{
+			if (GetConnection() == nullptr)
+				return;
+
+			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(this);
+			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(this);
+
+			if (m_Owner.GetConnectionGame() != nullptr)
+				m_Owner.GetConnectionGame()->RemoveMessageDelegate(this, Message::Game::JoinGameInstanceRes::MID.GetMsgID());
+		}
+
+		void OnConnectionEvent(const Net::ConnectionEvent& evt)
+		{
+			if (evt.Components.EventType == Net::ConnectionEvent::EVT_CONNECTION_RESULT)
+			{
+				if (evt.Components.hr)
+				{
+					SetOnlineState(OnlineState::InGameInGameInstance);
+				}
+				else
+				{
+					GetConnection()->Disconnect("JoinGameServer failed");
+					Disconnect();
+					SetOnlineState(OnlineState::InGameServer);
+				}
+				SetResult(evt.Components.hr);
+			}
+		}
+
+
+		void OnJoinGameInstanceRes(SharedPointerT<Message::MessageData>& pMsgData)
+		{
+			Message::Game::JoinGameInstanceRes packet(Forward<MessageDataPtr>(pMsgData));
+			auto result = packet.ParseMsg();
+			if (!result)
+			{
+				SFLog(Net, Error, "JoinGameInstanceRes: Packet parsing error: {0}", result);
+				SetResult(result);
+				Disconnect();
+				SetOnlineState(OnlineState::InGameServer);
+				return;
+			}
+
+			if (!packet.GetResult())
+			{
+				SFLog(Net, Error, "JoinGameInstanceRes: failure: {0}", packet.GetResult());
+				SetResult(packet.GetResult());
+				Disconnect();
+				SetOnlineState(OnlineState::InGameServer);
+				return;
+			}
+
+			//m_Owner.m_NickName = packet.GetNickName();
+			//m_Owner.m_GameInstanceUID = packet.GetGameUID();
+			//m_Owner.m_PartyUID = packet.GetPartyUID();
+			//m_Owner.m_PartyLeaderId = packet.GetPartyLeaderID();
+			//const MatchingQueueTicket& GetMatchingTicket() const { return m_MatchingTicket; };
+			m_Owner.m_GameInstanceUID = packet.GetInsUID();
+			m_Owner.m_GameInstanceAddress = packet.GetServerAddress();
+			m_Owner.m_GameInstanceAddress4 = packet.GetServerAddress4();
+
+			SFLog(Net, Info, "Game instance joined: {0}, game:{1}, {2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, m_Owner.m_GameInstanceAddress4);
+
+			SetOnlineState(OnlineState::InGameConnectingGameInstance);
+
+			auto authTicket = 0;
+			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, m_Owner.GetGameInstanceAddress(), 0));
+			if (result)
+			{
+				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);
+			}
+		}
+	};
 
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -311,9 +510,6 @@ namespace SF
 
 		m_PendingTasks.push_back(new(GetHeap()) ClientTask_Login(*this));
 		m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameServer(*this));
-		//m_PendingTasks.push_back(new(GetHeap()) ClientTask_Login(*this));
-
-		// TODO: create async tasks
 	}
 
 	void OnlineClient::Disconnect(SharedPointerT<Net::Connection>& pConn)
@@ -339,13 +535,27 @@ namespace SF
 	void OnlineClient::UpdateGameTick()
 	{
 		if (m_Login != nullptr)
+		{
 			m_Login->UpdateGameTick();
+		}
 
 		if (m_Game != nullptr)
+		{
 			m_Game->UpdateGameTick();
 
+			if (m_Game->GetConnectionState() == Net::ConnectionState::CONNECTED
+				&& Util::TimeSince(m_HeartbitTimer) > DurationMS(15 * 1000))
+			{
+				m_HeartbitTimer = Util::Time.GetTimeMs();
+				Policy::NetPolicyGame policy(m_Game);
+				policy.HeartBitC2SEvt();
+			}
+		}
+
 		if (m_GameInstance != nullptr)
+		{
 			m_GameInstance->UpdateGameTick();
+		}
 
 
 		if (m_CurrentTask)
@@ -356,10 +566,13 @@ namespace SF
 				m_CurrentTask.reset();
 			}
 		}
+
 		if (m_CurrentTask == nullptr && m_PendingTasks.size() > 0)
 		{
 			m_CurrentTask.reset(m_PendingTasks[0]);
 			m_PendingTasks.RemoveAt(0);
+
+			m_CurrentTask->Initialize();
 		}
 	}
 }

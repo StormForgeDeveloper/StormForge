@@ -1,0 +1,63 @@
+﻿////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) 2016 Kyungkun Ko
+// 
+// Author : Generated
+// 
+// Description : PlayInstance Message debug implementations
+// 
+////////////////////////////////////////////////////////////////////////////////
+
+
+#include "SFProtocolPCH.h"
+#include "SFTypedefs.h"
+#include "Protocol/SFProtocol.h"
+#include "Net/SFNetDef.h"
+#include "Protocol/Message/PlayInstanceMsgDebug.h"
+#include "Protocol/Message/PlayInstanceMsgClass.h"
+
+
+
+namespace SF
+{
+ 	namespace Protocol
+	{
+ 		///////////////////////////////////////////////////////////////
+		// PlayInstance Debug trace mapping
+		extern std::unordered_map<uint32_t,MessageHandlingFunction> MessageDebugTraceMap;
+
+		void RegisterDebugTracePlayInstance()
+		{
+ 			// S2C: Event for Player joined.
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerJoinS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerJoinS2CEvt::TraceOut));
+			// S2C: Event for Player left.
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerLeftS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerLeftS2CEvt::TraceOut));
+			// C2S: Play packet
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayPacketC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayPacketC2SEvt::TraceOut));
+			// S2C: New Player in get view
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::NewPlayerInViewS2CEvt::TraceOut));
+			// S2C: Remove player from view
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::RemovePlayerFromViewS2CEvt::TraceOut));
+			// C2S: Player Movement
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerMovementC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerMovementC2SEvt::TraceOut));
+			// S2C: Player Movement
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerMovementS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerMovementS2CEvt::TraceOut));
+			// Cmd: Create stream instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CreateStreamRes::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamRes::TraceOut));
+			// Cmd: Open stream instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::FindStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::FindStreamCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::FindStreamRes::MID.IDSeq.MsgID,&Message::PlayInstance::FindStreamRes::TraceOut));
+			// Cmd: Delete stream instance
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::DeleteStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::DeleteStreamCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::DeleteStreamRes::MID.IDSeq.MsgID,&Message::PlayInstance::DeleteStreamRes::TraceOut));
+			// Cmd: Get stream list
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::GetStreamListCmd::MID.IDSeq.MsgID,&Message::PlayInstance::GetStreamListCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::GetStreamListRes::MID.IDSeq.MsgID,&Message::PlayInstance::GetStreamListRes::TraceOut));
+		}; // void RegisterDebugTracePlayInstance()
+
+
+	}; // namespace Protocol
+}; // namespace SF
+
+

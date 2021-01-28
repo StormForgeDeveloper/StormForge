@@ -1,6 +1,6 @@
 ﻿***
  
- CopyRight (c) 2020 StormForge
+ CopyRight (c) 2021 StormForge
  
  Description : Game Message Protocol API Document
 
@@ -792,13 +792,9 @@ Join to a game instance
 
 1. Command interface
 
-        Result JoinGameInstanceCmd(const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID)
+        Result JoinGameInstanceCmd(const uint64_t &InTransactionID, const uint64_t &InInsUID)
 
 		- OutInTransactionID: TransactionID type. 
-
-		- OutInPlayerID: AccountID type. Player ID of the player
-
-		- OutInTicket: AuthTicket type. Login session ID
 
 		- OutInInsUID: GameInsUID type. Game instance ID to join
 
@@ -813,19 +809,19 @@ C++: Cast message to JoinGameInstanceRes to access values
 
 		- OutInsUID: GameInsUID type. Game instance ID
 
+		- OutServerAddress: NetAddress type. Game instance address
+
+		- OutServerAddress4: NetAddress type. Game instance address
+
 
 ## LeaveGameInstance Request
 Leave game instance
 
 1. Command interface
 
-        Result LeaveGameInstanceCmd(const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID)
+        Result LeaveGameInstanceCmd(const uint64_t &InTransactionID, const uint64_t &InInsUID)
 
 		- OutInTransactionID: TransactionID type. 
-
-		- OutInPlayerID: AccountID type. Player ID of the player
-
-		- OutInTicket: AuthTicket type. Login session ID
 
 		- OutInInsUID: GameInsUID type. Game instance ID to join
 
@@ -837,8 +833,6 @@ C++: Cast message to LeaveGameInstanceRes to access values
 		- OutTransactionID: TransactionID type. 
 
 		- OutResult: Result type. 
-
-		- OutInsUID: GameInsUID type. Game instance ID
 
 
 ## SearchGameInstance Request
@@ -889,54 +883,6 @@ C++: Cast message to GetCharacterDataInGameInstanceRes to access values
 		- OutPlayerID: PlayerID type. Player Movement
 
 		- OutGameInstances: VariableTable type. Game instance ID
-
-
-## NewPlayerInViewS2CEvt
-New Player in get view
-
-        Result NewPlayerInViewS2CEvt(const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes)
-
-		- OutInGameInsUID: GameInsUID type. Game instance UID
-
-		- OutInPlayerID: PlayerID type. Player Id
-
-		- OutInAttributes: VariableTable type. Movement attributes
-
-
-## RemovePlayerFromViewS2CEvt
-Remove player from view
-
-        Result RemovePlayerFromViewS2CEvt(const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes)
-
-		- OutInGameInsUID: GameInsUID type. Game instance UID
-
-		- OutInPlayerID: PlayerID type. Player Id
-
-		- OutInAttributes: VariableTable type. Movement attributes
-
-
-## PlayerMovementC2SEvt
-Player Movement
-
-        Result PlayerMovementC2SEvt(const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes)
-
-		- OutInGameInsUID: GameInsUID type. Game instance UID
-
-		- OutInPlayerID: PlayerID type. Player Id
-
-		- OutInAttributes: VariableTable type. Movement attributes
-
-
-## PlayerMovementS2CEvt
-Player Movement
-
-        Result PlayerMovementS2CEvt(const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes)
-
-		- OutInGameInsUID: GameInsUID type. Game instance UID
-
-		- OutInPlayerID: PlayerID type. Player Movement
-
-		- OutInAttributes: VariableTable type. Movement attributes
 
 
 ## JoinGame Request

@@ -18,7 +18,7 @@
 #include "Service/SFEngineService.h"
 #include "Interfaces/SFNetRelayInterface.h"
 #include "Net/SFNetRelayNetwork.h"
-#include "Protocol/Message/RelayMsgClass.h"
+#include "Protocol/Message/PlayInstanceMsgClass.h"
 
 
 namespace SF
@@ -123,7 +123,7 @@ namespace SF
 		if (!m_Impl->GetRecvMessage(pMsg))
 			return 0;
 
-		Message::Relay::RelayPacketC2SEvt message(std::forward<MessageDataPtr>(pMsg));
+		Message::PlayInstance::PlayPacketC2SEvt message(std::forward<MessageDataPtr>(pMsg));
 		auto hr = message.ParseMsg();
 		if (!hr)
 		{

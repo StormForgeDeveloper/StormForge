@@ -28,7 +28,7 @@
 #include "Net/SFNetSystem.h"
 #include "Net/SFNetToString.h"
 #include "Net/SFNetRelayNetwork.h"
-#include "Protocol/Message/RelayMsgClass.h"
+#include "Protocol/Message/GameInstanceMsgClass.h"
 
 
 

@@ -24,7 +24,7 @@
 #include "StreamDB/SFStreamDB.h"
 #include "StreamDB/SFStreamDBDirectory.h"
 
-#include "Protocol/Message/RelayMsgClass.h"
+#include "Protocol/Message/PlayInstanceMsgClass.h"
 
 
 using ::testing::EmptyTestEventListener;
@@ -113,17 +113,17 @@ TEST_F(KafkaTest, DirectoryBroker)
     if (pMsg != nullptr)
     {
         auto msgId = pMsg->GetMessageHeader()->msgID;
-        if (msgId.GetMsgIDOnly() == SF::Message::Relay::FindStreamRes::MID)
+        if (msgId.GetMsgIDOnly() == SF::Message::PlayInstance::FindStreamRes::MID)
         {
-            SF::Message::Relay::FindStreamRes msg(std::forward<MessageDataPtr>(pMsg));
+            SF::Message::PlayInstance::FindStreamRes msg(std::forward<MessageDataPtr>(pMsg));
             GTEST_ASSERT_EQ(msg.ParseMsg(), ResultCode::SUCCESS);
 
             // TODO:
             //msg.Get
         }
-        else if (msgId.GetMsgIDOnly() == SF::Message::Relay::GetStreamListRes::MID)
+        else if (msgId.GetMsgIDOnly() == SF::Message::PlayInstance::GetStreamListRes::MID)
         {
-            SF::Message::Relay::GetStreamListRes msg(std::forward<MessageDataPtr>(pMsg));
+            SF::Message::PlayInstance::GetStreamListRes msg(std::forward<MessageDataPtr>(pMsg));
             GTEST_ASSERT_EQ(msg.ParseMsg(), ResultCode::SUCCESS);
 
 			SFLog(Net, Info, "Stream count:{0}", msg.GetStreamNames().size());

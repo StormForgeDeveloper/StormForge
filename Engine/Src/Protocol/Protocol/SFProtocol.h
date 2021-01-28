@@ -43,6 +43,9 @@ namespace SF
 		PROTOCOLID_GAME						,				// Game policy
 		PROTOCOLID_SVR_GAME					,				// Game policy
 
+		PROTOCOLID_PLAYINSTANCE,							// Play instance
+		PROTOCOLID_SVR_PLAYINSTANCE,						// play instance
+
 		PROTOCOLID_SERVER					,				// server generic policy
 		PROTOCOLID_SVR_SERVER				,				// server generic policy
 

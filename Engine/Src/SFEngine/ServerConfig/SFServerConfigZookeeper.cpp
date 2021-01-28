@@ -85,12 +85,6 @@ namespace SF
 
 		ValidateFunc();
 
-		//if ((intptr_t)(childList[3].data()) == 0x1643f60)
-		//{
-		//	testEnable = true;
-		//}
-
-
 		for (auto& itChildPath : childList)
 		{
 			assert(!itChildPath.IsNullOrEmpty()); // not empty

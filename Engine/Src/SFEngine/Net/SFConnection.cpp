@@ -486,13 +486,11 @@ namespace Net {
 		else if (!(GetEventHandler()->OnRecvMessage(this, pMsg)))
 		{
 			SFLog(Net, Error, "Failed to route a message to recv msg:{0}", msgID);
-			netChk(GetRecvQueue().Enqueue(std::forward<SharedPointerT<Message::MessageData>>(pMsg)));
+			netCheck(GetRecvQueue().Enqueue(std::forward<SharedPointerT<Message::MessageData>>(pMsg)));
 		}
 
 		pMsg = nullptr;
 
-
-	Proc_End:
 
 		Assert(!(hr) || pMsg == nullptr);
 

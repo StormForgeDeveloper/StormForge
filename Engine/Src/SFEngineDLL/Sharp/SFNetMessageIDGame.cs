@@ -253,18 +253,6 @@ namespace SF.Net
 		public static int GetCharacterDataInGameInstanceRes { get { return CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes(); } }
 
 
-		// S2C: New Player in get view
-		public static int NewPlayerInViewS2CEvt { get { return CSSFNetMessageID_GameNewPlayerInViewS2CEvt(); } }
-
-		// S2C: Remove player from view
-		public static int RemovePlayerFromViewS2CEvt { get { return CSSFNetMessageID_GameRemovePlayerFromViewS2CEvt(); } }
-
-		// C2S: Player Movement
-		public static int PlayerMovementC2SEvt { get { return CSSFNetMessageID_GamePlayerMovementC2SEvt(); } }
-
-		// S2C: Player Movement
-		public static int PlayerMovementS2CEvt { get { return CSSFNetMessageID_GamePlayerMovementS2CEvt(); } }
-
 		// Cmd: Join to a game
 		public static int JoinGameCmd { get { return CSSFNetMessageID_GameJoinGameCmd(); } }
 
@@ -870,26 +858,6 @@ namespace SF.Net
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes();
 
-
-
-		// S2C: New Player in get view
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameNewPlayerInViewS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameNewPlayerInViewS2CEvt();
-
-
-		// S2C: Remove player from view
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRemovePlayerFromViewS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameRemovePlayerFromViewS2CEvt();
-
-
-		// C2S: Player Movement
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GamePlayerMovementC2SEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GamePlayerMovementC2SEvt();
-
-
-		// S2C: Player Movement
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GamePlayerMovementS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GamePlayerMovementS2CEvt();
 
 
 		// Cmd: Join to a game

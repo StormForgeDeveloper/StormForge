@@ -54,8 +54,8 @@ namespace SF
 			InGameServer,
 
 			// In game instance state. the player still in game as well
-			InGameConnectingGameInstance,
 			InGameJoiningGameInstance,
+			InGameConnectingGameInstance,
 			InGameInGameInstance,
 
 			// Disconnected
@@ -84,6 +84,7 @@ namespace SF
 			void SetResult(Result result) { m_Result = result; }
 			Result GetResult() const { return m_Result; }
 
+			virtual void Initialize() { m_Result = ResultCode::BUSY; }
 			virtual void TickUpdate() {}
 
 		protected:
@@ -120,6 +121,9 @@ namespace SF
 		AccountID GetAccountId() const { return m_AccountId; }
 		AuthTicket GetAuthTicket() const { return m_AuthTicket; }
 
+		uint64_t GetGameInstanceUID() const { return m_GameInstanceUID; }
+		const NetAddress& GetGameInstanceAddress() const { return m_GameInstanceAddress; }
+		const NetAddress& GetGameInstanceAddress4() const { return m_GameInstanceAddress4; }
 
 		const SharedPointerT<Net::Connection>& GetConnectionLogin() const { return m_Login; }
 		const SharedPointerT<Net::Connection>& GetConnectionGame() const { return m_Game; }
@@ -138,6 +142,7 @@ namespace SF
 		friend ClientTask;
 		friend class ClientTask_Login;
 		friend class ClientTask_JoinGameServer;
+		friend class ClientTask_JoinGameInstanceServer;
 
 		// Online state
 		OnlineState m_OnlineState = OnlineState::None;
@@ -159,11 +164,15 @@ namespace SF
 		uint64_t m_PartyUID;
 		uint64_t m_PartyLeaderId;
 
+		NetAddress m_GameInstanceAddress;
+		NetAddress m_GameInstanceAddress4;
+
 		// connections
 		SharedPointerT<Net::Connection> m_Login;
 		SharedPointerT<Net::Connection> m_Game;
 		SharedPointerT<Net::Connection> m_GameInstance;
 
+		TimeStampMS m_HeartbitTimer{};
 
 		UniquePtr<ClientTask> m_CurrentTask;
 		DynamicArray<ClientTask*> m_PendingTasks;

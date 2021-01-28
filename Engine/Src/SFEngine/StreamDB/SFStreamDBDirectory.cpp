@@ -15,8 +15,8 @@
 #include "StreamDB/SFStreamDBDirectory.h"
 #include "String/SFStringFormat.h"
 #include "Net/SFConnectionTCP.h"
-#include "Protocol/Policy/RelayNetPolicy.h"
-#include "Protocol/Message/RelayMsgClass.h"
+#include "Protocol/Policy/PlayInstanceNetPolicy.h"
+#include "Protocol/Message/PlayInstanceMsgClass.h"
 
 #ifdef USE_STREAMDB
 
@@ -180,7 +180,7 @@ namespace SF
 			m_FindRequested = false;
 			if (!RequestStreamListInternal())
 			{
-				m_ResultMessage = Message::Relay::GetStreamListRes::Create(GetHeap(), 0, ResultCode::NO_DATA_EXIST,
+				m_ResultMessage = Message::PlayInstance::GetStreamListRes::Create(GetHeap(), 0, ResultCode::NO_DATA_EXIST,
 					ArrayView<const char*>());
 			}
 			else
@@ -189,7 +189,7 @@ namespace SF
 				for (auto& itString : m_TopicList)
 					TopicList.push_back(itString.data());
 
-				m_ResultMessage = Message::Relay::GetStreamListRes::Create(GetHeap(), 0, ResultCode::NO_DATA_EXIST,
+				m_ResultMessage = Message::PlayInstance::GetStreamListRes::Create(GetHeap(), 0, ResultCode::NO_DATA_EXIST,
 					TopicList);
 			}
 		}
@@ -271,7 +271,7 @@ namespace SF
 			break;
 		}
 
-		return Policy::NetPolicyRelay(m_ConnectionDirectory).GetStreamListCmd(0, 0);
+		return Policy::NetPolicyPlayInstance(m_ConnectionDirectory).GetStreamListCmd(0, 0);
 	}
 
 	Result StreamDBDirectoryClient::PollEvent(Event& evt)

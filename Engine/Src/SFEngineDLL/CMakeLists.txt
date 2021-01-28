@@ -31,8 +31,8 @@ set(SFENGINEDLL_LIB_FILES
 	Java/JniUtil.h
 	pch.h
 	Interfaces/SFPublicInterface.cpp
-	Interfaces/SFNetRelayInterface.h
-	Interfaces/SFNetRelayInterface.cpp
+	#Interfaces/SFNetRelayInterface.h
+	#Interfaces/SFNetRelayInterface.cpp
   )
 
 

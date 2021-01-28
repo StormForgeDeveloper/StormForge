@@ -89,8 +89,8 @@ set(SFENGINE_LIB_FILES
 	Net/SFNetSystem_WinIOCP.cpp
 	Net/SFNetToString.cpp
 	Net/SFNetUtil.cpp
-	Net/SFNetRelayNetwork.cpp
-	Net/SFNetRelayNetwork.h
+	#Net/SFNetRelayNetwork.cpp
+	#Net/SFNetRelayNetwork.h
 	Resource/SFAnimation.cpp
 	Resource/SFDeviceMesh.cpp
 	Resource/SFDeviceResource.cpp
@@ -116,6 +116,8 @@ set(SFENGINE_LIB_FILES
 	ServerConfig/SFServerConfigXML.cpp
 	ServerConfig/SFServerConfigZookeeper.h
 	ServerConfig/SFServerConfigZookeeper.cpp
+	ServerConfig/SFServerConfigJson.h
+	ServerConfig/SFServerConfigJson.cpp
 	Service/SFEngineService.cpp
 	SFEngine.Android.cpp
 	SFEngine.cpp

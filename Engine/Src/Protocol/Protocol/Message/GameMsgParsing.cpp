@@ -225,18 +225,6 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceRes::ParseMessageToMessageBase));
-			// S2C: New Player in get view
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID,&Message::Game::NewPlayerInViewS2CEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID,&Message::Game::NewPlayerInViewS2CEvt::ParseMessageToMessageBase));
-			// S2C: Remove player from view
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID,&Message::Game::RemovePlayerFromViewS2CEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID,&Message::Game::RemovePlayerFromViewS2CEvt::ParseMessageToMessageBase));
-			// C2S: Player Movement
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::PlayerMovementC2SEvt::MID.IDSeq.MsgID,&Message::Game::PlayerMovementC2SEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::PlayerMovementC2SEvt::MID.IDSeq.MsgID,&Message::Game::PlayerMovementC2SEvt::ParseMessageToMessageBase));
-			// S2C: Player Movement
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::PlayerMovementS2CEvt::MID.IDSeq.MsgID,&Message::Game::PlayerMovementS2CEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::PlayerMovementS2CEvt::MID.IDSeq.MsgID,&Message::Game::PlayerMovementS2CEvt::ParseMessageToMessageBase));
 			// Cmd: Join to a game
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::JoinGameCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::JoinGameCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameCmd::ParseMessageToMessageBase));

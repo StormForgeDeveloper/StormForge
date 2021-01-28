@@ -513,34 +513,6 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes()
 
 
-// S2C: New Player in get view
-SFDLL_EXPORT int  CSSFNetMessageID_GameNewPlayerInViewS2CEvt()
-{
- 	return SF::Message::Game::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameNewPlayerInViewS2CEvt()
-
-
-// S2C: Remove player from view
-SFDLL_EXPORT int  CSSFNetMessageID_GameRemovePlayerFromViewS2CEvt()
-{
- 	return SF::Message::Game::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameRemovePlayerFromViewS2CEvt()
-
-
-// C2S: Player Movement
-SFDLL_EXPORT int  CSSFNetMessageID_GamePlayerMovementC2SEvt()
-{
- 	return SF::Message::Game::PlayerMovementC2SEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GamePlayerMovementC2SEvt()
-
-
-// S2C: Player Movement
-SFDLL_EXPORT int  CSSFNetMessageID_GamePlayerMovementS2CEvt()
-{
- 	return SF::Message::Game::PlayerMovementS2CEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GamePlayerMovementS2CEvt()
-
-
 // Cmd: Join to a game
 SFDLL_EXPORT int  CSSFNetMessageID_GameJoinGameCmd()
 {

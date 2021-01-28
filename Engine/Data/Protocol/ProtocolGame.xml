@@ -346,23 +346,20 @@
 
 		<Command Name="JoinGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Join to a game instance">
 			<Cmd>
-				<Params Type="AccountID" Name="PlayerID" Desc="Player ID of the player"/>
-				<Params Type="AuthTicket" Name="Ticket" Desc="Login session ID"/>
 				<Params Type="GameInsUID" Name="InsUID" Desc="Game instance ID to join"/>
 			</Cmd>
 			<Res>
 				<Params Type="GameInsUID" Name="InsUID" Desc="Game instance ID"/>
+				<Params Type="NetAddress" Name="ServerAddress" Desc="Game instance address"/>
+				<Params Type="NetAddress" Name="ServerAddress4" Desc="Game instance address"/>
 			</Res>
 		</Command>
 
 		<Command Name="LeaveGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Leave game instance">
 			<Cmd>
-				<Params Type="AccountID" Name="PlayerID" Desc="Player ID of the player"/>
-				<Params Type="AuthTicket" Name="Ticket" Desc="Login session ID"/>
 				<Params Type="GameInsUID" Name="InsUID" Desc="Game instance ID to join"/>
 			</Cmd>
 			<Res>
-				<Params Type="GameInsUID" Name="InsUID" Desc="Game instance ID"/>
 			</Res>
 		</Command>
 
@@ -385,32 +382,6 @@
 				<Params Type="VariableTable" Name="GameInstances" Desc="Game instance ID"/>
 			</Res>
 		</Command>
-
-
-		<S2CEvent Name="NewPlayerInView" Reliable="true" Crypto="No" Trace="Debug1" Desc="New Player in get view">
-			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
-			<Params Type="VariableTable" Name="Attributes" Desc="Movement attributes"/>
-		</S2CEvent>
-
-		<S2CEvent Name="RemovePlayerFromView" Reliable="true" Crypto="No" Trace="Debug1" Desc="Remove player from view">
-			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
-			<Params Type="VariableTable" Name="Attributes" Desc="Movement attributes"/>
-		</S2CEvent>
-
-
-		<C2SEvent Name="PlayerMovement" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player Movement">
-			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
-			<Params Type="VariableTable" Name="Attributes" Desc="Movement attributes"/>
-		</C2SEvent>
-
-		<S2CEvent Name="PlayerMovement" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player Movement">
-			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Movement"/>
-			<Params Type="VariableTable" Name="Attributes" Desc="Movement attributes"/>
-		</S2CEvent>
 
 
 		<!-- ===================================================  Game instance(TODO: legacy packets don't use) ================================================== -->

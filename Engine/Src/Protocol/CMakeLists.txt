@@ -15,19 +15,19 @@ set(SFPROTOCOL_LIB_FILES
 	Protocol/Message/LoginMsgClass.h
 	Protocol/Message/LoginMsgDebug.h
 	Protocol/Message/LoginMsgParsing.h
-	Protocol/Message/RelayMsgClass.cpp
-	Protocol/Message/RelayMsgClass.h
-	Protocol/Message/RelayMsgDebug.cpp
-	Protocol/Message/RelayMsgDebug.h
-	Protocol/Message/RelayMsgParsing.cpp
-	Protocol/Message/RelayMsgParsing.h
+	Protocol/Message/PlayInstanceMsgClass.cpp
+	Protocol/Message/PlayInstanceMsgClass.h
+	Protocol/Message/PlayInstanceMsgDebug.cpp
+	Protocol/Message/PlayInstanceMsgDebug.h
+	Protocol/Message/PlayInstanceMsgParsing.cpp
+	Protocol/Message/PlayInstanceMsgParsing.h
 
 	Protocol/Policy/GameNetPolicy.cpp
 	Protocol/Policy/GameNetPolicy.h
 	Protocol/Policy/LoginNetPolicy.cpp
 	Protocol/Policy/LoginNetPolicy.h
-	Protocol/Policy/RelayNetPolicy.cpp
-	Protocol/Policy/RelayNetPolicy.h
+	Protocol/Policy/PlayInstanceNetPolicy.cpp
+	Protocol/Policy/PlayInstanceNetPolicy.h
 
 	Protocol/SFProtocol.cpp
 	Protocol/SFGenericMessageClass.h

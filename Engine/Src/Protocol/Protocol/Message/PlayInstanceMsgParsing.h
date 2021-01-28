@@ -1,10 +1,10 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) 2017 Kyungkun Ko
 // 
 // Author : Generated
 // 
-// Description : Relay Message debug definitions
+// Description : PlayInstance Message parsing definitions
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -13,7 +13,7 @@
 #include "SFTypedefs.h"
 #include "Protocol/SFProtocol.h"
 #include "Net/SFNetDef.h"
-#include "Protocol/Message/RelayMsgClass.h"
+#include "Protocol/Message/PlayInstanceMsgClass.h"
 
 
 
@@ -23,9 +23,9 @@ namespace SF
 	{
  
 		///////////////////////////////////////////////////////////////
-		// Relay Debug output function 
+		// PlayInstance parsing register function 
 
-		void RegisterDebugTraceRelay();
+		void RegisterParserPlayInstance();
 
 
 

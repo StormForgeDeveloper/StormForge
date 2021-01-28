@@ -74,22 +74,6 @@ namespace SF
 
 		Result ParseXMLServers(xmlNode* pNode);
 
-		/////////////////////////////////////////////////////////////////////////////////////////////////////////
-		////
-		////	Node setting xml generation
-		////
-
-
-		//xmlNode* ToXMLNetPrivate(xmlNode* pParent, const ServerConfig::NetPrivate& privateNet) const;
-		//xmlNode* ToXMLNetPublic(xmlNode* pParent, const ServerConfig::NetPublic& publicNet) const;
-		//xmlNode* ToXMLGenericServer(const char* nodeName, const ServerConfig::GenericServer* pGenericServer) const;
-
-		//xmlNode* ToXMLDBInstance(const ServerConfig::DBInstance* pDBInstance) const;
-		//xmlNode* ToXMLDBCluster(const ServerConfig::DBCluster* pDBCluster) const;
-		//xmlNode* ToXMLModule(const ServerConfig::ServerModule* pServerModule) const;
-		//xmlNode* ToXMLServerComponent(const ServerConfig::ServerComponent* pServerComponent) const;
-		//xmlNode* ToXMLGameServer(const ServerConfig::GameServer* pGameServer) const;
-		//xmlNode* ToXMLGameInstanceServer(const ServerConfig::GameInstanceServer* pGameInstanceServer) const;
 
 
 		// Load config xml

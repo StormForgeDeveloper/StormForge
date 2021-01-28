@@ -71,7 +71,7 @@ namespace SF
 
 		struct DBCluster
 		{
-			GameCluster* pGameCluster = nullptr; // Game Cluster pointer if it's under game cluster
+			GameCluster* pGameCluster = nullptr; // Game Cluster pointer if it's under game cluster, deprecated
 			String ClusterName;
 			DBClusterType ClusterType;
 			String DBInstanceName;

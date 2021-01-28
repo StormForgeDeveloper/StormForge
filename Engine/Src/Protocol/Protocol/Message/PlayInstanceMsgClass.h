@@ -4,7 +4,7 @@
 // 
 // Author : Generated
 // 
-// Description : Relay Message parser definitions
+// Description : PlayInstance Message parser definitions
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -23,151 +23,9 @@ namespace SF
 {
  	namespace Message
 	{
- 		namespace Relay
+ 		namespace PlayInstance
 		{
- 			// C2S: Event for Player Join request.
-			class JoinRelayInstanceC2SEvt : public MessageBase
-			{
- 			public:
-				static const MessageID MID;
-				// Parameter type informations for template
-				enum ParameterTypeInfo
-				{
- 					HasPlayerID = 1,
-					HasTransactionID = 0,
-					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
-				}; // enum ParameterTypeInfo
-			public:
-				uint64_t GetTransactionID() { return 0; }
-				RouteContext GetRouteContext() { return 0; }
-				uint32_t GetRouteHopCount() { return 0; }
-				uint64_t GetSender() { return 0; }
-			private:
-				uint32_t m_RelayInstanceID{};
-				PlayerID m_PlayerID{};
-				const char* m_PlayerIdentifier{};
-			public:
-				JoinRelayInstanceC2SEvt()
-					{}
-
-				JoinRelayInstanceC2SEvt( MessageDataPtr &&pMsg )
-					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
-
-				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
-				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const char* GetPlayerIdentifier() const	{ return m_PlayerIdentifier; };
-
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
-
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
-
-				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
-
-			}; // class JoinRelayInstanceC2SEvt : public MessageBase
-
-			// S2C: Event for joined player
-			class JoinRelayInstanceResS2CEvt : public MessageBase
-			{
- 			public:
-				static const MessageID MID;
-				// Parameter type informations for template
-				enum ParameterTypeInfo
-				{
- 					HasPlayerID = 0,
-					HasTransactionID = 0,
-					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
-				}; // enum ParameterTypeInfo
-			public:
-				uint64_t GetPlayerID() { return 0; }
-				uint64_t GetTransactionID() { return 0; }
-				RouteContext GetRouteContext() { return 0; }
-				uint32_t GetRouteHopCount() { return 0; }
-				uint64_t GetSender() { return 0; }
-			private:
-				Result m_Result{};
-				uint32_t m_RelayInstanceID{};
-				uint32_t m_MyEndpointID{};
-				ArrayView<RelayPlayerInfo> m_MemberInfos;
-			public:
-				JoinRelayInstanceResS2CEvt()
-					{}
-
-				JoinRelayInstanceResS2CEvt( MessageDataPtr &&pMsg )
-					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
-
-				const Result& GetResult() const	{ return m_Result; };
-				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
-				const uint32_t& GetMyEndpointID() const	{ return m_MyEndpointID; };
-				const Array<RelayPlayerInfo>& GetMemberInfos() const	{ return m_MemberInfos; };
-
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
-
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
-
-				static MessageData* Create( IHeap& memHeap, const Result &InResult, const uint32_t &InRelayInstanceID, const uint32_t &InMyEndpointID, const Array<RelayPlayerInfo>& InMemberInfos );
-
-			}; // class JoinRelayInstanceResS2CEvt : public MessageBase
-
-			// C2S: Event for Player Join request.
-			class LeaveRelayInstanceC2SEvt : public MessageBase
-			{
- 			public:
-				static const MessageID MID;
-				// Parameter type informations for template
-				enum ParameterTypeInfo
-				{
- 					HasPlayerID = 1,
-					HasTransactionID = 0,
-					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
-				}; // enum ParameterTypeInfo
-			public:
-				uint64_t GetTransactionID() { return 0; }
-				RouteContext GetRouteContext() { return 0; }
-				uint32_t GetRouteHopCount() { return 0; }
-				uint64_t GetSender() { return 0; }
-			private:
-				uint32_t m_RelayInstanceID{};
-				PlayerID m_PlayerID{};
-			public:
-				LeaveRelayInstanceC2SEvt()
-					{}
-
-				LeaveRelayInstanceC2SEvt( MessageDataPtr &&pMsg )
-					: MessageBase(std::forward<MessageDataPtr>(pMsg))
-					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
-
-				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
-				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
-
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
-
-				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InPlayerID );
-
-			}; // class LeaveRelayInstanceC2SEvt : public MessageBase
-
-			// S2C: Event for Player joined.
+ 			// S2C: Event for Player joined.
 			class PlayerJoinS2CEvt : public MessageBase
 			{
  			public:
@@ -188,8 +46,8 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint32_t m_RelayInstanceID{};
-				RelayPlayerInfo m_JoinedPlayerInfo{};
+				uint32_t m_PlayInstanceID{};
+				PlayerInformation m_JoinedPlayerInfo{};
 			public:
 				PlayerJoinS2CEvt()
 					{}
@@ -200,8 +58,8 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
-				const RelayPlayerInfo& GetJoinedPlayerInfo() const	{ return m_JoinedPlayerInfo; };
+				const uint32_t& GetPlayInstanceID() const	{ return m_PlayInstanceID; };
+				const PlayerInformation& GetJoinedPlayerInfo() const	{ return m_JoinedPlayerInfo; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -209,7 +67,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const RelayPlayerInfo &InJoinedPlayerInfo );
+				static MessageData* Create( IHeap& memHeap, const uint32_t &InPlayInstanceID, const PlayerInformation &InJoinedPlayerInfo );
 
 			}; // class PlayerJoinS2CEvt : public MessageBase
 
@@ -234,7 +92,7 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint32_t m_RelayInstanceID{};
+				uint32_t m_PlayInstanceID{};
 				PlayerID m_LeftPlayerID{};
 				uint32_t m_KickedReason{};
 			public:
@@ -247,7 +105,7 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
+				const uint32_t& GetPlayInstanceID() const	{ return m_PlayInstanceID; };
 				const PlayerID& GetLeftPlayerID() const	{ return m_LeftPlayerID; };
 				const uint32_t& GetKickedReason() const	{ return m_KickedReason; };
 
@@ -257,12 +115,12 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason );
+				static MessageData* Create( IHeap& memHeap, const uint32_t &InPlayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason );
 
 			}; // class PlayerLeftS2CEvt : public MessageBase
 
-			// C2S: Relay packet
-			class RelayPacketC2SEvt : public MessageBase
+			// C2S: Play packet
+			class PlayPacketC2SEvt : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -282,21 +140,21 @@ namespace SF
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
 			private:
-				uint32_t m_RelayInstanceID{};
+				uint32_t m_PlayInstanceID{};
 				uint32_t m_SenderEndpointID{};
 				uint32_t m_TargetEndpointMask{};
 				ArrayView<uint8_t> m_Payload;
 			public:
-				RelayPacketC2SEvt()
+				PlayPacketC2SEvt()
 					{}
 
-				RelayPacketC2SEvt( MessageDataPtr &&pMsg )
+				PlayPacketC2SEvt( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const uint32_t& GetRelayInstanceID() const	{ return m_RelayInstanceID; };
+				const uint32_t& GetPlayInstanceID() const	{ return m_PlayInstanceID; };
 				const uint32_t& GetSenderEndpointID() const	{ return m_SenderEndpointID; };
 				const uint32_t& GetTargetEndpointMask() const	{ return m_TargetEndpointMask; };
 				const Array<uint8_t>& GetPayload() const	{ return m_Payload; };
@@ -307,9 +165,213 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint32_t &InRelayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
+				static MessageData* Create( IHeap& memHeap, const uint32_t &InPlayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
 
-			}; // class RelayPacketC2SEvt : public MessageBase
+			}; // class PlayPacketC2SEvt : public MessageBase
+
+			// S2C: New Player in get view
+			class NewPlayerInViewS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetTransactionID() { return 0; }
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_GameInsUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_AttributesRaw;
+				mutable bool m_AttributesHasParsed = false;
+				mutable VariableTable m_Attributes;
+			public:
+				NewPlayerInViewS2CEvt()
+					{}
+
+				NewPlayerInViewS2CEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
+				const VariableTable& GetAttributes() const;
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+
+			}; // class NewPlayerInViewS2CEvt : public MessageBase
+
+			// S2C: Remove player from view
+			class RemovePlayerFromViewS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetTransactionID() { return 0; }
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_GameInsUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_AttributesRaw;
+				mutable bool m_AttributesHasParsed = false;
+				mutable VariableTable m_Attributes;
+			public:
+				RemovePlayerFromViewS2CEvt()
+					{}
+
+				RemovePlayerFromViewS2CEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
+				const VariableTable& GetAttributes() const;
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+
+			}; // class RemovePlayerFromViewS2CEvt : public MessageBase
+
+			// C2S: Player Movement
+			class PlayerMovementC2SEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetTransactionID() { return 0; }
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_GameInsUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_AttributesRaw;
+				mutable bool m_AttributesHasParsed = false;
+				mutable VariableTable m_Attributes;
+			public:
+				PlayerMovementC2SEvt()
+					{}
+
+				PlayerMovementC2SEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
+				const VariableTable& GetAttributes() const;
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+
+			}; // class PlayerMovementC2SEvt : public MessageBase
+
+			// S2C: Player Movement
+			class PlayerMovementS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetTransactionID() { return 0; }
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_GameInsUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_AttributesRaw;
+				mutable bool m_AttributesHasParsed = false;
+				mutable VariableTable m_Attributes;
+			public:
+				PlayerMovementS2CEvt()
+					{}
+
+				PlayerMovementS2CEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
+				const VariableTable& GetAttributes() const;
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+
+			}; // class PlayerMovementS2CEvt : public MessageBase
 
 			// Cmd: Create stream instance
 			class CreateStreamCmd : public MessageBase
@@ -691,7 +753,7 @@ namespace SF
 
 
 
-		}; // namespace Relay
+		}; // namespace PlayInstance
 	}; // namespace Message
 }; // namespace SF
 
