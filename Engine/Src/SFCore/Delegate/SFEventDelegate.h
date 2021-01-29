@@ -35,7 +35,7 @@ namespace SF
 		struct EventDelegate
 		{
 			uint CallSerial = 0;
-			void* Context = nullptr;
+			uintptr_t Context{};
 			CallableType Func;
 		};
 
@@ -45,29 +45,29 @@ namespace SF
 		{
 		}
 
-		void AddDelegateUnique(void* Context, const CallableType& func)
+		void AddDelegateUnique(uintptr_t Context, const CallableType& func)
 		{
 			RemoveDelegateAll(Context);
 			AddDelegate(Context, func);
 		}
 
-		void AddDelegateUnique(void* Context, CallableType&& func)
+		void AddDelegateUnique(uintptr_t Context, CallableType&& func)
 		{
 			RemoveDelegateAll(Context);
 			AddDelegate(Context, Forward<CallableType>(func));
 		}
 
-		void AddDelegate(void* Context, const CallableType& func)
+		void AddDelegate(uintptr_t Context, const CallableType& func)
 		{
 			m_DelegateArray.push_back(EventDelegate{ m_CallSerial, Context, func });
 		}
 
-		void AddDelegate(void* Context, CallableType&& func)
+		void AddDelegate(uintptr_t Context, CallableType&& func)
 		{
 			m_DelegateArray.push_back(EventDelegate{ m_CallSerial, Context, Forward<CallableType>(func) });
 		}
 
-		void RemoveDelegate(void* Context)
+		void RemoveDelegate(uintptr_t Context)
 		{
 			for (uint iIndex = 0; iIndex < m_DelegateArray.size(); iIndex++)
 			{
@@ -79,7 +79,7 @@ namespace SF
 			}
 		}
 
-		void RemoveDelegateAll(void* Context)
+		void RemoveDelegateAll(uintptr_t Context)
 		{
 			for (uint iIndex = 0; iIndex < m_DelegateArray.size();)
 			{

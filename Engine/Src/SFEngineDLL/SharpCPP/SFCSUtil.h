@@ -23,7 +23,7 @@
 namespace SF
 {
 	typedef void(*SET_MESSAGE_FUNCTION)(uint32_t messageID);
-	typedef void(*SET_MESSAGE_FUNCTION)(uint32_t messageID);
+	typedef void(*ON_READY_FUNCTION)();
 	typedef void(*SET_EVENT_FUNCTION)(Net::ConnectionEvent::EventTypes eventType, int32_t result, Net::ConnectionState state);
 
 

@@ -81,13 +81,13 @@ namespace SF
 			m_Owner.m_Login = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
 			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this,
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this),
 				[this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					OnConnectionEvent(evt);
 				});
 
-			GetConnection()->AddMessageDelegateUnique(this,
+			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Login::LoginRes::MID.GetMsgID(),
 				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
 				{
@@ -95,7 +95,7 @@ namespace SF
 				});
 
 
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this, [this](Net::Connection*, const Net::ConnectionEvent& evt)
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 						Disconnect();
@@ -118,9 +118,9 @@ namespace SF
 			if (GetConnection() == nullptr)
 				return;
 
-			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(this);
-			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(this);
-			GetConnection()->RemoveMessageDelegate(this, Message::Login::LoginRes::MID.GetMsgID());
+			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
+			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
+			GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Login::LoginRes::MID.GetMsgID());
 		}
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
@@ -224,13 +224,13 @@ namespace SF
 			m_Owner.m_Game = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
 			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this,
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this),
 				[this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					OnConnectionEvent(evt);
 				});
 
-			GetConnection()->AddMessageDelegateUnique(this,
+			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Game::JoinGameServerRes::MID.GetMsgID(),
 				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
 				{
@@ -238,7 +238,7 @@ namespace SF
 				});
 
 
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this, [this](Net::Connection*, const Net::ConnectionEvent& evt)
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 						Disconnect();
@@ -258,9 +258,9 @@ namespace SF
 			if (GetConnection() == nullptr)
 				return;
 
-			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(this);
-			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(this);
-			GetConnection()->RemoveMessageDelegate(this, Message::Game::JoinGameServerRes::MID.GetMsgID());
+			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
+			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
+			GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameServerRes::MID.GetMsgID());
 		}
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
@@ -366,20 +366,20 @@ namespace SF
 			m_Owner.m_GameInstance = new(GetHeap()) Net::ConnectionUDPClient(GetHeap());
 			GetConnection()->SetEventFireMode(Net::Connection::EventFireMode::OnGameTick);
 
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this,
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this),
 				[this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					OnConnectionEvent(evt);
 				});
 
-			m_Owner.GetConnectionGame()->AddMessageDelegateUnique(this,
+			m_Owner.GetConnectionGame()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Game::JoinGameInstanceRes::MID.GetMsgID(),
 				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
 				{
 					OnJoinGameInstanceRes(pMsgData);
 				});
 
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(this, [this](Net::Connection*, const Net::ConnectionEvent& evt)
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 						Disconnect();
@@ -402,11 +402,11 @@ namespace SF
 			if (GetConnection() == nullptr)
 				return;
 
-			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(this);
-			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(this);
+			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
+			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
 
 			if (m_Owner.GetConnectionGame() != nullptr)
-				m_Owner.GetConnectionGame()->RemoveMessageDelegate(this, Message::Game::JoinGameInstanceRes::MID.GetMsgID());
+				m_Owner.GetConnectionGame()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameInstanceRes::MID.GetMsgID());
 		}
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
@@ -510,8 +510,8 @@ namespace SF
 		if (pConn == nullptr)
 			return;
 
-		pConn->GetConnectionEventDelegates().RemoveDelegateAll(this);
-		pConn->GetRecvMessageDelegates().RemoveDelegateAll(this);
+		pConn->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
+		pConn->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
 		pConn->DisconnectNRelease("Disconnect All");
 		pConn = nullptr;
 	}

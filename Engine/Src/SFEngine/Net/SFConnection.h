@@ -280,7 +280,7 @@ namespace Net {
 		NetSyncMessageDelegates& GetNetSyncMessageDelegates() { return m_NetSyncMessageDelegates; }
 
 
-		void AddMessageDelegateUnique(void* context, uint32_t msgId, RecvMessageDelegates::CallableType&& func)
+		void AddMessageDelegateUnique(uintptr_t context, uint32_t msgId, RecvMessageDelegates::CallableType&& func)
 		{
 			RecvMessageDelegates* pDelegateList = nullptr;
 			if (!m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
@@ -290,15 +290,15 @@ namespace Net {
 				m_RecvMessageDelegatesByMsgId.CommitChanges();
 			}
 
-			pDelegateList->AddDelegateUnique(context, Forward<RecvMessageDelegates::CallableType>(func));
+			pDelegateList->AddDelegateUnique(uintptr_t(context), Forward<RecvMessageDelegates::CallableType>(func));
 		}
 
-		void RemoveMessageDelegate(void* context, uint32_t msgId)
+		void RemoveMessageDelegate(uintptr_t context, uint32_t msgId)
 		{
 			RecvMessageDelegates* pDelegateList = nullptr;
 			if (m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
 			{
-				pDelegateList->RemoveDelegateAll(context);
+				pDelegateList->RemoveDelegateAll(uintptr_t(context));
 			}
 		}
 
