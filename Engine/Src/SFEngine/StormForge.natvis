@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <!--from windef.h -->
+    <Type Name="SF::Array&lt;*&gt;" Priority="MediumLow">
+      <DisplayString>{{ size={m_Size} }}</DisplayString>
+      <Expand>
+          <Item Name="[capacity]" ExcludeView="simple">m_AllocatedSize</Item>
+          <ArrayItems>
+              <Size>m_Size</Size>
+              <ValuePointer>m_pDataPtr</ValuePointer>
+          </ArrayItems>
+      </Expand>
+	</Type>
+
+    <Type Name="SF::TString&lt;*&gt;" Priority="MediumLow">
+      <DisplayString>{{ {m_StringView} }}</DisplayString>
+	</Type>
+    <Type Name="SF::TSharedStringBuffer&lt;*&gt;" Priority="MediumLow">
+      <DisplayString>{{ {m_StringValue}, strlen={m_StringLength}, allocated={m_AllocatedSize} }}</DisplayString>
+	</Type>
+
+    <Type Name="SF::SharedPointerT&lt;*&gt;" Priority="MediumLow">
+      <DisplayString>{{ {m_pObject} }}</DisplayString>
+      <Expand>
+          <Item Name="[Ptr]" ExcludeView="simple">(ObjectType*)m_pObject</Item>
+      </Expand>
+	</Type>
+</AutoVisualizer>
