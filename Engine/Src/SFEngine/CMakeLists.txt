@@ -57,6 +57,8 @@ set(SFENGINE_LIB_FILES
 	Graphics/Vulkan/SFVulkanLogicalDevice.cpp
 	Graphics/Vulkan/SFVulkanPhysicalDevice.cpp
 	Graphics/Vulkan/SFVulkanSystem.cpp
+	StreamDB/SFStreamDBDirectory.h
+	StreamDB/SFStreamDBDirectory.cpp
 	Net/SFConnection.cpp
 	Net/SFConnectionAction.cpp
 	Net/SFConnectionActions.cpp
@@ -243,10 +245,6 @@ set(SFENGINE_LIB_FILES
 	Service/SFIGraphicDevice.h
 	Service/SFNetSystemService.h
 	Service/SFResourceManagerService.h
-	StreamDB/SFStreamDB.h
-	StreamDB/SFStreamDB.cpp
-	StreamDB/SFStreamDBDirectory.h
-	StreamDB/SFStreamDBDirectory.cpp
 	SFEngine.h
 	SFEnginePCH.h
 	String/SFToStringEngineTypes.h

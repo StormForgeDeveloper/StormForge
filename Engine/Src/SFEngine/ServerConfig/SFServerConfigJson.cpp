@@ -257,7 +257,8 @@ namespace SF
 			if (pModule != nullptr)
 				pServer->Modules.push_back(pModule);
 
-			return result;
+			if (!result)
+				return result;
 		}
 
 		return result;
@@ -292,7 +293,8 @@ namespace SF
 			if (pDBInstance != nullptr)
 				dbInstances.push_back(pDBInstance);
 
-			return result;
+			if (!result)
+				return result;
 		}
 
 		return result;
@@ -317,7 +319,8 @@ namespace SF
 			if (pDBCluster != nullptr)
 				dbClusters.push_back(pDBCluster);
 
-			return result;
+			if (!result)
+				return result;
 		}
 
 		return result;
@@ -327,9 +330,18 @@ namespace SF
 	{
 		Result result;
 
-		auto gameClusterID = rootObject.get("GameClusterId", Json::Value(""));
+		auto gameClusterID = rootObject.get("GameClusterId", Json::Value("DefaultGame"));
 		pServer->GameClusterName = gameClusterID.asCString();
 		pServer->GameClusterID = gameClusterID.asCString();
+
+		auto dataCenter = rootObject.get("DataCenter", Json::Value("127.0.0.1:2181"));
+		pServer->DataCenter = dataCenter.asCString();
+
+		auto logFilePath = rootObject.get("LogFilePath", Json::Value(""));
+		pServer->LogFilePath = logFilePath.asCString();
+
+		auto logServer = rootObject.get("LogServer", Json::Value(""));
+		pServer->LogServer = logServer.asCString();
 
 		result = LoadDBInstances(rootObject, pServer->DBInstances);
 		if (!result)

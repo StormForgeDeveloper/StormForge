@@ -76,7 +76,9 @@ namespace SF {
 		LogOutputMask LogOutputCommon{};
 
 		// Log file name prefix
-		const char* LogFilePrefix = nullptr;
+		const char* LogServerAddress{};
+
+		const char* LogFilePrefix{};
 	};
 
 

@@ -240,15 +240,18 @@ namespace SF
 		{
 			GameID GameClusterID;
 			String GameClusterName;
+			String DataCenter;
+			String LogFilePath;
+			String LogServer;
 
 			GenericServer* MonitoringServer{};
 			DynamicArray<DBCluster*> DBClusters;
 			DynamicArray<DBInstance*> DBInstances;
 
 			ServerService()
-				: GenericServer(GetEngineHeap())
-				, DBClusters(GetEngineHeap())
-				, DBInstances(GetEngineHeap())
+				: GenericServer(GetSystemHeap())
+				, DBClusters(GetSystemHeap())
+				, DBInstances(GetSystemHeap())
 			{}
 
 			virtual ~ServerService()

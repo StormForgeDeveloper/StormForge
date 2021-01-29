@@ -18,6 +18,7 @@
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Util/SFLogComponent.h"
 #include "Util/SFTimeUtil.h"
+#include "Util/SFLogOutputLogServerComponent.h"
 #include "Service/SFEngineService.h"
 #include "Platform/StackWalkerComponent.h"
 
@@ -102,6 +103,12 @@ namespace SF {
 		if (m_InitParameter.LogOutputFile.Composited != 0 && m_InitParameter.LogFilePrefix != nullptr)
 		{
 			if (AddComponent<SF::LogOutputFileComponent>(m_InitParameter.LogOutputFile, m_InitParameter.LogFilePrefix, true) == nullptr)
+				return ResultCode::FAIL;
+		}
+
+		if (!StrUtil::IsNullOrEmpty(m_InitParameter.LogServerAddress))
+		{
+			if (AddComponent<SF::LogOutputLogServerComponent>(m_InitParameter.LogOutputFile, m_InitParameter.LogServerAddress) == nullptr)
 				return ResultCode::FAIL;
 		}
 

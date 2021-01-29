@@ -312,7 +312,6 @@ namespace SF
 			m_Owner.m_GameInstanceUID = packet.GetGameUID();
 			m_Owner.m_PartyUID = packet.GetPartyUID();
 			m_Owner.m_PartyLeaderId = packet.GetPartyLeaderID();
-			//const MatchingQueueTicket& GetMatchingTicket() const { return m_MatchingTicket; };
 
 			SFLog(Net, Info, "Game server joined: {0}, game:{1}, party:'{2}:{3}'", m_Owner.m_NickName, m_Owner.m_GameInstanceUID, m_Owner.m_PartyUID, m_Owner.m_PartyLeaderId);
 			SetResult(ResultCode::SUCCESS);
@@ -427,7 +426,6 @@ namespace SF
 				SetResult(evt.Components.hr);
 			}
 		}
-
 
 		void OnJoinGameInstanceRes(SharedPointerT<Message::MessageData>& pMsgData)
 		{

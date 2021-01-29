@@ -89,7 +89,7 @@ namespace SF {
 		};
 		uint32_t Composited = std::numeric_limits<uint32_t>::max();
 
-		LogOutputMask() : Composited(0) {}
+		LogOutputMask() = default;
 		LogOutputMask(uint32_t composited) :Composited(composited) {}
 
 		LogOutputMask operator &(const LogOutputMask& op2) const

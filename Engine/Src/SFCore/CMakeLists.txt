@@ -25,6 +25,8 @@ set(SFCORE_LIB_FILES
 	IO/SharedMemory/SFSharedMemory.cpp
 	IO/SharedMemory/SFSharedMemory_linux.cpp
 	IO/SharedMemory/SFSharedMemory_win.cpp
+	StreamDB/SFStreamDB.h
+	StreamDB/SFStreamDB.cpp
 	Math/SF3DMath.cpp
 	Math/SF3DMathSSE.cpp
 	Memory/SFHeapMemory.cpp
@@ -65,6 +67,8 @@ set(SFCORE_LIB_FILES
 	Util/SFCryptoSHA.cpp
 	Util/SFLog.cpp
 	Util/SFLogComponent.cpp
+	Util/SFLogOutputLogServerComponent.h
+	Util/SFLogOutputLogServerComponent.cpp
 	Util/SFPath.cpp
 	Util/SFRandom.cpp
 	Util/SFTimeUtil.cpp
