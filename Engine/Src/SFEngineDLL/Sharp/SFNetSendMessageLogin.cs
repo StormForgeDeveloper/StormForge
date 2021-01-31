@@ -103,16 +103,16 @@ namespace SF.Net
 			return result;
 		} // public int  DataTestCmd( System.UInt64 InTransactionID, System.Byte[] InTestData )
 
-		// C2S: Heartbit
-		public int  HeartBitC2SEvt(  )
+		// C2S: Heartbeat
+		public int  HeartbeatC2SEvt(  )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_LoginHeartBitC2SEvt(m_Connection.NativeHandle);
+			result = CSSFNetAdapter_LoginHeartbeatC2SEvt(m_Connection.NativeHandle);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDLogin.HeartBitC2SEvt);
+			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDLogin.HeartbeatC2SEvt);
 			return result;
-		} // public int  HeartBitC2SEvt(  )
+		} // public int  HeartbeatC2SEvt(  )
 
 
 		// Cmd: Write All!! User Score and Ranking list
@@ -157,9 +157,9 @@ namespace SF.Net
 		static extern int CSSFNetAdapter_LoginDataTestCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt16 _sizeOfInTestData,System.Byte[] InTestData );
 
 
-		// C2S: Heartbit
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginHeartBitC2SEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_LoginHeartBitC2SEvt(System.IntPtr InNativeConnectionHandle );
+		// C2S: Heartbeat
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginHeartbeatC2SEvt", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_LoginHeartbeatC2SEvt(System.IntPtr InNativeConnectionHandle );
 
 
 

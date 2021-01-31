@@ -95,7 +95,7 @@ namespace SF
 
 	public:
 
-		OnlineClient();
+		OnlineClient(IHeap& heap);
 		virtual ~OnlineClient();
 
 
@@ -175,7 +175,7 @@ namespace SF
 		SharedPointerT<Net::Connection> m_Game;
 		SharedPointerT<Net::Connection> m_GameInstance;
 
-		TimeStampMS m_HeartbitTimer{};
+		TimeStampMS m_HeartbeatTimer{};
 
 		UniquePtr<ClientTask> m_CurrentTask;
 		DynamicArray<ClientTask*> m_PendingTasks;

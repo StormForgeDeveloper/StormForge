@@ -227,12 +227,8 @@ namespace Net {
 			m_Owner.m_IsTCPSocketConnectionEstablished = m_Owner.Connect();
 			break;
 		case (uint32_t)ResultCode::IO_IO_SEND_FAIL:
-			// no further error handling
-			hr = ResultCode::SUCCESS;
 			break;
 		};
-
-	//Proc_End:
 
 		return hr;
 	}
@@ -257,7 +253,7 @@ namespace Net {
 	{
 		m_bufRecvTem.resize(Const::PACKET_SIZE_MAX * 2);
 
-		SetHeartbitTry(Const::TCP_HEARTBIT_START_TIME);
+		SetHeartbeatTry(Const::TCP_HEARTBEAT_START_TIME);
 
 		m_NetIOAdapter.SetWriteQueue(new(GetHeap()) WriteBufferQueue(GetHeap()));
 	}
@@ -307,7 +303,7 @@ namespace Net {
 					if (GetConnectionState() != ConnectionState::DISCONNECTED)
 						netChk(CloseConnection("Disconnect ack"));
 					break;
-				case NetCtrlCode_HeartBit:
+				case NetCtrlCode_Heartbeat:
 					m_ulNetCtrlTime = Util::Time.GetTimeMs();
 					break;
 				case NetCtrlCode_Connect:
@@ -343,14 +339,14 @@ namespace Net {
 					OnConnectionResult(ResultCode::IO_PROTOCOL_VERSION_MISMATCH);
 					netChk(Disconnect("Protocol mismatch"));
 					break;
-				case NetCtrlCode_HeartBit:
+				case NetCtrlCode_Heartbeat:
 					break;
 				default:
 					break;
 				};
 			}
 			break;
-		case NetCtrlCode_HeartBit:
+		case NetCtrlCode_Heartbeat:
 			m_ulNetCtrlTime = Util::Time.GetTimeMs();
 			netChk(SendNetCtrl(PACKET_NETCTRL_ACK, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID));
 			break;
@@ -753,37 +749,35 @@ namespace Net {
 
 	Result ConnectionTCP::SendRaw(SharedPointerT<Message::MessageData> &pMsg)
 	{
-		Result hr = ResultCode::SUCCESS;
-		IOBUFFER_WRITE *pSendBuffer = nullptr;
+		UniquePtr<IOBUFFER_WRITE> pSendBuffer;
+		ScopeContext hr;
 
 		if (!m_NetIOAdapter.GetIsIORegistered())
 			return ResultCode::SUCCESS_FALSE;
 
-		netChkPtr(pMsg);
+		netCheckMem(pMsg);
+
+		pSendBuffer.reset(new(GetIOHeap()) IOBUFFER_WRITE);
+		netCheckMem(pSendBuffer.get());
+		pSendBuffer->SetupSendTCP(std::forward<SharedPointerT<Message::MessageData>>(pMsg));
+		pMsg = nullptr;
 
 		m_NetIOAdapter.IncPendingSendCount();
 
-		netMem(pSendBuffer = new(GetIOHeap()) IOBUFFER_WRITE);
-		pSendBuffer->SetupSendTCP(std::forward<SharedPointerT<Message::MessageData>>(pMsg));
-
 		if (NetSystem::IsProactorSystem())
 		{
-			netChk(m_NetIOAdapter.WriteBuffer(pSendBuffer));
+			hr = m_NetIOAdapter.WriteBuffer(pSendBuffer.get());
 		}
 		else
 		{
-			netChk(m_NetIOAdapter.EnqueueBuffer(pSendBuffer));
+			hr = m_NetIOAdapter.EnqueueBuffer(pSendBuffer.get());
 			m_NetIOAdapter.ProcessSendQueue();
 		}
-		pMsg = nullptr;
-		pSendBuffer = nullptr;
 
-	Proc_End:
-
-		if (pSendBuffer != nullptr)
-		{
-			GetHeap().Free(pSendBuffer);
-		}
+		if (hr)
+			pSendBuffer.release();
+		else
+			m_NetIOAdapter.DecPendingSendCount();
 
 		return hr;
 	}
@@ -883,6 +877,14 @@ namespace Net {
 		//GetRecvBuffer()->SetupRecvTCP( GetCID() );
 		// We can't set tick here. There is a small chance that tick update finished before this object's reference count got increased
 		//SetTickGroup(EngineTaskTick::AsyncTick);
+
+		SetNetCtrlAction(NetCtrlCode_TimeSyncRtn, &m_HandleTimeSyncRtn);
+
+		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
+		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
+		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
+		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartbeat);
+		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
 	}
 
 	ConnectionTCPClient::~ConnectionTCPClient()
@@ -890,20 +892,17 @@ namespace Net {
 	}
 
 
-	// Update net control, process connection heartbit, ... etc
+	// Update net control, process connection heartbeat, ... etc
 	Result ConnectionTCPClient::TickUpdate()
 	{
 		Result hr = ResultCode::SUCCESS;
-		Message::MessageID msgIDTem;
-
-		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
 
 		if( GetConnectionState() != ConnectionState::DISCONNECTED)
 		{
 			if (!GetIsIORegistered())
 			{
 				SFLog(Net, Debug, "Close connection because it's kicked from net IO, CID:{0}", GetCID());
-				netChk(CloseConnection("Kicked from IO system"));
+				netCheck(CloseConnection("Kicked from IO system"));
 			}
 			else
 			{
@@ -911,57 +910,6 @@ namespace Net {
 					GetNetIOHandler()->PendingRecv();
 			}
 		}
-
-		// connect/disconnect process
-		msgIDTem.ID = PACKET_NETCTRL_NONE;
-		switch (GetConnectionState())
-		{
-		case ConnectionState::CONNECTING:
-			if (Util::TimeSince(m_ulNetCtrlTime) > GetConnectingTimeOut()) // connection time out
-			{
-				SFLog(Net, Debug, "Connecting Timeout CID:{0}", GetCID() );
-				netChk( CloseConnection("Connecting timeout") );
-			}
-			else if(Util::TimeSince(m_ulNetCtrlTryTime) > Const::CONNECTION_RETRY_TIME ) // retry
-			{
-				m_ulNetCtrlTryTime = ulTimeCur;
-				netChk(SendNetCtrl(PACKET_NETCTRL_CONNECT, (uint)GetLocalInfo().PeerClass, Message::MessageID(SF_PROTOCOL_VERSION), GetLocalInfo().PeerID));
-			}
-
-			goto Proc_End;
-			break;
-		case ConnectionState::DISCONNECTING:
-			if( (ulTimeCur-m_ulNetCtrlTime) > DurationMS(Const::SVR_DISCONNECT_TIMEOUT) ) // connection time out
-			{
-				SFLog(Net, Debug, "Disconnecting Timeout CID:{0}", GetCID() );
-				netChk( CloseConnection("Disconnecting") );
-			}
-
-			m_ulNetCtrlTryTime = ulTimeCur;
-			goto Proc_End;
-			break;
-		case ConnectionState::CONNECTED:
-			if(Util::TimeSince(m_ulNetCtrlTime) > Const::HEARTBIT_TIMEOUT ) // connection time out
-			{
-				SFLog(Net, Debug, "Connection Timeout CID:{1}", GetCID() );
-
-				netChk( CloseConnection("Heartbit timeout") );
-				m_ulNetCtrlTime = ulTimeCur;
-				goto Proc_End;
-			}
-			else if( (ulTimeCur-m_ulNetCtrlTryTime) > DurationMS(GetHeartbitTry()) ) // heartbit time
-			{
-				m_ulNetCtrlTryTime = ulTimeCur;
-				netChk( SendNetCtrl( PACKET_NETCTRL_HEARTBIT, 0, msgIDTem ) );
-			}
-			break;
-		default:
-			break;
-		};
-
-
-	Proc_End:
-
 
 		return hr;
 	}
@@ -987,9 +935,12 @@ namespace Net {
 	ConnectionTCPServer::ConnectionTCPServer(IHeap& heap)
 		: ConnectionTCP(heap)
 	{
-		SetHeartbitTry(Const::SVR_HEARTBIT_TIME_PEER);
+		SetHeartbeatTry(Const::SVR_HEARTBEAT_TIME_PEER);
 
 		Assert(GetMyNetIOAdapter().GetWriteQueue() != nullptr);
+
+		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
+		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
 	}
 
 	ConnectionTCPServer::~ConnectionTCPServer()
@@ -997,7 +948,7 @@ namespace Net {
 	}
 
 
-	// Update net control, process connection heartbit, ... etc
+	// Update net control, process connection heartbeat, ... etc
 	Result ConnectionTCPServer::TickUpdate()
 	{
 		Result hr = ResultCode::SUCCESS;
@@ -1035,11 +986,11 @@ namespace Net {
 			goto Proc_End;
 			break;
 		case ConnectionState::CONNECTED:
-			if(Util::TimeSince(m_ulNetCtrlTime) > Const::HEARTBIT_TIMEOUT ) // connection time out
+			if(Util::TimeSince(m_ulNetCtrlTime) > Const::HEARTBEAT_TIMEOUT ) // connection time out
 			{
 				SFLog(Net, Info, "Connection Timeout CID:{0}", GetCID() );
 
-				netChk( CloseConnection("heartbit timeout") );
+				netChk( CloseConnection("heartbeat timeout") );
 				m_ulNetCtrlTime = ulTimeCur;
 				goto Proc_End;
 			}

@@ -23,7 +23,23 @@ namespace SF
 {
  	namespace Policy
 	{
- 		// C2S: Play packet
+ 		// Cmd: Event for Player Join request.
+		Result NetPolicyPlayInstance::JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint32_t &InPlayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+		{
+ 			ScopeContext hr;
+
+			 MessageDataPtr pMessage;
+			 protocolCheckPtr(m_pConnection);
+
+			 pMessage = SF::Message::PlayInstance::JoinGameInstanceCmd::Create(m_pConnection->GetIOHeap(), InTransactionID, InPlayInstanceID, InPlayerID, InPlayerIdentifier);
+			 protocolCheckPtr(*pMessage);
+
+			 return m_pConnection->Send( pMessage );
+
+			return hr;
+
+		}; // Result NetPolicyPlayInstance::JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint32_t &InPlayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+		// C2S: Play packet
 		Result NetPolicyPlayInstance::PlayPacketC2SEvt( const uint32_t &InPlayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 		{
  			ScopeContext hr;
@@ -121,6 +137,22 @@ namespace SF
 		}; // Result NetPolicyPlayInstance::GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket )
 
 
+		// Cmd: Event for Player Join request.
+		Result NetSvrPolicyPlayInstance::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos )
+		{
+ 			ScopeContext hr;
+
+			 MessageDataPtr pMessage;
+			 protocolCheckPtr(m_pConnection);
+
+			 pMessage = SF::Message::PlayInstance::JoinGameInstanceRes::Create(m_pConnection->GetIOHeap(), InTransactionID, InResult, InPlayInstanceID, InMyEndpointID, InMemberInfos);
+			 protocolCheckPtr(*pMessage);
+
+			 return m_pConnection->Send( pMessage );
+
+			return hr;
+
+		}; // Result NetSvrPolicyPlayInstance::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos )
 		// S2C: Event for Player joined.
 		Result NetSvrPolicyPlayInstance::PlayerJoinS2CEvt( const uint32_t &InPlayInstanceID, const PlayerInformation &InJoinedPlayerInfo )
 		{

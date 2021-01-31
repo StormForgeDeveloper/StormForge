@@ -64,7 +64,7 @@ namespace Net {
 	//	, m_RecvGuaQueue(GetHeap(), MessageWindow::MESSAGE_QUEUE_SIZE / 2 )
 		, m_pWriteQueuesUDP(nullptr)
 	{
-		SetHeartbitTry( Const::UDP_HEARTBIT_TIME);
+		SetHeartbeatTry( Const::UDP_HEARTBEAT_TIME);
 
 		SetWriteQueueUDP(Service::NetSystem->GetWriteBufferQueue());
 		SetUseAddressMap(true);
@@ -828,7 +828,7 @@ namespace Net {
 						OnConnectionResult( ResultCode::SUCCESS );
 					}
 					break;
-				case NetCtrlCode_HeartBit:
+				case NetCtrlCode_Heartbeat:
 					m_ulNetCtrlTime = Util::Time.GetTimeMs();
 					break;
 				default:
@@ -863,7 +863,7 @@ namespace Net {
 					}
 					netChk( Disconnect("Protocol mismatch") );
 					break;
-				case NetCtrlCode_HeartBit:
+				case NetCtrlCode_Heartbeat:
 					break;
 				default:
 					break;
@@ -873,7 +873,7 @@ namespace Net {
 			{
 			}
 			break;
-		case NetCtrlCode_HeartBit:
+		case NetCtrlCode_Heartbeat:
 			m_ulNetCtrlTime = Util::Time.GetTimeMs();
 			netChk(SendPending(PACKET_NETCTRL_ACK, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID));
 			break;
@@ -1044,7 +1044,7 @@ namespace Net {
 
 	
 
-	// Update net control, process connection heartbit, ... etc
+	// Update net control, process connection heartbeat, ... etc
 	Result ConnectionUDP::TickUpdate()
 	{
 		Result hr = ResultCode::SUCCESS;

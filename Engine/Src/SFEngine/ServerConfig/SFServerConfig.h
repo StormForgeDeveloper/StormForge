@@ -43,6 +43,7 @@ namespace SF
 
 		struct NetPublic
 		{
+			String Protocol; // UDP, TCP, MRUDP
 			String IPV4;
 			String IPV6;
 			String ListenIP;
@@ -50,7 +51,8 @@ namespace SF
 			uint MaxConnection = 1000000;
 
 			NetPublic(IHeap& heap)
-				: IPV4(heap)
+				: Protocol(heap)
+				, IPV4(heap)
 				, IPV6(heap)
 				, ListenIP(heap)
 			{}

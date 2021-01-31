@@ -32,8 +32,8 @@ namespace SF
 		void RegisterParserGame()
 		{
  			// C2S: Client heart bit
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::HeartBitC2SEvt::MID.IDSeq.MsgID,&Message::Game::HeartBitC2SEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::HeartBitC2SEvt::MID.IDSeq.MsgID,&Message::Game::HeartBitC2SEvt::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::HeartbeatC2SEvt::MID.IDSeq.MsgID,&Message::Game::HeartbeatC2SEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::HeartbeatC2SEvt::MID.IDSeq.MsgID,&Message::Game::HeartbeatC2SEvt::ParseMessageToMessageBase));
 			// Cmd: Player connected from a login server and moved to game server
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::JoinGameServerCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameServerCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::JoinGameServerCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameServerCmd::ParseMessageToMessageBase));

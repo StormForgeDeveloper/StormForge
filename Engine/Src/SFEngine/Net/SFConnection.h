@@ -89,7 +89,7 @@ namespace Net {
 		CircularPageQueueAtomic<uint64_t>	m_EventQueue;
 
 		// heart bit time
-		DurationMS	m_ulHeartbitTry;
+		DurationMS	m_ulHeartbeatTry;
 		DurationMS	m_ulConnectingTimeOut;
 
 		// Sequence 
@@ -246,8 +246,8 @@ namespace Net {
 		inline uint16_t NewSeqNone();
 
 		// Heart bit time
-		DurationMS GetHeartbitTry();
-		void SetHeartbitTry(DurationMS ulHeartbitTry);
+		DurationMS GetHeartbeatTry();
+		void SetHeartbeatTry(DurationMS ulHeartbeatTry);
 
 		DurationMS GetConnectingTimeOut();
 		void SetConnectingTimeOut(DurationMS ulConnectingTimeOut);
@@ -317,7 +317,7 @@ namespace Net {
 		void OnTimeSyncRtn(DurationMS roundTripTime);
 
 
-		void OnHeartBitPacket();
+		void OnHeartbeatPacket();
 
 
 		//////////////////////////////////////////////////////////////////////////

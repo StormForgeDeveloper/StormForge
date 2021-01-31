@@ -1255,9 +1255,9 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DataTestRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			// C2S: Heartbit
-			const MessageID HeartBitC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 6);
-			Result HeartBitC2SEvt::ParseMessage(const MessageData* pIMsg)
+			// C2S: Heartbeat
+			const MessageID HeartbeatC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 6);
+			Result HeartbeatC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -1268,34 +1268,34 @@ namespace SF
 
 				return hr;
 
-			}; // Result HeartBitC2SEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result HeartbeatC2SEvt::ParseMessage(const MessageData* pIMsg)
 
-			Result HeartBitC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result HeartbeatC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				HeartBitC2SEvt parser;
+				HeartbeatC2SEvt parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 
 				return hr;
 
-			}; // Result HeartBitC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result HeartbeatC2SEvt::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result HeartBitC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			Result HeartbeatC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) HeartBitC2SEvt(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheckMem(pMessageBase = new(memHeap) HeartbeatC2SEvt(std::forward<MessageDataPtr>(pIMsg)));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result HeartBitC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			}; // Result HeartbeatC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* HeartBitC2SEvt::Create( IHeap& memHeap )
+			MessageData* HeartbeatC2SEvt::Create( IHeap& memHeap )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1311,21 +1311,21 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::HeartBitC2SEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::HeartbeatC2SEvt::MID, __uiMessageSize ) );
 
 				return hr;
-			}; // MessageData* HeartBitC2SEvt::Create( IHeap& memHeap )
+			}; // MessageData* HeartbeatC2SEvt::Create( IHeap& memHeap )
 
 
 
-			Result HeartBitC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				HeartBitC2SEvt parser;
+ 				HeartbeatC2SEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "HeartBit:{0}:{1} ",
+				SFLog(Net, Debug1, "Heartbeat:{0}:{1} ",
 						prefix, pMsg->GetMessageHeader()->Length); 
 				return ResultCode::SUCCESS;
-			}; // Result HeartBitC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Write All!! User Score and Ranking list
 			const MessageID DebugPrintALLRankingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 7);

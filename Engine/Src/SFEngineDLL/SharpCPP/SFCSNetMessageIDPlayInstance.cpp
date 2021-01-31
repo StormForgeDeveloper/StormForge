@@ -19,6 +19,19 @@
 using namespace SF;
 
 
+// Cmd: Event for Player Join request.
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd()
+{
+ 	return SF::Message::PlayInstance::JoinGameInstanceCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinGameInstanceRes()
+{
+ 	return SF::Message::PlayInstance::JoinGameInstanceRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinGameInstanceRes()
+
+
 // S2C: Event for Player joined.
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerJoinS2CEvt()
 {

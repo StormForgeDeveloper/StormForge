@@ -119,7 +119,7 @@ namespace Net {
 		///////////////////////////////////////////////////////////////////////////////
 		// Socket handling 
 
-		virtual Result SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket) override;
+		virtual Result SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket = false) override;
 
 		virtual Result RegisterSocket(SocketIO* cbInstance) override;
 		virtual Result UnregisterSocket(SocketIO* cbInstance) override;

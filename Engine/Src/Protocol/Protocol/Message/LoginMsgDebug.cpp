@@ -46,8 +46,8 @@ namespace SF
 			// Cmd: For network test
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::DataTestCmd::MID.IDSeq.MsgID,&Message::Login::DataTestCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::DataTestRes::MID.IDSeq.MsgID,&Message::Login::DataTestRes::TraceOut));
-			// C2S: Heartbit
-			MessageDebugTraceMap.insert(std::make_pair(Message::Login::HeartBitC2SEvt::MID.IDSeq.MsgID,&Message::Login::HeartBitC2SEvt::TraceOut));
+			// C2S: Heartbeat
+			MessageDebugTraceMap.insert(std::make_pair(Message::Login::HeartbeatC2SEvt::MID.IDSeq.MsgID,&Message::Login::HeartbeatC2SEvt::TraceOut));
 			// Cmd: Write All!! User Score and Ranking list
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::DebugPrintALLRankingCmd::MID.IDSeq.MsgID,&Message::Login::DebugPrintALLRankingCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::DebugPrintALLRankingRes::MID.IDSeq.MsgID,&Message::Login::DebugPrintALLRankingRes::TraceOut));

@@ -82,7 +82,7 @@
     </Command>
 	
 	
-	<C2SEvent Name="HeartBit" Reliable="true" Crypto="No" Trace="Debug1" Desc="Heartbit">
+	<C2SEvent Name="Heartbeat" Reliable="true" Crypto="No" Trace="Debug1" Desc="Heartbeat">
     </C2SEvent>
 
     <Command Name="DebugPrintALLRanking" Reliable="true" Crypto="No" Trace="Debug1" Desc="Write All!! User Score and Ranking list">

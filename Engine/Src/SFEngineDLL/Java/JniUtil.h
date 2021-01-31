@@ -88,6 +88,7 @@ namespace SF
 		virtual void SetVariable(const char* varName, const Array<uint64_t>& value) override;
 		virtual void SetVariable(const char* varName, const Array<float>& value) override;
 		virtual void SetVariable(const char* varName, const Array<double>& value) override;
+		virtual void SetVariable(const char* varName, const Array<PlayerInformation>& value) override;
 		virtual void SetVariable(const char* varName, const Array<FriendInformation>& value) override;
 		virtual void SetVariable(const char* varName, const Array<TotalRankingPlayerInformation>& value) override;
 		virtual void SetVariable(const char* varName, const Array<RelayPlayerInfo>& value) override;
@@ -96,7 +97,7 @@ namespace SF
 
 		virtual void SetVariable(const char* varName, const char* TypeName, const Array<uint8_t>& value) override;
 
-
+		jobject ToJavaObject(const PlayerInformation& value);
 		jobject ToJavaObject(const FriendInformation& value);
 		jobject ToJavaObject(const TotalRankingPlayerInformation& value);
 		jobject ToJavaObject(const RelayPlayerInfo& value);

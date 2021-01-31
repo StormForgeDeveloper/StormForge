@@ -28,6 +28,12 @@ namespace SF.Net
 		#else
 		    "SFEngineDLL";
 		#endif
+		// Cmd: Event for Player Join request.
+		public static int JoinGameInstanceCmd { get { return CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd(); } }
+
+		public static int JoinGameInstanceRes { get { return CSSFNetMessageID_PlayInstanceJoinGameInstanceRes(); } }
+
+
 		// S2C: Event for Player joined.
 		public static int PlayerJoinS2CEvt { get { return CSSFNetMessageID_PlayInstancePlayerJoinS2CEvt(); } }
 
@@ -74,6 +80,16 @@ namespace SF.Net
 
 
 		#region Native Interfaces 
+		// Cmd: Event for Player Join request.
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceJoinGameInstanceRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceJoinGameInstanceRes();
+
+
+
 		// S2C: Event for Player joined.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstancePlayerJoinS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstancePlayerJoinS2CEvt();

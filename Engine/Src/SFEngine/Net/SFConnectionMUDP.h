@@ -39,7 +39,7 @@ namespace Net {
 
 		ConnectionMessageAction_MUDPHandleAck m_HandleAck;
 		ConnectionMessageAction_MUDPHandleNack m_HandleNack;
-		ConnectionMessageAction_HandleHeartBit m_HandleHeartBit;
+		ConnectionMessageAction_HandleHeartbeat m_HandleHeartbeat;
 		ConnectionMessageAction_HandleTimeSync m_HandleTimeSync;
 		ConnectionMessageAction_MUDPHandleConnect m_HandleConnect;
 		ConnectionMessageAction_UDPHandleDisconnect m_HandleDisconnect;
@@ -86,7 +86,7 @@ namespace Net {
 		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg ) override;
 
 
-		// Update net control, process connection heartbit, ... etc
+		// Update net control, process connection heartbeat, ... etc
 		virtual Result TickUpdate() override;
 	};
 
@@ -204,8 +204,10 @@ namespace Net {
 		// Event actions
 		ConnectionMessageAction_MUDPHandleSyncReliableClient m_HandleSyncReliableClient;
 
+		ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
 		ConnectionStateAction_SendConnect m_SendConnect;
-		ConnectionStateAction_SendHeartBit m_SendHeartBit;
+		ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
+		ConnectionStateAction_SendHeartbeat m_SendHeartbeat;
 		ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
 		ConnectionStateAction_SendSync m_ActSendSync;

@@ -75,7 +75,6 @@ namespace SF
 		{
 			super::Initialize();
 
-			m_Owner.ClearTasks();
 			m_Owner.DisconnectAll();
 
 			m_Owner.m_Login = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
@@ -98,7 +97,11 @@ namespace SF
 			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+					{
 						Disconnect();
+						SetOnlineState(OnlineState::Disconnected);
+						SetResult(ResultCode::IO_DISCONNECTED);
+					}
 				});
 
 
@@ -241,7 +244,11 @@ namespace SF
 			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+					{
 						Disconnect();
+						SetOnlineState(OnlineState::Disconnected);
+						SetResult(ResultCode::IO_DISCONNECTED);
+					}
 				});
 
 			SetOnlineState(OnlineState::ConnectingToGameServer);
@@ -382,7 +389,12 @@ namespace SF
 			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection*, const Net::ConnectionEvent& evt)
 				{
 					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+					{
 						Disconnect();
+						SetOnlineState(OnlineState::InGameServer);
+						SetResult(ResultCode::IO_DISCONNECTED);
+					}
+
 				});
 
 
@@ -472,8 +484,8 @@ namespace SF
 	//	OnlineClient class
 	// 
 
-	OnlineClient::OnlineClient()
-		: EngineObject(new(GetEngineHeap()) IHeap("OnlineClient", &GetEngineHeap()), "OnlineClient")
+	OnlineClient::OnlineClient(IHeap& heap)
+		: EngineObject(new(heap) IHeap("OnlineClient", &heap), "OnlineClient")
 		, m_IncomingMovements(GetHeap())
 	{
 	}
@@ -487,6 +499,9 @@ namespace SF
 	void OnlineClient::ClearTasks()
 	{
 		m_CurrentTask.reset();
+		for (auto& itTask : m_PendingTasks)
+			delete itTask;
+		m_PendingTasks.Clear();
 	}
 
 	Result OnlineClient::StartConnection(StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password)
@@ -559,11 +574,11 @@ namespace SF
 			m_Game->UpdateGameTick();
 
 			if (m_Game->GetConnectionState() == Net::ConnectionState::CONNECTED
-				&& Util::TimeSince(m_HeartbitTimer) > DurationMS(15 * 1000))
+				&& Util::TimeSince(m_HeartbeatTimer) > DurationMS(15 * 1000))
 			{
-				m_HeartbitTimer = Util::Time.GetTimeMs();
+				m_HeartbeatTimer = Util::Time.GetTimeMs();
 				Policy::NetPolicyGame policy(m_Game);
-				policy.HeartBitC2SEvt();
+				policy.HeartbeatC2SEvt();
 			}
 		}
 
@@ -578,7 +593,11 @@ namespace SF
 			m_CurrentTask->TickUpdate();
 			if (m_CurrentTask->GetResult() != ResultCode::BUSY)
 			{
-				m_CurrentTask.reset();
+				// Sequence of task are queued int the PendingTasks, if one fails need to cancel whole taks sequence
+				if (!m_CurrentTask->GetResult())
+					ClearTasks();
+				else
+					m_CurrentTask.reset();
 			}
 		}
 

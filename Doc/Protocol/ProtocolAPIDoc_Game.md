@@ -14,10 +14,10 @@ namespace SF::Message::Game
 
 
 # Protocol interface class NetPolicyGame
-## HeartBitC2SEvt
+## HeartbeatC2SEvt
 Client heart bit
 
-        Result HeartBitC2SEvt()
+        Result HeartbeatC2SEvt()
 
 
 ## JoinGameServer Request

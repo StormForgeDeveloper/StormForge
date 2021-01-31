@@ -26,7 +26,7 @@ namespace SF
  		namespace Game
 		{
  			// C2S: Client heart bit
-			class HeartBitC2SEvt : public MessageBase
+			class HeartbeatC2SEvt : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -47,10 +47,10 @@ namespace SF
 				uint64_t GetSender() { return 0; }
 			private:
 			public:
-				HeartBitC2SEvt()
+				HeartbeatC2SEvt()
 					{}
 
-				HeartBitC2SEvt( MessageDataPtr &&pMsg )
+				HeartbeatC2SEvt( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
@@ -65,7 +65,7 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap );
 
-			}; // class HeartBitC2SEvt : public MessageBase
+			}; // class HeartbeatC2SEvt : public MessageBase
 
 			// Cmd: Player connected from a login server and moved to game server
 			class JoinGameServerCmd : public MessageBase

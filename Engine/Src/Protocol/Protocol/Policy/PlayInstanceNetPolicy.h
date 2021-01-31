@@ -35,6 +35,8 @@ namespace SF
 			NetPolicyPlayInstance ( const SharedPointerAtomicT<Net::Connection>& pConn ) : m_pConnection(pConn)
 			{}
 
+			// Cmd: Event for Player Join request.
+			Result JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint32_t &InPlayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
 			// C2S: Play packet
 			Result PlayPacketC2SEvt( const uint32_t &InPlayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
 			// C2S: Player Movement
@@ -62,6 +64,8 @@ namespace SF
 			NetSvrPolicyPlayInstance ( const SharedPointerAtomicT<Net::Connection>& pConn ) : m_pConnection(pConn)
 			{}
 
+			// Cmd: Event for Player Join request.
+			Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos );
 			// S2C: Event for Player joined.
 			Result PlayerJoinS2CEvt( const uint32_t &InPlayInstanceID, const PlayerInformation &InJoinedPlayerInfo );
 			// S2C: Event for Player left.

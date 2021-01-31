@@ -61,9 +61,9 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::DataTestCmd::MID.IDSeq.MsgID,&Message::Login::DataTestCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Login::DataTestRes::MID.IDSeq.MsgID,&Message::Login::DataTestRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::DataTestRes::MID.IDSeq.MsgID,&Message::Login::DataTestRes::ParseMessageToMessageBase));
-			// C2S: Heartbit
-			MessageParseToVariableMap.insert(std::make_pair(Message::Login::HeartBitC2SEvt::MID.IDSeq.MsgID,&Message::Login::HeartBitC2SEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::HeartBitC2SEvt::MID.IDSeq.MsgID,&Message::Login::HeartBitC2SEvt::ParseMessageToMessageBase));
+			// C2S: Heartbeat
+			MessageParseToVariableMap.insert(std::make_pair(Message::Login::HeartbeatC2SEvt::MID.IDSeq.MsgID,&Message::Login::HeartbeatC2SEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::HeartbeatC2SEvt::MID.IDSeq.MsgID,&Message::Login::HeartbeatC2SEvt::ParseMessageToMessageBase));
 			// Cmd: Write All!! User Score and Ranking list
 			MessageParseToVariableMap.insert(std::make_pair(Message::Login::DebugPrintALLRankingCmd::MID.IDSeq.MsgID,&Message::Login::DebugPrintALLRankingCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::DebugPrintALLRankingCmd::MID.IDSeq.MsgID,&Message::Login::DebugPrintALLRankingCmd::ParseMessageToMessageBase));

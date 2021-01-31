@@ -78,6 +78,7 @@ namespace SF {
 		virtual void SetVariable(const char* varName, const Array<uint64_t>& value) = 0;
 		virtual void SetVariable(const char* varName, const Array<float>& value) = 0;
 		virtual void SetVariable(const char* varName, const Array<double>& value) = 0;
+		virtual void SetVariable(const char* varName, const Array<PlayerInformation>& value) = 0;
 		virtual void SetVariable(const char* varName, const Array<FriendInformation>& value) = 0;
 		virtual void SetVariable(const char* varName, const Array<TotalRankingPlayerInformation>& value) = 0;
 		virtual void SetVariable(const char* varName, const Array<RelayPlayerInfo>& value) = 0;

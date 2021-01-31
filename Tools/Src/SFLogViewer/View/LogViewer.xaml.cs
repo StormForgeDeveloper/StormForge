@@ -51,11 +51,12 @@ namespace SFLogViewer.View
 
             GlobalEngine.Start("SFLogViewer");
 
+            this.Title = string.Format("{0},{1}", logServerAddress, topic);
+
             m_StreamDB = new StreamDBConsumer();
             m_StreamDB.Initialize(logServerAddress, topic);
 
-            m_StreamDB.RequestData(m_StreamDB.ToOffsetFromTail(m_MaxEntries));
-
+            m_StreamDB.RequestData(m_StreamDB.ToOffsetFromTail(m_MaxEntries / 4));
 
             m_TickTimer = new DispatcherTimer();
             m_TickTimer.Tick += new EventHandler(Timer_Tick);

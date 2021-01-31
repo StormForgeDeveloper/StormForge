@@ -19,14 +19,6 @@
 //
 
 
-
-inline void Connection::SetConnectionState(ConnectionState newState)
-{
-	m_ConnectionState.store(newState, std::memory_order_relaxed);;
-}
-
-
-
 inline ConnectionEvent& ConnectionEvent::operator =(const ConnectionEvent& src)
 {
 	memcpy(this, &src, sizeof(src));
@@ -159,15 +151,15 @@ uint16_t Connection::NewSeqNone()
 }
 
 
-// Heartbit time
-inline DurationMS Connection::GetHeartbitTry()
+// Heartbeat time
+inline DurationMS Connection::GetHeartbeatTry()
 {
-	return m_ulHeartbitTry;
+	return m_ulHeartbeatTry;
 }
 
-inline void Connection::SetHeartbitTry(DurationMS ulHeartbitTry )
+inline void Connection::SetHeartbeatTry(DurationMS ulHeartbeatTry )
 {
-	m_ulHeartbitTry = ulHeartbitTry;
+	m_ulHeartbeatTry = ulHeartbeatTry;
 }
 
 inline DurationMS Connection::GetConnectingTimeOut()

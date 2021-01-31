@@ -47,8 +47,8 @@ namespace SF
 			Result GetRankingListCmd( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
 			// Cmd: For network test
 			Result DataTestCmd( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData );
-			// C2S: Heartbit
-			Result HeartBitC2SEvt(  );
+			// C2S: Heartbeat
+			Result HeartbeatC2SEvt(  );
 			// Cmd: Write All!! User Score and Ranking list
 			Result DebugPrintALLRankingCmd( const uint64_t &InTransactionID, const char* InFileName );
 

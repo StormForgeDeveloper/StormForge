@@ -19,6 +19,18 @@
 using namespace SF;
 
 
+// Cmd: Event for Player Join request.
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InPlayInstanceID, PlayerID InPlayerID, const char* InPlayerIdentifier )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::PlayInstance::JoinGameInstanceCmd::Create(pConnection->GetHeap(), InTransactionID, InPlayInstanceID, InPlayerID,InPlayerIdentifier);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InPlayInstanceID, PlayerID InPlayerID, const char* InPlayerIdentifier )
+
+
 // C2S: Play packet
 SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayPacketC2SEvt( intptr_t InNativeConnectionHandle, uint32_t InPlayInstanceID, uint32_t InSenderEndpointID, uint32_t InTargetEndpointMask, uint16_t _sizeOfInPayload,const uint8_t* InPayload )
 {
@@ -92,6 +104,19 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListCmd( intptr_t InNative
 	return (uint32_t)res;
 } // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, AuthTicket InTicket )
 
+
+
+
+// Cmd: Event for Player Join request.
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint32_t InPlayInstanceID, uint32_t InMyEndpointID, uint16_t _sizeOfInMemberInfos,const PlayerInformation* InMemberInfos )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::PlayInstance::JoinGameInstanceRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InPlayInstanceID, InMyEndpointID,SF::ArrayView<PlayerInformation>(_sizeOfInMemberInfos, _sizeOfInMemberInfos, const_cast<PlayerInformation*>(InMemberInfos)));
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint32_t InPlayInstanceID, uint32_t InMyEndpointID, uint16_t _sizeOfInMemberInfos,const PlayerInformation* InMemberInfos )
 
 
 

@@ -64,8 +64,8 @@ namespace SF.Net
 		public static int DataTestRes { get { return CSSFNetMessageID_LoginDataTestRes(); } }
 
 
-		// C2S: Heartbit
-		public static int HeartBitC2SEvt { get { return CSSFNetMessageID_LoginHeartBitC2SEvt(); } }
+		// C2S: Heartbeat
+		public static int HeartbeatC2SEvt { get { return CSSFNetMessageID_LoginHeartbeatC2SEvt(); } }
 
 		// Cmd: Write All!! User Score and Ranking list
 		public static int DebugPrintALLRankingCmd { get { return CSSFNetMessageID_LoginDebugPrintALLRankingCmd(); } }
@@ -134,9 +134,9 @@ namespace SF.Net
 
 
 
-		// C2S: Heartbit
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_LoginHeartBitC2SEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_LoginHeartBitC2SEvt();
+		// C2S: Heartbeat
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_LoginHeartbeatC2SEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_LoginHeartbeatC2SEvt();
 
 
 		// Cmd: Write All!! User Score and Ranking list

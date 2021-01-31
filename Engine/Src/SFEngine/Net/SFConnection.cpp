@@ -70,7 +70,7 @@ namespace Net {
 		, m_IOHandler(ioHandler)
 		, m_RecvQueue(GetHeap())
 		, m_EventQueue(GetHeap())
-		, m_ulHeartbitTry(1000)
+		, m_ulHeartbeatTry(1000)
 		, m_ulConnectingTimeOut(Const::CONNECTION_TIMEOUT)
 		, m_usSeqNone(0)
 		, m_ulZeroLengthRecvCount(0)
@@ -144,7 +144,6 @@ namespace Net {
 		return m_IOHandler != nullptr ? m_IOHandler->GetIOHeap() : Service::NetSystem->GetHeap();
 	}
 
-
 	Result Connection::ClearQueues()
 	{
 		m_RecvQueue.ClearQueue();
@@ -164,7 +163,6 @@ namespace Net {
 		return SendNetCtrl(PACKET_NETCTRL_TIMESYNC, 0, msgID, GetLocalInfo().PeerID);
 	}
 
-
 	void Connection::OnTimeSyncRtn(DurationMS roundTripTime)
 	{
 		m_RoundTripDelay = roundTripTime;
@@ -172,8 +170,7 @@ namespace Net {
 		EnqueueConnectionEvent(ConnectionEvent(ConnectionEvent::EVT_TIMESYNC_RESULT, ResultCode::SUCCESS));
 	}
 
-
-	void Connection::OnHeartBitPacket()
+	void Connection::OnHeartbeatPacket()
 	{
 		m_ulNetCtrlTime = Util::Time.GetTimeMs();
 	}
@@ -187,7 +184,6 @@ namespace Net {
 			Assert(false);
 			return ResultCode::SUCCESS;
 		}
-
 
 		auto& actionListForState = m_ActionsByState[(int)state];
 		for (auto& itAction : actionListForState)
@@ -208,13 +204,13 @@ namespace Net {
 
 		if (uiCtrlCode == PACKET_NETCTRL_CONNECT || UID != 0)
 		{
-			netMem( pMsg = Message::MessageData::NewMessage(GetHeap(), uiCtrlCode, sizeof(MsgNetCtrlConnect) ) );
+			netCheckMem( pMsg = Message::MessageData::NewMessage(GetHeap(), uiCtrlCode, sizeof(MsgNetCtrlConnect) ) );
 			MsgNetCtrlConnect *pConMsg = (MsgNetCtrlConnect*)pMsg->GetMessageBuff();
 			pConMsg->Peer = GetLocalInfo();
 		}
 		else
 		{
-			netMem( pMsg = Message::MessageData::NewMessage(GetHeap(), uiCtrlCode, sizeof(MsgNetCtrl) ) );
+			netCheckMem( pMsg = Message::MessageData::NewMessage(GetHeap(), uiCtrlCode, sizeof(MsgNetCtrl) ) );
 		}
 
 		pMsg->GetMessageHeader()->msgID.IDs.Mobile = false;
@@ -226,10 +222,8 @@ namespace Net {
 
 		pMsg->UpdateChecksum();
 
-
-
 		hrTem = SendRaw(pMsg);
-		if( !(hrTem) )
+		if(!hrTem)
 		{
 			SFLog(Net, Custom10, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
 				GetCID(), 
@@ -240,15 +234,17 @@ namespace Net {
 			// ignore io send fail except connection closed
 			if( hrTem == ((Result)ResultCode::IO_CONNECTION_CLOSED) )
 			{
-				goto Proc_End;
+				return hr;
 			}
 		}
-
-	Proc_End:
 
 		return hr;
 	}
 
+	void Connection::SetConnectionState(ConnectionState newState)
+	{
+		m_ConnectionState.store(newState, std::memory_order_relaxed);;
+	}
 
 	// Change remote Address
 	void Connection::SetRemoteAddress(const sockaddr_storage& socAddr)
@@ -344,7 +340,7 @@ namespace Net {
 		// Except client everybody should have port number when it gets here
 		Assert(remote.PeerClass == NetClass::Client || remote.PeerAddress.Port != 0);
 		if (GetConnectionState() != ConnectionState::DISCONNECTED)
-			netChk( CloseConnection("InitConnection failed: Invalid State") );
+			netCheck( CloseConnection("InitConnection failed: Invalid State") );
 
 		// event handler need to be reassigned after initconnection is called
 		// - No they should be kept, but it need to be tested
@@ -359,7 +355,7 @@ namespace Net {
 
 		SetConnectionState(ConnectionState::CONNECTING);
 
-		netChk( InitSynchronization() );
+		netCheck( InitSynchronization() );
 
 		m_ulZeroLengthRecvCount = 0;
 
@@ -371,8 +367,6 @@ namespace Net {
 		m_ulNetCtrlTime = Util::Time.GetTimeMs();
 
 		EnqueueConnectionEvent(ConnectionEvent(ConnectionEvent::EVT_STATE_CHANGE, GetConnectionState()));
-
-	Proc_End:
 
 		SFLog(Net, Info, "InitConnection CID:{0}, from:{1}, to:{2} hr:{3}", GetCID(), local.PeerAddress, remote.PeerAddress, hr);
 
@@ -490,7 +484,6 @@ namespace Net {
 		}
 
 		pMsg = nullptr;
-
 
 		Assert(!(hr) || pMsg == nullptr);
 

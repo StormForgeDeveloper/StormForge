@@ -54,9 +54,11 @@ namespace SF
 
 	Result ServerConfigJson::ParseNetPublic(const Json::Value& itemValue, ServerConfig::NetPublic& publicNet)
 	{
+		auto Protocol = itemValue.get("Protocol", Json::Value("TCP"));
 		auto IPV4 = itemValue.get("IPV4", Json::Value(""));
 		auto IPV6 = itemValue.get("IPV6", Json::Value(""));
 		auto ListenIP = itemValue.get("ListenIP", Json::Value(""));
+		publicNet.Protocol = Protocol.asCString();
 		publicNet.IPV4 = IPV4.asCString();
 		publicNet.IPV6 = IPV6.asCString();
 		publicNet.ListenIP = ListenIP.asCString();

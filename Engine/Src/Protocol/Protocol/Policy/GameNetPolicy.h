@@ -36,7 +36,7 @@ namespace SF
 			{}
 
 			// C2S: Client heart bit
-			Result HeartBitC2SEvt(  );
+			Result HeartbeatC2SEvt(  );
 			// Cmd: Player connected from a login server and moved to game server
 			Result JoinGameServerCmd( const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 			// Cmd: player complition statues
