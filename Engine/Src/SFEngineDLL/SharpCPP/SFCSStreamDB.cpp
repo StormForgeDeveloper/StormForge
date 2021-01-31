@@ -39,14 +39,17 @@ SFDLL_EXPORT intptr_t StreamDB_NativeCreateDirectoryClient()
 
 SFDLL_EXPORT intptr_t StreamDB_NativeCreateProducer()
 {
-	auto streamDBInstance = new(GetSystemHeap()) StreamDBProducer;
-	return NativeObjectToIntptr(streamDBInstance);
+	SharedPointerT<StreamDBProducer> streamDBInstance = new(GetSystemHeap()) StreamDBProducer;
+	Service::EngineObjectManager->AddToDetainedRelease(streamDBInstance.StaticCast<SharedObject>());
+	return NativeObjectToIntptr(streamDBInstance.get());
 }
 
 SFDLL_EXPORT intptr_t StreamDB_NativeCreateConsumer()
 {
-	auto streamDBInstance = new(GetSystemHeap()) StreamDBConsumer;
-	return NativeObjectToIntptr(streamDBInstance);
+	SharedPointerT<StreamDBConsumer> streamDBInstance = new(GetSystemHeap()) StreamDBConsumer;
+	Service::EngineObjectManager->AddToDetainedRelease(streamDBInstance.StaticCast<SharedObject>());
+
+	return NativeObjectToIntptr(streamDBInstance.get());
 }
 
 
@@ -78,7 +81,7 @@ SFDLL_EXPORT int32_t StreamDBDirectory_NativeInitialize(intptr_t nativeHandle, c
 	return (int32_t)pStreamInstance->Initialize(strBrokers);
 }
 
-SFDLL_EXPORT int32_t StreamDBDirectory_RequestStreamList(intptr_t nativeHandle)
+SFDLL_EXPORT int32_t StreamDBDirectory_NativeRequestStreamList(intptr_t nativeHandle)
 {
 	auto pStreamInstance = NativeToObject<StreamDBDirectoryBroker>(nativeHandle);
 	if (pStreamInstance == nullptr)
@@ -151,6 +154,15 @@ SFDLL_EXPORT int32_t StreamDBProducer_NativeFlush(intptr_t nativeHandle)
 	return (int32_t)pStreamInstance->Flush();
 }
 
+SFDLL_EXPORT int64_t StreamDBConsumer_NativeToOffsetFromTail(intptr_t nativeHandle, int64_t offsetFromTail)
+{
+	auto pStreamInstance = NativeToObject<StreamDBConsumer>(nativeHandle);
+	if (pStreamInstance == nullptr)
+		return -1;
+
+	return pStreamInstance->ToOffsetFromTail(offsetFromTail);
+}
+
 SFDLL_EXPORT int32_t StreamDBConsumer_NativeRequestData(intptr_t nativeHandle, int64_t start_offset)
 {
 	auto pStreamInstance = NativeToObject<StreamDBConsumer>(nativeHandle);
@@ -160,7 +172,7 @@ SFDLL_EXPORT int32_t StreamDBConsumer_NativeRequestData(intptr_t nativeHandle, i
 	return (int32_t)pStreamInstance->RequestData(start_offset);
 }
 
-SFDLL_EXPORT int32_t StreamDBConsumer_NativePollData(intptr_t nativeHandle, int32_t& InOutmessageDataSize, intptr_t& InOutmessageData)
+SFDLL_EXPORT int32_t StreamDBConsumer_NativePollData(intptr_t nativeHandle, int64_t& InOutmessageOffset, int64_t& InOutmessageTimeStamp, int32_t& InOutmessageDataSize, intptr_t& InOutmessageData)
 {
 	auto pStreamInstance = NativeToObject<StreamDBConsumer>(nativeHandle);
 	if (pStreamInstance == nullptr)
@@ -169,10 +181,13 @@ SFDLL_EXPORT int32_t StreamDBConsumer_NativePollData(intptr_t nativeHandle, int3
 
 	auto result = pStreamInstance->PollData();
 
-	if (pStreamInstance->GetLatestReceivedData())
+	const UniquePtr<StreamDBConsumer::StreamMessageData>& messageData = pStreamInstance->GetLatestReceivedData();
+	if (messageData)
 	{
-		InOutmessageDataSize = static_cast<int32_t>(pStreamInstance->GetLatestReceivedData()->size());
-		InOutmessageData = reinterpret_cast<intptr_t>(pStreamInstance->GetLatestReceivedData()->data());
+		InOutmessageOffset = messageData->GetOffset();
+		InOutmessageTimeStamp = messageData->GetTimeStamp();
+		InOutmessageDataSize = static_cast<int32_t>(messageData->size());
+		InOutmessageData = reinterpret_cast<intptr_t>(messageData->data());
 	}
 
 	return (int32_t)result;

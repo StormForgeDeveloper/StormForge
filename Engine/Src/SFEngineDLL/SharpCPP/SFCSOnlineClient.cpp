@@ -49,10 +49,70 @@ SFDLL_EXPORT intptr_t SFOnlineClient_NativeCreateOnlineClient()
 	return NativeObjectToIntptr(pOnlineClient);
 }
 
-SFDLL_EXPORT uint32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, const char* gameId, const char* loginAddress, const char* userId, const char* password)
 {
 	if (nativeHandle == 0)
-		return false;
+		return ResultCode::NOT_INITIALIZED;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	return pOnlineClient->StartConnection(gameId, loginAddress, userId, password);
+}
+
+SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle, uint64_t gameInstanceUID)
+{
+	if (nativeHandle == 0)
+		return ResultCode::NOT_INITIALIZED;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	return pOnlineClient->JoinGameInstance(gameInstanceUID);
+}
+
+SFDLL_EXPORT void SFOnlineClient_NativeDisconnectAll(intptr_t nativeHandle)
+{
+	if (nativeHandle == 0)
+		return;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	pOnlineClient->DisconnectAll();
+}
+
+SFDLL_EXPORT int32_t SFOnlineClient_NativeGetOnlineState(intptr_t nativeHandle)
+{
+	if (nativeHandle == 0)
+		return 0;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	return int32_t(pOnlineClient->GetOnlineState());
+}
+
+SFDLL_EXPORT int32_t SFOnlineClient_NativeGetGameId(intptr_t nativeHandle)
+{
+	if (nativeHandle == 0)
+		return ResultCode::NOT_INITIALIZED;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	return pOnlineClient->GetGameId();
+}
+
+SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetGameInstanceUID(intptr_t nativeHandle)
+{
+	if (nativeHandle == 0)
+		return 0;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	return uint64_t(pOnlineClient->GetGameInstanceUID());
+}
+
+SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady)
+{
+	if (nativeHandle == 0)
+		return ResultCode::NOT_INITIALIZED;
 
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
@@ -115,7 +175,7 @@ SFDLL_EXPORT uint32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 	}
 
 
-	return true;
+	return ResultCode::SUCCESS;
 
 }
 

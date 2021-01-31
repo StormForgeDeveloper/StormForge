@@ -31,7 +31,7 @@ namespace TestStream.WinSharp
         {
             InitializeComponent();
 
-            SF.GlobalEngine.Start();
+            SF.GlobalEngine.Start("TestNet.WinSharp");
 
             SF.ServerAddressRegistry.ReadServerAddress();
             var serverAddresses = SF.ServerAddressRegistry.GetServerAddresses();
@@ -136,7 +136,9 @@ namespace TestStream.WinSharp
             do
             {
                 byte[] recordData;
-                var result = m_Consumer.PollData(out recordData);
+                Int64 messageOffset;
+                Int64 messageTimeStamp;
+                var result = m_Consumer.PollData(out messageOffset, out messageTimeStamp, out recordData);
                 if (result.IsFailed)
                     break;
                 else 

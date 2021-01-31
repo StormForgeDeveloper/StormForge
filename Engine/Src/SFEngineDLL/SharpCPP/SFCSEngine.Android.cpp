@@ -33,7 +33,7 @@
 #include "Graphics/SFGraphicDeviceGLES.h"
 #include "Net/SFNetConst.h"
 #include "Service/SFEngineService.h"
-
+#include "Util/SFS"
 
 
 
@@ -43,7 +43,7 @@
 //	Engine interface
 //
 
-SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineEmpty()
+SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress)
 {
 	SF::LogChannelParameter logChannelParameter;
 	logChannelParameter.SubChannelMask.Debug = 0;
@@ -54,10 +54,20 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineEmpty()
 	SF::EngineInitParam initParam;
 	initParam.LogOutputDebugger = false;
 	initParam.LogChannel = logChannelParameter;
+
+	initParam.LogOutputDebugger = false;
+	initParam.LogOutputConsole = false;
+
+	if (!SF::StrUtil::IsNullOrEmpty(logServerAddress))
+		initParam.LogServerAddress = logServerAddress;
+
+	if (!SF::StrUtil::IsNullOrEmpty(processName))
+		SF::Util::SetServiceName(processName);
+
 	return SF::Engine::Start(initParam);
 }
 
-SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngine(AAssetManager* assetManager)
+SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithGraphic(AAssetManager* assetManager)
 {
 	SF::EngineInitParam initParam;
 	initParam.Context = assetManager;

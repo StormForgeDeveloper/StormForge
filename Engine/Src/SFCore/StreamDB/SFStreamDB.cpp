@@ -221,7 +221,7 @@ namespace SF
 		}
 		else
 		{
-			SFLog(Net, Debug1, "Kafka Message delivered to topic:{0}, partition:{1}", message.topic_name(), message.partition());
+			//SFLog(Net, Debug1, "Kafka Message delivered to topic:{0}, partition:{1}", message.topic_name(), message.partition());
 		}
 	}
 
@@ -366,6 +366,16 @@ namespace SF
 
 		}
 
+		int64_t StreamDBConsumer::StreamMessageData::GetOffset() const
+		{
+			return m_MessageData->offset();
+		}
+
+		int64_t StreamDBConsumer::StreamMessageData::GetTimeStamp() const
+		{
+			return m_MessageData->timestamp().timestamp;
+		}
+
 		//size_t StreamDBConsumer::StreamMessageData::size() const
 		//{
 		//	if (m_MessageData)
@@ -432,8 +442,6 @@ namespace SF
 		}
 
 
-
-
 		Result StreamDBConsumer::RequestData(int64_t start_offset)
 		{
 			// partition has never been set. Set one now
@@ -452,7 +460,7 @@ namespace SF
 			return ResultCode::SUCCESS;
 		}
 
-		Result StreamDBConsumer::PollData(UniquePtr<ArrayView<uint8_t>>& receivedMessageData, int32_t timeoutMS)
+		Result StreamDBConsumer::PollData(UniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS)
 		{
 			ScopeContext hr([this](Result hr)
 				{
@@ -465,14 +473,14 @@ namespace SF
 
 			UniquePtr<RdKafka::Message> message(m_Consumer->consume(GetTopicHandle().get(), m_Partition, timeoutMS));
 			if (message == nullptr)
-				return hr = ResultCode::SUCCESS_FALSE;
+				return hr = ResultCode::NO_DATA_EXIST;
 
 			const RdKafka::Headers* headers = nullptr;
 
 			switch (message->err())
 			{
 			case RdKafka::ERR__TIMED_OUT:
-				hr = ResultCode::SUCCESS_FALSE;
+				hr = ResultCode::NO_DATA_EXIST;
 				break;
 
 			case RdKafka::ERR_NO_ERROR:
@@ -507,6 +515,14 @@ namespace SF
 		{
 			m_ReceivedMessageData.reset();
 			return PollData(m_ReceivedMessageData, timeoutMS);
+		}
+
+		int64_t StreamDBConsumer::ToOffsetFromTail(int64_t offsetFromTail) const
+		{
+			if (offsetFromTail < 0)
+				offsetFromTail = 0;
+
+			return RdKafka::Consumer::OffsetTail(offsetFromTail);
 		}
 }
 

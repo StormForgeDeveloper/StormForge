@@ -64,10 +64,11 @@ namespace SF {
 
 	void LogOutputLogServerComponent::MyOutputHandler::PrintOutput(const Log::LogModule::LogItem* logMessage)
 	{
-		if (logMessage == nullptr || m_StreamProducer == nullptr) return;
+		if (logMessage == nullptr || m_StreamProducer == nullptr || logMessage->LogStringSize < 1) return;
 
-		ArrayView<uint8_t> dataArray(logMessage->LogStringSize, reinterpret_cast<const uint8_t*>(logMessage->LogBuff));
-		m_StreamProducer->SendRecord(dataArray /*, logMessage->TimeStamp.time_since_epoch().count()*/);
+		// -1 for removing \n
+		ArrayView<uint8_t> dataArray(logMessage->LogStringSize - 1, reinterpret_cast<const uint8_t*>(logMessage->LogBuff));
+		m_StreamProducer->SendRecord(dataArray);
 	}
 
 	// Initialize server component

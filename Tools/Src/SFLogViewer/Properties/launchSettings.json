@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SFLogViewer": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

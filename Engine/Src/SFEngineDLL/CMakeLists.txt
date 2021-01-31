@@ -11,8 +11,10 @@ set(SFENGINEDLL_LIB_FILES
 	SharpCPP/SFCSStringCrc.cpp
 	SharpCPP/SFCSNetMessageIDGame.cpp
 	SharpCPP/SFCSNetMessageIDLogin.cpp
+	SharpCPP/SFCSNetMessageIDPlayInstance.cpp
 	SharpCPP/SFCSNetSendMessageGame.cpp
 	SharpCPP/SFCSNetSendMessageLogin.cpp
+	SharpCPP/SFCSNetSendMessagePlayInstance.cpp
 	SharpCPP/SFCSObject.cpp
 	SharpCPP/SFCSStreamDB.cpp
 	SharpCPP/SFCSTimeUtil.cpp

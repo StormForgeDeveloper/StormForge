@@ -70,7 +70,7 @@ TEST_F(KafkaTest, Consumer)
 
     Result hr;
     do {
-		UniquePtr<ArrayView<uint8_t>> messageData;
+        UniquePtr<StreamDBConsumer::StreamMessageData> messageData;
         int32_t timeoutMS = 10;
 
         hr = streamDB.PollData(messageData, timeoutMS);

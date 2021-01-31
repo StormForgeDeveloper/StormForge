@@ -23,6 +23,30 @@ namespace SF
 
     public class OnlineClient : SFObject
     {
+        public enum OnlineState
+        {
+            None,
+
+			// Login operations
+			ConnectingToLogin,
+			LogingIn,
+			LoggedIn,
+
+			// In game state
+			ConnectingToGameServer,
+			JoiningToGameServer,
+			InGameServer,
+
+			// In game instance state. the player still in game as well
+			InGameJoiningGameInstance,
+			InGameConnectingGameInstance,
+			InGameInGameInstance,
+
+			// Disconnected
+			Disconnected,
+		};
+
+
         // Connection event
         public delegate void ConnectionEventHandler(object sender, ref SFConnection.Event e);
         public event ConnectionEventHandler OnConnectionEvent;
@@ -35,6 +59,23 @@ namespace SF
         public OnlineClient()
         {
             NativeHandle = NativeCreateOnlineClient();
+        }
+
+        public Result StartConnection(string gameId, string loginAddress, string userId, string password)
+        {
+            var res = NativeStartConnection(NativeHandle, gameId, loginAddress, userId, password);
+            return new Result((int)res);
+        }
+
+        public Result JoinGameInstance(UInt64 gameInstanceUID)
+        {
+            var res = NativeJoinGameInstance(NativeHandle, gameInstanceUID);
+            return new Result((int)res);
+        }
+
+        public void DisconnectAll()
+        {
+            NativeDisconnectAll(NativeHandle);
         }
 
         public void UpdateGameTick()
@@ -54,6 +95,21 @@ namespace SF
                 SFMessageParsingUtil.stm_ParsingMessage = null;
                 stm_StaticEventReceiver = null;
             }
+        }
+
+        public OnlineState GetOnlineState()
+        {
+            return (OnlineState)NativeGetOnlineState(NativeHandle);
+        }
+
+        public Int32 GetGameId()
+        {
+            return NativeGetGameId(NativeHandle);
+        }
+
+        public UInt64 GetGameInstanceUID()
+        {
+            return NativeGetGameInstanceUID(NativeHandle);
         }
 
 
@@ -120,9 +176,27 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeCreateOnlineClient", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateOnlineClient();
-        
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeStartConnection", CharSet = CharSet.Auto)]
+        static extern Int32 NativeStartConnection(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, [MarshalAs(UnmanagedType.LPStr)] string userId, [MarshalAs(UnmanagedType.LPStr)] string password);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeJoinGameInstance", CharSet = CharSet.Auto)]
+        static extern Int32 NativeJoinGameInstance(IntPtr nativeHandle, UInt64 gameInstanceUID);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeDisconnectAll", CharSet = CharSet.Auto)]
+        static extern void NativeDisconnectAll(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetOnlineState", CharSet = CharSet.Auto)]
+        static extern Int32 NativeGetOnlineState(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetGameId", CharSet = CharSet.Auto)]
+        static extern Int32 NativeGetGameId(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetGameInstanceUID", CharSet = CharSet.Auto)]
+        static extern UInt64 NativeGetGameInstanceUID(IntPtr nativeHandle);
+
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeUpdateGameTick", CharSet = CharSet.Auto)]
-        static extern UInt32 NativeUpdateGameTick(IntPtr nativeHandle, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady);
+        static extern Int32 NativeUpdateGameTick(IntPtr nativeHandle, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady);
 
         #endregion
     }

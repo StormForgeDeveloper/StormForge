@@ -158,6 +158,9 @@ namespace SF
 
             virtual ~StreamMessageData();
 
+            int64_t GetOffset() const;
+            int64_t GetTimeStamp() const;
+
         private:
 
             UniquePtr<RdKafka::Message> m_MessageData;
@@ -171,22 +174,23 @@ namespace SF
 
         virtual Result Initialize(const String& brokers, const String& topic) override;
 
-
         Result RequestData(int64_t start_offset = OFFSET_BEGINNING);
 
-        Result PollData(UniquePtr<ArrayView<uint8_t>>& receivedMessageData, int32_t timeoutMS = 0);
+        Result PollData(UniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS = 0);
 		Result PollData(int32_t timeoutMS = 0);
 
-        const UniquePtr<ArrayView<uint8_t>>& GetLatestReceivedData() const { return m_ReceivedMessageData; }
+        const UniquePtr<StreamMessageData>& GetLatestReceivedData() const { return m_ReceivedMessageData; }
+
+        int64_t ToOffsetFromTail(int64_t offsetFromTail) const;
 
     private:
 
-        int32_t m_Partition;
+        mutable int32_t m_Partition;
 
         UniquePtr<RdKafka::Consumer> m_Consumer;
 
         // Locally cached data
-        UniquePtr<ArrayView<uint8_t>> m_ReceivedMessageData;
+        UniquePtr<StreamMessageData> m_ReceivedMessageData;
     };
 
 }

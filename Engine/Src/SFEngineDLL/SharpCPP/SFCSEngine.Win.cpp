@@ -44,7 +44,7 @@
 //	Engine interface
 //
 
-SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineEmpty()
+SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress)
 {
 	SF::LogOutputMask logOutputMask;
 
@@ -100,6 +100,16 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineEmpty()
 	initParam.LogOutputDebugger = { 0, };
 	initParam.LogFilePrefix = InstanceName;
 	initParam.LogOutputFile = SF::LogOutputMask(-1); // print all
+
+	initParam.LogOutputDebugger = false;
+	initParam.LogOutputConsole = false;
+
+	if (!SF::StrUtil::IsNullOrEmpty(logServerAddress))
+		initParam.LogServerAddress = logServerAddress;
+
+	if (!SF::StrUtil::IsNullOrEmpty(processName))
+		SF::Util::SetServiceName(processName);
+
 	// For stress test
 	initParam.AsyncTaskThreadCount = 6;
 	initParam.NetworkThreadCount = 4;
@@ -108,7 +118,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineEmpty()
 	return pEngine;
 }
 
-SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngine(void* context)
+SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithGraphic(void* context)
 {
 	SF::EngineInitParam initParam;
 #ifdef _DEBUG

@@ -100,7 +100,10 @@ namespace SF
 
 
 		// Initialize and start connection process
-		void StartConnection(StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password);
+		Result StartConnection(StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password);
+
+		// Join game instance
+		Result JoinGameInstance(uint64_t gameInstanceId);
 
 		// Disconnect all connection
 		void DisconnectAll();

@@ -347,7 +347,6 @@ namespace SF
 		if (!result)
 			return result;
 
-
 		result = LoadDBClusters(rootObject, pServer->DBClusters);
 		if (!result)
 			return result;

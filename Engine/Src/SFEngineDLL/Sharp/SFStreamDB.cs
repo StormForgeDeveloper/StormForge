@@ -82,7 +82,9 @@ namespace SF
 
         DirectoryMode m_DirectoryMode;
 
-        public StreamDBDirectory(DirectoryMode mode)
+        public string ServerAddress { get; private set; }
+
+        public StreamDBDirectory(DirectoryMode mode = DirectoryMode.Broker)
         {
             m_DirectoryMode = mode;
 
@@ -95,6 +97,8 @@ namespace SF
 
         public virtual Result Initialize(string serverAddress)
         {
+            ServerAddress = serverAddress;
+
             var result = NativeInitialize(NativeHandle, System.Text.Encoding.UTF8.GetBytes(serverAddress + "\0"));
             return new Result(result);
         }
@@ -106,14 +110,41 @@ namespace SF
 
         //public int GetTopicCount()
         //{
+        //    if (m_DirectoryMode != DirectoryMode.Broker)
+        //        return 0;
+
         //    return NativeGetTopicCount(NativeHandle);
         //}
 
         //public string GetTopic(int index)
         //{
+        //    if (m_DirectoryMode != DirectoryMode.Broker)
+        //        return null;
+
         //    var nativeStr = NativeGetTopic(NativeHandle, index);
         //    return Marshal.PtrToStringAnsi(nativeStr);
         //}
+
+
+        public SFMessage PollMessageData()
+        {
+            lock (SFMessageParsingUtil.stm_ParsingLock)
+            {
+                System.Diagnostics.Debug.Assert(SFMessageParsingUtil.stm_ParsingMessage == null);
+
+                NativePollMessage(NativeHandle,
+                    SFMessageParsingUtil.MessageParseCreateCallback,
+                    SFMessageParsingUtil.MessageParseSetValue,
+                    SFMessageParsingUtil.MessageParseSetArray
+                    );
+
+                var message = SFMessageParsingUtil.stm_ParsingMessage;
+                SFMessageParsingUtil.stm_ParsingMessage = null;
+                return message;
+            }
+        }
+
+
 
         ////////////////////////////////////////////////////////////////////////////////
         //
@@ -141,11 +172,11 @@ namespace SF
         [DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeRequestStreamList", CharSet = CharSet.Auto)]
         static extern Int32 NativeRequestStreamList(IntPtr nativeHandle);
 
-        //[DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeGetTopicCount", CharSet = CharSet.Auto)]
-        //static extern Int32 NativeGetTopicCount(IntPtr nativeHandle);
+        [DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeGetTopicCount", CharSet = CharSet.Auto)]
+        static extern Int32 NativeGetTopicCount(IntPtr nativeHandle);
 
-        //[DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeGetTopic", CharSet = CharSet.Ansi)]
-        //static extern IntPtr NativeGetTopic(IntPtr nativeHandle, Int32 index);
+        [DllImport(NativeDllName, EntryPoint = "StreamDBDirectory_NativeGetTopic", CharSet = CharSet.Ansi)]
+        static extern IntPtr NativeGetTopic(IntPtr nativeHandle, Int32 index);
 
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -218,6 +249,15 @@ namespace SF
             NativeHandle = NativeCreateConsumer();
         }
 
+        /// <summary>
+        /// Convert offset from tail to offset value can be used to request data call
+        /// </summary>
+        /// <param name="offsetFromTail"></param>
+        /// <returns></returns>
+        public Int64 ToOffsetFromTail(Int64 offsetFromTail)
+        {
+            return NativeToOffsetFromTail(NativeHandle, offsetFromTail);
+        }
 
         public Result RequestData(Int64 start_offset)
         {
@@ -225,13 +265,25 @@ namespace SF
             return new Result(result);
         }
 
-        public Result PollData(out byte[] recordData)
+        public static DateTime UnixTimeStampToDateTime(Int64 unixTimeStamp)
         {
+            // Unix timestamp is seconds past epoch
+            System.DateTime dtDateTime = new DateTime(1970, 1, 1, 0, 0, 0, 0, System.DateTimeKind.Utc);
+            dtDateTime = dtDateTime.AddMilliseconds(unixTimeStamp);
+            return dtDateTime;
+        }
+
+        public Result PollData(out Int64 InOutmessageOffset, out DateTime InOutmessageTimeStamp, out byte[] recordData)
+        {
+            InOutmessageOffset = 0;
             recordData = null;
+            Int64 messageTimeStamp = 0;
             Int32 messageDataSize = 0;
             IntPtr messageData = IntPtr.Zero;
-            var result = NativePollData(NativeHandle, ref messageDataSize, ref messageData);
 
+            var result = NativePollData(NativeHandle, out InOutmessageOffset, out messageTimeStamp, out messageDataSize, out messageData);
+
+            InOutmessageTimeStamp = UnixTimeStampToDateTime(messageTimeStamp);
             if (messageDataSize > 0 && messageData != IntPtr.Zero)
             {
                 recordData = new byte[messageDataSize];
@@ -259,11 +311,14 @@ namespace SF
         [DllImport(NativeDllName, EntryPoint = "StreamDB_NativeCreateConsumer", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateConsumer();
 
+        [DllImport(NativeDllName, EntryPoint = "StreamDBConsumer_NativeToOffsetFromTail", CharSet = CharSet.Auto)]
+        static extern Int64 NativeToOffsetFromTail(IntPtr nativeHandle, Int64 offsetFromTail);
+
         [DllImport(NativeDllName, EntryPoint = "StreamDBConsumer_NativeRequestData", CharSet = CharSet.Auto)]
         static extern Int32 NativeRequestData(IntPtr nativeHandle, Int64 start_offset);
 
         [DllImport(NativeDllName, EntryPoint = "StreamDBConsumer_NativePollData", CharSet = CharSet.Auto)]
-        static extern Int32 NativePollData(IntPtr nativeHandle, ref Int32 InOutmessageDataSize, ref IntPtr InOutmessageData);
+        static extern Int32 NativePollData(IntPtr nativeHandle, out Int64 InOutmessageOffset, out Int64 InOutmessageTimeStamp, out Int32 InOutmessageDataSize, out IntPtr InOutmessageData);
 
         #endregion
     }

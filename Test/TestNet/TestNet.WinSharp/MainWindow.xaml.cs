@@ -37,7 +37,7 @@ namespace TestNet.WinSharp
 
             Instance = this;
 
-            SF.GlobalEngine.Start();
+            SF.GlobalEngine.Start("TestNet.WInSharp");
 
 
             using (RegistryKey key = Registry.CurrentUser.CreateSubKey(RegistryKeyName))

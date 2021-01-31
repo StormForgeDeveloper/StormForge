@@ -23,7 +23,7 @@ namespace SF
         private IntPtr m_NativeHandle = IntPtr.Zero;
 
         // Native access handle
-        public IntPtr NativeHandle { get { return m_NativeHandle; } protected set { m_NativeHandle = value; } }
+        public IntPtr NativeHandle { get { return m_NativeHandle; } protected set { SetNativeHandle(value); } }
 
 
 	    public SFObject()

@@ -189,7 +189,7 @@ namespace SF
 				for (auto& itString : m_TopicList)
 					TopicList.push_back(itString.data());
 
-				m_ResultMessage = Message::PlayInstance::GetStreamListRes::Create(GetHeap(), 0, ResultCode::NO_DATA_EXIST,
+				m_ResultMessage = Message::PlayInstance::GetStreamListRes::Create(GetHeap(), 0, ResultCode::SUCCESS,
 					TopicList);
 			}
 		}

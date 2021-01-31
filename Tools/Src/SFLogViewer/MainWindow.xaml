@@ -1,0 +1,18 @@
+﻿<Window x:Class="SFLogViewer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SFLogViewer"
+        xmlns:localView="clr-namespace:SFLogViewer.View"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <Grid>
+        <TextBox x:Name="txtLogServerAddress" HorizontalAlignment="Left" Margin="118,20,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="326"/>
+        <Label Content="LogServer:" HorizontalAlignment="Left" Margin="22,22,0,0" VerticalAlignment="Top" Width="78"/>
+        <Label Content="LogChannels:" HorizontalAlignment="Left" Margin="22,53,0,0" VerticalAlignment="Top" Width="78"/>
+        <ListBox x:Name="listLogChannels" HorizontalAlignment="Left" Height="371" Margin="118,53,0,0" VerticalAlignment="Top" Width="672" MouseDoubleClick="OnChannel_DoubleClick"/>
+        <Button Content="Refresh" HorizontalAlignment="Left" Margin="463,20,0,0" VerticalAlignment="Top" Click="OnBtnRefresh_Clicked"/>
+    </Grid>
+</Window>

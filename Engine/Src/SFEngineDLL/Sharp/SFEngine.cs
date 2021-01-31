@@ -25,9 +25,9 @@ namespace SF
         {
         }
 
-	    public void StartEngine()
+	    public void StartEngine(string processName, string logServerAddress)
         {
-            m_EngineNativeHandle = NativeStartEngine();
+            m_EngineNativeHandle = NativeStartEngine(processName, logServerAddress);
         }
 
         public void StartEngineWithGraphic()
@@ -79,11 +79,11 @@ namespace SF
             "SFEngineDLL";
 #endif
 
-        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeStartEngineEmpty", CharSet = CharSet.Auto)]
-        static extern IntPtr NativeStartEngine();
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeStartEngineWithLog", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeStartEngine([MarshalAs(UnmanagedType.LPStr)] string processName, [MarshalAs(UnmanagedType.LPStr)] string logServerAddress);
 
-        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeStartEngine", CharSet = CharSet.Auto)]
-        static extern IntPtr NativeStartEngine(IntPtr context);
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeStartEngineWithGraphic", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeStartEngine(IntPtr graphicContext);
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeStopEngine", CharSet = CharSet.Auto)]
         static extern void NativeStopEngine();

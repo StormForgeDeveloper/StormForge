@@ -489,8 +489,15 @@ namespace SF
 		m_CurrentTask.reset();
 	}
 
-	void OnlineClient::StartConnection(StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password)
+	Result OnlineClient::StartConnection(StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password)
 	{
+		if (GetOnlineState() != OnlineState::None
+			&& GetOnlineState() != OnlineState::Disconnected)
+			return ResultCode::INVALID_STATE;
+
+		if (m_PendingTasks.size() > 0)
+			return ResultCode::BUSY;
+
 		if (loginAddress != nullptr)
 			m_LoginAddresses = loginAddress;
 
@@ -498,11 +505,26 @@ namespace SF
 		m_UserId = userId;
 		m_Password = password;
 
-
-		m_OnlineState = OnlineState::None;
-
 		m_PendingTasks.push_back(new(GetHeap()) ClientTask_Login(*this));
 		m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameServer(*this));
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result OnlineClient::JoinGameInstance(uint64_t gameInstanceId)
+	{
+		if (GetOnlineState() != OnlineState::InGameServer)
+			return ResultCode::INVALID_STATE;
+
+		if (m_PendingTasks.size() > 0)
+			return ResultCode::BUSY;
+
+		m_GameInstanceUID = gameInstanceId;
+
+		if (m_GameInstanceUID != 0)
+			m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameInstanceServer(*this));
+
+		return ResultCode::SUCCESS;
 	}
 
 	void OnlineClient::Disconnect(SharedPointerT<Net::Connection>& pConn)

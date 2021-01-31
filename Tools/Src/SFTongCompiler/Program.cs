@@ -43,7 +43,7 @@ namespace SFTongCompiler
             Application.DoEvents(); // see http://www.codeproject.com/buglist/EnableVisualStylesBug.asp?df=100&forumid=25268&exp=0&select=984714
 
             Engine engine = new Engine();
-            engine.StartEngine();
+            engine.StartEngine("TongCompiler", null);
 
             // Set up localization support early on, so that user-readable strings will be localized
             //  during the initialization phase below. Use XML files that are embedded resources.
