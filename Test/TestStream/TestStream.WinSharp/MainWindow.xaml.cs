@@ -137,7 +137,7 @@ namespace TestStream.WinSharp
             {
                 byte[] recordData;
                 Int64 messageOffset;
-                Int64 messageTimeStamp;
+                DateTime messageTimeStamp;
                 var result = m_Consumer.PollData(out messageOffset, out messageTimeStamp, out recordData);
                 if (result.IsFailed)
                     break;
