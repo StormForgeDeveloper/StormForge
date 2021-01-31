@@ -65,7 +65,7 @@ namespace Net {
 
 		SetNetCtrlAction(NetCtrlCode_Ack, &m_HandleAck);
 		SetNetCtrlAction(NetCtrlCode_Nack, &m_HandleNack);
-		SetNetCtrlAction(NetCtrlCode_HeartBit, &m_HandleHeartBit);
+		SetNetCtrlAction(NetCtrlCode_Heartbeat, &m_HandleHeartbeat);
 		SetNetCtrlAction(NetCtrlCode_TimeSync, &m_HandleTimeSync);
 		SetNetCtrlAction(NetCtrlCode_Connect, &m_HandleConnect);
 		SetNetCtrlAction(NetCtrlCode_Disconnect, &m_HandleDisconnect);

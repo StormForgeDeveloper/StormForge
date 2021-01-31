@@ -29,7 +29,7 @@ namespace SF
 		void RegisterDebugTraceGame()
 		{
  			// C2S: Client heart bit
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::HeartBitC2SEvt::MID.IDSeq.MsgID,&Message::Game::HeartBitC2SEvt::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::HeartbeatC2SEvt::MID.IDSeq.MsgID,&Message::Game::HeartbeatC2SEvt::TraceOut));
 			// Cmd: Player connected from a login server and moved to game server
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::JoinGameServerCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameServerCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::JoinGameServerRes::MID.IDSeq.MsgID,&Message::Game::JoinGameServerRes::TraceOut));

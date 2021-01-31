@@ -51,7 +51,7 @@ namespace Net {
 		const MsgMobileNetCtrl* pNetCtrl = (MsgMobileNetCtrl*)(netCtrlMsg);
 		if (pNetCtrl->rtnMsgID.IDs.Type == Message::MSGTYPE_NETCONTROL)// connecting process
 		{
-			GetConnection()->OnHeartBitPacket();
+			GetConnection()->OnHeartbeatPacket();
 
 			switch (pNetCtrl->rtnMsgID.IDs.MsgCode)
 			{
@@ -73,7 +73,7 @@ namespace Net {
 					}
 				}
 				break;
-			case NetCtrlCode_HeartBit:
+			case NetCtrlCode_Heartbeat:
 			case NetCtrlCode_SyncReliable:
 				break;
 			case NetCtrlCode_TimeSync:
@@ -127,7 +127,7 @@ namespace Net {
 	}
 
 
-	Result ConnectionMessageAction_HandleHeartBit::Run(const Message::MessageHeader* pNetCtrl)
+	Result ConnectionMessageAction_HandleHeartbeat::Run(const Message::MessageHeader* pNetCtrl)
 	{
 		Result hr;
 
@@ -352,19 +352,27 @@ namespace Net {
 
 
 
-	Result ConnectionStateAction_SendConnect::Run()
+	Result ConnectionStateAction_TimeoutConnecting::Run()
 	{
 		Result hr;
 		if (Util::TimeSince(GetNetCtrlTime()) > DurationMS(GetConnection()->GetConnectingTimeOut())) // connection time out
 		{
 			SFLog(Net, Info, "Connecting Timeout CID:{0}, ({1})", GetCID(), GetConnection()->GetConnectingTimeOut());
-			netChk(CloseConnection("Connection time out"));
+			netCheck(CloseConnection("Connection time out"));
 		}
-		else if (Util::TimeSince(GetNetCtrlTryTime()) > Const::CONNECTION_RETRY_TIME) // retry
+
+		return hr;
+	}
+
+	Result ConnectionStateAction_SendConnect::Run()
+	{
+		Result hr;
+
+		if (Util::TimeSince(GetNetCtrlTryTime()) > Const::CONNECTION_RETRY_TIME) // retry
 		{
 			UpdateNetCtrlTryTime();
 			SFLog(Net, Debug2, "Send Connecting CID({0}) : C:{1}, V:{2})", GetCID(), GetLocalInfo().PeerClass, (uint32_t)SF_PROTOCOL_VERSION);
-			netChk(GetConnection()->SendNetCtrl(PACKET_NETCTRL_CONNECT, (uint)GetLocalInfo().PeerClass, Message::MessageID(SF_PROTOCOL_VERSION), GetLocalInfo().PeerID));
+			netCheck(GetConnection()->SendNetCtrl(PACKET_NETCTRL_CONNECT, (uint)GetLocalInfo().PeerClass, Message::MessageID(SF_PROTOCOL_VERSION), GetLocalInfo().PeerID));
 		}
 
 	Proc_End:
@@ -373,31 +381,48 @@ namespace Net {
 	}
 
 
-	Result ConnectionStateAction_SendHeartBit::Run()
+	Result ConnectionStateAction_TimeoutHeartbeat::Run()
+	{
+		Result hr;
+
+		if (Util::TimeSince(GetNetCtrlTime()) > Const::HEARTBEAT_TIMEOUT) // connection time out
+		{
+			SFLog(Net, Debug, "UDP Connection Timeout CID:{0}", GetCID());
+			netCheck(Disconnect("Connection TimeOut"));
+			netCheck(CloseConnection("Heart bit timeout"));
+		}
+
+		return hr;
+	}
+
+	Result ConnectionStateAction_SendHeartbeat::Run()
 	{
 		Result hr;
 		Message::MessageID msgIDDummy;
 		msgIDDummy.ID = PACKET_NETCTRL_NONE;
 
-		if (Util::TimeSince(GetNetCtrlTime()) > Const::HEARTBIT_TIMEOUT) // connection time out
-		{
-			SFLog(Net, Debug, "UDP Connection Timeout CID:{0}", GetCID());
-			netChk(Disconnect("Connection TimeOut"));
-			netChk(CloseConnection("Heart bit timeout"));
-			goto Proc_End;
-		}
-		else if (Util::TimeSince(GetNetCtrlTryTime()) > GetConnection()->GetHeartbitTry()) // heart bit time
+		if (Util::TimeSince(GetNetCtrlTryTime()) > GetConnection()->GetHeartbeatTry()) // heart bit time
 		{
 			UpdateNetCtrlTryTime();
-			netChk(GetConnection()->SendPending(PACKET_NETCTRL_HEARTBIT, 0, msgIDDummy));
+			netCheck(GetConnection()->SendPending(PACKET_NETCTRL_HEARTBEAT, 0, msgIDDummy));
 		}
-
-
-	Proc_End:
 
 		return hr;
 	}
 
+
+	Result ConnectionStateAction_TimeoutDisconnecting::Run()
+	{
+		Result hr;
+
+		if (Util::TimeSince(GetNetCtrlTime()) > Const::DISCONNECT_TIMEOUT) // connection time out
+		{
+			SFLog(Net, Debug, "Disconnecting Timeout CID:{0}", GetCID());
+			netCheck(CloseConnection("Disconnecting"));
+		}
+
+		return hr;
+	}
 
 	Result ConnectionStateAction_SendDisconnect::Run()
 	{
@@ -405,12 +430,7 @@ namespace Net {
 		Message::MessageID msgIDDummy;
 		msgIDDummy.ID = PACKET_NETCTRL_NONE;
 
-		if (Util::TimeSince(GetNetCtrlTime()) > Const::DISCONNECT_TIMEOUT) // connection time out
-		{
-			SFLog(Net, Debug, "Disconnecting Timeout CID:{0}", GetCID());
-			netChk(CloseConnection("Disconnecting"));
-		}
-		else if (Util::TimeSince(GetNetCtrlTryTime()) > Const::DISCONNECT_RETRY_TIME) // retry
+		if (Util::TimeSince(GetNetCtrlTryTime()) > Const::DISCONNECT_RETRY_TIME) // retry
 		{
 			UpdateNetCtrlTryTime();
 			netChk(GetConnection()->SendPending(PACKET_NETCTRL_DISCONNECT, 0, msgIDDummy));

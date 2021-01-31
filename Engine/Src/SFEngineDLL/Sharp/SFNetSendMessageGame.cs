@@ -38,15 +38,15 @@ namespace SF.Net
 		} // public  SendMessageGame( SF.SFConnection connection )
 
 		// C2S: Client heart bit
-		public int  HeartBitC2SEvt(  )
+		public int  HeartbeatC2SEvt(  )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameHeartBitC2SEvt(m_Connection.NativeHandle);
+			result = CSSFNetAdapter_GameHeartbeatC2SEvt(m_Connection.NativeHandle);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.HeartBitC2SEvt);
+			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.HeartbeatC2SEvt);
 			return result;
-		} // public int  HeartBitC2SEvt(  )
+		} // public int  HeartbeatC2SEvt(  )
 
 
 		// Cmd: Player connected from a login server and moved to game server
@@ -692,8 +692,8 @@ namespace SF.Net
 
 		#region Native Interfaces 
 		// C2S: Client heart bit
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameHeartBitC2SEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameHeartBitC2SEvt(System.IntPtr InNativeConnectionHandle );
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameHeartbeatC2SEvt", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameHeartbeatC2SEvt(System.IntPtr InNativeConnectionHandle );
 
 
 

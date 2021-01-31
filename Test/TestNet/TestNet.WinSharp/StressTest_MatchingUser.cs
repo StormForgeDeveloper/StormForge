@@ -335,7 +335,7 @@ namespace TestNet.WinSharp
                 {
                     if (m_Game != null && mCurDeltaTime >= 10000)
                     {
-                        m_Game.HeartBitC2SEvt();
+                        m_Game.HeartbeatC2SEvt();
                         mCurDeltaTime = 0;
                     }
                 }

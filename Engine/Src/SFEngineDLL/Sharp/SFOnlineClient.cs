@@ -127,7 +127,7 @@ namespace SF
             evt.HResult.Code = result;
             evt.State = state;
 
-            stm_StaticEventReceiver.OnConnectionEvent.Invoke(stm_StaticEventReceiver, ref evt);
+            stm_StaticEventReceiver.OnConnectionEvent?.Invoke(stm_StaticEventReceiver, ref evt);
         }
 
         static internal void OnMessageReady_Internal()
@@ -139,7 +139,7 @@ namespace SF
             SFMessageParsingUtil.stm_ParsingMessage = null;
 
             // fire message handler
-            stm_StaticEventReceiver.OnMessageEvent.Invoke(stm_StaticEventReceiver, message);
+            stm_StaticEventReceiver.OnMessageEvent?.Invoke(stm_StaticEventReceiver, message);
         }
 
 

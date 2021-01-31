@@ -48,7 +48,7 @@ namespace Net {
 	};
 
 
-	class ConnectionMessageAction_HandleHeartBit : public ConnectionMessageAction
+	class ConnectionMessageAction_HandleHeartbeat : public ConnectionMessageAction
 	{
 	public:
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
@@ -114,6 +114,12 @@ namespace Net {
 		virtual Result Run() override;
 	};
 
+	class ConnectionStateAction_TimeoutConnecting : public ConnectionAction
+	{
+	public:
+		virtual Result Run() override;
+	};
+
 	class ConnectionStateAction_SendConnect : public ConnectionAction
 	{
 	public:
@@ -121,7 +127,19 @@ namespace Net {
 	};
 
 
-	class ConnectionStateAction_SendHeartBit : public ConnectionAction
+	class ConnectionStateAction_TimeoutHeartbeat : public ConnectionAction
+	{
+	public:
+		virtual Result Run() override;
+	};
+
+	class ConnectionStateAction_SendHeartbeat : public ConnectionAction
+	{
+	public:
+		virtual Result Run() override;
+	};
+
+	class ConnectionStateAction_TimeoutDisconnecting : public ConnectionAction
 	{
 	public:
 		virtual Result Run() override;

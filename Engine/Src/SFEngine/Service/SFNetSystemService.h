@@ -96,7 +96,7 @@ namespace SF {
 		///////////////////////////////////////////////////////////////////////////////
 		// Socket handling 
 
-		virtual Result SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket) { unused(sockType, socket); return ResultCode::SUCCESS_FALSE; }
+		virtual Result SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket = false) { unused(sockType, socket); return ResultCode::SUCCESS_FALSE; }
 
 		virtual Result RegisterSocket(Net::SocketIO* cbInstance) { unused(cbInstance); return ResultCode::SUCCESS_FALSE; }
 		virtual Result UnregisterSocket(Net::SocketIO* cbInstance) { unused(cbInstance); return ResultCode::SUCCESS_FALSE; }

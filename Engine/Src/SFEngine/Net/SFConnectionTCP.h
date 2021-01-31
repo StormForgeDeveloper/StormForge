@@ -169,7 +169,15 @@ namespace SF {
 
 		class ConnectionTCPClient : public ConnectionTCP
 		{
-		public:
+		private:
+
+			ConnectionMessageAction_HandleTimeSyncRtn m_HandleTimeSyncRtn;
+			ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
+			ConnectionStateAction_SendConnect m_SendConnect;
+			ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
+			ConnectionStateAction_SendHeartbeat m_SendHeartbeat;
+			ConnectionStateAction_SendDisconnect m_SendDisconnect;
+
 
 		public:
 			// Constructor
@@ -179,7 +187,7 @@ namespace SF {
 			// Initialize connection
 			virtual Result InitConnection(const PeerInfo& local, const PeerInfo& remote) override;
 
-			// Update net control, process connection heartbit, ... etc
+			// Update net control, process connection heartbeat, ... etc
 			virtual Result TickUpdate() override;
 
 		};
@@ -192,9 +200,10 @@ namespace SF {
 
 		class ConnectionTCPServer : public ConnectionTCP
 		{
-		public:
-
 		private:
+			ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
+			ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
+			ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
 		public:
 			// Constructor

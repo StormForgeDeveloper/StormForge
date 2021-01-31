@@ -201,7 +201,7 @@ namespace TestNet.WinSharp
 
                 if (mCurState == eTesterState.COMPLTE && m_Login != null && mCurDeltaTime >= 10000)// && m_ConnectionLogin.State != SFConnection.ConnectionState.DISCONNECTED)
                 {
-                   m_Login.HeartBitC2SEvt();
+                   m_Login.HeartbeatC2SEvt();
                    mCurDeltaTime = 0;
                 }
             }

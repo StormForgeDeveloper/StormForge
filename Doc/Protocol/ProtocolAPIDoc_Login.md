@@ -1,6 +1,6 @@
 ﻿***
  
- CopyRight (c) 2020 StormForge
+ CopyRight (c) 2021 StormForge
  
  Description : Login Message Protocol API Document
 
@@ -198,10 +198,10 @@ C++: Cast message to DataTestRes to access values
 		- OutTestData: uint8 type. 
 
 
-## HeartBitC2SEvt
-Heartbit
+## HeartbeatC2SEvt
+Heartbeat
 
-        Result HeartBitC2SEvt()
+        Result HeartbeatC2SEvt()
 
 
 ## DebugPrintALLRanking Request

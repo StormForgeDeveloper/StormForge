@@ -20,15 +20,15 @@ using namespace SF;
 
 
 // C2S: Client heart bit
-SFDLL_EXPORT int  CSSFNetAdapter_GameHeartBitC2SEvt( intptr_t InNativeConnectionHandle )
+SFDLL_EXPORT int  CSSFNetAdapter_GameHeartbeatC2SEvt( intptr_t InNativeConnectionHandle )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::HeartBitC2SEvt::Create(pConnection->GetHeap());
+	MessageDataPtr pMessage = SF::Message::Game::HeartbeatC2SEvt::Create(pConnection->GetHeap());
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameHeartBitC2SEvt( intptr_t InNativeConnectionHandle )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameHeartbeatC2SEvt( intptr_t InNativeConnectionHandle )
 
 
 

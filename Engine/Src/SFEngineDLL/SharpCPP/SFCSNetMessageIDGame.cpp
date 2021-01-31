@@ -20,10 +20,10 @@ using namespace SF;
 
 
 // C2S: Client heart bit
-SFDLL_EXPORT int  CSSFNetMessageID_GameHeartBitC2SEvt()
+SFDLL_EXPORT int  CSSFNetMessageID_GameHeartbeatC2SEvt()
 {
- 	return SF::Message::Game::HeartBitC2SEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameHeartBitC2SEvt()
+ 	return SF::Message::Game::HeartbeatC2SEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameHeartbeatC2SEvt()
 
 
 // Cmd: Player connected from a login server and moved to game server

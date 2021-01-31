@@ -24,21 +24,21 @@ namespace SF
  	namespace Policy
 	{
  		// C2S: Client heart bit
-		Result NetPolicyGame::HeartBitC2SEvt(  )
+		Result NetPolicyGame::HeartbeatC2SEvt(  )
 		{
  			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
 
-			 pMessage = SF::Message::Game::HeartBitC2SEvt::Create(m_pConnection->GetIOHeap());
+			 pMessage = SF::Message::Game::HeartbeatC2SEvt::Create(m_pConnection->GetIOHeap());
 			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
 			return hr;
 
-		}; // Result NetPolicyGame::HeartBitC2SEvt(  )
+		}; // Result NetPolicyGame::HeartbeatC2SEvt(  )
 		// Cmd: Player connected from a login server and moved to game server
 		Result NetPolicyGame::JoinGameServerCmd( const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 		{

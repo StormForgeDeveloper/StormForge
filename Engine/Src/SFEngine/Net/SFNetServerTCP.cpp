@@ -217,7 +217,7 @@ namespace Net {
 		// Initialize connection
 		netChk( pConnection->InitConnection( local, remote ) );
 
-		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::Stream, pConnection->GetSocketFamily(), acceptedSocket));
+		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::Stream, pConnection->GetSocketFamily(), acceptedSocket, true));
 
 		pConnection->GetMyNetIOAdapter().SetSocket(pConnection->GetSocketFamily(), SockType::Stream, acceptedSocket);
 		acceptedSocket = INVALID_SOCKET;

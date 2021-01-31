@@ -202,6 +202,11 @@ namespace SF
 		m_SetArrayFunc(varName, "double", (int)value.size(), value.data());
 	}
 
+	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<PlayerInformation>& value)
+	{
+		m_SetArrayFunc(varName, "PlayerInformation", (int)value.size(), value.data());
+	}
+
 	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<FriendInformation>& value)
 	{
 		m_SetArrayFunc(varName, "FriendInformation", (int)value.size(), value.data());

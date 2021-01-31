@@ -91,16 +91,16 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginDataTestCmd( intptr_t InNativeConnectionHa
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginDataTestCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint16_t _sizeOfInTestData,const uint8_t* InTestData )
 
 
-// C2S: Heartbit
-SFDLL_EXPORT int  CSSFNetAdapter_LoginHeartBitC2SEvt( intptr_t InNativeConnectionHandle )
+// C2S: Heartbeat
+SFDLL_EXPORT int  CSSFNetAdapter_LoginHeartbeatC2SEvt( intptr_t InNativeConnectionHandle )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::HeartBitC2SEvt::Create(pConnection->GetHeap());
+	MessageDataPtr pMessage = SF::Message::Login::HeartbeatC2SEvt::Create(pConnection->GetHeap());
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_LoginHeartBitC2SEvt( intptr_t InNativeConnectionHandle )
+} // SFDLL_EXPORT int  CSSFNetAdapter_LoginHeartbeatC2SEvt( intptr_t InNativeConnectionHandle )
 
 
 

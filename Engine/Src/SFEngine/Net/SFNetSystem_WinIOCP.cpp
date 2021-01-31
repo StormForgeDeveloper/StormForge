@@ -511,31 +511,34 @@ namespace Net {
 	//	return hr;
 	//}
 
-	Result NetSystem::SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket)
+	Result NetSystem::SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket)
 	{
 		Result hr;
 
 		int iOptValue = m_RecvBufferSize;
 		if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "Failed to change socket option SO_RCVBUF={0}, err={1}", iOptValue, GetLastNetSystemResult());
-			return ResultCode::UNEXPECTED;
+			hr = GetLastNetSystemResult();
+			SFLog(Net, Error, "Failed to change socket option SO_RCVBUF={0}, err={1}", iOptValue, hr);
+			return hr;
 		}
 
 		iOptValue = m_SendBufferSize;
 		if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "Failed to change socket option SO_SNDBUF={0}, err={1}", iOptValue, GetLastNetSystemResult());
-			return ResultCode::UNEXPECTED;
+			hr = GetLastNetSystemResult();
+			SFLog(Net, Error, "Failed to change socket option SO_SNDBUF={0}, err={1}", iOptValue, hr);
+			return hr;
 		}
 
-		if (sockFamily == SockFamily::IPV6)
+		if (!acceptedSocket && sockFamily == SockFamily::IPV6)
 		{
 			iOptValue = FALSE;
 			if (setsockopt(socket, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
 			{
-				SFLog(Net, Error, "Failed to change socket option IPV6_V6ONLY = {0}, err = {1}", iOptValue, GetLastNetSystemResult());
-				netErr(ResultCode::UNEXPECTED);
+				hr = GetLastNetSystemResult();
+				SFLog(Net, Error, "Failed to change socket option IPV6_V6ONLY = {0}, err = {1}", iOptValue, hr);
+				netCheck(hr);
 			}
 		}
 
@@ -543,11 +546,10 @@ namespace Net {
 		iMode = true;
 		if (ioctlsocket(socket, FIONBIO, &iMode) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "Failed to change socket IO Mode to {0},  err = {1}", (uint32_t)iMode, GetLastNetSystemResult());
-			netErr(ResultCode::UNEXPECTED);
+			hr = GetLastNetSystemResult();
+			SFLog(Net, Error, "Failed to change socket IO Mode to {0},  err = {1}", (uint32_t)iMode, hr);
+			netCheck(hr);
 		}
-
-	Proc_End:
 
 		return hr;
 	}

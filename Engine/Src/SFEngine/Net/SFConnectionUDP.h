@@ -60,7 +60,7 @@ namespace Net {
 		virtual Result OnRecv( uint uiBuffSize, const uint8_t* pBuff );
 		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg );
 
-		// Update net control, process connection heartbit, ... etc
+		// Update net control, process connection heartbeat, ... etc
 		virtual Result TickUpdate();
 	};
 
@@ -89,7 +89,7 @@ namespace Net {
 
 		Result ProcNetCtrl( const MsgNetCtrl* pNetCtrl ) override;
 
-		// Update net control, process connection heartbit, ... etc
+		// Update net control, process connection heartbeat, ... etc
 		//virtual Result TickUpdate() override;
 	};
 
@@ -113,7 +113,7 @@ namespace Net {
 		ConnectionUDPServer(IHeap& heap, SocketIO* ioHandler);
 		virtual ~ConnectionUDPServer();
 
-		// Update net control, process connection heartbit, ... etc
+		// Update net control, process connection heartbeat, ... etc
 		//virtual Result TickUpdate() override;
 	};
 	
@@ -185,7 +185,7 @@ namespace Net {
 		Result ReInitialize( const sockaddr_storage& socAddr );
 
 
-		// Update net control, process connection heartbit, ... etc
+		// Update net control, process connection heartbeat, ... etc
 		//virtual Result TickUpdate() override;
 
 		// Update Send buffer Queue, TCP and UDP client connection

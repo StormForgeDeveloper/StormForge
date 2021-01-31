@@ -89,7 +89,7 @@ namespace Net {
 		//virtual Result Send( Message::MessageData* &pMsg ) = 0;
 
 
-		// Update net control, process connection heartbit, ... etc
+		// Update net control, process connection heartbeat, ... etc
 		virtual Result TickUpdate() override { return ResultCode::FAIL; }
 
 

@@ -88,10 +88,10 @@ namespace Net {
 		CONNECTION_ZEROPACKET_MAX		= 15,
 		CONNECTION_RETRY				= 700,
 
-		MUDP_HEARTBIT_START_TIME		= 1000*60,
-		MUDP_HEARTBIT_TIMEOUT			= 1000*60*10,
+		MUDP_HEARTBEAT_START_TIME		= 1000*60,
+		MUDP_HEARTBEAT_TIMEOUT			= 1000*60*10,
 
-		//UDP_HEARTBIT_TIMEOUT = 1000 * 60 * 10,
+		//UDP_HEARTBEAT_TIMEOUT = 1000 * 60 * 10,
 		};
 
 		constexpr int GUARANT_PENDING_MAX = 1024;
@@ -107,19 +107,19 @@ namespace Net {
 		constexpr DurationMS MUDP_SEND_RETRY_TIME = DurationMS(2000);
 		constexpr DurationMS CONNECTION_RETRY_TIME = DurationMS(500);
 
-		constexpr DurationMS SVR_HEARTBIT_TIME_UDP = DurationMS(5 * 1000);
+		constexpr DurationMS SVR_HEARTBEAT_TIME_UDP = DurationMS(5 * 1000);
 
-		constexpr DurationMS UDP_HEARTBIT_TIME = DurationMS(20 * 1000);
-		constexpr DurationMS TCP_HEARTBIT_START_TIME = DurationMS(7 * 1000);
+		constexpr DurationMS UDP_HEARTBEAT_TIME = DurationMS(20 * 1000);
+		constexpr DurationMS TCP_HEARTBEAT_START_TIME = DurationMS(7 * 1000);
 
-		constexpr DurationMS SVR_HEARTBIT_TIME_PEER = DurationMS(30 * 1000);
+		constexpr DurationMS SVR_HEARTBEAT_TIME_PEER = DurationMS(30 * 1000);
 
 #if defined(_DEBUG) || defined(DEBUG)
 		constexpr DurationMS CONNECTION_TIMEOUT = DurationMS(2 * 60 * 1000);
 #else
 		constexpr DurationMS CONNECTION_TIMEOUT = DurationMS(60 * 1000);
 #endif
-		constexpr DurationMS HEARTBIT_TIMEOUT = DurationMS(2 * 60 * 1000);
+		constexpr DurationMS HEARTBEAT_TIMEOUT = DurationMS(2 * 60 * 1000);
 
 		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME = DurationMS(10 * 1000);
 		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME_BOOSTED = DurationMS(5 * 1000);

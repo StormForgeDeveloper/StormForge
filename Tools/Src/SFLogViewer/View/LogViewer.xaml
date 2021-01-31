@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SFLogViewer.View"
         mc:Ignorable="d"
-        Title="LogViewer" Height="450" Width="800">
+        Title="LogViewer" Height="550" Width="1147">
     <Window.Resources>
         <Style TargetType="ItemsControl" x:Key="LogViewerStyle">
             <Setter Property="Template">
@@ -53,7 +53,7 @@
             <TextBlock Text="{Binding Count, StringFormat='{}{0} Items'}"
                DockPanel.Dock="Top"/>
 
-            <ItemsControl ItemsSource="{Binding}" Style="{StaticResource LogViewerStyle}">
+            <ItemsControl ItemsSource="{Binding}" Style="{StaticResource LogViewerStyle}" Margin="16,16,16,16">
                 <ItemsControl.Template>
                     <ControlTemplate>
                         <ScrollViewer CanContentScroll="True" ScrollChanged="ScrollViewer_ScrollChanged">

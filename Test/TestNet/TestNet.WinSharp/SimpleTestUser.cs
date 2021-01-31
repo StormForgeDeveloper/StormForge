@@ -409,7 +409,7 @@ namespace TestNet.WinSharp
                 {
                     m_GameHeartBitTime = DateTime.Now;
                     if (m_Game != null)
-                        m_Game.HeartBitC2SEvt();
+                        m_Game.HeartbeatC2SEvt();
                 }
             }
 

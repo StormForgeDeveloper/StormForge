@@ -37,6 +37,17 @@ namespace SF.Net
  			m_Connection = connection;
 		} // public  SendMessagePlayInstance( SF.SFConnection connection )
 
+		// Cmd: Event for Player Join request.
+		public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt32 InPlayInstanceID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceID, InPlayerID,System.Text.Encoding.UTF8.GetBytes(InPlayerIdentifier + "\0"));
+			}
+			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinGameInstanceCmd);
+			return result;
+		} // public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt32 InPlayInstanceID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
+
 		// C2S: Play packet
 		public int  PlayPacketC2SEvt( System.UInt32 InPlayInstanceID, System.UInt32 InSenderEndpointID, System.UInt32 InTargetEndpointMask, System.Byte[] InPayload )
 		{
@@ -108,6 +119,11 @@ namespace SF.Net
 		} // public int  GetStreamListCmd( System.UInt64 InTransactionID, System.UInt64 InTicket )
 
 		#region Native Interfaces 
+		// Cmd: Event for Player Join request.
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InPlayInstanceID, System.UInt64 InPlayerID, [MarshalAs(UnmanagedType.LPArray)] byte[] InPlayerIdentifier );
+
+
 		// C2S: Play packet
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstancePlayPacketC2SEvt", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstancePlayPacketC2SEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InPlayInstanceID, System.UInt32 InSenderEndpointID, System.UInt32 InTargetEndpointMask, System.UInt16 _sizeOfInPayload,System.Byte[] InPayload );
@@ -158,6 +174,18 @@ namespace SF.Net
 		{
  			m_Connection = connection;
 		} // public  SendMessageSvrPlayInstance( SF.SFConnection connection )
+
+		// Cmd: Event for Player Join request.
+		public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InPlayInstanceID, System.UInt32 InMyEndpointID, SF.PlayerInformation[] InMemberInfos )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_PlayInstanceJoinGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceID, InMyEndpointID,(ushort)InMemberInfos.Length, InMemberInfos);
+			}
+			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinGameInstanceRes);
+			return result;
+		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InPlayInstanceID, System.UInt32 InMyEndpointID, SF.PlayerInformation[] InMemberInfos )
+
 
 		// S2C: Event for Player joined.
 		public int  PlayerJoinS2CEvt( System.UInt32 InPlayInstanceID, SF.PlayerInformation InJoinedPlayerInfo )
@@ -275,6 +303,12 @@ namespace SF.Net
 
 
 		#region Native Interfaces 
+		// Cmd: Event for Player Join request.
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinGameInstanceRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstanceJoinGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InPlayInstanceID, System.UInt32 InMyEndpointID, System.UInt16 _sizeOfInMemberInfos,SF.PlayerInformation[] InMemberInfos );
+
+
+
 		// S2C: Event for Player joined.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstancePlayerJoinS2CEvt", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstancePlayerJoinS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InPlayInstanceID, ref SF.PlayerInformation InJoinedPlayerInfo );

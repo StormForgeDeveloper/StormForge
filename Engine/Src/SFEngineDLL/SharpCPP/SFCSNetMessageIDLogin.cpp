@@ -97,11 +97,11 @@ SFDLL_EXPORT int  CSSFNetMessageID_LoginDataTestRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_LoginDataTestRes()
 
 
-// C2S: Heartbit
-SFDLL_EXPORT int  CSSFNetMessageID_LoginHeartBitC2SEvt()
+// C2S: Heartbeat
+SFDLL_EXPORT int  CSSFNetMessageID_LoginHeartbeatC2SEvt()
 {
- 	return SF::Message::Login::HeartBitC2SEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_LoginHeartBitC2SEvt()
+ 	return SF::Message::Login::HeartbeatC2SEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_LoginHeartbeatC2SEvt()
 
 
 // Cmd: Write All!! User Score and Ranking list

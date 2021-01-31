@@ -43,10 +43,10 @@ using namespace SF;
 
 SFDLL_EXPORT intptr_t SFOnlineClient_NativeCreateOnlineClient()
 {
-	auto pOnlineClient = new(Service::NetSystem->GetHeap()) OnlineClient();
-	SharedReferenceInc inc(pOnlineClient);
+	auto pOnlineClient = NewObject<OnlineClient>(GetEngineHeap());
+	Service::EngineObjectManager->AddToDetainedRelease(pOnlineClient.StaticCast<SharedObject>());
 
-	return NativeObjectToIntptr(pOnlineClient);
+	return NativeObjectToIntptr(pOnlineClient.get());
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, const char* gameId, const char* loginAddress, const char* userId, const char* password)

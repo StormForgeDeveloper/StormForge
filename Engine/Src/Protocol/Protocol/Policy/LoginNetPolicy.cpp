@@ -119,22 +119,22 @@ namespace SF
 			return hr;
 
 		}; // Result NetPolicyLogin::DataTestCmd( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
-		// C2S: Heartbit
-		Result NetPolicyLogin::HeartBitC2SEvt(  )
+		// C2S: Heartbeat
+		Result NetPolicyLogin::HeartbeatC2SEvt(  )
 		{
  			ScopeContext hr;
 
 			 MessageDataPtr pMessage;
 			 protocolCheckPtr(m_pConnection);
 
-			 pMessage = SF::Message::Login::HeartBitC2SEvt::Create(m_pConnection->GetIOHeap());
+			 pMessage = SF::Message::Login::HeartbeatC2SEvt::Create(m_pConnection->GetIOHeap());
 			 protocolCheckPtr(*pMessage);
 
 			 return m_pConnection->Send( pMessage );
 
 			return hr;
 
-		}; // Result NetPolicyLogin::HeartBitC2SEvt(  )
+		}; // Result NetPolicyLogin::HeartbeatC2SEvt(  )
 		// Cmd: Write All!! User Score and Ranking list
 		Result NetPolicyLogin::DebugPrintALLRankingCmd( const uint64_t &InTransactionID, const char* InFileName )
 		{

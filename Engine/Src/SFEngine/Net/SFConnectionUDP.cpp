@@ -59,7 +59,7 @@ namespace Net {
 		: ConnectionUDP(heap, ioHandler)
 	{
 		// limit server net retry maximum
-		SetHeartbitTry( Const::SVR_HEARTBIT_TIME_PEER );
+		SetHeartbeatTry( Const::SVR_HEARTBEAT_TIME_PEER );
 		SetMaxGuarantedRetry( Const::UDP_CLI_RETRY_ONETIME_MAX );
 	}
 
@@ -118,7 +118,7 @@ namespace Net {
 	}
 
 
-	//// Update net control, process connection heartbit, ... etc
+	//// Update net control, process connection heartbeat, ... etc
 	//Result ConnectionUDPServerPeer::TickUpdate()
 	//{
 	//	Result hr = ResultCode::SUCCESS;
@@ -147,7 +147,7 @@ namespace Net {
 		: ConnectionUDP(heap, ioHandler)
 	{
 		// limit server net retry maximum
-		SetHeartbitTry( Const::SVR_HEARTBIT_TIME_UDP );
+		SetHeartbeatTry( Const::SVR_HEARTBEAT_TIME_UDP );
 		SetMaxGuarantedRetry( Const::UDP_CLI_RETRY_ONETIME_MAX );
 	}
 
@@ -157,7 +157,7 @@ namespace Net {
 	}
 
 
-	//// Update net control, process connection heartbit, ... etc
+	//// Update net control, process connection heartbeat, ... etc
 	//Result ConnectionUDPServer::TickUpdate()
 	//{
 	//	Result hr = ResultCode::SUCCESS;

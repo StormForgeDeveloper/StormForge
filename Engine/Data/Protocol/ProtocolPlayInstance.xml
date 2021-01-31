@@ -11,10 +11,9 @@
 			<Params Type="String" Name="PlayerIdentifier" Desc="Joining player identifier. string value"/>
 		</Cmd>
 		<Res>
-			<Params Type="Result" Name="Result" Desc="Join result"/>
 			<Params Type="uint32" Name="PlayInstanceID" Desc="joined Play instance ID"/>
 			<Params Type="uint32" Name="MyEndpointID" Desc="Joined player PlayID"/>
-			<Params Type="PlayPlayerInfo" IsArray="true" Name="MemberInfos" Desc="Member player IDs"/>
+			<Params Type="PlayerInformation" IsArray="true" Name="MemberInfos" Desc="Member player IDs"/>
 		</Res>
 	</Command>
 

@@ -31,7 +31,12 @@ namespace SF
 
 		void RegisterParserPlayInstance()
 		{
- 			// S2C: Event for Player joined.
+ 			// Cmd: Event for Player Join request.
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceCmd::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceCmd::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceRes::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceRes::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceRes::ParseMessageToMessageBase));
+			// S2C: Event for Player joined.
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::PlayerJoinS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerJoinS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::PlayerJoinS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerJoinS2CEvt::ParseMessageToMessageBase));
 			// S2C: Event for Player left.
