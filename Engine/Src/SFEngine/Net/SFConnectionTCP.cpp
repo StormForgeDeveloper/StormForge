@@ -426,10 +426,7 @@ namespace Net {
 	{
 		Connection::OnConnectionResult( hrConnect );
 
-		if( ( hrConnect ) )
-		{
-		}
-		else
+		if( !hrConnect )
 		{
 			CloseConnection("Connecting failed");
 		}
@@ -746,6 +743,10 @@ namespace Net {
 		return hr;
 	}
 
+	Result ConnectionTCP::SendPending(uint uiCtrlCode, uint uiSequence, Message::MessageID returnMsgID, uint64_t UID)
+	{
+		return SendNetCtrl(uiCtrlCode, uiSequence, returnMsgID, UID);
+	}
 
 	Result ConnectionTCP::SendRaw(SharedPointerT<Message::MessageData> &pMsg)
 	{
@@ -884,6 +885,7 @@ namespace Net {
 		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
 		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
 		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartbeat);
+		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
 	}
 
@@ -911,7 +913,7 @@ namespace Net {
 			}
 		}
 
-		return hr;
+		return super::TickUpdate();
 	}
 	
 		
@@ -941,6 +943,8 @@ namespace Net {
 
 		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
 		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
+		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
+		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
 	}
 
 	ConnectionTCPServer::~ConnectionTCPServer()
@@ -954,56 +958,13 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS;
 		Message::MessageID msgIDTem;
 
-		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
-
 		if( GetConnectionState() != ConnectionState::DISCONNECTED)
 		{
 			if (GetNetIOHandler() != nullptr)
 				GetNetIOHandler()->PendingRecv();
 		}
 
-		// connect/disconnect process
-		msgIDTem.ID = PACKET_NETCTRL_NONE;
-		switch (GetConnectionState())
-		{
-		case ConnectionState::CONNECTING:
-			if( (ulTimeCur-m_ulNetCtrlTime) > DurationMS(GetConnectingTimeOut()) ) // connection time out
-			{
-				SFLog(Net, Info, "Connecting Timeout CID:{0}", GetCID() );
-				netChk( CloseConnection("Connecting timeout") );
-			}
-
-			goto Proc_End;
-			break;
-		case ConnectionState::DISCONNECTING:
-			if( (ulTimeCur-m_ulNetCtrlTime) > DurationMS(Const::DISCONNECT_TIMEOUT) ) // connection time out
-			{
-				SFLog(Net, Info, "Disconnecting Timeout CID:{0}", GetCID() );
-				netChk( CloseConnection("Disconnecting") );
-			}
-
-			m_ulNetCtrlTryTime = ulTimeCur;
-			goto Proc_End;
-			break;
-		case ConnectionState::CONNECTED:
-			if(Util::TimeSince(m_ulNetCtrlTime) > Const::HEARTBEAT_TIMEOUT ) // connection time out
-			{
-				SFLog(Net, Info, "Connection Timeout CID:{0}", GetCID() );
-
-				netChk( CloseConnection("heartbeat timeout") );
-				m_ulNetCtrlTime = ulTimeCur;
-				goto Proc_End;
-			}
-			break;
-		default:
-			break;
-		};
-
-
-	Proc_End:
-
-
-		return hr;
+		return super::TickUpdate();
 	}
 
 

@@ -327,7 +327,7 @@ namespace SF
             }
             else
             {
-                SFLog(Net, Debug2, "Kafka Enqueued message: {0}, size:{1}", GetTopic(), data.size());
+                //SFLog(Net, Debug, "Kafka Enqueued message: {0}, size:{1}", GetTopic(), data.size());
             }
 
             // TODO:  I might want to do it on specific thread

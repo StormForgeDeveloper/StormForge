@@ -35,6 +35,8 @@ namespace Net {
 	{
 	public:
 
+		using super = ConnectionUDPBase;
+
 	protected:
 
 		ConnectionMessageAction_MUDPHandleAck m_HandleAck;
@@ -208,6 +210,7 @@ namespace Net {
 		ConnectionStateAction_SendConnect m_SendConnect;
 		ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
 		ConnectionStateAction_SendHeartbeat m_SendHeartbeat;
+		ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
 		ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
 		ConnectionStateAction_SendSync m_ActSendSync;

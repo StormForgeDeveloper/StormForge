@@ -323,6 +323,8 @@ namespace Net {
 		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
 		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
 		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartbeat);
+		
+		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
 
 		AddStateAction(ConnectionState::CONNECTED, &m_ActSendSync);

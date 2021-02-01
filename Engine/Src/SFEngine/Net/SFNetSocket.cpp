@@ -480,7 +480,7 @@ namespace Net {
 		IncPendingRecvCount();
 
 		hr = Recv(pRecvBuffer);
-		if (!(hr) && hr != Result(ResultCode::IO_IO_PENDING) && hr != Result(ResultCode::IO_TRY_AGAIN))
+		if (!hr && hr != ResultCode::IO_IO_PENDING && hr != ResultCode::IO_TRY_AGAIN)
 		{
 			SFLog(Net, Debug3, "Pending Recv failed, CID:{0}, pending:{1}, hr:{2}", GetUserSocketID(), GetPendingRecvCount(), hr);
 			//Assert(false);

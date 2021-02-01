@@ -98,7 +98,7 @@ namespace SF {
 
 		protected:
 
-
+			virtual Result SendPending(uint uiCtrlCode, uint uiSequence, Message::MessageID returnMsgID, uint64_t UID = 0) override;
 			virtual Result SendRaw(SharedPointerT<Message::MessageData>& pMsg) override;
 
 		public:
@@ -169,6 +169,10 @@ namespace SF {
 
 		class ConnectionTCPClient : public ConnectionTCP
 		{
+		public:
+
+			using super = ConnectionTCP;
+
 		private:
 
 			ConnectionMessageAction_HandleTimeSyncRtn m_HandleTimeSyncRtn;
@@ -176,6 +180,7 @@ namespace SF {
 			ConnectionStateAction_SendConnect m_SendConnect;
 			ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
 			ConnectionStateAction_SendHeartbeat m_SendHeartbeat;
+			ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
 			ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
 
@@ -200,9 +205,14 @@ namespace SF {
 
 		class ConnectionTCPServer : public ConnectionTCP
 		{
+		public:
+
+			using super = ConnectionTCP;
+
 		private:
 			ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
 			ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
+			ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
 			ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
 		public:

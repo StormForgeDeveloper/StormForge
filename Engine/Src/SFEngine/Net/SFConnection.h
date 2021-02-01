@@ -121,7 +121,7 @@ namespace Net {
 		TimeStampMS m_ulNetCtrlTryTime;
 
 		// Net control actions
-		ConnectionMessageAction* m_NetCtrlAction[(int)NetCtrlIDs::NetCtrlCode_Max];
+		ConnectionMessageAction* m_NetCtrlAction[(int)NetCtrlIDs::NetCtrlCode_Max]{};
 
 		// Update Tick actions
 		// Connection actions by state
@@ -261,6 +261,7 @@ namespace Net {
 		void UpdateNetCtrlTime();
 		void UpdateNetCtrlTryTime();
 
+		// Deprecated, use delegate function
 		IConnectionEventHandler* GetEventHandler();
 
 		// Connection event handler
@@ -391,7 +392,7 @@ namespace Net {
 		//
 
 		// Update net control, process connection heart bit, ... etc
-		virtual Result TickUpdate() = 0;
+		virtual Result TickUpdate();
 
 		// Update send queue, Reliable UDP
 		virtual Result UpdateSendQueue() { return ResultCode::SUCCESS; }
@@ -406,7 +407,7 @@ namespace Net {
 		//	Event delegates
 		//
 
-		EventFireMode m_DelegateFireMode = EventFireMode::Immediate;
+		EventFireMode m_DelegateFireMode = EventFireMode::OnGameTick;
 
 		ConnectionEventDeletates m_ConnectionEventDelegates;
 		NetSyncMessageDelegates m_NetSyncMessageDelegates;

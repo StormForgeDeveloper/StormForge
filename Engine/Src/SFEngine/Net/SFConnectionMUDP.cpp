@@ -410,14 +410,8 @@ namespace Net {
 
 		MutexScopeLock scopeLock(GetUpdateLock());
 
-		hr = ProcConnectionStateAction();
-		if( !(hr) )
-		{
-			SFLog(Net, Info, "Process Connection state failed {0:X8}", hr );
-		}
+		hr = super::TickUpdate();
 
-
-	//Proc_End:
 
 		SendFlush();
 

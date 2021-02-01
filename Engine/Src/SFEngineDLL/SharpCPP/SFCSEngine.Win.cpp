@@ -56,6 +56,8 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	SF::Log::Net.ChannelMask.Error = 1;
 	SF::Log::Net.ChannelMask.Assert = 1;
 	SF::Log::Net.ChannelMask.Debug1 = 1;
+	SF::Log::Net.ChannelMask.Debug2 = 1;
+	SF::Log::Net.ChannelMask.Debug3 = 1;
 	logOutputMask.Custom1 = 1;
 	logOutputMask.Custom2 = 1;
 	logOutputMask.Custom3 = 1;
@@ -67,8 +69,10 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	logOutputMask.Custom9 = 1;
 	logOutputMask.Custom10 = 1;
 	logOutputMask.Debug1 = 1;
-	logOutputMask.Debug2 = 0;
-	logOutputMask.Debug3 = 0;
+	logOutputMask.Debug2 = 1;
+	logOutputMask.Debug3 = 1;
+	logOutputMask.Debug4 = 1;
+	logOutputMask.Debug5 = 1;
 #else
 
 	SF::Log::Net.ChannelMask.Info = 1;
@@ -89,6 +93,8 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	logOutputMask.Debug1 = 0;
 	logOutputMask.Debug2 = 0;
 	logOutputMask.Debug3 = 0;
+	logOutputMask.Debug4 = 0;
+	logOutputMask.Debug5 = 0;
 #endif
 	initParam.EnableMemoryLeakDetection = false;
 

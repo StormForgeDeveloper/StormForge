@@ -143,6 +143,7 @@ namespace Net {
 	//	IConnectionEventHandler Interface
 	//
 
+	// Deprecated, use delegate function
 	class IConnectionEventHandler
 	{
 	public:
