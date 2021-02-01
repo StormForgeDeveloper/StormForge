@@ -40,8 +40,20 @@ namespace Net {
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
 	};
 
+	class ConnectionMessageAction_HandleAck : public ConnectionMessageAction
+	{
+	public:
+		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+	};
+
 
 	class ConnectionMessageAction_MUDPHandleNack : public ConnectionMessageAction
+	{
+	public:
+		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+	};
+
+	class ConnectionMessageAction_HandleNack : public ConnectionMessageAction
 	{
 	public:
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
@@ -88,8 +100,14 @@ namespace Net {
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
 	};
 
+	class ConnectionMessageAction_HandleConnect : public ConnectionMessageAction
+	{
+	public:
+		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+	};
 
-	class ConnectionMessageAction_UDPHandleDisconnect : public ConnectionMessageAction
+
+	class ConnectionMessageAction_HandleDisconnect : public ConnectionMessageAction
 	{
 	public:
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;

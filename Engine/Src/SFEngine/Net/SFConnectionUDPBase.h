@@ -65,8 +65,6 @@ namespace Net {
 
 	protected:
 		
-		// Process network control message
-		virtual Result ProcNetCtrl( const MsgNetCtrl* pNetCtrl ) = 0;
 
 
 		CriticalSection& GetUpdateLock() { return m_UpdateLock; }

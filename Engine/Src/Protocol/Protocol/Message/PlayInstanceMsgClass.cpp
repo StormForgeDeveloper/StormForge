@@ -43,6 +43,7 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_PlayInstanceID);
 				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_PlayerIdentifier, ArrayLen));
 
 				return hr;
@@ -1125,6 +1126,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Ticket);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
 
 				return hr;
@@ -1222,6 +1224,7 @@ namespace SF
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_StreamServerAddr);
 				protocolCheck(*input >> m_StreamServerAddrIPV4);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_StreamUID, ArrayLen));
 
 				return hr;
@@ -1324,6 +1327,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Ticket);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
 
 				return hr;
@@ -1421,6 +1425,7 @@ namespace SF
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_StreamServerAddr);
 				protocolCheck(*input >> m_StreamServerAddrIPV4);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_StreamUID, ArrayLen));
 
 				return hr;
@@ -1523,6 +1528,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Ticket);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_StreamName, ArrayLen));
 
 				return hr;

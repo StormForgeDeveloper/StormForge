@@ -328,6 +328,37 @@ namespace SF {
 			actionListForState.push_back(action);
 		}
 
+		// Process network control message
+		Result Connection::ProcNetCtrl(const MsgNetCtrl* pNetCtrl)
+		{
+			//assert(ThisThread::GetThreadID() == GetRunningThreadID());
+
+			Result hr = ResultCode::SUCCESS;
+			ConnectionMessageAction* pAction = nullptr;
+
+			if (pNetCtrl->msgID.IDs.Mobile == 1 || pNetCtrl->Length < sizeof(MsgNetCtrl))
+			{
+				SFLog(Net, Info, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
+				netCheck(Disconnect("Invalid packet"));
+				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
+			}
+
+			pAction = m_NetCtrlAction[pNetCtrl->msgID.IDs.MsgCode];
+			if (pAction != nullptr)
+			{
+				return pAction->Run(pNetCtrl);
+			}
+			else
+			{
+				// Not handle or invalid
+				SFLog(Net, Warning, "HackWarn : Not handled or Invalid net control packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
+				netCheck(CloseConnection("Invalid net ctrl action"));
+				netCheck(ResultCode::UNEXPECTED);
+			}
+
+			return hr;
+		}
+
 
 		// Initialize connection
 		Result Connection::InitConnection(const PeerInfo& local, const PeerInfo& remote)

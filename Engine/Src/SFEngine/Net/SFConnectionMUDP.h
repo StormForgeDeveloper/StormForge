@@ -44,7 +44,7 @@ namespace Net {
 		ConnectionMessageAction_HandleHeartbeat m_HandleHeartbeat;
 		ConnectionMessageAction_HandleTimeSync m_HandleTimeSync;
 		ConnectionMessageAction_MUDPHandleConnect m_HandleConnect;
-		ConnectionMessageAction_UDPHandleDisconnect m_HandleDisconnect;
+		ConnectionMessageAction_HandleDisconnect m_HandleDisconnect;
 
 		ConnectionStateAction_SendReliableQueue m_ActSendReliableQueue;
 		ConnectionStateAction_SendReliableRetry m_ActSendReliableRetry;

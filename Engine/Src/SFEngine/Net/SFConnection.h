@@ -31,8 +31,6 @@ namespace Net {
 
 
 
-
-
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Network connection base class
@@ -88,7 +86,7 @@ namespace Net {
 		// Event queue
 		CircularPageQueueAtomic<uint64_t>	m_EventQueue;
 
-		// heart bit time
+		// heartbeat time
 		DurationMS	m_ulHeartbeatTry;
 		DurationMS	m_ulConnectingTimeOut;
 
@@ -160,6 +158,8 @@ namespace Net {
 
 		void SetNetIOHandler(SocketIO* pValue) { m_IOHandler = pValue; }
 
+		// Process network control message
+		virtual Result ProcNetCtrl(const MsgNetCtrl* pNetCtrl);
 
 	public:
 
@@ -245,7 +245,7 @@ namespace Net {
 		// Sequence generation
 		inline uint16_t NewSeqNone();
 
-		// Heart bit time
+		// heartbeat time
 		DurationMS GetHeartbeatTry();
 		void SetHeartbeatTry(DurationMS ulHeartbeatTry);
 
@@ -391,7 +391,7 @@ namespace Net {
 		//	Overridable
 		//
 
-		// Update net control, process connection heart bit, ... etc
+		// Update net control, process connection heartbeat, ... etc
 		virtual Result TickUpdate();
 
 		// Update send queue, Reliable UDP

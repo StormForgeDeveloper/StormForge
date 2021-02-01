@@ -42,7 +42,9 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_GameID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ID, ArrayLen));
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_Password, ArrayLen));
 
 				return hr;
@@ -254,8 +256,11 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_GameID);
 				protocolCheck(*input >> m_UID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_FaceBookName, ArrayLen));
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_EMail, ArrayLen));
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_FacebookToken, ArrayLen));
 
 				return hr;
@@ -472,6 +477,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_GameID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_CellPhone, ArrayLen));
 
 				return hr;
@@ -1343,6 +1349,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_FileName, ArrayLen));
 
 				return hr;

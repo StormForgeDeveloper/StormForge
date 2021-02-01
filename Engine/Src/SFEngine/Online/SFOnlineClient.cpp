@@ -94,16 +94,6 @@ namespace SF
 				});
 
 
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection*, const Net::ConnectionEvent& evt)
-				{
-					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
-					{
-						Disconnect();
-						SetOnlineState(OnlineState::Disconnected);
-						SetResult(ResultCode::IO_DISCONNECTED);
-					}
-				});
-
 
 			SetOnlineState(OnlineState::ConnectingToLogin);
 
@@ -149,6 +139,13 @@ namespace SF
 					SetOnlineState(OnlineState::Disconnected);
 				}
 			}
+			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+			{
+				Disconnect();
+				SetOnlineState(OnlineState::Disconnected);
+				SetResult(ResultCode::IO_DISCONNECTED);
+			}
+
 		}
 
 		void OnLoginRes(SharedPointerT<Message::MessageData>& pMsgData)
@@ -241,16 +238,6 @@ namespace SF
 				});
 
 
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection*, const Net::ConnectionEvent& evt)
-				{
-					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
-					{
-						Disconnect();
-						SetOnlineState(OnlineState::Disconnected);
-						SetResult(ResultCode::IO_DISCONNECTED);
-					}
-				});
-
 			SetOnlineState(OnlineState::ConnectingToGameServer);
 			auto authTicket = 0;
 			auto result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, m_Owner.GetGameAddress4(), 0));
@@ -291,6 +278,12 @@ namespace SF
 					GetConnection()->Disconnect("JoinGameServer failed");
 					Disconnect();
 				}
+			}
+			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+			{
+				Disconnect();
+				SetOnlineState(OnlineState::Disconnected);
+				SetResult(ResultCode::IO_DISCONNECTED);
 			}
 		}
 
@@ -386,17 +379,6 @@ namespace SF
 					OnJoinGameInstanceRes(pMsgData);
 				});
 
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this), [this](Net::Connection*, const Net::ConnectionEvent& evt)
-				{
-					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
-					{
-						Disconnect();
-						SetOnlineState(OnlineState::InGameServer);
-						SetResult(ResultCode::IO_DISCONNECTED);
-					}
-
-				});
-
 
 			SetOnlineState(OnlineState::InGameJoiningGameInstance);
 			Policy::NetPolicyGame policy(m_Owner.GetConnectionGame());
@@ -436,6 +418,12 @@ namespace SF
 					SetOnlineState(OnlineState::InGameServer);
 				}
 				SetResult(evt.Components.hr);
+			}
+			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+			{
+				Disconnect();
+				SetOnlineState(OnlineState::InGameServer);
+				SetResult(ResultCode::IO_DISCONNECTED);
 			}
 		}
 

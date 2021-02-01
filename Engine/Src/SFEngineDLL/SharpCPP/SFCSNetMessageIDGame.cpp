@@ -19,7 +19,7 @@
 using namespace SF;
 
 
-// C2S: Client heart bit
+// C2S: Client heartbeat
 SFDLL_EXPORT int  CSSFNetMessageID_GameHeartbeatC2SEvt()
 {
  	return SF::Message::Game::HeartbeatC2SEvt::MID.IDSeq.MsgID;

@@ -3,7 +3,7 @@
 	<ProtocolGroup Name="Game" GenParameterContext="true" IsMobile="true" GenCSharp="true" Desc="Game Server Protocol. Interface the game client can call to the server.">
     <!-- ===================================================  Login ========================================================= -->
 
-		<C2SEvent Name="Heartbeat" Reliable="true" Crypto="No" Trace="Debug1" Desc="Client heart bit">
+		<C2SEvent Name="Heartbeat" Reliable="true" Crypto="No" Trace="Debug1" Desc="Client heartbeat">
 		</C2SEvent>
 
 		<Command Name="JoinGameServer" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player connected from a login server and moved to game server">

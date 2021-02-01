@@ -96,6 +96,14 @@ namespace SF {
 			// Flag indicating whether TCP socket layer connection has been established.
 			bool m_IsTCPSocketConnectionEstablished;
 
+
+			ConnectionMessageAction_HandleAck m_HandleAck;
+			ConnectionMessageAction_HandleNack m_HandleNack;
+			ConnectionMessageAction_HandleHeartbeat m_HandleHeartbeat;
+			ConnectionMessageAction_HandleTimeSync m_HandleTimeSync;
+			ConnectionMessageAction_HandleConnect m_HandleConnect;
+			ConnectionMessageAction_HandleDisconnect m_HandleDisconnect;
+
 		protected:
 
 			virtual Result SendPending(uint uiCtrlCode, uint uiSequence, Message::MessageID returnMsgID, uint64_t UID = 0) override;
@@ -115,9 +123,6 @@ namespace SF {
 			bool GetIsIORegistered() const { return m_NetIOAdapter.GetIsIORegistered(); }
 
 			IOBUFFER_READ* GetRecvBuffer() { return &m_RecvBuffer; }
-
-			// Process network control message
-			Result ProcNetCtrl(const MsgNetCtrl* pNetCtrl);
 
 			SockFamily GetSocketFamily() const { return GetLocalInfo().PeerAddress.SocketFamily; }
 
@@ -220,7 +225,7 @@ namespace SF {
 			ConnectionTCPServer(IHeap& heap);
 			~ConnectionTCPServer();
 
-			// Update net control, process connection heart bit, ... etc
+			// Update net control, process connection heartbeat, ... etc
 			virtual Result TickUpdate() override;
 
 		};
@@ -245,7 +250,7 @@ namespace SF {
 
 			virtual void OnConnectionResult(Result hrConnect) override;
 
-			// Update net control, process connection heart bit, ... etc
+			// Update net control, process connection heartbeat, ... etc
 			virtual Result TickUpdate() override;
 
 		};

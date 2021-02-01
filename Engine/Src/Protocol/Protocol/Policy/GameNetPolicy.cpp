@@ -23,7 +23,7 @@ namespace SF
 {
  	namespace Policy
 	{
- 		// C2S: Client heart bit
+ 		// C2S: Client heartbeat
 		Result NetPolicyGame::HeartbeatC2SEvt(  )
 		{
  			ScopeContext hr;

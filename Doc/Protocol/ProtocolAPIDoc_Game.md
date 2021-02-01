@@ -15,7 +15,7 @@ namespace SF::Message::Game
 
 # Protocol interface class NetPolicyGame
 ## HeartbeatC2SEvt
-Client heart bit
+Client heartbeat
 
         Result HeartbeatC2SEvt()
 

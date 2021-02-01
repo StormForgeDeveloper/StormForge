@@ -25,7 +25,7 @@ namespace SF
 	{
  		namespace Game
 		{
- 			// C2S: Client heart bit
+ 			// C2S: Client heartbeat
 			const MessageID HeartbeatC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 0);
 			Result HeartbeatC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
@@ -213,6 +213,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_NickName, ArrayLen));
 				protocolCheck(*input >> m_GameUID);
 				protocolCheck(*input >> m_PartyUID);
@@ -412,6 +413,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ComplitionState, ArrayLen));
 
 				return hr;
@@ -507,6 +509,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ComplitionState, ArrayLen));
 
 				return hr;
@@ -690,6 +693,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_GCMRegisteredID, ArrayLen));
 
 				return hr;
@@ -873,6 +877,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_GCMRegisteredID, ArrayLen));
 
 				return hr;
@@ -2743,6 +2748,7 @@ namespace SF
 				protocolCheck(*input >> m_NotificationType);
 				protocolCheck(*input >> m_MessageParam0);
 				protocolCheck(*input >> m_MessageParam1);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_MessageText, ArrayLen));
 				protocolCheck(*input >> m_IsRead);
 				protocolCheck(*input >> m_TimeStamp);
@@ -2852,6 +2858,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_PlayerEMail, ArrayLen));
 
 				return hr;
@@ -4276,6 +4283,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_NickName, ArrayLen));
 				protocolCheck(*input >> m_IsCostFree);
 
@@ -5786,6 +5794,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_InviterID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_InviterName, ArrayLen));
 				protocolCheck(*input >> m_PartyToJoinUID);
 
@@ -6157,6 +6166,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ChatMessage, ArrayLen));
 
 				return hr;
@@ -6340,7 +6350,9 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_SenderID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_SenderName, ArrayLen));
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ChatMessage, ArrayLen));
 
 				return hr;
@@ -6814,6 +6826,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_SearchKeyword, ArrayLen));
 
 				return hr;
@@ -8440,6 +8453,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ChatMessage, ArrayLen));
 				protocolCheck(*input >> m_Role);
 
@@ -8628,7 +8642,9 @@ namespace SF
 
 				protocolCheck(*input >> m_SenderID);
 				protocolCheck(*input >> m_Role);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_SenderName, ArrayLen));
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ChatMessage, ArrayLen));
 
 				return hr;
@@ -11787,6 +11803,7 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_ShopItemID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_PurchaseID, ArrayLen));
 
 				return hr;
@@ -11886,8 +11903,11 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_ShopItemID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_Platform, ArrayLen));
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_PackageName, ArrayLen));
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_PurchaseTransactionID, ArrayLen));
 				protocolCheck(input->Read(ArrayLen));
 				uint8_t* PurchaseTokenPtr = nullptr;
@@ -12092,7 +12112,9 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ChannelName, ArrayLen));
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_Passcode, ArrayLen));
 
 				return hr;
@@ -13225,6 +13247,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_ChatUID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ChatMessage, ArrayLen));
 
 				return hr;
@@ -13411,7 +13434,9 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_SenderID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_SenderName, ArrayLen));
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ChatMessage, ArrayLen));
 
 				return hr;
@@ -13517,6 +13542,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_CharacterName, ArrayLen));
 				protocolCheck(input->Read(ArrayLen));
 				uint8_t* AttributesPtr = nullptr;

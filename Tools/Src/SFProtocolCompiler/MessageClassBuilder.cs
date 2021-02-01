@@ -524,6 +524,7 @@ namespace ProtocolCompiler
                     }
                     else if (IsStrType(param))
                     {
+                        MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
                         MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink(m_{0}, ArrayLen));", param.Name);
                     }
                     else if (IsVariableSizeType(param.Type))

@@ -256,6 +256,14 @@ namespace Net {
 		SetHeartbeatTry(Const::TCP_HEARTBEAT_START_TIME);
 
 		m_NetIOAdapter.SetWriteQueue(new(GetHeap()) WriteBufferQueue(GetHeap()));
+
+		SetNetCtrlAction(NetCtrlCode_Ack, &m_HandleAck);
+		SetNetCtrlAction(NetCtrlCode_Nack, &m_HandleNack);
+		SetNetCtrlAction(NetCtrlCode_Heartbeat, &m_HandleHeartbeat);
+		SetNetCtrlAction(NetCtrlCode_TimeSync, &m_HandleTimeSync);
+		SetNetCtrlAction(NetCtrlCode_Connect, &m_HandleConnect);
+		SetNetCtrlAction(NetCtrlCode_Disconnect, &m_HandleDisconnect);
+
 	}
 
 	ConnectionTCP::~ConnectionTCP()
@@ -284,131 +292,6 @@ namespace Net {
 		super::Dispose();
 
 		m_NetIOAdapter.CloseSocket();
-	}
-
-
-	// Process network control message
-	Result ConnectionTCP::ProcNetCtrl(const MsgNetCtrl* pNetCtrl)
-	{
-		Result hr = ResultCode::SUCCESS;
-
-		switch (pNetCtrl->msgID.IDs.MsgCode)
-		{
-		case NetCtrlCode_Ack:
-			if (pNetCtrl->rtnMsgID.IDs.Type == Message::MSGTYPE_NETCONTROL)
-			{
-				switch (pNetCtrl->rtnMsgID.IDs.MsgCode)
-				{
-				case NetCtrlCode_Disconnect:
-					if (GetConnectionState() != ConnectionState::DISCONNECTED)
-						netChk(CloseConnection("Disconnect ack"));
-					break;
-				case NetCtrlCode_Heartbeat:
-					m_ulNetCtrlTime = Util::Time.GetTimeMs();
-					break;
-				case NetCtrlCode_Connect:
-					if (GetConnectionState() == ConnectionState::CONNECTING)
-					{
-						Assert(pNetCtrl->Length == sizeof(MsgNetCtrlConnect));
-						auto pConnectCtrl = ((MsgNetCtrlConnect*)pNetCtrl);
-						GetRemoteInfo().SetInfo(pConnectCtrl->Peer.PeerClass, pConnectCtrl->Peer.PeerAddress, pConnectCtrl->Peer.PeerID);
-						OnConnectionResult(ResultCode::SUCCESS);
-					}
-					break;
-				};
-			}
-			else
-			{
-				// Remove from Guranted queue
-				if (pNetCtrl->rtnMsgID.IDs.Reliability)
-				{
-					m_lGuarantedAck.fetch_add(1, std::memory_order_relaxed);
-				}
-			}
-
-			break;
-		case NetCtrlCode_Nack:
-			if (pNetCtrl->rtnMsgID.IDs.Type == Message::MSGTYPE_NETCONTROL)// connecting process
-			{
-				switch (pNetCtrl->rtnMsgID.IDs.MsgCode)
-				{
-				case NetCtrlCode_Disconnect:
-					break;
-				case NetCtrlCode_Connect:
-					// Protocol version mismatch
-					OnConnectionResult(ResultCode::IO_PROTOCOL_VERSION_MISMATCH);
-					netChk(Disconnect("Protocol mismatch"));
-					break;
-				case NetCtrlCode_Heartbeat:
-					break;
-				default:
-					break;
-				};
-			}
-			break;
-		case NetCtrlCode_Heartbeat:
-			m_ulNetCtrlTime = Util::Time.GetTimeMs();
-			netChk(SendNetCtrl(PACKET_NETCTRL_ACK, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID));
-			break;
-		case NetCtrlCode_Connect:
-		{
-			m_ulNetCtrlTime = Util::Time.GetTimeMs();
-
-			if (pNetCtrl->Length < sizeof(MsgNetCtrlConnect))
-			{
-				SFLog(Net, Warning, "HackWarn : Invalid Connect packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
-				netChk(CloseConnection("Invalid packet size during connect"));
-				netErr(ResultCode::UNEXPECTED);
-			}
-
-			if (GetConnectionState() == ConnectionState::CONNECTING || GetConnectionState() == ConnectionState::CONNECTED)// ServerTCP connection will occure this case
-			{
-				const MsgNetCtrlConnect *pNetCtrlCon = (const MsgNetCtrlConnect*)pNetCtrl;
-				uint recvProtocolVersion = pNetCtrl->rtnMsgID.ID;
-
-				if (recvProtocolVersion != SF_PROTOCOL_VERSION)
-				{
-					netChk(SendNetCtrl(PACKET_NETCTRL_NACK, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID));
-					if (GetConnectionState() != ConnectionState::CONNECTED)
-						OnConnectionResult(ResultCode::IO_PROTOCOL_VERSION_MISMATCH);
-					netChk(Disconnect("Protocol mismatch"));
-				}
-				else if (GetRemoteInfo().PeerClass != NetClass::Unknown && pNetCtrlCon->Peer.PeerClass != GetRemoteInfo().PeerClass)
-				{
-					netChk(SendNetCtrl(PACKET_NETCTRL_NACK, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID));
-					if (GetConnectionState() != ConnectionState::CONNECTED)
-						OnConnectionResult(ResultCode::IO_INVALID_NETCLASS);
-					netChk(Disconnect("Invalid netclass"));
-				}
-				else
-				{
-					Assert(GetLocalInfo().PeerClass != NetClass::Unknown);
-					netChk(SendNetCtrl(PACKET_NETCTRL_ACK, (uint)GetLocalInfo().PeerClass, pNetCtrl->msgID, GetLocalInfo().PeerID));
-					if (GetConnectionState() != ConnectionState::CONNECTED)
-					{
-						GetRemoteInfo().SetInfo(pNetCtrlCon->Peer.PeerClass, pNetCtrlCon->Peer.PeerAddress, pNetCtrlCon->Peer.PeerID);
-						OnConnectionResult(ResultCode::SUCCESS);
-					}
-				}
-			}
-			break;
-		}
-		case NetCtrlCode_Disconnect:
-			netChk(SendNetCtrl(PACKET_NETCTRL_ACK, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID));
-			netChk(SendNetCtrl(PACKET_NETCTRL_DISCONNECT, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID));
-			netChk(CloseConnection("Disconnect received"));
-			break;
-		default:
-			SFLog(Net, Warning, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
-			netChk(CloseConnection("Invalid net ctrl packet"));
-			netErr(ResultCode::UNEXPECTED);
-			break;
-		};
-
-
-	Proc_End:
-
-		return hr;
 	}
 
 
@@ -566,20 +449,16 @@ namespace Net {
 
 		m_NetIOAdapter.CloseSocket();
 
-		netChk(Connection::CloseConnection(reason) );
+		netCheck(Connection::CloseConnection(reason));
 
 		if (GetConnectionState() == ConnectionState::DISCONNECTED)
-			goto Proc_End;
-		
-
-	Proc_End:
+			return hr;
 
 		return hr;
 	}
 
 
-
-	// called when incoming message occure
+	// called when incoming message occur
 	Result ConnectionTCP::OnRecv( uint uiBuffSize, const uint8_t* pBuff )
 	{
 		Result hr = ResultCode::SUCCESS;
@@ -716,27 +595,20 @@ namespace Net {
 
 		if( pMsgHeader->msgID.IDs.Type == Message::MSGTYPE_NETCONTROL )
 		{
-			SFLog(Net, Debug2, "TCP Ctrl Recv ip:{0}, msg:{1}, Len:%2%",
+			SFLog(Net, Debug2, "TCP Ctrl Recv ip:{0}, msg:{1}, Len:{2}",
 				GetRemoteInfo().PeerAddress, 
 				pMsgHeader->msgID, pMsgHeader->Length );
 
-			netChk( ProcNetCtrl( (MsgNetCtrl*)pMsgHeader ) );
+			netCheck( ProcNetCtrl( (MsgNetCtrl*)pMsgHeader ) );
 		}
 		else
 		{
-			netChk( pMsg->ValidateChecksumNDecrypt() );
-
-			if( pMsgHeader->msgID.IDs.Reliability )
-			{
-				SendNetCtrl(PACKET_NETCTRL_ACK, pMsgHeader->msgID.IDSeq.Sequence, pMsgHeader->msgID);
-			}
+			netCheck( pMsg->ValidateChecksumNDecrypt() );
 
 			hr  = Connection::OnRecv( pMsg );
 			pMsg = nullptr;
-			netChk( hr );
+			netCheck( hr );
 		}
-
-	Proc_End:
 
 		pMsg = nullptr;
 

@@ -28,7 +28,7 @@ namespace SF.Net
 		#else
 		    "SFEngineDLL";
 		#endif
-		// C2S: Client heart bit
+		// C2S: Client heartbeat
 		public static int HeartbeatC2SEvt { get { return CSSFNetMessageID_GameHeartbeatC2SEvt(); } }
 
 		// Cmd: Player connected from a login server and moved to game server
@@ -485,7 +485,7 @@ namespace SF.Net
 
 
 		#region Native Interfaces 
-		// C2S: Client heart bit
+		// C2S: Client heartbeat
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameHeartbeatC2SEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameHeartbeatC2SEvt();
 

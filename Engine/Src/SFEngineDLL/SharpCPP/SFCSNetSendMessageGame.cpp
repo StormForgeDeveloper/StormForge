@@ -19,7 +19,7 @@
 using namespace SF;
 
 
-// C2S: Client heart bit
+// C2S: Client heartbeat
 SFDLL_EXPORT int  CSSFNetAdapter_GameHeartbeatC2SEvt( intptr_t InNativeConnectionHandle )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);

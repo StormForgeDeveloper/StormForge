@@ -141,8 +141,8 @@ namespace Net {
 		if (pNetCtrl->msgID.IDs.Mobile == 0 || pNetCtrl->Length < sizeof(MsgMobileNetCtrl))
 		{
 			SFLog(Net, Info, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
-			netChk(Disconnect("Invalid packet"));
-			netErr(ResultCode::IO_BADPACKET_NOTEXPECTED);
+			netCheck(Disconnect("Invalid packet"));
+			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 		}
 
 		pAction = m_NetCtrlAction[pNetCtrl->msgID.IDs.MsgCode];
@@ -154,13 +154,9 @@ namespace Net {
 		{
 			// Not handle or invalid
 			SFLog(Net, Warning, "HackWarn : Not handled or Invalid net control packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
-			netChk(CloseConnection("Invalid net ctrl action"));
-			netErr(ResultCode::UNEXPECTED);
+			netCheck(CloseConnection("Invalid net ctrl action"));
+			netCheck(ResultCode::UNEXPECTED);
 		}
-
-
-	Proc_End:
-
 
 		return hr;
 	}

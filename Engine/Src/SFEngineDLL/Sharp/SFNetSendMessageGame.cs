@@ -37,7 +37,7 @@ namespace SF.Net
  			m_Connection = connection;
 		} // public  SendMessageGame( SF.SFConnection connection )
 
-		// C2S: Client heart bit
+		// C2S: Client heartbeat
 		public int  HeartbeatC2SEvt(  )
 		{
  			int result;
@@ -691,7 +691,7 @@ namespace SF.Net
 		} // public int  SetPresetGameConfigIDCmd( System.UInt64 InTransactionID, System.UInt32 InPresetID )
 
 		#region Native Interfaces 
-		// C2S: Client heart bit
+		// C2S: Client heartbeat
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameHeartbeatC2SEvt", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameHeartbeatC2SEvt(System.IntPtr InNativeConnectionHandle );
 

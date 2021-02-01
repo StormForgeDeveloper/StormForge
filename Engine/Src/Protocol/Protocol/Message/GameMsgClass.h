@@ -25,7 +25,7 @@ namespace SF
 	{
  		namespace Game
 		{
- 			// C2S: Client heart bit
+ 			// C2S: Client heartbeat
 			class HeartbeatC2SEvt : public MessageBase
 			{
  			public:
