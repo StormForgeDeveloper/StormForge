@@ -487,15 +487,12 @@ namespace Net {
 			// Failed, release pending flag
 			pRecvBuffer->SetPendingFalse();
 			DecPendingRecvCount();
+			delete pRecvBuffer;
 		}
 		else
 		{
-			pRecvBuffer = nullptr;
 			SFLog(Net, Debug3, "Pending Recv CID:{0}, pending:{1}, hr:{2:X8}", GetUserSocketID(), GetPendingRecvCount(), hr);
 		}
-
-
-		IHeap::Delete(pRecvBuffer);
 
 		return hr;
 	}

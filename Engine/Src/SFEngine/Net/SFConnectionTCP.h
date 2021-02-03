@@ -157,13 +157,15 @@ namespace SF {
 			// Send message to connected entity
 			virtual Result Send(SharedPointerT<Message::MessageData>& pMsg) override;
 
-			virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID = 0) override;
-
 
 			// Update send queue, Reliable UDP
 			//virtual Result UpdateSendQueue() override;
 			// Update Send buffer Queue, TCP and UDP client connection
 			virtual Result UpdateSendBufferQueue() override;
+
+			// Update net control, process connection heartbeat, ... etc
+			virtual Result TickUpdate() override;
+
 		};
 
 
@@ -197,9 +199,6 @@ namespace SF {
 			// Initialize connection
 			virtual Result InitConnection(const PeerInfo& local, const PeerInfo& remote) override;
 
-			// Update net control, process connection heartbeat, ... etc
-			virtual Result TickUpdate() override;
-
 		};
 
 
@@ -225,9 +224,6 @@ namespace SF {
 			ConnectionTCPServer(IHeap& heap);
 			~ConnectionTCPServer();
 
-			// Update net control, process connection heartbeat, ... etc
-			virtual Result TickUpdate() override;
-
 		};
 
 
@@ -241,7 +237,15 @@ namespace SF {
 		{
 		public:
 
+			using super = ConnectionTCP;
+
 		private:
+			ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
+			ConnectionStateAction_SendConnect m_SendConnect;
+			ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
+			ConnectionStateAction_SendHeartbeat m_SendHeartbeat;
+			ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
+			ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
 		public:
 			// Constructor

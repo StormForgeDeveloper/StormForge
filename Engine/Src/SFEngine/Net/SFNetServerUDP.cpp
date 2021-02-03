@@ -112,12 +112,11 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 		SF_SOCKET socket = INVALID_SOCKET;
-		//INT iOptValue;
+
 		sockaddr_storage bindAddr;
 
 		if( GetSocket() != INVALID_SOCKET )
 			return ResultCode::SUCCESS;
-
 
 		netChk(ServerNet::HostOpen( netCls, strLocalIP, usLocalPort ) );
 
@@ -144,7 +143,6 @@ namespace Net {
 			if (iOptValue < Const::PACKET_SIZE_MAX)
 			{
 				SFLog(Net, Warning, "Socket max packet size too small, Change to socket maximum SocketMax={0}, SvrMax={1}, err = {2:X8}", iOptValue, (uint)Const::PACKET_SIZE_MAX, GetLastNetSystemResult());
-				//Const::PACKET_SIZE_MAX = iOptValue;
 			}
 		}
 #endif
@@ -200,7 +198,7 @@ namespace Net {
 
 	Proc_End:
 
-		if( !(hr) )
+		if( !hr )
 			HostClose();
 
 		if( socket != INVALID_SOCKET )
@@ -214,17 +212,15 @@ namespace Net {
 	// Close host and close all connections
 	Result ServerUDPBase::HostClose()
 	{
-		Result hr = ResultCode::SUCCESS;
+		ScopeContext hr([this](Result hr) 
+			{
+				SFLog(Net, Info, "HostClose {0}, hr={1:X8}", GetLocalAddress(), hr);
+			});
 
-		netChk(ServerNet::HostClose() );
+		netCheck(ServerNet::HostClose() );
 
 		if(GetSocketIO() != nullptr)
 			GetSocketIO()->CloseSocket();
-
-
-	Proc_End:
-
-		SFLog(Net, Info, "HostClose {0}, hr={1:X8}", GetLocalAddress(), hr );
 
 		return hr;
 	}

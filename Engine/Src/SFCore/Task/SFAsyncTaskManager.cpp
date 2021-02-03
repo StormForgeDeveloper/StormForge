@@ -85,8 +85,6 @@ namespace SF {
 			TaskOperator().Canceled(*pTask);
 		}
 
-		//m_pTaskManager->
-
 		return true;
 	}
 

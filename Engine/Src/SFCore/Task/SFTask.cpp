@@ -86,15 +86,11 @@ namespace SF {
 
 	void Task::NotifyStateChange()
 	{
-		if (m_pNotificationHandler == nullptr)
+		auto pHandler = m_pNotificationHandler.load(MemoryOrder::memory_order_acquire);
+		if (pHandler == nullptr)
 			return;
 
-		m_pNotificationHandler->OnTaskStateChanged(this, GetState(std::memory_order_acquire));
-		//TaskNotification* notification = new(GetEngineHeap()) TaskNotification;
-		//notification->pTask = WeakPointerT<Task>(this);
-		//notification->State = m_TaskState.load(std::memory_order_acquire);
-
-		//m_pNotificationQueue->Enqueue(std::forward<TaskNotification*>(notification));
+		pHandler->OnTaskStateChanged(this, GetState(MemoryOrder::memory_order_acquire));
 	}
 
 	void Task::Requested()

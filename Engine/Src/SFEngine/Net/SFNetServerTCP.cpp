@@ -206,9 +206,7 @@ namespace Net {
 			netErr( ResultCode::FAIL );
 		}
 
-
 		pConn = pConnection;
-
 
 		pConnection->SetConnectingTimeOut( Const::CONNECTION_TIMEOUT );
 
@@ -241,7 +239,7 @@ namespace Net {
 			Service::NetSystem->CloseSocket(acceptedSocket);
 		}
 
-		if( !(hr) )
+		if( !hr )
 		{
 			if( pConn != nullptr )
 			{
@@ -262,9 +260,7 @@ namespace Net {
 
 	}
 
-
-
-	// Enable/Disable new connection acception
+	// Enable/Disable new connection
 	void ServerTCP::SetIsEnableAccept( bool bIsEnable )
 	{
 		ServerNet::SetIsEnableAccept( bIsEnable );
@@ -278,7 +274,6 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 		SF_SOCKET socket = INVALID_SOCKET;
-		//int32_t iOptValue;
 		int bOptValue;
 		sockaddr_storage bindAddr;
 
@@ -313,8 +308,7 @@ namespace Net {
 
 		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::Stream, GetLocalAddress().SocketFamily, socket));
 
-
-		bOptValue = TRUE;
+		bOptValue = 1;
 		if( setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, (char *)&bOptValue, sizeof(bOptValue)) == SOCKET_ERROR )
 		{
 			SFLog(Net, Error, "Failed to change socket option SO_REUSEADDR = {0}, err = {1:X8}", bOptValue, GetLastNetSystemResult() );
@@ -341,7 +335,6 @@ namespace Net {
 		m_MySocketIOAdapter.GetIOFlagsEditable().IsListenSocket = 1;
 		netChk(Service::NetSystem->RegisterSocket(&m_MySocketIOAdapter));
 
-
 		netChk(m_MySocketIOAdapter.PendingAccept() );
 
 	Proc_End:
@@ -357,14 +350,12 @@ namespace Net {
 	// Close host and close all connections
 	Result ServerTCP::HostClose()
 	{
-		Result hr = ResultCode::SUCCESS;
+		ScopeContext hr([this](Result hr)
+			{
+				SFLog(Net, Info, "HostClose {0}, hr={1:X8}", GetLocalAddress(), hr);
+			});
 
-
-		netChk(ServerNet::HostClose() );
-
-	Proc_End:
-
-		SFLog(Net, Info, "HostClose {0}, hr={1:X8}", GetLocalAddress(), hr );
+		netCheck(ServerNet::HostClose() );
 
 		return hr;
 	}

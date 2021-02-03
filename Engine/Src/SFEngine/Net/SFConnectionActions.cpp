@@ -128,9 +128,7 @@ namespace Net {
 				break;
 			case NetCtrlCode_Heartbeat:
 			case NetCtrlCode_SyncReliable:
-				break;
 			case NetCtrlCode_TimeSync:
-
 				break;
 			default:
 				SFLog(Net, Warning, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);

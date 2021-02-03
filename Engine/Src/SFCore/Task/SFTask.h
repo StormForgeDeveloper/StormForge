@@ -105,11 +105,11 @@ namespace SF {
 	private:
 
 		// Task state
-		std::atomic<State> m_TaskState;
+		Atomic<State> m_TaskState;
 
 		// Task notification queue, If assigned
 
-		TaskEventHandler* m_pNotificationHandler = nullptr;
+		Atomic<TaskEventHandler*> m_pNotificationHandler;
 
 	private:
 
@@ -133,8 +133,8 @@ namespace SF {
 		State GetState(std::memory_order memoryOrder = std::memory_order_relaxed) { return m_TaskState.load(memoryOrder); }
 
 		// Event handler
-		TaskEventHandler* GetTaskEventHandler() { return m_pNotificationHandler; }
-		void SetTaskEventHandler(TaskEventHandler* pEventHandler) { m_pNotificationHandler = pEventHandler; }
+		TaskEventHandler* GetTaskEventHandler() { return m_pNotificationHandler.load(MemoryOrder::memory_order_acquire); }
+		void SetTaskEventHandler(TaskEventHandler* pEventHandler) { m_pNotificationHandler.store(pEventHandler, MemoryOrder::memory_order_release); }
 
 		// This call will queue this task to the global task manager
 		virtual void Request();
@@ -182,5 +182,5 @@ namespace SF {
 
 
 
-}; // namespace SF
+} // namespace SF
 

@@ -332,7 +332,7 @@ namespace Net {
 		m_uiRecvTemUsed = 0;
 
 		m_IsClientConnection = false;
-		m_IsTCPSocketConnectionEstablished = true;
+		m_IsTCPSocketConnectionEstablished = true; // accepted socket treated as if they are already connected
 
 		Assert(local.PeerClass != NetClass::Unknown);
 
@@ -719,21 +719,47 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionTCP::SendNetCtrl(uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID)
-	{
-		Result hr = Connection::SendNetCtrl(uiCtrlCode, uiSequence, msgID, UID);
-		if ((hr))
-		{
-			m_NetIOAdapter.IncPendingSendCount();
-		}
-
-		return hr;
-	}
-
 	// Update Send buffer Queue, TCP and UDP client connection
 	Result ConnectionTCP::UpdateSendBufferQueue()
 	{
 		return m_NetIOAdapter.ProcessSendQueue();
+	}
+
+	// Update net control, process connection heartbeat, ... etc
+	Result ConnectionTCP::TickUpdate()
+	{
+		Result hr = ResultCode::SUCCESS;
+
+		if (GetConnectionState() != ConnectionState::DISCONNECTED)
+		{
+			if (!GetIsIORegistered())
+			{
+				SFLog(Net, Debug, "Close connection because it's kicked from net IO, CID:{0}", GetCID());
+				netCheck(CloseConnection("Kicked from IO system"));
+			}
+			else
+			{
+				// On client side, we need to check readable/writable status by calling connect again
+				if (m_IsClientConnection && !m_IsTCPSocketConnectionEstablished && GetConnectionState() == ConnectionState::CONNECTING)
+				{
+					m_IsTCPSocketConnectionEstablished = Connect();
+				}
+
+				if (m_IsTCPSocketConnectionEstablished
+					&& GetMyNetIOAdapter().GetPendingRecvCount() == 0
+					&& GetNetIOHandler() != nullptr)
+				{
+					hr = GetNetIOHandler()->PendingRecv();
+					if (hr == ResultCode::IO_NOTCONN)
+					{
+						SFLog(Net, Info, "Connection not connected CID:{0}", GetCID());
+						CloseConnection("Can't recv if not connected");
+					}
+				}
+			}
+		}
+
+		return super::TickUpdate();
 	}
 
 
@@ -765,35 +791,13 @@ namespace Net {
 	{
 	}
 
-
-	// Update net control, process connection heartbeat, ... etc
-	Result ConnectionTCPClient::TickUpdate()
-	{
-		Result hr = ResultCode::SUCCESS;
-
-		if( GetConnectionState() != ConnectionState::DISCONNECTED)
-		{
-			if (!GetIsIORegistered())
-			{
-				SFLog(Net, Debug, "Close connection because it's kicked from net IO, CID:{0}", GetCID());
-				netCheck(CloseConnection("Kicked from IO system"));
-			}
-			else
-			{
-				if(GetNetIOHandler() != nullptr)
-					GetNetIOHandler()->PendingRecv();
-			}
-		}
-
-		return super::TickUpdate();
-	}
-	
-		
 	// Initialize connection
 	Result ConnectionTCPClient::InitConnection(const PeerInfo &local, const PeerInfo &remote)
 	{
+		if (local.PeerClass != NetClass::Client)
+			return ResultCode::INVALID_ARG;
+
 		Result hr = ConnectionTCP::InitConnection(local, remote );
-		SetLocalClass( NetClass::Client );
 
 		return hr;
 	}
@@ -824,20 +828,7 @@ namespace Net {
 	}
 
 
-	// Update net control, process connection heartbeat, ... etc
-	Result ConnectionTCPServer::TickUpdate()
-	{
-		Result hr = ResultCode::SUCCESS;
-		Message::MessageID msgIDTem;
 
-		if( GetConnectionState() != ConnectionState::DISCONNECTED)
-		{
-			if (GetNetIOHandler() != nullptr)
-				GetNetIOHandler()->PendingRecv();
-		}
-
-		return super::TickUpdate();
-	}
 
 
 

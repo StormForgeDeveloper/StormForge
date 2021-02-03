@@ -42,7 +42,6 @@ namespace SF {
 			, m_ObjectPtr(pObj)
 			, m_TickFlag(tickFlag)
 		{
-
 		}
 
 		virtual void Run() override
@@ -317,15 +316,6 @@ namespace SF {
 	{
 		pTask->DecRepeat();
 		pTask->SetTaskEventHandler(nullptr);
-
-		//if (pTask->GetTaskTick() == EngineTaskTick::AsyncTick)
-		//{
-		//	m_EngineAsyncTaskCount.fetch_sub(1, std::memory_order_relaxed);
-		//}
-		//else if (pTask->GetTaskTick() == EngineTaskTick::AsyncRender)
-		//{
-		//	m_RenderAsyncTaskCount.fetch_sub(1, std::memory_order_relaxed);
-		//}
 	}
 
 	void EngineTaskManager::OnTaskCanceled(EngineTask* pTask)
@@ -355,7 +345,7 @@ namespace SF {
 				continue;
 			}
 
-			// canceled or nulified task
+			// canceled or nullified task
 			if (task->GetState() == Task::State::Idle)
 			{
 				task = nullptr;
@@ -372,7 +362,7 @@ namespace SF {
 
 		// We expect async task count is zero at the beginning
 		Assert(m_EngineAsyncTaskCount == 0);
-		//m_EngineAsyncTaskCount = 0;
+		m_EngineAsyncTaskCount = 0;
 
 		TickSyncTaskList(m_Tasks[(int)EngineTaskTick::SyncSystemTick]);
 		TickSyncObjectList(EngineTaskTick::SyncSystemTick, m_Objects[(int)EngineTaskTick::SyncSystemTick]);
