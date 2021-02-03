@@ -822,7 +822,7 @@ namespace SF
 			return *this;
 		}
 
-		float inv33 = 1.0 / a33;
+		float inv33 = 1.0f / a33;
 		auto mmInv33 = _mm_set_ps1(inv33);
 		Packed[0] = _mm_mul_ps(Packed[0], mmInv33);
 		Packed[1] = _mm_mul_ps(Packed[1], mmInv33);
