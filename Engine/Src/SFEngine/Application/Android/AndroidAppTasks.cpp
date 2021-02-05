@@ -81,6 +81,7 @@ namespace SF
 
 		}
 
+		Finished();
 	}
 
 
@@ -114,6 +115,8 @@ namespace SF
 		{
 			SFLog(System, Info, "Input queue detached");
 		}
+
+		Finished();
 	}
 
 
@@ -136,6 +139,8 @@ namespace SF
 			Service::GraphicDevice->InitDisplay(m_Window);
 			m_Window = nullptr;
 		}
+
+		Finished();
 	}
 
 
@@ -147,6 +152,7 @@ namespace SF
 	void AndroidAppTask_DestroyWindow::Run()
 	{
 		Service::GraphicDevice->DeinitDisplay();
+		Finished();
 	}
 
 
@@ -158,7 +164,7 @@ namespace SF
 
 	void AndroidAppTask_WindowResized::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -177,6 +183,8 @@ namespace SF
 		ASensorEventQueue_enableSensor(GetApp()->GetSensorEventQueue(), GetApp()->GetAccelerometerSensor());
 		// We'd like to get 60 events per second (in us).
 		ASensorEventQueue_setEventRate(GetApp()->GetSensorEventQueue(), GetApp()->GetAccelerometerSensor(), (1000L / 60) * 1000);
+
+		Finished();
 	}
 
 
@@ -193,6 +201,8 @@ namespace SF
 		if (GetApp()->GetAccelerometerSensor() == nullptr) return;
 		
 		ASensorEventQueue_disableSensor(GetApp()->GetSensorEventQueue(), GetApp()->GetAccelerometerSensor());
+
+		Finished();
 	}
 
 
@@ -204,7 +214,7 @@ namespace SF
 
 	void AndroidAppTask_LowMemory::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -216,7 +226,7 @@ namespace SF
 
 	void AndroidAppTask_AppStart::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -228,7 +238,7 @@ namespace SF
 
 	void AndroidAppTask_AppStop::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -241,6 +251,7 @@ namespace SF
 	void AndroidAppTask_Pause::Run()
 	{
 		GetApp()->SetPaused(true);
+		Finished();
 	}
 
 
@@ -253,6 +264,7 @@ namespace SF
 	void AndroidAppTask_Resume::Run()
 	{
 		GetApp()->SetPaused(false);
+		Finished();
 	}
 
 
@@ -265,6 +277,7 @@ namespace SF
 	void AndroidAppTask_ConfigChanged::Run()
 	{
 		AConfiguration_fromAssetManager(GetApp()->GetConfig(), GetApp()->GetAssetManager());
+		Finished();
 	}
 
 
@@ -277,6 +290,7 @@ namespace SF
 	void AndroidAppTask_SaveState::Run()
 	{
 		// TODO::
+		Finished();
 	}
 
 

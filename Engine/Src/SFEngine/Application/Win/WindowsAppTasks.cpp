@@ -75,7 +75,7 @@ namespace SF
 		//	}
 
 		//}
-
+		Finished();
 	}
 
 
@@ -106,6 +106,7 @@ namespace SF
 			Service::GraphicDevice->InitDisplay(m_Window);
 			m_Window = nullptr;
 		}
+		Finished();
 	}
 
 
@@ -117,6 +118,7 @@ namespace SF
 	void WindowsAppTask_DestroyWindow::Run()
 	{
 		Service::GraphicDevice->DeinitDisplay();
+		Finished();
 	}
 
 
@@ -129,6 +131,7 @@ namespace SF
 	void WindowsAppTask_WindowResized::Run()
 	{
 		Service::GraphicDevice->OnResize();
+		Finished();
 	}
 
 
@@ -142,11 +145,7 @@ namespace SF
 	{
 		GetApp()->SetPaused(false);
 
-		//if (GetApp()->GetAccelerometerSensor() == nullptr) return;
-
-		//ASensorEventQueue_enableSensor(GetApp()->GetSensorEventQueue(), GetApp()->GetAccelerometerSensor());
-		//// We'd like to get 60 events per second (in us).
-		//ASensorEventQueue_setEventRate(GetApp()->GetSensorEventQueue(), GetApp()->GetAccelerometerSensor(), (1000L / 60) * 1000);
+		Finished();
 	}
 
 
@@ -159,10 +158,7 @@ namespace SF
 	void WindowsAppTask_LostFocus::Run()
 	{
 		GetApp()->SetPaused(true);
-
-		//if (GetApp()->GetAccelerometerSensor() == nullptr) return;
-		//
-		//ASensorEventQueue_disableSensor(GetApp()->GetSensorEventQueue(), GetApp()->GetAccelerometerSensor());
+		Finished();
 	}
 
 
@@ -174,7 +170,7 @@ namespace SF
 
 	void WindowsAppTask_LowMemory::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -186,7 +182,7 @@ namespace SF
 
 	void WindowsAppTask_AppStart::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -198,7 +194,7 @@ namespace SF
 
 	void WindowsAppTask_AppStop::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -211,6 +207,7 @@ namespace SF
 	void WindowsAppTask_Pause::Run()
 	{
 		GetApp()->SetPaused(true);
+		Finished();
 	}
 
 
@@ -223,9 +220,8 @@ namespace SF
 	void WindowsAppTask_Resume::Run()
 	{
 		GetApp()->SetPaused(false);
+		Finished();
 	}
-
-
 
 
 }

@@ -32,34 +32,6 @@ namespace SF {
 	//	Task event handler
 	//
 
-	TaskEventHandlerQueue::TaskEventHandlerQueue(TaskNotificationQueue* pQueue)
-		: m_pNotificationQueue(pQueue)
-	{
-	}
-
-	void TaskEventHandlerQueue::OnTaskStateChanged(Task *pTask, TaskState state)
-	{
-		if (m_pNotificationQueue == nullptr)
-			return;
-
-		TaskNotification* notification = new(GetEngineHeap()) TaskNotification;
-		notification->pTask = WeakPointerT<Task>(pTask);
-		notification->State = state;
-
-		m_pNotificationQueue->Enqueue(std::forward<TaskNotification*>(notification));
-	}
-
-
-	TaskEventHandlerFinishCounter::TaskEventHandlerFinishCounter(std::atomic<int32_t>& finishCounter)
-		: m_FinishCounter(finishCounter)
-	{
-	}
-
-	void TaskEventHandlerFinishCounter::OnTaskStateChanged(Task *pTask, TaskState state)
-	{
-		if (state == TaskState::Idle)
-			m_FinishCounter.fetch_sub(1, std::memory_order_release);
-	}
 
 	
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -70,27 +42,42 @@ namespace SF {
 
 	Task::Task()
 		: m_TaskState(State::Idle)
+		, m_FinishedEventFired(true)
+		, m_TaskFinishedHandlers(GetSystemHeap())
+		, m_TaskTickedHandlers(GetSystemHeap())
 	{
 	}
 
 
-	Task::Task(TaskEventHandler* pEventHandler)
+	Task::Task(TaskFinishedEventDelegate&& pEventHandler)
 		: m_TaskState(State::Idle)
-		, m_pNotificationHandler(pEventHandler)
+		, m_FinishedEventFired(true)
+		, m_TaskFinishedHandlers(GetSystemHeap())
+		, m_TaskTickedHandlers(GetSystemHeap())
 	{
+		m_TaskFinishedHandlers.AddDelegate(Forward<TaskFinishedEventDelegate>(pEventHandler));
 	}
 
 	Task::~Task()
 	{
+		if (!m_FinishedEventFired.load(MemoryOrder::memory_order_acquire))
+		{
+			m_TaskFinishedHandlers.Invoke(this);
+		}
 	}
 
-	void Task::NotifyStateChange()
+	void Task::NotifyFinished()
 	{
-		auto pHandler = m_pNotificationHandler.load(MemoryOrder::memory_order_acquire);
-		if (pHandler == nullptr)
-			return;
+		if (!m_FinishedEventFired.load(MemoryOrder::memory_order_acquire))
+		{
+			m_TaskFinishedHandlers.Invoke(this);
+			m_FinishedEventFired.store(false, MemoryOrder::memory_order_release);
+		}
+	}
 
-		pHandler->OnTaskStateChanged(this, GetState(MemoryOrder::memory_order_acquire));
+	void Task::NotifyTicked()
+	{
+		m_TaskTickedHandlers.Invoke(this);
 	}
 
 	void Task::Requested()
@@ -103,8 +90,6 @@ namespace SF {
 
 			expected = State::Idle;
 		}
-
-		NotifyStateChange();
 	}
 
 	void Task::Scheduled()
@@ -121,8 +106,6 @@ namespace SF {
 
 			expected = State::Pending;
 		}
-
-		NotifyStateChange();
 	}
 
 	void Task::StartWorking()
@@ -138,8 +121,6 @@ namespace SF {
 				expected = State::Scheduled;
 		}
 
-		NotifyStateChange();
-
 		OnStarted();
 	}
 
@@ -147,8 +128,7 @@ namespace SF {
 	{
 		m_TaskState.store(State::Idle, std::memory_order_release);
 
-		NotifyStateChange();
-
+		NotifyFinished();
 		OnFinished();
 	}
 
@@ -156,14 +136,46 @@ namespace SF {
 	{
 		m_TaskState.store(State::Idle, std::memory_order_release);
 
-		NotifyStateChange();
-
+		NotifyFinished();
 		OnCanceled();
 	}
+
+	void Task::AddTaskEventHandler(TaskFinishedEventDelegate&& pEventHandler)
+	{
+		m_TaskFinishedHandlers.AddDelegate(Forward<TaskFinishedEventDelegate>(pEventHandler));
+	}
+
+	void Task::AddTaskEventHandler(const TaskFinishedEventDelegate& pEventHandler)
+	{
+		m_TaskFinishedHandlers.AddDelegate(pEventHandler);
+	}
+
+	void Task::RemoveTaskEventHandler(uintptr_t context)
+	{
+		m_TaskFinishedHandlers.RemoveDelegateAll(context);
+	}
+
+	void Task::AddTaskTickHandler(TaskFinishedEventDelegate&& pEventHandler)
+	{
+		m_TaskTickedHandlers.AddDelegate(Forward<TaskFinishedEventDelegate>(pEventHandler));
+	}
+
+	void Task::AddTaskTickHandler(const TaskFinishedEventDelegate& pEventHandler)
+	{
+		m_TaskTickedHandlers.AddDelegate(pEventHandler);
+	}
+
+	void Task::RemoveTaskTickHandler(uintptr_t context)
+	{
+		m_TaskTickedHandlers.RemoveDelegateAll(context);
+	}
+
 
 	// This call will queue this task to the global task manager
 	void Task::Request()
 	{
+		m_FinishedEventFired = false;
+
 		if (m_TaskState.load(std::memory_order_relaxed) != State::Idle)
 		{
 			Assert(false);
@@ -177,7 +189,7 @@ namespace SF {
 	{
 		m_TaskState.store(State::Idle, std::memory_order_relaxed);
 
-		NotifyStateChange();
+		NotifyFinished();
 	}
 
 
@@ -217,5 +229,5 @@ namespace SF {
 	}
 
 
-}; // namespace SF
+} // namespace SF
 

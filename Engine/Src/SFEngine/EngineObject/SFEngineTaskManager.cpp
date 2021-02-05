@@ -28,33 +28,6 @@
 namespace SF {
 
 
-
-	class SetObjectTickFlagTask : public EngineTask
-	{
-	private:
-		// object pointer 
-		SharedPointerT<EngineObject>	m_ObjectPtr;
-		uint32_t m_TickFlag = 0;
-
-	public:
-		SetObjectTickFlagTask(EngineObject* pObj, uint32_t tickFlag)
-			: EngineTask()
-			, m_ObjectPtr(pObj)
-			, m_TickFlag(tickFlag)
-		{
-		}
-
-		virtual void Run() override
-		{
-			if (m_ObjectPtr != nullptr)
-			{
-				Service::EngineTaskManager->SetTickFlagsInternal(*m_ObjectPtr, m_TickFlag);
-			}
-			m_ObjectPtr = nullptr;
-		}
-	};
-
-
 	////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Engine Task Manager base class -  interface for task manager
@@ -68,10 +41,29 @@ namespace SF {
 		: LibraryComponent("EngineTaskManager")
 		, m_EngineNewTask(GetEngineHeap())
 		, m_RenderingNewTask(GetEngineHeap())
-		, m_AsyncTaskHandler(m_EngineAsyncTaskCount)
-		, m_RenderAsyncTaskHandler(m_RenderAsyncTaskCount)
+		, m_EngineTickAction(GetEngineHeap())
+
 	{
+		m_AsyncTaskHandler = TaskFinishedEventDelegate{ 
+			uintptr_t(this), 
+			[this](Task* pTask)
+			{
+				unused(pTask);
+				m_EngineAsyncTaskCount.fetch_sub(1, MemoryOrder::memory_order_release);
+			}
+		};
+
+		m_RenderAsyncTaskHandler = TaskFinishedEventDelegate{
+			uintptr_t(this),
+			[this](Task* pTask)
+			{
+				unused(pTask);
+				m_RenderAsyncTaskCount.fetch_sub(1, MemoryOrder::memory_order_release);
+			}
+		};
+
 		m_EngineAsyncTaskCount = 0;
+
 		m_FrameNumber = 0;
 	}
 
@@ -131,21 +123,24 @@ namespace SF {
 			tickList.Add(&objNode);
 	}
 
-	EngineTaskPtr EngineTaskManager::SetTickFlags(EngineObject* pObj, uint32_t tickFlag)
+	void EngineTaskManager::SetTickFlags(EngineObject* pObj, uint32_t tickFlag)
 	{
 		if (ThisThread::GetThreadID() == GetEngineThreadID())
 		{
 			SetTickFlagsInternal(pObj, tickFlag);
-			return EngineTaskPtr();
 		}
 		else
 		{
 			assert(pObj->IsDisposed() || pObj->GetReferenceCount() > 0);
 
-			// This function can be called in the object destructor, so we need to use some global memory manager
-			EngineTaskPtr pNewTask = new(GetEngineHeap()) SetObjectTickFlagTask(pObj, tickFlag);
-			pNewTask->Request();
-			return std::forward<EngineTaskPtr>(pNewTask);
+			SharedPointerT<EngineObject> pObjectPtr(pObj);
+			RunOnEngineTick([this, tickFlag = tickFlag, pObjectPtr]()
+				{
+					if (pObjectPtr != nullptr)
+					{
+						SetTickFlagsInternal(pObjectPtr.get(), tickFlag);
+					}
+				});
 		}
 	}
 
@@ -168,17 +163,12 @@ namespace SF {
 	}
 
 
-	// Schedule Async task for this tick
-	Result EngineTaskManager::ScheduleTaskForThisTick(Task* pTask)
+	Result EngineTaskManager::RunOnEngineTick(DelegateEngineTickAction&& action)
 	{
-		if (pTask == nullptr)
-			return ResultCode::INVALID_ARG;
-
-		ScheduleAsyncTaskForThisTick(pTask, m_AsyncTaskHandler);
-
-		return ResultCode::SUCCESS;
+		auto result = m_EngineTickAction.Enqueue(Forward<DelegateEngineTickAction>(action));
+		assert(result);
+		return result;
 	}
-
 
 	// Add object event task
 	Result EngineTaskManager::AddTask(EngineTask* pTask)
@@ -209,7 +199,7 @@ namespace SF {
 		});
 	}
 
-	void EngineTaskManager::TickAsyncObjectList(EngineTaskTick tick, DoubleLinkedListStaticT<EngineObject*>& objectList, TaskEventHandlerFinishCounter& counter)
+	void EngineTaskManager::TickAsyncObjectList(EngineTaskTick tick, DoubleLinkedListStaticT<EngineObject*>& objectList, Atomic<int32_t>& counter, const TaskFinishedEventDelegate& eventFunc)
 	{
 		objectList.ForeachWithRemove([&](DoubleLinkedListNodeDataT<EngineObject*>& node)
 		{
@@ -222,9 +212,14 @@ namespace SF {
 				return false;
 			}
 
-			auto task = objectPtr->GetEngineAsyncTask();
 
-			ScheduleAsyncTaskForThisTick(*task, counter);
+#if SF_ENABLE_TASK_TRACKING
+			m_TaskTrackingNames[m_TaskTrackingIndex++] = typeid(*objectPtr).name();
+#endif
+
+			auto task = objectPtr->GetEngineAsyncTickTask();
+
+			ScheduleAsyncTaskForThisTick(*task, counter, eventFunc);
 
 			return true;
 		});
@@ -250,11 +245,8 @@ namespace SF {
 
 			TaskOperator().StartWorking(*task);
 			task->Run();
-			auto repeat = task->DecRepeat();
-			if (repeat < 0)
+			if (task->GetState() == TaskState::Idle) // if you want the task keep going, don't finish it
 			{
-				TaskOperator().Finished(*task);
-				// remove
 				// when nullptr assignment is happened the task with node is released so return false will cause segment fault
 				if(taskList.IsInTheList(&node))
 					taskList.RemoveNoLock(&node);
@@ -266,12 +258,12 @@ namespace SF {
 		});
 	}
 
-	void EngineTaskManager::TickAsyncTaskList(DoubleLinkedListStaticT<SharedPointerT<EngineTask>>& taskList, TaskEventHandlerFinishCounter& counter)
+	void EngineTaskManager::TickAsyncTaskList(DoubleLinkedListStaticT<SharedPointerT<EngineTask>>& taskList, Atomic<int32_t>& counter, const TaskFinishedEventDelegate& eventFunc)
 	{
 		taskList.ForeachWithRemove([&](DoubleLinkedListNodeDataT<SharedPointerT<EngineTask>>& node)
 		{
 			SharedPointerT<EngineTask>& task = node.Data;
-			if (task == nullptr || task->GetRepeat() < 0)
+			if (task == nullptr)
 			{
 				// remove
 				// when nullptr assignment is happened the task with node is released so return false will cause segment fault
@@ -281,7 +273,16 @@ namespace SF {
 				return true;
 			}
 
-			ScheduleAsyncTaskForThisTick(*task, counter);
+#if SF_ENABLE_TASK_TRACKING
+			m_TaskTrackingNames[m_TaskTrackingIndex++] = typeid(*task.get()).name();
+#endif
+
+			counter.fetch_add(1, std::memory_order_relaxed);
+			task->RemoveTaskTickHandler(intptr_t(this));
+			task->AddTaskTickHandler(eventFunc);
+			Service::AsyncTaskManager->PendingTask(task.get());
+
+			//ScheduleAsyncTaskForThisTick(*task, counter, eventFunc);
 
 			return true;
 		});
@@ -304,30 +305,25 @@ namespace SF {
 	}
 
 	// Schedule task for this tick
-	void EngineTaskManager::ScheduleAsyncTaskForThisTick(Task* pTask, TaskEventHandlerFinishCounter& counter)
+	void EngineTaskManager::ScheduleAsyncTaskForThisTick(Task* pTask, Atomic<int32_t>& counter, const TaskFinishedEventDelegate& eventFunc)
 	{
-		counter.GetCounter().fetch_add(1, std::memory_order_relaxed);
-		pTask->SetTaskEventHandler(&counter);
+		counter.fetch_add(1, std::memory_order_relaxed);
+		pTask->RemoveTaskTickHandler(intptr_t(this));
+		pTask->AddTaskTickHandler(eventFunc);
 		Service::AsyncTaskManager->PendingTask(pTask);
 	}
 
-
-	void EngineTaskManager::OnTaskFinished(EngineTask* pTask)
+	void EngineTaskManager::UpdatePendingTickAction()
 	{
-		pTask->DecRepeat();
-		pTask->SetTaskEventHandler(nullptr);
+		DelegateEngineTickAction action;
+		while (m_EngineTickAction.Dequeue(action))
+		{
+			action();
+		}
 	}
 
-	void EngineTaskManager::OnTaskCanceled(EngineTask* pTask)
+	void EngineTaskManager::UpdateEngineNewTasks()
 	{
-		// do the same thing
-		OnTaskFinished(pTask);
-	}
-
-	void EngineTaskManager::EngineTickUpdate()
-	{
-		m_FrameNumber.fetch_add(1, MemoryOrder::memory_order_release);
-
 		SharedPointerT<EngineTask> task;
 		while (m_EngineNewTask.Dequeue(task))
 		{
@@ -337,7 +333,7 @@ namespace SF {
 				continue;
 			}
 
-			auto index = (int)task->GetTaskTick();
+			auto index = (int)task->GetTickGroup();
 			if (index < 0 || index >(int)countof(m_Tasks))
 			{
 				task = nullptr;
@@ -359,10 +355,22 @@ namespace SF {
 			assert(result == Result(ResultCode::SUCCESS));
 			task = nullptr;
 		}
+	}
+
+	void EngineTaskManager::EngineTickUpdate()
+	{
+		m_FrameNumber.fetch_add(1, MemoryOrder::memory_order_release);
+
+		UpdatePendingTickAction();
+		UpdateEngineNewTasks();
 
 		// We expect async task count is zero at the beginning
 		Assert(m_EngineAsyncTaskCount == 0);
 		m_EngineAsyncTaskCount = 0;
+#if SF_ENABLE_TASK_TRACKING
+		m_TaskTrackingIndex = 0;
+#endif
+
 
 		TickSyncTaskList(m_Tasks[(int)EngineTaskTick::SyncSystemTick]);
 		TickSyncObjectList(EngineTaskTick::SyncSystemTick, m_Objects[(int)EngineTaskTick::SyncSystemTick]);
@@ -370,9 +378,8 @@ namespace SF {
 		TickSyncTaskList(m_Tasks[(int)EngineTaskTick::SyncPreTick]);
 		TickSyncObjectList(EngineTaskTick::SyncPreTick, m_Objects[(int)EngineTaskTick::SyncPreTick]);
 
-
-		TickAsyncTaskList(m_Tasks[(int)EngineTaskTick::AsyncTick], m_AsyncTaskHandler);
-		TickAsyncObjectList(EngineTaskTick::AsyncTick, m_Objects[(int)EngineTaskTick::AsyncTick], m_AsyncTaskHandler);
+		TickAsyncTaskList(m_Tasks[(int)EngineTaskTick::AsyncTick], m_EngineAsyncTaskCount, m_AsyncTaskHandler);
+		TickAsyncObjectList(EngineTaskTick::AsyncTick, m_Objects[(int)EngineTaskTick::AsyncTick], m_EngineAsyncTaskCount, m_AsyncTaskHandler );
 
 		TickSyncTaskList(m_Tasks[(int)EngineTaskTick::SyncTick]);
 		TickSyncObjectList(EngineTaskTick::SyncTick, m_Objects[(int)EngineTaskTick::SyncTick]);
@@ -391,7 +398,7 @@ namespace SF {
 		{
 			if (task == nullptr) continue;
 
-			auto index = (int)task->GetTaskTick();
+			auto index = (int)task->GetTickGroup();
 			if (index < 0 || index >(int)countof(m_Tasks))
 			{
 				Assert(false); // invalid index
@@ -408,8 +415,8 @@ namespace SF {
 		// Reset async task count
 		m_RenderAsyncTaskCount = 0;
 
-		TickAsyncTaskList(m_Tasks[(int)EngineTaskTick::AsyncRender], m_RenderAsyncTaskHandler);
-		TickAsyncObjectList(EngineTaskTick::AsyncRender, m_Objects[(int)EngineTaskTick::AsyncRender], m_RenderAsyncTaskHandler);
+		TickAsyncTaskList(m_Tasks[(int)EngineTaskTick::AsyncRender], m_RenderAsyncTaskCount, m_RenderAsyncTaskHandler);
+		TickAsyncObjectList(EngineTaskTick::AsyncRender, m_Objects[(int)EngineTaskTick::AsyncRender], m_RenderAsyncTaskCount, m_RenderAsyncTaskHandler);
 
 		TickSyncTaskList(m_Tasks[(int)EngineTaskTick::SyncRender]);
 		TickSyncObjectList(EngineTaskTick::SyncRender, m_Objects[(int)EngineTaskTick::SyncRender]);

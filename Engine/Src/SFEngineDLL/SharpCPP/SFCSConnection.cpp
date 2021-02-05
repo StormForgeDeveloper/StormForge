@@ -103,7 +103,7 @@ SFDLL_EXPORT void SFConnection_NativeDisconnect(intptr_t nativeHandle)
 	auto pConnection = SF::NativeToObject<Net::Connection>(nativeHandle);
 	pConnection->Disconnect("Requested from CS");
 	pConnection->CloseConnection("Request from CS");
-	pConnection->SetTickFlags(0);
+	pConnection->SetTickGroup(EngineTaskTick::None);
 }
 
 SFDLL_EXPORT uint64_t SFConnection_NativeGetLocalPeerID(intptr_t nativeHandle)

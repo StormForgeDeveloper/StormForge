@@ -44,7 +44,6 @@ namespace SF {
 	{
 	}
 
-
 	AsyncTaskWorker::~AsyncTaskWorker()
 	{
 	}
@@ -76,14 +75,17 @@ namespace SF {
 
 		if (pTask->GetState() == Task::State::Scheduled || pTask->GetState() == Task::State::Pending)
 		{
-			TaskOperator().StartWorking(*pTask);
+			pTask->StartWorking();
+
 			pTask->Run();
-			TaskOperator().Finished(*pTask);
+
+			pTask->Finished();
 		}
 		else
 		{
-			TaskOperator().Canceled(*pTask);
+			pTask->Canceled();
 		}
+		pTask->NotifyTicked();
 
 		return true;
 	}
@@ -131,7 +133,7 @@ namespace SF {
 	{
 		if (UseConditionVariable)
 		{
-			std::lock_guard<std::mutex> lockGuard(GetTaskAssignMutex());
+			std::scoped_lock<std::mutex> lockGuard(GetTaskAssignMutex());
 
 			TaskOperator().Requested(pTask);
 			if (m_PendingTasks.Enqueue(SharedPointerAtomicT<Task>(pTask)))
@@ -146,10 +148,7 @@ namespace SF {
 		else
 		{
 			TaskOperator().Requested(pTask);
-			if (m_PendingTasks.Enqueue(SharedPointerAtomicT<Task>(pTask)))
-			{
-			}
-			else
+			if (!m_PendingTasks.Enqueue(SharedPointerAtomicT<Task>(pTask)))
 			{
 				TaskOperator().Canceled(pTask);
 			}
@@ -190,7 +189,7 @@ namespace SF {
 		for (auto itWorker = m_TaskWorkers.begin(); itWorker.IsValid(); ++itWorker)
 		{
 			(*itWorker)->Stop(true);
-			IHeap::Delete(*itWorker);
+			delete *itWorker;
 		}
 
 		SharedPointerAtomicT<Task> task;

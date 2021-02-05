@@ -46,7 +46,7 @@ namespace SF {
 		static void CopyRValue(DataType& dest, DataStorageType& src) { dest = std::forward<DataStorageType>(src); }
 
 		static void Write(DataStorageType& dest, const DataType& data) { dest = data; }
-		static void Write(DataStorageType& dest, DataType&& data) { dest = std::forward<DataType>(data); }
+		static void Write(DataStorageType& dest, DataType&& data) { dest = std::forward<DataType>(data); data = {}; }
 	};
 
 

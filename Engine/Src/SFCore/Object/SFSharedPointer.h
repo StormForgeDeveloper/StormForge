@@ -1205,21 +1205,6 @@ namespace SF {
 		return *this;
 	}
 
-	///////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Override sync trait for containers
-	//
 
-	//template<>	inline bool DataTrait_NeedFenceForRW<SharedPointer>() { return false; }
-
-	// This need to be override individually
-	//template<>
-	//inline bool SF::DataTrait_NeedFenceForRW<SharedPointerT<typename DataType>>() { return false; }
-
-	//template<>	inline bool DataTrait_NeedFenceForRW<WeakPointer>() { return false; }
-
-	// This need to be override individually
-	//template<class classType>
-	//inline bool SF::DataTrait_NeedFenceForRW<WeakPointerT<classType>>() { return false; }
 }
 

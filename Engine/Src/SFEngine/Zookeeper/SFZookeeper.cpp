@@ -32,7 +32,7 @@ namespace SF
 		ZKResult = Zookeeper::ToResult(zkResult);
 		if (!ZKResult && GetState() == State::Pending)
 		{
-			TaskOperator().Finished(this);
+			Finished();
 		}
 	}
 

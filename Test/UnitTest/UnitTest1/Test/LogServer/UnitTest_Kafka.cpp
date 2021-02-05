@@ -78,6 +78,11 @@ TEST_F(KafkaTest, Consumer)
         {
 			break;
         }
+        else if (hr == ResultCode::NO_DATA_EXIST)
+        {
+            // data may not yet available, ignore
+            continue;
+        }
         else if (!hr)
         {
             GTEST_ASSERT_EQ(hr, ResultCode::SUCCESS);

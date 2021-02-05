@@ -22,7 +22,6 @@ namespace SF {
 	EngineTask_Terminate::EngineTask_Terminate()
 		: EngineTask(EngineTaskTick::SyncPostTick)
 	{
-
 	}
 
 	void EngineTask_Terminate::Run()
@@ -30,8 +29,10 @@ namespace SF {
 		auto pEngine = Engine::GetInstance();
 		if (pEngine != nullptr)
 			pEngine->SetExitCode(0);
+
+		Finished();
 	}
 
 
-}; // namespace SF
+} // namespace SF
 

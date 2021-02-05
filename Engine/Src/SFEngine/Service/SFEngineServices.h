@@ -39,6 +39,10 @@ namespace SF {
 
 	class EngineTaskService
 	{
+	public:
+
+		using DelegateEngineTickAction = std::function<void()>;
+
 	private:
 
 		ThreadID m_EngineThreadID;
@@ -60,9 +64,6 @@ namespace SF {
 
 	protected:
 
-		virtual void OnTaskFinished(EngineTask* pTask) {}
-		virtual void OnTaskCanceled(EngineTask* pTask) {}
-
 		friend class EngineTask;
 		friend class Engine;
 		friend class EngineThread;
@@ -76,11 +77,11 @@ namespace SF {
 		uint32_t GetFrameNumber() const { return m_FrameNumber.load(MemoryOrder::memory_order_relaxed); }
 
 
-		virtual EngineTaskPtr SetTickFlags(EngineObject* pObj, uint32_t tickFlag) { unused(pObj); unused(tickFlag); return EngineTaskPtr(); }
+		virtual void SetTickFlags(EngineObject* pObj, uint32_t tickFlag) { unused(pObj); unused(tickFlag); }
 
 
 		// Schedule Async task for this tick, for one time running
-		virtual Result ScheduleTaskForThisTick(Task* pTask) { unused(pTask); return ResultCode::SUCCESS_FALSE; }
+		virtual Result RunOnEngineTick(DelegateEngineTickAction&& action) { return ResultCode::SUCCESS_FALSE; }
 
 		// Add object event task
 		virtual Result AddTask(EngineTask* pTask) { unused(pTask); return ResultCode::SUCCESS_FALSE; }

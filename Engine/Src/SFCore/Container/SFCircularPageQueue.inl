@@ -138,14 +138,14 @@ namespace SF {
 		template <class DataType, class DataStorageType, class StorageAccessor>
 		Result CircularPageQueue<DataType,DataStorageType, StorageAccessor>::Enqueue(DataType&& item)
 		{
-			DataType defaultValue = DataType{};
-
 			if (m_CircularPages == nullptr)
 				return ResultCode::INVALID_POINTER;
 
-			Assert(item != defaultValue);
-			if (item == defaultValue)
+			if (IsDefaultValue(item))
+			{
+				assert(false);
 				return ResultCode::FAIL;
+			}
 
 			auto expectedTicket = m_EnqueueTicket.load(std::memory_order_relaxed) + 1;
 			auto expectedPageID = expectedTicket / m_NumberOfItemsPerPage;
@@ -227,8 +227,6 @@ namespace SF {
 			Assert(WriteCount <= m_NumberOfItemsPerPage);
 			unused(WriteCount);
 
-			//Proc_End:
-
 			return ResultCode::SUCCESS;
 		}
 
@@ -243,8 +241,8 @@ namespace SF {
 			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::Exclusive, m_CircularBufferLock);
 
 			// empty state / read count is bigger than written count
-			// m_EnqueueTicket means number of items have been enqueued
-			// m_DequeueTicket means number of items have been dequeued or trying
+			// m_EnqueueTicket is number of items have been enqueued
+			// m_DequeueTicket is number of items have been dequeued or trying
 			if((SignedCounterType)(m_EnqueueTicket.load(std::memory_order_relaxed) - m_DequeueTicket.load(std::memory_order_relaxed)) <= 0)
 				return ResultCode::FAIL;
 
@@ -277,7 +275,7 @@ namespace SF {
 
 			// Read the data & clear that read position 
 			LockTry = 0;
-			while (StorageAccessor::Read(pCurPage->Element[itemIndex]) == defaultValue)
+			while (IsDefaultValue(StorageAccessor::Read(pCurPage->Element[itemIndex])))
 			{
 				LockTry++;
 				if (LockTry % MaximumRetryInARow)
@@ -291,15 +289,11 @@ namespace SF {
 				}
 			}
 
-			Assert(StorageAccessor::Read(pCurPage->Element[itemIndex]) != defaultValue);
-
 			StorageAccessor::CopyRValue(item, pCurPage->Element[itemIndex]);
-			//item = std::forward<DataType>(pCurPage->Element[itemIndex]);
 
 			// Even though previous one is rvalue copy, some datatype doesn't support rvalue copy.
 			// Thus, we need to make sure the element is cleaned up
-			//StorageAccessor::Write(pCurPage->Element[itemIndex], std::forward<DataType>(defaultValue));
-			//pCurPage->Element[itemIndex] = defaultValue;
+			//pCurPage->Element[itemIndex] = {};
 
 			// increment item read count
 			auto readCount = pCurPage->Header.ReadCounter.fetch_add(1, std::memory_order_acq_rel) + 1;
@@ -359,7 +353,6 @@ namespace SF {
 		template <class DataType, class DataStorageType, class StorageAccessor>
 		Result CircularPageQueue<DataType,DataStorageType, StorageAccessor>::GetFront(DataType& item)
 		{
-			auto defaultValue = DataType{};
 			if (m_CircularPages == nullptr)
 				return ResultCode::INVALID_POINTER;
 
@@ -420,7 +413,7 @@ namespace SF {
 			LockTry = 0;
 
 			item = pCurPage->Element[itemIndex];
-			while (item == defaultValue)
+			while (IsDefaultValue(item))
 			{
 				LockTry++;
 				if (LockTry % 10)
@@ -486,6 +479,4 @@ namespace SF {
 			m_DequeueTicket = 0;
 		}
 
-
 } // namespace SF
-

@@ -39,7 +39,7 @@ namespace SF
 		{
 		public:
 
-			AssetLoadingTask(IHeap& heap, TaskEventHandler* pEventHandler);
+			AssetLoadingTask(IHeap& heap, const TaskFinishedEventDelegate& pEventHandler = {});
 			virtual ~AssetLoadingTask() {}
 
 
@@ -75,12 +75,12 @@ namespace SF
 		// Request loading an asset package. If the package is already exist, just reference count will be increased
 		// @packagePath: package path
 		// @pNotificationQueue: optional, notification queue will be assigned to the queue. If you want to get notification than polling task state, you need to set up 
-		virtual SharedPointerT<AssetLoadingTask> LoadAssetPackage(const String& packagePath, TaskEventHandler* pEventHandler = nullptr) { unused(packagePath); unused(pEventHandler); return SharedPointerT<AssetLoadingTask>(); }
+		virtual SharedPointerT<AssetLoadingTask> LoadAssetPackage(const String& packagePath, const TaskFinishedEventDelegate& pEventHandler) { unused(packagePath); unused(pEventHandler); return SharedPointerT<AssetLoadingTask>(); }
 
 		// Request loading a resource. If the resource is already exist, just reference count will be increased
 		// @assetPath: asset resource file path
 		// @pNotificationQueue: optional, notification queue will be assigned to the queue
-		virtual SharedPointerT<AssetLoadingTask> LoadAsset(const String& assetPath, TaskEventHandler* pEventHandler = nullptr) { unused(assetPath); unused(pEventHandler); return SharedPointerT<AssetLoadingTask>(); }
+		virtual SharedPointerT<AssetLoadingTask> LoadAsset(const String& assetPath, const TaskFinishedEventDelegate& pEventHandler) { unused(assetPath); unused(pEventHandler); return SharedPointerT<AssetLoadingTask>(); }
 
 	};
 	

@@ -92,7 +92,7 @@ namespace SF {
 
 		Connection::~Connection()
 		{
-			SetTickFlags(0);
+			SetTickGroup(EngineTaskTick::None);
 
 			// Not need with abstract class
 			m_RecvQueue.ClearQueue();
@@ -460,7 +460,7 @@ namespace SF {
 
 		void Connection::DisconnectNRelease(const char* reason)
 		{
-			SetTickFlags(0);
+			SetTickGroup(EngineTaskTick::None);
 			// This guy should not belong to connection heap
 			SharedPointerT<EngineTask> pTask = new(GetSystemHeap()) ConnectionTask_DisconnectNClose(this, reason);
 			pTask->Request();

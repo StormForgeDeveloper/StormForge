@@ -55,7 +55,13 @@ namespace SF {
 			return;
 		}
 
-		objectPtr->OnTick(GetTaskTick());
+		objectPtr->OnTick(GetTickGroup());
+	}
+
+	void EngineObjectAsyncEngineTask::NotifyTicked()
+	{
+		assert(m_TaskTickedHandlers.size() > 0);
+		super::NotifyTicked();
 	}
 
 
@@ -134,40 +140,40 @@ namespace SF {
 
 		SetTickFlags(0);
 
-		if (m_EngineAsyncTask != nullptr)
-			m_EngineAsyncTask->ClearObject();
-		m_EngineAsyncTask = nullptr;
+		if (m_EngineAsyncTickTask != nullptr)
+			m_EngineAsyncTickTask->ClearObject();
+		m_EngineAsyncTickTask = nullptr;
 
-		if (m_RenderAsyncTask != nullptr)
-			m_RenderAsyncTask->ClearObject();
-		m_RenderAsyncTask = nullptr;
+		if (m_RenderAsyncTickTask != nullptr)
+			m_RenderAsyncTickTask->ClearObject();
+		m_RenderAsyncTickTask = nullptr;
 	}
 
 
-	EngineTaskPtr EngineObject::SetTickFlags(uint32_t tickFlag)
+	void EngineObject::SetTickFlags(uint32_t tickFlag)
 	{
-		return std::forward<EngineTaskPtr>(Service::EngineTaskManager->SetTickFlags(this, tickFlag));
+		Service::EngineTaskManager->SetTickFlags(this, tickFlag);
 	}
 
-	EngineTaskPtr EngineObject::SetTickGroup(EngineTaskTick tickGroup)
+	void EngineObject::SetTickGroup(EngineTaskTick tickGroup)
 	{
-		auto tickFlag = (uint32_t)1 << (int)tickGroup;
-		return SetTickFlags(tickFlag);
+		auto tickFlag = tickGroup != EngineTaskTick::None ? (uint32_t)1 << (int)tickGroup : 0;
+		SetTickFlags(tickFlag);
 	}
 
 
-	SharedPointerT<EngineObjectAsyncEngineTask>& EngineObject::GetEngineAsyncTask()
+	SharedPointerT<EngineObjectAsyncEngineTask>& EngineObject::GetEngineAsyncTickTask()
 	{
-		if (m_Disposed) return m_EngineAsyncTask;
-		if (m_EngineAsyncTask == nullptr) m_EngineAsyncTask = new(GetHeap()) EngineObjectAsyncEngineTask(this, EngineTaskTick::AsyncTick);
-		return m_EngineAsyncTask;
+		if (m_Disposed) return m_EngineAsyncTickTask;
+		if (m_EngineAsyncTickTask == nullptr) m_EngineAsyncTickTask = new(GetHeap()) EngineObjectAsyncEngineTask(this, EngineTaskTick::AsyncTick);
+		return m_EngineAsyncTickTask;
 	}
 
-	SharedPointerT<EngineObjectAsyncEngineTask>& EngineObject::GetRenderAsyncTask()
+	SharedPointerT<EngineObjectAsyncEngineTask>& EngineObject::GetRenderAsyncTickTask()
 	{
-		if (m_Disposed) return m_RenderAsyncTask;
-		if (m_RenderAsyncTask == nullptr) m_RenderAsyncTask = new(GetHeap()) EngineObjectAsyncEngineTask(this, EngineTaskTick::AsyncRender);
-		return m_RenderAsyncTask;
+		if (m_Disposed) return m_RenderAsyncTickTask;
+		if (m_RenderAsyncTickTask == nullptr) m_RenderAsyncTickTask = new(GetHeap()) EngineObjectAsyncEngineTask(this, EngineTaskTick::AsyncRender);
+		return m_RenderAsyncTickTask;
 	}
 
 	// Set timer

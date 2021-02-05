@@ -51,7 +51,7 @@ namespace SF {
 
 	public:
 
-		static constexpr StringCrc64 TypeName = "LogOutputLogServerComponent";
+		static const StringCrc64 TypeName;
 
 		LogOutputLogServerComponent(const LogOutputMask& logMask, const String& logServerAddress);
 		~LogOutputLogServerComponent();

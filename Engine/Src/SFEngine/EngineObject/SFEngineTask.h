@@ -27,10 +27,12 @@ namespace SF {
 	//	EngineTaskTick
 	//
 
-	// Our engine system has easy approach task arrange ment system.
+	// Our engine system has easy approach task arrangement system.
 	// 
 	enum class EngineTaskTick : int
 	{
+		None, // Don't tick
+
 		SyncSystemTick,
 		SyncPreTick,
 		SyncTick,
@@ -49,19 +51,18 @@ namespace SF {
 	////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	EngineTask -  interface for task operation
-	//
+	//		- Engine tasks will be running as far as they have tick group assigned
 
 	class EngineTask : public Task
 	{
 	public:
 
+		using super = Task;
+
 	private:
 
 		// Task tick group
 		EngineTaskTick m_TaskTick;
-
-		// Repeat count, -1 means tick forever
-		std::atomic<int> m_Repeat;
 
 		// Task manager node
 		DoubleLinkedListNodeDataT<SharedPointerT<EngineTask>> m_TaskManagerNode;
@@ -71,29 +72,20 @@ namespace SF {
 		DoubleLinkedListNodeDataT<SharedPointerT<EngineTask>>& GetManagerListNode();
 		friend class EngineTaskManager;
 
-		virtual void OnStarted() override;
-		virtual void OnFinished() override;
-		virtual void OnCanceled() override;
-
 	public:
 		EngineTask(EngineTaskTick taskTick = EngineTaskTick::SyncPreTick);
 		virtual ~EngineTask();
 
 		// Get tick task flags
-		EngineTaskTick GetTaskTick() { return m_TaskTick; }
+		EngineTaskTick GetTickGroup() { return m_TaskTick; }
 
-		// Get repeat setting
-		int GetRepeat() { return m_Repeat.load(std::memory_order_relaxed); }
-
-		// Set repeat setting. std::numeric_limits<int>::max() means infinite
-		void SetRepeat(int repeat) { m_Repeat = repeat; }
-
-		// Inc/Dec repeat. 
-		void IncRepeat() { m_Repeat.fetch_add(1, std::memory_order_relaxed); }
-		int DecRepeat() { auto orgCount = m_Repeat.load(std::memory_order_relaxed); if (orgCount != std::numeric_limits<int>::max()) return m_Repeat.fetch_sub(1, std::memory_order_release) - 1; return orgCount; }
+		// TODO: probably we need to support changing tick group?
+		void SetTickGroup(EngineTaskTick newTickGroup) { assert(newTickGroup == EngineTaskTick::None); m_TaskTick = newTickGroup; }
 
 		// Dispose
 		virtual void Dispose() override;
+
+		virtual void Finished() override;
 
 		// Request task. register itself to the task manager
 		virtual void Request() override;
@@ -132,6 +124,9 @@ namespace SF {
 		virtual void Run()
 		{
 			m_Func();
+
+			// Only one time execution
+			Finished();
 		}
 	};
 

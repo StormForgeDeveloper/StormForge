@@ -26,7 +26,7 @@
 namespace SF {
 
 
-	constexpr StringCrc64 LogOutputLogServerComponent::TypeName;
+	const StringCrc64 LogOutputLogServerComponent::TypeName = Hash64("LogOutputLogServerComponent");
 
 
 

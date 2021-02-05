@@ -32,12 +32,13 @@ namespace SF
 
 
 	// Asset loading notification task
-	ResourceManager::AssetLoadingTask::AssetLoadingTask(IHeap& heap, TaskEventHandler* pEventHandler)
-		: Task(pEventHandler)
+	ResourceManager::AssetLoadingTask::AssetLoadingTask(IHeap& heap, const TaskFinishedEventDelegate& pEventHandler)
+		: Task()
 		, HeapForLoading(heap)
 		, FilePath(heap)
 		, AssetName(heap)
 	{
+		AddTaskEventHandler(pEventHandler);
 	}
 
 
@@ -48,7 +49,7 @@ namespace SF
 	//
 
 
-	ResourceManager::AssetLoadingTaskImpl::AssetLoadingTaskImpl(IHeap& heap, TaskEventHandler* pEventHandler)
+	ResourceManager::AssetLoadingTaskImpl::AssetLoadingTaskImpl(IHeap& heap, const TaskFinishedEventDelegate& pEventHandler)
 		: AssetLoadingTask(heap, pEventHandler)
 	{
 	}
@@ -166,7 +167,7 @@ namespace SF
 	}
 
 	// Request loading an asset package. If the package is already exist, just reference count will be increased
-	SharedPointerT<IResourceManagerService::AssetLoadingTask> ResourceManager::LoadAssetPackage(const String& packagePath, TaskEventHandler* pEventHandler)
+	SharedPointerT<IResourceManagerService::AssetLoadingTask> ResourceManager::LoadAssetPackage(const String& packagePath, const TaskFinishedEventDelegate& pEventHandler)
 	{
 		SharedPointerT<AssetLoadingTask> loadingTask = new(GetHeap()) AssetLoadingTaskImpl(GetHeap(), pEventHandler);
 
@@ -179,7 +180,7 @@ namespace SF
 	}
 
 	// Request loading a resource. If the resource is already exist, just reference count will be increased
-	SharedPointerT<IResourceManagerService::AssetLoadingTask> ResourceManager::LoadAsset(const String& assetPath, TaskEventHandler* pEventHandler)
+	SharedPointerT<IResourceManagerService::AssetLoadingTask> ResourceManager::LoadAsset(const String& assetPath, const TaskFinishedEventDelegate& pEventHandler)
 	{
 		SharedPointerT<AssetLoadingTask> loadingTask = new(GetHeap()) AssetLoadingTaskImpl(GetHeap(), pEventHandler);
 

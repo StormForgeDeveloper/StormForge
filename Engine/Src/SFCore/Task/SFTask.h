@@ -19,7 +19,7 @@
 #include "Thread/SFSystemSynchronization.h"
 #include "Container/SFCircularPageQueue.h"
 #include "Util/SFTimeUtil.h"
-
+#include "Delegate/SFEventDelegate.h"
 
 
 namespace SF {
@@ -34,61 +34,7 @@ namespace SF {
 		Working
 	};
 
-
-	struct TaskNotification
-	{
-		WeakPointerT<class Task> pTask;
-		TaskState State;
-	};
-
-
-	typedef CircularPageQueueAtomic<TaskNotification*> TaskNotificationQueue;
-	
-
-	//////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Task event handler
-	//
-
-	// notification handler base 
-	class TaskEventHandler
-	{
-	public:
-		TaskEventHandler() {}
-		virtual ~TaskEventHandler() {}
-
-		// called when task state has changed
-		virtual void OnTaskStateChanged(Task *pTask, TaskState state) { unused(pTask); unused(state); }
-	};
-
-	// Handle event queue
-	class TaskEventHandlerQueue : public TaskEventHandler
-	{
-	private:
-		TaskNotificationQueue* m_pNotificationQueue = nullptr;
-
-	public:
-
-		TaskEventHandlerQueue(TaskNotificationQueue* pQueue);
-
-		virtual void OnTaskStateChanged(Task *pTask, TaskState state) override;
-	};
-
-	// Handle sync state
-	class TaskEventHandlerFinishCounter : public TaskEventHandler
-	{
-	private:
-		std::atomic<int32_t>& m_FinishCounter;
-
-	public:
-
-		TaskEventHandlerFinishCounter(std::atomic<int32_t>& finishCounter);
-
-		std::atomic<int32_t>& GetCounter() { return m_FinishCounter; }
-
-		virtual void OnTaskStateChanged(Task *pTask, TaskState state) override;
-	};
-
+	using TaskFinishedEventDelegate = EventDelegateList<Task*>::EventDelegate;
 
 
 	//////////////////////////////////////////////////////////////////
@@ -107,34 +53,47 @@ namespace SF {
 		// Task state
 		Atomic<State> m_TaskState;
 
+	protected:
 		// Task notification queue, If assigned
+		Atomic<bool> m_FinishedEventFired;
+		EventDelegateList<Task*> m_TaskFinishedHandlers;
 
-		Atomic<TaskEventHandler*> m_pNotificationHandler;
+		// event invoked when it is ticked
+		EventDelegateList<Task*> m_TaskTickedHandlers;
 
-	private:
+	protected:
 
-		void Requested();
-		void Scheduled();
-		void StartWorking();
-		void Finished();
-		void Canceled();
 
-		void NotifyStateChange();
+		virtual void NotifyFinished();
+		virtual void NotifyTicked();
+
+		virtual void Requested();
+		virtual void Scheduled();
+		virtual void StartWorking();
+		virtual void Finished();
+		virtual void Canceled();
 
 		friend class TaskOperator;
+		friend class AsyncTaskManager;
+		friend class AsyncTaskWorker;
 
 	public:
 
 		Task();
-		Task(TaskEventHandler* pEventHandler);
+		Task(TaskFinishedEventDelegate&& pEventHandler);
 		virtual ~Task();
 
 		// Get task state
 		State GetState(std::memory_order memoryOrder = std::memory_order_relaxed) { return m_TaskState.load(memoryOrder); }
 
 		// Event handler
-		TaskEventHandler* GetTaskEventHandler() { return m_pNotificationHandler.load(MemoryOrder::memory_order_acquire); }
-		void SetTaskEventHandler(TaskEventHandler* pEventHandler) { m_pNotificationHandler.store(pEventHandler, MemoryOrder::memory_order_release); }
+		void AddTaskEventHandler(TaskFinishedEventDelegate&& pEventHandler);
+		void AddTaskEventHandler(const TaskFinishedEventDelegate& pEventHandler);
+		void RemoveTaskEventHandler(uintptr_t context);
+
+		void AddTaskTickHandler(TaskFinishedEventDelegate&& pEventHandler);
+		void AddTaskTickHandler(const TaskFinishedEventDelegate& pEventHandler);
+		void RemoveTaskTickHandler(uintptr_t context);
 
 		// This call will queue this task to the global task manager
 		virtual void Request();
@@ -145,6 +104,7 @@ namespace SF {
 
 		void Wait();
 		bool Wait(DurationMS waitTime);
+
 
 		//////////////////////////////////////////////////////////////////////
 		//
@@ -179,8 +139,6 @@ namespace SF {
 	extern template class WeakPointerT < Task >;
 
 	typedef SharedPointerT < Task > TaskPtr;
-
-
 
 } // namespace SF
 

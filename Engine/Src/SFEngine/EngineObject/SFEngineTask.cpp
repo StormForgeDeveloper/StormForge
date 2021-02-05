@@ -32,7 +32,6 @@ namespace SF {
 
 	EngineTask::EngineTask(EngineTaskTick taskTick)
 		: m_TaskTick(taskTick)
-		, m_Repeat(0)
 	{
 	}
 
@@ -48,7 +47,9 @@ namespace SF {
 
 	void EngineTask::Dispose()
 	{
-		//m_ObjectPtr = WeakPointerT<EngineObject>();
+		// NOTE: It is better to be cleared, but it is not a big deal
+		//assert(m_TaskTick == EngineTaskTick::None);
+
 		AssertRel(m_TaskManagerNode.pNext == nullptr && m_TaskManagerNode.pPrev == nullptr);
 		AssertRel(m_TaskManagerNode.pNext != (DoubleLinkedListNode*)0xdddddddddddddddd && m_TaskManagerNode.pPrev != (DoubleLinkedListNode*)0xdddddddddddddddd);
 		m_TaskManagerNode.Data = nullptr;
@@ -59,25 +60,31 @@ namespace SF {
 		Service::EngineTaskManager->AddTask(this);
 	}
 
+	void EngineTask::Finished()
+	{
+		SetTickGroup(EngineTaskTick::None);
+		super::Finished();
+	}
+
 	void EngineTask::Run()
 	{
 	}
 
 
-	void EngineTask::OnStarted()
-	{
-		//Service::EngineTaskManager->OnTaskStarted(this);
-	}
+	//void EngineTask::OnStarted()
+	//{
+	//	//Service::EngineTaskManager->OnTaskStarted(this);
+	//}
 
-	void EngineTask::OnFinished()
-	{
-		Service::EngineTaskManager->OnTaskFinished(this);
-	}
+	//void EngineTask::OnFinished()
+	//{
+	//	//Service::EngineTaskManager->OnTaskFinished(this);
+	//}
 
-	void EngineTask::OnCanceled()
-	{
-		Service::EngineTaskManager->OnTaskFinished(this);
-	}
+	//void EngineTask::OnCanceled()
+	//{
+	//	//Service::EngineTaskManager->OnTaskFinished(this);
+	//}
 
 
 }; // namespace SF

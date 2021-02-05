@@ -88,6 +88,7 @@ namespace Net {
 			return;
 
 		pConnectionManager->AddressRemap(connectionPtr, m_OrgAddress, m_NewAddress);
+		Finished();
 	}
 
 
@@ -108,6 +109,7 @@ namespace Net {
 			return;
 
 		pConnectionManager->RemapPeerID(connectionPtr, m_PeerID);
+		Finished();
 	}
 
 

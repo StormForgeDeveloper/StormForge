@@ -34,15 +34,37 @@ namespace SF
 
 		struct EventDelegate
 		{
-			uint CallSerial = 0;
 			uintptr_t Context{};
 			CallableType Func;
+			uint CallSerial = 0;
 		};
 
 
 		EventDelegateList(IHeap& heap)
 			: m_DelegateArray(heap)
 		{
+		}
+
+		void AddDelegate(const EventDelegate& dele)
+		{
+			AddDelegate(dele.Context, dele.Func);
+		}
+
+		void AddDelegate(EventDelegate&& dele)
+		{
+			AddDelegate(dele.Context, Forward<CallableType>(dele.Func));
+		}
+
+		void AddDelegateUnique(const EventDelegate& dele)
+		{
+			RemoveDelegateAll(dele.Context);
+			AddDelegate(dele.Context, dele.Func);
+		}
+
+		void AddDelegateUnique(EventDelegate&& dele)
+		{
+			RemoveDelegateAll(dele.Context);
+			AddDelegate(dele.Context, Forward<CallableType>(dele.Func));
 		}
 
 		void AddDelegateUnique(uintptr_t Context, const CallableType& func)
@@ -59,12 +81,12 @@ namespace SF
 
 		void AddDelegate(uintptr_t Context, const CallableType& func)
 		{
-			m_DelegateArray.push_back(EventDelegate{ m_CallSerial, Context, func });
+			m_DelegateArray.push_back(EventDelegate{ Context, func, m_CallSerial });
 		}
 
 		void AddDelegate(uintptr_t Context, CallableType&& func)
 		{
-			m_DelegateArray.push_back(EventDelegate{ m_CallSerial, Context, Forward<CallableType>(func) });
+			m_DelegateArray.push_back(EventDelegate{ Context, Forward<CallableType>(func), m_CallSerial });
 		}
 
 		void RemoveDelegate(uintptr_t Context)

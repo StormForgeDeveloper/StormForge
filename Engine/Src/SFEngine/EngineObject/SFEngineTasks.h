@@ -21,6 +21,7 @@ namespace SF {
 	// Engine terminate task
 	class EngineTask_Terminate : public EngineTask
 	{
+		using super = EngineTask;
 	public:
 		EngineTask_Terminate();
 

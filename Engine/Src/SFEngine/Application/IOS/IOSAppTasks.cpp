@@ -60,6 +60,7 @@ namespace SF
 			Service::GraphicDevice->InitDisplay(m_Window);
 			m_Window = nullptr;
 		}
+		Finished();
 	}
 
 
@@ -71,6 +72,7 @@ namespace SF
 	void IOSAppTask_DestroyWindow::Run()
 	{
 		Service::GraphicDevice->DeinitDisplay();
+		Finished();
 	}
 
 
@@ -82,7 +84,7 @@ namespace SF
 
 	void IOSAppTask_WindowResized::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -96,11 +98,7 @@ namespace SF
 	{
 		GetApp()->SetPaused(false);
 
-		//if (GetApp()->GetAccelerometerSensor() == nullptr) return;
-
-		//ASensorEventQueue_enableSensor(GetApp()->GetSensorEventQueue(), GetApp()->GetAccelerometerSensor());
-		//// We'd like to get 60 events per second (in us).
-		//ASensorEventQueue_setEventRate(GetApp()->GetSensorEventQueue(), GetApp()->GetAccelerometerSensor(), (1000L / 60) * 1000);
+		Finished();
 	}
 
 
@@ -114,9 +112,7 @@ namespace SF
 	{
 		GetApp()->SetPaused(true);
 
-		//if (GetApp()->GetAccelerometerSensor() == nullptr) return;
-		//
-		//ASensorEventQueue_disableSensor(GetApp()->GetSensorEventQueue(), GetApp()->GetAccelerometerSensor());
+		Finished();
 	}
 
 
@@ -128,7 +124,7 @@ namespace SF
 
 	void IOSAppTask_LowMemory::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -140,7 +136,7 @@ namespace SF
 
 	void IOSAppTask_AppStart::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -152,7 +148,7 @@ namespace SF
 
 	void IOSAppTask_AppStop::Run()
 	{
-
+		Finished();
 	}
 
 
@@ -165,6 +161,7 @@ namespace SF
 	void IOSAppTask_Pause::Run()
 	{
 		GetApp()->SetPaused(true);
+		Finished();
 	}
 
 
@@ -177,6 +174,7 @@ namespace SF
 	void IOSAppTask_Resume::Run()
 	{
 		GetApp()->SetPaused(false);
+		Finished();
 	}
 
 
@@ -188,6 +186,7 @@ namespace SF
 
 	void IOSAppTask_ConfigChanged::Run()
 	{
+		Finished();
 	}
 
 
@@ -200,6 +199,7 @@ namespace SF
 	void IOSAppTask_SaveState::Run()
 	{
 		// TODO::
+		Finished();
 	}
 
 

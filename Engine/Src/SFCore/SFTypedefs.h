@@ -714,3 +714,6 @@ bool operator == (const sockaddr_in& op1, const sockaddr_in& op2);
 bool operator == (const sockaddr_in6& op1, const sockaddr_in6& op2);
 
 
+template<class DataType> inline bool IsDefaultValue(const DataType& value) { DataType defaultValue{}; return value == defaultValue; }
+
+template<> inline bool IsDefaultValue(const std::function<void()>& value) { return !(bool)value; }

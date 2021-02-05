@@ -329,7 +329,6 @@ namespace SF {
 		join();
 	}
 
-
 	void Thread::Run()
 	{
 		while (!CheckKillEvent(m_TickInterval))
@@ -337,7 +336,6 @@ namespace SF {
 			if (!Tick())
 				break;
 		}
-
 	}
 
 

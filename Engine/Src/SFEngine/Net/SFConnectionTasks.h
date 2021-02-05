@@ -35,6 +35,10 @@ namespace Net {
 
 	class ConnectionTask_DisconnectNClose : public EngineTask
 	{
+	public:
+
+		using super = EngineTask;
+
 	private:
 		const char* m_Reason = nullptr;
 		SharedPointerT<Connection> m_pConnection;

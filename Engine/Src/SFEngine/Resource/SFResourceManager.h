@@ -35,7 +35,7 @@ namespace SF
 		{
 		public:
 
-			AssetLoadingTaskImpl(IHeap& heap, TaskEventHandler* pEventHandler);
+			AssetLoadingTaskImpl(IHeap& heap, const TaskFinishedEventDelegate& pEventHandler);
 			~AssetLoadingTaskImpl();
 
 			Result LoadPackage(StringCrc64 assetType, IInputStream& stream);
@@ -71,10 +71,10 @@ namespace SF
 		virtual void RegisterLoadedResource(ResourcePtr& res) override;
 
 		// Request loading an asset package. If the package is already exist, just reference count will be increased
-		virtual SharedPointerT<AssetLoadingTask> LoadAssetPackage(const String& packagePath, TaskEventHandler* pEventHandler = nullptr) override;
+		virtual SharedPointerT<AssetLoadingTask> LoadAssetPackage(const String& packagePath, const TaskFinishedEventDelegate& pEventHandler) override;
 
 		// Request loading a resource. If the resource is already exist, just reference count will be increased
-		virtual SharedPointerT<AssetLoadingTask> LoadAsset(const String& assetPath, TaskEventHandler* pEventHandler = nullptr) override;
+		virtual SharedPointerT<AssetLoadingTask> LoadAsset(const String& assetPath, const TaskFinishedEventDelegate& pEventHandler) override;
 	};
 	
 

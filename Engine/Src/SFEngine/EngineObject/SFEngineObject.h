@@ -54,15 +54,15 @@ namespace SF {
 
 		std::atomic<bool> m_ActuallyRegistered;
 
-		SharedPointerT<EngineObjectAsyncEngineTask> m_EngineAsyncTask, m_RenderAsyncTask;
+		SharedPointerT<EngineObjectAsyncEngineTask> m_EngineAsyncTickTask, m_RenderAsyncTickTask;
 
 		DoubleLinkedListNodeDataT<EngineObject*> m_ManagerListNodes;
 		DoubleLinkedListNodeDataT<EngineObject*> m_ListNodes[(int)EngineTaskTick::Max];
 
     private:
 
-		SharedPointerT<EngineObjectAsyncEngineTask>& GetEngineAsyncTask();
-		SharedPointerT<EngineObjectAsyncEngineTask>& GetRenderAsyncTask();
+		SharedPointerT<EngineObjectAsyncEngineTask>& GetEngineAsyncTickTask();
+		SharedPointerT<EngineObjectAsyncEngineTask>& GetRenderAsyncTickTask();
 
 		DoubleLinkedListNodeDataT<EngineObject*>& GetManagerListNode() { return m_ManagerListNodes; }
 		DoubleLinkedListNodeDataT<EngineObject*>& GetListNode(EngineTaskTick taskTick) { return m_ListNodes[(int)taskTick]; }
@@ -71,6 +71,8 @@ namespace SF {
 		friend class EngineTaskManager;
 
 		void RegisterToEngineObjectManager();
+
+		void SetTickFlags(uint32_t tickFlag);
 
 
 	public:
@@ -90,8 +92,7 @@ namespace SF {
 		// Change tick flag
 		// Any combination of EngineTaskTick are acceptable
 		uint32_t GetTickFlags() { return m_TickFlags.load(std::memory_order_relaxed); }
-		EngineTaskPtr SetTickFlags(uint32_t tickFlag);
-		EngineTaskPtr SetTickGroup(EngineTaskTick tickGroup);
+		void SetTickGroup(EngineTaskTick tickGroup);
 
 		// Set timer
 		//	@startDelay: timer will start after startDelay
@@ -137,6 +138,10 @@ namespace SF {
 
 	class EngineObjectAsyncEngineTask : public EngineTask
 	{
+	public:
+
+		using super = EngineTask;
+
 	private:
 		EngineObject* m_ObjectPtr;
 
@@ -146,6 +151,9 @@ namespace SF {
 		void ClearObject();
 
 		virtual void Run() override;
+
+		virtual void NotifyTicked() override;
+
 	};
 
 
