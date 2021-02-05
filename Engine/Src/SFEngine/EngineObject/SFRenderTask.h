@@ -43,7 +43,7 @@ namespace SF {
 		RenderTask(Object* pObject); // poke ticking
 		virtual ~RenderTask();
 
-		virtual void Request() override;
+		virtual Result Request() override;
 
 		virtual void Run() override;
 	};

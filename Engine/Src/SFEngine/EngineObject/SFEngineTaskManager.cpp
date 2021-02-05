@@ -280,7 +280,10 @@ namespace SF {
 			counter.fetch_add(1, std::memory_order_relaxed);
 			task->RemoveTaskTickHandler(intptr_t(this));
 			task->AddTaskTickHandler(eventFunc);
-			Service::AsyncTaskManager->PendingTask(task.get());
+			if (!Service::AsyncTaskManager->PendingTask(task.get()))
+			{
+				counter.fetch_sub(1, std::memory_order_relaxed);
+			}
 
 			//ScheduleAsyncTaskForThisTick(*task, counter, eventFunc);
 
@@ -310,7 +313,10 @@ namespace SF {
 		counter.fetch_add(1, std::memory_order_relaxed);
 		pTask->RemoveTaskTickHandler(intptr_t(this));
 		pTask->AddTaskTickHandler(eventFunc);
-		Service::AsyncTaskManager->PendingTask(pTask);
+		if (!Service::AsyncTaskManager->PendingTask(pTask))
+		{
+			counter.fetch_sub(1, std::memory_order_relaxed);
+		}
 	}
 
 	void EngineTaskManager::UpdatePendingTickAction()

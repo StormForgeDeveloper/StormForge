@@ -96,7 +96,7 @@ namespace SF {
 		void RemoveTaskTickHandler(uintptr_t context);
 
 		// This call will queue this task to the global task manager
-		virtual void Request();
+		virtual Result Request();
 
 		virtual void Cancel();
 

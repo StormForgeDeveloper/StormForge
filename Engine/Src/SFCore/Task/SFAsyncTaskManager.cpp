@@ -129,14 +129,16 @@ namespace SF {
 	}
 
 	// Pending an async task 
-	void AsyncTaskManager::PendingTask(Task* pTask)
+	Result AsyncTaskManager::PendingTask(Task* pTask)
 	{
+		Result hr;
 		if (UseConditionVariable)
 		{
 			std::scoped_lock<std::mutex> lockGuard(GetTaskAssignMutex());
 
 			TaskOperator().Requested(pTask);
-			if (m_PendingTasks.Enqueue(SharedPointerAtomicT<Task>(pTask)))
+			hr = m_PendingTasks.Enqueue(SharedPointerAtomicT<Task>(pTask));
+			if (hr)
 			{
 				m_TaskAssignCondition.notify_one();
 			}
@@ -148,11 +150,14 @@ namespace SF {
 		else
 		{
 			TaskOperator().Requested(pTask);
-			if (!m_PendingTasks.Enqueue(SharedPointerAtomicT<Task>(pTask)))
+			hr = m_PendingTasks.Enqueue(SharedPointerAtomicT<Task>(pTask));
+			if (!hr)
 			{
 				TaskOperator().Canceled(pTask);
 			}
 		}
+
+		return hr;
 	}
 
 

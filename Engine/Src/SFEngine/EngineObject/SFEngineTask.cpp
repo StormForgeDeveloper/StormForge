@@ -55,9 +55,9 @@ namespace SF {
 		m_TaskManagerNode.Data = nullptr;
 	}
 
-	void EngineTask::Request()
+	Result EngineTask::Request()
 	{
-		Service::EngineTaskManager->AddTask(this);
+		return Service::EngineTaskManager->AddTask(this);
 	}
 
 	void EngineTask::Finished()

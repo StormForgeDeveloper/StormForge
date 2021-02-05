@@ -172,17 +172,17 @@ namespace SF {
 
 
 	// This call will queue this task to the global task manager
-	void Task::Request()
+	Result Task::Request()
 	{
 		m_FinishedEventFired = false;
 
 		if (m_TaskState.load(std::memory_order_relaxed) != State::Idle)
 		{
 			Assert(false);
-			return;
+			return ResultCode::INVALID_STATE;
 		}
 
-		Service::AsyncTaskManager->PendingTask(this);
+		return Service::AsyncTaskManager->PendingTask(this);
 	}
 
 	void Task::Cancel()

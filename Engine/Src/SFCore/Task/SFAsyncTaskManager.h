@@ -99,7 +99,7 @@ namespace SF {
 		virtual bool WaitTaskSyncGroup(DurationMS waitDuration) override;
 
 		// Pending an async task 
-		virtual void PendingTask(Task* pTask) override;
+		virtual Result PendingTask(Task* pTask) override;
 
 
 		// Initialize component

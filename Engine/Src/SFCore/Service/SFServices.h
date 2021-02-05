@@ -34,10 +34,8 @@ namespace SF {
 		virtual bool WaitTaskSyncGroup(DurationMS waitDuration) { unused(waitDuration);  return true; }
 
 		// Pending an async task 
-		virtual void PendingTask(Task* pTask) { unused(pTask); }
+		virtual Result PendingTask(Task* pTask) { unused(pTask); return ResultCode::NOT_IMPLEMENTED; }
 	};
 
-
-
-}; // namespace SF
+} // namespace SF
 

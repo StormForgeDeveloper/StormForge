@@ -88,7 +88,7 @@ namespace SF {
 		virtual void Finished() override;
 
 		// Request task. register itself to the task manager
-		virtual void Request() override;
+		virtual Result Request() override;
 
 		// Task run function. if repeat is bigger than 0 it will be called until repeat is 0 or below zero.
 		virtual void Run() override;
