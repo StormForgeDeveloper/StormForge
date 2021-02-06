@@ -139,11 +139,11 @@ namespace StrUtil
 	bool StringCompairIgnoreCase( const char* szSrc, int iSrcBuffLen, const char* szDest, int iDestBuffLen );
 	bool StringCompairIgnoreCase( const wchar_t* szSrc, int iSrcBuffLen, const wchar_t* szDest, int iDestBuffLen );
 	template<int iSrcBuffLen, int iDestBuffLen>
-	bool StringCompairIgnoreCase( char (&szSrc)[iSrcBuffLen], char (&szDest)[iDestBuffLen] );
+	bool StringCompairIgnoreCase( const char (&szSrc)[iSrcBuffLen], const char (&szDest)[iDestBuffLen] );
 	template<int iDestBuffLen>
-	bool StringCompairIgnoreCase( const char* szSrc, int iSrcBuffLen, char (&szDest)[iDestBuffLen] );
+	bool StringCompairIgnoreCase( const char* szSrc, int iSrcBuffLen, const char (&szDest)[iDestBuffLen] );
 	template<int iSrcBuffLen>
-	bool StringCompairIgnoreCase( char (&szSrc)[iSrcBuffLen], const char* szDest, int iDestBuffLen );
+	bool StringCompairIgnoreCase(const char (&szSrc)[iSrcBuffLen], const char* szDest, int iDestBuffLen );
 
 	template<int iSrcBuffLen, int iDestBuffLen>
 	bool StringCompairIgnoreCase( wchar_t (&szSrc)[iSrcBuffLen], wchar_t (&szDest)[iDestBuffLen] );

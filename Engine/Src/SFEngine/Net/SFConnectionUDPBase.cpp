@@ -496,7 +496,7 @@ namespace Net {
 		return GetWriteQueueUDP()->Enqueue(pSendBuffer);
 	}
 
-	Result ConnectionUDPBase::SendRaw(SharedPointerT<Message::MessageData> &pMsg)
+	Result ConnectionUDPBase::SendRaw(const SharedPointerT<Message::MessageData> &pMsg)
 	{
 		Result hr = ResultCode::SUCCESS;
 		IOBUFFER_WRITE *pSendBuffer = nullptr;
@@ -517,7 +517,7 @@ namespace Net {
 
 		netMem(pSendBuffer = new(GetIOHeap()) IOBUFFER_WRITE);
 
-		pSendBuffer->SetupSendUDP(GetSocket(), GetRemoteSockAddr(), std::forward<SharedPointerT<Message::MessageData>>(pMsg));
+		pSendBuffer->SetupSendUDP(GetSocket(), GetRemoteSockAddr(), SharedPointerT<Message::MessageData>(pMsg));
 
 		if (NetSystem::IsProactorSystem())
 		{
@@ -532,7 +532,6 @@ namespace Net {
 		}
 
 
-		pMsg = nullptr;
 		pSendBuffer = nullptr;
 
 	Proc_End:
@@ -547,7 +546,7 @@ namespace Net {
 	}
 
 	// Send message to connected entity
-	Result ConnectionUDPBase::Send(SharedPointerT<Message::MessageData> &pMsg )
+	Result ConnectionUDPBase::Send(const SharedPointerT<Message::MessageData> &pMsg )
 	{
 		Result hr = ResultCode::SUCCESS;
 		Message::MessageID msgID;
@@ -569,13 +568,11 @@ namespace Net {
 			|| GetConnectionState() == ConnectionState::DISCONNECTED)
 		{
 			// Send fail by connection closed
-			pMsg = nullptr;
 			goto Proc_End;
 		}
 
 		if( pMsg->GetMessageSize() > (uint)Const::INTER_PACKET_SIZE_MAX )
 		{
-			pMsg = nullptr;
 			netErr( ResultCode::IO_BADPACKET_TOOBIG );
 		}
 
@@ -619,7 +616,7 @@ namespace Net {
 
 				AssertRel(pMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
 
-				netChk( m_SendGuaQueue.Enqueue( std::forward<SharedPointerT<Message::MessageData>>(pMsg) ) );
+				netChk( m_SendGuaQueue.Enqueue( SharedPointerT<Message::MessageData>(pMsg) ) );
 
 				SetSendBoost(Const::RELIABLE_SEND_BOOST);
 
@@ -634,13 +631,11 @@ namespace Net {
 				}
 			}
 		}
-		pMsg = nullptr;
 
 	Proc_End:
 
 		if (!(hr))
 		{
-			pMsg = nullptr;
 		}
 		else
 		{

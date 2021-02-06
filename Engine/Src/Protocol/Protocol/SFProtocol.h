@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -18,6 +18,7 @@
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
 #include "Net/SFMessageData.h"
+
 
 namespace SF
 {

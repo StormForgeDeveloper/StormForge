@@ -274,9 +274,6 @@ namespace SF
 		// Zookeeper handle
 		zhandle_t* m_ZKHandle = nullptr;
 
-		// State of zoo keeper server
-		//std::atomic<int> m_State;
-
 		// Zookeeper client id
 		uint8_t ClientIDBuffer[ZOOKEEPER_STAT_BUFFER_SIZE];
 		void* m_ClientID;
@@ -308,8 +305,6 @@ namespace SF
 		ZookeeperWatcher& GetWatcher() { return m_ZKWatcher; }
 
 		SortedSet<ZookeeperWatcher*>& GetRegisteredWatchers() { return m_RegisteredWatcher; }
-
-
 
 		// check connection status
 		bool IsConnected() const;

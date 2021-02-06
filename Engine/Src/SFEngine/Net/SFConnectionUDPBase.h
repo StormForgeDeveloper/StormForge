@@ -76,7 +76,7 @@ namespace Net {
 		// Send packet buffer to connection with network device
 		virtual Result EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer);
 
-		virtual Result SendRaw(SharedPointerT<Message::MessageData> &pMsg) override;
+		virtual Result SendRaw(const SharedPointerT<Message::MessageData> &pMsg) override;
 
 	public:
 		// Constructor
@@ -135,7 +135,7 @@ namespace Net {
 
 
 		// Send message to connected entity
-		virtual Result Send(SharedPointerT<Message::MessageData> &pMsg ) override;
+		virtual Result Send(const SharedPointerT<Message::MessageData> &pMsg ) override;
 
 
 		// Update Send buffer Queue, TCP and UDP client connection

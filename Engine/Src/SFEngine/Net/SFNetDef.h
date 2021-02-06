@@ -160,12 +160,23 @@ namespace Net {
 
 
 
-
-
-
 #include "SFNetDef.inl"
 
 } // namespace Net
+
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Message endpoint
+	//		- message routing endpoint through messaging server
+	//
+
+	class MessageEndpoint : public SharedObject
+	{
+	public:
+		virtual Result Send(const SharedPointerT<Message::MessageData>& messageData) = 0;
+	};
 
 
 

@@ -42,6 +42,19 @@ namespace SF
 	//	Node setting value parsing
 	//
 
+	Result ServerConfigJson::ParseEventRoute(const Json::Value& jsonObject, const char* keyName, ServerConfig::EventRoute& outEventRoute)
+	{
+		auto stringValue = jsonObject.get(keyName, Json::Value(Json::stringValue));
+		auto splitIndex = StrUtil::Indexof(stringValue.asCString(), '/');
+		if (splitIndex < 0)
+			return ResultCode::FAIL;
+
+		String eventRouterString = stringValue.asCString();
+		outEventRoute.RouteServer = eventRouterString.SubString(0, splitIndex);
+		outEventRoute.Channel = eventRouterString.SubString(splitIndex, eventRouterString.length());
+
+		return ResultCode::SUCCESS;
+	}
 
 	Result ServerConfigJson::ParseNetPrivate(const Json::Value& itemValue, ServerConfig::NetPrivate& privateNet)
 	{
@@ -74,14 +87,14 @@ namespace SF
 		auto UID = itemValue.get("UID", Json::Value(Json::uintValue));
 		auto WorkerThreadCount = itemValue.get("WorkerThreadCount", Json::Value(4));
 		auto NetIOThreadCount = itemValue.get("NetIOThreadCount", Json::Value(4));
-		auto NetPrivate = itemValue.get("NetPrivate", Json::Value(Json::objectValue));
+		//auto NetPrivate = itemValue.get("NetPrivate", Json::Value(Json::objectValue));
 
 		pGenericServer->Name = Name.asCString();
 		pGenericServer->UID = UID.asUInt();
 		pGenericServer->WorkerThreadCount = WorkerThreadCount.asUInt();
 		pGenericServer->NetIOThreadCount = NetIOThreadCount.asUInt();
-		Result result = ParseNetPrivate(NetPrivate, pGenericServer->PrivateNet);
-		if (!result) return result;
+		//Result result = ParseNetPrivate(NetPrivate, pGenericServer->PrivateNet);
+		//if (!result) return result;
 
 		return ResultCode::SUCCESS;
 	}
@@ -227,6 +240,9 @@ namespace SF
 			break;
 		}
 
+		// Ignoring parsing error as not all of module requires it
+		ParseEventRoute(moduleValue, "EventRoute", pServerModule->EventRoute);
+
 		if (pServerModule != nullptr)
 			pServerModule->ModuleName = moduleName.asCString();
 
@@ -336,8 +352,11 @@ namespace SF
 		pServer->GameClusterName = gameClusterID.asCString();
 		pServer->GameClusterID = gameClusterID.asCString();
 
-		auto dataCenter = rootObject.get("DataCenter", Json::Value("127.0.0.1:2181"));
-		pServer->DataCenter = dataCenter.asCString();
+		auto dataCenter = rootObject.get("DataCenter", Json::Value("127.0.0.1:2181/BRServiceDirectory"));
+		auto splitIndex = StrUtil::Indexof(dataCenter.asCString(), '/');
+		String dataCenterString = dataCenter.asCString();
+		pServer->DataCenter = dataCenterString.SubString(splitIndex, dataCenterString.length());
+		pServer->DataCenterPath = dataCenterString.SubString(0, splitIndex);
 
 		auto logFilePath = rootObject.get("LogFilePath", Json::Value(""));
 		pServer->LogFilePath = logFilePath.asCString();

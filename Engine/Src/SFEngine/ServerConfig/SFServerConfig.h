@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2017 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -37,6 +37,17 @@ namespace SF
 
 			NetPrivate(IHeap& heap)
 				: IP(heap)
+			{}
+		};
+
+		struct EventRoute
+		{
+			String RouteServer;
+			String Channel;
+
+			EventRoute(IHeap& heap)
+				: RouteServer(heap)
+				, Channel(heap)
 			{}
 		};
 
@@ -88,8 +99,10 @@ namespace SF
 		struct ServerModule
 		{
 			String ModuleName;
+			EventRoute EventRoute;
 			ServerModule(IHeap& heap)
 				: ModuleName(heap)
+				, EventRoute(heap)
 			{}
 			virtual ~ServerModule() {}
 		};
@@ -173,7 +186,6 @@ namespace SF
 			uint32_t UID = 0;
 			String Name;
 			String Executable;
-			NetPrivate PrivateNet;
 			uint WorkerThreadCount = 4;
 			uint NetIOThreadCount = 4;
 			DynamicArray<ServerModule*> Modules;
@@ -181,7 +193,6 @@ namespace SF
 			GenericServer(IHeap& heap)
 				: Name(heap)
 				, Executable(heap)
-				, PrivateNet(heap)
 				, Modules(heap)
 			{}
 			virtual ~GenericServer()
@@ -242,7 +253,13 @@ namespace SF
 		{
 			GameID GameClusterID;
 			String GameClusterName;
+			// Data center
 			String DataCenter;
+			String DataCenterPath;
+			// Server event router server
+			String EventRouter;
+			String EventRouterPath;
+			// Log config
 			String LogFilePath;
 			String LogServer;
 

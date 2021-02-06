@@ -57,12 +57,15 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
             NewLine(3);
 
-            OutStream.WriteLine("class VariableTable;");
-            NewLine(3);
+            //OutStream.WriteLine("class VariableTable;");
+            //NewLine(3);
 
             // namespace definition
             OpenSection("namespace", PrjPrefix);
-            OpenSection("namespace", "Policy");
+
+            OutStream.WriteLine("   class MessageEndpoint;");
+            OutStream.WriteLine("   class VariableTable;");
+            NewLine(2);
         }
 
 
@@ -83,7 +86,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
             OutStream.WriteLine("#include \"Net/SFMessage.h\"");
-            OutStream.WriteLine("#include \"Net/SFConnection.h\"");
+            OutStream.WriteLine("#include \"Net/SFMessageEndpoint.h\"");
             if(Group.IsServer)
                 OutStream.WriteLine("#include \"Protocol/SvrProtocol.h\"");
             OutStream.WriteLine(string.Format("#include \"Protocol/Policy/{0}\"", OutputHeaderName()));
@@ -96,7 +99,6 @@ namespace ProtocolCompiler
 
             // namespace definition
             OpenSection("namespace", PrjPrefix);
-            OpenSection("namespace", "Policy");
         }
 
         public override string ParamInString(Parameter[] parameter, bool bUseOriginalType = false)
@@ -135,14 +137,11 @@ namespace ProtocolCompiler
 
             OpenSection("class", string.Format("{0}", SvrPolicyClassName));
             MatchIndent(); OutStream.WriteLine("private:");
-            MatchIndent(1); OutStream.WriteLine("SharedPointerT<Net::Connection> m_pConnection;");
+            MatchIndent(1); OutStream.WriteLine("SharedPointerT<MessageEndpoint> m_Endpoint;");
             MatchIndent(); OutStream.WriteLine("public:");
             MatchIndent(); OutStream.WriteLine("// Constructor");
             MatchIndent(); OutStream.WriteLine(
-                string.Format("{0} ( const SharedPointerT<Net::Connection>& pConn ) : m_pConnection(pConn)", SvrPolicyClassName));
-            MatchIndent(); OutStream.WriteLine("{}");
-            MatchIndent(); OutStream.WriteLine(
-                string.Format("{0} ( const SharedPointerAtomicT<Net::Connection>& pConn ) : m_pConnection(pConn)", SvrPolicyClassName));
+                string.Format("{0} ( const SharedPointerT<MessageEndpoint>& pEndpoint ) : m_Endpoint(pEndpoint)", SvrPolicyClassName));
             MatchIndent(); OutStream.WriteLine("{}");
             NewLine();
 
@@ -180,14 +179,11 @@ namespace ProtocolCompiler
 
             OpenSection("class", string.Format("{0} ", PolicyClassName));
             MatchIndent(); OutStream.WriteLine("private:");
-            MatchIndent(1); OutStream.WriteLine("SharedPointerT<Net::Connection> m_pConnection;");
+            MatchIndent(1); OutStream.WriteLine("SharedPointerT<MessageEndpoint> m_Endpoint;");
             MatchIndent(); OutStream.WriteLine("public:");
             MatchIndent(); OutStream.WriteLine("// Constructor");
             MatchIndent(); OutStream.WriteLine(
-                string.Format("{0} ( const SharedPointerT<Net::Connection>& pConn ) : m_pConnection(pConn)", PolicyClassName));
-            MatchIndent(); OutStream.WriteLine("{}");
-            MatchIndent(); OutStream.WriteLine(
-                string.Format("{0} ( const SharedPointerAtomicT<Net::Connection>& pConn ) : m_pConnection(pConn)", PolicyClassName));
+                string.Format("{0} (const SharedPointerT<MessageEndpoint>& pEndpoint ) : m_Endpoint(pEndpoint)", PolicyClassName));
             MatchIndent(); OutStream.WriteLine("{}");
             NewLine();
 
@@ -230,22 +226,22 @@ namespace ProtocolCompiler
             DefaultHRESULT(); NewLine();
 
             MatchIndent(); OutStream.WriteLine(" MessageDataPtr pMessage;");
-            MatchIndent(); OutStream.WriteLine(" protocolCheckPtr(m_pConnection);");
+            MatchIndent(); OutStream.WriteLine(" protocolCheckPtr(m_Endpoint);");
             NewLine();
 
             if (parameters != null && parameters.Length > 0)
             {
-                MatchIndent(); OutStream.WriteLine(" pMessage = SF::Message::{0}::{1}{2}::Create(m_pConnection->GetIOHeap(), {3});", Group.Name, Name, typeName, ParamArgument(parameters));
+                MatchIndent(); OutStream.WriteLine(" pMessage = SF::Message::{0}::{1}{2}::Create(GetSystemHeap(), {3});", Group.Name, Name, typeName, ParamArgument(parameters));
             }
             else
             {
-                MatchIndent(); OutStream.WriteLine(" pMessage = SF::Message::{0}::{1}{2}::Create(m_pConnection->GetIOHeap());", Group.Name, Name, typeName);
+                MatchIndent(); OutStream.WriteLine(" pMessage = SF::Message::{0}::{1}{2}::Create(GetSystemHeap());", Group.Name, Name, typeName);
             }
 
             MatchIndent(); OutStream.WriteLine(" protocolCheckPtr(*pMessage);");
             NewLine();
 
-            MatchIndent(); OutStream.WriteLine(" return m_pConnection->Send( pMessage );");
+            MatchIndent(); OutStream.WriteLine(" return m_Endpoint->Send( pMessage );");
             NewLine();
             
             ReturnHR(); NewLine();

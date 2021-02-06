@@ -43,7 +43,7 @@ namespace ProtocolCompiler
         public virtual string OutputCppName { get { return Group.Name + "Service.cpp"; } }
         public virtual string ServiceClassName { get { return Group.Name + "Service"; } }
 
-        public virtual string NetInterfaceString { get { return "Policy::NetPolicy" + Group.Name + "(GetConnection())"; } }
+        public virtual string NetInterfaceString { get { return "NetPolicy" + Group.Name + "(GetTargetEndpoint())"; } }
 
         public virtual string BasePolicyHeaderName { get { return Group.Name + "NetPolicy.h"; } }
 
@@ -54,7 +54,7 @@ namespace ProtocolCompiler
         {
             OutStream.WriteLine("////////////////////////////////////////////////////////////////////////////////");
             OutStream.WriteLine("// ");
-            OutStream.WriteLine("// CopyRight (c) 2016 Kyungkun Ko");
+            OutStream.WriteLine("// CopyRight (c) Kyungkun Ko");
             OutStream.WriteLine("// ");
             OutStream.WriteLine("// Author : Generated");
             OutStream.WriteLine("// ");
@@ -74,7 +74,6 @@ namespace ProtocolCompiler
 
             // namespace definition
             OpenSection("namespace", "SF");
-            OpenSection("namespace", "Svr");
         }
 
 
@@ -82,11 +81,11 @@ namespace ProtocolCompiler
         {
             OutStream.WriteLine("////////////////////////////////////////////////////////////////////////////////");
             OutStream.WriteLine("// ");
-            OutStream.WriteLine("// CopyRight (c) 2016 Kyungkun Ko");
+            OutStream.WriteLine("// CopyRight (c) Kyungkun Ko");
             OutStream.WriteLine("// ");
             OutStream.WriteLine("// Author : Generated");
             OutStream.WriteLine("// ");
-            OutStream.WriteLine("// Description : {0} Message debug implementations", Group.Name);
+            OutStream.WriteLine("// Description : {0} Server service", Group.Name);
             OutStream.WriteLine("// ");
             OutStream.WriteLine("////////////////////////////////////////////////////////////////////////////////");
             OutStream.WriteLine("");
@@ -94,10 +93,9 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"{0}\"", PreCompiledHeader);
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
             OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
-            OutStream.WriteLine("#include \"ServerEntity/ServerEntity.h\"");
+            OutStream.WriteLine("#include \"Net/SFMessageEndpoint.h\"");
             OutStream.WriteLine("#include \"Server/BrServer.h\"");
             OutStream.WriteLine("#include \"Server/BrServerUtil.h\"");
-            OutStream.WriteLine("#include \"Entity/EntityInformation.h\"");
             OutStream.WriteLine("#include \"Protocol/ServerService/{0}\"", OutputHeaderName);
             OutStream.WriteLine("#include \"SvrTrace.h\"");
 
@@ -105,7 +103,6 @@ namespace ProtocolCompiler
 
             // namespace definition
             OpenSection("namespace", PrjPrefix);
-            OpenSection("namespace", "Svr");
         }
 
         protected string ParamString(Parameter[] parameter)

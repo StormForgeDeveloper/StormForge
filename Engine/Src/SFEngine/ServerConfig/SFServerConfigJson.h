@@ -40,6 +40,7 @@ namespace SF
 		//
 
 
+		Result ParseEventRoute(const Json::Value& jsonObject, const char* keyName, ServerConfig::EventRoute& outEventRoute);
 		Result ParseNetPrivate(const Json::Value& json, ServerConfig::NetPrivate& privateNet);
 		Result ParseNetPublic(const Json::Value& json, ServerConfig::NetPublic& publicNet);
 		Result ParseGenericServer(const Json::Value& json, ServerConfig::GenericServer* pGenericServer);

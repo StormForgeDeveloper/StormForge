@@ -301,7 +301,6 @@ namespace SF
 	Zookeeper::Zookeeper(IHeap& heap, uint32_t debugLogLevel)
 		: m_Heap(heap)
 		, m_ZKHandle(nullptr)
-//		, m_State(0)
 		, m_ZKWatcher(heap)
 		, m_LogLevel(debugLogLevel)
 		, m_RegisteredWatcher(m_Heap)

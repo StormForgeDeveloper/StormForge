@@ -27,6 +27,9 @@
 
 
 namespace SF {
+
+	class MessageEndpoint;
+
 namespace Net {
 
 
@@ -108,6 +111,9 @@ namespace Net {
 		// Thread error detection
 		ThreadID m_RunningThreadID;
 
+		// Message endpoint adapter
+		SharedPointerT<MessageEndpoint> m_MessageEndpoint;
+
 	protected:
 
 		// Guaranteed sending wait queue
@@ -150,7 +156,7 @@ namespace Net {
 		virtual Result InitSynchronization();
 
 
-		virtual Result SendRaw(SharedPointerT<Message::MessageData> &pMsg) = 0;
+		virtual Result SendRaw(const SharedPointerT<Message::MessageData> &pMsg) = 0;
 
 		void SetNetCtrlAction(NetCtrlIDs id, ConnectionMessageAction* action);
 		void AddStateAction(ConnectionState state, ConnectionAction* action);
@@ -189,6 +195,8 @@ namespace Net {
 		void ClearCID();
 		void SetCID(uint64_t cid) { m_CID = cid; }
 
+
+		const SharedPointerT<MessageEndpoint>& GetMessageEndpoint() const { return m_MessageEndpoint; }
 
 		// Get connection state
 		const ConnectionState GetConnectionState() const;
@@ -370,7 +378,7 @@ namespace Net {
 
 
 		// Send message to connected entity
-		virtual Result Send(SharedPointerT<Message::MessageData> &pMsg) = 0;
+		virtual Result Send(const SharedPointerT<Message::MessageData> &pMsg) = 0;
 
 		// Message count currently in recv queue
 		virtual SysUInt GetRecvMessageCount();

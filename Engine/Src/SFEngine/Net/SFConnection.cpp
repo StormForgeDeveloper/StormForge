@@ -49,6 +49,35 @@ namespace SF {
 
 	namespace Net {
 
+		////////////////////////////////////////////////////////////////////////////////
+		//
+		//	MessageEndpoint adapter
+		//
+
+
+		class MessageEndpointConnection : public MessageEndpoint
+		{
+		public:
+			WeakPointerT<Connection*> m_pConnection;
+
+			MessageEndpointConnection(Connection* pConnection)
+			{
+				m_pConnection = pConnection->AsSharedPtr();
+			}
+
+			virtual Result Send(const SharedPointerT<Message::MessageData>& messageData) override
+			{
+				auto pConnection = m_pConnection.AsSharedPtr<Connection>();
+				if (pConnection != nullptr)
+				{
+					return pConnection->Send(messageData);
+				}
+
+				return ResultCode::INVALID_STATE;
+			}
+		};
+
+
 
 		////////////////////////////////////////////////////////////////////////////////
 		//
@@ -88,6 +117,9 @@ namespace SF {
 			{
 				new((void*)&m_ActionsByState[iState]) ConnectionActionArray(GetHeap());
 			}
+
+			// create endpoint adapter
+			m_MessageEndpoint = new MessageEndpointConnection(this);
 		}
 
 		Connection::~Connection()

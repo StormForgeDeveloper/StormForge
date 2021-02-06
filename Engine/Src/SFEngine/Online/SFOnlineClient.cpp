@@ -123,7 +123,7 @@ namespace SF
 				if (evt.Components.hr)
 				{
 					SetOnlineState(OnlineState::LogingIn);
-					Policy::NetPolicyLogin policy(GetConnection());
+					NetPolicyLogin policy(GetConnection()->GetMessageEndpoint());
 					auto res = policy.LoginCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetUserId(), m_Owner.GetPassword());
 					if (!res)
 					{
@@ -264,7 +264,7 @@ namespace SF
 				if (evt.Components.hr)
 				{
 					SetOnlineState(OnlineState::JoiningToGameServer);
-					Policy::NetPolicyGame policy(GetConnection());
+					NetPolicyGame policy(GetConnection()->GetMessageEndpoint());
 					auto res = policy.JoinGameServerCmd(intptr_t(this), m_Owner.GetAccountId(), m_Owner.GetAuthTicket(), m_Owner.GetLoginEntityUID());
 					if (!res)
 					{
@@ -381,7 +381,7 @@ namespace SF
 
 
 			SetOnlineState(OnlineState::InGameJoiningGameInstance);
-			Policy::NetPolicyGame policy(m_Owner.GetConnectionGame());
+			NetPolicyGame policy(m_Owner.GetConnectionGame()->GetMessageEndpoint());
 			auto res = policy.JoinGameInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID());
 			if (!res)
 			{
@@ -565,7 +565,7 @@ namespace SF
 				&& Util::TimeSince(m_HeartbeatTimer) > DurationMS(15 * 1000))
 			{
 				m_HeartbeatTimer = Util::Time.GetTimeMs();
-				Policy::NetPolicyGame policy(m_Game);
+				NetPolicyGame policy(m_Game->GetMessageEndpoint());
 				policy.HeartbeatC2SEvt();
 			}
 		}

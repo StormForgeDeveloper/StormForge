@@ -271,7 +271,7 @@ namespace SF
 			break;
 		}
 
-		return Policy::NetPolicyPlayInstance(m_ConnectionDirectory).GetStreamListCmd(0, 0);
+		return NetPolicyPlayInstance(m_ConnectionDirectory->GetMessageEndpoint()).GetStreamListCmd(0, 0);
 	}
 
 	Result StreamDBDirectoryClient::PollEvent(Event& evt)

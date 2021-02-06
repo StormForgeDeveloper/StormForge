@@ -297,19 +297,19 @@ namespace SF {
 		}
 
 		template<int iSrcBuffLen, int iDestBuffLen>
-		inline bool StringCompairIgnoreCase(char(&szSrc)[iSrcBuffLen], char(&szDest)[iDestBuffLen])
+		inline bool StringCompairIgnoreCase(const char(&szSrc)[iSrcBuffLen], const char(&szDest)[iDestBuffLen])
 		{
 			return StringCompairIgnoreCase(szSrc, iSrcBuffLen, szDest, iDestBuffLen);
 		}
 
 		template<int iDestBuffLen>
-		inline bool StringCompairIgnoreCase(const char* szSrc, int iSrcBuffLen, char(&szDest)[iDestBuffLen])
+		inline bool StringCompairIgnoreCase(const char* szSrc, int iSrcBuffLen, const char(&szDest)[iDestBuffLen])
 		{
 			return StringCompairIgnoreCase(szSrc, iSrcBuffLen, szDest, iDestBuffLen);
 		}
 
 		template<int iSrcBuffLen>
-		inline bool StringCompairIgnoreCase(char(&szSrc)[iSrcBuffLen], const char* szDest, int iDestBuffLen)
+		inline bool StringCompairIgnoreCase(const char(&szSrc)[iSrcBuffLen], const char* szDest, int iDestBuffLen)
 		{
 			return StringCompairIgnoreCase(szSrc, iSrcBuffLen, szDest, iDestBuffLen);
 		}

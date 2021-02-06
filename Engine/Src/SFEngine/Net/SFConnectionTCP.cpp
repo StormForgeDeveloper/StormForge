@@ -620,7 +620,7 @@ namespace Net {
 		return SendNetCtrl(uiCtrlCode, uiSequence, returnMsgID, UID);
 	}
 
-	Result ConnectionTCP::SendRaw(SharedPointerT<Message::MessageData> &pMsg)
+	Result ConnectionTCP::SendRaw(const SharedPointerT<Message::MessageData> &pMsg)
 	{
 		UniquePtr<IOBUFFER_WRITE> pSendBuffer;
 		ScopeContext hr;
@@ -632,8 +632,7 @@ namespace Net {
 
 		pSendBuffer.reset(new(GetIOHeap()) IOBUFFER_WRITE);
 		netCheckMem(pSendBuffer.get());
-		pSendBuffer->SetupSendTCP(std::forward<SharedPointerT<Message::MessageData>>(pMsg));
-		pMsg = nullptr;
+		pSendBuffer->SetupSendTCP(SharedPointerT<Message::MessageData>(pMsg));
 
 		m_NetIOAdapter.IncPendingSendCount();
 
@@ -656,7 +655,7 @@ namespace Net {
 	}
 
 	// Send message to connected entity
-	Result ConnectionTCP::Send(SharedPointerT<Message::MessageData> &pMsg )
+	Result ConnectionTCP::Send(const SharedPointerT<Message::MessageData> &pMsg )
 	{
 		Result hr = ResultCode::SUCCESS;
 		Message::MessageID msgID;
@@ -671,13 +670,11 @@ namespace Net {
 			|| GetConnectionState() == ConnectionState::DISCONNECTED)
 		{
 			// Send fail by connection closed
-			pMsg = nullptr;
 			goto Proc_End;
 		}
 
 		if( pMsg->GetMessageSize() > (uint)Const::INTER_PACKET_SIZE_MAX )
 		{
-			pMsg = nullptr;
 			netErr( ResultCode::IO_BADPACKET_TOOBIG );
 		}
 
@@ -696,13 +693,10 @@ namespace Net {
 
 		netChk(SendRaw(pMsg));
 
-		pMsg = nullptr;
-
 	Proc_End:
 
 		if(!(hr))
 		{
-			pMsg = nullptr;
 		}
 		else
 		{
