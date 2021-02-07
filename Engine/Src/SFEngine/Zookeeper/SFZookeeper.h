@@ -21,6 +21,7 @@
 #include "Container/SFCircularPageQueue.h"
 #include "Task/SFTask.h"
 #include "json/json.h"
+#include "Delegate/SFEventDelegate.h"
 
 struct ACL_vector;
 struct String_vector;
@@ -169,7 +170,7 @@ namespace SF
 	private:
 
 		// State of zoo keeper server
-		std::atomic<int> m_State;
+		Atomic<int> m_State;
 
 		// Zookeeper event queue
 		CircularPageQueueAtomic<uint64_t> m_EventQueue;
@@ -191,9 +192,16 @@ namespace SF
 
 		friend class Zookeeper;
 
+
 	public:
 
-		ZookeeperWatcher(IHeap& memoryManager);
+		/////////////////////////////////////////////////////////////////////
+		// Event delegates
+		EventDelegateList<int> OnSessionEvent;
+
+	public:
+
+		ZookeeperWatcher(IHeap& heap);
 		virtual ~ZookeeperWatcher() {}
 
 		Zookeeper* GetZKInstance() { return m_ZKInstance; }
@@ -296,6 +304,9 @@ namespace SF
 		~Zookeeper();
 
 		IHeap& GetHeap() { return m_Heap; }
+
+
+
 
 		/////////////////////////////////////////////////////////////
 		//

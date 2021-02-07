@@ -39,6 +39,7 @@ namespace SF
 	ZookeeperWatcher::ZookeeperWatcher(IHeap& memoryManager)
 		: m_EventQueue(memoryManager)
 		, m_State(0)
+		, OnSessionEvent(GetSystemHeap())
 	{
 	}
 
@@ -66,6 +67,8 @@ namespace SF
 					itRegistered->OnNewEvent(evt);
 				}
 			}
+
+			zkWatcher->OnSessionEvent.Invoke(Forward<int>(state));
 		}
 		else
 		{

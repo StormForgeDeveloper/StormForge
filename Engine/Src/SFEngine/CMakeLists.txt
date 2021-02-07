@@ -59,6 +59,8 @@ set(SFENGINE_LIB_FILES
 	Graphics/Vulkan/SFVulkanSystem.cpp
 	StreamDB/SFStreamDBDirectory.h
 	StreamDB/SFStreamDBDirectory.cpp
+    Net/SFMessageEndpoint.h
+    Net/SFMessageEndpoint.cpp
 	Net/SFConnection.cpp
 	Net/SFConnectionAction.cpp
 	Net/SFConnectionActions.cpp

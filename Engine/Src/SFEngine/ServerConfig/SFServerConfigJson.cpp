@@ -255,7 +255,7 @@ namespace SF
 		}
 
 		// Ignoring parsing error as not all of module requires it
-		ParseMessageEndpoint(moduleValue, "MessageEndpoint", pServerModule->MessageEndpoint);
+		ParseMessageEndpoint(moduleValue, "PrivateEndpoint", pServerModule->MessageEndpoint);
 
 		if (pServerModule != nullptr)
 			pServerModule->ModuleName = moduleName.asCString();
