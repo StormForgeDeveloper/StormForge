@@ -37,6 +37,9 @@
 
 
 namespace SF {
+
+	const int SF_PROTOCOL_VERSION = 11;
+
 namespace Protocol {
 
 	std::unordered_map<uint32_t, MessageHandlingFunction> MessageDebugTraceMap;

@@ -22,16 +22,8 @@
 
 namespace SF
 {
-
-	//namespace Message {
-	//	class MessageData;
-	//	class MessageBase;
-	//}
-
 	
-	constexpr int SF_PROTOCOL_VERSION = 11;
-
-
+	extern const int SF_PROTOCOL_VERSION;
 
 	enum ProtocolID
 	{
@@ -39,74 +31,42 @@ namespace SF
 		PROTOCOLID_NONE						= 0,			// Not defined policy
 
 		PROTOCOLID_LOGIN					,
-		PROTOCOLID_SVR_LOGIN				,
-
 		PROTOCOLID_GAME						,				// Game policy
-		PROTOCOLID_SVR_GAME					,				// Game policy
-
 		PROTOCOLID_PLAYINSTANCE,							// Play instance
-		PROTOCOLID_SVR_PLAYINSTANCE,						// play instance
 
 		PROTOCOLID_SERVER					,				// server generic policy
-		PROTOCOLID_SVR_SERVER				,				// server generic policy
 
 		PROTOCOLID_LOGINSERVER				,
-		PROTOCOLID_SVR_LOGINSERVER			,
-
 		PROTOCOLID_GAMESERVER				,				// Game server policy
-		PROTOCOLID_SVR_GAMESERVER			,				// Game server policy
-
 		PROTOCOLID_GAMEPARTY				,				// Game party server policy
-		PROTOCOLID_SVR_GAMEPARTY			,				// Game party server policy
-
-		PROTOCOLID_CLUSTERSERVER			,
-		PROTOCOLID_SVR_CLUSTERSERVER		,
-
-		PROTOCOLID_MONITORING,
-		PROTOCOLID_SVR_MONITORING,
 
 		PROTOCOLID_CHARACTERDATASERVER,
-		PROTOCOLID_SVR_CHARACTERDATASERVER,
 
 		//////////////////////////////////////////////////////////////////////////
 		//
 		//	Game cluster
 		//
 
-		PROTOCOLID_ENTITYSERVER				,				// entity server policy
-		PROTOCOLID_SVR_ENTITYSERVER			,				// entity server policy
-
 		PROTOCOLID_PARTYMATCHING			,
-		PROTOCOLID_SVR_PARTYMATCHING		,
-
 		PROTOCOLID_PARTYMATCHINGQUEUE		,
-		PROTOCOLID_SVR_PARTYMATCHINGQUEUE	,
-
 		PROTOCOLID_GAMEINSTANCE				,
-		PROTOCOLID_SVR_GAMEINSTANCE			,
-
 		PROTOCOLID_GAMEINSTANCEMANAGER		,
-		PROTOCOLID_SVR_GAMEINSTANCEMANAGER	,
-
 		PROTOCOLID_GAMEPARTYMANAGER			,
-		PROTOCOLID_SVR_GAMEPARTYMANAGER		,
-
-		PROTOCOLID_RANKING,
 		PROTOCOLID_RANKINGSERVER,
-
 		PROTOCOLID_CHATCHANNEL,
-		PROTOCOLID_SVR_CHATCHANNEL,
-
 		PROTOCOLID_CHATCHANNELMANAGER,
-		PROTOCOLID_SVR_CHATCHANNELMANAGER,
 
+		// 
 		PROTOCOLID_RELAY,
 		PROTOCOLID_RELAYSERVER,
 
-		PROTOCOLID_NETMAX					,				// Max Network policy value
-		PROTOCOLID_CLIENTNETMAX = PROTOCOLID_SVR_GAME+1,
+		// deprecated
+		PROTOCOLID_CLUSTERSERVER,
+		PROTOCOLID_MONITORING,
 
+		PROTOCOLID_NETMAX					,				// Max Network policy value
 	};
+
 
 	class IVariableMapBuilder;
 	typedef Result(*MessageHandlingFunction)(const char* prefix, const SharedPointerT<Message::MessageData>& pMsg);
@@ -127,7 +87,7 @@ namespace SF
 	}
 
 	
-}; // namespace SF
+} // namespace SF
 
 
 

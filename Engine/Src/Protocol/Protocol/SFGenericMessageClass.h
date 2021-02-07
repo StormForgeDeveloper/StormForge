@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -19,34 +19,32 @@
 
 
 namespace SF {
-namespace Message {
+	namespace Message {
 
-		// S2C: Used for sending generial failure for not started transaction messages
+		// S2C: Used for sending general failure for not started transaction messages
 		class FailResultS2CEvt : public MessageBase
 		{
- 		private:
+		private:
 			Context m_Context;
 			Result m_hrRes;
 		public:
 			FailResultS2CEvt()
-				{}
+			{}
 
-			FailResultS2CEvt( MessageDataPtr &&pMsg )
+			FailResultS2CEvt(MessageDataPtr&& pMsg)
 				:MessageBase(std::forward<MessageDataPtr>(pMsg))
-				{}
+			{}
 
-			const Context& GetContext() const	{ return m_Context; };
-			const Result& GethrRes() const	{ return m_hrRes; };
+			const Context& GetContext() const { return m_Context; };
+			const Result& GethrRes() const { return m_hrRes; };
 
 			void OutputMessage(const char* Prefix);
 
-			virtual Result ParseMessage( const MessageData* pIMsg ) override;
+			virtual Result ParseMessage(const MessageData* pIMsg) override;
 
 		}; // class FailResultS2CEvt : public BR::Net::MessageBase
 
-	
-}; // namespace Message
-}; // namespace SF
 
-
+	} // namespace Message
+} // namespace SF
 
