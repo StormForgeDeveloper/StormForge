@@ -51,12 +51,12 @@ namespace SF
 			{}
 		};
 
-		struct DataCenter
+		struct DataCenterEndpoint
 		{
 			String Server;
 			String Path;
 
-			DataCenter(IHeap& heap)
+			DataCenterEndpoint(IHeap& heap)
 				: Server(heap)
 				, Path(heap)
 			{}
@@ -110,10 +110,10 @@ namespace SF
 		struct ServerModule
 		{
 			String ModuleName;
-			MessageEndpoint MessageEndpoint;
+			MessageEndpoint Endpoint;
 			ServerModule(IHeap& heap)
 				: ModuleName(heap)
-				, MessageEndpoint(heap)
+				, Endpoint(heap)
 			{}
 			virtual ~ServerModule() {}
 		};
@@ -265,7 +265,7 @@ namespace SF
 			GameID GameClusterID;
 			String GameClusterName;
 			// Data center
-			DataCenter DataCenter;
+			DataCenterEndpoint DataCenter;
 			// Log config
 			String LogFilePath;
 			String LogServer;

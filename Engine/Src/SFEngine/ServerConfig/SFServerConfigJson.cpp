@@ -56,7 +56,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result ServerConfigJson::ParseDataCenter(const Json::Value& jsonObject, const char* keyName, ServerConfig::DataCenter& outDataCenter)
+	Result ServerConfigJson::ParseDataCenter(const Json::Value& jsonObject, const char* keyName, ServerConfig::DataCenterEndpoint& outDataCenter)
 	{
 		auto stringValue = jsonObject.get(keyName, Json::Value(Json::stringValue));
 		auto splitIndex = StrUtil::Indexof(stringValue.asCString(), '/');
@@ -255,7 +255,7 @@ namespace SF
 		}
 
 		// Ignoring parsing error as not all of module requires it
-		ParseMessageEndpoint(moduleValue, "PrivateEndpoint", pServerModule->MessageEndpoint);
+		ParseMessageEndpoint(moduleValue, "PrivateEndpoint", pServerModule->Endpoint);
 
 		if (pServerModule != nullptr)
 			pServerModule->ModuleName = moduleName.asCString();
