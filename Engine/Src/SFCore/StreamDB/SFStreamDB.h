@@ -169,7 +169,6 @@ namespace SF
     public:
 
         StreamDBConsumer();
-
         virtual ~StreamDBConsumer();
 
         virtual Result Initialize(const String& brokers, const String& topic) override;

@@ -40,14 +40,25 @@ namespace SF
 			{}
 		};
 
-		struct EventRoute
+		struct MessageEndpoint
 		{
-			String RouteServer;
+			String MessageServer;
 			String Channel;
 
-			EventRoute(IHeap& heap)
-				: RouteServer(heap)
+			MessageEndpoint(IHeap& heap = GetSystemHeap())
+				: MessageServer(heap)
 				, Channel(heap)
+			{}
+		};
+
+		struct DataCenter
+		{
+			String Server;
+			String Path;
+
+			DataCenter(IHeap& heap)
+				: Server(heap)
+				, Path(heap)
 			{}
 		};
 
@@ -99,10 +110,10 @@ namespace SF
 		struct ServerModule
 		{
 			String ModuleName;
-			EventRoute EventRoute;
+			MessageEndpoint MessageEndpoint;
 			ServerModule(IHeap& heap)
 				: ModuleName(heap)
-				, EventRoute(heap)
+				, MessageEndpoint(heap)
 			{}
 			virtual ~ServerModule() {}
 		};
@@ -254,11 +265,7 @@ namespace SF
 			GameID GameClusterID;
 			String GameClusterName;
 			// Data center
-			String DataCenter;
-			String DataCenterPath;
-			// Server event router server
-			String EventRouter;
-			String EventRouterPath;
+			DataCenter DataCenter;
 			// Log config
 			String LogFilePath;
 			String LogServer;
@@ -269,6 +276,7 @@ namespace SF
 
 			ServerService()
 				: GenericServer(GetSystemHeap())
+				, DataCenter(GetSystemHeap())
 				, DBClusters(GetSystemHeap())
 				, DBInstances(GetSystemHeap())
 			{}

@@ -42,16 +42,30 @@ namespace SF
 	//	Node setting value parsing
 	//
 
-	Result ServerConfigJson::ParseEventRoute(const Json::Value& jsonObject, const char* keyName, ServerConfig::EventRoute& outEventRoute)
+	Result ServerConfigJson::ParseMessageEndpoint(const Json::Value& jsonObject, const char* keyName, ServerConfig::MessageEndpoint& outMessageEndpoint)
 	{
 		auto stringValue = jsonObject.get(keyName, Json::Value(Json::stringValue));
 		auto splitIndex = StrUtil::Indexof(stringValue.asCString(), '/');
 		if (splitIndex < 0)
 			return ResultCode::FAIL;
 
-		String eventRouterString = stringValue.asCString();
-		outEventRoute.RouteServer = eventRouterString.SubString(0, splitIndex);
-		outEventRoute.Channel = eventRouterString.SubString(splitIndex, eventRouterString.length());
+		String MessageEndpointrString = stringValue.asCString();
+		outMessageEndpoint.MessageServer = MessageEndpointrString.SubString(0, splitIndex);
+		outMessageEndpoint.Channel = MessageEndpointrString.SubString(splitIndex+1, MessageEndpointrString.length());
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result ServerConfigJson::ParseDataCenter(const Json::Value& jsonObject, const char* keyName, ServerConfig::DataCenter& outDataCenter)
+	{
+		auto stringValue = jsonObject.get(keyName, Json::Value(Json::stringValue));
+		auto splitIndex = StrUtil::Indexof(stringValue.asCString(), '/');
+		if (splitIndex < 0)
+			return ResultCode::FAIL;
+
+		String dataCenterString = stringValue.asCString();
+		outDataCenter.Server = dataCenterString.SubString(0, splitIndex);
+		outDataCenter.Path = dataCenterString.SubString(splitIndex, dataCenterString.length());
 
 		return ResultCode::SUCCESS;
 	}
@@ -241,7 +255,7 @@ namespace SF
 		}
 
 		// Ignoring parsing error as not all of module requires it
-		ParseEventRoute(moduleValue, "EventRoute", pServerModule->EventRoute);
+		ParseMessageEndpoint(moduleValue, "MessageEndpoint", pServerModule->MessageEndpoint);
 
 		if (pServerModule != nullptr)
 			pServerModule->ModuleName = moduleName.asCString();
@@ -352,11 +366,9 @@ namespace SF
 		pServer->GameClusterName = gameClusterID.asCString();
 		pServer->GameClusterID = gameClusterID.asCString();
 
-		auto dataCenter = rootObject.get("DataCenter", Json::Value("127.0.0.1:2181/BRServiceDirectory"));
-		auto splitIndex = StrUtil::Indexof(dataCenter.asCString(), '/');
-		String dataCenterString = dataCenter.asCString();
-		pServer->DataCenter = dataCenterString.SubString(splitIndex, dataCenterString.length());
-		pServer->DataCenterPath = dataCenterString.SubString(0, splitIndex);
+		result = ParseDataCenter(rootObject, "DataCenter", pServer->DataCenter);
+		if (!result)
+			return result;
 
 		auto logFilePath = rootObject.get("LogFilePath", Json::Value(""));
 		pServer->LogFilePath = logFilePath.asCString();
