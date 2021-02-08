@@ -85,7 +85,7 @@ namespace SF {
 	//typedef uint32_t ClusterID;
 	enum class ClusterID : uint32_t
 	{
-		Invalid = 0,
+		None = 0,
 		ClusterManager,
 		Monitoring,
 		PlayerManager,

@@ -15,7 +15,7 @@
 #include "Types/SFEngineTypedefs.h"
 #include "String/SFStringCrc32.h"
 #include "String/SFString.h"
-
+#include "Net/SFNetDef.h"
 
 #include "Zookeeper/SFZookeeper.h"
 #include "SFEnum.h"
@@ -37,17 +37,6 @@ namespace SF
 
 			NetPrivate(IHeap& heap)
 				: IP(heap)
-			{}
-		};
-
-		struct MessageEndpoint
-		{
-			String MessageServer;
-			String Channel;
-
-			MessageEndpoint(IHeap& heap = GetSystemHeap())
-				: MessageServer(heap)
-				, Channel(heap)
 			{}
 		};
 
@@ -110,7 +99,7 @@ namespace SF
 		struct ServerModule
 		{
 			String ModuleName;
-			MessageEndpoint Endpoint;
+			EndpointAddress Endpoint;
 			ServerModule(IHeap& heap)
 				: ModuleName(heap)
 				, Endpoint(heap)
@@ -266,6 +255,8 @@ namespace SF
 			String GameClusterName;
 			// Data center
 			DataCenterEndpoint DataCenter;
+			// Server message endpoint. server ID will be attached
+			EndpointAddress ServerEndpointAddress;
 			// Log config
 			String LogFilePath;
 			String LogServer;

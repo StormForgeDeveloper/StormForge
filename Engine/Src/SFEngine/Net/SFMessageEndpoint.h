@@ -35,6 +35,7 @@ namespace SF {
 	{
 	public:
 
+		EndpointAddress m_EndpointAddress;
 		SharedPointerT<StreamDBProducer> m_TargetEndpoint;
 
 	public:
@@ -48,6 +49,7 @@ namespace SF {
 		// Close entity and clear transaction
 		virtual Result Terminate();
 
+		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
 		virtual Result Send(const SharedPointerT<Message::MessageData>& messageData) override;
 	};
 

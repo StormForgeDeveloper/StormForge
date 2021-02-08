@@ -16,7 +16,7 @@
 #include "Util/SFTimeUtil.h"
 #include "Net/SFMessageEndpoint.h"
 #include "StreamDB/SFStreamDB.h"
-
+#include "ServerConfig/SFServerConfig.h"
 
 
 namespace SF {
@@ -42,6 +42,9 @@ namespace SF {
 	{
 		Result hr;
 
+		m_EndpointAddress.MessageServer = endpointServer;
+		m_EndpointAddress.Channel = endpointChannel;
+
 		m_TargetEndpoint = new StreamDBProducer;
 		hr = m_TargetEndpoint->Initialize(endpointServer, endpointChannel);
 
@@ -56,6 +59,11 @@ namespace SF {
 		m_TargetEndpoint = nullptr;
 
 		return ResultCode::SUCCESS;
+	}
+
+	bool MessageEndpointStreamDB::IsSameEndpoint(const EndpointAddress& messageEndpoint)
+	{
+		return m_EndpointAddress.MessageServer == messageEndpoint.MessageServer && m_EndpointAddress.Channel == messageEndpoint.Channel;
 	}
 
 	Result MessageEndpointStreamDB::Send(const SharedPointerT<Message::MessageData>& messageData)

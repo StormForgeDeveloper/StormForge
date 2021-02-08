@@ -40,7 +40,7 @@ namespace SF
 		//
 
 
-		Result ParseMessageEndpoint(const Json::Value& jsonObject, const char* keyName, ServerConfig::MessageEndpoint& outMessageEndpoint);
+		Result ParseMessageEndpoint(const Json::Value& jsonObject, const char* keyName, EndpointAddress& outMessageEndpoint);
 		Result ParseDataCenter(const Json::Value& jsonObject, const char* keyName, ServerConfig::DataCenterEndpoint& outDataCenter);
 		Result ParseNetPrivate(const Json::Value& json, ServerConfig::NetPrivate& privateNet);
 		Result ParseNetPublic(const Json::Value& json, ServerConfig::NetPublic& publicNet);

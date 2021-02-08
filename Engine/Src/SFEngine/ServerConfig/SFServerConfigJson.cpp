@@ -42,7 +42,7 @@ namespace SF
 	//	Node setting value parsing
 	//
 
-	Result ServerConfigJson::ParseMessageEndpoint(const Json::Value& jsonObject, const char* keyName, ServerConfig::MessageEndpoint& outMessageEndpoint)
+	Result ServerConfigJson::ParseMessageEndpoint(const Json::Value& jsonObject, const char* keyName, EndpointAddress& outMessageEndpoint)
 	{
 		auto stringValue = jsonObject.get(keyName, Json::Value(Json::stringValue));
 		auto splitIndex = StrUtil::Indexof(stringValue.asCString(), '/');
@@ -367,6 +367,10 @@ namespace SF
 		pServer->GameClusterID = gameClusterID.asCString();
 
 		result = ParseDataCenter(rootObject, "DataCenter", pServer->DataCenter);
+		if (!result)
+			return result;
+
+		result = ParseMessageEndpoint(rootObject, "ServerEndpoint", pServer->ServerEndpointAddress);
 		if (!result)
 			return result;
 

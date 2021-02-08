@@ -20,6 +20,7 @@
 #include <netdb.h>
 #endif
 
+#include "String/SFString.h"
 
 namespace SF {
 namespace Net {
@@ -166,6 +167,18 @@ namespace Net {
 
 
 
+	struct EndpointAddress
+	{
+		String MessageServer;
+		String Channel;
+
+		EndpointAddress(IHeap& heap = GetSystemHeap())
+			: MessageServer(heap)
+			, Channel(heap)
+		{}
+	};
+
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Message endpoint
@@ -175,6 +188,7 @@ namespace Net {
 	class MessageEndpoint : public SharedObject
 	{
 	public:
+		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) = 0;
 		virtual Result Send(const SharedPointerT<Message::MessageData>& messageData) = 0;
 	};
 

@@ -65,6 +65,19 @@ namespace SF {
 				m_pConnection = pConnection->AsSharedPtr();
 			}
 
+			virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override
+			{
+				auto pConnection = m_pConnection.AsSharedPtr<Connection>();
+
+				if (pConnection == nullptr)
+					return messageEndpoint.MessageServer.IsNullOrEmpty();
+
+				auto& netAddress = pConnection->GetRemoteInfo().PeerAddress;
+				char portString[64];
+				StrUtil::Format(portString, "{0}", netAddress.Port);
+				return messageEndpoint.Channel == portString && messageEndpoint.MessageServer == netAddress.Address;
+			}
+
 			virtual Result Send(const SharedPointerT<Message::MessageData>& messageData) override
 			{
 				auto pConnection = m_pConnection.AsSharedPtr<Connection>();
