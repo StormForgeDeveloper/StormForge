@@ -58,7 +58,7 @@ namespace SF
 
 	}
 
-	Result StreamDB::Initialize(const String& brokers, const String& topic)
+	Result StreamDB::Initialize(const String& brokers, const String& topic, int32_t partition)
 	{
 		m_Config.reset(RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL));
 
@@ -82,6 +82,8 @@ namespace SF
 			SFLog(Net, Error, "Kafka configuration has failed: {0}", errstr);
 			return ResultCode::INVALID_ARG;
 		}
+
+		m_Partition = partition;
 
 		m_StreamName = topic;
 
@@ -241,9 +243,9 @@ namespace SF
 		m_Producer.reset();
 	}
 
-        Result StreamDBProducer::Initialize(const String& brokers, const String& topic)
+        Result StreamDBProducer::Initialize(const String& brokers, const String& topic, int32_t partition)
         {
-            Result hr = super::Initialize(brokers, topic);
+            Result hr = super::Initialize(brokers, topic, partition);
             if (!hr)
                 return hr;
 
@@ -299,7 +301,7 @@ namespace SF
                  * used to assign the message to a topic based
                  * on the message key, or random partition if
                  * the key is not set. */
-                RdKafka::Topic::PARTITION_UA,
+				GetPartition(),
                 RdKafka::Producer::RK_MSG_COPY /* Copy payload */,
                 /* Payload */
                 const_cast<uint8_t*>(data.data()), data.size(),
@@ -394,7 +396,6 @@ namespace SF
 
 
 		StreamDBConsumer::StreamDBConsumer()
-			: m_Partition(RdKafka::Topic::PARTITION_UA)
 		{
 
 		}
@@ -403,7 +404,7 @@ namespace SF
 		{
 			if (m_Consumer)
 			{
-				m_Consumer->stop(GetTopicHandle().get(), m_Partition);
+				m_Consumer->stop(GetTopicHandle().get(), GetPartition());
 
 				m_Consumer->poll(1000);
 			}
@@ -412,11 +413,11 @@ namespace SF
 			m_Consumer.reset();
 		}
 
-		Result StreamDBConsumer::Initialize(const String& brokers, const String& topic)
+		Result StreamDBConsumer::Initialize(const String& brokers, const String& topic, int32_t partition)
 		{
 			std::string errstr;
 
-			Result hr = super::Initialize(brokers, topic);
+			Result hr = super::Initialize(brokers, topic, partition);
 			if (!hr)
 				return hr;
 
@@ -445,17 +446,19 @@ namespace SF
 		Result StreamDBConsumer::RequestData(int64_t start_offset)
 		{
 			// partition has never been set. Set one now
-			if (m_Partition < 0 && GetPartitionList().size() > 0)
+			if (GetPartition() <= 0 && GetPartitionList().size() > 0)
 			{
-				m_Partition = *GetPartitionList().begin();
+				SetPartition(*GetPartitionList().begin());
 			}
 
-			RdKafka::ErrorCode resp = m_Consumer->start(GetTopicHandle().get(), m_Partition, start_offset);
+			RdKafka::ErrorCode resp = m_Consumer->start(GetTopicHandle().get(), GetPartition(), start_offset);
 			if (resp != RdKafka::ERR_NO_ERROR)
 			{
-				SFLog(Net, Error, "Failed to start consumer: {0}", RdKafka::err2str(resp));
+				SFLog(Net, Debug, "Failed to start consumer: {0}", RdKafka::err2str(resp));
 				return ResultCode::FAIL;
 			}
+
+			m_IsDataRequested = true;
 
 			return ResultCode::SUCCESS;
 		}
@@ -471,7 +474,7 @@ namespace SF
 			if (!m_Consumer)
 				return hr = ResultCode::NOT_INITIALIZED;
 
-			UniquePtr<RdKafka::Message> message(m_Consumer->consume(GetTopicHandle().get(), m_Partition, timeoutMS));
+			UniquePtr<RdKafka::Message> message(m_Consumer->consume(GetTopicHandle().get(), GetPartition(), timeoutMS));
 			if (message == nullptr)
 				return hr = ResultCode::NO_DATA_EXIST;
 

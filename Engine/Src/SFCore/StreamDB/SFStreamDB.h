@@ -68,10 +68,11 @@ namespace SF
         virtual ~StreamDB();
 
 
-        virtual Result Initialize(const String& brokers, const String& topic);
-
+        virtual Result Initialize(const String& brokers, const String& topic, int32_t partition = 0);
 
         const String& GetTopic() const { return m_StreamName; }
+        int32_t GetPartition() const { return m_Partition; }
+        void SetPartition(int32_t value) { m_Partition = value; }
 
         const UniquePtr<RdKafka::Conf>& GetConfig() const { return m_Config; }
         const UniquePtr<RdKafka::Conf>& GetTopicConfig() const { return m_TopicConfig; }
@@ -93,6 +94,7 @@ namespace SF
 
     private:
 
+        int32_t m_Partition = -1;
         String m_StreamName;
 
         UniquePtr<RdKafka::Conf> m_Config;
@@ -122,7 +124,7 @@ namespace SF
 
         virtual ~StreamDBProducer();
 
-        virtual Result Initialize(const String& brokers, const String& topic) override;
+        virtual Result Initialize(const String& brokers, const String& topic, int32_t partition = 0) override;
 
         Result SendRecord(const Array<uint8_t>& data, int64_t timestamp = 0);
 
@@ -134,7 +136,6 @@ namespace SF
         UniquePtr<StreamDBSendReportCb> m_DeliveryCallback;
 
         UniquePtr<RdKafka::Producer> m_Producer;
-
     };
 
 
@@ -171,7 +172,9 @@ namespace SF
         StreamDBConsumer();
         virtual ~StreamDBConsumer();
 
-        virtual Result Initialize(const String& brokers, const String& topic) override;
+        virtual Result Initialize(const String& brokers, const String& topic, int32_t partition = 0) override;
+
+        bool IsDateRequested() const { return m_IsDataRequested; }
 
         Result RequestData(int64_t start_offset = OFFSET_BEGINNING);
 
@@ -184,9 +187,9 @@ namespace SF
 
     private:
 
-        mutable int32_t m_Partition;
-
         UniquePtr<RdKafka::Consumer> m_Consumer;
+
+        bool m_IsDataRequested = false;
 
         // Locally cached data
         UniquePtr<StreamMessageData> m_ReceivedMessageData;

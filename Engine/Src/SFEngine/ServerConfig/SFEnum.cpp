@@ -96,7 +96,7 @@ namespace SF
 
 
 #define __CLUSTERID_NAMES__ \
-	"Invalid",\
+	"None",\
 	"ClusterManager",\
 	"Monitoring",\
 	"PlayerManager",\

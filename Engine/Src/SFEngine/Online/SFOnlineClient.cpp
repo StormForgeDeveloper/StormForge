@@ -135,13 +135,13 @@ namespace SF
 				else
 				{
 					GetConnection()->Disconnect("Login failed");
-					Disconnect();
+					//Disconnect();
 					SetOnlineState(OnlineState::Disconnected);
 				}
 			}
 			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 			{
-				Disconnect();
+				//Disconnect();
 				SetOnlineState(OnlineState::Disconnected);
 				SetResult(ResultCode::IO_DISCONNECTED);
 			}
