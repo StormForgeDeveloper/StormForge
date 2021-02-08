@@ -423,6 +423,9 @@ namespace SF {
 			if (GetConnectionState() != ConnectionState::DISCONNECTED)
 				netCheck(CloseConnection("InitConnection failed: Invalid State"));
 
+			// create endpoint adapter
+			m_MessageEndpoint = new MessageEndpointConnection(this);
+
 			// event handler need to be reassigned after initconnection is called
 			// - No they should be kept, but it need to be tested
 			SetEventHandler(nullptr);
