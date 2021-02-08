@@ -112,7 +112,7 @@ namespace Net {
 		ThreadID m_RunningThreadID;
 
 		// Message endpoint adapter
-		SharedPointerT<MessageEndpoint> m_MessageEndpoint;
+		mutable SharedPointerT<MessageEndpoint> m_MessageEndpoint;
 
 	protected:
 
@@ -144,10 +144,6 @@ namespace Net {
 		void SetConnectionState(ConnectionState newState);
 		void UpdateConnectionTime();
 
-		// Set socket handle
-		//void SetSocket(SOCKET socket, bool isSocketOwner) { m_Socket = socket; m_IsSocketOwner = isSocketOwner; }
-
-
 		// Add network event to queue
 		virtual Result EnqueueConnectionEvent(const ConnectionEvent& evt);
 
@@ -155,12 +151,10 @@ namespace Net {
 		// Initialize packet synchronization
 		virtual Result InitSynchronization();
 
-
 		virtual Result SendRaw(const SharedPointerT<Message::MessageData> &pMsg) = 0;
 
 		void SetNetCtrlAction(NetCtrlIDs id, ConnectionMessageAction* action);
 		void AddStateAction(ConnectionState state, ConnectionAction* action);
-
 
 		void SetNetIOHandler(SocketIO* pValue) { m_IOHandler = pValue; }
 
@@ -195,8 +189,7 @@ namespace Net {
 		void ClearCID();
 		void SetCID(uint64_t cid) { m_CID = cid; }
 
-
-		const SharedPointerT<MessageEndpoint>& GetMessageEndpoint() const { return m_MessageEndpoint; }
+		const SharedPointerT<MessageEndpoint>& GetMessageEndpoint() const;
 
 		// Get connection state
 		const ConnectionState GetConnectionState() const;

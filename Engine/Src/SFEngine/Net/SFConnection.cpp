@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -58,11 +58,11 @@ namespace SF {
 		class MessageEndpointConnection : public MessageEndpoint
 		{
 		public:
-			WeakPointerT<Connection*> m_pConnection;
+			WeakPointerT<Connection> m_pConnection;
 
 			MessageEndpointConnection(Connection* pConnection)
 			{
-				m_pConnection = pConnection->AsSharedPtr();
+				m_pConnection = SharedPointerT<Connection>(pConnection);
 			}
 
 			virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override
@@ -130,9 +130,6 @@ namespace SF {
 			{
 				new((void*)&m_ActionsByState[iState]) ConnectionActionArray(GetHeap());
 			}
-
-			// create endpoint adapter
-			m_MessageEndpoint = new MessageEndpointConnection(this);
 		}
 
 		Connection::~Connection()
@@ -404,6 +401,16 @@ namespace SF {
 			return hr;
 		}
 
+		const SharedPointerT<MessageEndpoint>& Connection::GetMessageEndpoint() const
+		{
+			if (m_MessageEndpoint == nullptr)
+			{
+				// create endpoint adapter
+				m_MessageEndpoint = new MessageEndpointConnection(const_cast<Connection*>(this));
+			}
+
+			return m_MessageEndpoint;
+		}
 
 		// Initialize connection
 		Result Connection::InitConnection(const PeerInfo& local, const PeerInfo& remote)

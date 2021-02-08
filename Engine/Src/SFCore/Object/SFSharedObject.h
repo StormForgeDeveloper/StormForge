@@ -56,15 +56,12 @@ namespace SF {
 		SharedObject();
 		virtual ~SharedObject();
 
-		inline ReferenceCounterType			GetReferenceCount() const				{ return m_ReferenceCount.load(std::memory_order_relaxed); }
-		inline ReferenceCounterType			GetWeakReferenceCount() const			{ return m_WeakReferenceCount.load(std::memory_order_relaxed); }
-		inline ReferenceCounterType			GetManagerReferenceCount() const		{ return m_ManagerReferenceCount.load(std::memory_order_relaxed); }
-
+		inline ReferenceCounterType		GetReferenceCount() const				{ return m_ReferenceCount.load(std::memory_order_relaxed); }
+		inline ReferenceCounterType		GetWeakReferenceCount() const			{ return m_WeakReferenceCount.load(std::memory_order_relaxed); }
+		inline ReferenceCounterType		GetManagerReferenceCount() const		{ return m_ManagerReferenceCount.load(std::memory_order_relaxed); }
 		inline SharedObjectManager*		GetReferenceManager()					{ return m_ReferenceManagerObject; }
 
-
 		SharedPointer AsSharedPtr() const;
-
 
 		// If your object is added to shared object manager and CanDelete returns false the manager will give more time for the object
 		virtual bool	CanDelete() { return true; }

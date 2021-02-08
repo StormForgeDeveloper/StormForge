@@ -154,8 +154,10 @@ namespace Net {
 				switch ((uint32_t)hrRes)
 				{
 				case (uint32_t)ResultCode::IO_CONNECTION_CLOSED:
+					m_Owner.Disconnect("Recv failed, IO_CONNECTION_CLOSED");
+					break;
 				case (uint32_t)ResultCode::IO_IO_ABORTED:
-					m_Owner.Disconnect("Recv failed");;
+					m_Owner.Disconnect("Recv fail, IO_IO_ABORTED");
 					break;
 				default:
 					SFLog(Net, Debug3, "Recv Msg Failed, SvrTCP, CID {0}, hr={1:X8}", GetCID(), hrRes);
