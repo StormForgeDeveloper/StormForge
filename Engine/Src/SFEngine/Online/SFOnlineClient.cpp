@@ -569,11 +569,23 @@ namespace SF
 		if (m_Login != nullptr)
 		{
 			m_Login->UpdateGameTick();
+			if (m_Login->GetConnectionState() == Net::ConnectionState::DISCONNECTED)
+			{
+				m_Login->DisconnectNRelease("Already Disconnected");
+				m_Login = nullptr;
+			}
 		}
 
 		if (m_Game != nullptr)
 		{
 			m_Game->UpdateGameTick();
+
+			if (m_Game->GetConnectionState() == Net::ConnectionState::DISCONNECTED)
+			{
+				m_Game->DisconnectNRelease("Already Disconnected");
+				m_Game = nullptr;
+			}
+
 
 			if (m_Game != nullptr)
 			{
