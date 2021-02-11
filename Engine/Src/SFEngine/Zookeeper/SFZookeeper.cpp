@@ -728,10 +728,16 @@ namespace SF
 
 		StaticArray<uint8_t,2048> valueBuffer(GetHeap());
 		int buffLen = (int)valueBuffer.GetAllocatedSize() - 1;
+		valueBuffer.data()[0] = '\0';
+
 		auto zkResult = zoo_get(m_ZKHandle, path, 0, (char*)valueBuffer.data(), &buffLen, nullptr);
 		valueBuffer.resize(buffLen);
 
 		res = ToResult(zkResult);
+		if (!res)
+		{
+			return res;
+		}
 
 		valueBuffer.push_back('\0');
 
@@ -742,7 +748,7 @@ namespace SF
 		if (validateFunc) validateFunc();
 		if (!bRes)
 		{
-			SFLog(Net, Error, "Zookeeper::Get value parsing error:{0}", errs);
+			SFLog(Net, Error, "Zookeeper::Get value parsing node:{0}, error:{1}, valueString:{2}", path, errs, readStart);
 			return ResultCode::INVALID_STR_DATA;
 		}
 		if (validateFunc) validateFunc();

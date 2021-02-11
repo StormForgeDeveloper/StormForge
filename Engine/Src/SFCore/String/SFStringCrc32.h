@@ -36,11 +36,7 @@ namespace SF
 
 		}
 
-		StringCrc32(const char* text)
-			: m_Crc(Hasher_Crc32C().Hash(text))
-		{
-
-		}
+		StringCrc32(const char* text);
 
 		constexpr uint32_t GetHash() const
 		{

@@ -909,6 +909,8 @@ namespace SF {
 		virtual uint64_t GetValueUInt64() const override;
 		virtual float GetValueFloat() const override;
 		virtual double GetValueDouble() const override;
+		virtual const char* GetValueCharString() const override;
+		virtual StringCrc32 GetValueStringCrc32() const override;
 		virtual StringCrc64 GetValueStringCrc64() const override;
 		virtual String GetValueString() const override;
 

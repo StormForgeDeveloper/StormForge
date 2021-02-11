@@ -83,7 +83,7 @@ namespace SF
 		AndroidApp(AAssetManager* assetManager);
 		~AndroidApp();
 
-		virtual const FixedString& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() override { return TypeName; }
 
 		virtual Result InitializeComponent() override;
 		virtual void DeinitializeComponent() override;

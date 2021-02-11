@@ -222,6 +222,7 @@ namespace SF
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
+		context.MaxDigit = -1;
 		context.StringBuffer = renderBuffer;
 		context.StringBufferLength = sizeof(renderBuffer);
 
@@ -886,6 +887,16 @@ namespace SF
 	double VariableString::GetValueDouble() const
 	{
 		return (double)atof(m_Value);
+	}
+
+	const char* VariableString::GetValueCharString() const
+	{
+		return m_Value;
+	}
+
+	StringCrc32 VariableString::GetValueStringCrc32() const
+	{
+		return StringCrc32(m_Value);
 	}
 
 	StringCrc64 VariableString::GetValueStringCrc64() const

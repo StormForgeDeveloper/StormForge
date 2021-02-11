@@ -445,6 +445,9 @@ namespace SF
 
 		Result StreamDBConsumer::RequestData(int64_t start_offset)
 		{
+			if (m_Consumer == nullptr)
+				return ResultCode::NOT_INITIALIZED;
+
 			// partition has never been set. Set one now
 			if (GetPartition() <= 0 && GetPartitionList().size() > 0)
 			{

@@ -184,6 +184,15 @@ namespace SF
 		m_StringMap32.Insert(hash32Value, newAddr);
 		m_StringMap64.Insert(hash64Value, newAddr);
 
+		m_StringMap32.CommitChanges();
+		m_StringMap64.CommitChanges();
+
+#ifdef DEBUG
+		const StringItem* pTest{};
+		assert(m_StringMap32.Find(hash32Value, pTest));
+		assert(m_StringMap64.Find(hash64Value, pTest));
+#endif
+
 	}
 
 	// Add string to specific table
@@ -203,6 +212,15 @@ namespace SF
 		const StringItem* newAddr = AddStringToBuffer(hash64Value, hash32Value, str);
 		m_StringMap32.Insert(hash32Value, newAddr);
 		m_StringMap64.Insert(hash64Value, newAddr);
+
+		m_StringMap32.CommitChanges();
+		m_StringMap64.CommitChanges();
+
+#ifdef DEBUG
+		const StringItem* pTest{};
+		assert(m_StringMap32.Find(hash32Value, pTest));
+		assert(m_StringMap64.Find(hash64Value, pTest));
+#endif
 
 		return hash32Value;
 	}

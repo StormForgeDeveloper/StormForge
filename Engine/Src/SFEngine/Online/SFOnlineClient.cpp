@@ -237,13 +237,32 @@ namespace SF
 					OnJoinGameServerRes(pMsgData);
 				});
 
+			auto authTicket = m_Owner.GetAuthTicket();
+			auto remoteAddress = m_Owner.GetGameAddress4();
+			if (authTicket == 0)
+			{
+				SFLog(Net, Error, "Join game server has failed, invalid auth ticket");
+				SetResult(ResultCode::INVALID_STATE);
+				return;
+			}
 
-			SetOnlineState(OnlineState::ConnectingToGameServer);
-			auto authTicket = 0;
+			if (StrUtil::IsNullOrEmpty(remoteAddress.Address) || remoteAddress.Port == 0)
+			{
+				SFLog(Net, Error, "Join game server has failed, invalid remote address: {0}", remoteAddress);
+				SetResult(ResultCode::INVALID_STATE);
+				return;
+			}
+
 			auto result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, m_Owner.GetGameAddress4(), 0));
 			if (result)
 			{
 				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);
+				SetOnlineState(OnlineState::ConnectingToGameServer);
+			}
+			else
+			{
+				SFLog(Net, Error, "Failed to connect to game server {0}", result);
+				SetOnlineState(OnlineState::Disconnected);
 			}
 		}
 
@@ -268,7 +287,6 @@ namespace SF
 					auto res = policy.JoinGameServerCmd(intptr_t(this), m_Owner.GetAccountId(), m_Owner.GetAuthTicket(), m_Owner.GetLoginEntityUID());
 					if (!res)
 					{
-						m_Owner.DisconnectAll();
 						SetOnlineState(OnlineState::Disconnected);
 						SFLog(Net, Error, "JoinGameServer command has failed {0}", res);
 					}
@@ -276,12 +294,10 @@ namespace SF
 				else
 				{
 					GetConnection()->Disconnect("JoinGameServer failed");
-					Disconnect();
 				}
 			}
 			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 			{
-				Disconnect();
 				SetOnlineState(OnlineState::Disconnected);
 				SetResult(ResultCode::IO_DISCONNECTED);
 			}
@@ -414,14 +430,12 @@ namespace SF
 				else
 				{
 					GetConnection()->Disconnect("JoinGameServer failed");
-					Disconnect();
 					SetOnlineState(OnlineState::InGameServer);
 				}
 				SetResult(evt.Components.hr);
 			}
 			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 			{
-				Disconnect();
 				SetOnlineState(OnlineState::InGameServer);
 				SetResult(ResultCode::IO_DISCONNECTED);
 			}
@@ -561,12 +575,15 @@ namespace SF
 		{
 			m_Game->UpdateGameTick();
 
-			if (m_Game->GetConnectionState() == Net::ConnectionState::CONNECTED
-				&& Util::TimeSince(m_HeartbeatTimer) > DurationMS(15 * 1000))
+			if (m_Game != nullptr)
 			{
-				m_HeartbeatTimer = Util::Time.GetTimeMs();
-				NetPolicyGame policy(m_Game->GetMessageEndpoint());
-				policy.HeartbeatC2SEvt();
+				if (m_Game->GetConnectionState() == Net::ConnectionState::CONNECTED
+					&& Util::TimeSince(m_HeartbeatTimer) > DurationMS(15 * 1000))
+				{
+					m_HeartbeatTimer = Util::Time.GetTimeMs();
+					NetPolicyGame policy(m_Game->GetMessageEndpoint());
+					policy.HeartbeatC2SEvt();
+				}
 			}
 		}
 

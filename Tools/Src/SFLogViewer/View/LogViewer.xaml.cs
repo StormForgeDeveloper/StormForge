@@ -56,7 +56,7 @@ namespace SFLogViewer.View
             m_StreamDB = new StreamDBConsumer();
             m_StreamDB.Initialize(logServerAddress, topic);
 
-            m_StreamDB.RequestData(m_StreamDB.ToOffsetFromTail(m_MaxEntries / 4));
+            m_StreamDB.RequestData(m_StreamDB.ToOffsetFromTail(100));
 
             m_TickTimer = new DispatcherTimer();
             m_TickTimer.Tick += new EventHandler(Timer_Tick);

@@ -22,6 +22,11 @@
 
 namespace SF
 {
+	// todo: move to preprocessing
+	StringCrc32::StringCrc32(const char* text)
+		: m_Crc(Service::StringDB->AddNGetString32(text))
+	{
+	}
 
 	const char* StringCrc32::ToString() const
 	{
