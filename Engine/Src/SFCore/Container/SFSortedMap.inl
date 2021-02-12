@@ -126,7 +126,7 @@ namespace SF {
 			//while (m_FreeNodes != nullptr)
 			//{
 			//	auto next = m_FreeNodes->Next;
-			//	delete m_FreeNodes;
+			//	IHeap::Delete(m_FreeNodes);
 			//	m_FreeNodes = next;
 			//}
 		}

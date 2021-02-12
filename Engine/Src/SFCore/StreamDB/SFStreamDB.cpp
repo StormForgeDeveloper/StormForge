@@ -232,7 +232,7 @@ namespace SF
 
 
 	StreamDBProducer::StreamDBProducer()
-		: m_DeliveryCallback(new(GetSystemHeap()) StreamDBSendReportCb)
+		: m_DeliveryCallback(new StreamDBSendReportCb)
 	{
 		
 	}
@@ -466,7 +466,7 @@ namespace SF
 			return ResultCode::SUCCESS;
 		}
 
-		Result StreamDBConsumer::PollData(UniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS)
+		Result StreamDBConsumer::PollData(SFUniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS)
 		{
 			ScopeContext hr([this](Result hr)
 				{

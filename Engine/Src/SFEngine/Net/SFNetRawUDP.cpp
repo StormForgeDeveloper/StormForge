@@ -152,7 +152,7 @@ namespace Net {
 
 	RawUDP::~RawUDP()
 	{
-		delete m_pRecvBuffers;
+		IHeap::Delete(m_pRecvBuffers);
 	}
 
 	Result RawUDP::InitializeNet(const NetAddress& localAddress, MessageHandlerFunc &&Handler)
@@ -295,7 +295,7 @@ namespace Net {
 			{
 				pOverlapped->ClearBuffer();
 				pOverlapped->pMsgs = nullptr;
-				delete pOverlapped;
+				IHeap::Delete(pOverlapped);
 			}
 			else
 			{

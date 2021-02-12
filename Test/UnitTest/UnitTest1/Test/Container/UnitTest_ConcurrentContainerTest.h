@@ -13,7 +13,7 @@
 #include <gtest/gtest.h>
 #include "Thread/SFThread.h"
 #include "../SFTestBase.h"
-
+#include "Memory/SFIMemoryManager.h"
 
 
 

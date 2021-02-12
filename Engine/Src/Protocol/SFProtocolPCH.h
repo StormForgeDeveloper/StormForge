@@ -20,6 +20,7 @@
 #include "Util/SFLog.h"
 #include "Thread/SFSynchronization.h"
 #include "Memory/SFMemory.h"
+#include "Memory/SFIMemoryManager.h"
 #include "Variable/SFVariableBoxing.h"
 #include "String/SFToString.h"
 #include "String/SFToStringBase.h"

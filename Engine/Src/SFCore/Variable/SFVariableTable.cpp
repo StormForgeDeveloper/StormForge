@@ -44,7 +44,7 @@ namespace SF {
 		m_VairableTable.ForeachOrder(0, (uint)m_VairableTable.size(), [](KeyType name, Variable* pValue)
 		{
 			unused(name);
-			delete pValue;
+			IHeap::Delete(pValue);
 			return true;
 		});
 
@@ -57,7 +57,7 @@ namespace SF {
 		m_VairableTable.Remove(name, pVariable);
 		if (pVariable != nullptr)
 		{
-			delete pVariable;
+			IHeap::Delete(pVariable);
 		}
 
 		auto newVariable = variable.Clone(GetHeap());
@@ -71,7 +71,7 @@ namespace SF {
 		m_VairableTable.Remove(name, pVariable);
 		if (pVariable != nullptr)
 		{
-			delete pVariable;
+			IHeap::Delete(pVariable);
 		}
 
 		auto Ret = m_VairableTable.Set(name, variable.get());
@@ -88,7 +88,7 @@ namespace SF {
 		m_VairableTable.Remove(name, pVariable);
 		if (pVariable != nullptr)
 		{
-			delete pVariable;
+			IHeap::Delete(pVariable);
 		}
 
 		if (variable == nullptr)
@@ -164,7 +164,7 @@ namespace SF {
 			}
 			else
 			{
-				delete[] reinterpret_cast<uint8_t*>(pVariable);
+				IHeap::Delete(reinterpret_cast<uint8_t*>(pVariable));
 				pBuffer = new(GetHeap()) uint8_t[varSize];
 			}
 		}

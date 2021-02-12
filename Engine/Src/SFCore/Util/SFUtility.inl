@@ -40,7 +40,7 @@ Result ArrayDup(IHeap& memoryManager, DupType* &pDest, INT iSrcCount, const DupT
 {
 	if( pDest != NULL )
 	{
-		delete[] pDest;
+		IHeap::Delete(pDest);
 		pDest = NULL;
 	}
 

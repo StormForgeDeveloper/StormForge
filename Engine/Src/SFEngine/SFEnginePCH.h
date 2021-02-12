@@ -13,6 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
+#include "Memory/SFMemory.h"
 #include "String/SFToString.h"
 #include "Net/SFNetToString.h"
 #include "Service/SFService.h"
@@ -27,7 +28,6 @@
 #include "String/SFStringCrc64.h"
 #include "String/SFStrUtil.h"
 #include "String/SFString.h"
-#include "Memory/SFMemory.h"
 #include "Memory/SFIMemoryManager.h"
 #include "Memory/SFMemoryManager.h"
 #include "Memory/SFMemoryPool.h"

@@ -178,10 +178,10 @@ namespace SF
 
         Result RequestData(int64_t start_offset = OFFSET_BEGINNING);
 
-        Result PollData(UniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS = 0);
+        Result PollData(SFUniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS = 0);
 		Result PollData(int32_t timeoutMS = 0);
 
-        const UniquePtr<StreamMessageData>& GetLatestReceivedData() const { return m_ReceivedMessageData; }
+        const SFUniquePtr<StreamMessageData>& GetLatestReceivedData() const { return m_ReceivedMessageData; }
 
         int64_t ToOffsetFromTail(int64_t offsetFromTail) const;
 
@@ -192,7 +192,7 @@ namespace SF
         bool m_IsDataRequested = false;
 
         // Locally cached data
-        UniquePtr<StreamMessageData> m_ReceivedMessageData;
+        SFUniquePtr<StreamMessageData> m_ReceivedMessageData;
     };
 
 }

@@ -42,8 +42,8 @@ namespace SF
 			Page* pNext;
 			CounterType PageID;		// starting from 0
 
-			SyncCounter	WriteCounter;
-			SyncCounter ReadCounter;
+			Atomic<uint32_t>	WriteCounter;
+			Atomic<uint32_t> ReadCounter;
 
 			PageHeader() :pNext(nullptr), PageID(0), WriteCounter(0), ReadCounter(0) { }
 			~PageHeader() { }
@@ -89,18 +89,19 @@ namespace SF
 		IHeap& m_MemeoryManager;
 
 		// page header pointer
-		std::atomic<Page*>       m_EnqueuePage;
-		std::atomic<Page*>       m_EnqueueNextPage;
-		std::atomic<CounterType> m_EnqueuePageID;
-		std::atomic<Page*>       m_DequeuePage;
-		std::atomic<CounterType> m_DequeuePageID;
+		Atomic<Page*>       m_EnqueuePage;
+		Atomic<Page*>       m_EnqueueNextPage;
+		Atomic<CounterType> m_EnqueuePageID;
+		Atomic<Page*>       m_DequeuePage;
+		Atomic<CounterType> m_DequeuePageID;
 
+		CriticalSection m_DequeuePageRemoveLock;
 		// item_count per page
 		CounterType m_NumberOfItemsPerPage;	
 
 		// ticket to the entering write section
-		SyncCounter m_EnqueueTicket;
-		SyncCounter	m_DequeueTicket;
+		Atomic<uint32_t> m_EnqueueTicket;
+		Atomic<uint32_t>	m_DequeueTicket;
 
 		// Page allocation index
 		CounterType m_PageIndex;

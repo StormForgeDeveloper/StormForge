@@ -170,8 +170,7 @@ namespace SF {
 
 			if (!IsInTheList(pRemove))
 			{
-				assert(false);
-				return ResultCode::UNEXPECTED;
+				return ResultCode::NOT_EXIST;
 			}
 
 			if (pRemove == m_Header)

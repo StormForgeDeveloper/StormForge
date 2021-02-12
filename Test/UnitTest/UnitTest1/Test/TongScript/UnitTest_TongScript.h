@@ -13,6 +13,7 @@
 
 #include <gtest/gtest.h>
 #include "Thread/SFThread.h"
+#include "Memory/SFIMemoryManager.h"
 #include "Memory/SFMemoryManager.h"
 #include "String/SFToString.h"
 #include "Script/Tong/SFTongScriptBytecode.h"
@@ -64,7 +65,7 @@ public:
 	virtual void TearDown()
 	{
 		if (m_pScriptEngine != nullptr)
-			delete m_pScriptEngine;
+			SF::IHeap::Delete(m_pScriptEngine);
 		m_pScriptEngine = nullptr;
 		MyTestBase::TearDown();
 

@@ -886,7 +886,7 @@ namespace SF
 
 	}; // Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes )
 	// Cmd: Remove character
-	Result NetPolicyGame::RemoveCharacterCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID )
+	Result NetPolicyGame::RemoveCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 	{
  		ScopeContext hr;
 
@@ -900,7 +900,7 @@ namespace SF
 
 		return hr;
 
-	}; // Result NetPolicyGame::RemoveCharacterCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID )
+	}; // Result NetPolicyGame::RemoveCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 	// Cmd: Get character list
 	Result NetPolicyGame::GetCharacterListCmd( const uint64_t &InTransactionID )
 	{
@@ -918,7 +918,7 @@ namespace SF
 
 	}; // Result NetPolicyGame::GetCharacterListCmd( const uint64_t &InTransactionID )
 	// Cmd: 
-	Result NetPolicyGame::GetCharacterDataCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID, const Array<const char*>& InAttributeNames )
+	Result NetPolicyGame::GetCharacterDataCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const Array<const char*>& InAttributeNames )
 	{
  		ScopeContext hr;
 
@@ -932,7 +932,7 @@ namespace SF
 
 		return hr;
 
-	}; // Result NetPolicyGame::GetCharacterDataCmd( const uint64_t &InTransactionID, const int32_t &InCharacterID, const Array<const char*>& InAttributeNames )
+	}; // Result NetPolicyGame::GetCharacterDataCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const Array<const char*>& InAttributeNames )
 	// Cmd: Give my stamina to other player
 	Result NetPolicyGame::GiveStaminaCmd( const uint64_t &InTransactionID, const AccountID &InTargetPlayer )
 	{
@@ -2360,7 +2360,7 @@ namespace SF
 
 	}; // Result NetSvrPolicyGame::ChatChannelChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 	// Cmd: Create character
-	Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const int32_t &InCharacterID )
+	Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
 	{
  		ScopeContext hr;
 
@@ -2374,7 +2374,7 @@ namespace SF
 
 		return hr;
 
-	}; // Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const int32_t &InCharacterID )
+	}; // Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
 	// Cmd: Remove character
 	Result NetSvrPolicyGame::RemoveCharacterRes( const uint64_t &InTransactionID, const Result &InResult )
 	{
@@ -2392,7 +2392,7 @@ namespace SF
 
 	}; // Result NetSvrPolicyGame::RemoveCharacterRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Get character list
-	Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<int32_t>& InCharacterIDs )
+	Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs )
 	{
  		ScopeContext hr;
 
@@ -2406,7 +2406,7 @@ namespace SF
 
 		return hr;
 
-	}; // Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<int32_t>& InCharacterIDs )
+	}; // Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs )
 	// Cmd: 
 	Result NetSvrPolicyGame::GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 	{

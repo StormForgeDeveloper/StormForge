@@ -96,7 +96,7 @@ using ::testing::UnitTest;
 //		SF::Message::Login::LoginCmd *pMsg = nullptr;
 //			EXPECT_HRESULT_SUCCEEDED(HandleMessage<SF::Message::Login::LoginCmd>(pMsgData, pMsg));
 //			if( pMsg ) 
-//				delete pMsg;
+//				IHeap::Delete(pMsg);
 //			return S_OK;
 //	});
 //	messageHandlers.Register<SF::Message::Login::LoginRes>(__FILE__, __LINE__,
@@ -105,7 +105,7 @@ using ::testing::UnitTest;
 //		EXPECT_HRESULT_SUCCEEDED(HandleMessage<SF::Message::Login::LoginRes>(pMsgData, pMsg));
 //			SF::CheckCtrMemory();
 //			if( pMsg ) 
-//				delete pMsg;
+//				IHeap::Delete(pMsg);
 //			SF::CheckCtrMemory();
 //			return S_OK;
 //	});
@@ -114,7 +114,7 @@ using ::testing::UnitTest;
 //			SF::Message::Game::JoinGameCmd *pMsg = nullptr;
 //			EXPECT_HRESULT_SUCCEEDED( HandleMessage<SF::Message::Game::JoinGameCmd>( pMsgData, pMsg ) );
 //			if( pMsg ) 
-//				delete pMsg;
+//				IHeap::Delete(pMsg);
 //			return S_OK;
 //	});
 //	messageHandlers.Register<SF::Message::Game::JoinGameRes>( __FILE__, __LINE__,
@@ -122,7 +122,7 @@ using ::testing::UnitTest;
 //			SF::Message::Game::JoinGameRes *pMsg = nullptr;
 //			EXPECT_HRESULT_SUCCEEDED( HandleMessage<SF::Message::Game::JoinGameRes>( pMsgData, pMsg ) );
 //			if( pMsg ) 
-//				delete pMsg;
+//				IHeap::Delete(pMsg);
 //			return S_OK;
 //	});
 //

@@ -1720,7 +1720,7 @@ C++: Cast message to CreateCharacterRes to access values
 
 		- OutResult: Result type. 
 
-		- OutCharacterID: int32 type. Created character ID
+		- OutCharacterID: uint32 type. Created character ID
 
 
 ## RemoveCharacter Request
@@ -1728,11 +1728,11 @@ Remove character
 
 1. Command interface
 
-        Result RemoveCharacterCmd(const uint64_t &InTransactionID, const int32_t &InCharacterID)
+        Result RemoveCharacterCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID)
 
 		- OutInTransactionID: TransactionID type. 
 
-		- OutInCharacterID: int32 type. Character ID to remove
+		- OutInCharacterID: uint32 type. Character ID to remove
 
 2. Result interface
 
@@ -1762,7 +1762,7 @@ C++: Cast message to GetCharacterListRes to access values
 
 		- OutResult: Result type. 
 
-		- OutCharacterIDs: int32 type. Character id list
+		- OutCharacterIDs: uint32 type. Character id list
 
 
 ## GetCharacterData Request
@@ -1770,11 +1770,11 @@ C++: Cast message to GetCharacterListRes to access values
 
 1. Command interface
 
-        Result GetCharacterDataCmd(const uint64_t &InTransactionID, const int32_t &InCharacterID, const Array<const char*>& InAttributeNames)
+        Result GetCharacterDataCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID, const Array<const char*>& InAttributeNames)
 
 		- OutInTransactionID: TransactionID type. 
 
-		- OutInCharacterID: int32 type. Character ID to get
+		- OutInCharacterID: uint32 type. Character ID to get
 
 		- OutInAttributeNames: String type. attribute names to query
 

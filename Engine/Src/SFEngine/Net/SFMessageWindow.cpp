@@ -55,7 +55,7 @@ namespace Net {
 	RecvMsgWindow::~RecvMsgWindow()
 	{
 		ClearWindow();
-		delete[] m_pMsgWnd;
+		IHeap::Delete(m_pMsgWnd);
 	}
 
 	// Add message
@@ -214,7 +214,7 @@ namespace Net {
 	{
 		ClearWindow();
 		if (m_pMsgWnd != nullptr)
-			delete[] m_pMsgWnd;
+			IHeap::Delete(m_pMsgWnd);
 		m_pMsgWnd = nullptr;
 	}
 

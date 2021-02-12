@@ -84,7 +84,7 @@ TEST_F(MemoryTest, CircularHeap)
 		if ((allocatedList.size() > 0 && randVal > 50) || circularHeap->GetFreeMemorySize() < minAllocationSize)
 		{
 			auto pPtr = allocatedList.pop_back();
-			delete[] pPtr;
+			IHeap::Delete(pPtr);
 		}
 		else
 		{
@@ -97,7 +97,7 @@ TEST_F(MemoryTest, CircularHeap)
 
 	for (auto itPtr : allocatedList)
 	{
-		delete[] itPtr;
+		IHeap::Delete(itPtr);
 	}
 }
 
@@ -139,7 +139,7 @@ TEST_F(MemoryTest, CircularHeap_RandomDelete)
 			auto refCount = circularHeap->GetReferenceCount();
 			Assert(refCount >= 2);
 			auto pPtr = allocatedList.GetKeyAt(randVal);
-			delete[] pPtr;
+			IHeap::Delete(pPtr);
 			allocatedList.Remove(pPtr);
 			auto refCount2 = circularHeap->GetReferenceCount();
 			if (allocatedList.size() > 0)
@@ -171,7 +171,7 @@ TEST_F(MemoryTest, CircularHeap_RandomDelete)
 
 	for (auto itPtr : allocatedList)
 	{
-		delete[] itPtr;
+		IHeap::Delete(itPtr);
 	}
 	allocatedList.Clear();
 }

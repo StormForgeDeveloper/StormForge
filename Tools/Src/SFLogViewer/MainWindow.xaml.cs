@@ -113,6 +113,8 @@ namespace SFLogViewer
                             var requestResult = message.GetValue<Result>("Result");
                             var streamNames = message.GetValue<string[]>("StreamNames");
 
+                            Array.Sort(streamNames);
+
                             listLogChannels.BeginInit();
                             listLogChannels.Items.Clear();
 

@@ -99,7 +99,7 @@ namespace SF {
 	Result IInputStream::Read(char*& data)
 	{
 		if (data != nullptr)
-			delete[] data;
+			IHeap::Delete(data);
 		data = nullptr;
 
 		uint16_t NumChar = 0;
@@ -120,7 +120,7 @@ namespace SF {
 	Result IInputStream::Read(wchar_t*& data)
 	{
 		if (data != nullptr)
-			delete[] data;
+			IHeap::Delete(data);
 		data = nullptr;
 
 		uint16_t NumChar = 0;

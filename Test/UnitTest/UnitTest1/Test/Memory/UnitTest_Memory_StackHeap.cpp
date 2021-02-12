@@ -82,7 +82,7 @@ TEST_F(MemoryTest, StackHeap)
 		if ((allocatedList.size() > 0 && randVal > 50) || stackHeap->GetFreeMemorySize() < minAllocationSize)
 		{
 			auto pPtr = allocatedList.pop_back();
-			delete[] pPtr;
+			IHeap::Delete(pPtr);
 		}
 		else
 		{
@@ -95,7 +95,7 @@ TEST_F(MemoryTest, StackHeap)
 
 	for (auto itPtr : allocatedList)
 	{
-		delete[] itPtr;
+		IHeap::Delete(itPtr);
 	}
 }
 
@@ -137,7 +137,7 @@ TEST_F(MemoryTest, StackHeap_RandomDelete)
 			auto refCount = stackHeap->GetReferenceCount();
 			Assert(refCount >= 2);
 			auto pPtr = allocatedList.GetKeyAt(randVal);
-			delete[] pPtr;
+			IHeap::Delete(pPtr);
 			allocatedList.Remove(pPtr);
 			auto refCount2 = stackHeap->GetReferenceCount();
 			if (allocatedList.size() > 0)
@@ -169,7 +169,7 @@ TEST_F(MemoryTest, StackHeap_RandomDelete)
 
 	for (auto itPtr : allocatedList)
 	{
-		delete[] itPtr;
+		IHeap::Delete(itPtr);
 	}
 	allocatedList.Clear();
 }

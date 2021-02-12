@@ -35,7 +35,7 @@ namespace SF
 
 	void Animation::ClearResource()
 	{
-		delete[] m_AniData;
+		IHeap::Delete(m_AniData);
 		m_AniData = nullptr;
 	}
 

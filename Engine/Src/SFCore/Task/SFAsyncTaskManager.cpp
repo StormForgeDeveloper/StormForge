@@ -194,7 +194,7 @@ namespace SF {
 		for (auto itWorker = m_TaskWorkers.begin(); itWorker.IsValid(); ++itWorker)
 		{
 			(*itWorker)->Stop(true);
-			delete *itWorker;
+			IHeap::Delete(*itWorker);
 		}
 
 		SharedPointerAtomicT<Task> task;

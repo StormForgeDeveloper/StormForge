@@ -50,13 +50,13 @@ namespace SF
 		{
 			for (auto itVar : m_VairableTable)
 			{
-				delete itVar.GetValue();
+				IHeap::Delete(itVar.GetValue());
 			}
 			m_VairableTable.Clear();
 
 			for (auto itFunc : m_FunctionTable)
 			{
-				delete itFunc.GetValue();
+				IHeap::Delete(itFunc.GetValue());
 			}
 			m_FunctionTable.Clear();
 		}

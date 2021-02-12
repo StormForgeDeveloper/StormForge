@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -16,47 +16,19 @@
 #include "String/SFStringCrc64.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
+#include "Memory/SFMemory.h"
 
 
-
-
-
-#ifdef X64
-#define SF_ALIGN				16
-#define SF_ALIGN_SHIFT			4
-#define SF_ALIGN_DOUBLE			16
-#define SF_ALIGN_DOUBLE_SHIFT	4
-#else
-#define SF_ALIGN				16
-#define SF_ALIGN_SHIFT			4
-#define SF_ALIGN_DOUBLE			16
-#define SF_ALIGN_DOUBLE_SHIFT	4
-#endif
-
-#if __GNUC__
-#define SF_DECLARE_ALIGN		__attribute__((aligned(SF_ALIGN)))
-#define SF_DECLARE_ALIGN_DOUBLE __attribute__((aligned(SF_ALIGN_DOUBLE)))
-#else
-#define SF_DECLARE_ALIGN		__declspec(align(SF_ALIGN))
-#define SF_DECLARE_ALIGN_DOUBLE __declspec(align(SF_ALIGN_DOUBLE))
-#endif
-
-//#define AlignUp(x,allign)	( (((uintptr_t)(x) + allign-1) & (~((uintptr_t)allign-1))) )
 
 
 namespace SF {
-
-	template<class ValueType>
-	constexpr ValueType AlignUp(ValueType x, size_t align)
-	{
-		return (ValueType)((((uintptr_t)(x) +align - 1) & (~((uintptr_t)align - 1))));
-	}
 
 	class MemoryPool;
 	class MemoryPoolManager;
 	struct MemBlockHdr;
 	class IHeap;
 	class IHeapImpl;
+
 
 	typedef SharedPointerT<IHeap> IHeapPtr;
 	typedef SharedPointerAtomicT<IHeap> IHeapAtomicPtr;
@@ -74,8 +46,6 @@ namespace SF {
 	// Engine memory manager
 	IHeap& GetEngineHeap();
 	const IHeapPtr& GetEngineHeapPtr();
-
-
 
 
 
@@ -102,8 +72,8 @@ namespace SF {
 	protected:
 
 		// Allocated size include sub manager
-		std::atomic<int64_t> m_AllocatedDRAM;
-		std::atomic<int64_t> m_AllocatedVRAM;
+		Atomic<int64_t> m_AllocatedDRAM;
+		Atomic<int64_t> m_AllocatedVRAM;
 
 
 	private:
@@ -167,19 +137,34 @@ namespace SF {
 
 
 		static struct MemBlockHdr* GetMemoryBlockHdr(void* ptr);
+		static IHeap* GetAloocationHeap(void* ptr);
 		static bool CheckMemoryHeader(void* ptr);
 
-		// Deprecated
 		template<class ClassType>
 		static void Delete(ClassType* pPtr)
 		{
 			if (pPtr == nullptr) return;
-			delete pPtr;
+			auto pHeap = GetAloocationHeap((void*)(pPtr));
+			assert(pHeap);
+			pPtr->~ClassType();
+			operator delete((void*)(pPtr), *pHeap);
 		}
-
 	};
 
 
+	// SF deleter
+	template <class DataType>
+	struct Deleter {
+		constexpr Deleter() noexcept = default;
+
+		void operator()(DataType* _Ptr) const noexcept {
+			static_assert(0 < sizeof(DataType), "can't delete an incomplete type");
+			IHeap::Delete(_Ptr);
+		}
+	};
+
+	template<typename DataType, typename D = Deleter<DataType>>
+	using SFUniquePtr = std::unique_ptr<DataType, D>;
 
 
 	/////////////////////////////////////////////////////////////

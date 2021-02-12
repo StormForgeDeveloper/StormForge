@@ -39,7 +39,7 @@ namespace SF {
 		while (m_Vairables.size() > 0)
 		{
 			auto pVar = m_Vairables.pop_back();
-			delete[] pVar;
+			IHeap::Delete(pVar);
 		}
 	}
 
@@ -68,7 +68,7 @@ namespace SF {
 		for (; static_cast<int>(m_Vairables.size()) >= iCount && iCount > 0; iCount--)
 		{
 			auto pVar = m_Vairables.pop_back();
-			delete pVar;
+			IHeap::Delete(pVar);
 		}
 
 		if (iCount > 0)

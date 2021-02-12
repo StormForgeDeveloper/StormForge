@@ -163,7 +163,7 @@ namespace SF {
 		if (m_EngineThread != nullptr)
 		{
 			m_EngineThread->Stop(true);
-			delete m_EngineThread;
+			IHeap::Delete(m_EngineThread);
 		}
 
 		// Engine and render thread should be stopped at this moment

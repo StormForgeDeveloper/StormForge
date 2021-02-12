@@ -832,7 +832,7 @@ namespace ProtocolCompiler
             OpenSection("ScopeContext", "hr([&pNewMsg](Result hr) -> MessageData*");
             MatchIndent(); OutStream.WriteLine("if(!hr && pNewMsg != nullptr)");
                 OpenSection();
-                MatchIndent(); OutStream.WriteLine("delete pNewMsg;");
+                MatchIndent(); OutStream.WriteLine("IHeap::Delete(pNewMsg);");
             MatchIndent(); OutStream.WriteLine("return nullptr;");
             CloseSection();
             MatchIndent(); OutStream.WriteLine("return pNewMsg;");

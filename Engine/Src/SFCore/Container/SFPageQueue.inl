@@ -117,6 +117,8 @@ namespace SF
 	template <class DataType>
 	Result PageQueue<DataType>::DequeuePageMoveMT()
 	{
+		MutexScopeLock lock(m_DequeuePageRemoveLock);
+
 		// We use Page ID to sync check of HeadPage then pointer
 		Page* curDequeue = m_DequeuePage.load(std::memory_order_relaxed);
 		if (//curDequeue->Header.PageID == m_EnqueuePageID.load(std::memory_order_acquire) || 
@@ -176,21 +178,19 @@ namespace SF
 	template <class DataType>
 	Result PageQueue<DataType>::Enqueue(const DataType& item)
 	{
-		return Enqueue(std::forward<DataType>(const_cast<DataType&>(item)));
+		DataType temp = item;
+		return Enqueue(Forward<DataType>(temp));
 	}
 
 	template <class DataType>
 	Result PageQueue<DataType>::Enqueue(DataType&& item)
 	{
-		//Result hr = ResultCode::SUCCESS;
-		auto defaultValue = DataType{};
-
-		Assert(item != defaultValue);
-		if (item == defaultValue)
+		Assert(!IsDefaultValue(item));
+		if (IsDefaultValue(item))
 			return ResultCode::FAIL;
 
 		// total ticket number
-		CounterType myTicket = m_EnqueueTicket.fetch_add(1, std::memory_order_relaxed);// m_EnqueueTicket.AcquireTicket() - 1;
+		CounterType myTicket = m_EnqueueTicket.fetch_add(1, std::memory_order_relaxed);
 
 		// my pertinent PageID...starting from 0
 		CounterType myPageID = (myTicket) / m_NumberOfItemsPerPage;
@@ -199,7 +199,7 @@ namespace SF
 		CounterType myCellID = (myTicket) % m_NumberOfItemsPerPage;
 
 		int iTry = 0;
-		auto diffPageID = (SignedCounterType)(myPageID - m_EnqueuePageID.load(std::memory_order_relaxed));
+		auto diffPageID = (SignedCounterType)(myPageID - m_EnqueuePageID.load(std::memory_order_acquire));
 		Page* pMyEnqueuePage = nullptr;
 		while (diffPageID != 0)
 		{
@@ -247,15 +247,12 @@ namespace SF
 			EnqueuePageMove(pMyEnqueuePage, myPageID);
 		}
 
-		//Proc_End:
-
 		return ResultCode::SUCCESS;
 	}
 
 	template <class DataType>
 	Result PageQueue<DataType>::Dequeue(DataType& item)
 	{
-		auto defaultValue = DataType{};
 		// empty state / read count is bigger than written count
 		if (m_DequeueTicket.load(std::memory_order_relaxed) >= m_EnqueueTicket.load(std::memory_order_relaxed)) return ResultCode::FAIL;
 
@@ -285,7 +282,7 @@ namespace SF
 		// Read the data & clear that read position 
 		int LockTry = 0;
 		Page* pMyPage = m_DequeuePage.load(std::memory_order_relaxed);
-		while (pMyPage->Element[myCellID] == defaultValue)
+		while (IsDefaultValue(pMyPage->Element[myCellID]))
 		{
 			LockTry++;
 			if (LockTry % MaximumRetryInARow)
@@ -294,11 +291,11 @@ namespace SF
 			}
 		}
 
-		Assert(pMyPage->Element[myCellID] != defaultValue);
+		Assert(!IsDefaultValue(pMyPage->Element[myCellID]));
 
 		item = std::forward<DataType>(pMyPage->Element[myCellID]);
 
-		pMyPage->Element[myCellID] = defaultValue;
+		pMyPage->Element[myCellID] = DataType{};
 
 		// When the queue is used with shared pointer these order is very important
 		std::atomic_thread_fence(std::memory_order_release);
@@ -324,7 +321,7 @@ namespace SF
 		// my pertinent PageID...starting from 0
 		CounterType myPageID = (myDequeueTicket) / m_NumberOfItemsPerPage;
 
-		// Page ID circulation can be occure so change to subtraction
+		// Page ID circulation can be occur so change to subtraction
 		while (myPageID != m_DequeuePageID.load(std::memory_order_relaxed))
 		{
 			ThisThread::SleepFor(DurationMS(3));
@@ -357,6 +354,9 @@ namespace SF
 
 		if (ReadCount == m_NumberOfItemsPerPage)
 		{
+			// even though my page has finished work, previous page could be still being accessed
+			// Let's leave it to other thread.
+			//while(DequeuePageMoveMT());
 			hr = DequeuePageMoveMT();
 			AssertRel((hr));
 		}

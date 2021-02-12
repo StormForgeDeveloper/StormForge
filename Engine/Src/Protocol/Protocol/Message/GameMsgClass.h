@@ -6607,7 +6607,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				int32_t m_CharacterID{};
+				uint32_t m_CharacterID{};
 			public:
 				CreateCharacterRes()
 					{}
@@ -6620,7 +6620,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const int32_t& GetCharacterID() const	{ return m_CharacterID; };
+				const uint32_t& GetCharacterID() const	{ return m_CharacterID; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -6628,7 +6628,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const int32_t &InCharacterID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID );
 
 			}; // class CreateCharacterRes : public MessageBase
 
@@ -6653,7 +6653,7 @@ namespace SF
 				uint64_t GetSender() { return 0; }
 			private:
 				uint64_t m_TransactionID{};
-				int32_t m_CharacterID{};
+				uint32_t m_CharacterID{};
 			public:
 				RemoveCharacterCmd()
 					{}
@@ -6665,7 +6665,7 @@ namespace SF
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
-				const int32_t& GetCharacterID() const	{ return m_CharacterID; };
+				const uint32_t& GetCharacterID() const	{ return m_CharacterID; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -6673,7 +6673,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const int32_t &InCharacterID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 
 			}; // class RemoveCharacterCmd : public MessageBase
 
@@ -6785,7 +6785,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				ArrayView<int32_t> m_CharacterIDs;
+				ArrayView<uint32_t> m_CharacterIDs;
 			public:
 				GetCharacterListRes()
 					{}
@@ -6798,7 +6798,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const Array<int32_t>& GetCharacterIDs() const	{ return m_CharacterIDs; };
+				const Array<uint32_t>& GetCharacterIDs() const	{ return m_CharacterIDs; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -6806,7 +6806,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<int32_t>& InCharacterIDs );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs );
 
 			}; // class GetCharacterListRes : public MessageBase
 
@@ -6831,7 +6831,7 @@ namespace SF
 				uint64_t GetSender() { return 0; }
 			private:
 				uint64_t m_TransactionID{};
-				int32_t m_CharacterID{};
+				uint32_t m_CharacterID{};
 				DynamicArray<const char*> m_AttributeNames;
 			public:
 				GetCharacterDataCmd()
@@ -6844,7 +6844,7 @@ namespace SF
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
-				const int32_t& GetCharacterID() const	{ return m_CharacterID; };
+				const uint32_t& GetCharacterID() const	{ return m_CharacterID; };
 				const Array<const char*>& GetAttributeNames() const	{ return m_AttributeNames; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -6853,7 +6853,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const int32_t &InCharacterID, const Array<const char*>& InAttributeNames );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID, const Array<const char*>& InAttributeNames );
 
 			}; // class GetCharacterDataCmd : public MessageBase
 

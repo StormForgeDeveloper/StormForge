@@ -332,9 +332,10 @@ namespace SF {
 
 		uint8_t* pCompilerSizePos = reinterpret_cast<uint8_t*>(ptr); // each compiler has different search length
 		uint8_t headerOffset = 0;
+		const int iSearchMax = 3;
 
 		// search up to for times, one already counted so 3 more
-		for (int iSearch = 0; iSearch < 2; iSearch++, pCompilerSizePos-=sizeof(size_t))
+		for (int iSearch = 0; iSearch < iSearchMax; iSearch++, pCompilerSizePos-=sizeof(size_t))
 		{
 			headerOffset = *(pCompilerSizePos - 1); // The place I stored header offset
 			pMemBlock = reinterpret_cast<MemBlockHdr*>(pCompilerSizePos - headerOffset);
@@ -351,6 +352,12 @@ namespace SF {
 		}
 
 		return pMemBlock;
+	}
+
+	IHeap* IHeap::GetAloocationHeap(void* ptr)
+	{
+		auto pHdr = GetMemoryBlockHdr(ptr);
+		return pHdr ? pHdr->pHeap : nullptr;
 	}
 
 	bool IHeap::CheckMemoryHeader(void* ptr)

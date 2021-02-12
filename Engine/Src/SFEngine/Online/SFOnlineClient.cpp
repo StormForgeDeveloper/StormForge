@@ -502,7 +502,7 @@ namespace SF
 	{
 		m_CurrentTask.reset();
 		for (auto& itTask : m_PendingTasks)
-			delete itTask;
+			IHeap::Delete(itTask);
 		m_PendingTasks.Clear();
 	}
 

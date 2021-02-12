@@ -37,7 +37,7 @@ namespace SF
 		ScriptEngine::~ScriptEngine()
 		{
 			if (m_RootEnvironment != nullptr)
-				delete m_RootEnvironment;
+				IHeap::Delete(m_RootEnvironment);
 			m_RootEnvironment = nullptr;
 		}
 
@@ -59,7 +59,7 @@ namespace SF
 		{
 
 			if (m_RootEnvironment != nullptr)
-				delete m_RootEnvironment;
+				IHeap::Delete(m_RootEnvironment);
 			m_RootEnvironment = nullptr;
 
 			LibraryComponent::DeinitializeComponent();

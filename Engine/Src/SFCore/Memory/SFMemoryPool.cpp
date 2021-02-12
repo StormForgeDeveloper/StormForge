@@ -249,7 +249,7 @@ namespace SF
 		// How can we delete them?
 		for (auto& itPoolItem : m_MemoryPoolbySize)
 		{
-			delete itPoolItem.pMemoryPool;
+			IHeap::Delete(itPoolItem.pMemoryPool);
 		}
 	}
 

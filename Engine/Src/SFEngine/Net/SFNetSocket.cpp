@@ -198,7 +198,7 @@ namespace Net {
 	{
 		ScopeContext hr([&pRecvBuffer](Result hr)
 			{
-				delete pRecvBuffer;
+				IHeap::Delete(pRecvBuffer);
 			});
 		Result hrErr = ResultCode::SUCCESS;
 		m_LastPendingRecvResult = ResultCode::SUCCESS;
@@ -487,7 +487,7 @@ namespace Net {
 			// Failed, release pending flag
 			pRecvBuffer->SetPendingFalse();
 			DecPendingRecvCount();
-			delete pRecvBuffer;
+			IHeap::Delete(pRecvBuffer);
 		}
 		else
 		{

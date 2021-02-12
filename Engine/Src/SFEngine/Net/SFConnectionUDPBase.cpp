@@ -77,7 +77,7 @@ namespace Net {
 
 
 		if(m_pGatheringBuffer != nullptr)
-			IHeap::Free(m_pGatheringBuffer);
+			IHeap::Delete(m_pGatheringBuffer);
 		m_pGatheringBuffer = nullptr;
 
 		m_SubFrameMessage = nullptr;
@@ -248,7 +248,7 @@ namespace Net {
 
 		m_uiGatheredSize = 0;
 		if( m_pGatheringBuffer != nullptr )
-			IHeap::Free(m_pGatheringBuffer);
+			IHeap::Delete(m_pGatheringBuffer);
 
 		if (pSendBuffer != nullptr)
 			IHeap::Delete(pSendBuffer);
@@ -536,7 +536,7 @@ namespace Net {
 
 	Proc_End:
 
-		IHeap::Free(pSendBuffer);
+		IHeap::Delete(pSendBuffer);
 
 		if(!hr && pIOHandler != nullptr)
 			pIOHandler->DecPendingSendCount();

@@ -177,7 +177,7 @@ namespace SF
 
 		TimeStampMS m_HeartbeatTimer{};
 
-		UniquePtr<ClientTask> m_CurrentTask;
+		SFUniquePtr<ClientTask> m_CurrentTask;
 		DynamicArray<ClientTask*> m_PendingTasks;
 
 		// My actor movement

@@ -763,13 +763,13 @@
 			    <Params Type="VariableTable" Name="Attributes"/>
 		    </Cmd>
 		    <Res>
-			    <Params Type="int32" Name="CharacterID" Desc="Created character ID"/>
+			    <Params Type="uint32" Name="CharacterID" Desc="Created character ID"/>
 		    </Res>
 	    </Command>
 
 		<Command Name="RemoveCharacter" Reliable="true" Crypto="No" Trace="Debug1" Desc="Remove character">
 			<Cmd>
-				<Params Type="int32" Name="CharacterID" Desc="Character ID to remove"/>
+				<Params Type="uint32" Name="CharacterID" Desc="Character ID to remove"/>
 			</Cmd>
 			<Res>
 			</Res>
@@ -779,13 +779,13 @@
 			<Cmd>
 			</Cmd>
 			<Res>
-				<Params Type="int32" IsArray="true" Name="CharacterIDs" Desc="Character id list"/>
+				<Params Type="uint32" IsArray="true" Name="CharacterIDs" Desc="Character id list"/>
 			</Res>
 		</Command>
 
 		<Command Name="GetCharacterData" Reliable="true" Crypto="No" Trace="Debug1" Desc="">
 		    <Cmd>
-				<Params Type="int32" Name="CharacterID" Desc="Character ID to get"/>
+				<Params Type="uint32" Name="CharacterID" Desc="Character ID to get"/>
 				<Params Type="String" IsArray="true" Name="AttributeNames" Desc="attribute names to query"/>
 			</Cmd>
 			<Res>

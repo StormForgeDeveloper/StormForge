@@ -220,7 +220,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 	for (int64_t i = 0; i < (TEST_COUNT); i++)
 	{
 		int64_t value = (rand() % MAX_NUMBER) + 1;
-		TestMapNodeShared *pNewNode = new TestMapNodeShared;
+		TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
 		pNewNode->Value = value;
 		if ((TestMap.Insert(value, pNewNode)))
 		{
@@ -229,7 +229,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 		}
 		else
 		{
-			//delete pNewNode;
+			//IHeap::Delete(pNewNode);
 		}
 	}
 
@@ -274,7 +274,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 		}
 		else
 		{
-			TestMapNodeShared *pNewNode = new TestMapNodeShared;
+			TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
 			pNewNode->Value = value;
 			if ((TestMap.Insert(value, pNewNode)))
 			{
@@ -283,7 +283,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 			}
 			else
 			{
-				//delete pNewNode;
+				//IHeap::Delete(pNewNode);
 			}
 		}
 
@@ -353,7 +353,7 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 	for (int64_t i = 0; i < (TEST_COUNT); i++)
 	{
 		int64_t value = (rand() % MAX_NUMBER) + 1;
-		TestMapNodeShared *pNewNode = new TestMapNodeShared;
+		TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
 		pNewNode->Value = value;
 		if ((TestMap.Insert(value, pNewNode)))
 		{
@@ -361,7 +361,7 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 		}
 		else
 		{
-			//delete pNewNode;
+			//IHeap::Delete(pNewNode);
 		}
 	}
 
@@ -408,7 +408,7 @@ TEST_F(HashTableTest, HashTable2_UniqueWriteMT)
 				}
 				else
 				{
-					TestMapNodeShared *pNewNode = new TestMapNodeShared;
+					TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
 					pNewNode->Value = value;
 					if ((TestMap.Insert(value, pNewNode)))
 					{
@@ -482,7 +482,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 	for (int64_t i = 0; i < (TEST_COUNT); i++)
 	{
 		int value = rand() % MAX_NUMBER;
-		TestMapNodeShared *pNewNode = new TestMapNodeShared;
+		TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
 		pNewNode->Value = value;
 		if ((TestMap.Insert(value, pNewNode)))
 		{
@@ -491,7 +491,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 		}
 		else
 		{
-			//delete pNewNode;
+			//IHeap::Delete(pNewNode);
 		}
 		writeCount.fetch_add(1, std::memory_order_relaxed);
 	}
@@ -538,7 +538,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 		}
 		else
 		{
-			TestMapNodeShared *pNewNode = new TestMapNodeShared;
+			TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
 			pNewNode->Value = value;
 			if ((TestMap.Insert(value, pNewNode)))
 			{
@@ -547,7 +547,7 @@ TEST_F(HashTableTest, HashTable2_PerfRead)
 			}
 			else
 			{
-				//delete pNewNode;
+				//IHeap::Delete(pNewNode);
 			}
 		}
 
@@ -616,7 +616,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 	for (int64_t i = 0; i < (TEST_COUNT); i++)
 	{
 		int value = rand() % MAX_NUMBER;
-		TestMapNodeShared *pNewNode = new TestMapNodeShared;
+		TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
 		pNewNode->Value = value;
 		if ((TestMap.Insert(value, pNewNode)))
 		{
@@ -624,7 +624,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 		}
 		else
 		{
-			//delete pNewNode;
+			//IHeap::Delete(pNewNode);
 		}
 		writeCount.fetch_add(1, std::memory_order_relaxed);
 	}
@@ -668,7 +668,7 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 				}
 				else
 				{
-					TestMapNodeShared *pNewNode = new TestMapNodeShared;
+					TestMapNodeShared *pNewNode = new(GetHeap()) TestMapNodeShared;
 					pNewNode->Value = value;
 					if ((TestMap.Insert(value, pNewNode)))
 					{
@@ -696,7 +696,3 @@ TEST_F(HashTableTest, HashTable2_PerfReadWriteMT)
 
 	printf("Read: %llu, Write: %llu\n", static_cast<unsigned long long>(readCount.load(std::memory_order_acquire)), static_cast<unsigned long long>(writeCount.load(std::memory_order_acquire)));
 }
-
-
-
-

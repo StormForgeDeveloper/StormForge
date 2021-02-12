@@ -673,7 +673,7 @@ void StackWalkerImpl::CaptureCallStack(CallStackTrace& stackTrace, void** stackB
 		if (stm_pInstance == nullptr)
 			return;
 
-		delete stm_pInstance;
+		IHeap::Delete(stm_pInstance);
 		stm_pInstance = nullptr;
 	}
 

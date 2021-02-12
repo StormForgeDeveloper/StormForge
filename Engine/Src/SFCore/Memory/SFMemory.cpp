@@ -123,7 +123,6 @@ void* operator new[](size_t size)
 {
 	return SF::GetSystemHeap().Alloc(size);
 }
-#endif
 
 void operator delete(void* pBuff) noexcept
 {
@@ -134,3 +133,4 @@ void operator delete[](void* pBuff) noexcept
 {
 	SF::IHeap::Free(pBuff);
 }
+#endif

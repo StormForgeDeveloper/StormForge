@@ -382,7 +382,7 @@ namespace SF {
 		StaticArray<DataType, DefaultBufferSize>::~StaticArray()
 		{
 			if (m_pAllocatedBuffer)
-				delete[] m_pAllocatedBuffer;
+				IHeap::Delete(m_pAllocatedBuffer);
 		}
 
 		// reallocate
@@ -405,7 +405,7 @@ namespace SF {
 			m_pAllocatedBuffer = pNewBuffer;
 			if (pOldBuffer)
 			{
-				delete[] pOldBuffer;
+				IHeap::Delete(pOldBuffer);
 			}
 
 			return ResultCode::SUCCESS;
@@ -434,7 +434,7 @@ namespace SF {
 		DynamicArray<DataType>::~DynamicArray()
 		{
 			if (m_pAllocatedBuffer)
-				delete[] m_pAllocatedBuffer;
+				IHeap::Delete(m_pAllocatedBuffer);
 		}
 
 		// reallocate
@@ -459,7 +459,7 @@ namespace SF {
 			m_pAllocatedBuffer = pNewBuffer;
 			if (pOldBuffer)
 			{
-				delete[] pOldBuffer;
+				IHeap::Delete(pOldBuffer);
 			}
 
 			return ResultCode::SUCCESS;

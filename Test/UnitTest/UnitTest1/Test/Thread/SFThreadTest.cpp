@@ -217,6 +217,8 @@ public:
 
 	}
 
+	IHeap& GetHeap() { return m_Heap; }
+
 	Result InitializeTaskManager()
 	{
 		for (uint worker = 0; worker < m_NumberOfWorker; worker++)
@@ -232,7 +234,7 @@ public:
 		for (uint entity = 0; entity < m_NumberOfTestEntity; entity++)
 		{
 			uint entityID = entity + 1;
-			auto entityPtr = new WorkingEntity(entityID);
+			auto entityPtr = new(GetHeap()) WorkingEntity(entityID);
 			m_ReferenceManager.RegisterSharedObject(entityPtr);
 			m_EntityManager.insert(std::make_pair(entityID, entityPtr));
 		}
@@ -246,7 +248,7 @@ public:
 		{
 			pWorker->Stop(true);
 
-			delete pWorker;
+			IHeap::Delete(pWorker);
 		});
 
 		m_Workers.clear();
@@ -261,7 +263,7 @@ public:
 		SharedPointerT<WorkingEntity> entity;
 		if (itEntity == m_EntityManager.end())
 		{
-			auto newObject = new WorkingEntity(entityID);
+			auto newObject = new(GetHeap()) WorkingEntity(entityID);
 			newObject->TestID = entityID;
 			m_ReferenceManager.RegisterSharedObject(newObject);
 
@@ -389,7 +391,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueue)
 	std::for_each(m_Threads.begin(), m_Threads.end(), [](Thread* pThread)
 	{
 		if (pThread) pThread->Stop(false);
-		delete pThread;
+		IHeap::Delete(pThread);
 	});
 	m_Threads.clear();
 
@@ -459,7 +461,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 	std::for_each(m_Threads.begin(), m_Threads.end(), [](Thread* pThread)
 	{
 		if (pThread) pThread->Stop(false);
-		delete pThread;
+		IHeap::Delete(pThread);
 	});
 	m_Threads.clear();
 
@@ -535,7 +537,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueThreadDequeue)
 	std::for_each(m_Threads.begin(), m_Threads.end(), [](Thread* pThread)
 	{
 		if (pThread) pThread->Stop(false);
-		delete pThread;
+		IHeap::Delete(pThread);
 	});
 	m_Threads.clear();
 
@@ -601,7 +603,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
 	std::for_each(threads.begin(), threads.end(), [](Thread* pThread)
 	{
 		if (pThread) pThread->Stop(false);
-		delete pThread;
+		IHeap::Delete(pThread);
 	});
 	threads.clear();
 
@@ -663,14 +665,14 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_Concurrent)
 	std::for_each(threads.begin(), threads.end(), [](Thread* pThread)
 	{
 		if (pThread) pThread->Stop(false);
-		delete pThread;
+		IHeap::Delete(pThread);
 	});
 	threads.clear();
 
 	auto end = Util::Time.GetRawTimeMs();
 	printf("concurrent_queue Execution Time: %15d\n", (end - start).count());
 
-	delete testArray;
+	IHeap::Delete(testArray);
 }
 #endif
 

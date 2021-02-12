@@ -53,7 +53,7 @@ SFDLL_EXPORT void SFTongScriptByteCode_NativeDelete(uintptr_t nativeHandler)
 
 	auto pScriptByteCode = reinterpret_cast<Tong::ScriptBytecode*>(nativeHandler);
 
-	delete pScriptByteCode;
+	IHeap::Delete(pScriptByteCode);
 }
 
 

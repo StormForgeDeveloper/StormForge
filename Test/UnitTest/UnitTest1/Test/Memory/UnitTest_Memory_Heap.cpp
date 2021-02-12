@@ -64,3 +64,42 @@ TEST_F(MemoryTest, Heap)
 	GetHeap().Free(pPtr);
 }
 
+
+TEST_F(MemoryTest, NewDelete)
+{
+
+	class TestAllocationObject
+	{
+	public:
+
+		// Constructor
+		TestAllocationObject()
+		{
+		}
+
+		~TestAllocationObject()
+		{
+		}
+
+	public:
+
+		// Is available
+		bool m_isAvailable{};
+
+	private:
+		// PreferencePlayer ID
+		uint m_PlayerID{};
+
+		// preference vector
+		Vector4 m_PackedFactors[8]{};
+
+		// current Shell Index, if belong to a Shell
+		uint m_CurrentShellID = -1;
+		Mutex m_ShellLock;
+	};
+
+
+	auto arrayValue = new(GetHeap()) TestAllocationObject[204800];
+	IHeap::Delete(arrayValue);
+}
+

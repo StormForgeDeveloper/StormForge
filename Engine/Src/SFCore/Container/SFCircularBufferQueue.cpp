@@ -36,7 +36,7 @@ namespace SF
 	CircularBufferQueue::~CircularBufferQueue()
 	{
 		if (!m_ExternalBuffer && m_Buffer != nullptr)
-			delete[] m_Buffer;
+			IHeap::Delete(m_Buffer);
 		m_Buffer = nullptr;
 	}
 

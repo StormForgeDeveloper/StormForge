@@ -68,7 +68,7 @@ public:
 		std::for_each(m_Threads.begin(), m_Threads.end(), [](SF::Thread* pThread)
 		{
 			if (pThread) pThread->Stop(true);
-			delete pThread;
+			SF::IHeap::Delete(pThread);
 		});
 		m_Threads.clear();
 	}

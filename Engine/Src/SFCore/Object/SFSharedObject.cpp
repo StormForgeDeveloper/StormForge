@@ -95,7 +95,7 @@ namespace SF {
 			if (decValue <= 1)
 			{
 				AssertRel(decValue == 1);
-				delete this;
+				IHeap::Delete(this);
 			}
 		}
 

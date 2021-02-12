@@ -263,7 +263,7 @@ TEST_F(TongScriptTest, Bytecode)
 
 
 	if (pEnvironment != nullptr)
-		delete pEnvironment;
+		IHeap::Delete(pEnvironment);
 	pEnvironment = nullptr;
 }
 
