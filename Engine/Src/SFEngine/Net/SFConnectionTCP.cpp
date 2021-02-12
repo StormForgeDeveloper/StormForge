@@ -624,7 +624,7 @@ namespace Net {
 
 	Result ConnectionTCP::SendRaw(const SharedPointerT<Message::MessageData> &pMsg)
 	{
-		UniquePtr<IOBUFFER_WRITE> pSendBuffer;
+		SFUniquePtr<IOBUFFER_WRITE> pSendBuffer;
 		ScopeContext hr;
 
 		if (!m_NetIOAdapter.GetIsIORegistered())

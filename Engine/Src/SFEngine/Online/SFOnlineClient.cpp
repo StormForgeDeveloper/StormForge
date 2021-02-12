@@ -268,12 +268,18 @@ namespace SF
 
 		virtual ~ClientTask_JoinGameServer()
 		{
-			if (GetConnection() == nullptr)
-				return;
+			if (GetConnection() != nullptr)
+			{
+				GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
+				GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
+				GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameServerRes::MID.GetMsgID());
+			}
 
-			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
-			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
-			GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameServerRes::MID.GetMsgID());
+			if (m_Owner.GetOnlineState() == OnlineState::InGameServer)
+			{
+				m_Owner.Disconnect(m_Owner.m_Login);
+				m_Owner.m_Login = nullptr;
+			}
 		}
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
@@ -569,10 +575,14 @@ namespace SF
 		if (m_Login != nullptr)
 		{
 			m_Login->UpdateGameTick();
-			if (m_Login->GetConnectionState() == Net::ConnectionState::DISCONNECTED)
+
+			if (m_Login != nullptr)
 			{
-				m_Login->DisconnectNRelease("Already Disconnected");
-				m_Login = nullptr;
+				if (m_Login->GetConnectionState() == Net::ConnectionState::DISCONNECTED)
+				{
+					m_Login->DisconnectNRelease("Already Disconnected");
+					m_Login = nullptr;
+				}
 			}
 		}
 
@@ -580,12 +590,11 @@ namespace SF
 		{
 			m_Game->UpdateGameTick();
 
-			if (m_Game->GetConnectionState() == Net::ConnectionState::DISCONNECTED)
+			if (m_Game != nullptr && m_Game->GetConnectionState() == Net::ConnectionState::DISCONNECTED)
 			{
 				m_Game->DisconnectNRelease("Already Disconnected");
 				m_Game = nullptr;
 			}
-
 
 			if (m_Game != nullptr)
 			{

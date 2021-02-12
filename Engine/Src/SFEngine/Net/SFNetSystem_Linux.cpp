@@ -237,11 +237,9 @@ namespace Net {
 			if (setsockopt(socket, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
 			{
 				SFLog(Net, Error, "Failed to change socket option IPV6_V6ONLY = {0}, err = {1}", iOptValue, GetLastNetSystemResult());
-				netErr(ResultCode::UNEXPECTED);
+				netCheck(ResultCode::UNEXPECTED);
 			}
 		}
-
-	Proc_End:
 
 		return hr;
 	}
@@ -340,12 +338,11 @@ namespace Net {
 			{
 			case (uint32_t)ResultCode::IO_WOULDBLOCK:
 			case (uint32_t)ResultCode::IO_IO_PENDING:
-				goto Proc_End;
+				return hr = err;
 
 			case (uint32_t)ResultCode::IO_TRY_AGAIN:
 				// Nothing to accept for now
-				hr = err;
-				goto Proc_End;
+				return hr = err;
 
 			case (uint32_t)ResultCode::IO_NETDOWN:
 			case (uint32_t)ResultCode::IO_PROTO:

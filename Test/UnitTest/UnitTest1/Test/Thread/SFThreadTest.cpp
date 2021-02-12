@@ -248,7 +248,7 @@ public:
 		{
 			pWorker->Stop(true);
 
-			IHeap::Delete(pWorker);
+			delete pWorker;
 		});
 
 		m_Workers.clear();
@@ -374,7 +374,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueue)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new FunctorThread([&](Thread* pThread)
+		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
 		{
 			do
 			{
@@ -426,7 +426,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new FunctorThread([&](Thread* pThread)
+		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
 		{
 			do
 			{
@@ -488,7 +488,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueThreadDequeue)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new FunctorThread([&](Thread* pThread)
+		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
 		{
 			do
 			{
@@ -507,7 +507,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueThreadDequeue)
 	SyncCounter readCount(0);
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new FunctorThread([&](Thread* pThread)
+		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
 		{
 			int64_t item;
 			auto readOrder = readCount.fetch_add(1,std::memory_order_relaxed);
@@ -533,13 +533,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueThreadDequeue)
 		m_Threads.push_back(pWorker);
 	}
 
-
-	std::for_each(m_Threads.begin(), m_Threads.end(), [](Thread* pThread)
-	{
-		if (pThread) pThread->Stop(false);
-		IHeap::Delete(pThread);
-	});
-	m_Threads.clear();
+	StopAllThread();
 
 
 	for (uint item = 0; item < TEST_LENGTH; item++)
@@ -570,7 +564,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new FunctorThread([&](Thread* pThread)
+		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
 		{
 			do
 			{
@@ -600,12 +594,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
 		}
 	}
 
-	std::for_each(threads.begin(), threads.end(), [](Thread* pThread)
-	{
-		if (pThread) pThread->Stop(false);
-		IHeap::Delete(pThread);
-	});
-	threads.clear();
+	StopAllThread();
 
 	auto end = Util::Time.GetRawTimeMs();
 	printf("PageQueue Execution Time:      %15d\n", (end - start).count());
@@ -632,7 +621,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_Concurrent)
 
 	for (uint worker = 0; worker < NUM_THREAD; worker++)
 	{
-		auto pWorker = new FunctorThread([&](Thread* pThread)
+		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
 		{
 			do
 			{
@@ -662,12 +651,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_Concurrent)
 		}
 	}
 
-	std::for_each(threads.begin(), threads.end(), [](Thread* pThread)
-	{
-		if (pThread) pThread->Stop(false);
-		IHeap::Delete(pThread);
-	});
-	threads.clear();
+	StopAllThread();
 
 	auto end = Util::Time.GetRawTimeMs();
 	printf("concurrent_queue Execution Time: %15d\n", (end - start).count());

@@ -93,19 +93,30 @@ namespace Net {
 
 	Result KQUEUEWorker::HandleAccept(SF_SOCKET sock, SocketIO* pCallBack)
 	{
-		Result hr = ResultCode::SUCCESS;
 		IOBUFFER_ACCEPT* pAcceptInfo = nullptr;
+		ScopeContext hr([&pAcceptInfo](Result hr)
+			{
+				Util::SafeDelete(pAcceptInfo);
+			});
 
-		SFLog(Net, Info, "Socket Accepted sock:{0}", sock);
 		while (1)
 		{
 			// Accept will happened in network thread
 			hr = pCallBack->Accept(pAcceptInfo);
-			switch ((uint32_t)hr)
+			switch ((uint32_t)(Result)hr)
 			{
 			case (uint32_t)ResultCode::SUCCESS:
-				netChk(pCallBack->OnIOAccept(hr, pAcceptInfo));
-				pAcceptInfo = nullptr;
+				if (pAcceptInfo->sockAccept != INVALID_SOCKET)
+				{
+					hr = pCallBack->OnIOAccept(hr, pAcceptInfo);
+					pAcceptInfo = nullptr;
+					if (!hr)
+						return hr;
+				}
+				else
+				{
+					return hr;
+				}
 				break;
 			case (uint32_t)ResultCode::NOT_IMPLEMENTED:
 				Assert(false); // Fix it!
@@ -122,11 +133,6 @@ namespace Net {
 
 			Util::SafeDelete(pAcceptInfo);
 		}
-
-	Proc_End:
-
-		Util::SafeDelete(pAcceptInfo);
-
 
 		return hr;
 	}
