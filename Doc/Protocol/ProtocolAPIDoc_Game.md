@@ -1723,12 +1723,12 @@ C++: Cast message to CreateCharacterRes to access values
 		- OutCharacterID: uint32 type. Created character ID
 
 
-## RemoveCharacter Request
-Remove character
+## DeleteCharacter Request
+Delete character
 
 1. Command interface
 
-        Result RemoveCharacterCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID)
+        Result DeleteCharacterCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID)
 
 		- OutInTransactionID: TransactionID type. 
 
@@ -1736,7 +1736,7 @@ Remove character
 
 2. Result interface
 
-C++: Cast message to RemoveCharacterRes to access values
+C++: Cast message to DeleteCharacterRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
@@ -1770,13 +1770,11 @@ C++: Cast message to GetCharacterListRes to access values
 
 1. Command interface
 
-        Result GetCharacterDataCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID, const Array<const char*>& InAttributeNames)
+        Result GetCharacterDataCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID)
 
 		- OutInTransactionID: TransactionID type. 
 
 		- OutInCharacterID: uint32 type. Character ID to get
-
-		- OutInAttributeNames: String type. attribute names to query
 
 2. Result interface
 
@@ -1788,6 +1786,29 @@ C++: Cast message to GetCharacterDataRes to access values
 		- OutResult: Result type. 
 
 		- OutAttributes: VariableTable type. Character attributes
+
+
+## SelectCharacter Request
+Select character
+
+1. Command interface
+
+        Result SelectCharacterCmd(const uint64_t &InTransactionID, const uint32_t &InCharacterID)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInCharacterID: uint32 type. Character ID to select
+
+2. Result interface
+
+C++: Cast message to SelectCharacterRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutCharacterID: uint32 type. Selected Character ID
 
 
 ## GiveStamina Request

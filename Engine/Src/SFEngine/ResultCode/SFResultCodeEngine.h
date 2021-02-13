@@ -30,6 +30,9 @@ namespace SF {
 			// Connectionlost 
 			constexpr Result 			ENGINE_CONNECTION_LOST                                             ((int32_t)0xE7020003L);
 
+			// Invalid character data 
+			constexpr Result 			ENGINE_INVALID_CHARACTER                                           ((int32_t)0xE7020004L);
+
 	}//namespace ResultCode 
 }//namespace SF 
 

@@ -83,6 +83,9 @@ namespace Net {
 				return ResultCode::SUCCESS;
 		}
 
+		if (!NetSystem::IsProactorSystem())
+			return ResultCode::SUCCESS;
+
 		return SocketIOTCP::PendingRecv(pRecvBuffer);
 	}
 
@@ -146,8 +149,6 @@ namespace Net {
 
 				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->buffer)))
 					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
-
-				PendingRecv();
 			}
 			else
 			{
@@ -170,7 +171,12 @@ namespace Net {
 
 		// decrease should be happened at last, and always
 		if (NetSystem::IsProactorSystem())
+		{
 			DecPendingRecvCount();
+
+			PendingRecv();
+		}
+
 
 		if (pIOBuffer != nullptr)
 		{

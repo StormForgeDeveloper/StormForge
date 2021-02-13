@@ -619,7 +619,7 @@ namespace SF
 			m_CurrentTask->TickUpdate();
 			if (m_CurrentTask->GetResult() != ResultCode::BUSY)
 			{
-				// Sequence of task are queued int the PendingTasks, if one fails need to cancel whole taks sequence
+				// Sequence of task are queued int the PendingTasks, if one fails need to cancel whole task sequence
 				if (!m_CurrentTask->GetResult())
 					ClearTasks();
 				else

@@ -534,6 +534,9 @@ namespace SF {
 			// Invalid stream ID 
 			constexpr Result 			INVALID_STREAMID                                                   ((int32_t)0xE70100ABL);
 
+			// Generic DB failure 
+			constexpr Result 			DB_FAILURE                                                         ((int32_t)0xE70100ACL);
+
 	}//namespace ResultCode 
 }//namespace SF 
 

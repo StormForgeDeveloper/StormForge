@@ -292,20 +292,6 @@ namespace Net {
 
 		SFLog(Net, Info, "Open Server TCP Host {0}:{1}, sock:{2}", strLocalIP, usLocalPort, socket);
 
-		//iOptValue = Const::SVR_RECV_BUFFER_SIZE;
-		//if( setsockopt(socket, SOL_SOCKET, SO_RCVBUF, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR )
-		//{
-		//	SFLog(Net, Error, "Failed to change socket option SO_RCVBUF = {0}, err = {1:X8}", iOptValue, GetLastNetSystemResult() );
-		//	netErr( ResultCode::UNEXPECTED );
-		//}
-
-		//iOptValue = Const::SVR_SEND_BUFFER_SIZE;
-		//if( setsockopt(socket, SOL_SOCKET, SO_SNDBUF, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR )
-		//{
-		//	SFLog(Net, Error, "Failed to change socket option SO_SNDBUF = {0}, err = {1:X8}", iOptValue, GetLastNetSystemResult() );
-		//	netErr( ResultCode::UNEXPECTED );
-		//}
-
 		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::Stream, GetLocalAddress().SocketFamily, socket));
 
 		bOptValue = 1;

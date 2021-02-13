@@ -26,6 +26,9 @@ namespace SF {
 		// Connectionlost 
 		public const int ENGINE_CONNECTION_LOST =                           unchecked((int)0xE7020003); 
 
+		// Invalid character data 
+		public const int ENGINE_INVALID_CHARACTER =                         unchecked((int)0xE7020004); 
+
 	}
 }
 

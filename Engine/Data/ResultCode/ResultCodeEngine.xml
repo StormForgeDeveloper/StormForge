@@ -5,12 +5,14 @@
              IDTable="false"
              >
 
-  
-  <ResultCodeItem Severity="Error" CodeName="INITIALIZATION_FAILED" Desc="Engine initialization is failed"/>
-  <ResultCodeItem Severity="Error" CodeName="INVALID_CONFIG" Desc="Invalid configuration"/>
-  <ResultCodeItem Severity="Error" CodeName="CONNECTION_FAILED" Desc="Connection failed"/>
-  <ResultCodeItem Severity="Error" CodeName="CONNECTION_LOST" Desc="Connectionlost"/>
 
-  
+	<ResultCodeItem Severity="Error" CodeName="INITIALIZATION_FAILED" Desc="Engine initialization is failed"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_CONFIG" Desc="Invalid configuration"/>
+	<ResultCodeItem Severity="Error" CodeName="CONNECTION_FAILED" Desc="Connection failed"/>
+	<ResultCodeItem Severity="Error" CodeName="CONNECTION_LOST" Desc="Connectionlost"/>
+
+	<ResultCodeItem Severity="Error" CodeName="INVALID_CHARACTER" Desc="Invalid character data"/>
+
+
 </ResultCodes>
 

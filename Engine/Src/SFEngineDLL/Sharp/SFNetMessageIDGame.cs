@@ -454,10 +454,10 @@ namespace SF.Net
 		public static int CreateCharacterRes { get { return CSSFNetMessageID_GameCreateCharacterRes(); } }
 
 
-		// Cmd: Remove character
-		public static int RemoveCharacterCmd { get { return CSSFNetMessageID_GameRemoveCharacterCmd(); } }
+		// Cmd: Delete character
+		public static int DeleteCharacterCmd { get { return CSSFNetMessageID_GameDeleteCharacterCmd(); } }
 
-		public static int RemoveCharacterRes { get { return CSSFNetMessageID_GameRemoveCharacterRes(); } }
+		public static int DeleteCharacterRes { get { return CSSFNetMessageID_GameDeleteCharacterRes(); } }
 
 
 		// Cmd: Get character list
@@ -470,6 +470,12 @@ namespace SF.Net
 		public static int GetCharacterDataCmd { get { return CSSFNetMessageID_GameGetCharacterDataCmd(); } }
 
 		public static int GetCharacterDataRes { get { return CSSFNetMessageID_GameGetCharacterDataRes(); } }
+
+
+		// Cmd: Select character
+		public static int SelectCharacterCmd { get { return CSSFNetMessageID_GameSelectCharacterCmd(); } }
+
+		public static int SelectCharacterRes { get { return CSSFNetMessageID_GameSelectCharacterRes(); } }
 
 
 		// Cmd: Give my stamina to other player
@@ -1195,13 +1201,13 @@ namespace SF.Net
 
 
 
-		// Cmd: Remove character
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRemoveCharacterCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameRemoveCharacterCmd();
+		// Cmd: Delete character
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameDeleteCharacterCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameDeleteCharacterCmd();
 
 
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRemoveCharacterRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameRemoveCharacterRes();
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameDeleteCharacterRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameDeleteCharacterRes();
 
 
 
@@ -1222,6 +1228,16 @@ namespace SF.Net
 
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetCharacterDataRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameGetCharacterDataRes();
+
+
+
+		// Cmd: Select character
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSelectCharacterCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameSelectCharacterCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSelectCharacterRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameSelectCharacterRes();
 
 
 

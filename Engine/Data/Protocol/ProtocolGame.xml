@@ -767,7 +767,7 @@
 		    </Res>
 	    </Command>
 
-		<Command Name="RemoveCharacter" Reliable="true" Crypto="No" Trace="Debug1" Desc="Remove character">
+		<Command Name="DeleteCharacter" Reliable="true" Crypto="No" Trace="Debug1" Desc="Delete character">
 			<Cmd>
 				<Params Type="uint32" Name="CharacterID" Desc="Character ID to remove"/>
 			</Cmd>
@@ -786,10 +786,19 @@
 		<Command Name="GetCharacterData" Reliable="true" Crypto="No" Trace="Debug1" Desc="">
 		    <Cmd>
 				<Params Type="uint32" Name="CharacterID" Desc="Character ID to get"/>
-				<Params Type="String" IsArray="true" Name="AttributeNames" Desc="attribute names to query"/>
 			</Cmd>
 			<Res>
 				<Params Type="VariableTable" Name="Attributes" Desc="Character attributes"/>
+			</Res>
+	    </Command>
+
+		<Command Name="SelectCharacter" Reliable="true" Crypto="No" Trace="Debug1" Desc="Select character">
+		    <Cmd>
+				<Params Type="uint32" Name="CharacterID" Desc="Character ID to select"/>
+			</Cmd>
+			<Res>
+				<!-- <Params Type="VariableTable" Name="Attributes" Desc="Character attributes"/> -->
+				<Params Type="uint32" Name="CharacterID" Desc="Selected Character ID"/>
 			</Res>
 	    </Command>
 

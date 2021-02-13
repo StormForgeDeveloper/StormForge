@@ -960,17 +960,17 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameCreateCharacterRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameCreateCharacterRes()
 
 
-// Cmd: Remove character
-SFDLL_EXPORT int  CSSFNetMessageID_GameRemoveCharacterCmd()
+// Cmd: Delete character
+SFDLL_EXPORT int  CSSFNetMessageID_GameDeleteCharacterCmd()
 {
- 	return SF::Message::Game::RemoveCharacterCmd::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameRemoveCharacterCmd()
+ 	return SF::Message::Game::DeleteCharacterCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameDeleteCharacterCmd()
 
 
-SFDLL_EXPORT int  CSSFNetMessageID_GameRemoveCharacterRes()
+SFDLL_EXPORT int  CSSFNetMessageID_GameDeleteCharacterRes()
 {
- 	return SF::Message::Game::RemoveCharacterRes::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_GameRemoveCharacterRes()
+ 	return SF::Message::Game::DeleteCharacterRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameDeleteCharacterRes()
 
 
 // Cmd: Get character list
@@ -997,6 +997,19 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterDataRes()
 {
  	return SF::Message::Game::GetCharacterDataRes::MID.IDSeq.MsgID;
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameGetCharacterDataRes()
+
+
+// Cmd: Select character
+SFDLL_EXPORT int  CSSFNetMessageID_GameSelectCharacterCmd()
+{
+ 	return SF::Message::Game::SelectCharacterCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameSelectCharacterCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameSelectCharacterRes()
+{
+ 	return SF::Message::Game::SelectCharacterRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameSelectCharacterRes()
 
 
 // Cmd: Give my stamina to other player

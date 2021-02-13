@@ -530,6 +530,9 @@ namespace SF {
 		// Invalid stream ID 
 		public const int INVALID_STREAMID =                                 unchecked((int)0xE70100AB); 
 
+		// Generic DB failure 
+		public const int DB_FAILURE =                                       unchecked((int)0xE70100AC); 
+
 	}
 }
 

@@ -885,22 +885,22 @@ namespace SF
 		return hr;
 
 	}; // Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes )
-	// Cmd: Remove character
-	Result NetPolicyGame::RemoveCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+	// Cmd: Delete character
+	Result NetPolicyGame::DeleteCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::RemoveCharacterCmd::Create(GetSystemHeap(), InTransactionID, InCharacterID);
+		 pMessage = SF::Message::Game::DeleteCharacterCmd::Create(GetSystemHeap(), InTransactionID, InCharacterID);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetPolicyGame::RemoveCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+	}; // Result NetPolicyGame::DeleteCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 	// Cmd: Get character list
 	Result NetPolicyGame::GetCharacterListCmd( const uint64_t &InTransactionID )
 	{
@@ -918,21 +918,37 @@ namespace SF
 
 	}; // Result NetPolicyGame::GetCharacterListCmd( const uint64_t &InTransactionID )
 	// Cmd: 
-	Result NetPolicyGame::GetCharacterDataCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const Array<const char*>& InAttributeNames )
+	Result NetPolicyGame::GetCharacterDataCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::GetCharacterDataCmd::Create(GetSystemHeap(), InTransactionID, InCharacterID, InAttributeNames);
+		 pMessage = SF::Message::Game::GetCharacterDataCmd::Create(GetSystemHeap(), InTransactionID, InCharacterID);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetPolicyGame::GetCharacterDataCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID, const Array<const char*>& InAttributeNames )
+	}; // Result NetPolicyGame::GetCharacterDataCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+	// Cmd: Select character
+	Result NetPolicyGame::SelectCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::SelectCharacterCmd::Create(GetSystemHeap(), InTransactionID, InCharacterID);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+		return hr;
+
+	}; // Result NetPolicyGame::SelectCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 	// Cmd: Give my stamina to other player
 	Result NetPolicyGame::GiveStaminaCmd( const uint64_t &InTransactionID, const AccountID &InTargetPlayer )
 	{
@@ -2375,22 +2391,22 @@ namespace SF
 		return hr;
 
 	}; // Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
-	// Cmd: Remove character
-	Result NetSvrPolicyGame::RemoveCharacterRes( const uint64_t &InTransactionID, const Result &InResult )
+	// Cmd: Delete character
+	Result NetSvrPolicyGame::DeleteCharacterRes( const uint64_t &InTransactionID, const Result &InResult )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::RemoveCharacterRes::Create(GetSystemHeap(), InTransactionID, InResult);
+		 pMessage = SF::Message::Game::DeleteCharacterRes::Create(GetSystemHeap(), InTransactionID, InResult);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetSvrPolicyGame::RemoveCharacterRes( const uint64_t &InTransactionID, const Result &InResult )
+	}; // Result NetSvrPolicyGame::DeleteCharacterRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Get character list
 	Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs )
 	{
@@ -2423,6 +2439,22 @@ namespace SF
 		return hr;
 
 	}; // Result NetSvrPolicyGame::GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
+	// Cmd: Select character
+	Result NetSvrPolicyGame::SelectCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::SelectCharacterRes::Create(GetSystemHeap(), InTransactionID, InResult, InCharacterID);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+		return hr;
+
+	}; // Result NetSvrPolicyGame::SelectCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
 	// Cmd: Give my stamina to other player
 	Result NetSvrPolicyGame::GiveStaminaRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp )
 	{

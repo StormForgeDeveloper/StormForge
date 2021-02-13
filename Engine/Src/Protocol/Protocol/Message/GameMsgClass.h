@@ -6632,8 +6632,8 @@ namespace SF
 
 			}; // class CreateCharacterRes : public MessageBase
 
-			// Cmd: Remove character
-			class RemoveCharacterCmd : public MessageBase
+			// Cmd: Delete character
+			class DeleteCharacterCmd : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -6655,10 +6655,10 @@ namespace SF
 				uint64_t m_TransactionID{};
 				uint32_t m_CharacterID{};
 			public:
-				RemoveCharacterCmd()
+				DeleteCharacterCmd()
 					{}
 
-				RemoveCharacterCmd( MessageDataPtr &&pMsg )
+				DeleteCharacterCmd( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
@@ -6675,9 +6675,9 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 
-			}; // class RemoveCharacterCmd : public MessageBase
+			}; // class DeleteCharacterCmd : public MessageBase
 
-			class RemoveCharacterRes : public MessageBase
+			class DeleteCharacterRes : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -6699,10 +6699,10 @@ namespace SF
 				uint64_t m_TransactionID{};
 				Result m_Result{};
 			public:
-				RemoveCharacterRes()
+				DeleteCharacterRes()
 					{}
 
-				RemoveCharacterRes( MessageDataPtr &&pMsg )
+				DeleteCharacterRes( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
@@ -6719,7 +6719,7 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
-			}; // class RemoveCharacterRes : public MessageBase
+			}; // class DeleteCharacterRes : public MessageBase
 
 			// Cmd: Get character list
 			class GetCharacterListCmd : public MessageBase
@@ -6832,7 +6832,6 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				uint32_t m_CharacterID{};
-				DynamicArray<const char*> m_AttributeNames;
 			public:
 				GetCharacterDataCmd()
 					{}
@@ -6845,7 +6844,6 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetCharacterID() const	{ return m_CharacterID; };
-				const Array<const char*>& GetAttributeNames() const	{ return m_AttributeNames; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -6853,7 +6851,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID, const Array<const char*>& InAttributeNames );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 
 			}; // class GetCharacterDataCmd : public MessageBase
 
@@ -6906,6 +6904,97 @@ namespace SF
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
 
 			}; // class GetCharacterDataRes : public MessageBase
+
+			// Cmd: Select character
+			class SelectCharacterCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 0,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetPlayerID() { return 0; }
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_TransactionID{};
+				uint32_t m_CharacterID{};
+			public:
+				SelectCharacterCmd()
+					{}
+
+				SelectCharacterCmd( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const uint32_t& GetCharacterID() const	{ return m_CharacterID; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID );
+
+			}; // class SelectCharacterCmd : public MessageBase
+
+			class SelectCharacterRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 0,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetPlayerID() { return 0; }
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint32_t m_CharacterID{};
+			public:
+				SelectCharacterRes()
+					{}
+
+				SelectCharacterRes( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const uint32_t& GetCharacterID() const	{ return m_CharacterID; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID );
+
+			}; // class SelectCharacterRes : public MessageBase
 
 			// Cmd: Give my stamina to other player
 			class GiveStaminaCmd : public MessageBase

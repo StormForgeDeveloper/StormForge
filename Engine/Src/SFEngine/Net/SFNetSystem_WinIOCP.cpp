@@ -516,7 +516,7 @@ namespace Net {
 		Result hr;
 
 		int iOptValue = m_RecvBufferSize;
-		if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
+		if (setsockopt(socket, SOL_SOCKET, SO_RCVBUF, (char *)&iOptValue, sizeof(iOptValue)) < 0)
 		{
 			hr = GetLastNetSystemResult();
 			SFLog(Net, Error, "Failed to change socket option SO_RCVBUF={0}, err={1}", iOptValue, hr);
@@ -524,17 +524,28 @@ namespace Net {
 		}
 
 		iOptValue = m_SendBufferSize;
-		if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
+		if (setsockopt(socket, SOL_SOCKET, SO_SNDBUF, (char *)&iOptValue, sizeof(iOptValue)) < 0)
 		{
 			hr = GetLastNetSystemResult();
 			SFLog(Net, Error, "Failed to change socket option SO_SNDBUF={0}, err={1}", iOptValue, hr);
 			return hr;
 		}
 
+		if (sockType == SockType::Stream)
+		{
+			iOptValue = 1;
+			if (setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, (char*)&iOptValue, sizeof(iOptValue)) < 0)
+			{
+				hr = GetLastNetSystemResult();
+				SFLog(Net, Error, "Failed to change socket option TCP_NODELAY={0}, err={1}", iOptValue, hr);
+				return hr;
+			}
+		}
+
 		if (!acceptedSocket && sockFamily == SockFamily::IPV6)
 		{
 			iOptValue = FALSE;
-			if (setsockopt(socket, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&iOptValue, sizeof(iOptValue)) == SOCKET_ERROR)
+			if (setsockopt(socket, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&iOptValue, sizeof(iOptValue)) < 0)
 			{
 				hr = GetLastNetSystemResult();
 				SFLog(Net, Error, "Failed to change socket option IPV6_V6ONLY = {0}, err = {1}", iOptValue, hr);
@@ -544,7 +555,7 @@ namespace Net {
 
 		u_long iMode = true;// non block
 		iMode = true;
-		if (ioctlsocket(socket, FIONBIO, &iMode) == SOCKET_ERROR)
+		if (ioctlsocket(socket, FIONBIO, &iMode) < 0)
 		{
 			hr = GetLastNetSystemResult();
 			SFLog(Net, Error, "Failed to change socket IO Mode to {0},  err = {1}", (uint32_t)iMode, hr);
