@@ -516,10 +516,17 @@ namespace SF
 	{
 		if (GetOnlineState() != OnlineState::None
 			&& GetOnlineState() != OnlineState::Disconnected)
+		{
+			SFLog(Net, Error, "OnlineClient::StartConnection, Busy, invalid state:{0}", (uint32_t)GetOnlineState());
 			return ResultCode::INVALID_STATE;
+		}
 
 		if (m_PendingTasks.size() > 0)
+		{
+			SFLog(Net, Error, "OnlineClient::StartConnection, Busy, we have running task, state:{0}", (uint32_t)GetOnlineState());
 			return ResultCode::BUSY;
+		}
+		return ResultCode::BUSY;
 
 		if (loginAddress != nullptr)
 			m_LoginAddresses = loginAddress;
@@ -537,10 +544,16 @@ namespace SF
 	Result OnlineClient::JoinGameInstance(uint64_t gameInstanceId)
 	{
 		if (GetOnlineState() != OnlineState::InGameServer)
+		{
+			SFLog(Net, Error, "OnlineClient::JoinGameInstance, Busy, invalid state:{0}", (uint32_t)GetOnlineState());
 			return ResultCode::INVALID_STATE;
+		}
 
 		if (m_PendingTasks.size() > 0)
+		{
+			SFLog(Net, Error, "OnlineClient::JoinGameInstance, Busy, we have running task, state:{0}", (uint32_t)GetOnlineState());
 			return ResultCode::BUSY;
+		}
 
 		m_GameInstanceUID = gameInstanceId;
 
@@ -598,12 +611,14 @@ namespace SF
 
 			if (m_Game != nullptr)
 			{
-				if (m_Game->GetConnectionState() == Net::ConnectionState::CONNECTED
-					&& Util::TimeSince(m_HeartbeatTimer) > DurationMS(15 * 1000))
+				if (m_Game->GetConnectionState() == Net::ConnectionState::CONNECTED)
 				{
-					m_HeartbeatTimer = Util::Time.GetTimeMs();
-					NetPolicyGame policy(m_Game->GetMessageEndpoint());
-					policy.HeartbeatC2SEvt();
+					if (Util::TimeSince(m_HeartbeatTimer) > DurationMS(15 * 1000))
+					{
+						m_HeartbeatTimer = Util::Time.GetTimeMs();
+						NetPolicyGame policy(m_Game->GetMessageEndpoint());
+						policy.HeartbeatC2SEvt();
+					}
 				}
 			}
 		}

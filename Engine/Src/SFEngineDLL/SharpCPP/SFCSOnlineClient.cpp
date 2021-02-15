@@ -179,3 +179,28 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, 
 
 }
 
+SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetConnection(intptr_t nativeHandle, int32_t connectionIndex)
+{
+	if (nativeHandle == 0)
+		return 0;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	switch (connectionIndex)
+	{
+	case 0:
+		return NativeObjectToIntptr(pOnlineClient->GetConnectionLogin().get());
+		break;
+	case 1:
+		return NativeObjectToIntptr(pOnlineClient->GetConnectionGame().get());
+		break;
+	case 2:
+		return NativeObjectToIntptr(pOnlineClient->GetConnectionGameInstance().get());
+		break;
+	default:
+		break;
+	}
+
+	return 0;
+}
+

@@ -14049,6 +14049,7 @@ namespace SF
 				uint32_t* CharacterIDsPtr = nullptr;
 				protocolCheck(input->ReadLink(CharacterIDsPtr, ArrayLen));
 				m_CharacterIDs.SetLinkedBuffer(ArrayLen, CharacterIDsPtr);
+				protocolCheck(input->ReadArrayLink(m_CharacterNames));
 
 				return hr;
 
@@ -14065,6 +14066,7 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("CharacterIDs", parser.GetCharacterIDs());
+				variableBuilder.SetVariable("CharacterNames", parser.GetCharacterNames());
 
 				return hr;
 
@@ -14082,7 +14084,7 @@ namespace SF
 			}; // Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs )
+			MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs, const Array<const char*>& InCharacterNames )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -14102,6 +14104,7 @@ namespace SF
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InCharacterIDs)
+					+ SerializedSizeOf(InCharacterNames)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterListRes::MID, __uiMessageSize ) );
@@ -14113,9 +14116,10 @@ namespace SF
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 				protocolCheck(*output << InCharacterIDs);
+				protocolCheck(*output << InCharacterNames);
 
 				return hr;
-			}; // MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs )
+			}; // MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs, const Array<const char*>& InCharacterNames )
 
 
 
@@ -14123,8 +14127,8 @@ namespace SF
 			{
  				GetCharacterListRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetCharacterList:{0}:{1} , TransactionID:{2}, Result:{3:X8}, CharacterIDs:{4,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacterIDs()); 
+				SFLog(Net, Debug1, "GetCharacterList:{0}:{1} , TransactionID:{2}, Result:{3:X8}, CharacterIDs:{4,30}, CharacterNames:{5,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacterIDs(), parser.GetCharacterNames()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

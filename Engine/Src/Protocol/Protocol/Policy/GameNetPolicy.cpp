@@ -2408,21 +2408,21 @@ namespace SF
 
 	}; // Result NetSvrPolicyGame::DeleteCharacterRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Get character list
-	Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs )
+	Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs, const Array<const char*>& InCharacterNames )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::GetCharacterListRes::Create(GetSystemHeap(), InTransactionID, InResult, InCharacterIDs);
+		 pMessage = SF::Message::Game::GetCharacterListRes::Create(GetSystemHeap(), InTransactionID, InResult, InCharacterIDs, InCharacterNames);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs )
+	}; // Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs, const Array<const char*>& InCharacterNames )
 	// Cmd: 
 	Result NetSvrPolicyGame::GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 	{

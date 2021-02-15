@@ -780,6 +780,7 @@
 			</Cmd>
 			<Res>
 				<Params Type="uint32" IsArray="true" Name="CharacterIDs" Desc="Character id list"/>
+				<Params Type="String" IsArray="true" Name="CharacterNames" Desc="Character name list"/>
 			</Res>
 		</Command>
 

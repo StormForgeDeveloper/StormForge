@@ -46,6 +46,17 @@ namespace SF
 			Disconnected,
 		};
 
+        public enum ConnectionType
+        {
+            Login,
+            Game,
+            GameInstance
+        }
+
+        readonly SFIMessageRouter m_MessageRouter = null;
+
+        public SFIMessageRouter MessageRouter { get { return m_MessageRouter; } }
+
 
         // Connection event
         public delegate void ConnectionEventHandler(object sender, ref SFConnection.Event e);
@@ -56,9 +67,10 @@ namespace SF
         public event MessageEventHandler OnMessageEvent;
 
 
-        public OnlineClient()
+        public OnlineClient(SFIMessageRouter messageRouter = null)
         {
             NativeHandle = NativeCreateOnlineClient();
+            m_MessageRouter = messageRouter;
         }
 
         public Result StartConnection(string gameId, string loginAddress, string userId, string password)
@@ -112,6 +124,14 @@ namespace SF
             return NativeGetGameInstanceUID(NativeHandle);
         }
 
+        public SFConnection GetConnection(ConnectionType connectionType)
+        {
+            var connectionHandle = NativeGetConnection(NativeHandle, (int) connectionType);
+            if (connectionHandle != IntPtr.Zero)
+                return new SFConnection(connectionHandle);
+
+            return null;
+        }
 
         #region Event Receiving
 
@@ -140,6 +160,8 @@ namespace SF
 
             // fire message handler
             stm_StaticEventReceiver.OnMessageEvent?.Invoke(stm_StaticEventReceiver, message);
+
+            stm_StaticEventReceiver.m_MessageRouter?.HandleRecvMessage(message);
         }
 
 
@@ -197,6 +219,9 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeUpdateGameTick", CharSet = CharSet.Auto)]
         static extern Int32 NativeUpdateGameTick(IntPtr nativeHandle, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetConnection", CharSet = CharSet.Auto)]
+        static extern IntPtr NativeGetConnection(IntPtr nativeHandle, Int32 connectionIndex);
 
         #endregion
     }

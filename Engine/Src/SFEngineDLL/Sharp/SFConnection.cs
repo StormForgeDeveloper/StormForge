@@ -109,6 +109,13 @@ namespace SF
             m_MessageRouter = messageRouter;
         }
 
+        public SFConnection(IntPtr nativeHandle, SFIMessageRouter messageRouter = null)
+        {
+            // Don't use constructor of SFObject, it will increase reference count of the object
+            NativeHandle = nativeHandle;
+            m_MessageRouter = messageRouter;
+        }
+
         virtual public int Connect(UInt64 authTicket, String address, int port)
 	    {
             return NativeConnect(NativeHandle, authTicket, address, port);

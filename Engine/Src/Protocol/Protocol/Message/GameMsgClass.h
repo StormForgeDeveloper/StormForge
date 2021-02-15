@@ -6786,6 +6786,7 @@ namespace SF
 				uint64_t m_TransactionID{};
 				Result m_Result{};
 				ArrayView<uint32_t> m_CharacterIDs;
+				DynamicArray<const char*> m_CharacterNames;
 			public:
 				GetCharacterListRes()
 					{}
@@ -6799,6 +6800,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const Array<uint32_t>& GetCharacterIDs() const	{ return m_CharacterIDs; };
+				const Array<const char*>& GetCharacterNames() const	{ return m_CharacterNames; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -6806,7 +6808,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs, const Array<const char*>& InCharacterNames );
 
 			}; // class GetCharacterListRes : public MessageBase
 
