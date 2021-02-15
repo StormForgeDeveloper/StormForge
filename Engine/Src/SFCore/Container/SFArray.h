@@ -329,22 +329,6 @@ namespace SF {
 			const iterator begin() const { return iterator(const_cast<Array<DataType>*>(this), size() == 0 ? iterator::END_IDX : 0); }
 			const iterator end() const { return iterator(const_cast<Array<DataType>*>(this), iterator::END_IDX); }
 
-			// for_each operator
-			Result for_each(std::function<Result(DataType&)> functor)
-			{
-				for (size_t iData = 0; iData < size(); iData++)
-				{
-					Result hr = functor(m_pDataPtr[iData]);
-					if (!(hr)) return hr;
-				}
-				return ResultCode::SUCCESS;
-			}
-
-			Result for_each(std::function<Result(DataType&)> functor) const
-			{
-				return const_cast<Array<DataType>*>(this)->for_each(functor);
-			}
-
 			template<typename PredicatorType>
 			iterator Find(const PredicatorType& predicator)
 			{
