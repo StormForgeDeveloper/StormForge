@@ -171,6 +171,15 @@ namespace SF
 		return new(heap) VariableInt(m_Value);
 	}
 
+	Result VariableInt::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
+
+	Result VariableInt::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -245,6 +254,15 @@ namespace SF
 		return new(heap) VariableUInt(m_Value);
 	}
 
+	Result VariableUInt::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
+
+	Result VariableUInt::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
+	}
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -271,7 +289,15 @@ namespace SF
 		return new(heap) VariableResult(m_Value);
 	}
 
+	Result VariableResult::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
 
+	Result VariableResult::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
+	}
 
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
@@ -351,6 +377,15 @@ namespace SF
 		return new(heap) VariableInt64(m_Value);
 	}
 
+	Result VariableInt64::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
+
+	Result VariableInt64::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -424,6 +459,15 @@ namespace SF
 		return new(heap) VariableUInt64(m_Value);
 	}
 
+	Result VariableUInt64::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
+
+	Result VariableUInt64::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
+	}
 
 
 
@@ -497,6 +541,16 @@ namespace SF
 	Variable* VariableFloat::Clone(IHeap& heap) const
 	{
 		return new(heap) VariableFloat(m_Value);
+	}
+
+	Result VariableFloat::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
+
+	Result VariableFloat::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
 	}
 
 
@@ -578,6 +632,15 @@ namespace SF
 		return new(heap) VariableDouble(m_Value);
 	}
 
+	Result VariableDouble::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
+
+	Result VariableDouble::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
+	}
 
 	bool VariableDouble::operator == (const Variable& op) const
 	{
@@ -929,6 +992,16 @@ namespace SF
 		return new(heap) VariableString(m_Value);
 	}
 
+	Result VariableString::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
+
+	Result VariableString::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
+	}
+
 	bool VariableString::operator == (const Variable& op) const
 	{
 		return m_Value == op.GetValueCharString();
@@ -975,6 +1048,15 @@ namespace SF
 		return new(heap) VariableStringCrc32(m_Value);
 	}
 
+	Result VariableStringCrc32::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
+
+	Result VariableStringCrc32::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
+	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -1013,7 +1095,15 @@ namespace SF
 		return new(heap) VariableStringCrc64(m_Value);
 	}
 
+	Result VariableStringCrc64::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
 
+	Result VariableStringCrc64::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
+	}
 
 
 
@@ -1041,7 +1131,14 @@ namespace SF
 		return new(heap) VariableBLOB(heap, m_Value);
 	}
 
-
+	Result VariableBLOB::Serialize(IOutputStream& output) const
+	{
+		return output.Write(m_Value);
+	}
+	Result VariableBLOB::Deserialize(IInputStream& input)
+	{
+		return input.Read(m_Value);
+	}
 
 
 } // namespace SF

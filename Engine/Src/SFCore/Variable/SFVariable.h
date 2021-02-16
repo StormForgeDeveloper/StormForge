@@ -100,8 +100,8 @@ namespace SF {
 		virtual size_t GetVariableSize() const { return sizeof(Variable); }
 
 		// Serialization
-		virtual size_t GetSerializedSize() const { return sizeof(StringCrc32); }
-		virtual Result Serialize(IOutputStream& output) const { return output.Write(GetTypeName()); }
+		virtual size_t GetSerializedSize() const { return 0; }
+		virtual Result Serialize(IOutputStream& output) const { return ResultCode::SUCCESS; }
 		virtual Result Deserialize(IInputStream& input) { return ResultCode::SUCCESS; } // We deserialze type name from caller
 
 		// Clone variable into given buffer, the buffer should have enough space for the variable instance.
@@ -203,14 +203,14 @@ namespace SF {
 			return m_Value == *reinterpret_cast<ValueTypeDecay*>(op.GetDataPtr());
 		}
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override
 		{
-			return Variable::Serialize(output) && output << m_Value;
+			return output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input) override
 		{
-			return Variable::Deserialize(input) && input >> m_Value;
+			return input >> m_Value;
 		}
 
 	};
@@ -322,14 +322,14 @@ namespace SF {
 		}
 
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(*m_Value); }
+		virtual size_t GetSerializedSize() const  override { return sizeof(*m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override
 		{
-			return Variable::Serialize(output) && output << *m_Value;
+			return output << *m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input) override
 		{
-			return Variable::Deserialize(input) && input >> *m_Value;
+			return input >> *m_Value;
 		}
 
 	};

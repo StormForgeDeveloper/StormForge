@@ -109,14 +109,14 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-		virtual size_t GetSerializedSize() const override { return Variable::GetSerializedSize() + sizeof(m_Value); }
+		virtual size_t GetSerializedSize() const override { return sizeof(m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override
 		{
-			return Variable::Serialize(output) && output << m_Value;
+			return output << m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input) override
 		{
-			return Variable::Deserialize(input) && input >> m_Value;
+			return input >> m_Value;
 		}
 
 		virtual bool operator == (const Variable& op) const override;
@@ -231,15 +231,9 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(m_Value); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			return Variable::Serialize(output) && output << m_Value;
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			return Variable::Deserialize(input) && input >> m_Value;
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 	};
 
 
@@ -304,15 +298,9 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(m_Value); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			return Variable::Serialize(output) && output << m_Value;
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			return Variable::Deserialize(input) && input >> m_Value;
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 	};
 
 
@@ -374,15 +362,9 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(m_Value); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			return Variable::Serialize(output) && output << m_Value;
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			return Variable::Deserialize(input) && input >> m_Value;
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 	};
 
 
@@ -450,15 +432,9 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(m_Value); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			return Variable::Serialize(output) && output << m_Value;
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			return Variable::Deserialize(input) && input >> m_Value;
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 	};
 
 
@@ -523,15 +499,9 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(m_Value); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			return Variable::Serialize(output) && output << m_Value;
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			return Variable::Deserialize(input) && input >> m_Value;
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 	};
 
 
@@ -598,15 +568,9 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(m_Value); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			return Variable::Serialize(output) && output << m_Value;
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			return Variable::Deserialize(input) && input >> m_Value;
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 
 		virtual bool operator == (const Variable& op) const override;
 	};
@@ -673,15 +637,9 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(m_Value); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			return Variable::Serialize(output) && output << m_Value;
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			return Variable::Deserialize(input) && input >> m_Value;
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 
 		virtual bool operator == (const Variable& op) const override;
 	};
@@ -919,15 +877,9 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(uint16_t) + m_Value.size() * sizeof(char); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			return Variable::Serialize(output) && output << m_Value;
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			return Variable::Deserialize(input) && input >> m_Value;
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(uint16_t) + m_Value.size() * sizeof(char); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 
 		virtual bool operator == (const Variable& op) const override;
 	};
@@ -989,16 +941,9 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(m_Value); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			return Variable::Serialize(output) && output << m_Value;
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			return Variable::Deserialize(input) && input >> m_Value;
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 	};
 
 
@@ -1056,15 +1001,9 @@ namespace SF {
 		virtual Variable* Clone(IHeap& heap) const override;
 
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(m_Value); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			return Variable::Serialize(output) && output << m_Value;
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			return Variable::Deserialize(input) && input >> m_Value;
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(m_Value); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 	};
 
 
@@ -1129,27 +1068,9 @@ namespace SF {
 		virtual Variable* Clone(IHeap& heap) const override;
 
 
-		virtual size_t GetSerializedSize() const  override { return Variable::GetSerializedSize() + sizeof(uint16_t) + m_Value.size(); }
-		virtual Result Serialize(IOutputStream& output) const override
-		{
-			uint16_t dataSize = static_cast<uint16_t>(m_Value.size());
-			return Variable::Serialize(output)
-				&& output.Write(dataSize)
-				&& output.Write(m_Value.data());
-		}
-		virtual Result Deserialize(IInputStream& input) override
-		{
-			if (!Variable::Deserialize(input))
-				return false;
-
-			uint16_t dataSize = 0;
-			if (!input.Read(dataSize))
-				return false;
-
-			m_Value.resize(dataSize);
-
-			return input.Read(m_Value.data(), dataSize);
-		}
+		virtual size_t GetSerializedSize() const  override { return sizeof(uint16_t) + m_Value.size(); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
 	};
 
 

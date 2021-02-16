@@ -25,12 +25,50 @@ namespace SF
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	Variable int
+	//	Serialized sizeof implementation
 	//
+
+
+	size_t SerializedSizeOf(const Variable& Value)
+	{
+		return Value.GetSerializedSize();
+	}
+
+	size_t SerializedSizeOf(const VariableBox& Value)
+	{
+		auto pVariable = Value.GetVariable();
+		return sizeof(Variable::TypeNameType) + (pVariable ? pVariable->GetSerializedSize() : 0);
+	}
+
+
+	size_t SerializedSizeOf(const NamedVariableBox& Value)
+	{
+		auto pVariable = Value.GetVariable();
+		return sizeof(NamedVariableBox::NameType) + sizeof(Variable::TypeNameType) + (pVariable ? pVariable->GetSerializedSize() : 0);
+	}
+
+
+	size_t SerializedSizeOf(const VariableTable& Value)
+	{
+		size_t Size = sizeof(uint16_t);
+		for (auto& itVar : Value)
+		{
+			Size += SerializedSizeOf(itVar.GetKey());
+			auto* pVariable = itVar.GetValue();
+			if (pVariable != nullptr)
+			{
+				Size += sizeof(Variable::TypeNameType);
+				Size += SerializedSizeOf(*pVariable);
+			}
+		}
+
+		return Size;
+	}
+
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
-	//	String stream IO util
+	//	operator
 	//
 
 

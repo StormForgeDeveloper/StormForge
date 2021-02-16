@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2020 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -22,6 +22,7 @@
 #include "Variable/SFVariableTable.h"
 #include "Variable/SFNamedVariableBox.h"
 
+
 namespace SF {
 
 
@@ -32,37 +33,10 @@ namespace SF {
 	//
 
 
-
-	inline size_t SerializedSizeOf(const Variable& Value) { return Value.GetSerializedSize(); }
-
-
-
-	inline size_t SerializedSizeOf(const VariableBox& Value)
-	{
-		auto pVariable = Value.GetVariable();
-		return pVariable ? pVariable->GetSerializedSize() : sizeof(Variable::TypeNameType);
-	}
-
-
-	inline size_t SerializedSizeOf(const NamedVariableBox& Value) { auto pVariable = Value.GetVariable(); return sizeof(NamedVariableBox::NameType) + (pVariable ? pVariable->GetSerializedSize() : sizeof(Variable::TypeNameType)); }
-
-
-	inline size_t SerializedSizeOf(const VariableTable& Value)
-	{
-		size_t Size = sizeof(uint16_t);
-		for (auto& itVar : Value)
-		{
-			Size += SerializedSizeOf(itVar.GetKey());
-			auto* pVariable = itVar.GetValue();
-			if (pVariable != nullptr)
-				Size += SerializedSizeOf(*pVariable);
-			else
-				Size += sizeof(Variable::TypeNameType);
-		}
-
-		return Size;
-	}
-
+	size_t SerializedSizeOf(const Variable& Value);
+	size_t SerializedSizeOf(const VariableBox& Value);
+	size_t SerializedSizeOf(const NamedVariableBox& Value);
+	size_t SerializedSizeOf(const VariableTable& Value);
 
 
 	Result operator >> (IInputStream& input, VariableBox& data);
@@ -76,27 +50,4 @@ namespace SF {
 
 
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	VariableTableWriter
-	//		Helper class to help send message
-	//
-
-	//template<typename DataType, typename ArrayType = DynamicArray<uint8_t>>
-	//class BinarySerializer : public ArrayType
-	//{
-	//public:
-
-	//	BinarySerializer(const DataType& src)
-	//	{
-	//		OutputMemoryStream outputStream(*this);
-	//		auto* output = outputStream.ToOutputStream();
-	//		output->Write(src);
-	//	}
-
-
-	//};
-
 } // namespace SF
-
-
