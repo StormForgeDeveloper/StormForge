@@ -14,7 +14,7 @@
 
 #include "SFTypedefs.h"
 #include "Object/SFLibraryComponent.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 #include "Service/SFService.h"
 
 namespace SF {

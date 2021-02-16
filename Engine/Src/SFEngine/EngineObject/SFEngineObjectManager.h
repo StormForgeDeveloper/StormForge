@@ -13,8 +13,8 @@
 
 #include "SFTypedefs.h"
 #include "ResultCode/SFResultCodeEngine.h"
-#include "Thread/SFThread.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFThread.h"
+#include "Multithread/SFSynchronization.h"
 #include "Object/SFSharedObjectManager.h"
 #include "Object/SFObjectManager.h"
 #include "Container/SFSortedMap.h"

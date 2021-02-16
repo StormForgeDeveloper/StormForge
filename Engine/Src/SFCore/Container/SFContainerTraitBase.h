@@ -14,8 +14,8 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Thread/SFSynchronization.h"
-#include "Thread/SFSystemSynchronization.h"
+#include "Multithread/SFSynchronization.h"
+#include "Multithread/SFSystemSynchronization.h"
 
 
 

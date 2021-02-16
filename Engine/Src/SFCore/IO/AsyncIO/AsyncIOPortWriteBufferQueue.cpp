@@ -11,7 +11,7 @@
 
 
 #include "SFCorePCH.h"
-#include "Memory/SFMemoryManager.h"
+#include "MemoryManager/SFMemoryManager.h"
 #include "IO/AsyncIO/AsyncIOPortWriteBufferQueue.h"
 #include "IO/AsyncIO/AsyncIOPort.h"
 #include "IO/AsyncIO/AsyncIOPort_EPOLL.h"
@@ -19,7 +19,7 @@
 #include "IO/AsyncIO/AsyncIOPort_IOCP.h"
 
 #include "ResultCode/SFResultCodeLibrary.h"
-#include "Memory/SFMemoryPool.h"
+#include "MemoryManager/SFMemoryPool.h"
 
 #include "Util/SFLog.h"
 #include "Util/SFTimeUtil.h"

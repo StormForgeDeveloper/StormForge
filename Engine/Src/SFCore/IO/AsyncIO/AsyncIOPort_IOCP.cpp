@@ -23,9 +23,9 @@
 #include "Util/SFTimeUtil.h"
 #include "Util/SFUtility.h"
 #include "Container/SFSpinSharedBuffer.h"
-#include "Memory/SFMemoryPool.h"
-#include "Memory/SFMemory.h"
-#include "Memory/SFMemoryManager.h"
+#include "MemoryManager/SFMemoryPool.h"
+#include "MemoryManager/SFMemory.h"
+#include "MemoryManager/SFMemoryManager.h"
 #include "String/SFToString.h"
 
 

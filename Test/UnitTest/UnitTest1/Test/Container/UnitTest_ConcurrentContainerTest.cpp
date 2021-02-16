@@ -13,7 +13,7 @@
 #include "Container/SFSpinBufferMT.h"
 #include "Util/SFTimeUtil.h"
 #include "Container/SFCircularQueue.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 #include "UnitTest_ConcurrentContainerTest.h"
 
 

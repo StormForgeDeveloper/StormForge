@@ -12,7 +12,7 @@
 
 
 #include "SFTypedefs.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 
 
 

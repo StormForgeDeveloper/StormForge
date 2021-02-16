@@ -12,7 +12,7 @@
 #pragma once 
 
 #include "SFTypedefs.h"
-#include "Memory/SFIMemoryManager.h"
+#include "MemoryManager/SFIMemoryManager.h"
 
 
 

@@ -13,8 +13,8 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Thread/SFSynchronization.h"
-#include "Memory/SFMemory.h"
+#include "Multithread/SFSynchronization.h"
+#include "MemoryManager/SFMemory.h"
 
 
 

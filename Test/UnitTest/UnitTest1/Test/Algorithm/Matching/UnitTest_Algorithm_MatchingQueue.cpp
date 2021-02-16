@@ -3,8 +3,8 @@
 
 #include "UnitTest1PCH.h"
 #include <gtest/gtest.h>
-#include "Thread/SFSystemSynchronization.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFSystemSynchronization.h"
+#include "Multithread/SFThread.h"
 #include "Container/SFSortedMap.h"
 #include "Container/SFCircularPageQueue.h"
 #include "Container/SFCircularQueue.h"

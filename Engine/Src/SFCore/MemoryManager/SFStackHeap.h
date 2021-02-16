@@ -12,9 +12,9 @@
 
 
 #include "SFTypedefs.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFSynchronization.h"
 #include "Container/SFStackPool.h"
-#include "Memory/SFIMemoryManager.h"
+#include "MemoryManager/SFIMemoryManager.h"
 
 
 

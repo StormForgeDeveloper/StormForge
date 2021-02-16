@@ -11,8 +11,8 @@
 
 #pragma once
 
-#include "Memory/SFMemory.h"
-#include "Memory/SFMemoryManager.h"
+#include "MemoryManager/SFMemory.h"
+#include "MemoryManager/SFMemoryManager.h"
 #include "Container/SFSortedArray.h"
 #include "Service/SFIAssetSerializerFactory.h"
 

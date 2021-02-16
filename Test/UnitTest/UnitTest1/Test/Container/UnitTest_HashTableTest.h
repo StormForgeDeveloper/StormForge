@@ -12,8 +12,8 @@
 
 
 #include <gtest/gtest.h>
-#include "Thread/SFThread.h"
-#include "Memory/SFMemoryPool.h"
+#include "Multithread/SFThread.h"
+#include "MemoryManager/SFMemoryPool.h"
 #include "Container/SFHashTable.h"
 #include "../SFTestBase.h"
 

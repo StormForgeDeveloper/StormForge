@@ -11,9 +11,9 @@
 
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
-#include "Thread/SFSynchronization.h"
-#include "Memory/SFMemoryManager.h"
-#include "Memory/SFMemoryPool.h"
+#include "Multithread/SFSynchronization.h"
+#include "MemoryManager/SFMemoryManager.h"
+#include "MemoryManager/SFMemoryPool.h"
 #include "String/SFString.h"
 #include "String/SFStringCrc64.h"
 #include "Util/SFUtility.h"

@@ -12,9 +12,9 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Memory/SFIMemoryManager.h"
-#include "Thread/SFSynchronization.h"
-#include "Thread/SFSystemSynchronization.h"
+#include "MemoryManager/SFIMemoryManager.h"
+#include "Multithread/SFSynchronization.h"
+#include "Multithread/SFSystemSynchronization.h"
 
 namespace SF
 {

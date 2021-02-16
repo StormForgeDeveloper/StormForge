@@ -12,9 +12,9 @@
 
 
 #include <gtest/gtest.h>
-#include "Thread/SFThread.h"
-#include "Memory/SFIMemoryManager.h"
-#include "Memory/SFMemoryManager.h"
+#include "Multithread/SFThread.h"
+#include "MemoryManager/SFIMemoryManager.h"
+#include "MemoryManager/SFMemoryManager.h"
 #include "String/SFToString.h"
 #include "Script/Tong/SFTongScriptBytecode.h"
 #include "Script/Tong/SFTongScriptEngine.h"

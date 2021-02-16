@@ -11,9 +11,9 @@
 
 
 #include <gtest/gtest.h>
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 #include "../SFTestBase.h"
-#include "Memory/SFIMemoryManager.h"
+#include "MemoryManager/SFIMemoryManager.h"
 
 
 

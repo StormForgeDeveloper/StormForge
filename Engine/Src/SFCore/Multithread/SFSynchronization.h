@@ -14,7 +14,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 #include "SFResult.h"
 #include "ResultCode/SFResultCodeSystem.h"
 

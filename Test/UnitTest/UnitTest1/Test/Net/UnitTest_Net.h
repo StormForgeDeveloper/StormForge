@@ -10,8 +10,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <gtest/gtest.h>
-#include "Thread/SFThread.h"
-#include "Memory/SFMemoryManager.h"
+#include "Multithread/SFThread.h"
+#include "MemoryManager/SFMemoryManager.h"
 #include "String/SFToString.h"
 #include "../SFTestBase.h"
 

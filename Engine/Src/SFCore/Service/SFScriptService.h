@@ -18,7 +18,7 @@
 #include "Variable/SFVariableBoxing.h"
 #include "String/SFPathString.h"
 #include "String/SFString.h"
-#include "Memory/SFMemoryManager.h"
+#include "MemoryManager/SFMemoryManager.h"
 
 namespace SF
 {

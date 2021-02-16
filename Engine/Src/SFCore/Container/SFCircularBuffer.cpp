@@ -7,8 +7,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "SFCorePCH.h"
-#include "Memory/SFIMemoryManager.h"
-#include "Memory/SFMemory.h"
+#include "MemoryManager/SFIMemoryManager.h"
+#include "MemoryManager/SFMemory.h"
 #include "SFCircularBuffer.h"
 
 

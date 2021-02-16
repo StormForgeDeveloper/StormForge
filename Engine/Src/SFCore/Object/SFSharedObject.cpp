@@ -11,9 +11,9 @@
 
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
-#include "Memory/SFMemory.h"
+#include "MemoryManager/SFMemory.h"
 #include "Object/SFSharedObject.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFSynchronization.h"
 #include "Object/SFSharedObjectManager.h"
 #include "Object/SFSharedPointer.h"
 

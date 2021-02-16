@@ -12,7 +12,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Memory/SFMemoryPool.h"
+#include "MemoryManager/SFMemoryPool.h"
 #include "Object/SFObject.h"
 #include "SceneGraph/SFSceneNode.h"
 #include "Task/SFTimerScheduler.h"

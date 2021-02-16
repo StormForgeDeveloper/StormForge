@@ -12,8 +12,8 @@
 
 
 #include "SFEnginePCH.h"
-#include "Thread/SFThread.h"
-#include "Memory/SFMemory.h"
+#include "Multithread/SFThread.h"
+#include "MemoryManager/SFMemory.h"
 #include "SFAssert.h"
 #include "Util/SFTimeUtil.h"
 #include "ResultCode/SFResultCodeEngine.h"

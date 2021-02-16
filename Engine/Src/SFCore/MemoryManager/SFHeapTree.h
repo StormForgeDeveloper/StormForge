@@ -12,7 +12,7 @@
 
 #include "SFTypedefs.h"
 #include "Container/SFArray.h"
-#include "Memory/SFMemory.h"
+#include "MemoryManager/SFMemory.h"
 
 
 namespace SF {

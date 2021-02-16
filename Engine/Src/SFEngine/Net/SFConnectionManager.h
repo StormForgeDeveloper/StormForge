@@ -12,8 +12,8 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Thread/SFThread.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFThread.h"
+#include "Multithread/SFSynchronization.h"
 #include "Util/SFUniqueIDGenerator.h"
 #include "Net/SFNetDef.h"
 #include "Net/SFConnection.h"

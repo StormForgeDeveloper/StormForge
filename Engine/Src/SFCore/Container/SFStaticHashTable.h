@@ -13,10 +13,10 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Memory/SFMemoryPool.h"
+#include "MemoryManager/SFMemoryPool.h"
 #include "Container/SFContainerTrait.h"
 #include "Container/SFIndexing.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFSynchronization.h"
 #include "Container/SFArray.h"
 #include "Container/SFOrderedLinkedList.h"
 

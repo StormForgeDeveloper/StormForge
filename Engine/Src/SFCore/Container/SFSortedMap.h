@@ -13,7 +13,7 @@
 #include "SFTypedefs.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFObjectPool.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFSynchronization.h"
 #include "Container/SFArray.h"
 
 

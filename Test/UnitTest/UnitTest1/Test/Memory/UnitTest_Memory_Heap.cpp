@@ -11,8 +11,8 @@
 
 #include "UnitTest1PCH.h"
 #include <gtest/gtest.h>
-#include "Thread/SFSystemSynchronization.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFSystemSynchronization.h"
+#include "Multithread/SFThread.h"
 #include "Container/SFDualSortedMap.h"
 #include "Container/SFSortedArray.h"
 #include "Util/SFTimeUtil.h"

@@ -9,12 +9,12 @@
 #include "Container/SFPageQueue.h"
 #include "Util/SFTimeUtil.h"
 #include "Container/SFCircularQueue.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 #include "Object/SFSharedPointer.h"
 #include "Object/SFSharedObjectManager.h"
 #include "SFSystemSynchronizeTest.h"
 
-#include "Thread/SFSystemSynchronization.h"
+#include "Multithread/SFSystemSynchronization.h"
 
 
 using ::testing::EmptyTestEventListener;

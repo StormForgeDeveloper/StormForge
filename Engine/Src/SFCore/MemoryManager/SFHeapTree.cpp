@@ -11,7 +11,7 @@
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Memory/SFHeapTree.h"
+#include "MemoryManager/SFHeapTree.h"
 
 
 namespace SF

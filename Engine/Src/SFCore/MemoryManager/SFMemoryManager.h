@@ -11,8 +11,8 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Memory/SFMemory.h"
-#include "Memory/SFIMemoryManager.h"
+#include "MemoryManager/SFMemory.h"
+#include "MemoryManager/SFIMemoryManager.h"
 #include "Container/SFContainerTraitBase.h"
 #include "Container/SFDoubleLinkedListBase.h"
 

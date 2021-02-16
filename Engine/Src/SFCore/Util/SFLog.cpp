@@ -15,10 +15,10 @@
 #include "String/SFStrUtil.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFLog.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 #include "Object/SFSharedObject.h"
 #include "Service/SFService.h"
-#include "Memory/SFMemoryManager.h"
+#include "MemoryManager/SFMemoryManager.h"
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 // For crash dump

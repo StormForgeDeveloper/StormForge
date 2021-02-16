@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFSynchronization.h"
 
 
 namespace SF {

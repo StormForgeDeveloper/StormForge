@@ -17,7 +17,7 @@
 #include "String/SFStringCrc64.h"
 #include "String/SFString.h"
 #include "Variable/SFVariable.h"
-#include "Memory/SFStackHeap.h"
+#include "MemoryManager/SFStackHeap.h"
 #include "Container/SFSortedArray.h"
 
 

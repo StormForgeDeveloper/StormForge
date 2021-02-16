@@ -13,7 +13,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 #include "Net/SFNetDef.h"
 #include "Net/SFNetSvrDef.h"
 #include "Net/SFConnectionUDP.h"

@@ -12,7 +12,7 @@
 #pragma once
 
 #include "SFAssert.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFSynchronization.h"
 #include "Util/SFLog.h"
 #include "Util/SFUtility.h"
 

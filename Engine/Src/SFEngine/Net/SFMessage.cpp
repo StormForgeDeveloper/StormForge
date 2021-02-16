@@ -13,8 +13,8 @@
 
 #include "SFEnginePCH.h"
 #include "Util/SFLog.h"
-#include "Memory/SFMemory.h"
-#include "Memory/SFMemoryPool.h"
+#include "MemoryManager/SFMemory.h"
+#include "MemoryManager/SFMemoryPool.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "String/SFHasher32.h"

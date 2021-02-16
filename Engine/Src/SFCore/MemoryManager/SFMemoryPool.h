@@ -12,11 +12,11 @@
 
 
 #include "SFTypedefs.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFSynchronization.h"
 #include "Container/SFStackPool.h"
 #include "Platform/StackWalker.h"
-#include "Thread/SFSynchronization.h"
-#include "Thread/SFSystemSynchronization.h"
+#include "Multithread/SFSynchronization.h"
+#include "Multithread/SFSystemSynchronization.h"
 #include "Container/SFSortedArray.h"
 
 

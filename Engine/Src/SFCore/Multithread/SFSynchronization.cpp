@@ -12,10 +12,10 @@
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
 #include "Util/SFTimeUtil.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 #include "String/SFStrUtil.h"
-#include "Thread/SFSynchronization.h"
-#include "Thread/SFSystemSynchronization.h"
+#include "Multithread/SFSynchronization.h"
+#include "Multithread/SFSystemSynchronization.h"
 
 
 

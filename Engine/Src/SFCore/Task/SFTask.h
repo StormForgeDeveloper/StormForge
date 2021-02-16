@@ -13,10 +13,10 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Memory/SFMemoryPool.h"
+#include "MemoryManager/SFMemoryPool.h"
 #include "Object/SFSharedPointer.h"
 #include "Container/SFDoubleLinkedListBase.h"
-#include "Thread/SFSystemSynchronization.h"
+#include "Multithread/SFSystemSynchronization.h"
 #include "Container/SFCircularPageQueue.h"
 #include "Util/SFTimeUtil.h"
 #include "Delegate/SFEventDelegate.h"

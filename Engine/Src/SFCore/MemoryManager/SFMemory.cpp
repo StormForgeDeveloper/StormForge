@@ -14,9 +14,9 @@
 #include "SFTypedefs.h"
 #include "Util/SFUtility.h"
 
-#include "Thread/SFThread.h"
-#include "Memory/SFMemory.h"
-#include "Memory/SFMemoryManager.h"
+#include "Multithread/SFThread.h"
+#include "MemoryManager/SFMemory.h"
+#include "MemoryManager/SFMemoryManager.h"
 
 
 

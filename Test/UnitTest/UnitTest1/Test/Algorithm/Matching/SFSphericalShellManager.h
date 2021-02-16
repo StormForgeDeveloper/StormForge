@@ -11,7 +11,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Thread/SFSystemSynchronization.h"
+#include "Multithread/SFSystemSynchronization.h"
 #include "Container/SFStaticDoubleLinkedList.h"
 #include "Container/SFDualSortedMap.h"
 #include "Container/SFArray.h"

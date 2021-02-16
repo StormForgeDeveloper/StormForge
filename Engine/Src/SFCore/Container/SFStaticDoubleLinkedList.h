@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Memory/SFMemoryPool.h"
+#include "MemoryManager/SFMemoryPool.h"
 #include "Container/SFContainerTrait.h"
 #include "ResultCode/SFResultCodeSystem.h"
 

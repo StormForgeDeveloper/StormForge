@@ -11,7 +11,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Memory/SFMemoryManager.h"
+#include "MemoryManager/SFMemoryManager.h"
 
 
 namespace SF {

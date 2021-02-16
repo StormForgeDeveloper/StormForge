@@ -20,7 +20,7 @@
 #include "Application/IOS/IOSAppTasks.h"
 
 
-#include "Thread/SFAsyncTaskManager.h"
+#include "Multithread/SFAsyncTaskManager.h"
 #include "Util/SFLog.h"
 #include "Util/SFLogComponent.h"
 #include "Object/SFObjectManager.h"

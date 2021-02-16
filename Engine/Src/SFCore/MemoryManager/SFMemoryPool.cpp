@@ -16,12 +16,12 @@
 #include "String/SFStrUtil.h"
 #include "Util/SFLog.h"
 #include "Util/SFUtility.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFSynchronization.h"
 #include "ResultCode/SFResultCodeSystem.h"
 
 #include "Container/SFHashTable2.h"
 #include "Platform/StackWalker.h"
-#include "Memory/SFMemoryPool.h"
+#include "MemoryManager/SFMemoryPool.h"
 
 
 namespace SF

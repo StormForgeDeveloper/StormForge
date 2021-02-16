@@ -14,7 +14,7 @@
 #include "Util/SFLog.h"
 #include "Util/SFUtility.h"
 #include "ResultCode/SFResultCodeSystem.h"
-#include "Memory/SFCircularHeap.h"
+#include "MemoryManager/SFCircularHeap.h"
 
 
 

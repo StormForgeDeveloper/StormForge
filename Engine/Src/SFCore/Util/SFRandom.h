@@ -13,7 +13,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFSynchronization.h"
 
 
 

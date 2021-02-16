@@ -12,7 +12,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Thread/SFSynchronization.h"
+#include "Multithread/SFSynchronization.h"
 #include "Container/SFArray.h"
 #include "Platform/StackWalker.h"
 #include "Object/SFObjectPool.h"

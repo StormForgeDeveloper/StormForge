@@ -16,7 +16,7 @@
 #include "Net/SFNetCtrl.h"
 #include "EngineObject/SFEngineTask.h"
 #include "Object/SFSharedObject.h"
-#include "Memory/SFMemoryPool.h"
+#include "MemoryManager/SFMemoryPool.h"
 #include "Service/SFEngineService.h"
 
 

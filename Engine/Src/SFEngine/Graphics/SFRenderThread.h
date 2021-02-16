@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 
 
 namespace SF

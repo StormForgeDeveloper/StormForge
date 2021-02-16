@@ -14,8 +14,8 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Memory/SFMemory.h"
-#include "Memory/SFIMemoryManager.h"
+#include "MemoryManager/SFMemory.h"
+#include "MemoryManager/SFIMemoryManager.h"
 #include "ResultCode/SFResultCodeSystem.h"
 
 

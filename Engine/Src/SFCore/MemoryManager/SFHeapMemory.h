@@ -14,8 +14,8 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Memory/SFIMemoryManager.h"
-#include "Memory/SFHeapTree.h"
+#include "MemoryManager/SFIMemoryManager.h"
+#include "MemoryManager/SFHeapTree.h"
 #include "Container/SFStaticDoubleLinkedList.h"
 
 // Enable memory allocation trace

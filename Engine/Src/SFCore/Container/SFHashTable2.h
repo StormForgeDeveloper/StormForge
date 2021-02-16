@@ -15,7 +15,7 @@
 #include "SFAssert.h"
 #include "Container/SFIndexing.h"
 #include "Container/SFContainerTrait.h"
-#include "Thread/SFSystemSynchronization.h"
+#include "Multithread/SFSystemSynchronization.h"
 #include "Container/SFArray.h"
 
 

@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "Memory/SFMemory.h"
+#include "MemoryManager/SFMemory.h"
 #include "Stream/SFStream.h"
 #include "String/SFString.h"
 #include "String/SFStringCrc64.h"

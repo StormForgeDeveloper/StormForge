@@ -12,11 +12,11 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Memory/SFMemoryPool.h"
+#include "MemoryManager/SFMemoryPool.h"
 #include "Object/SFSharedPointer.h"
 #include "Container/SFDualSortedMap.h"
 #include "Util/SFTimeUtil.h"
-#include "Thread/SFSystemSynchronization.h"
+#include "Multithread/SFSystemSynchronization.h"
 
 
 

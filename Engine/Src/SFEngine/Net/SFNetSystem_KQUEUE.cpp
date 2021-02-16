@@ -21,8 +21,8 @@
 #include "Util/SFLog.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFUtility.h"
-#include "Thread/SFSystemSynchronization.h"
-#include "Memory/SFMemoryPool.h"
+#include "Multithread/SFSystemSynchronization.h"
+#include "MemoryManager/SFMemoryPool.h"
 
 #include "Service/SFEngineService.h"
 

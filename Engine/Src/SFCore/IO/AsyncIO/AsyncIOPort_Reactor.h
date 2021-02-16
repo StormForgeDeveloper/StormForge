@@ -19,8 +19,8 @@
 #include "SFTypedefs.h"
 #include "String/SFStrUtil.h"
 #include "Container/SFHashTable.h"
-#include "Memory/SFMemoryPool.h"
-#include "Thread/SFThread.h"
+#include "MemoryManager/SFMemoryPool.h"
+#include "Multithread/SFThread.h"
 #include "IO/AsyncIO/AsyncIOPortSystemImpl.h"
 
 

@@ -12,9 +12,9 @@
 
 
 #include <gtest/gtest.h>
-#include "Thread/SFThread.h"
-#include "Memory/SFMemory.h"
-#include "Memory/SFIMemoryManager.h"
+#include "Multithread/SFThread.h"
+#include "MemoryManager/SFMemory.h"
+#include "MemoryManager/SFIMemoryManager.h"
 #include "../SFTestBase.h"
 
 

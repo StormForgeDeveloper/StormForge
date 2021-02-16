@@ -6,8 +6,8 @@
 #include "SFAssert.h"
 #include "Util/SFUtility.h"
 #include "ResultCode/SFResultCodeLibrary.h"
-#include "Memory/SFMemoryManager.h"
-#include "Memory/SFMemory.h"
+#include "MemoryManager/SFMemoryManager.h"
+#include "MemoryManager/SFMemory.h"
 
 #include "Task/SFTask.h"
 

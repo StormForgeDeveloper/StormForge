@@ -14,9 +14,9 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 
-#include "Memory/SFMemoryPool.h"
-#include "Thread/SFSynchronization.h"
-#include "Thread/SFSystemSynchronization.h"
+#include "MemoryManager/SFMemoryPool.h"
+#include "Multithread/SFSynchronization.h"
+#include "Multithread/SFSystemSynchronization.h"
 #include "Container/SFStackPool.h"
 #include "Util/SFLog.h"
 #include "Util/SFUtility.h"

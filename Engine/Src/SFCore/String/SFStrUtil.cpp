@@ -18,7 +18,7 @@
 #include "String/SFToString.h"
 #include "Variable/SFVariableBoxing.h"
 #include "String/SFStrFormat.h"
-#include "Memory/SFMemory.h"
+#include "MemoryManager/SFMemory.h"
 #include "Util/SFUtility.h"
 #include "ResultCode/SFResultCodeSystem.h"
 

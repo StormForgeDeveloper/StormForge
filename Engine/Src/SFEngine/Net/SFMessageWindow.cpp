@@ -10,13 +10,13 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "SFEnginePCH.h"
-#include "Thread/SFThread.h"
+#include "Multithread/SFThread.h"
 #include "SFAssert.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "Util/SFLog.h"
 #include "Util/SFTimeUtil.h"
-#include "Memory/SFMemory.h"
+#include "MemoryManager/SFMemory.h"
 #include "String/SFToString.h"
 
 #include "Net/SFConnectionUDP.h"

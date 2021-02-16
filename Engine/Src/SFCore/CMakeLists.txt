@@ -29,12 +29,12 @@ set(SFCORE_LIB_FILES
 	StreamDB/SFStreamDB.cpp
 	Math/SF3DMath.cpp
 	Math/SF3DMathSSE.cpp
-	Memory/SFHeapMemory.cpp
-	Memory/SFHeapTree.cpp
-	Memory/SFIMemoryManager.cpp
-	Memory/SFMemory.cpp
-	Memory/SFMemoryManager.cpp
-	Memory/SFMemoryPool.cpp
+	MemoryManager/SFHeapMemory.cpp
+	MemoryManager/SFHeapTree.cpp
+	MemoryManager/SFIMemoryManager.cpp
+	MemoryManager/SFMemory.cpp
+	MemoryManager/SFMemoryManager.cpp
+	MemoryManager/SFMemoryPool.cpp
 	Object/SFLibraryComponent.cpp
 	Object/SFObjectPool.cpp
 	Object/SFObject.cpp
@@ -58,8 +58,8 @@ set(SFCORE_LIB_FILES
 	Task/SFAsyncTaskManager.cpp
 	Task/SFTask.cpp
 	Task/SFTimerScheduler.cpp
-	Thread/SFSynchronization.cpp
-	Thread/SFThread.cpp
+	Multithread/SFSynchronization.cpp
+	Multithread/SFThread.cpp
 	Util/SFCryptoBase64.cpp
 	Util/SFCryptoCrc32.cpp
 	Util/SFCryptoCrc32C.cpp
@@ -143,16 +143,16 @@ set(SFCORE_LIB_FILES
 	Math/SFMathConsts.h
 	Math/SFMathTypes.h
 	Math/SFMathUtil.h
-	Memory/SFHeapMemory.h
-	Memory/SFHeapTree.h
-	Memory/SFIMemoryManager.h
-	Memory/SFCircularHeap.h
-	Memory/SFCircularHeap.cpp
-	Memory/SFMemory.h
-	Memory/SFMemoryManager.h
-	Memory/SFMemoryPool.h
-	Memory/SFStackHeap.h
-	Memory/SFStackHeap.cpp
+	MemoryManager/SFHeapMemory.h
+	MemoryManager/SFHeapTree.h
+	MemoryManager/SFIMemoryManager.h
+	MemoryManager/SFCircularHeap.h
+	MemoryManager/SFCircularHeap.cpp
+	MemoryManager/SFMemory.h
+	MemoryManager/SFMemoryManager.h
+	MemoryManager/SFMemoryPool.h
+	MemoryManager/SFStackHeap.h
+	MemoryManager/SFStackHeap.cpp
 	Object/SFLibraryComponent.h
 	Object/SFLibraryComponentAdapter.h
 	Object/SFLibraryComponentManager.h
@@ -217,9 +217,9 @@ set(SFCORE_LIB_FILES
 	Task/SFTask.h
 	Task/SFTimerScheduler.h
 	Task/SFTimerSchedulerAction.h
-	Thread/SFSynchronization.h
-	Thread/SFSystemSynchronization.h
-	Thread/SFThread.h
+	Multithread/SFSynchronization.h
+	Multithread/SFSystemSynchronization.h
+	Multithread/SFThread.h
 	Util/SFLog.h
 	Util/SFLogComponent.h
 	Util/SFPath.h
@@ -244,9 +244,9 @@ set(SFCORE_LIB_FILES
 	Math/SFMath.inl
 	String/SFHashCRC32Table.inl
 	String/SFStrUtil.inl
-	Thread/SFSynchronization.inl
-	Thread/SFSystemSynchronize_win.inl
-	Thread/SFThread.inl
+	Multithread/SFSynchronization.inl
+	Multithread/SFSystemSynchronize_win.inl
+	Multithread/SFThread.inl
 	Util/SFRandom.inl
 	Util/SFTimeUtil.inl
 	Util/SFUtility.inl
