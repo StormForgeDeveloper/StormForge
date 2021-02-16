@@ -11,6 +11,8 @@
 #include "String/SFToString.h"
 #include "Container/SFArray.h"
 #include "UnitTest_Variable.h"
+#include "Stream/SFMemoryStream.h"
+#include "Variable/SFVariableSerialization.h"
 
 
 using ::testing::EmptyTestEventListener;
@@ -68,5 +70,42 @@ TEST_F(VariableTest, Table2)
 	EXPECT_EQ(boxedInt.GetVariable()->GetValue<int>(), table.GetValue<int>("testInt"));
 	EXPECT_EQ(boxedFloat.GetVariable()->GetValue<float>(), table.GetValue<float>("testFloat"));
 	EXPECT_EQ(boxedDouble.GetVariable()->GetValue<double>(), table.GetValue<double>("testDouble"));
+}
+
+
+
+TEST_F(VariableTest, Serialization)
+{
+	VariableTable table1(GetHeap());
+	DynamicArray<uint8_t> table1Bin(GetHeap());
+	table1.SetValue("sex", 1);
+	table1.SetValue("hat", 10);
+	table1.SetValue("shoes", 10);
+
+	uint8_t testData[] = {12,114,54,66,234, 235};
+	SFUniquePtr<Variable> blobVar(new(GetEngineHeap()) VariableBLOB(ArrayView<uint8_t>(sizeof(testData), testData)));
+	table1.SetVariable("BinData", blobVar);
+
+	table1Bin.reserve(2048);
+	{
+		OutputMemoryStream outputStream(table1Bin, true);
+		outputStream << table1;
+	}
+
+	auto expectedSize = SerializedSizeOf(table1);
+
+	EXPECT_EQ(expectedSize, table1Bin.size());
+
+	// Serialization validation
+	VariableTable tableDeserialized;
+	{
+		InputMemoryStream inStream(table1Bin);
+		inStream >> tableDeserialized;
+	}
+
+	EXPECT_EQ(table1.GetValue<int32_t>("sex"), tableDeserialized.GetValue<int32_t>("sex"));
+	EXPECT_EQ(table1.GetValue<int32_t>("hat"), tableDeserialized.GetValue<int32_t>("hat"));
+	EXPECT_EQ(table1.GetValue<int32_t>("shoes"), tableDeserialized.GetValue<int32_t>("shoes"));
+	EXPECT_EQ(table1.GetValueBLOB("BinData"), tableDeserialized.GetValueBLOB("BinData"));
 }
 
