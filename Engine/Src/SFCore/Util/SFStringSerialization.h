@@ -16,7 +16,7 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 #include "ResultCode/SFResultCodeSystem.h"
-#include "String/SFString.h"
+#include "Util/SFString.h"
 #include "Stream/SFStream.h"
 
 namespace SF {

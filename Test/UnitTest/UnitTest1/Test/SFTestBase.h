@@ -13,7 +13,7 @@
 
 #include <gtest/gtest.h>
 #include "Util/SFLog.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "MemoryManager/SFMemoryManager.h"
 #include "MemoryManager/SFMemory.h"
 #include "Multithread/SFSystemSynchronization.h"

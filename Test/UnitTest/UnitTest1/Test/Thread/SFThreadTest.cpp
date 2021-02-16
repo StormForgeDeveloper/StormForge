@@ -3,9 +3,9 @@
 
 #include "UnitTest1PCH.h"
 #include <gtest/gtest.h>
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "Util/SFRandom.h"
-#include "String/SFStrFormat.h"
+#include "Util/SFStrFormat.h"
 #include "Container/SFPageQueue.h"
 #include "Util/SFTimeUtil.h"
 #include "Container/SFCircularQueue.h"

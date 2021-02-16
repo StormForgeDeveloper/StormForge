@@ -13,7 +13,7 @@
 
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "Util/SFLog.h"
 #include "Util/SFUtility.h"
 #include "Multithread/SFSynchronization.h"

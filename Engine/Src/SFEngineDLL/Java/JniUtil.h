@@ -15,8 +15,8 @@
 
 #if SF_PLATFORM == SF_PLATFORM_ANDROID
 
-#include "String/SFStringCrc64.h"
-#include "String/SFString.h"
+#include "Util/SFStringCrc64.h"
+#include "Util/SFString.h"
 #include "Variable/SFVariableMapBuilder.h"
 #include "jni.h"
 

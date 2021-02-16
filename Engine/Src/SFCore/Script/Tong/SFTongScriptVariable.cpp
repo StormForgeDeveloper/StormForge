@@ -13,7 +13,7 @@
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "Service/SFScriptService.h"
 #include "Script/Tong/SFTongScriptVariable.h"
 #include "Script/Tong/SFTongScriptEnvironment.h"

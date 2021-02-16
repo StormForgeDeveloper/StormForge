@@ -190,28 +190,29 @@ set(SFCORE_LIB_FILES
 	Stream/SFCompressedStream.h
 	Stream/SFMemoryStream.h
 	Stream/SFStream.h
-	String/SFStringCrc64.h
-	String/SFStringCrc32.h
-	String/SFStringCrcDB.h
-	String/SFHasher32.h
-	String/SFHasher32C.h
-	String/SFHasher64.h
-	String/SFPathString.h
-	String/SFString.h
-	String/SFStrFormat.h
-	String/SFStrParserUtil.h
-	String/SFStringSerialization.h
-	String/SFStrUtil.h
-	String/SFToString.h
-	String/SFToStringBase.h
-	String/SFStringCrc64.cpp
-	String/SFStringCrcDB.cpp
-	String/SFPathString.cpp
-	String/SFString.cpp
-	String/SFStrParserUtil.cpp
-	String/SFStrUtil.cpp
-	String/SFToString.cpp
-	String/SFToStringBase.cpp
+	Util/SFStringFormat.h
+	Util/SFStringCrc64.h
+	Util/SFStringCrc32.h
+	Util/SFStringCrcDB.h
+	Util/SFHasher32.h
+	Util/SFHasher32C.h
+	Util/SFHasher64.h
+	Util/SFPathString.h
+	Util/SFString.h
+	Util/SFStrFormat.h
+	Util/SFStrParserUtil.h
+	Util/SFStringSerialization.h
+	Util/SFStrUtil.h
+	Util/SFToString.h
+	Util/SFToStringBase.h
+	Util/SFStringCrc64.cpp
+	Util/SFStringCrcDB.cpp
+	Util/SFPathString.cpp
+	Util/SFString.cpp
+	Util/SFStrParserUtil.cpp
+	Util/SFStrUtil.cpp
+	Util/SFToString.cpp
+	Util/SFToStringBase.cpp
 
 	Task/SFAsyncTaskManager.h
 	Task/SFTask.h
@@ -242,8 +243,8 @@ set(SFCORE_LIB_FILES
 	Math/SF3DMath_vectorSoft.inl
 	Math/SFAngle.inl
 	Math/SFMath.inl
-	String/SFHashCRC32Table.inl
-	String/SFStrUtil.inl
+	Util/SFHashCRC32Table.inl
+	Util/SFStrUtil.inl
 	Multithread/SFSynchronization.inl
 	Multithread/SFSystemSynchronize_win.inl
 	Multithread/SFThread.inl

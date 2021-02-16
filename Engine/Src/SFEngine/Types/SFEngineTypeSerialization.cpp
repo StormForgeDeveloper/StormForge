@@ -12,7 +12,7 @@
 
 #include "SFEnginePCH.h"
 #include "SFAssert.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Stream/SFStream.h"
 #include "Types/SFEngineTypeSerialization.h"

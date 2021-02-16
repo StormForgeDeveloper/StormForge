@@ -14,7 +14,7 @@
 
 #include "SFTypedefs.h"
 #include "Util/SFUtility.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "Types/SFEngineTypeSerialization.h"
 #include "Net/SFMessage.h"
 #include "Util/SFLog.h"
@@ -22,8 +22,8 @@
 #include "MemoryManager/SFMemory.h"
 #include "MemoryManager/SFIMemoryManager.h"
 #include "Variable/SFVariableBoxing.h"
-#include "String/SFToString.h"
-#include "String/SFToStringBase.h"
+#include "Util/SFToString.h"
+#include "Util/SFToStringBase.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "ResultCode/SFResultCodeLibrary.h"
 

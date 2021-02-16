@@ -12,7 +12,7 @@
 
 #include "SFEnginePCH.h"
 #include "Util/SFLog.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "Util/SFTimeUtil.h"
 #include "Net/SFMessageEndpoint.h"
 #include "StreamDB/SFStreamDB.h"

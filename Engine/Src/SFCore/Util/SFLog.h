@@ -13,10 +13,10 @@
 
 #include "SFTypedefs.h"
 #include "Service/SFLogService.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "Container/SFArray.h"
 #include "Container/SFSpinBufferMT.h"
-#include "String/SFStrFormat.h"
+#include "Util/SFStrFormat.h"
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Object/SFLibraryComponent.h"
 

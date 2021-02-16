@@ -20,7 +20,7 @@
 #include <netdb.h>
 #endif
 
-#include "String/SFString.h"
+#include "Util/SFString.h"
 
 namespace SF {
 namespace Net {

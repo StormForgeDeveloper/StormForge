@@ -22,7 +22,7 @@
 #include "Net/SFNetCtrl.h"
 #include "Net/SFNetConst.h"
 #include "Net/SFNetCtrl.h"
-#include "String/SFToString.h"
+#include "Util/SFToString.h"
 #include "Net/SFNetToString.h"
 
 #include "Protocol/SFProtocol.h"

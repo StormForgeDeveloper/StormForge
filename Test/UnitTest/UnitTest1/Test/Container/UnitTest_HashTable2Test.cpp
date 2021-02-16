@@ -3,8 +3,8 @@
 
 #include "UnitTest1PCH.h"
 #include <gtest/gtest.h>
-#include "String/SFStrUtil.h"
-#include "String/SFStrFormat.h"
+#include "Util/SFStrUtil.h"
+#include "Util/SFStrFormat.h"
 #include "Object/SFSharedPointer.h"
 #include "UnitTest_HashTableTest.h"
 #include "Container/SFHashTable2.h"

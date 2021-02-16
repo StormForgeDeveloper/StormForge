@@ -14,8 +14,8 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 #include "ResultCode/SFResultCodeSystem.h"
-#include "String/SFStrUtil.h"
-#include "String/SFToStringBase.h"
+#include "Util/SFStrUtil.h"
+#include "Util/SFToStringBase.h"
 
 
 namespace SF {

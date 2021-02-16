@@ -14,7 +14,7 @@
 
 
 #include "SFTypedefs.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "Container/SFArray.h"
 #include "ResultCode/SFResultCodeSystem.h"
 

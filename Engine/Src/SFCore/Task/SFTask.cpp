@@ -13,9 +13,9 @@
 
 #include "SFCorePCH.h"
 #include "Multithread/SFThread.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "Util/SFLog.h"
-#include "String/SFToString.h"
+#include "Util/SFToString.h"
 #include "Task/SFTask.h"
 #include "Task/SFAsyncTaskManager.h"
 

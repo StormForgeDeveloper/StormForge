@@ -10,10 +10,10 @@
 
 #include "SFCorePCH.h"
 
-#include "String/SFHasher32.h"
-#include "String/SFHasher64.h"
-#include "String/SFStringCrcDB.h"
-#include "String/SFStrFormat.h"
+#include "Util/SFHasher32.h"
+#include "Util/SFHasher64.h"
+#include "Util/SFStringCrcDB.h"
+#include "Util/SFStrFormat.h"
 #include "Service/SFService.h"
 #include "Stream/SFStream.h"
 #include "Types/SFEngineTypeSerialization.h"

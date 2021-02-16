@@ -14,8 +14,8 @@
 #include "Multithread/SFSynchronization.h"
 #include "MemoryManager/SFMemoryManager.h"
 #include "MemoryManager/SFMemoryPool.h"
-#include "String/SFString.h"
-#include "String/SFStringCrc64.h"
+#include "Util/SFString.h"
+#include "Util/SFStringCrc64.h"
 #include "Util/SFUtility.h"
 
 

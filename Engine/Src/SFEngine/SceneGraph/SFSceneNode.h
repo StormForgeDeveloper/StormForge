@@ -18,7 +18,7 @@
 #include "Task/SFTimerScheduler.h"
 #include "Container/SFArray.h"
 #include "Math/SF3DMath.h"
-#include "String/SFString.h"
+#include "Util/SFString.h"
 
 
 namespace SF

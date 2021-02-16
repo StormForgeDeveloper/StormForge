@@ -12,7 +12,7 @@
 
 #include "SFCorePCH.h"
 #include "SFAssert.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "SFTypedefs.h"
 #include "ResultCode/SFResultCodeSystem.h"
 

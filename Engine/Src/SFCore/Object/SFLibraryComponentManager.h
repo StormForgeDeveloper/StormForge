@@ -16,7 +16,7 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 #include "ResultCode/SFResultCodeSystem.h"
-#include "String/SFStringCrc64.h"
+#include "Util/SFStringCrc64.h"
 #include "Container/SFSortedArray.h"
 #include "Object/SFLibraryComponent.h"
 

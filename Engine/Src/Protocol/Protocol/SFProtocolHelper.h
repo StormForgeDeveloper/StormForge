@@ -16,15 +16,15 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "Stream/SFMemoryStream.h"
 #include "Net/SFNetDef.h"
-#include "String/SFStrUtil.h"
-#include "String/SFString.h"
+#include "Util/SFStrUtil.h"
+#include "Util/SFString.h"
 #include "Types/SFEngineTypeSerialization.h"
 #include "Variable/SFVariableToString.h"
-#include "String/SFStringSerialization.h"
+#include "Util/SFStringSerialization.h"
 #include "Variable/SFVariableSerialization.h"
 #include "Container/SFArraySerialization.h"
 #include "Util/SFLog.h"
-#include "String/SFToStringEngineTypes.h"
+#include "Util/SFToStringEngineTypes.h"
 
 
 namespace SF {

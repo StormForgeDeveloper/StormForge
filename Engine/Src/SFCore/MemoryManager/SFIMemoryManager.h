@@ -13,7 +13,7 @@
 #include "SFTypedefs.h"
 #include "Container/SFContainerTraitBase.h"
 #include "Container/SFDoubleLinkedListBase.h"
-#include "String/SFStringCrc64.h"
+#include "Util/SFStringCrc64.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
 #include "MemoryManager/SFMemory.h"

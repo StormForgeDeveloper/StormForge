@@ -12,8 +12,8 @@
 #pragma once 
 
 #include "SFTypedefs.h"
-#include "String/SFStringCrc32.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStringCrc32.h"
+#include "Util/SFStrUtil.h"
 
 namespace SF {
 

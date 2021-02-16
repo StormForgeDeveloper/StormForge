@@ -15,8 +15,8 @@
 #include "SFAssert.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
-#include "String/SFStrUtil.h"
-#include "String/SFString.h"
+#include "Util/SFStrUtil.h"
+#include "Util/SFString.h"
 #include "Container/SFArray.h"
 
 

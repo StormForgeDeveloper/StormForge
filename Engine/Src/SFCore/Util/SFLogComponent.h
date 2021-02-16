@@ -17,7 +17,7 @@
 #include "Object/SFSharedPointer.h"
 #include "Util/SFLog.h"
 #include "IO/SFFile.h"
-#include "String/SFString.h"
+#include "Util/SFString.h"
 
 
 namespace SF {

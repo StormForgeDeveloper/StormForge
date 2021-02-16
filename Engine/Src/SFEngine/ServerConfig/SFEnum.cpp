@@ -12,7 +12,7 @@
 
 #include "SFEnginePCH.h"
 #include "SFEnum.h"
-#include "String/SFStringCrc32.h"
+#include "Util/SFStringCrc32.h"
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>

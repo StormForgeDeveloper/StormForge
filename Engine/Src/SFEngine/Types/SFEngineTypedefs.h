@@ -13,8 +13,8 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "String/SFStringCrc32.h"
-#include "String/SFStringCrc64.h"
+#include "Util/SFStringCrc32.h"
+#include "Util/SFStringCrc64.h"
 #include "Math/SF3DMath.h"
 
 ////////////////////////////////////////////////////////////////////////////////

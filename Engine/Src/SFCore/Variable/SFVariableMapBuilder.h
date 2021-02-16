@@ -15,8 +15,8 @@
 #include "SFTypedefs.h"
 #include "Types/SFEngineTypedefs.h"
 #include "SFAssert.h"
-#include "String/SFStringCrc64.h"
-#include "String/SFString.h"
+#include "Util/SFStringCrc64.h"
+#include "Util/SFString.h"
 
 
 namespace SF {

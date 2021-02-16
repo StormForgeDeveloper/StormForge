@@ -11,7 +11,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "String/SFStringCrc64.h"
+#include "Util/SFStringCrc64.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
 #include "MemoryManager/SFMemoryManager.h"

@@ -14,7 +14,7 @@
 
 
 #include "SFTypedefs.h"
-#include "String/SFStringCrc64.h"
+#include "Util/SFStringCrc64.h"
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Object/SFLibraryComponent.h"
 

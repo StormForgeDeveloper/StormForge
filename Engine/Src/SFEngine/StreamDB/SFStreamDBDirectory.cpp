@@ -13,7 +13,7 @@
 
 #include "StreamDB/SFStreamDB.h"
 #include "StreamDB/SFStreamDBDirectory.h"
-#include "String/SFStringFormat.h"
+#include "Util/SFStringFormat.h"
 #include "Net/SFConnectionTCP.h"
 #include "Protocol/Policy/PlayInstanceNetPolicy.h"
 #include "Protocol/Message/PlayInstanceMsgClass.h"

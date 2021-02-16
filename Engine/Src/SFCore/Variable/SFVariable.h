@@ -14,11 +14,11 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "String/SFStringCrc64.h"
-#include "String/SFStringCrc32.h"
-#include "String/SFString.h"
+#include "Util/SFStringCrc64.h"
+#include "Util/SFStringCrc32.h"
+#include "Util/SFString.h"
 #include "Stream/SFStream.h"
-#include "String/SFStringSerialization.h"
+#include "Util/SFStringSerialization.h"
 
 
 namespace SF {

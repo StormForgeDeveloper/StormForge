@@ -25,7 +25,7 @@
 #include "Util/SFLogComponent.h"
 #include "Object/SFObjectManager.h"
 #include "Util/SFTimeUtil.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "EngineObject/SFEngineObjectManager.h"
 #include "EngineObject/SFEngineTaskManager.h"
 #include "Net/SFNetSystem.h"

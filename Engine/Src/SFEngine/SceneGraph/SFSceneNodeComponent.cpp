@@ -13,7 +13,7 @@
 
 #include "SFEnginePCH.h"
 #include "Multithread/SFThread.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "EngineObject/SFEngineObject.h"
 #include "SceneGraph/SFSceneNodeComponent.h"
 #include "SceneGraph/SFSceneNode.h"

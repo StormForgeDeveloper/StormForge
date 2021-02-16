@@ -16,8 +16,8 @@
 #define USE_ZOOKEEPER
 
 #ifdef USE_ZOOKEEPER
-#include "String/SFStringCrc32.h"
-#include "String/SFString.h"
+#include "Util/SFStringCrc32.h"
+#include "Util/SFString.h"
 #include "Container/SFCircularPageQueue.h"
 #include "Task/SFTask.h"
 #include "json/json.h"

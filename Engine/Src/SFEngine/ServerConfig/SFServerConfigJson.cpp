@@ -13,9 +13,9 @@
 #include "SFEnginePCH.h"
 
 #include "SFServerConfigJson.h"
-#include "String/SFStringCrc32.h"
+#include "Util/SFStringCrc32.h"
 #include "Util/SFLog.h"
-#include "String/SFStringFormat.h"
+#include "Util/SFStringFormat.h"
 #include "IO/SFFile.h"
 
 

@@ -13,8 +13,8 @@
 #include "Task/SFTask.h"
 #include "SFEngine.h"
 
-#include "String/SFStringCrc32.h"
-#include "String/SFString.h"
+#include "Util/SFStringCrc32.h"
+#include "Util/SFString.h"
 #include "Container/SFCircularPageQueue.h"
 
 #define THREADED 1

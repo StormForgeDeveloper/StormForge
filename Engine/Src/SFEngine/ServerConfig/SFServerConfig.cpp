@@ -12,7 +12,7 @@
 
 #include "SFEnginePCH.h"
 #include "SFServerConfig.h"
-#include "String/SFStringCrc32.h"
+#include "Util/SFStringCrc32.h"
 
 
 

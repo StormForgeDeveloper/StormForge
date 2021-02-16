@@ -12,7 +12,7 @@
 #include "SFEnginePCH.h"
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Asset/Importer/SFAssetImporter.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 
 namespace SF
 {

@@ -16,7 +16,7 @@
 #include "Multithread/SFThread.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFRandom.h"
-#include "String/SFToString.h"
+#include "Util/SFToString.h"
 #include "UnitTest_Movement.h"
 #include "Math/SF3DMath.h"
 #include "Actor/Movement/SFActorMovement.h"

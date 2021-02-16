@@ -12,7 +12,7 @@
 #include "SFCorePCH.h"
 
 #include "StreamDB/SFStreamDB.h"
-#include "String/SFStringFormat.h"
+#include "Util/SFStringFormat.h"
 
 #ifdef USE_STREAMDB
 

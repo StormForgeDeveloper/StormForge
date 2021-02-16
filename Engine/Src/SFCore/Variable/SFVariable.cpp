@@ -14,9 +14,9 @@
 #include "SFTypedefs.h"
 #include "Util/SFLog.h"
 #include "Variable/SFVariable.h"
-#include "String/SFToString.h"
-#include "String/SFStringFormat.h"
-#include "String/SFHasher32C.h"
+#include "Util/SFToString.h"
+#include "Util/SFStringFormat.h"
+#include "Util/SFHasher32C.h"
 
 namespace SF
 {

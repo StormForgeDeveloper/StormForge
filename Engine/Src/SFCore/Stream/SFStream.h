@@ -12,11 +12,11 @@
 
 #include "SFTypedefs.h"
 #include "Object/SFSharedObject.h"
-#include "String/SFStringCrc32.h"
-#include "String/SFStringCrc64.h"
+#include "Util/SFStringCrc32.h"
+#include "Util/SFStringCrc64.h"
 #include "Container/SFArray.h"
-#include "String/SFStrUtil.h"
-#include "String/SFString.h"
+#include "Util/SFStrUtil.h"
+#include "Util/SFString.h"
 
 namespace SF
 {

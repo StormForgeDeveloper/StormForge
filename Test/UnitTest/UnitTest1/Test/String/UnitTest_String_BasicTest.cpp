@@ -17,8 +17,8 @@
 #include "Container/SFDualSortedMap.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFRandom.h"
-#include "String/SFToString.h"
-#include "String/SFStringFormat.h"
+#include "Util/SFToString.h"
+#include "Util/SFStringFormat.h"
 #include "UnitTest_String.h"
 
 

@@ -14,7 +14,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "String/SFToStringBase.h"
+#include "Util/SFToStringBase.h"
 #include "Variable/SFVariableCommonDefs.h"
 #include "Stream/SFStream.h"
 

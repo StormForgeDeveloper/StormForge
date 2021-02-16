@@ -17,8 +17,8 @@
 #include "Util/SFTimeUtil.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "Util/SFLog.h"
-#include "String/SFStrUtil.h"
-#include "String/SFToString.h"
+#include "Util/SFStrUtil.h"
+#include "Util/SFToString.h"
 #include "Protocol/SFProtocol.h"
 
 #include "Net/SFConnection.h"

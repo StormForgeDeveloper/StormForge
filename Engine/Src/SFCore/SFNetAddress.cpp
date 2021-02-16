@@ -13,7 +13,7 @@
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 
 #if SF_PLATFORM == SF_PLATFORM_LINUX || SF_PLATFORM == SF_PLATFORM_ANDROID
 #include <arpa/inet.h>

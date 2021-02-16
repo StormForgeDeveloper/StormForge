@@ -15,7 +15,7 @@
 #if USE_REACTOR_PATTERN && KQUEUE
 
 #include "SFTypedefs.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 #include "Container/SFHashTable.h"
 #include "MemoryManager/SFMemoryPool.h"
 #include "Multithread/SFThread.h"

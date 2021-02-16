@@ -16,9 +16,9 @@
 #include "Variable/SFVariable.h"
 #include "Variable/SFNamedVariableBox.h"
 #include "Variable/SFVariableTable.h"
-#include "String/SFToString.h"
-#include "String/SFStringFormat.h"
-#include "String/SFHasher32C.h"
+#include "Util/SFToString.h"
+#include "Util/SFStringFormat.h"
+#include "Util/SFHasher32C.h"
 
 namespace SF
 {

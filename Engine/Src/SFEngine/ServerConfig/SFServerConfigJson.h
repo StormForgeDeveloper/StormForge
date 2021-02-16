@@ -12,8 +12,8 @@
 #pragma once
 
 
-#include "String/SFStringCrc32.h"
-#include "String/SFString.h"
+#include "Util/SFStringCrc32.h"
+#include "Util/SFString.h"
 
 #include "Zookeeper/SFZookeeper.h"
 #include "ServerConfig/SFEnum.h"

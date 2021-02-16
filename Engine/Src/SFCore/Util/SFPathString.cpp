@@ -13,11 +13,11 @@
 
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
-#include "String/SFStrFormat.h"
+#include "Util/SFStrFormat.h"
 #include "Variable/SFVariableBoxing.h"
-#include "String/SFStringCrc64.h"
-#include "String/SFString.h"
-#include "String/SFPathString.h"
+#include "Util/SFStringCrc64.h"
+#include "Util/SFString.h"
+#include "Util/SFPathString.h"
 #include "Util/SFUtility.h"
 #include "Util/SFPath.h"
 

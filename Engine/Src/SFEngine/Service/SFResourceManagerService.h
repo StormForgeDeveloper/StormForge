@@ -15,7 +15,7 @@
 #include "Resource/SFResource.h"
 #include "Container/SFDualSortedMap.h"
 #include "Asset/Package/SFAssetPackage.h"
-#include "String/SFString.h"
+#include "Util/SFString.h"
 #include "Task/SFTask.h"
 
 

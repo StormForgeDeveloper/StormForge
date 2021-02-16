@@ -20,7 +20,7 @@
 #include "Util/SFUtility.h"
 #include "Util/SFTimeUtil.h"
 #include "Protocol/SFProtocol.h"
-#include "String/SFToString.h"
+#include "Util/SFToString.h"
 
 #include "Net/SFConnectionActions.h"
 #include "Net/SFConnectionMUDP.h"

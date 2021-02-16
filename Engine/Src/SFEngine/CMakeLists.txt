@@ -128,7 +128,7 @@ set(SFENGINE_LIB_FILES
 	SFEngine.IOS.cpp
 	SFEngine.Win.cpp
 	SFEngine.Linux.cpp
-	String/SFToStringEngineTypes.cpp
+	Util/SFToStringEngineTypes.cpp
 	Types/SFEngineTypedefs.cpp
 
 	Actor/Movement/SFActorMovement.h
@@ -249,7 +249,7 @@ set(SFENGINE_LIB_FILES
 	Service/SFResourceManagerService.h
 	SFEngine.h
 	SFEnginePCH.h
-	String/SFToStringEngineTypes.h
+	Util/SFToStringEngineTypes.h
 	Types/SFEngineTypedefs.h
 	Types/SFEngineTypeSerialization.h
 	Types/SFEngineTypeSerialization.cpp

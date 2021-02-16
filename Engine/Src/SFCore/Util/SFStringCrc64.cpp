@@ -14,9 +14,9 @@
 #include <fstream>
 #include <algorithm>
 
-#include "String/SFStringCrc32.h"
-#include "String/SFStringCrc64.h"
-#include "String/SFStringCrcDB.h"
+#include "Util/SFStringCrc32.h"
+#include "Util/SFStringCrc64.h"
+#include "Util/SFStringCrcDB.h"
 #include "Service/SFService.h"
 
 

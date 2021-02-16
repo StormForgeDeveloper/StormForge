@@ -16,8 +16,8 @@
 #define USE_STREAMDB
 
 #ifdef USE_STREAMDB
-#include "String/SFStringCrc32.h"
-#include "String/SFString.h"
+#include "Util/SFStringCrc32.h"
+#include "Util/SFString.h"
 #include "Task/SFTask.h"
 #include "EngineObject/SFEngineObject.h"
 #include "Net/SFConnection.h"

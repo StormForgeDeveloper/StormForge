@@ -13,11 +13,11 @@
 
 #include "SFTypedefs.h"
 #include "SFResult.h"
-#include "String/SFStringCrc64.h"
-#include "String/SFStringCrc32.h"
+#include "Util/SFStringCrc64.h"
+#include "Util/SFStringCrc32.h"
 #include "Variable/SFVariableBoxing.h"
-#include "String/SFPathString.h"
-#include "String/SFString.h"
+#include "Util/SFPathString.h"
+#include "Util/SFString.h"
 #include "MemoryManager/SFMemoryManager.h"
 
 namespace SF

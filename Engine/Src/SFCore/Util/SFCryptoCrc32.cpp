@@ -13,7 +13,7 @@
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
 #include "Util/SFUtility.h"
-#include "String/SFHasher32.h"
+#include "Util/SFHasher32.h"
 
 
 

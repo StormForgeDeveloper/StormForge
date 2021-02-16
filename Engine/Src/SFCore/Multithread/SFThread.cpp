@@ -14,7 +14,7 @@
 #include "SFTypedefs.h"
 #include "Util/SFTimeUtil.h"
 #include "Multithread/SFThread.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFStrUtil.h"
 
 
 

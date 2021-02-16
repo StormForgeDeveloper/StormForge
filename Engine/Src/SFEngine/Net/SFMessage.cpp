@@ -17,7 +17,7 @@
 #include "MemoryManager/SFMemoryPool.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "ResultCode/SFResultCodeLibrary.h"
-#include "String/SFHasher32.h"
+#include "Util/SFHasher32.h"
 
 #include "Net/SFMessage.h"
 #include "Net/SFNetSystem.h"

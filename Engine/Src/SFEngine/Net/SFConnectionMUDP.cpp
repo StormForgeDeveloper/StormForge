@@ -16,8 +16,8 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "Util/SFLog.h"
 #include "Util/SFTimeUtil.h"
-#include "String/SFToString.h"
-#include "String/SFHasher32.h"
+#include "Util/SFToString.h"
+#include "Util/SFHasher32.h"
 #include "Protocol/SFProtocol.h"
 
 #include "Net/SFConnectionMUDP.h"

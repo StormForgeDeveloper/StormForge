@@ -11,7 +11,7 @@
 
 
 #include "SFEnginePCH.h"
-#include "String/SFStringCrc32.h"
+#include "Util/SFStringCrc32.h"
 #include "Component/SFConnectionManagerComponent.h"
 #include "Net/SFNetSystem.h"
 #include "Net/SFConnectionManager.h"

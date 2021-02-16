@@ -16,8 +16,8 @@
 #include "Multithread/SFThread.h"
 #include "Protocol/SFProtocol.h"
 #include "Service/SFEngineService.h"
-#include "String/SFToString.h"
-#include "String/SFStrUtil.h"
+#include "Util/SFToString.h"
+#include "Util/SFStrUtil.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFLog.h"
 

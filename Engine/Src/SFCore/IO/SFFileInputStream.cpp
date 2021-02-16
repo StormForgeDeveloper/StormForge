@@ -13,9 +13,9 @@
 
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
-#include "String/SFStringCrc64.h"
+#include "Util/SFStringCrc64.h"
 #include "Variable/SFVariableBoxing.h"
-#include "String/SFToString.h"
+#include "Util/SFToString.h"
 #include "IO/SFFileInputStream.h"
 
 

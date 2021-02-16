@@ -13,9 +13,9 @@
 
 
 #include "SFTypedefs.h"
-#include "String/SFStrUtil.h"
-#include "String/SFStringCrc32.h"
-#include "String/SFStringCrc64.h"
+#include "Util/SFStrUtil.h"
+#include "Util/SFStringCrc32.h"
+#include "Util/SFStringCrc64.h"
 
 
 namespace SF {
