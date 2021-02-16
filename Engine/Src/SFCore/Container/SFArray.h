@@ -326,7 +326,7 @@ namespace SF {
 
 				for (uint iItem = 0; iItem < size(); iItem++)
 				{
-					if (m_pDataPtr[iData] != op2[iData])
+					if (m_pDataPtr[iItem] != op2.m_pDataPtr[iItem])
 						return false;
 				}
 
