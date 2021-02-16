@@ -504,7 +504,7 @@ namespace Net {
 
 		if (Util::TimeSince(GetNetCtrlTime()) > Const::HEARTBEAT_TIMEOUT) // connection time out
 		{
-			SFLog(Net, Debug, "UDP Connection Timeout CID:{0}", GetCID());
+			SFLog(Net, Debug, "Connection heat beat Timeout CID:{0}", GetCID());
 			netCheck(Disconnect("Connection TimeOut"));
 			netCheck(CloseConnection("Heartbeat timeout"));
 		}

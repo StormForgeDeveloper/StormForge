@@ -75,11 +75,14 @@ namespace SF
 	public:
 
 		OutputMemoryStream(IHeap& memoryManager);
-		OutputMemoryStream(Array<uint8_t>& memorySource);
+		OutputMemoryStream(Array<uint8_t>& memorySource, bool bAllowResize = false);
 		virtual ~OutputMemoryStream();
 
 		// Reset position to begin
 		void Reset();
+
+		bool IsBufferResizeAllowed() const { return m_IsBufferResizeAllowed; }
+		void EnableBufferResize(bool bEnable) { m_IsBufferResizeAllowed = bEnable; }
 
 		size_t capacity() const { return m_Buffer == nullptr ? 0 : m_Buffer->GetAllocatedSize(); }
 		Array<uint8_t>& GetBuffer() const { return *m_Buffer; }

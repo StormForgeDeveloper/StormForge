@@ -164,6 +164,7 @@ namespace SF
                     }
                     break;
                 case "int":
+                case "int32":
                     {
                         var newArray = new int[arrayCount];
                         if (arrayCount > 0) Marshal.Copy(Value, newArray, 0, arrayCount);
@@ -171,6 +172,7 @@ namespace SF
                     }
                     break;
                 case "uint":
+                case "uint32":
                     {
                         var newArray = new uint[arrayCount];
                         MarshalCopy(Value, newArray, 0, arrayCount);
@@ -273,14 +275,13 @@ namespace SF
                         stm_ParsingMessage.SetValue(stringHash, newArray);
                     }
                     break;
-                // TODO:
-                //case "VariableTable":
-                //    {
-                //        VariableTable parsedValue = new VariableTable();
-                //        parsedValue.FromSerializedMemory(Value);
-                //        stm_ParsingMessage.SetValue(stringHash, parsedValue);
-                //    }
-                //    break;
+                case "VariableTable":
+                    {
+                        VariableTable parsedValue = new VariableTable();
+                        parsedValue.FromSerializedMemory(Value);
+                        stm_ParsingMessage.SetValue(stringHash, parsedValue);
+                    }
+                    break;
 
                 default:
                     System.Diagnostics.Debug.Assert(false);

@@ -51,6 +51,9 @@ namespace SF
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc32);
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc64);
 			_CREATE_VARIABLE_TYPE_(VariableBLOB);
+		case "int32"_crc32c: return new(heap) VariableInt();
+		case "uint32"_crc32c: return new(heap) VariableUInt();
+
 		default:
 			// TODO: Add dynamic type supports
 			assert(false);
@@ -62,7 +65,7 @@ namespace SF
 
 	Variable* VariableFactoryService::CreateVariable(Array<uint8_t>& bufer, StringCrc32 TypeName)
 	{
-#define _CREATE_VARIABLE_TYPE_(TypeName) case TypeName::TYPE_NAME: if (remainSize < sizeof(TypeName)) return nullptr; return new(pBufferPtr) TypeName();
+#define _CREATE_VARIABLE_TYPE_(TypeName) case TypeName::TYPE_NAME: return (remainSize < sizeof(TypeName)) ? nullptr : new(pBufferPtr) TypeName();
 
 		auto remainSize = bufer.GetAllocatedSize() - bufer.size();
 		auto pBufferPtr = bufer.data() + bufer.size();
@@ -85,6 +88,8 @@ namespace SF
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc32);
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc64);
 			_CREATE_VARIABLE_TYPE_(VariableBLOB);
+		case "int32"_crc32c: return (remainSize < sizeof(VariableInt)) ? nullptr : new(pBufferPtr) VariableInt();
+		case "uint32"_crc32c: return (remainSize < sizeof(VariableUInt)) ? nullptr : new(pBufferPtr) VariableUInt();
 
 		default:
 			// TODO: Add dynamic type supports

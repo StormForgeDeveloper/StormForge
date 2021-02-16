@@ -53,44 +53,44 @@ namespace SF {
 		virtual TypeNameType GetTypeName() const = 0;
 
 
-		virtual void SetValue(bool value) { unused(value); }
-		virtual void SetValue(int8_t value) { unused(value); }
-		virtual void SetValue(uint8_t value) { unused(value); }
-		virtual void SetValue(int16_t value) { unused(value); }
-		virtual void SetValue(uint16_t value) { unused(value); }
-		virtual void SetValue(int32_t value) { unused(value); }
-		virtual void SetValue(uint32_t value) { unused(value); }
-		virtual void SetValue(int64_t value) { unused(value); }
-		virtual void SetValue(uint64_t value) { unused(value); }
-		virtual void SetValue(float value) { unused(value); }
-		virtual void SetValue(double value) { unused(value); }
-		virtual void SetValue(const char* value) { unused(value); }
-		virtual void SetValue(const wchar_t* value) { unused(value); }
-		virtual void SetValue(const String& value) { unused(value); }
-		virtual void SetValue(StringCrc32 value) { unused(value); }
-		virtual void SetValue(StringCrc64 value) { unused(value); }
-		virtual void SetValue(const Array<uint8_t>& value) { unused(value); }
-		virtual void SetValue(Array<uint8_t>&& value) { unused(value); }
+		virtual void SetValue(bool value) { assert(false); unused(value); }
+		virtual void SetValue(int8_t value) { assert(false); unused(value); }
+		virtual void SetValue(uint8_t value) { assert(false); unused(value); }
+		virtual void SetValue(int16_t value) { assert(false); unused(value); }
+		virtual void SetValue(uint16_t value) { assert(false); unused(value); }
+		virtual void SetValue(int32_t value) { assert(false); unused(value); }
+		virtual void SetValue(uint32_t value) { assert(false); unused(value); }
+		virtual void SetValue(int64_t value) { assert(false); unused(value); }
+		virtual void SetValue(uint64_t value) { assert(false); unused(value); }
+		virtual void SetValue(float value) { assert(false); unused(value); }
+		virtual void SetValue(double value) { assert(false); unused(value); }
+		virtual void SetValue(const char* value) { assert(false); unused(value); }
+		virtual void SetValue(const wchar_t* value) { assert(false); unused(value); }
+		virtual void SetValue(const String& value) { assert(false); unused(value); }
+		virtual void SetValue(StringCrc32 value) { assert(false); unused(value); }
+		virtual void SetValue(StringCrc64 value) { assert(false); unused(value); }
+		virtual void SetValue(const Array<uint8_t>& value) { assert(false); unused(value); }
+		virtual void SetValue(Array<uint8_t>&& value) { assert(false); unused(value); }
 
 
 		virtual void* GetDataPtr() const { return nullptr; }
-		virtual bool GetValueBool() const { return false; }
-		virtual int8_t GetValueInt8() const { return 0; }
-		virtual uint8_t GetValueUInt8() const { return 0; }
-		virtual int16_t GetValueInt16() const { return 0; }
-		virtual uint16_t GetValueUInt16() const { return 0; }
-		virtual int32_t GetValueInt32() const { return 0; }
-		virtual uint32_t GetValueUInt32() const { return 0; }
-		virtual int64_t GetValueInt64() const { return 0; }
-		virtual uint64_t GetValueUInt64() const { return 0; }
-		virtual float GetValueFloat() const { return 0; }
-		virtual double GetValueDouble() const { return 0; }
+		virtual bool GetValueBool() const { assert(false); return false; }
+		virtual int8_t GetValueInt8() const { assert(false); return 0; }
+		virtual uint8_t GetValueUInt8() const { assert(false); return 0; }
+		virtual int16_t GetValueInt16() const { assert(false); return 0; }
+		virtual uint16_t GetValueUInt16() const { assert(false); return 0; }
+		virtual int32_t GetValueInt32() const { assert(false); return 0; }
+		virtual uint32_t GetValueUInt32() const { assert(false); return 0; }
+		virtual int64_t GetValueInt64() const { assert(false); return 0; }
+		virtual uint64_t GetValueUInt64() const { assert(false); return 0; }
+		virtual float GetValueFloat() const { assert(false); return 0; }
+		virtual double GetValueDouble() const { assert(false); return 0; }
 		virtual String GetValueString() const { return String_Empty; }
 		virtual const char* GetValueCharString() const { return nullptr; }
 		virtual const wchar_t* GetValueWCharString() const { return nullptr; }
 		virtual StringCrc32 GetValueStringCrc32() const { return StringCrc32(); }
 		virtual StringCrc64 GetValueStringCrc64() const { return StringCrc64(); }
-		virtual const Array<uint8_t>& GetValueBLOB() const { static StaticArray<uint8_t,1> temp; return temp; }
+		virtual const Array<uint8_t>& GetValueBLOB() const { assert(false); static StaticArray<uint8_t,1> temp; return temp; }
 
 		// Template implementation for type based GetValue access
 		template<class ValueType>
@@ -102,7 +102,7 @@ namespace SF {
 		// Serialization
 		virtual size_t GetSerializedSize() const { return sizeof(StringCrc32); }
 		virtual Result Serialize(IOutputStream& output) const { return output.Write(GetTypeName()); }
-		virtual Result Deserialize(IInputStream& input) { return ResultCode::FAIL; }
+		virtual Result Deserialize(IInputStream& input) { return ResultCode::SUCCESS; } // We deserialze type name from caller
 
 		// Clone variable into given buffer, the buffer should have enough space for the variable instance.
 		// To get variable instance size call GetVariableSize
@@ -318,10 +318,6 @@ namespace SF {
 				return GetDataPtr() == op.GetDataPtr();
 			}
 
-			// Note: To enable == operator all types need to support compare operator
-			//if (GetTypeName() == op.GetTypeName())
-			//	return *reinterpret_cast<ValueType*>(GetDataPtr()) == *reinterpret_cast<ValueType*>(op.GetDataPtr());
-
 			return memcmp(GetDataPtr(), op.GetDataPtr(), sizeof(ValueType));
 		}
 
@@ -337,9 +333,6 @@ namespace SF {
 		}
 
 	};
-
-
-
 
 } // namespace SF
 

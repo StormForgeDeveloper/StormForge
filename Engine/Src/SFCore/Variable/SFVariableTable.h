@@ -66,7 +66,7 @@ namespace SF {
 		virtual Result SetVariable(KeyType name, const Variable& variable);
 
 		// Set variable, it will take over the pointer owner ship
-		virtual Result SetVariable(KeyType name, std::unique_ptr<Variable>& variable);
+		virtual Result SetVariable(KeyType name, SFUniquePtr<Variable>& variable);
 		virtual Result SetVariable(KeyType name, Variable*& variable);
 
 		// Get variable
@@ -77,7 +77,7 @@ namespace SF {
 		template<class ValueType>
 		Result SetValue(KeyType name, ValueType value)
 		{
-			auto boxedValue = Boxing(value);
+			auto boxedValue = BoxingByValue(value);
 			if (boxedValue.GetVariable() == nullptr)
 				return ResultCode::NOT_SUPPORTED;
 
@@ -92,6 +92,16 @@ namespace SF {
 				return ValueType{};
 
 			return pVariable->GetValue<ValueType>();
+		}
+
+		const Array<uint8_t>& GetValueBLOB(KeyType name) const
+		{
+			static StaticArray<uint8_t, 1> dummy;
+			auto* pVariable = GetVariable(name);
+			if (pVariable == nullptr)
+				return dummy;
+
+			return pVariable->GetValueBLOB();
 		}
 
 

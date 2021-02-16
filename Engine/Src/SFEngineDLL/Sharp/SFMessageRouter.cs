@@ -18,7 +18,7 @@ namespace SF
 {
 
 
-    public class SFMessageRouter : SFIMessageRouter
+    public class SFMessageRouter : SFIMessageRouter, IDisposable
     {
         class PriorityComparer<TKey> : IComparer<TKey>
             where TKey : IComparable
@@ -40,6 +40,11 @@ namespace SF
 
         public SFMessageRouter()
         {
+        }
+
+        public void Dispose()
+        {
+            m_MessageHandlerMap.Clear();
         }
 
         public override void RegisterMessageHandler(int messageID, int priority, Action<SFMessage> handler)

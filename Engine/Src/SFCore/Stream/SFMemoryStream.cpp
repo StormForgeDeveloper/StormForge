@@ -105,9 +105,9 @@ namespace SF {
 		m_Buffer = new(heap) DynamicArray<uint8_t>(heap);
 	}
 
-	OutputMemoryStream::OutputMemoryStream(Array<uint8_t>& memorySource)
+	OutputMemoryStream::OutputMemoryStream(Array<uint8_t>& memorySource, bool bAllowResize)
 		: m_IsBufferOwner(false)
-		, m_IsBufferResizeAllowed(false)
+		, m_IsBufferResizeAllowed(bAllowResize)
 		, m_Buffer(&memorySource)
 	{
 	}

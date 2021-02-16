@@ -44,7 +44,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceID, InPlayerID,System.Text.Encoding.UTF8.GetBytes(InPlayerIdentifier + "\0"));
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinGameInstanceCmd);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinGameInstanceCmd);
 			return result;
 		} // public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt32 InPlayInstanceID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
 
@@ -55,7 +55,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayPacketC2SEvt(m_Connection.NativeHandle, InPlayInstanceID, InSenderEndpointID, InTargetEndpointMask,(ushort)InPayload.Length, InPayload);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayPacketC2SEvt);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayPacketC2SEvt);
 			return result;
 		} // public int  PlayPacketC2SEvt( System.UInt32 InPlayInstanceID, System.UInt32 InSenderEndpointID, System.UInt32 InTargetEndpointMask, System.Byte[] InPayload )
 
@@ -69,7 +69,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt(m_Connection.NativeHandle, InGameInsUID, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerMovementC2SEvt);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerMovementC2SEvt);
 			return result;
 		} // public int  PlayerMovementC2SEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
 
@@ -81,7 +81,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceCreateStreamCmd(m_Connection.NativeHandle, InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamCmd);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamCmd);
 			return result;
 		} // public int  CreateStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
 
@@ -92,7 +92,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceFindStreamCmd(m_Connection.NativeHandle, InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.FindStreamCmd);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.FindStreamCmd);
 			return result;
 		} // public int  FindStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
 
@@ -103,7 +103,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceDeleteStreamCmd(m_Connection.NativeHandle, InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamCmd);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamCmd);
 			return result;
 		} // public int  DeleteStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
 
@@ -114,7 +114,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceGetStreamListCmd(m_Connection.NativeHandle, InTransactionID, InTicket);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.GetStreamListCmd);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.GetStreamListCmd);
 			return result;
 		} // public int  GetStreamListCmd( System.UInt64 InTransactionID, System.UInt64 InTicket )
 
@@ -182,7 +182,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceJoinGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceID, InMyEndpointID,(ushort)InMemberInfos.Length, InMemberInfos);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinGameInstanceRes);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinGameInstanceRes);
 			return result;
 		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InPlayInstanceID, System.UInt32 InMyEndpointID, SF.PlayerInformation[] InMemberInfos )
 
@@ -194,7 +194,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayerJoinS2CEvt(m_Connection.NativeHandle, InPlayInstanceID,ref InJoinedPlayerInfo);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerJoinS2CEvt);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerJoinS2CEvt);
 			return result;
 		} // public int  PlayerJoinS2CEvt( System.UInt32 InPlayInstanceID, SF.PlayerInformation InJoinedPlayerInfo )
 
@@ -206,7 +206,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayerLeftS2CEvt(m_Connection.NativeHandle, InPlayInstanceID, InLeftPlayerID, InKickedReason);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerLeftS2CEvt);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerLeftS2CEvt);
 			return result;
 		} // public int  PlayerLeftS2CEvt( System.UInt32 InPlayInstanceID, System.UInt64 InLeftPlayerID, System.UInt32 InKickedReason )
 
@@ -220,7 +220,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt(m_Connection.NativeHandle, InGameInsUID, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.NewPlayerInViewS2CEvt);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.NewPlayerInViewS2CEvt);
 			return result;
 		} // public int  NewPlayerInViewS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
 
@@ -234,7 +234,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt(m_Connection.NativeHandle, InGameInsUID, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.RemovePlayerFromViewS2CEvt);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.RemovePlayerFromViewS2CEvt);
 			return result;
 		} // public int  RemovePlayerFromViewS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
 
@@ -248,7 +248,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayerMovementS2CEvt(m_Connection.NativeHandle, InGameInsUID, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerMovementS2CEvt);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerMovementS2CEvt);
 			return result;
 		} // public int  PlayerMovementS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
 
@@ -260,7 +260,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceCreateStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InStreamServerAddr,ref InStreamServerAddrIPV4,System.Text.Encoding.UTF8.GetBytes(InStreamUID + "\0"));
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamRes);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamRes);
 			return result;
 		} // public int  CreateStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InStreamServerAddr, SF.NetAddress InStreamServerAddrIPV4, System.String InStreamUID )
 
@@ -272,7 +272,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceFindStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InStreamServerAddr,ref InStreamServerAddrIPV4,System.Text.Encoding.UTF8.GetBytes(InStreamUID + "\0"));
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.FindStreamRes);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.FindStreamRes);
 			return result;
 		} // public int  FindStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InStreamServerAddr, SF.NetAddress InStreamServerAddrIPV4, System.String InStreamUID )
 
@@ -284,7 +284,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceDeleteStreamRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamRes);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamRes);
 			return result;
 		} // public int  DeleteStreamRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -297,7 +297,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceGetStreamListRes(m_Connection.NativeHandle, InTransactionID, InResult,InStreamNamesArray.NativeHandle);
 			}
-			m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.GetStreamListRes);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.GetStreamListRes);
 			return result;
 		} // public int  GetStreamListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String[] InStreamNames )
 

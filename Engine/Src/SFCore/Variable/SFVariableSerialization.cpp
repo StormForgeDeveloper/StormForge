@@ -34,9 +34,6 @@ namespace SF
 	//
 
 
-
-
-
 	Result operator >> (IInputStream& input, VariableBox& data)
 	{
 		StringCrc32 TypeName;
@@ -81,7 +78,7 @@ namespace SF
 			if (!(input >> TypeName))
 				return ResultCode::END_OF_STREAM;
 
-			std::unique_ptr<Variable> pVariable;
+			SFUniquePtr<Variable> pVariable;
 			if (TypeName != nullptr)
 			{
 				pVariable.reset(Service::VariableFactory->CreateVariable(data.GetHeap(), TypeName));

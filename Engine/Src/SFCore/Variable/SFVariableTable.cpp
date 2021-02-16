@@ -65,7 +65,7 @@ namespace SF {
 		return m_VairableTable.Set(name, newVariable);
 	}
 
-	Result VariableTable::SetVariable(KeyType name, std::unique_ptr<Variable>& variable)
+	Result VariableTable::SetVariable(KeyType name, SFUniquePtr<Variable>& variable)
 	{
 		Variable* pVariable = nullptr;
 		m_VairableTable.Remove(name, pVariable);

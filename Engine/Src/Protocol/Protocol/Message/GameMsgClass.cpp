@@ -13518,6 +13518,16 @@ namespace SF
 
 			// Cmd: Create character
 			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 88);
+			const VariableTable& CreateCharacterCmd::GetVisualData() const
+			{
+ 				if (!m_VisualDataHasParsed)
+				{
+ 					m_VisualDataHasParsed = true;
+					InputMemoryStream VisualData_ReadStream(m_VisualDataRaw);
+					*VisualData_ReadStream.ToInputStream() >> m_VisualData;
+				} // if (!m_VisualDataHasParsed)
+				return m_VisualData;
+			} // const VariableTable& CreateCharacterCmd::GetVisualData() const
 			const VariableTable& CreateCharacterCmd::GetAttributes() const
 			{
  				if (!m_AttributesHasParsed)
@@ -13545,6 +13555,10 @@ namespace SF
 				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_CharacterName, ArrayLen));
 				protocolCheck(input->Read(ArrayLen));
+				uint8_t* VisualDataPtr = nullptr;
+				protocolCheck(input->ReadLink(VisualDataPtr, ArrayLen));
+				m_VisualDataRaw.SetLinkedBuffer(ArrayLen, VisualDataPtr);
+				protocolCheck(input->Read(ArrayLen));
 				uint8_t* AttributesPtr = nullptr;
 				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
 				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
@@ -13563,6 +13577,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("CharacterName", parser.GetCharacterName());
+				variableBuilder.SetVariable("VisualData", "VariableTable", parser.GetVisualDataRaw());
 				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
@@ -13580,7 +13595,7 @@ namespace SF
 
 			}; // Result CreateCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes )
+			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InVisualData, const Array<uint8_t>& InAttributes )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -13595,10 +13610,12 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
+				uint16_t serializedSizeOfInVisualData = static_cast<uint16_t>(SerializedSizeOf(InVisualData)); 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterName)
+					+ serializedSizeOfInVisualData
 					+ serializedSizeOfInAttributes
 				);
 
@@ -13610,12 +13627,13 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InCharacterName);
+				protocolCheck(*output << InVisualData);
 				protocolCheck(*output << InAttributes);
 
 				return hr;
-			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes )
+			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InVisualData, const Array<uint8_t>& InAttributes )
 
-			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes )
+			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -13630,10 +13648,13 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
+				uint16_t serializedSizeOfInVisualData = static_cast<uint16_t>(SerializedSizeOf(InVisualData)); 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterName)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInVisualData
 					+ sizeof(uint16_t)
 					+ serializedSizeOfInAttributes
 				);
@@ -13646,11 +13667,13 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InCharacterName);
+				protocolCheck(output->Write(serializedSizeOfInVisualData));
+				protocolCheck(*output << InVisualData);
 				protocolCheck(output->Write(serializedSizeOfInAttributes));
 				protocolCheck(*output << InAttributes);
 
 				return hr;
-			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InAttributes )
+			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes )
 
 
 
@@ -13658,8 +13681,8 @@ namespace SF
 			{
  				CreateCharacterCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateCharacter:{0}:{1} , TransactionID:{2}, CharacterName:{3,60}, Attributes:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetCharacterName(), parser.GetAttributes()); 
+				SFLog(Net, Debug1, "CreateCharacter:{0}:{1} , TransactionID:{2}, CharacterName:{3,60}, VisualData:{4}, Attributes:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetCharacterName(), parser.GetVisualData(), parser.GetAttributes()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -14462,6 +14485,16 @@ namespace SF
 			}; // Result SelectCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID SelectCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 92);
+			const VariableTable& SelectCharacterRes::GetAttributes() const
+			{
+ 				if (!m_AttributesHasParsed)
+				{
+ 					m_AttributesHasParsed = true;
+					InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
+					*Attributes_ReadStream.ToInputStream() >> m_Attributes;
+				} // if (!m_AttributesHasParsed)
+				return m_Attributes;
+			} // const VariableTable& SelectCharacterRes::GetAttributes() const
 			Result SelectCharacterRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -14478,6 +14511,10 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_CharacterID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* AttributesPtr = nullptr;
+				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
+				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
 
 				return hr;
 
@@ -14494,6 +14531,7 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("CharacterID", parser.GetCharacterID());
+				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -14510,8 +14548,7 @@ namespace SF
 
 			}; // Result SelectCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-
-			MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
+			MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const Array<uint8_t>& InAttributes )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -14526,10 +14563,12 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
+				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InCharacterID)
+					+ serializedSizeOfInAttributes
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SelectCharacterRes::MID, __uiMessageSize ) );
@@ -14541,9 +14580,49 @@ namespace SF
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 				protocolCheck(*output << InCharacterID);
+				protocolCheck(*output << InAttributes);
 
 				return hr;
-			}; // MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
+			}; // MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const Array<uint8_t>& InAttributes )
+
+			MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InCharacterID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInAttributes
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SelectCharacterRes::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InCharacterID);
+				protocolCheck(output->Write(serializedSizeOfInAttributes));
+				protocolCheck(*output << InAttributes);
+
+				return hr;
+			}; // MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
 
 
 
@@ -14551,8 +14630,8 @@ namespace SF
 			{
  				SelectCharacterRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "SelectCharacter:{0}:{1} , TransactionID:{2}, Result:{3:X8}, CharacterID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacterID()); 
+				SFLog(Net, Debug1, "SelectCharacter:{0}:{1} , TransactionID:{2}, Result:{3:X8}, CharacterID:{4}, Attributes:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacterID(), parser.GetAttributes()); 
 				return ResultCode::SUCCESS;
 			}; // Result SelectCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

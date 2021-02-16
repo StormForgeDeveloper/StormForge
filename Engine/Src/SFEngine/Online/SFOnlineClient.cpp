@@ -526,7 +526,6 @@ namespace SF
 			SFLog(Net, Error, "OnlineClient::StartConnection, Busy, we have running task, state:{0}", (uint32_t)GetOnlineState());
 			return ResultCode::BUSY;
 		}
-		return ResultCode::BUSY;
 
 		if (loginAddress != nullptr)
 			m_LoginAddresses = loginAddress;

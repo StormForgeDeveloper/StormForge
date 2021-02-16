@@ -368,13 +368,13 @@ namespace SF
                 (writer, value) => { writer.Write(((Result)value).Code); },
                 (reader) => { return new Result(reader.ReadInt32()); }));
 
-            TypeInfoByType.Add(typeof(int), new TypeInfo("int",
-                (writer,value)=> { writer.Write((int)value); },
-                (reader) => { return reader.ReadInt32(); }));
+            //TypeInfoByType.Add(typeof(int), new TypeInfo("int",
+            //    (writer,value)=> { writer.Write((int)value); },
+            //    (reader) => { return reader.ReadInt32(); }));
 
-            TypeInfoByType.Add(typeof(uint), new TypeInfo("uint",
-                (writer, value) => { writer.Write((uint)value); },
-                (reader) => { return reader.ReadUInt32(); }));
+            //TypeInfoByType.Add(typeof(uint), new TypeInfo("uint",
+            //    (writer, value) => { writer.Write((uint)value); },
+            //    (reader) => { return reader.ReadUInt32(); }));
 
             TypeInfoByType.Add(typeof(SByte), new TypeInfo("int8",
                 (writer, value) => { writer.Write((SByte)value); },
@@ -505,22 +505,32 @@ namespace SF
             Clear();
 
             UInt16 byteSize = (UInt16)Marshal.ReadInt16(InDataPtr); InDataPtr = (IntPtr)(InDataPtr.ToInt64() + sizeof(UInt16));
+            if (byteSize < sizeof(UInt16))
+                return;
+
             byte[] byteData = new byte[byteSize];
             Marshal.Copy(InDataPtr, byteData, 0, byteData.Length);
 
-            using (BinaryReader reader = new BinaryReader(new MemoryStream(byteData)))
+            try
             {
-                var numItems = reader.ReadUInt16();
-
-                for (UInt16 iItem = 0; iItem < numItems; iItem++)
+                using (BinaryReader reader = new BinaryReader(new MemoryStream(byteData)))
                 {
-                    var variableName = new StringCrc32(reader.ReadUInt32());
-                    var typeName = new StringCrc32(reader.ReadUInt32());
+                    var numItems = reader.ReadUInt16();
 
-                    var typeInfo = GetTypeInfo(typeName);
-                    var value = typeInfo.Deserializer(reader);
-                    Add(variableName, value);
+                    for (UInt16 iItem = 0; iItem < numItems; iItem++)
+                    {
+                        var variableName = new StringCrc32(reader.ReadUInt32());
+                        var typeName = new StringCrc32(reader.ReadUInt32());
+
+                        var typeInfo = GetTypeInfo(typeName);
+                        var value = typeInfo.Deserializer(reader);
+                        Add(variableName, value);
+                    }
                 }
+            }
+            catch(Exception exp)
+            {
+
             }
         }
     }

@@ -1038,7 +1038,7 @@ namespace SF
 
 	Variable* VariableBLOB::Clone(IHeap& heap) const
 	{
-		return new(heap) VariableBLOB(heap);
+		return new(heap) VariableBLOB(heap, m_Value);
 	}
 
 

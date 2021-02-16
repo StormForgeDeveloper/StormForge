@@ -247,6 +247,8 @@ namespace SF {
 	// Specialize for wchar*
 	template<> inline const wchar_t* VariableValueReference<const wchar_t*>::GetValueWCharString() const { return reinterpret_cast<const wchar_t*>(GetDataPtr()); }
 
+	template<> inline const Array<uint8_t>& VariableValueReference<Array<uint8_t>>::GetValueBLOB() const { return *reinterpret_cast<Array<uint8_t>*>(GetDataPtr()); }
+
 
 	// Specialize for numerics
 #define BR_VARIABLEBYREFERENCE_NUMERIC_SPECIALIZE(DataType)\

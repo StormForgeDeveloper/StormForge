@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TestNet2.WinSharp": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}

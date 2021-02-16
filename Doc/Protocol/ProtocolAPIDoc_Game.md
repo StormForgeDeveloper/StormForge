@@ -1703,11 +1703,13 @@ Create character
 
 1. Command interface
 
-        Result CreateCharacterCmd(const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InAttributes)
+        Result CreateCharacterCmd(const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InVisualData, const Array<uint8_t>& InAttributes)
 
 		- OutInTransactionID: TransactionID type. 
 
 		- OutInCharacterName: String type. 
+
+		- OutInVisualData: VariableTable type. 
 
 		- OutInAttributes: VariableTable type. 
 
@@ -1811,6 +1813,8 @@ C++: Cast message to SelectCharacterRes to access values
 		- OutResult: Result type. 
 
 		- OutCharacterID: uint32 type. Selected Character ID
+
+		- OutAttributes: VariableTable type. Character attributes
 
 
 ## GiveStamina Request

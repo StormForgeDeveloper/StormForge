@@ -760,6 +760,7 @@
 	    <Command Name="CreateCharacter" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create character">
 		    <Cmd>
 			    <Params Type="String" Name="CharacterName"/>
+				<Params Type="VariableTable" Name="VisualData"/>
 			    <Params Type="VariableTable" Name="Attributes"/>
 		    </Cmd>
 		    <Res>
@@ -781,6 +782,7 @@
 			<Res>
 				<Params Type="uint32" IsArray="true" Name="CharacterIDs" Desc="Character id list"/>
 				<Params Type="String" IsArray="true" Name="CharacterNames" Desc="Character name list"/>
+				<!--<Params Type="VariableTable" IsArray="true" Name="Attributes" Desc="Characters"/>-->
 			</Res>
 		</Command>
 
@@ -798,8 +800,8 @@
 				<Params Type="uint32" Name="CharacterID" Desc="Character ID to select"/>
 			</Cmd>
 			<Res>
-				<!-- <Params Type="VariableTable" Name="Attributes" Desc="Character attributes"/> -->
 				<Params Type="uint32" Name="CharacterID" Desc="Selected Character ID"/>
+				<Params Type="VariableTable" Name="Attributes" Desc="Character attributes"/>
 			</Res>
 	    </Command>
 

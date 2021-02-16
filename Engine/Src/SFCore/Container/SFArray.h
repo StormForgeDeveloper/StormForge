@@ -23,27 +23,6 @@ namespace SF {
 
 	class IHeap;
 
-#pragma pack(push, 2)
-	struct BinaryHeader
-	{
-		uint16_t Magic;		// Binary magic
-		uint16_t Version;	// Binary Version
-		uint32_t Size;		// Size
-	};
-#pragma pack(pop)
-
-	// default binary version and magic
-	template< class DataType >
-	uint BinaryMagic()
-	{
-		return 0;
-	}
-
-	template< class DataType >
-	uint BinaryVersion()
-	{
-		return 0;
-	}
 
 		////////////////////////////////////////////////////////////////////////////////////////////
 		//
@@ -56,18 +35,6 @@ namespace SF {
 		public:
 
 			using DataTypeDecay = std::decay_t<DataType>;
-
-#pragma pack(push, 4)
-
-#if !defined(SWIG)
-			// Binary Type
-			struct BinaryType : public BinaryHeader
-			{
-				DataType pData[1];
-			};
-#endif
-
-#pragma pack(pop)
 
 #if !defined(SWIG)
 			class iterator
@@ -351,32 +318,19 @@ namespace SF {
 				return iterator::END_IDX;
 			}
 
-			// TODO: this interface should be separated
-			// Copy to Bin
-			template< size_t szBinSize >
-			Result CopyToBin(uint8_t(&Dest)[szBinSize]) const
+			template<class DataType2, typename = std::enable_if_t<std::is_convertible_v<DataType, DataType2>>>
+			bool operator == (const Array<DataType2>& op2) const
 			{
-				Result hr = ResultCode::SUCCESS;
-				BinaryType *pDst = (BinaryType*)Dest;
+				if (size() != op2.size())
+					return false;
 
-				static_assert(szBinSize >= sizeof(BinaryType), "Invalid dest binary size");
-				size_t DstMaxCount = (szBinSize - sizeof(BinaryHeader)) / sizeof(DataType);
-				size_t CopyCount = size();
-				if (DstMaxCount < size())
+				for (uint iItem = 0; iItem < size(); iItem++)
 				{
-					//defTrace( Trace::TRC_ERROR, "Error, Invalid Binary size, Droping Data, {0}", typeid(DataType).name() );
-					hr = ResultCode::FAIL;
-
-					CopyCount = DstMaxCount;
+					if (m_pDataPtr[iData] != op2[iData])
+						return false;
 				}
 
-				pDst->Magic = BinaryMagic<DataType>();		// Binary magic
-				pDst->Version = BinaryVersion<DataType>();	// Binary Version
-				pDst->Count = (uint32_t)CopyCount;		// Count
-
-				memcpy(pDst->pData, m_pDataPtr, sizeof(DataType) * CopyCount);
-
-				return hr;
+				return true;
 			}
 
 			// copy operator
