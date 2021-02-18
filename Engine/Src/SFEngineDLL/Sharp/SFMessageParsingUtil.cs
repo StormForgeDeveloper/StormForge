@@ -117,10 +117,10 @@ namespace SF
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(GameInstanceInfo)));
                     break;
                 case "VariableTable":
-                    VariableTable parsedValue = new VariableTable();
-                    parsedValue.FromSerializedMemory(Value);
-                    stm_ParsingMessage.SetValue(stringHash, parsedValue);
-                    break;
+                    //VariableTable parsedValue = new VariableTable();
+                    //parsedValue.FromSerializedMemory(arrayCount, Value);
+                    //stm_ParsingMessage.SetValue(stringHash, parsedValue);
+                    //break;
                 default:
                     System.Diagnostics.Debug.Assert(false);
                     break;
@@ -278,7 +278,7 @@ namespace SF
                 case "VariableTable":
                     {
                         VariableTable parsedValue = new VariableTable();
-                        parsedValue.FromSerializedMemory(Value);
+                        parsedValue.FromSerializedMemory(arrayCount, Value);
                         stm_ParsingMessage.SetValue(stringHash, parsedValue);
                     }
                     break;

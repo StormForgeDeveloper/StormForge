@@ -338,22 +338,136 @@ namespace SF
             public delegate void SerializerFunc(BinaryWriter writer, object value);
             public delegate object DeserializerFunc(BinaryReader reader);
 
+            public readonly Type Type;
             public readonly StringCrc32 TypeNameCrc;
             public readonly SerializerFunc Serializer;
             public readonly DeserializerFunc Deserializer;
 
 
-            public TypeInfo(StringCrc32 InTypeNameCrc, SerializerFunc InSerializer, DeserializerFunc InDeserializer)
+            public TypeInfo(Type InType, StringCrc32 InTypeNameCrc, SerializerFunc InSerializer, DeserializerFunc InDeserializer)
             {
+                Type = InType;
                 TypeNameCrc = InTypeNameCrc;
                 Serializer = InSerializer;
                 Deserializer = InDeserializer;
             }
 
-            public TypeInfo(string InTypeName, SerializerFunc InSerializer, DeserializerFunc InDeserializer)
-                : this(new StringCrc32(InTypeName), InSerializer, InDeserializer)
+            public TypeInfo(Type InType, string InTypeName, SerializerFunc InSerializer, DeserializerFunc InDeserializer)
+                : this(InType, new StringCrc32(InTypeName), InSerializer, InDeserializer)
             {
             }
+
+        };
+
+        static TypeInfo[] TypeInfoList = {
+                new TypeInfo(typeof(Result), "Result",
+                    (writer, value) => { writer.Write(((Result)value).Code); },
+                    (reader) => { return new Result(reader.ReadInt32()); }
+                ),
+                new TypeInfo(typeof(bool), "bool",
+                (writer, value) => { writer.Write(((Int32)value)); },
+                (reader) => { return reader.ReadInt32() != 0 ? true : false; }),
+
+        new TypeInfo(typeof(IntPtr), "void*",
+            (writer, value) => { writer.Write((Int64)value); },
+                (reader) => { return reader.ReadInt64(); }),
+
+            new TypeInfo(typeof(IntPtr), "void*",
+                (writer, value) => { writer.Write((Int64)value); },
+                (reader) => { return reader.ReadInt64(); }),
+
+            new TypeInfo(typeof(int), "int",
+                (writer, value) => { writer.Write((int)value); },
+                (reader) => { return reader.ReadInt32(); }),
+
+            new TypeInfo(typeof(uint), "uint",
+                (writer, value) => { writer.Write((uint)value); },
+                (reader) => { return reader.ReadUInt32(); }),
+
+            new TypeInfo(typeof(Int32), "int32",
+                (writer, value) => { writer.Write((Int32)value); },
+                (reader) => { return reader.ReadInt32(); }),
+
+            new TypeInfo(typeof(UInt32), "uint32",
+                (writer, value) => { writer.Write((UInt32)value); },
+                (reader) => { return reader.ReadUInt32(); }),
+
+            new TypeInfo(typeof(SByte), "int8",
+                (writer, value) => { writer.Write((SByte)value); },
+                (reader) => { return reader.ReadSByte(); }),
+
+            new TypeInfo(typeof(Byte), "uint8",
+                (writer, value) => { writer.Write((Byte)value); },
+                (reader) => { return reader.ReadByte(); }),
+
+            new TypeInfo(typeof(Int16), "int16",
+                (writer, value) => { writer.Write((Int16)value); },
+                (reader) => { return reader.ReadInt16(); }),
+
+            new TypeInfo(typeof(UInt16), "uint16",
+                (writer, value) => { writer.Write((UInt16)value); },
+                (reader) => { return reader.ReadUInt16(); }),
+
+            new TypeInfo(typeof(Int64), "int64",
+                (writer, value) => { writer.Write((Int64)value); },
+                (reader) => { return reader.ReadInt64(); }),
+
+            new TypeInfo(typeof(UInt64), "uint64",
+                (writer, value) => { writer.Write((UInt64)value); },
+                (reader) => { return reader.ReadUInt64(); }),
+
+            new TypeInfo(typeof(SFUInt128), "uint128",
+                (writer, value) => { var valueTemp = (SFUInt128)value; writer.Write(valueTemp.Low); writer.Write(valueTemp.High); },
+                (reader) => { return new SFUInt128() { Low = reader.ReadUInt64(), High = reader.ReadUInt64() }; }),
+
+            new TypeInfo(typeof(float), "float",
+                (writer, value) => { writer.Write((float)value); },
+                (reader) => { return reader.ReadSingle(); }),
+
+            new TypeInfo(typeof(double), "double",
+                (writer, value) => { writer.Write((double)value); },
+                (reader) => { return reader.ReadDouble(); }),
+
+            new TypeInfo(typeof(UInt32), "hex32",
+                (writer, value) => { writer.Write((UInt32)value); },
+                (reader) => { return reader.ReadUInt32(); }),
+
+            new TypeInfo(typeof(UInt64), "hex64",
+                (writer, value) => { writer.Write((UInt64)value); },
+                (reader) => { return reader.ReadUInt64(); }),
+
+            new TypeInfo(typeof(string),
+                "String",
+                    (writer, value) =>
+                    {
+                        var valueTemp = (string)value;
+                        writer.Write((UInt16)(valueTemp.Length + 1));
+                        writer.Write(System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0"));
+                    },
+                    (reader) =>
+                    {
+                        var strLen = reader.ReadUInt16();
+                        byte[] byteBuffer = reader.ReadBytes(strLen);
+                        return System.Text.Encoding.UTF8.GetString(byteBuffer, 0, strLen);
+                    }
+                ),
+
+            new TypeInfo(typeof(Vector2), "Vector2",
+                (writer, value) => { var valueTemp = (Vector2)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); },
+                (reader) => { return new Vector2() { x = reader.ReadSingle(), y = reader.ReadSingle() }; }),
+
+            new TypeInfo(typeof(Vector3), "Vector3",
+                (writer, value) => { var valueTemp = (Vector3)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); },
+                (reader) => { return new Vector3() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle() }; }),
+
+            new TypeInfo(typeof(UInt64), "StringCrc32",
+                (writer, value) => { writer.Write(((StringCrc32)value).StringHash); },
+                (reader) => { return new StringCrc32(reader.ReadUInt32()); }),
+
+            new TypeInfo(typeof(UInt64), "StringCrc64",
+                (writer, value) => { writer.Write(((StringCrc64)value).StringHash); },
+                (reader) => { return new StringCrc64(reader.ReadUInt64()); }),
+
 
         };
 
@@ -363,93 +477,20 @@ namespace SF
         static VariableTable()
         {
             TypeInfoByType = new Dictionary<Type, TypeInfo>();
-
-            TypeInfoByType.Add(typeof(Result), new TypeInfo("Result",
-                (writer, value) => { writer.Write(((Result)value).Code); },
-                (reader) => { return new Result(reader.ReadInt32()); }));
-
-            //TypeInfoByType.Add(typeof(int), new TypeInfo("int",
-            //    (writer,value)=> { writer.Write((int)value); },
-            //    (reader) => { return reader.ReadInt32(); }));
-
-            //TypeInfoByType.Add(typeof(uint), new TypeInfo("uint",
-            //    (writer, value) => { writer.Write((uint)value); },
-            //    (reader) => { return reader.ReadUInt32(); }));
-
-            TypeInfoByType.Add(typeof(SByte), new TypeInfo("int8",
-                (writer, value) => { writer.Write((SByte)value); },
-                (reader) => { return reader.ReadSByte(); }));
-
-            TypeInfoByType.Add(typeof(Byte), new TypeInfo("uint8",
-                (writer, value) => { writer.Write((Byte)value); },
-                (reader) => { return reader.ReadByte(); }));
-
-            TypeInfoByType.Add(typeof(Int16), new TypeInfo("int16",
-                (writer, value) => { writer.Write((Int16)value); },
-                (reader) => { return reader.ReadInt16(); }));
-
-            TypeInfoByType.Add(typeof(UInt16), new TypeInfo("uint16",
-                (writer, value) => { writer.Write((UInt16)value); },
-                (reader) => { return reader.ReadUInt16(); }));
-
-            TypeInfoByType.Add(typeof(Int32), new TypeInfo("int32",
-                (writer, value) => { writer.Write((Int32)value); },
-                (reader) => { return reader.ReadInt32(); }));
-
-            TypeInfoByType.Add(typeof(UInt32), new TypeInfo("uint32",
-                (writer, value) => { writer.Write((UInt32)value); },
-                (reader) => { return reader.ReadUInt32(); }));
-
-            TypeInfoByType.Add(typeof(Int64), new TypeInfo("int64",
-                (writer, value) => { writer.Write((Int64)value); },
-                (reader) => { return reader.ReadInt64(); }));
-
-            TypeInfoByType.Add(typeof(UInt64), new TypeInfo("uint64",
-                (writer, value) => { writer.Write((UInt64)value); },
-                (reader) => { return reader.ReadUInt64(); }));
-
-            TypeInfoByType.Add(typeof(SFUInt128), new TypeInfo("uint128",
-                (writer, value) => { var valueTemp = (SFUInt128)value; writer.Write(valueTemp.Low); writer.Write(valueTemp.High); },
-                (reader) => { return new SFUInt128() { Low = reader.ReadUInt64(), High = reader.ReadUInt64() }; }));
-
-            TypeInfoByType.Add(typeof(float), new TypeInfo("float",
-                (writer, value) => { writer.Write((float)value); },
-                (reader) => { return reader.ReadSingle(); }));
-
-            TypeInfoByType.Add(typeof(double), new TypeInfo("double",
-                (writer, value) => { writer.Write((double)value); },
-                (reader) => { return reader.ReadDouble(); }));
-
-            TypeInfoByType.Add(typeof(string), 
-                new TypeInfo("String",
-                    (writer, value) =>
-                    {
-                        var valueTemp = (string)value;
-                        writer.Write((UInt16)(valueTemp.Length+1));
-                        writer.Write(System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0"));
-                    },
-                    (reader) =>
-                    {
-                        var strLen = reader.ReadUInt16();
-                        byte[] byteBuffer = reader.ReadBytes(strLen);
-                        return System.Text.Encoding.UTF8.GetString(byteBuffer, 0, strLen);
-                    }
-                )
-            );
-
-            TypeInfoByType.Add(typeof(Vector2), new TypeInfo("Vector2",
-                (writer, value) => { var valueTemp = (Vector2)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); },
-                (reader) => { return new Vector2() { x = reader.ReadSingle(), y = reader.ReadSingle() }; }));
-
-            TypeInfoByType.Add(typeof(Vector3), new TypeInfo("Vector3",
-                (writer, value) => { var valueTemp = (Vector3)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); },
-                (reader) => { return new Vector3() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle() }; }));
+            foreach(var itItem in TypeInfoList)
+            {
+                if (TypeInfoByType.ContainsKey(itItem.Type))
+                    continue;
+                TypeInfoByType.Add(itItem.Type, itItem);
+            }
 
 
             TypeInfoByTypeName = new Dictionary<uint, TypeInfo>();
-            foreach(var itItem in TypeInfoByType)
+            foreach(var itItem in TypeInfoList)
             {
-                TypeInfoByTypeName.Add(itItem.Value.TypeNameCrc.StringHash, itItem.Value);
+                if (TypeInfoByTypeName.ContainsKey(itItem.TypeNameCrc.StringHash))
+                    continue;
+                TypeInfoByTypeName.Add(itItem.TypeNameCrc.StringHash, itItem);
             }
         }
 
@@ -496,15 +537,12 @@ namespace SF
                 writer.Flush();
                 return outputStream.ToArray();
             }
-
-
         }
 
-        public void FromSerializedMemory(IntPtr InDataPtr)
+        public void FromSerializedMemory(int byteSize, IntPtr InDataPtr)
         {
             Clear();
 
-            UInt16 byteSize = (UInt16)Marshal.ReadInt16(InDataPtr); InDataPtr = (IntPtr)(InDataPtr.ToInt64() + sizeof(UInt16));
             if (byteSize < sizeof(UInt16))
                 return;
 
@@ -530,7 +568,7 @@ namespace SF
             }
             catch(Exception exp)
             {
-
+                System.Diagnostics.Debug.Print(exp.Message);
             }
         }
     }
