@@ -35,11 +35,11 @@ namespace SF {
 	const String String_Success(GetSystemHeap(), "Success");
 	const String String_Fail(GetSystemHeap(), "Fail");
 
-	const StringW StringW_Empty(GetSystemHeap());
-	const StringW StringW_True(GetSystemHeap(), L"true");
-	const StringW StringW_False(GetSystemHeap(), L"false");
-	const StringW StringW_Success(GetSystemHeap(), L"Success");
-	const StringW StringW_Fail(GetSystemHeap(), L"Fail");
+	const WString WString_Empty(GetSystemHeap());
+	const WString WString_True(GetSystemHeap(), L"true");
+	const WString WString_False(GetSystemHeap(), L"false");
+	const WString WString_Success(GetSystemHeap(), L"Success");
+	const WString WString_Fail(GetSystemHeap(), L"Fail");
 
 
 	template class TString<char>;

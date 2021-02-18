@@ -73,6 +73,7 @@ namespace SF {
 		Variable* GetVariable(KeyType name);
 		const Variable* GetVariable(KeyType name) const;
 
+		// TODO: need to make it safer with string
 		// Get/Set values
 		template<class ValueType>
 		Result SetValue(KeyType name, ValueType value)
@@ -120,7 +121,7 @@ namespace SF {
 			return true;
 		}
 
-		VariableTable& operator = (const VariableTable& src) { assert(false);  return *this; } // Not implemented
+		VariableTable& operator = (const VariableTable& src);
 	};
 
 

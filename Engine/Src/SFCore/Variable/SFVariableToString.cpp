@@ -19,6 +19,10 @@
 
 namespace SF {
 	
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(NamedVariableBox);
+	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(VariableTable);
+
+
 
 	Result _ToString(ToStringContext& context, const NamedVariableBox& value)
 	{

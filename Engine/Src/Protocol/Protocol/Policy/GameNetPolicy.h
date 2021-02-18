@@ -343,7 +343,7 @@ namespace SF
 		// Cmd: Delete character
 		Result DeleteCharacterRes( const uint64_t &InTransactionID, const Result &InResult );
 		// Cmd: Get character list
-		Result GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs, const Array<const char*>& InCharacterNames );
+		Result GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters );
 		// Cmd: 
 		Result GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
 		// Cmd: Select character

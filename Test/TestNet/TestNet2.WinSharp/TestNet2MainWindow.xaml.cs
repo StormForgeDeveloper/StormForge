@@ -295,11 +295,15 @@ namespace TestNet2.WinSharp
             var characterData = message.GetValue<VariableTable>("Attributes");
 
             int Gold, Agile, Strength, Integer;
-
-            characterData.TryGetValue(new StringCrc32("Gold"), 100);
-            characterData.TryGetValue(new StringCrc32("Agile"), 10);
-            characterData.TryGetValue(new StringCrc32("Strength"), 20);
-            characterData.TryGetValue(new StringCrc32("Integer"), 30);
+            object obj;
+            characterData.TryGetValue(new StringCrc32("Gold"), out obj);
+            Gold = (int)obj;
+            characterData.TryGetValue(new StringCrc32("Agile"), out obj);
+            Agile = (int)obj;
+            characterData.TryGetValue(new StringCrc32("Strength"), out obj);
+            Strength = (int)obj;
+            characterData.TryGetValue(new StringCrc32("Integer"), out obj);
+            Integer = (int)obj;
 
         }
 

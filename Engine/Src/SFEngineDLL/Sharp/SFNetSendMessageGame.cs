@@ -2098,16 +2098,15 @@ namespace SF.Net
 
 
 		// Cmd: Get character list
-		public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32[] InCharacterIDs, System.String[] InCharacterNames )
+		public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InCharacters )
 		{
  			int result;
-			using (var InCharacterNamesArray = new ArrayObjectString(InCharacterNames))
 			{
-			result = CSSFNetAdapter_GameGetCharacterListRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InCharacterIDs.Length, InCharacterIDs,InCharacterNamesArray.NativeHandle);
+			result = CSSFNetAdapter_GameGetCharacterListRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InCharacters.Length, InCharacters);
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterListRes);
 			return result;
-		} // public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32[] InCharacterIDs, System.String[] InCharacterNames )
+		} // public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InCharacters )
 
 
 		// Cmd: 
@@ -2699,7 +2698,7 @@ namespace SF.Net
 
 		// Cmd: Get character list
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterListRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetCharacterListRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInCharacterIDs,System.UInt32[] InCharacterIDs, IntPtr InCharacterNames );
+		static extern int CSSFNetAdapter_GameGetCharacterListRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInCharacters,SF.VariableTable[] InCharacters );
 
 
 

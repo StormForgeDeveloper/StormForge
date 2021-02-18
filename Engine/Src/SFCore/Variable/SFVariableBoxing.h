@@ -128,60 +128,71 @@ namespace SF {
 
 	//inline VariableBox Boxing(Array<varType>& src) { VariableValueReference<Array<varType>> variable(src); return VariableBox(variable); }\
 
-
-#define DEFINE_BOXING_TEMPLETE_BYVALUE(varType)	\
-	inline VariableBox BoxingByValue(const std::decay_t<varType>& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
-	inline VariableBox BoxingByValue(std::decay_t<varType>&& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
-	inline VariableBox BoxingByReference(const std::decay_t<varType>& src) { VariableValueReference<varType> variable(src); return VariableBox(variable); }\
-	inline VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
-	inline VariableBox Boxing(const std::decay_t<varType>& src) { VariableByBinaryValue<varType> variable(src); return VariableBox(variable); } \
-	inline VariableBox Boxing(std::decay_t<varType>&& src) { VariableByBinaryValue<varType> variable(src); return VariableBox(variable); } \
+#define IMPLEMENT_BOXING_TEMPLATE_INTERNAL(varType, DefaultVariableValueType) \
 	template<> inline StringCrc32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
 	template<> inline StringCrc32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
 	template<> inline StringCrc32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
-	inline VariableBox Boxing(Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
-	inline VariableBox Boxing(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
 	template<> inline Result VariableValueReference<Array<varType>>::ToString(ToStringContext& context) const\
 	{\
-		if (m_Value == nullptr) return ResultCode::FAIL;\
-		int iNumEle = 0;\
-		for (auto& itValue : *m_Value)\
-		{\
-			VariableByBinaryValue<varType> eleRef(itValue);\
-			auto result = eleRef.ToString(context);\
-			if (!result) return result;\
-			iNumEle++; if (iNumEle >= context.MaxArraySize) break;\
-		}\
-		return ResultCode::SUCCESS;\
+		if (m_Value == nullptr) return ResultCode::FAIL; \
+			int iNumEle = 0; \
+			for (auto& itValue : *m_Value)\
+			{\
+				DefaultVariableValueType eleRef(itValue); \
+				auto result = eleRef.ToString(context); \
+				if (!result) return result; \
+					iNumEle++; if (iNumEle >= context.MaxArraySize) break; \
+			}\
+				return ResultCode::SUCCESS; \
 	}\
 
 
+#define DECLARE_BOXING_TEMPLETE_BYVALUE(varType)	\
+	VariableBox BoxingByValue(const std::decay_t<varType>& src);\
+	VariableBox BoxingByValue(std::decay_t<varType>&& src);\
+	VariableBox BoxingByReference(const std::decay_t<varType>& src);\
+	VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src);\
+	VariableBox Boxing(const std::decay_t<varType>& src); \
+	VariableBox Boxing(std::decay_t<varType>&& src); \
+	VariableBox Boxing(Array<std::decay_t<varType>>& src);\
+	VariableBox Boxing(const Array<std::decay_t<varType>>& src);\
+	IMPLEMENT_BOXING_TEMPLATE_INTERNAL(varType, VariableByBinaryValue<varType>)
 
-#define DEFINE_BOXING_TEMPLETE_BYREFERENCE(varType)					\
-	inline VariableBox BoxingByValue(const std::decay_t<varType>& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
-	inline VariableBox BoxingByValue(std::decay_t<varType>&& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
-	inline VariableBox BoxingByReference(const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
-	inline VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
-	inline VariableBox Boxing(const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
-	inline VariableBox Boxing(std::decay_t<varType>&& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
-	inline VariableBox Boxing(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
-	template<> inline StringCrc32 VariableByBinaryValue<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
-	template<> inline StringCrc32 VariableValueReference<std::decay_t<varType>>::GetTypeName() const { return #varType; }\
-	template<> inline StringCrc32 VariableValueReference<Array<std::decay_t<varType>>>::GetTypeName() const { return "Array<"#varType">"; }\
-	template<> inline Result VariableValueReference<Array<std::decay_t<varType>>>::ToString(ToStringContext& context) const\
-	{\
-		if (m_Value == nullptr) return ResultCode::FAIL;\
-		int iNumEle = 0;\
-		for (auto& itValue : *m_Value)\
-		{\
-			VariableValueReference<varType> eleRef(itValue);\
-			auto result = eleRef.ToString(context);\
-			if (!result) return result;\
-			iNumEle++; if (iNumEle >= context.MaxArraySize) break;\
-		}\
-		return ResultCode::SUCCESS;\
-	}\
 
+#define IMPLEMENT_BOXING_TEMPLETE_BYVALUE(varType) \
+	VariableBox BoxingByValue(const std::decay_t<varType>& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
+	VariableBox BoxingByValue(std::decay_t<varType>&& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
+	VariableBox BoxingByReference(const std::decay_t<varType>& src) { VariableValueReference<varType> variable(src); return VariableBox(variable); }\
+	VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
+	VariableBox Boxing(const std::decay_t<varType>& src) { VariableByBinaryValue<varType> variable(src); return VariableBox(variable); } \
+	VariableBox Boxing(std::decay_t<varType>&& src) { VariableByBinaryValue<varType> variable(src); return VariableBox(variable); } \
+	VariableBox Boxing(Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
+	VariableBox Boxing(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
+
+
+
+
+#define DECLARE_BOXING_TEMPLETE_BYREFERENCE(varType)					\
+	VariableBox BoxingByValue(const std::decay_t<varType>& src); \
+	VariableBox BoxingByValue(std::decay_t<varType>&& src); \
+	VariableBox BoxingByReference(const std::decay_t<varType>& src);\
+	VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src);\
+	VariableBox Boxing(const std::decay_t<varType>& src);\
+	VariableBox Boxing(std::decay_t<varType>&& src);\
+	VariableBox Boxing(const Array<std::decay_t<varType>>& src);\
+	IMPLEMENT_BOXING_TEMPLATE_INTERNAL(varType, VariableValueReference<varType>)
+
+
+
+
+#define IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(varType)					\
+	VariableBox BoxingByValue(const std::decay_t<varType>& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
+	VariableBox BoxingByValue(std::decay_t<varType>&& src) { VariableByBinaryValue<std::decay_t<varType>> variable(src); return VariableBox(variable); } \
+	VariableBox BoxingByReference(const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
+	VariableBox BoxingByReference(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
+	VariableBox Boxing(const std::decay_t<varType>& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
+	VariableBox Boxing(std::decay_t<varType>&& src) { VariableValueReference<std::decay_t<varType>> variable(src); return VariableBox(variable); }\
+	VariableBox Boxing(const Array<std::decay_t<varType>>& src) { VariableValueReference<Array<std::decay_t<varType>>> variable(src); return VariableBox(variable); }\
 
 
 
@@ -304,17 +315,28 @@ namespace SF {
 	DEFINE_BOXING_TEMPLETE(uint64_t, VariableUInt64);
 	DEFINE_BOXING_TEMPLETE(float, VariableFloat);
 	DEFINE_BOXING_TEMPLETE(double, VariableDouble);
-	DEFINE_BOXING_TEMPLETE_BYVALUE(const char*);
-	//DEFINE_BOXING_TEMPLETE(const char*, VariableCharString);
-	DEFINE_BOXING_TEMPLETE_BYVALUE(void*);
-	//DEFINE_BOXING_TEMPLETE(const wchar_t*, VariableWCharString);
-	//DEFINE_BOXING_TEMPLETE(wchar_t*, VariableWCharString);
-	DEFINE_BOXING_TEMPLETE_BYVALUE(const wchar_t*);
+	DECLARE_BOXING_TEMPLETE_BYVALUE(void*);
 	DEFINE_BOXING_TEMPLETE(String, VariableString);
 	DEFINE_BOXING_TEMPLETE(StringCrc64, VariableStringCrc64);
 	DEFINE_BOXING_TEMPLETE(StringCrc32, VariableStringCrc32);
 	DEFINE_BOXING_TEMPLETE(Result, VariableResult);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(std::string);
+	DECLARE_BOXING_TEMPLETE_BYREFERENCE(std::string);
+
+	//DECLARE_BOXING_TEMPLETE_BYVALUE(const char*);
+	VariableBox BoxingByValue(const char* src);
+	VariableBox BoxingByReference(const char* src);
+	VariableBox Boxing(const char* src);
+	VariableBox Boxing(Array<const char*>& src);
+	VariableBox Boxing(const Array<const char*>& src);
+	IMPLEMENT_BOXING_TEMPLATE_INTERNAL(const char*, VariableString);
+
+	//DECLARE_BOXING_TEMPLETE_BYVALUE(const wchar_t*);
+	VariableBox BoxingByValue(const wchar_t* src);
+	VariableBox BoxingByReference(const wchar_t* src);
+	VariableBox Boxing(const wchar_t* src);
+	VariableBox Boxing(Array<const wchar_t*>& src);
+	VariableBox Boxing(const Array<const wchar_t*>& src);
+	IMPLEMENT_BOXING_TEMPLATE_INTERNAL(const wchar_t*, VariableWString);
 
 	// They comes from OS system types, but not referenced by std types on windows(VC compiler)
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
@@ -323,15 +345,15 @@ namespace SF {
 #endif
 
 
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(NetAddress);
-	DEFINE_BOXING_TEMPLETE_BYVALUE(TimeStampMS);
-	DEFINE_BOXING_TEMPLETE_BYVALUE(TimeStampSec);
-	DEFINE_BOXING_TEMPLETE_BYVALUE(UTCTimeStampMS);
-	DEFINE_BOXING_TEMPLETE_BYVALUE(UTCTimeStampSec);
-	DEFINE_BOXING_TEMPLETE_BYVALUE(DurationMS);
-	DEFINE_BOXING_TEMPLETE_BYVALUE(DurationSec);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_in6);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_storage);
+	DECLARE_BOXING_TEMPLETE_BYREFERENCE(NetAddress);
+	DECLARE_BOXING_TEMPLETE_BYVALUE(TimeStampMS);
+	DECLARE_BOXING_TEMPLETE_BYVALUE(TimeStampSec);
+	DECLARE_BOXING_TEMPLETE_BYVALUE(UTCTimeStampMS);
+	DECLARE_BOXING_TEMPLETE_BYVALUE(UTCTimeStampSec);
+	DECLARE_BOXING_TEMPLETE_BYVALUE(DurationMS);
+	DECLARE_BOXING_TEMPLETE_BYVALUE(DurationSec);
+	DECLARE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_in6);
+	DECLARE_BOXING_TEMPLETE_BYREFERENCE(sockaddr_storage);
 
 
 } // namespace SF

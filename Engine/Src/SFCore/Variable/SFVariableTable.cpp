@@ -121,7 +121,17 @@ namespace SF {
 		return pVariable;
 	}
 
+	VariableTable& VariableTable::operator = (const VariableTable& src)
+	{
+		Clear();
 
+		for (auto& itVariable : src)
+		{
+			SetVariable(itVariable.GetKey(), *itVariable.GetValue());
+		}
+
+		return *this;
+	}
 
 	/////////////////////////////////////////////////////////////////////////////////
 	//

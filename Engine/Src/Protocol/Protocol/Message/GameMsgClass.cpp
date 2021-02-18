@@ -1952,7 +1952,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInFriendList = (uint16_t)InFriendList.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -3284,7 +3283,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInTargetPlayerID = (uint16_t)InTargetPlayerID.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTargetPlayerID)
@@ -3668,7 +3666,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInRanking = (uint16_t)InRanking.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -4814,7 +4811,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInChatHistoryData = (uint16_t)InChatHistoryData.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -6971,7 +6967,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInGameInstances = (uint16_t)InGameInstances.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -7440,8 +7435,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInChatHistoryData = (uint16_t)InChatHistoryData.size(); 
-				uint16_t numberOfInGameLogData = (uint16_t)InGameLogData.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -9763,7 +9756,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInVoted = (uint16_t)InVoted.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InGameInsUID)
 					+ SerializedSizeOf(InVoted)
@@ -10334,7 +10326,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInTargetPlayerID = (uint16_t)InTargetPlayerID.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTargetPlayerID)
@@ -10440,8 +10431,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInRevealedPlayerID = (uint16_t)InRevealedPlayerID.size(); 
-				uint16_t numberOfInRevealedRole = (uint16_t)InRevealedRole.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -11229,8 +11218,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInChatHistoryData = (uint16_t)InChatHistoryData.size(); 
-				uint16_t numberOfInGameLogData = (uint16_t)InGameLogData.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InInsUID)
 					+ SerializedSizeOf(InTimeStamp)
@@ -11964,7 +11951,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInPurchaseToken = (uint16_t)InPurchaseToken.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InShopItemID)
@@ -14068,11 +14054,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
-				protocolCheck(input->Read(ArrayLen));
-				uint32_t* CharacterIDsPtr = nullptr;
-				protocolCheck(input->ReadLink(CharacterIDsPtr, ArrayLen));
-				m_CharacterIDs.SetLinkedBuffer(ArrayLen, CharacterIDsPtr);
-				protocolCheck(input->ReadArrayLink(m_CharacterNames));
+				protocolCheck(input->Read(m_Characters));
 
 				return hr;
 
@@ -14088,8 +14070,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("CharacterIDs", parser.GetCharacterIDs());
-				variableBuilder.SetVariable("CharacterNames", parser.GetCharacterNames());
+				variableBuilder.SetVariable("Characters", parser.GetCharacters());
 
 				return hr;
 
@@ -14107,7 +14088,7 @@ namespace SF
 			}; // Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs, const Array<const char*>& InCharacterNames )
+			MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -14122,12 +14103,10 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInCharacterIDs = (uint16_t)InCharacterIDs.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InCharacterIDs)
-					+ SerializedSizeOf(InCharacterNames)
+					+ SerializedSizeOf(InCharacters)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterListRes::MID, __uiMessageSize ) );
@@ -14138,11 +14117,10 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
-				protocolCheck(*output << InCharacterIDs);
-				protocolCheck(*output << InCharacterNames);
+				protocolCheck(*output << InCharacters);
 
 				return hr;
-			}; // MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint32_t>& InCharacterIDs, const Array<const char*>& InCharacterNames )
+			}; // MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
 
 
 
@@ -14150,8 +14128,8 @@ namespace SF
 			{
  				GetCharacterListRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetCharacterList:{0}:{1} , TransactionID:{2}, Result:{3:X8}, CharacterIDs:{4,30}, CharacterNames:{5,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacterIDs(), parser.GetCharacterNames()); 
+				SFLog(Net, Debug1, "GetCharacterList:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Characters:{4,30}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacters()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

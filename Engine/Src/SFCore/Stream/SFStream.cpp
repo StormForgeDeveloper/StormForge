@@ -45,7 +45,7 @@ namespace SF {
 		return Read(data.data(), NumChar * sizeof(char));
 	}
 
-	Result IInputStream::Read(StringW& data)
+	Result IInputStream::Read(WString& data)
 	{
 		uint16_t NumChar = 0;
 		if (!Read(&NumChar, sizeof(NumChar)))
@@ -197,7 +197,7 @@ namespace SF {
 		}
 	}
 
-	Result IOutputStream::Write(const StringW& data)
+	Result IOutputStream::Write(const WString& data)
 	{
 		uint16_t NumChar = static_cast<uint16_t>(data.size() + 1);
 		if (!Write(&NumChar, sizeof(NumChar)))

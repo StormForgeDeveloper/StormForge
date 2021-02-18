@@ -116,7 +116,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("");
             OutStream.WriteLine("#include \"{0}\"", PreCompiledHeader );
             OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
-            OutStream.WriteLine("#include \"String/SFToString.h\"");
+            OutStream.WriteLine("#include \"Util/SFToString.h\"");
             OutStream.WriteLine("#include \"Net/SFNetToString.h\"");
             OutStream.WriteLine("#include \"Container/SFArray.h\"");
             OutStream.WriteLine("#include \"Protocol/SFProtocolHelper.h\"");
@@ -234,7 +234,7 @@ namespace ProtocolCompiler
 
             foreach (Parameter param in parameters)
             {
-                bHas |= !IsStrType(param) && IsVariableSizeType(param.Type);
+                bHas |= !IsStrType(param) && !param.IsArray && IsVariableSizeType(param.Type);
             }
             return bHas;
         }
@@ -443,7 +443,7 @@ namespace ProtocolCompiler
 
             foreach(var param in parameters)
             {
-                if (IsStrType(param))
+                if (IsStrType(param) || param.IsArray)
                     continue;
 
                 if (IsVariableSizeType(param.Type))
@@ -806,7 +806,6 @@ namespace ProtocolCompiler
                 }
                 else if (param.IsArray) // array
                 {
-                    MatchIndent(); OutStream.WriteLine("{1} numberOf{0} = ({1}){0}.size(); ", InParamName(param.Name), ArrayLenType);
                 }
                 else if (IsVariableSizeType(param.Type))
                 {
@@ -856,7 +855,7 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
-                    if (!IsStrType(param) && IsVariableSizeType(param.Type))
+                    if (!IsStrType(param) && !param.IsArray && IsVariableSizeType(param.Type))
                     {
                         // Original type will use binary conversion, so has extra array length parameter
                         if (bUseOriginalType)
@@ -904,7 +903,7 @@ namespace ProtocolCompiler
                     //    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, &numberOf{0}, sizeof({1})); ", InParamName(param.Name), ArrayLenType);
                     //    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, {0}.data(), (INT)(sizeof({1})*{0}.size())); ", InParamName(param.Name), ToTargetTypeName(param.Type));
                     //}
-                    else if (IsVariableSizeType(param.Type))
+                    else if (!param.IsArray && IsVariableSizeType(param.Type))
                     {
                         if (bUseOriginalType)
                         {

@@ -26,8 +26,8 @@ namespace SF {
 	Result _ToString(ToStringContext& context, const VariableTable& value);
 
 
-	DEFINE_BOXING_TEMPLETE_BYVALUE(NamedVariableBox);
-	DEFINE_BOXING_TEMPLETE_BYREFERENCE(VariableTable);
+	DECLARE_BOXING_TEMPLETE_BYVALUE(NamedVariableBox);
+	DECLARE_BOXING_TEMPLETE_BYREFERENCE(VariableTable);
 
 }; // namespace SF
 

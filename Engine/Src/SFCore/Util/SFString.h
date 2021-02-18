@@ -1140,7 +1140,7 @@ namespace SF {
 
 
 	using String = TString<char>;
-	using StringW = TString<wchar_t>;
+	using WString = TString<wchar_t>;
 
 
 	extern const String String_Empty;
@@ -1149,11 +1149,11 @@ namespace SF {
 	extern const String String_Success;
 	extern const String String_Fail;
 
-	extern const StringW StringW_Empty;
-	extern const StringW StringW_True;
-	extern const StringW StringW_False;
-	extern const StringW StringW_Success;
-	extern const StringW StringW_Fail;
+	extern const WString WString_Empty;
+	extern const WString WString_True;
+	extern const WString WString_False;
+	extern const WString WString_Success;
+	extern const WString WString_Fail;
 
 
 

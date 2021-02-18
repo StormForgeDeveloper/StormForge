@@ -81,6 +81,7 @@ TEST_F(VariableTest, Serialization)
 	table1.SetValue("sex", 1);
 	table1.SetValue("hat", 10);
 	table1.SetValue("shoes", 10);
+	table1.SetValue("Name", "testName1234");
 
 	uint8_t testData[] = {12,114,54,66,234, 235};
 	SFUniquePtr<Variable> blobVar(new(GetEngineHeap()) VariableBLOB(ArrayView<uint8_t>(sizeof(testData), testData)));
@@ -106,6 +107,7 @@ TEST_F(VariableTest, Serialization)
 	EXPECT_EQ(table1.GetValue<int32_t>("sex"), tableDeserialized.GetValue<int32_t>("sex"));
 	EXPECT_EQ(table1.GetValue<int32_t>("hat"), tableDeserialized.GetValue<int32_t>("hat"));
 	EXPECT_EQ(table1.GetValue<int32_t>("shoes"), tableDeserialized.GetValue<int32_t>("shoes"));
+	EXPECT_EQ(table1.GetValue<String>("Name"), tableDeserialized.GetValue<String>("Name"));
 	EXPECT_EQ(table1.GetValueBLOB("BinData"), tableDeserialized.GetValueBLOB("BinData"));
 }
 

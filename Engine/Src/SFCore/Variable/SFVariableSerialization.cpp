@@ -55,6 +55,7 @@ namespace SF
 		{
 			Size += SerializedSizeOf(itVar.GetKey());
 			auto* pVariable = itVar.GetValue();
+			assert(pVariable);
 			if (pVariable != nullptr)
 			{
 				Size += sizeof(Variable::TypeNameType);

@@ -104,10 +104,44 @@ namespace SF
 
 
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Default platform type helpers
-//
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Boxing implementations
+	//
+
+	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(std::string);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(void*);
+
+	//IMPLEMENT_BOXING_TEMPLETE_BYVALUE(const char*);
+	VariableBox BoxingByValue(const char* src) { return VariableBox(VariableString(src)); }
+	VariableBox BoxingByReference(const char* src) { return VariableBox(VariableCharString(src)); }
+	VariableBox Boxing(const char* src) { return VariableBox(VariableCharString(src)); }
+	VariableBox Boxing(Array<const char*>& src) { VariableValueReference<Array<const char*>> variable(src); return VariableBox(variable); }
+	VariableBox Boxing(const Array<const char*>& src) { VariableValueReference<Array<const char*>> variable(src); return VariableBox(variable); }
+
+	//IMPLEMENT_BOXING_TEMPLETE_BYVALUE(const wchar_t*);
+	VariableBox BoxingByValue(const wchar_t* src) { return VariableBox(VariableWCharString(src)); } // TODO: need VariableWString
+	VariableBox BoxingByReference(const wchar_t* src) { return VariableBox(VariableWCharString(src)); }
+	VariableBox Boxing(const wchar_t* src) { return VariableBox(VariableWCharString(src)); }
+	VariableBox Boxing(Array<const wchar_t*>& src) { VariableValueReference<Array<const wchar_t*>> variable(src); return VariableBox(variable); }
+	VariableBox Boxing(const Array<const wchar_t*>& src) { VariableValueReference<Array<const wchar_t*>> variable(src); return VariableBox(variable); }
+
+	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(NetAddress);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(TimeStampMS);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(TimeStampSec);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(UTCTimeStampMS);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(UTCTimeStampSec);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(DurationMS);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(DurationSec);
+	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(sockaddr_in6);
+	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(sockaddr_storage);
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Default platform type helpers
+	//
 
 
 
