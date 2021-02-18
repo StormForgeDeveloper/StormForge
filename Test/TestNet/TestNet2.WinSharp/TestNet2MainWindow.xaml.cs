@@ -163,6 +163,7 @@ namespace TestNet2.WinSharp
         {
             public string CharacterName;
             public UInt32 CharacterId;
+            public VariableTable VisualData;
 
             public override string ToString()
             {
@@ -254,19 +255,29 @@ namespace TestNet2.WinSharp
                 return;
             }
 
-            var characterIds = message.GetValue<UInt32[]>("CharacterIDs");
-            var characterNames = message.GetValue<string[]>("CharacterNames");
-            var numCharacter = Math.Min(characterIds.Length, characterNames.Length);
+            var characters = message.GetValue<VariableTable[]>("Characters");
+            var numCharacter = characters.Length;
 
             listCharacter.BeginInit();
             listCharacter.Items.Clear();
 
             for (int iChar = 0; iChar < numCharacter; iChar++)
             {
+                object obj;
+                characters[iChar].TryGetValue(new StringCrc32("CharacterId"), out obj);
+                var characterId = (UInt64)Convert.ChangeType(obj, typeof(UInt64));
+                characters[iChar].TryGetValue(new StringCrc32("Name"), out obj);
+                string characterName = (string)Convert.ChangeType(obj, typeof(string));
+                characters[iChar].TryGetValue(new StringCrc32("VisualData"), out obj);
+                byte[] characterVisual = (byte[])obj;
+                VariableTable parsedValue = new VariableTable();
+                parsedValue.FromSerializedMemory(characterVisual);
+
                 listCharacter.Items.Add(new CharacterItem()
                 {
-                    CharacterId = characterIds[iChar],
-                    CharacterName = characterNames[iChar]
+                    CharacterId = (uint)characterId,
+                    CharacterName = characterName,
+                    VisualData = parsedValue
                 });
             }
 

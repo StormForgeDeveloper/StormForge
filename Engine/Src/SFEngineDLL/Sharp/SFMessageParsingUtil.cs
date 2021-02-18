@@ -11,6 +11,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 #if UNITY_IOS
@@ -280,6 +281,25 @@ namespace SF
                         VariableTable parsedValue = new VariableTable();
                         parsedValue.FromSerializedMemory(arrayCount, Value);
                         stm_ParsingMessage.SetValue(stringHash, parsedValue);
+                    }
+                    break;
+                case "Array<VariableTable>":
+                    {
+                        byte[] byteData = new byte[arrayCount];
+                        Marshal.Copy(Value, byteData, 0, byteData.Length);
+                        List<VariableTable> tableList = new List<VariableTable>();
+                        using (BinaryReader reader = new BinaryReader(new MemoryStream(byteData)))
+                        {
+                            var NumElement = reader.ReadInt16();
+                            for (int iElement = 0; iElement < NumElement; iElement++)
+                            {
+                                VariableTable parsedValue = new VariableTable();
+                                parsedValue.FromSerializedMemory(reader);
+                                tableList.Add(parsedValue);
+                            }
+                        }
+
+                        stm_ParsingMessage.SetValue(stringHash, tableList.ToArray());
                     }
                     break;
 

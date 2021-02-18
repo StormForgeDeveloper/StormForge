@@ -372,10 +372,6 @@ namespace SF
             (writer, value) => { writer.Write((Int64)value); },
                 (reader) => { return reader.ReadInt64(); }),
 
-            new TypeInfo(typeof(IntPtr), "void*",
-                (writer, value) => { writer.Write((Int64)value); },
-                (reader) => { return reader.ReadInt64(); }),
-
             new TypeInfo(typeof(int), "int",
                 (writer, value) => { writer.Write((int)value); },
                 (reader) => { return reader.ReadInt32(); }),
@@ -448,7 +444,39 @@ namespace SF
                     {
                         var strLen = reader.ReadUInt16();
                         byte[] byteBuffer = reader.ReadBytes(strLen);
-                        return System.Text.Encoding.UTF8.GetString(byteBuffer, 0, strLen);
+                        return System.Text.Encoding.UTF8.GetString(byteBuffer, 0, strLen-1);
+                    }
+                ),
+
+            new TypeInfo(typeof(string),
+                "string",
+                    (writer, value) =>
+                    {
+                        var valueTemp = (string)value;
+                        writer.Write((UInt16)(valueTemp.Length + 1));
+                        writer.Write(System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0"));
+                    },
+                    (reader) =>
+                    {
+                        var strLen = reader.ReadUInt16();
+                        byte[] byteBuffer = reader.ReadBytes(strLen);
+                        return System.Text.Encoding.UTF8.GetString(byteBuffer, 0, strLen-1);
+                    }
+                ),
+
+            new TypeInfo(typeof(string),
+                "const char*",
+                    (writer, value) =>
+                    {
+                        var valueTemp = (string)value;
+                        writer.Write((UInt16)(valueTemp.Length + 1));
+                        writer.Write(System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0"));
+                    },
+                    (reader) =>
+                    {
+                        var strLen = reader.ReadUInt16();
+                        byte[] byteBuffer = reader.ReadBytes(strLen);
+                        return System.Text.Encoding.UTF8.GetString(byteBuffer, 0, strLen-1);
                     }
                 ),
 
@@ -467,6 +495,15 @@ namespace SF
             new TypeInfo(typeof(UInt64), "StringCrc64",
                 (writer, value) => { writer.Write(((StringCrc64)value).StringHash); },
                 (reader) => { return new StringCrc64(reader.ReadUInt64()); }),
+
+            new TypeInfo(typeof(byte[]), "BLOB",
+                (writer, value) => { var byteArray = (byte[])value; writer.Write(byteArray); },
+                (reader) =>
+                {
+                    var byteSize = reader.ReadUInt16();
+                    var bytes = reader.ReadBytes(byteSize);
+                    return bytes;
+                }),
 
 
         };
@@ -541,34 +578,43 @@ namespace SF
 
         public void FromSerializedMemory(int byteSize, IntPtr InDataPtr)
         {
-            Clear();
-
             if (byteSize < sizeof(UInt16))
                 return;
 
             byte[] byteData = new byte[byteSize];
             Marshal.Copy(InDataPtr, byteData, 0, byteData.Length);
 
+            FromSerializedMemory(byteData);
+        }
+        public void FromSerializedMemory(byte[] byteData)
+        {
             try
             {
                 using (BinaryReader reader = new BinaryReader(new MemoryStream(byteData)))
                 {
-                    var numItems = reader.ReadUInt16();
-
-                    for (UInt16 iItem = 0; iItem < numItems; iItem++)
-                    {
-                        var variableName = new StringCrc32(reader.ReadUInt32());
-                        var typeName = new StringCrc32(reader.ReadUInt32());
-
-                        var typeInfo = GetTypeInfo(typeName);
-                        var value = typeInfo.Deserializer(reader);
-                        Add(variableName, value);
-                    }
+                    FromSerializedMemory(reader);
                 }
             }
-            catch(Exception exp)
+            catch (Exception exp)
             {
                 System.Diagnostics.Debug.Print(exp.Message);
+            }
+        }
+
+        public void FromSerializedMemory(BinaryReader reader)
+        {
+            Clear();
+
+            var numItems = reader.ReadUInt16();
+
+            for (UInt16 iItem = 0; iItem < numItems; iItem++)
+            {
+                var variableName = new StringCrc32(reader.ReadUInt32());
+                var typeName = new StringCrc32(reader.ReadUInt32());
+
+                var typeInfo = GetTypeInfo(typeName);
+                var value = typeInfo.Deserializer(reader);
+                Add(variableName, value);
             }
         }
     }
