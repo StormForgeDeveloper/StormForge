@@ -293,6 +293,14 @@ namespace TestNet2.WinSharp
 
             var characterId = message.GetValue<UInt32>("CharacterID");
             var characterData = message.GetValue<VariableTable>("Attributes");
+
+            int Gold, Agile, Strength, Integer;
+
+            characterData.TryGetValue(new StringCrc32("Gold"), 100);
+            characterData.TryGetValue(new StringCrc32("Agile"), 10);
+            characterData.TryGetValue(new StringCrc32("Strength"), 20);
+            characterData.TryGetValue(new StringCrc32("Integer"), 30);
+
         }
 
 
