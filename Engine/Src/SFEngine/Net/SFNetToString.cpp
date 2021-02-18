@@ -17,6 +17,13 @@
 namespace SF {
 	
 
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Net::ConnectionState);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(NetClass);
+	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(Net::PeerInfo);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Message::MessageID);
+
+
+
 	Result _ToString(ToStringContext& context, Net::ConnectionState value)
 	{
 		return _IToA(context, (uint32_t)value);

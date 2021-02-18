@@ -56,7 +56,7 @@ namespace StrUtil {
 	}
 
 
-}; // namespace StrUtil
+} // namespace StrUtil
 } // namespace SF
 
 

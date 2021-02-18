@@ -836,7 +836,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInRanking = (uint16_t)InRanking.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -1035,7 +1034,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInRanking = (uint16_t)InRanking.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -1133,7 +1131,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInTestData = (uint16_t)InTestData.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTestData)
@@ -1230,7 +1227,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInTestData = (uint16_t)InTestData.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)

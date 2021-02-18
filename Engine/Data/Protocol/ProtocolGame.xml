@@ -780,9 +780,7 @@
 			<Cmd>
 			</Cmd>
 			<Res>
-				<Params Type="uint32" IsArray="true" Name="CharacterIDs" Desc="Character id list"/>
-				<Params Type="String" IsArray="true" Name="CharacterNames" Desc="Character name list"/>
-				<!--<Params Type="VariableTable" IsArray="true" Name="Attributes" Desc="Characters"/>-->
+				<Params Type="VariableTable" IsArray="true" Name="Characters" Desc="Characters"/>
 			</Res>
 		</Command>
 

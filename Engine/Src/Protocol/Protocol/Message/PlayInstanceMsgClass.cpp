@@ -198,7 +198,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInMemberInfos = (uint16_t)InMemberInfos.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -492,7 +491,6 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t numberOfInPayload = (uint16_t)InPayload.size(); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceID)
 					+ SerializedSizeOf(InSenderEndpointID)

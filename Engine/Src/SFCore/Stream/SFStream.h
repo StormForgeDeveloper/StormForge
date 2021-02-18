@@ -109,7 +109,7 @@ namespace SF
 		inline Result Read(double& data) { return Read(&data, sizeof(data)); }
 
 		Result Read(String& data);
-		Result Read(StringW& data);
+		Result Read(WString& data);
 
 		Result Read(std::string& data);
 		Result Read(std::wstring& data);
@@ -294,7 +294,7 @@ namespace SF
 		Result Write(const wchar_t* data);
 
 		Result Write(const String& data);
-		Result Write(const StringW& data);
+		Result Write(const WString& data);
 
 		Result Write(const std::string& data);
 		Result Write(const std::wstring& data);
@@ -460,9 +460,9 @@ namespace SF
 	inline Result operator >> (IInputStream& input, String& data) { return input.Read(data); }
 	inline Result operator << (IOutputStream& output, const String& data) { return output.Write(data); }
 
-	inline size_t SerializedSizeOf(const StringW& Value) { return sizeof(uint16_t) + (Value.length() + 1) * sizeof(wchar_t); }
-	inline Result operator >> (IInputStream& input, StringW& data) { return input.Read(data); }
-	inline Result operator << (IOutputStream& output, const StringW& data) { return output.Write(data); }
+	inline size_t SerializedSizeOf(const WString& Value) { return sizeof(uint16_t) + (Value.length() + 1) * sizeof(wchar_t); }
+	inline Result operator >> (IInputStream& input, WString& data) { return input.Read(data); }
+	inline Result operator << (IOutputStream& output, const WString& data) { return output.Write(data); }
 
 	inline size_t SerializedSizeOf(const Result& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, Result& data) { return input.Read(&data, sizeof(data)); }

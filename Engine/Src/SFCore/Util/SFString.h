@@ -1026,20 +1026,10 @@ namespace SF {
 		// Format string
 		template< class ...ArgTypes >
 		StringType& Format(const CharType* strFormat, ArgTypes... args);
-		//{
-		//	VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
-		//	Format_Internal(strFormat, sizeof...(args), arguments);
-		//	return *this;
-		//}
 
 		// Format string
 		template< class ...ArgTypes >
 		StringType& AppendFormat(const CharType* strFormat, ArgTypes... args);
-		//{
-		//	VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
-		//	AppendFormat_Internal(strFormat, sizeof...(args), arguments);
-		//	return *this;
-		//}
 
 		CharType* data() { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
 		const CharType* data() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
@@ -1140,7 +1130,7 @@ namespace SF {
 
 
 	using String = TString<char>;
-	using StringW = TString<wchar_t>;
+	using WString = TString<wchar_t>;
 
 
 	extern const String String_Empty;
@@ -1149,11 +1139,11 @@ namespace SF {
 	extern const String String_Success;
 	extern const String String_Fail;
 
-	extern const StringW StringW_Empty;
-	extern const StringW StringW_True;
-	extern const StringW StringW_False;
-	extern const StringW StringW_Success;
-	extern const StringW StringW_Fail;
+	extern const WString WString_Empty;
+	extern const WString WString_True;
+	extern const WString WString_False;
+	extern const WString WString_Success;
+	extern const WString WString_Fail;
 
 
 

@@ -1013,6 +1013,223 @@ namespace SF
 
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//
+	//	Variable WString
+	//
+
+	constexpr StringCrc32 VariableWString::TYPE_NAME;
+
+	void VariableWString::SetValue(bool value)
+	{
+		m_Value = value ? WString_True : WString_False;
+	}
+
+	void VariableWString::SetValue(int8_t value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(uint8_t value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(int16_t value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(uint16_t value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(int32_t value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(uint32_t value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(int64_t value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(uint64_t value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(float value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(double value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(const char* value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	void VariableWString::SetValue(const String& value)
+	{
+		wchar_t ConvertBuffer[1024];
+		StrUtil::UTF8ToWCS(value.data(), ConvertBuffer);
+
+		m_Value = ConvertBuffer;
+	}
+
+	void VariableWString::SetValue(StringCrc64 value)
+	{
+		m_Value.Format(L"{0}", value);
+	}
+
+	bool VariableWString::GetValueBool() const
+	{
+		if (m_Value.IsEqualIgnoreCase(WString_True))
+			return true;
+
+		return false;
+	}
+
+	int8_t VariableWString::GetValueInt8() const
+	{
+		wchar_t* pEnd{};
+		return (int8_t)wcstol(m_Value, &pEnd, 10);
+	}
+
+	uint8_t VariableWString::GetValueUInt8() const
+	{
+		wchar_t* pEnd{};
+		return (uint8_t)wcstol(m_Value, &pEnd, 10);
+	}
+
+	int16_t VariableWString::GetValueInt16() const
+	{
+		wchar_t* pEnd{};
+		return (int16_t)wcstol(m_Value, &pEnd, 10);
+	}
+
+	uint16_t VariableWString::GetValueUInt16() const
+	{
+		wchar_t* pEnd{};
+		return (uint16_t)wcstol(m_Value, &pEnd, 10);
+	}
+
+	int32_t VariableWString::GetValueInt32() const
+	{
+		wchar_t* pEnd{};
+		return (int32_t)wcstol(m_Value, &pEnd, 10);
+	}
+
+	uint32_t VariableWString::GetValueUInt32() const
+	{
+		wchar_t* pEnd{};
+		return (uint32_t)wcstol(m_Value, &pEnd, 10);
+	}
+
+	int64_t VariableWString::GetValueInt64() const
+	{
+		wchar_t* pEnd{};
+		return (int64_t)wcstol(m_Value, &pEnd, 10);
+	}
+
+	uint64_t VariableWString::GetValueUInt64() const
+	{
+		wchar_t* pEnd{};
+		return (uint64_t)wcstol(m_Value, &pEnd, 10);
+	}
+
+	float VariableWString::GetValueFloat() const
+	{
+		wchar_t* pEnd{};
+		return (float)wcstod(m_Value, &pEnd);
+	}
+
+	double VariableWString::GetValueDouble() const
+	{
+		wchar_t* pEnd{};
+		return (double)wcstod(m_Value, &pEnd);
+	}
+
+	const wchar_t* VariableWString::GetValueWCharString() const
+	{
+		return m_Value;
+	}
+
+	StringCrc32 VariableWString::GetValueStringCrc32() const
+	{
+		char ConvertBuffer[1024];
+		StrUtil::WCSToUTF8(m_Value.data(), ConvertBuffer);
+		return StringCrc32(ConvertBuffer);
+	}
+
+	StringCrc64 VariableWString::GetValueStringCrc64() const
+	{
+		char ConvertBuffer[1024];
+		StrUtil::WCSToUTF8(m_Value.data(), ConvertBuffer);
+		return StringCrc64(ConvertBuffer);
+	}
+
+	String VariableWString::GetValueString() const
+	{
+		char ConvertBuffer[1024];
+		StrUtil::WCSToUTF8(m_Value.data(), ConvertBuffer);
+		return ConvertBuffer;
+	}
+
+
+	Result VariableWString::ToString(ToStringContext& context) const
+	{
+		char ConvertBuffer[1024];
+
+		if (m_Value.GetLength() != 0)
+		{
+			StrUtil::WCSToUTF8(m_Value.data(), ConvertBuffer);
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ConvertBuffer);
+		}
+		else
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(null)");
+	}
+
+
+	Variable* VariableWString::Clone(Array<uint8_t>& buffer) const
+	{
+		return new((void*)buffer.data()) VariableWString(m_Value);
+	}
+
+	Variable* VariableWString::Clone(IHeap& heap) const
+	{
+		return new(heap) VariableWString(m_Value);
+	}
+
+	Result VariableWString::Serialize(IOutputStream& output) const
+	{
+		return output << m_Value;
+	}
+
+	Result VariableWString::Deserialize(IInputStream& input)
+	{
+		return input >> m_Value;
+	}
+
+	bool VariableWString::operator == (const Variable& op) const
+	{
+		return m_Value == op.GetValueWCharString();
+	}
+
+
+
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	//
 	//	Variable StringCrc32
 	//
 
@@ -1133,7 +1350,11 @@ namespace SF
 
 	Result VariableBLOB::Serialize(IOutputStream& output) const
 	{
-		return output.Write(m_Value);
+		uint16_t NumItems = static_cast<uint16_t>(m_Value.size());
+		if (!output.Write(NumItems))
+			return ResultCode::END_OF_STREAM;
+
+		return output.Write(m_Value.data(), m_Value.size());
 	}
 	Result VariableBLOB::Deserialize(IInputStream& input)
 	{

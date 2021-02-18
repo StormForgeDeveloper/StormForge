@@ -1900,16 +1900,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameDeleteCharacterRes( intptr_t InNativeConnec
 
 
 // Cmd: Get character list
-SFDLL_EXPORT int  CSSFNetAdapter_GameGetCharacterListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInCharacterIDs,const uint32_t* InCharacterIDs, intptr_t InCharacterNames )
+SFDLL_EXPORT int  CSSFNetAdapter_GameGetCharacterListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInCharacters,const VariableTable* InCharacters )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	auto& InCharacterNamesArray_ = *NativeToObject<SF::ArrayObject<const char*>>(InCharacterNames);
-	MessageDataPtr pMessage = SF::Message::Game::GetCharacterListRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ArrayView<uint32_t>(_sizeOfInCharacterIDs, _sizeOfInCharacterIDs, const_cast<uint32_t*>(InCharacterIDs)),InCharacterNamesArray_);
+	MessageDataPtr pMessage = SF::Message::Game::GetCharacterListRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ArrayView<VariableTable>(_sizeOfInCharacters, _sizeOfInCharacters, const_cast<VariableTable*>(InCharacters)));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetCharacterListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInCharacterIDs,const uint32_t* InCharacterIDs, intptr_t InCharacterNames )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameGetCharacterListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInCharacters,const VariableTable* InCharacters )
 
 
 

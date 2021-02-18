@@ -877,13 +877,80 @@ namespace SF {
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
 		virtual Variable* Clone(IHeap& heap) const override;
 
-		virtual size_t GetSerializedSize() const  override { return sizeof(uint16_t) + m_Value.size() * sizeof(char); }
+		virtual size_t GetSerializedSize() const  override { return sizeof(uint16_t) + (m_Value.GetLength() + 1) * sizeof(char); }
 		virtual Result Serialize(IOutputStream& output) const override;
 		virtual Result Deserialize(IInputStream& input) override;
 
 		virtual bool operator == (const Variable& op) const override;
 	};
 
+
+
+	class VariableWString : public Variable
+	{
+	public:
+
+		static constexpr StringCrc32 TYPE_NAME = "wstring"_crc32c;
+
+	private:
+		WString m_Value;
+
+	public:
+		VariableWString()
+			: m_Value(0)
+		{
+		}
+		VariableWString(const WString& value)
+			: m_Value(value)
+		{
+		}
+
+		virtual StringCrc32 GetTypeName() const override { return TYPE_NAME; }
+
+		virtual void SetValue(bool value) override;
+		virtual void SetValue(int8_t value) override;
+		virtual void SetValue(uint8_t value) override;
+		virtual void SetValue(int16_t value) override;
+		virtual void SetValue(uint16_t value) override;
+		virtual void SetValue(int32_t value) override;
+		virtual void SetValue(uint32_t value) override;
+		virtual void SetValue(int64_t value) override;
+		virtual void SetValue(uint64_t value) override;
+		virtual void SetValue(float value) override;
+		virtual void SetValue(double value) override;
+		virtual void SetValue(const char* value) override;
+		virtual void SetValue(const String& value) override;
+		virtual void SetValue(StringCrc64 value) override;
+
+		virtual void* GetDataPtr() const override { return (void*)&m_Value; }
+		virtual bool GetValueBool() const override;
+		virtual int8_t GetValueInt8() const override;
+		virtual uint8_t GetValueUInt8() const override;
+		virtual int16_t GetValueInt16() const override;
+		virtual uint16_t GetValueUInt16() const override;
+		virtual int32_t GetValueInt32() const override;
+		virtual uint32_t GetValueUInt32() const override;
+		virtual int64_t GetValueInt64() const override;
+		virtual uint64_t GetValueUInt64() const override;
+		virtual float GetValueFloat() const override;
+		virtual double GetValueDouble() const override;
+		virtual const wchar_t* GetValueWCharString() const override;
+		virtual StringCrc32 GetValueStringCrc32() const override;
+		virtual StringCrc64 GetValueStringCrc64() const override;
+		virtual String GetValueString() const override;
+
+
+		virtual Result ToString(ToStringContext& context) const override;
+
+		virtual Variable* Clone(Array<uint8_t>& buffer) const override;
+		virtual Variable* Clone(IHeap& heap) const override;
+
+		virtual size_t GetSerializedSize() const  override { return sizeof(uint16_t) + (m_Value.GetLength() + 1) * sizeof(wchar_t); }
+		virtual Result Serialize(IOutputStream& output) const override;
+		virtual Result Deserialize(IInputStream& input) override;
+
+		virtual bool operator == (const Variable& op) const override;
+	};
 
 
 

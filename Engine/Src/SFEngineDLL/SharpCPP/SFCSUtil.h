@@ -95,6 +95,7 @@ namespace SF
 		virtual void SetVariable(const char* varName, const Array<RelayPlayerInfo>& value) override;
 		virtual void SetVariable(const char* varName, const Array<GameInstanceInfo>& value) override;
 		virtual void SetVariable(const char* varName, const Array<const char*>& value) override;
+		virtual void SetVariable(const char* varName, const Array<VariableTable>& value) override;
 
 		virtual void SetVariable(const char* varName, const char* typeName, const Array<uint8_t>& value) override;
 

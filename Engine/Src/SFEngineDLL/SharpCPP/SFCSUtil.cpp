@@ -238,6 +238,18 @@ namespace SF
 		m_SetArrayFunc(varName, typeName, (int)value.size(), value.data());
 	}
 
+	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<VariableTable>& value)
+	{
+		DynamicArray<uint8_t> rawValue;
+		rawValue.reserve(1024);
+		{
+			OutputMemoryStream output(rawValue, true);
+			output << value;
+		}
+
+		SetVariable(varName, "Array<VariableTable>", rawValue);
+	}
+
 
 
 

@@ -1764,9 +1764,7 @@ C++: Cast message to GetCharacterListRes to access values
 
 		- OutResult: Result type. 
 
-		- OutCharacterIDs: uint32 type. Character id list
-
-		- OutCharacterNames: String type. Character name list
+		- OutCharacters: VariableTable type. Characters
 
 
 ## GetCharacterData Request
