@@ -73,7 +73,7 @@ TEST_F(ConcurrentContainerTest, SpinBufferMT_Simple)
 
 TEST_F(ConcurrentContainerTest, SpinBufferMT_IN)
 {
-	const uint64_t TEST_LENGTH = TestScale * 999999;
+	const uint64_t TEST_LENGTH = TestScale * 9999;
 	const int NUM_THREAD = 10;
 
 	struct TestDataType
@@ -156,7 +156,7 @@ TEST_F(ConcurrentContainerTest, SpinBufferMT_IN)
 
 TEST_F(ConcurrentContainerTest, SpinBufferMT_INOUT)
 {
-	const uint64_t TEST_LENGTH = TestScale * 999999;
+	const uint64_t TEST_LENGTH = TestScale * 9999;
 	const int64_t NUM_THREAD = 10;
 	const int64_t NUM_READ_THREAD = 5;
 
