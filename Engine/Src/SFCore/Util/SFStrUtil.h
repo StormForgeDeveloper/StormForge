@@ -89,6 +89,11 @@ namespace StrUtil
 	size_t WCSToUTF8( const wchar_t* strWCS, char (&strUTF8)[iBuffLen] );
 	size_t WCSToUTF8( const std::wstring &strWCS, std::string &strUTF8 );
 
+	size_t WCSToUTF8(const char16_t* strWCS, char* strUTF8, int iBuffLen);
+	template<int iBuffLen>
+	size_t WCSToUTF8(const char16_t* strWCS, char(&strUTF8)[iBuffLen]);
+	size_t WCSToUTF8(const std::u16string& strWCS, std::string& strUTF8);
+
 	//// MBCS to Unicode string conversion
 	//Result MBCSToWCS( const char *strMBCS, wchar_t* strWCS, int iBuffLen );
 	//template<int iBuffLen>

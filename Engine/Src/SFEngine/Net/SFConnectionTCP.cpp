@@ -78,7 +78,7 @@ namespace Net {
 		// On client side, we need to check writable status by calling connect again
 		if (m_Owner.m_IsClientConnection && !m_Owner.m_IsTCPSocketConnectionEstablished && m_Owner.GetConnectionState() == ConnectionState::CONNECTING)
 		{
-			m_Owner.m_IsTCPSocketConnectionEstablished = m_Owner.Connect();
+			m_Owner.m_IsTCPSocketConnectionEstablished = m_Owner.Connect() == ResultCode::SUCCESS;
 			if (!m_Owner.m_IsTCPSocketConnectionEstablished)
 				return ResultCode::SUCCESS;
 		}
@@ -232,7 +232,7 @@ namespace Net {
 			hr = ResultCode::IO_CONNECTION_CLOSED;
 			break;
 		case (uint32_t)ResultCode::IO_NOTCONN:
-			m_Owner.m_IsTCPSocketConnectionEstablished = m_Owner.Connect();
+			m_Owner.m_IsTCPSocketConnectionEstablished = m_Owner.Connect() == ResultCode::SUCCESS;
 			break;
 		case (uint32_t)ResultCode::IO_IO_SEND_FAIL:
 			break;
@@ -745,7 +745,7 @@ namespace Net {
 				// On client side, we need to check readable/writable status by calling connect again
 				if (m_IsClientConnection && !m_IsTCPSocketConnectionEstablished && GetConnectionState() == ConnectionState::CONNECTING)
 				{
-					m_IsTCPSocketConnectionEstablished = Connect();
+					m_IsTCPSocketConnectionEstablished = Connect() == ResultCode::SUCCESS;
 				}
 
 				if (m_IsTCPSocketConnectionEstablished

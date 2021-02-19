@@ -63,14 +63,17 @@ namespace SF {
 		}
 
 
-
-
 		template<int iBuffLen>
 		size_t WCSToUTF8(const wchar_t* strWCS, char(&strUTF8)[iBuffLen])
 		{
 			return WCSToUTF8(strWCS, strUTF8, iBuffLen);
 		}
 
+		template<int iBuffLen>
+		size_t WCSToUTF8(const char16_t* strWCS, char(&strUTF8)[iBuffLen])
+		{
+			return WCSToUTF8(strWCS, strUTF8, iBuffLen);
+		}
 
 		template<int iBuffLen>
 		size_t UTF8ToWCS(const char *strUTF8, wchar_t(&strWCS)[iBuffLen])

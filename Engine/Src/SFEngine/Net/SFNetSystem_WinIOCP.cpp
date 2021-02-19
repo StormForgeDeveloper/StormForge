@@ -544,7 +544,7 @@ namespace Net {
 
 		if (!acceptedSocket && sockFamily == SockFamily::IPV6)
 		{
-			iOptValue = FALSE;
+			iOptValue = 0;
 			if (setsockopt(socket, IPPROTO_IPV6, IPV6_V6ONLY, (char *)&iOptValue, sizeof(iOptValue)) < 0)
 			{
 				hr = GetLastNetSystemResult();

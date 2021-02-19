@@ -588,6 +588,9 @@ namespace SF
         }
         public void FromSerializedMemory(byte[] byteData)
         {
+            if (byteData == null)
+                return;
+
             try
             {
                 using (BinaryReader reader = new BinaryReader(new MemoryStream(byteData)))

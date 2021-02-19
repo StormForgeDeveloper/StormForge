@@ -295,21 +295,21 @@ namespace Net {
 		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::Stream, GetLocalAddress().SocketFamily, socket));
 
 		bOptValue = 1;
-		if( setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, (char *)&bOptValue, sizeof(bOptValue)) == SOCKET_ERROR )
+		if( setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, (char *)&bOptValue, sizeof(bOptValue)) < 0 )
 		{
 			SFLog(Net, Error, "Failed to change socket option SO_REUSEADDR = {0}, err = {1:X8}", bOptValue, GetLastNetSystemResult() );
 			netErr( ResultCode::UNEXPECTED );
 		}
 
 		GetAnyBindAddr(GetSocketAddr(), bindAddr);
-		if (bind(socket, (sockaddr*)&bindAddr, GetSocketAddrSize()) == SOCKET_ERROR)
+		if (bind(socket, (sockaddr*)&bindAddr, GetSocketAddrSize()) < 0)
 		{
 			SFLog(Net, Error, "Socket bind failed, TCP {0:X8}", GetLastNetSystemResult() );
 			netErr( ResultCode::UNEXPECTED );
 		}
 
 
-		if( listen(socket, SOMAXCONN) == SOCKET_ERROR )
+		if( listen(socket, SOMAXCONN) < 0 )
 		{
 			SFLog(Net, Error, "Failed to listen socket {0:X8}", GetLastNetSystemResult() );
 			netErr( ResultCode::UNEXPECTED );

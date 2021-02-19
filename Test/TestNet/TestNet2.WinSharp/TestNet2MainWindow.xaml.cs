@@ -264,12 +264,16 @@ namespace TestNet2.WinSharp
             for (int iChar = 0; iChar < numCharacter; iChar++)
             {
                 object obj;
-                characters[iChar].TryGetValue(new StringCrc32("CharacterId"), out obj);
-                var characterId = (UInt64)Convert.ChangeType(obj, typeof(UInt64));
-                characters[iChar].TryGetValue(new StringCrc32("Name"), out obj);
-                string characterName = (string)Convert.ChangeType(obj, typeof(string));
-                characters[iChar].TryGetValue(new StringCrc32("VisualData"), out obj);
-                byte[] characterVisual = (byte[])obj;
+                UInt64 characterId = 0;
+                string characterName = null;
+                byte[] characterVisual = null;
+
+                if (characters[iChar].TryGetValue(new StringCrc32("CharacterId"), out obj))
+                    characterId = (UInt64)Convert.ChangeType(obj, typeof(UInt64));
+                if (characters[iChar].TryGetValue(new StringCrc32("Name"), out obj))
+                    characterName = (string)Convert.ChangeType(obj, typeof(string));
+                if (characters[iChar].TryGetValue(new StringCrc32("VisualData"), out obj))
+                    characterVisual = (byte[])obj;
                 VariableTable parsedValue = new VariableTable();
                 parsedValue.FromSerializedMemory(characterVisual);
 
