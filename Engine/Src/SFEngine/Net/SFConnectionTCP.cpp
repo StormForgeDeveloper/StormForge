@@ -424,6 +424,7 @@ namespace Net {
 		if (connResult == SOCKET_ERROR)
 		{
 			hrConResult = GetLastNetSystemResult();
+			SFLog(Net, Debug2, "TCP Connect result {0}", hrConResult);
 			switch ((uint32_t)hrConResult)
 			{
 			case (uint32_t)ResultCode::IO_INPROGRESS:
