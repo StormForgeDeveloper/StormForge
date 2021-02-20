@@ -479,8 +479,8 @@ namespace Net {
 			if( GetZeroRecvCount() > (uint32_t)Const::CONNECTION_ZEROPACKET_MAX )
 			{
 				SFLog(Net, Debug3, "TCP RecvBuf, too many zero size packet, {1}", GetZeroRecvCount());
-				ResetZeroRecvCount();
-				//Disconnect("Too many zero packets");
+				//ResetZeroRecvCount();
+				Disconnect("Too many zero packets");
 			}
 			return hr;
 		}
@@ -571,7 +571,7 @@ namespace Net {
 
 					m_uiRecvTemUsed += uiBuffSize;
 
-					// remain data will be occure at next parts of packet
+					// remain data will be occur at next parts of packet
 					break;
 				}
 
