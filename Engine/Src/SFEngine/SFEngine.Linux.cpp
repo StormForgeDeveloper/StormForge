@@ -50,8 +50,6 @@ namespace SF
 	public:
 		ModuleTestLimits_impl()
 		{
-#if SF_PLATFORM != SF_PLATFORM_ANDROID
-
 			SFLog(System, Info, "Testing system limits");
 
 			rlimit limit;
@@ -90,7 +88,6 @@ namespace SF
 			{
 				SFLog(System, Info, "RLIMIT_FSIZE limits: cur:{0}, max{1}", limit.rlim_cur, limit.rlim_max);
 			}
-#endif
 		}
 	};
 
