@@ -126,6 +126,25 @@ namespace SF {
 				//assert(!"Invalid rtpio FIFO limits:");
 			}
 			std::cout << "TestThreadLimits - OK" << std::endl;
+
+			if (getrlimit(RLIMIT_CORE, &limit) != 0)
+			{
+				std::cout << "Failed to get RLIMIT_CORE limits:" << errno << std::endl;
+			}
+			else
+			{
+				std::cout << "RLIMIT_CORE limit: min:" << (int)sched_get_priority_min(SCHED_RR) << " max:" << (int)rrMax << std::endl;
+			}
+
+			if (getrlimit(RLIMIT_FSIZE, &limit) != 0)
+			{
+				std::cout << "Failed to get RLIMIT_FSIZE limits:" << errno << std::endl;
+			}
+			else
+			{
+				std::cout << "RLIMIT_FSIZE limit: min:" << (int)sched_get_priority_min(SCHED_RR) << " max:" << (int)rrMax << std::endl;
+			}
+
 #endif
 		}
 	};

@@ -473,17 +473,19 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS;
 		SharedPointerT<Message::MessageData> pMsg;
 
-		SFLog(Net, Debug3, "TCP RecvBuf Len={0}", uiBuffSize);
-
 		if( uiBuffSize == 0 )
 		{
 			IncZeroRecvCount();
 			if( GetZeroRecvCount() > (uint32_t)Const::CONNECTION_ZEROPACKET_MAX )
 			{
+				SFLog(Net, Debug3, "TCP RecvBuf, too many zero size packet, {1}", GetZeroRecvCount());
+				ResetZeroRecvCount();
 				//Disconnect("Too many zero packets");
 			}
-			goto Proc_End;
+			return hr;
 		}
+
+		SFLog(Net, Debug3, "TCP RecvBuf Len={0}", uiBuffSize);
 
 		while( uiBuffSize > 0 )
 		{
@@ -511,14 +513,14 @@ namespace Net {
 				if( pMsgHdr->Length < sizeof(Message::MessageHeader) )
 				{
 					// too small invalid packet
-					netErr( ResultCode::UNEXPECTED );
+					netCheck( ResultCode::UNEXPECTED );
 				}
 
-				netMem( pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHdr->msgID.ID, pMsgHdr->Length, pBuff ) );
+				netCheckMem( pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHdr->msgID.ID, pMsgHdr->Length, pBuff ) );
 
 				hr = OnRecv( pMsg );
 				pMsg = nullptr;
-				netChk( hr );
+				netCheck( hr );
 
 				uiBuffSize -= pMsgHdr->Length;
 				pBuff += pMsgHdr->Length;
@@ -558,7 +560,7 @@ namespace Net {
 				// append remain body
 				if( pMsgHdr->Length < m_uiRecvTemUsed )
 				{
-					netErr( ResultCode::IO_BADPACKET_SIZE );
+					netCheck( ResultCode::IO_BADPACKET_SIZE );
 				}
 
 				uiCopySize = pMsgHdr->Length - m_uiRecvTemUsed;
@@ -579,18 +581,14 @@ namespace Net {
 				pBuff += uiCopySize;
 				m_uiRecvTemUsed = 0;
 
-				netMem( pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHdr->msgID.ID, pMsgHdr->Length, m_bufRecvTem.data() ) );
+				netCheckMem( pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHdr->msgID.ID, pMsgHdr->Length, m_bufRecvTem.data() ) );
 
 				hr = OnRecv( pMsg );
 				pMsg = nullptr;
-				netChk( hr );
+				netCheck( hr );
 			}
 
 		}
-
-	Proc_End:
-
-		pMsg = nullptr;
 
 		return hr;
 	}
