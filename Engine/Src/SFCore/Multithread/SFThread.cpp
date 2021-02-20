@@ -94,64 +94,6 @@ namespace SF {
 
 	static_assert(countof(ThreadSchedulingTable) == ((int)Thread::PRIORITY::IDLE + 1), "Invalid Thread scheduling table count");
 
-
-	class ModuleThread_impl
-	{
-	public:
-		ModuleThread_impl()
-		{
-#if SF_PLATFORM != SF_PLATFORM_ANDROID
-			rlimit limit;
-			memset(&limit, 0, sizeof limit);
-			if (getrlimit(RLIMIT_RTPRIO, &limit) != 0)
-			{
-				std::cout << "Failed to get rtpio limits:" << errno << std::endl;
-				assert(!"Failed to get rtpio limits:");
-				return;
-			}
-
-			unsigned int rrMax = (unsigned)sched_get_priority_max(SCHED_RR);
-			if (rrMax > limit.rlim_cur || rrMax > limit.rlim_max)
-			{
-				//std::cout << "rtpio RR Current limit: min:" << (int)limit.rlim_cur << " max:" << (int)limit.rlim_max << std::endl;
-				std::cout << "rtpio RR Required limit: min:" << (int)sched_get_priority_min(SCHED_RR) << " max:" << (int)rrMax << std::endl;
-				//assert(!"Invalid rtpio RR limits:");
-			}
-
-			unsigned int fifoMax = (unsigned)sched_get_priority_max(SCHED_FIFO);
-			if (fifoMax > limit.rlim_cur || fifoMax > limit.rlim_max)
-			{
-				//std::cout << "rtpio FIFO Current limit: min:" << (int)limit.rlim_cur << " max:" << (int)limit.rlim_max << std::endl;
-				std::cout << "rtpio FIFO Required limit: min:" << (int)sched_get_priority_min(SCHED_FIFO) << " max:" << (int)fifoMax << std::endl;
-				//assert(!"Invalid rtpio FIFO limits:");
-			}
-			std::cout << "TestThreadLimits - OK" << std::endl;
-
-			if (getrlimit(RLIMIT_CORE, &limit) != 0)
-			{
-				std::cout << "Failed to get RLIMIT_CORE limits:" << errno << std::endl;
-			}
-			else
-			{
-				std::cout << "RLIMIT_CORE limit: min:" << (int)sched_get_priority_min(SCHED_RR) << " max:" << (int)rrMax << std::endl;
-			}
-
-			if (getrlimit(RLIMIT_FSIZE, &limit) != 0)
-			{
-				std::cout << "Failed to get RLIMIT_FSIZE limits:" << errno << std::endl;
-			}
-			else
-			{
-				std::cout << "RLIMIT_FSIZE limit: min:" << (int)sched_get_priority_min(SCHED_RR) << " max:" << (int)rrMax << std::endl;
-			}
-
-#endif
-		}
-	};
-	static ModuleThread_impl CheckThreadLimits;
-
-
-
 #endif
 
 	constexpr int Thread::NAMELEN;

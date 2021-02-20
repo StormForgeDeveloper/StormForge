@@ -45,6 +45,56 @@
 namespace SF
 {
 
+	class ModuleTestLimits_impl
+	{
+	public:
+		ModuleTestLimits_impl()
+		{
+#if SF_PLATFORM != SF_PLATFORM_ANDROID
+
+			SFLog(System, Info, "Testing system limits");
+
+			rlimit limit;
+			memset(&limit, 0, sizeof limit);
+			if (getrlimit(RLIMIT_RTPRIO, &limit) != 0)
+			{
+				SFLog(System, Info, "Failed to get rtpio limits:{0}", std::strerror(errno));
+			}
+
+			unsigned int rrMax = (unsigned)sched_get_priority_max(SCHED_RR);
+			if (rrMax > limit.rlim_cur || rrMax > limit.rlim_max)
+			{
+				SFLog(System, Info, "rtpio RR Required limit: min:{0}, max:{1}", (int)sched_get_priority_min(SCHED_RR), (int)rrMax);
+			}
+
+			unsigned int fifoMax = (unsigned)sched_get_priority_max(SCHED_FIFO);
+			if (fifoMax > limit.rlim_cur || fifoMax > limit.rlim_max)
+			{
+				SFLog(System, Info, "rtpio FIFO Required limit: min:{0}, max:{1}", (int)sched_get_priority_min(SCHED_FIFO), (int)fifoMax);
+			}
+
+			if (getrlimit(RLIMIT_CORE, &limit) != 0)
+			{
+				SFLog(System, Info, "Failed to get RLIMIT_CORE limits:{0}", std::strerror(errno));
+			}
+			else
+			{
+				SFLog(System, Info, "RLIMIT_CORE limits: cur:{0}, max{1}", limit.rlim_cur, limit.rlim_max);
+			}
+
+			if (getrlimit(RLIMIT_FSIZE, &limit) != 0)
+			{
+				SFLog(System, Info, "Failed to get RLIMIT_FSIZE limits:{0}", std::strerror(errno));
+			}
+			else
+			{
+				SFLog(System, Info, "RLIMIT_FSIZE limits: cur:{0}, max{1}", limit.rlim_cur, limit.rlim_max);
+			}
+#endif
+		}
+	};
+
+
 	Engine* Engine::Start(const EngineInitParam& initParam)
 	{
 		if (Engine::GetInstance() != nullptr)
@@ -69,6 +119,8 @@ namespace SF
 
 		// Initialize base system first
 		pEngine->InitializeComponents();
+
+		ModuleTestLimits_impl CheckLimits;
 
 		return pEngine;
 	}

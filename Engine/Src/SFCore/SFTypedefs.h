@@ -113,7 +113,7 @@
 
 #include <functional>
 #include <condition_variable>
-
+#include <cstring>
 
 
 
