@@ -105,7 +105,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	initParam.LogOutputConsole = { 0, };
 	initParam.LogOutputDebugger = { 0, };
 	initParam.LogFilePrefix = InstanceName;
-	initParam.LogOutputFile = SF::LogOutputMask(-1); // print all
+	initParam.LogOutputFile = SF::LogOutputMask(0);
 
 	initParam.LogOutputDebugger = false;
 	initParam.LogOutputConsole = false;

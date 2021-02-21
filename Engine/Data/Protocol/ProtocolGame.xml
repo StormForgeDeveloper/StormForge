@@ -184,7 +184,7 @@
 			<Params Type="uint8" Name="IsInGame" Desc="TRUE if the player is in a game"/>
 		</S2CEvent>
 
-		<Command Name="GetRankingList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get Ranking lise">
+		<Command Name="GetRankingList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get Ranking list">
 			<Cmd>
 				<Params Type="uint8" Name="RankingType"/>
 				<Params Type="uint8" Name="BaseRanking" Desc="Base ranking to query, 0 based ranking order"/>
