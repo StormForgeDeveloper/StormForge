@@ -32,9 +32,7 @@
 
 
 namespace SF {
-	
-	
-	
+
 
 	ConnectionManagerService::Sockaddress::Sockaddress(const sockaddr_storage& src)
 	{
@@ -252,7 +250,6 @@ namespace Net {
 
 		return hr;
 	}
-
 
 
 	void ConnectionManager::NewMUDPAddress(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote)

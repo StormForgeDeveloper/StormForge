@@ -109,11 +109,35 @@ namespace Net {
 
 	public:
 		// Constructor
-		ConnectionMUDPServer(IHeap& heap, SocketIO* ioHandler);
-		virtual ~ConnectionMUDPServer();
+		ConnectionMUDPServer(IHeap& heap, SocketIO* ioHandler)
+			: ConnectionMUDP(heap, ioHandler)
+		{
+			SetNetCtrlAction(NetCtrlCode_SyncReliable, &m_HandleSyncReliable);
+
+			AddStateAction(ConnectionState::CONNECTED, &m_ActSync);
+		}
+		virtual ~ConnectionMUDPServer() = default;
 
 		// We need this for event handling
-		Result UpdateSendQueue() override;
+		Result UpdateSendQueue() override
+		{
+			Result hr;
+			if (GetConnectionState() == ConnectionState::DISCONNECTED)
+				return ResultCode::SUCCESS;
+
+			MutexScopeLock localLock(GetUpdateLock());
+
+			// Force update send
+			m_ActSendReliableQueue.Run();
+			m_ActSendReliableRetry.Run();
+
+
+
+			// Flush sync message asap
+			SendFlush();
+
+			return hr;
+		}
 	};
 
 
@@ -262,5 +286,4 @@ namespace Net {
 
 }  // namespace Net
 } // namespace SF
-
 

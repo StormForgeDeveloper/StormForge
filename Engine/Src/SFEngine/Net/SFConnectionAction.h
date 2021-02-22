@@ -83,6 +83,8 @@ namespace Net {
 	class ConnectionAction : public ConnectionActionBase
 	{
 	public:
+		ConnectionAction() = default;
+		virtual ~ConnectionAction() = default;
 
 		virtual Result Run() { return ResultCode::NOT_IMPLEMENTED; }
 	};
@@ -90,6 +92,9 @@ namespace Net {
 	class ConnectionActionMUDP : public ConnectionAction
 	{
 	public:
+		ConnectionActionMUDP() = default;
+		virtual ~ConnectionActionMUDP() = default;
+
 		ConnectionMUDP* GetConnection();
 	};
 
@@ -97,6 +102,8 @@ namespace Net {
 	class ConnectionMessageAction : public ConnectionActionBase
 	{
 	public:
+		ConnectionMessageAction() = default;
+		virtual ~ConnectionMessageAction() = default;
 
 		void OnConnectionResult(Result hrConnect);
 
@@ -107,8 +114,10 @@ namespace Net {
 	class ConnectionMessageActionMUDP : public ConnectionMessageAction
 	{
 	public:
-		ConnectionMUDP* GetConnection();
+		ConnectionMessageActionMUDP() = default;
+		virtual ~ConnectionMessageActionMUDP() = default;
 
+		ConnectionMUDP* GetConnection();
 	};
 
 
