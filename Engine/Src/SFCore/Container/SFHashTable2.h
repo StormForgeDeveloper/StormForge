@@ -526,6 +526,8 @@ namespace SF {
 			Result erase(const KeyType &key) { ValueType erasedValue;  return Erase(key, erasedValue); }
 			Result erase(const KeyType &key, ValueType& erasedValue) { return Erase(key, erasedValue); }
 
+			Result remove(const KeyType& key) { ValueType erasedValue;  return Erase(key, erasedValue); }
+			Result remove(const KeyType& key, ValueType& erasedValue) { return Erase(key, erasedValue); }
 
 			Result Clear()
 			{
