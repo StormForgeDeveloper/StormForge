@@ -443,7 +443,7 @@ C++: Cast message to RequestPlayerStatusUpdateRes to access values
 
 
 ## GetRankingList Request
-Get Ranking lise
+Get Ranking list
 
 1. Command interface
 

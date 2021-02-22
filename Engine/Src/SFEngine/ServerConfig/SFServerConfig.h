@@ -99,10 +99,10 @@ namespace SF
 		struct ServerModule
 		{
 			String ModuleName;
-			EndpointAddress Endpoint;
+			EndpointAddress ServiceListenEndpoint;
 			ServerModule(IHeap& heap)
 				: ModuleName(heap)
-				, Endpoint(heap)
+				, ServiceListenEndpoint(heap)
 			{}
 			virtual ~ServerModule() {}
 		};
@@ -162,10 +162,20 @@ namespace SF
 			{}
 		};
 
+		struct ServerModuleStaticGameInstanceManager : public ServerModulePublicService
+		{
+			// ZoneDBTable
+			String ZoneDBTable;
+
+			ServerModuleStaticGameInstanceManager(IHeap& heap)
+				: ServerModulePublicService(heap)
+				, ZoneDBTable(heap)
+			{}
+		};
+
 		struct ServerModuleGameInstanceManager : public ServerModulePublicService
 		{
-			String Name;
-			String DataTable;
+			String ZoneDBTable;
 
 			ServerModuleGameInstanceManager(IHeap& heap)
 				: ServerModulePublicService(heap)

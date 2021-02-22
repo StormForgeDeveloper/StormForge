@@ -43,9 +43,9 @@ namespace SF
 	{
 	}
 
-	void ZookeeperWatcher::ZKWatcherCB(zhandle_t *zkHandle, int type, int state, const char *path, void*v)
+	void ZookeeperWatcher::ZKWatcherCB(zhandle_t *zkHandle, int type, int state, const char *path, void* watcherCtx)
 	{
-		auto zkWatcher = (ZookeeperWatcher*)v;
+		auto zkWatcher = (ZookeeperWatcher*)watcherCtx;
 		ZKEvent evt;
 
 		if (type == Zookeeper::EVENT_SESSION)

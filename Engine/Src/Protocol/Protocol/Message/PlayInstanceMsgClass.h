@@ -45,7 +45,7 @@ namespace SF
 				uint64_t GetSender() { return 0; }
 			private:
 				uint64_t m_TransactionID{};
-				uint32_t m_PlayInstanceID{};
+				uint64_t m_PlayInstanceID{};
 				PlayerID m_PlayerID{};
 				const char* m_PlayerIdentifier{};
 			public:
@@ -59,7 +59,7 @@ namespace SF
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
-				const uint32_t& GetPlayInstanceID() const	{ return m_PlayInstanceID; };
+				const uint64_t& GetPlayInstanceID() const	{ return m_PlayInstanceID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const char* GetPlayerIdentifier() const	{ return m_PlayerIdentifier; };
 
@@ -69,7 +69,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InPlayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
 
 			}; // class JoinGameInstanceCmd : public MessageBase
 
@@ -94,7 +94,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				uint32_t m_PlayInstanceID{};
+				uint64_t m_PlayInstanceID{};
 				uint32_t m_MyEndpointID{};
 				ArrayView<PlayerInformation> m_MemberInfos;
 			public:
@@ -109,7 +109,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const uint32_t& GetPlayInstanceID() const	{ return m_PlayInstanceID; };
+				const uint64_t& GetPlayInstanceID() const	{ return m_PlayInstanceID; };
 				const uint32_t& GetMyEndpointID() const	{ return m_MyEndpointID; };
 				const Array<PlayerInformation>& GetMemberInfos() const	{ return m_MemberInfos; };
 
@@ -119,12 +119,12 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos );
 
 			}; // class JoinGameInstanceRes : public MessageBase
 
 			// S2C: Event for Player joined.
-			class PlayerJoinS2CEvt : public MessageBase
+			class PlayerJoinedS2CEvt : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -147,10 +147,10 @@ namespace SF
 				uint32_t m_PlayInstanceID{};
 				PlayerInformation m_JoinedPlayerInfo{};
 			public:
-				PlayerJoinS2CEvt()
+				PlayerJoinedS2CEvt()
 					{}
 
-				PlayerJoinS2CEvt( MessageDataPtr &&pMsg )
+				PlayerJoinedS2CEvt( MessageDataPtr &&pMsg )
 					: MessageBase(std::forward<MessageDataPtr>(pMsg))
 					{}
 
@@ -167,7 +167,7 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InPlayInstanceID, const PlayerInformation &InJoinedPlayerInfo );
 
-			}; // class PlayerJoinS2CEvt : public MessageBase
+			}; // class PlayerJoinedS2CEvt : public MessageBase
 
 			// S2C: Event for Player left.
 			class PlayerLeftS2CEvt : public MessageBase
@@ -216,6 +216,50 @@ namespace SF
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InPlayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason );
 
 			}; // class PlayerLeftS2CEvt : public MessageBase
+
+			// S2C: Player kicked event. this event will be brocasted when a player kicked.
+			class PlayerKickedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 0,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetPlayerID() { return 0; }
+				uint64_t GetTransactionID() { return 0; }
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				PlayerID m_KickedPlayerID{};
+			public:
+				PlayerKickedS2CEvt()
+					{}
+
+				PlayerKickedS2CEvt( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const PlayerID& GetKickedPlayerID() const	{ return m_KickedPlayerID; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const PlayerID &InKickedPlayerID );
+
+			}; // class PlayerKickedS2CEvt : public MessageBase
 
 			// C2S: Play packet
 			class PlayPacketC2SEvt : public MessageBase

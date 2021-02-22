@@ -262,7 +262,7 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameNotifyPlayerStatusUpdatedS2CEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameNotifyPlayerStatusUpdatedS2CEvt()
 
 
-// Cmd: Get Ranking lise
+// Cmd: Get Ranking list
 SFDLL_EXPORT int  CSSFNetMessageID_GameGetRankingListCmd()
 {
  	return SF::Message::Game::GetRankingListCmd::MID.IDSeq.MsgID;

@@ -102,6 +102,9 @@ namespace SF
 	"PlayerManager",\
 	"Login",\
 	"Game",\
+	"StaticGameInstance",\
+	"GameInstance",\
+	"GameStaticInstanceManager",\
 	"GameInstanceManager",\
 	"GamePartyManager",\
 	"Ranking",\

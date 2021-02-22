@@ -6,19 +6,19 @@
 
 	<Command Name="JoinGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Event for Player Join request.">
 		<Cmd>
-			<Params Type="uint32" Name="PlayInstanceID" Desc="Play instance to join"/>
+			<Params Type="EntityUID" Name="PlayInstanceID" Desc="Play instance to join"/>
 			<Params Type="PlayerID" Name="PlayerID" Desc="Joining player id"/>
 			<Params Type="String" Name="PlayerIdentifier" Desc="Joining player identifier. string value"/>
 		</Cmd>
 		<Res>
-			<Params Type="uint32" Name="PlayInstanceID" Desc="joined Play instance ID"/>
+			<Params Type="EntityUID" Name="PlayInstanceID" Desc="joined Play instance ID"/>
 			<Params Type="uint32" Name="MyEndpointID" Desc="Joined player PlayID"/>
 			<Params Type="PlayerInformation" IsArray="true" Name="MemberInfos" Desc="Member player IDs"/>
 		</Res>
 	</Command>
 
 
-	<S2CEvent Name="PlayerJoin" Reliable="true" Crypto="No" Trace="Debug1" Desc="Event for Player joined.">
+	<S2CEvent Name="PlayerJoined" Reliable="true" Crypto="No" Trace="Debug1" Desc="Event for Player joined.">
 		<Params Type="uint32" Name="PlayInstanceID" Desc="Play Instance id"/>
 		<Params Type="PlayerInformation" Name="JoinedPlayerInfo" Desc="Joined player ID"/>
 	</S2CEvent>
@@ -29,6 +29,9 @@
 		<Params Type="uint32" Name="KickedReason" Desc="Reason"/>
 	</S2CEvent>
 
+	<S2CEvent Name="PlayerKicked" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player kicked event. this event will be brocasted when a player kicked.">
+		<Params Type="PlayerID" Name="KickedPlayerID" Desc="Kicked player ID"/>
+	</S2CEvent>
 
 	<C2SEvent Name="PlayPacket" Reliable="false" Crypto="No" Trace="Debug1" Desc="Play packet">
 		<Params Type="uint32" Name="PlayInstanceID" Desc="Play Instance id"/>

@@ -32,7 +32,7 @@ namespace SF
 		{}
 
 		// Cmd: Event for Player Join request.
-		Result JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint32_t &InPlayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
+		Result JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
 		// C2S: Play packet
 		Result PlayPacketC2SEvt( const uint32_t &InPlayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
 		// C2S: Player Movement
@@ -59,11 +59,13 @@ namespace SF
 		{}
 
 		// Cmd: Event for Player Join request.
-		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos );
+		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos );
 		// S2C: Event for Player joined.
-		Result PlayerJoinS2CEvt( const uint32_t &InPlayInstanceID, const PlayerInformation &InJoinedPlayerInfo );
+		Result PlayerJoinedS2CEvt( const uint32_t &InPlayInstanceID, const PlayerInformation &InJoinedPlayerInfo );
 		// S2C: Event for Player left.
 		Result PlayerLeftS2CEvt( const uint32_t &InPlayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason );
+		// S2C: Player kicked event. this event will be brocasted when a player kicked.
+		Result PlayerKickedS2CEvt( const PlayerID &InKickedPlayerID );
 		// S2C: New Player in get view
 		Result NewPlayerInViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
 		// S2C: Remove player from view

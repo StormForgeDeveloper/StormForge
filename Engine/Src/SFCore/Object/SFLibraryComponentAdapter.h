@@ -49,6 +49,14 @@ namespace SF {
 		{
 			m_Object = new(heap) ClassType(args...);
 		}
+
+		LibraryComponentAdapter(IHeap& heap, ClassType* pObject)
+			: LibraryComponent(TypeName)
+			, m_Heap(heap)
+		{
+			m_Object = pObject;
+		}
+
 		~LibraryComponentAdapter()
 		{
 			m_Object = nullptr;
@@ -61,6 +69,9 @@ namespace SF {
 
 		ClassType* operator ->() { return *m_Object; }
 		ClassType* operator *() { return *m_Object; }
+
+		operator ClassType* () { return m_Object.get(); }
+		operator const ClassType* () const { return m_Object.get(); }
 
 		// Initialize component
 		virtual Result InitializeComponent() override

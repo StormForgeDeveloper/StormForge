@@ -293,7 +293,7 @@ namespace SF
 		return hr;
 
 	}; // Result NetPolicyGame::RequestPlayerStatusUpdateCmd( const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
-	// Cmd: Get Ranking lise
+	// Cmd: Get Ranking list
 	Result NetPolicyGame::GetRankingListCmd( const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 	{
  		ScopeContext hr;
@@ -1303,7 +1303,7 @@ namespace SF
 		return hr;
 
 	}; // Result NetSvrPolicyGame::NotifyPlayerStatusUpdatedS2CEvt( const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
-	// Cmd: Get Ranking lise
+	// Cmd: Get Ranking list
 	Result NetSvrPolicyGame::GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 	{
  		ScopeContext hr;

@@ -32,9 +32,11 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceCmd::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceRes::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceRes::TraceOut));
 			// S2C: Event for Player joined.
-			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerJoinS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerJoinS2CEvt::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerJoinedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerJoinedS2CEvt::TraceOut));
 			// S2C: Event for Player left.
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerLeftS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerLeftS2CEvt::TraceOut));
+			// S2C: Player kicked event. this event will be brocasted when a player kicked.
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerKickedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerKickedS2CEvt::TraceOut));
 			// C2S: Play packet
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayPacketC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayPacketC2SEvt::TraceOut));
 			// S2C: New Player in get view

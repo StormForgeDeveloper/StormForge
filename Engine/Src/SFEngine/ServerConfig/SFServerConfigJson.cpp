@@ -204,12 +204,21 @@ namespace SF
 			pServerModule = pModule;
 			break;
 		}
+		case "ModStaticGameInstanceManager"_crc:
+		{
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleStaticGameInstanceManager(GetHeap());
+
+			pModule->ZoneDBTable = moduleValue.get("ZoneDBTable", Json::Value("")).asCString();
+
+			result = ParseNetPublic(moduleValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
+			pServerModule = pModule;
+			break;
+		}
 		case "ModGameInstanceManager"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModuleGameInstanceManager(GetHeap());
 
-			pModule->Name = moduleValue.get("Name", Json::Value("")).asCString();
-			pModule->DataTable = moduleValue.get("DataTable", Json::Value("")).asCString();
+			pModule->ZoneDBTable = moduleValue.get("ZoneDBTable", Json::Value("")).asCString();
 
 			result = ParseNetPublic(moduleValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pServerModule = pModule;
@@ -255,7 +264,7 @@ namespace SF
 		}
 
 		// Ignoring parsing error as not all of module requires it
-		ParseMessageEndpoint(moduleValue, "PrivateEndpoint", pServerModule->Endpoint);
+		ParseMessageEndpoint(moduleValue, "ListenEndpoint", pServerModule->ServiceListenEndpoint);
 
 		if (pServerModule != nullptr)
 			pServerModule->ModuleName = moduleName.asCString();

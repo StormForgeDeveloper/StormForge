@@ -224,7 +224,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameRequestPlayerStatusUpdateCmd( intptr_t InNa
 } // SFDLL_EXPORT int  CSSFNetAdapter_GameRequestPlayerStatusUpdateCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint16_t _sizeOfInTargetPlayerID,const AccountID* InTargetPlayerID )
 
 
-// Cmd: Get Ranking lise
+// Cmd: Get Ranking list
 SFDLL_EXPORT int  CSSFNetAdapter_GameGetRankingListCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint8_t InRankingType, uint8_t InBaseRanking, uint8_t InCount )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
@@ -1002,7 +1002,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameNotifyPlayerStatusUpdatedS2CEvt( intptr_t I
 
 
 
-// Cmd: Get Ranking lise
+// Cmd: Get Ranking list
 SFDLL_EXPORT int  CSSFNetAdapter_GameGetRankingListRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInRanking,const TotalRankingPlayerInformation* InRanking )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);

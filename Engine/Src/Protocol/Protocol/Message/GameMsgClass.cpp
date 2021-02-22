@@ -3498,7 +3498,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result NotifyPlayerStatusUpdatedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			// Cmd: Get Ranking lise
+			// Cmd: Get Ranking list
 			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 21);
 			Result GetRankingListCmd::ParseMessage(const MessageData* pIMsg)
 			{

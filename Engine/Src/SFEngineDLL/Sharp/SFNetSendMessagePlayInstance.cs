@@ -38,7 +38,7 @@ namespace SF.Net
 		} // public  SendMessagePlayInstance( SF.SFConnection connection )
 
 		// Cmd: Event for Player Join request.
-		public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt32 InPlayInstanceID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
+		public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
 		{
  			int result;
 			{
@@ -46,7 +46,7 @@ namespace SF.Net
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinGameInstanceCmd);
 			return result;
-		} // public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt32 InPlayInstanceID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
+		} // public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
 
 		// C2S: Play packet
 		public int  PlayPacketC2SEvt( System.UInt32 InPlayInstanceID, System.UInt32 InSenderEndpointID, System.UInt32 InTargetEndpointMask, System.Byte[] InPayload )
@@ -121,7 +121,7 @@ namespace SF.Net
 		#region Native Interfaces 
 		// Cmd: Event for Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InPlayInstanceID, System.UInt64 InPlayerID, [MarshalAs(UnmanagedType.LPArray)] byte[] InPlayerIdentifier );
+		static extern int CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceID, System.UInt64 InPlayerID, [MarshalAs(UnmanagedType.LPArray)] byte[] InPlayerIdentifier );
 
 
 		// C2S: Play packet
@@ -176,7 +176,7 @@ namespace SF.Net
 		} // public  SendMessageSvrPlayInstance( SF.SFConnection connection )
 
 		// Cmd: Event for Player Join request.
-		public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InPlayInstanceID, System.UInt32 InMyEndpointID, SF.PlayerInformation[] InMemberInfos )
+		public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceID, System.UInt32 InMyEndpointID, SF.PlayerInformation[] InMemberInfos )
 		{
  			int result;
 			{
@@ -184,19 +184,19 @@ namespace SF.Net
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinGameInstanceRes);
 			return result;
-		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InPlayInstanceID, System.UInt32 InMyEndpointID, SF.PlayerInformation[] InMemberInfos )
+		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceID, System.UInt32 InMyEndpointID, SF.PlayerInformation[] InMemberInfos )
 
 
 		// S2C: Event for Player joined.
-		public int  PlayerJoinS2CEvt( System.UInt32 InPlayInstanceID, SF.PlayerInformation InJoinedPlayerInfo )
+		public int  PlayerJoinedS2CEvt( System.UInt32 InPlayInstanceID, SF.PlayerInformation InJoinedPlayerInfo )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_PlayInstancePlayerJoinS2CEvt(m_Connection.NativeHandle, InPlayInstanceID,ref InJoinedPlayerInfo);
+			result = CSSFNetAdapter_PlayInstancePlayerJoinedS2CEvt(m_Connection.NativeHandle, InPlayInstanceID,ref InJoinedPlayerInfo);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerJoinS2CEvt);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerJoinedS2CEvt);
 			return result;
-		} // public int  PlayerJoinS2CEvt( System.UInt32 InPlayInstanceID, SF.PlayerInformation InJoinedPlayerInfo )
+		} // public int  PlayerJoinedS2CEvt( System.UInt32 InPlayInstanceID, SF.PlayerInformation InJoinedPlayerInfo )
 
 
 		// S2C: Event for Player left.
@@ -209,6 +209,18 @@ namespace SF.Net
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerLeftS2CEvt);
 			return result;
 		} // public int  PlayerLeftS2CEvt( System.UInt32 InPlayInstanceID, System.UInt64 InLeftPlayerID, System.UInt32 InKickedReason )
+
+
+		// S2C: Player kicked event. this event will be brocasted when a player kicked.
+		public int  PlayerKickedS2CEvt( System.UInt64 InKickedPlayerID )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt(m_Connection.NativeHandle, InKickedPlayerID);
+			}
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerKickedS2CEvt);
+			return result;
+		} // public int  PlayerKickedS2CEvt( System.UInt64 InKickedPlayerID )
 
 
 		// S2C: New Player in get view
@@ -305,19 +317,25 @@ namespace SF.Net
 		#region Native Interfaces 
 		// Cmd: Event for Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinGameInstanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceJoinGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InPlayInstanceID, System.UInt32 InMyEndpointID, System.UInt16 _sizeOfInMemberInfos,SF.PlayerInformation[] InMemberInfos );
+		static extern int CSSFNetAdapter_PlayInstanceJoinGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceID, System.UInt32 InMyEndpointID, System.UInt16 _sizeOfInMemberInfos,SF.PlayerInformation[] InMemberInfos );
 
 
 
 		// S2C: Event for Player joined.
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstancePlayerJoinS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstancePlayerJoinS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InPlayInstanceID, ref SF.PlayerInformation InJoinedPlayerInfo );
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstancePlayerJoinedS2CEvt", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstancePlayerJoinedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InPlayInstanceID, ref SF.PlayerInformation InJoinedPlayerInfo );
 
 
 
 		// S2C: Event for Player left.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstancePlayerLeftS2CEvt", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstancePlayerLeftS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InPlayInstanceID, System.UInt64 InLeftPlayerID, System.UInt32 InKickedReason );
+
+
+
+		// S2C: Player kicked event. this event will be brocasted when a player kicked.
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InKickedPlayerID );
 
 
 

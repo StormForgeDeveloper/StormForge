@@ -86,7 +86,7 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestPlayerStatusUpdateRes::MID.IDSeq.MsgID,&Message::Game::RequestPlayerStatusUpdateRes::TraceOut));
 			// S2C: *Notify Player Status Updated
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::NotifyPlayerStatusUpdatedS2CEvt::MID.IDSeq.MsgID,&Message::Game::NotifyPlayerStatusUpdatedS2CEvt::TraceOut));
-			// Cmd: Get Ranking lise
+			// Cmd: Get Ranking list
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetRankingListCmd::MID.IDSeq.MsgID,&Message::Game::GetRankingListCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetRankingListRes::MID.IDSeq.MsgID,&Message::Game::GetRankingListRes::TraceOut));
 			// Cmd: Game user game play information

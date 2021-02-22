@@ -65,7 +65,7 @@ namespace SF
 		Result FindPlayerByPlayerIDCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID );
 		// Cmd: *Request Player Status Update
 		Result RequestPlayerStatusUpdateCmd( const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID );
-		// Cmd: Get Ranking lise
+		// Cmd: Get Ranking list
 		Result GetRankingListCmd( const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
 		// Cmd: Game user game play information
 		Result GetUserGamePlayerInfoCmd( const uint64_t &InTransactionID );
@@ -204,7 +204,7 @@ namespace SF
 		Result RequestPlayerStatusUpdateRes( const uint64_t &InTransactionID, const Result &InResult );
 		// S2C: *Notify Player Status Updated
 		Result NotifyPlayerStatusUpdatedS2CEvt( const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame );
-		// Cmd: Get Ranking lise
+		// Cmd: Get Ranking list
 		Result GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 		// Cmd: Game user game play information
 		Result GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );

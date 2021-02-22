@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -91,6 +91,9 @@ namespace SF {
 		PlayerManager,
 		Login,
 		Game,
+		StaticGameInstance,
+		GameInstance,
+		GameStaticInstanceManager,
 		GameInstanceManager,
 		GamePartyManager,
 		Ranking,

@@ -118,14 +118,5 @@ namespace SF {
 		}
 	};
 
-
-
-
-
-
-
 } // namespace SF
-
-
-
 

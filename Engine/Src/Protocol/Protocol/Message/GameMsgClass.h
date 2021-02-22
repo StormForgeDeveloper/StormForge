@@ -1719,7 +1719,7 @@ namespace SF
 
 			}; // class NotifyPlayerStatusUpdatedS2CEvt : public MessageBase
 
-			// Cmd: Get Ranking lise
+			// Cmd: Get Ranking list
 			class GetRankingListCmd : public MessageBase
 			{
  			public:

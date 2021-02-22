@@ -139,7 +139,7 @@ namespace SF.Net
 		// S2C: *Notify Player Status Updated
 		public static int NotifyPlayerStatusUpdatedS2CEvt { get { return CSSFNetMessageID_GameNotifyPlayerStatusUpdatedS2CEvt(); } }
 
-		// Cmd: Get Ranking lise
+		// Cmd: Get Ranking list
 		public static int GetRankingListCmd { get { return CSSFNetMessageID_GameGetRankingListCmd(); } }
 
 		public static int GetRankingListRes { get { return CSSFNetMessageID_GameGetRankingListRes(); } }
@@ -676,7 +676,7 @@ namespace SF.Net
 		static extern int CSSFNetMessageID_GameNotifyPlayerStatusUpdatedS2CEvt();
 
 
-		// Cmd: Get Ranking lise
+		// Cmd: Get Ranking list
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGetRankingListCmd", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameGetRankingListCmd();
 

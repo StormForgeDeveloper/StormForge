@@ -126,7 +126,7 @@ namespace SF
 			// S2C: *Notify Player Status Updated
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::NotifyPlayerStatusUpdatedS2CEvt::MID.IDSeq.MsgID,&Message::Game::NotifyPlayerStatusUpdatedS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::NotifyPlayerStatusUpdatedS2CEvt::MID.IDSeq.MsgID,&Message::Game::NotifyPlayerStatusUpdatedS2CEvt::ParseMessageToMessageBase));
-			// Cmd: Get Ranking lise
+			// Cmd: Get Ranking list
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetRankingListCmd::MID.IDSeq.MsgID,&Message::Game::GetRankingListCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::GetRankingListCmd::MID.IDSeq.MsgID,&Message::Game::GetRankingListCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::GetRankingListRes::MID.IDSeq.MsgID,&Message::Game::GetRankingListRes::ParseMessageTo));

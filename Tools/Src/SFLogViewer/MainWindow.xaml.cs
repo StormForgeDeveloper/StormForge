@@ -69,18 +69,6 @@ namespace SFLogViewer
             }
 
             m_StreamDirectory.RequestStreamList();
-            //var numTopic = m_StreamDirectory.GetTopicCount();
-
-            //listLogChannels.BeginInit();
-            //listLogChannels.Items.Clear();
-
-            //for (int iTopic = 0; iTopic < numTopic; iTopic++)
-            //{
-            //    var topicName = m_StreamDirectory.GetTopic(iTopic);
-            //    listLogChannels.Items.Add(topicName);
-            //}
-
-            //listLogChannels.EndInit();
         }
 
         protected override void OnClosing(CancelEventArgs e)
