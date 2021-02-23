@@ -243,293 +243,295 @@ namespace SF
 		m_Producer.reset();
 	}
 
-        Result StreamDBProducer::Initialize(const String& brokers, const String& topic, int32_t partition)
-        {
-            Result hr = super::Initialize(brokers, topic, partition);
-            if (!hr)
-                return hr;
-
-            std::string errstr;
-            if (GetConfig()->set("dr_cb", m_DeliveryCallback.get(), errstr) != RdKafka::Conf::CONF_OK) {
-                SFLog(Net, Error, "Kafka callback registration has failed: {0}", errstr);
-                return ResultCode::INVALID_ARG;
-            }
-
-            RdKafka::Producer* producer = RdKafka::Producer::create(GetConfig().get(), errstr);
-            if (!producer)
-            {
-                SFLog(Net, Error, "Kafka producer creation has failed: {0}", errstr);
-                return ResultCode::INVALID_ARG;
-            }
-
-            m_Producer.reset(producer);
-
-            RdKafka::Topic* topicHandle = RdKafka::Topic::create(m_Producer.get(), GetTopic().data(), GetTopicConfig().get(), errstr);
-            if (topicHandle == nullptr)
-            {
-                SFLog(Net, Error, "Kafka consumer topic creation has failed: {0}", errstr);
-                return ResultCode::OUT_OF_MEMORY;
-            }
-
-            SetTopicHandle(topicHandle);
-
-            // If the there is no data in the topic, getting metadata will fail.
-            // Ignoring metadata update result
-            UpdateTopicMetadata(m_Producer.get());
-
-            return ResultCode::SUCCESS;
-        }
-
-        Result StreamDBProducer::SendRecord(const Array<uint8_t>& data, int64_t timestamp)
-        {
-            if (!m_Producer)
-                return ResultCode::NOT_INITIALIZED;
-
-            if (data.size() == 0)
-                return ResultCode::INVALID_ARG;
-
-            if (GetTopic().IsNullOrEmpty())
-                return ResultCode::NOT_INITIALIZED;
-
-            // Additional headers
-            RdKafka::Headers* headers = RdKafka::Headers::create();
-            headers->add("GameStream", GetTopic().data());
-
-            RdKafka::ErrorCode err = m_Producer->produce(
-                GetTopicHandle().get(),
-                /* Any Partition: the builtin partitioner will be
-                 * used to assign the message to a topic based
-                 * on the message key, or random partition if
-                 * the key is not set. */
-				GetPartition(),
-                RdKafka::Producer::RK_MSG_COPY /* Copy payload */,
-                /* Payload */
-                const_cast<uint8_t*>(data.data()), data.size(),
-                NULL, 0, // Key
-                timestamp, // Timestamp (0 means defaults to current time)
-                headers,
-                /* Per-message opaque value passed to delivery report */
-                NULL);
-
-            if (err != RdKafka::ERR_NO_ERROR)
-            {
-                SFLog(Net, Error, "Kafka Failed to send data, topic:{0}, error:{1}", GetTopic(), RdKafka::err2str(err));
-
-                delete headers; // Headers are automatically deleted on produce() success. 
-
-                if (err == RdKafka::ERR__QUEUE_FULL)
-                {
-                    // change queue.buffering.max.messages if you want more
-                    return ResultCode::OUT_OF_RESERVED_MEMORY;
-                }
-                else
-                {
-                    return ResultCode::UNEXPECTED;
-                }
-            }
-            else
-            {
-                //SFLog(Net, Debug, "Kafka Enqueued message: {0}, size:{1}", GetTopic(), data.size());
-            }
-
-            // TODO:  I might want to do it on specific thread
-            m_Producer->poll(0);
-
-            return ResultCode::SUCCESS;
-        }
-
-        Result StreamDBProducer::Flush()
-        {
-            if (!m_Producer)
-                return ResultCode::NOT_INITIALIZED;
-
-            auto res = m_Producer->flush(30 * 1000);
-            return res == RdKafka::ErrorCode::ERR_NO_ERROR ? ResultCode::SUCCESS : ResultCode::IO_TIMEDOUT;
-        }
-
-
-
-
-
-
-		////////////////////////////////////////////////////////////////////////////////////////////////
-		//
-		//	class StreamDBConsumer
-		//
-
-		StreamDBConsumer::StreamMessageData::StreamMessageData(RdKafka::Message* messageData)
-			: ArrayView<uint8_t>(messageData->len(), reinterpret_cast<const uint8_t*>(messageData->payload()))
-			, m_MessageData(messageData)
-		{
-		}
-
-		StreamDBConsumer::StreamMessageData::~StreamMessageData()
-		{
-
-		}
-
-		int64_t StreamDBConsumer::StreamMessageData::GetOffset() const
-		{
-			return m_MessageData->offset();
-		}
-
-		int64_t StreamDBConsumer::StreamMessageData::GetTimeStamp() const
-		{
-			return m_MessageData->timestamp().timestamp;
-		}
-
-		//size_t StreamDBConsumer::StreamMessageData::size() const
-		//{
-		//	if (m_MessageData)
-		//		return m_MessageData->len();
-
-		//	return 0;
-		//}
-
-		//const uint8_t* StreamDBConsumer::StreamMessageData::data() const
-		//{
-		//	if (m_MessageData)
-		//		return reinterpret_cast<const uint8_t*>(m_MessageData->payload());
-
-		//	return nullptr;
-		//}
-
-
-		StreamDBConsumer::StreamDBConsumer()
-		{
-
-		}
-
-		StreamDBConsumer::~StreamDBConsumer()
-		{
-			if (m_Consumer)
-			{
-				m_Consumer->stop(GetTopicHandle().get(), GetPartition());
-
-				m_Consumer->poll(1000);
-			}
-
-			Clear_Internal(); // Unlike regular cases, parent stuffs should be released first
-			m_Consumer.reset();
-		}
-
-		Result StreamDBConsumer::Initialize(const String& brokers, const String& topic, int32_t partition)
-		{
-			std::string errstr;
-
-			Result hr = super::Initialize(brokers, topic, partition);
-			if (!hr)
-				return hr;
-
-			RdKafka::Consumer* consumer = RdKafka::Consumer::create(GetConfig().get(), errstr);
-			if (!consumer)
-			{
-				SFLog(Net, Error, "Kafka consumer creation has failed: {0}", errstr);
-				return ResultCode::OUT_OF_MEMORY;
-			}
-
-			m_Consumer.reset(consumer);
-
-			RdKafka::Topic* topicHandle = RdKafka::Topic::create(m_Consumer.get(), GetTopic().data(), GetTopicConfig().get(), errstr);
-			if (topicHandle == nullptr)
-			{
-				SFLog(Net, Error, "Kafka consumer topic creation has failed: {0}", errstr);
-				return ResultCode::OUT_OF_MEMORY;
-			}
-
-			SetTopicHandle(topicHandle);
-
-			return UpdateTopicMetadata(m_Consumer.get());
-		}
-
-
-		Result StreamDBConsumer::RequestData(int64_t start_offset)
-		{
-			if (m_Consumer == nullptr)
-				return ResultCode::NOT_INITIALIZED;
-
-			// partition has never been set. Set one now
-			if (GetPartition() <= 0 && GetPartitionList().size() > 0)
-			{
-				SetPartition(*GetPartitionList().begin());
-			}
-
-			RdKafka::ErrorCode resp = m_Consumer->start(GetTopicHandle().get(), GetPartition(), start_offset);
-			if (resp != RdKafka::ERR_NO_ERROR)
-			{
-				SFLog(Net, Debug, "Failed to start consumer: {0}", RdKafka::err2str(resp));
-				return ResultCode::FAIL;
-			}
-
-			m_IsDataRequested = true;
-
-			return ResultCode::SUCCESS;
-		}
-
-		Result StreamDBConsumer::PollData(SFUniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS)
-		{
-			ScopeContext hr([this](Result hr)
-				{
-					if (m_Consumer)
-						m_Consumer->poll(0);
-				});
-
-			if (!m_Consumer)
-				return hr = ResultCode::NOT_INITIALIZED;
-
-			UniquePtr<RdKafka::Message> message(m_Consumer->consume(GetTopicHandle().get(), GetPartition(), timeoutMS));
-			if (message == nullptr)
-				return hr = ResultCode::NO_DATA_EXIST;
-
-			const RdKafka::Headers* headers = nullptr;
-
-			switch (message->err())
-			{
-			case RdKafka::ERR__TIMED_OUT:
-				hr = ResultCode::NO_DATA_EXIST;
-				break;
-
-			case RdKafka::ERR_NO_ERROR:
-
-				/* Real message */
-				SFLog(Net, Error, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
-
-				receivedMessageData.reset(new(GetSystemHeap()) StreamMessageData(message.release()));
-				break;
-
-			case RdKafka::ERR__PARTITION_EOF:
-				// Last message
-				hr = ResultCode::END_OF_STREAM;
-				break;
-
-			case RdKafka::ERR__UNKNOWN_TOPIC:
-			case RdKafka::ERR__UNKNOWN_PARTITION:
-				SFLog(Net, Error, "Consume failed: might be invalid stream, {0}", message->errstr());
-				hr = ResultCode::INVALID_STREAMID;
-				break;
-
-			default:
-				SFLog(Net, Error, "Consume failed: {0}", message->errstr());
-				hr = ResultCode::UNEXPECTED;
-			}
-
+	Result StreamDBProducer::Initialize(const String& brokers, const String& topic, int32_t partition)
+	{
+		assert(!brokers.IsNullOrEmpty());
+		assert(!topic.IsNullOrEmpty());
+		Result hr = super::Initialize(brokers, topic, partition);
+		if (!hr)
 			return hr;
+
+		std::string errstr;
+		if (GetConfig()->set("dr_cb", m_DeliveryCallback.get(), errstr) != RdKafka::Conf::CONF_OK) {
+			SFLog(Net, Error, "Kafka callback registration has failed: {0}", errstr);
+			return ResultCode::INVALID_ARG;
 		}
 
-
-		Result StreamDBConsumer::PollData(int32_t timeoutMS)
+		RdKafka::Producer* producer = RdKafka::Producer::create(GetConfig().get(), errstr);
+		if (!producer)
 		{
-			m_ReceivedMessageData.reset();
-			return PollData(m_ReceivedMessageData, timeoutMS);
+			SFLog(Net, Error, "Kafka producer creation has failed: {0}", errstr);
+			return ResultCode::INVALID_ARG;
 		}
 
-		int64_t StreamDBConsumer::ToOffsetFromTail(int64_t offsetFromTail) const
+		m_Producer.reset(producer);
+
+		RdKafka::Topic* topicHandle = RdKafka::Topic::create(m_Producer.get(), GetTopic().data(), GetTopicConfig().get(), errstr);
+		if (topicHandle == nullptr)
 		{
-			if (offsetFromTail < 0)
-				offsetFromTail = 0;
-
-			return RdKafka::Consumer::OffsetTail(offsetFromTail);
+			SFLog(Net, Error, "Kafka consumer topic creation has failed: {0}", errstr);
+			return ResultCode::OUT_OF_MEMORY;
 		}
+
+		SetTopicHandle(topicHandle);
+
+		// If the there is no data in the topic, getting metadata will fail.
+		// Ignoring metadata update result
+		UpdateTopicMetadata(m_Producer.get());
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result StreamDBProducer::SendRecord(const Array<uint8_t>& data, int64_t timestamp)
+	{
+		if (!m_Producer)
+			return ResultCode::NOT_INITIALIZED;
+
+		if (data.size() == 0)
+			return ResultCode::INVALID_ARG;
+
+		if (GetTopic().IsNullOrEmpty())
+			return ResultCode::NOT_INITIALIZED;
+
+		// Additional headers
+		RdKafka::Headers* headers = RdKafka::Headers::create();
+		headers->add("GameStream", GetTopic().data());
+
+		RdKafka::ErrorCode err = m_Producer->produce(
+			GetTopicHandle().get(),
+			/* Any Partition: the builtin partitioner will be
+			 * used to assign the message to a topic based
+			 * on the message key, or random partition if
+			 * the key is not set. */
+			GetPartition(),
+			RdKafka::Producer::RK_MSG_COPY /* Copy payload */,
+			/* Payload */
+			const_cast<uint8_t*>(data.data()), data.size(),
+			NULL, 0, // Key
+			timestamp, // Timestamp (0 means defaults to current time)
+			headers,
+			/* Per-message opaque value passed to delivery report */
+			NULL);
+
+		if (err != RdKafka::ERR_NO_ERROR)
+		{
+			SFLog(Net, Error, "Kafka Failed to send data, topic:{0}, error:{1}", GetTopic(), RdKafka::err2str(err));
+
+			delete headers; // Headers are automatically deleted on produce() success. 
+
+			if (err == RdKafka::ERR__QUEUE_FULL)
+			{
+				// change queue.buffering.max.messages if you want more
+				return ResultCode::OUT_OF_RESERVED_MEMORY;
+			}
+			else
+			{
+				return ResultCode::UNEXPECTED;
+			}
+		}
+		else
+		{
+			//SFLog(Net, Debug, "Kafka Enqueued message: {0}, size:{1}", GetTopic(), data.size());
+		}
+
+		// TODO:  I might want to do it on specific thread
+		m_Producer->poll(0);
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result StreamDBProducer::Flush()
+	{
+		if (!m_Producer)
+			return ResultCode::NOT_INITIALIZED;
+
+		auto res = m_Producer->flush(30 * 1000);
+		return res == RdKafka::ErrorCode::ERR_NO_ERROR ? ResultCode::SUCCESS : ResultCode::IO_TIMEDOUT;
+	}
+
+
+
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	class StreamDBConsumer
+	//
+
+	StreamDBConsumer::StreamMessageData::StreamMessageData(RdKafka::Message* messageData)
+		: ArrayView<uint8_t>(messageData->len(), reinterpret_cast<const uint8_t*>(messageData->payload()))
+		, m_MessageData(messageData)
+	{
+	}
+
+	StreamDBConsumer::StreamMessageData::~StreamMessageData()
+	{
+
+	}
+
+	int64_t StreamDBConsumer::StreamMessageData::GetOffset() const
+	{
+		return m_MessageData->offset();
+	}
+
+	int64_t StreamDBConsumer::StreamMessageData::GetTimeStamp() const
+	{
+		return m_MessageData->timestamp().timestamp;
+	}
+
+	//size_t StreamDBConsumer::StreamMessageData::size() const
+	//{
+	//	if (m_MessageData)
+	//		return m_MessageData->len();
+
+	//	return 0;
+	//}
+
+	//const uint8_t* StreamDBConsumer::StreamMessageData::data() const
+	//{
+	//	if (m_MessageData)
+	//		return reinterpret_cast<const uint8_t*>(m_MessageData->payload());
+
+	//	return nullptr;
+	//}
+
+
+	StreamDBConsumer::StreamDBConsumer()
+	{
+
+	}
+
+	StreamDBConsumer::~StreamDBConsumer()
+	{
+		if (m_Consumer)
+		{
+			m_Consumer->stop(GetTopicHandle().get(), GetPartition());
+
+			m_Consumer->poll(1000);
+		}
+
+		Clear_Internal(); // Unlike regular cases, parent stuffs should be released first
+		m_Consumer.reset();
+	}
+
+	Result StreamDBConsumer::Initialize(const String& brokers, const String& topic, int32_t partition)
+	{
+		std::string errstr;
+
+		Result hr = super::Initialize(brokers, topic, partition);
+		if (!hr)
+			return hr;
+
+		RdKafka::Consumer* consumer = RdKafka::Consumer::create(GetConfig().get(), errstr);
+		if (!consumer)
+		{
+			SFLog(Net, Error, "Kafka consumer creation has failed: {0}", errstr);
+			return ResultCode::OUT_OF_MEMORY;
+		}
+
+		m_Consumer.reset(consumer);
+
+		RdKafka::Topic* topicHandle = RdKafka::Topic::create(m_Consumer.get(), GetTopic().data(), GetTopicConfig().get(), errstr);
+		if (topicHandle == nullptr)
+		{
+			SFLog(Net, Error, "Kafka consumer topic creation has failed: {0}", errstr);
+			return ResultCode::OUT_OF_MEMORY;
+		}
+
+		SetTopicHandle(topicHandle);
+
+		return UpdateTopicMetadata(m_Consumer.get());
+	}
+
+
+	Result StreamDBConsumer::RequestData(int64_t start_offset)
+	{
+		if (m_Consumer == nullptr)
+			return ResultCode::NOT_INITIALIZED;
+
+		// partition has never been set. Set one now
+		if (GetPartition() <= 0 && GetPartitionList().size() > 0)
+		{
+			SetPartition(*GetPartitionList().begin());
+		}
+
+		RdKafka::ErrorCode resp = m_Consumer->start(GetTopicHandle().get(), GetPartition(), start_offset);
+		if (resp != RdKafka::ERR_NO_ERROR)
+		{
+			SFLog(Net, Debug, "Failed to start consumer: {0}", RdKafka::err2str(resp));
+			return ResultCode::FAIL;
+		}
+
+		m_IsDataRequested = true;
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result StreamDBConsumer::PollData(SFUniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS)
+	{
+		ScopeContext hr([this](Result hr)
+			{
+				if (m_Consumer)
+					m_Consumer->poll(0);
+			});
+
+		if (!m_Consumer)
+			return hr = ResultCode::NOT_INITIALIZED;
+
+		UniquePtr<RdKafka::Message> message(m_Consumer->consume(GetTopicHandle().get(), GetPartition(), timeoutMS));
+		if (message == nullptr)
+			return hr = ResultCode::NO_DATA_EXIST;
+
+		const RdKafka::Headers* headers = nullptr;
+
+		switch (message->err())
+		{
+		case RdKafka::ERR__TIMED_OUT:
+			hr = ResultCode::NO_DATA_EXIST;
+			break;
+
+		case RdKafka::ERR_NO_ERROR:
+
+			/* Real message */
+			SFLog(Net, Error, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
+
+			receivedMessageData.reset(new(GetSystemHeap()) StreamMessageData(message.release()));
+			break;
+
+		case RdKafka::ERR__PARTITION_EOF:
+			// Last message
+			hr = ResultCode::END_OF_STREAM;
+			break;
+
+		case RdKafka::ERR__UNKNOWN_TOPIC:
+		case RdKafka::ERR__UNKNOWN_PARTITION:
+			SFLog(Net, Error, "Consume failed: might be invalid stream, {0}", message->errstr());
+			hr = ResultCode::INVALID_STREAMID;
+			break;
+
+		default:
+			SFLog(Net, Error, "Consume failed: {0}", message->errstr());
+			hr = ResultCode::UNEXPECTED;
+		}
+
+		return hr;
+	}
+
+
+	Result StreamDBConsumer::PollData(int32_t timeoutMS)
+	{
+		m_ReceivedMessageData.reset();
+		return PollData(m_ReceivedMessageData, timeoutMS);
+	}
+
+	int64_t StreamDBConsumer::ToOffsetFromTail(int64_t offsetFromTail) const
+	{
+		if (offsetFromTail < 0)
+			offsetFromTail = 0;
+
+		return RdKafka::Consumer::OffsetTail(offsetFromTail);
+	}
 }
 
 #endif

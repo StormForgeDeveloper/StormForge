@@ -42,6 +42,9 @@ namespace SF {
 	{
 		Result hr;
 
+		if (endpointServer.IsNullOrEmpty() || endpointChannel.IsNullOrEmpty())
+			return ResultCode::FAIL;
+
 		m_EndpointAddress.MessageServer = endpointServer;
 		m_EndpointAddress.Channel = endpointChannel;
 
