@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -98,7 +98,7 @@ namespace SF {
 			// Calculate shift of UTC
 			tm timeStruct;
 			memset(&timeStruct, 0, sizeof(timeStruct));
-			timeStruct.tm_year = UTC_REFERENCE_YEAR - 1900;
+			timeStruct.tm_year = 1900;
 			timeStruct.tm_mday = 1;
 
 			m_ullUTCOffset = DurationMSDouble((uint64_t)timegm(&timeStruct) * 1000 + std::chrono::duration_cast<DurationMSDouble>(UTCClockType::now().time_since_epoch()).count());
@@ -173,7 +173,6 @@ namespace SF {
 		void Time_Chrono::UpdateUTCOffset(TimeStampMS expectedTime)
 		{
 			auto oldValue = m_ullUTCOffset;
-			//m_ullUTCOffset = DurationMS_Zero;
 			auto localTime = GetRawUTCMs();
 			auto diff = ((uint64_t)localTime.time_since_epoch().count() - (uint64_t)expectedTime.time_since_epoch().count());
 

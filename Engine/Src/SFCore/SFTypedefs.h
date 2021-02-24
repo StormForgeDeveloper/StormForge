@@ -574,11 +574,11 @@ namespace SF {
 	using MemoryOrder = std::memory_order;
 
 	using ClockType = std::chrono::steady_clock;
-	using DurationSec = std::chrono::duration<uint>;
+	using DurationSec = std::chrono::duration<uint64_t>;
 	using TimeStampSec = std::chrono::time_point<ClockType, DurationSec>;
 
-	using DurationMS = std::chrono::duration<uint, std::milli>;
-	using DurationMSDouble = std::chrono::duration<uint64_t, std::milli>;
+	using DurationMS = std::chrono::duration<uint64_t, std::milli>;
+	using DurationMSDouble = DurationMS;
 
 	using UTCClockType = std::chrono::system_clock;
 	using UTCTimeStampMS = std::chrono::time_point<UTCClockType, DurationMSDouble>;

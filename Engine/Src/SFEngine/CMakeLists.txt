@@ -130,6 +130,11 @@ set(SFENGINE_LIB_FILES
 	SFEngine.Linux.cpp
 	Util/SFToStringEngineTypes.cpp
 	Types/SFEngineTypedefs.cpp
+	
+	Mongo/SFMongoDB.h
+	Mongo/SFMongoDB.cpp
+	Mongo/SFMongoDBComponent.h
+	Mongo/SFMongoDBComponent.cpp
 
 	Actor/Movement/SFActorMovement.h
 	Actor/Movement/SFActorMovement.cpp

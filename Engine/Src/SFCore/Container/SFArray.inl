@@ -143,9 +143,9 @@ namespace SF {
 
 		// Get data pointer
 		template< class DataType >
-		const DataType* Array<DataType>::data() const
+		DataType* Array<DataType>::data() const
 		{
-			return m_pDataPtr;
+			return const_cast<DataType*>(m_pDataPtr);
 		}
 
 		template< class DataType >

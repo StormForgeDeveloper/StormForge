@@ -103,7 +103,8 @@ if(WIN32)
 		$ENV{VK_SDK_PATH}/include
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/$(Configuration)/include
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/$(Configuration)/include
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/$(Configuration)/include/libbson-1.0
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/$(Configuration)/include/libmongoc-1.0
 	)
 
 	link_directories(
@@ -186,7 +187,8 @@ elseif(UNIX)
 		/usr/include/mysql-cppconn-8
 		/usr/include/vulkan
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/${CMAKE_BUILD_TYPE}/include
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/${CMAKE_BUILD_TYPE}/include/libbson-1.0
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/${CMAKE_BUILD_TYPE}/include/libmongoc-1.0
 	)
 	
 	link_directories(

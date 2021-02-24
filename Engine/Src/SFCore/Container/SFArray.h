@@ -263,7 +263,7 @@ namespace SF {
 			virtual Result reserve(size_t szReserv) { return ResultCode::SUCCESS; }
 
 			// Get data pointer
-			inline const DataType* data() const;
+			inline DataType* data() const;
 			inline DataType* data();
 
 			// Insert an item
