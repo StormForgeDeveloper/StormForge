@@ -37,7 +37,7 @@ static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int
 		EXPECT_TRUE((sortedMap.Insert(TestValues[iTest], TestValues[iTest])));
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Insert %d items, %dms\n", numberOfTest, (end - start).count());
+	SFLog(Game, Info, "Insert {0} items, {1}ms", numberOfTest, (end - start).count());
 
 	start = Util::Time.GetRawTimeMs();
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
@@ -47,7 +47,7 @@ static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Remove  %d items, %dms\n", numberOfTest, (end - start).count());
+	SFLog(Game, Info, "Remove  {0} items, {1}ms", numberOfTest, (end - start).count());
 
 
 	unsigned iTest = 0;
@@ -61,7 +61,7 @@ static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int
 		EXPECT_TRUE((sortedMap.Insert(TestValues[iTest], TestValues[iTest])));
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Insert last 1000 items, %dms\n", (end - start).count());
+	SFLog(Game, Info, "Insert last 1000 items, {0}ms", (end - start).count());
 
 	start = Util::Time.GetRawTimeMs();
 	for (iTest = 0; iTest < Util::Min((unsigned)1000, numberOfTest); iTest++)
@@ -71,7 +71,7 @@ static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Remove first 1000 items, %dms\n", (end - start).count());
+	SFLog(Game, Info, "Remove first 1000 items, {0}ms", (end - start).count());
 
 	start = Util::Time.GetRawTimeMs();
 	for (; iTest < numberOfTest; iTest++)
@@ -81,7 +81,7 @@ static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Remove remain items, %dms\n", (end - start).count());
+	SFLog(Game, Info, "Remove remain items, {0}ms", (end - start).count());
 }
 
 

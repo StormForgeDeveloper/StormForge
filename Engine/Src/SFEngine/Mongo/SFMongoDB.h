@@ -26,9 +26,49 @@ typedef struct _mongoc_uri_t mongoc_uri_t;
 typedef struct _mongoc_database_t mongoc_database_t;
 typedef struct _mongoc_collection_t mongoc_collection_t;
 typedef struct _bson_t bson_t;
+typedef struct _mongoc_cursor_t mongoc_cursor_t;
 
 namespace SF
 {
+
+
+	// SF deleter
+	struct BsonDeleter {
+		constexpr BsonDeleter() noexcept = default;
+		void operator()(bson_t* _Ptr) const noexcept;
+	};
+	using BsonUniquePtr = std::unique_ptr<bson_t, BsonDeleter>;
+
+	struct MongoCursorDeleter {
+		constexpr MongoCursorDeleter() noexcept = default;
+		void operator()(mongoc_cursor_t* _Ptr) const noexcept;
+	};
+	using MongoCursorUniquePtr = std::unique_ptr<mongoc_cursor_t, MongoCursorDeleter>;
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//  class MongoDBCursor
+	//
+
+	class MongoDBCursor
+	{
+	public:
+		MongoDBCursor(mongoc_cursor_t* _Ptr = nullptr);
+		~MongoDBCursor();
+
+		void SetCursorRaw(mongoc_cursor_t* _Ptr);
+
+		operator bool() const { return m_Cursor != nullptr; }
+
+		const bson_t* Next();
+
+	private:
+
+		MongoCursorUniquePtr m_Cursor;
+	};
+
+
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//  class MongoDB
@@ -46,6 +86,8 @@ namespace SF
 		mongoc_client_t* m_Client{};
 		mongoc_database_t* m_Database{};
 		mongoc_collection_t* m_Collection{};
+
+		BsonUniquePtr m_AddOrUpdateOpt;
 
 	public:
 
@@ -65,8 +107,9 @@ namespace SF
 
 		// row manipulation
 		Result Insert(const bson_t* row);
-		Result AddOrupdate(const bson_t* row);
+		Result AddOrUpdate(uint64_t id, const bson_t* row);
 
+		Result Aggregate(const bson_t* aggregatePipeline, MongoDBCursor& outCursor);
 		// TODO: supporting bulk operations
 	};
 

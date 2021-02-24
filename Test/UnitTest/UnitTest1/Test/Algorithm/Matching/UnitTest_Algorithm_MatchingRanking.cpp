@@ -113,7 +113,7 @@ TEST_F(AlgorithmTest, MatchingRanking)
 		EXPECT_TRUE((rankingMap.Insert(players[iPlayer].GetRankingKey(), &players[iPlayer])));
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Insertion took %dms\n", (end - start).count());
+	SFLog(Game, Info, "Insertion took {0}ms", (end - start).count());
 
 	EXPECT_TRUE((rankingMap.CommitChanges()));
 

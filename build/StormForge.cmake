@@ -75,6 +75,7 @@ if(WIN32)
 	add_definitions(-DWIN32)
 	add_definitions(-D_WINDOWS)
 	add_definitions(-DSTATIC_CONCPP) # mysql cpp conn static
+	add_definitions(-DMONGOC_STATIC)
 
 
 	#always use debug info
@@ -96,7 +97,7 @@ if(WIN32)
 
 	set(ARTECTURE x64)
 
-	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi mysqlcppconn8-static Dnsapi bson-static-1.0 mongoc-static-1.0)
+	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi Bcrypt Crypt32 mysqlcppconn8-static Dnsapi bson-static-1.0 mongoc-static-1.0)
 	list(APPEND ENGINE_LINK_LIBS libssl libcrypto)
 	
 	include_directories(AFTER 

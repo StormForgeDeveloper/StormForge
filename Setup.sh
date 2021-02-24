@@ -9,6 +9,7 @@ ATF_PATH=$SF_PATH/../ATF
 
 sudo apt-get install git-lfs build-essential clang cmake rsync zip ninja-build
 sudo apt-get install -y libatomic-ops-dev
+sudo apt install build-essential clang vulkan-sdk libssl-dev perl libssl-dev pkg-config libsasl2-dev
 
 
 if [ ! -d "$ATF_PATH" ]; then
@@ -39,7 +40,6 @@ if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-1.2.148-bionic.list" ]; then
 	sudo apt update
 fi
 
-sudo apt install build-essential clang vulkan-sdk libssl-dev perl libssl-dev
 
 
 pushd src/mysql/

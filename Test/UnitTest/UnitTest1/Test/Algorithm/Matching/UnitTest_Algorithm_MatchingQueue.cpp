@@ -396,7 +396,7 @@ TEST_F(AlgorithmTest, MatchingQueue)
 	matchMaker.Initialize();
 
 	end = Util::Time.GetRawTimeMs();
-	printf("Initialization took %dms\n", (end - start).count());
+	SFLog(Game, Info, "Initialization took {0}ms\n", (end - start).count());
 
 
 	// Start update threads

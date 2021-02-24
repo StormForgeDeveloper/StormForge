@@ -35,7 +35,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestSimple)
 	}
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 	end = Util::Time.GetRawTimeMs();
-	printf("Insert %d items, %dms\n", numberOfTest, (end - start).count());
+	SFLog(Game, Info, "Insert %d items, {0}ms", numberOfTest, (end - start).count());
 
 	start = Util::Time.GetRawTimeMs();
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
@@ -46,7 +46,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestSimple)
 	}
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 	end = Util::Time.GetRawTimeMs();
-	printf("Remove  %d items, %dms\n", numberOfTest, (end - start).count());
+	SFLog(Game, Info, "Remove  {0} items, {1}ms", numberOfTest, (end - start).count());
 
 
 	start = Util::Time.GetRawTimeMs();
@@ -56,7 +56,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestSimple)
 		EXPECT_TRUE((sortedMap.CommitChanges()));
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Insert with commit %d items, %dms\n", numberOfTest, (end - start).count());
+	SFLog(Game, Info, "Insert with commit {0} items, {1}ms", numberOfTest, (end - start).count());
 
 	start = Util::Time.GetRawTimeMs();
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
@@ -67,7 +67,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestSimple)
 		EXPECT_TRUE((sortedMap.CommitChanges()));
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Remove with commit  %d items, %dms\n", numberOfTest, (end - start).count());
+	SFLog(Game, Info, "Remove with commit  {0} items, {1}ms", numberOfTest, (end - start).count());
 }
 
 
@@ -90,7 +90,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestRead)
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Find %d items, %dms\n", numberOfTest, (end - start).count());
+	SFLog(Game, Info, "Find {0} items, {1}ms", numberOfTest, (end - start).count());
 
 
 	start = Util::Time.GetRawTimeMs();
@@ -110,7 +110,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestRead)
 		});
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Query 100 items in %d items %d times, %dms\n", numberOfTest, numberOfTest, (end - start).count());
+	SFLog(Game, Info, "Query 100 items in {0} items {1} times, {2}ms", numberOfTest, numberOfTest, (end - start).count());
 }
 
 TEST_F(AVLTreeTest, DualSortedMapPerfTest1000)
@@ -119,14 +119,14 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTest1000)
 	TimeStampMS start, end;
 
 	int iTest = 0;
-	printf("Insert %d items for test\n", numberOfTest - 1000);
+	SFLog(Game, Info, "Insert {0} items for test", numberOfTest - 1000);
 	start = Util::Time.GetRawTimeMs();
 	for (; iTest < std::max(0, (int)numberOfTest - 1000); iTest++)
 	{
 		EXPECT_TRUE((sortedMap.Insert(TestValues[iTest], TestValues[iTest])));
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Insertion took %dms\n", (end - start).count());
+	SFLog(Game, Info, "Insertion took {0}ms", (end - start).count());
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 
 	start = Util::Time.GetRawTimeMs();
@@ -136,7 +136,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTest1000)
 	}
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 	end = Util::Time.GetRawTimeMs();
-	printf("Insert last 1000 items, %dms\n", (end - start).count());
+	SFLog(Game, Info, "Insert last 1000 items, {0}ms", (end - start).count());
 
 	start = Util::Time.GetRawTimeMs();
 	for (iTest = 0; iTest < std::min(1000, (int)numberOfTest); iTest++)
@@ -147,7 +147,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTest1000)
 	}
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 	end = Util::Time.GetRawTimeMs();
-	printf("Remove first 1000 items, %dms\n", (end - start).count());
+	SFLog(Game, Info, "Remove first 1000 items, {0}ms", (end - start).count());
 
 	start = Util::Time.GetRawTimeMs();
 	for (; iTest < (int)numberOfTest; iTest++)
@@ -158,7 +158,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTest1000)
 	}
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 	end = Util::Time.GetRawTimeMs();
-	printf("Remove remain items, %dms\n", (end - start).count());
+	SFLog(Game, Info, "Remove remain items, {0}ms", (end - start).count());
 }
 
 
@@ -170,14 +170,14 @@ TEST_F(AVLTreeTest, DualSortedMapPerfWithReadThreads)
 	TimeStampMS start, end;
 
 	int iTest = 0;
-	printf("Insert %d items for test\n", numberOfTest - testItemCount);
+	SFLog(Game, Info, "Insert {0} items for test", numberOfTest - testItemCount);
 	start = Util::Time.GetRawTimeMs();
 	for (; iTest < std::max(0, (int)numberOfTest - testItemCount); iTest++)
 	{
 		EXPECT_TRUE((sortedMap.Insert(TestValues[iTest], TestValues[iTest])));
 	}
 	end = Util::Time.GetRawTimeMs();
-	printf("Insertion took %dms\n", (end - start).count());
+	SFLog(Game, Info, "Insertion took {0}ms", (end - start).count());
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 
 	// Start read threads
@@ -206,7 +206,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfWithReadThreads)
 	}
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 	end = Util::Time.GetRawTimeMs();
-	printf("Insert last %d items, %dms\n", testItemCount, (end - start).count());
+	SFLog(Game, Info, "Insert last {0} items, {1}ms", testItemCount, (end - start).count());
 
 	start = Util::Time.GetRawTimeMs();
 	for (iTest = 0; iTest < std::min(1000, (int)numberOfTest); iTest++)
@@ -217,7 +217,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfWithReadThreads)
 	}
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 	end = Util::Time.GetRawTimeMs();
-	printf("Remove first %d items, %dms\n", testItemCount, (end - start).count());
+	SFLog(Game, Info, "Remove first {0} items, {1}ms", testItemCount, (end - start).count());
 
 	start = Util::Time.GetRawTimeMs();
 	for (; iTest < (int)numberOfTest; iTest++)
@@ -228,7 +228,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfWithReadThreads)
 	}
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 	end = Util::Time.GetRawTimeMs();
-	printf("Remove remain items, %dms\n", (end - start).count());
+	SFLog(Game, Info, "Remove remain items, {0}ms", (end - start).count());
 
 	// Stop all read threads
 	StopAllThread();
