@@ -55,7 +55,6 @@ include_directories(AFTER
 	../${SF_FOLDER}/3rdParties/src/zlib/zlib-1.2.8
 	../${SF_FOLDER}/3rdParties/src/jsoncpp/jsoncpp/include
 	../${SF_FOLDER}/3rdParties/src/zookeeper/zookeeperConnector/include
-	../${SF_FOLDER}/3rdParties/src/PlayFab/XPlatCppSdk/code/include
 	../${SF_FOLDER}/Engine/Src/SFCore
 	../${SF_FOLDER}/Engine/Src/SFEngine
 	../${SF_FOLDER}/Engine/Src/Protocol
@@ -97,18 +96,20 @@ if(WIN32)
 
 	set(ARTECTURE x64)
 
-	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi mysqlcppconn8-static Dnsapi)
+	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi mysqlcppconn8-static Dnsapi bson-static-1.0 mongoc-static-1.0)
 	list(APPEND ENGINE_LINK_LIBS libssl libcrypto)
 	
 	include_directories(AFTER 
 		$ENV{VK_SDK_PATH}/include
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
+		../${SF_FOLDER}/3rdParties/Windows/mongoc/${CMAKE_BUILD_TYPE}/include
 	)
 
 	link_directories(
 		../${SF_FOLDER}/3rdParties/src/openssl/buildWIndows/openssl/lib
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14/$(Configuration)
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14
+		../${SF_FOLDER}/3rdParties/Windows/mongoc/${CMAKE_BUILD_TYPE}/lib
 	)
 	
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
@@ -173,12 +174,13 @@ elseif(UNIX)
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)
 
-	set(PLATFORM_LIBS mysqlcppconn8 rt m atomic)
+	set(PLATFORM_LIBS bson-static-1.0 mongoc-static-1.0 mysqlcppconn8 rt m atomic)
 	list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 	include_directories(AFTER 
 		/usr/include/mysql-cppconn-8
 		/usr/include/vulkan
+		../${SF_FOLDER}/3rdParties/Linux/mongoc/${CMAKE_BUILD_TYPE}/include
 	)
 	
 	link_directories(
@@ -186,6 +188,7 @@ elseif(UNIX)
 		/usr/lib/x86_64-linux-gnu/
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
 		../${SF_FOLDER}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE}/lib
+		../${SF_FOLDER}/3rdParties/Linux/mongoc/${CMAKE_BUILD_TYPE}/lib
 		)
 
 	set(ARTECTURE x64)
