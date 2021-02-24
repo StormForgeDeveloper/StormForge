@@ -340,12 +340,12 @@ namespace SF {
 	{
 		GameInsUID GameInstanceUID;
 		StringCrc32 TypeName;
-		StringCrc32 DataID;
+		uint32_t ZoneTableID{};
 
 
 		GameInstanceInfo() {}
 		GameInstanceInfo(const GameInstanceInfo& src);
-		GameInstanceInfo(GameInsUID InGameInstanceUID, StringCrc32 InTypeName, StringCrc32 InDataID);
+		GameInstanceInfo(GameInsUID InGameInstanceUID, StringCrc32 InTypeName, uint32_t InZoneTableID);
 
 		GameInstanceInfo& operator = (const GameInstanceInfo& src);
 		bool operator == (const GameInstanceInfo& src) const;

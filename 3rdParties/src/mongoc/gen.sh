@@ -1,0 +1,53 @@
+
+
+export CMAKE_SYSTEM_NAME=Linux
+export PROCESS_ARCHITECTUR=x64
+
+
+if [ ! -d "build$CMAKE_SYSTEM_NAME" ]; then
+	mkdir build$CMAKE_SYSTEM_NAME
+fi
+
+if [ ! -d "build$CMAKE_SYSTEM_NAME/Debug" ]; then
+	mkdir build$CMAKE_SYSTEM_NAME/Debug
+fi
+
+if [ ! -d "build$CMAKE_SYSTEM_NAME/RelWithDebInfo" ]; then
+	mkdir build$CMAKE_SYSTEM_NAME/RelWithDebInfo
+fi
+
+
+pushd build$CMAKE_SYSTEM_NAME
+
+
+
+export CONFIGURATION=Debug
+pushd $CONFIGURATION
+#export zlibPath=$(dirname $(readlink -e ../../../../$CMAKE_SYSTEM_NAME/$PROCESS_ARCHITECTUR/$CONFIGURATION/lib/libzlib.a))
+# export LD_LIBRARY_PATH=$SavedLinkDir $zlibPath
+cmake ../../1.17 -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$CONFIGURATION  \
+	-DCMAKE_INSTALL_PREFIX=../../../../$CMAKE_SYSTEM_NAME/mongoc/$CONFIGURATION  -DCMAKE_SYSTEM_NAME=$CMAKE_SYSTEM_NAME \
+	-DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF \
+	-DENABLE_STATIC=ON -DENABLE_ZLIB=BUNDLED -DENABLE_BSON=ON -DENABLE_MONGODB_AWS_AUTH=OFF 
+	#-DZLIB_INCLUDE_DIR=../../../zlib/zlib-1.2.8 
+	#-DZLIB_LIBRARY=../../../../$CMAKE_SYSTEM_NAME/$PROCESS_ARCHITECTUR/$CONFIGURATION/lib/zlib
+
+popd
+
+
+export CONFIGURATION=RelWithDebInfo
+pushd $CONFIGURATION
+#export zlibPath=$(dirname $(readlink -e ../../../../$CMAKE_SYSTEM_NAME/$PROCESS_ARCHITECTUR/$CONFIGURATION/lib/libzlib.a))
+# export LD_LIBRARY_PATH=$SavedLinkDir $zlibPath
+cmake ../../1.17 -G "Unix Makefiles"  -DCMAKE_BUILD_TYPE=$CONFIGURATION \
+	-DCMAKE_INSTALL_PREFIX=../../../../$CMAKE_SYSTEM_NAME/mongoc/$CONFIGURATION  -DCMAKE_SYSTEM_NAME=$CMAKE_SYSTEM_NAME \
+	-DENABLE_TESTS=OFF -DENABLE_EXAMPLES=OFF \
+	-DENABLE_STATIC=ON -DENABLE_ZLIB=BUNDLED -DENABLE_BSON=ON -DENABLE_MONGODB_AWS_AUTH=OFF 
+	#-DZLIB_INCLUDE_DIR=../../../zlib/zlib-1.2.8 -DZLIB_LIBRARY=zlib -DCMAKE_SYSTEM_LIBRARY_PATH=$zlibPath
+
+popd
+popd
+
+
+export LD_LIBRARY_PATH=$SavedLinkDir
+

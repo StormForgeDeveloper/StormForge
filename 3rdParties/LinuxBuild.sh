@@ -19,9 +19,9 @@ if [ $? -ne 0 ]; then
 fi
 
 
-export CMAKE_BUILD_TYPE=Release
+export CMAKE_BUILD_TYPE=RelWithDebInfo
 cd ../../x64/$CMAKE_BUILD_TYPE
-cmake --build .   --target install --config Release
+cmake --build .   --target install --config RelWithDebInfo
 
 if [ $? -ne 0 ]; then
 	exit 2

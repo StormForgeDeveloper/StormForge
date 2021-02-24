@@ -5,6 +5,7 @@ call FindVC.cmd
 set NASM_DIR=src\nasm
 set OPENSSL_DIR=src\openssl
 set MYSQL_DIR=src\mysql
+set MONGOC_DIR=src\mongoc
 
 
 rem build helper tools
@@ -20,6 +21,9 @@ cmd /c "cd %OPENSSL_DIR% & config1.1_Winx64.cmd"
 
 rem configure MYSQL client lib
 cmd /c "cd %MYSQL_DIR% & WinGen.cmd"
+
+rem configure MongoC client lib
+cmd /c "cd %MONGOC_DIR% & gen.cmd"
 
 
 cd %~dp0

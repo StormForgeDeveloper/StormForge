@@ -29,14 +29,14 @@ namespace SF {
 	GameInstanceInfo::GameInstanceInfo(const GameInstanceInfo& src)
 		: GameInstanceUID(src.GameInstanceUID)
 		, TypeName(src.TypeName)
-		, DataID(src.DataID)
+		, ZoneTableID(src.ZoneTableID)
 	{
 	}
 
-	GameInstanceInfo::GameInstanceInfo(GameInsUID InGameInstanceUID, StringCrc32 InTypeName, StringCrc32 InDataID)
+	GameInstanceInfo::GameInstanceInfo(GameInsUID InGameInstanceUID, StringCrc32 InTypeName, uint32_t InZoneTableID)
 		: GameInstanceUID(InGameInstanceUID)
 		, TypeName(InTypeName)
-		, DataID(InDataID)
+		, ZoneTableID(InZoneTableID)
 	{
 	}
 
@@ -44,7 +44,7 @@ namespace SF {
 	{
 		GameInstanceUID = src.GameInstanceUID;
 		TypeName = src.TypeName;
-		DataID = src.DataID;
+		ZoneTableID = src.ZoneTableID;
 
 		return *this;
 	}
@@ -53,7 +53,7 @@ namespace SF {
 	{
 		return GameInstanceUID == src.GameInstanceUID
 			&& TypeName == src.TypeName
-			&& DataID == src.DataID;
+			&& ZoneTableID == src.ZoneTableID;
 	}
 
 
