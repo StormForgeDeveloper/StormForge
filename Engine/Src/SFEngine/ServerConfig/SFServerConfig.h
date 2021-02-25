@@ -18,7 +18,6 @@
 #include "Net/SFNetDef.h"
 
 #include "Zookeeper/SFZookeeper.h"
-#include "SFEnum.h"
 
 
 
@@ -265,6 +264,7 @@ namespace SF
 			String GameClusterName;
 			// Data center
 			DataCenterEndpoint DataCenter;
+			String ObjectDirectory;
 			// Server message endpoint. server ID will be attached
 			EndpointAddress ServerEndpointAddress;
 			// Log config

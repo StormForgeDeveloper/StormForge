@@ -42,7 +42,7 @@ namespace SF {
 			std::atomic<UTCTimeStampSec>		m_ullTimeStampUTC;
 
 			// Default UTC offset
-			DurationMSDouble				m_ullUTCOffset;
+			DurationMSDouble				m_ullUTCOffset{};
 
 
 		protected:
@@ -81,7 +81,6 @@ namespace SF {
 			UTCTimeStampSec	GetRawUTCSec();
 			UTCTimeStampMS	GetRawUTCMs();
 
-			DurationSec		GetUTCSecOffset() { return std::chrono::duration_cast<DurationSec>(m_ullUTCOffset); }
 
 			void			UpdateUTCOffset(TimeStampMS expectedTime);
 

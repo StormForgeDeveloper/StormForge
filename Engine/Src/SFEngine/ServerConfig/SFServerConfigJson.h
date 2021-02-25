@@ -16,7 +16,6 @@
 #include "Util/SFString.h"
 
 #include "Zookeeper/SFZookeeper.h"
-#include "ServerConfig/SFEnum.h"
 #include "ServerConfig/SFServerConfig.h"
 #include "json/json.h"
 

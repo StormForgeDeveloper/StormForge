@@ -52,7 +52,7 @@ namespace SF {
 			{
 			public:
 				// thread lock for bucket access
-				TicketLockType	m_Lock;
+				mutable TicketLockType	m_Lock;
 
 			public:
 
@@ -483,19 +483,19 @@ namespace SF {
 			Result insert(const KeyType key, const ItemType &data) { return Insert(key, data); }
 
 
-			Result Find( const KeyType& keyVal, ItemType &data )
+			Result Find( const KeyType& keyVal, ItemType &data ) const
 			{
 				size_t hashVal = HasherType()( keyVal );
 				size_t iBucket = hashVal%m_Buckets.size();
 
-				Bucket& bucket = m_Buckets[iBucket];
+				auto& bucket = m_Buckets[iBucket];
 				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::NonExclusive, bucket.m_Lock );
 
 				Result hr = bucket.m_Items->Find(keyVal, data);
 
 				return hr;
 			}
-			Result find(const KeyType& keyVal, ItemType &data) { return Find(keyVal, data); }
+			Result find(const KeyType& keyVal, ItemType &data) const { return Find(keyVal, data); }
 
 			// Erase a data from hash map
 			Result Erase(const KeyType &key, ValueType& erasedValue)

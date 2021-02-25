@@ -85,7 +85,6 @@ namespace SF
 		mongoc_uri_t* m_Uri{};
 		mongoc_client_t* m_Client{};
 		mongoc_database_t* m_Database{};
-		mongoc_collection_t* m_Collection{};
 
 		BsonUniquePtr m_AddOrUpdateOpt;
 
@@ -102,14 +101,51 @@ namespace SF
 
 		virtual Result Initialize(const String& serverAddress);
 
-		// set database and collection to use
-		Result SetDatabase(const char* database, const char* collection);
+		mongoc_client_t* GetClient() const { return m_Client; }
+	};
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//  class MongoDBCollection
+	//
+
+	class MongoDBCollection : public SharedObject
+	{
+	public:
+
+		using super = SharedObject;
+
+		IHeap& m_Heap;
+
+		SharedPointerT<MongoDB> m_DB;
+		mongoc_database_t* m_DataBase{};
+		mongoc_collection_t* m_Collection{};
+
+		BsonUniquePtr m_AddOrUpdateOpt;
+
+	public:
+
+		MongoDBCollection(IHeap& heap);
+		virtual ~MongoDBCollection();
+
+		IHeap& GetHeap() { return m_Heap; }
+
+		void Clear();
+
+		virtual void Dispose() override;
+
+		virtual Result Initialize(MongoDB* pDB, const char* database, const char* collection);
 
 		// row manipulation
 		Result Insert(const bson_t* row);
 		Result AddOrUpdate(uint64_t id, const bson_t* row);
 
+		Result Find(const bson_t* matchPattern, MongoDBCursor& outCursor);
 		Result Aggregate(const bson_t* aggregatePipeline, MongoDBCursor& outCursor);
+
+
+		Result Remove(uint64_t id);
 		// TODO: supporting bulk operations
 	};
 

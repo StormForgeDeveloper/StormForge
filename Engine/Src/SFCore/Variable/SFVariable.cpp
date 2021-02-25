@@ -1240,6 +1240,12 @@ namespace SF
 		return Service::StringDB->GetString(m_Value);
 	}
 
+	const char* VariableStringCrc32::GetValueCharString() const
+	{
+		return Service::StringDB->GetString(m_Value);
+	}
+
+
 	Result VariableStringCrc32::ToString(ToStringContext& context) const
 	{
 		auto pStr = Service::StringDB->GetString(m_Value);
@@ -1283,6 +1289,11 @@ namespace SF
 	constexpr StringCrc32 VariableStringCrc64::TYPE_NAME;
 
 	String VariableStringCrc64::GetValueString() const
+	{
+		return Service::StringDB->GetString(m_Value);
+	}
+
+	const char* VariableStringCrc64::GetValueCharString() const
 	{
 		return Service::StringDB->GetString(m_Value);
 	}

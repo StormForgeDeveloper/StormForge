@@ -91,14 +91,15 @@ namespace SF {
 		PlayerManager,
 		Login,
 		Game,
-		StaticGameInstance,
-		GameInstance,
 		GameStaticInstanceManager,
 		GameInstanceManager,
 		GamePartyManager,
 		Ranking,
 		ChatChannelManager,
 		CharacterData,
+		LoginPlayer,
+		GamePlayer,
+		GameInstance,
 
 		PurchaseValidateGoogle,
 		PurchaseValidateIOS,
@@ -131,6 +132,8 @@ namespace SF {
 
 	static constexpr uint32_t ClusterID_MatchingQueue_Max = static_cast<uint32_t>(ClusterID::Stream);
 
+	const char* ToString(ClusterID clusterId);
+	StringCrc64 ToStringCrc64(ClusterID clusterId);
 
 	inline ClusterID operator++(ClusterID clusterID)
 	{

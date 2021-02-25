@@ -1002,6 +1002,7 @@ namespace SF {
 		virtual double GetValueDouble() const override { return (double)m_Value; }
 		virtual StringCrc32 GetValueStringCrc32() const override { return m_Value; }
 		virtual String GetValueString() const override;
+		virtual const char* GetValueCharString() const override;
 
 		virtual Result ToString(ToStringContext& context) const override;
 
@@ -1061,6 +1062,7 @@ namespace SF {
 		virtual double GetValueDouble() const override { return (double)m_Value; }
 		virtual StringCrc64 GetValueStringCrc64() const override { return m_Value; }
 		virtual String GetValueString() const override;
+		virtual const char* GetValueCharString() const override;
 
 		virtual Result ToString(ToStringContext& context) const override;
 

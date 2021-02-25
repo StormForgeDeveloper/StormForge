@@ -21,6 +21,66 @@
 
 namespace SF {
 
+
+#define __CLUSTERID_NAMES__ \
+	"None",\
+	"ClusterManager",\
+	"Monitoring",\
+	"PlayerManager",\
+	"Login",\
+	"Game",\
+	"GameStaticInstanceManager",\
+	"GameInstanceManager",\
+	"GamePartyManager",\
+	"Ranking",\
+	"ChatChannelManager",\
+	"CharacterData",\
+	"LoginPlayer",\
+	"GamePlayer",\
+	"GameInstance",\
+	"PurchaseValidateGoogle",\
+	"PurchaseValidateIOS",\
+	"Matching_Game_4",\
+	"Matching_Game_8",\
+	"MatchingQueue_Game_4x1",\
+	"MatchingQueue_Game_4x2",\
+	"MatchingQueue_Game_4x3",\
+	"MatchingQueue_Game_4x1S",\
+	"MatchingQueue_Game_4x1W",\
+	"MatchingQueue_Game_8x1",\
+	"MatchingQueue_Game_8x2",\
+	"MatchingQueue_Game_8x3",\
+	"MatchingQueue_Game_8x4",\
+	"MatchingQueue_Game_8x5",\
+	"MatchingQueue_Game_8x6",\
+	"MatchingQueue_Game_8x7",\
+	"MatchingQueue_Game_8x1S",\
+	"MatchingQueue_Game_8x1W",\
+	"Relay",\
+	"Max",\
+
+
+
+	static constexpr const char* __ClusterID_NameList[] =
+	{
+		__CLUSTERID_NAMES__
+	};
+
+	static constexpr StringCrc64 __ClusterID_NameCrcList[] =
+	{
+		__CLUSTERID_NAMES__
+	};
+
+	const char* ToString(ClusterID clusterId)
+	{
+		return __ClusterID_NameList[(int)clusterId];
+	}
+
+	StringCrc64 ToStringCrc64(ClusterID clusterId)
+	{
+		return __ClusterID_NameCrcList[(int)clusterId];
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//
 	//	Type utility

@@ -176,6 +176,9 @@ namespace Net {
 			: MessageServer(heap)
 			, Channel(heap)
 		{}
+
+		EndpointAddress& operator = (const EndpointAddress& src);
+		EndpointAddress& operator = (const char* srcAddress);
 	};
 
 

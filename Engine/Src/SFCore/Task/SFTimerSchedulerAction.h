@@ -31,7 +31,7 @@ namespace SF {
 #pragma pack(push, 4)
 		union TimeKey {
 			struct {
-				uint32_t ObjectID;
+				uint32_t ObjectId;// This should be unique id in the processes, something like entity id
 				TimeStampMS NextTickTime;
 			} Components;
 
@@ -40,6 +40,8 @@ namespace SF {
 			TimeKey() {}
 		};
 #pragma pack(pop)
+
+		static_assert(sizeof(TimeStampMS) == 4, "This will break TimeKey size assumption");
 
 	private:
 
@@ -72,7 +74,7 @@ namespace SF {
 
 		virtual bool OnTimerTick() { return false; }
 
-		virtual const char* GetDebugString() = 0;
+		virtual const char* GetDebugString() { return "DefaultTimerAction"; }
 	};
 
 

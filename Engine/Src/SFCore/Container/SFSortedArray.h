@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -25,7 +25,7 @@ namespace SF {
 	//	- Implementation of sorted vector array
 	//
 
-	template<class KeyType, class ValueType, bool UseUniqueKey = true, bool UseBulkCopy = true>
+	template<class KeyType, class ValueType, bool UseUniqueKey = true, bool UseBulkCopy = std::is_scalar<ValueType>::value>
 	class SortedArray
 	{
 	public:

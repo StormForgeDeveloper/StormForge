@@ -38,6 +38,7 @@ add_definitions(-DENABLE_PLAYFABSERVER_API)
 add_definitions(-DTHREADED) # for zookeeper
 add_definitions(-DUSE_STATIC_LIB) # for zookeeper
 add_definitions(-DLIBRDKAFKA_STATICLIB) # for rdkafka static lib
+add_definitions(-DBSON_STATIC) # bson static lib
 
 add_definitions(-DSF_USE_MBEDTLS)
 

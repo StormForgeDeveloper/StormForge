@@ -45,13 +45,15 @@ namespace SF
 	Result ServerConfigJson::ParseMessageEndpoint(const Json::Value& jsonObject, const char* keyName, EndpointAddress& outMessageEndpoint)
 	{
 		auto stringValue = jsonObject.get(keyName, Json::Value(Json::stringValue));
-		auto splitIndex = StrUtil::Indexof(stringValue.asCString(), '/');
-		if (splitIndex < 0)
-			return ResultCode::FAIL;
 
-		String MessageEndpointrString = stringValue.asCString();
-		outMessageEndpoint.MessageServer = MessageEndpointrString.SubString(0, splitIndex);
-		outMessageEndpoint.Channel = MessageEndpointrString.SubString(splitIndex+1, MessageEndpointrString.length());
+		outMessageEndpoint = stringValue.asCString();
+		//auto splitIndex = StrUtil::Indexof(stringValue.asCString(), '/');
+		//if (splitIndex < 0)
+		//	return ResultCode::FAIL;
+
+		//String MessageEndpointrString = stringValue.asCString();
+		//outMessageEndpoint.MessageServer = MessageEndpointrString.SubString(0, splitIndex);
+		//outMessageEndpoint.Channel = MessageEndpointrString.SubString(splitIndex+1, MessageEndpointrString.length());
 
 		return ResultCode::SUCCESS;
 	}
@@ -137,7 +139,7 @@ namespace SF
 		auto DBName = itemValue.get("DBName", Json::Value(""));
 
 		pDBCluster->ClusterName = Name.asCString();
-		pDBCluster->ClusterType = Enum<DBClusterType>().GetValue(ClusterTypeString.asCString());
+		pDBCluster->ClusterType = StrUtil::StringCompairIgnoreCase("Normal", 7, ClusterTypeString.asCString(), -1) == true ? DBClusterType::Normal : DBClusterType::Sharding;
 		pDBCluster->DBInstanceName = DBInstanceName.asCString();
 		pDBCluster->DBName = DBName.asCString();
 
@@ -372,8 +374,10 @@ namespace SF
 		Result result;
 
 		auto gameClusterID = rootObject.get("GameClusterId", Json::Value("DefaultGame"));
+		auto objectDirectory = rootObject.get("ObjectDirectory", Json::Value(""));
 		pServer->GameClusterName = gameClusterID.asCString();
 		pServer->GameClusterID = gameClusterID.asCString();
+		pServer->ObjectDirectory = objectDirectory.asCString();
 
 		result = ParseDataCenter(rootObject, "DataCenter", pServer->DataCenter);
 		if (!result)

@@ -48,6 +48,10 @@ namespace SF
 		, m_StringMap32(GetHeap())
 		, m_StringMap64(GetHeap())
 	{
+		// Static table
+		AddNGetString("Static");
+		AddNGetString("Type");
+
 		Service::StringDB = this;
 	}
 

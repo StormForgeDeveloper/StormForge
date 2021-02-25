@@ -101,7 +101,7 @@ namespace SF {
 			timeStruct.tm_year = 1900;
 			timeStruct.tm_mday = 1;
 
-			m_ullUTCOffset = DurationMSDouble((uint64_t)timegm(&timeStruct) * 1000 + std::chrono::duration_cast<DurationMSDouble>(UTCClockType::now().time_since_epoch()).count());
+			m_ullUTCOffset = DurationMSDouble(0);
 
 			UpdateTimer();
 		}
@@ -166,21 +166,22 @@ namespace SF {
 
 		UTCTimeStampMS Time_Chrono::GetRawUTCMs()
 		{
-			return UTCTimeStampMS(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()) - m_ullUTCOffset);
+			return UTCTimeStampMS(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()));
 		}
 
 
 		void Time_Chrono::UpdateUTCOffset(TimeStampMS expectedTime)
 		{
-			auto oldValue = m_ullUTCOffset;
-			auto localTime = GetRawUTCMs();
-			auto diff = ((uint64_t)localTime.time_since_epoch().count() - (uint64_t)expectedTime.time_since_epoch().count());
+			// TODO: Fixme
+			//auto oldValue = 0; m_ullUTCOffset;
+			//auto localTime = GetRawUTCMs();
+			//auto diff = ((uint64_t)localTime.time_since_epoch().count() - (uint64_t)expectedTime.time_since_epoch().count());
 
 			// Average with previous value
-			if (oldValue.count() != 0)
-			{
-				m_ullUTCOffset = DurationMS(diff + oldValue.count());
-			}
+			//if (oldValue.count() != 0)
+			//{
+			//	m_ullUTCOffset = DurationMS(diff + oldValue.count());
+			//}
 		}
 
 		

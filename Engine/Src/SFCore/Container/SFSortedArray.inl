@@ -444,23 +444,34 @@ namespace SF {
 				auto copyCount = m_ItemCount - index;
 				unused(copyCount);
 				assert((index + 1 + copyCount) <= m_AllocatedItemCount);
-				memmove(m_KeyArray + index + 1, m_KeyArray + index, sizeof(KeyType) * (m_ItemCount - index));
+
 				if (UseBulkCopy)
 				{
+					memmove(m_KeyArray + index + 1, m_KeyArray + index, sizeof(KeyType) * (m_ItemCount - index));
 					memmove(m_ValueArray + index + 1, m_ValueArray + index, sizeof(ValueType) * (m_ItemCount - index));
 				}
 				else
 				{
+					// TODO: assuming key is scalar type always
+					//static_assert(std::is_scalar<KeyType>::value, "Assumed key type is scalar type");
+					new((void*)&m_KeyArray[m_ItemCount]) KeyType;
+					memmove(m_KeyArray + index + 1, m_KeyArray + index, sizeof(KeyType) * (m_ItemCount - index));
+					new((void*)&m_ValueArray[m_ItemCount]) ValueType;
 					// Copy from back so that we don't lose data
 					for (int iItem = (int)m_ItemCount - 1; iItem >= index; iItem--)
 					{
-						m_ValueArray[iItem + 1] = m_ValueArray[iItem];
+						m_ValueArray[iItem + 1] = Forward<ValueType>(m_ValueArray[iItem]);
 					}
 				}
 			}
 			else
 			{
 				index = 0;
+				if (!UseBulkCopy)
+				{
+					new((void*)&m_KeyArray[index]) KeyType;
+					new((void*)&m_ValueArray[index]) ValueType;
+				}
 			}
 
 			m_KeyArray[index] = keyValue;
@@ -533,7 +544,7 @@ namespace SF {
 				{
 					for (int iItem = index; iItem < (int)m_ItemCount; iItem++)
 					{
-						m_ValueArray[iItem] = std::forward<ValueType>(m_ValueArray[iItem + 1]);
+						m_ValueArray[iItem] = Forward<ValueType>(m_ValueArray[iItem + 1]);
 					}
 				}
 			}

@@ -90,12 +90,6 @@ namespace SF
 			m_Database = nullptr;
 		}
 
-		if (m_Collection)
-		{
-			mongoc_collection_destroy(m_Collection);
-			m_Collection = nullptr;
-		}
-
 		if (m_Uri)
 		{
 			mongoc_uri_destroy(m_Uri);
@@ -141,12 +135,23 @@ namespace SF
 	}
 
 
-	Result MongoDB::SetDatabase(const char* database, const char* collection)
+
+	MongoDBCollection::MongoDBCollection(IHeap& heap)
+		: m_Heap(heap)
 	{
-		if (m_Database)
+	}
+
+	MongoDBCollection::~MongoDBCollection()
+	{
+
+	}
+
+	void MongoDBCollection::Clear()
+	{
+		if (m_DataBase)
 		{
-			mongoc_database_destroy(m_Database);
-			m_Database = nullptr;
+			mongoc_database_destroy(m_DataBase);
+			m_DataBase = nullptr;
 		}
 
 		if (m_Collection)
@@ -155,13 +160,29 @@ namespace SF
 			m_Collection = nullptr;
 		}
 
-		m_Database = mongoc_client_get_database(m_Client, database);
-		m_Collection = mongoc_client_get_collection(m_Client, database, collection);
-
-		return m_Database != nullptr && m_Collection != nullptr ? ResultCode::SUCCESS : ResultCode::FAIL;
+		m_DB = nullptr;
 	}
 
-	Result MongoDB::Insert(const bson_t* row)
+	void MongoDBCollection::Dispose()
+	{
+		Clear();
+	}
+
+	Result MongoDBCollection::Initialize(MongoDB* pDB, const char* database, const char* collection)
+	{
+		m_DB = pDB;
+		if (m_DB == nullptr)
+			return ResultCode::INVALID_ARG;
+
+		m_AddOrUpdateOpt.reset(BCON_NEW("upsert", BCON_BOOL(true)));
+
+		m_DataBase = mongoc_client_get_database(pDB->GetClient(), database);
+		m_Collection = mongoc_client_get_collection(m_DB->GetClient(), database, collection);
+
+		return m_Collection != nullptr ? ResultCode::SUCCESS : ResultCode::FAIL;
+	}
+
+	Result MongoDBCollection::Insert(const bson_t* row)
 	{
 		if (m_Collection == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -183,7 +204,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result MongoDB::AddOrUpdate(uint64_t id, const bson_t* row)
+	Result MongoDBCollection::AddOrUpdate(uint64_t id, const bson_t* row)
 	{
 		if (m_Collection == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -196,10 +217,14 @@ namespace SF
 			return ResultCode::INVALID_FORMAT;
 
 		BsonUniquePtr selector(BCON_NEW("_id",BCON_INT64(id)));
-		BsonUniquePtr update(BCON_NEW("$set", row));
+		bson_t update;
+		bson_init(&update);
+		BsonUniquePtr updatePtr(&update);
+		
+		bson_append_document(&update, "$set", -1, row);
 
 		bson_error_t error;
-		auto ret = mongoc_collection_update_one(m_Collection, selector.get(), update.get(), m_AddOrUpdateOpt.get(), nullptr, &error);
+		auto ret = mongoc_collection_update_one(m_Collection, selector.get(), &update, m_AddOrUpdateOpt.get(), nullptr, &error);
 		if (!ret)
 		{
 			SFLog(Net, Error, "MongoDB:Insert failed error:{0}", error.message);
@@ -208,7 +233,23 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result MongoDB::Aggregate(const bson_t* aggregatePipeline, MongoDBCursor& outCursor)
+	Result MongoDBCollection::Find(const bson_t* matchPattern, MongoDBCursor& outCursor)
+	{
+		if (m_Collection == nullptr)
+			return ResultCode::NOT_INITIALIZED;
+
+		if (matchPattern == nullptr)
+			return ResultCode::INVALID_ARG;
+
+		BsonUniquePtr opt(BCON_NEW("batchSize", BCON_INT32(50)));
+
+		const mongoc_read_prefs_t* read_prefs = nullptr;
+		outCursor.SetCursorRaw(mongoc_collection_find_with_opts(m_Collection, matchPattern, opt.get(), read_prefs));
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result MongoDBCollection::Aggregate(const bson_t* aggregatePipeline, MongoDBCursor& outCursor)
 	{
 		if (m_Collection == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -225,6 +266,29 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
+	Result MongoDBCollection::Remove(uint64_t id)
+	{
+		if (m_Collection == nullptr)
+			return ResultCode::NOT_INITIALIZED;
+
+		if (id == 0)
+			return ResultCode::INVALID_ARG;
+
+		bson_t key;
+		bson_init(&key);
+		BsonUniquePtr keyPtr(&key);
+
+		bson_append_int64(&key, "_id", -1, id);
+
+		bson_error_t error;
+		auto ret = mongoc_collection_delete_many(m_Collection, &key, nullptr, nullptr, &error);
+		if (!ret)
+		{
+			SFLog(Net, Error, "MongoDB:Remove failed, if:{0} error:{1}", id, error.message);
+		}
+
+		return ResultCode::SUCCESS;
+	}
 }
 
 #endif

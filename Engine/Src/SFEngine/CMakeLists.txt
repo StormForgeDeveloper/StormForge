@@ -115,11 +115,7 @@ set(SFENGINE_LIB_FILES
 	SceneGraph/SFSceneNodeComponent.cpp
 	SceneGraph/SFSceneNodeComponentMesh.cpp
 	SceneGraph/SFSceneNodeComponentSkeletalMesh.cpp
-	ServerConfig/SFEnum.cpp
 	ServerConfig/SFServerConfig.cpp
-	#ServerConfig/SFServerConfigXML.cpp
-	#ServerConfig/SFServerConfigZookeeper.h
-	#ServerConfig/SFServerConfigZookeeper.cpp
 	ServerConfig/SFServerConfigJson.h
 	ServerConfig/SFServerConfigJson.cpp
 	Service/SFEngineService.cpp
@@ -241,9 +237,7 @@ set(SFENGINE_LIB_FILES
 	SceneGraph/SFSceneNodeComponent.h
 	SceneGraph/SFSceneNodeComponentMesh.h
 	SceneGraph/SFSceneNodeComponentSkeletalMesh.h
-	ServerConfig/SFEnum.h
 	ServerConfig/SFServerConfig.h
-	#ServerConfig/SFServerConfigXML.h
 	Service/SFConnectionManagerService.h
 	Service/SFEngineService.h
 	Service/SFEngineServices.h
