@@ -681,6 +681,11 @@ namespace SF {
 		return static_cast<DataType&&>(_Arg);
 	}
 
+	template<typename DataType>
+	[[nodiscard]] constexpr DataType&& Forward(std::remove_reference_t<DataType>&& _Arg) noexcept
+	{
+		return static_cast<DataType&&>(_Arg);
+	}
 
 	#define OffsetOf(s,m) ((size_t)&reinterpret_cast<char const volatile&>((((s*)0)->m)))
 	#define ContainerPtrFromMember(ContainerTypeT, member, memberPtr) ((ContainerTypeT*)((uint8_t*)(memberPtr) - OffsetOf(ContainerTypeT,member)))

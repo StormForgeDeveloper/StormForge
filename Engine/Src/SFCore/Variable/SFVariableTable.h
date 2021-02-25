@@ -50,6 +50,8 @@ namespace SF {
 	public:
 
 		VariableTable(IHeap& heap = GetEngineHeap());
+		VariableTable(IHeap& heap, const VariableTable& src);
+		VariableTable(const VariableTable& src);
 		virtual ~VariableTable();
 
 		IHeap& GetHeap() { return m_Heap; }

@@ -74,7 +74,8 @@ namespace SF
 			}
 			else
 			{
-				mongoc_client_set_appname(m_Client, Util::GetModuleName());
+				// You can't set appname to pooled client
+				//mongoc_client_set_appname(m_Client, Util::GetModuleName());
 			}
 		}
 	}
@@ -197,7 +198,8 @@ namespace SF
 
 	MongoPooledClientPtr MongoDB::GetClientFromPool()
 	{
-		return Forward<MongoPooledClientPtr>(MongoPooledClientPtr(m_MongoClientPool.get()));
+		MongoPooledClientPtr client(m_MongoClientPool.get());
+		return Forward<MongoPooledClientPtr>(client);
 	}
 
 
@@ -225,7 +227,7 @@ namespace SF
 		Clear();
 	}
 
-	Result MongoDBCollection::Initialize(MongoPooledClientPtr& client, const char* database, const char* collection)
+	Result MongoDBCollection::Initialize(MongoPooledClientPtr&& client, const char* database, const char* collection)
 	{
 		m_Client = Forward<MongoPooledClientPtr>(client);
 		if (m_Client == nullptr)

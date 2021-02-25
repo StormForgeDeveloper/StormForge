@@ -179,7 +179,7 @@ elseif(UNIX)
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)
 
-	set(PLATFORM_LIBS bson-static-1.0 mongoc-static-1.0 mysqlcppconn8 rt m atomic)
+	set(PLATFORM_LIBS mongoc-static-1.0 bson-static-1.0 mysqlcppconn8 sasl2 rt m atomic resolv)
 	list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 	set(ARTECTURE x64)

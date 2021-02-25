@@ -182,7 +182,7 @@ namespace SF
 
 		virtual void Dispose() override;
 
-		virtual Result Initialize(MongoPooledClientPtr& client, const char* database, const char* collection);
+		virtual Result Initialize(MongoPooledClientPtr&& client, const char* database, const char* collection);
 
 		// row manipulation
 		Result Insert(const bson_t* row);

@@ -33,6 +33,26 @@ namespace SF {
 	{
 	}
 
+	VariableTable::VariableTable(IHeap& heap, const VariableTable& src)
+		: m_Heap(heap)
+		, m_VairableTable(m_Heap)
+	{
+		for (auto& itVariable : src)
+		{
+			SetVariable(itVariable.GetKey(), *itVariable.GetValue());
+		}
+	}
+
+	VariableTable::VariableTable(const VariableTable& src)
+		: m_Heap(GetSystemHeap())
+		, m_VairableTable(m_Heap)
+	{
+		for (auto& itVariable : src)
+		{
+			SetVariable(itVariable.GetKey(), *itVariable.GetValue());
+		}
+	}
+
 	VariableTable::~VariableTable()
 	{
 		Clear();
