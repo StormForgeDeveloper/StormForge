@@ -21,6 +21,7 @@
 #include "Object/SFSharedObject.h"
 
 
+typedef struct _mongoc_client_pool_t mongoc_client_pool_t; 
 typedef struct _mongoc_client_t mongoc_client_t;
 typedef struct _mongoc_uri_t mongoc_uri_t;
 typedef struct _mongoc_database_t mongoc_database_t;
@@ -45,6 +46,54 @@ namespace SF
 	};
 	using MongoCursorUniquePtr = std::unique_ptr<mongoc_cursor_t, MongoCursorDeleter>;
 
+	struct MongoCollectionDeleter {
+		constexpr MongoCollectionDeleter() noexcept = default;
+		void operator()(mongoc_collection_t* _Ptr) const noexcept;
+	};
+	using MongoCollectionUniquePtr = std::unique_ptr<mongoc_collection_t, MongoCollectionDeleter>;
+
+	struct MongoDatabaseDeleter {
+		constexpr MongoDatabaseDeleter() noexcept = default;
+		void operator()(mongoc_database_t* _Ptr) const noexcept;
+	};
+	using MongoDatabaseUniquePtr = std::unique_ptr<mongoc_database_t, MongoDatabaseDeleter>;
+
+	struct MongoClientDeleter {
+		constexpr MongoClientDeleter() noexcept = default;
+		void operator()(mongoc_client_t* _Ptr) const noexcept;
+	};
+	using MongoClientUniquePtr = std::unique_ptr<mongoc_client_t, MongoClientDeleter>;
+
+	struct MongoClientPoolDeleter {
+		constexpr MongoClientPoolDeleter() noexcept = default;
+		void operator()(mongoc_client_pool_t* _Ptr) const noexcept;
+	};
+	using MongoClientPoolUniquePtr = std::unique_ptr<mongoc_client_pool_t, MongoClientPoolDeleter>;
+
+
+
+	/////////////////////////////////////////////////////////////////////////////////////////////////////
+	// Mongo client from client pool
+	//	- It works like UniquePtr
+	class MongoPooledClientPtr
+	{
+	private:
+		mongoc_client_pool_t* m_Pool{};
+		mongoc_client_t* m_Client{};
+
+	public:
+		MongoPooledClientPtr() = default;
+		MongoPooledClientPtr(mongoc_client_pool_t* pool);
+		MongoPooledClientPtr(MongoPooledClientPtr&& src);
+
+		~MongoPooledClientPtr();
+
+		void reset();
+
+		MongoPooledClientPtr& operator = (MongoPooledClientPtr&& src);
+
+		operator mongoc_client_t* () const { return m_Client; }
+	};
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -83,9 +132,7 @@ namespace SF
 		IHeap& m_Heap;
 
 		mongoc_uri_t* m_Uri{};
-		mongoc_client_t* m_Client{};
-		mongoc_database_t* m_Database{};
-
+		MongoClientPoolUniquePtr m_MongoClientPool;
 		BsonUniquePtr m_AddOrUpdateOpt;
 
 	public:
@@ -101,7 +148,7 @@ namespace SF
 
 		virtual Result Initialize(const String& serverAddress);
 
-		mongoc_client_t* GetClient() const { return m_Client; }
+		MongoPooledClientPtr GetClientFromPool();
 	};
 
 
@@ -118,9 +165,9 @@ namespace SF
 
 		IHeap& m_Heap;
 
-		SharedPointerT<MongoDB> m_DB;
-		mongoc_database_t* m_DataBase{};
-		mongoc_collection_t* m_Collection{};
+		MongoPooledClientPtr m_Client;
+		MongoDatabaseUniquePtr m_DataBase;
+		MongoCollectionUniquePtr m_Collection;
 
 		BsonUniquePtr m_AddOrUpdateOpt;
 
@@ -135,7 +182,7 @@ namespace SF
 
 		virtual void Dispose() override;
 
-		virtual Result Initialize(MongoDB* pDB, const char* database, const char* collection);
+		virtual Result Initialize(MongoPooledClientPtr& client, const char* database, const char* collection);
 
 		// row manipulation
 		Result Insert(const bson_t* row);

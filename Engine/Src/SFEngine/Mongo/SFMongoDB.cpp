@@ -36,6 +36,83 @@ namespace SF
 		if (_Ptr) mongoc_cursor_destroy(_Ptr);
 	}
 
+	void MongoCollectionDeleter::operator()(mongoc_collection_t* _Ptr) const noexcept
+	{
+		if (_Ptr) mongoc_collection_destroy(_Ptr);
+	}
+
+	void MongoDatabaseDeleter::operator()(mongoc_database_t* _Ptr) const noexcept
+	{
+		if (_Ptr) mongoc_database_destroy(_Ptr);
+	}
+
+	void MongoClientDeleter::operator()(mongoc_client_t* _Ptr) const noexcept
+	{
+		if (_Ptr) mongoc_client_destroy(_Ptr);
+	}
+
+	void MongoClientPoolDeleter::operator()(mongoc_client_pool_t* _Ptr) const noexcept
+	{
+		if (_Ptr) mongoc_client_pool_destroy(_Ptr);
+	}
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	class MongoDBCursor
+	//
+
+	MongoPooledClientPtr::MongoPooledClientPtr(mongoc_client_pool_t* pool)
+		: m_Pool(pool)
+	{
+		if (m_Pool)
+		{
+			m_Client = mongoc_client_pool_pop(m_Pool);
+			if (m_Client == nullptr)
+			{
+				SFLog(Net, Error, "MongoDB: failed to allocated a client from pool");
+			}
+			else
+			{
+				mongoc_client_set_appname(m_Client, Util::GetModuleName());
+			}
+		}
+	}
+
+	MongoPooledClientPtr::MongoPooledClientPtr(MongoPooledClientPtr&& src)
+		: m_Pool(src.m_Pool)
+		, m_Client(src.m_Client)
+	{
+		src.m_Pool = nullptr;
+		src.m_Client = nullptr;
+	}
+
+	MongoPooledClientPtr::~MongoPooledClientPtr()
+	{
+		reset();
+	}
+
+	void MongoPooledClientPtr::reset()
+	{
+		if (m_Pool && m_Client)
+		{
+			mongoc_client_pool_push(m_Pool, m_Client);
+		}
+
+		m_Client = nullptr;
+		m_Pool = nullptr;
+	}
+
+	MongoPooledClientPtr& MongoPooledClientPtr::operator = (MongoPooledClientPtr&& src)
+	{
+		m_Pool = src.m_Pool;
+		m_Client = src.m_Client;
+		src.m_Pool = nullptr;
+		src.m_Client = nullptr;
+		return *this;
+	}
+
+
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	class MongoDBCursor
@@ -80,27 +157,18 @@ namespace SF
 
 	MongoDB::~MongoDB()
 	{
+		Clear();
 	}
 
 	void MongoDB::Clear()
 	{
-		if (m_Database)
-		{
-			mongoc_database_destroy(m_Database);
-			m_Database = nullptr;
-		}
-
 		if (m_Uri)
 		{
 			mongoc_uri_destroy(m_Uri);
 			m_Uri = nullptr;
 		}
 
-		if (m_Client)
-		{
-			mongoc_client_destroy(m_Client);
-			m_Client = nullptr;
-		}
+		m_MongoClientPool.reset();
 	}
 
 	void MongoDB::Dispose()
@@ -115,27 +183,26 @@ namespace SF
 
 		Clear();
 
-		mongoc_uri_t* uri = mongoc_uri_new_with_error(serverAddress, &error);
-		if (!uri)
+		m_Uri = mongoc_uri_new_with_error(serverAddress, &error);
+		if (!m_Uri)
 		{
 			SFLog(Net, Error, "MongoDB: failed to parse URI:{0}, error:{1}", serverAddress, error.message);
 			return ResultCode::IO_INVALID_ADDRESS;
 		}
 
-		m_Client = mongoc_client_new_from_uri(uri);
-		if (!m_Client)
-		{
-			SFLog(Net, Error, "MongoDB: failed to create client:{0}", serverAddress);
-			return ResultCode::OUT_OF_MEMORY;
-		}
-
-		mongoc_client_set_appname(m_Client, Util::GetModuleName());
+		m_MongoClientPool.reset(mongoc_client_pool_new(m_Uri));
 
 		return ResultCode::SUCCESS;
 	}
 
+	MongoPooledClientPtr MongoDB::GetClientFromPool()
+	{
+		return Forward<MongoPooledClientPtr>(MongoPooledClientPtr(m_MongoClientPool.get()));
+	}
 
 
+	////////////////////////////////////////////////////////////////////////////////////////
+	// MongoDBCollection
 	MongoDBCollection::MongoDBCollection(IHeap& heap)
 		: m_Heap(heap)
 	{
@@ -148,19 +215,9 @@ namespace SF
 
 	void MongoDBCollection::Clear()
 	{
-		if (m_DataBase)
-		{
-			mongoc_database_destroy(m_DataBase);
-			m_DataBase = nullptr;
-		}
-
-		if (m_Collection)
-		{
-			mongoc_collection_destroy(m_Collection);
-			m_Collection = nullptr;
-		}
-
-		m_DB = nullptr;
+		m_DataBase.reset();
+		m_Collection.reset();
+		m_Client.reset();
 	}
 
 	void MongoDBCollection::Dispose()
@@ -168,16 +225,16 @@ namespace SF
 		Clear();
 	}
 
-	Result MongoDBCollection::Initialize(MongoDB* pDB, const char* database, const char* collection)
+	Result MongoDBCollection::Initialize(MongoPooledClientPtr& client, const char* database, const char* collection)
 	{
-		m_DB = pDB;
-		if (m_DB == nullptr)
+		m_Client = Forward<MongoPooledClientPtr>(client);
+		if (m_Client == nullptr)
 			return ResultCode::INVALID_ARG;
 
 		m_AddOrUpdateOpt.reset(BCON_NEW("upsert", BCON_BOOL(true)));
 
-		m_DataBase = mongoc_client_get_database(pDB->GetClient(), database);
-		m_Collection = mongoc_client_get_collection(m_DB->GetClient(), database, collection);
+		m_DataBase.reset(mongoc_client_get_database(m_Client, database));
+		m_Collection.reset(mongoc_client_get_collection(m_Client, database, collection));
 
 		return m_Collection != nullptr ? ResultCode::SUCCESS : ResultCode::FAIL;
 	}
@@ -195,7 +252,7 @@ namespace SF
 			return ResultCode::INVALID_FORMAT;
 
 		bson_error_t error;
-		auto ret = mongoc_collection_insert_one(m_Collection, row, nullptr, nullptr, &error);
+		auto ret = mongoc_collection_insert_one(m_Collection.get(), row, nullptr, nullptr, &error);
 		if (!ret)
 		{
 			SFLog(Net, Error, "MongoDB:Insert failed error:{0}", error.message);
@@ -224,7 +281,7 @@ namespace SF
 		bson_append_document(&update, "$set", -1, row);
 
 		bson_error_t error;
-		auto ret = mongoc_collection_update_one(m_Collection, selector.get(), &update, m_AddOrUpdateOpt.get(), nullptr, &error);
+		auto ret = mongoc_collection_update_one(m_Collection.get(), selector.get(), &update, m_AddOrUpdateOpt.get(), nullptr, &error);
 		if (!ret)
 		{
 			SFLog(Net, Error, "MongoDB:Insert failed error:{0}", error.message);
@@ -244,7 +301,7 @@ namespace SF
 		BsonUniquePtr opt(BCON_NEW("batchSize", BCON_INT32(50)));
 
 		const mongoc_read_prefs_t* read_prefs = nullptr;
-		outCursor.SetCursorRaw(mongoc_collection_find_with_opts(m_Collection, matchPattern, opt.get(), read_prefs));
+		outCursor.SetCursorRaw(mongoc_collection_find_with_opts(m_Collection.get(), matchPattern, opt.get(), read_prefs));
 
 		return ResultCode::SUCCESS;
 	}
@@ -261,7 +318,7 @@ namespace SF
 
 		mongoc_query_flags_t flags = (mongoc_query_flags_t)(MONGOC_QUERY_SLAVE_OK | MONGOC_QUERY_PARTIAL);
 		const mongoc_read_prefs_t* read_prefs = nullptr;
-		outCursor.SetCursorRaw(mongoc_collection_aggregate(m_Collection, flags, aggregatePipeline, opt.get(), read_prefs));
+		outCursor.SetCursorRaw(mongoc_collection_aggregate(m_Collection.get(), flags, aggregatePipeline, opt.get(), read_prefs));
 
 		return ResultCode::SUCCESS;
 	}
@@ -281,7 +338,7 @@ namespace SF
 		bson_append_int64(&key, "_id", -1, id);
 
 		bson_error_t error;
-		auto ret = mongoc_collection_delete_many(m_Collection, &key, nullptr, nullptr, &error);
+		auto ret = mongoc_collection_delete_many(m_Collection.get(), &key, nullptr, nullptr, &error);
 		if (!ret)
 		{
 			SFLog(Net, Error, "MongoDB:Remove failed, if:{0} error:{1}", id, error.message);
