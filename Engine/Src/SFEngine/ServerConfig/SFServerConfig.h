@@ -161,13 +161,13 @@ namespace SF
 			{}
 		};
 
-		struct ServerModuleStaticGameInstanceManager : public ServerModulePublicService
+		struct ServerModuleStaticGameInstanceManager : public ServerModule
 		{
 			// ZoneDBTable
 			String ZoneDBTable;
 
 			ServerModuleStaticGameInstanceManager(IHeap& heap)
-				: ServerModulePublicService(heap)
+				: ServerModule(heap)
 				, ZoneDBTable(heap)
 			{}
 		};

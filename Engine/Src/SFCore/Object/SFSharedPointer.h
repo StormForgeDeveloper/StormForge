@@ -1029,16 +1029,6 @@ namespace SF {
 
 			return *this;
 		}
-
-
-		//WeakPointer& operator = (void* src)
-		//{
-		//	// Assigning non pointer directly isn't thread safe
-		//	assert(src != nullptr);
-		//	ReleaseReference();
-
-		//	return *this;
-		//}
 	};
 
 	template<class ClassType>
@@ -1126,42 +1116,6 @@ namespace SF {
 
 			return *this;
 		}
-
-		//WeakPointerT<ClassType>& operator = (const SharedPointer& src)
-		//{
-		//	WeakPointer::operator = (src);
-
-		//	if (m_pObject != nullptr)
-		//	{
-		//		assert(typeid(m_pObject) == typeid(ClassType));
-		//	}
-
-		//	return *this;
-		//}
-
-		//WeakPointerT<ClassType>& operator = (const WeakPointer& src)
-		//{
-		//	WeakPointer::operator = (src);
-
-		//	if (m_pObject != nullptr)
-		//	{
-		//		assert(typeid(m_pObject) == typeid(ClassType));
-		//	}
-
-		//	return *this;
-		//}
-
-		//WeakPointerT<ClassType>& operator = (WeakPointer&& src)
-		//{
-		//	WeakPointer::operator = (src);
-
-		//	if (m_pObject != nullptr)
-		//	{
-		//		assert(typeid(m_pObject) == typeid(ClassType));
-		//	}
-
-		//	return *this;
-		//}
 
 		WeakPointerT<ClassType>& operator = (const WeakPointerT<ClassType>& src)
 		{

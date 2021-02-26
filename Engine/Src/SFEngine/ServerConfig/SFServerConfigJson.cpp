@@ -212,7 +212,6 @@ namespace SF
 
 			pModule->ZoneDBTable = moduleValue.get("ZoneDBTable", Json::Value("")).asCString();
 
-			result = ParseNetPublic(moduleValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pServerModule = pModule;
 			break;
 		}
