@@ -1520,7 +1520,7 @@ namespace SF.Net
 
 
 		// Cmd: Search game instance
-		public int  SearchGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.GameInstanceInfo[] InGameInstances )
+		public int  SearchGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InGameInstances )
 		{
  			int result;
 			{
@@ -1528,7 +1528,7 @@ namespace SF.Net
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SearchGameInstanceRes);
 			return result;
-		} // public int  SearchGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.GameInstanceInfo[] InGameInstances )
+		} // public int  SearchGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InGameInstances )
 
 
 		// Cmd: Search game instance
@@ -2410,7 +2410,7 @@ namespace SF.Net
 
 		// Cmd: Search game instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSearchGameInstanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameSearchGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInGameInstances,SF.GameInstanceInfo[] InGameInstances );
+		static extern int CSSFNetAdapter_GameSearchGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInGameInstances,SF.VariableTable[] InGameInstances );
 
 
 

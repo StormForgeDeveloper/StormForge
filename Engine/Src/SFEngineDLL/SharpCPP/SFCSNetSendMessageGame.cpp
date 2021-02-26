@@ -1276,15 +1276,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameLeaveGameInstanceRes( intptr_t InNativeConn
 
 
 // Cmd: Search game instance
-SFDLL_EXPORT int  CSSFNetAdapter_GameSearchGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInGameInstances,const GameInstanceInfo* InGameInstances )
+SFDLL_EXPORT int  CSSFNetAdapter_GameSearchGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInGameInstances,const VariableTable* InGameInstances )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::SearchGameInstanceRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ArrayView<GameInstanceInfo>(_sizeOfInGameInstances, _sizeOfInGameInstances, const_cast<GameInstanceInfo*>(InGameInstances)));
+	MessageDataPtr pMessage = SF::Message::Game::SearchGameInstanceRes::Create(pConnection->GetHeap(), InTransactionID, InResult,SF::ArrayView<VariableTable>(_sizeOfInGameInstances, _sizeOfInGameInstances, const_cast<VariableTable*>(InGameInstances)));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameSearchGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInGameInstances,const GameInstanceInfo* InGameInstances )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameSearchGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInGameInstances,const VariableTable* InGameInstances )
 
 
 

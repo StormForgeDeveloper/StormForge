@@ -307,15 +307,6 @@ namespace SF
     }
 
 
-    [Struct]
-    [StructLayout(LayoutKind.Sequential)]
-    public struct GameInstanceInfo
-    {
-        GameInstanceID GameInstanceID;
-        StringCrc32 Type;
-        StringCrc32 Name;
-    }
-
 
     [Struct]
     [StructLayout(LayoutKind.Sequential)]

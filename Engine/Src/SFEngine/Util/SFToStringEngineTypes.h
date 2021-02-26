@@ -27,7 +27,6 @@ namespace SF
 	Result _ToString(ToStringContext& context, const MatchingQueueTicket& value);
 	Result _ToString(ToStringContext& context, const NotificationType& value);
 	Result _ToString(ToStringContext& context, const RelayPlayerInfo& value);
-	Result _ToString(ToStringContext& context, const GameInstanceInfo& value);
 	Result _ToString(ToStringContext& context, const RouteContext& Data);
 
 
@@ -38,7 +37,6 @@ namespace SF
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(MatchingQueueTicket);
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(NotificationType);
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(RelayPlayerInfo);
-	DECLARE_BOXING_TEMPLETE_BYREFERENCE(GameInstanceInfo);
 	DECLARE_BOXING_TEMPLETE_BYVALUE(RouteContext);
 
 } // namespace SF

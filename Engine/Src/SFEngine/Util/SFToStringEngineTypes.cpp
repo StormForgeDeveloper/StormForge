@@ -28,7 +28,6 @@ namespace SF {
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(MatchingQueueTicket);
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(NotificationType);
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(RelayPlayerInfo);
-	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(GameInstanceInfo);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(RouteContext);
 
 
@@ -152,14 +151,6 @@ namespace SF {
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, value.RelayPlayerID)))
-			return ResultCode::FAIL;
-
-		return ResultCode::SUCCESS;
-	}
-
-	Result _ToString(ToStringContext& context, const GameInstanceInfo& value)
-	{
-		if (!(_IToA(context, value.GameInstanceUID)))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;

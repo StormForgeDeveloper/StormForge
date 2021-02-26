@@ -170,6 +170,18 @@ namespace TestNet2.WinSharp
                 return string.Format("({0}){1}", CharacterId, CharacterName);
             }
         };
+        public class ZoneItem
+        {
+            public Int32 ZoneTableId;
+            public UInt64 ZoneInstanceId;
+            public StringCrc32 ZoneType;
+
+            public override string ToString()
+            {
+                return string.Format("table:{0}, instance:{1:X}", ZoneTableId, ZoneInstanceId);
+            }
+        };
+
 
         private void OnCharacterListDoubleClicked(object sender, MouseButtonEventArgs e)
         {
@@ -213,6 +225,18 @@ namespace TestNet2.WinSharp
 
             var gamePolicy = new SF.Net.SendMessageGame(gameConn);
             gamePolicy.GetCharacterListCmd(0);
+        }
+
+        private void OnZoneListDoubleClicked(object sender, MouseButtonEventArgs e)
+        {
+            var selectedZone = listCharacter.SelectedItem as ZoneItem;
+
+            var gameConn = m_OnlineClient.GetConnection(OnlineClient.ConnectionType.Game);
+            if (gameConn == null)
+                return;
+
+            var gamePolicy = new SF.Net.SendMessageGame(gameConn);
+            gamePolicy.JoinGameInstanceCmd(0, selectedZone.ZoneInstanceId);
         }
 
         #region Message handling
@@ -320,6 +344,49 @@ namespace TestNet2.WinSharp
             characterData.TryGetValue(new StringCrc32("Integer"), out obj);
             Integer = (int)obj;
 
+        }
+
+
+
+
+        void HandleZoneListRes(SFMessage message)
+        {
+            UpdateButtonState();
+
+            var result = message.GetValue<Result>("Result");
+            if (result.IsFailed)
+            {
+                return;
+            }
+
+            var zoneInstances = message.GetValue<VariableTable[]>("GameInstances");
+
+            listCharacter.BeginInit();
+            listCharacter.Items.Clear();
+
+            foreach (var zoneInfo in zoneInstances)
+            {
+                object obj;
+                UInt64 instanceUID = 0;
+                Int32 zoneTableId = 0;
+                StringCrc32 zoneType;
+
+                if (zoneInfo.TryGetValue(new StringCrc32("InstanceUID"), out obj))
+                    instanceUID = (UInt64)Convert.ChangeType(obj, typeof(UInt64));
+                if (zoneInfo.TryGetValue(new StringCrc32("ZoneTableID"), out obj))
+                    zoneTableId = (Int32)Convert.ChangeType(obj, typeof(Int32));
+                if (zoneInfo.TryGetValue(new StringCrc32("Type"), out obj))
+                    zoneType = (StringCrc32)obj;
+
+                listCharacter.Items.Add(new ZoneItem()
+                {
+                    ZoneInstanceId = instanceUID,
+                    ZoneTableId = zoneTableId,
+                    ZoneType = zoneType
+                });
+            }
+
+            listCharacter.EndInit();
         }
 
 

@@ -855,7 +855,7 @@ C++: Cast message to SearchGameInstanceRes to access values
 
 		- OutResult: Result type. 
 
-		- OutGameInstances: GameInstanceInfo type. Game instance informations
+		- OutGameInstances: VariableTable type. Game instance informations
 
 
 ## GetCharacterDataInGameInstance Request

@@ -142,11 +142,6 @@ namespace SF
 		m_SetFunc(varName, "RelayPlayerInfo", &value);
 	}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const GameInstanceInfo& value)
-	{
-		m_SetFunc(varName, "GameInstanceInfo", &value);
-	}
-
 	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<bool>& value)
 	{
 		m_SetArrayFunc(varName, "bool", (int)value.size(), value.data());
@@ -220,11 +215,6 @@ namespace SF
 	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<RelayPlayerInfo>& value)
 	{
 		m_SetArrayFunc(varName, "RelayPlayerInfo", (int)value.size(), value.data());
-	}
-
-	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<GameInstanceInfo>& value)
-	{
-		m_SetArrayFunc(varName, "GameInstanceInfo", (int)value.size(), value.data());
 	}
 
 	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<const char*>& value)

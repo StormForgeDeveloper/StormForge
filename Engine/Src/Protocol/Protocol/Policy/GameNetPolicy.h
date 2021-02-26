@@ -247,7 +247,7 @@ namespace SF
 		// Cmd: Leave game instance
 		Result LeaveGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult );
 		// Cmd: Search game instance
-		Result SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<GameInstanceInfo>& InGameInstances );
+		Result SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
 		// Cmd: Search game instance
 		Result GetCharacterDataInGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances );
 		// Cmd: Join to a game

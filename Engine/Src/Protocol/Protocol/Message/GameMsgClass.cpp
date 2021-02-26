@@ -6915,10 +6915,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
-				protocolCheck(input->Read(ArrayLen));
-				GameInstanceInfo* GameInstancesPtr = nullptr;
-				protocolCheck(input->ReadLink(GameInstancesPtr, ArrayLen));
-				m_GameInstances.SetLinkedBuffer(ArrayLen, GameInstancesPtr);
+				protocolCheck(input->Read(m_GameInstances));
 
 				return hr;
 
@@ -6952,7 +6949,7 @@ namespace SF
 			}; // Result SearchGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<GameInstanceInfo>& InGameInstances )
+			MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -6984,7 +6981,7 @@ namespace SF
 				protocolCheck(*output << InGameInstances);
 
 				return hr;
-			}; // MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<GameInstanceInfo>& InGameInstances )
+			}; // MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
 
 
 

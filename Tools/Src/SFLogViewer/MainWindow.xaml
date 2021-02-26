@@ -6,13 +6,13 @@
         xmlns:local="clr-namespace:SFLogViewer"
         xmlns:localView="clr-namespace:SFLogViewer.View"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="599" Width="581">
 
     <Grid>
         <TextBox x:Name="txtLogServerAddress" HorizontalAlignment="Left" Margin="118,20,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="326"/>
         <Label Content="LogServer:" HorizontalAlignment="Left" Margin="22,22,0,0" VerticalAlignment="Top" Width="78"/>
         <Label Content="LogChannels:" HorizontalAlignment="Left" Margin="22,53,0,0" VerticalAlignment="Top" Width="78"/>
-        <ListBox x:Name="listLogChannels" HorizontalAlignment="Left" Height="355" Margin="118,53,0,0" VerticalAlignment="Top" Width="672" MouseDoubleClick="OnChannel_DoubleClick"/>
+        <ListBox x:Name="listLogChannels" HorizontalAlignment="Left" Height="520" Margin="118,53,0,0" VerticalAlignment="Top" Width="453" MouseDoubleClick="OnChannel_DoubleClick"/>
         <Button Content="Refresh" HorizontalAlignment="Left" Margin="463,20,0,0" VerticalAlignment="Top" Click="OnBtnRefresh_Clicked"/>
     </Grid>
 </Window>

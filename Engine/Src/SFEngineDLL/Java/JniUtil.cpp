@@ -209,14 +209,6 @@ namespace SF
 		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
 	}
 
-	void VariableMapBuilderJObject::SetVariable(const char* varName, const GameInstanceInfo& value)
-	{
-		jobject jobj = ToJavaObject(value);
-
-		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
-		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
-	}
-
 
 
 
@@ -390,19 +382,6 @@ namespace SF
 	}
 
 	void VariableMapBuilderJObject::SetVariable(const char* varName, const Array<RelayPlayerInfo>& value)
-	{
-		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
-
-		auto objectClass = m_Env->FindClass("java/lang/Object");
-		auto valueArray = m_Env->NewObjectArray(value.size(), objectClass, nullptr);
-
-		for (int iValue = 0; iValue < value.size(); iValue++)
-			m_Env->SetObjectArrayElement(valueArray, iValue, ToJavaObject(value[iValue]));
-
-		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, valueArray);
-	}
-
-	void VariableMapBuilderJObject::SetVariable(const char* varName, const Array<GameInstanceInfo>& value)
 	{
 		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
 

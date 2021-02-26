@@ -3354,7 +3354,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				ArrayView<GameInstanceInfo> m_GameInstances;
+				DynamicArray<VariableTable> m_GameInstances;
 			public:
 				SearchGameInstanceRes()
 					{}
@@ -3367,7 +3367,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const Array<GameInstanceInfo>& GetGameInstances() const	{ return m_GameInstances; };
+				const Array<VariableTable>& GetGameInstances() const	{ return m_GameInstances; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -3375,7 +3375,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<GameInstanceInfo>& InGameInstances );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
 
 			}; // class SearchGameInstanceRes : public MessageBase
 

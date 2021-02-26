@@ -338,21 +338,21 @@ namespace SF {
 	};
 
 
-	// Game Instance info
-	struct GameInstanceInfo
-	{
-		GameInsUID GameInstanceUID;
-		StringCrc32 TypeName;
-		uint32_t ZoneTableID{};
+	//// Game Instance info
+	//struct GameInstanceInfo
+	//{
+	//	GameInsUID GameInstanceUID;
+	//	StringCrc32 TypeName;
+	//	uint32_t ZoneTableID{};
 
 
-		GameInstanceInfo() {}
-		GameInstanceInfo(const GameInstanceInfo& src);
-		GameInstanceInfo(GameInsUID InGameInstanceUID, StringCrc32 InTypeName, uint32_t InZoneTableID);
+	//	GameInstanceInfo() {}
+	//	GameInstanceInfo(const GameInstanceInfo& src);
+	//	GameInstanceInfo(GameInsUID InGameInstanceUID, StringCrc32 InTypeName, uint32_t InZoneTableID);
 
-		GameInstanceInfo& operator = (const GameInstanceInfo& src);
-		bool operator == (const GameInstanceInfo& src) const;
-	};
+	//	GameInstanceInfo& operator = (const GameInstanceInfo& src);
+	//	bool operator == (const GameInstanceInfo& src) const;
+	//};
 
 
 	// Player information
