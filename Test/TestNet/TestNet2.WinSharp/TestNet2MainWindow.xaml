@@ -21,7 +21,9 @@
         <Button x:Name="btnDisconnect" Content="Disconnect" HorizontalAlignment="Left" Margin="219,35,0,0" VerticalAlignment="Top" Click="OnDisconnectClicked"/>
         <Button x:Name="btnCreateCharacter" Content="CreateCharacter" HorizontalAlignment="Left" Margin="10,35,0,0" VerticalAlignment="Top" Click="OnCreateCharacterClicked"/>
         <Button x:Name="btnRefreshCharacterList" Content="RefreshChar" HorizontalAlignment="Left" Margin="112,35,0,0" VerticalAlignment="Top" Click="OnRefreshCharacterListClicked"/>
-        <ListBox x:Name="listZone" Margin="236,62,360,8" Grid.RowSpan="2" MouseDoubleClick="OnZoneListDoubleClicked"/>
+        <ListBox x:Name="listZone" Margin="236,103,360,10" Grid.RowSpan="2" MouseDoubleClick="OnZoneListDoubleClicked"/>
+        <Button x:Name="btnZoneList" Content="RefreshZoneList" HorizontalAlignment="Left" Margin="242,78,0,0" VerticalAlignment="Top" Click="OnBtnZoneListClicked"/>
+        <TextBox x:Name="txtLogId" HorizontalAlignment="Left" Margin="623,14,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
 
     </Grid>
 </Window>

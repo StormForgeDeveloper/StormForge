@@ -537,6 +537,9 @@ namespace SF {
 			// Generic DB failure 
 			constexpr Result 			DB_FAILURE                                                         ((int32_t)0xE70100ACL);
 
+			// Service is not available 
+			constexpr Result 			SERVICE_NOT_AVAILABLE                                              ((int32_t)0xE70100ADL);
+
 	}//namespace ResultCode 
 }//namespace SF 
 

@@ -533,6 +533,9 @@ namespace SF {
 		// Generic DB failure 
 		public const int DB_FAILURE =                                       unchecked((int)0xE70100AC); 
 
+		// Service is not available 
+		public const int SERVICE_NOT_AVAILABLE =                            unchecked((int)0xE70100AD); 
+
 	}
 }
 

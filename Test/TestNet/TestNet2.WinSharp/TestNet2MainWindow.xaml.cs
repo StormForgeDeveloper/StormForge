@@ -38,7 +38,7 @@ namespace TestNet2.WinSharp
             txtLoginName.Text = SavedValueRegistry.ReadValue("LoginName", "");
 
             var processName = SavedValueRegistry.ReadValue("ProcessName", "TestNet2.WinSharp");
-            SavedValueRegistry.SaveValue("ProcessName", processName);
+            txtLogId.Text = processName;
 
             GlobalEngine.Start(processName, logServerAddress);
 
@@ -73,11 +73,15 @@ namespace TestNet2.WinSharp
                 listCharacter.IsEnabled = false;
                 btnCreateCharacter.IsEnabled = false;
                 btnRefreshCharacterList.IsEnabled = false;
+                listZone.IsEnabled = false;
+                btnZoneList.IsEnabled = false;
                 return;
             }
 
             btnDisconnect.IsEnabled = true;
             btnLogin.IsEnabled = false;
+            listZone.IsEnabled = false;
+            btnZoneList.IsEnabled = false;
             var onlineState = m_OnlineClient.GetOnlineState();
             switch (onlineState)
             {
@@ -85,6 +89,8 @@ namespace TestNet2.WinSharp
                     btnCreateCharacter.IsEnabled = true;
                     listCharacter.IsEnabled = true;
                     btnRefreshCharacterList.IsEnabled = true;
+                    listZone.IsEnabled = true;
+                    btnZoneList.IsEnabled = true;
                     break;
                 case OnlineClient.OnlineState.InGameJoiningGameInstance:
                 case OnlineClient.OnlineState.InGameConnectingGameInstance:
@@ -99,6 +105,11 @@ namespace TestNet2.WinSharp
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
+
+            SavedValueRegistry.SaveValue("LoginName", txtLoginName.Text);
+            SavedValueRegistry.SaveValue("LoginServer", txtLoginServer.Text);
+            SavedValueRegistry.SaveValue("LogServer", txtLogServer.Text);
+            SavedValueRegistry.SaveValue("ProcessName", txtLogId.Text);
 
             m_TickTimer.Stop();
             m_TickTimer = null;
@@ -170,6 +181,7 @@ namespace TestNet2.WinSharp
                 return string.Format("({0}){1}", CharacterId, CharacterName);
             }
         };
+
         public class ZoneItem
         {
             public Int32 ZoneTableId;
@@ -227,16 +239,30 @@ namespace TestNet2.WinSharp
             gamePolicy.GetCharacterListCmd(0);
         }
 
-        private void OnZoneListDoubleClicked(object sender, MouseButtonEventArgs e)
+        private void OnBtnZoneListClicked(object sender, RoutedEventArgs e)
         {
-            var selectedZone = listCharacter.SelectedItem as ZoneItem;
-
             var gameConn = m_OnlineClient.GetConnection(OnlineClient.ConnectionType.Game);
             if (gameConn == null)
                 return;
 
             var gamePolicy = new SF.Net.SendMessageGame(gameConn);
-            gamePolicy.JoinGameInstanceCmd(0, selectedZone.ZoneInstanceId);
+            gamePolicy.SearchGameInstanceCmd(0, "");
+        }
+
+        private void OnZoneListDoubleClicked(object sender, MouseButtonEventArgs e)
+        {
+            var selectedZone = listCharacter.SelectedItem as ZoneItem;
+
+            var res = m_OnlineClient.JoinGameInstance(selectedZone.ZoneInstanceId);
+            if (res.IsFailed)
+            {
+            }
+            //var gameConn = m_OnlineClient.GetConnection(OnlineClient.ConnectionType.Game);
+            //if (gameConn == null)
+            //    return;
+
+            //var gamePolicy = new SF.Net.SendMessageGame(gameConn);
+            //gamePolicy.JoinGameInstanceCmd(0, selectedZone.ZoneInstanceId);
         }
 
         #region Message handling
@@ -247,6 +273,10 @@ namespace TestNet2.WinSharp
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.GetCharacterListRes, 0, HandleGetCharacterListRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.GetCharacterDataRes, 0, HandleGetCharacterDataRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.SelectCharacterRes, 0, HandleSelectCharacterRes);
+
+            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.SearchGameInstanceRes, 0, HandleZoneListRes);
+            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.JoinGameInstanceRes, 0, HandleJoinGameInstanceRes);
+            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.LeaveGameInstanceRes, 0, HandleLeaveGameInstanceRes);
         }
 
         void HandleJoinGameServerRes(SFMessage message)
@@ -346,9 +376,6 @@ namespace TestNet2.WinSharp
 
         }
 
-
-
-
         void HandleZoneListRes(SFMessage message)
         {
             UpdateButtonState();
@@ -369,7 +396,7 @@ namespace TestNet2.WinSharp
                 object obj;
                 UInt64 instanceUID = 0;
                 Int32 zoneTableId = 0;
-                StringCrc32 zoneType;
+                StringCrc32 zoneType = new StringCrc32();
 
                 if (zoneInfo.TryGetValue(new StringCrc32("InstanceUID"), out obj))
                     instanceUID = (UInt64)Convert.ChangeType(obj, typeof(UInt64));
@@ -382,15 +409,36 @@ namespace TestNet2.WinSharp
                 {
                     ZoneInstanceId = instanceUID,
                     ZoneTableId = zoneTableId,
-                    ZoneType = zoneType
+                    ZoneType = zoneType,
                 });
             }
 
             listCharacter.EndInit();
         }
 
+        void HandleJoinGameInstanceRes(SFMessage message)
+        {
+            UpdateButtonState();
+
+            var result = message.GetValue<Result>("Result");
+            if (result.IsFailed)
+            {
+                return;
+            }
+        }
+
+        void HandleLeaveGameInstanceRes(SFMessage message)
+        {
+            UpdateButtonState();
+
+            var result = message.GetValue<Result>("Result");
+            if (result.IsFailed)
+            {
+                return;
+            }
+        }
 
         #endregion
 
     }
-}
+    }

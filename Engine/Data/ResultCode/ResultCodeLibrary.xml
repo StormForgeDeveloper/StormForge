@@ -191,6 +191,9 @@
 	<ResultCodeItem Severity="Error" CodeName="INVALID_STREAMID" Desc="Invalid stream ID"/>
 
 	<ResultCodeItem Severity="Error" CodeName="DB_FAILURE" Desc="Generic DB failure"/>
-	
+
+	<ResultCodeItem Severity="Error" CodeName="SERVICE_NOT_AVAILABLE" Desc="Service is not available"/>
+
+
 </ResultCodes>
 
