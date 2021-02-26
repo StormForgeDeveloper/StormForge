@@ -132,6 +132,8 @@ namespace SF
 		IHeap& m_Heap;
 
 		mongoc_uri_t* m_Uri{};
+
+		CriticalSection m_PoolLock;
 		MongoClientPoolUniquePtr m_MongoClientPool;
 		BsonUniquePtr m_AddOrUpdateOpt;
 

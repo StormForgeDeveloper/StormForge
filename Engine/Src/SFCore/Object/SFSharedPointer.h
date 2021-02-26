@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -72,6 +72,11 @@ namespace SF {
 		}
 
 		virtual ~SharedPointer()
+		{
+			ReleaseReference();
+		}
+
+		void reset() const
 		{
 			ReleaseReference();
 		}
@@ -214,6 +219,11 @@ namespace SF {
 
 		virtual ~SharedPointerT()
 		{
+		}
+
+		void reset() const
+		{
+			ReleaseReference();
 		}
 
 		ClassType* GetObjectPtr()
@@ -893,6 +903,11 @@ namespace SF {
 			ReleaseReference();
 		}
 
+		void reset() const
+		{
+			ReleaseReference();
+		}
+
 		void ReleaseReference() const
 		{
 			auto pObject = m_pObject;
@@ -1060,6 +1075,11 @@ namespace SF {
 		{
 		}
 
+		void reset() const
+		{
+			ReleaseReference();
+		}
+
 		explicit operator SharedPointerT<ClassType>()
 		{
 			return std::forward<SharedPointerT<ClassType>>(AsSharedPtr<ClassType>());
@@ -1107,41 +1127,41 @@ namespace SF {
 			return *this;
 		}
 
-		WeakPointerT<ClassType>& operator = (const SharedPointer& src)
-		{
-			WeakPointer::operator = (src);
+		//WeakPointerT<ClassType>& operator = (const SharedPointer& src)
+		//{
+		//	WeakPointer::operator = (src);
 
-			if (m_pObject != nullptr)
-			{
-				assert(typeid(m_pObject) == typeid(ClassType));
-			}
+		//	if (m_pObject != nullptr)
+		//	{
+		//		assert(typeid(m_pObject) == typeid(ClassType));
+		//	}
 
-			return *this;
-		}
+		//	return *this;
+		//}
 
-		WeakPointerT<ClassType>& operator = (const WeakPointer& src)
-		{
-			WeakPointer::operator = (src);
+		//WeakPointerT<ClassType>& operator = (const WeakPointer& src)
+		//{
+		//	WeakPointer::operator = (src);
 
-			if (m_pObject != nullptr)
-			{
-				assert(typeid(m_pObject) == typeid(ClassType));
-			}
+		//	if (m_pObject != nullptr)
+		//	{
+		//		assert(typeid(m_pObject) == typeid(ClassType));
+		//	}
 
-			return *this;
-		}
+		//	return *this;
+		//}
 
-		WeakPointerT<ClassType>& operator = (WeakPointer&& src)
-		{
-			WeakPointer::operator = (src);
+		//WeakPointerT<ClassType>& operator = (WeakPointer&& src)
+		//{
+		//	WeakPointer::operator = (src);
 
-			if (m_pObject != nullptr)
-			{
-				assert(typeid(m_pObject) == typeid(ClassType));
-			}
+		//	if (m_pObject != nullptr)
+		//	{
+		//		assert(typeid(m_pObject) == typeid(ClassType));
+		//	}
 
-			return *this;
-		}
+		//	return *this;
+		//}
 
 		WeakPointerT<ClassType>& operator = (const WeakPointerT<ClassType>& src)
 		{

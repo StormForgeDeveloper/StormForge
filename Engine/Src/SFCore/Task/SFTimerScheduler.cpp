@@ -349,7 +349,10 @@ namespace SF {
 
 		//m_IsWriteLocked.fetch_add(1, std::memory_order_acquire);
 
-		m_TimerMap.ForeachReverseOrder(0, (uint)m_TimerMap.size(), [&](const uint64_t& keyVal, const SharedPointerT<TimerAction>& pAction) { return TimerTickActionUpdate(keyVal, pAction); });
+		m_TimerMap.ForeachReverseOrder(0, (uint)m_TimerMap.size(), [&](const uint64_t& keyVal, const SharedPointerT<TimerAction>& pAction)
+			{
+				return TimerTickActionUpdate(keyVal, pAction);
+			});
 
 		//m_IsWriteLocked.fetch_sub(1, std::memory_order_release);
 

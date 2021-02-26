@@ -169,6 +169,7 @@ namespace SF
 			m_Uri = nullptr;
 		}
 
+		MutexScopeLock lock(m_PoolLock);
 		m_MongoClientPool.reset();
 	}
 
@@ -191,6 +192,7 @@ namespace SF
 			return ResultCode::IO_INVALID_ADDRESS;
 		}
 
+		MutexScopeLock lock(m_PoolLock);
 		m_MongoClientPool.reset(mongoc_client_pool_new(m_Uri));
 
 		return ResultCode::SUCCESS;
@@ -198,6 +200,8 @@ namespace SF
 
 	MongoPooledClientPtr MongoDB::GetClientFromPool()
 	{
+		MutexScopeLock lock(m_PoolLock); // Mongodb client pool, actually wan't thread safe
+
 		MongoPooledClientPtr client(m_MongoClientPool.get());
 		return Forward<MongoPooledClientPtr>(client);
 	}
