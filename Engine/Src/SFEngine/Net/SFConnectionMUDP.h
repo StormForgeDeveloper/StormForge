@@ -39,19 +39,18 @@ namespace Net {
 
 	protected:
 
-		ConnectionMessageAction_MUDPHandleAck m_HandleAck;
-		ConnectionMessageAction_MUDPHandleNack m_HandleNack;
-		ConnectionMessageAction_HandleHeartbeat m_HandleHeartbeat;
-		ConnectionMessageAction_HandleTimeSync m_HandleTimeSync;
-		ConnectionMessageAction_MUDPHandleConnect m_HandleConnect;
-		ConnectionMessageAction_HandleDisconnect m_HandleDisconnect;
+		//ConnectionMessageAction_UDPHandleAck m_HandleAck;
+		//ConnectionMessageAction_UDPHandleNack m_HandleNack;
+		//ConnectionMessageAction_HandleHeartbeat m_HandleHeartbeat;
+		//ConnectionMessageAction_HandleTimeSync m_HandleTimeSync;
+		//ConnectionMessageAction_UDPHandleConnect m_HandleConnect;
+		//ConnectionMessageAction_HandleDisconnect m_HandleDisconnect;
 
-		ConnectionStateAction_SendReliableQueue m_ActSendReliableQueue;
-		ConnectionStateAction_SendReliableRetry m_ActSendReliableRetry;
+		//ConnectionStateAction_SendReliableQueue m_ActSendReliableQueue;
+		//ConnectionStateAction_SendReliableRetry m_ActSendReliableRetry;
 
-
-		friend class ConnectionStateAction_SendReliableQueue;
-		friend class ConnectionStateAction_SendReliableRetry;
+		//friend class ConnectionStateAction_SendReliableQueue;
+		//friend class ConnectionStateAction_SendReliableRetry;
 		friend class ConnectionStateAction_SendSync;
 		friend class ConnectionStateAction_SendSyncSvr;
 		friend class ConnectionMessageAction_MUDPHandleSyncReliableServer;
@@ -64,14 +63,9 @@ namespace Net {
 
 		// gathering
 		virtual Result SendPending( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID = 0 ) override;
-		virtual Result SendPending(SharedPointerT<Message::MessageData>& pMsg )  override { return ConnectionUDPBase::SendPending(pMsg); }
 		virtual Result SendSync( uint uiSequence, uint64_t uiSyncMask );
 
-		virtual Result SendNetCtrl( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID = 0 ) override;
-
-
-		// Process network control message
-		virtual Result ProcNetCtrl( const MsgNetCtrl* pNetCtrl ) override;
+		//virtual Result SendNetCtrl( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID = 0 ) override;
 
 
 		Result OnGuarrentedMessageRecv(SharedPointerT<Message::MessageData>& pMsg);
@@ -105,7 +99,8 @@ namespace Net {
 
 		ConnectionMessageAction_MUDPHandleSyncReliableServer m_HandleSyncReliable;
 
-		ConnectionStateAction_SendSyncSvr m_ActSync;
+		// Server doesn't send sync
+		//ConnectionStateAction_SendSyncSvr m_ActSync;
 
 	public:
 		// Constructor
@@ -114,30 +109,10 @@ namespace Net {
 		{
 			SetNetCtrlAction(NetCtrlCode_SyncReliable, &m_HandleSyncReliable);
 
-			AddStateAction(ConnectionState::CONNECTED, &m_ActSync);
+			//AddStateAction(ConnectionState::CONNECTED, &m_ActSync);
 		}
 		virtual ~ConnectionMUDPServer() = default;
 
-		// We need this for event handling
-		Result UpdateSendQueue() override
-		{
-			Result hr;
-			if (GetConnectionState() == ConnectionState::DISCONNECTED)
-				return ResultCode::SUCCESS;
-
-			MutexScopeLock localLock(GetUpdateLock());
-
-			// Force update send
-			m_ActSendReliableQueue.Run();
-			m_ActSendReliableRetry.Run();
-
-
-
-			// Flush sync message asap
-			SendFlush();
-
-			return hr;
-		}
 	};
 
 

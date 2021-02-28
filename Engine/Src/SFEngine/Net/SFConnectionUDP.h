@@ -21,10 +21,9 @@
 #include "Net/SFConnectionUDPBase.h"
 #include "Net/SFMessageWindow.h"
 
+
 namespace SF {
 namespace Net {
-
-
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -34,21 +33,9 @@ namespace Net {
 
 	class ConnectionUDP : public ConnectionUDPBase
 	{
-	protected:
-		
-		// Process network control message
-		virtual Result ProcNetCtrl( const MsgNetCtrl* pNetCtrl );
+	public:
 
-		// Process Recv queue
-		//virtual Result ProcRecvReliableQueue();
-
-		// Process Send queue
-		virtual Result ProcSendReliableQueue();
-		
-		// Process message window queue
-		virtual Result ProcReliableSendRetry();
-
-
+		using super = ConnectionUDPBase;
 
 	public:
 		
@@ -61,7 +48,7 @@ namespace Net {
 		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg );
 
 		// Update net control, process connection heartbeat, ... etc
-		virtual Result TickUpdate();
+		virtual Result TickUpdate() override;
 	};
 
 
@@ -193,10 +180,8 @@ namespace Net {
 	};
 
 
-
-
 }  // namespace Net
-}; // namespace SF
+} // namespace SF
 
 
 

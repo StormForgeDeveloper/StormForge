@@ -34,7 +34,7 @@ namespace Net {
 
 
 
-	class ConnectionMessageAction_MUDPHandleAck : public ConnectionMessageAction
+	class ConnectionMessageAction_UDPHandleAck : public ConnectionMessageAction
 	{
 	public:
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
@@ -47,7 +47,7 @@ namespace Net {
 	};
 
 
-	class ConnectionMessageAction_MUDPHandleNack : public ConnectionMessageAction
+	class ConnectionMessageAction_UDPHandleNack : public ConnectionMessageAction
 	{
 	public:
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
@@ -94,7 +94,7 @@ namespace Net {
 
 
 
-	class ConnectionMessageAction_MUDPHandleConnect : public ConnectionMessageAction
+	class ConnectionMessageAction_UDPHandleConnect : public ConnectionMessageAction
 	{
 	public:
 		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
@@ -206,13 +206,13 @@ namespace Net {
 		virtual Result Run() override;
 	};
 
-	class ConnectionStateAction_SendReliableQueue : public ConnectionActionMUDP
+	class ConnectionStateAction_SendReliableQueue : public ConnectionActionUDP
 	{
 	public:
 		virtual Result Run() override;
 	};
 
-	class ConnectionStateAction_SendReliableRetry : public ConnectionActionMUDP
+	class ConnectionStateAction_SendReliableRetry : public ConnectionActionUDP
 	{
 	public:
 		virtual Result Run() override;

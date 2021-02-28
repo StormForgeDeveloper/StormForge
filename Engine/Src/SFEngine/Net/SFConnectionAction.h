@@ -29,6 +29,8 @@ namespace Net {
 
 
 	class Connection;
+	class ConnectionUDPBase;
+	class ConnectionUDP;
 	class ConnectionMUDP;
 
 
@@ -87,6 +89,15 @@ namespace Net {
 		virtual ~ConnectionAction() = default;
 
 		virtual Result Run() { return ResultCode::NOT_IMPLEMENTED; }
+	};
+
+	class ConnectionActionUDP : public ConnectionAction
+	{
+	public:
+		ConnectionActionUDP() = default;
+		virtual ~ConnectionActionUDP() = default;
+
+		ConnectionUDPBase* GetConnection();
 	};
 
 	class ConnectionActionMUDP : public ConnectionAction

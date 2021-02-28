@@ -52,8 +52,6 @@ namespace Net {
 	//	Network control Message base Header
 	//
 
-	typedef MsgNetCtrl MsgMobileNetCtrl;
-
 	struct MsgMobileNetCtrlSync : public Message::MobileMessageHeader
 	{
 		uint64_t	MessageMask;

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -43,9 +43,6 @@
 namespace SF {
 namespace Net {
 
-	
-
-	
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -311,7 +308,7 @@ namespace Net {
 	Result ConnectionUDPClient::PendingRecv()
 	{
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
-		IOBUFFER_READ *pOver = nullptr;
+		SFUniquePtr<IOBUFFER_READ> pOver;
 
 		if (!NetSystem::IsProactorSystem())
 			return ResultCode::SUCCESS;
@@ -321,27 +318,22 @@ namespace Net {
 
 		while(1)
 		{
-			pOver = new(GetHeap()) IOBUFFER_READ;
-			hrErr = m_NetIOAdapter.Recv(pOver);
+			pOver.reset(new(GetHeap()) IOBUFFER_READ);
+			hrErr = m_NetIOAdapter.PendingRecv(pOver.get());
 			switch ((uint32_t)hrErr)
 			{
 			case (uint32_t)ResultCode::SUCCESS:
 			case (uint32_t)ResultCode::IO_IO_PENDING:
 			case (uint32_t)ResultCode::IO_WOULDBLOCK:
-				pOver = nullptr;
-				goto Proc_End;// success
-				break;
+				pOver.release();
+				return hr;
 			case (uint32_t)ResultCode::IO_TRY_AGAIN:
 			default:
+				m_NetIOAdapter.DecPendingRecvCount();
 				Disconnect("Pending recv is failed");
-				goto Proc_End;
+				return hr;
 			}
 		}
-
-
-	Proc_End:
-
-		Util::SafeDelete(pOver);
 
 		return hr;
 	}
@@ -361,10 +353,13 @@ namespace Net {
 	// Local address will be auto detected
 	Result ConnectionUDPClient::Connect(PeerInfo local, const PeerInfo& remote)
 	{
-		Result hr = ResultCode::SUCCESS;
 		SF_SOCKET socket = INVALID_SOCKET;
 		sockaddr_storage bindAddr;
-
+		ScopeContext hr([this, &socket](Result hr) 
+			{
+				if (socket != INVALID_SOCKET)
+					Service::NetSystem->CloseSocket(socket);
+			});
 
 		if (remote.PeerAddress.SocketFamily == SockFamily::IPV4)
 			Net::GetLocalAddressIPv4(local.PeerAddress);
@@ -375,40 +370,34 @@ namespace Net {
 		if (socket == INVALID_SOCKET)
 		{
 			SFLog(Net, Error, "Failed to Open Client Socket {0:X8}", GetLastNetSystemResult());
-			netErr(ResultCode::UNEXPECTED);
+			netCheck(ResultCode::UNEXPECTED);
 		}
 
-		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::DataGram, local.PeerAddress.SocketFamily, socket));
+		netCheck(Service::NetSystem->SetupCommonSocketOptions(SockType::DataGram, local.PeerAddress.SocketFamily, socket));
 
 		bindAddr = (sockaddr_storage)local.PeerAddress;
 		if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)
 		{
 			SFLog(Net, Error, "Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
-			netErr(ResultCode::UNEXPECTED);
+			netCheck(ResultCode::UNEXPECTED);
 		}
 		local.PeerAddress = bindAddr;
 
 
-		netChk(InitConnection(local, remote));
+		netCheck(InitConnection(local, remote));
 		SFLog(Net, Info, "Initialize connection CID:{0}, Addr:{1}", GetCID(), remote.PeerAddress);
 
 		m_NetIOAdapter.SetSocket(local.PeerAddress.SocketFamily, SockType::DataGram, socket);
 
 		socket = INVALID_SOCKET;
 
-		netChk(Service::NetSystem->RegisterSocket(&m_NetIOAdapter));
+		netCheck(Service::NetSystem->RegisterSocket(&m_NetIOAdapter));
 
-		netChk(PendingRecv());
+		netCheck(PendingRecv());
 
-		//netChk(Service::ConnectionManager->PendingWaitConnection(pConn));
+		//netCheck(Service::ConnectionManager->PendingWaitConnection(pConn));
 
-		//netChk( CliSystem::AddConnectionTask( &GetConnectionManager(), pConn ) );
-
-
-	Proc_End:
-
-		if (socket != INVALID_SOCKET)
-			Service::NetSystem->CloseSocket(socket);
+		//netCheck( CliSystem::AddConnectionTask( &GetConnectionManager(), pConn ) );
 
 		return hr;
 	}

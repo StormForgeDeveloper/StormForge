@@ -118,6 +118,8 @@ namespace SF
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
 		{
+			SFLog(Net, Info, "Login OnConnectionEvent  type:{0}, state:{1}", evt.Components.EventType, evt.Components.State);
+
 			if (evt.Components.EventType == Net::ConnectionEvent::EVT_CONNECTION_RESULT)
 			{
 				if (evt.Components.hr)
@@ -284,6 +286,7 @@ namespace SF
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
 		{
+			SFLog(Net, Info, "Game OnConnectionEvent  type:{0}, state:{1}", evt.Components.EventType, evt.Components.State);
 			if (evt.Components.EventType == Net::ConnectionEvent::EVT_CONNECTION_RESULT)
 			{
 				if (evt.Components.hr)
@@ -434,6 +437,7 @@ namespace SF
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
 		{
+			SFLog(Net, Info, "GameInstance OnConnectionEvent  type:{0}, state:{1}", evt.Components.EventType, evt.Components.State);
 			if (evt.Components.EventType == Net::ConnectionEvent::EVT_CONNECTION_RESULT)
 			{
 				if (evt.Components.hr)

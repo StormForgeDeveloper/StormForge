@@ -228,9 +228,7 @@ namespace SF
             //new TypeMap( ParameterType.NamedVariable, -1, typeof(IntPtr), cppTypeName:"NamedVariable" ),
             new TypeMap( ParameterType.VariableTable, -1, typeof(VariableTable), cppTypeName:"VariableTable" ),
 
-            new TypeMap( ParameterType.GameInstanceInfo, 4 * 3, typeof(GameInstanceInfo), cppTypeName:"GameInstanceInfo" ),
-
-            new TypeMap( ParameterType.Vector2, 8, typeof(Vector2) ),
+             new TypeMap( ParameterType.Vector2, 8, typeof(Vector2) ),
             new TypeMap( ParameterType.Vector3, 12, typeof(Vector3) ),
             new TypeMap( ParameterType.NetAddress, 18, typeof(NetAddress) ),
             new TypeMap( ParameterType.NetClass, 18, typeof(UInt32) ),

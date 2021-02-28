@@ -329,7 +329,8 @@ namespace Net {
 			}
 			else
 			{
-				Util::SafeDelete(pIOBuffer);
+				IHeap::Delete(pIOBuffer);
+				pIOBuffer = nullptr;
 			}
 		}
 

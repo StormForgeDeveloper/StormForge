@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SF;
+using System.Collections.Specialized;
 
 namespace SFLogViewer.View
 {
@@ -27,16 +28,29 @@ namespace SFLogViewer.View
     }
 
 
+    public class LogEntryCollection : List<LogEntry>, INotifyCollectionChanged
+    {
+        public event NotifyCollectionChangedEventHandler CollectionChanged;
+
+        public void FireChangedEvent(NotifyCollectionChangedEventArgs eventArg)
+        {
+            CollectionChanged.Invoke(this, eventArg);
+        }
+    }
+
     /// <summary>
     /// Interaction logic for LogViewer.xaml
     /// </summary>
     public partial class LogViewer : Window
     {
         DispatcherTimer m_TickTimer;
+        bool m_ReadThreadTerminate;
+        System.Threading.Thread m_ReadThread;
 
         int m_MaxEntries = 1000;
 
         public ObservableCollection<LogEntry> m_LogEntries { get; set; }
+        //public LogEntryCollection m_LogEntries { get; set; }
 
         StreamDBConsumer m_StreamDB;
 
@@ -46,6 +60,7 @@ namespace SFLogViewer.View
             InitializeComponent();
 
             DataContext = m_LogEntries = new ObservableCollection<LogEntry>();
+            //DataContext = m_LogEntries = new LogEntryCollection();
 
             AddHotKeys();
 
@@ -60,8 +75,12 @@ namespace SFLogViewer.View
 
             m_TickTimer = new DispatcherTimer();
             m_TickTimer.Tick += new EventHandler(Timer_Tick);
-            m_TickTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            m_TickTimer.Interval = new TimeSpan(0, 0, 0, 0, 200);
             m_TickTimer.Start();
+
+            m_ReadThreadTerminate = false;
+            m_ReadThread = new System.Threading.Thread(ThreadRun);
+            m_ReadThread.Start();
         }
 
         private void AddHotKeys()
@@ -74,6 +93,9 @@ namespace SFLogViewer.View
         protected override void OnClosing(CancelEventArgs e)
         {
             base.OnClosing(e);
+
+            m_ReadThreadTerminate = true;
+            m_ReadThread.Join();
 
             m_TickTimer.Stop();
             m_TickTimer = null;
@@ -143,9 +165,89 @@ namespace SFLogViewer.View
             }
         }
 
+        object m_NewLogEntryLock = new object();
+        List<LogEntry> m_NewLogEntries;
+        void ReadThreadTick()
+        {
+            if (m_StreamDB == null)
+                return;
+
+            lock (m_NewLogEntryLock)
+            {
+                if (m_NewLogEntries == null)
+                    m_NewLogEntries = new List<LogEntry>();
+
+                DateTime messageTimeStamp;
+                Int64 messageOffset;
+                byte[] recordData;
+                while (m_StreamDB.PollData(out messageOffset, out messageTimeStamp, out recordData).IsSucceeded)
+                {
+                    // skip null data
+                    if (recordData == null || recordData.Length == 0)
+                        continue;
+
+                    LogEntry newLogEntry = new LogEntry();
+                    newLogEntry.DateTime = messageTimeStamp;
+                    newLogEntry.Index = messageOffset;
+                    newLogEntry.Message = Encoding.UTF8.GetString(recordData);
+                    m_NewLogEntries.Add(newLogEntry);
+                }
+            }
+        }
+
+        void ThreadRun()
+        {
+            while(!m_ReadThreadTerminate)
+            {
+                System.Threading.Thread.Sleep(10);
+                ReadThreadTick();
+            }
+        }
+
+        void UITickUpdate()
+        {
+            if (m_NewLogEntries == null || m_NewLogEntries.Count == 0)
+                return;
+
+            List<LogEntry> newLogEntries;
+            lock (m_NewLogEntryLock)
+            {
+                newLogEntries = m_NewLogEntries;
+                m_NewLogEntries = new List<LogEntry>();
+            }
+
+            //NotifyCollectionChangedEventArgs eventArg = null;
+
+            if (newLogEntries.Count > m_MaxEntries)
+            {
+                newLogEntries.RemoveRange(0, newLogEntries.Count - m_MaxEntries);
+
+                m_LogEntries.Clear();
+                //eventArg = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
+            }
+            else
+            {
+                var newTotal = m_LogEntries.Count + newLogEntries.Count;
+                if (newTotal > m_MaxEntries)
+                {
+                    var removeCount = newTotal - (m_MaxEntries * 0.9);
+                    for (int iIndex = 0; iIndex < removeCount; iIndex++)
+                        m_LogEntries.RemoveAt(0);
+                }
+            }
+
+            foreach (var logEntry in newLogEntries)
+            {
+                m_LogEntries.Add(logEntry);
+            }
+            //m_LogEntries.CopyTo(newLogEntries.ToArray(), m_LogEntries.Count);
+            //m_LogEntries.FireChangedEvent(eventArg);
+        }
+
         private void Timer_Tick(object sender, EventArgs e)
         {
-            TickStreamDB();
+            UITickUpdate();
+            //TickStreamDB();
 
             // Test data
             //AddRandomEntry();

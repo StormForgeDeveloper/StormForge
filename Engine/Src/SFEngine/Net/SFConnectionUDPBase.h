@@ -33,7 +33,7 @@ namespace Net {
 	class ConnectionUDPBase : public Connection
 	{
 	public:
-
+		using super = Connection;
 
 	protected:
 		// Receive Sorted messages
@@ -63,20 +63,31 @@ namespace Net {
 
 		CriticalSection		m_UpdateLock;
 
+	private:
+
+		ConnectionMessageAction_UDPHandleAck m_HandleAck;
+		ConnectionMessageAction_UDPHandleNack m_HandleNack;
+		ConnectionMessageAction_HandleHeartbeat m_HandleHeartbeat;
+		ConnectionMessageAction_HandleTimeSync m_HandleTimeSync;
+		ConnectionMessageAction_UDPHandleConnect m_HandleConnect;
+		ConnectionMessageAction_HandleDisconnect m_HandleDisconnect;
+
+		ConnectionStateAction_SendReliableQueue m_ActSendReliableQueue;
+		ConnectionStateAction_SendReliableRetry m_ActSendReliableRetry;
+
+
 	protected:
 		
-
-
 		CriticalSection& GetUpdateLock() { return m_UpdateLock; }
 
 		WriteBufferQueue* GetWriteQueueUDP() { return m_pWriteQueuesUDP; }
-
-
 
 		// Send packet buffer to connection with network device
 		virtual Result EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer);
 
 		virtual Result SendRaw(const SharedPointerT<Message::MessageData> &pMsg) override;
+
+		virtual Result ProcNetCtrl(const MsgNetCtrl* pNetCtrl) override;
 
 	public:
 		// Constructor
@@ -137,19 +148,16 @@ namespace Net {
 		// Send message to connected entity
 		virtual Result Send(const SharedPointerT<Message::MessageData> &pMsg ) override;
 
-
 		// Update Send buffer Queue, TCP and UDP client connection
 		virtual Result UpdateSendBufferQueue() override;
 
+		// We need this for event handling on server
+		virtual Result UpdateSendQueue() override;
 		//virtual Result ProcGuarrentedMessageWindow(const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action);
 
 	};
 
 
-
-
 }  // namespace Net
-}; // namespace SF
-
-
+} // namespace SF
 

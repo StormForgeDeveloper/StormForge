@@ -85,6 +85,11 @@ namespace Net {
 		return m_pConnection->GetEventHandler();
 	}
 
+	ConnectionUDPBase* ConnectionActionUDP::GetConnection()
+	{
+		return static_cast<ConnectionUDPBase*>(ConnectionActionBase::GetConnection());
+	}
+
 	ConnectionMUDP* ConnectionActionMUDP::GetConnection()
 	{
 		return static_cast<ConnectionMUDP*>(ConnectionActionBase::GetConnection());

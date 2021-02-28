@@ -104,7 +104,7 @@ void IOBUFFER_READ::InitForIO()
 	dwFlags = 0;
 	dwNumberOfByte = 0;
 	CID = 0;
-	Assert(!NetSystem::IsProactorSystem() || bIsPending.load(std::memory_order_relaxed));
+	Assert(!NetSystem::IsProactorSystem() || bIsPending.load(std::memory_order_acquire));
 
 	iSockLen = sizeof(NetAddr.From);
 }

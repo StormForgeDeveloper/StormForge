@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -62,16 +62,6 @@ namespace SF {
 			// limit server net retry maximum
 			SetMaxGuarantedRetry(Const::UDP_CLI_RETRY_ONETIME_MAX);
 			SetUsePeerIDMap(true);
-
-			SetNetCtrlAction(NetCtrlCode_Ack, &m_HandleAck);
-			SetNetCtrlAction(NetCtrlCode_Nack, &m_HandleNack);
-			SetNetCtrlAction(NetCtrlCode_Heartbeat, &m_HandleHeartbeat);
-			SetNetCtrlAction(NetCtrlCode_TimeSync, &m_HandleTimeSync);
-			SetNetCtrlAction(NetCtrlCode_Connect, &m_HandleConnect);
-			SetNetCtrlAction(NetCtrlCode_Disconnect, &m_HandleDisconnect);
-
-			AddStateAction(ConnectionState::CONNECTED, &m_ActSendReliableQueue);
-			AddStateAction(ConnectionState::CONNECTED, &m_ActSendReliableRetry);
 		}
 
 		ConnectionMUDP::~ConnectionMUDP()
@@ -79,87 +69,55 @@ namespace SF {
 		}
 
 
-		// Make Ack packet and enqueue to SendNetCtrlqueue
-		Result ConnectionMUDP::SendNetCtrl(uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID)
-		{
-			Result hr = ResultCode::SUCCESS, hrTem = ResultCode::SUCCESS;
+		//// Make Ack packet and enqueue to SendNetCtrlqueue
+		//Result ConnectionMUDP::SendNetCtrl(uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID)
+		//{
+		//	Result hr = ResultCode::SUCCESS, hrTem = ResultCode::SUCCESS;
 
-			MsgMobileNetCtrl* pNetCtrl = nullptr;
-			SharedPointerT<Message::MessageData> pMsg;
+		//	MsgNetCtrl* pNetCtrl = nullptr;
+		//	SharedPointerT<Message::MessageData> pMsg;
 
-			netMem(pMsg = Message::MessageData::NewMessage(GetIOHeap(), uiCtrlCode, sizeof(MsgMobileNetCtrl)));
+		//	netMem(pMsg = Message::MessageData::NewMessage(GetIOHeap(), uiCtrlCode, sizeof(MsgNetCtrl)));
 
-			pNetCtrl = (MsgMobileNetCtrl*)pMsg->GetMessageBuff();
-			pNetCtrl->PeerID = UID == 0 ? GetLocalInfo().PeerID : UID;
-			pNetCtrl->msgID.SetSequence(uiSequence);
-			pNetCtrl->rtnMsgID = msgID;
+		//	pNetCtrl = (MsgNetCtrl*)pMsg->GetMessageBuff();
+		//	pNetCtrl->PeerID = UID == 0 ? GetLocalInfo().PeerID : UID;
+		//	pNetCtrl->msgID.SetSequence(uiSequence);
+		//	pNetCtrl->rtnMsgID = msgID;
 
-			pMsg->GetMessageHeader()->msgID.IDs.Mobile = true;
+		//	pMsg->GetMessageHeader()->msgID.IDs.Mobile = true;
 
-			pMsg->UpdateChecksum();
+		//	pMsg->UpdateChecksum();
 
 
-			hrTem = SendRaw(pMsg);
-			if (!(hrTem))
-			{
-				SFLog(Net, Custom10, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
-					GetCID(),
-					msgID.ID,
-					uiSequence,
-					hrTem);
+		//	hrTem = SendRaw(pMsg);
+		//	if (!(hrTem))
+		//	{
+		//		SFLog(Net, Custom10, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
+		//			GetCID(),
+		//			msgID.ID,
+		//			uiSequence,
+		//			hrTem);
 
-				// ignore io send fail except connection closed
-				if (hrTem == ((Result)ResultCode::IO_CONNECTION_CLOSED))
-				{
-					goto Proc_End;
-				}
-			}
+		//		// ignore io send fail except connection closed
+		//		if (hrTem == ((Result)ResultCode::IO_CONNECTION_CLOSED))
+		//		{
+		//			goto Proc_End;
+		//		}
+		//	}
 
-		Proc_End:
+		//Proc_End:
 
-			if (!(hrTem))
-			{
-				SFLog(Net, Custom10, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
-					GetCID(),
-					msgID.ID,
-					uiSequence,
-					hrTem);
-			}
+		//	if (!(hrTem))
+		//	{
+		//		SFLog(Net, Custom10, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
+		//			GetCID(),
+		//			msgID.ID,
+		//			uiSequence,
+		//			hrTem);
+		//	}
 
-			return hr;
-		}
-
-		// Process network control message
-		Result ConnectionMUDP::ProcNetCtrl(const MsgNetCtrl* netCtrl)
-		{
-			//assert(ThisThread::GetThreadID() == GetRunningThreadID());
-
-			const MsgMobileNetCtrl* pNetCtrl = (const MsgMobileNetCtrl*)netCtrl;
-			Result hr = ResultCode::SUCCESS;
-			ConnectionMessageAction* pAction = nullptr;
-
-			if (pNetCtrl->msgID.IDs.Mobile == 0 || pNetCtrl->Length < sizeof(MsgMobileNetCtrl))
-			{
-				SFLog(Net, Info, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
-				netCheck(Disconnect("Invalid packet"));
-				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
-			}
-
-			pAction = m_NetCtrlAction[pNetCtrl->msgID.IDs.MsgCode];
-			if (pAction != nullptr)
-			{
-				return pAction->Run(pNetCtrl);
-			}
-			else
-			{
-				// Not handle or invalid
-				SFLog(Net, Warning, "HackWarn : Not handled or Invalid net control packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
-				netCheck(CloseConnection("Invalid net ctrl action"));
-				netCheck(ResultCode::UNEXPECTED);
-			}
-
-			return hr;
-		}
+		//	return hr;
+		//}
 
 
 		// called when incoming message occur
@@ -292,20 +250,20 @@ namespace SF {
 		{
 			ScopeContext hr;
 
-			MsgMobileNetCtrl* pNetCtrlMsg = nullptr;
+			MsgNetCtrl* pNetCtrlMsg = nullptr;
 
 			netCheck(PrepareGatheringBuffer(sizeof(MsgNetCtrlBuffer)));
 
-			pNetCtrlMsg = (MsgMobileNetCtrl*)(m_pGatheringBuffer + m_uiGatheredSize);
+			pNetCtrlMsg = (MsgNetCtrl*)(m_pGatheringBuffer + m_uiGatheredSize);
 			pNetCtrlMsg->msgID.ID = uiCtrlCode;
 			pNetCtrlMsg->msgID.SetSequence(uiSequence);
 			pNetCtrlMsg->rtnMsgID = msgID;
 			pNetCtrlMsg->PeerID = UID == 0 ? GetLocalInfo().PeerID : UID;
 
 			pNetCtrlMsg->msgID.IDs.Mobile = true;
-			pNetCtrlMsg->Length = sizeof(MsgMobileNetCtrl);
+			pNetCtrlMsg->Length = sizeof(MsgNetCtrl);
 
-			pNetCtrlMsg->Crc32 = Hasher_Crc32().Crc32(0, (uint8_t*)pNetCtrlMsg + sizeof(Message::MobileMessageHeader), sizeof(MsgMobileNetCtrl) - sizeof(Message::MobileMessageHeader));
+			pNetCtrlMsg->Crc32 = Hasher_Crc32().Crc32(0, (uint8_t*)pNetCtrlMsg + sizeof(Message::MobileMessageHeader), sizeof(MsgNetCtrl) - sizeof(Message::MobileMessageHeader));
 			if (pNetCtrlMsg->Crc32 == 0) pNetCtrlMsg->Crc32 = ~pNetCtrlMsg->Crc32;
 
 			m_uiGatheredSize += pNetCtrlMsg->Length;

@@ -253,8 +253,8 @@ namespace SF {
 			pMsg->GetMessageHeader()->msgID.IDs.Mobile = false;
 
 			pAckMsg = (MsgNetCtrl*)pMsg->GetMessageBuff();
+			pAckMsg->PeerID = UID == 0 ? GetLocalInfo().PeerID : UID;
 			pAckMsg->msgID.SetSequence(uiSequence);
-			pAckMsg->PeerID = UID;
 			pAckMsg->rtnMsgID = returnMsgID;
 
 			pMsg->UpdateChecksum();
