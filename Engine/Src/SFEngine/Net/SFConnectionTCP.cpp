@@ -403,7 +403,10 @@ namespace Net {
 		int connResult;
 		ScopeContext hr([this, &hrConResult](Result hr)
 			{
-				SFLog(Net, Debug, "Connect sock:{0}, to:{1}, hrCon:{2}, hr:{3}", GetSocket(), GetRemoteInfo().PeerAddress, hrConResult, hr);
+				if (hrConResult != ResultCode::IO_ALREADY)
+				{
+					SFLog(Net, Debug, "Connect sock:{0}, to:{1}, hrCon:{2}, hr:{3}", GetSocket(), GetRemoteInfo().PeerAddress, hrConResult, hr);
+				}
 
 				if (!hr)
 				{
@@ -424,7 +427,10 @@ namespace Net {
 		if (connResult == SOCKET_ERROR)
 		{
 			hrConResult = GetLastNetSystemResult();
-			SFLog(Net, Debug2, "TCP Connect result {0}", hrConResult);
+			if (hrConResult != ResultCode::IO_ALREADY)
+			{
+				SFLog(Net, Debug2, "TCP Connect result {0}", hrConResult);
+			}
 			switch ((uint32_t)hrConResult)
 			{
 			case (uint32_t)ResultCode::IO_INPROGRESS:
