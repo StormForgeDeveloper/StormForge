@@ -151,6 +151,14 @@ namespace SF {
 				m_ActionsByState = nullptr;
 			}
 
+			m_RecvMessageDelegatesByMsgId.CommitChanges();
+			m_RecvMessageDelegatesByMsgId.ForeachOrder(0, m_RecvMessageDelegatesByMsgId.size(), [](uint32_t, RecvMessageDelegates* pDelegate)
+				{
+					IHeap::Delete(pDelegate);
+					return true;
+				});
+			m_RecvMessageDelegatesByMsgId.clear();
+
 			// I created IHeap manually, so I need to check manually
 			GetHeap().ReportLeak();
 		}
@@ -370,6 +378,26 @@ namespace SF {
 			actionListForState.push_back(action);
 		}
 
+		void Connection::RemoveStateAction(ConnectionState state, ConnectionAction* action)
+		{
+			int iState = (int)state;
+			if (iState < 0 || iState >= (int)ConnectionState::Max)
+			{
+				Assert(false);
+				return;
+			}
+
+			// TODO: we might need critical section at some point
+			auto& actionListForState = m_ActionsByState[(int)state];
+			for (int iAction = 0; iAction < actionListForState.size(); iAction++)
+			{
+				if (actionListForState[iAction] == action)
+				{
+					actionListForState.RemoveAt(iAction);
+				}
+			}
+		}
+
 		// Process network control message
 		Result Connection::ProcNetCtrl(const MsgNetCtrl* pNetCtrl)
 		{
@@ -417,9 +445,19 @@ namespace SF {
 		{
 			Result hr = ResultCode::SUCCESS;
 
-			Assert(GetConnectionState() == ConnectionState::DISCONNECTED);
+			if (GetConnectionState() != ConnectionState::DISCONNECTED)
+			{
+				SFLog(Net, Error, "Failed to initialize connection, invalid address, CID:{0}, from:{1}, to:{2} hr:{3}", GetCID(), local.PeerAddress, remote.PeerAddress, hr);
+				return ResultCode::INVALID_STATE;
+			}
+
 			// Except client everybody should have port number when it gets here
-			Assert(remote.PeerClass == NetClass::Client || remote.PeerAddress.Port != 0);
+			if (remote.PeerClass != NetClass::Client && remote.PeerAddress.Port == 0)
+			{
+				SFLog(Net, Error, "Failed to initialize connection, invalid address, CID:{0}, from:{1}, to:{2} hr:{3}", GetCID(), local.PeerAddress, remote.PeerAddress, hr);
+				return ResultCode::IO_INVALID_ADDRESS;
+			}
+
 			if (GetConnectionState() != ConnectionState::DISCONNECTED)
 				netCheck(CloseConnection("InitConnection failed: Invalid State"));
 

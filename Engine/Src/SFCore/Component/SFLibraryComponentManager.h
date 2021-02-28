@@ -18,7 +18,7 @@
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Util/SFStringCrc64.h"
 #include "Container/SFSortedArray.h"
-#include "Component/SFLibraryComponent.h"
+#include "Object/SFLibraryComponent.h"
 
 
 

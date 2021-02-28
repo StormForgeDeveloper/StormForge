@@ -18,7 +18,7 @@
 #include "Task/SFTimerScheduler.h"
 #include "Container/SFDoubleLinkedList.h"
 #include "Container/SFCircularQueue.h"
-
+#include "Component/SFComponent.h"
 
 namespace SF {
 
@@ -31,14 +31,22 @@ namespace SF {
 
 	////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	EngineObject class -  interface for task operation
+	//	EngineObject component base class
+	//
+
+	class EngineObjectComponent
+	{
+
+	};
+
+
+	////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	EngineObject class
 	//
 
 	class EngineObject : public Object
 	{
-	public:
-
-
 	private:
 
 		SharedPointerT<TimerAction> m_TimerAction;
@@ -58,6 +66,8 @@ namespace SF {
 
 		DoubleLinkedListNodeDataT<EngineObject*> m_ManagerListNodes;
 		DoubleLinkedListNodeDataT<EngineObject*> m_ListNodes[(int)EngineTaskTick::Max];
+
+		ComponentManager m_ComponentManager;
 
     private:
 
@@ -83,7 +93,6 @@ namespace SF {
 		// Initialize engine object
 		virtual Result InitializeObject();
 
-
 		virtual bool CanDelete() override;
 		virtual void Dispose() override;
 
@@ -99,6 +108,9 @@ namespace SF {
 		//	@interval: 0 means no repeat
 		void SetTimer(DurationMS startDelay, DurationMS interval = DurationMS(0));
 
+		// Get component manager
+		ComponentManager& GetComponentManager() { return m_ComponentManager; }
+		const ComponentManager& GetComponentManager() const { return m_ComponentManager; }
 
 		/////////////////////////////////////////////////////////
 		// Event functions

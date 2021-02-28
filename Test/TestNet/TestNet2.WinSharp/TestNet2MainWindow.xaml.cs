@@ -40,7 +40,7 @@ namespace TestNet2.WinSharp
             var processName = SavedValueRegistry.ReadValue("ProcessName", "TestNet2.WinSharp");
             txtLogId.Text = processName;
 
-            GlobalEngine.Start(processName, logServerAddress);
+            GlobalEngine.Start(processName, logServerAddress, 0xFFFFFFFF);
 
             m_MessageRouter = new SFMessageRouter();
             RegisterMessageLiteners();
@@ -155,6 +155,9 @@ namespace TestNet2.WinSharp
                 m_OnlineClient = new OnlineClient(m_MessageRouter);
             }
 
+            listCharacter.Items.Clear();
+            listZone.Items.Clear();
+
              SavedValueRegistry.SaveValue("LoginName", userId);
 
             var loginAddress = txtLoginServer.Text;
@@ -251,7 +254,7 @@ namespace TestNet2.WinSharp
 
         private void OnZoneListDoubleClicked(object sender, MouseButtonEventArgs e)
         {
-            var selectedZone = listCharacter.SelectedItem as ZoneItem;
+            var selectedZone = listZone.SelectedItem as ZoneItem;
 
             var res = m_OnlineClient.JoinGameInstance(selectedZone.ZoneInstanceId);
             if (res.IsFailed)
@@ -388,8 +391,8 @@ namespace TestNet2.WinSharp
 
             var zoneInstances = message.GetValue<VariableTable[]>("GameInstances");
 
-            listCharacter.BeginInit();
-            listCharacter.Items.Clear();
+            listZone.BeginInit();
+            listZone.Items.Clear();
 
             foreach (var zoneInfo in zoneInstances)
             {
@@ -405,7 +408,7 @@ namespace TestNet2.WinSharp
                 if (zoneInfo.TryGetValue(new StringCrc32("Type"), out obj))
                     zoneType = (StringCrc32)obj;
 
-                listCharacter.Items.Add(new ZoneItem()
+                listZone.Items.Add(new ZoneItem()
                 {
                     ZoneInstanceId = instanceUID,
                     ZoneTableId = zoneTableId,
@@ -413,7 +416,7 @@ namespace TestNet2.WinSharp
                 });
             }
 
-            listCharacter.EndInit();
+            listZone.EndInit();
         }
 
         void HandleJoinGameInstanceRes(SFMessage message)

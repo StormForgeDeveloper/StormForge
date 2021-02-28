@@ -72,6 +72,8 @@ namespace SF {
 		// Log filter mask for file output
 		LogOutputMask LogOutputFile{};
 
+		LogOutputMask LogOutputLogServer{};
+
 		// Log filter mask for file output
 		LogOutputMask LogOutputCommon{};
 

@@ -809,9 +809,9 @@ C++: Cast message to JoinGameInstanceRes to access values
 
 		- OutInsUID: GameInsUID type. Game instance ID
 
-		- OutServerAddress: NetAddress type. Game instance address
+		- OutServerAddress4: NetAddress type. Game instance address IPV4
 
-		- OutServerAddress4: NetAddress type. Game instance address
+		- OutServerAddress6: NetAddress type. Game instance address IPV6
 
 
 ## LeaveGameInstance Request

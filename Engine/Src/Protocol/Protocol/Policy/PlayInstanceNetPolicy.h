@@ -59,7 +59,7 @@ namespace SF
 		{}
 
 		// Cmd: Event for Player Join request.
-		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos );
+		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID );
 		// S2C: Event for Player joined.
 		Result PlayerJoinedS2CEvt( const uint32_t &InPlayInstanceID, const PlayerInformation &InJoinedPlayerInfo );
 		// S2C: Event for Player left.

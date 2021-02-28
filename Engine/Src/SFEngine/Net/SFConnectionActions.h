@@ -157,6 +157,21 @@ namespace Net {
 		virtual Result Run() override;
 	};
 
+	class ConnectionStateAction_StateTimeout : public ConnectionAction
+	{
+	private:
+
+		TimeStampMS m_StartTimeStamp = TimeStampMS(DurationMS(0));
+		DurationMS m_Timeout = DurationMS(60 * 1000); // default 60s timeout
+
+	public:
+
+		void SetTimeout(DurationMS timeout) { m_Timeout = timeout; }
+
+	public:
+		virtual Result Run() override;
+	};
+
 	class ConnectionStateAction_TimeoutDisconnecting : public ConnectionAction
 	{
 	public:

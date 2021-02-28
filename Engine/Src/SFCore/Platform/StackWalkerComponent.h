@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "Multithread/SFThread.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Platform/StackWalker.h"
 
 

@@ -21,7 +21,7 @@ namespace SF
         static Engine stm_Instance;
         static long stm_RefCount = 0;
 
-        public static void Start(string processName, string logServerAddress = null)
+        public static void Start(string processName, string logServerAddress = null, UInt32 debuggerLogMask = 0)
         {
             var newRefCount = Interlocked.Increment(ref stm_RefCount);
             if (newRefCount == 1)
@@ -33,7 +33,7 @@ namespace SF
                 }
 
                 stm_Instance = new Engine();
-                stm_Instance.StartEngine(processName, logServerAddress); 
+                stm_Instance.StartEngine(processName, logServerAddress, debuggerLogMask); 
 
             }
         }

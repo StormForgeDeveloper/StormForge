@@ -13,7 +13,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Multithread/SFThread.h"
 #include "Service/SFService.h"
 

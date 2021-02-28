@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "SFAssert.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Object/SFSharedPointer.h"
 #include "Util/SFLog.h"
 #include "IO/SFFile.h"

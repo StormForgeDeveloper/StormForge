@@ -528,6 +528,26 @@ namespace Net {
 	}
 
 
+	Result ConnectionStateAction_StateTimeout::Run()
+	{
+		Result hr;
+
+		if (m_StartTimeStamp == TimeStampMS(DurationMS(0)))
+		{
+			m_StartTimeStamp = Util::Time.GetRawTimeMs();
+		}
+		else
+		{
+			if (Util::TimeSince(m_StartTimeStamp) > m_Timeout)
+			{
+				SFLog(Net, Debug, "Disconnecting StateTimeout CID:{0}", GetCID());
+				netCheck(CloseConnection("Disconnecting"));
+			}
+		}
+
+		return hr;
+	}
+
 	Result ConnectionStateAction_TimeoutDisconnecting::Run()
 	{
 		Result hr;

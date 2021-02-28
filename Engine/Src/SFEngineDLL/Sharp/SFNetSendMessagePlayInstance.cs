@@ -176,15 +176,15 @@ namespace SF.Net
 		} // public  SendMessageSvrPlayInstance( SF.SFConnection connection )
 
 		// Cmd: Event for Player Join request.
-		public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceID, System.UInt32 InMyEndpointID, SF.PlayerInformation[] InMemberInfos )
+		public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceID, System.UInt64 InPlayerID )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceJoinGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceID, InMyEndpointID,(ushort)InMemberInfos.Length, InMemberInfos);
+			result = CSSFNetAdapter_PlayInstanceJoinGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceID, InPlayerID);
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinGameInstanceRes);
 			return result;
-		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceID, System.UInt32 InMyEndpointID, SF.PlayerInformation[] InMemberInfos )
+		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceID, System.UInt64 InPlayerID )
 
 
 		// S2C: Event for Player joined.
@@ -317,7 +317,7 @@ namespace SF.Net
 		#region Native Interfaces 
 		// Cmd: Event for Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinGameInstanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceJoinGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceID, System.UInt32 InMyEndpointID, System.UInt16 _sizeOfInMemberInfos,SF.PlayerInformation[] InMemberInfos );
+		static extern int CSSFNetAdapter_PlayInstanceJoinGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceID, System.UInt64 InPlayerID );
 
 
 

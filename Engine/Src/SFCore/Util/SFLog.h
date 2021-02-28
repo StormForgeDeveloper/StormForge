@@ -18,7 +18,7 @@
 #include "Container/SFSpinBufferMT.h"
 #include "Util/SFStrFormat.h"
 #include "ResultCode/SFResultCodeSystem.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 
 
 

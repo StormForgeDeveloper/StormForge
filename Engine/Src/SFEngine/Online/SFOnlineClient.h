@@ -125,8 +125,8 @@ namespace SF
 		AuthTicket GetAuthTicket() const { return m_AuthTicket; }
 
 		uint64_t GetGameInstanceUID() const { return m_GameInstanceUID; }
-		const NetAddress& GetGameInstanceAddress() const { return m_GameInstanceAddress; }
 		const NetAddress& GetGameInstanceAddress4() const { return m_GameInstanceAddress4; }
+		const NetAddress& GetGameInstanceAddress6() const { return m_GameInstanceAddress6; }
 
 		const SharedPointerT<Net::Connection>& GetConnectionLogin() const { return m_Login; }
 		const SharedPointerT<Net::Connection>& GetConnectionGame() const { return m_Game; }
@@ -167,8 +167,8 @@ namespace SF
 		uint64_t m_PartyUID;
 		uint64_t m_PartyLeaderId;
 
-		NetAddress m_GameInstanceAddress;
 		NetAddress m_GameInstanceAddress4;
+		NetAddress m_GameInstanceAddress6;
 
 		// connections
 		SharedPointerT<Net::Connection> m_Login;

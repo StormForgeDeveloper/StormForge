@@ -1496,15 +1496,15 @@ namespace SF.Net
 
 
 		// Cmd: Join to a game instance
-		public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, SF.NetAddress InServerAddress, SF.NetAddress InServerAddress4 )
+		public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, SF.NetAddress InServerAddress4, SF.NetAddress InServerAddress6 )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameJoinGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InInsUID,ref InServerAddress,ref InServerAddress4);
+			result = CSSFNetAdapter_GameJoinGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InInsUID,ref InServerAddress4,ref InServerAddress6);
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinGameInstanceRes);
 			return result;
-		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, SF.NetAddress InServerAddress, SF.NetAddress InServerAddress4 )
+		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, SF.NetAddress InServerAddress4, SF.NetAddress InServerAddress6 )
 
 
 		// Cmd: Leave game instance
@@ -2398,7 +2398,7 @@ namespace SF.Net
 
 		// Cmd: Join to a game instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameJoinGameInstanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameJoinGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, ref SF.NetAddress InServerAddress, ref SF.NetAddress InServerAddress4 );
+		static extern int CSSFNetAdapter_GameJoinGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, ref SF.NetAddress InServerAddress4, ref SF.NetAddress InServerAddress6 );
 
 
 

@@ -6537,8 +6537,8 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_InsUID);
-				protocolCheck(*input >> m_ServerAddress);
 				protocolCheck(*input >> m_ServerAddress4);
+				protocolCheck(*input >> m_ServerAddress6);
 
 				return hr;
 
@@ -6555,8 +6555,8 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("InsUID", parser.GetInsUID());
-				variableBuilder.SetVariable("ServerAddress", parser.GetServerAddress());
 				variableBuilder.SetVariable("ServerAddress4", parser.GetServerAddress4());
+				variableBuilder.SetVariable("ServerAddress6", parser.GetServerAddress6());
 
 				return hr;
 
@@ -6574,7 +6574,7 @@ namespace SF
 			}; // Result JoinGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress, const NetAddress &InServerAddress4 )
+			MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress4, const NetAddress &InServerAddress6 )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -6593,8 +6593,8 @@ namespace SF
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InInsUID)
-					+ SerializedSizeOf(InServerAddress)
 					+ SerializedSizeOf(InServerAddress4)
+					+ SerializedSizeOf(InServerAddress6)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinGameInstanceRes::MID, __uiMessageSize ) );
@@ -6606,11 +6606,11 @@ namespace SF
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 				protocolCheck(*output << InInsUID);
-				protocolCheck(*output << InServerAddress);
 				protocolCheck(*output << InServerAddress4);
+				protocolCheck(*output << InServerAddress6);
 
 				return hr;
-			}; // MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress, const NetAddress &InServerAddress4 )
+			}; // MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress4, const NetAddress &InServerAddress6 )
 
 
 
@@ -6618,8 +6618,8 @@ namespace SF
 			{
  				JoinGameInstanceRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "JoinGameInstance:{0}:{1} , TransactionID:{2}, Result:{3:X8}, InsUID:{4}, ServerAddress:{5}, ServerAddress4:{6}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetInsUID(), parser.GetServerAddress(), parser.GetServerAddress4()); 
+				SFLog(Net, Debug1, "JoinGameInstance:{0}:{1} , TransactionID:{2}, Result:{3:X8}, InsUID:{4}, ServerAddress4:{5}, ServerAddress6:{6}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetInsUID(), parser.GetServerAddress4(), parser.GetServerAddress6()); 
 				return ResultCode::SUCCESS;
 			}; // Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

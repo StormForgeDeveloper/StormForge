@@ -1608,21 +1608,21 @@ namespace SF
 
 	}; // Result NetSvrPolicyGame::PartyChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 	// Cmd: Join to a game instance
-	Result NetSvrPolicyGame::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress, const NetAddress &InServerAddress4 )
+	Result NetSvrPolicyGame::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress4, const NetAddress &InServerAddress6 )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::JoinGameInstanceRes::Create(GetSystemHeap(), InTransactionID, InResult, InInsUID, InServerAddress, InServerAddress4);
+		 pMessage = SF::Message::Game::JoinGameInstanceRes::Create(GetSystemHeap(), InTransactionID, InResult, InInsUID, InServerAddress4, InServerAddress6);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetSvrPolicyGame::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress, const NetAddress &InServerAddress4 )
+	}; // Result NetSvrPolicyGame::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress4, const NetAddress &InServerAddress6 )
 	// Cmd: Leave game instance
 	Result NetSvrPolicyGame::LeaveGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult )
 	{

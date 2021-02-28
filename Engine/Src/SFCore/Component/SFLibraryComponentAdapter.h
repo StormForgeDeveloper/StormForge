@@ -16,7 +16,7 @@
 #include "SFTypedefs.h"
 #include "Util/SFStringCrc64.h"
 #include "ResultCode/SFResultCodeSystem.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 
 
 namespace SF {

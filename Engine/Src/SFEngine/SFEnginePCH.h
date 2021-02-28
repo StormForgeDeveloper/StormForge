@@ -44,7 +44,7 @@
 #include "Container/SFSortedArray.h"
 #include "Container/SFSortedMap.h"
 #include "ResultCode/SFResultCodeSystem.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
 

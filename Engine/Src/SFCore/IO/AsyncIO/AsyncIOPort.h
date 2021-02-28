@@ -15,7 +15,7 @@
 #include "SFTypedefs.h"
 #include "Container/SFCircularPageQueue.h"
 #include "MemoryManager/SFMemoryPool.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Service/SFAsyncIOPortService.h"
 #include "IO/AsyncIO/AsyncIOPortWriteBufferQueue.h"
 

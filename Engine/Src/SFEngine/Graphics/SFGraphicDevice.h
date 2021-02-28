@@ -11,7 +11,7 @@
 
 #pragma once
 
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Object/SFSharedObjectManager.h"
 #include "Graphics/SFRenderThread.h"
 #include "Service/SFIGraphicDevice.h"

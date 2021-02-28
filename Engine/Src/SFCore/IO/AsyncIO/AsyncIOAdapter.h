@@ -16,7 +16,7 @@
 #include "Container/SFCircularPageQueue.h"
 #include "MemoryManager/SFMemoryPool.h"
 #include "Multithread/SFThread.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 
 
 namespace SF {

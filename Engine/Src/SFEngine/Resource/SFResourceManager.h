@@ -13,7 +13,7 @@
 
 #include "Object/SFSharedPointer.h"
 #include "Object/SFSharedObjectManager.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Service/SFResourceManagerService.h"
 
 

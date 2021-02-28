@@ -23,7 +23,7 @@
 #include "Net/SFNetSvrDef.h"
 #include "Task/SFAsyncTaskManager.h"
 #include "SFEngine.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Service/SFEngineService.h"
 
 

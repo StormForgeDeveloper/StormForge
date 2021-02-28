@@ -13,7 +13,7 @@
 #include "SFTypedefs.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedObjectManager.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 
 
 

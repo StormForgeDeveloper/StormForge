@@ -15,7 +15,7 @@
 #include "Types/SFEngineTypedefs.h"
 #include "Util/SFStringCrc32.h"
 #include "Util/SFString.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 
 #include "Service/SFEngineService.h"
 

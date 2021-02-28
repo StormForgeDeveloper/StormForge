@@ -12,8 +12,7 @@
 		</Cmd>
 		<Res>
 			<Params Type="EntityUID" Name="PlayInstanceID" Desc="joined Play instance ID"/>
-			<Params Type="uint32" Name="MyEndpointID" Desc="Joined player PlayID"/>
-			<Params Type="PlayerInformation" IsArray="true" Name="MemberInfos" Desc="Member player IDs"/>
+			<Params Type="PlayerID" Name="PlayerID" Desc="Joined player id for validation"/>
 		</Res>
 	</Command>
 

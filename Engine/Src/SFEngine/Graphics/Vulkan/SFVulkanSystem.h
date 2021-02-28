@@ -13,7 +13,7 @@
 
 
 #include "SFTypedefs.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Graphics/Vulkan/SFVulkanLibrary.h"
 #include "Graphics/Vulkan/SFVulkanDebug.h"
 

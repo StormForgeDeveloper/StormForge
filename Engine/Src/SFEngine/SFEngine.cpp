@@ -106,9 +106,9 @@ namespace SF {
 				return ResultCode::FAIL;
 		}
 
-		if (!StrUtil::IsNullOrEmpty(m_InitParameter.LogServerAddress))
+		if (!StrUtil::IsNullOrEmpty(m_InitParameter.LogServerAddress) && m_InitParameter.LogOutputLogServer.Composited != 0)
 		{
-			if (AddComponent<SF::LogOutputLogServerComponent>(m_InitParameter.LogOutputFile, m_InitParameter.LogServerAddress) == nullptr)
+			if (AddComponent<SF::LogOutputLogServerComponent>(m_InitParameter.LogOutputLogServer, m_InitParameter.LogServerAddress) == nullptr)
 				return ResultCode::FAIL;
 		}
 

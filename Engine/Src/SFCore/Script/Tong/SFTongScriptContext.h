@@ -16,7 +16,7 @@
 #include "SFTypedefs.h"
 #include "SFResult.h"
 #include "Service/SFScriptService.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Container/SFSortedArray.h"
 #include "Variable/SFVariable.h"
 #include "Variable/SFVariableTable.h"

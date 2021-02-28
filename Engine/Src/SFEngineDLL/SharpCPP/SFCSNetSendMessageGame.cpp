@@ -1250,15 +1250,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_GamePartyChatMessageS2CEvt( intptr_t InNativeCo
 
 
 // Cmd: Join to a game instance
-SFDLL_EXPORT int  CSSFNetAdapter_GameJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InInsUID, const NetAddress& InServerAddress, const NetAddress& InServerAddress4 )
+SFDLL_EXPORT int  CSSFNetAdapter_GameJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InInsUID, const NetAddress& InServerAddress4, const NetAddress& InServerAddress6 )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::JoinGameInstanceRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InInsUID,InServerAddress,InServerAddress4);
+	MessageDataPtr pMessage = SF::Message::Game::JoinGameInstanceRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InInsUID,InServerAddress4,InServerAddress6);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InInsUID, const NetAddress& InServerAddress, const NetAddress& InServerAddress4 )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InInsUID, const NetAddress& InServerAddress4, const NetAddress& InServerAddress6 )
 
 
 

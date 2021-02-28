@@ -20,7 +20,7 @@
 #include "MemoryManager/SFMemoryPool.h"
 #include "Multithread/SFThread.h"
 #include "Net/SFNetUtil.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "EngineObject/SFEngineTask.h"
 
 #include "Service/SFEngineServices.h"

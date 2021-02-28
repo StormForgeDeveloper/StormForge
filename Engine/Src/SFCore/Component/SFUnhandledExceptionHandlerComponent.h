@@ -11,7 +11,7 @@
 
 
 #include "SFTypedefs.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 
 
 namespace SF {

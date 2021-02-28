@@ -470,10 +470,10 @@ namespace SF
 			}
 
 			m_Owner.m_GameInstanceUID = packet.GetInsUID();
-			m_Owner.m_GameInstanceAddress = packet.GetServerAddress();
 			m_Owner.m_GameInstanceAddress4 = packet.GetServerAddress4();
+			m_Owner.m_GameInstanceAddress6 = packet.GetServerAddress6();
 
-			SFLog(Net, Info, "Game instance joined: {0}, game:{1}, {2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, m_Owner.m_GameInstanceAddress4);
+			SFLog(Net, Info, "Game instance joined: {0}, game:{1}, {2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress4, m_Owner.m_GameInstanceAddress6);
 
 			SetOnlineState(OnlineState::InGameConnectingGameInstance);
 

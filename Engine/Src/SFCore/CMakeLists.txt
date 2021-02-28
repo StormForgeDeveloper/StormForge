@@ -2,6 +2,13 @@
 
 
 set(SFCORE_LIB_FILES
+	Component/SFComponent.h
+	Component/SFLibraryComponent.h
+	Component/SFLibraryComponent.cpp
+	Component/SFLibraryComponentAdapter.h
+	#Component/SFLibraryComponentAdapter.cpp
+	Component/SFLibraryComponentManager.h
+	#Component/SFLibraryComponentManager.cpp
   	Component/SFUnhandledExceptionHandlerComponent.cpp
 	Container/SFCircularBuffer.cpp
 	Container/SFCircularBufferQueue.cpp
@@ -35,7 +42,6 @@ set(SFCORE_LIB_FILES
 	MemoryManager/SFMemory.cpp
 	MemoryManager/SFMemoryManager.cpp
 	MemoryManager/SFMemoryPool.cpp
-	Object/SFLibraryComponent.cpp
 	Object/SFObjectPool.cpp
 	Object/SFObject.cpp
 	Object/SFObjectManager.cpp
@@ -153,9 +159,6 @@ set(SFCORE_LIB_FILES
 	MemoryManager/SFMemoryPool.h
 	MemoryManager/SFStackHeap.h
 	MemoryManager/SFStackHeap.cpp
-	Object/SFLibraryComponent.h
-	Object/SFLibraryComponentAdapter.h
-	Object/SFLibraryComponentManager.h
 	Object/SFObjectPool.h
 	Object/SFObject.h
 	Object/SFObjectManager.h

@@ -350,8 +350,8 @@
 			</Cmd>
 			<Res>
 				<Params Type="GameInsUID" Name="InsUID" Desc="Game instance ID"/>
-				<Params Type="NetAddress" Name="ServerAddress" Desc="Game instance address"/>
-				<Params Type="NetAddress" Name="ServerAddress4" Desc="Game instance address"/>
+				<Params Type="NetAddress" Name="ServerAddress4" Desc="Game instance address IPV4"/>
+				<Params Type="NetAddress" Name="ServerAddress6" Desc="Game instance address IPV6"/>
 			</Res>
 		</Command>
 

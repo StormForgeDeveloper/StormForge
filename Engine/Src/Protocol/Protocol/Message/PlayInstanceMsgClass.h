@@ -80,14 +80,13 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
+ 					HasPlayerID = 1,
 					HasTransactionID = 1,
 					HasRouteContext = 0,
 					HasRouteHopCount = 0,
 					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return 0; }
 				RouteContext GetRouteContext() { return 0; }
 				uint32_t GetRouteHopCount() { return 0; }
 				uint64_t GetSender() { return 0; }
@@ -95,8 +94,7 @@ namespace SF
 				uint64_t m_TransactionID{};
 				Result m_Result{};
 				uint64_t m_PlayInstanceID{};
-				uint32_t m_MyEndpointID{};
-				ArrayView<PlayerInformation> m_MemberInfos;
+				PlayerID m_PlayerID{};
 			public:
 				JoinGameInstanceRes()
 					{}
@@ -110,8 +108,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPlayInstanceID() const	{ return m_PlayInstanceID; };
-				const uint32_t& GetMyEndpointID() const	{ return m_MyEndpointID; };
-				const Array<PlayerInformation>& GetMemberInfos() const	{ return m_MemberInfos; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -119,7 +116,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID );
 
 			}; // class JoinGameInstanceRes : public MessageBase
 

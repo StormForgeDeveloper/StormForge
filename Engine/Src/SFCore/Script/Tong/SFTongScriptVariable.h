@@ -15,7 +15,7 @@
 
 #include "SFTypedefs.h"
 #include "Service/SFScriptService.h"
-#include "Object/SFLibraryComponent.h"
+#include "Component/SFLibraryComponent.h"
 #include "Container/SFSortedArray.h"
 
 namespace SF

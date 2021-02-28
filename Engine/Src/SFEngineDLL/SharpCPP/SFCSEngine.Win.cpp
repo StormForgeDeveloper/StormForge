@@ -44,7 +44,7 @@
 //	Engine interface
 //
 
-SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress)
+SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, uint32_t debuggerLogMask)
 {
 	SF::LogOutputMask logOutputMask;
 
@@ -55,6 +55,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	SF::Log::Net.ChannelMask.Warning = 1;
 	SF::Log::Net.ChannelMask.Error = 1;
 	SF::Log::Net.ChannelMask.Assert = 1;
+	SF::Log::Net.ChannelMask.Debug = 1;
 	SF::Log::Net.ChannelMask.Debug1 = 1;
 	SF::Log::Net.ChannelMask.Debug2 = 1;
 	SF::Log::Net.ChannelMask.Debug3 = 1;
@@ -68,6 +69,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	logOutputMask.Custom8 = 1;
 	logOutputMask.Custom9 = 1;
 	logOutputMask.Custom10 = 1;
+	logOutputMask.Debug = 1;
 	logOutputMask.Debug1 = 1;
 	logOutputMask.Debug2 = 1;
 	logOutputMask.Debug3 = 1;
@@ -98,20 +100,17 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 #endif
 	initParam.EnableMemoryLeakDetection = false;
 
-	static char InstanceName[128];
 	srand(clock());
-	SF::StrUtil::Format(InstanceName, "StormForge");
 	initParam.GlobalLogOutputMask = logOutputMask;
-	initParam.LogOutputConsole = { 0, };
-	initParam.LogOutputDebugger = { 0, };
-	initParam.LogFilePrefix = InstanceName;
+	initParam.LogOutputConsole = SF::LogOutputMask(0);
+	initParam.LogOutputDebugger = SF::LogOutputMask(debuggerLogMask);
 	initParam.LogOutputFile = SF::LogOutputMask(0);
 
-	initParam.LogOutputDebugger = false;
-	initParam.LogOutputConsole = false;
-
 	if (!SF::StrUtil::IsNullOrEmpty(logServerAddress))
+	{
 		initParam.LogServerAddress = logServerAddress;
+		initParam.LogOutputLogServer = SF::LogOutputMask(-1);
+	}
 
 	if (!SF::StrUtil::IsNullOrEmpty(processName))
 		SF::Util::SetServiceName(processName);

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -136,7 +136,6 @@ namespace Net {
 		// TODO: It might be helpful If I make a class wrapper for this.
 		ConnectionActionArray *m_ActionsByState = nullptr;
 
-
 		// Round trip delay between two peer, Updated with TimeSync command
 		DurationMS m_RoundTripDelay;
 
@@ -154,12 +153,18 @@ namespace Net {
 		virtual Result SendRaw(const SharedPointerT<Message::MessageData> &pMsg) = 0;
 
 		void SetNetCtrlAction(NetCtrlIDs id, ConnectionMessageAction* action);
-		void AddStateAction(ConnectionState state, ConnectionAction* action);
 
 		void SetNetIOHandler(SocketIO* pValue) { m_IOHandler = pValue; }
 
 		// Process network control message
 		virtual Result ProcNetCtrl(const MsgNetCtrl* pNetCtrl);
+
+	public:
+		void AddStateAction(ConnectionState state, ConnectionAction* action);
+		void RemoveStateAction(ConnectionState state, ConnectionAction* action);
+
+		// Only CONNECTED state is supported
+		void SetStateTimeout(ConnectionState state, DurationMS timeout);
 
 	public:
 
@@ -287,7 +292,7 @@ namespace Net {
 			RecvMessageDelegates* pDelegateList = nullptr;
 			if (!m_RecvMessageDelegatesByMsgId.Find(msgId, pDelegateList))
 			{
-				pDelegateList = new RecvMessageDelegates(GetHeap());
+				pDelegateList = new(GetHeap()) RecvMessageDelegates(GetHeap());
 				m_RecvMessageDelegatesByMsgId.Insert(msgId, pDelegateList);
 				m_RecvMessageDelegatesByMsgId.CommitChanges();
 			}

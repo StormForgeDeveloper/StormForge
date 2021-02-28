@@ -106,7 +106,7 @@ namespace SF {
 	{
 		RegisterToEngineObjectManager();
 
-		return ResultCode::SUCCESS;
+		return m_ComponentManager.InitializeComponents();
 	}
 
 	void EngineObject::RegisterToEngineObjectManager()
@@ -147,6 +147,8 @@ namespace SF {
 		if (m_RenderAsyncTickTask != nullptr)
 			m_RenderAsyncTickTask->ClearObject();
 		m_RenderAsyncTickTask = nullptr;
+
+		m_ComponentManager.TerminateComponents();
 	}
 
 

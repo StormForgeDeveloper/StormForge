@@ -143,11 +143,7 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_PlayInstanceID);
-				protocolCheck(*input >> m_MyEndpointID);
-				protocolCheck(input->Read(ArrayLen));
-				PlayerInformation* MemberInfosPtr = nullptr;
-				protocolCheck(input->ReadLink(MemberInfosPtr, ArrayLen));
-				m_MemberInfos.SetLinkedBuffer(ArrayLen, MemberInfosPtr);
+				protocolCheck(*input >> m_PlayerID);
 
 				return hr;
 
@@ -164,8 +160,7 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("PlayInstanceID", parser.GetPlayInstanceID());
-				variableBuilder.SetVariable("MyEndpointID", parser.GetMyEndpointID());
-				variableBuilder.SetVariable("MemberInfos", parser.GetMemberInfos());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 
 				return hr;
 
@@ -183,7 +178,7 @@ namespace SF
 			}; // Result JoinGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos )
+			MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -202,8 +197,7 @@ namespace SF
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayInstanceID)
-					+ SerializedSizeOf(InMyEndpointID)
-					+ SerializedSizeOf(InMemberInfos)
+					+ SerializedSizeOf(InPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinGameInstanceRes::MID, __uiMessageSize ) );
@@ -215,11 +209,10 @@ namespace SF
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 				protocolCheck(*output << InPlayInstanceID);
-				protocolCheck(*output << InMyEndpointID);
-				protocolCheck(*output << InMemberInfos);
+				protocolCheck(*output << InPlayerID);
 
 				return hr;
-			}; // MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const uint32_t &InMyEndpointID, const Array<PlayerInformation>& InMemberInfos )
+			}; // MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID )
 
 
 
@@ -227,8 +220,8 @@ namespace SF
 			{
  				JoinGameInstanceRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "JoinGameInstance:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceID:{4}, MyEndpointID:{5}, MemberInfos:{6,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceID(), parser.GetMyEndpointID(), parser.GetMemberInfos()); 
+				SFLog(Net, Debug1, "JoinGameInstance:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceID:{4}, PlayerID:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceID(), parser.GetPlayerID()); 
 				return ResultCode::SUCCESS;
 			}; // Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
