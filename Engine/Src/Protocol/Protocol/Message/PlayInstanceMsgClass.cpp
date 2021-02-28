@@ -897,7 +897,7 @@ namespace SF
 			}; // Result RemovePlayerFromViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// C2S: Player Movement
-			const MessageID PlayerMovementC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 7);
+			const MessageID PlayerMovementC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 7);
 			const VariableTable& PlayerMovementC2SEvt::GetAttributes() const
 			{
  				if (!m_AttributesHasParsed)
@@ -1043,7 +1043,7 @@ namespace SF
 			}; // Result PlayerMovementC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Player Movement
-			const MessageID PlayerMovementS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 8);
+			const MessageID PlayerMovementS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 8);
 			const VariableTable& PlayerMovementS2CEvt::GetAttributes() const
 			{
  				if (!m_AttributesHasParsed)
