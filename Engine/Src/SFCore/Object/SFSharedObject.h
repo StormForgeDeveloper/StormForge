@@ -21,6 +21,10 @@ namespace SF {
 	class SharedObjectManager;
 	class SharedPointer;
 
+	template<typename DestType>
+	class SharedPointerT;
+
+
 	// Shared object base
 	class SharedObject
 	{
@@ -62,6 +66,14 @@ namespace SF {
 		inline SharedObjectManager*		GetReferenceManager()					{ return m_ReferenceManagerObject; }
 
 		SharedPointer AsSharedPtr() const;
+
+		template<typename DestType,
+			typename = std::enable_if_t<std::is_base_of_v<SharedObject,DestType>>>
+		SharedPointerT<DestType> AsSharedPtr() const
+		{
+			return SharedPointerT<DestType>((DestType*)this);
+		}
+
 
 		// If your object is added to shared object manager and CanDelete returns false the manager will give more time for the object
 		virtual bool	CanDelete() { return true; }

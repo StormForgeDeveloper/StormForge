@@ -120,7 +120,7 @@ namespace SF {
 		virtual Result OnTimerTick(TimerAction *pAction) { unused(pAction); return ResultCode::NOT_IMPLEMENTED; }
 
 		// Object task
-		virtual Result OnTick(EngineTaskTick tick) { return ResultCode::NOT_IMPLEMENTED; }
+		virtual Result OnTick(EngineTaskTick tick);
 	};
 
 

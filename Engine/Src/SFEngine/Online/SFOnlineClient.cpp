@@ -394,6 +394,13 @@ namespace SF
 					OnConnectionEvent(evt);
 				});
 
+			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
+				Message::PlayInstance::JoinGameInstanceRes::MID.GetMsgID(),
+				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				{
+					OnPlayInstanceJoinGameInstanceRes(pMsgData);
+				});
+
 			m_Owner.GetConnectionGame()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Game::JoinGameInstanceRes::MID.GetMsgID(),
 				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
@@ -407,7 +414,7 @@ namespace SF
 			auto res = policy.JoinGameInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID());
 			if (!res)
 			{
-				Disconnect();
+				SetResult(res);
 				SetOnlineState(OnlineState::InGameServer);
 				SFLog(Net, Error, "JoinGameInstance command has failed {0}", res);
 			}
@@ -431,7 +438,17 @@ namespace SF
 			{
 				if (evt.Components.hr)
 				{
-					SetOnlineState(OnlineState::InGameInGameInstance);
+					NetPolicyGame policy(m_Owner.GetConnectionGame()->GetMessageEndpoint());
+					auto res = policy.JoinGameInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID());
+					if (!res)
+					{
+						SetResult(res);
+						SetOnlineState(OnlineState::InGameServer);
+						SFLog(Net, Error, "JoinGameInstance command has failed {0}", res);
+						return;
+					}
+
+					SetOnlineState(OnlineState::InGameGameInstanceJoining);
 				}
 				else
 				{
@@ -483,6 +500,34 @@ namespace SF
 			{
 				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);
 			}
+		}
+
+		void OnPlayInstanceJoinGameInstanceRes(SharedPointerT<Message::MessageData>& pMsgData)
+		{
+			Message::PlayInstance::JoinGameInstanceRes packet(Forward<MessageDataPtr>(pMsgData));
+			auto result = packet.ParseMsg();
+			if (!result)
+			{
+				SFLog(Net, Error, "PlayInstance::JoinGameInstanceRes: Packet parsing error: {0}", result);
+				SetResult(result);
+				Disconnect();
+				SetOnlineState(OnlineState::InGameServer);
+				return;
+			}
+
+			if (!packet.GetResult())
+			{
+				SFLog(Net, Error, "PlayInstance::JoinGameInstanceRes: failure: {0}", packet.GetResult());
+				SetResult(packet.GetResult());
+				Disconnect();
+				SetOnlineState(OnlineState::InGameServer);
+				return;
+			}
+
+
+			SFLog(Net, Info, "PlayInstance::JoinGameInstanceRes joined: {0}", m_Owner.m_GameInstanceUID);
+
+			SetOnlineState(OnlineState::InGameInGameInstance);
 		}
 	};
 

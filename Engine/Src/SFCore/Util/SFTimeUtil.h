@@ -132,6 +132,50 @@ namespace SF {
 		};
 
 
+		class Timer
+		{
+		public:
+			const static TimeStampMS	InvalidTime;
+
+		private:
+			TimeStampMS	m_ulTimeToExpire;
+			TimeStampMS	m_ulTimeToExpirePrev;
+
+			// Timer expire caller
+			std::function<void()> m_delOnExpired;
+
+		public:
+			Timer() = default;
+			~Timer() = default;
+
+
+			// Set timer delegate
+			 void SetTimerFunc(std::function<void()> funcOnExpired)
+			{
+				m_delOnExpired = funcOnExpired;
+			}
+
+			// set timer
+			Result SetTimer(DurationMS TimerDuration);
+
+			// clear timer
+			void ClearTimer()
+			{
+				m_ulTimeToExpire = InvalidTime;
+			}
+
+			TimeStampMS	GetTimerExpireTime() { return m_ulTimeToExpire; }
+
+			// check about timer is working
+			bool IsTimerWorking() const
+			{
+				return m_ulTimeToExpire != InvalidTime;
+			}
+
+			// Timer check update
+			bool	CheckTimer();
+		};
+
 		////////////////////////////////////////////////////////////////////////////////
 		//
 		//	Module

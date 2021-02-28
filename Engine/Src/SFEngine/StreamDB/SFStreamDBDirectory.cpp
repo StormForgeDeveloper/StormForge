@@ -175,6 +175,8 @@ namespace SF
 	{
 		ScopeContext hr;
 
+		super::OnTick(tick);
+
 		if (m_FindRequested)
 		{
 			m_FindRequested = false;

@@ -184,28 +184,6 @@ namespace SF {
 			//}
 		}
 
-		
-
-
-		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		// TimeStampTimer
-		//
-
-
-		const TimeStampMS TimeStampTimer::InvalidTime;
-
-
-		// set timer
-		Result TimeStampTimer::SetTimer(DurationMS TimerDuration)
-		{
-			TimeStampMS ulNewTime = Time.GetTimeMs() + TimerDuration;
-
-			m_ulTimeToExpire = ulNewTime;
-			if (m_ulTimeToExpire.time_since_epoch().count() == 0)
-				m_ulTimeToExpire = Time.GetTimeMs();
-
-			return ResultCode::SUCCESS;
-		}
 
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -235,8 +213,24 @@ namespace SF {
 
 
 		/////////////////////////////////////////////////////////////////////////////////////////////////////
-		// Time stamp timer
+		// TimeStampTimer
 		//
+
+
+		const TimeStampMS TimeStampTimer::InvalidTime;
+
+
+		// set timer
+		Result TimeStampTimer::SetTimer(DurationMS TimerDuration)
+		{
+			TimeStampMS ulNewTime = Time.GetTimeMs() + TimerDuration;
+
+			m_ulTimeToExpire = ulNewTime;
+			if (m_ulTimeToExpire.time_since_epoch().count() == 0)
+				m_ulTimeToExpire = Time.GetTimeMs();
+
+			return ResultCode::SUCCESS;
+		}
 
 
 		// Timer check update
@@ -261,6 +255,46 @@ namespace SF {
 			return bExpired;
 		}
 
+
+		/////////////////////////////////////////////////////////////////////////////////////////////////////
+		// Timer
+		//
+
+
+		const TimeStampMS Timer::InvalidTime;
+
+		// Timer check update
+		bool	Timer::CheckTimer()
+		{
+			if (m_ulTimeToExpire == InvalidTime)
+				return false;
+
+			auto diff = m_ulTimeToExpire - Time.GetRawTimeMs();
+			bool bExpired = ((INT)diff.count() < 0);
+
+			if (bExpired)
+			{
+				if (m_delOnExpired)
+					m_delOnExpired();
+
+				// Clear timer
+				m_ulTimeToExpirePrev = m_ulTimeToExpire;
+				m_ulTimeToExpire = InvalidTime;
+			}
+
+			return bExpired;
+		}
+
+		Result Timer::SetTimer(DurationMS TimerDuration)
+		{
+			TimeStampMS ulNewTime = Time.GetRawTimeMs() + TimerDuration;
+
+			m_ulTimeToExpire = ulNewTime;
+			if (m_ulTimeToExpire.time_since_epoch().count() == 0)
+				m_ulTimeToExpire = Time.GetRawTimeMs();
+
+			return ResultCode::SUCCESS;
+		}
 
 	}	// namespace Util
 } // namespace SF

@@ -30,6 +30,9 @@ namespace SF {
 
 		class ServerNet : public EngineObject
 		{
+		public:
+			using super = EngineObject;
+
 		private:
 
 			// local Address

@@ -38,6 +38,8 @@ namespace SF
 	{
 	public:
 
+		using super = EngineObject;
+
 		// Online State
 		enum class OnlineState : uint8_t
 		{
@@ -56,6 +58,7 @@ namespace SF
 			// In game instance state. the player still in game as well
 			InGameJoiningGameInstance,
 			InGameConnectingGameInstance,
+			InGameGameInstanceJoining,
 			InGameInGameInstance,
 
 			// Disconnected

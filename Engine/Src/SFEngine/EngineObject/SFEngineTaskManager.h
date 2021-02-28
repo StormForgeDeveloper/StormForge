@@ -26,7 +26,7 @@
 #include "Service/SFEngineServices.h"
 
 
-#if defined(DEBUG)
+#if 0 // defined(DEBUG)
 #define SF_ENABLE_TASK_TRACKING 1
 #else
 #define SF_ENABLE_TASK_TRACKING 0

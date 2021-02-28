@@ -55,40 +55,29 @@ namespace SF {
 		//
 
 
-		class MessageEndpointConnection : public MessageEndpoint
+		bool MessageEndpointConnection::IsSameEndpoint(const EndpointAddress& messageEndpoint)
 		{
-		public:
-			WeakPointerT<Connection> m_pConnection;
+			auto pConnection = m_pConnection.AsSharedPtr<Connection>();
 
-			MessageEndpointConnection(Connection* pConnection)
+			if (pConnection == nullptr)
+				return messageEndpoint.MessageServer.IsNullOrEmpty();
+
+			auto& netAddress = pConnection->GetRemoteInfo().PeerAddress;
+			char portString[64];
+			StrUtil::Format(portString, "{0}", netAddress.Port);
+			return messageEndpoint.Channel == portString && messageEndpoint.MessageServer == netAddress.Address;
+		}
+
+		Result MessageEndpointConnection::Send(const SharedPointerT<Message::MessageData>& messageData)
+		{
+			auto pConnection = m_pConnection.AsSharedPtr<Connection>();
+			if (pConnection != nullptr)
 			{
-				m_pConnection = SharedPointerT<Connection>(pConnection);
+				return pConnection->Send(messageData);
 			}
 
-			virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override
-			{
-				auto pConnection = m_pConnection.AsSharedPtr<Connection>();
-
-				if (pConnection == nullptr)
-					return messageEndpoint.MessageServer.IsNullOrEmpty();
-
-				auto& netAddress = pConnection->GetRemoteInfo().PeerAddress;
-				char portString[64];
-				StrUtil::Format(portString, "{0}", netAddress.Port);
-				return messageEndpoint.Channel == portString && messageEndpoint.MessageServer == netAddress.Address;
-			}
-
-			virtual Result Send(const SharedPointerT<Message::MessageData>& messageData) override
-			{
-				auto pConnection = m_pConnection.AsSharedPtr<Connection>();
-				if (pConnection != nullptr)
-				{
-					return pConnection->Send(messageData);
-				}
-
-				return ResultCode::INVALID_STATE;
-			}
-		};
+			return ResultCode::INVALID_STATE;
+		}
 
 
 
@@ -706,7 +695,11 @@ namespace SF {
 
 		Result Connection::OnTick(EngineTaskTick tick)
 		{
+			Result hr;
+
 			SetRunningThreadID(ThisThread::GetThreadID());
+
+			netCheck(super::OnTick(tick));
 
 			return TickUpdate();
 		}

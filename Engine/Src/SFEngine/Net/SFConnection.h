@@ -43,6 +43,7 @@ namespace Net {
 	{
 	public:
 
+		using super = EngineObject;
 		using ConnectionEventDeletates = EventDelegateList<Connection*, const ConnectionEvent&>;
 		using RecvMessageDelegates = EventDelegateList<Connection*, SharedPointerT<Message::MessageData>&>;
 		using NetSyncMessageDelegates = EventDelegateList<Connection*>;
@@ -360,7 +361,7 @@ namespace Net {
 		// Call Disconnect and Wait everything is ready to go away, and release itself
 		virtual void DisconnectNRelease(const char* reason);
 
-		// called when incoming message occure
+		// called when incoming message occur
 		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) = 0;
 		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg);
 
@@ -425,6 +426,29 @@ namespace Net {
 	#include "SFConnection.inl"
 
 	typedef SharedPointerT <Connection> ConnectionPtr;
+
+
+
+	////////////////////////////////////////////////////////////////////////////////
+	//
+	//	MessageEndpoint adapter
+	//
+
+
+	class MessageEndpointConnection : public MessageEndpoint
+	{
+	public:
+		WeakPointerT<Connection> m_pConnection;
+
+		MessageEndpointConnection(Connection* pConnection)
+		{
+			m_pConnection = SharedPointerT<Connection>(pConnection);
+		}
+
+		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
+		virtual Result Send(const SharedPointerT<Message::MessageData>& messageData) override;
+	};
+
 
 }  // namespace Net
 

@@ -29,8 +29,6 @@ namespace SF {
 
 	class Component
 	{
-	public:
-
 	private:
 
 		unsigned int m_ComponentID = 0;
@@ -60,8 +58,7 @@ namespace SF {
 
 	// deprecated
 	template< size_t MaxComponentID >
-	[[deprecated("Use ComponentManager")]]
-	class ComponentCarrier
+	class [[deprecated("Use ComponentManager")]] ComponentCarrier
 	{
 	public:
 
@@ -438,14 +435,16 @@ namespace SF {
 			return pComponent;
 		}
 
-		template< class ComponentType >
+		template< class ComponentType,
+			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
 		ComponentType* RemoveComponent()
 		{
-			return RemoveComponent(ComponentType::ComponentID);
+			return static_cast<ComponentType*>(RemoveComponent(ComponentType::ComponentID));
 		}
 
 		// Add component
-		template< class ComponentType >
+		template< class ComponentType,
+			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
 		Result AddComponent(bool bAllowDuplicatedComponent = false)
 		{
 			if (!bAllowDuplicatedComponent && GetComponent<ComponentType>() != nullptr)
@@ -467,7 +466,8 @@ namespace SF {
 			return hr;
 		}
 
-		template< class ComponentType, class ParamType0 >
+		template< class ComponentType, class ParamType0,
+			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
 		Result AddComponent(ParamType0 p0, bool bAllowDuplicatedComponent = false)
 		{
 			if (!bAllowDuplicatedComponent && GetComponent<ComponentType>() != nullptr)
@@ -489,7 +489,8 @@ namespace SF {
 			return hr;
 		}
 
-		template< class ComponentType, class ParamType0, class ParamType1 >
+		template< class ComponentType, class ParamType0, class ParamType1,
+			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
 		Result AddComponent(ParamType0 p0, ParamType1 p1, bool bAllowDuplicatedComponent = false)
 		{
 			if (!bAllowDuplicatedComponent && GetComponent<ComponentType>() != nullptr)
@@ -511,7 +512,8 @@ namespace SF {
 			return hr;
 		}
 
-		template< class ComponentType, class ParamType0, class ParamType1, class ParamType2 >
+		template< class ComponentType, class ParamType0, class ParamType1, class ParamType2,
+			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
 		Result AddComponent(ParamType0 p0, ParamType1 p1, ParamType2 p2)
 		{
 			if (GetComponent<ComponentType>() != nullptr)
@@ -534,7 +536,8 @@ namespace SF {
 		}
 
 
-		template< class ComponentType >
+		template< class ComponentType,
+			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
 		Result AddComponent(ComponentType*& newComponent)
 		{
 			if (m_Components.find(newComponent->GetComponentID()) != nullptr)
@@ -560,7 +563,8 @@ namespace SF {
 			return m_Components.find(ID);
 		}
 
-		template< class ComponentType >
+		template< class ComponentType,
+			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
 		ComponentType* GetComponent(StringCrc32 ID)
 		{
 			return m_Components.find(ID);
@@ -568,14 +572,16 @@ namespace SF {
 
 
 		// Get component with its type
-		template< class ComponentType >
+		template< class ComponentType,
+			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
 		ComponentType* GetComponent()
 		{
 			return static_cast<ComponentType*>(GetComponent(ComponentType::ComponentID));
 		}
 
 		// Get component with its type
-		template< class ComponentType >
+		template< class ComponentType,
+			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
 		const ComponentType* GetComponent() const
 		{
 			return GetComponent(ComponentType::ComponentID);

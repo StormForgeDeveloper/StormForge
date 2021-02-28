@@ -77,6 +77,7 @@ namespace SF {
 		, m_TickFlags(0)
 		, m_ActuallyRegistered(false)
 		, m_ManagerListNodes(this)
+		, m_ComponentManager(GetHeap())
 	{
 		for (int iNode = 0; iNode < (int)EngineTaskTick::Max; iNode++)
 		{
@@ -187,6 +188,11 @@ namespace SF {
 			m_TimerAction = new(GetHeap()) EngineObjectTimerAction(this);
 	}
 
+	Result EngineObject::OnTick(EngineTaskTick tick)
+	{
+		m_ComponentManager.TickUpdate();
+		return ResultCode::SUCCESS;
+	}
 
 	/////////////////////////////////////////////////////////////////////////////////////////
 	//
