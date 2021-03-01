@@ -250,8 +250,6 @@ namespace SF {
 				netCheckMem(pMsg = Message::MessageData::NewMessage(GetHeap(), uiCtrlCode, sizeof(MsgNetCtrl)));
 			}
 
-			pMsg->GetMessageHeader()->msgID.IDs.Mobile = false;
-
 			pAckMsg = (MsgNetCtrl*)pMsg->GetMessageBuff();
 			pAckMsg->PeerID = UID == 0 ? GetLocalInfo().PeerID : UID;
 			pAckMsg->msgID.SetSequence(uiSequence);
@@ -395,7 +393,7 @@ namespace SF {
 			Result hr = ResultCode::SUCCESS;
 			ConnectionMessageAction* pAction = nullptr;
 
-			if (pNetCtrl->msgID.IDs.Mobile == 1 || pNetCtrl->Length < sizeof(MsgNetCtrl))
+			if (pNetCtrl->Length < sizeof(MsgNetCtrl))
 			{
 				SFLog(Net, Info, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
 				netCheck(Disconnect("Invalid packet"));
