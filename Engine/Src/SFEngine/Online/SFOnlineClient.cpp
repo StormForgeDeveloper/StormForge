@@ -442,13 +442,13 @@ namespace SF
 			{
 				if (evt.Components.hr)
 				{
-					NetPolicyGame policy(m_Owner.GetConnectionGame()->GetMessageEndpoint());
-					auto res = policy.JoinGameInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID());
+					NetPolicyPlayInstance policy(m_Owner.GetConnectionGameInstance()->GetMessageEndpoint());
+					auto res = policy.JoinGameInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID(), m_Owner.GetPlayerID(), "??");
 					if (!res)
 					{
 						SetResult(res);
 						SetOnlineState(OnlineState::InGameServer);
-						SFLog(Net, Error, "JoinGameInstance command has failed {0}", res);
+						SFLog(Net, Error, "PlayInstance::JoinGameInstance command has failed {0}", res);
 						return;
 					}
 
@@ -456,7 +456,7 @@ namespace SF
 				}
 				else
 				{
-					GetConnection()->Disconnect("JoinGameServer failed");
+					GetConnection()->Disconnect("PlayInstance connection has failed");
 					SetOnlineState(OnlineState::InGameServer);
 				}
 				SetResult(evt.Components.hr);

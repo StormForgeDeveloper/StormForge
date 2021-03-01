@@ -126,6 +126,7 @@ namespace SF
 		const NetAddress& GetGameAddress4() const { return m_GameAddress4; }
 		AccountID GetAccountId() const { return m_AccountId; }
 		AuthTicket GetAuthTicket() const { return m_AuthTicket; }
+		PlayerID GetPlayerID() const { return m_AccountId; }
 
 		uint64_t GetGameInstanceUID() const { return m_GameInstanceUID; }
 		const NetAddress& GetGameInstanceAddress4() const { return m_GameInstanceAddress4; }
