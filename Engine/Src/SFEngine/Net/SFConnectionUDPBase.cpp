@@ -128,42 +128,6 @@ namespace Net {
 		return hr;
 	}
 
-	//Result ConnectionUDPBase::ProcGuarrentedMessageWindow(const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action)
-	//{
-	//	Result hr = ResultCode::SUCCESS;
-	//	SharedPointerT<Message::MessageData> pIMsg;
-
-	//	// slide recv window
-	//	while ((m_RecvReliableWindow.PopMsg(pIMsg)))
-	//	{
-	//		Assert(pIMsg != nullptr);
-	//		Message::MessageHeader *pQMsgHeader = pIMsg->GetMessageHeader();
-	//		SFLog(Net, Debug2, "RECVGuaDEQ : CID:{0}:{1}, seq:{2}, msg:{3}, len:%4%",
-	//			GetCID(), m_RecvReliableWindow.GetBaseSequence(),
-	//			pQMsgHeader->msgID.IDSeq.Sequence,
-	//			pQMsgHeader->msgID,
-	//			pQMsgHeader->Length);
-
-
-	//		if (pIMsg->GetMessageHeader()->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
-	//		{
-	//			OnFrameSequenceMessage(pIMsg, action);
-	//		}
-	//		else
-	//		{
-	//			action(pIMsg);
-	//		}
-	//		//netChk(Connection::OnRecv(pIMsg));
-	//		pIMsg = nullptr;
-	//	}
-
-	////Proc_End:
-
-	//	pIMsg = nullptr;
-
-	//	return hr;
-	//}
-
 	// gathering
 	Result ConnectionUDPBase::SendPending( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID )
 	{
@@ -586,6 +550,58 @@ namespace Net {
 		return hr;
 	}
 
+	Result ConnectionUDPBase::OnGuarrentedMessageRecv(SharedPointerT<Message::MessageData>& pIMsg)
+	{
+		Result hr = ResultCode::SUCCESS;
+
+		auto msgID = pIMsg->GetMessageHeader()->msgID;
+		auto seq = pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence;
+		auto len = pIMsg->GetMessageHeader()->Length;
+
+		Result hrTem = m_RecvReliableWindow.AddMsg(pIMsg);
+
+		SFLog(Net, Debug2, "RECVGuaAdd : CID:{0} BaseSeq:{1}, msg:{2}, seq:{3}, len:%4%, hr={5:X8}",
+			GetCID(), m_RecvReliableWindow.GetBaseSequence(),
+			msgID,
+			seq,
+			len,
+			hrTem);
+
+		if (hrTem == Result(ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE))
+		{
+			pIMsg = nullptr;
+			return hr;
+		}
+		else if (hrTem == Result(ResultCode::IO_INVALID_SEQUENCE) || hrTem == Result(ResultCode::IO_SEQUENCE_OVERFLOW))
+		{
+			// out of window, we are going to receive this message again
+			pIMsg = nullptr;
+			return hr;
+		}
+		else
+		{
+			netCheck(hrTem);
+			// Added to msg window just send ACK
+			pIMsg = nullptr;
+
+			SharedPointerT<Message::MessageData> pPopMsg;
+			while (m_RecvReliableWindow.PopMsg(pPopMsg))
+			{
+				hr = ConnectionUDPBase::OnRecv(pPopMsg);
+			}
+
+			if (GetEventHandler() != nullptr)
+			{
+				MessageDataPtr temp;
+				GetEventHandler()->OnRecvMessage(this, temp);
+			}
+		}
+
+		pIMsg = nullptr;
+
+		return hr;
+	}
+
 	// Send message to connected entity
 	Result ConnectionUDPBase::Send(const SharedPointerT<Message::MessageData> &pMsg )
 	{
@@ -694,6 +710,132 @@ namespace Net {
 	}
 
 
+	// called when incoming message occur
+	Result ConnectionUDPBase::OnRecv(uint uiBuffSize, const uint8_t* pBuff)
+	{
+		Result hr = ResultCode::SUCCESS;
+		SharedPointerT<Message::MessageData> pMsg;
+		Message::MobileMessageHeader* pMsgHeader = (Message::MobileMessageHeader*)pBuff;
+
+		SFLog(Net, Debug3, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
+
+		if (uiBuffSize == 0)
+		{
+			IncZeroRecvCount();
+
+			if (GetZeroRecvCount() > (uint32_t)Const::CONNECTION_ZEROPACKET_MAX)
+			{
+				Disconnect("Too many zero packet");
+			}
+			return hr;
+		}
+
+		MutexScopeLock scopeLock(GetUpdateLock());
+
+		while (uiBuffSize && GetConnectionState() != ConnectionState::DISCONNECTED)
+		{
+			pMsgHeader = (Message::MobileMessageHeader*)pBuff;
+			if (uiBuffSize < sizeof(Message::MobileMessageHeader) || uiBuffSize < pMsgHeader->Length)
+			{
+				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->Length);
+				netErr(ResultCode::IO_BADPACKET_SIZE);
+			}
+
+#ifdef UDP_PACKETLOS_EMULATE
+			if ((Util::Random.Rand() % UDP_PACKETLOS_RATE) < UDP_PACKETLOS_BOUND)
+				goto Proc_End;
+#endif	// UDP_PACKETLOS_EMULATE
+
+			ResetZeroRecvCount();
+
+			if (pMsgHeader->msgID.IDs.Type == Message::MSGTYPE_NETCONTROL && pMsgHeader->msgID.IDs.Reliability == false) // if net control message then process immidiately
+			{
+				netChk(ProcNetCtrl((MsgNetCtrl*)pMsgHeader));
+			}
+			else
+			{
+				if (GetConnectionState() == ConnectionState::CONNECTED)
+				{
+					netMem(pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
+
+					hr = OnRecv(pMsg);
+					netChk(hr);
+				}
+				else
+				{
+					if (GetConnectionState() != ConnectionState::CONNECTING)
+					{
+						// Sending normal message packet without connection process.
+						// Disconnect them
+						netChk(Disconnect("Invalid packet type"));
+						netErr(ResultCode::IO_BADPACKET_NOTEXPECTED);
+					}
+				}
+			}
+
+
+			uiBuffSize -= pMsgHeader->Length;
+			pBuff += pMsgHeader->Length;
+			pMsg = nullptr;
+		}
+
+	Proc_End:
+
+		pMsg = nullptr;
+
+		SendFlush();
+
+		return hr;
+	}
+
+
+	Result ConnectionUDPBase::OnRecv(SharedPointerT<Message::MessageData>& pMsg)
+	{
+		ScopeContext hr([this](Result hr)
+			{
+				if (!hr)
+				{
+					CloseConnection("OnRecv is failed");
+				}
+			});
+		Message::MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
+
+		if (GetConnectionState() != ConnectionState::CONNECTED)
+		{
+			return hr;
+		}
+
+		netCheck(pMsg->ValidateChecksumNDecrypt());
+
+		if (pMsgHeader->msgID.IDs.Reliability)
+		{
+			Assert(!pMsgHeader->msgID.IDs.Encrypted);
+
+			SFLog(Net, Debug2, "RECVGua    : CID:{0} msg:{1}, seq:{2}, len:{3}",
+				GetCID(),
+				pMsg->GetMessageHeader()->msgID,
+				pMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
+				pMsg->GetMessageHeader()->Length);
+
+			if (pMsgHeader->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
+			{
+				netCheck(OnFrameSequenceMessage(pMsg, [&](SharedPointerT<Message::MessageData>& pMsgData) { hr = m_RecvReliableWindow.AddMsg(pMsgData); }));
+			}
+			else
+			{
+				netCheck(OnGuarrentedMessageRecv(pMsg));
+			}
+			pMsg = nullptr;
+		}
+		else
+		{
+			netCheck(ConnectionUDPBase::OnRecv(pMsg));
+			pMsg = nullptr;
+		}
+
+		return hr;
+	}
+
 
 
 	
@@ -701,140 +843,6 @@ namespace Net {
 	//
 	//	UDP connection class
 	//
-
-	// called when incoming message occur
-	Result ConnectionUDP::OnRecv( uint uiBuffSize, const uint8_t* pBuff )
-	{
-		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<Message::MessageData> pMsg;
-
-		Message::MessageHeader * pMsgHeader = (Message::MessageHeader*)pBuff;
-
-		SFLog(Net, Debug3, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
-
-		if( uiBuffSize == 0 )
-		{
-			IncZeroRecvCount();
-
-			if( GetZeroRecvCount() > (uint32_t)Const::CONNECTION_ZEROPACKET_MAX )
-			{
-				Disconnect("Too many zero packets");
-			}
-			goto Proc_End;
-		}
-
-
-		while( uiBuffSize )
-		{
-			pMsgHeader = (Message::MessageHeader*)pBuff;
-
-			if( uiBuffSize < pMsgHeader->Length )
-			{
-				//Assert(0); // Will not occure with UDP packet
-				netErr( ResultCode::IO_BADPACKET_SIZE );
-			}
-
-
-#ifdef UDP_PACKETLOS_EMULATE
-			if( (Util::Random.Rand() % UDP_PACKETLOS_RATE) < UDP_PACKETLOS_BOUND )
-				goto Proc_End;
-#endif	// UDP_PACKETLOS_EMULATE
-
-			ResetZeroRecvCount();
-
-			// if net control message then process immediately except reliable messages
-			if (pMsgHeader->msgID.IDs.Type == Message::MSGTYPE_NETCONTROL && pMsgHeader->msgID.IDs.Reliability == false) 
-			{
-				netChk(ProcNetCtrl((MsgNetCtrl*)pMsgHeader));
-			}
-			else
-			{
-				if (GetConnectionState() == Net::ConnectionState::CONNECTED)
-				{
-					netMem( pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff ) );
-
-					hr = OnRecv( pMsg );
-					pMsg = nullptr;
-					netChk( hr );
-				}
-			}
-
-
-			uiBuffSize -= pMsgHeader->Length;
-			pBuff += pMsgHeader->Length;
-
-			pMsg = nullptr;
-		}
-
-	Proc_End:
-
-		pMsg = nullptr;
-
-		return hr;
-	}
-
-
-	Result ConnectionUDP::OnRecv(SharedPointerT<Message::MessageData>& pMsg )
-	{
-		Result hr = ResultCode::SUCCESS;
-		uint length = 0;
-		uint8_t* pDataPtr = nullptr;
-
-		Message::MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
-
-		if (GetConnectionState() != Net::ConnectionState::CONNECTED)
-		{
-			goto Proc_End;
-		}
-
-
-		pMsg->GetLengthNDataPtr( length, pDataPtr );
-		Assert(length == 0 || pMsgHeader->Crc32 != 0 );
-
-		netChk( pMsg->ValidateChecksumNDecrypt() );
-
-		if( pMsgHeader->msgID.IDs.Reliability )
-		{
-			Assert( !pMsgHeader->msgID.IDs.Encrypted );
-
-			// This message need to be merged before adding recv queue
-			if (pMsgHeader->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
-			{
-				hr = OnFrameSequenceMessage(pMsg, [&](SharedPointerT<Message::MessageData>& pMsgData) { hr = m_RecvReliableWindow.AddMsg(pMsgData); });
-			}
-			else
-			{
-				hr = m_RecvReliableWindow.AddMsg(pMsg);
-			}
-
-			pMsg = nullptr;
-			netChk(hr);
-
-			SharedPointerT<Message::MessageData> pPopMsg;
-			while (m_RecvReliableWindow.PopMsg(pPopMsg))
-			{
-				hr = ConnectionUDPBase::OnRecv(pPopMsg);
-			}
-		}
-		else
-		{
-			hr = ConnectionUDPBase::OnRecv( pMsg );
-			pMsg = nullptr;
-			netChk( hr );
-		}
-
-
-	Proc_End:
-
-		pMsg = nullptr;
-
-		if( !( hr ) )
-		{
-			CloseConnection("OnRecv failed");
-		}
-
-		return hr;
-	}
 
 
 	// Update net control, process connection heartbeat, ... etc
@@ -846,6 +854,9 @@ namespace Net {
 			});
 
 		netCheck(super::TickUpdate());
+
+		// It is in state action
+		//netCheck(UpdateSendQueue());
 
 		return hr;
 	}

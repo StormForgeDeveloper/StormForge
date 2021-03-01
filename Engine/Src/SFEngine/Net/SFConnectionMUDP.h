@@ -39,18 +39,6 @@ namespace Net {
 
 	protected:
 
-		//ConnectionMessageAction_UDPHandleAck m_HandleAck;
-		//ConnectionMessageAction_UDPHandleNack m_HandleNack;
-		//ConnectionMessageAction_HandleHeartbeat m_HandleHeartbeat;
-		//ConnectionMessageAction_HandleTimeSync m_HandleTimeSync;
-		//ConnectionMessageAction_UDPHandleConnect m_HandleConnect;
-		//ConnectionMessageAction_HandleDisconnect m_HandleDisconnect;
-
-		//ConnectionStateAction_SendReliableQueue m_ActSendReliableQueue;
-		//ConnectionStateAction_SendReliableRetry m_ActSendReliableRetry;
-
-		//friend class ConnectionStateAction_SendReliableQueue;
-		//friend class ConnectionStateAction_SendReliableRetry;
 		friend class ConnectionStateAction_SendSync;
 		friend class ConnectionStateAction_SendSyncSvr;
 		friend class ConnectionMessageAction_MUDPHandleSyncReliableServer;
@@ -68,18 +56,8 @@ namespace Net {
 		//virtual Result SendNetCtrl( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID = 0 ) override;
 
 
-		Result OnGuarrentedMessageRecv(SharedPointerT<Message::MessageData>& pMsg);
-
-		// On server side, update send queue will be handled by event handler
-		// On client side, send queue need to be updated by connection
-		//virtual Result ProcSendReliable();
-
-
 	public:
 
-		// called when incoming message occur
-		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) override;
-		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg ) override;
 
 
 		// Update net control, process connection heartbeat, ... etc
@@ -195,15 +173,12 @@ namespace Net {
 
 		MyNetSocketIOManager m_NetIOAdapterManager;
 
-
-		ConnectionMessageAction_HandleTimeSyncRtn m_HandleTimeSyncRtn;
-
 		// Sync tick counter
 		TimeStampMS m_ReliableSyncTime;
 
-
 		// Event actions
 		ConnectionMessageAction_MUDPHandleSyncReliableClient m_HandleSyncReliableClient;
+		ConnectionMessageAction_HandleTimeSyncRtn m_HandleTimeSyncRtn;
 
 		ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
 		ConnectionStateAction_SendConnect m_SendConnect;

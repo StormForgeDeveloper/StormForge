@@ -89,6 +89,8 @@ namespace Net {
 
 		virtual Result ProcNetCtrl(const MsgNetCtrl* pNetCtrl) override;
 
+		Result OnGuarrentedMessageRecv(SharedPointerT<Message::MessageData>& pMsg);
+
 	public:
 		// Constructor
 		ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler);
@@ -148,12 +150,15 @@ namespace Net {
 		// Send message to connected entity
 		virtual Result Send(const SharedPointerT<Message::MessageData> &pMsg ) override;
 
+		// called when incoming message occur
+		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) override;
+		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg) override;
+
 		// Update Send buffer Queue, TCP and UDP client connection
 		virtual Result UpdateSendBufferQueue() override;
 
 		// We need this for event handling on server
 		virtual Result UpdateSendQueue() override;
-		//virtual Result ProcGuarrentedMessageWindow(const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action);
 
 	};
 

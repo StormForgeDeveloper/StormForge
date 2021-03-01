@@ -158,8 +158,6 @@ namespace SF {
 			virtual Result Send(const SharedPointerT<Message::MessageData>& pMsg) override;
 
 
-			// Update send queue, Reliable UDP
-			//virtual Result UpdateSendQueue() override;
 			// Update Send buffer Queue, TCP and UDP client connection
 			virtual Result UpdateSendBufferQueue() override;
 

@@ -24,7 +24,7 @@
 #include "Net/SFNetCtrl.h"
 #include "Util/SFToString.h"
 #include "Net/SFNetToString.h"
-
+#include "Net/SFConnectionActions.h"
 #include "Protocol/SFProtocol.h"
 
 
@@ -184,6 +184,7 @@ namespace Net {
 		, m_Owner(owner)
 	{
 		SetUserSocketID(m_Owner.GetCID());
+
 	}
 
 
@@ -284,9 +285,21 @@ namespace Net {
 
 		SetLocalClass( NetClass::Client );
 
-
 		// We will share the write queue for UDP
 		//SetWriteQueue(new WriteBufferQueue);
+
+		//SetNetCtrlAction(NetCtrlCode_SyncReliable, &m_HandleSyncReliableClient);
+		SetNetCtrlAction(NetCtrlCode_TimeSyncRtn, &m_HandleTimeSyncRtn);
+
+		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
+		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
+		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
+		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartbeat);
+
+		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
+		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
+		//AddStateAction(ConnectionState::CONNECTED, &m_ActSendSync);
+
 	}
 
 	ConnectionUDPClient::~ConnectionUDPClient()

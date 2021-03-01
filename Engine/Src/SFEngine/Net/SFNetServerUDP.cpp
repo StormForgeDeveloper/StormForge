@@ -283,7 +283,7 @@ namespace Net {
 				{
 					Service::ConnectionManager->NewUDPAddress(GetHeap(), this, GetSocket(), GetLocalPeerInfo(), PeerInfo(pIOBuffer->NetAddr.From));
 				}
-				else if( pNetCtrl->msgID.ID == PACKET_NETCTRL_ACK )
+				else if(pNetCtrl->msgID.ID == PACKET_NETCTRL_ACK)
 				{
 					// ignore this packet
 				}
@@ -296,7 +296,6 @@ namespace Net {
 			}
 			else
 			{
-				//pConnection = (*iterCon).pConnection;
 			}
 
 			if( pConnection != nullptr )

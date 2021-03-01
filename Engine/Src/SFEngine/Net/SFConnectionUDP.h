@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko.
+// CopyRight (c) Kyungkun Ko.
 // 
 // Author : KyungKun Ko
 //
@@ -20,6 +20,7 @@
 #include "Net/SFConnection.h"
 #include "Net/SFConnectionUDPBase.h"
 #include "Net/SFMessageWindow.h"
+#include "Net/SFConnectionActions.h"
 
 
 namespace SF {
@@ -43,9 +44,6 @@ namespace Net {
 			: ConnectionUDPBase(heap, ioHandler)
 		{}
 
-		// called when incoming message occur
-		virtual Result OnRecv( uint uiBuffSize, const uint8_t* pBuff );
-		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg );
 
 		// Update net control, process connection heartbeat, ... etc
 		virtual Result TickUpdate() override;
@@ -139,6 +137,19 @@ namespace Net {
 	private:
 
 		MyNetSocketIOAdapter m_NetIOAdapter;
+
+		// Event actions
+		//ConnectionMessageAction_MUDPHandleSyncReliableClient m_HandleSyncReliableClient;
+		ConnectionMessageAction_HandleTimeSyncRtn m_HandleTimeSyncRtn;
+
+		ConnectionStateAction_TimeoutConnecting m_TimeoutConnecting;
+		ConnectionStateAction_SendConnect m_SendConnect;
+		ConnectionStateAction_TimeoutHeartbeat m_TimeoutHeartbeat;
+		ConnectionStateAction_SendHeartbeat m_SendHeartbeat;
+		ConnectionStateAction_TimeoutDisconnecting m_TimeoutDisconnecting;
+		ConnectionStateAction_SendDisconnect m_SendDisconnect;
+
+		//ConnectionStateAction_SendSync m_ActSendSync;
 
 	protected:
 		// Send packet buffer to connection with network device
