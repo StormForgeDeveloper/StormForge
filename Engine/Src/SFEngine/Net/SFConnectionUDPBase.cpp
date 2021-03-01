@@ -527,7 +527,7 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS;
 		ConnectionMessageAction* pAction = nullptr;
 
-		if (pNetCtrl->msgID.IDs.Mobile == 0 || pNetCtrl->Length < sizeof(MsgNetCtrl))
+		if (pNetCtrl->Length < sizeof(MsgNetCtrl))
 		{
 			SFLog(Net, Info, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
 			netCheck(Disconnect("Invalid packet"));
