@@ -119,7 +119,7 @@ namespace Net {
 #else
 		constexpr DurationMS CONNECTION_TIMEOUT = DurationMS(60 * 1000);
 #endif
-		constexpr DurationMS HEARTBEAT_TIMEOUT = DurationMS(2 * 60 * 1000);
+		constexpr DurationMS HEARTBEAT_TIMEOUT = DurationMS(60 * 1000);
 
 		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME = DurationMS(10 * 1000);
 		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME_BOOSTED = DurationMS(5 * 1000);
