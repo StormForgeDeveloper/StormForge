@@ -334,6 +334,8 @@ namespace Net {
 		if (pMsg == nullptr)
 			return ResultCode::INVALID_POINTER;
 
+
+		// TODO: subframe ack?
 		Message::MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 
 		auto* pFrame = (MsgMobileNetCtrlSequenceFrame*)pMsgHeader;
@@ -550,7 +552,7 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionUDPBase::OnGuarrentedMessageRecv(SharedPointerT<Message::MessageData>& pIMsg)
+	Result ConnectionUDPBase::OnGuaranteedMessageRecv(SharedPointerT<Message::MessageData>& pIMsg)
 	{
 		Result hr = ResultCode::SUCCESS;
 
@@ -569,6 +571,9 @@ namespace Net {
 
 		if (hrTem == Result(ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE))
 		{
+			// Added to msg window just send ACK
+			SendReliableMessageAck(msgID);
+
 			pIMsg = nullptr;
 			return hr;
 		}
@@ -581,20 +586,23 @@ namespace Net {
 		else
 		{
 			netCheck(hrTem);
+
 			// Added to msg window just send ACK
+			SendReliableMessageAck(msgID);
+
 			pIMsg = nullptr;
 
 			SharedPointerT<Message::MessageData> pPopMsg;
 			while (m_RecvReliableWindow.PopMsg(pPopMsg))
 			{
-				hr = ConnectionUDPBase::OnRecv(pPopMsg);
+				hr = super::OnRecv(pPopMsg);
 			}
 
-			if (GetEventHandler() != nullptr)
-			{
-				MessageDataPtr temp;
-				GetEventHandler()->OnRecvMessage(this, temp);
-			}
+			//if (GetEventHandler() != nullptr)
+			//{
+			//	MessageDataPtr temp;
+			//	GetEventHandler()->OnRecvMessage(this, temp);
+			//}
 		}
 
 		pIMsg = nullptr;
@@ -602,11 +610,30 @@ namespace Net {
 		return hr;
 	}
 
+	Result ConnectionUDPBase::SendReliableMessageAck(Message::MessageID msgID)
+	{
+		return SendNetCtrl(PACKET_NETCTRL_ACK, msgID.IDSeq.Sequence, msgID, GetLocalInfo().PeerID);
+	}
+
 	// Send message to connected entity
 	Result ConnectionUDPBase::Send(const SharedPointerT<Message::MessageData> &pMsg )
 	{
-		Result hr = ResultCode::SUCCESS;
 		Message::MessageID msgID;
+		ScopeContext hr([this, &msgID](Result hr)
+			{
+				if (hr)
+				{
+					if (msgID.IDs.Type == Message::MSGTYPE_NETCONTROL)
+					{
+						SFLog(Net, Debug2, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
+					}
+					else
+					{
+						SFLog(Net, Debug3, "TCP Send CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
+					}
+				}
+
+			});
 		uint uiMsgLen;
 
 		if (GetConnectionState() == ConnectionState::DISCONNECTED)
@@ -625,12 +652,12 @@ namespace Net {
 			|| GetConnectionState() == ConnectionState::DISCONNECTED)
 		{
 			// Send fail by connection closed
-			goto Proc_End;
+			return hr;
 		}
 
 		if( pMsg->GetMessageSize() > (uint)Const::INTER_PACKET_SIZE_MAX )
 		{
-			netErr( ResultCode::IO_BADPACKET_TOOBIG );
+			netCheck( ResultCode::IO_BADPACKET_TOOBIG );
 		}
 
 		Protocol::PrintDebugMessage( "Send", pMsg );
@@ -639,7 +666,7 @@ namespace Net {
 			&& m_SendGuaQueue.size() > Const::GUARANT_PENDING_MAX)
 		{
 			// Drop if there is too many reliable packets are pending
-			netErr(ResultCode::IO_SEND_FAIL);
+			netCheck(ResultCode::IO_SEND_FAIL);
 		}
 
 		pMsg->UpdateChecksumNEncrypt();
@@ -655,13 +682,13 @@ namespace Net {
 				msgID.IDSeq.Sequence,
 				uiMsgLen);
 
-			netChk(SendRaw(pMsg));
+			netCheck(SendRaw(pMsg));
 		}
 		else
 		{
 			if( pMsg->GetIsSequenceAssigned() )
 			{
-				netChk(SendRaw(pMsg));
+				netCheck(SendRaw(pMsg));
 			}
 			else
 			{
@@ -673,7 +700,7 @@ namespace Net {
 
 				AssertRel(pMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
 
-				netChk( m_SendGuaQueue.Enqueue( SharedPointerT<Message::MessageData>(pMsg) ) );
+				netCheck( m_SendGuaQueue.Enqueue( SharedPointerT<Message::MessageData>(pMsg) ) );
 
 				SetSendBoost(Const::RELIABLE_SEND_BOOST);
 
@@ -686,23 +713,6 @@ namespace Net {
 					else
 						GetNetSyncMessageDelegates().Invoke(this);
 				}
-			}
-		}
-
-	Proc_End:
-
-		if (!(hr))
-		{
-		}
-		else
-		{
-			if (msgID.IDs.Type == Message::MSGTYPE_NETCONTROL)
-			{
-				SFLog(Net, Debug1, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
-			}
-			else
-			{
-				SFLog(Net, Debug3, "TCP Send CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
 			}
 		}
 
@@ -748,7 +758,7 @@ namespace Net {
 
 			ResetZeroRecvCount();
 
-			if (pMsgHeader->msgID.IDs.Type == Message::MSGTYPE_NETCONTROL && pMsgHeader->msgID.IDs.Reliability == false) // if net control message then process immidiately
+			if (pMsgHeader->msgID.IDs.Type == Message::MSGTYPE_NETCONTROL) // if net control message then process immediately
 			{
 				netChk(ProcNetCtrl((MsgNetCtrl*)pMsgHeader));
 			}
@@ -823,13 +833,13 @@ namespace Net {
 			}
 			else
 			{
-				netCheck(OnGuarrentedMessageRecv(pMsg));
+				netCheck(OnGuaranteedMessageRecv(pMsg));
 			}
 			pMsg = nullptr;
 		}
 		else
 		{
-			netCheck(ConnectionUDPBase::OnRecv(pMsg));
+			netCheck(super::OnRecv(pMsg));
 			pMsg = nullptr;
 		}
 
@@ -850,7 +860,7 @@ namespace Net {
 	{
 		ScopeContext hr([this](Result hr) 
 			{
-				//SendFlush();
+				SendFlush();
 			});
 
 		netCheck(super::TickUpdate());

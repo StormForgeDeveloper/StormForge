@@ -89,7 +89,7 @@ inline void Connection::ClearCID()
 // Get connection state
 inline const ConnectionState Connection::GetConnectionState() const
 {
-	return m_ConnectionState.load(std::memory_order_relaxed);
+	return m_ConnectionState.load(std::memory_order_acquire);
 }
 
 // Set local class

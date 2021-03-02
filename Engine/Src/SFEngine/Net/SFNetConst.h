@@ -105,6 +105,7 @@ namespace Net {
 		constexpr DurationMS SVR_CONNECTION_TIMEOUT = DurationMS(10 * 60 * 1000);
 		constexpr DurationMS SEND_RETRY_TIME = DurationMS(1000);
 		constexpr DurationMS MUDP_SEND_RETRY_TIME = DurationMS(2000);
+		constexpr DurationMS MUDP_SEND_RETRY_TIME_BOOSTED = DurationMS(200);
 		constexpr DurationMS CONNECTION_RETRY_TIME = DurationMS(500);
 
 		constexpr DurationMS SVR_HEARTBEAT_TIME_UDP = DurationMS(5 * 1000);
@@ -122,7 +123,7 @@ namespace Net {
 		constexpr DurationMS HEARTBEAT_TIMEOUT = DurationMS(60 * 1000);
 
 		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME = DurationMS(10 * 1000);
-		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME_BOOSTED = DurationMS(5 * 1000);
+		constexpr DurationMS RELIABLE_SYNC_POLLING_TIME_BOOSTED = DurationMS(500);
 		constexpr int RELIABLE_SEND_BOOST = 10;
 	};
 

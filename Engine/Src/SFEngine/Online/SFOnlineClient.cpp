@@ -430,9 +430,13 @@ namespace SF
 
 			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
 			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
+			GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::PlayInstance::JoinGameInstanceRes::MID.GetMsgID());
 
 			if (m_Owner.GetConnectionGame() != nullptr)
 				m_Owner.GetConnectionGame()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameInstanceRes::MID.GetMsgID());
+
+			if (m_Owner.GetOnlineState() != OnlineState::InGameInGameInstance)
+				Disconnect();
 		}
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
@@ -458,8 +462,8 @@ namespace SF
 				{
 					GetConnection()->Disconnect("PlayInstance connection has failed");
 					SetOnlineState(OnlineState::InGameServer);
+					SetResult(ResultCode::IO_DISCONNECTED);
 				}
-				SetResult(evt.Components.hr);
 			}
 			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 			{
@@ -476,7 +480,6 @@ namespace SF
 			{
 				SFLog(Net, Error, "JoinGameInstanceRes: Packet parsing error: {0}", result);
 				SetResult(result);
-				Disconnect();
 				SetOnlineState(OnlineState::InGameServer);
 				return;
 			}
@@ -485,7 +488,6 @@ namespace SF
 			{
 				SFLog(Net, Error, "JoinGameInstanceRes: failure: {0}", packet.GetResult());
 				SetResult(packet.GetResult());
-				Disconnect();
 				SetOnlineState(OnlineState::InGameServer);
 				return;
 			}
@@ -498,7 +500,7 @@ namespace SF
 
 			SetOnlineState(OnlineState::InGameConnectingGameInstance);
 
-			auto authTicket = 0;
+			auto authTicket = m_Owner.GetAuthTicket();
 			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, m_Owner.GetGameInstanceAddress4(), 0));
 			if (result)
 			{
@@ -514,7 +516,6 @@ namespace SF
 			{
 				SFLog(Net, Error, "PlayInstance::JoinGameInstanceRes: Packet parsing error: {0}", result);
 				SetResult(result);
-				Disconnect();
 				SetOnlineState(OnlineState::InGameServer);
 				return;
 			}
@@ -523,7 +524,6 @@ namespace SF
 			{
 				SFLog(Net, Error, "PlayInstance::JoinGameInstanceRes: failure: {0}", packet.GetResult());
 				SetResult(packet.GetResult());
-				Disconnect();
 				SetOnlineState(OnlineState::InGameServer);
 				return;
 			}

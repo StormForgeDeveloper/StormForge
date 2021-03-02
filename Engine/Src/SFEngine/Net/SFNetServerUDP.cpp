@@ -275,13 +275,16 @@ namespace Net {
 			if(pIOBuffer->TransferredSize < sizeof(Message::MessageHeader) )// invalid packet size
 				goto Proc_End;
 
-			if( GetIsEnableAccept()
-				&& !(Service::ConnectionManager->GetConnectionByAddr(pIOBuffer->NetAddr.From, pConnection)))
+			if (!Service::ConnectionManager->GetConnectionByAddr(pIOBuffer->NetAddr.From, pConnection))
 			{
+				// return if we are not accepting any new connection
+				if (!GetIsEnableAccept())
+					return hr;
+
 				MsgNetCtrlConnect *pNetCtrl = (MsgNetCtrlConnect*)pIOBuffer->buffer;
 				if (pNetCtrl->Length == sizeof(MsgNetCtrlConnect) && pNetCtrl->msgID.IDSeq.MsgID == PACKET_NETCTRL_CONNECT.IDSeq.MsgID && pNetCtrl->rtnMsgID.ID == SF_PROTOCOL_VERSION)
 				{
-					Service::ConnectionManager->NewUDPAddress(GetHeap(), this, GetSocket(), GetLocalPeerInfo(), PeerInfo(pIOBuffer->NetAddr.From));
+					Service::ConnectionManager->NewUDPAddress(GetHeap(), this, GetSocket(), GetLocalPeerInfo(), PeerInfo(pNetCtrl->Peer.PeerClass, pIOBuffer->NetAddr.From, pNetCtrl->PeerID));
 				}
 				else if(pNetCtrl->msgID.ID == PACKET_NETCTRL_ACK)
 				{
@@ -295,10 +298,6 @@ namespace Net {
 
 			}
 			else
-			{
-			}
-
-			if( pConnection != nullptr )
 			{
 				netChk( pConnection->OnRecv(pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->buffer) );
 			}

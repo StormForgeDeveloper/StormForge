@@ -51,7 +51,7 @@ namespace SF {
 			m_IsEnableAccept = bIsEnable;
 		}
 
-		void ServerNet::SetNewConnectionhandler(std::function<void(SharedPointerT<Connection>&)> handler)
+		void ServerNet::SetNewConnectionhandler(std::function<void(SharedPointerT<Connection>)> handler)
 		{
 			m_NewConnectionhandler = handler;
 		}

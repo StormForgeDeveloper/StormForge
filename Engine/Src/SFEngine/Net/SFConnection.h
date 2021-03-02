@@ -74,7 +74,7 @@ namespace Net {
 		uint64_t	m_UData;
 
 		// Connection state
-		std::atomic<ConnectionState>	m_ConnectionState;
+		Atomic<ConnectionState>	m_ConnectionState;
 
 		// Connection time
 		TimeStampMS	m_tConnectionTime;

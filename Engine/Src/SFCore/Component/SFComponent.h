@@ -348,6 +348,8 @@ namespace SF {
 
 		IHeap& m_Heap;
 
+		bool m_IsInitialized = false;
+
 		// component array
 		SortedArray<StringCrc32,Component*> m_Components;
 
@@ -401,6 +403,8 @@ namespace SF {
 				}
 			}
 
+			m_IsInitialized = true;
+
 			return hr;
 		}
 
@@ -416,6 +420,8 @@ namespace SF {
 					pComponent->TerminateComponent();
 				}
 			}
+
+			m_IsInitialized = false;
 
 			return hr;
 		}
@@ -547,6 +553,9 @@ namespace SF {
 			}
 
 			m_Components.Insert(ComponentType::ComponentID, newComponent);
+
+			if (m_IsInitialized && !newComponent->GetIsInitialized())
+				newComponent->InitializeComponent();
 
 			OnAddComponent(newComponent);
 

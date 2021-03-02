@@ -198,6 +198,7 @@ namespace Net {
 	{
 		ScopeContext hr([&pRecvBuffer](Result hr)
 			{
+				SFLog(Net, Debug3, "SocketIOUDP::PendingRecv hr:{0}", hr);
 				IHeap::Delete(pRecvBuffer);
 			});
 		Result hrErr = ResultCode::SUCCESS;

@@ -53,12 +53,11 @@ namespace Net {
 		virtual Result SendPending( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID = 0 ) override;
 		virtual Result SendSync( uint uiSequence, uint64_t uiSyncMask );
 
-		//virtual Result SendNetCtrl( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID = 0 ) override;
+		// We are using send sync mask rather than per message
+		virtual Result SendReliableMessageAck(Message::MessageID msgID) override { return ResultCode::SUCCESS; }
 
 
 	public:
-
-
 
 		// Update net control, process connection heartbeat, ... etc
 		virtual Result TickUpdate() override;

@@ -89,7 +89,8 @@ namespace Net {
 
 		virtual Result ProcNetCtrl(const MsgNetCtrl* pNetCtrl) override;
 
-		Result OnGuarrentedMessageRecv(SharedPointerT<Message::MessageData>& pMsg);
+		Result OnGuaranteedMessageRecv(SharedPointerT<Message::MessageData>& pMsg);
+		virtual Result SendReliableMessageAck(Message::MessageID msgID);
 
 	public:
 		// Constructor

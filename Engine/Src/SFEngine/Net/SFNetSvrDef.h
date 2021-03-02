@@ -51,7 +51,7 @@ namespace SF {
 
 			IConnectionEventHandler* m_DefaultConnectionEventHandler = nullptr;
 
-			std::function<void(SharedPointerT<Connection>&)> m_NewConnectionhandler;
+			std::function<void(SharedPointerT<Connection>)> m_NewConnectionhandler;
 
 			SocketIO* m_SocketIO = nullptr;
 
@@ -101,8 +101,8 @@ namespace SF {
 			// Get Socket
 			const SF_SOCKET GetSocket() const { return GetSocketIO() != nullptr ? GetSocketIO()->GetIOSocket() : INVALID_SOCKET; }
 
-			const std::function<void(SharedPointerT<Connection>&)>& GetNewConnectionHandler() { return m_NewConnectionhandler; }
-			void SetNewConnectionhandler(std::function<void(SharedPointerT<Connection>&)> handler);
+			const std::function<void(SharedPointerT<Connection>)>& GetNewConnectionHandler() { return m_NewConnectionhandler; }
+			void SetNewConnectionhandler(std::function<void(SharedPointerT<Connection>)> handler);
 
 			// check about initialize
 			virtual bool IsReady();

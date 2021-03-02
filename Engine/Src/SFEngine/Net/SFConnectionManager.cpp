@@ -191,7 +191,7 @@ namespace Net {
 		SharedPointerT<Connection> pConnPtr;
 		SharedPointerT<Connection> pPtr;
 
-		netChkPtr( pConn );
+		netCheckPtr( pConn );
 
 		if (pConn->GetCID() == 0)
 		{
@@ -215,7 +215,7 @@ namespace Net {
 				else
 				{
 					// already in map
-					netErr(ResultCode::INVALID_ARG);
+					netCheck(ResultCode::INVALID_ARG);
 				}
 			}
 		}
@@ -223,19 +223,19 @@ namespace Net {
 		if ((m_CIDMap.Find(pConn->GetCID(), pConnPtr)))
 		{
 			// already in map
-			netErr( ResultCode::INVALID_ARG );
+			netCheck( ResultCode::INVALID_ARG );
 		}
 
 		if (pConn->GetUseAddressMap() && pConn->GetRemoteSockAddr().ss_family != 0)
 		{
-			netChk(m_AddrMap.Insert(pConn->GetRemoteSockAddr(), SharedPointerT<Connection>(pConn)));
+			netCheck(m_AddrMap.Insert(pConn->GetRemoteSockAddr(), SharedPointerT<Connection>(pConn)));
 		}
 
 		if (!(m_CIDMap.Insert(pConn->GetCID(), pConn)))
 		{
 			// remove
 			m_AddrMap.Erase(pConn->GetRemoteSockAddr(), pPtr);
-			netErr( ResultCode::UNEXPECTED );
+			netCheck( ResultCode::UNEXPECTED );
 		}
 
 		if ((pConn->GetUsePeerIDMap() && pConn->GetRemoteInfo().PeerID != 0 && !(m_PeerIDMap.Insert(pConn->GetRemoteInfo().PeerID, SharedPointerT<Connection>(pConn)))))
@@ -243,10 +243,8 @@ namespace Net {
 			// remove
 			m_AddrMap.Erase(pConn->GetRemoteSockAddr(), pPtr);
 			m_CIDMap.Erase(pConn->GetCID(), pConnPtr);
-			netErr( ResultCode::UNEXPECTED );
+			netCheck( ResultCode::UNEXPECTED );
 		}
-
-	Proc_End:
 
 		return hr;
 	}

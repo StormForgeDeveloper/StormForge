@@ -702,7 +702,13 @@ namespace Net {
 		SendMsgWindow::MessageData *pMessageElement = nullptr;
 		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
 		auto sendBoost = GetConnection()->GetSendBoost();
-		auto retryTimeout = sendBoost > 0 ? DurationMS(Const::MUDP_SEND_RETRY_TIME / sendBoost) : DurationMS(Const::MUDP_SEND_RETRY_TIME);
+		auto retryTimeout = DurationMS(Const::MUDP_SEND_RETRY_TIME);
+
+		if (sendBoost > 0)
+		{
+			retryTimeout = DurationMS(Const::MUDP_SEND_RETRY_TIME_BOOSTED);
+			GetConnection()->DecSendBoost();
+		}
 
 		//assert(ThisThread::GetThreadID() == GetRunningThreadID());
 		auto& sendWindow = GetConnection()->GetSendReliableWindow();

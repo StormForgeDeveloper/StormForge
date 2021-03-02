@@ -71,7 +71,7 @@ namespace Net {
 		template<class ConnectionType,
 			typename = std::enable_if_t<std::is_base_of<Connection, ConnectionType>::value>
 		>
-		void NewUDPAddress_Internal(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
+			Result NewUDPAddress_Internal(IHeap& memMgr, ServerNet* pNet, SF_SOCKET socket, const PeerInfo& local, const PeerInfo& remote)
 		{
 			Result hr;
 			auto sockAddr = (sockaddr_storage)remote.PeerAddress;
@@ -80,28 +80,29 @@ namespace Net {
 			if (GetConnectionByAddr(sockAddr, pFound))
 			{
 				// already registered
-				return;
+				return hr;
 			}
+
+			SFLog(Net, Debug, "New UDP connection from {0}", remote.PeerAddress);
 
 			auto pNewConnectionType = NewObject<ConnectionType>(memMgr, pNet->GetSocketIO());
 			ConnectionPtr pNewConnection = pNewConnectionType.template StaticCast<Connection>();
 			Assert(pNewConnection != nullptr);
 			if (pNewConnection == nullptr)
-				return;
+				return hr;
 
 			pNewConnection->SetCID(NewCID());
-			netChk(pNewConnection->InitConnection(local, remote));
+			netCheck(pNewConnection->InitConnection(local, remote));
 
 			pNewConnection->SetTickGroup(EngineTaskTick::AsyncTick);
-
-			AddConnection_Internal(pNewConnection);
 
 			if (pNet != nullptr)
 				pNet->GetNewConnectionHandler()(pNewConnection);
 
-		Proc_End:
+			// add later so that new connection handler is kicked in first
+			netCheck(AddConnection_Internal(pNewConnection));
 
-			return;
+			return hr;
 		}
 
 		void RemoveConnection_Internal(const ConnectionPtr& pConn);
