@@ -6,7 +6,7 @@ pushd $MONGOC_DIR
 ./build.sh
 
 
-cd %~dp0
+popd
 
 :exit
 
