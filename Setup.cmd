@@ -49,6 +49,13 @@ if not exist %PERL_INSTALL% (
 
 cd %~dp0
 
+
+if not exist "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt" (
+	mkdir Test/UnitTest/UnitTest1/Test/LogServer/LocalData
+	copy Test/UnitTest/UnitTest1/Test/LogServer/serveraddress_sample.txt Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt
+)
+
+
 @echo ==============================================================
 @echo Register test host names 
 @echo Zookeeper: SFTestZookeeper.com

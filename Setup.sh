@@ -40,6 +40,10 @@ pushd $SF_PATH/3rdParties
 #./FBXSDK/fbx20201_fbxsdk_linux /usr
 
 
+if [ ! -f "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt" ]; then
+	mkdir Test/UnitTest/UnitTest1/Test/LogServer/LocalData
+	cp Test/UnitTest/UnitTest1/Test/LogServer/serveraddress_sample.txt Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt
+fi
 
 
 
