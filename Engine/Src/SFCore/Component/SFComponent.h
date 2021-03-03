@@ -17,10 +17,8 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 
 
-
-
-namespace SF {
-
+namespace SF
+{
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -474,7 +472,7 @@ namespace SF {
 
 		template< class ComponentType, class ParamType0,
 			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
-		Result AddComponent(ParamType0 p0, bool bAllowDuplicatedComponent = false)
+		Result AddComponent(const ParamType0& p0, bool bAllowDuplicatedComponent = false)
 		{
 			if (!bAllowDuplicatedComponent && GetComponent<ComponentType>() != nullptr)
 			{
@@ -497,7 +495,7 @@ namespace SF {
 
 		template< class ComponentType, class ParamType0, class ParamType1,
 			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
-		Result AddComponent(ParamType0 p0, ParamType1 p1, bool bAllowDuplicatedComponent = false)
+		Result AddComponent(ParamType0&& p0, ParamType1&& p1, bool bAllowDuplicatedComponent = false)
 		{
 			if (!bAllowDuplicatedComponent && GetComponent<ComponentType>() != nullptr)
 			{
