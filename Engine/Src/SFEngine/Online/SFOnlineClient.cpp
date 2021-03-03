@@ -75,6 +75,8 @@ namespace SF
 		{
 			super::Initialize();
 
+			SFLog(Net, Info, "Start ClientTask_Login");
+
 			m_Owner.DisconnectAll();
 
 			m_Owner.m_Login = new(GetHeap()) Net::ConnectionTCPClient(GetHeap());
@@ -108,6 +110,8 @@ namespace SF
 
 		virtual ~ClientTask_Login()
 		{
+			SFLog(Net, Info, "Finished ClientTask_Login");
+
 			if (GetConnection() == nullptr)
 				return;
 
@@ -214,6 +218,8 @@ namespace SF
 		{
 			super::Initialize();
 
+			SFLog(Net, Info, "Starting ClientTask_JoinGameServer");
+
 			if (m_Owner.GetConnectionLogin() == nullptr || m_Owner.GetConnectionLogin()->GetConnectionState() != Net::ConnectionState::CONNECTED)
 			{
 				SFLog(Net, Error, "Join game server has requested without Login connection");
@@ -270,6 +276,8 @@ namespace SF
 
 		virtual ~ClientTask_JoinGameServer()
 		{
+			SFLog(Net, Info, "Finished ClientTask_JoinGameServer");
+
 			if (GetConnection() != nullptr)
 			{
 				GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
@@ -372,6 +380,8 @@ namespace SF
 		{
 			super::Initialize();
 
+			SFLog(Net, Info, "Starting ClientTask_JoinGameInstanceServer");
+
 			if (m_Owner.GetConnectionGame() == nullptr || m_Owner.GetConnectionGame()->GetConnectionState() != Net::ConnectionState::CONNECTED)
 			{
 				SFLog(Net, Error, "Join game instance has requested without game connection");
@@ -425,6 +435,8 @@ namespace SF
 
 		virtual ~ClientTask_JoinGameInstanceServer()
 		{
+			SFLog(Net, Info, "Finished ClientTask_JoinGameInstanceServer");
+
 			if (GetConnection() == nullptr)
 				return;
 
@@ -583,6 +595,8 @@ namespace SF
 		m_UserId = userId;
 		m_Password = password;
 
+		SFLog(Net, Info, "OnlineClient::StartConnection login:{0}", loginAddress);
+
 		m_PendingTasks.push_back(new(GetHeap()) ClientTask_Login(*this));
 		m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameServer(*this));
 
@@ -602,6 +616,8 @@ namespace SF
 			SFLog(Net, Error, "OnlineClient::JoinGameInstance, Busy, we have running task, state:{0}", (uint32_t)GetOnlineState());
 			return ResultCode::BUSY;
 		}
+
+		SFLog(Net, Info, "OnlineClient::JoinGameInstance gameinstanceUID:{0}", gameInstanceId);
 
 		m_GameInstanceUID = gameInstanceId;
 
