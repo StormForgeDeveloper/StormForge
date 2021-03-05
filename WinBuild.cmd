@@ -37,6 +37,7 @@ if ERRORLEVEL 1 goto exit
 robocopy lib ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib  
 robocopy bin ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin  
 robocopy bin ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin\netcoreapp3.1  
+robocopy bin ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\bin\publish  
 robocopy Engine\Src\SFCore\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib *.pdb
 robocopy Engine\Src\SFEngine\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib *.pdb
 robocopy Engine\Src\Protocol\%CMAKE_BUILD_TYPE%\ ..\%PROCESS_ARCHITECTUR%%CMAKE_BUILD_TYPE%\lib *.pdb

@@ -212,6 +212,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeSetOnlineStateCallback(intptr_t native
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
+	pOnlineClient->GetOnlineStateEventDelegate().RemoveDelegateAll();
 	pOnlineClient->GetOnlineStateEventDelegate().AddDelegate(nativeHandle, stateChangedCallback);
 
 	return ResultCode::SUCCESS;

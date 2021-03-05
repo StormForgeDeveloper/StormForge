@@ -55,7 +55,7 @@ namespace SF.Asset
 
             if (added != dependency)
             {
-                return ResultCode.S_FALSE;
+                return new ResultCode(ResultCode.SUCCESS_FALSE);
             }
 
             dependency.References.AddOrUpdate(SourcePath, this, (x, oldValue) => {
@@ -63,7 +63,7 @@ namespace SF.Asset
                 return this;
             });
 
-            return ResultCode.S_OK;
+            return new ResultCode(ResultCode.SUCCESS);
         }
 
         public void RemoveDependency(AssetGraphNode dependencyToRemove)

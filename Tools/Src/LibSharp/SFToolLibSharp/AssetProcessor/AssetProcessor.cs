@@ -66,7 +66,7 @@ namespace SF.Asset
             Name = GetType().Name;
             ParameterSetting = new ToolSetting();
             AvailablePlatforms = new List<BuildPlatform>();
-            ProcessResult = ResultCode.S_FALSE;
+            ProcessResult = new ResultCode(ResultCode.SUCCESS_FALSE);
         }
 
         public abstract void Start(AssetBuildContext context);
@@ -200,14 +200,14 @@ namespace SF.Asset
                 if(!m_RunningProcess.HasExited)
                 {
                     m_RunningProcess.Kill();
-                    ProcessResult = ResultCode.E_FAIL;
+                    ProcessResult = new ResultCode(ResultCode.FAIL);
                 }
                 else
                 {
                     if (m_RunningProcess.ExitCode != 0)
-                        ProcessResult = ResultCode.E_FAIL;
+                        ProcessResult = new ResultCode(ResultCode.FAIL);
                     else
-                        ProcessResult = ResultCode.S_OK;
+                        ProcessResult = new ResultCode(ResultCode.SUCCESS);
                 }
 
                 m_RunningProcess.Dispose();

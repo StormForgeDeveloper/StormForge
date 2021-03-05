@@ -102,7 +102,7 @@ namespace SF.Asset
                 return result;
             }
 
-            return ResultCode.S_OK;
+            return new ResultCode(ResultCode.SUCCESS);
         }
 
         // dependencies calculated during built
@@ -111,7 +111,7 @@ namespace SF.Asset
         {
             // Skip if they are already depend on each other
             if(Dependencies.Contains(dependency.Dependencies))
-                return ResultCode.S_OK;
+                return new ResultCode(ResultCode.SUCCESS);
 
             var result = BuildDependencies.AddDependency(dependency.BuildDependencies);
             if (!result.IsSuccessed())
@@ -120,7 +120,7 @@ namespace SF.Asset
                 return result;
             }
 
-            return ResultCode.S_OK;
+            return new ResultCode(ResultCode.SUCCESS);
         }
 
 

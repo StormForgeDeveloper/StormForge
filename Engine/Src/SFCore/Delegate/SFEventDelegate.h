@@ -116,6 +116,11 @@ namespace SF
 			}
 		}
 
+		void RemoveDelegateAll()
+		{
+			m_DelegateArray.Clear();
+		}
+
 		void Invoke(const std::remove_reference_t<ArgTypes>&... args)
 		{
 			m_CallSerial++;
