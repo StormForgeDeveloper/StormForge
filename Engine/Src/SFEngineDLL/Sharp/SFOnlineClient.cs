@@ -37,13 +37,14 @@ namespace SF
 			JoiningToGameServer,
 			InGameServer,
 
-			// In game instance state. the player still in game as well
-			InGameJoiningGameInstance,
-			InGameConnectingGameInstance,
-			InGameInGameInstance,
+            // In game instance state. the player still in game as well
+            InGameJoiningGameInstance,
+            InGameConnectingGameInstance,
+            InGameGameInstanceJoining,
+            InGameInGameInstance,
 
-			// Disconnected
-			Disconnected,
+            // Disconnected
+            Disconnected,
 		};
 
         public enum ConnectionType
@@ -66,11 +67,16 @@ namespace SF
         public delegate void MessageEventHandler(object sender, SFMessage msg);
         public event MessageEventHandler OnMessageEvent;
 
+        public delegate void OnlineStateChangedHandler(object sender, OnlineState prevState, OnlineState newState);
+        public static event OnlineStateChangedHandler OnOnlineStateChanged;
+
 
         public OnlineClient(SFIMessageRouter messageRouter = null)
         {
             NativeHandle = NativeCreateOnlineClient();
             m_MessageRouter = messageRouter;
+
+            NativeSetOnlineStateCallback(NativeHandle, OnOnlineStateChanged_Internal);
         }
 
         public Result StartConnection(string gameId, string loginAddress, string userId, string password)
@@ -112,6 +118,11 @@ namespace SF
         public OnlineState GetOnlineState()
         {
             return (OnlineState)NativeGetOnlineState(NativeHandle);
+        }
+
+        static void OnOnlineStateChanged_Internal(OnlineState prevState, OnlineState newState)
+        {
+            OnOnlineStateChanged?.Invoke(null, prevState, newState);
         }
 
         public Int32 GetGameId()
@@ -196,6 +207,9 @@ namespace SF
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void SET_ARRAY_FUNCTION([MarshalAs(UnmanagedType.LPStr)] string stringHash, [MarshalAs(UnmanagedType.LPStr)] string typeNameHash, int arrayCount, IntPtr Value);
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void ONLINE_STATECHAGED_CALLBACK(OnlineState prevState, OnlineState newState);
+
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeCreateOnlineClient", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateOnlineClient();
 
@@ -222,6 +236,9 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetConnection", CharSet = CharSet.Auto)]
         static extern IntPtr NativeGetConnection(IntPtr nativeHandle, Int32 connectionIndex);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeSetOnlineStateCallback", CharSet = CharSet.Auto)]
+        static extern Int32 NativeSetOnlineStateCallback(IntPtr nativeHandle, ONLINE_STATECHAGED_CALLBACK setEventFunc);
 
         #endregion
     }

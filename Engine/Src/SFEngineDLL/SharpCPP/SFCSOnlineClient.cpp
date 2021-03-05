@@ -27,6 +27,7 @@
 
 namespace SF
 {
+	typedef void(*ONLINE_STATECHAGED_CALLBACK)(OnlineClient::OnlineState prevState, OnlineClient::OnlineState newState);
 
 }
 
@@ -204,3 +205,14 @@ SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetConnection(intptr_t nativeHandle, 
 	return 0;
 }
 
+SFDLL_EXPORT int32_t SFOnlineClient_NativeSetOnlineStateCallback(intptr_t nativeHandle, ONLINE_STATECHAGED_CALLBACK stateChangedCallback)
+{
+	if (nativeHandle == 0)
+		return ResultCode::NOT_INITIALIZED;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	pOnlineClient->GetOnlineStateEventDelegate().AddDelegate(nativeHandle, stateChangedCallback);
+
+	return ResultCode::SUCCESS;
+}

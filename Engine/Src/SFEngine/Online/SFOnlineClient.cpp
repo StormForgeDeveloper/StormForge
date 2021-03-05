@@ -556,6 +556,7 @@ namespace SF
 	OnlineClient::OnlineClient(IHeap& heap)
 		: EngineObject(new(heap) IHeap("OnlineClient", &heap), "OnlineClient")
 		, m_IncomingMovements(GetHeap())
+		, m_OnlineStateDelegate(GetHeap())
 	{
 	}
 
@@ -625,6 +626,18 @@ namespace SF
 			m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameInstanceServer(*this));
 
 		return ResultCode::SUCCESS;
+	}
+
+	void OnlineClient::SetOnlineState(OnlineState newState)
+	{
+		if (m_OnlineState == newState)
+			return;
+
+		auto prevState = m_OnlineState;
+
+		m_OnlineState = newState;
+
+		m_OnlineStateDelegate.Invoke(prevState, newState);
 	}
 
 	void OnlineClient::Disconnect(SharedPointerT<Net::Connection>& pConn)

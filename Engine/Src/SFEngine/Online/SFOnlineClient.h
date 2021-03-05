@@ -16,7 +16,7 @@
 #include "Object/SFSharedPointer.h"
 #include "EngineObject/SFEngineObject.h"
 #include "Container/SFDualSortedMap.h"
-
+#include "Delegate/SFEventDelegate.h"
 
 namespace SF
 {
@@ -136,9 +136,14 @@ namespace SF
 		const SharedPointerT<Net::Connection>& GetConnectionGame() const { return m_Game; }
 		const SharedPointerT<Net::Connection>& GetConnectionGameInstance() const { return m_GameInstance; }
 
+
+		EventDelegateList<OnlineState, OnlineState>& GetOnlineStateEventDelegate() { return m_OnlineStateDelegate; }
+
+
+
 	private:
 
-		void SetOnlineState(OnlineState newState) { m_OnlineState = newState; }
+		void SetOnlineState(OnlineState newState);
 
 		void Disconnect(SharedPointerT<Net::Connection>& pConn);
 
@@ -189,6 +194,8 @@ namespace SF
 
 		// PlayerId by movement
 		DualSortedMap<PlayerID,SharedPointerT<ReceivedActorMovementManager>> m_IncomingMovements;
+
+		EventDelegateList<OnlineState, OnlineState> m_OnlineStateDelegate;
 	};
 
 }

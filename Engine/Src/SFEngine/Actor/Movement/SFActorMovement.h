@@ -26,7 +26,6 @@ namespace SF
 		static constexpr float DeltaSecondsPerFrame = 1.0 / (float)FramesPerSeconds;
 		static constexpr float MoveFrameTimeout = 10 * FramesPerSeconds;
 
-
 		Vector4 Position = Vector4::Zero();
 		Vector4 LinearVelocity = Vector4::Zero();
 
@@ -35,11 +34,10 @@ namespace SF
 		uint32_t MoveFrame = 0;
 		uint8_t MovementState = 0;
 
-
 		Result TryMerge(const ActorMovement* pNextMove);
-	
 	};
 	#pragma pack(pop)
+
 
 	////////////////////////////////////////////////////////////////////////////////////////
 	//
