@@ -178,6 +178,7 @@
 					<xs:enumeration value="ClusterType"/>
 					<xs:enumeration value="ClusterMembership"/>
 					<xs:enumeration value="ServiceStatus"/>
+					<xs:enumeration value="ActorMovement"/>
 
 					<xs:enumeration value="GameID"/>
 

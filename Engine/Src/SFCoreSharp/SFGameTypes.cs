@@ -46,6 +46,16 @@ namespace SF
         public float z;
     };
 
+    [Struct()]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct Vector4
+    {
+        public float x;
+        public float y;
+        public float z;
+        public float w;
+    };
+
 
     // Manages pinned byte buffer
     public class PinnedByteBuffer : IDisposable
@@ -193,6 +203,19 @@ namespace SF
     {
         public UInt64 QueueUID;
         public UInt64 QueueItemID;
+    }
+
+    [Struct]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct ActorMovement
+    {
+        Vector4 Position;
+        Vector4 LinearVelocity;
+
+        // Look direction
+        float AngularYaw; // No pitch and roll
+        UInt32 MoveFrame;
+        UInt32 MovementState;
     }
 
     [Struct]

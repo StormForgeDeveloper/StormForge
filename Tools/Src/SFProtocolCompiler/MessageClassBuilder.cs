@@ -72,7 +72,7 @@ namespace ProtocolCompiler
         {
             OutStream.WriteLine("////////////////////////////////////////////////////////////////////////////////");
             OutStream.WriteLine("// ");
-            OutStream.WriteLine("// CopyRight (c) 2016 Kyungkun Ko");
+            OutStream.WriteLine("// CopyRight (c) StormForge");
             OutStream.WriteLine("// ");
             OutStream.WriteLine("// Author : Generated");
             OutStream.WriteLine("// ");
@@ -87,6 +87,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Types/SFEngineTypedefs.h\"");
             OutStream.WriteLine("#include \"Variable/SFVariableTable.h\"");
             OutStream.WriteLine("#include \"Container/SFArray.h\"");
+            OutStream.WriteLine("#include \"Actor/Movement/SFActorMovement.h\"");
             if (AppConfig.GetValue("VariableMapParser", false))
             {
                 OutStream.WriteLine("#include \"Variable/SFVariableMapBuilder.h\"");
@@ -105,7 +106,7 @@ namespace ProtocolCompiler
         {
             OutStream.WriteLine("////////////////////////////////////////////////////////////////////////////////");
             OutStream.WriteLine("// ");
-            OutStream.WriteLine("// CopyRight (c) 2016 Kyungkun Ko");
+            OutStream.WriteLine("// CopyRight (c) StormForge");
             OutStream.WriteLine("// ");
             OutStream.WriteLine("// Author : Generated");
             OutStream.WriteLine("// ");
@@ -588,7 +589,12 @@ namespace ProtocolCompiler
                     }
                     else
                     {
-                        MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name);
+                        MatchIndent();
+                        var isStruct = SystemTypeInfo.IsStruct(param.Type);
+                        if (isStruct)
+                            OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", \"{1}\", &parser.Get{0}());", param.Name, param.Type.ToString());
+                        else
+                            OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name);
                     }
                 }
             }

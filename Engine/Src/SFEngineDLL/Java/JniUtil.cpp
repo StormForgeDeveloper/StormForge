@@ -135,70 +135,79 @@ namespace SF
 		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jstrValue);
 	}
 
-	void VariableMapBuilderJObject::SetVariable(const char* varName, const RouteContext& value)
-	{
-		static jclass jcls = m_Env->FindClass("java/com/sf/SFRouteContext");
-		static jmethodID constructorID = m_Env->GetMethodID(jcls, "<init>", "(J;J)V");
+	//void VariableMapBuilderJObject::SetVariable(const char* varName, const RouteContext& value)
+	//{
+	//	static jclass jcls = m_Env->FindClass("java/com/sf/SFRouteContext");
+	//	static jmethodID constructorID = m_Env->GetMethodID(jcls, "<init>", "(J;J)V");
 
-		jobject jobj = m_Env->NewObject(jcls, constructorID, (uint64_t)value.Components.From, (uint64_t)value.Components.To);
+	//	jobject jobj = m_Env->NewObject(jcls, constructorID, (uint64_t)value.Components.From, (uint64_t)value.Components.To);
 
-		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
-		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
-	}
+	//	jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+	//	m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
+	//}
 
-	void VariableMapBuilderJObject::SetVariable(const char* varName, const NetAddress& value)
-	{
-		static jclass jcls = m_Env->FindClass("java/com/sf/SFRouteContext");
-		static jmethodID constructorID = m_Env->GetMethodID(jcls, "<init>", "(I;Ljava/lang/String;I)V");
+	//void VariableMapBuilderJObject::SetVariable(const char* varName, const NetAddress& value)
+	//{
+	//	static jclass jcls = m_Env->FindClass("java/com/sf/SFRouteContext");
+	//	static jmethodID constructorID = m_Env->GetMethodID(jcls, "<init>", "(I;Ljava/lang/String;I)V");
 
-		jstring jstrAddress = m_Env->NewStringUTF(value.Address);
+	//	jstring jstrAddress = m_Env->NewStringUTF(value.Address);
 
-		jobject jobj = m_Env->NewObject(jcls, constructorID, (int)value.SocketFamily, jstrAddress, (int)value.Port);
+	//	jobject jobj = m_Env->NewObject(jcls, constructorID, (int)value.SocketFamily, jstrAddress, (int)value.Port);
 
-		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
-		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
-	}
+	//	jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+	//	m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
+	//}
 
-	void VariableMapBuilderJObject::SetVariable(const char* varName, const PlayerInformation& value)
-	{
-		static jclass jcls = m_Env->FindClass("java/com/sf/SFPlayerInformation");
-		static jmethodID constructorID = m_Env->GetMethodID(jcls, "<init>", "(J;J;Ljava/lang/String;J;I;I)V");
+	//void VariableMapBuilderJObject::SetVariable(const char* varName, const PlayerInformation& value)
+	//{
+	//	static jclass jcls = m_Env->FindClass("java/com/sf/SFPlayerInformation");
+	//	static jmethodID constructorID = m_Env->GetMethodID(jcls, "<init>", "(J;J;Ljava/lang/String;J;I;I)V");
 
-		jstring jstrName = m_Env->NewStringUTF(value.NickName);
+	//	jstring jstrName = m_Env->NewStringUTF(value.NickName);
 
-		jobject jobj = m_Env->NewObject(jcls, constructorID, (jlong)value.PlayerID, (jlong)value.FBUID, jstrName, (jlong)value.LastActiveTime, (int)value.Level, (int)value.IsPlayingGame);
+	//	jobject jobj = m_Env->NewObject(jcls, constructorID, (jlong)value.PlayerID, (jlong)value.FBUID, jstrName, (jlong)value.LastActiveTime, (int)value.Level, (int)value.IsPlayingGame);
 
-		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
-		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
-	}
+	//	jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+	//	m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
+	//}
 
-	void VariableMapBuilderJObject::SetVariable(const char* varName, const RankingPlayerInformation& value)
-	{
-		static jclass jcls = m_Env->FindClass("java/com/sf/SFRankingPlayerInformation");
-		static jmethodID constructorID = m_Env->GetMethodID(jcls, "<init>", "(J;J;Ljava/lang/String;J;I;I;I;I)V");
+	//void VariableMapBuilderJObject::SetVariable(const char* varName, const RankingPlayerInformation& value)
+	//{
+	//	static jclass jcls = m_Env->FindClass("java/com/sf/SFRankingPlayerInformation");
+	//	static jmethodID constructorID = m_Env->GetMethodID(jcls, "<init>", "(J;J;Ljava/lang/String;J;I;I;I;I)V");
 
-		jstring jstrName = m_Env->NewStringUTF(value.NickName);
+	//	jstring jstrName = m_Env->NewStringUTF(value.NickName);
 
-		jobject jobj = m_Env->NewObject(jcls, constructorID, (jlong)value.PlayerID, (jlong)value.FBUID, jstrName, (jlong)value.LastActiveTime, (int)value.Level, (int)value.IsPlayingGame, (int)value.WeeklyWin, (int)value.WeeklyLose);
+	//	jobject jobj = m_Env->NewObject(jcls, constructorID, (jlong)value.PlayerID, (jlong)value.FBUID, jstrName, (jlong)value.LastActiveTime, (int)value.Level, (int)value.IsPlayingGame, (int)value.WeeklyWin, (int)value.WeeklyLose);
 
-		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
-		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
-	}
+	//	jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+	//	m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
+	//}
 
-	void VariableMapBuilderJObject::SetVariable(const char* varName, const FriendInformation& value)
+	//void VariableMapBuilderJObject::SetVariable(const char* varName, const FriendInformation& value)
+	//{
+	//	jobject jobj = ToJavaObject(value);
+
+	//	jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+	//	m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
+	//}
+
+	//void VariableMapBuilderJObject::SetVariable(const char* varName, const TotalRankingPlayerInformation& value)
+	//{
+	//	jobject jobj = ToJavaObject(value);
+
+	//	jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
+	//	m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
+	//}
+
+	void VariableMapBuilderJObject::SetVariable(const char* varName, const char* typeName, const void* value)
 	{
 		jobject jobj = ToJavaObject(value);
 
-		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
-		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
-	}
-
-	void VariableMapBuilderJObject::SetVariable(const char* varName, const TotalRankingPlayerInformation& value)
-	{
-		jobject jobj = ToJavaObject(value);
-
-		jstring jstrBuf = m_Env->NewStringUTF((const char*)varName);
-		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrBuf, jobj);
+		jstring jstrName = m_Env->NewStringUTF((const char*)varName);
+		jstring jstrTypeName = m_Env->NewStringUTF((const char*)typeName);
+		m_Env->CallVoidMethod(m_MapObject, m_SetMethodID, jstrName, jstrTypeName, jobj);
 	}
 
 	void VariableMapBuilderJObject::SetVariable(const char* varName, const RelayPlayerInfo& value)

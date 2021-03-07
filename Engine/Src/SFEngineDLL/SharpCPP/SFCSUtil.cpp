@@ -107,39 +107,44 @@ namespace SF
 		m_SetFunc(varName, "StringCrc64", &hashValue);
 	}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const RouteContext& value)
-	{
-		m_SetFunc(varName, "RouteContext", &value);
-	}
+	//void VariableMapBuilderCS::SetVariable(const char* varName, const RouteContext& value)
+	//{
+	//	m_SetFunc(varName, "RouteContext", &value);
+	//}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const NetAddress& value)
-	{
-		m_SetFunc(varName, "NetAddress", &value);
-	}
+	//void VariableMapBuilderCS::SetVariable(const char* varName, const NetAddress& value)
+	//{
+	//	m_SetFunc(varName, "NetAddress", &value);
+	//}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const PlayerInformation& value)
-	{
-		m_SetFunc(varName, "PlayerInformation", &value);
-	}
+	//void VariableMapBuilderCS::SetVariable(const char* varName, const PlayerInformation& value)
+	//{
+	//	m_SetFunc(varName, "PlayerInformation", &value);
+	//}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const RankingPlayerInformation& value)
-	{
-		m_SetFunc(varName, "RankingPlayerInformation", &value);
-	}
+	//void VariableMapBuilderCS::SetVariable(const char* varName, const RankingPlayerInformation& value)
+	//{
+	//	m_SetFunc(varName, "RankingPlayerInformation", &value);
+	//}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const FriendInformation& value)
-	{
-		m_SetFunc(varName, "FriendInformation", &value);
-	}
+	//void VariableMapBuilderCS::SetVariable(const char* varName, const FriendInformation& value)
+	//{
+	//	m_SetFunc(varName, "FriendInformation", &value);
+	//}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const TotalRankingPlayerInformation& value)
-	{
-		m_SetFunc(varName, "TotalRankingPlayerInformation", &value);
-	}
+	//void VariableMapBuilderCS::SetVariable(const char* varName, const TotalRankingPlayerInformation& value)
+	//{
+	//	m_SetFunc(varName, "TotalRankingPlayerInformation", &value);
+	//}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const RelayPlayerInfo& value)
+	//void VariableMapBuilderCS::SetVariable(const char* varName, const RelayPlayerInfo& value)
+	//{
+	//	m_SetFunc(varName, "RelayPlayerInfo", &value);
+	//}
+
+	void VariableMapBuilderCS::SetVariable(const char* varName, const char* typeName, const void* value)
 	{
-		m_SetFunc(varName, "RelayPlayerInfo", &value);
+		m_SetFunc(varName, typeName, value);
 	}
 
 	void VariableMapBuilderCS::SetVariable(const char* varName, const Array<bool>& value)

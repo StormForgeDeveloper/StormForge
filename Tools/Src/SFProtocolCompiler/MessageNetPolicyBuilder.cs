@@ -57,14 +57,14 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
             NewLine(3);
 
-            //OutStream.WriteLine("class VariableTable;");
-            //NewLine(3);
 
             // namespace definition
             OpenSection("namespace", PrjPrefix);
 
             OutStream.WriteLine("   class MessageEndpoint;");
             OutStream.WriteLine("   class VariableTable;");
+            OutStream.WriteLine("   struct ActorMovement;");
+
             NewLine(2);
         }
 
@@ -87,7 +87,8 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
             OutStream.WriteLine("#include \"Net/SFMessage.h\"");
             OutStream.WriteLine("#include \"Net/SFMessageEndpoint.h\"");
-            if(Group.IsServer)
+            OutStream.WriteLine("#include \"Actor/Movement/SFActorMovement.h\"");
+            if (Group.IsServer)
                 OutStream.WriteLine("#include \"Protocol/SvrProtocol.h\"");
             OutStream.WriteLine(string.Format("#include \"Protocol/Policy/{0}\"", OutputHeaderName()));
             OutStream.WriteLine(string.Format("#include \"Protocol/Message/{0}\"", MessageClassHeaderName));

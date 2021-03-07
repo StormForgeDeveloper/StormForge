@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) StormForge
 // 
 // Author : Generated
 // 
@@ -238,7 +238,7 @@ namespace SF
 				variableBuilder.SetVariable("GameUID", parser.GetGameUID());
 				variableBuilder.SetVariable("PartyUID", parser.GetPartyUID());
 				variableBuilder.SetVariable("PartyLeaderID", parser.GetPartyLeaderID());
-				variableBuilder.SetVariable("MatchingTicket", parser.GetMatchingTicket());
+				variableBuilder.SetVariable("MatchingTicket", "MatchingQueueTicket", &parser.GetMatchingTicket());
 
 				return hr;
 
@@ -1356,7 +1356,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("NewFriend", parser.GetNewFriend());
+				variableBuilder.SetVariable("NewFriend", "FriendInformation", &parser.GetNewFriend());
 
 				return hr;
 
@@ -1448,7 +1448,7 @@ namespace SF
 				FriendRequestAcceptedS2CEvt parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
-				variableBuilder.SetVariable("Accepter", parser.GetAccepter());
+				variableBuilder.SetVariable("Accepter", "FriendInformation", &parser.GetAccepter());
 
 				return hr;
 
@@ -2966,7 +2966,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("Player", parser.GetPlayer());
+				variableBuilder.SetVariable("Player", "PlayerInformation", &parser.GetPlayer());
 
 				return hr;
 
@@ -3153,7 +3153,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("Player", parser.GetPlayer());
+				variableBuilder.SetVariable("Player", "PlayerInformation", &parser.GetPlayer());
 
 				return hr;
 
@@ -4876,7 +4876,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("PartyUID", parser.GetPartyUID());
-				variableBuilder.SetVariable("JoinedPlayer", parser.GetJoinedPlayer());
+				variableBuilder.SetVariable("JoinedPlayer", "PlayerInformation", &parser.GetJoinedPlayer());
 
 				return hr;
 
@@ -6555,8 +6555,8 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("InsUID", parser.GetInsUID());
-				variableBuilder.SetVariable("ServerAddress4", parser.GetServerAddress4());
-				variableBuilder.SetVariable("ServerAddress6", parser.GetServerAddress6());
+				variableBuilder.SetVariable("ServerAddress4", "NetAddress", &parser.GetServerAddress4());
+				variableBuilder.SetVariable("ServerAddress6", "NetAddress", &parser.GetServerAddress6());
 
 				return hr;
 
@@ -7513,7 +7513,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("GameInsUID", parser.GetGameInsUID());
-				variableBuilder.SetVariable("JoinedPlayer", parser.GetJoinedPlayer());
+				variableBuilder.SetVariable("JoinedPlayer", "PlayerInformation", &parser.GetJoinedPlayer());
 
 				return hr;
 
@@ -12498,7 +12498,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
-				variableBuilder.SetVariable("JoinedPlayer", parser.GetJoinedPlayer());
+				variableBuilder.SetVariable("JoinedPlayer", "PlayerInformation", &parser.GetJoinedPlayer());
 
 				return hr;
 

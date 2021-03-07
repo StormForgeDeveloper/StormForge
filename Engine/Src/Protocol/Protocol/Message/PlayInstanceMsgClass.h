@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) StormForge
 // 
 // Author : Generated
 // 
@@ -15,6 +15,7 @@
 #include "Types/SFEngineTypedefs.h"
 #include "Variable/SFVariableTable.h"
 #include "Container/SFArray.h"
+#include "Actor/Movement/SFActorMovement.h"
 #include "Variable/SFVariableMapBuilder.h"
 
 
@@ -432,9 +433,7 @@ namespace SF
 			private:
 				uint64_t m_GameInsUID{};
 				PlayerID m_PlayerID{};
-				ArrayView<uint8_t> m_AttributesRaw;
-				mutable bool m_AttributesHasParsed = false;
-				mutable VariableTable m_Attributes;
+				ActorMovement m_Movement{};
 			public:
 				PlayerMovementC2SEvt()
 					{}
@@ -447,8 +446,7 @@ namespace SF
 
 				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
-				const VariableTable& GetAttributes() const;
+				const ActorMovement& GetMovement() const	{ return m_Movement; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -456,8 +454,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 
 			}; // class PlayerMovementC2SEvt : public MessageBase
 
@@ -483,9 +480,7 @@ namespace SF
 			private:
 				uint64_t m_GameInsUID{};
 				PlayerID m_PlayerID{};
-				ArrayView<uint8_t> m_AttributesRaw;
-				mutable bool m_AttributesHasParsed = false;
-				mutable VariableTable m_Attributes;
+				ActorMovement m_Movement{};
 			public:
 				PlayerMovementS2CEvt()
 					{}
@@ -498,8 +493,7 @@ namespace SF
 
 				const uint64_t& GetGameInsUID() const	{ return m_GameInsUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
-				const VariableTable& GetAttributes() const;
+				const ActorMovement& GetMovement() const	{ return m_Movement; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -507,8 +501,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 
 			}; // class PlayerMovementS2CEvt : public MessageBase
 

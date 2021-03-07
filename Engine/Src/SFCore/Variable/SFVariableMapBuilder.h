@@ -58,13 +58,15 @@ namespace SF {
 		virtual void SetVariable(const char* varName, const StringCrc64& value) = 0;
 		virtual void SetVariable(const char* varName, const char* value) = 0;
 
-		virtual void SetVariable(const char* varName, const RouteContext& value) = 0;
-		virtual void SetVariable(const char* varName, const NetAddress& value) = 0;
-		virtual void SetVariable(const char* varName, const PlayerInformation& value) = 0;
-		virtual void SetVariable(const char* varName, const RankingPlayerInformation& value) = 0;
-		virtual void SetVariable(const char* varName, const FriendInformation& value) = 0;
-		virtual void SetVariable(const char* varName, const TotalRankingPlayerInformation& value) = 0;
-		virtual void SetVariable(const char* varName, const RelayPlayerInfo& value) = 0;
+		//virtual void SetVariable(const char* varName, const RouteContext& value) = 0;
+		//virtual void SetVariable(const char* varName, const NetAddress& value) = 0;
+		//virtual void SetVariable(const char* varName, const PlayerInformation& value) = 0;
+		//virtual void SetVariable(const char* varName, const RankingPlayerInformation& value) = 0;
+		//virtual void SetVariable(const char* varName, const FriendInformation& value) = 0;
+		//virtual void SetVariable(const char* varName, const TotalRankingPlayerInformation& value) = 0;
+		//virtual void SetVariable(const char* varName, const RelayPlayerInfo& value) = 0;
+
+		virtual void SetVariable(const char* varName, const char* typeName, const void* value) = 0;
 
 		virtual void SetVariable(const char* varName, const Array<bool>& value) = 0;
 		virtual void SetVariable(const char* varName, const Array<int8_t>& value) = 0;

@@ -12,12 +12,11 @@
 #include "SFEnginePCH.h"
 
 #include "Actor/Movement/SFActorMovement.h"
-
+#include "Math/SF3DMathSerialization.h"
 
 
 namespace SF
 {
-
 
 
 	Result ActorMovement::TryMerge(const ActorMovement* pNextMove)
@@ -41,10 +40,45 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
+	bool ActorMovement::operator == (const ActorMovement& src) const
+	{
+		return memcmp(this, &src, sizeof(ActorMovement)) == 0;
+	}
+
+	bool ActorMovement::operator != (const ActorMovement& src) const
+	{
+		return memcmp(this, &src, sizeof(ActorMovement)) != 0;
+	}
+
+	ActorMovement& ActorMovement::operator=(const ActorMovement& src)
+	{
+		memcpy(this, &src, sizeof(ActorMovement));
+
+		return *this;
+	}
+
+	Result _ToString(ToStringContext& context, const ActorMovement& value)
+	{
+		if (!_ToString(context, value.Position))
+			return ResultCode::FAIL;
+
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":"))
+			return ResultCode::FAIL;
+
+		if (!_ToString(context, value.LinearVelocity))
+			return ResultCode::FAIL;
+
+		return ResultCode::SUCCESS;
+	}
+
+	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(ActorMovement)
 
 
 
 
+	/// <summary>
+	/// ActorMovementManager
+	/// </summary>
 	ActorMovementManager::ActorMovementManager()
 	{
 		for (auto& itMove : m_MovementBuffer)
@@ -56,6 +90,7 @@ namespace SF
 
 	ActorMovementManager::~ActorMovementManager()
 	{
+		m_Moves.ClearQueue();
 		ResetFreeMove();
 	}
 
@@ -93,6 +128,41 @@ namespace SF
 		}
 	}
 
+	Result ActorMovementManager::EnqueueMovement(const ActorMovement& newMove)
+	{
+			auto pNewMove = GetFreeMovement();
+			if (pNewMove == nullptr)
+				DequeueMovement(pNewMove); // remove oldest one and use it
+
+			*pNewMove = newMove;
+
+			return EnqueueMovement_Internal(pNewMove);
+	}
+
+	Result ActorMovementManager::EnqueueMovement_Internal(ActorMovement* pMove)
+	{
+		if (pMove == nullptr)
+			return ResultCode::INVALID_ARG;
+
+		if (pMove->MoveFrame <= m_LatestQueuedFrame)
+			return ResultCode::SUCCESS_FALSE; // drop old frames
+
+		if (m_Moves.IsFull())
+		{
+			ActorMovement* pRemove = nullptr;
+			m_Moves.Dequeue(pRemove);
+			if (pRemove)
+				FreeMovement(pRemove);
+		}
+
+		return m_Moves.Enqueue(pMove);
+	}
+
+	Result ActorMovementManager::DequeueMovement(ActorMovement*& pMove)
+	{
+		return m_Moves.Dequeue(pMove);
+	}
+
 
 
 
@@ -104,27 +174,14 @@ namespace SF
 
 	SendingActorMovementManager::~SendingActorMovementManager()
 	{
-		m_Moves.ClearQueue();
 	}
 
 
-	Result SendingActorMovementManager::EnqueueMovement(const ActorMovement& newMove)
+	Result SendingActorMovementManager::EnqueueMovement_Internal(ActorMovement* pMove)
 	{
-		auto pNewMove = GetFreeMovement();
-		if (pNewMove == nullptr)
-			DequeueMovement(pNewMove); // remove oldest one and use it
-
-		*pNewMove = newMove;
-
-		return EnqueueMovement(pNewMove);
-	}
-
-	Result SendingActorMovementManager::EnqueueMovement(ActorMovement* pMove)
-	{
-		assert(IsValidFreeMove(pMove));
-
 		if (pMove == nullptr)
 			return ResultCode::INVALID_ARG;
+
 
 		if (pMove->MoveFrame <= m_LatestQueuedFrame)
 			return ResultCode::SUCCESS_FALSE; // drop old frames
@@ -139,23 +196,8 @@ namespace SF
 			}
 		}
 
-		// This unlikely hit. just leaving it as fail safe code
-		if (m_Moves.IsFull())
-		{
-			ActorMovement* pRemove = nullptr;
-			m_Moves.Dequeue(pRemove);
-			if (pRemove)
-				FreeMovement(pRemove);
-		}
-
-		return m_Moves.Enqueue(pMove);
+		return super::EnqueueMovement_Internal(pMove);
 	}
-
-	Result SendingActorMovementManager::DequeueMovement(ActorMovement*& pMove)
-	{
-		return m_Moves.Dequeue(pMove);
-	}
-
 
 
 
@@ -264,15 +306,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result ReceivedActorMovementManager::EnqueueMovement(const ActorMovement& pMove)
-	{
-		auto pNewMove = GetFreeMovement();
-		*pNewMove = pMove;
-
-		return EnqueueMovement(pNewMove);
-	}
-
-	Result ReceivedActorMovementManager::EnqueueMovement(ActorMovement* pMove)
+	Result ReceivedActorMovementManager::EnqueueMovement_Internal(ActorMovement* pMove)
 	{
 		if (pMove == nullptr)
 			return ResultCode::INVALID_ARG;
@@ -351,6 +385,5 @@ namespace SF
 
 		return vDiff * InvBlendSpeed;
 	}
-
 
 }

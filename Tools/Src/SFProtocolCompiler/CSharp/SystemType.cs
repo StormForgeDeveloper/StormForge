@@ -220,6 +220,7 @@ namespace SF
             new TypeMap( ParameterType.ClusterMembership, 4, typeof(ClusterMembership) ),
             new TypeMap( ParameterType.ServiceStatus, 4, typeof(ServiceStatus) ),
 
+            new TypeMap( ParameterType.ActorMovement, Marshal.SizeOf(typeof(ActorMovement)), typeof(ActorMovement) ),
             new TypeMap( ParameterType.MatchingPlayerInformation, 16, typeof(MatchingPlayerInformation) ),
             new TypeMap( ParameterType.MatchingQueueTicket, 8, typeof(MatchingQueueTicket) ),
             new TypeMap( ParameterType.LocalUID, 8, typeof(LocalUID), cppTypeName:"uint64_t" ),

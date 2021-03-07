@@ -20,6 +20,7 @@ namespace SF
 {
     class MessageEndpoint;
    class VariableTable;
+   struct ActorMovement;
 
 
 	class NetPolicyGame 

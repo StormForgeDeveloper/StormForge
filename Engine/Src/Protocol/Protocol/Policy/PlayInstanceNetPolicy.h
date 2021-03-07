@@ -20,6 +20,7 @@ namespace SF
 {
     class MessageEndpoint;
    class VariableTable;
+   struct ActorMovement;
 
 
 	class NetPolicyPlayInstance 
@@ -36,7 +37,7 @@ namespace SF
 		// C2S: Play packet
 		Result PlayPacketC2SEvt( const uint32_t &InPlayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
 		// C2S: Player Movement
-		Result PlayerMovementC2SEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+		Result PlayerMovementC2SEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 		// Cmd: Create stream instance
 		Result CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 		// Cmd: Open stream instance
@@ -71,7 +72,7 @@ namespace SF
 		// S2C: Remove player from view
 		Result RemovePlayerFromViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
 		// S2C: Player Movement
-		Result PlayerMovementS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+		Result PlayerMovementS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 		// Cmd: Create stream instance
 		Result CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
 		// Cmd: Open stream instance

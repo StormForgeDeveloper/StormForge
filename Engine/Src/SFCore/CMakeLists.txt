@@ -36,6 +36,8 @@ set(SFCORE_LIB_FILES
 	StreamDB/SFStreamDB.cpp
 	Math/SF3DMath.cpp
 	Math/SF3DMathSSE.cpp
+	Math/SF3DMathSerialization.h
+	Math/SF3DMathSerialization.cpp
 	MemoryManager/SFHeapMemory.cpp
 	MemoryManager/SFHeapTree.cpp
 	MemoryManager/SFIMemoryManager.cpp

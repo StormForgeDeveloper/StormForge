@@ -424,6 +424,9 @@ namespace SF
 			return hr;
 		}
 
+		auto begin() { return m_Components.begin(); }
+		auto end() { return m_Components.end(); }
+
 		// Add component
 		Component* RemoveComponent(StringCrc32 name)
 		{

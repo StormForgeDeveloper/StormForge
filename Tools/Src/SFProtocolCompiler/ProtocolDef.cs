@@ -417,6 +417,9 @@ namespace ProtocolXml {
         ServiceStatus,
         
         /// <remarks/>
+        ActorMovement,
+        
+        /// <remarks/>
         GameID,
         
         /// <remarks/>

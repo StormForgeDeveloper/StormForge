@@ -13,16 +13,17 @@
 
 #include "SFTypedefs.h"
 #include "Object/SFSharedObject.h"
-
+#include "Container/SFCircularQueue.h"
+#include "Math/SF3DMath.h"
 
 namespace SF
 {
-
 	#pragma pack(push, 4)
 	struct SF_DECLARE_ALIGN ActorMovement
 	{
 		static constexpr size_t MaxSavedMove = 8;
 		static constexpr uint32_t FramesPerSeconds = 60;
+		static constexpr uint32_t DeltaMSPerFrame = 1000 / FramesPerSeconds;
 		static constexpr float DeltaSecondsPerFrame = 1.0 / (float)FramesPerSeconds;
 		static constexpr float MoveFrameTimeout = 10 * FramesPerSeconds;
 
@@ -32,11 +33,28 @@ namespace SF
 		// Look direction
 		float AngularYaw = 0; // No pitch and roll
 		uint32_t MoveFrame = 0;
-		uint8_t MovementState = 0;
+		uint32_t MovementState = 0; // can be 8bit, just for C# size match
 
 		Result TryMerge(const ActorMovement* pNextMove);
+
+
+		bool operator == (const ActorMovement& src) const;
+		bool operator != (const ActorMovement& src) const;
+
+		ActorMovement& operator=(const ActorMovement& src);
 	};
 	#pragma pack(pop)
+
+
+	inline size_t SerializedSizeOf(const ActorMovement& Value) { return sizeof(Value); }
+	inline Result operator >> (IInputStream& input, ActorMovement& data) { return input.Read(&data, sizeof(data)); }
+	inline Result operator << (IOutputStream& output, const ActorMovement& data) { return output.Write(&data, sizeof(data)); }
+
+
+	Result _ToString(ToStringContext& context, const ActorMovement& value);
+
+
+	DECLARE_BOXING_TEMPLETE_BYREFERENCE(ActorMovement);
 
 
 	////////////////////////////////////////////////////////////////////////////////////////
@@ -63,8 +81,17 @@ namespace SF
 
 		bool IsValidFreeMove(ActorMovement* pMove);
 
+
 		void ResetFreeMove();
 
+		// Queue style operation
+		Result EnqueueMovement(const ActorMovement& newMove);
+
+		Result DequeueMovement(ActorMovement*& pMove);
+
+
+	protected:
+		virtual Result EnqueueMovement_Internal(ActorMovement* pMove);
 
 	private:
 
@@ -72,28 +99,25 @@ namespace SF
 		ActorMovement m_MovementBuffer[MaxSavedMove * 2];
 		CircularQueue<ActorMovement*, MaxSavedMove * 3> m_FreeMoves;
 
+	protected:
+		uint32_t m_LatestQueuedFrame = 0;
+		CircularQueue<ActorMovement*, MaxSavedMove> m_Moves;
 	};
 
 
 	class SendingActorMovementManager : public ActorMovementManager
 	{
 	public:
+		using super = ActorMovementManager;
 
 		SendingActorMovementManager();
 
 		virtual ~SendingActorMovementManager();
 
-
-		Result EnqueueMovement(const ActorMovement& newMove);
-
-		Result EnqueueMovement(ActorMovement* pMove);
-
-		Result DequeueMovement(ActorMovement*& pMove);
+	protected:
+		virtual Result EnqueueMovement_Internal(ActorMovement* pMove) override;
 
 	private:
-
-		uint32_t m_LatestQueuedFrame = 0;
-		CircularQueue<ActorMovement*, MaxSavedMove> m_Moves;
 
 	};
 
@@ -114,9 +138,8 @@ namespace SF
 
 		Result SimulateCurrentMove(uint32_t MoveFrame, ActorMovement& outCurMove);
 
-		Result EnqueueMovement(const ActorMovement& pMove);
-
-		Result EnqueueMovement(ActorMovement* pMove);
+	protected:
+		virtual Result EnqueueMovement_Internal(ActorMovement* pMove) override;
 
 	private:
 
@@ -132,12 +155,8 @@ namespace SF
 
 		// Latest calculation information
 		uint32_t m_LatestFrame = 0;
-		uint32_t m_LatestQueuedFrame = 0;
 		ActorMovement m_LastestMove{};
 		ActorMovement m_MoveExpected{};
-
-		// saved moves
-		CircularQueue<ActorMovement*, MaxSavedMove> m_Moves;
 	};
 
 

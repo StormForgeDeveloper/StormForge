@@ -69,13 +69,14 @@ namespace SF
 		virtual void SetVariable(const char* varName, const char* value) override;
 		virtual void SetVariable(const char* varName, const StringCrc64& value) override;
 
-		virtual void SetVariable(const char* varName, const RouteContext& value) override;
-		virtual void SetVariable(const char* varName, const NetAddress& value) override;
-		virtual void SetVariable(const char* varName, const PlayerInformation& value) override;
-		virtual void SetVariable(const char* varName, const RankingPlayerInformation& value) override;
-		virtual void SetVariable(const char* varName, const FriendInformation& value) override;
-		virtual void SetVariable(const char* varName, const TotalRankingPlayerInformation& value) override;
-		virtual void SetVariable(const char* varName, const RelayPlayerInfo& value) override;
+		//virtual void SetVariable(const char* varName, const RouteContext& value) override;
+		//virtual void SetVariable(const char* varName, const NetAddress& value) override;
+		//virtual void SetVariable(const char* varName, const PlayerInformation& value) override;
+		//virtual void SetVariable(const char* varName, const RankingPlayerInformation& value) override;
+		//virtual void SetVariable(const char* varName, const FriendInformation& value) override;
+		//virtual void SetVariable(const char* varName, const TotalRankingPlayerInformation& value) override;
+		//virtual void SetVariable(const char* varName, const RelayPlayerInfo& value) override;
+		virtual void SetVariable(const char* varName, const char* typeName, const void* value) override;
 
 		virtual void SetVariable(const char* varName, const Array<bool>& value) override;
 		virtual void SetVariable(const char* varName, const Array<int8_t>& value) override;

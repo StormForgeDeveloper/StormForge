@@ -59,13 +59,13 @@
 		<C2SEvent Name="PlayerMovement" Reliable="false" Crypto="No" Trace="Debug1" Desc="Player Movement">
 			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance UID"/>
 			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
-			<Params Type="VariableTable" Name="Attributes" Desc="Movement attributes"/>
+			<Params Type="ActorMovement" Name="Movement" Desc="Movement attributes"/>
 		</C2SEvent>
 
 		<S2CEvent Name="PlayerMovement" Reliable="false" Crypto="No" Trace="Debug1" Desc="Player Movement">
 			<Params Type="GameInsUID" Name="GameInsUID" Desc="Game instance UID"/>
 			<Params Type="PlayerID" Name="PlayerID" Desc="Player Movement"/>
-			<Params Type="VariableTable" Name="Attributes" Desc="Movement attributes"/>
+			<Params Type="ActorMovement" Name="Movement" Desc="Movement attributes"/>
 		</S2CEvent>
 
 
