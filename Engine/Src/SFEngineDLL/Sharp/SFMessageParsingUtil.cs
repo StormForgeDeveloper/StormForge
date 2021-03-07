@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -114,11 +114,10 @@ namespace SF
                 case "RelayPlayerInfo":
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(RelayPlayerInfo)));
                     break;
-                    // deprecated
-//                case "GameInstanceInfo":
-                    //stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(GameInstanceInfo)));
-  //                  break;
-                case "VariableTable":
+                case "ActorMovement":
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(ActorMovement)));
+                    break;
+                //case "VariableTable":
                     //VariableTable parsedValue = new VariableTable();
                     //parsedValue.FromSerializedMemory(arrayCount, Value);
                     //stm_ParsingMessage.SetValue(stringHash, parsedValue);
@@ -270,14 +269,13 @@ namespace SF
                         stm_ParsingMessage.SetValue(stringHash, newArray);
                     }
                     break;
-                    // deprecated
-                //case "GameInstanceInfo":
-                //    {
-                //        var newArray = new GameInstanceInfo[arrayCount];
-                //        MarshalCopy(Value, newArray, 0, arrayCount);
-                //        stm_ParsingMessage.SetValue(stringHash, newArray);
-                //    }
-                //    break;
+                case "ActorMovement":
+                    {
+                        var newArray = new ActorMovement[arrayCount];
+                        MarshalCopy(Value, newArray, 0, arrayCount);
+                        stm_ParsingMessage.SetValue(stringHash, newArray);
+                    }
+                    break;
                 case "VariableTable":
                     {
                         VariableTable parsedValue = new VariableTable();
