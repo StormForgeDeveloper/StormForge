@@ -113,6 +113,10 @@ namespace SF
 
 		void UpdateGameTick();
 
+		void UpdateTasks();
+
+		void UpdateMovement(uint32_t deltaFrames);
+
 		// Online State
 		OnlineState GetOnlineState() const { return m_OnlineState; }
 
@@ -148,6 +152,12 @@ namespace SF
 		void Disconnect(SharedPointerT<Net::Connection>& pConn);
 
 		void ClearTasks();
+
+		void ClearInstanceInfo();
+
+		void OnPlayerInView(MessageDataPtr&& pMsgData);
+		void OnPlayerOutofView(MessageDataPtr&& pMsgData);
+		void OnPlayerMovement(MessageDataPtr&& pMsgData);
 
 	private:
 
@@ -193,7 +203,10 @@ namespace SF
 		SharedPointerT<SendingActorMovementManager> m_OutgoingMovement;
 
 		// PlayerId by movement
-		DualSortedMap<PlayerID,SharedPointerT<ReceivedActorMovementManager>> m_IncomingMovements;
+		SortedMap<PlayerID,SharedPointerT<ReceivedActorMovementManager>> m_IncomingMovements;
+
+		// Move frame
+		uint32_t m_MoveFrame{};
 
 		EventDelegateList<OnlineState, OnlineState> m_OnlineStateDelegate;
 	};

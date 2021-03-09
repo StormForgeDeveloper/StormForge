@@ -180,6 +180,17 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, 
 
 }
 
+SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateMovement(intptr_t nativeHandle, uint32_t deltaFrames)
+{
+	if (nativeHandle == 0)
+		return ResultCode::NOT_INITIALIZED;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	pOnlineClient->UpdateMovement(deltaFrames);
+	return ResultCode::SUCCESS;
+}
+
 SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetConnection(intptr_t nativeHandle, int32_t connectionIndex)
 {
 	if (nativeHandle == 0)

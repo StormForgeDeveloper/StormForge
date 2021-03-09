@@ -34,13 +34,7 @@ namespace SF.Net
 		public static int JoinGameInstanceRes { get { return CSSFNetMessageID_PlayInstanceJoinGameInstanceRes(); } }
 
 
-		// S2C: Event for Player joined.
-		public static int PlayerJoinedS2CEvt { get { return CSSFNetMessageID_PlayInstancePlayerJoinedS2CEvt(); } }
-
-		// S2C: Event for Player left.
-		public static int PlayerLeftS2CEvt { get { return CSSFNetMessageID_PlayInstancePlayerLeftS2CEvt(); } }
-
-		// S2C: Player kicked event. this event will be brocasted when a player kicked.
+		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 		public static int PlayerKickedS2CEvt { get { return CSSFNetMessageID_PlayInstancePlayerKickedS2CEvt(); } }
 
 		// C2S: Play packet
@@ -93,17 +87,7 @@ namespace SF.Net
 
 
 
-		// S2C: Event for Player joined.
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstancePlayerJoinedS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_PlayInstancePlayerJoinedS2CEvt();
-
-
-		// S2C: Event for Player left.
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstancePlayerLeftS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_PlayInstancePlayerLeftS2CEvt();
-
-
-		// S2C: Player kicked event. this event will be brocasted when a player kicked.
+		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstancePlayerKickedS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstancePlayerKickedS2CEvt();
 

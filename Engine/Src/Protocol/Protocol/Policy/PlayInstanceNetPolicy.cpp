@@ -23,53 +23,53 @@
 namespace SF
 {
  	// Cmd: Event for Player Join request.
-	Result NetPolicyPlayInstance::JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+	Result NetPolicyPlayInstance::JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::JoinGameInstanceCmd::Create(GetSystemHeap(), InTransactionID, InPlayInstanceID, InPlayerID, InPlayerIdentifier);
+		 pMessage = SF::Message::PlayInstance::JoinGameInstanceCmd::Create(GetSystemHeap(), InTransactionID, InPlayInstanceUID, InPlayerID, InPlayerIdentifier);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetPolicyPlayInstance::JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+	}; // Result NetPolicyPlayInstance::JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 	// C2S: Play packet
-	Result NetPolicyPlayInstance::PlayPacketC2SEvt( const uint32_t &InPlayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
+	Result NetPolicyPlayInstance::PlayPacketC2SEvt( const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::PlayPacketC2SEvt::Create(GetSystemHeap(), InPlayInstanceID, InSenderEndpointID, InTargetEndpointMask, InPayload);
+		 pMessage = SF::Message::PlayInstance::PlayPacketC2SEvt::Create(GetSystemHeap(), InPlayInstanceUID, InSenderEndpointID, InTargetEndpointMask, InPayload);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetPolicyPlayInstance::PlayPacketC2SEvt( const uint32_t &InPlayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
+	}; // Result NetPolicyPlayInstance::PlayPacketC2SEvt( const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 	// C2S: Player Movement
-	Result NetPolicyPlayInstance::PlayerMovementC2SEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+	Result NetPolicyPlayInstance::PlayerMovementC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::PlayerMovementC2SEvt::Create(GetSystemHeap(), InGameInsUID, InPlayerID, InMovement);
+		 pMessage = SF::Message::PlayInstance::PlayerMovementC2SEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InMovement);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetPolicyPlayInstance::PlayerMovementC2SEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+	}; // Result NetPolicyPlayInstance::PlayerMovementC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 	// Cmd: Create stream instance
 	Result NetPolicyPlayInstance::CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	{
@@ -137,117 +137,85 @@ namespace SF
 
 
 	// Cmd: Event for Player Join request.
-	Result NetSvrPolicyPlayInstance::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID )
+	Result NetSvrPolicyPlayInstance::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMovementFrame )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::JoinGameInstanceRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayInstanceID, InPlayerID);
+		 pMessage = SF::Message::PlayInstance::JoinGameInstanceRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMovementFrame);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetSvrPolicyPlayInstance::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID )
-	// S2C: Event for Player joined.
-	Result NetSvrPolicyPlayInstance::PlayerJoinedS2CEvt( const uint32_t &InPlayInstanceID, const PlayerInformation &InJoinedPlayerInfo )
+	}; // Result NetSvrPolicyPlayInstance::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMovementFrame )
+	// S2C: Player kicked event. this event will be broadcasted when a player kicked.
+	Result NetSvrPolicyPlayInstance::PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::PlayerJoinedS2CEvt::Create(GetSystemHeap(), InPlayInstanceID, InJoinedPlayerInfo);
+		 pMessage = SF::Message::PlayInstance::PlayerKickedS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InKickedPlayerID);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetSvrPolicyPlayInstance::PlayerJoinedS2CEvt( const uint32_t &InPlayInstanceID, const PlayerInformation &InJoinedPlayerInfo )
-	// S2C: Event for Player left.
-	Result NetSvrPolicyPlayInstance::PlayerLeftS2CEvt( const uint32_t &InPlayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
-	{
- 		ScopeContext hr;
-
-		 MessageDataPtr pMessage;
-		 protocolCheckPtr(m_Endpoint);
-
-		 pMessage = SF::Message::PlayInstance::PlayerLeftS2CEvt::Create(GetSystemHeap(), InPlayInstanceID, InLeftPlayerID, InKickedReason);
-		 protocolCheckPtr(*pMessage);
-
-		 return m_Endpoint->Send( pMessage );
-
-		return hr;
-
-	}; // Result NetSvrPolicyPlayInstance::PlayerLeftS2CEvt( const uint32_t &InPlayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason )
-	// S2C: Player kicked event. this event will be brocasted when a player kicked.
-	Result NetSvrPolicyPlayInstance::PlayerKickedS2CEvt( const PlayerID &InKickedPlayerID )
-	{
- 		ScopeContext hr;
-
-		 MessageDataPtr pMessage;
-		 protocolCheckPtr(m_Endpoint);
-
-		 pMessage = SF::Message::PlayInstance::PlayerKickedS2CEvt::Create(GetSystemHeap(), InKickedPlayerID);
-		 protocolCheckPtr(*pMessage);
-
-		 return m_Endpoint->Send( pMessage );
-
-		return hr;
-
-	}; // Result NetSvrPolicyPlayInstance::PlayerKickedS2CEvt( const PlayerID &InKickedPlayerID )
+	}; // Result NetSvrPolicyPlayInstance::PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
 	// S2C: New Player in get view
-	Result NetSvrPolicyPlayInstance::NewPlayerInViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
+	Result NetSvrPolicyPlayInstance::NewPlayerInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::NewPlayerInViewS2CEvt::Create(GetSystemHeap(), InGameInsUID, InPlayerID, InAttributes);
+		 pMessage = SF::Message::PlayInstance::NewPlayerInViewS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InAttributes);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetSvrPolicyPlayInstance::NewPlayerInViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
+	}; // Result NetSvrPolicyPlayInstance::NewPlayerInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
 	// S2C: Remove player from view
-	Result NetSvrPolicyPlayInstance::RemovePlayerFromViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
+	Result NetSvrPolicyPlayInstance::RemovePlayerFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::RemovePlayerFromViewS2CEvt::Create(GetSystemHeap(), InGameInsUID, InPlayerID, InAttributes);
+		 pMessage = SF::Message::PlayInstance::RemovePlayerFromViewS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InAttributes);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetSvrPolicyPlayInstance::RemovePlayerFromViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
+	}; // Result NetSvrPolicyPlayInstance::RemovePlayerFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
 	// S2C: Player Movement
-	Result NetSvrPolicyPlayInstance::PlayerMovementS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+	Result NetSvrPolicyPlayInstance::PlayerMovementS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::PlayerMovementS2CEvt::Create(GetSystemHeap(), InGameInsUID, InPlayerID, InMovement);
+		 pMessage = SF::Message::PlayInstance::PlayerMovementS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InMovement);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetSvrPolicyPlayInstance::PlayerMovementS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+	}; // Result NetSvrPolicyPlayInstance::PlayerMovementS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 	// Cmd: Create stream instance
 	Result NetSvrPolicyPlayInstance::CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 	{

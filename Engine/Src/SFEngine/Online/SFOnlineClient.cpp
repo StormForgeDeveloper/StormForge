@@ -421,6 +421,27 @@ namespace SF
 					OnJoinGameInstanceRes(pMsgData);
 				});
 
+			GetConnection()->AddMessageDelegateUnique(uintptr_t(&m_Owner),
+				Message::PlayInstance::NewPlayerInViewS2CEvt::MID.GetMsgID(),
+				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				{
+					m_Owner.OnPlayerInView(Forward<MessageDataPtr>(pMsgData));
+				});
+
+			GetConnection()->AddMessageDelegateUnique(uintptr_t(&m_Owner),
+				Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.GetMsgID(),
+				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				{
+					m_Owner.OnPlayerOutofView(Forward<MessageDataPtr>(pMsgData));
+				});
+
+			GetConnection()->AddMessageDelegateUnique(uintptr_t(&m_Owner),
+				Message::PlayInstance::PlayerMovementS2CEvt::MID.GetMsgID(),
+				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				{
+					m_Owner.OnPlayerMovement(Forward<MessageDataPtr>(pMsgData));
+				});
+
 
 			SetOnlineState(OnlineState::InGameJoiningGameInstance);
 			NetPolicyGame policy(m_Owner.GetConnectionGame()->GetMessageEndpoint());
@@ -437,6 +458,12 @@ namespace SF
 		{
 			SFLog(Net, Info, "Finished ClientTask_JoinGameInstanceServer");
 
+			if (m_Owner.GetOnlineState() != OnlineState::InGameInGameInstance)
+			{
+				m_Owner.ClearInstanceInfo();
+				Disconnect();
+			}
+
 			if (GetConnection() == nullptr)
 				return;
 
@@ -446,9 +473,6 @@ namespace SF
 
 			if (m_Owner.GetConnectionGame() != nullptr)
 				m_Owner.GetConnectionGame()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameInstanceRes::MID.GetMsgID());
-
-			if (m_Owner.GetOnlineState() != OnlineState::InGameInGameInstance)
-				Disconnect();
 		}
 
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
@@ -572,6 +596,11 @@ namespace SF
 		for (auto& itTask : m_PendingTasks)
 			IHeap::Delete(itTask);
 		m_PendingTasks.Clear();
+	}
+
+	void OnlineClient::ClearInstanceInfo()
+	{
+		m_IncomingMovements.ClearMap();
 	}
 
 	Result OnlineClient::StartConnection(StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password)
@@ -705,7 +734,11 @@ namespace SF
 			m_GameInstance->UpdateGameTick();
 		}
 
+		UpdateTasks();
+	}
 
+	void OnlineClient::UpdateTasks()
+	{
 		if (m_CurrentTask)
 		{
 			m_CurrentTask->TickUpdate();
@@ -727,4 +760,89 @@ namespace SF
 			m_CurrentTask->Initialize();
 		}
 	}
+
+	void OnlineClient::UpdateMovement(uint32_t deltaFrames)
+	{
+		m_MoveFrame += deltaFrames;
+		m_IncomingMovements.ForeachOrder(0, m_IncomingMovements.size(), 
+			[moveFrame = m_MoveFrame](const PlayerID playerId, const SharedPointerT<ReceivedActorMovementManager>& movement)
+			{
+				ActorMovement outMovement;
+				movement->SimulateCurrentMove(moveFrame, outMovement);
+				return true;
+			});
+	}
+
+	void OnlineClient::OnPlayerInView(MessageDataPtr&& pMsgData)
+	{
+		Message::PlayInstance::NewPlayerInViewS2CEvt msg(Forward<MessageDataPtr>(pMsgData));
+		if (!msg.ParseMsg())
+		{
+			SFLog(Net, Info, "OnlineClient::OnPlayerInView Parsing error");
+			return;
+		}
+
+		if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+		{
+			SFLog(Net, Info, "Invalid instance id, ignoring movement");
+			return;
+		}
+
+		// TODO:
+		//SharedPointerT<ReceivedActorMovementManager> movement;
+		//if (!m_IncomingMovements.Find(msg.GetPlayerID(), movement))
+		//{
+		//	movement = new(GetHeap()) ReceivedActorMovementManager;
+		//	auto res = m_IncomingMovements.Insert(msg.GetPlayerID(), movement);
+		//	assert(res);
+		//}
+
+		//movement->EnqueueMovement(msg.GetMovement());
+	}
+
+	void OnlineClient::OnPlayerOutofView(MessageDataPtr&& pMsgData)
+	{
+		Message::PlayInstance::RemovePlayerFromViewS2CEvt msg(Forward<MessageDataPtr>(pMsgData));
+		if (!msg.ParseMsg())
+		{
+			SFLog(Net, Info, "OnlineClient::OnPlayerOutofView Parsing error");
+			return;
+		}
+
+		if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+		{
+			SFLog(Net, Info, "Invalid instance id, ignoring movement");
+			return;
+		}
+
+		SharedPointerT<ReceivedActorMovementManager> movement;
+		m_IncomingMovements.Remove(msg.GetPlayerID(), movement);
+	}
+
+	void OnlineClient::OnPlayerMovement(MessageDataPtr&& pMsgData)
+	{
+		Message::PlayInstance::PlayerMovementS2CEvt msg(Forward<MessageDataPtr>(pMsgData));
+		if (!msg.ParseMsg())
+		{
+			SFLog(Net, Info, "OnlineClient::OnPlayerMovement Parsing error");
+			return;
+		}
+
+		if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+		{
+			SFLog(Net, Info, "Invalid instance id, ignoring movement");
+			return;
+		}
+
+		SharedPointerT<ReceivedActorMovementManager> movement;
+		if (!m_IncomingMovements.Find(msg.GetPlayerID(), movement))
+		{
+			movement = new(GetHeap()) ReceivedActorMovementManager;
+			auto res = m_IncomingMovements.Insert(msg.GetPlayerID(), movement);
+			assert(res);
+		}
+
+		movement->EnqueueMovement(msg.GetMovement());
+	}
+
 }

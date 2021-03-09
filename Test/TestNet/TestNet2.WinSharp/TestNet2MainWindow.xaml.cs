@@ -57,10 +57,10 @@ namespace TestNet2.WinSharp
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            if (m_OnlineClient != null)
-            {
-                m_OnlineClient.UpdateGameTick();
-            }
+            if (m_OnlineClient == null)
+                return;
+
+            m_OnlineClient.UpdateGameTick();
         }
 
         void UpdateButtonState()

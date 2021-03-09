@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -18,6 +18,8 @@ namespace SF {
 
 		////////////////////////////////////////////////////////////////////////////////
 		// Circular Buffer 
+		//  - Single thread input, single thread output.
+		//  - Input and output thread can be different
 
 		template <typename T, int SIZE_BUFFER = 3>
 		class CircularQueue

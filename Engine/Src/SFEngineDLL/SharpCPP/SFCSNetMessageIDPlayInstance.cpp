@@ -32,21 +32,7 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinGameInstanceRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinGameInstanceRes()
 
 
-// S2C: Event for Player joined.
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerJoinedS2CEvt()
-{
- 	return SF::Message::PlayInstance::PlayerJoinedS2CEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerJoinedS2CEvt()
-
-
-// S2C: Event for Player left.
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerLeftS2CEvt()
-{
- 	return SF::Message::PlayInstance::PlayerLeftS2CEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerLeftS2CEvt()
-
-
-// S2C: Player kicked event. this event will be brocasted when a player kicked.
+// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerKickedS2CEvt()
 {
  	return SF::Message::PlayInstance::PlayerKickedS2CEvt::MID.IDSeq.MsgID;

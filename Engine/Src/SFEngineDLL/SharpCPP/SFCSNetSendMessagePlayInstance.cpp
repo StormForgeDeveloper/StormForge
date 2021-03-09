@@ -20,40 +20,40 @@ using namespace SF;
 
 
 // Cmd: Event for Player Join request.
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceID, PlayerID InPlayerID, const char* InPlayerIdentifier )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::JoinGameInstanceCmd::Create(pConnection->GetHeap(), InTransactionID, InPlayInstanceID, InPlayerID,InPlayerIdentifier);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::JoinGameInstanceCmd::Create(pConnection->GetHeap(), InTransactionID, InPlayInstanceUID, InPlayerID,InPlayerIdentifier);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceID, PlayerID InPlayerID, const char* InPlayerIdentifier )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
 
 
 // C2S: Play packet
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayPacketC2SEvt( intptr_t InNativeConnectionHandle, uint32_t InPlayInstanceID, uint32_t InSenderEndpointID, uint32_t InTargetEndpointMask, uint16_t _sizeOfInPayload,const uint8_t* InPayload )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayPacketC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, uint32_t InSenderEndpointID, uint32_t InTargetEndpointMask, uint16_t _sizeOfInPayload,const uint8_t* InPayload )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayPacketC2SEvt::Create(pConnection->GetHeap(), InPlayInstanceID, InSenderEndpointID, InTargetEndpointMask,SF::ArrayView<uint8_t>(_sizeOfInPayload, _sizeOfInPayload, const_cast<uint8_t*>(InPayload)));
+	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayPacketC2SEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InSenderEndpointID, InTargetEndpointMask,SF::ArrayView<uint8_t>(_sizeOfInPayload, _sizeOfInPayload, const_cast<uint8_t*>(InPayload)));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayPacketC2SEvt( intptr_t InNativeConnectionHandle, uint32_t InPlayInstanceID, uint32_t InSenderEndpointID, uint32_t InTargetEndpointMask, uint16_t _sizeOfInPayload,const uint8_t* InPayload )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayPacketC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, uint32_t InSenderEndpointID, uint32_t InTargetEndpointMask, uint16_t _sizeOfInPayload,const uint8_t* InPayload )
 
 
 
 // C2S: Player Movement
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, PlayerID InPlayerID, const ActorMovement& InMovement )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerMovementC2SEvt::Create(pConnection->GetHeap(), InGameInsUID, InPlayerID,InMovement);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerMovementC2SEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,InMovement);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, PlayerID InPlayerID, const ActorMovement& InMovement )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
 
 
 
@@ -108,93 +108,67 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceGetStreamListCmd( intptr_t InNative
 
 
 // Cmd: Event for Player Join request.
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceID, PlayerID InPlayerID )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMovementFrame )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::JoinGameInstanceRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InPlayInstanceID, InPlayerID);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::JoinGameInstanceRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMovementFrame);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceID, PlayerID InPlayerID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMovementFrame )
 
 
 
-// S2C: Event for Player joined.
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerJoinedS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InPlayInstanceID, const PlayerInformation& InJoinedPlayerInfo )
+// S2C: Player kicked event. this event will be broadcasted when a player kicked.
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InKickedPlayerID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerJoinedS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceID,InJoinedPlayerInfo);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerKickedS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InKickedPlayerID);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerJoinedS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InPlayInstanceID, const PlayerInformation& InJoinedPlayerInfo )
-
-
-
-// S2C: Event for Player left.
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerLeftS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InPlayInstanceID, PlayerID InLeftPlayerID, uint32_t InKickedReason )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerLeftS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceID, InLeftPlayerID, InKickedReason);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerLeftS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InPlayInstanceID, PlayerID InLeftPlayerID, uint32_t InKickedReason )
-
-
-
-// S2C: Player kicked event. this event will be brocasted when a player kicked.
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt( intptr_t InNativeConnectionHandle, PlayerID InKickedPlayerID )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerKickedS2CEvt::Create(pConnection->GetHeap(), InKickedPlayerID);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt( intptr_t InNativeConnectionHandle, PlayerID InKickedPlayerID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InKickedPlayerID )
 
 
 
 // S2C: New Player in get view
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::NewPlayerInViewS2CEvt::Create(pConnection->GetHeap(), InGameInsUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInAttributes, _sizeOfInAttributes, InAttributes));
+	MessageDataPtr pMessage = SF::Message::PlayInstance::NewPlayerInViewS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInAttributes, _sizeOfInAttributes, InAttributes));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
 
 
 
 // S2C: Remove player from view
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::RemovePlayerFromViewS2CEvt::Create(pConnection->GetHeap(), InGameInsUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInAttributes, _sizeOfInAttributes, InAttributes));
+	MessageDataPtr pMessage = SF::Message::PlayInstance::RemovePlayerFromViewS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInAttributes, _sizeOfInAttributes, InAttributes));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
 
 
 
 // S2C: Player Movement
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, PlayerID InPlayerID, const ActorMovement& InMovement )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerMovementS2CEvt::Create(pConnection->GetHeap(), InGameInsUID, InPlayerID,InMovement);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerMovementS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,InMovement);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InGameInsUID, PlayerID InPlayerID, const ActorMovement& InMovement )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
 
 
 

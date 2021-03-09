@@ -33,11 +33,11 @@ namespace SF
 		{}
 
 		// Cmd: Event for Player Join request.
-		Result JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
+		Result JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
 		// C2S: Play packet
-		Result PlayPacketC2SEvt( const uint32_t &InPlayInstanceID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
+		Result PlayPacketC2SEvt( const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
 		// C2S: Player Movement
-		Result PlayerMovementC2SEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
+		Result PlayerMovementC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 		// Cmd: Create stream instance
 		Result CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 		// Cmd: Open stream instance
@@ -60,19 +60,15 @@ namespace SF
 		{}
 
 		// Cmd: Event for Player Join request.
-		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceID, const PlayerID &InPlayerID );
-		// S2C: Event for Player joined.
-		Result PlayerJoinedS2CEvt( const uint32_t &InPlayInstanceID, const PlayerInformation &InJoinedPlayerInfo );
-		// S2C: Event for Player left.
-		Result PlayerLeftS2CEvt( const uint32_t &InPlayInstanceID, const PlayerID &InLeftPlayerID, const uint32_t &InKickedReason );
-		// S2C: Player kicked event. this event will be brocasted when a player kicked.
-		Result PlayerKickedS2CEvt( const PlayerID &InKickedPlayerID );
+		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMovementFrame );
+		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
+		Result PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID );
 		// S2C: New Player in get view
-		Result NewPlayerInViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+		Result NewPlayerInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
 		// S2C: Remove player from view
-		Result RemovePlayerFromViewS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+		Result RemovePlayerFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
 		// S2C: Player Movement
-		Result PlayerMovementS2CEvt( const uint64_t &InGameInsUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
+		Result PlayerMovementS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 		// Cmd: Create stream instance
 		Result CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
 		// Cmd: Open stream instance
