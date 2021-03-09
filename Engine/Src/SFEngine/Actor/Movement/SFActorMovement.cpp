@@ -222,7 +222,7 @@ namespace SF
 
 	void ReceivedActorMovementManager::ResetMove()
 	{
-		m_LastestMove = {};
+		m_LatestMove = {};
 		m_LatestFrame = 0;
 
 		m_Moves.ClearQueue();
@@ -281,7 +281,7 @@ namespace SF
 
 		if (move1 == nullptr)
 		{
-			Simulate(MoveFrame, m_LastestMove, m_MoveExpected);
+			Simulate(MoveFrame, m_LatestMove, m_MoveExpected);
 		}
 		else if (move2 == nullptr)
 		{
@@ -293,15 +293,15 @@ namespace SF
 			Simulate(*move1, *move2, MoveFrame, deltaTime, m_MoveExpected);
 		}
 
-		Vector4& Pc = m_LastestMove.Position;
+		Vector4& Pc = m_LatestMove.Position;
 		Vector4& Pe = m_MoveExpected.Position;
 		Vector4 Vart = CalculateArtificialDelta(Pc, Pe, deltaTime);
 
-		m_LastestMove.Position += Vart * deltaTime;
-		m_LastestMove.LinearVelocity = m_MoveExpected.LinearVelocity;
-		m_LastestMove.MovementState = m_MoveExpected.MovementState;
-		m_LastestMove.AngularYaw = m_MoveExpected.AngularYaw;
-		outCurMove = m_LastestMove;
+		m_LatestMove.Position += Vart * deltaTime;
+		m_LatestMove.LinearVelocity = m_MoveExpected.LinearVelocity;
+		m_LatestMove.MovementState = m_MoveExpected.MovementState;
+		m_LatestMove.AngularYaw = m_MoveExpected.AngularYaw;
+		outCurMove = m_LatestMove;
 
 		return ResultCode::SUCCESS;
 	}

@@ -657,6 +657,16 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
+	Result OnlineClient::GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement)
+	{
+		SharedPointerT<ReceivedActorMovementManager> movement;
+		if (!m_IncomingMovements.Find(playerId, movement))
+			return ResultCode::OBJECT_NOT_FOUND;
+
+		outMovement = movement->GetLatestMovement();
+		return ResultCode::SUCCESS;
+	}
+
 	void OnlineClient::SetOnlineState(OnlineState newState)
 	{
 		if (m_OnlineState == newState)

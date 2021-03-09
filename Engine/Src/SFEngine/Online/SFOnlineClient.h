@@ -25,6 +25,7 @@ namespace SF
 		class Connection;
 	}
 
+	struct ActorMovement;
 	class SendingActorMovementManager;
 	class ReceivedActorMovementManager;
 
@@ -143,6 +144,8 @@ namespace SF
 
 		EventDelegateList<OnlineState, OnlineState>& GetOnlineStateEventDelegate() { return m_OnlineStateDelegate; }
 
+
+		Result GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement);
 
 
 	private:

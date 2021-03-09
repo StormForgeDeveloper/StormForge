@@ -228,3 +228,13 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeSetOnlineStateCallback(intptr_t native
 
 	return ResultCode::SUCCESS;
 }
+
+SFDLL_EXPORT int32_t SFOnlineClient_NativeGetMovementForPlayer(intptr_t nativeHandle, uint64_t playerId, SF::ActorMovement& actorMovement)
+{
+	if (nativeHandle == 0)
+		return ResultCode::NOT_INITIALIZED;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	return pOnlineClient->GetMovementForPlayer(playerId, actorMovement);
+}

@@ -147,6 +147,11 @@ namespace SF
             return null;
         }
 
+        public Result GetMovementForPlayer(UInt64 playerId, out ActorMovement movement)
+        {
+            return new Result(NativeGetMovementForPlayer(NativeHandle, playerId, out movement));
+        }
+
         #region Event Receiving
 
         static internal OnlineClient stm_StaticEventReceiver = null;
@@ -245,6 +250,9 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeSetOnlineStateCallback", CharSet = CharSet.Auto)]
         static extern Int32 NativeSetOnlineStateCallback(IntPtr nativeHandle, ONLINE_STATECHAGED_CALLBACK setEventFunc);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForPlayer", CharSet = CharSet.Auto)]
+        static extern Int32 NativeGetMovementForPlayer(IntPtr nativeHandle, UInt64 playerId, out ActorMovement actorMovement);
 
         #endregion
     }

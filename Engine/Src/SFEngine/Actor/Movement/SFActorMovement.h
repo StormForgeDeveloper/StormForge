@@ -136,6 +136,8 @@ namespace SF
 
 		void ResetMove();
 
+		const ActorMovement& GetLatestMovement() const { return m_LatestMove; }
+
 		Result SimulateCurrentMove(uint32_t MoveFrame, ActorMovement& outCurMove);
 
 	protected:
@@ -155,7 +157,7 @@ namespace SF
 
 		// Latest calculation information
 		uint32_t m_LatestFrame = 0;
-		ActorMovement m_LastestMove{};
+		ActorMovement m_LatestMove{};
 		ActorMovement m_MoveExpected{};
 	};
 
