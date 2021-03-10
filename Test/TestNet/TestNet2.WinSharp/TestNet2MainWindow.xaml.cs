@@ -260,12 +260,6 @@ namespace TestNet2.WinSharp
             if (res.IsFailed)
             {
             }
-            //var gameConn = m_OnlineClient.GetConnection(OnlineClient.ConnectionType.Game);
-            //if (gameConn == null)
-            //    return;
-
-            //var gamePolicy = new SF.Net.SendMessageGame(gameConn);
-            //gamePolicy.JoinGameInstanceCmd(0, selectedZone.ZoneInstanceId);
         }
 
         #region Message handling

@@ -123,8 +123,16 @@ namespace SF
             return (OnlineState)NativeGetOnlineState(NativeHandle);
         }
 
+#if UNITY_EDITOR
+        static bool PrintOnlineStateChangeDebug = true;
+#endif
         static void OnOnlineStateChanged_Internal(OnlineState prevState, OnlineState newState)
         {
+#if UNITY_EDITOR
+
+            if (PrintOnlineStateChangeDebug)
+                UnityEngine.Debug.Log(string.Format("OnOnlineStateChanged InvokeCount = {0}", OnOnlineStateChanged?.GetInvocationList().Length));
+#endif
             OnOnlineStateChanged?.Invoke(null, prevState, newState);
         }
 
