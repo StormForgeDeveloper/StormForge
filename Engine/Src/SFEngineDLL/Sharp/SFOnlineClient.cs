@@ -75,8 +75,6 @@ namespace SF
         {
             NativeHandle = NativeCreateOnlineClient();
             m_MessageRouter = messageRouter;
-
-            NativeSetOnlineStateCallback(NativeHandle, OnOnlineStateChanged_Internal);
         }
 
         public Result StartConnection(string gameId, string loginAddress, string userId, string password)
@@ -99,11 +97,13 @@ namespace SF
         public void UpdateGameTick()
         {
             UInt32 deltaFrames = 1;
+
             lock (SFMessageParsingUtil.stm_ParsingLock)
             {
                 stm_StaticEventReceiver = this;
 
-                NativeUpdateGameTick(NativeHandle, 
+                NativeUpdateGameTick(NativeHandle,
+                    OnOnlineStateChanged_Internal,
                     OnEvent_Internal,
                     SFMessageParsingUtil.MessageParseCreateCallback,
                     SFMessageParsingUtil.MessageParseSetValue,
@@ -240,16 +240,13 @@ namespace SF
         static extern UInt64 NativeGetGameInstanceUID(IntPtr nativeHandle);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeUpdateGameTick", CharSet = CharSet.Auto)]
-        static extern Int32 NativeUpdateGameTick(IntPtr nativeHandle, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady);
+        static extern Int32 NativeUpdateGameTick(IntPtr nativeHandle, ONLINE_STATECHAGED_CALLBACK setOnlineStateEventFunc, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeUpdateMovement", CharSet = CharSet.Auto)]
         static extern Int32 NativeUpdateMovement(IntPtr nativeHandle, UInt32 deltaFrames);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetConnection", CharSet = CharSet.Auto)]
         static extern IntPtr NativeGetConnection(IntPtr nativeHandle, Int32 connectionIndex);
-
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeSetOnlineStateCallback", CharSet = CharSet.Auto)]
-        static extern Int32 NativeSetOnlineStateCallback(IntPtr nativeHandle, ONLINE_STATECHAGED_CALLBACK setEventFunc);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForPlayer", CharSet = CharSet.Auto)]
         static extern Int32 NativeGetMovementForPlayer(IntPtr nativeHandle, UInt64 playerId, out ActorMovement actorMovement);

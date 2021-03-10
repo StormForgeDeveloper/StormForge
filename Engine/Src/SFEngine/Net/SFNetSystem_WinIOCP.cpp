@@ -309,7 +309,7 @@ namespace Net {
 						IOBUFFER_READ *pIOBuffer = (IOBUFFER_READ*)pOverlapped;
 						SocketIO *pCallback = (SocketIO*)ulKey;
 						pIOBuffer->TransferredSize = dwTransferred;
-						SFLog(Net, Debug3, "Recv From:{0}, To:{1}, Size{2}", pIOBuffer->NetAddr.From, pIOBuffer->NetAddr.To, pIOBuffer->TransferredSize);
+						SFLog(Net, Debug3, "Recv From:{0}, To:{1}, Size:{2}, err:{3}, hr:{4}", pIOBuffer->NetAddr.From, pIOBuffer->NetAddr.To, pIOBuffer->TransferredSize, iLastError, hr);
 						hr = pCallback->OnIORecvCompleted( hr, pIOBuffer );
 						pIOBuffer = nullptr;
 						pOverlapped = nullptr;

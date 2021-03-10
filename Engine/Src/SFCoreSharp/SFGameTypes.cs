@@ -206,7 +206,7 @@ namespace SF
     }
 
     [Struct]
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct ActorMovement
     {
         Vector4 Position;

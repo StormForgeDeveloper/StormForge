@@ -484,7 +484,7 @@ namespace Net {
 			IncZeroRecvCount();
 			if( GetZeroRecvCount() > (uint32_t)Const::CONNECTION_ZEROPACKET_MAX )
 			{
-				SFLog(Net, Debug3, "TCP RecvBuf, too many zero size packet, {1}", GetZeroRecvCount());
+				SFLog(Net, Debug3, "TCP RecvBuf, too many zero size packet, {0}", GetZeroRecvCount());
 				//ResetZeroRecvCount();
 				Disconnect("Too many zero packets");
 			}

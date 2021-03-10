@@ -110,7 +110,7 @@ SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetGameInstanceUID(intptr_t nativeHan
 	return uint64_t(pOnlineClient->GetGameInstanceUID());
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, ONLINE_STATECHAGED_CALLBACK stateChangedCallback, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
@@ -153,6 +153,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, 
 		pOnlineClient->GetConnectionGameInstance()->GetRecvMessageDelegates().AddDelegateUnique(1, messageHandler);
 	}
 
+	pOnlineClient->SetStateChangeCallback(stateChangedCallback);
 
 	pOnlineClient->UpdateGameTick();
 
@@ -174,6 +175,8 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, 
 		pOnlineClient->GetConnectionGameInstance()->GetConnectionEventDelegates().RemoveDelegateAll(1);
 		pOnlineClient->GetConnectionGameInstance()->GetRecvMessageDelegates().RemoveDelegateAll(1);
 	}
+
+	pOnlineClient->SetStateChangeCallback(nullptr);
 
 
 	return ResultCode::SUCCESS;
@@ -214,19 +217,6 @@ SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetConnection(intptr_t nativeHandle, 
 	}
 
 	return 0;
-}
-
-SFDLL_EXPORT int32_t SFOnlineClient_NativeSetOnlineStateCallback(intptr_t nativeHandle, ONLINE_STATECHAGED_CALLBACK stateChangedCallback)
-{
-	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
-
-	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
-
-	pOnlineClient->GetOnlineStateEventDelegate().RemoveDelegateAll();
-	pOnlineClient->GetOnlineStateEventDelegate().AddDelegate(nativeHandle, stateChangedCallback);
-
-	return ResultCode::SUCCESS;
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeGetMovementForPlayer(intptr_t nativeHandle, uint64_t playerId, SF::ActorMovement& actorMovement)

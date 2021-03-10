@@ -66,6 +66,13 @@ namespace SF
 			Disconnected,
 		};
 
+		struct OnlineStateChangedEventArgs
+		{
+			OnlineState PrevState = OnlineState::None;
+			OnlineState NewState = OnlineState::None;
+		};
+
+		typedef void(*ONLINESTATE_CHAGED_CALLBACK)(OnlineClient::OnlineState prevState, OnlineClient::OnlineState newState);
 
 
 		/////////////////////////////////////////////////////////////////////////////////////
@@ -115,6 +122,7 @@ namespace SF
 		void UpdateGameTick();
 
 		void UpdateTasks();
+		void UpdateOnlineState();
 
 		void UpdateMovement(uint32_t deltaFrames);
 
@@ -142,11 +150,9 @@ namespace SF
 		const SharedPointerT<Net::Connection>& GetConnectionGameInstance() const { return m_GameInstance; }
 
 
-		EventDelegateList<OnlineState, OnlineState>& GetOnlineStateEventDelegate() { return m_OnlineStateDelegate; }
-
-
 		Result GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement);
 
+		void SetStateChangeCallback(ONLINESTATE_CHAGED_CALLBACK callback) { m_OnlineStateChangedCallback = callback; }
 
 	private:
 
@@ -211,8 +217,12 @@ namespace SF
 		// Move frame
 		uint32_t m_MoveFrame{};
 
-		EventDelegateList<OnlineState, OnlineState> m_OnlineStateDelegate;
+		CircularPageQueue<OnlineStateChangedEventArgs> m_OnlineStateChangedQueue;
+		ONLINESTATE_CHAGED_CALLBACK m_OnlineStateChangedCallback{};
 	};
 
+
 }
+
+template<> inline bool IsDefaultValue(const SF::OnlineClient::OnlineStateChangedEventArgs& value) { return value.PrevState == SF::OnlineClient::OnlineState::None && value.NewState == SF::OnlineClient::OnlineState::None; }
 

@@ -580,7 +580,7 @@ namespace SF
 	OnlineClient::OnlineClient(IHeap& heap)
 		: EngineObject(new(heap) IHeap("OnlineClient", &heap), "OnlineClient")
 		, m_IncomingMovements(GetHeap())
-		, m_OnlineStateDelegate(GetHeap())
+		, m_OnlineStateChangedQueue(GetHeap())
 	{
 	}
 
@@ -676,7 +676,7 @@ namespace SF
 
 		m_OnlineState = newState;
 
-		m_OnlineStateDelegate.Invoke(prevState, newState);
+		m_OnlineStateChangedQueue.Enqueue(OnlineStateChangedEventArgs{ prevState, newState });
 	}
 
 	void OnlineClient::Disconnect(SharedPointerT<Net::Connection>& pConn)
@@ -745,6 +745,7 @@ namespace SF
 		}
 
 		UpdateTasks();
+		UpdateOnlineState();
 	}
 
 	void OnlineClient::UpdateTasks()
@@ -768,6 +769,19 @@ namespace SF
 			m_PendingTasks.RemoveAt(0);
 
 			m_CurrentTask->Initialize();
+		}
+	}
+
+	void OnlineClient::UpdateOnlineState()
+	{
+		OnlineStateChangedEventArgs args;
+		while (m_OnlineStateChangedQueue.Dequeue(args))
+		{
+			SFLog(Net, Info, "OnlineStateChanged, {0} -> {1}", (uint32_t)args.PrevState, (uint32_t)args.NewState);
+			if (m_OnlineStateChangedCallback)
+			{
+				m_OnlineStateChangedCallback(args.PrevState, args.NewState);
+			}
 		}
 	}
 
