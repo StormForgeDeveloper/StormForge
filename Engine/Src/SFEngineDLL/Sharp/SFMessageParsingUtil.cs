@@ -102,6 +102,9 @@ namespace SF
                 case "NetAddress":
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(NetAddress)));
                     break;
+                case "MatchingQueueTicket":
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(MatchingQueueTicket)));
+                    break;
                 case "PlayerInformation":
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(PlayerInformation)));
                     break;
