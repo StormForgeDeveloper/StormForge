@@ -242,7 +242,7 @@ namespace Net {
 	{
 	}
 
-	// called when reciving message
+	// called when receiving message
 	Result ServerUDP::OnIORecvCompleted( Result hrRes, IOBUFFER_READ* &pIOBuffer )
 	{
 		Result hr = ResultCode::SUCCESS;
@@ -259,9 +259,9 @@ namespace Net {
 			{
 			case (uint32_t)ResultCode::IO_CONNECTION_CLOSED:
 			case (uint32_t)ResultCode::IO_IO_ABORTED:
-				if ((Service::ConnectionManager->GetConnectionByAddr(from, pConnection)))
+				if (Service::ConnectionManager->GetConnectionByAddr(from, pConnection))
 				{
-					SFLog(Net, Info, "UDP bad connection state IP:{0}", from);
+					SFLog(Net, Debug1, "UDP bad connection state IP:{0}, hr:{1}", from, hrRes);
 				}
 				hr = hrRes;
 				break;
