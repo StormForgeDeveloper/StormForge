@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -15,6 +15,7 @@
 #include "MemoryManager/SFMemoryPool.h"
 #include "Object/SFSharedPointer.h"
 #include "Container/SFDualSortedMap.h"
+#include "Container/SFCircularPageQueue.h"
 #include "Util/SFTimeUtil.h"
 #include "Multithread/SFSystemSynchronization.h"
 #include "Task/SFTimerSchedulerAction.h"
@@ -28,8 +29,6 @@ namespace SF {
 	// Shared object base
 	class TimerScheduler
 	{
-	public:
-
 	private:
 		// Minimum timer tick time when the action doesn't assigned a valid tick time
 		DurationMS m_FailSafeTimerTickInterval;
@@ -39,10 +38,12 @@ namespace SF {
 
 		// timer map
 		DualSortedMap<uint64_t, SharedPointerT<TimerAction>> m_TimerMap;
-		//BR::CriticalSection m_WriteLock;
 		ThreadID m_WorkingThreadID;
 
-		std::atomic<int> m_IsWriteLocked;
+		// objects needs reschedule
+		CircularPageQueue<SharedPointerT<TimerAction>> m_RescheduleQueue;
+
+		//std::atomic<int> m_IsWriteLocked;
 
 		std::function<bool(const uint64_t&, const SharedPointerT<TimerAction>&)> m_TimerTickActionUpdate;
 		bool TimerTickActionUpdate(const uint64_t& keyVal, const SharedPointerT<TimerAction>& pAction);
@@ -51,9 +52,10 @@ namespace SF {
 		std::function<bool(const uint64_t&, const SharedPointerT<TimerAction>&)> m_TimerTickActionGetNextTick;
 		bool TimerTickActionGetNextTick(const uint64_t& keyVal, const SharedPointerT<TimerAction>& pAction);
 
+		void UpdateRescheduleQueue();
 	public:
 
-		TimerScheduler(IHeap& memoryManager);
+		TimerScheduler(IHeap& heap);
 
 		void Clear();
 
@@ -71,8 +73,7 @@ namespace SF {
 
 		TimeStampMS GetNextTimeTick();
 
-		CounterType GetScheduledItemCount()								{ return m_TimerMap.size(); }
-		CounterType GetChangedItemCount()								{ return m_TimerMap.GetWriteItemCount(); }
+		CounterType GetScheduledItemCount()								{ return m_TimerMap.GetWriteItemCount() + m_RescheduleQueue.size(); }
 
 		void ValidateTimerKeys();
 
@@ -80,5 +81,5 @@ namespace SF {
 	};
 
 
-}; // namespace SF
+} // namespace SF
 

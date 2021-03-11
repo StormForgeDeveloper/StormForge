@@ -59,13 +59,28 @@ namespace SF
 
 	Result _ToString(ToStringContext& context, const ActorMovement& value)
 	{
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(F:"))
+			return ResultCode::FAIL;
+
+		auto oldRadis = context.Radix;
+		context.Radix = 16;
+		if (!_IToA(context, value.MoveFrame))
+			return ResultCode::FAIL;
+		context.Radix = oldRadis;
+		
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ",P:"))
+			return ResultCode::FAIL;
+
 		if (!_ToString(context, value.Position))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":"))
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ",V:"))
 			return ResultCode::FAIL;
 
 		if (!_ToString(context, value.LinearVelocity))
+			return ResultCode::FAIL;
+
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;
@@ -136,7 +151,12 @@ namespace SF
 
 			*pNewMove = newMove;
 
-			return EnqueueMovement_Internal(pNewMove);
+			auto res = EnqueueMovement_Internal(pNewMove);
+
+			if (res != ResultCode::SUCCESS)
+				FreeMovement(pNewMove);
+
+			return res;
 	}
 
 	Result ActorMovementManager::EnqueueMovement_Internal(ActorMovement* pMove)
@@ -155,6 +175,7 @@ namespace SF
 				FreeMovement(pRemove);
 		}
 
+		m_LatestQueuedFrame = pMove->MoveFrame;
 		return m_Moves.Enqueue(pMove);
 	}
 
@@ -235,8 +256,7 @@ namespace SF
 		if (m_LatestFrame > MoveFrame)
 			return ResultCode::IO_INVALID_SEQUENCE;// drop out of sequenced move
 
-		auto prevFrame = m_LatestFrame;
-		m_LatestFrame = MoveFrame;
+		auto prevFrame = m_LatestMove.MoveFrame;
 
 		const ActorMovement* move1 = nullptr, * move2 = nullptr;
 
@@ -301,6 +321,7 @@ namespace SF
 		m_LatestMove.LinearVelocity = m_MoveExpected.LinearVelocity;
 		m_LatestMove.MovementState = m_MoveExpected.MovementState;
 		m_LatestMove.AngularYaw = m_MoveExpected.AngularYaw;
+		m_LatestMove.MoveFrame = MoveFrame;
 		outCurMove = m_LatestMove;
 
 		return ResultCode::SUCCESS;
@@ -322,6 +343,7 @@ namespace SF
 				FreeMovement(pRemove);
 		}
 
+		m_LatestQueuedFrame = pMove->MoveFrame;
 		return m_Moves.Enqueue(pMove);
 	}
 

@@ -75,9 +75,8 @@ namespace Net {
 				break;
 			case NetCtrlCode_Heartbeat:
 			case NetCtrlCode_SyncReliable:
-				break;
 			case NetCtrlCode_TimeSync:
-
+				// Called already
 				break;
 			default:
 				SFLog(Net, Warning, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
@@ -140,6 +139,7 @@ namespace Net {
 			case NetCtrlCode_Heartbeat:
 			case NetCtrlCode_SyncReliable:
 			case NetCtrlCode_TimeSync:
+				// Called already
 				break;
 			default:
 				SFLog(Net, Warning, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);

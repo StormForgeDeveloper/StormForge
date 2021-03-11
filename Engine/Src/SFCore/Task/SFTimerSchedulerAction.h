@@ -46,7 +46,7 @@ namespace SF {
 	private:
 
 		TimeKey m_InQueueKey;
-		bool    m_Queued;
+		//bool    m_Queued;
 		friend class TimerScheduler;
 
 		DurationMS m_TickInterval;
