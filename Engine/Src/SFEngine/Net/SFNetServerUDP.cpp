@@ -332,7 +332,11 @@ namespace Net {
 			}
 		}
 
-		GetSocketIO()->DecPendingRecvCount();
+
+		if (NetSystem::IsProactorSystem())
+		{
+			GetSocketIO()->DecPendingRecvCount();
+		}
 
 		return hr;
 	}
