@@ -48,11 +48,22 @@ namespace TestNet2.WinSharp
 
             UpdateButtonState();
 
+            OnlineClient.OnOnlineStateChanged += (object sender, OnlineClient.OnlineState prevState, OnlineClient.OnlineState newState) =>
+            {
+                UpdateStatusText(newState);
+            };
+            UpdateStatusText(OnlineClient.OnlineState.None);
+
 
             m_TickTimer = new System.Windows.Threading.DispatcherTimer();
             m_TickTimer.Tick += new EventHandler(Timer_Tick);
             m_TickTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             m_TickTimer.Start();
+        }
+
+        void UpdateStatusText(SF.OnlineClient.OnlineState status)
+        {
+            textOnlineStatus.Content = status.ToString();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -61,6 +72,8 @@ namespace TestNet2.WinSharp
                 return;
 
             m_OnlineClient.UpdateGameTick();
+
+            m_OnlineClient.SendMovement(ref m_MyMove);
         }
 
         void UpdateButtonState()
@@ -158,7 +171,7 @@ namespace TestNet2.WinSharp
             listCharacter.Items.Clear();
             listZone.Items.Clear();
 
-             SavedValueRegistry.SaveValue("LoginName", userId);
+            SavedValueRegistry.SaveValue("LoginName", userId);
 
             var loginAddress = txtLoginServer.Text;
             SavedValueRegistry.SaveValue("LoginServer", loginAddress);
@@ -217,7 +230,7 @@ namespace TestNet2.WinSharp
                 return;
 
             var gamePolicy = new SF.Net.SendMessageGame(gameConn);
-            var charName = string.Format("testchar{0}{1}", txtLoginName.Text, m_Rand.Next()%100);
+            var charName = string.Format("testchar{0}{1}", txtLoginName.Text, m_Rand.Next() % 100);
 
             var visualConfig = new VariableTable();
             visualConfig.Add(new StringCrc32("sex"), 1);
@@ -259,6 +272,34 @@ namespace TestNet2.WinSharp
             var res = m_OnlineClient.JoinGameInstance(selectedZone.ZoneInstanceId);
             if (res.IsFailed)
             {
+            }
+        }
+
+        ActorMovement m_MyMove = new ActorMovement();
+        private void OnClickedMove(object sender, RoutedEventArgs e)
+        {
+            if (m_OnlineClient == null)
+                return;
+
+            if (sender == btnMoveUp)
+            {
+                m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame();
+                m_MyMove.Position.z += 3;
+            }
+            else if (sender == btnMoveDown)
+            {
+                m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame();
+                m_MyMove.Position.z -= 3;
+            }
+            else if (sender == btnMoveRight)
+            {
+                m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame();
+                m_MyMove.Position.x += 3;
+            }
+            else if (sender == btnMoveLeft)
+            {
+                m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame();
+                m_MyMove.Position.x -= 3;
             }
         }
 
@@ -438,4 +479,4 @@ namespace TestNet2.WinSharp
         #endregion
 
     }
-    }
+}

@@ -90,12 +90,10 @@ TEST_F(MovementTest, ActorMovementSimple)
 
 
 		// pump  sending move to 
-		ActorMovement* pMove = nullptr;
+		ActorMovement pMove;
 		while (sendingMove->DequeueMovement(pMove))
 		{
-			receivedMove->EnqueueMovement(*pMove);
-
-			sendingMove->FreeMovement(pMove);
+			receivedMove->EnqueueMovement(pMove);
 		}
 
 		// read and processing

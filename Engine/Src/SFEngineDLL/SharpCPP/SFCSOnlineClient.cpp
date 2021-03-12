@@ -21,13 +21,13 @@
 #include "Net/SFMessage.h"
 #include "Protocol/SFProtocol.h"
 #include "Online/SFOnlineClient.h"
-
+#include "Actor/Movement/SFActorMovement.h"
 #include "SFCSUtil.h"
 
 
 namespace SF
 {
-	typedef void(*ONLINE_STATECHAGED_CALLBACK)(OnlineClient::OnlineState prevState, OnlineClient::OnlineState newState);
+	typedef void(*ONLINE_STATECHANGED_CALLBACK)(OnlineClient::OnlineState prevState, OnlineClient::OnlineState newState);
 
 }
 
@@ -110,7 +110,7 @@ SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetGameInstanceUID(intptr_t nativeHan
 	return uint64_t(pOnlineClient->GetGameInstanceUID());
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, ONLINE_STATECHAGED_CALLBACK stateChangedCallback, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, ONLINE_STATECHANGED_CALLBACK stateChangedCallback, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
@@ -228,3 +228,30 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeGetMovementForPlayer(intptr_t nativeHa
 
 	return pOnlineClient->GetMovementForPlayer(playerId, actorMovement);
 }
+
+SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetCurrentMoveFrame(intptr_t nativeHandle)
+{
+	if (nativeHandle == 0)
+		return ResultCode::NOT_INITIALIZED;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	return pOnlineClient->GetCurrentMovementFrame();
+}
+
+SFDLL_EXPORT int32_t SFOnlineClient_NativeSendMovement(intptr_t nativeHandle, const ActorMovement& newMove)
+{
+	if (nativeHandle == 0)
+		return ResultCode::NOT_INITIALIZED;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	if (pOnlineClient->GetSendMovementManager() == nullptr)
+		return ResultCode::INVALID_STATE;
+
+	// ActorMovement requires special memory alignment, copy incoming data to local storage
+	ActorMovement tempMove = newMove;
+
+	return pOnlineClient->GetSendMovementManager()->EnqueueMovement(tempMove);
+}
+

@@ -2,6 +2,7 @@
 
 
 set(SFENGINEDLL_LIB_FILES
+	SharpCPP/SFCSActorMovement.cpp
   	SharpCPP/SFCSConnection.cpp
 	SharpCPP/SFCSConnectionGroup.cpp
 	SharpCPP/SFCSEngine.Android.cpp

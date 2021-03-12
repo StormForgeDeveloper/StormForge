@@ -168,7 +168,8 @@ namespace SF {
 	MemBlockHdr* IHeap::AllocInternal(size_t size, size_t alignment)
 	{
 		assert(GetParent() != nullptr);
-		if (GetParent() == nullptr) return nullptr;
+		if (GetParent() == nullptr)
+			return nullptr;
 
 		MemBlockHdr* pMemBlock = GetParent()->AllocInternal(size, alignment);
 		if (pMemBlock != nullptr)
@@ -240,7 +241,8 @@ namespace SF {
 	{
 
 		MemBlockHdr* pMemBlock = AllocInternal(size, alignment);
-		if (pMemBlock == nullptr) return nullptr;
+		if (pMemBlock == nullptr)
+			return nullptr;
 #if ENABLE_MEMORY_TRACE
 		if (!GetIgnoreMemoryLeak())
 		{

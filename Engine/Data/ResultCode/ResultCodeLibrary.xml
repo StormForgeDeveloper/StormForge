@@ -182,6 +182,7 @@
 	<ResultCodeItem Severity="Error" CodeName="NOT_SUPPORTED_FORMAT" Desc="Format is not supported"/>
 	<ResultCodeItem Severity="Error" CodeName="INVALID_FORMAT" Desc="Format is not valid"/>
 	<ResultCodeItem Severity="Error" CodeName="INVALID_FILE" Desc="Failed to open file"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_FRAME" Desc="Invalid frame"/>
 
 	<!-- Script -->
 	<ResultCodeItem Severity="Error" CodeName="VARIABLE_NOT_FOUND" Desc="Specific variable not found"/>

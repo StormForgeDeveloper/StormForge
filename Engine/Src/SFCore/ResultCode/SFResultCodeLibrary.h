@@ -522,23 +522,26 @@ namespace SF {
 			// Failed to open file 
 			constexpr Result 			INVALID_FILE                                                       ((int32_t)0xE70100A7L);
 
+			// Invalid frame 
+			constexpr Result 			INVALID_FRAME                                                      ((int32_t)0xE70100A8L);
+
 			// Specific variable not found 
-			constexpr Result 			VARIABLE_NOT_FOUND                                                 ((int32_t)0xE70100A8L);
+			constexpr Result 			VARIABLE_NOT_FOUND                                                 ((int32_t)0xE70100A9L);
 
 			// Specific function not found 
-			constexpr Result 			FUNCTION_NOT_FOUND                                                 ((int32_t)0xE70100A9L);
+			constexpr Result 			FUNCTION_NOT_FOUND                                                 ((int32_t)0xE70100AAL);
 
 			// Specific object not found 
-			constexpr Result 			OBJECT_NOT_FOUND                                                   ((int32_t)0xE70100AAL);
+			constexpr Result 			OBJECT_NOT_FOUND                                                   ((int32_t)0xE70100ABL);
 
 			// Invalid stream ID 
-			constexpr Result 			INVALID_STREAMID                                                   ((int32_t)0xE70100ABL);
+			constexpr Result 			INVALID_STREAMID                                                   ((int32_t)0xE70100ACL);
 
 			// Generic DB failure 
-			constexpr Result 			DB_FAILURE                                                         ((int32_t)0xE70100ACL);
+			constexpr Result 			DB_FAILURE                                                         ((int32_t)0xE70100ADL);
 
 			// Service is not available 
-			constexpr Result 			SERVICE_NOT_AVAILABLE                                              ((int32_t)0xE70100ADL);
+			constexpr Result 			SERVICE_NOT_AVAILABLE                                              ((int32_t)0xE70100AEL);
 
 	}//namespace ResultCode 
 }//namespace SF 

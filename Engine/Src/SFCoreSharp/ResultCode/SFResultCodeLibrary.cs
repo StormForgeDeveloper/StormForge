@@ -518,23 +518,26 @@ namespace SF {
 		// Failed to open file 
 		public const int INVALID_FILE =                                     unchecked((int)0xE70100A7); 
 
+		// Invalid frame 
+		public const int INVALID_FRAME =                                    unchecked((int)0xE70100A8); 
+
 		// Specific variable not found 
-		public const int VARIABLE_NOT_FOUND =                               unchecked((int)0xE70100A8); 
+		public const int VARIABLE_NOT_FOUND =                               unchecked((int)0xE70100A9); 
 
 		// Specific function not found 
-		public const int FUNCTION_NOT_FOUND =                               unchecked((int)0xE70100A9); 
+		public const int FUNCTION_NOT_FOUND =                               unchecked((int)0xE70100AA); 
 
 		// Specific object not found 
-		public const int OBJECT_NOT_FOUND =                                 unchecked((int)0xE70100AA); 
+		public const int OBJECT_NOT_FOUND =                                 unchecked((int)0xE70100AB); 
 
 		// Invalid stream ID 
-		public const int INVALID_STREAMID =                                 unchecked((int)0xE70100AB); 
+		public const int INVALID_STREAMID =                                 unchecked((int)0xE70100AC); 
 
 		// Generic DB failure 
-		public const int DB_FAILURE =                                       unchecked((int)0xE70100AC); 
+		public const int DB_FAILURE =                                       unchecked((int)0xE70100AD); 
 
 		// Service is not available 
-		public const int SERVICE_NOT_AVAILABLE =                            unchecked((int)0xE70100AD); 
+		public const int SERVICE_NOT_AVAILABLE =                            unchecked((int)0xE70100AE); 
 
 	}
 }

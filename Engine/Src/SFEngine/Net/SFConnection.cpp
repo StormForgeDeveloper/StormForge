@@ -421,7 +421,7 @@ namespace SF {
 			if (m_MessageEndpoint == nullptr)
 			{
 				// create endpoint adapter
-				m_MessageEndpoint = new MessageEndpointConnection(const_cast<Connection*>(this));
+				m_MessageEndpoint = new(GetHeap()) MessageEndpointConnection(const_cast<Connection*>(this));
 			}
 
 			return m_MessageEndpoint;
@@ -449,7 +449,8 @@ namespace SF {
 				netCheck(CloseConnection("InitConnection failed: Invalid State"));
 
 			// create endpoint adapter
-			m_MessageEndpoint = new MessageEndpointConnection(this);
+			if (m_MessageEndpoint == nullptr)
+				m_MessageEndpoint = new(GetHeap()) MessageEndpointConnection(this);
 
 			// event handler need to be reassigned after initconnection is called
 			// - No they should be kept, but it need to be tested
@@ -571,10 +572,13 @@ namespace SF {
 				{
 					GetRecvMessageDelegates().Invoke(this, pMsg);
 
-					RecvMessageDelegates* pMessageDelegate = nullptr;
-					m_RecvMessageDelegatesByMsgId.Find(pMsg->GetMessageHeader()->msgID.GetMsgID(), pMessageDelegate);
-					if (pMessageDelegate)
-						pMessageDelegate->Invoke(this, pMsg);
+					if (pMsg != nullptr) // if it hasn't consumed yet, call next callback
+					{
+						RecvMessageDelegates* pMessageDelegate = nullptr;
+						m_RecvMessageDelegatesByMsgId.Find(pMsg->GetMessageHeader()->msgID.GetMsgID(), pMessageDelegate);
+						if (pMessageDelegate)
+							pMessageDelegate->Invoke(this, pMsg);
+					}
 				}
 				else
 				{

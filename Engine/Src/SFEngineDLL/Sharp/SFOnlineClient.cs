@@ -94,10 +94,8 @@ namespace SF
             NativeDisconnectAll(NativeHandle);
         }
 
-        public void UpdateGameTick()
+        public void UpdateGameTick(UInt32 deltaFrames = 1)
         {
-            UInt32 deltaFrames = 1;
-
             lock (SFMessageParsingUtil.stm_ParsingLock)
             {
                 stm_StaticEventReceiver = this;
@@ -158,6 +156,16 @@ namespace SF
         public Result GetMovementForPlayer(UInt64 playerId, out ActorMovement movement)
         {
             return new Result(NativeGetMovementForPlayer(NativeHandle, playerId, out movement));
+        }
+
+        public UInt32 GetCurrentMoveFrame()
+        {
+            return NativeGetCurrentMoveFrame(NativeHandle);
+        }
+
+        public Result SendMovement(ref ActorMovement newMove)
+        {
+            return new Result(NativeSendMovement(NativeHandle, ref newMove));
         }
 
         #region Event Receiving
@@ -258,6 +266,12 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForPlayer", CharSet = CharSet.Auto)]
         static extern Int32 NativeGetMovementForPlayer(IntPtr nativeHandle, UInt64 playerId, out ActorMovement actorMovement);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetCurrentMoveFrame", CharSet = CharSet.Auto)]
+        static extern UInt32 NativeGetCurrentMoveFrame(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeSendMovement", CharSet = CharSet.Auto)]
+        static extern Int32 NativeSendMovement(IntPtr nativeHandle, ref ActorMovement actorMovement);
 
         #endregion
     }

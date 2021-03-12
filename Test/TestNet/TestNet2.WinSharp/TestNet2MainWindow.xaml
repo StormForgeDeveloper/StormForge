@@ -24,6 +24,11 @@
         <ListBox x:Name="listZone" Margin="236,103,360,10" Grid.RowSpan="2" MouseDoubleClick="OnZoneListDoubleClicked"/>
         <Button x:Name="btnZoneList" Content="RefreshZoneList" HorizontalAlignment="Left" Margin="242,78,0,0" VerticalAlignment="Top" Click="OnBtnZoneListClicked"/>
         <TextBox x:Name="txtLogId" HorizontalAlignment="Left" Margin="623,14,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="167"/>
+        <Label x:Name="textOnlineStatus" Content="None" HorizontalAlignment="Left" Margin="623,47,0,0" VerticalAlignment="Top" Width="167"/>
+        <Button x:Name="btnMoveLeft" Content="Left" HorizontalAlignment="Left" Margin="467,148,0,0" VerticalAlignment="Top" Click="OnClickedMove"/>
+        <Button x:Name="btnMoveUp" Content="Up" HorizontalAlignment="Left" Margin="502,120,0,0" VerticalAlignment="Top" Click="OnClickedMove"/>
+        <Button x:Name="btnMoveRight" Content="Right" HorizontalAlignment="Left" Margin="527,148,0,0" VerticalAlignment="Top" Click="OnClickedMove"/>
+        <Button x:Name="btnMoveDown" Content="Down" HorizontalAlignment="Left" Margin="494,173,0,0" VerticalAlignment="Top" Click="OnClickedMove"/>
 
     </Grid>
 </Window>

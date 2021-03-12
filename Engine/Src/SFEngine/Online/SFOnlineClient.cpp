@@ -245,6 +245,16 @@ namespace SF
 					OnJoinGameServerRes(pMsgData);
 				});
 
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(&m_Owner),
+				[pOnlineClient = &m_Owner](Net::Connection*, const Net::ConnectionEvent& evt)
+				{
+					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+					{
+						pOnlineClient->ClearInstanceInfo();
+						pOnlineClient->UpdateOnlineStateByConnectionState();
+					}
+				});
+
 			auto authTicket = m_Owner.GetAuthTicket();
 			auto remoteAddress = m_Owner.GetGameAddress4();
 			if (authTicket == 0)
@@ -276,7 +286,7 @@ namespace SF
 
 		virtual ~ClientTask_JoinGameServer()
 		{
-			SFLog(Net, Info, "Finished ClientTask_JoinGameServer");
+			SFLog(Net, Info, "Finished ClientTask_JoinGameServer res:{0}", GetResult());
 
 			if (GetConnection() != nullptr)
 			{
@@ -289,6 +299,13 @@ namespace SF
 			{
 				m_Owner.Disconnect(m_Owner.m_Login);
 				m_Owner.m_Login = nullptr;
+			}
+			else if (m_Owner.GetOnlineState() == OnlineState::LoggedIn)
+			{
+				m_Owner.Disconnect(m_Owner.m_Game);
+				m_Owner.m_Game = nullptr;
+				m_Owner.Disconnect(m_Owner.m_GameInstance);
+				m_Owner.m_GameInstance = nullptr;
 			}
 		}
 
@@ -304,7 +321,7 @@ namespace SF
 					auto res = policy.JoinGameServerCmd(intptr_t(this), m_Owner.GetAccountId(), m_Owner.GetAuthTicket(), m_Owner.GetLoginEntityUID());
 					if (!res)
 					{
-						SetOnlineState(OnlineState::Disconnected);
+						SetOnlineState(OnlineState::LoggedIn);
 						SFLog(Net, Error, "JoinGameServer command has failed {0}", res);
 					}
 				}
@@ -315,7 +332,7 @@ namespace SF
 			}
 			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 			{
-				SetOnlineState(OnlineState::Disconnected);
+				SetOnlineState(OnlineState::LoggedIn);
 				SetResult(ResultCode::IO_DISCONNECTED);
 			}
 		}
@@ -345,6 +362,7 @@ namespace SF
 			m_Owner.m_GameInstanceUID = packet.GetGameUID();
 			m_Owner.m_PartyUID = packet.GetPartyUID();
 			m_Owner.m_PartyLeaderId = packet.GetPartyLeaderID();
+			m_Owner.SetupInstanceInfo();
 
 			SFLog(Net, Info, "Game server joined: {0}, game:{1}, party:'{2}:{3}'", m_Owner.m_NickName, m_Owner.m_GameInstanceUID, m_Owner.m_PartyUID, m_Owner.m_PartyLeaderId);
 			SetResult(ResultCode::SUCCESS);
@@ -423,23 +441,32 @@ namespace SF
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(&m_Owner),
 				Message::PlayInstance::NewPlayerInViewS2CEvt::MID.GetMsgID(),
-				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				[pOnlineClient = &m_Owner](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
 				{
-					m_Owner.OnPlayerInView(Forward<MessageDataPtr>(pMsgData));
+					pOnlineClient->OnPlayerInView(Forward<MessageDataPtr>(pMsgData));
 				});
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(&m_Owner),
 				Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.GetMsgID(),
-				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				[pOnlineClient = &m_Owner](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
 				{
-					m_Owner.OnPlayerOutofView(Forward<MessageDataPtr>(pMsgData));
+					pOnlineClient->OnPlayerOutofView(Forward<MessageDataPtr>(pMsgData));
 				});
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(&m_Owner),
 				Message::PlayInstance::PlayerMovementS2CEvt::MID.GetMsgID(),
-				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				[pOnlineClient = &m_Owner](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
 				{
-					m_Owner.OnPlayerMovement(Forward<MessageDataPtr>(pMsgData));
+					pOnlineClient->OnPlayerMovement(Forward<MessageDataPtr>(pMsgData));
+				});
+
+			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(&m_Owner),
+				[pOnlineClient = &m_Owner](Net::Connection*, const Net::ConnectionEvent& evt)
+				{
+					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+					{
+						pOnlineClient->UpdateOnlineStateByConnectionState();
+					}
 				});
 
 
@@ -497,13 +524,13 @@ namespace SF
 				else
 				{
 					GetConnection()->Disconnect("PlayInstance connection has failed");
-					SetOnlineState(OnlineState::InGameServer);
+					m_Owner.UpdateOnlineStateByConnectionState();
 					SetResult(ResultCode::IO_DISCONNECTED);
 				}
 			}
 			else if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
 			{
-				SetOnlineState(OnlineState::InGameServer);
+				m_Owner.UpdateOnlineStateByConnectionState();
 				SetResult(ResultCode::IO_DISCONNECTED);
 			}
 		}
@@ -565,9 +592,12 @@ namespace SF
 			}
 
 
-			SFLog(Net, Info, "PlayInstance::JoinGameInstanceRes joined: {0}", m_Owner.m_GameInstanceUID);
+			SFLog(Net, Info, "PlayInstance::JoinGameInstanceRes joined: {0}, F:{1:X}", m_Owner.m_GameInstanceUID, packet.GetMovementFrame());
+
+			m_Owner.SetMovementFrame(packet.GetMovementFrame());
 
 			SetOnlineState(OnlineState::InGameInGameInstance);
+			SetResult(ResultCode::SUCCESS);
 		}
 	};
 
@@ -598,8 +628,14 @@ namespace SF
 		m_PendingTasks.Clear();
 	}
 
+	void OnlineClient::SetupInstanceInfo()
+	{
+		m_OutgoingMovement = new(GetHeap()) SendingActorMovementManager;
+	}
+
 	void OnlineClient::ClearInstanceInfo()
 	{
+		m_OutgoingMovement.reset();
 		m_IncomingMovements.ClearMap();
 	}
 
@@ -795,6 +831,17 @@ namespace SF
 				movement->SimulateCurrentMove(moveFrame, outMovement);
 				return true;
 			});
+
+
+		if (m_OutgoingMovement != nullptr && GetConnectionGameInstance() != nullptr)
+		{
+			NetPolicyPlayInstance policy(GetConnectionGameInstance()->GetMessageEndpoint());
+			ActorMovement pMove{};
+			while (m_OutgoingMovement->DequeueMovement(pMove))
+			{
+				policy.PlayerMovementC2SEvt(GetGameInstanceUID(), GetPlayerID(), pMove);
+			}
+		}
 	}
 
 	void OnlineClient::OnPlayerInView(MessageDataPtr&& pMsgData)
@@ -858,6 +905,14 @@ namespace SF
 			return;
 		}
 
+		// adjust move frame
+		// TODO: consider round trip delay
+		if (msg.GetPlayerID() == GetPlayerID())
+		{
+			if (m_MoveFrame < msg.GetMovement().MoveFrame)
+				m_MoveFrame = msg.GetMovement().MoveFrame;
+		}
+
 		SharedPointerT<ReceivedActorMovementManager> movement;
 		if (!m_IncomingMovements.Find(msg.GetPlayerID(), movement))
 		{
@@ -869,4 +924,32 @@ namespace SF
 		movement->EnqueueMovement(msg.GetMovement());
 	}
 
+	void OnlineClient::UpdateOnlineStateByConnectionState()
+	{
+		if (GetConnectionLogin() != nullptr && GetConnectionLogin()->GetConnectionState() == Net::ConnectionState::CONNECTED)
+		{
+			if (GetConnectionGame() != nullptr && GetConnectionGame()->GetConnectionState() == Net::ConnectionState::CONNECTED)
+			{
+				if (GetConnectionGameInstance() != nullptr && GetConnectionGameInstance()->GetConnectionState() == Net::ConnectionState::CONNECTED)
+				{
+					SetOnlineState(OnlineState::InGameInGameInstance);
+				}
+				else
+				{
+					SetOnlineState(OnlineState::InGameServer);
+				}
+			}
+			else
+			{
+				Disconnect(m_GameInstance);
+				SetOnlineState(OnlineState::LoggedIn);
+			}
+		}
+		else
+		{
+			DisconnectAll();
+			SetOnlineState(OnlineState::Disconnected);
+		}
+
+	}
 }

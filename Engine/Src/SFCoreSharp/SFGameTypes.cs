@@ -209,13 +209,13 @@ namespace SF
     [StructLayout(LayoutKind.Sequential, Pack = 4)]
     public struct ActorMovement
     {
-        Vector4 Position;
-        Vector4 LinearVelocity;
+        public Vector4 Position;
+        public Vector4 LinearVelocity;
 
         // Look direction
-        float AngularYaw; // No pitch and roll
-        UInt32 MoveFrame;
-        UInt32 MovementState;
+        public float AngularYaw; // No pitch and roll
+        public UInt32 MoveFrame;
+        public UInt32 MovementState;
     }
 
     [Struct]

@@ -48,7 +48,7 @@ namespace SF {
 		const StringCrc64& GetName() { return m_Name; }
 		void SetName(const StringCrc64& name) { m_Name = name; }
 
-		IHeap& GetHeap() { return **m_Heap; }
+		IHeap& GetHeap() const { return **m_Heap; }
 	};
 
 	extern template class SharedPointerT<Object>;

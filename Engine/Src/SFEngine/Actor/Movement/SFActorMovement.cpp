@@ -18,12 +18,24 @@
 namespace SF
 {
 
+	constexpr size_t ActorMovement::MaxSavedMove;
+	constexpr uint32_t ActorMovement::FramesPerSeconds;
+	constexpr uint32_t ActorMovement::DeltaMSPerFrame;
+	constexpr float ActorMovement::DeltaSecondsPerFrame;
+	constexpr float ActorMovement::MoveFrameTimeoutSeconds;
+	constexpr uint32_t ActorMovement::MoveFrameTimeout;
+	constexpr size_t ActorMovement::SizeOfActorMovement;
 
-	Result ActorMovement::TryMerge(const ActorMovement* pNextMove)
+
+	Result ActorMovement::CanMerge(const ActorMovement* pNextMove) const
 	{
 		const float fMergeThreshold = 0.01;
 
 		if (MovementState != pNextMove->MovementState)
+			return ResultCode::FAIL;
+
+		float deltaTime = (pNextMove->MoveFrame - MoveFrame) * DeltaSecondsPerFrame;
+		if (deltaTime > MoveFrameTimeoutSeconds) // Don't merge if the time exceeded
 			return ResultCode::FAIL;
 
 		if (Util::Abs(AngularYaw - pNextMove->AngularYaw) > fMergeThreshold)
@@ -32,7 +44,6 @@ namespace SF
 		if ((LinearVelocity - pNextMove->LinearVelocity).SquareLength3() > fMergeThreshold)
 			return ResultCode::FAIL;
 
-		float deltaTime = (pNextMove->MoveFrame - MoveFrame) * DeltaSecondsPerFrame;
 		auto expectedPos = (Position + LinearVelocity * deltaTime);
 		if ((expectedPos - pNextMove->Position).SquareLength3() > fMergeThreshold)
 			return ResultCode::FAIL;
@@ -42,12 +53,12 @@ namespace SF
 
 	bool ActorMovement::operator == (const ActorMovement& src) const
 	{
-		return memcmp(this, &src, sizeof(ActorMovement)) == 0;
+		return memcmp(this, &src, SizeOfActorMovement) == 0;
 	}
 
 	bool ActorMovement::operator != (const ActorMovement& src) const
 	{
-		return memcmp(this, &src, sizeof(ActorMovement)) != 0;
+		return memcmp(this, &src, SizeOfActorMovement) != 0;
 	}
 
 	ActorMovement& ActorMovement::operator=(const ActorMovement& src)
@@ -96,94 +107,33 @@ namespace SF
 	/// </summary>
 	ActorMovementManager::ActorMovementManager()
 	{
-		for (auto& itMove : m_MovementBuffer)
-		{
-			ActorMovement* pMovement = &itMove;
-			m_FreeMoves.Enqueue(pMovement);
-		}
 	}
 
 	ActorMovementManager::~ActorMovementManager()
 	{
 		m_Moves.ClearQueue();
-		ResetFreeMove();
-	}
-
-	ActorMovement* ActorMovementManager::GetFreeMovement()
-	{
-		ActorMovement* pMove = nullptr;
-
-		m_FreeMoves.Dequeue(pMove);
-
-		return pMove;
-	}
-
-	void ActorMovementManager::FreeMovement(ActorMovement* pMove)
-	{
-		if (pMove == nullptr)
-			return;
-
-		m_FreeMoves.Enqueue(pMove);
-	}
-
-	bool ActorMovementManager::IsValidFreeMove(ActorMovement* pMove)
-	{
-		auto pMovePtr = uintptr_t(pMove);
-		return pMovePtr >= uintptr_t(m_MovementBuffer) && pMovePtr < uintptr_t(m_MovementBuffer + countof(m_MovementBuffer));
-	}
-
-	void ActorMovementManager::ResetFreeMove()
-	{
-		m_FreeMoves.ClearQueue();
-
-		for (uint iMove = 0; iMove < countof(m_MovementBuffer); iMove++)
-		{
-			m_MovementBuffer[iMove] = {};
-			m_FreeMoves.Enqueue(&m_MovementBuffer[iMove]);
-		}
 	}
 
 	Result ActorMovementManager::EnqueueMovement(const ActorMovement& newMove)
 	{
-			auto pNewMove = GetFreeMovement();
-			if (pNewMove == nullptr)
-				DequeueMovement(pNewMove); // remove oldest one and use it
+			if (newMove.MoveFrame <= m_LatestQueuedFrame)
+				return ResultCode::INVALID_FRAME; // drop old frames
 
-			*pNewMove = newMove;
+			if (m_Moves.IsFull())
+			{
+				ActorMovement pRemove;
+				m_Moves.Dequeue(pRemove);
+			}
 
-			auto res = EnqueueMovement_Internal(pNewMove);
+			m_LatestQueuedFrame = newMove.MoveFrame;
 
-			if (res != ResultCode::SUCCESS)
-				FreeMovement(pNewMove);
-
-			return res;
+			return m_Moves.Enqueue(newMove);
 	}
 
-	Result ActorMovementManager::EnqueueMovement_Internal(ActorMovement* pMove)
+	Result ActorMovementManager::DequeueMovement(ActorMovement& movement)
 	{
-		if (pMove == nullptr)
-			return ResultCode::INVALID_ARG;
-
-		if (pMove->MoveFrame <= m_LatestQueuedFrame)
-			return ResultCode::SUCCESS_FALSE; // drop old frames
-
-		if (m_Moves.IsFull())
-		{
-			ActorMovement* pRemove = nullptr;
-			m_Moves.Dequeue(pRemove);
-			if (pRemove)
-				FreeMovement(pRemove);
-		}
-
-		m_LatestQueuedFrame = pMove->MoveFrame;
-		return m_Moves.Enqueue(pMove);
+		return m_Moves.Dequeue(movement);
 	}
-
-	Result ActorMovementManager::DequeueMovement(ActorMovement*& pMove)
-	{
-		return m_Moves.Dequeue(pMove);
-	}
-
 
 
 
@@ -198,29 +148,20 @@ namespace SF
 	}
 
 
-	Result SendingActorMovementManager::EnqueueMovement_Internal(ActorMovement* pMove)
+	Result SendingActorMovementManager::EnqueueMovement(const ActorMovement& newMove)
 	{
-		if (pMove == nullptr)
-			return ResultCode::INVALID_ARG;
-
-
-		if (pMove->MoveFrame <= m_LatestQueuedFrame)
+		if (newMove.MoveFrame <= m_LatestQueuedFrame)
 			return ResultCode::SUCCESS_FALSE; // drop old frames
 
-		if (m_Moves.size() > 0)
+		if (m_LatestEnqueued.CanMerge(&newMove))
 		{
-			auto lastMove = m_Moves[m_Moves.size() - 1];
-			if (lastMove->TryMerge(pMove))
-			{
-				FreeMovement(pMove);
-				return ResultCode::SUCCESS;
-			}
+			return ResultCode::SUCCESS;
 		}
 
-		return super::EnqueueMovement_Internal(pMove);
+		m_LatestEnqueued = newMove;
+
+		return super::EnqueueMovement(newMove);
 	}
-
-
 
 
 
@@ -247,8 +188,6 @@ namespace SF
 		m_LatestFrame = 0;
 
 		m_Moves.ClearQueue();
-
-		ResetFreeMove();
 	}
 
 	Result ReceivedActorMovementManager::SimulateCurrentMove(uint32_t MoveFrame, ActorMovement& outCurMove)
@@ -271,7 +210,7 @@ namespace SF
 				break;
 			}
 
-			move1 = m_Moves[0];
+			move1 = &m_Moves[0];
 			if (MoveFrame < move1->MoveFrame)
 			{
 				move1 = nullptr;
@@ -283,14 +222,13 @@ namespace SF
 				break;
 
 			// we found two moves with expected time
-			move2 = m_Moves[1];
+			move2 = &m_Moves[1];
 			if (move2->MoveFrame > MoveFrame)
 				break;
 
 			// We don't need move1 anymore, free it
-			ActorMovement* pRemove = nullptr;
+			ActorMovement pRemove;
 			m_Moves.Dequeue(pRemove);
-			FreeMovement(pRemove);
 
 			// Start over
 		}
@@ -327,26 +265,6 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result ReceivedActorMovementManager::EnqueueMovement_Internal(ActorMovement* pMove)
-	{
-		if (pMove == nullptr)
-			return ResultCode::INVALID_ARG;
-
-		if (pMove->MoveFrame <= m_LatestQueuedFrame)
-			return ResultCode::SUCCESS_FALSE; // drop old frames
-
-		if (m_Moves.IsFull())
-		{
-			ActorMovement* pRemove = nullptr;
-			m_Moves.Dequeue(pRemove);
-			if (pRemove)
-				FreeMovement(pRemove);
-		}
-
-		m_LatestQueuedFrame = pMove->MoveFrame;
-		return m_Moves.Enqueue(pMove);
-	}
-
 
 
 	// a * (1 - t) + b * t
@@ -366,7 +284,8 @@ namespace SF
 		if (movement.MoveFrame > MoveFrame)
 		{
 			assert(false); // unexpected
-			outCurMove = {};
+			outCurMove = m_LatestMove;
+			outCurMove.LinearVelocity = Vector4::Zero();
 			return;
 		}
 
@@ -374,7 +293,8 @@ namespace SF
 		if ((MoveFrame - movement.MoveFrame) > MoveFrameTimeout)
 		{
 			// Let's stop everything
-			outCurMove = {};
+			outCurMove = m_LatestMove;
+			outCurMove.LinearVelocity = Vector4::Zero();
 			return;
 		}
 

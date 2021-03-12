@@ -149,8 +149,11 @@ namespace SF
 		const SharedPointerT<Net::Connection>& GetConnectionGame() const { return m_Game; }
 		const SharedPointerT<Net::Connection>& GetConnectionGameInstance() const { return m_GameInstance; }
 
-
+		const SharedPointerT<SendingActorMovementManager>& GetSendMovementManager() const { return m_OutgoingMovement; }
 		Result GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement);
+
+		uint32_t GetCurrentMovementFrame() const { return m_MoveFrame; }
+		void SetMovementFrame(uint32_t moveFrame) { m_MoveFrame = moveFrame; }
 
 		void SetStateChangeCallback(ONLINESTATE_CHAGED_CALLBACK callback) { m_OnlineStateChangedCallback = callback; }
 
@@ -162,12 +165,14 @@ namespace SF
 
 		void ClearTasks();
 
+		void SetupInstanceInfo();
 		void ClearInstanceInfo();
 
 		void OnPlayerInView(MessageDataPtr&& pMsgData);
 		void OnPlayerOutofView(MessageDataPtr&& pMsgData);
 		void OnPlayerMovement(MessageDataPtr&& pMsgData);
 
+		void UpdateOnlineStateByConnectionState();
 	private:
 
 		friend ClientTask;
