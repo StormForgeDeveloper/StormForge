@@ -96,7 +96,6 @@ namespace SF
 		using super = ActorMovementManager;
 
 	public:
-		using super = ActorMovementManager;
 
 		SendingActorMovementManager();
 
