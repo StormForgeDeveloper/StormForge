@@ -439,36 +439,8 @@ namespace SF
 					OnJoinGameInstanceRes(pMsgData);
 				});
 
-			GetConnection()->AddMessageDelegateUnique(uintptr_t(&m_Owner),
-				Message::PlayInstance::NewPlayerInViewS2CEvt::MID.GetMsgID(),
-				[pOnlineClient = &m_Owner](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
-				{
-					pOnlineClient->OnPlayerInView(Forward<MessageDataPtr>(pMsgData));
-				});
-
-			GetConnection()->AddMessageDelegateUnique(uintptr_t(&m_Owner),
-				Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.GetMsgID(),
-				[pOnlineClient = &m_Owner](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
-				{
-					pOnlineClient->OnPlayerOutofView(Forward<MessageDataPtr>(pMsgData));
-				});
-
-			GetConnection()->AddMessageDelegateUnique(uintptr_t(&m_Owner),
-				Message::PlayInstance::PlayerMovementS2CEvt::MID.GetMsgID(),
-				[pOnlineClient = &m_Owner](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
-				{
-					pOnlineClient->OnPlayerMovement(Forward<MessageDataPtr>(pMsgData));
-				});
-
-			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(&m_Owner),
-				[pOnlineClient = &m_Owner](Net::Connection*, const Net::ConnectionEvent& evt)
-				{
-					if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
-					{
-						pOnlineClient->UpdateOnlineStateByConnectionState();
-					}
-				});
-
+			m_Owner.RegisterPlayInstanceHandlers();
+			
 
 			SetOnlineState(OnlineState::InGameJoiningGameInstance);
 			NetPolicyGame policy(m_Owner.GetConnectionGame()->GetMessageEndpoint());
@@ -638,6 +610,46 @@ namespace SF
 		m_OutgoingMovement.reset();
 		m_IncomingMovements.ClearMap();
 	}
+
+	void OnlineClient::RegisterPlayInstanceHandlers()
+	{
+		if (m_GameInstance == nullptr)
+		{
+			assert(false);
+			return;
+		}
+
+		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
+			Message::PlayInstance::NewPlayerInViewS2CEvt::MID.GetMsgID(),
+			[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+			{
+				OnPlayerInView(Forward<MessageDataPtr>(pMsgData));
+			});
+
+		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
+			Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.GetMsgID(),
+			[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+			{
+				OnPlayerOutofView(Forward<MessageDataPtr>(pMsgData));
+			});
+
+		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
+			Message::PlayInstance::PlayerMovementS2CEvt::MID.GetMsgID(),
+			[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+			{
+				OnPlayerMovement(Forward<MessageDataPtr>(pMsgData));
+			});
+
+		m_GameInstance->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this),
+			[this](Net::Connection*, const Net::ConnectionEvent& evt)
+			{
+				if (evt.Components.EventType == Net::ConnectionEvent::EVT_DISCONNECTED)
+				{
+					UpdateOnlineStateByConnectionState();
+				}
+			});
+	}
+
 
 	Result OnlineClient::StartConnection(StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password)
 	{

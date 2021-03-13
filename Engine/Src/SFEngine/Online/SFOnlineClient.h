@@ -167,12 +167,14 @@ namespace SF
 
 		void SetupInstanceInfo();
 		void ClearInstanceInfo();
+		void RegisterPlayInstanceHandlers();
 
 		void OnPlayerInView(MessageDataPtr&& pMsgData);
 		void OnPlayerOutofView(MessageDataPtr&& pMsgData);
 		void OnPlayerMovement(MessageDataPtr&& pMsgData);
 
 		void UpdateOnlineStateByConnectionState();
+
 	private:
 
 		friend ClientTask;

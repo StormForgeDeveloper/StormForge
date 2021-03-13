@@ -315,6 +315,9 @@ namespace TestNet2.WinSharp
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.SearchGameInstanceRes, 0, HandleZoneListRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.JoinGameInstanceRes, 0, HandleJoinGameInstanceRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.LeaveGameInstanceRes, 0, HandleLeaveGameInstanceRes);
+
+            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.NewPlayerInViewS2CEvt, 0, HandleNewPlayerInView);
+            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.RemovePlayerFromViewS2CEvt, 0, HandleRemovePlayerFromView);
         }
 
         void HandleJoinGameServerRes(SFMessage message)
@@ -474,6 +477,23 @@ namespace TestNet2.WinSharp
             {
                 return;
             }
+        }
+
+        void HandleNewPlayerInView(SFMessage message)
+        {
+            var PlayInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
+            var PlayerID = message.GetValue<UInt64>("PlayerID");
+            var VisualData = message.GetValue<UInt64>("Attributes");
+
+            // player moved in visual range or joined
+        }
+
+        void HandleRemovePlayerFromView(SFMessage message)
+        {
+            var PlayInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
+            var PlayerID = message.GetValue<UInt64>("PlayerID");
+
+            // player left or moved away
         }
 
         #endregion
