@@ -212,17 +212,15 @@ namespace SF.Net
 
 
 		// S2C: Remove player from view
-		public int  RemovePlayerFromViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
+		public int  RemovePlayerFromViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID )
 		{
  			int result;
-			var InAttributes_ = InAttributes.ToByteArray();
-			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
 			{
-			result = CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
+			result = CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID);
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.RemovePlayerFromViewS2CEvt);
 			return result;
-		} // public int  RemovePlayerFromViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
+		} // public int  RemovePlayerFromViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID )
 
 
 		// S2C: Player Movement
@@ -307,7 +305,7 @@ namespace SF.Net
 
 		// S2C: Remove player from view
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt16 _sizeOfInAttributes,IntPtr InAttributes );
+		static extern int CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID );
 
 
 

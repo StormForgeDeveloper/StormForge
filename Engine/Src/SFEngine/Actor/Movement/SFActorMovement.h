@@ -89,6 +89,11 @@ namespace SF
 	};
 
 
+	////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// SendingActorMovementManager
+	//
+
 	class SendingActorMovementManager : public ActorMovementManager
 	{
 	public:

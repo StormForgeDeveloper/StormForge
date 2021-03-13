@@ -292,9 +292,6 @@ namespace SF
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
-				ArrayView<uint8_t> m_AttributesRaw;
-				mutable bool m_AttributesHasParsed = false;
-				mutable VariableTable m_Attributes;
 			public:
 				RemovePlayerFromViewS2CEvt()
 					{}
@@ -307,8 +304,6 @@ namespace SF
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
-				const VariableTable& GetAttributes() const;
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -316,8 +311,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID );
 
 			}; // class RemovePlayerFromViewS2CEvt : public MessageBase
 

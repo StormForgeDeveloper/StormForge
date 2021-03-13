@@ -147,15 +147,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InN
 
 
 // S2C: Remove player from view
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::RemovePlayerFromViewS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInAttributes, _sizeOfInAttributes, InAttributes));
+	MessageDataPtr pMessage = SF::Message::PlayInstance::RemovePlayerFromViewS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID )
 
 
 

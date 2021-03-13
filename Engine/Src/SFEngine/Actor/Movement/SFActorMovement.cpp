@@ -139,6 +139,11 @@ namespace SF
 
 
 
+	////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// SendingActorMovementManager
+	//
+
 	SendingActorMovementManager::SendingActorMovementManager()
 	{
 	}
@@ -168,6 +173,11 @@ namespace SF
 
 
 
+
+	////////////////////////////////////////////////////////////////////////////////////////
+	//
+	// Received actor movement 
+	//
 
 	ReceivedActorMovementManager::ReceivedActorMovementManager()
 	{

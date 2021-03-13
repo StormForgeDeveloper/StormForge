@@ -572,16 +572,6 @@ namespace SF
 
 			// S2C: Remove player from view
 			const MessageID RemovePlayerFromViewS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 4);
-			const VariableTable& RemovePlayerFromViewS2CEvt::GetAttributes() const
-			{
- 				if (!m_AttributesHasParsed)
-				{
- 					m_AttributesHasParsed = true;
-					InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
-					*Attributes_ReadStream.ToInputStream() >> m_Attributes;
-				} // if (!m_AttributesHasParsed)
-				return m_Attributes;
-			} // const VariableTable& RemovePlayerFromViewS2CEvt::GetAttributes() const
 			Result RemovePlayerFromViewS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -597,10 +587,6 @@ namespace SF
 
 				protocolCheck(*input >> m_PlayInstanceUID);
 				protocolCheck(*input >> m_PlayerID);
-				protocolCheck(input->Read(ArrayLen));
-				uint8_t* AttributesPtr = nullptr;
-				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
-				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
 
 				return hr;
 
@@ -616,7 +602,6 @@ namespace SF
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -633,7 +618,8 @@ namespace SF
 
 			}; // Result RemovePlayerFromViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* RemovePlayerFromViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes )
+
+			MessageData* RemovePlayerFromViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -648,11 +634,9 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
-				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
-					+ serializedSizeOfInAttributes
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::RemovePlayerFromViewS2CEvt::MID, __uiMessageSize ) );
@@ -663,47 +647,9 @@ namespace SF
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
-				protocolCheck(*output << InAttributes);
 
 				return hr;
-			}; // MessageData* RemovePlayerFromViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes )
-
-			MessageData* RemovePlayerFromViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
-			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
-
-				uint8_t *pMsgData = nullptr;
-
-				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
-					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InPlayerID)
-					+ sizeof(uint16_t)
-					+ serializedSizeOfInAttributes
-				);
-
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::RemovePlayerFromViewS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
-				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InPlayInstanceUID);
-				protocolCheck(*output << InPlayerID);
-				protocolCheck(output->Write(serializedSizeOfInAttributes));
-				protocolCheck(*output << InAttributes);
-
-				return hr;
-			}; // MessageData* RemovePlayerFromViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
+			}; // MessageData* RemovePlayerFromViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
 
 
 
@@ -711,8 +657,8 @@ namespace SF
 			{
  				RemovePlayerFromViewS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "RemovePlayerFromView:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, Attributes:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetAttributes()); 
+				SFLog(Net, Debug1, "RemovePlayerFromView:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID()); 
 				return ResultCode::SUCCESS;
 			}; // Result RemovePlayerFromViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

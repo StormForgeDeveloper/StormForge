@@ -76,21 +76,19 @@ New Player in get view
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
-		- OutInPlayerID: PlayerID type. Player Id
+		- OutInPlayerID: PlayerID type. Joined Player Id
 
-		- OutInAttributes: VariableTable type. Movement attributes
+		- OutInAttributes: VariableTable type. Character visual data
 
 
 ## RemovePlayerFromViewS2CEvt
 Remove player from view
 
-        Result RemovePlayerFromViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes)
+        Result RemovePlayerFromViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
-		- OutInPlayerID: PlayerID type. Player Id
-
-		- OutInAttributes: VariableTable type. Movement attributes
+		- OutInPlayerID: PlayerID type. Removed Player Id
 
 
 ## PlayerMovementC2SEvt
