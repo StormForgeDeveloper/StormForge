@@ -103,7 +103,9 @@ namespace Net {
 		if( m_pRecvBuffers )
 			IHeap::Delete(m_pRecvBuffers);
 
-		if (m_MySocketIOAdapter.GetWriteQueue()) IHeap::Delete(m_MySocketIOAdapter.GetWriteQueue());
+		// Write queue is for UDP reactor pattern will be managed by IO system.
+		// Don't delete it here
+		//if (m_MySocketIOAdapter.GetWriteQueue()) IHeap::Delete(m_MySocketIOAdapter.GetWriteQueue());
 	}
 
 	

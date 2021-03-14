@@ -481,17 +481,17 @@ namespace TestNet2.WinSharp
 
         void HandleNewPlayerInView(SFMessage message)
         {
-            var PlayInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
-            var PlayerID = message.GetValue<UInt64>("PlayerID");
-            var VisualData = message.GetValue<UInt64>("Attributes");
+            var playInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
+            var playerID = message.GetValue<UInt64>("PlayerID");
+            var visualData = message.GetValue<UInt64>("Attributes");
 
             // player moved in visual range or joined
         }
 
         void HandleRemovePlayerFromView(SFMessage message)
         {
-            var PlayInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
-            var PlayerID = message.GetValue<UInt64>("PlayerID");
+            var playInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
+            var playerID = message.GetValue<UInt64>("PlayerID");
 
             // player left or moved away
         }
