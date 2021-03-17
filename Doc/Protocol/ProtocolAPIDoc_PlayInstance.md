@@ -115,6 +115,103 @@ Player Movement
 		- OutInMovement: ActorMovement type. Movement attributes
 
 
+## OccupyMapObject Request
+Occupy map object
+
+1. Command interface
+
+        Result OccupyMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance ID
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInMapObjectId: uint32 type. MapObjectId
+
+		- OutInUsageId: uint32 type. MapObjectOccupyMode 
+
+2. Result interface
+
+C++: Cast message to OccupyMapObjectRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutPlayInstanceUID: EntityUID type. Play instance ID
+
+		- OutPlayerID: PlayerID type. player id for validation
+
+		- OutMapObjectId: uint32 type. MapObjectId
+
+
+## UnoccupyMapObject Request
+Unoccupy map object
+
+1. Command interface
+
+        Result UnoccupyMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance ID
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInMapObjectId: uint32 type. MapObjectId
+
+2. Result interface
+
+C++: Cast message to UnoccupyMapObjectRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutPlayInstanceUID: EntityUID type. Play instance ID
+
+		- OutPlayerID: PlayerID type. player id for validation
+
+		- OutMapObjectId: uint32 type. MapObjectId
+
+
+## UseMapObject Request
+Use map object
+
+1. Command interface
+
+        Result UseMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const Array<uint8_t>& InUseParameters)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance ID
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInMapObjectId: uint32 type. MapObjectId
+
+		- OutInUseParameters: VariableTable type. use parameters
+
+2. Result interface
+
+C++: Cast message to UseMapObjectRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutPlayInstanceUID: EntityUID type. Play instance ID
+
+		- OutPlayerID: PlayerID type. player id for validation
+
+		- OutResultAttributes: VariableTable type. Use result attributes
+
+
 ## CreateStream Request
 Create stream instance
 

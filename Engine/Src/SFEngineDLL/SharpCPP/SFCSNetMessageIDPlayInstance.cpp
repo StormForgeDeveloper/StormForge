@@ -74,6 +74,45 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt()
 
 
+// Cmd: Occupy map object
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceOccupyMapObjectCmd()
+{
+ 	return SF::Message::PlayInstance::OccupyMapObjectCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceOccupyMapObjectCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceOccupyMapObjectRes()
+{
+ 	return SF::Message::PlayInstance::OccupyMapObjectRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceOccupyMapObjectRes()
+
+
+// Cmd: Unoccupy map object
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUnoccupyMapObjectCmd()
+{
+ 	return SF::Message::PlayInstance::UnoccupyMapObjectCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUnoccupyMapObjectCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUnoccupyMapObjectRes()
+{
+ 	return SF::Message::PlayInstance::UnoccupyMapObjectRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUnoccupyMapObjectRes()
+
+
+// Cmd: Use map object
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUseMapObjectCmd()
+{
+ 	return SF::Message::PlayInstance::UseMapObjectCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUseMapObjectCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUseMapObjectRes()
+{
+ 	return SF::Message::PlayInstance::UseMapObjectRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUseMapObjectRes()
+
+
 // Cmd: Create stream instance
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCreateStreamCmd()
 {

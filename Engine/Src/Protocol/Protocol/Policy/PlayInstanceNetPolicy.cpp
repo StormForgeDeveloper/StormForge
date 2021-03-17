@@ -70,6 +70,54 @@ namespace SF
 		return hr;
 
 	}; // Result NetPolicyPlayInstance::PlayerMovementC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+	// Cmd: Occupy map object
+	Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::OccupyMapObjectCmd::Create(GetSystemHeap(), InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+		return hr;
+
+	}; // Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
+	// Cmd: Unoccupy map object
+	Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::UnoccupyMapObjectCmd::Create(GetSystemHeap(), InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+		return hr;
+
+	}; // Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	// Cmd: Use map object
+	Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const VariableTable &InUseParameters )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::UseMapObjectCmd::Create(GetSystemHeap(), InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUseParameters);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+		return hr;
+
+	}; // Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const VariableTable &InUseParameters )
 	// Cmd: Create stream instance
 	Result NetPolicyPlayInstance::CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	{
@@ -216,6 +264,54 @@ namespace SF
 		return hr;
 
 	}; // Result NetSvrPolicyPlayInstance::PlayerMovementS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+	// Cmd: Occupy map object
+	Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::OccupyMapObjectRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+		return hr;
+
+	}; // Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	// Cmd: Unoccupy map object
+	Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::UnoccupyMapObjectRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+		return hr;
+
+	}; // Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	// Cmd: Use map object
+	Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InResultAttributes )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::UseMapObjectRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InResultAttributes);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+		return hr;
+
+	}; // Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InResultAttributes )
 	// Cmd: Create stream instance
 	Result NetSvrPolicyPlayInstance::CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 	{

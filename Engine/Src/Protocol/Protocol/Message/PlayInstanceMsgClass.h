@@ -409,6 +409,309 @@ namespace SF
 
 			}; // class PlayerMovementS2CEvt : public MessageBase
 
+			// Cmd: Occupy map object
+			class OccupyMapObjectCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				uint32_t m_MapObjectId{};
+				uint32_t m_UsageId{};
+			public:
+				OccupyMapObjectCmd()
+					{}
+
+				OccupyMapObjectCmd( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
+				const uint32_t& GetUsageId() const	{ return m_UsageId; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId );
+
+			}; // class OccupyMapObjectCmd : public MessageBase
+
+			class OccupyMapObjectRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				uint32_t m_MapObjectId{};
+			public:
+				OccupyMapObjectRes()
+					{}
+
+				OccupyMapObjectRes( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+
+			}; // class OccupyMapObjectRes : public MessageBase
+
+			// Cmd: Unoccupy map object
+			class UnoccupyMapObjectCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				uint32_t m_MapObjectId{};
+			public:
+				UnoccupyMapObjectCmd()
+					{}
+
+				UnoccupyMapObjectCmd( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+
+			}; // class UnoccupyMapObjectCmd : public MessageBase
+
+			class UnoccupyMapObjectRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				uint32_t m_MapObjectId{};
+			public:
+				UnoccupyMapObjectRes()
+					{}
+
+				UnoccupyMapObjectRes( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
+
+			}; // class UnoccupyMapObjectRes : public MessageBase
+
+			// Cmd: Use map object
+			class UseMapObjectCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				uint32_t m_MapObjectId{};
+				ArrayView<uint8_t> m_UseParametersRaw;
+				mutable bool m_UseParametersHasParsed = false;
+				mutable VariableTable m_UseParameters;
+			public:
+				UseMapObjectCmd()
+					{}
+
+				UseMapObjectCmd( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
+				const Array<uint8_t>& GetUseParametersRaw() const	{ return m_UseParametersRaw; };
+				const VariableTable& GetUseParameters() const;
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const Array<uint8_t>& InUseParameters );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const VariableTable &InUseParameters );
+
+			}; // class UseMapObjectCmd : public MessageBase
+
+			class UseMapObjectRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_ResultAttributesRaw;
+				mutable bool m_ResultAttributesHasParsed = false;
+				mutable VariableTable m_ResultAttributes;
+			public:
+				UseMapObjectRes()
+					{}
+
+				UseMapObjectRes( MessageDataPtr &&pMsg )
+					: MessageBase(std::forward<MessageDataPtr>(pMsg))
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetResultAttributesRaw() const	{ return m_ResultAttributesRaw; };
+				const VariableTable& GetResultAttributes() const;
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InResultAttributes );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InResultAttributes );
+
+			}; // class UseMapObjectRes : public MessageBase
+
 			// Cmd: Create stream instance
 			class CreateStreamCmd : public MessageBase
 			{

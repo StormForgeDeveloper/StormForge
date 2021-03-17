@@ -52,6 +52,24 @@ namespace SF.Net
 		// S2C: Player Movement
 		public static int PlayerMovementS2CEvt { get { return CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt(); } }
 
+		// Cmd: Occupy map object
+		public static int OccupyMapObjectCmd { get { return CSSFNetMessageID_PlayInstanceOccupyMapObjectCmd(); } }
+
+		public static int OccupyMapObjectRes { get { return CSSFNetMessageID_PlayInstanceOccupyMapObjectRes(); } }
+
+
+		// Cmd: Unoccupy map object
+		public static int UnoccupyMapObjectCmd { get { return CSSFNetMessageID_PlayInstanceUnoccupyMapObjectCmd(); } }
+
+		public static int UnoccupyMapObjectRes { get { return CSSFNetMessageID_PlayInstanceUnoccupyMapObjectRes(); } }
+
+
+		// Cmd: Use map object
+		public static int UseMapObjectCmd { get { return CSSFNetMessageID_PlayInstanceUseMapObjectCmd(); } }
+
+		public static int UseMapObjectRes { get { return CSSFNetMessageID_PlayInstanceUseMapObjectRes(); } }
+
+
 		// Cmd: Create stream instance
 		public static int CreateStreamCmd { get { return CSSFNetMessageID_PlayInstanceCreateStreamCmd(); } }
 
@@ -115,6 +133,36 @@ namespace SF.Net
 		// S2C: Player Movement
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt();
+
+
+		// Cmd: Occupy map object
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceOccupyMapObjectCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceOccupyMapObjectCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceOccupyMapObjectRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceOccupyMapObjectRes();
+
+
+
+		// Cmd: Unoccupy map object
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceUnoccupyMapObjectCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceUnoccupyMapObjectCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceUnoccupyMapObjectRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceUnoccupyMapObjectRes();
+
+
+
+		// Cmd: Use map object
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceUseMapObjectCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceUseMapObjectCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceUseMapObjectRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceUseMapObjectRes();
+
 
 
 		// Cmd: Create stream instance

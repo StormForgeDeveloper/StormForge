@@ -4,7 +4,7 @@
 
 		<!-- ============================  Game instance ============================================ -->
 
-		<Command Name="JoinGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Event for Player Join request.">
+		<Command Name="JoinGameInstance" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Event for Player Join request.">
 			<Cmd>
 				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance to join"/>
 				<Params Type="PlayerID" Name="PlayerID" Desc="Joining player id"/>
@@ -72,6 +72,63 @@
 			<Params Type="ActorMovement" Name="Movement" Desc="Movement attributes"/>
 		</S2CEvent>
 
+
+		<!-- ============================= Object interection ======================================= -->
+
+		<Command Name="OccupyMapObject" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Occupy map object">
+			<Cmd>
+				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
+				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params Type="uint32" Name="UsageId" Desc="MapObjectOccupyMode "/>
+			</Cmd>
+			<Res>
+				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params Type="PlayerID" Name="PlayerID" Desc="player id for validation"/>
+				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
+			</Res>
+		</Command>
+
+		<Command Name="UnoccupyMapObject" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Unoccupy map object">
+			<Cmd>
+				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
+				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
+			</Cmd>
+			<Res>
+				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params Type="PlayerID" Name="PlayerID" Desc="player id for validation"/>
+				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
+			</Res>
+		</Command>
+
+		<Command Name="UseMapObject" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Use map object">
+			<Cmd>
+				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
+				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params Type="VariableTable" Name="UseParameters" Desc="use parameters"/>
+			</Cmd>
+			<Res>
+				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params Type="PlayerID" Name="PlayerID" Desc="player id for validation"/>
+				<Params Type="VariableTable" Name="ResultAttributes" Desc="Use result attributes"/>
+			</Res>
+		</Command>
+
+		<Command Name="UseMapObject" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Use map object">
+			<Cmd>
+				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
+				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params Type="VariableTable" Name="UseParameters" Desc="use parameters"/>
+			</Cmd>
+			<Res>
+				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params Type="PlayerID" Name="PlayerID" Desc="player id for validation"/>
+				<Params Type="VariableTable" Name="ResultAttributes" Desc="Use result attributes"/>
+			</Res>
+		</Command>
 
 
 		<!-- ============================  Streaming ============================================ -->
