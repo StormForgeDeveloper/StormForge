@@ -57,7 +57,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle,
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return pOnlineClient->StartConnection(gameId, loginAddress, userId, password);
+	return (int32_t)pOnlineClient->StartConnection(gameId, loginAddress, userId, password);
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle, uint64_t gameInstanceUID)
@@ -67,7 +67,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return pOnlineClient->JoinGameInstance(gameInstanceUID);
+	return (int32_t)pOnlineClient->JoinGameInstance(gameInstanceUID);
 }
 
 SFDLL_EXPORT void SFOnlineClient_NativeDisconnectAll(intptr_t nativeHandle)

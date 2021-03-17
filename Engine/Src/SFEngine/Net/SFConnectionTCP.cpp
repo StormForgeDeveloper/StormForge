@@ -433,6 +433,10 @@ namespace Net {
 			}
 			switch ((uint32_t)hrConResult)
 			{
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+			// This is for Winsock 1.1, but happens with 2.2 sometimes?
+			case (uint32_t)ResultCode::INVALID_ARG:
+#endif
 			case (uint32_t)ResultCode::IO_INPROGRESS:
 			case (uint32_t)ResultCode::IO_WOULDBLOCK:  // First call need to wait
 			case (uint32_t)ResultCode::IO_ALREADY:		// called again, still need to wait

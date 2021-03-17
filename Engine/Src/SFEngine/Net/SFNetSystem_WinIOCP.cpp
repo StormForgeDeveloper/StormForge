@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko 
+// CopyRight (c) Kyungkun Ko 
 // 
 // Author : KyungKun Ko
 //
@@ -373,6 +373,8 @@ namespace Net {
 				SFLog(Net, Error, "Can't Initialize Winsock DLL err={0}", iErr);
 				return iErr;
 			}
+
+			SFLog(Net, Info, "Socket system has initialized {0}.{1}", HIBYTE(wsaData.wVersion), LOBYTE(wsaData.wVersion));
 
 
 			SYSTEM_INFO sysInfo;
