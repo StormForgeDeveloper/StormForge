@@ -58,7 +58,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt( intptr_t InNa
 
 
 // Cmd: Occupy map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId, uint32_t InUsageId )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint32_t InUsageId )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
@@ -66,11 +66,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd( intptr_t InNati
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId, uint32_t InUsageId )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint32_t InUsageId )
 
 
 // Cmd: Unoccupy map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
@@ -78,11 +78,11 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd( intptr_t InNa
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId )
 
 
 // Cmd: Use map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId, uint16_t _sizeOfInUseParameters,uint8_t* InUseParameters )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInUseParameters,uint8_t* InUseParameters )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
@@ -90,7 +90,19 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeC
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId, uint16_t _sizeOfInUseParameters,uint8_t* InUseParameters )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInUseParameters,uint8_t* InUseParameters )
+
+
+// Cmd: Havest area
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceHarvestAreaCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InAreaId )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::PlayInstance::HarvestAreaCmd::Create(pConnection->GetHeap(), InTransactionID, InPlayInstanceUID, InPlayerID, InAreaId);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceHarvestAreaCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InAreaId )
 
 
 // Cmd: Create stream instance
@@ -209,7 +221,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementS2CEvt( intptr_t InNa
 
 
 // Cmd: Occupy map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
@@ -217,12 +229,12 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectRes( intptr_t InNati
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceOccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId )
 
 
 
 // Cmd: Unoccupy map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
@@ -230,20 +242,33 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes( intptr_t InNa
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InMapObjectId )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId )
 
 
 
 // Cmd: Use map object
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::UseMapObjectRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInResultAttributes, _sizeOfInResultAttributes, InResultAttributes));
+	MessageDataPtr pMessage = SF::Message::PlayInstance::UseMapObjectRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId,SF::ArrayView<uint8_t>(_sizeOfInResultAttributes, _sizeOfInResultAttributes, InResultAttributes));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
+
+
+
+// Cmd: Havest area
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceHarvestAreaRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InAreaId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::PlayInstance::HarvestAreaRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InAreaId,SF::ArrayView<uint8_t>(_sizeOfInResultAttributes, _sizeOfInResultAttributes, InResultAttributes));
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceHarvestAreaRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InAreaId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
 
 
 

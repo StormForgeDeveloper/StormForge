@@ -909,7 +909,7 @@ namespace SF
 			}; // Result OccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
+			MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -945,7 +945,7 @@ namespace SF
 				protocolCheck(*output << InUsageId);
 
 				return hr;
-			}; // MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
+			}; // MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId )
 
 
 
@@ -1012,7 +1012,7 @@ namespace SF
 			}; // Result OccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+			MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1048,7 +1048,7 @@ namespace SF
 				protocolCheck(*output << InMapObjectId);
 
 				return hr;
-			}; // MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+			}; // MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 
 
 
@@ -1114,7 +1114,7 @@ namespace SF
 			}; // Result UnoccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+			MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1148,7 +1148,7 @@ namespace SF
 				protocolCheck(*output << InMapObjectId);
 
 				return hr;
-			}; // MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+			}; // MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 
 
 
@@ -1215,7 +1215,7 @@ namespace SF
 			}; // Result UnoccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+			MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1251,7 +1251,7 @@ namespace SF
 				protocolCheck(*output << InMapObjectId);
 
 				return hr;
-			}; // MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+			}; // MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 
 
 
@@ -1331,7 +1331,7 @@ namespace SF
 
 			}; // Result UseMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const Array<uint8_t>& InUseParameters )
+			MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1368,9 +1368,9 @@ namespace SF
 				protocolCheck(*output << InUseParameters);
 
 				return hr;
-			}; // MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const Array<uint8_t>& InUseParameters )
+			}; // MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters )
 
-			MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const VariableTable &InUseParameters )
+			MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1409,7 +1409,7 @@ namespace SF
 				protocolCheck(*output << InUseParameters);
 
 				return hr;
-			}; // MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const VariableTable &InUseParameters )
+			}; // MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
 
 
 
@@ -1450,6 +1450,7 @@ namespace SF
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_PlayInstanceUID);
 				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_MapObjectId);
 				protocolCheck(input->Read(ArrayLen));
 				uint8_t* ResultAttributesPtr = nullptr;
 				protocolCheck(input->ReadLink(ResultAttributesPtr, ArrayLen));
@@ -1471,6 +1472,7 @@ namespace SF
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("MapObjectId", parser.GetMapObjectId());
 				variableBuilder.SetVariable("ResultAttributes", "VariableTable", parser.GetResultAttributesRaw());
 
 				return hr;
@@ -1488,7 +1490,7 @@ namespace SF
 
 			}; // Result UseMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InResultAttributes )
+			MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InResultAttributes )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1509,6 +1511,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMapObjectId)
 					+ serializedSizeOfInResultAttributes
 				);
 
@@ -1522,12 +1525,13 @@ namespace SF
 				protocolCheck(*output << InResult);
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InMapObjectId);
 				protocolCheck(*output << InResultAttributes);
 
 				return hr;
-			}; // MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InResultAttributes )
+			}; // MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InResultAttributes )
 
-			MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InResultAttributes )
+			MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1548,6 +1552,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMapObjectId)
 					+ sizeof(uint16_t)
 					+ serializedSizeOfInResultAttributes
 				);
@@ -1562,11 +1567,12 @@ namespace SF
 				protocolCheck(*output << InResult);
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InMapObjectId);
 				protocolCheck(output->Write(serializedSizeOfInResultAttributes));
 				protocolCheck(*output << InResultAttributes);
 
 				return hr;
-			}; // MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InResultAttributes )
+			}; // MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
 
 
 
@@ -1574,13 +1580,276 @@ namespace SF
 			{
  				UseMapObjectRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "UseMapObject:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, ResultAttributes:{6}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetResultAttributes()); 
+				SFLog(Net, Debug1, "UseMapObject:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, MapObjectId:{6}, ResultAttributes:{7}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId(), parser.GetResultAttributes()); 
 				return ResultCode::SUCCESS;
 			}; // Result UseMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
+			// Cmd: Havest area
+			const MessageID HarvestAreaCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
+			Result HarvestAreaCmd::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_AreaId);
+
+				return hr;
+
+			}; // Result HarvestAreaCmd::ParseMessage(const MessageData* pIMsg)
+
+			Result HarvestAreaCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				HarvestAreaCmd parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("AreaId", parser.GetAreaId());
+
+				return hr;
+
+			}; // Result HarvestAreaCmd::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result HarvestAreaCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) HarvestAreaCmd(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result HarvestAreaCmd::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+
+
+			MessageData* HarvestAreaCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InAreaId)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::HarvestAreaCmd::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InAreaId);
+
+				return hr;
+			}; // MessageData* HarvestAreaCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId )
+
+
+
+			Result HarvestAreaCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				HarvestAreaCmd parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "HarvestArea:{0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, AreaId:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetAreaId()); 
+				return ResultCode::SUCCESS;
+			}; // Result HarvestAreaCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			const MessageID HarvestAreaRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
+			const VariableTable& HarvestAreaRes::GetResultAttributes() const
+			{
+ 				if (!m_ResultAttributesHasParsed)
+				{
+ 					m_ResultAttributesHasParsed = true;
+					InputMemoryStream ResultAttributes_ReadStream(m_ResultAttributesRaw);
+					*ResultAttributes_ReadStream.ToInputStream() >> m_ResultAttributes;
+				} // if (!m_ResultAttributesHasParsed)
+				return m_ResultAttributes;
+			} // const VariableTable& HarvestAreaRes::GetResultAttributes() const
+			Result HarvestAreaRes::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_AreaId);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* ResultAttributesPtr = nullptr;
+				protocolCheck(input->ReadLink(ResultAttributesPtr, ArrayLen));
+				m_ResultAttributesRaw.SetLinkedBuffer(ArrayLen, ResultAttributesPtr);
+
+				return hr;
+
+			}; // Result HarvestAreaRes::ParseMessage(const MessageData* pIMsg)
+
+			Result HarvestAreaRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				HarvestAreaRes parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("AreaId", parser.GetAreaId());
+				variableBuilder.SetVariable("ResultAttributes", "VariableTable", parser.GetResultAttributesRaw());
+
+				return hr;
+
+			}; // Result HarvestAreaRes::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result HarvestAreaRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) HarvestAreaRes(std::forward<MessageDataPtr>(pIMsg)));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result HarvestAreaRes::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )
+
+			MessageData* HarvestAreaRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const Array<uint8_t>& InResultAttributes )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InAreaId)
+					+ serializedSizeOfInResultAttributes
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::HarvestAreaRes::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InAreaId);
+				protocolCheck(*output << InResultAttributes);
+
+				return hr;
+			}; // MessageData* HarvestAreaRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const Array<uint8_t>& InResultAttributes )
+
+			MessageData* HarvestAreaRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InAreaId)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInResultAttributes
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::HarvestAreaRes::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InAreaId);
+				protocolCheck(output->Write(serializedSizeOfInResultAttributes));
+				protocolCheck(*output << InResultAttributes);
+
+				return hr;
+			}; // MessageData* HarvestAreaRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes )
+
+
+
+			Result HarvestAreaRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				HarvestAreaRes parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "HarvestArea:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, AreaId:{6}, ResultAttributes:{7}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetAreaId(), parser.GetResultAttributes()); 
+				return ResultCode::SUCCESS;
+			}; // Result HarvestAreaRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
 			// Cmd: Create stream instance
-			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
+			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
 			Result CreateStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1676,7 +1945,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
+			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
 			Result CreateStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1781,7 +2050,7 @@ namespace SF
 			}; // Result CreateStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Open stream instance
-			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
+			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
 			Result FindStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1877,7 +2146,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result FindStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
+			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
 			Result FindStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1982,7 +2251,7 @@ namespace SF
 			}; // Result FindStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Delete stream instance
-			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
+			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
 			Result DeleteStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2078,7 +2347,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
+			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
 			Result DeleteStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2170,7 +2439,7 @@ namespace SF
 			}; // Result DeleteStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Get stream list
-			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
+			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
 			Result GetStreamListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2261,7 +2530,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetStreamListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetStreamListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
+			const MessageID GetStreamListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
 			Result GetStreamListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;

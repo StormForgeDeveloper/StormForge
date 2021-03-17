@@ -69,6 +69,11 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::UseMapObjectCmd::MID.IDSeq.MsgID,&Message::PlayInstance::UseMapObjectCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::UseMapObjectRes::MID.IDSeq.MsgID,&Message::PlayInstance::UseMapObjectRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::UseMapObjectRes::MID.IDSeq.MsgID,&Message::PlayInstance::UseMapObjectRes::ParseMessageToMessageBase));
+			// Cmd: Havest area
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::HarvestAreaCmd::MID.IDSeq.MsgID,&Message::PlayInstance::HarvestAreaCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::HarvestAreaCmd::MID.IDSeq.MsgID,&Message::PlayInstance::HarvestAreaCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::HarvestAreaRes::MID.IDSeq.MsgID,&Message::PlayInstance::HarvestAreaRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::HarvestAreaRes::MID.IDSeq.MsgID,&Message::PlayInstance::HarvestAreaRes::ParseMessageToMessageBase));
 			// Cmd: Create stream instance
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::ParseMessageToMessageBase));

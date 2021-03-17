@@ -107,6 +107,17 @@ namespace SF.Net
 			return result;
 		} // public int  UseMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters )
 
+		// Cmd: Havest area
+		public int  HarvestAreaCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InAreaId )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_PlayInstanceHarvestAreaCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InAreaId);
+			}
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.HarvestAreaCmd);
+			return result;
+		} // public int  HarvestAreaCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InAreaId )
+
 		// Cmd: Create stream instance
 		public int  CreateStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
 		{
@@ -182,6 +193,11 @@ namespace SF.Net
 		// Cmd: Use map object
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceUseMapObjectCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstanceUseMapObjectCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt16 _sizeOfInUseParameters,IntPtr InUseParameters );
+
+
+		// Cmd: Havest area
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceHarvestAreaCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstanceHarvestAreaCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InAreaId );
 
 
 		// Cmd: Create stream instance
@@ -310,17 +326,31 @@ namespace SF.Net
 
 
 		// Cmd: Use map object
-		public int  UseMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InResultAttributes )
+		public int  UseMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InResultAttributes )
 		{
  			int result;
 			var InResultAttributes_ = InResultAttributes.ToByteArray();
 			using (var InResultAttributes_PinnedPtr_ = new PinnedByteBuffer(InResultAttributes_))
 			{
-			result = CSSFNetAdapter_PlayInstanceUseMapObjectRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID,(ushort)InResultAttributes_.Length, InResultAttributes_PinnedPtr_.Ptr);
+			result = CSSFNetAdapter_PlayInstanceUseMapObjectRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId,(ushort)InResultAttributes_.Length, InResultAttributes_PinnedPtr_.Ptr);
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.UseMapObjectRes);
 			return result;
-		} // public int  UseMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InResultAttributes )
+		} // public int  UseMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InResultAttributes )
+
+
+		// Cmd: Havest area
+		public int  HarvestAreaRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InAreaId, SF.VariableTable InResultAttributes )
+		{
+ 			int result;
+			var InResultAttributes_ = InResultAttributes.ToByteArray();
+			using (var InResultAttributes_PinnedPtr_ = new PinnedByteBuffer(InResultAttributes_))
+			{
+			result = CSSFNetAdapter_PlayInstanceHarvestAreaRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InAreaId,(ushort)InResultAttributes_.Length, InResultAttributes_PinnedPtr_.Ptr);
+			}
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.HarvestAreaRes);
+			return result;
+		} // public int  HarvestAreaRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InAreaId, SF.VariableTable InResultAttributes )
 
 
 		// Cmd: Create stream instance
@@ -417,7 +447,13 @@ namespace SF.Net
 
 		// Cmd: Use map object
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceUseMapObjectRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceUseMapObjectRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt16 _sizeOfInResultAttributes,IntPtr InResultAttributes );
+		static extern int CSSFNetAdapter_PlayInstanceUseMapObjectRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt16 _sizeOfInResultAttributes,IntPtr InResultAttributes );
+
+
+
+		// Cmd: Havest area
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceHarvestAreaRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstanceHarvestAreaRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InAreaId, System.UInt16 _sizeOfInResultAttributes,IntPtr InResultAttributes );
 
 
 

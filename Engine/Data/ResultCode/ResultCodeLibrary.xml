@@ -195,6 +195,10 @@
 
 	<ResultCodeItem Severity="Error" CodeName="SERVICE_NOT_AVAILABLE" Desc="Service is not available"/>
 
+	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_ALREADY_IN_USE" Desc="Map object is already in use"/>
+	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_IN_USE" Desc="Map object is not in use"/>
+	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_FOUND" Desc="Map object is already in use"/>
+	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_OCCUPIED_BY_PLAYER" Desc="Map object is not occupied by the player"/>
 
 </ResultCodes>
 

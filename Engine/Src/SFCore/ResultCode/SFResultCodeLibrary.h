@@ -543,6 +543,18 @@ namespace SF {
 			// Service is not available 
 			constexpr Result 			SERVICE_NOT_AVAILABLE                                              ((int32_t)0xE70100AEL);
 
+			// Map object is already in use 
+			constexpr Result 			MAPOBJECT_ALREADY_IN_USE                                           ((int32_t)0xE70100AFL);
+
+			// Map object is not in use 
+			constexpr Result 			MAPOBJECT_NOT_IN_USE                                               ((int32_t)0xE70100B0L);
+
+			// Map object is already in use 
+			constexpr Result 			MAPOBJECT_NOT_FOUND                                                ((int32_t)0xE70100B1L);
+
+			// Map object is not occupied by the player 
+			constexpr Result 			MAPOBJECT_NOT_OCCUPIED_BY_PLAYER                                   ((int32_t)0xE70100B2L);
+
 	}//namespace ResultCode 
 }//namespace SF 
 

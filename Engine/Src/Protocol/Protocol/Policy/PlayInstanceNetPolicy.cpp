@@ -71,7 +71,7 @@ namespace SF
 
 	}; // Result NetPolicyPlayInstance::PlayerMovementC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 	// Cmd: Occupy map object
-	Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
+	Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId )
 	{
  		ScopeContext hr;
 
@@ -85,9 +85,9 @@ namespace SF
 
 		return hr;
 
-	}; // Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
+	}; // Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId )
 	// Cmd: Unoccupy map object
-	Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 	{
  		ScopeContext hr;
 
@@ -101,9 +101,9 @@ namespace SF
 
 		return hr;
 
-	}; // Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	}; // Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 	// Cmd: Use map object
-	Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const VariableTable &InUseParameters )
+	Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
 	{
  		ScopeContext hr;
 
@@ -117,7 +117,23 @@ namespace SF
 
 		return hr;
 
-	}; // Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const VariableTable &InUseParameters )
+	}; // Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
+	// Cmd: Havest area
+	Result NetPolicyPlayInstance::HarvestAreaCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::HarvestAreaCmd::Create(GetSystemHeap(), InTransactionID, InPlayInstanceUID, InPlayerID, InAreaId);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+		return hr;
+
+	}; // Result NetPolicyPlayInstance::HarvestAreaCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId )
 	// Cmd: Create stream instance
 	Result NetPolicyPlayInstance::CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	{
@@ -265,7 +281,7 @@ namespace SF
 
 	}; // Result NetSvrPolicyPlayInstance::PlayerMovementS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 	// Cmd: Occupy map object
-	Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 	{
  		ScopeContext hr;
 
@@ -279,9 +295,9 @@ namespace SF
 
 		return hr;
 
-	}; // Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	}; // Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 	// Cmd: Unoccupy map object
-	Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 	{
  		ScopeContext hr;
 
@@ -295,23 +311,39 @@ namespace SF
 
 		return hr;
 
-	}; // Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+	}; // Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 	// Cmd: Use map object
-	Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InResultAttributes )
+	Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::UseMapObjectRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InResultAttributes);
+		 pMessage = SF::Message::PlayInstance::UseMapObjectRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId, InResultAttributes);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
 		return hr;
 
-	}; // Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InResultAttributes )
+	}; // Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
+	// Cmd: Havest area
+	Result NetSvrPolicyPlayInstance::HarvestAreaRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::HarvestAreaRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InAreaId, InResultAttributes);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+		return hr;
+
+	}; // Result NetSvrPolicyPlayInstance::HarvestAreaRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes )
 	// Cmd: Create stream instance
 	Result NetSvrPolicyPlayInstance::CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 	{

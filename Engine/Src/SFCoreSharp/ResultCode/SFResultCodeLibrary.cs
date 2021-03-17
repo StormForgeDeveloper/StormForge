@@ -539,6 +539,18 @@ namespace SF {
 		// Service is not available 
 		public const int SERVICE_NOT_AVAILABLE =                            unchecked((int)0xE70100AE); 
 
+		// Map object is already in use 
+		public const int MAPOBJECT_ALREADY_IN_USE =                         unchecked((int)0xE70100AF); 
+
+		// Map object is not in use 
+		public const int MAPOBJECT_NOT_IN_USE =                             unchecked((int)0xE70100B0); 
+
+		// Map object is already in use 
+		public const int MAPOBJECT_NOT_FOUND =                              unchecked((int)0xE70100B1); 
+
+		// Map object is not occupied by the player 
+		public const int MAPOBJECT_NOT_OCCUPIED_BY_PLAYER =                 unchecked((int)0xE70100B2); 
+
 	}
 }
 
