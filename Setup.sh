@@ -47,9 +47,17 @@ fi
 
 
 
+
 pushd src/mysql/
 ./setup_ubuntu.sh
 popd
+
+
+
+pushd src/mongoc/
+./download.sh
+popd
+
 
 
 echo ==============================================================

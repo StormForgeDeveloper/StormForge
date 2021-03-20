@@ -56,6 +56,10 @@ if not exist "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt
 )
 
 
+
+cmd /c "cd 3rdParties\src\mongoc & download.cmd"
+
+
 @echo ==============================================================
 @echo Register test host names 
 @echo Zookeeper: SFTestZookeeper.com
