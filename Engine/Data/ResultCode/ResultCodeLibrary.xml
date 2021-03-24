@@ -200,5 +200,8 @@
 	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_FOUND" Desc="Map object is already in use"/>
 	<ResultCodeItem Severity="Error" CodeName="MAPOBJECT_NOT_OCCUPIED_BY_PLAYER" Desc="Map object is not occupied by the player"/>
 
+	<ResultCodeItem Severity="Error" CodeName="INVALID_CHARACTERID" Desc="Invalid character ID"/>
+	<ResultCodeItem Severity="Error" CodeName="CHARACTER_NOT_SELECTED" Desc="Character hasn't selected"/>
+
 </ResultCodes>
 

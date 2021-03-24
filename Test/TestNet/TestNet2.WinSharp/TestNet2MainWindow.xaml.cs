@@ -179,7 +179,7 @@ namespace TestNet2.WinSharp
             var logServer = txtLogServer.Text;
             SavedValueRegistry.SaveValue("LogServer", logServer);
 
-            var result = m_OnlineClient.StartConnection("FishingOnline", loginAddress, userId, userId);
+            var result = m_OnlineClient.StartConnection(1, "FishingOnline", loginAddress, userId, userId);
             if (result.IsSucceeded)
             {
             }
@@ -269,7 +269,7 @@ namespace TestNet2.WinSharp
         {
             var selectedZone = listZone.SelectedItem as ZoneItem;
 
-            var res = m_OnlineClient.JoinGameInstance(selectedZone.ZoneInstanceId);
+            var res = m_OnlineClient.JoinGameInstance(2, selectedZone.ZoneInstanceId);
             if (res.IsFailed)
             {
             }
@@ -316,6 +316,7 @@ namespace TestNet2.WinSharp
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.JoinGameInstanceRes, 0, HandleJoinGameInstanceRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.LeaveGameInstanceRes, 0, HandleLeaveGameInstanceRes);
 
+            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.JoinGameInstanceRes, 0, HandleJoinConnectedGameInstanceRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.NewPlayerInViewS2CEvt, 0, HandleNewPlayerInView);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.RemovePlayerFromViewS2CEvt, 0, HandleRemovePlayerFromView);
         }
@@ -477,6 +478,22 @@ namespace TestNet2.WinSharp
             {
                 return;
             }
+        }
+
+        void HandleJoinConnectedGameInstanceRes(SFMessage message)
+        {
+            UpdateButtonState();
+
+            var result = message.GetValue<Result>("Result");
+            if (result.IsFailed)
+            {
+                return;
+            }
+
+            var playInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
+            var playerID = message.GetValue<UInt64>("PlayerID");
+            var visualData = message.GetValue<UInt32>("MovementFrame");
+            // player join process has finished
         }
 
         void HandleNewPlayerInView(SFMessage message)

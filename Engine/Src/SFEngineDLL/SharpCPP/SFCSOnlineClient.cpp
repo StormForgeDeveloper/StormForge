@@ -50,24 +50,24 @@ SFDLL_EXPORT intptr_t SFOnlineClient_NativeCreateOnlineClient()
 	return NativeObjectToIntptr(pOnlineClient.get());
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, const char* gameId, const char* loginAddress, const char* userId, const char* password)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, uint64_t transactionId, const char* gameId, const char* loginAddress, const char* userId, const char* password)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return (int32_t)pOnlineClient->StartConnection(gameId, loginAddress, userId, password);
+	return (int32_t)pOnlineClient->StartConnection(transactionId, gameId, loginAddress, userId, password);
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle, uint64_t gameInstanceUID)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle, uint64_t transactionId, uint64_t gameInstanceUID)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return (int32_t)pOnlineClient->JoinGameInstance(gameInstanceUID);
+	return (int32_t)pOnlineClient->JoinGameInstance(transactionId, gameInstanceUID);
 }
 
 SFDLL_EXPORT void SFOnlineClient_NativeDisconnectAll(intptr_t nativeHandle)
@@ -110,7 +110,11 @@ SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetGameInstanceUID(intptr_t nativeHan
 	return uint64_t(pOnlineClient->GetGameInstanceUID());
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, ONLINE_STATECHANGED_CALLBACK stateChangedCallback, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, 
+	ONLINE_STATECHANGED_CALLBACK stateChangedCallback, 
+	SET_EVENT_FUNCTION setEventFunc, 
+	SET_MESSAGE_FUNCTION setMessageFunc, VariableMapBuilderCS::SET_FUNCTION setValueFunc, VariableMapBuilderCS::SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady, 
+	OnlineClient::ONLINE_TASK_FINISHED_CALLBACK onTaskFinished)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
@@ -154,6 +158,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, 
 	}
 
 	pOnlineClient->SetStateChangeCallback(stateChangedCallback);
+	pOnlineClient->SetTaskFinishedCallback(onTaskFinished);
 
 	pOnlineClient->UpdateGameTick();
 
@@ -177,7 +182,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle, 
 	}
 
 	pOnlineClient->SetStateChangeCallback(nullptr);
-
+	pOnlineClient->SetTaskFinishedCallback(nullptr);
 
 	return ResultCode::SUCCESS;
 

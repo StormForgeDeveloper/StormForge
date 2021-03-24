@@ -30,10 +30,10 @@ namespace SF
 	//	ClientTask class
 	// 
 
-	OnlineClient::ClientTask::ClientTask(OnlineClient& owner)
+	OnlineClient::ClientTask::ClientTask(OnlineClient& owner, uint64_t transactionId)
 		: m_Owner(owner)
+		, m_TransactionId(transactionId)
 	{
-
 	}
 
 	OnlineClient::ClientTask::~ClientTask()
@@ -55,8 +55,8 @@ namespace SF
 
 	public:
 
-		ClientTask_Login(OnlineClient& owner)
-			: ClientTask(owner)
+		ClientTask_Login(OnlineClient& owner, uint64_t transactionId)
+			: ClientTask(owner, transactionId)
 		{
 		}
 
@@ -198,8 +198,8 @@ namespace SF
 
 	public:
 
-		ClientTask_JoinGameServer(OnlineClient& owner)
-			: ClientTask(owner)
+		ClientTask_JoinGameServer(OnlineClient& owner, uint64_t transactionId)
+			: ClientTask(owner, transactionId)
 		{
 		}
 
@@ -378,8 +378,8 @@ namespace SF
 
 	public:
 
-		ClientTask_JoinGameInstanceServer(OnlineClient& owner)
-			: ClientTask(owner)
+		ClientTask_JoinGameInstanceServer(OnlineClient& owner, uint64_t transactionId)
+			: ClientTask(owner, transactionId)
 		{
 		}
 
@@ -651,7 +651,7 @@ namespace SF
 	}
 
 
-	Result OnlineClient::StartConnection(StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password)
+	Result OnlineClient::StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password)
 	{
 		if (GetOnlineState() != OnlineState::None
 			&& GetOnlineState() != OnlineState::Disconnected)
@@ -675,13 +675,13 @@ namespace SF
 
 		SFLog(Net, Info, "OnlineClient::StartConnection login:{0}", loginAddress);
 
-		m_PendingTasks.push_back(new(GetHeap()) ClientTask_Login(*this));
-		m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameServer(*this));
+		m_PendingTasks.push_back(new(GetHeap()) ClientTask_Login(*this, transactionId));
+		m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameServer(*this, transactionId));
 
 		return ResultCode::SUCCESS;
 	}
 
-	Result OnlineClient::JoinGameInstance(uint64_t gameInstanceId)
+	Result OnlineClient::JoinGameInstance(uint64_t transactionId, uint64_t gameInstanceId)
 	{
 		if (GetOnlineState() != OnlineState::InGameServer)
 		{
@@ -700,7 +700,7 @@ namespace SF
 		m_GameInstanceUID = gameInstanceId;
 
 		if (m_GameInstanceUID != 0)
-			m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameInstanceServer(*this));
+			m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameInstanceServer(*this, transactionId));
 
 		return ResultCode::SUCCESS;
 	}
@@ -803,12 +803,24 @@ namespace SF
 			m_CurrentTask->TickUpdate();
 			if (m_CurrentTask->GetResult() != ResultCode::BUSY)
 			{
+				uint64_t temp{};
+				if (m_FinishedTaskTransactionIds.IsFull())
+					m_FinishedTaskTransactionIds.Dequeue(temp);
+				m_FinishedTaskTransactionIds.Enqueue(m_CurrentTask->GetTransactionID());
+
 				// Sequence of task are queued int the PendingTasks, if one fails need to cancel whole task sequence
 				if (!m_CurrentTask->GetResult())
 					ClearTasks();
 				else
 					m_CurrentTask.reset();
 			}
+		}
+
+		uint64_t transId{};
+		while (m_FinishedTaskTransactionIds.Dequeue(transId))
+		{
+			if (m_OnlineTaskFinishedCallback)
+				m_OnlineTaskFinishedCallback(transId);
 		}
 
 		if (m_CurrentTask == nullptr && m_PendingTasks.size() > 0)

@@ -551,6 +551,12 @@ namespace SF {
 		// Map object is not occupied by the player 
 		public const int MAPOBJECT_NOT_OCCUPIED_BY_PLAYER =                 unchecked((int)0xE70100B2); 
 
+		// Invalid character ID 
+		public const int INVALID_CHARACTERID =                              unchecked((int)0xE70100B3); 
+
+		// Character hasn't selected 
+		public const int CHARACTER_NOT_SELECTED =                           unchecked((int)0xE70100B4); 
+
 	}
 }
 

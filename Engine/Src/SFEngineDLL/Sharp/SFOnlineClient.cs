@@ -70,6 +70,10 @@ namespace SF
         public delegate void OnlineStateChangedHandler(object sender, OnlineState prevState, OnlineState newState);
         public static event OnlineStateChangedHandler OnOnlineStateChanged;
 
+        public delegate void OnlineTaskFinishedHandler(UInt64 transactionId);
+        public static event OnlineTaskFinishedHandler OnOnlineTaskFinished;
+        
+
 
         public OnlineClient(SFIMessageRouter messageRouter = null)
         {
@@ -77,15 +81,15 @@ namespace SF
             m_MessageRouter = messageRouter;
         }
 
-        public Result StartConnection(string gameId, string loginAddress, string userId, string password)
+        public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, string userId, string password)
         {
-            var res = NativeStartConnection(NativeHandle, gameId, loginAddress, userId, password);
+            var res = NativeStartConnection(NativeHandle, transactionId, gameId, loginAddress, userId, password);
             return new Result((int)res);
         }
 
-        public Result JoinGameInstance(UInt64 gameInstanceUID)
+        public Result JoinGameInstance(UInt64 transactionId, UInt64 gameInstanceUID)
         {
-            var res = NativeJoinGameInstance(NativeHandle, gameInstanceUID);
+            var res = NativeJoinGameInstance(NativeHandle, transactionId, gameInstanceUID);
             return new Result((int)res);
         }
 
@@ -106,7 +110,8 @@ namespace SF
                     SFMessageParsingUtil.MessageParseCreateCallback,
                     SFMessageParsingUtil.MessageParseSetValue,
                     SFMessageParsingUtil.MessageParseSetArray,
-                    OnMessageReady_Internal
+                    OnMessageReady_Internal,
+                    OnTaskFinished_Internal
                     );
 
                 SFMessageParsingUtil.stm_ParsingMessage = null;
@@ -199,6 +204,11 @@ namespace SF
             stm_StaticEventReceiver.m_MessageRouter?.HandleRecvMessage(message);
         }
 
+        static internal void OnTaskFinished_Internal(UInt64 transactionId)
+        {
+            OnOnlineTaskFinished?.Invoke(transactionId);
+        }
+
 
         #endregion
 
@@ -234,14 +244,18 @@ namespace SF
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void ONLINE_STATECHAGED_CALLBACK(OnlineState prevState, OnlineState newState);
 
+        [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
+        public delegate void ONLINE_TASK_FINISHED_CALLBACK(UInt64 transactionId);
+
+
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeCreateOnlineClient", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateOnlineClient();
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeStartConnection", CharSet = CharSet.Auto)]
-        static extern Int32 NativeStartConnection(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, [MarshalAs(UnmanagedType.LPStr)] string userId, [MarshalAs(UnmanagedType.LPStr)] string password);
+        static extern Int32 NativeStartConnection(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, [MarshalAs(UnmanagedType.LPStr)] string userId, [MarshalAs(UnmanagedType.LPStr)] string password);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeJoinGameInstance", CharSet = CharSet.Auto)]
-        static extern Int32 NativeJoinGameInstance(IntPtr nativeHandle, UInt64 gameInstanceUID);
+        static extern Int32 NativeJoinGameInstance(IntPtr nativeHandle, UInt64 transactionId, UInt64 gameInstanceUID);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeDisconnectAll", CharSet = CharSet.Auto)]
         static extern void NativeDisconnectAll(IntPtr nativeHandle);
@@ -256,7 +270,7 @@ namespace SF
         static extern UInt64 NativeGetGameInstanceUID(IntPtr nativeHandle);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeUpdateGameTick", CharSet = CharSet.Auto)]
-        static extern Int32 NativeUpdateGameTick(IntPtr nativeHandle, ONLINE_STATECHAGED_CALLBACK setOnlineStateEventFunc, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady);
+        static extern Int32 NativeUpdateGameTick(IntPtr nativeHandle, ONLINE_STATECHAGED_CALLBACK setOnlineStateEventFunc, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady, ONLINE_TASK_FINISHED_CALLBACK onTaskFinished);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeUpdateMovement", CharSet = CharSet.Auto)]
         static extern Int32 NativeUpdateMovement(IntPtr nativeHandle, UInt32 deltaFrames);

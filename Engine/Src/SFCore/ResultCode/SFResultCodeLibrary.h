@@ -555,6 +555,12 @@ namespace SF {
 			// Map object is not occupied by the player 
 			constexpr Result 			MAPOBJECT_NOT_OCCUPIED_BY_PLAYER                                   ((int32_t)0xE70100B2L);
 
+			// Invalid character ID 
+			constexpr Result 			INVALID_CHARACTERID                                                ((int32_t)0xE70100B3L);
+
+			// Character hasn't selected 
+			constexpr Result 			CHARACTER_NOT_SELECTED                                             ((int32_t)0xE70100B4L);
+
 	}//namespace ResultCode 
 }//namespace SF 
 

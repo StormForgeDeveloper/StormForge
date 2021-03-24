@@ -74,6 +74,8 @@ namespace SF
 
 		typedef void(*ONLINESTATE_CHAGED_CALLBACK)(OnlineClient::OnlineState prevState, OnlineClient::OnlineState newState);
 
+		typedef void(*ONLINE_TASK_FINISHED_CALLBACK)(uint64_t transactionId);
+
 
 		/////////////////////////////////////////////////////////////////////////////////////
 		// 
@@ -85,12 +87,14 @@ namespace SF
 		public:
 			using OnlineState = OnlineClient::OnlineState;
 
-			ClientTask(OnlineClient& owner);
+			ClientTask(OnlineClient& owner, uint64_t transactionId);
 			virtual ~ClientTask();
 
 			IHeap& GetHeap() { return m_Owner.GetHeap(); }
 
 			void SetOnlineState(OnlineState newState);
+
+			uint64_t GetTransactionID() const { return m_TransactionId; }
 
 			void SetResult(Result result) { m_Result = result; }
 			Result GetResult() const { return m_Result; }
@@ -102,6 +106,7 @@ namespace SF
 
 			OnlineClient& m_Owner;
 			Result m_Result = ResultCode::SUCCESS;
+			uint64_t m_TransactionId{};
 		};
 
 	public:
@@ -111,10 +116,10 @@ namespace SF
 
 
 		// Initialize and start connection process
-		Result StartConnection(StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password);
+		Result StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password);
 
 		// Join game instance
-		Result JoinGameInstance(uint64_t gameInstanceId);
+		Result JoinGameInstance(uint64_t transactionId, uint64_t gameInstanceId);
 
 		// Disconnect all connection
 		void DisconnectAll();
@@ -156,6 +161,7 @@ namespace SF
 		void SetMovementFrame(uint32_t moveFrame) { m_MoveFrame = moveFrame; }
 
 		void SetStateChangeCallback(ONLINESTATE_CHAGED_CALLBACK callback) { m_OnlineStateChangedCallback = callback; }
+		void SetTaskFinishedCallback(ONLINE_TASK_FINISHED_CALLBACK callback) { m_OnlineTaskFinishedCallback = callback; }
 
 	private:
 
@@ -214,6 +220,7 @@ namespace SF
 
 		SFUniquePtr<ClientTask> m_CurrentTask;
 		DynamicArray<ClientTask*> m_PendingTasks;
+		CircularQueue<uint64_t, 4> m_FinishedTaskTransactionIds;
 
 		// My actor movement
 		SharedPointerT<SendingActorMovementManager> m_OutgoingMovement;
@@ -226,6 +233,7 @@ namespace SF
 
 		CircularPageQueue<OnlineStateChangedEventArgs> m_OnlineStateChangedQueue;
 		ONLINESTATE_CHAGED_CALLBACK m_OnlineStateChangedCallback{};
+		ONLINE_TASK_FINISHED_CALLBACK m_OnlineTaskFinishedCallback{};
 	};
 
 
