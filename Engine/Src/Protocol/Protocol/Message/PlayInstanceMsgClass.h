@@ -96,7 +96,7 @@ namespace SF
 				Result m_Result{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
-				uint32_t m_MovementFrame{};
+				ActorMovement m_Movement{};
 			public:
 				JoinGameInstanceRes()
 					{}
@@ -111,7 +111,7 @@ namespace SF
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const uint32_t& GetMovementFrame() const	{ return m_MovementFrame; };
+				const ActorMovement& GetMovement() const	{ return m_Movement; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -119,7 +119,7 @@ namespace SF
 				static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMovementFrame );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 
 			}; // class JoinGameInstanceRes : public MessageBase
 

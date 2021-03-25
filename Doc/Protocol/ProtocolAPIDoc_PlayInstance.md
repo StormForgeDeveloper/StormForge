@@ -42,7 +42,7 @@ C++: Cast message to JoinGameInstanceRes to access values
 
 		- OutPlayerID: PlayerID type. Joined player id for validation
 
-		- OutMovementFrame: uint32 type. Movement Frame
+		- OutMovement: ActorMovement type. Start movement
 
 
 ## PlayerKickedS2CEvt

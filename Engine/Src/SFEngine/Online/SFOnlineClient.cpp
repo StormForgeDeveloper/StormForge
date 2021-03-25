@@ -564,9 +564,9 @@ namespace SF
 			}
 
 
-			SFLog(Net, Info, "PlayInstance::JoinGameInstanceRes joined: {0}, F:{1:X}", m_Owner.m_GameInstanceUID, packet.GetMovementFrame());
+			SFLog(Net, Info, "PlayInstance::JoinGameInstanceRes joined: {0}, F:{1:X}", m_Owner.m_GameInstanceUID, packet.GetMovement().MoveFrame);
 
-			m_Owner.SetMovementFrame(packet.GetMovementFrame());
+			m_Owner.OnPlayerMovement(m_Owner.GetPlayerID(), packet.GetMovement());
 
 			SetOnlineState(OnlineState::InGameInGameInstance);
 			SetResult(ResultCode::SUCCESS);
@@ -929,23 +929,29 @@ namespace SF
 			return;
 		}
 
-		// adjust move frame
 		// TODO: consider round trip delay
-		if (msg.GetPlayerID() == GetPlayerID())
+
+		OnPlayerMovement(GetPlayerID(), msg.GetMovement());
+	}
+
+	void OnlineClient::OnPlayerMovement(PlayerID playerId, const ActorMovement& newMove)
+	{
+		// adjust move frame
+		if (playerId == GetPlayerID())
 		{
-			if (m_MoveFrame < msg.GetMovement().MoveFrame)
-				m_MoveFrame = msg.GetMovement().MoveFrame;
+			if (m_MoveFrame < newMove.MoveFrame)
+				m_MoveFrame = newMove.MoveFrame;
 		}
 
 		SharedPointerT<ReceivedActorMovementManager> movement;
-		if (!m_IncomingMovements.Find(msg.GetPlayerID(), movement))
+		if (!m_IncomingMovements.Find(playerId, movement))
 		{
 			movement = new(GetHeap()) ReceivedActorMovementManager;
-			auto res = m_IncomingMovements.Insert(msg.GetPlayerID(), movement);
+			auto res = m_IncomingMovements.Insert(playerId, movement);
 			assert(res);
 		}
 
-		movement->EnqueueMovement(msg.GetMovement());
+		movement->EnqueueMovement(newMove);
 	}
 
 	void OnlineClient::UpdateOnlineStateByConnectionState()

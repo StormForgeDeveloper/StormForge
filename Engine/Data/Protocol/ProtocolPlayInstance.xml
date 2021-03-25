@@ -13,7 +13,7 @@
 			<Res>
 				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="joined Play instance ID"/>
 				<Params Type="PlayerID" Name="PlayerID" Desc="Joined player id for validation"/>
-				<Params Type="uint32" Name="MovementFrame" Desc="Movement Frame"/>
+				<Params Type="ActorMovement" Name="Movement" Desc="Start movement"/>
 			</Res>
 		</Command>
 

@@ -68,7 +68,7 @@ namespace SF
 		{}
 
 		// Cmd: Event for Player Join request.
-		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMovementFrame );
+		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 		Result PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID );
 		// S2C: New Player in get view

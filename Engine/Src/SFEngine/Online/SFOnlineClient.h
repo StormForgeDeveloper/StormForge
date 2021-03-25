@@ -178,6 +178,7 @@ namespace SF
 		void OnPlayerInView(MessageDataPtr&& pMsgData);
 		void OnPlayerOutofView(MessageDataPtr&& pMsgData);
 		void OnPlayerMovement(MessageDataPtr&& pMsgData);
+		void OnPlayerMovement(PlayerID playerId, const ActorMovement& movement);
 
 		void UpdateOnlineStateByConnectionState();
 
