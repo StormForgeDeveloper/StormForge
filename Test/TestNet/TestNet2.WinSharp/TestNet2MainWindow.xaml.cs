@@ -492,7 +492,8 @@ namespace TestNet2.WinSharp
 
             var playInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
             var playerID = message.GetValue<UInt64>("PlayerID");
-            var visualData = message.GetValue<UInt32>("MovementFrame");
+            var movement = message.GetValue<ActorMovement>("Movement");
+            m_MyMove = movement;
             // player join process has finished
         }
 

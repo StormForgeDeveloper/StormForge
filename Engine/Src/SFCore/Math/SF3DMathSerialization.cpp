@@ -12,6 +12,7 @@
 #include "SFCorePCH.h"
 #include "SFTypedefs.h"
 #include "Math/SF3DMath.h"
+#include "Math/SF3DMathSerialization.h"
 #include "Stream/SFStream.h"
 
 
@@ -55,5 +56,8 @@ namespace SF {
 
 		return ResultCode::SUCCESS;
 	}
+
+
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Vector4)
 }
 
