@@ -176,14 +176,8 @@ namespace SF {
 
 		Vector4Soft() { }
 		Vector4Soft(T x) : x(T(x)), y(T(x)), z(T(x)), w(T(x)) { }
-		template<typename T0, typename T1, typename T2, typename T3>
-		Vector4Soft(T0 x, T1 y, T2 z, T3 w = 0) : x(T(x)), y(T(y)), z(T(z)), w(T(w)) { }
+		Vector4Soft(T x, T y, T z, T w = 0) : x(T(x)), y(T(y)), z(T(z)), w(T(w)) { }
 		Vector4Soft(const T* xyzw) : x(xyzw[0]), y(xyzw[1]), z(xyzw[2]), w(xyzw[3]) { }
-		Vector4Soft(const Vector2Soft<T>& u) : x(u.x), y(u.y), z(0), w(1) { }
-		Vector4Soft(const Vector2Soft<T>& u, const T zz) : x(u.x), y(u.y), z(zz), w(1) { }
-		Vector4Soft(const Vector2Soft<T>& u, const T zz, const T ww) : x(u.x), y(u.y), z(zz), w(ww) { }
-		Vector4Soft(const Vector3Soft<T>& u) : x(u.x), y(u.y), z(u.z), w(1) { }
-		Vector4Soft(const Vector3Soft<T>& u, const T w) : x(u.x), y(u.y), z(u.z), w(w) { }
 		Vector4Soft(const Vector4Soft<T>& u) : x(u.x), y(u.y), z(u.z), w(u.w) { }
 
 		bool operator==(const Vector4Soft<T> & u) const { return (u.x == x && u.y == y && u.z == z && u.w == w) ? true : false; }
@@ -495,7 +489,7 @@ namespace SF {
 
 		Matrix4Soft<T> & Rotate(const T & theta, const Vector3Soft<T> & v)
 		{
-			*this *= Matrix4Soft<T>().InitRotationMatrix(theta, v);
+			*this *= Matrix4Soft<T>().InitRotationMatrix(theta, Vector4Soft<T>(v.x, v.y, v.z));
 			return *this;
 		}
 
