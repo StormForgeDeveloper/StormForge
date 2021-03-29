@@ -255,6 +255,8 @@ namespace SF
 		{
 			// No next frame information
 			Simulate(MoveFrame, *move1, m_MoveExpected);
+			// At the beginning, m_LatestMove holds invalid movement. No need for delta blending
+			m_LatestMove = m_MoveExpected;
 		}
 		else
 		{
