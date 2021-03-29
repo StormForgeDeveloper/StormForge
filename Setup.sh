@@ -30,14 +30,18 @@ pushd $SF_PATH/3rdParties
 
 
 # linux version install doesn't work
-#if [ ! -f "$FBX_SDK_INSTALL_FILE_LINUX" ]; then
-#	wget https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/2020-1/fbx20201_fbxsdk_linux.tar.gz
-#fi
+# if [ ! -f "$FBX_SDK_INSTALL_FILE_LINUX" ]; then
+	# wget https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/2020-1/fbx20201_fbxsdk_linux.tar.gz
+	# sudo apt install uuid-dev libxmu-dev libxi-dev libx11-dev
+# fi
 
-# linux version install doesn't work
-#tar -xvf fbx20201_fbxsdk_linux.tar.gz -C FBXSDK
-#chmod ugo+x FBXSDK/fbx20201_fbxsdk_linux
-#./FBXSDK/fbx20201_fbxsdk_linux /usr
+# # linux version install doesn't work
+# if [ ! -d "FBXSDK_Linux_Install" ]; then
+	# mkdir FBXSDK_Linux_Install
+# fi
+# tar -xvf fbx20201_fbxsdk_linux.tar.gz -C FBXSDK_Linux_Install
+# chmod ugo+x FBXSDK_Linux_Install/fbx20201_fbxsdk_linux
+# ./FBXSDK/fbx20201_fbxsdk_linux /usr
 
 
 if [ ! -f "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt" ]; then

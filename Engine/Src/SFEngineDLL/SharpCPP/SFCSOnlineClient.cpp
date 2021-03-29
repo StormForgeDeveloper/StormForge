@@ -90,14 +90,24 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeGetOnlineState(intptr_t nativeHandle)
 	return int32_t(pOnlineClient->GetOnlineState());
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeGetGameId(intptr_t nativeHandle)
+SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetPlayerId(intptr_t nativeHandle)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return pOnlineClient->GetGameId();
+	return pOnlineClient->GetPlayerID();
+}
+
+SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetGameId(intptr_t nativeHandle)
+{
+	if (nativeHandle == 0)
+		return ResultCode::NOT_INITIALIZED;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	return (uint32_t)(pOnlineClient->GetGameId());
 }
 
 SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetGameInstanceUID(intptr_t nativeHandle)

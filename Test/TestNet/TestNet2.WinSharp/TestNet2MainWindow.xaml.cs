@@ -334,8 +334,10 @@ namespace TestNet2.WinSharp
             if (gameConn == null)
                 return;
 
-
             UpdateButtonState();
+
+            // access playerid
+            var playerId = m_OnlineClient.GetPlayerId();
 
             var gamePolicy = new SF.Net.SendMessageGame(gameConn);
             gamePolicy.GetCharacterListCmd(0);
