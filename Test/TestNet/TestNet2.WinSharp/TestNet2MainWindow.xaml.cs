@@ -407,6 +407,9 @@ namespace TestNet2.WinSharp
             var characterId = message.GetValue<UInt32>("CharacterID");
             var characterData = message.GetValue<VariableTable>("Attributes");
 
+            var cachedCharacterId = m_OnlineClient.GetCharacterId();
+            System.Diagnostics.Debug.Assert(characterId == cachedCharacterId);
+
             int Gold, Agile, Strength, Integer;
             object obj;
             characterData.TryGetValue(new StringCrc32("Gold"), out obj);

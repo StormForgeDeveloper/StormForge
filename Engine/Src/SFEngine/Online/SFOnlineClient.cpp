@@ -363,6 +363,7 @@ namespace SF
 			m_Owner.m_PartyUID = packet.GetPartyUID();
 			m_Owner.m_PartyLeaderId = packet.GetPartyLeaderID();
 			m_Owner.SetupInstanceInfo();
+			m_Owner.RegisterGameHandlers();
 
 			SFLog(Net, Info, "Game server joined: {0}, game:{1}, party:'{2}:{3}'", m_Owner.m_NickName, m_Owner.m_GameInstanceUID, m_Owner.m_PartyUID, m_Owner.m_PartyLeaderId);
 			SetResult(ResultCode::SUCCESS);
@@ -609,6 +610,27 @@ namespace SF
 	{
 		m_OutgoingMovement.reset();
 		m_IncomingMovements.ClearMap();
+	}
+
+	void OnlineClient::RegisterGameHandlers()
+	{
+		if (m_Game == nullptr)
+		{
+			assert(false);
+			return;
+		}
+
+
+		m_Game->AddMessageDelegateUnique(uintptr_t(this),
+			Message::Game::SelectCharacterRes::MID.GetMsgID(),
+			[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+			{
+				Message::Game::SelectCharacterRes msg;
+				if (msg.ParseMessage(pMsgData.get()))
+				{
+					m_CharacterId = msg.GetCharacterID();
+				}
+			});
 	}
 
 	void OnlineClient::RegisterPlayInstanceHandlers()

@@ -146,6 +146,8 @@ namespace SF
 		AuthTicket GetAuthTicket() const { return m_AuthTicket; }
 		PlayerID GetPlayerID() const { return m_AccountId; }
 
+		uint32_t GetCharacterId() const { return m_CharacterId; }
+
 		uint64_t GetGameInstanceUID() const { return m_GameInstanceUID; }
 		const NetAddress& GetGameInstanceAddress4() const { return m_GameInstanceAddress4; }
 		const NetAddress& GetGameInstanceAddress6() const { return m_GameInstanceAddress6; }
@@ -173,6 +175,7 @@ namespace SF
 
 		void SetupInstanceInfo();
 		void ClearInstanceInfo();
+		void RegisterGameHandlers();
 		void RegisterPlayInstanceHandlers();
 
 		void OnPlayerInView(MessageDataPtr&& pMsgData);
@@ -205,9 +208,10 @@ namespace SF
 		AuthTicket m_AuthTicket{};
 
 		String m_NickName;
-		uint64_t m_GameInstanceUID;
-		uint64_t m_PartyUID;
-		uint64_t m_PartyLeaderId;
+		uint32_t m_CharacterId{};
+		uint64_t m_GameInstanceUID{};
+		uint64_t m_PartyUID{};
+		uint64_t m_PartyLeaderId{};
 
 		NetAddress m_GameInstanceAddress4;
 		NetAddress m_GameInstanceAddress6;

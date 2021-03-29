@@ -662,12 +662,17 @@ namespace SF {
 				if (!GetRecvMessage(pMsgData))
 					continue;
 
-				GetRecvMessageDelegates().Invoke(this, pMsgData);
-
 				RecvMessageDelegates* pMessageDelegate = nullptr;
 				m_RecvMessageDelegatesByMsgId.Find(pMsgData->GetMessageHeader()->msgID.GetMsgID(), pMessageDelegate);
-				if (pMessageDelegate)
-					pMessageDelegate->Invoke(this, pMsgData);
+				if (pMessageDelegate && pMessageDelegate->size() > 0)
+				{
+					// Invoke is designed to hand over owner ship, which we don't want that anymore.
+					// Make a copy and hand it over
+					auto pTemp = pMsgData; 
+					pMessageDelegate->Invoke(this, pTemp);
+				}
+
+				GetRecvMessageDelegates().Invoke(this, pMsgData);
 			}
 
 			uint32_t eventCount = m_EventQueue.size();
