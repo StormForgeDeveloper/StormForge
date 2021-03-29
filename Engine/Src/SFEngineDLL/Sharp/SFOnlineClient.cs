@@ -154,16 +154,6 @@ namespace SF
             OnOnlineStateChanged?.Invoke(null, prevState, newState);
         }
 
-        public Int32 GetGameId()
-        {
-            return NativeGetGameId(NativeHandle);
-        }
-
-        public UInt64 GetGameInstanceUID()
-        {
-            return NativeGetGameInstanceUID(NativeHandle);
-        }
-
         public SFConnection GetConnection(ConnectionType connectionType)
         {
             var connectionHandle = NativeGetConnection(NativeHandle, (int) connectionType);
