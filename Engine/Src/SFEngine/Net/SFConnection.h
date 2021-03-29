@@ -45,7 +45,7 @@ namespace Net {
 
 		using super = EngineObject;
 		using ConnectionEventDeletates = EventDelegateList<Connection*, const ConnectionEvent&>;
-		using RecvMessageDelegates = EventDelegateList<Connection*, SharedPointerT<Message::MessageData>&>;
+		using RecvMessageDelegates = EventDelegateList<Connection*, const SharedPointerT<Message::MessageData>&>;
 		using NetSyncMessageDelegates = EventDelegateList<Connection*>;
 
 		enum class EventFireMode : uint8_t

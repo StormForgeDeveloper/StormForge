@@ -314,8 +314,8 @@ namespace ProtocolCompiler
             MatchIndent(1); OutStream.WriteLine("{}");
             NewLine();
 
-            MatchIndent(); OutStream.WriteLine(strClassName + "( MessageDataPtr &&pMsg )");
-            MatchIndent(1); OutStream.WriteLine(": MessageBase(std::forward<MessageDataPtr>(pMsg))");
+            MatchIndent(); OutStream.WriteLine(strClassName + "( const MessageDataPtr &pMsg )");
+            MatchIndent(1); OutStream.WriteLine(": MessageBase(pMsg)");
             MatchIndent(1); OutStream.WriteLine("{}");
             NewLine();
 
@@ -359,10 +359,10 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("virtual Result ParseMessage(const MessageData* pIMsg);");
             if(AppConfig.GetValue("VariableMapParser", false))
             {
-                MatchIndent(); OutStream.WriteLine("static Result ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );");
+                MatchIndent(); OutStream.WriteLine("static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );");
             }
 
-            MatchIndent(); OutStream.WriteLine("static Result ParseMessageToMessageBase(IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMsgBase);");
+            MatchIndent(); OutStream.WriteLine("static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);");
             NewLine();
 
             // Build function
@@ -558,7 +558,7 @@ namespace ProtocolCompiler
             }
 
             string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::ParseMessageTo( MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )");
+            OpenSection("Result", strClassName + "::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )");
 
             DefaultHRESULT(); NewLine();
 
@@ -610,14 +610,14 @@ namespace ProtocolCompiler
         void BuildParserToMessageBaseImpl(string Name, string typeName, Parameter[] parameters)
         {
             string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::ParseMessageToMessageBase( IHeap& memHeap, MessageDataPtr&& pIMsg, MessageBase* &pMessageBase )");
+            OpenSection("Result", strClassName + "::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )");
 
             DefaultHRESULT();
 
             bool bHasParameter = parameters != null && parameters.Length > 0;
 
             NewLine();
-            MatchIndent(); OutStream.WriteLine("protocolCheckMem(pMessageBase = new(memHeap) {0}(std::forward<MessageDataPtr>(pIMsg)));", strClassName);
+            MatchIndent(); OutStream.WriteLine("protocolCheckMem(pMessageBase = new(memHeap) {0}(pIMsg));", strClassName);
             MatchIndent(); OutStream.WriteLine("protocolCheck(pMessageBase->ParseMsg());", strClassName);
             NewLine();
 

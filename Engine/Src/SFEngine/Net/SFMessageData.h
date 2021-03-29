@@ -112,8 +112,8 @@ namespace Message {
 	public:
 
 		MessageBase() = default;
-		MessageBase(SharedPointerT<MessageData> &&pIMsg)
-			: m_pIMsg(std::forward<SharedPointerT<MessageData>>(pIMsg))
+		MessageBase(const SharedPointerT<MessageData> &pIMsg)
+			: m_pIMsg(pIMsg)
 		{
 		}
 

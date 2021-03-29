@@ -90,7 +90,7 @@ namespace SF
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Login::LoginRes::MID.GetMsgID(),
-				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 				{
 					OnLoginRes(pMsgData);
 				});
@@ -154,9 +154,9 @@ namespace SF
 
 		}
 
-		void OnLoginRes(SharedPointerT<Message::MessageData>& pMsgData)
+		void OnLoginRes(const SharedPointerT<Message::MessageData>& pMsgData)
 		{
-			Message::Login::LoginRes packet(Forward<MessageDataPtr>(pMsgData));
+			Message::Login::LoginRes packet(pMsgData);
 			auto result = packet.ParseMsg();
 			if (!result)
 			{
@@ -240,7 +240,7 @@ namespace SF
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Game::JoinGameServerRes::MID.GetMsgID(),
-				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 				{
 					OnJoinGameServerRes(pMsgData);
 				});
@@ -338,9 +338,9 @@ namespace SF
 		}
 
 
-		void OnJoinGameServerRes(SharedPointerT<Message::MessageData>& pMsgData)
+		void OnJoinGameServerRes(const SharedPointerT<Message::MessageData>& pMsgData)
 		{
-			Message::Game::JoinGameServerRes packet(Forward<MessageDataPtr>(pMsgData));
+			Message::Game::JoinGameServerRes packet(pMsgData);
 			auto result = packet.ParseMsg();
 			if (!result)
 			{
@@ -428,14 +428,14 @@ namespace SF
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::PlayInstance::JoinGameInstanceRes::MID.GetMsgID(),
-				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 				{
 					OnPlayInstanceJoinGameInstanceRes(pMsgData);
 				});
 
 			m_Owner.GetConnectionGame()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Game::JoinGameInstanceRes::MID.GetMsgID(),
-				[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+				[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 				{
 					OnJoinGameInstanceRes(pMsgData);
 				});
@@ -508,9 +508,9 @@ namespace SF
 			}
 		}
 
-		void OnJoinGameInstanceRes(SharedPointerT<Message::MessageData>& pMsgData)
+		void OnJoinGameInstanceRes(const SharedPointerT<Message::MessageData>& pMsgData)
 		{
-			Message::Game::JoinGameInstanceRes packet(Forward<MessageDataPtr>(pMsgData));
+			Message::Game::JoinGameInstanceRes packet(pMsgData);
 			auto result = packet.ParseMsg();
 			if (!result)
 			{
@@ -544,9 +544,9 @@ namespace SF
 			}
 		}
 
-		void OnPlayInstanceJoinGameInstanceRes(SharedPointerT<Message::MessageData>& pMsgData)
+		void OnPlayInstanceJoinGameInstanceRes(const SharedPointerT<Message::MessageData>& pMsgData)
 		{
-			Message::PlayInstance::JoinGameInstanceRes packet(Forward<MessageDataPtr>(pMsgData));
+			Message::PlayInstance::JoinGameInstanceRes packet(pMsgData);
 			auto result = packet.ParseMsg();
 			if (!result)
 			{
@@ -623,7 +623,7 @@ namespace SF
 
 		m_Game->AddMessageDelegateUnique(uintptr_t(this),
 			Message::Game::SelectCharacterRes::MID.GetMsgID(),
-			[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
 				Message::Game::SelectCharacterRes msg;
 				if (msg.ParseMessage(pMsgData.get()))
@@ -643,23 +643,23 @@ namespace SF
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
 			Message::PlayInstance::NewPlayerInViewS2CEvt::MID.GetMsgID(),
-			[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
-				OnPlayerInView(Forward<MessageDataPtr>(pMsgData));
+				OnPlayerInView(pMsgData);
 			});
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
 			Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.GetMsgID(),
-			[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
-				OnPlayerOutofView(Forward<MessageDataPtr>(pMsgData));
+				OnPlayerOutofView(pMsgData);
 			});
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
 			Message::PlayInstance::PlayerMovementS2CEvt::MID.GetMsgID(),
-			[this](Net::Connection*, SharedPointerT<Message::MessageData>& pMsgData)
+			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
-				OnPlayerMovement(Forward<MessageDataPtr>(pMsgData));
+				OnPlayerMovement(pMsgData);
 			});
 
 		m_GameInstance->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this),
@@ -890,9 +890,9 @@ namespace SF
 		}
 	}
 
-	void OnlineClient::OnPlayerInView(MessageDataPtr&& pMsgData)
+	void OnlineClient::OnPlayerInView(const MessageDataPtr& pMsgData)
 	{
-		Message::PlayInstance::NewPlayerInViewS2CEvt msg(Forward<MessageDataPtr>(pMsgData));
+		Message::PlayInstance::NewPlayerInViewS2CEvt msg(pMsgData);
 		if (!msg.ParseMsg())
 		{
 			SFLog(Net, Info, "OnlineClient::OnPlayerInView Parsing error");
@@ -917,9 +917,9 @@ namespace SF
 		//movement->EnqueueMovement(msg.GetMovement());
 	}
 
-	void OnlineClient::OnPlayerOutofView(MessageDataPtr&& pMsgData)
+	void OnlineClient::OnPlayerOutofView(const MessageDataPtr& pMsgData)
 	{
-		Message::PlayInstance::RemovePlayerFromViewS2CEvt msg(Forward<MessageDataPtr>(pMsgData));
+		Message::PlayInstance::RemovePlayerFromViewS2CEvt msg(pMsgData);
 		if (!msg.ParseMsg())
 		{
 			SFLog(Net, Info, "OnlineClient::OnPlayerOutofView Parsing error");
@@ -936,9 +936,9 @@ namespace SF
 		m_IncomingMovements.Remove(msg.GetPlayerID(), movement);
 	}
 
-	void OnlineClient::OnPlayerMovement(MessageDataPtr&& pMsgData)
+	void OnlineClient::OnPlayerMovement(const MessageDataPtr& pMsgData)
 	{
-		Message::PlayInstance::PlayerMovementS2CEvt msg(Forward<MessageDataPtr>(pMsgData));
+		Message::PlayInstance::PlayerMovementS2CEvt msg(pMsgData);
 		if (!msg.ParseMsg())
 		{
 			SFLog(Net, Info, "OnlineClient::OnPlayerMovement Parsing error");

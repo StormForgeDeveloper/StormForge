@@ -78,7 +78,7 @@ namespace Protocol {
 		}
 	}
 	
-	Result ParseMessage(SharedPointerT<Message::MessageData>& pMsg, IVariableMapBuilder& variableMap)
+	Result ParseMessage(const SharedPointerT<Message::MessageData>& pMsg, IVariableMapBuilder& variableMap)
 	{
 		if (pMsg == nullptr)
 			return ResultCode::INVALID_POINTER;
@@ -92,7 +92,7 @@ namespace Protocol {
 		return ResultCode::IO_BADPACKET;
 	}
 	
-	Result ParseMessage(IHeap& memoryManager, SharedPointerT<Message::MessageData>&& pMsg, Message::MessageBase * &pMsgBase)
+	Result ParseMessage(IHeap& memoryManager, const SharedPointerT<Message::MessageData>& pMsg, Message::MessageBase * &pMsgBase)
 	{
 		pMsgBase = nullptr;
 
@@ -102,7 +102,7 @@ namespace Protocol {
 		auto itFound = MessageParseToMessageBaseMap.find(pMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
 		if (itFound != MessageParseToMessageBaseMap.end())
 		{
-			return (itFound->second)(memoryManager, std::forward<MessageDataPtr>(pMsg), pMsgBase);
+			return (itFound->second)(memoryManager, pMsg, pMsgBase);
 		}
 		
 		return ResultCode::IO_BADPACKET;

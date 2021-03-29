@@ -666,10 +666,7 @@ namespace SF {
 				m_RecvMessageDelegatesByMsgId.Find(pMsgData->GetMessageHeader()->msgID.GetMsgID(), pMessageDelegate);
 				if (pMessageDelegate && pMessageDelegate->size() > 0)
 				{
-					// Invoke is designed to hand over owner ship, which we don't want that anymore.
-					// Make a copy and hand it over
-					auto pTemp = pMsgData; 
-					pMessageDelegate->Invoke(this, pTemp);
+					pMessageDelegate->Invoke(this, pMsgData);
 				}
 
 				GetRecvMessageDelegates().Invoke(this, pMsgData);

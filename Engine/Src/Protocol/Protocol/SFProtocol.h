@@ -70,8 +70,8 @@ namespace SF
 
 	class IVariableMapBuilder;
 	typedef Result(*MessageHandlingFunction)(const char* prefix, const SharedPointerT<Message::MessageData>& pMsg);
-	typedef Result(*HandleParseMessageTo)(SharedPointerT<Message::MessageData>&, IVariableMapBuilder &);
-	typedef Result(*HandleParseMessageToMessageBase)(IHeap& memoryManager, SharedPointerT<Message::MessageData>&&, Message::MessageBase * &);
+	typedef Result(*HandleParseMessageTo)(const SharedPointerT<Message::MessageData>&, IVariableMapBuilder &);
+	typedef Result(*HandleParseMessageToMessageBase)(IHeap& memoryManager, const SharedPointerT<Message::MessageData>&, Message::MessageBase * &);
 	
 	
 
@@ -82,8 +82,8 @@ namespace SF
 		
 		//TODO: to library object
 		void PrintDebugMessage(const char* preFix, const SharedPointerT<Message::MessageData>& pMsg);
-		Result ParseMessage(SharedPointerT<Message::MessageData>& pMsg, IVariableMapBuilder& variableMap);
-		Result ParseMessage(IHeap& memoryManager, SharedPointerT<Message::MessageData>&& Msg, Message::MessageBase * &pMsgBase);
+		Result ParseMessage(const SharedPointerT<Message::MessageData>& pMsg, IVariableMapBuilder& variableMap);
+		Result ParseMessage(IHeap& memoryManager, const SharedPointerT<Message::MessageData>& Msg, Message::MessageBase * &pMsgBase);
 	}
 
 	

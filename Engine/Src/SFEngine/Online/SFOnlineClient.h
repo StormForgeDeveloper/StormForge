@@ -178,9 +178,9 @@ namespace SF
 		void RegisterGameHandlers();
 		void RegisterPlayInstanceHandlers();
 
-		void OnPlayerInView(MessageDataPtr&& pMsgData);
-		void OnPlayerOutofView(MessageDataPtr&& pMsgData);
-		void OnPlayerMovement(MessageDataPtr&& pMsgData);
+		void OnPlayerInView(const MessageDataPtr& pMsgData);
+		void OnPlayerOutofView(const MessageDataPtr& pMsgData);
+		void OnPlayerMovement(const MessageDataPtr& pMsgData);
 		void OnPlayerMovement(PlayerID playerId, const ActorMovement& movement);
 
 		void UpdateOnlineStateByConnectionState();
