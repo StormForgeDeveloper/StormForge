@@ -8,6 +8,7 @@ if not exist %CMAKE_SYSTEM_NAME% mkdir %CMAKE_SYSTEM_NAME%
 if not exist %CMAKE_SYSTEM_NAME%\Debug mkdir %CMAKE_SYSTEM_NAME%\Debug
 if not exist %CMAKE_SYSTEM_NAME%\RelWithDebInfo mkdir %CMAKE_SYSTEM_NAME%\RelWithDebInfo
 
+
 set BUILD_DIR=%CMAKE_SYSTEM_NAME%\
 
 

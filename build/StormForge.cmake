@@ -104,17 +104,16 @@ if(WIN32)
 	include_directories(AFTER 
 		$ENV{VK_SDK_PATH}/include
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/$(Configuration)/include
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/$(Configuration)/include/libbson-1.0
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/$(Configuration)/include/libmongoc-1.0
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include/libbson-1.0
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include/libmongoc-1.0
 	)
 
 	link_directories(
 		../${SF_FOLDER}/3rdParties/src/openssl/buildWIndows/openssl/lib
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14/$(Configuration)
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/$(Configuration)/lib
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/$(Configuration)/lib
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/lib
 	)
 	
 	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
@@ -188,9 +187,9 @@ elseif(UNIX)
 	include_directories(AFTER 
 		/usr/include/mysql-cppconn-8
 		/usr/include/vulkan
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/${CMAKE_BUILD_TYPE}/include/libbson-1.0
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/${CMAKE_BUILD_TYPE}/include/libmongoc-1.0
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include/libbson-1.0
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include/libmongoc-1.0
 	)
 	
 	link_directories(
@@ -198,20 +197,19 @@ elseif(UNIX)
 		/usr/lib/x86_64-linux-gnu/
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
 		../${SF_FOLDER}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE}/lib
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/lib
-		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/mongoc/${CMAKE_BUILD_TYPE}/lib
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/lib
 		)
 
 endif()
 
 
 include_directories(AFTER 
-	../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/include
+	../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/include
 )
 
 #message ("../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/${CMAKE_BUILD_TYPE}/include")
 	
 link_directories(BEFORE 
-	../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${ARTECTURE}/lib
+	../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/lib
 )
 

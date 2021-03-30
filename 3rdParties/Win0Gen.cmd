@@ -25,6 +25,9 @@ cmd /c "cd %MYSQL_DIR% & WinGen.cmd"
 rem configure MongoC client lib
 cmd /c "cd %MONGOC_DIR% & gen.cmd"
 
+rem configure jansson
+cmd /c "cd src/jansson & gen.cmd"
+
 
 cd %~dp0
 
