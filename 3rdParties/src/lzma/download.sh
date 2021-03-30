@@ -1,10 +1,10 @@
 
-if [ ! -f "lzma1900" ]; then
-	sudo wget https://www.7-zip.org/a/lzma1900.7z
+if [ ! -f "xz-5.2.5.tar.gz" ]; then
+	sudo wget https://cfhcable.dl.sourceforge.net/project/lzmautils/xz-5.2.5.tar.gz
 fi
 
-if [ ! -d "lzma1900" ]; then
-	tar -xvf lzma1900.tar.bz2
+if [ ! -d "xz-5.2.5.tar.gz" ]; then
+	tar -xvf xz-5.2.5.tar.gz
 fi
 
 #echo patching...
