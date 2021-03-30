@@ -56,9 +56,19 @@ pushd src/mysql/
 ./setup_ubuntu.sh
 popd
 
-
-
 pushd src/mongoc/
+./download.sh
+popd
+
+pushd src/lzma/
+./download.sh
+popd
+
+pushd src/jansson/
+./download.sh
+popd
+
+pushd src/avro/
 ./download.sh
 popd
 

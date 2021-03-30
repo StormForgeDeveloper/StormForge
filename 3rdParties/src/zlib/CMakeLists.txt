@@ -26,10 +26,17 @@ set(SRC_FILES
 
 add_library(zlib ${SRC_FILES})
 
+
 install (TARGETS zlib
          ARCHIVE DESTINATION lib COMPONENT SF3rdParties
          LIBRARY DESTINATION lib COMPONENT SF3rdParties
          RUNTIME DESTINATION bin COMPONENT SF3rdParties)
 
+SET(ZLIB_INSTALL_INCLUDE_DIR include)
+INSTALL(FILES
+  zlib-1.2.8/zlib.h
+  zlib-1.2.8/sfzconf.h
+  DESTINATION ${ZLIB_INSTALL_INCLUDE_DIR} COMPONENT SF3rdParties
+  )
 
 

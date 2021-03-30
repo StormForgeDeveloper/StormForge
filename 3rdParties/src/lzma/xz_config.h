@@ -115,16 +115,14 @@
 /* Define to 1 if the system has the type `_Bool'. */
 #define HAVE__BOOL 1
 
-#ifdef _M_IX86
+#if defined(WIN32)
 /* Define to 1 when using Windows 95 (and thus XP) compatible threads. This
    avoids use of features that were added in Windows Vista.
    This is used for 32-bit x86 builds for compatibility reasons since it
    makes no measurable difference in performance compared to Vista threads. */
-#define MYTHREAD_WIN95 1
+	#define MYTHREAD_WIN95 1
 #else
-/* Define to 1 when using Windows Vista compatible threads. This uses features
-   that are not available on Windows XP. */
-#define MYTHREAD_VISTA 1
+	#define MYTHREAD_POSIX 1
 #endif
 
 /* Define to 1 to disable debugging code. */
@@ -137,11 +135,7 @@
 #define PACKAGE_URL "https://tukaani.org/xz/"
 
 /* The size of `size_t', as computed by sizeof. */
-#ifdef _WIN64
-#define SIZEOF_SIZE_T 8
-#else
-#define SIZEOF_SIZE_T 4
-#endif
+#define SIZEOF_SIZE_T (sizeof(size_t))
 
 /* Define to 1 if the system supports fast unaligned access to 16-bit and
    32-bit integers. */
