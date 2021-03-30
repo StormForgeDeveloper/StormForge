@@ -7,3 +7,5 @@ if not exist %JANSSON_SRC% (
 	git clone --branch %JANSSON_SRC% https://github.com/akheron/jansson.git ./%JANSSON_SRC%
 )
 
+rem patch
+xcopy /s patch\* %JANSSON_SRC%\ /y

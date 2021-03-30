@@ -6,8 +6,8 @@ set PROCESS_ARCHITECTUR=x64
 
 call ..\..\FindVC.cmd
 
-if not exist build%CMAKE_SYSTEM_NAME% mkdir build%CMAKE_SYSTEM_NAME%
-cd build%CMAKE_SYSTEM_NAME%
+if not exist %CMAKE_SYSTEM_NAME% mkdir %CMAKE_SYSTEM_NAME%
+cd %CMAKE_SYSTEM_NAME%
 
 
 set CMAKE_BUILD_TYPE=Debug

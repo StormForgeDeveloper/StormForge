@@ -19,6 +19,7 @@ include_directories(AFTER
 	src/libxml/libxml2/include
 	src/curl/curl/include
 	src/zlib/zlib-1.2.8
+	src/lzma
 	src/jsoncpp/jsoncpp/include
 	src/zookeeper/zookeeperConnector/include
 	#src/PlayFab/XPlatCppSdk/code/include
@@ -59,6 +60,7 @@ add_subdirectory(src/memcached)
 add_subdirectory(src/rdkafka)
 add_subdirectory(src/tinyxml)
 add_subdirectory(src/zlib)
+add_subdirectory(src/lzma)
 add_subdirectory(src/yaml)
 add_subdirectory(src/zookeeper)
 add_subdirectory(src/SFWinport)

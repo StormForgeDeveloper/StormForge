@@ -1,0 +1,46 @@
+
+
+export CMAKE_SYSTEM_NAME=Linux
+export PROCESS_ARCHITECTUR=x64
+export AVRO_PATH=avro-src-1.10.2
+
+if [ ! -d "$CMAKE_SYSTEM_NAME" ]; then
+	mkdir $CMAKE_SYSTEM_NAME
+fi
+
+if [ ! -d "$CMAKE_SYSTEM_NAME/Debug" ]; then
+	mkdir $CMAKE_SYSTEM_NAME/Debug
+fi
+
+if [ ! -d "$CMAKE_SYSTEM_NAME/RelWithDebInfo" ]; then
+	mkdir $CMAKE_SYSTEM_NAME/RelWithDebInfo
+fi
+
+
+pushd $CMAKE_SYSTEM_NAME
+
+
+
+export CONFIGURATION=Debug
+pushd $CONFIGURATION
+cmake ../../$AVRO_PATH/lang/c -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=$CONFIGURATION  \
+	-DCMAKE_INSTALL_PREFIX=../../../../$CMAKE_SYSTEM_NAME/$CONFIGURATION  -DCMAKE_SYSTEM_NAME=$CMAKE_SYSTEM_NAME \
+	-DZLIB_ROOT=../../../zlib/zlib-1.2.8 -DZLIB_LIBRARY=../../../../../../%CMAKE_SYSTEM_NAME%/%PROCESS_ARCHITECTUR%/lib/%CONFIGURATION%/zlib \
+	-DCMAKE_APPBUNDLE_PATH=../../../../$CMAKE_SYSTEM_NAME/$CONFIGURATION 
+
+popd
+
+
+export CONFIGURATION=RelWithDebInfo
+pushd $CONFIGURATION
+cmake ../../$AVRO_PATH/lang/c -G "Unix Makefiles"  -DCMAKE_BUILD_TYPE=$CONFIGURATION \
+	-DCMAKE_INSTALL_PREFIX=../../../../$CMAKE_SYSTEM_NAME/$CONFIGURATION  -DCMAKE_SYSTEM_NAME=$CMAKE_SYSTEM_NAME \
+	-DZLIB_ROOT=../../../zlib/zlib-1.2.8 -DZLIB_LIBRARY=../../../../../../$CMAKE_SYSTEM_NAME/$PROCESS_ARCHITECTUR/lib/$CONFIGURATION/zlib \
+	-DCMAKE_APPBUNDLE_PATH=../../../../$CMAKE_SYSTEM_NAME/$CONFIGURATION 
+
+popd
+popd
+
+
+export LD_LIBRARY_PATH=$SavedLinkDir
+

@@ -28,7 +28,7 @@ ENDIF()
 
 
 #add_definitions(-DNOMINMAX)
-add_definitions(-DHAVE_CONFIG_H)
+add_definitions(-DHAVE_CONFIG_H=1)
 add_definitions(-DCURL_STATICLIB)
 add_definitions(-DHAVE_STDDEF_H=1)
 add_definitions(-DHAVE_SYS_TYPES_H=1)
