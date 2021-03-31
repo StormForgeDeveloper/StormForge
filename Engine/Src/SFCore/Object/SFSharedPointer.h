@@ -33,12 +33,11 @@ namespace SF {
 	public:
 
 	protected:
-		mutable SharedObject *m_pObject;
+		mutable SharedObject* m_pObject{};
 
 	public:
 
 		constexpr SharedPointer()
-			: m_pObject(nullptr)
 		{
 		}
 
@@ -67,7 +66,6 @@ namespace SF {
 		}
 
 		constexpr SharedPointer(std::nullptr_t)
-			: m_pObject(nullptr)
 		{
 		}
 
@@ -857,7 +855,7 @@ namespace SF {
 
 	protected:
 
-		mutable SharedObject *m_pObject;
+		mutable SharedObject* m_pObject{};
 
 		WeakPointer(SharedObject* pRef)
 			:m_pObject(pRef)
@@ -881,7 +879,6 @@ namespace SF {
 		}
 
 		WeakPointer() noexcept
-			:m_pObject(nullptr)
 		{
 		}
 
