@@ -39,6 +39,9 @@ namespace SFLogViewer
 
             txtLogServerAddress.Text = logServerAddress;
 
+            var backLog = SavedValueRegistry.ReadValue("InitialBacklog", "100");
+            textBacklog.Text = backLog;
+
             GlobalEngine.Start("SFLogViewer");
 
             RefreshChannelList();
@@ -129,9 +132,15 @@ namespace SFLogViewer
             if (selectedChannelItem == null || string.IsNullOrEmpty(selectedChannelItem.ToString()))
                 return;
 
+            UInt32 InitialBackLog = 100;
+            if (UInt32.TryParse(textBacklog.Text, out InitialBackLog))
+            {
+                SavedValueRegistry.SaveValue("InitialBacklog", InitialBackLog.ToString());
+            }
+
             var logChannel = selectedChannelItem.ToString();
 
-            var logView = new View.LogViewer(logServerAddress, logChannel);
+            var logView = new View.LogViewer(logServerAddress, logChannel, (int)InitialBackLog);
             logView.Show();
         }
 

@@ -8,11 +8,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="599" Width="581">
 
-    <Grid>
-        <TextBox x:Name="txtLogServerAddress" HorizontalAlignment="Left" Margin="118,20,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="326"/>
+    <Grid Margin="0,0,-16,0">
+        <TextBox x:Name="txtLogServerAddress" HorizontalAlignment="Left" Margin="118,20,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="226"/>
         <Label Content="LogServer:" HorizontalAlignment="Left" Margin="22,22,0,0" VerticalAlignment="Top" Width="78"/>
         <Label Content="LogChannels:" HorizontalAlignment="Left" Margin="22,53,0,0" VerticalAlignment="Top" Width="78"/>
         <ListBox x:Name="listLogChannels" HorizontalAlignment="Left" Height="520" Margin="118,53,0,0" VerticalAlignment="Top" Width="453" MouseDoubleClick="OnChannel_DoubleClick"/>
-        <Button Content="Refresh" HorizontalAlignment="Left" Margin="463,20,0,0" VerticalAlignment="Top" Click="OnBtnRefresh_Clicked"/>
+        <Button Content="Refresh" HorizontalAlignment="Left" Margin="349,19,0,0" VerticalAlignment="Top" Click="OnBtnRefresh_Clicked"/>
+        <TextBox x:Name="textBacklog" HorizontalAlignment="Left" Margin="485,22,0,0" Text="TextBox" TextWrapping="Wrap" VerticalAlignment="Top" Width="86"/>
+        <Label Content="Backlog" HorizontalAlignment="Left" Margin="429,18,0,0" VerticalAlignment="Top"/>
     </Grid>
 </Window>

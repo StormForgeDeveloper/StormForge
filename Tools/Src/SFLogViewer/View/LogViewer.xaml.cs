@@ -47,7 +47,8 @@ namespace SFLogViewer.View
         bool m_ReadThreadTerminate;
         System.Threading.Thread m_ReadThread;
 
-        int m_MaxEntries = 1000;
+        int m_MaxEntries = 10000;
+        int m_InitialBacklog = 100;
 
         public ObservableCollection<LogEntry> m_LogEntries { get; set; }
         //public LogEntryCollection m_LogEntries { get; set; }
@@ -55,7 +56,7 @@ namespace SFLogViewer.View
         StreamDBConsumer m_StreamDB;
 
 
-        public LogViewer(string logServerAddress, string topic)
+        public LogViewer(string logServerAddress, string topic, int initialBacklog = 100)
         {
             InitializeComponent();
 
@@ -66,12 +67,13 @@ namespace SFLogViewer.View
 
             GlobalEngine.Start("SFLogViewer");
 
+            m_InitialBacklog = initialBacklog;
             this.Title = string.Format("{0},{1}", logServerAddress, topic);
 
             m_StreamDB = new StreamDBConsumer();
             m_StreamDB.Initialize(logServerAddress, topic);
 
-            m_StreamDB.RequestData(m_StreamDB.ToOffsetFromTail(100));
+            m_StreamDB.RequestData(m_StreamDB.ToOffsetFromTail(m_InitialBacklog));
 
             m_TickTimer = new DispatcherTimer();
             m_TickTimer.Tick += new EventHandler(Timer_Tick);
