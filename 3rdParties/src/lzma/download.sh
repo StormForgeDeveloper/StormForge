@@ -8,4 +8,4 @@ if [ ! -d "xz-5.2.5.tar.gz" ]; then
 fi
 
 #echo patching...
-cp -R -v c/* xz-5.2.5/
+cp -R -v patch/* xz-5.2.5/

@@ -11,4 +11,4 @@ if not exist xz-5.2.5.tar.gz (
 
 
 rem patch
-xcopy /s c\* xz-5.2.5\ /y
+xcopy /s patch\* xz-5.2.5\ /y
