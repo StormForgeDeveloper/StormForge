@@ -11,4 +11,4 @@ if not exist xz-5.2.5.tar.gz (
 
 
 rem patch
-rem xcopy /s c\* lzma918\lang\c\ /y
+xcopy /s c\* xz-5.2.5\ /y
