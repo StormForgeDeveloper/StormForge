@@ -177,7 +177,6 @@ namespace Net {
 			PendingRecv();
 		}
 
-
 		if (pIOBuffer != nullptr)
 		{
 			pIOBuffer->SetPendingFalse();
@@ -187,7 +186,6 @@ namespace Net {
 		SFLog(Net, Debug3, "TCP Recv CID:{0}, pending:{1}, hr:{2:X8}", GetCID(), GetPendingRecvCount(), hr);
 
 		return hr;
-
 	}
 
 	Result ConnectionTCP::MyNetSocketIOAdapter::OnWriteReady()
@@ -197,15 +195,13 @@ namespace Net {
 		{
 			// This will only be happened on connection with server connection
 			auto hrRes = GetEventHandler()->OnNetSendReadyMessage(&m_Owner);
-			netChk(hrRes);
+			netCheck(hrRes);
 		}
 		// process directly
 		else
 		{
-			netChk(ProcessSendQueue());
+			netCheck(ProcessSendQueue());
 		}
-
-	Proc_End:
 
 		return hr;
 	}
