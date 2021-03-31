@@ -20,9 +20,8 @@
 // Includes //
 //////////////
 
-#ifdef HAVE_CONFIG_H
-#	include <xz_config.h>
-#endif
+// blue3k-mod: include always
+#include <xz_config.h>
 
 // Get standard-compliant stdio functions under MinGW and MinGW-w64.
 #ifdef __MINGW32__
