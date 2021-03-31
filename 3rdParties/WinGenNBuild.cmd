@@ -21,6 +21,11 @@ cmd /c "cd %MYSQL_DIR% & WinGen.cmd"
 cmd /c "cd %MYSQL_DIR% & WinBuild.cmd"
 
 
+
+rem Build main part
+cmd /c "call WinGenMain.cmd nopause"
+cmd /c "call WinBuildMain.cmd nopause"
+
 rem build MongoC client lib
 cmd /c "cd src\mongoc & gen.cmd"
 cmd /c "cd src\mongoc & build.cmd"
@@ -28,12 +33,6 @@ cmd /c "cd src\mongoc & build.cmd"
 rem build jansson
 cmd /c "cd src/jansson & gen.cmd"
 cmd /c "cd src/jansson & build.cmd"
-
-
-rem Build main part
-cmd /c "call WinGenMain.cmd nopause"
-cmd /c "call WinBuildMain.cmd nopause"
-
 
 rem build avro
 cmd /c "cd src/avro & gen.cmd"
