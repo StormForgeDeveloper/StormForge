@@ -194,5 +194,15 @@
 
 		<!-- =============================  ======================================= -->
 
+		<Command Name="CallFunction" Reliable="true" Crypto="No" Trace="Debug1" Desc="To call general functionality">
+			<Cmd>
+				<Params Type="StringCrc32" Name="FunctionName" Desc="function name"/>
+				<Params Type="VariableTable" Name="Parameters" Desc="function parameter"/>
+			</Cmd>
+			<Res>
+				<Params Type="VariableTable" Name="Results" Desc="function result"/>
+			</Res>
+		</Command>
+
 	</ProtocolGroup>
 </Protocols>
