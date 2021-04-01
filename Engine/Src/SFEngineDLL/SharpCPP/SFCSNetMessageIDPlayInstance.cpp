@@ -178,6 +178,19 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceGetStreamListRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceGetStreamListRes()
 
 
+// Cmd: To call general functionality
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionCmd()
+{
+ 	return SF::Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionRes()
+{
+ 	return SF::Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionRes()
+
+
 
 
 

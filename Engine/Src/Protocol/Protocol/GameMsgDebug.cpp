@@ -147,70 +147,6 @@ namespace SF
 			// Cmd: Search game instance
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceCmd::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GetCharacterDataInGameInstanceRes::MID.IDSeq.MsgID,&Message::Game::GetCharacterDataInGameInstanceRes::TraceOut));
-			// Cmd: Join to a game
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::JoinGameCmd::MID.IDSeq.MsgID,&Message::Game::JoinGameCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::JoinGameRes::MID.IDSeq.MsgID,&Message::Game::JoinGameRes::TraceOut));
-			// S2C: Player Joined in the game
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::PlayerJoinedS2CEvt::MID.IDSeq.MsgID,&Message::Game::PlayerJoinedS2CEvt::TraceOut));
-			// Cmd: Leave Game
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::LeaveGameCmd::MID.IDSeq.MsgID,&Message::Game::LeaveGameCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::LeaveGameRes::MID.IDSeq.MsgID,&Message::Game::LeaveGameRes::TraceOut));
-			// S2C: Player left event
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::PlayerLeftS2CEvt::MID.IDSeq.MsgID,&Message::Game::PlayerLeftS2CEvt::TraceOut));
-			// Cmd: Kick player
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::KickPlayerCmd::MID.IDSeq.MsgID,&Message::Game::KickPlayerCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::KickPlayerRes::MID.IDSeq.MsgID,&Message::Game::KickPlayerRes::TraceOut));
-			// S2C: Player kicked
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::PlayerKickedS2CEvt::MID.IDSeq.MsgID,&Message::Game::PlayerKickedS2CEvt::TraceOut));
-			// Cmd: Assign role + Game state reset
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::AssignRoleCmd::MID.IDSeq.MsgID,&Message::Game::AssignRoleCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::AssignRoleRes::MID.IDSeq.MsgID,&Message::Game::AssignRoleRes::TraceOut));
-			// S2C: Role assigned event
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RoleAssignedS2CEvt::MID.IDSeq.MsgID,&Message::Game::RoleAssignedS2CEvt::TraceOut));
-			// Cmd: Send chatting message to the game
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ChatMessageCmd::MID.IDSeq.MsgID,&Message::Game::ChatMessageCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ChatMessageRes::MID.IDSeq.MsgID,&Message::Game::ChatMessageRes::TraceOut));
-			// S2C: Chatting message event 
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ChatMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::ChatMessageS2CEvt::TraceOut));
-			// Cmd: Advance game
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::AdvanceGameCmd::MID.IDSeq.MsgID,&Message::Game::AdvanceGameCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::AdvanceGameRes::MID.IDSeq.MsgID,&Message::Game::AdvanceGameRes::TraceOut));
-			// S2C: The game state is advanced
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GameAdvancedS2CEvt::MID.IDSeq.MsgID,&Message::Game::GameAdvancedS2CEvt::TraceOut));
-			// S2C: Game is ended
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GameEndedS2CEvt::MID.IDSeq.MsgID,&Message::Game::GameEndedS2CEvt::TraceOut));
-			// Cmd: Vote game advance
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::VoteGameAdvanceCmd::MID.IDSeq.MsgID,&Message::Game::VoteGameAdvanceCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::VoteGameAdvanceRes::MID.IDSeq.MsgID,&Message::Game::VoteGameAdvanceRes::TraceOut));
-			// S2C: GameAdvance is Voted
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GameAdvanceVotedS2CEvt::MID.IDSeq.MsgID,&Message::Game::GameAdvanceVotedS2CEvt::TraceOut));
-			// Cmd: Vote
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::VoteCmd::MID.IDSeq.MsgID,&Message::Game::VoteCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::VoteRes::MID.IDSeq.MsgID,&Message::Game::VoteRes::TraceOut));
-			// S2C: Player Voted
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::VotedS2CEvt::MID.IDSeq.MsgID,&Message::Game::VotedS2CEvt::TraceOut));
-			// S2C: Vote is ended
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::VoteEndS2CEvt::MID.IDSeq.MsgID,&Message::Game::VoteEndS2CEvt::TraceOut));
-			// S2C: Player Killed
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::PlayerKilledS2CEvt::MID.IDSeq.MsgID,&Message::Game::PlayerKilledS2CEvt::TraceOut));
-			// S2C: Player Voted
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::PlayerRevealedS2CEvt::MID.IDSeq.MsgID,&Message::Game::PlayerRevealedS2CEvt::TraceOut));
-			// Cmd: Play again with the current players
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GamePlayAgainCmd::MID.IDSeq.MsgID,&Message::Game::GamePlayAgainCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GamePlayAgainRes::MID.IDSeq.MsgID,&Message::Game::GamePlayAgainRes::TraceOut));
-			// S2C: Somebody pressed play again. Only one of PartyUID and GameInsUID can have a value
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GamePlayAgainS2CEvt::MID.IDSeq.MsgID,&Message::Game::GamePlayAgainS2CEvt::TraceOut));
-			// Cmd: Player. reveal a player
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GameRevealPlayerCmd::MID.IDSeq.MsgID,&Message::Game::GameRevealPlayerCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GameRevealPlayerRes::MID.IDSeq.MsgID,&Message::Game::GameRevealPlayerRes::TraceOut));
-			// Cmd: Player. revive himself
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GamePlayerReviveCmd::MID.IDSeq.MsgID,&Message::Game::GamePlayerReviveCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GamePlayerReviveRes::MID.IDSeq.MsgID,&Message::Game::GamePlayerReviveRes::TraceOut));
-			// S2C: Player is revived
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GamePlayerRevivedS2CEvt::MID.IDSeq.MsgID,&Message::Game::GamePlayerRevivedS2CEvt::TraceOut));
-			// Cmd: Player. reset ranking
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GamePlayerResetRankCmd::MID.IDSeq.MsgID,&Message::Game::GamePlayerResetRankCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GamePlayerResetRankRes::MID.IDSeq.MsgID,&Message::Game::GamePlayerResetRankRes::TraceOut));
 			// Cmd: Request Game match
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestGameMatchCmd::MID.IDSeq.MsgID,&Message::Game::RequestGameMatchCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestGameMatchRes::MID.IDSeq.MsgID,&Message::Game::RequestGameMatchRes::TraceOut));
@@ -271,12 +207,9 @@ namespace SF
 			// Cmd: Select character
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SelectCharacterCmd::MID.IDSeq.MsgID,&Message::Game::SelectCharacterCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SelectCharacterRes::MID.IDSeq.MsgID,&Message::Game::SelectCharacterRes::TraceOut));
-			// Cmd: Give my stamina to other player
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GiveStaminaCmd::MID.IDSeq.MsgID,&Message::Game::GiveStaminaCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::GiveStaminaRes::MID.IDSeq.MsgID,&Message::Game::GiveStaminaRes::TraceOut));
-			// Cmd: For debug, Change configue preset
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SetPresetGameConfigIDCmd::MID.IDSeq.MsgID,&Message::Game::SetPresetGameConfigIDCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SetPresetGameConfigIDRes::MID.IDSeq.MsgID,&Message::Game::SetPresetGameConfigIDRes::TraceOut));
+			// Cmd: To call general functionality
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::CallFunctionCmd::MID.IDSeq.MsgID,&Message::Game::CallFunctionCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::CallFunctionRes::MID.IDSeq.MsgID,&Message::Game::CallFunctionRes::TraceOut));
 		}; // void RegisterDebugTraceGame()
 
 

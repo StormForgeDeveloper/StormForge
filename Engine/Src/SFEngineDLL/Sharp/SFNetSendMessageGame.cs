@@ -390,138 +390,6 @@ namespace SF.Net
 			return result;
 		} // public int  GetCharacterDataInGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID )
 
-		// Cmd: Join to a game
-		public int  JoinGameCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InInsUID )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameJoinGameCmd(m_Connection.NativeHandle, InTransactionID, InPlayerID, InTicket, InInsUID);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinGameCmd);
-			return result;
-		} // public int  JoinGameCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InInsUID )
-
-		// Cmd: Leave Game
-		public int  LeaveGameCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameLeaveGameCmd(m_Connection.NativeHandle, InTransactionID, InGameInsUID, InPlayerID, InTicket);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LeaveGameCmd);
-			return result;
-		} // public int  LeaveGameCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket )
-
-		// Cmd: Kick player
-		public int  KickPlayerCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameKickPlayerCmd(m_Connection.NativeHandle, InTransactionID, InGameInsUID, InPlayerID, InPlayerToKick);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.KickPlayerCmd);
-			return result;
-		} // public int  KickPlayerCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick )
-
-		// Cmd: Assign role + Game state reset
-		public int  AssignRoleCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameAssignRoleCmd(m_Connection.NativeHandle, InTransactionID, InGameInsUID, InPlayerID, InTicket);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.AssignRoleCmd);
-			return result;
-		} // public int  AssignRoleCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket )
-
-		// Cmd: Send chatting message to the game
-		public int  ChatMessageCmd( System.UInt64 InTransactionID, System.String InChatMessage, System.Byte InRole )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameChatMessageCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"), InRole);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatMessageCmd);
-			return result;
-		} // public int  ChatMessageCmd( System.UInt64 InTransactionID, System.String InChatMessage, System.Byte InRole )
-
-		// Cmd: Advance game
-		public int  AdvanceGameCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameAdvanceGameCmd(m_Connection.NativeHandle, InTransactionID, InGameInsUID, InPlayerID, InTicket);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.AdvanceGameCmd);
-			return result;
-		} // public int  AdvanceGameCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket )
-
-		// Cmd: Vote game advance
-		public int  VoteGameAdvanceCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameVoteGameAdvanceCmd(m_Connection.NativeHandle, InTransactionID, InGameInsUID, InPlayerID, InTicket);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.VoteGameAdvanceCmd);
-			return result;
-		} // public int  VoteGameAdvanceCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket )
-
-		// Cmd: Vote
-		public int  VoteCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InVoteTarget, System.UInt32 InActionSerial )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameVoteCmd(m_Connection.NativeHandle, InTransactionID, InGameInsUID, InPlayerID, InTicket, InVoteTarget, InActionSerial);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.VoteCmd);
-			return result;
-		} // public int  VoteCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InVoteTarget, System.UInt32 InActionSerial )
-
-		// Cmd: Play again with the current players
-		public int  GamePlayAgainCmd( System.UInt64 InTransactionID )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGamePlayAgainCmd(m_Connection.NativeHandle, InTransactionID);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GamePlayAgainCmd);
-			return result;
-		} // public int  GamePlayAgainCmd( System.UInt64 InTransactionID )
-
-		// Cmd: Player. reveal a player
-		public int  GameRevealPlayerCmd( System.UInt64 InTransactionID, System.UInt64[] InTargetPlayerID )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGameRevealPlayerCmd(m_Connection.NativeHandle, InTransactionID,(ushort)InTargetPlayerID.Length, InTargetPlayerID);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GameRevealPlayerCmd);
-			return result;
-		} // public int  GameRevealPlayerCmd( System.UInt64 InTransactionID, System.UInt64[] InTargetPlayerID )
-
-		// Cmd: Player. revive himself
-		public int  GamePlayerReviveCmd( System.UInt64 InTransactionID )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGamePlayerReviveCmd(m_Connection.NativeHandle, InTransactionID);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GamePlayerReviveCmd);
-			return result;
-		} // public int  GamePlayerReviveCmd( System.UInt64 InTransactionID )
-
-		// Cmd: Player. reset ranking
-		public int  GamePlayerResetRankCmd( System.UInt64 InTransactionID )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGamePlayerResetRankCmd(m_Connection.NativeHandle, InTransactionID);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GamePlayerResetRankCmd);
-			return result;
-		} // public int  GamePlayerResetRankCmd( System.UInt64 InTransactionID )
-
 		// Cmd: Request Game match
 		public int  RequestGameMatchCmd( System.UInt64 InTransactionID, System.Byte InNumPlayer, System.Byte InRequestRole )
 		{
@@ -680,27 +548,18 @@ namespace SF.Net
 			return result;
 		} // public int  SelectCharacterCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 
-		// Cmd: Give my stamina to other player
-		public int  GiveStaminaCmd( System.UInt64 InTransactionID, System.UInt64 InTargetPlayer )
+		// Cmd: To call general functionality
+		public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, SF.VariableTable InParameters )
 		{
  			int result;
+			var InParameters_ = InParameters.ToByteArray();
+			using (var InParameters_PinnedPtr_ = new PinnedByteBuffer(InParameters_))
 			{
-			result = CSSFNetAdapter_GameGiveStaminaCmd(m_Connection.NativeHandle, InTransactionID, InTargetPlayer);
+			result = CSSFNetAdapter_GameCallFunctionCmd(m_Connection.NativeHandle, InTransactionID, InFunctionName,(ushort)InParameters_.Length, InParameters_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GiveStaminaCmd);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CallFunctionCmd);
 			return result;
-		} // public int  GiveStaminaCmd( System.UInt64 InTransactionID, System.UInt64 InTargetPlayer )
-
-		// Cmd: For debug, Change configue preset
-		public int  SetPresetGameConfigIDCmd( System.UInt64 InTransactionID, System.UInt32 InPresetID )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameSetPresetGameConfigIDCmd(m_Connection.NativeHandle, InTransactionID, InPresetID);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SetPresetGameConfigIDCmd);
-			return result;
-		} // public int  SetPresetGameConfigIDCmd( System.UInt64 InTransactionID, System.UInt32 InPresetID )
+		} // public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, SF.VariableTable InParameters )
 
 		#region Native Interfaces 
 		// C2S: Client heartbeat
@@ -864,66 +723,6 @@ namespace SF.Net
 		static extern int CSSFNetAdapter_GameGetCharacterDataInGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID );
 
 
-		// Cmd: Join to a game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameJoinGameCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameJoinGameCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InInsUID );
-
-
-		// Cmd: Leave Game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameLeaveGameCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameLeaveGameCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket );
-
-
-		// Cmd: Kick player
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameKickPlayerCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameKickPlayerCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick );
-
-
-		// Cmd: Assign role + Game state reset
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameAssignRoleCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameAssignRoleCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket );
-
-
-		// Cmd: Send chatting message to the game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameChatMessageCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameChatMessageCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage, System.Byte InRole );
-
-
-		// Cmd: Advance game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameAdvanceGameCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameAdvanceGameCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket );
-
-
-		// Cmd: Vote game advance
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameVoteGameAdvanceCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameVoteGameAdvanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket );
-
-
-		// Cmd: Vote
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameVoteCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameVoteCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.UInt64 InTicket, System.UInt64 InVoteTarget, System.UInt32 InActionSerial );
-
-
-		// Cmd: Play again with the current players
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGamePlayAgainCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGamePlayAgainCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID );
-
-
-		// Cmd: Player. reveal a player
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGameRevealPlayerCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGameRevealPlayerCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt16 _sizeOfInTargetPlayerID,System.UInt64[] InTargetPlayerID );
-
-
-		// Cmd: Player. revive himself
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGamePlayerReviveCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGamePlayerReviveCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID );
-
-
-		// Cmd: Player. reset ranking
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGamePlayerResetRankCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGamePlayerResetRankCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID );
-
-
 		// Cmd: Request Game match
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestGameMatchCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameRequestGameMatchCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Byte InNumPlayer, System.Byte InRequestRole );
@@ -994,14 +793,9 @@ namespace SF.Net
 		static extern int CSSFNetAdapter_GameSelectCharacterCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InCharacterID );
 
 
-		// Cmd: Give my stamina to other player
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGiveStaminaCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGiveStaminaCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InTargetPlayer );
-
-
-		// Cmd: For debug, Change configue preset
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSetPresetGameConfigIDCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameSetPresetGameConfigIDCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InPresetID );
+		// Cmd: To call general functionality
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameCallFunctionCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameCallFunctionCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt16 _sizeOfInParameters,IntPtr InParameters );
 
 
 		#endregion //Native Interfaces 
@@ -1545,318 +1339,6 @@ namespace SF.Net
 		} // public int  GetCharacterDataInGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerID, SF.VariableTable InGameInstances )
 
 
-		// Cmd: Join to a game
-		public int  JoinGameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, System.UInt32 InTimeStamp, SF.GameStateID InGameState, System.Byte InDay, System.Byte InMaxPlayer, System.Byte InPlayerIndex, System.Byte InPlayerCharacter, System.Byte InRole, System.Byte InDead, System.Byte[] InChatHistoryData, System.Byte[] InGameLogData )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameJoinGameRes(m_Connection.NativeHandle, InTransactionID, InResult, InInsUID, InTimeStamp,(int) InGameState, InDay, InMaxPlayer, InPlayerIndex, InPlayerCharacter, InRole, InDead,(ushort)InChatHistoryData.Length, InChatHistoryData,(ushort)InGameLogData.Length, InGameLogData);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinGameRes);
-			return result;
-		} // public int  JoinGameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, System.UInt32 InTimeStamp, SF.GameStateID InGameState, System.Byte InDay, System.Byte InMaxPlayer, System.Byte InPlayerIndex, System.Byte InPlayerCharacter, System.Byte InRole, System.Byte InDead, System.Byte[] InChatHistoryData, System.Byte[] InGameLogData )
-
-
-		// S2C: Player Joined in the game
-		public int  PlayerJoinedS2CEvt( System.UInt64 InGameInsUID, SF.PlayerInformation InJoinedPlayer )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GamePlayerJoinedS2CEvt(m_Connection.NativeHandle, InGameInsUID,ref InJoinedPlayer);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PlayerJoinedS2CEvt);
-			return result;
-		} // public int  PlayerJoinedS2CEvt( System.UInt64 InGameInsUID, SF.PlayerInformation InJoinedPlayer )
-
-
-		// Cmd: Leave Game
-		public int  LeaveGameRes( System.UInt64 InTransactionID, System.Int32 InResult )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameLeaveGameRes(m_Connection.NativeHandle, InTransactionID, InResult);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LeaveGameRes);
-			return result;
-		} // public int  LeaveGameRes( System.UInt64 InTransactionID, System.Int32 InResult )
-
-
-		// S2C: Player left event
-		public int  PlayerLeftS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InLeftPlayerID )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GamePlayerLeftS2CEvt(m_Connection.NativeHandle, InGameInsUID, InLeftPlayerID);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PlayerLeftS2CEvt);
-			return result;
-		} // public int  PlayerLeftS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InLeftPlayerID )
-
-
-		// Cmd: Kick player
-		public int  KickPlayerRes( System.UInt64 InTransactionID, System.Int32 InResult )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameKickPlayerRes(m_Connection.NativeHandle, InTransactionID, InResult);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.KickPlayerRes);
-			return result;
-		} // public int  KickPlayerRes( System.UInt64 InTransactionID, System.Int32 InResult )
-
-
-		// S2C: Player kicked
-		public int  PlayerKickedS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InKickedPlayerID )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GamePlayerKickedS2CEvt(m_Connection.NativeHandle, InGameInsUID, InKickedPlayerID);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PlayerKickedS2CEvt);
-			return result;
-		} // public int  PlayerKickedS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InKickedPlayerID )
-
-
-		// Cmd: Assign role + Game state reset
-		public int  AssignRoleRes( System.UInt64 InTransactionID, System.Int32 InResult )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameAssignRoleRes(m_Connection.NativeHandle, InTransactionID, InResult);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.AssignRoleRes);
-			return result;
-		} // public int  AssignRoleRes( System.UInt64 InTransactionID, System.Int32 InResult )
-
-
-		// S2C: Role assigned event
-		public int  RoleAssignedS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.Byte InRole )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameRoleAssignedS2CEvt(m_Connection.NativeHandle, InGameInsUID, InPlayerID, InRole);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RoleAssignedS2CEvt);
-			return result;
-		} // public int  RoleAssignedS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.Byte InRole )
-
-
-		// Cmd: Send chatting message to the game
-		public int  ChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameChatMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatMessageRes);
-			return result;
-		} // public int  ChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
-
-
-		// S2C: Chatting message event 
-		public int  ChatMessageS2CEvt( System.UInt64 InSenderID, System.Byte InRole, System.String InSenderName, System.String InChatMessage )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameChatMessageS2CEvt(m_Connection.NativeHandle, InSenderID, InRole,System.Text.Encoding.UTF8.GetBytes(InSenderName + "\0"),System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatMessageS2CEvt);
-			return result;
-		} // public int  ChatMessageS2CEvt( System.UInt64 InSenderID, System.Byte InRole, System.String InSenderName, System.String InChatMessage )
-
-
-		// Cmd: Advance game
-		public int  AdvanceGameRes( System.UInt64 InTransactionID, System.Int32 InResult )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameAdvanceGameRes(m_Connection.NativeHandle, InTransactionID, InResult);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.AdvanceGameRes);
-			return result;
-		} // public int  AdvanceGameRes( System.UInt64 InTransactionID, System.Int32 InResult )
-
-
-		// S2C: The game state is advanced
-		public int  GameAdvancedS2CEvt( System.UInt64 InGameInsUID, System.UInt32 InTimeStamp, SF.GameStateID InGameState, System.Byte InDay )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGameAdvancedS2CEvt(m_Connection.NativeHandle, InGameInsUID, InTimeStamp,(int) InGameState, InDay);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GameAdvancedS2CEvt);
-			return result;
-		} // public int  GameAdvancedS2CEvt( System.UInt64 InGameInsUID, System.UInt32 InTimeStamp, SF.GameStateID InGameState, System.Byte InDay )
-
-
-		// S2C: Game is ended
-		public int  GameEndedS2CEvt( System.UInt64 InGameInsUID, SF.GameWinner InWinner, System.UInt32 InGainedExp, System.UInt32 InGainedGameMoney )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGameEndedS2CEvt(m_Connection.NativeHandle, InGameInsUID,(int) InWinner, InGainedExp, InGainedGameMoney);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GameEndedS2CEvt);
-			return result;
-		} // public int  GameEndedS2CEvt( System.UInt64 InGameInsUID, SF.GameWinner InWinner, System.UInt32 InGainedExp, System.UInt32 InGainedGameMoney )
-
-
-		// Cmd: Vote game advance
-		public int  VoteGameAdvanceRes( System.UInt64 InTransactionID, System.Int32 InResult )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameVoteGameAdvanceRes(m_Connection.NativeHandle, InTransactionID, InResult);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.VoteGameAdvanceRes);
-			return result;
-		} // public int  VoteGameAdvanceRes( System.UInt64 InTransactionID, System.Int32 InResult )
-
-
-		// S2C: GameAdvance is Voted
-		public int  GameAdvanceVotedS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InVoter )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGameAdvanceVotedS2CEvt(m_Connection.NativeHandle, InGameInsUID, InVoter);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GameAdvanceVotedS2CEvt);
-			return result;
-		} // public int  GameAdvanceVotedS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InVoter )
-
-
-		// Cmd: Vote
-		public int  VoteRes( System.UInt64 InTransactionID, System.Int32 InResult )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameVoteRes(m_Connection.NativeHandle, InTransactionID, InResult);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.VoteRes);
-			return result;
-		} // public int  VoteRes( System.UInt64 InTransactionID, System.Int32 InResult )
-
-
-		// S2C: Player Voted
-		public int  VotedS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InVoter, System.UInt64 InVotedTarget )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameVotedS2CEvt(m_Connection.NativeHandle, InGameInsUID, InVoter, InVotedTarget);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.VotedS2CEvt);
-			return result;
-		} // public int  VotedS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InVoter, System.UInt64 InVotedTarget )
-
-
-		// S2C: Vote is ended
-		public int  VoteEndS2CEvt( System.UInt64 InGameInsUID, System.UInt64[] InVoted )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameVoteEndS2CEvt(m_Connection.NativeHandle, InGameInsUID,(ushort)InVoted.Length, InVoted);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.VoteEndS2CEvt);
-			return result;
-		} // public int  VoteEndS2CEvt( System.UInt64 InGameInsUID, System.UInt64[] InVoted )
-
-
-		// S2C: Player Killed
-		public int  PlayerKilledS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InKilledPlayer, SF.PlayerKilledReason InReason )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GamePlayerKilledS2CEvt(m_Connection.NativeHandle, InGameInsUID, InKilledPlayer,(int) InReason);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PlayerKilledS2CEvt);
-			return result;
-		} // public int  PlayerKilledS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InKilledPlayer, SF.PlayerKilledReason InReason )
-
-
-		// S2C: Player Voted
-		public int  PlayerRevealedS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InRevealedPlayerID, System.Byte InRole, SF.PlayerRevealedReason InReason )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GamePlayerRevealedS2CEvt(m_Connection.NativeHandle, InGameInsUID, InRevealedPlayerID, InRole,(int) InReason);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PlayerRevealedS2CEvt);
-			return result;
-		} // public int  PlayerRevealedS2CEvt( System.UInt64 InGameInsUID, System.UInt64 InRevealedPlayerID, System.Byte InRole, SF.PlayerRevealedReason InReason )
-
-
-		// Cmd: Play again with the current players
-		public int  GamePlayAgainRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGamePlayAgainRes(m_Connection.NativeHandle, InTransactionID, InResult, InTotalGem, InTotalGameMoney);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GamePlayAgainRes);
-			return result;
-		} // public int  GamePlayAgainRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
-
-
-		// S2C: Somebody pressed play again. Only one of PartyUID and GameInsUID can have a value
-		public int  GamePlayAgainS2CEvt( System.UInt64 InPartyUID, System.UInt64 InLeadPlayer )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGamePlayAgainS2CEvt(m_Connection.NativeHandle, InPartyUID, InLeadPlayer);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GamePlayAgainS2CEvt);
-			return result;
-		} // public int  GamePlayAgainS2CEvt( System.UInt64 InPartyUID, System.UInt64 InLeadPlayer )
-
-
-		// Cmd: Player. reveal a player
-		public int  GameRevealPlayerRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64[] InRevealedPlayerID, System.Byte[] InRevealedRole, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGameRevealPlayerRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InRevealedPlayerID.Length, InRevealedPlayerID,(ushort)InRevealedRole.Length, InRevealedRole, InTotalGem, InTotalGameMoney);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GameRevealPlayerRes);
-			return result;
-		} // public int  GameRevealPlayerRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64[] InRevealedPlayerID, System.Byte[] InRevealedRole, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
-
-
-		// Cmd: Player. revive himself
-		public int  GamePlayerReviveRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGamePlayerReviveRes(m_Connection.NativeHandle, InTransactionID, InResult, InTotalGem, InTotalGameMoney);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GamePlayerReviveRes);
-			return result;
-		} // public int  GamePlayerReviveRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
-
-
-		// S2C: Player is revived
-		public int  GamePlayerRevivedS2CEvt( System.UInt64 InRevivedPlayerID )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGamePlayerRevivedS2CEvt(m_Connection.NativeHandle, InRevivedPlayerID);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GamePlayerRevivedS2CEvt);
-			return result;
-		} // public int  GamePlayerRevivedS2CEvt( System.UInt64 InRevivedPlayerID )
-
-
-		// Cmd: Player. reset ranking
-		public int  GamePlayerResetRankRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameGamePlayerResetRankRes(m_Connection.NativeHandle, InTransactionID, InResult, InTotalGem, InTotalGameMoney);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GamePlayerResetRankRes);
-			return result;
-		} // public int  GamePlayerResetRankRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
-
-
 		// Cmd: Request Game match
 		public int  RequestGameMatchRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
 		{
@@ -2137,28 +1619,18 @@ namespace SF.Net
 		} // public int  SelectCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InCharacterID, SF.VariableTable InAttributes )
 
 
-		// Cmd: Give my stamina to other player
-		public int  GiveStaminaRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTargetPlayer, System.UInt64 InTimeStamp )
+		// Cmd: To call general functionality
+		public int  CallFunctionRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
 		{
  			int result;
+			var InResults_ = InResults.ToByteArray();
+			using (var InResults_PinnedPtr_ = new PinnedByteBuffer(InResults_))
 			{
-			result = CSSFNetAdapter_GameGiveStaminaRes(m_Connection.NativeHandle, InTransactionID, InResult, InTargetPlayer, InTimeStamp);
+			result = CSSFNetAdapter_GameCallFunctionRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InResults_.Length, InResults_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GiveStaminaRes);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CallFunctionRes);
 			return result;
-		} // public int  GiveStaminaRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTargetPlayer, System.UInt64 InTimeStamp )
-
-
-		// Cmd: For debug, Change configue preset
-		public int  SetPresetGameConfigIDRes( System.UInt64 InTransactionID, System.Int32 InResult )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_GameSetPresetGameConfigIDRes(m_Connection.NativeHandle, InTransactionID, InResult);
-			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SetPresetGameConfigIDRes);
-			return result;
-		} // public int  SetPresetGameConfigIDRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		} // public int  CallFunctionRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
 
 
 		#region Native Interfaces 
@@ -2420,162 +1892,6 @@ namespace SF.Net
 
 
 
-		// Cmd: Join to a game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameJoinGameRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameJoinGameRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, System.UInt32 InTimeStamp, int InGameState, System.Byte InDay, System.Byte InMaxPlayer, System.Byte InPlayerIndex, System.Byte InPlayerCharacter, System.Byte InRole, System.Byte InDead, System.UInt16 _sizeOfInChatHistoryData,System.Byte[] InChatHistoryData, System.UInt16 _sizeOfInGameLogData,System.Byte[] InGameLogData );
-
-
-
-		// S2C: Player Joined in the game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GamePlayerJoinedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GamePlayerJoinedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, ref SF.PlayerInformation InJoinedPlayer );
-
-
-
-		// Cmd: Leave Game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameLeaveGameRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameLeaveGameRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
-
-
-
-		// S2C: Player left event
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GamePlayerLeftS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GamePlayerLeftS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InLeftPlayerID );
-
-
-
-		// Cmd: Kick player
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameKickPlayerRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameKickPlayerRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
-
-
-
-		// S2C: Player kicked
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GamePlayerKickedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GamePlayerKickedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InKickedPlayerID );
-
-
-
-		// Cmd: Assign role + Game state reset
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameAssignRoleRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameAssignRoleRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
-
-
-
-		// S2C: Role assigned event
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRoleAssignedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameRoleAssignedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InPlayerID, System.Byte InRole );
-
-
-
-		// Cmd: Send chatting message to the game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameChatMessageRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameChatMessageRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
-
-
-
-		// S2C: Chatting message event 
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameChatMessageS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameChatMessageS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InSenderID, System.Byte InRole, [MarshalAs(UnmanagedType.LPArray)] byte[] InSenderName, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
-
-
-
-		// Cmd: Advance game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameAdvanceGameRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameAdvanceGameRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
-
-
-
-		// S2C: The game state is advanced
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGameAdvancedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGameAdvancedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt32 InTimeStamp, int InGameState, System.Byte InDay );
-
-
-
-		// S2C: Game is ended
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGameEndedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGameEndedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, int InWinner, System.UInt32 InGainedExp, System.UInt32 InGainedGameMoney );
-
-
-
-		// Cmd: Vote game advance
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameVoteGameAdvanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameVoteGameAdvanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
-
-
-
-		// S2C: GameAdvance is Voted
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGameAdvanceVotedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGameAdvanceVotedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InVoter );
-
-
-
-		// Cmd: Vote
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameVoteRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameVoteRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
-
-
-
-		// S2C: Player Voted
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameVotedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameVotedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InVoter, System.UInt64 InVotedTarget );
-
-
-
-		// S2C: Vote is ended
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameVoteEndS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameVoteEndS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt16 _sizeOfInVoted,System.UInt64[] InVoted );
-
-
-
-		// S2C: Player Killed
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GamePlayerKilledS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GamePlayerKilledS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InKilledPlayer, int InReason );
-
-
-
-		// S2C: Player Voted
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GamePlayerRevealedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GamePlayerRevealedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InGameInsUID, System.UInt64 InRevealedPlayerID, System.Byte InRole, int InReason );
-
-
-
-		// Cmd: Play again with the current players
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGamePlayAgainRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGamePlayAgainRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney );
-
-
-
-		// S2C: Somebody pressed play again. Only one of PartyUID and GameInsUID can have a value
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGamePlayAgainS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGamePlayAgainS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPartyUID, System.UInt64 InLeadPlayer );
-
-
-
-		// Cmd: Player. reveal a player
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGameRevealPlayerRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGameRevealPlayerRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInRevealedPlayerID,System.UInt64[] InRevealedPlayerID, System.UInt16 _sizeOfInRevealedRole,System.Byte[] InRevealedRole, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney );
-
-
-
-		// Cmd: Player. revive himself
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGamePlayerReviveRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGamePlayerReviveRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney );
-
-
-
-		// S2C: Player is revived
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGamePlayerRevivedS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGamePlayerRevivedS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InRevivedPlayerID );
-
-
-
-		// Cmd: Player. reset ranking
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGamePlayerResetRankRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGamePlayerResetRankRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney );
-
-
-
 		// Cmd: Request Game match
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestGameMatchRes", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameRequestGameMatchRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney );
@@ -2714,15 +2030,9 @@ namespace SF.Net
 
 
 
-		// Cmd: Give my stamina to other player
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGiveStaminaRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGiveStaminaRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTargetPlayer, System.UInt64 InTimeStamp );
-
-
-
-		// Cmd: For debug, Change configue preset
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSetPresetGameConfigIDRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameSetPresetGameConfigIDRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
+		// Cmd: To call general functionality
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameCallFunctionRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameCallFunctionRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInResults,IntPtr InResults );
 
 
 

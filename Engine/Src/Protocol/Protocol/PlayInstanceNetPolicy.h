@@ -54,6 +54,8 @@ namespace SF
 		Result DeleteStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 		// Cmd: Get stream list
 		Result GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket );
+		// Cmd: To call general functionality
+		Result CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters );
 
 	}; // class NetPolicyPlayInstance 
 
@@ -93,6 +95,8 @@ namespace SF
 		Result DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult );
 		// Cmd: Get stream list
 		Result GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
+		// Cmd: To call general functionality
+		Result CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults );
 
 	}; // class NetSvrPolicyPlayInstance
 

@@ -100,6 +100,12 @@ namespace SF.Net
 		public static int GetStreamListRes { get { return CSSFNetMessageID_PlayInstanceGetStreamListRes(); } }
 
 
+		// Cmd: To call general functionality
+		public static int CallFunctionCmd { get { return CSSFNetMessageID_PlayInstanceCallFunctionCmd(); } }
+
+		public static int CallFunctionRes { get { return CSSFNetMessageID_PlayInstanceCallFunctionRes(); } }
+
+
 		#region Native Interfaces 
 		// Cmd: Event for Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd", CharSet = CharSet.Auto)]
@@ -218,6 +224,16 @@ namespace SF.Net
 
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceGetStreamListRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstanceGetStreamListRes();
+
+
+
+		// Cmd: To call general functionality
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceCallFunctionCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceCallFunctionCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceCallFunctionRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceCallFunctionRes();
 
 
 

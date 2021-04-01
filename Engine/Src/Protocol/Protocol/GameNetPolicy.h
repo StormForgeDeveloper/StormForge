@@ -96,30 +96,6 @@ namespace SF
 		Result SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword );
 		// Cmd: Search game instance
 		Result GetCharacterDataInGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID );
-		// Cmd: Join to a game
-		Result JoinGameCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID, const AuthTicket &InTicket, const uint64_t &InInsUID );
-		// Cmd: Leave Game
-		Result LeaveGameCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
-		// Cmd: Kick player
-		Result KickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
-		// Cmd: Assign role + Game state reset
-		Result AssignRoleCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
-		// Cmd: Send chatting message to the game
-		Result ChatMessageCmd( const uint64_t &InTransactionID, const char* InChatMessage, const uint8_t &InRole );
-		// Cmd: Advance game
-		Result AdvanceGameCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
-		// Cmd: Vote game advance
-		Result VoteGameAdvanceCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket );
-		// Cmd: Vote
-		Result VoteCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const AccountID &InPlayerID, const AuthTicket &InTicket, const AccountID &InVoteTarget, const uint32_t &InActionSerial );
-		// Cmd: Play again with the current players
-		Result GamePlayAgainCmd( const uint64_t &InTransactionID );
-		// Cmd: Player. reveal a player
-		Result GameRevealPlayerCmd( const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID );
-		// Cmd: Player. revive himself
-		Result GamePlayerReviveCmd( const uint64_t &InTransactionID );
-		// Cmd: Player. reset ranking
-		Result GamePlayerResetRankCmd( const uint64_t &InTransactionID );
 		// Cmd: Request Game match
 		Result RequestGameMatchCmd( const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
 		// Cmd: Cancel Game match
@@ -148,10 +124,8 @@ namespace SF
 		Result GetCharacterDataCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 		// Cmd: Select character
 		Result SelectCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
-		// Cmd: Give my stamina to other player
-		Result GiveStaminaCmd( const uint64_t &InTransactionID, const AccountID &InTargetPlayer );
-		// Cmd: For debug, Change configue preset
-		Result SetPresetGameConfigIDCmd( const uint64_t &InTransactionID, const uint32_t &InPresetID );
+		// Cmd: To call general functionality
+		Result CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters );
 
 	}; // class NetPolicyGame 
 
@@ -251,58 +225,6 @@ namespace SF
 		Result SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
 		// Cmd: Search game instance
 		Result GetCharacterDataInGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances );
-		// Cmd: Join to a game
-		Result JoinGameRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData );
-		// S2C: Player Joined in the game
-		Result PlayerJoinedS2CEvt( const uint64_t &InGameInsUID, const PlayerInformation &InJoinedPlayer );
-		// Cmd: Leave Game
-		Result LeaveGameRes( const uint64_t &InTransactionID, const Result &InResult );
-		// S2C: Player left event
-		Result PlayerLeftS2CEvt( const uint64_t &InGameInsUID, const AccountID &InLeftPlayerID );
-		// Cmd: Kick player
-		Result KickPlayerRes( const uint64_t &InTransactionID, const Result &InResult );
-		// S2C: Player kicked
-		Result PlayerKickedS2CEvt( const uint64_t &InGameInsUID, const AccountID &InKickedPlayerID );
-		// Cmd: Assign role + Game state reset
-		Result AssignRoleRes( const uint64_t &InTransactionID, const Result &InResult );
-		// S2C: Role assigned event
-		Result RoleAssignedS2CEvt( const uint64_t &InGameInsUID, const AccountID &InPlayerID, const uint8_t &InRole );
-		// Cmd: Send chatting message to the game
-		Result ChatMessageRes( const uint64_t &InTransactionID, const Result &InResult );
-		// S2C: Chatting message event 
-		Result ChatMessageS2CEvt( const AccountID &InSenderID, const uint8_t &InRole, const char* InSenderName, const char* InChatMessage );
-		// Cmd: Advance game
-		Result AdvanceGameRes( const uint64_t &InTransactionID, const Result &InResult );
-		// S2C: The game state is advanced
-		Result GameAdvancedS2CEvt( const uint64_t &InGameInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay );
-		// S2C: Game is ended
-		Result GameEndedS2CEvt( const uint64_t &InGameInsUID, const uint8_t &InWinner, const uint32_t &InGainedExp, const uint32_t &InGainedGameMoney );
-		// Cmd: Vote game advance
-		Result VoteGameAdvanceRes( const uint64_t &InTransactionID, const Result &InResult );
-		// S2C: GameAdvance is Voted
-		Result GameAdvanceVotedS2CEvt( const uint64_t &InGameInsUID, const AccountID &InVoter );
-		// Cmd: Vote
-		Result VoteRes( const uint64_t &InTransactionID, const Result &InResult );
-		// S2C: Player Voted
-		Result VotedS2CEvt( const uint64_t &InGameInsUID, const AccountID &InVoter, const AccountID &InVotedTarget );
-		// S2C: Vote is ended
-		Result VoteEndS2CEvt( const uint64_t &InGameInsUID, const Array<AccountID>& InVoted );
-		// S2C: Player Killed
-		Result PlayerKilledS2CEvt( const uint64_t &InGameInsUID, const AccountID &InKilledPlayer, const uint8_t &InReason );
-		// S2C: Player Voted
-		Result PlayerRevealedS2CEvt( const uint64_t &InGameInsUID, const AccountID &InRevealedPlayerID, const uint8_t &InRole, const uint8_t &InReason );
-		// Cmd: Play again with the current players
-		Result GamePlayAgainRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
-		// S2C: Somebody pressed play again. Only one of PartyUID and GameInsUID can have a value
-		Result GamePlayAgainS2CEvt( const uint64_t &InPartyUID, const AccountID &InLeadPlayer );
-		// Cmd: Player. reveal a player
-		Result GameRevealPlayerRes( const uint64_t &InTransactionID, const Result &InResult, const Array<AccountID>& InRevealedPlayerID, const Array<uint8_t>& InRevealedRole, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
-		// Cmd: Player. revive himself
-		Result GamePlayerReviveRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
-		// S2C: Player is revived
-		Result GamePlayerRevivedS2CEvt( const AccountID &InRevivedPlayerID );
-		// Cmd: Player. reset ranking
-		Result GamePlayerResetRankRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 		// Cmd: Request Game match
 		Result RequestGameMatchRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 		// S2C: Game matched
@@ -349,10 +271,8 @@ namespace SF
 		Result GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
 		// Cmd: Select character
 		Result SelectCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes );
-		// Cmd: Give my stamina to other player
-		Result GiveStaminaRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InTargetPlayer, const uint64_t &InTimeStamp );
-		// Cmd: For debug, Change configue preset
-		Result SetPresetGameConfigIDRes( const uint64_t &InTransactionID, const Result &InResult );
+		// Cmd: To call general functionality
+		Result CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults );
 
 	}; // class NetSvrPolicyGame
 

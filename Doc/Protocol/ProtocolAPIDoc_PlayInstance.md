@@ -351,6 +351,31 @@ C++: Cast message to GetStreamListRes to access values
 		- OutStreamNames: String type. Stream names
 
 
+## CallFunction Request
+To call general functionality
+
+1. Command interface
+
+        Result CallFunctionCmd(const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInFunctionName: StringCrc32 type. function name
+
+		- OutInParameters: VariableTable type. function parameter
+
+2. Result interface
+
+C++: Cast message to CallFunctionRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+		- OutResults: VariableTable type. function result
+
+
 
 
 

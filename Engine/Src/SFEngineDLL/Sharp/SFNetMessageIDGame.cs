@@ -253,120 +253,6 @@ namespace SF.Net
 		public static int GetCharacterDataInGameInstanceRes { get { return CSSFNetMessageID_GameGetCharacterDataInGameInstanceRes(); } }
 
 
-		// Cmd: Join to a game
-		public static int JoinGameCmd { get { return CSSFNetMessageID_GameJoinGameCmd(); } }
-
-		public static int JoinGameRes { get { return CSSFNetMessageID_GameJoinGameRes(); } }
-
-
-		// S2C: Player Joined in the game
-		public static int PlayerJoinedS2CEvt { get { return CSSFNetMessageID_GamePlayerJoinedS2CEvt(); } }
-
-		// Cmd: Leave Game
-		public static int LeaveGameCmd { get { return CSSFNetMessageID_GameLeaveGameCmd(); } }
-
-		public static int LeaveGameRes { get { return CSSFNetMessageID_GameLeaveGameRes(); } }
-
-
-		// S2C: Player left event
-		public static int PlayerLeftS2CEvt { get { return CSSFNetMessageID_GamePlayerLeftS2CEvt(); } }
-
-		// Cmd: Kick player
-		public static int KickPlayerCmd { get { return CSSFNetMessageID_GameKickPlayerCmd(); } }
-
-		public static int KickPlayerRes { get { return CSSFNetMessageID_GameKickPlayerRes(); } }
-
-
-		// S2C: Player kicked
-		public static int PlayerKickedS2CEvt { get { return CSSFNetMessageID_GamePlayerKickedS2CEvt(); } }
-
-		// Cmd: Assign role + Game state reset
-		public static int AssignRoleCmd { get { return CSSFNetMessageID_GameAssignRoleCmd(); } }
-
-		public static int AssignRoleRes { get { return CSSFNetMessageID_GameAssignRoleRes(); } }
-
-
-		// S2C: Role assigned event
-		public static int RoleAssignedS2CEvt { get { return CSSFNetMessageID_GameRoleAssignedS2CEvt(); } }
-
-		// Cmd: Send chatting message to the game
-		public static int ChatMessageCmd { get { return CSSFNetMessageID_GameChatMessageCmd(); } }
-
-		public static int ChatMessageRes { get { return CSSFNetMessageID_GameChatMessageRes(); } }
-
-
-		// S2C: Chatting message event 
-		public static int ChatMessageS2CEvt { get { return CSSFNetMessageID_GameChatMessageS2CEvt(); } }
-
-		// Cmd: Advance game
-		public static int AdvanceGameCmd { get { return CSSFNetMessageID_GameAdvanceGameCmd(); } }
-
-		public static int AdvanceGameRes { get { return CSSFNetMessageID_GameAdvanceGameRes(); } }
-
-
-		// S2C: The game state is advanced
-		public static int GameAdvancedS2CEvt { get { return CSSFNetMessageID_GameGameAdvancedS2CEvt(); } }
-
-		// S2C: Game is ended
-		public static int GameEndedS2CEvt { get { return CSSFNetMessageID_GameGameEndedS2CEvt(); } }
-
-		// Cmd: Vote game advance
-		public static int VoteGameAdvanceCmd { get { return CSSFNetMessageID_GameVoteGameAdvanceCmd(); } }
-
-		public static int VoteGameAdvanceRes { get { return CSSFNetMessageID_GameVoteGameAdvanceRes(); } }
-
-
-		// S2C: GameAdvance is Voted
-		public static int GameAdvanceVotedS2CEvt { get { return CSSFNetMessageID_GameGameAdvanceVotedS2CEvt(); } }
-
-		// Cmd: Vote
-		public static int VoteCmd { get { return CSSFNetMessageID_GameVoteCmd(); } }
-
-		public static int VoteRes { get { return CSSFNetMessageID_GameVoteRes(); } }
-
-
-		// S2C: Player Voted
-		public static int VotedS2CEvt { get { return CSSFNetMessageID_GameVotedS2CEvt(); } }
-
-		// S2C: Vote is ended
-		public static int VoteEndS2CEvt { get { return CSSFNetMessageID_GameVoteEndS2CEvt(); } }
-
-		// S2C: Player Killed
-		public static int PlayerKilledS2CEvt { get { return CSSFNetMessageID_GamePlayerKilledS2CEvt(); } }
-
-		// S2C: Player Voted
-		public static int PlayerRevealedS2CEvt { get { return CSSFNetMessageID_GamePlayerRevealedS2CEvt(); } }
-
-		// Cmd: Play again with the current players
-		public static int GamePlayAgainCmd { get { return CSSFNetMessageID_GameGamePlayAgainCmd(); } }
-
-		public static int GamePlayAgainRes { get { return CSSFNetMessageID_GameGamePlayAgainRes(); } }
-
-
-		// S2C: Somebody pressed play again. Only one of PartyUID and GameInsUID can have a value
-		public static int GamePlayAgainS2CEvt { get { return CSSFNetMessageID_GameGamePlayAgainS2CEvt(); } }
-
-		// Cmd: Player. reveal a player
-		public static int GameRevealPlayerCmd { get { return CSSFNetMessageID_GameGameRevealPlayerCmd(); } }
-
-		public static int GameRevealPlayerRes { get { return CSSFNetMessageID_GameGameRevealPlayerRes(); } }
-
-
-		// Cmd: Player. revive himself
-		public static int GamePlayerReviveCmd { get { return CSSFNetMessageID_GameGamePlayerReviveCmd(); } }
-
-		public static int GamePlayerReviveRes { get { return CSSFNetMessageID_GameGamePlayerReviveRes(); } }
-
-
-		// S2C: Player is revived
-		public static int GamePlayerRevivedS2CEvt { get { return CSSFNetMessageID_GameGamePlayerRevivedS2CEvt(); } }
-
-		// Cmd: Player. reset ranking
-		public static int GamePlayerResetRankCmd { get { return CSSFNetMessageID_GameGamePlayerResetRankCmd(); } }
-
-		public static int GamePlayerResetRankRes { get { return CSSFNetMessageID_GameGamePlayerResetRankRes(); } }
-
-
 		// Cmd: Request Game match
 		public static int RequestGameMatchCmd { get { return CSSFNetMessageID_GameRequestGameMatchCmd(); } }
 
@@ -478,16 +364,10 @@ namespace SF.Net
 		public static int SelectCharacterRes { get { return CSSFNetMessageID_GameSelectCharacterRes(); } }
 
 
-		// Cmd: Give my stamina to other player
-		public static int GiveStaminaCmd { get { return CSSFNetMessageID_GameGiveStaminaCmd(); } }
+		// Cmd: To call general functionality
+		public static int CallFunctionCmd { get { return CSSFNetMessageID_GameCallFunctionCmd(); } }
 
-		public static int GiveStaminaRes { get { return CSSFNetMessageID_GameGiveStaminaRes(); } }
-
-
-		// Cmd: For debug, Change configue preset
-		public static int SetPresetGameConfigIDCmd { get { return CSSFNetMessageID_GameSetPresetGameConfigIDCmd(); } }
-
-		public static int SetPresetGameConfigIDRes { get { return CSSFNetMessageID_GameSetPresetGameConfigIDRes(); } }
+		public static int CallFunctionRes { get { return CSSFNetMessageID_GameCallFunctionRes(); } }
 
 
 		#region Native Interfaces 
@@ -866,196 +746,6 @@ namespace SF.Net
 
 
 
-		// Cmd: Join to a game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameJoinGameCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameJoinGameCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameJoinGameRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameJoinGameRes();
-
-
-
-		// S2C: Player Joined in the game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GamePlayerJoinedS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GamePlayerJoinedS2CEvt();
-
-
-		// Cmd: Leave Game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameLeaveGameCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameLeaveGameCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameLeaveGameRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameLeaveGameRes();
-
-
-
-		// S2C: Player left event
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GamePlayerLeftS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GamePlayerLeftS2CEvt();
-
-
-		// Cmd: Kick player
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameKickPlayerCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameKickPlayerCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameKickPlayerRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameKickPlayerRes();
-
-
-
-		// S2C: Player kicked
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GamePlayerKickedS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GamePlayerKickedS2CEvt();
-
-
-		// Cmd: Assign role + Game state reset
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameAssignRoleCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameAssignRoleCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameAssignRoleRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameAssignRoleRes();
-
-
-
-		// S2C: Role assigned event
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRoleAssignedS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameRoleAssignedS2CEvt();
-
-
-		// Cmd: Send chatting message to the game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameChatMessageCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameChatMessageCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameChatMessageRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameChatMessageRes();
-
-
-
-		// S2C: Chatting message event 
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameChatMessageS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameChatMessageS2CEvt();
-
-
-		// Cmd: Advance game
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameAdvanceGameCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameAdvanceGameCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameAdvanceGameRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameAdvanceGameRes();
-
-
-
-		// S2C: The game state is advanced
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGameAdvancedS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGameAdvancedS2CEvt();
-
-
-		// S2C: Game is ended
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGameEndedS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGameEndedS2CEvt();
-
-
-		// Cmd: Vote game advance
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameVoteGameAdvanceCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameVoteGameAdvanceCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameVoteGameAdvanceRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameVoteGameAdvanceRes();
-
-
-
-		// S2C: GameAdvance is Voted
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGameAdvanceVotedS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGameAdvanceVotedS2CEvt();
-
-
-		// Cmd: Vote
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameVoteCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameVoteCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameVoteRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameVoteRes();
-
-
-
-		// S2C: Player Voted
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameVotedS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameVotedS2CEvt();
-
-
-		// S2C: Vote is ended
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameVoteEndS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameVoteEndS2CEvt();
-
-
-		// S2C: Player Killed
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GamePlayerKilledS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GamePlayerKilledS2CEvt();
-
-
-		// S2C: Player Voted
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GamePlayerRevealedS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GamePlayerRevealedS2CEvt();
-
-
-		// Cmd: Play again with the current players
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGamePlayAgainCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGamePlayAgainCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGamePlayAgainRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGamePlayAgainRes();
-
-
-
-		// S2C: Somebody pressed play again. Only one of PartyUID and GameInsUID can have a value
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGamePlayAgainS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGamePlayAgainS2CEvt();
-
-
-		// Cmd: Player. reveal a player
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGameRevealPlayerCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGameRevealPlayerCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGameRevealPlayerRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGameRevealPlayerRes();
-
-
-
-		// Cmd: Player. revive himself
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGamePlayerReviveCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGamePlayerReviveCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGamePlayerReviveRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGamePlayerReviveRes();
-
-
-
-		// S2C: Player is revived
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGamePlayerRevivedS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGamePlayerRevivedS2CEvt();
-
-
-		// Cmd: Player. reset ranking
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGamePlayerResetRankCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGamePlayerResetRankCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGamePlayerResetRankRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGamePlayerResetRankRes();
-
-
-
 		// Cmd: Request Game match
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRequestGameMatchCmd", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameRequestGameMatchCmd();
@@ -1241,23 +931,13 @@ namespace SF.Net
 
 
 
-		// Cmd: Give my stamina to other player
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGiveStaminaCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGiveStaminaCmd();
+		// Cmd: To call general functionality
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameCallFunctionCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameCallFunctionCmd();
 
 
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameGiveStaminaRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameGiveStaminaRes();
-
-
-
-		// Cmd: For debug, Change configue preset
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSetPresetGameConfigIDCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameSetPresetGameConfigIDCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSetPresetGameConfigIDRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_GameSetPresetGameConfigIDRes();
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameCallFunctionRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameCallFunctionRes();
 
 
 
