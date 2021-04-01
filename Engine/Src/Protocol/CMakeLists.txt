@@ -3,31 +3,31 @@
 set(SFPROTOCOL_LIB_FILES
   	Protocol/SFGenericMessageClass.cpp
 	
-	Protocol/Message/GameMsgClass.cpp
-	Protocol/Message/GameMsgDebug.cpp
-	Protocol/Message/GameMsgParsing.cpp
-	Protocol/Message/LoginMsgClass.cpp
-	Protocol/Message/LoginMsgDebug.cpp
-	Protocol/Message/LoginMsgParsing.cpp
-	Protocol/Message/GameMsgClass.h
-	Protocol/Message/GameMsgDebug.h
-	Protocol/Message/GameMsgParsing.h
-	Protocol/Message/LoginMsgClass.h
-	Protocol/Message/LoginMsgDebug.h
-	Protocol/Message/LoginMsgParsing.h
-	Protocol/Message/PlayInstanceMsgClass.cpp
-	Protocol/Message/PlayInstanceMsgClass.h
-	Protocol/Message/PlayInstanceMsgDebug.cpp
-	Protocol/Message/PlayInstanceMsgDebug.h
-	Protocol/Message/PlayInstanceMsgParsing.cpp
-	Protocol/Message/PlayInstanceMsgParsing.h
+	Protocol/GameMsgClass.cpp
+	Protocol/GameMsgDebug.cpp
+	Protocol/GameMsgParsing.cpp
+	Protocol/LoginMsgClass.cpp
+	Protocol/LoginMsgDebug.cpp
+	Protocol/LoginMsgParsing.cpp
+	Protocol/GameMsgClass.h
+	Protocol/GameMsgDebug.h
+	Protocol/GameMsgParsing.h
+	Protocol/LoginMsgClass.h
+	Protocol/LoginMsgDebug.h
+	Protocol/LoginMsgParsing.h
+	Protocol/PlayInstanceMsgClass.cpp
+	Protocol/PlayInstanceMsgClass.h
+	Protocol/PlayInstanceMsgDebug.cpp
+	Protocol/PlayInstanceMsgDebug.h
+	Protocol/PlayInstanceMsgParsing.cpp
+	Protocol/PlayInstanceMsgParsing.h
 
-	Protocol/Policy/GameNetPolicy.cpp
-	Protocol/Policy/GameNetPolicy.h
-	Protocol/Policy/LoginNetPolicy.cpp
-	Protocol/Policy/LoginNetPolicy.h
-	Protocol/Policy/PlayInstanceNetPolicy.cpp
-	Protocol/Policy/PlayInstanceNetPolicy.h
+	Protocol/GameNetPolicy.cpp
+	Protocol/GameNetPolicy.h
+	Protocol/LoginNetPolicy.cpp
+	Protocol/LoginNetPolicy.h
+	Protocol/PlayInstanceNetPolicy.cpp
+	Protocol/PlayInstanceNetPolicy.h
 
 	Protocol/SFProtocol.cpp
 	Protocol/SFGenericMessageClass.h

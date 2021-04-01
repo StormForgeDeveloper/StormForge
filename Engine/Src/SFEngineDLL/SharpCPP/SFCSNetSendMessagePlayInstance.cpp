@@ -11,7 +11,7 @@
 
 #include "SFEngineDLLPCH.h"
 #include "Net/SFConnection.h"
-#include "Protocol/Message/PlayInstanceMsgClass.h"
+#include "Protocol/PlayInstanceMsgClass.h"
 #include "SFCSUtil.h"
 
 

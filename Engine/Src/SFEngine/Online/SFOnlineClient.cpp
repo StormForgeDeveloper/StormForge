@@ -15,12 +15,12 @@
 #include "Net/SFConnection.h"
 #include "Net/SFConnectionTCP.h"
 #include "Net/SFConnectionUDP.h"
-#include "Protocol/Policy/LoginNetPolicy.h"
-#include "Protocol/Message/LoginMsgClass.h"
-#include "Protocol/Policy/GameNetPolicy.h"
-#include "Protocol/Message/GameMsgClass.h"
-#include "Protocol/Policy/PlayInstanceNetPolicy.h"
-#include "Protocol/Message/PlayInstanceMsgClass.h"
+#include "Protocol/LoginNetPolicy.h"
+#include "Protocol/LoginMsgClass.h"
+#include "Protocol/GameNetPolicy.h"
+#include "Protocol/GameMsgClass.h"
+#include "Protocol/PlayInstanceNetPolicy.h"
+#include "Protocol/PlayInstanceMsgClass.h"
 
 namespace SF
 {

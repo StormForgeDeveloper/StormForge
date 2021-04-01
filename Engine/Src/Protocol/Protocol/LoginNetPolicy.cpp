@@ -15,8 +15,8 @@
 #include "Net/SFMessage.h"
 #include "Net/SFMessageEndpoint.h"
 #include "Actor/Movement/SFActorMovement.h"
-#include "Protocol/Policy/LoginNetPolicy.h"
-#include "Protocol/Message/LoginMsgClass.h"
+#include "Protocol/LoginNetPolicy.h"
+#include "Protocol/LoginMsgClass.h"
 
 
 

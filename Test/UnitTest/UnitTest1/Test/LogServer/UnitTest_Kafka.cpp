@@ -24,7 +24,7 @@
 #include "StreamDB/SFStreamDB.h"
 #include "StreamDB/SFStreamDBDirectory.h"
 
-#include "Protocol/Message/PlayInstanceMsgClass.h"
+#include "Protocol/PlayInstanceMsgClass.h"
 
 
 using ::testing::EmptyTestEventListener;

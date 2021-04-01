@@ -1,10 +1,10 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2017 Kyungkun Ko
+// CopyRight (c) 2016 Kyungkun Ko
 // 
 // Author : Generated
 // 
-// Description : Login Message parsing definitions
+// Description : Game Message debug definitions
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -13,7 +13,7 @@
 #include "SFTypedefs.h"
 #include "Protocol/SFProtocol.h"
 #include "Net/SFNetDef.h"
-#include "Protocol/Message/LoginMsgClass.h"
+#include "Protocol/GameMsgClass.h"
 
 
 
@@ -23,9 +23,9 @@ namespace SF
 	{
  
 		///////////////////////////////////////////////////////////////
-		// Login parsing register function 
+		// Game Debug output function 
 
-		void RegisterParserLogin();
+		void RegisterDebugTraceGame();
 
 
 

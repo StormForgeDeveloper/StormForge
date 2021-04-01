@@ -15,8 +15,8 @@
 #include "Net/SFMessage.h"
 #include "Net/SFMessageEndpoint.h"
 #include "Actor/Movement/SFActorMovement.h"
-#include "Protocol/Policy/PlayInstanceNetPolicy.h"
-#include "Protocol/Message/PlayInstanceMsgClass.h"
+#include "Protocol/PlayInstanceNetPolicy.h"
+#include "Protocol/PlayInstanceMsgClass.h"
 
 
 

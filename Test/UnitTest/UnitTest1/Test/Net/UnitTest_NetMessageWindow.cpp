@@ -10,7 +10,7 @@
 #include "Net/SFMessageWindow.h"
 #include "ResultCode/SFResultCodeLibrary.h"
 
-#include "Protocol/Message/LoginMsgClass.h"
+#include "Protocol/LoginMsgClass.h"
 
 #include "UnitTest_Net.h"
 #include "SFEngine.h"

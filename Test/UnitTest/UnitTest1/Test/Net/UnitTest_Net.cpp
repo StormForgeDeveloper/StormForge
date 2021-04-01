@@ -22,7 +22,7 @@
 #include "Util/SFToString.h"
 #include "Net/SFMessage.h"
 #include "Net/SFMessageWindow.h"
-#include "Protocol/Message/LoginMsgClass.h"
+#include "Protocol/LoginMsgClass.h"
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "UnitTest_Net.h"

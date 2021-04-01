@@ -1,10 +1,10 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) 2017 Kyungkun Ko
 // 
 // Author : Generated
 // 
-// Description : PlayInstance Message debug definitions
+// Description : Login Message parsing definitions
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -13,7 +13,7 @@
 #include "SFTypedefs.h"
 #include "Protocol/SFProtocol.h"
 #include "Net/SFNetDef.h"
-#include "Protocol/Message/PlayInstanceMsgClass.h"
+#include "Protocol/LoginMsgClass.h"
 
 
 
@@ -23,9 +23,9 @@ namespace SF
 	{
  
 		///////////////////////////////////////////////////////////////
-		// PlayInstance Debug output function 
+		// Login parsing register function 
 
-		void RegisterDebugTracePlayInstance();
+		void RegisterParserLogin();
 
 
 

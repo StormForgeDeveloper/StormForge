@@ -13,8 +13,8 @@
 #include "SFTypedefs.h"
 #include "Protocol/SFProtocol.h"
 #include "Net/SFNetDef.h"
-#include "Protocol/Message/LoginMsgParsing.h"
-#include "Protocol/Message/LoginMsgClass.h"
+#include "Protocol/LoginMsgParsing.h"
+#include "Protocol/LoginMsgClass.h"
 
 
 

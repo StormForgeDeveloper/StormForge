@@ -13,8 +13,8 @@
 #include "SFTypedefs.h"
 #include "Protocol/SFProtocol.h"
 #include "Net/SFNetDef.h"
-#include "Protocol/Message/GameMsgDebug.h"
-#include "Protocol/Message/GameMsgClass.h"
+#include "Protocol/GameMsgDebug.h"
+#include "Protocol/GameMsgClass.h"
 
 
 

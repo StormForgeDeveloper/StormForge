@@ -11,7 +11,7 @@
 
 #include "SFEngineDLLPCH.h"
 #include "Net/SFConnection.h"
-#include "Protocol/Message/LoginMsgClass.h"
+#include "Protocol/LoginMsgClass.h"
 #include "SFCSUtil.h"
 
 

@@ -15,7 +15,7 @@
 #include "Net/SFNetToString.h"
 #include "Container/SFArray.h"
 #include "Protocol/SFProtocolHelper.h"
-#include "Protocol/Message/LoginMsgClass.h"
+#include "Protocol/LoginMsgClass.h"
 
 
 

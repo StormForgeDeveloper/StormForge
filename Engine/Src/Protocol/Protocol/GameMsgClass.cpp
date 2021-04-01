@@ -15,7 +15,7 @@
 #include "Net/SFNetToString.h"
 #include "Container/SFArray.h"
 #include "Protocol/SFProtocolHelper.h"
-#include "Protocol/Message/GameMsgClass.h"
+#include "Protocol/GameMsgClass.h"
 
 
 

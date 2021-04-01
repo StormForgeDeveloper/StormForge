@@ -121,7 +121,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Net/SFNetToString.h\"");
             OutStream.WriteLine("#include \"Container/SFArray.h\"");
             OutStream.WriteLine("#include \"Protocol/SFProtocolHelper.h\"");
-            OutStream.WriteLine("#include \"Protocol/Message/{0}\"", HeaderName);
+            OutStream.WriteLine("#include \"Protocol/{0}\"", HeaderName);
             if (Group.IsServer)
                 OutStream.WriteLine("#include \"Protocol/SvrProtocol.h\"");
 

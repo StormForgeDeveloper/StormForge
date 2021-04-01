@@ -56,7 +56,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
             OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
-            OutStream.WriteLine("#include \"Protocol/Message/{0}MsgClass.h\"", Group.Name);
+            OutStream.WriteLine("#include \"Protocol/{0}MsgClass.h\"", Group.Name);
             NewLine(3);
 
             // namespace definition
@@ -82,8 +82,8 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"SFTypedefs.h\"");
             OutStream.WriteLine("#include \"Protocol/SFProtocol.h\"");
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
-            OutStream.WriteLine("#include \"Protocol/Message/{0}\"", OutputHeaderName());
-            OutStream.WriteLine("#include \"Protocol/Message/{0}MsgClass.h\"", Group.Name);
+            OutStream.WriteLine("#include \"Protocol/{0}\"", OutputHeaderName());
+            OutStream.WriteLine("#include \"Protocol/{0}MsgClass.h\"", Group.Name);
             NewLine(3);
 
             // namespace definition

@@ -90,8 +90,8 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Actor/Movement/SFActorMovement.h\"");
             if (Group.IsServer)
                 OutStream.WriteLine("#include \"Protocol/SvrProtocol.h\"");
-            OutStream.WriteLine(string.Format("#include \"Protocol/Policy/{0}\"", OutputHeaderName()));
-            OutStream.WriteLine(string.Format("#include \"Protocol/Message/{0}\"", MessageClassHeaderName));
+            OutStream.WriteLine(string.Format("#include \"Protocol/{0}\"", OutputHeaderName()));
+            OutStream.WriteLine(string.Format("#include \"Protocol/{0}\"", MessageClassHeaderName));
             if (Group.IsServer)
                 OutStream.WriteLine("#include \"ProtocolTrace.h\"");
             

@@ -4,7 +4,7 @@
 // 
 // Author : Generated
 // 
-// Description : Login Message debug definitions
+// Description : PlayInstance Message debug definitions
 // 
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -13,7 +13,7 @@
 #include "SFTypedefs.h"
 #include "Protocol/SFProtocol.h"
 #include "Net/SFNetDef.h"
-#include "Protocol/Message/LoginMsgClass.h"
+#include "Protocol/PlayInstanceMsgClass.h"
 
 
 
@@ -23,9 +23,9 @@ namespace SF
 	{
  
 		///////////////////////////////////////////////////////////////
-		// Login Debug output function 
+		// PlayInstance Debug output function 
 
-		void RegisterDebugTraceLogin();
+		void RegisterDebugTracePlayInstance();
 
 
 

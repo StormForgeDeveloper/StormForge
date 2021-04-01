@@ -13,8 +13,8 @@
 #include "SFTypedefs.h"
 #include "Protocol/SFProtocol.h"
 #include "Net/SFNetDef.h"
-#include "Protocol/Message/PlayInstanceMsgParsing.h"
-#include "Protocol/Message/PlayInstanceMsgClass.h"
+#include "Protocol/PlayInstanceMsgParsing.h"
+#include "Protocol/PlayInstanceMsgClass.h"
 
 
 

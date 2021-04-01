@@ -69,7 +69,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"ServerService/ServerServiceBase.h\"");
 
             OutStream.WriteLine("#include \"Net/SFNetDef.h\"");
-            OutStream.WriteLine("#include \"Protocol/Policy/{0}\"", BasePolicyHeaderName);
+            OutStream.WriteLine("#include \"Protocol/{0}\"", BasePolicyHeaderName);
             NewLine(3);
 
             // namespace definition
@@ -96,7 +96,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Net/SFMessageEndpoint.h\"");
             OutStream.WriteLine("#include \"Server/BrServer.h\"");
             OutStream.WriteLine("#include \"Server/BrServerUtil.h\"");
-            OutStream.WriteLine("#include \"Protocol/ServerService/{0}\"", OutputHeaderName);
+            OutStream.WriteLine("#include \"Protocol/{0}\"", OutputHeaderName);
             OutStream.WriteLine("#include \"SvrTrace.h\"");
 
             NewLine(3);

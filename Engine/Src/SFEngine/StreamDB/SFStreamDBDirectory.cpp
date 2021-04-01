@@ -15,8 +15,8 @@
 #include "StreamDB/SFStreamDBDirectory.h"
 #include "Util/SFStringFormat.h"
 #include "Net/SFConnectionTCP.h"
-#include "Protocol/Policy/PlayInstanceNetPolicy.h"
-#include "Protocol/Message/PlayInstanceMsgClass.h"
+#include "Protocol/PlayInstanceNetPolicy.h"
+#include "Protocol/PlayInstanceMsgClass.h"
 
 #ifdef USE_STREAMDB
 

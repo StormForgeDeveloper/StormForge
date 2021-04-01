@@ -26,14 +26,14 @@
 
 #include "Protocol/SFProtocol.h"
 
-#include "Protocol/Message/LoginMsgDebug.h"
-#include "Protocol/Message/GameMsgDebug.h"
+#include "Protocol/LoginMsgDebug.h"
+#include "Protocol/GameMsgDebug.h"
 
-#include "Protocol/Message/LoginMsgParsing.h"
-#include "Protocol/Message/GameMsgParsing.h"
+#include "Protocol/LoginMsgParsing.h"
+#include "Protocol/GameMsgParsing.h"
 
-#include "Protocol/Message/PlayInstanceMsgDebug.h"
-#include "Protocol/Message/PlayInstanceMsgParsing.h"
+#include "Protocol/PlayInstanceMsgDebug.h"
+#include "Protocol/PlayInstanceMsgParsing.h"
 
 
 namespace SF {

@@ -94,7 +94,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("");
             OutStream.WriteLine("#include \"SFEngineDLLPCH.h\"");
             OutStream.WriteLine("#include \"Net/SFConnection.h\"");
-            OutStream.WriteLine("#include \"Protocol/Message/{0}MsgClass.h\"", Group.Name);
+            OutStream.WriteLine("#include \"Protocol/{0}MsgClass.h\"", Group.Name);
             OutStream.WriteLine("#include \"SFCSUtil.h\"");
             NewLine(3);
 
