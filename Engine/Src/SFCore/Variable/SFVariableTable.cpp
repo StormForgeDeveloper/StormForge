@@ -14,7 +14,8 @@
 #include "SFTypedefs.h"
 #include "Util/SFLog.h"
 #include "Variable/SFVariableTable.h"
-
+#include "Variable/SFVariableSerialization.h"
+#include "Stream/SFMemoryStream.h"
 
 
 namespace SF {
@@ -139,6 +140,12 @@ namespace SF {
 		m_VairableTable.Find(name, pVariable);
 
 		return pVariable;
+	}
+
+	Result VariableTable::FromBinData(const Array<uint8_t>& binData)
+	{
+		InputMemoryStream stream(binData);
+		return stream >> *this;
 	}
 
 	VariableTable& VariableTable::operator = (const VariableTable& src)

@@ -123,6 +123,9 @@ namespace SF {
 			return true;
 		}
 
+		// parse from bin data
+		Result FromBinData(const Array<uint8_t>&);
+
 		VariableTable& operator = (const VariableTable& src);
 	};
 
