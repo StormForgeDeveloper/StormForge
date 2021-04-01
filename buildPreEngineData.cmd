@@ -1,8 +1,3 @@
-
-PATH=%PATH%;"C:\Program Files (x86)\Windows Kits\10\bin\x64";
-
-cd %~dp0\Engine\Data
-
-bash buildData.sh build
+cmd /c "cd %~dp0\Engine\Data & bash buildData.sh build"
 
 pause
