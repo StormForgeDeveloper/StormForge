@@ -506,7 +506,7 @@ namespace TestNet2.WinSharp
         {
             var playInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
             var playerID = message.GetValue<UInt64>("PlayerID");
-            var visualData = message.GetValue<UInt64>("Attributes");
+            var visualData = message.GetValue<VariableTable>("Attributes");
 
             // player moved in visual range or joined
         }
