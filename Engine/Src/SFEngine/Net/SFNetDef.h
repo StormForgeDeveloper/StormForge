@@ -150,8 +150,8 @@ namespace Net {
 	public:
 		virtual ~IConnectionEventHandler();
 
-		virtual void OnConnectionEvent(Connection* pConn, const ConnectionEvent& evt) = 0;
-		virtual Result OnRecvMessage(Connection* pConn, SharedPointerT<Message::MessageData>& pMsg) = 0;
+		virtual void OnConnectionEvent(Connection* pConn, const ConnectionEvent& evt) {}
+		virtual Result OnRecvMessage(Connection* pConn, SharedPointerT<Message::MessageData>& pMsg) { return ResultCode::SUCCESS; }
 		virtual Result OnNetSyncMessage(Connection* pConn);
 
 		// Net send message

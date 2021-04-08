@@ -446,6 +446,11 @@ namespace SF {
 			ReleaseReference();
 		}
 
+		void reset()
+		{
+			ReleaseReference();
+		}
+
 		void ReleaseReference() const
 		{
 			auto pObj = m_pObject.exchange(nullptr, std::memory_order_acq_rel);

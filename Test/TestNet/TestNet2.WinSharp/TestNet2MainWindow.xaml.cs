@@ -62,7 +62,6 @@ namespace TestNet2.WinSharp
             };
             UpdateStatusText(OnlineClient.OnlineState.None);
 
-
             m_TickTimer = new System.Windows.Threading.DispatcherTimer();
             m_TickTimer.Tick += new EventHandler(Timer_Tick);
             m_TickTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
@@ -79,8 +78,9 @@ namespace TestNet2.WinSharp
             if (m_OnlineClient == null)
                 return;
 
-            m_OnlineClient.UpdateGameTick();
+            m_OnlineClient.UpdateGameTick(1);
 
+            m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame();
             m_OnlineClient.SendMovement(ref m_MyMove);
 
             foreach(var itPlayer in m_OtherPlayers)

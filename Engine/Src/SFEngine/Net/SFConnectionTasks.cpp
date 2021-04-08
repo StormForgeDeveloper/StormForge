@@ -61,6 +61,10 @@ namespace SF {
 			, m_pConnection(pConnection)
 		{
 			m_EnqueuedTime = Util::Time.GetTimeMs();
+			if (m_pConnection != nullptr)
+			{
+				m_pConnection->GetRecvMessageDelegates().RemoveDelegateAll();
+			}
 		}
 
 		ConnectionTask_DisconnectNClose::~ConnectionTask_DisconnectNClose()
