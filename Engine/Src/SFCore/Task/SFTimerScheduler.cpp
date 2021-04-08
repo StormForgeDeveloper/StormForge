@@ -180,37 +180,22 @@ namespace SF {
 		m_WorkingThreadID = threadID;
 	}
 
+	Result TimerScheduler::KickTickUpdate(TimerAction* pAction)
+	{
+		if (pAction == nullptr)
+			return ResultCode::INVALID_ARG;
+
+		return m_RescheduleQueue.Enqueue(pAction);
+	}
+
 	Result TimerScheduler::AddTimerAction(ThreadID threadID, TimerAction* pAction)
 	{
 		Result hr = ResultCode::SUCCESS;
 
-
-		//Assert(m_WorkingThreadID == threadID);
-		//if (m_WorkingThreadID != threadID)
-		//{
-		//	hr = ResultCode::INVALID_THREAD;
-		//	if(!hr) return hr;
-		//}
-
-		////Assert(m_IsWriteLocked.load(std::memory_order_relaxed) == 0);
-
 		if (pAction == nullptr) return ResultCode::INVALID_POINTER;
 
 		Assert(pAction->m_InQueueKey.Components.NextTickTime == TimeStampMS::max());
-		//// new time can be TimeStampMS::max() if muchine is running over 28 days
-		////defAssert(pAction->TimeData.Components.NextTickTime != TimeStampMS::max());
-		////defAssert(pAction->TimeData.TimerKey != 0);
 
-		//pAction->m_Queued = true;
-		//pAction->m_InQueueKey.TimerKey = pAction->TimeData.TimerKey;
-		//if (!(m_TimerMap.Insert(pAction->m_InQueueKey.TimerKey, pAction)))
-		//{
-		//	pAction->m_Queued = false;
-		//	Assert(false);
-		//}
-
-
-		//return hr;
 		return m_RescheduleQueue.Enqueue(pAction);
 	}
 

@@ -65,6 +65,9 @@ namespace SF {
 		ThreadID GetWorkingThreadID() const { return m_WorkingThreadID; }
 		void UpdateWorkingThreadID(ThreadID threadID);
 
+		// Kick the task so that it updated asap
+		Result KickTickUpdate(TimerAction* pAction);
+
 		Result AddTimerAction(ThreadID threadID, TimerAction* pAction);
 		Result RemoveTimerAction(ThreadID threadID, TimerAction* pAction);
 		Result CommitChanges(ThreadID threadID);
