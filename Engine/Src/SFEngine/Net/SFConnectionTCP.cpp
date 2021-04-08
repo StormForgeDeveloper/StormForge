@@ -200,7 +200,14 @@ namespace Net {
 		// process directly
 		else
 		{
-			netCheck(ProcessSendQueue());
+			if (m_Owner.GetNetSyncMessageDelegates().size() > 0)
+			{
+				m_Owner.GetNetSyncMessageDelegates().Invoke(&m_Owner);
+			}
+			else
+			{
+				netCheck(ProcessSendQueue());
+			}
 		}
 
 		return hr;
@@ -834,12 +841,5 @@ namespace Net {
 	{
 	}
 
-
-
-
-
-
 } // namespace Net
 } // namespace SF
-
-
