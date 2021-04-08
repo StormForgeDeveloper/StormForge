@@ -92,11 +92,12 @@ namespace TestNet.WinSharp
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.JoinGameServerRes, 0, HandleJoinGameServerRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.RequestGameMatchRes, 0, HandleGameMatchRes);
 
-            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.JoinGameRes, 0, HandleJoinGameRes);
-            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.LeaveGameRes, 0, HandleLeaveGameRes);
+            // TODO: Fixme
+            //m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.JoinGameRes, 0, HandleJoinGameRes);
+            //m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.LeaveGameRes, 0, HandleLeaveGameRes);
 
-            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.PlayerJoinedS2CEvt, 0, HandlePlayerJoinedS2Evt);
-            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.PlayerLeftS2CEvt, 0, HandlePlayerLeftS2CEvt);
+            //m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.PlayerJoinedS2CEvt, 0, HandlePlayerJoinedS2Evt);
+            //m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.PlayerLeftS2CEvt, 0, HandlePlayerLeftS2CEvt);
            
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.GameMatchedS2CEvt, 0, HandleGameMatchedS2CEvt);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.GameMatchFailedS2CEvt, 0, HandleGameMatchFailedS2CEvt);
@@ -403,7 +404,8 @@ namespace TestNet.WinSharp
             {
                 PrintStatus(1, "Already has JoinedGame!! = {0} ID = {1} And LeaveGameCMD!!", m_JoinedGameUID, m_LoginID);
                 m_MatchedInfo = new MatchedInfo(m_JoinedGameUID);
-                m_Game.LeaveGameCmd(0, m_JoinedGameUID, m_AccountID, m_LoginTicket);
+                // Fixme
+                //m_Game.LeaveGameCmd(0, m_JoinedGameUID, m_AccountID, m_LoginTicket);
             }         
         }
         void HandleGameMatchRes(SFMessage message)

@@ -953,7 +953,7 @@ namespace SF
 
 		// TODO: consider round trip delay
 
-		OnPlayerMovement(GetPlayerID(), msg.GetMovement());
+		OnPlayerMovement(msg.GetPlayerID(), msg.GetMovement());
 	}
 
 	void OnlineClient::OnPlayerMovement(PlayerID playerId, const ActorMovement& newMove)

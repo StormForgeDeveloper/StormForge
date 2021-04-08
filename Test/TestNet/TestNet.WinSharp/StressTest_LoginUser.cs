@@ -67,7 +67,8 @@ namespace TestNet.WinSharp
         {
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDLogin.CreateRandomUserRes, 0, HandleLoginRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.JoinGameServerRes, 0, HandleJoinGameServerRes);
-            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.LeaveGameRes, 0, HandleLeaveGameRes);
+            // FIxme
+            //m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.LeaveGameRes, 0, HandleLeaveGameRes);
         } 
 
         public void UnInitEngine()
@@ -340,7 +341,8 @@ namespace TestNet.WinSharp
             if (m_JoinedGameUID != 0)
             {
                 PrintStatus(1, "Already has JoinedGame!! = {0} ID = {1} And LeaveGameCMD!!", m_JoinedGameUID, m_LoginID);
-                m_Game.LeaveGameCmd(0, m_JoinedGameUID, m_AccountID, m_LoginTicket);
+                // Fixme
+                //m_Game.LeaveGameCmd(0, m_JoinedGameUID, m_AccountID, m_LoginTicket);
             }         
         }
 

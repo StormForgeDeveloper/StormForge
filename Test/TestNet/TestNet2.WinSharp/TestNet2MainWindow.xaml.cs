@@ -12,6 +12,13 @@ using SF;
 
 namespace TestNet2.WinSharp
 {
+    class PlayerCharacter
+    {
+        public UInt64 PlayerId;
+        public VariableTable VisualData;
+        public ActorMovement Movement;
+    };
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -20,6 +27,7 @@ namespace TestNet2.WinSharp
         System.Windows.Threading.DispatcherTimer m_TickTimer;
         OnlineClient m_OnlineClient;
         SFMessageRouter m_MessageRouter;
+        Dictionary<UInt64, PlayerCharacter> m_OtherPlayers = new Dictionary<UInt64, PlayerCharacter>();
 
         Random m_Rand = new Random();
 
@@ -74,6 +82,15 @@ namespace TestNet2.WinSharp
             m_OnlineClient.UpdateGameTick();
 
             m_OnlineClient.SendMovement(ref m_MyMove);
+
+            foreach(var itPlayer in m_OtherPlayers)
+            {
+                ActorMovement newMovement;
+                if (m_OnlineClient.GetMovementForPlayer(itPlayer.Value.PlayerId, out newMovement).IsFailed)
+                    continue;
+
+                itPlayer.Value.Movement = newMovement;
+            }
         }
 
         void UpdateButtonState()
@@ -413,13 +430,13 @@ namespace TestNet2.WinSharp
             int Gold, Agile, Strength, Integer;
             object obj;
             characterData.TryGetValue(new StringCrc32("Gold"), out obj);
-            Gold = (int)obj;
+            Gold = Convert.ToInt32(obj);
             characterData.TryGetValue(new StringCrc32("Agile"), out obj);
-            Agile = (int)obj;
+            Agile = Convert.ToInt32(obj);
             characterData.TryGetValue(new StringCrc32("Strength"), out obj);
-            Strength = (int)obj;
+            Strength = Convert.ToInt32(obj);
             characterData.TryGetValue(new StringCrc32("Integer"), out obj);
-            Integer = (int)obj;
+            Integer = Convert.ToInt32(obj);
 
         }
 
@@ -509,6 +526,14 @@ namespace TestNet2.WinSharp
             var visualData = message.GetValue<VariableTable>("Attributes");
 
             // player moved in visual range or joined
+            if (m_OtherPlayers.ContainsKey(playerID))
+                return;
+
+            var newPlayer = new PlayerCharacter();
+            newPlayer.PlayerId = playerID;
+            newPlayer.VisualData = visualData;
+
+            m_OtherPlayers.Add(playerID, newPlayer);
         }
 
         void HandleRemovePlayerFromView(SFMessage message)
@@ -517,6 +542,7 @@ namespace TestNet2.WinSharp
             var playerID = message.GetValue<UInt64>("PlayerID");
 
             // player left or moved away
+            m_OtherPlayers.Remove(playerID);
         }
 
         #endregion

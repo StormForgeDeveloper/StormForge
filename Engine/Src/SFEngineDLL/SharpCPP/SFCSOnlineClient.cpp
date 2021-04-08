@@ -251,7 +251,7 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeGetMovementForPlayer(intptr_t nativeHa
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return pOnlineClient->GetMovementForPlayer(playerId, actorMovement);
+	return int32_t(pOnlineClient->GetMovementForPlayer(playerId, actorMovement));
 }
 
 SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetCurrentMoveFrame(intptr_t nativeHandle)
@@ -277,6 +277,6 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeSendMovement(intptr_t nativeHandle, co
 	// ActorMovement requires special memory alignment, copy incoming data to local storage
 	ActorMovement tempMove = newMove;
 
-	return pOnlineClient->GetSendMovementManager()->EnqueueMovement(tempMove);
+	return int32_t(pOnlineClient->GetSendMovementManager()->EnqueueMovement(tempMove));
 }
 
