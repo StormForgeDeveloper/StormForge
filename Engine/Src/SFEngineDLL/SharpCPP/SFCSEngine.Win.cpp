@@ -49,7 +49,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	SF::LogOutputMask logOutputMask;
 
 	SF::EngineInitParam initParam;
-#ifdef _DEBUG
+#if 1 // def _DEBUG // Use debug for all for the moment
 	initParam.EnableMemoryLeakDetection = false;
 	SF::Log::Net.ChannelMask.Info = 1;
 	SF::Log::Net.ChannelMask.Warning = 1;
