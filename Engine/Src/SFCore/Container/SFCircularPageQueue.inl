@@ -452,7 +452,7 @@ namespace SF {
 			auto enqueueIndex = enqueuePageID % m_TotalPageCount;
 			//auto enqueuePage = enqueueTicket % m_TotalPageCount;
 
-			for (auto iPage = dequeueIndex; iPage <= enqueueIndex; iPage = (iPage+1) % m_TotalPageCount)
+			for (auto iPage = 0; iPage <= m_TotalPageCount; iPage++)
 			{
 				auto pPage = m_CircularPages[iPage].exchange(nullptr, std::memory_order_acq_rel);
 				if (pPage == nullptr) continue;
