@@ -441,37 +441,16 @@ namespace SF {
 			MutexScopeLock lock(m_CircularBufferLock);
 			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::Exclusive, m_CircularBufferLock);
 
-			if (m_CircularPages == nullptr) return;
-
-			auto dequeueTicket = m_DequeueTicket.load(std::memory_order_acquire);
-			auto dequeuePageID = dequeueTicket / m_NumberOfItemsPerPage;
-			auto dequeueIndex = dequeuePageID % m_TotalPageCount;
-			//auto dequeuePage = dequeueTicket % m_TotalPageCount;
-			auto enqueueTicket = m_EnqueueTicket.load(std::memory_order_acquire);
-			auto enqueuePageID = enqueueTicket / m_NumberOfItemsPerPage;
-			auto enqueueIndex = enqueuePageID % m_TotalPageCount;
-			//auto enqueuePage = enqueueTicket % m_TotalPageCount;
-
-			for (auto iPage = 0; iPage <= m_TotalPageCount; iPage++)
+			if (m_CircularPages != nullptr)
 			{
-				auto pPage = m_CircularPages[iPage].exchange(nullptr, std::memory_order_acq_rel);
-				if (pPage == nullptr) continue;
+				for (auto iPage = 0; iPage < m_TotalPageCount; iPage++)
+				{
+					auto pPage = m_CircularPages[iPage].exchange(nullptr, std::memory_order_acq_rel);
+					if (pPage == nullptr) continue;
 
-				FreePage(pPage, true);
+					FreePage(pPage, true);
+				}
 			}
-
-#if defined(DEBUG)
-			// fallback implementation
-			// TODO: bug
-			for (auto iPage = 0; iPage < m_TotalPageCount; iPage++)
-			{
-				auto pPage = m_CircularPages[iPage].exchange(nullptr, std::memory_order_acq_rel);
-				if (pPage == nullptr) continue;
-
-				Assert(false);
-				FreePage(pPage, true);
-			}
-#endif
 
 			// reset counters
 			m_PageIDBase = 0;
