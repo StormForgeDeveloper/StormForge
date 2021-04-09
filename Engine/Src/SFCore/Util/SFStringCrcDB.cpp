@@ -17,6 +17,7 @@
 #include "Service/SFService.h"
 #include "Stream/SFStream.h"
 #include "Types/SFEngineTypeSerialization.h"
+#include "Util/SFLog.h"
 
 
 namespace SF
@@ -193,8 +194,15 @@ namespace SF
 
 #ifdef DEBUG
 		const StringItem* pTest{};
-		assert(m_StringMap32.Find(hash32Value, pTest));
-		assert(m_StringMap64.Find(hash64Value, pTest));
+		if (!m_StringMap32.Find(hash32Value, pTest))
+		{
+			SFLog(System, Error, "StringCrcDB::AddNGetString32 has failed to add32 '{0}'", str);
+		}
+
+		if (!m_StringMap64.Find(hash64Value, pTest))
+		{
+			SFLog(System, Error, "StringCrcDB::AddNGetString32 has failed to add64 '{0}'", str);
+		}
 #endif
 
 	}
@@ -222,8 +230,15 @@ namespace SF
 
 #ifdef DEBUG
 		const StringItem* pTest{};
-		assert(m_StringMap32.Find(hash32Value, pTest));
-		assert(m_StringMap64.Find(hash64Value, pTest));
+		if (!m_StringMap32.Find(hash32Value, pTest))
+		{
+			SFLog(System, Error, "StringCrcDB::AddNGetString32 has failed to add32 '{0}':{1:X}", str, hash32Value);
+		}
+
+		if (!m_StringMap64.Find(hash64Value, pTest))
+		{
+			SFLog(System, Error, "StringCrcDB::AddNGetString32 has failed to add64 '{0}':{1:X}", str, hash64Value);
+		}
 #endif
 
 		return hash32Value;
