@@ -220,6 +220,7 @@ namespace Net {
 		Result hr;
 
 		GetConnection()->OnHeartbeatPacket();
+		SFLog(Net, Debug3, "Heartbeat CID:{0}, socketType:{1}", GetCID(), GetSocketType());
 		netCheck(SendNetCtrl(PACKET_NETCTRL_ACK, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID, GetLocalInfo().PeerID));
 
 		return hr;
