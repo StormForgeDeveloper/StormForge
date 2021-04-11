@@ -20,6 +20,14 @@
 
 namespace SF
 {
+	inline size_t SerializedSizeOf(const SockType& Value) { return sizeof(Value); }
+	inline Result operator >> (IInputStream& input, SockType& data) { return input.Read(&data, sizeof(data)); }
+	inline Result operator << (IOutputStream& output, const SockType& data) { return output.Write(&data, sizeof(data)); }
+
+	Result _ToString(ToStringContext& context, SockType value);
+
+	DECLARE_BOXING_TEMPLETE_BYVALUE(SockType);
+
 
 	Result _ToString(ToStringContext& context, Net::ConnectionState value);
 	Result _ToString(ToStringContext& context, const Net::PeerInfo& value);

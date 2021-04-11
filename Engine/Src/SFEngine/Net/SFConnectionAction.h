@@ -68,6 +68,8 @@ namespace Net {
 		// Get connection state
 		const ConnectionState GetConnectionState() const;
 
+		const SockType GetSocketType() const;
+
 		TimeStampMS GetNetCtrlTime();
 		TimeStampMS GetNetCtrlTryTime();
 		void UpdateNetCtrlTryTime();

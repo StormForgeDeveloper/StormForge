@@ -21,6 +21,7 @@
 #include "Util/SFTimeUtil.h"
 #include "Protocol/SFProtocol.h"
 #include "Util/SFToString.h"
+#include "Net/SFNetToString.h"
 
 #include "Net/SFConnectionActions.h"
 #include "Net/SFConnectionMUDP.h"
@@ -48,6 +49,8 @@ namespace Net {
 	{
 		Result hr;
 
+		auto socketType = GetSocketType();
+
 		const MsgNetCtrl* pNetCtrl = (MsgNetCtrl*)(netCtrlMsg);
 		if (pNetCtrl->rtnMsgID.IDs.Type == Message::MSGTYPE_NETCONTROL)// connecting process
 		{
@@ -74,6 +77,8 @@ namespace Net {
 				}
 				break;
 			case NetCtrlCode_Heartbeat:
+				SFLog(Net, Debug3, "RECV Heartbeat Ack CID:{0}, socketType:{1}", GetCID(), socketType);
+				break;
 			case NetCtrlCode_SyncReliable:
 			case NetCtrlCode_TimeSync:
 				// Called already
@@ -511,9 +516,12 @@ namespace Net {
 	{
 		Result hr;
 
+		auto socketType = GetSocketType();
+
+
 		if (Util::TimeSince(GetNetCtrlTime()) > Const::HEARTBEAT_TIMEOUT) // connection time out
 		{
-			SFLog(Net, Debug, "Connection heat beat Timeout CID:{0}", GetCID());
+			SFLog(Net, Debug, "Connection heartbeat Timeout CID:{0}, sockType:{1}", GetCID(), socketType);
 			netCheck(Disconnect("Connection TimeOut"));
 			netCheck(CloseConnection("Heartbeat timeout"));
 		}
@@ -527,8 +535,11 @@ namespace Net {
 		Message::MessageID msgIDDummy;
 		msgIDDummy.ID = PACKET_NETCTRL_NONE;
 
+		auto socketType = GetSocketType();
+
 		if (Util::TimeSince(GetNetCtrlTryTime()) > GetConnection()->GetHeartbeatTry()) // heartbeat time
 		{
+			SFLog(Net, Debug3, "Sending heartbeat CID:{0}, sockType:{1}", GetCID(), socketType);
 			UpdateNetCtrlTryTime();
 			netCheck(GetConnection()->SendPending(PACKET_NETCTRL_HEARTBEAT, 0, msgIDDummy));
 		}

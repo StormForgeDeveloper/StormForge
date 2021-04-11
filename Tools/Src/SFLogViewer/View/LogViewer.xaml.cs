@@ -51,7 +51,6 @@ namespace SFLogViewer.View
         int m_InitialBacklog = 100;
 
         public ObservableCollection<LogEntry> m_LogEntries { get; set; }
-        //public LogEntryCollection m_LogEntries { get; set; }
 
         StreamDBConsumer m_StreamDB;
 
@@ -61,7 +60,6 @@ namespace SFLogViewer.View
             InitializeComponent();
 
             DataContext = m_LogEntries = new ObservableCollection<LogEntry>();
-            //DataContext = m_LogEntries = new LogEntryCollection();
 
             AddHotKeys();
 

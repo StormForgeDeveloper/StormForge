@@ -17,12 +17,26 @@
 namespace SF {
 	
 
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(SockType);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Net::ConnectionState);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(NetClass);
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(Net::PeerInfo);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Message::MessageID);
 
 
+
+	Result _ToString(ToStringContext& context, SockType value)
+	{
+		switch (value)
+		{
+		case SockType::Stream:
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Stream");
+		case SockType::DataGram:
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "DataGram");
+		default:
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(Invalid)");
+		}
+	}
 
 	Result _ToString(ToStringContext& context, Net::ConnectionState value)
 	{
@@ -32,10 +46,10 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const Net::PeerInfo& value)
 	{
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Local:")))
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Local:"))
 			return ResultCode::FAIL;
 
-		if (!(_IToA(context, value.PeerID)))
+		if (!_IToA(context, value.PeerID))
 			return ResultCode::FAIL;
 
 		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Remote:")))

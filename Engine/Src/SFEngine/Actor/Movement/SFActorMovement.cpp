@@ -91,6 +91,18 @@ namespace SF
 		if (!_ToString(context, value.LinearVelocity))
 			return ResultCode::FAIL;
 
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ",A:"))
+			return ResultCode::FAIL;
+
+		if (!_ToString(context, value.AngularYaw))
+			return ResultCode::FAIL;
+
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ",S:"))
+			return ResultCode::FAIL;
+
+		if (!_ToString(context, value.MovementState))
+			return ResultCode::FAIL;
+
 		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
 			return ResultCode::FAIL;
 
