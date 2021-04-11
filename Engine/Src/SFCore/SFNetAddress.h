@@ -34,7 +34,7 @@ namespace SF
 		IPV6,// = AF_INET6
 	};
 
-	enum class SockType : uint8_t
+	enum class SocketType : uint8_t
 	{
 		Stream,// = SOCK_STREAM,       // TCP
 		DataGram,// = SOCK_DGRAM,     // UDP

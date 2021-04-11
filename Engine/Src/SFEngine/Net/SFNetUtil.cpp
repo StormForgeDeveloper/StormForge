@@ -656,23 +656,23 @@ namespace Net {
 		}
 	}
 
-	int ToSockValue(SockType sockType)
+	int ToSockValue(SocketType sockType)
 	{
 		switch (sockType)
 		{
-		case SockType::Stream: return SOCK_STREAM;
-		case SockType::DataGram: return SOCK_DGRAM;
+		case SocketType::Stream: return SOCK_STREAM;
+		case SocketType::DataGram: return SOCK_DGRAM;
 		default:
 			return 0;
 		}
 	}
 
-	int ToSockProto(SockType sockType)
+	int ToSockProto(SocketType sockType)
 	{
 		switch (sockType)
 		{
-		case SockType::Stream: return IPPROTO_TCP;
-		case SockType::DataGram: return IPPROTO_UDP;
+		case SocketType::Stream: return IPPROTO_TCP;
+		case SocketType::DataGram: return IPPROTO_UDP;
 		default:
 			return 0;
 		}
@@ -689,13 +689,13 @@ namespace Net {
 		}
 	}
 
-	SockType ToSockType(int family)
+	SocketType ToSockType(int family)
 	{
 		switch (family)
 		{
-		case SOCK_STREAM: return SockType::Stream;
+		case SOCK_STREAM: return SocketType::Stream;
 		default:
-		case SOCK_DGRAM: return SockType::DataGram;
+		case SOCK_DGRAM: return SocketType::DataGram;
 		}
 	}
 

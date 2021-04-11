@@ -54,7 +54,7 @@ namespace Net {
 		Assert(m_PendingSendCount == 0 && m_PendingRecvCount == 0);
 	}
 
-	void SocketIO::SetSocket(SockFamily sockFamily, SockType socketType, SF_SOCKET socket)
+	void SocketIO::SetSocket(SockFamily sockFamily, SocketType socketType, SF_SOCKET socket)
 	{
 		m_IOSockFamily = sockFamily;
 		m_IOSockType = socketType;
@@ -397,7 +397,7 @@ namespace Net {
 
 		memset(pAcceptInfo, 0, sizeof(IOBUFFER_ACCEPT));
 
-		sockAccept = Service::NetSystem->Socket(GetSocketFamily(), SockType::Stream);
+		sockAccept = Service::NetSystem->Socket(GetSocketFamily(), SocketType::Stream);
 		if (sockAccept == INVALID_SOCKET)
 		{
 			SFLog(Net, Error, "Failed to Open Accept Socket {0:X8}", GetLastNetSystemResult());

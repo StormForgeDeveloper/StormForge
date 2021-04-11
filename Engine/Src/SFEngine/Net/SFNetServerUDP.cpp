@@ -124,14 +124,14 @@ namespace Net {
 
 		SFLog(Net, Info, "Open Server UDP Host {0}:{1}", strLocalIP, usLocalPort );
 
-		socket = Service::NetSystem->Socket(GetLocalAddress().SocketFamily, SockType::DataGram);
+		socket = Service::NetSystem->Socket(GetLocalAddress().SocketFamily, SocketType::DataGram);
 		if( socket == INVALID_SOCKET )
 		{
 			SFLog(Net, Error, "Failed to Open Server Socket {0:X8}", GetLastNetSystemResult());
 			netErr( ResultCode::UNEXPECTED );
 		}
 
-		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::DataGram, GetLocalAddress().SocketFamily, socket));
+		netChk(Service::NetSystem->SetupCommonSocketOptions(SocketType::DataGram, GetLocalAddress().SocketFamily, socket));
 
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		{
@@ -177,7 +177,7 @@ namespace Net {
 			netErr( ResultCode::UNEXPECTED );
 		}
 
-		m_MySocketIOAdapter.SetSocket(GetLocalAddress().SocketFamily, SockType::DataGram, socket);
+		m_MySocketIOAdapter.SetSocket(GetLocalAddress().SocketFamily, SocketType::DataGram, socket);
 		socket = INVALID_SOCKET;
 
 		netChk(Service::NetSystem->RegisterSocket(GetSocketIO()));

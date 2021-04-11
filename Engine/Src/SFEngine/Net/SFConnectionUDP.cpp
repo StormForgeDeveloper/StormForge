@@ -379,14 +379,14 @@ namespace Net {
 		else
 			Net::GetLocalAddressIPv6(local.PeerAddress);
 
-		socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SockType::DataGram);
+		socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SocketType::DataGram);
 		if (socket == INVALID_SOCKET)
 		{
 			SFLog(Net, Error, "Failed to Open Client Socket {0:X8}", GetLastNetSystemResult());
 			netCheck(ResultCode::UNEXPECTED);
 		}
 
-		netCheck(Service::NetSystem->SetupCommonSocketOptions(SockType::DataGram, local.PeerAddress.SocketFamily, socket));
+		netCheck(Service::NetSystem->SetupCommonSocketOptions(SocketType::DataGram, local.PeerAddress.SocketFamily, socket));
 
 		bindAddr = (sockaddr_storage)local.PeerAddress;
 		if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)
@@ -400,7 +400,7 @@ namespace Net {
 		netCheck(InitConnection(local, remote));
 		SFLog(Net, Info, "Initialize connection CID:{0}, Addr:{1}", GetCID(), remote.PeerAddress);
 
-		m_NetIOAdapter.SetSocket(local.PeerAddress.SocketFamily, SockType::DataGram, socket);
+		m_NetIOAdapter.SetSocket(local.PeerAddress.SocketFamily, SocketType::DataGram, socket);
 
 		socket = INVALID_SOCKET;
 

@@ -123,7 +123,7 @@ namespace Net {
 
 		virtual Result MakeSocketNonBlocking(SF_SOCKET sfd) override;
 		virtual WriteBufferQueue* GetWriteBufferQueue() override;
-		//Result RegisterSharedSocket(SockType sockType, SocketIO* cbInstance);
+		//Result RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance);
 
 		// Register the socket to EPOLL
 		virtual Result RegisterToNETIO(SocketIO* cbInstance) override;

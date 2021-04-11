@@ -96,13 +96,13 @@ namespace SF {
 		///////////////////////////////////////////////////////////////////////////////
 		// Socket handling 
 
-		virtual Result SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket = false) { unused(sockType, socket); return ResultCode::SUCCESS_FALSE; }
+		virtual Result SetupCommonSocketOptions(SocketType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket = false) { unused(sockType, socket); return ResultCode::SUCCESS_FALSE; }
 
 		virtual Result RegisterSocket(Net::SocketIO* cbInstance) { unused(cbInstance); return ResultCode::SUCCESS_FALSE; }
 		virtual Result UnregisterSocket(Net::SocketIO* cbInstance) { unused(cbInstance); return ResultCode::SUCCESS_FALSE; }
-		//Result RegisterSharedSocket(SockType sockType, SocketIO* cbInstance);
+		//Result RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance);
 
-		virtual SF_SOCKET Socket(SockFamily domain, SockType type) { return INVALID_SOCKET; }
+		virtual SF_SOCKET Socket(SockFamily domain, SocketType type) { return INVALID_SOCKET; }
 		virtual void CloseSocket(SF_SOCKET sock) { unused(sock); }
 
 		virtual Result Accept(SF_SOCKET sockListen, Net::IOBUFFER_ACCEPT* pAccept) { unused(sockListen, pAccept); return ResultCode::SUCCESS_FALSE; }

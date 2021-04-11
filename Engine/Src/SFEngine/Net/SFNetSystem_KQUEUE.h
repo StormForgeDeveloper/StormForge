@@ -125,10 +125,10 @@ namespace Net {
 
 		virtual Result MakeSocketNonBlocking(SF_SOCKET sfd) override;
 		virtual WriteBufferQueue* GetWriteBufferQueue() override;
-		//Result RegisterSharedSocket(SockType sockType, SocketIO* cbInstance) override;
+		//Result RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance) override;
 
 		// Register the socket to KQUEUE
-		virtual Result RegisterToNETIO(SockType sockType, SocketIO* cbInstance) override;
+		virtual Result RegisterToNETIO(SocketType sockType, SocketIO* cbInstance) override;
 		virtual Result UnregisterFromNETIO(SocketIO* cbInstance) override;
 
 

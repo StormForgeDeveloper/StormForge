@@ -367,14 +367,14 @@ namespace Net {
 				Net::GetLocalAddressIPv6(local.PeerAddress);
 		}
 
-		socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SockType::Stream);
+		socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SocketType::Stream);
 		if (socket == INVALID_SOCKET)
 		{
 			SFLog(Net, Error, "Failed to Open a Socket {0:X8}", GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 
-		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::Stream, local.PeerAddress.SocketFamily, socket));
+		netChk(Service::NetSystem->SetupCommonSocketOptions(SocketType::Stream, local.PeerAddress.SocketFamily, socket));
 
 		netChk(InitConnection(local, remote));
 
@@ -384,7 +384,7 @@ namespace Net {
 			netChk(GetLastNetSystemResult());
 		}
 
-		m_NetIOAdapter.SetSocket(local.PeerAddress.SocketFamily, SockType::Stream, socket);
+		m_NetIOAdapter.SetSocket(local.PeerAddress.SocketFamily, SocketType::Stream, socket);
 
 		socket = INVALID_SOCKET;
 

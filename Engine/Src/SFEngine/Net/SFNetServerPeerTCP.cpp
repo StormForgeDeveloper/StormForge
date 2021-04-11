@@ -89,9 +89,9 @@ namespace Net {
 		// Initialize connection
 		netChk( pConnection->InitConnection( local, remote) );
 
-		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::Stream, pConnection->GetSocketFamily(), acceptedSocket));
+		netChk(Service::NetSystem->SetupCommonSocketOptions(SocketType::Stream, pConnection->GetSocketFamily(), acceptedSocket));
 
-		pConnection->GetMyNetIOAdapter().SetSocket(pConnection->GetSocketFamily(), SockType::Stream, acceptedSocket);
+		pConnection->GetMyNetIOAdapter().SetSocket(pConnection->GetSocketFamily(), SocketType::Stream, acceptedSocket);
 
 		acceptedSocket = INVALID_SOCKET;
 

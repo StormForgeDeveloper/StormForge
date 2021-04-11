@@ -215,9 +215,9 @@ namespace Net {
 		// Initialize connection
 		netChk( pConnection->InitConnection( local, remote ) );
 
-		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::Stream, pConnection->GetSocketFamily(), acceptedSocket, true));
+		netChk(Service::NetSystem->SetupCommonSocketOptions(SocketType::Stream, pConnection->GetSocketFamily(), acceptedSocket, true));
 
-		pConnection->GetMyNetIOAdapter().SetSocket(pConnection->GetSocketFamily(), SockType::Stream, acceptedSocket);
+		pConnection->GetMyNetIOAdapter().SetSocket(pConnection->GetSocketFamily(), SocketType::Stream, acceptedSocket);
 		acceptedSocket = INVALID_SOCKET;
 		netChk(Service::NetSystem->RegisterSocket(&pConnection->GetMyNetIOAdapter()));
 
@@ -283,7 +283,7 @@ namespace Net {
 		netChk(ServerNet::HostOpen( netCls, strLocalIP, usLocalPort ) );
 
 
-		socket = Service::NetSystem->Socket(GetLocalAddress().SocketFamily, SockType::Stream);
+		socket = Service::NetSystem->Socket(GetLocalAddress().SocketFamily, SocketType::Stream);
 		if( socket == INVALID_SOCKET )
 		{
 			SFLog(Net, Error, "Failed to Open Server Socket {0:X8}", GetLastNetSystemResult());
@@ -292,7 +292,7 @@ namespace Net {
 
 		SFLog(Net, Info, "Open Server TCP Host {0}:{1}, sock:{2}", strLocalIP, usLocalPort, socket);
 
-		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::Stream, GetLocalAddress().SocketFamily, socket));
+		netChk(Service::NetSystem->SetupCommonSocketOptions(SocketType::Stream, GetLocalAddress().SocketFamily, socket));
 
 		bOptValue = 1;
 		if( setsockopt(socket, SOL_SOCKET, SO_REUSEADDR, (char *)&bOptValue, sizeof(bOptValue)) < 0 )
@@ -315,7 +315,7 @@ namespace Net {
 			netErr( ResultCode::UNEXPECTED );
 		}
 
-		m_MySocketIOAdapter.SetSocket(GetLocalAddress().SocketFamily, SockType::Stream, socket );
+		m_MySocketIOAdapter.SetSocket(GetLocalAddress().SocketFamily, SocketType::Stream, socket );
 		socket = INVALID_SOCKET;
 
 		m_MySocketIOAdapter.GetIOFlagsEditable().IsListenSocket = 1;

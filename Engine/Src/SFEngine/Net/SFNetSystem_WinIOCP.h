@@ -215,7 +215,7 @@ namespace Net {
 			//virtual Net::WriteBufferQueue* GetWriteBufferQueue() { return nullptr; }
 
 			//// Register the socket to KQUEUE
-			//virtual Result RegisterToNETIO(SockType sockType, Net::SocketIO* cbInstance) { return ResultCode::FAIL; }
+			//virtual Result RegisterToNETIO(SocketType sockType, Net::SocketIO* cbInstance) { return ResultCode::FAIL; }
 			//virtual Result UnregisterFromNETIO(Net::SocketIO* cbInstance) { return ResultCode::FAIL; }
 
 			//virtual const char* EventFlagToString(int32_t bufferSize, char* stringBuffer, uint32_t eventFlags) { return ""; }

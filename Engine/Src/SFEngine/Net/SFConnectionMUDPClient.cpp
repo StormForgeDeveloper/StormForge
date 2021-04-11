@@ -155,7 +155,7 @@ namespace Net {
 	Result ConnectionMUDPClient::MyNetSocketIOManager::NewIOHandler()
 	{
 		Result hr;
-		SockType socketType = SockType::DataGram;
+		SocketType socketType = SocketType::DataGram;
 		SockFamily socketFamily = m_Owner.GetLocalInfo().PeerAddress.SocketFamily;
 		sockaddr_storage bindAddr;
 
@@ -381,14 +381,14 @@ namespace Net {
 		m_ReliableSyncTime = Util::Time.GetTimeMs();
 
 
-		//socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SockType::DataGram);
+		//socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SocketType::DataGram);
 		//if (socket == INVALID_SOCKET)
 		//{
 		//	SFLog(Net, Error, "Failed to Open Client Socket {0:X8}", GetLastNetSystemResult());
 		//	netErr(ResultCode::UNEXPECTED);
 		//}
 
-		//netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::DataGram, local.PeerAddress.SocketFamily, socket));
+		//netChk(Service::NetSystem->SetupCommonSocketOptions(SocketType::DataGram, local.PeerAddress.SocketFamily, socket));
 
 		//bindAddr = (sockaddr_storage)local.PeerAddress;
 		////if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)

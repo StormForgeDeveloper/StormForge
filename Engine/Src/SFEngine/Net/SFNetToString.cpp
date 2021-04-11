@@ -17,7 +17,7 @@
 namespace SF {
 	
 
-	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(SockType);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(SocketType);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Net::ConnectionState);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(NetClass);
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(Net::PeerInfo);
@@ -25,13 +25,13 @@ namespace SF {
 
 
 
-	Result _ToString(ToStringContext& context, SockType value)
+	Result _ToString(ToStringContext& context, SocketType value)
 	{
 		switch (value)
 		{
-		case SockType::Stream:
+		case SocketType::Stream:
 			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Stream");
-		case SockType::DataGram:
+		case SocketType::DataGram:
 			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "DataGram");
 		default:
 			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(Invalid)");

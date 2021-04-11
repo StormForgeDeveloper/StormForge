@@ -212,7 +212,7 @@ namespace Net {
 	///////////////////////////////////////////////////////////////////////////////
 	// Socket handling 
 
-	Result NetSystem::SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket)
+	Result NetSystem::SetupCommonSocketOptions(SocketType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket)
 	{
 		Result hr;
 		int32_t iOptValue;
@@ -231,7 +231,7 @@ namespace Net {
 			return ResultCode::UNEXPECTED;
 		}
 
-		if (sockType == SockType::Stream)
+		if (sockType == SocketType::Stream)
 		{
 			iOptValue = 1;
 			if (setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, (char*)&iOptValue, sizeof(iOptValue)) < 0)
@@ -296,7 +296,7 @@ namespace Net {
 		return hr;
 	}
 
-	//Result RegisterSharedSocket(SockType sockType, SocketIO* cbInstance)
+	//Result RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance)
 	//{
 	//	Result hr = ResultCode::SUCCESS;
 
@@ -311,7 +311,7 @@ namespace Net {
 	//}
 
 
-	SF_SOCKET NetSystem::Socket(SockFamily domain, SockType type)
+	SF_SOCKET NetSystem::Socket(SockFamily domain, SocketType type)
 	{
 		return socket(ToSockValue(domain), ToSockValue(type), ToSockProto(type));
 	}

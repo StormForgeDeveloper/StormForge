@@ -81,7 +81,7 @@ namespace Net {
 
 		CBFlags m_CBFlags;
 
-		SockType m_IOSockType = SockType::DataGram;
+		SocketType m_IOSockType = SocketType::DataGram;
 		SockFamily m_IOSockFamily = SockFamily::IPV4;
 
 		// Is registered to IO sub system
@@ -130,10 +130,10 @@ namespace Net {
 		void OnIORegistered();
 		void OnIOUnregistered();
 
-		void SetSocket(SockFamily sockFamily, SockType socketType, SF_SOCKET socket);
+		void SetSocket(SockFamily sockFamily, SocketType socketType, SF_SOCKET socket);
 		void CloseSocket();
 
-		SockType GetIOSockType() const { return m_IOSockType; }
+		SocketType GetIOSockType() const { return m_IOSockType; }
 		SockFamily GetSocketFamily() const { return m_IOSockFamily; }
 
 		const CBFlags& GetIOFlags() const { return m_CBFlags; }

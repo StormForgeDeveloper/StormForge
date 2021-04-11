@@ -512,10 +512,10 @@ namespace Net {
 	}
 
 
-	//Result EPOLLSystem::RegisterSharedSocket(SockType sockType, SocketIO* cbInstance)
+	//Result EPOLLSystem::RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance)
 	//{
-	//	Assert(sockType == SockType::DataGram);
-	//	if (sockType != SockType::DataGram)
+	//	Assert(sockType == SocketType::DataGram);
+	//	if (sockType != SocketType::DataGram)
 	//		return ResultCode::UNEXPECTED;
 
 	//	if (m_WorkerUDP.GetSize() < 1)
@@ -523,7 +523,7 @@ namespace Net {
 
 	//	if (cbInstance->GetWriteQueue() == nullptr)
 	//	{
-	//		Assert(sockType == SockType::DataGram);
+	//		Assert(sockType == SocketType::DataGram);
 	//		cbInstance->SetWriteQueue(&m_UDPSendWorker->GetWriteQueue());
 	//	}
 
@@ -536,7 +536,7 @@ namespace Net {
 		if (m_ListenWorker == nullptr)
 			return ResultCode::IO_NOTINITIALISED;
 
-		if (cbInstance->GetIOSockType() == SockType::Stream) // TCP
+		if (cbInstance->GetIOSockType() == SocketType::Stream) // TCP
 		{
 			// Listen worker will do all job when there is no other thread.
 			if (cbInstance->GetIOFlags().IsListenSocket != 0 || m_WorkerTCP.size() == 0)
@@ -554,7 +554,7 @@ namespace Net {
 		{
 			if (cbInstance->GetWriteQueue() == nullptr)
 			{
-				Assert(cbInstance->GetIOSockType() == SockType::DataGram);
+				Assert(cbInstance->GetIOSockType() == SocketType::DataGram);
 				cbInstance->SetWriteQueue( &m_UDPSendWorker->GetWriteQueue() );
 			}
 
@@ -580,9 +580,9 @@ namespace Net {
 		if (m_ListenWorker == nullptr)
 			return ResultCode::IO_NOTINITIALISED;
 
-		SockType sockType = cbInstance->GetIOSockType();
+		SocketType sockType = cbInstance->GetIOSockType();
 
-		if (sockType == SockType::Stream) // TCP
+		if (sockType == SocketType::Stream) // TCP
 		{
 			if (cbInstance->GetIOFlags().IsListenSocket != 0 || m_WorkerTCP.size() == 0)
 			{

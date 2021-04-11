@@ -119,13 +119,13 @@ namespace Net {
 		///////////////////////////////////////////////////////////////////////////////
 		// Socket handling 
 
-		virtual Result SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket = false) override;
+		virtual Result SetupCommonSocketOptions(SocketType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket = false) override;
 
 		virtual Result RegisterSocket(SocketIO* cbInstance) override;
 		virtual Result UnregisterSocket(SocketIO* cbInstance) override;
-		//Result RegisterSharedSocket(SockType sockType, SocketIO* cbInstance) override;
+		//Result RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance) override;
 
-		virtual SF_SOCKET Socket(SockFamily domain, SockType type) override;
+		virtual SF_SOCKET Socket(SockFamily domain, SocketType type) override;
 		virtual void CloseSocket(SF_SOCKET sock) override;
 
 		virtual Result Accept(SF_SOCKET sockListen, IOBUFFER_ACCEPT* pAccept) override;

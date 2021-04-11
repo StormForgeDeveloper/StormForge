@@ -51,7 +51,7 @@ namespace Net {
 	// Get connection state
 	const ConnectionState ConnectionActionBase::GetConnectionState() const { return m_pConnection->GetConnectionState(); }
 
-	const SockType ConnectionActionBase::GetSocketType() const { return m_pConnection->GetSocketType(); }
+	const SocketType ConnectionActionBase::GetSocketType() const { return m_pConnection->GetSocketType(); }
 
 
 	Result ConnectionActionBase::SendNetCtrl(uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID)

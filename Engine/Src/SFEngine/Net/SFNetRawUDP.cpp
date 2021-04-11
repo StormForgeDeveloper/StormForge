@@ -183,7 +183,7 @@ namespace Net {
 
 		SFLog(Net, Debug2, "RawUDP: Opening UDP Net {0}", m_LocalAddress);
 
-		socket = Service::NetSystem->Socket(m_LocalAddress.SocketFamily, SockType::DataGram);
+		socket = Service::NetSystem->Socket(m_LocalAddress.SocketFamily, SocketType::DataGram);
 		if (socket == INVALID_SOCKET)
 		{
 			SFLog(Net, Error, "RawUDP: Failed to Open RawUDP Socket {0}", GetLastNetSystemResult());
@@ -207,7 +207,7 @@ namespace Net {
 		unused(iOptValue);
 #endif
 
-		netChk(Service::NetSystem->SetupCommonSocketOptions(SockType::DataGram, m_LocalAddress.SocketFamily, socket));
+		netChk(Service::NetSystem->SetupCommonSocketOptions(SocketType::DataGram, m_LocalAddress.SocketFamily, socket));
 
 		GetAnyBindAddr(m_LocalSockAddress, bindAddr);
 		if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)
@@ -217,7 +217,7 @@ namespace Net {
 		}
 		m_LocalSockAddress = bindAddr;
 
-		m_NetIOAdapter.SetSocket(m_LocalAddress.SocketFamily, SockType::DataGram, socket);
+		m_NetIOAdapter.SetSocket(m_LocalAddress.SocketFamily, SocketType::DataGram, socket);
 		socket = INVALID_SOCKET;
 
 

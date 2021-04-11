@@ -69,11 +69,11 @@ namespace Net {
 
 	// To native socket value
 	int ToSockValue(SockFamily family);
-	int ToSockValue(SockType sockType);
-	int ToSockProto(SockType sockType);
+	int ToSockValue(SocketType sockType);
+	int ToSockProto(SocketType sockType);
 
 	SockFamily ToSockFamily(int family);
-	SockType ToSockType(int family);
+	SocketType ToSockType(int family);
 
 	bool operator == ( const sockaddr_in6 &op1, const sockaddr_in6 &op2 );
 	bool operator != ( const sockaddr_in6 &op1, const sockaddr_in6 &op2 );

@@ -499,7 +499,7 @@ namespace Net {
 	///////////////////////////////////////////////////////////////////////////////
 	// Socket handling 
 
-	//Result RegisterSharedSocket(SockType sockType, SocketIO* cbInstance)
+	//Result RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance)
 	//{
 	//	Result hr = ResultCode::SUCCESS;
 
@@ -513,7 +513,7 @@ namespace Net {
 	//	return hr;
 	//}
 
-	Result NetSystem::SetupCommonSocketOptions(SockType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket)
+	Result NetSystem::SetupCommonSocketOptions(SocketType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket)
 	{
 		Result hr;
 
@@ -533,7 +533,7 @@ namespace Net {
 			return hr;
 		}
 
-		if (sockType == SockType::Stream)
+		if (sockType == SocketType::Stream)
 		{
 			iOptValue = 1;
 			if (setsockopt(socket, IPPROTO_TCP, TCP_NODELAY, (char*)&iOptValue, sizeof(iOptValue)) < 0)
@@ -605,9 +605,9 @@ namespace Net {
 		return hr;
 	}
 
-	SF_SOCKET NetSystem::Socket(SockFamily domain, SockType type)
+	SF_SOCKET NetSystem::Socket(SockFamily domain, SocketType type)
 	{
-		if (type == SockType::Stream)
+		if (type == SocketType::Stream)
 		{
 			return WSASocket(ToSockValue(domain), ToSockValue(type), IPPROTO_TCP, nullptr, 0, WSA_FLAG_OVERLAPPED);
 		}
