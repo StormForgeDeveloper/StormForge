@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -75,6 +75,9 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	logOutputMask.Debug3 = 1;
 	logOutputMask.Debug4 = 1;
 	logOutputMask.Debug5 = 1;
+	logOutputMask.Debug6 = 1;
+	logOutputMask.Debug7 = 1;
+	logOutputMask.Debug8 = 1;
 #else
 
 	SF::Log::Net.ChannelMask.Info = 1;
