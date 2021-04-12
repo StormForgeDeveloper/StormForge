@@ -97,7 +97,7 @@ namespace Net {
 			{
 				auto* pConUDP = static_cast<ConnectionUDPBase*>(GetConnection());
 				auto hrTem = pConUDP->GetSendReliableWindow().ReleaseSingleMessage(pNetCtrl->msgID.IDSeq.Sequence);
-				SFLog(Net, Debug1, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4:X8}",
+				SFLog(Net, Debug2, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4:X8}",
 					GetCID(), pConUDP->GetSendReliableWindow().GetBaseSequence(), pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->rtnMsgID, hrTem);
 				netCheck(hrTem);
 			}
@@ -280,12 +280,12 @@ namespace Net {
 		hrTem = sendWindow.ReleaseMsg(pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
 		if (hrTem)
 		{
-			SFLog(Net, Debug, "NetCtrl Recv SendMask : CID:{0}: mySeq:{1}, seq:{2}, mask:{3:X8}",
+			SFLog(Net, Debug2, "NetCtrl Recv SendMask : CID:{0}: mySeq:{1}, seq:{2}, mask:{3:X8}",
 				GetCID(), sendWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
 		}
 		else
 		{
-			SFLog(Net, Debug, "NetCtrl Recv SendMask Failed : CID:{0} mySeq:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
+			SFLog(Net, Debug2, "NetCtrl Recv SendMask Failed : CID:{0} mySeq:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
 				GetCID(), sendWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask, hrTem);
 		}
 

@@ -260,7 +260,7 @@ namespace SF {
 			hrTem = SendRaw(pMsg);
 			if (!hrTem)
 			{
-				SFLog(Net, Custom10, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
+				SFLog(Net, Debug4, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
 					GetCID(),
 					returnMsgID.ID,
 					uiSequence,

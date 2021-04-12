@@ -676,7 +676,7 @@ namespace Net {
 			if( !pMsg->GetIsSequenceAssigned() )
 				pMsg->AssignSequence( NewSeqNone() );
 
-			SFLog(Net, Debug1, "SEND : msg:{0}, seq:{1}, len:{2}",
+			SFLog(Net, Debug4, "SEND : msg:{0}, seq:{1}, len:{2}",
 				msgID,
 				msgID.IDSeq.Sequence,
 				uiMsgLen);
@@ -726,7 +726,7 @@ namespace Net {
 		SharedPointerT<Message::MessageData> pMsg;
 		Message::MobileMessageHeader* pMsgHeader = (Message::MobileMessageHeader*)pBuff;
 
-		SFLog(Net, Debug3, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
+		SFLog(Net, Debug4, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
 
 		if (uiBuffSize == 0)
 		{
