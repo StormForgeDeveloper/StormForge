@@ -262,6 +262,7 @@ namespace SF
 		if (move1 == nullptr)
 		{
 			Simulate(MoveFrame, m_LatestMove, m_MoveExpected);
+			SFLog(Net, Debug7, "ReceivedActorMovementManager::SimulateCurrentMove move1:{0}, last:{0}, result:{1}", m_LatestMove, m_MoveExpected);
 		}
 		else if (move2 == nullptr)
 		{
@@ -269,22 +270,26 @@ namespace SF
 			Simulate(MoveFrame, *move1, m_MoveExpected);
 			// At the beginning, m_LatestMove holds invalid movement. No need for delta blending
 			m_LatestMove = m_MoveExpected;
+			SFLog(Net, Debug7, "ReceivedActorMovementManager::SimulateCurrentMove move1:{0}, result:{1}", *move1, m_MoveExpected);
 		}
 		else
 		{
 			Simulate(*move1, *move2, MoveFrame, deltaTime, m_MoveExpected);
+			SFLog(Net, Debug7, "ReceivedActorMovementManager::SimulateCurrentMove move1:{0}, move2:{1}, result:{2}", *move1, *move2, m_MoveExpected);
 		}
 
 		Vector4& Pc = m_LatestMove.Position;
 		Vector4& Pe = m_MoveExpected.Position;
 		Vector4 Vart = CalculateArtificialDelta(Pc, Pe, deltaTime);
 
-		m_LatestMove.Position += Vart * deltaTime;
+		m_LatestMove.Position += Vart;
 		m_LatestMove.LinearVelocity = m_MoveExpected.LinearVelocity;
 		m_LatestMove.MovementState = m_MoveExpected.MovementState;
 		m_LatestMove.AngularYaw = m_MoveExpected.AngularYaw;
 		m_LatestMove.MoveFrame = MoveFrame;
 		outCurMove = m_LatestMove;
+
+		SFLog(Net, Debug6, "ReceivedActorMovementManager::SimulateCurrentMove Vart:{0}, lastResult:{2}", Vart, m_LatestMove);
 
 		return ResultCode::SUCCESS;
 	}
@@ -351,5 +356,4 @@ namespace SF
 
 		return vDiff * InvBlendSpeed;
 	}
-
 }
