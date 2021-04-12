@@ -72,13 +72,15 @@ Play packet
 ## NewPlayerInViewS2CEvt
 New Player in get view
 
-        Result NewPlayerInViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes)
+        Result NewPlayerInViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
 		- OutInPlayerID: PlayerID type. Joined Player Id
 
 		- OutInAttributes: VariableTable type. Character visual data
+
+		- OutInMovement: ActorMovement type. Actor movement of the character
 
 
 ## RemovePlayerFromViewS2CEvt

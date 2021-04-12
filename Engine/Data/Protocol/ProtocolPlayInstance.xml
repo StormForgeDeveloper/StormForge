@@ -52,6 +52,7 @@
 			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
 			<Params Type="PlayerID" Name="PlayerID" Desc="Joined Player Id"/>
 			<Params Type="VariableTable" Name="Attributes" Desc="Character visual data"/>
+			<Params Type="ActorMovement" Name="Movement" Desc="Actor movement of the character"/>
 		</S2CEvent>
 
 		<S2CEvent Name="RemovePlayerFromView" Reliable="true" Crypto="No" Trace="Debug1" Desc="Remove player from view">

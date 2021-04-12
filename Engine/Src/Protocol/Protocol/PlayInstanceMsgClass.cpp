@@ -455,6 +455,7 @@ namespace SF
 				uint8_t* AttributesPtr = nullptr;
 				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
 				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
+				protocolCheck(*input >> m_Movement);
 
 				return hr;
 
@@ -471,6 +472,7 @@ namespace SF
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
+				variableBuilder.SetVariable("Movement", "ActorMovement", &parser.GetMovement());
 
 				return hr;
 
@@ -487,7 +489,7 @@ namespace SF
 
 			}; // Result NewPlayerInViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes )
+			MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -507,6 +509,7 @@ namespace SF
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ serializedSizeOfInAttributes
+					+ SerializedSizeOf(InMovement)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewPlayerInViewS2CEvt::MID, __uiMessageSize ) );
@@ -518,11 +521,12 @@ namespace SF
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
 				protocolCheck(*output << InAttributes);
+				protocolCheck(*output << InMovement);
 
 				return hr;
-			}; // MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes )
+			}; // MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement )
 
-			MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
+			MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -543,6 +547,7 @@ namespace SF
 					+ SerializedSizeOf(InPlayerID)
 					+ sizeof(uint16_t)
 					+ serializedSizeOfInAttributes
+					+ SerializedSizeOf(InMovement)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewPlayerInViewS2CEvt::MID, __uiMessageSize ) );
@@ -555,9 +560,10 @@ namespace SF
 				protocolCheck(*output << InPlayerID);
 				protocolCheck(output->Write(serializedSizeOfInAttributes));
 				protocolCheck(*output << InAttributes);
+				protocolCheck(*output << InMovement);
 
 				return hr;
-			}; // MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes )
+			}; // MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement )
 
 
 
@@ -565,8 +571,8 @@ namespace SF
 			{
  				NewPlayerInViewS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "NewPlayerInView:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, Attributes:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetAttributes()); 
+				SFLog(Net, Debug1, "NewPlayerInView:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, Attributes:{4}, Movement:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetAttributes(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
 			}; // Result NewPlayerInViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
