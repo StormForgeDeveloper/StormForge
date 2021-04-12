@@ -289,7 +289,7 @@ namespace SF
 		m_LatestMove.MoveFrame = MoveFrame;
 		outCurMove = m_LatestMove;
 
-		SFLog(Net, Debug6, "ReceivedActorMovementManager::SimulateCurrentMove Vart:{0}, lastResult:{2}", Vart, m_LatestMove);
+		SFLog(Net, Debug6, "ReceivedActorMovementManager::SimulateCurrentMove Vart:{0}, lastResult:{1}", Vart, m_LatestMove);
 
 		return ResultCode::SUCCESS;
 	}
