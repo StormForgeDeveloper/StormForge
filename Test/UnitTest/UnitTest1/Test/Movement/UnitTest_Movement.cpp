@@ -20,6 +20,7 @@
 #include "UnitTest_Movement.h"
 #include "Math/SF3DMath.h"
 #include "Actor/Movement/SFActorMovement.h"
+#include "Actor/Movement/SFActorMovementManager.h"
 
 
 using ::testing::EmptyTestEventListener;

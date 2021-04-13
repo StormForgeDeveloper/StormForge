@@ -12,6 +12,7 @@
 #include "SFEnginePCH.h"
 #include "Online/SFOnlineClient.h"
 #include "Actor/Movement/SFActorMovement.h"
+#include "Actor/Movement/SFActorMovementManager.h"
 #include "Net/SFConnection.h"
 #include "Net/SFConnectionTCP.h"
 #include "Net/SFConnectionUDP.h"
@@ -905,16 +906,15 @@ namespace SF
 			return;
 		}
 
-		// TODO:
-		//SharedPointerT<ReceivedActorMovementManager> movement;
-		//if (!m_IncomingMovements.Find(msg.GetPlayerID(), movement))
-		//{
-		//	movement = new(GetHeap()) ReceivedActorMovementManager;
-		//	auto res = m_IncomingMovements.Insert(msg.GetPlayerID(), movement);
-		//	assert(res);
-		//}
+		SharedPointerT<ReceivedActorMovementManager> movement;
+		if (!m_IncomingMovements.Find(msg.GetPlayerID(), movement))
+		{
+			movement = new(GetHeap()) ReceivedActorMovementManager;
+			auto res = m_IncomingMovements.Insert(msg.GetPlayerID(), movement);
+			assert(res);
+		}
 
-		//movement->EnqueueMovement(msg.GetMovement());
+		movement->ResetMove(msg.GetMovement());
 	}
 
 	void OnlineClient::OnPlayerOutofView(const MessageDataPtr& pMsgData)

@@ -134,6 +134,8 @@ set(SFENGINE_LIB_FILES
 
 	Actor/Movement/SFActorMovement.h
 	Actor/Movement/SFActorMovement.cpp
+	Actor/Movement/SFActorMovementManager.h
+	Actor/Movement/SFActorMovementManager.cpp
 
   	Application/Android/AndroidApp.h
 	Application/Android/AndroidAppTasks.h

@@ -22,6 +22,7 @@
 #include "Protocol/SFProtocol.h"
 #include "Online/SFOnlineClient.h"
 #include "Actor/Movement/SFActorMovement.h"
+#include "Actor/Movement/SFActorMovementManager.h"
 #include "SFCSUtil.h"
 
 

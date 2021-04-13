@@ -12,8 +12,6 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Object/SFSharedObject.h"
-#include "Container/SFCircularQueue.h"
 #include "Math/SF3DMath.h"
 
 namespace SF
@@ -58,97 +56,6 @@ namespace SF
 
 
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(ActorMovement);
-
-
-	////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// actor movement manager base
-	//
-	class ActorMovementManager : public SharedObject
-	{
-	public:
-		static constexpr size_t MaxSavedMove = ActorMovement::MaxSavedMove;
-		static constexpr uint32_t FramesPerSeconds = ActorMovement::FramesPerSeconds;
-		static constexpr float DeltaSecondsPerFrame = ActorMovement::DeltaSecondsPerFrame;
-		static constexpr float MoveFrameTimeoutSeconds = ActorMovement::MoveFrameTimeoutSeconds;
-		static constexpr uint32_t MoveFrameTimeout = ActorMovement::MoveFrameTimeout;
-
-	public:
-
-		ActorMovementManager();
-
-		virtual ~ActorMovementManager();
-
-		// Queue style operation
-		virtual Result EnqueueMovement(const ActorMovement& newMove);
-
-		virtual Result DequeueMovement(ActorMovement& pMove);
-
-	protected:
-		uint32_t m_LatestQueuedFrame = 0;
-		CircularQueue<ActorMovement, MaxSavedMove> m_Moves;
-	};
-
-
-	////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// SendingActorMovementManager
-	//
-
-	class SendingActorMovementManager : public ActorMovementManager
-	{
-	public:
-
-		using super = ActorMovementManager;
-
-	public:
-
-		SendingActorMovementManager();
-
-		virtual ~SendingActorMovementManager();
-
-		virtual Result EnqueueMovement(const ActorMovement& newMove) override;
-
-	private:
-
-		ActorMovement m_LatestEnqueued{};
-	};
-
-
-	////////////////////////////////////////////////////////////////////////////////////////
-	//
-	// Received actor movement 
-	//
-	class ReceivedActorMovementManager : public ActorMovementManager
-	{
-	public:
-
-		ReceivedActorMovementManager();
-
-		bool CanBeMerged(const ActorMovement& a, const ActorMovement& b, float deltaTime);
-
-		void ResetMove();
-
-		const ActorMovement& GetLatestMovement() const { return m_LatestMove; }
-
-		Result SimulateCurrentMove(uint32_t MoveFrame, ActorMovement& outCurMove);
-
-	private:
-
-
-		// a * (1 - t) + b * t
-		void Simulate(const ActorMovement& a, const ActorMovement& b, uint32_t moveFrame, float t, ActorMovement& result);
-
-		Vector4 CalculateArtificialDelta(const Vector4& Pc, const Vector4& Pe, float deltaTime);
-
-
-	private:
-
-		// Latest calculation information
-		uint32_t m_LatestFrame = 0;
-		ActorMovement m_LatestMove{};
-		ActorMovement m_MoveExpected{};
-	};
 
 
 }
