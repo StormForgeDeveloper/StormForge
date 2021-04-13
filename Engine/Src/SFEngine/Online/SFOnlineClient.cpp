@@ -734,7 +734,7 @@ namespace SF
 		if (!m_IncomingMovements.Find(playerId, movement))
 			return ResultCode::OBJECT_NOT_FOUND;
 
-		outMovement = movement->GetLatestMovement();
+		outMovement = movement->GetLatestMovementResult();
 		return ResultCode::SUCCESS;
 	}
 

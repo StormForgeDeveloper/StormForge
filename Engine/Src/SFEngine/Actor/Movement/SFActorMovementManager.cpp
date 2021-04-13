@@ -254,45 +254,45 @@ namespace SF
 
 	void ReceivedActorMovementManager::ResetMove(const ActorMovement& newMove)
 	{
-		m_LatestMove = newMove;
+		m_LatestReceivedMove = newMove;
 		m_MoveResult = newMove;
 	}
 
 	Result ReceivedActorMovementManager::SimulateCurrentMove(uint32_t InMoveFrame, ActorMovement& outCurMove)
 	{
-		if (m_LatestMove.MoveFrame > InMoveFrame)
+		if (m_LatestReceivedMove.MoveFrame > InMoveFrame)
 		{
-			outCurMove = m_LatestMove;
+			outCurMove = m_LatestReceivedMove;
 			outCurMove.MoveFrame = InMoveFrame;
 
 			return ResultCode::SUCCESS;
 		}
 
-		auto prevFrame = m_LatestMove.MoveFrame;
-		int32_t deltaFrames(InMoveFrame - m_LatestMove.MoveFrame);
+		auto prevFrame = m_LatestReceivedMove.MoveFrame;
+		int32_t deltaFrames(InMoveFrame - m_LatestReceivedMove.MoveFrame);
 		if (deltaFrames == 0)
 		{
-			outCurMove = m_LatestMove;
+			outCurMove = m_LatestReceivedMove;
 			outCurMove.MoveFrame = InMoveFrame;
 
 			return ResultCode::SUCCESS;
 		}
 
 		float deltaTime = ActorMovement::DeltaSecondsPerFrame * (deltaFrames);
-		m_LatestMove.SimulateCurrentMove(InMoveFrame, m_MoveExpected);
+		m_LatestReceivedMove.SimulateCurrentMove(InMoveFrame, m_MoveExpected);
 
 		Vector4& Pc = m_MoveResult.Position; // current position
 		Vector4& Pe = m_MoveExpected.Position;
-		Vector4 Vart = CalculateArtificialDelta(Pc, Pe, deltaTime);
+		Vector4 Vart = BlendDelta(Pc, Pe);
 
-		m_MoveExpected.Position += Vart;
+		m_MoveResult.Position += Vart;
 		m_MoveResult.LinearVelocity = m_MoveExpected.LinearVelocity;
 		m_MoveResult.MovementState = m_MoveExpected.MovementState;
 		m_MoveResult.AngularYaw = m_MoveExpected.AngularYaw;
 		m_MoveResult.MoveFrame = InMoveFrame;
 		outCurMove = m_MoveResult;
 
-		SFLog(Net, Debug6, "ActorMovementReplayManager::SimulateCurrentMove Vart:{0}, lastResult:{1}", Vart, m_LatestMove);
+		SFLog(Net, Debug6, "ActorMovementReplayManager::SimulateCurrentMove Vart:{0}, lastResult:{1}", Vart, m_MoveResult);
 
 		return ResultCode::SUCCESS;
 	}
@@ -300,23 +300,19 @@ namespace SF
 	// Queue style operation
 	Result ReceivedActorMovementManager::EnqueueMovement(const ActorMovement& newMove)
 	{
-		if (newMove.MoveFrame < m_LatestMove.MoveFrame)
+		if (newMove.MoveFrame < m_LatestReceivedMove.MoveFrame)
 			return ResultCode::SUCCESS_FALSE;
 
-		m_LatestMove = newMove;
+		m_LatestReceivedMove = newMove;
 
 		return ResultCode::SUCCESS;
 	}
 
-	Vector4 ReceivedActorMovementManager::CalculateArtificialDelta(const Vector4& Pc, const Vector4& Pe, float deltaTime)
+	Vector4 ReceivedActorMovementManager::BlendDelta(const Vector4& Pc, const Vector4& Pe)
 	{
-		static const float MinDistance = 0.01;
+		static const float MinDistance = 0.1;
 		static const float MaxDistance = 10000;
-		static const float BlendSpeed = 0.5;
-		static const float InvBlendSpeed = 1.0 / BlendSpeed;
-
-		if (deltaTime < std::numeric_limits<float>::epsilon())
-			return Vector4::Zero();
+		static const float BlendSpeed = 0.1;
 
 		auto vDiff = Pe - Pc;
 		auto distance = vDiff.SquareLength3();
@@ -329,7 +325,7 @@ namespace SF
 		//	vDiff *= MaxDistance / distance;
 		//}
 
-		return vDiff * InvBlendSpeed;
+		return vDiff * BlendSpeed;
 	}
 
 }

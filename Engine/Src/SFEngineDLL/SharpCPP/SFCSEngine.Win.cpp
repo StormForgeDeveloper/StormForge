@@ -46,6 +46,7 @@
 //
 
 static std::unique_ptr<SF::Mutex> g_InstanceMutex;
+static int g_InstanceId = 0;
 
 SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, uint32_t debuggerLogMask)
 {
@@ -106,11 +107,10 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 #endif
 	initParam.EnableMemoryLeakDetection = false;
 
-	int instanceId = 0;
 	char instanceNameBuffer[128];
 	if (g_InstanceMutex == nullptr)
 	{
-		for (; instanceId < 10; instanceId++)
+		for (int instanceId = 0; instanceId < 10; instanceId++)
 		{
 			SF::StrUtil::Format(instanceNameBuffer, "{0}_{1}", processName, instanceId);
 			auto instanceMutex = new SF::Mutex(instanceNameBuffer);
@@ -118,6 +118,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 			{
 				processName = instanceNameBuffer;
 				g_InstanceMutex.reset(instanceMutex);
+				g_InstanceId = instanceId;
 				break;
 			}
 			else
@@ -125,6 +126,11 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 				delete instanceMutex;
 			}
 		}
+	}
+	else
+	{
+		SF::StrUtil::Format(instanceNameBuffer, "{0}_{1}", processName, g_InstanceId);
+		processName = instanceNameBuffer;
 	}
 
 	srand(clock());

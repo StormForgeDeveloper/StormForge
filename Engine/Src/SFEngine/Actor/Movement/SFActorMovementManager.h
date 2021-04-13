@@ -125,7 +125,9 @@ namespace SF
 		void ResetMove();
 		void ResetMove(const ActorMovement& newMove);
 
-		const ActorMovement& GetLatestMovement() const { return m_LatestMove; }
+		const ActorMovement& GetLatestReceivedMovement() const { return m_LatestReceivedMove; }
+
+		const ActorMovement& GetLatestMovementResult() const { return m_MoveResult; }
 
 		Result SimulateCurrentMove(uint32_t MoveFrame, ActorMovement& outCurMove);
 
@@ -134,13 +136,13 @@ namespace SF
 
 	private:
 
-		Vector4 CalculateArtificialDelta(const Vector4& Pc, const Vector4& Pe, float deltaTime);
+		Vector4 BlendDelta(const Vector4& Pc, const Vector4& Pe);
 
 
 	private:
 
 		// Latest calculation information
-		ActorMovement m_LatestMove{};
+		ActorMovement m_LatestReceivedMove{};
 		ActorMovement m_MoveExpected{};
 		ActorMovement m_MoveResult{};
 	};

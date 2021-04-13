@@ -65,8 +65,12 @@ namespace SF
 		if (deltaFrames > MoveFrameTimeout)
 		{
 			// Timed out. Let's stop everything
+			deltaFrames = MoveFrameTimeout;
+			float deltaTime = DeltaSecondsPerFrame * (deltaFrames);
+
 			outCurMove = *this;
 			outCurMove.MoveFrame = InMoveFrame;
+			outCurMove.Position = Position + LinearVelocity * deltaTime;
 			outCurMove.LinearVelocity = Vector4::Zero();
 			return ResultCode::SUCCESS_FALSE;
 		}
