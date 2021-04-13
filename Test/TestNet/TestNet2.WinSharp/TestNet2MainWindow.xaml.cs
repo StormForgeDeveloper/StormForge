@@ -92,7 +92,7 @@ namespace TestNet2.WinSharp
             m_OnlineClient.UpdateGameTick(deltaTick);
 
             var prevFrame = m_MyMove.MoveFrame;
-            m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame() + 10;
+            m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame() + 4;
             if ((DateTime.Now - m_MoveStart).TotalSeconds > 1)
             {
                 m_MyMove.LinearVelocity = new Vector4() { x = 0, y = 0, z = 0, w = 0 };

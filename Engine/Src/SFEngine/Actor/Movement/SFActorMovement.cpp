@@ -72,7 +72,8 @@ namespace SF
 		}
 
 		float deltaTime = DeltaSecondsPerFrame * (deltaFrames);
-		outCurMove = *this;
+		outCurMove = *this; // copy all other properties
+		outCurMove.MoveFrame = InMoveFrame;
 		outCurMove.Position = Position + LinearVelocity * deltaTime;
 
 		return ResultCode::SUCCESS;
