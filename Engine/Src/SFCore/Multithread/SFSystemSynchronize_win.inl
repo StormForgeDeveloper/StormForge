@@ -52,13 +52,29 @@ public:
 			NULL);
 	}
 
+	Mutex(const char* MutexName, bool bInitiallyOwned = false)
+	{
+		m_Mutex = CreateMutexA(
+			NULL,              // default security attributes
+			bInitiallyOwned ? TRUE : FALSE,             // initially not owned
+			MutexName);
+	}
+
 	~Mutex()
 	{
-		CloseHandle(m_Mutex);
+		if (m_Mutex != nullptr)
+			CloseHandle(m_Mutex);
+	}
+
+	bool IsValid() const {
+		return m_Mutex != nullptr;
 	}
 
 	virtual void Lock() override
 	{
+		if (m_Mutex == nullptr)
+			return;
+
 		DWORD dwWaitResult = WaitForSingleObject(
 			m_Mutex,    // handle to mutex
 			INFINITE);
@@ -76,12 +92,13 @@ public:
 
 	virtual void UnLock() override
 	{
-		ReleaseMutex(m_Mutex);
+		if (m_Mutex != nullptr)
+			ReleaseMutex(m_Mutex);
 	}
 
 private:
 
-	HANDLE m_Mutex;
+	HANDLE m_Mutex = nullptr;
 };
 
 

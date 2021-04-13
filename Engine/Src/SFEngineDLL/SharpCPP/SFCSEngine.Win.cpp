@@ -23,6 +23,7 @@
 #include "Task/SFAsyncTaskManager.h"
 #include "Util/SFLog.h"
 #include "Util/SFLogComponent.h"
+#include "Util/SFStrUtil.h"
 #include "Object/SFObjectManager.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFStrUtil.h"
@@ -43,6 +44,8 @@
 //
 //	Engine interface
 //
+
+static std::unique_ptr<SF::Mutex> g_InstanceMutex;
 
 SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processName, const char* logServerAddress, uint32_t debuggerLogMask)
 {
@@ -102,6 +105,27 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	logOutputMask.Debug5 = 0;
 #endif
 	initParam.EnableMemoryLeakDetection = false;
+
+	int instanceId = 0;
+	char instanceNameBuffer[128];
+	if (g_InstanceMutex == nullptr)
+	{
+		for (; instanceId < 10; instanceId++)
+		{
+			SF::StrUtil::Format(instanceNameBuffer, "{0}_{1}", processName, instanceId);
+			auto instanceMutex = new SF::Mutex(instanceNameBuffer);
+			if (GetLastError() != ERROR_ALREADY_EXISTS)
+			{
+				processName = instanceNameBuffer;
+				g_InstanceMutex.reset(instanceMutex);
+				break;
+			}
+			else
+			{
+				delete instanceMutex;
+			}
+		}
+	}
 
 	srand(clock());
 	initParam.GlobalLogOutputMask = logOutputMask;
