@@ -138,7 +138,6 @@ namespace SF
 
 		// a * (1 - t) + b * t
 		void Simulate(const ActorMovement& a, const ActorMovement& b, uint32_t moveFrame, float t, ActorMovement& result);
-		void Simulate(uint32_t MoveFrame, const ActorMovement& movement, ActorMovement& outCurMove);
 
 		Vector4 CalculateArtificialDelta(const Vector4& Pc, const Vector4& Pe, float deltaTime);
 

@@ -51,30 +51,6 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	void ReceivedActorMovementManager::Simulate(uint32_t MoveFrame, const ActorMovement& movement, ActorMovement& outCurMove)
-	{
-		if (movement.MoveFrame > MoveFrame)
-		{
-			assert(false); // unexpected
-			outCurMove = m_LatestMove;
-			outCurMove.LinearVelocity = Vector4::Zero();
-			return;
-		}
-
-		// ActorMovement timeout, let it stop
-		if ((MoveFrame - movement.MoveFrame) > MoveFrameTimeout)
-		{
-			// Let's stop everything
-			outCurMove = m_LatestMove;
-			outCurMove.LinearVelocity = Vector4::Zero();
-			return;
-		}
-
-		float deltaTime = DeltaSecondsPerFrame * (MoveFrame - movement.MoveFrame);
-		outCurMove = movement;
-		outCurMove.Position = movement.Position + movement.LinearVelocity * deltaTime;
-	}
-
 	Result ActorMovement::SimulateCurrentMove(uint32_t InMoveFrame, ActorMovement& outCurMove) const
 	{
 		int32_t deltaFrames(InMoveFrame - MoveFrame);
@@ -312,13 +288,13 @@ namespace SF
 
 		if (move1 == nullptr)
 		{
-			Simulate(MoveFrame, m_LatestMove, m_MoveExpected);
+			m_LatestMove.SimulateCurrentMove(MoveFrame, m_MoveExpected);
 			SFLog(Net, Debug7, "ReceivedActorMovementManager::SimulateCurrentMove move1:{0}, last:{0}, result:{1}", m_LatestMove, m_MoveExpected);
 		}
 		else if (move2 == nullptr)
 		{
 			// No next frame information
-			Simulate(MoveFrame, *move1, m_MoveExpected);
+			move1->SimulateCurrentMove(MoveFrame, m_MoveExpected);
 			// At the beginning, m_LatestMove holds invalid movement. No need for delta blending
 			m_LatestMove = m_MoveExpected;
 			SFLog(Net, Debug7, "ReceivedActorMovementManager::SimulateCurrentMove move1:{0}, result:{1}", *move1, m_MoveExpected);
