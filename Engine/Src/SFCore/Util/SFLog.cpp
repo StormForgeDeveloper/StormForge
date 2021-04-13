@@ -67,7 +67,7 @@ namespace Log {
 	{
 		Service::LogModule = this;
 
-		m_Thread.SetThreadName("LogModule");
+		m_Thread.SetThreadName("LogThread");
 		m_Thread.Start();
 		m_Thread.SetPriority(Thread::PRIORITY::HIGHEST);
 	}
@@ -160,6 +160,12 @@ namespace Log {
 
 	void* LogModule::ReserveWriteBuffer()
 	{
+		// prevent logging on log thread, it can cause deadlock
+		if (ThisThread::GetThreadID() == m_Thread.GetThreadID())
+		{
+			return nullptr;
+		}
+
 		auto pSpinBlock = m_LogSpinBuffer.Write_Lock();
 
 		pSpinBlock->Data.TimeStamp = std::chrono::system_clock::now();
