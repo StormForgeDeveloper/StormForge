@@ -31,6 +31,8 @@ namespace TestNet2.WinSharp
 
         Random m_Rand = new Random();
 
+        DateTime m_PreviousTick;
+
         public TestNet2MainWindow()
         {
             InitializeComponent();
@@ -62,6 +64,8 @@ namespace TestNet2.WinSharp
             };
             UpdateStatusText(OnlineClient.OnlineState.None);
 
+            m_PreviousTick = DateTime.Now;
+
             m_TickTimer = new System.Windows.Threading.DispatcherTimer();
             m_TickTimer.Tick += new EventHandler(Timer_Tick);
             m_TickTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
@@ -78,9 +82,28 @@ namespace TestNet2.WinSharp
             if (m_OnlineClient == null)
                 return;
 
-            m_OnlineClient.UpdateGameTick(1);
+            var curTime = DateTime.Now;
+            var deltaTime = (curTime - m_PreviousTick).TotalSeconds;
+            var deltaTick = (uint)(deltaTime / SF.ActorMovementObject.DeltaSecondsPerFrame);
+            var deltaTickTime = SF.ActorMovementObject.DeltaSecondsPerFrame * deltaTick;
 
-            m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame();
+            m_PreviousTick += TimeSpan.FromSeconds(deltaTickTime);
+
+            m_OnlineClient.UpdateGameTick(deltaTick);
+
+            var prevFrame = m_MyMove.MoveFrame;
+            m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame() + 10;
+            if ((DateTime.Now - m_MoveStart).TotalSeconds > 1)
+            {
+                m_MyMove.LinearVelocity = new Vector4() { x = 0, y = 0, z = 0, w = 0 };
+            }
+            else
+            {
+                m_MyMove.Position.x += m_MyMove.LinearVelocity.x * deltaTickTime;
+                m_MyMove.Position.y += m_MyMove.LinearVelocity.y * deltaTickTime;
+                m_MyMove.Position.z += m_MyMove.LinearVelocity.z * deltaTickTime;
+            }
+
             m_OnlineClient.SendMovement(ref m_MyMove);
 
             foreach(var itPlayer in m_OtherPlayers)
@@ -293,30 +316,34 @@ namespace TestNet2.WinSharp
         }
 
         ActorMovement m_MyMove = new ActorMovement();
+        DateTime m_MoveStart = DateTime.Now;
         private void OnClickedMove(object sender, RoutedEventArgs e)
         {
             if (m_OnlineClient == null)
                 return;
 
+            float speed = 1;
+
+            m_MoveStart = DateTime.Now;
             if (sender == btnMoveUp)
             {
-                m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame();
-                m_MyMove.Position.z += 3;
+                //m_MyMove.Position.z += 3;
+                m_MyMove.LinearVelocity = new Vector4() { x = 0, y = 0, z = speed, w = 0 };
             }
             else if (sender == btnMoveDown)
             {
-                m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame();
-                m_MyMove.Position.z -= 3;
+                //m_MyMove.Position.z -= 3;
+                m_MyMove.LinearVelocity = new Vector4() { x = 0, y = 0, z = -speed, w = 0 };
             }
             else if (sender == btnMoveRight)
             {
-                m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame();
-                m_MyMove.Position.x += 3;
+                //m_MyMove.Position.x += 3;
+                m_MyMove.LinearVelocity = new Vector4() { x = speed, y = 0, z = 0, w = 0 };
             }
             else if (sender == btnMoveLeft)
             {
-                m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame();
-                m_MyMove.Position.x -= 3;
+                //m_MyMove.Position.x -= 3;
+                m_MyMove.LinearVelocity = new Vector4() { x = -speed, y = 0, z = 0, w = 0 };
             }
         }
 

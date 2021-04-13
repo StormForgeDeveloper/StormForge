@@ -51,6 +51,57 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
+	void ReceivedActorMovementManager::Simulate(uint32_t MoveFrame, const ActorMovement& movement, ActorMovement& outCurMove)
+	{
+		if (movement.MoveFrame > MoveFrame)
+		{
+			assert(false); // unexpected
+			outCurMove = m_LatestMove;
+			outCurMove.LinearVelocity = Vector4::Zero();
+			return;
+		}
+
+		// ActorMovement timeout, let it stop
+		if ((MoveFrame - movement.MoveFrame) > MoveFrameTimeout)
+		{
+			// Let's stop everything
+			outCurMove = m_LatestMove;
+			outCurMove.LinearVelocity = Vector4::Zero();
+			return;
+		}
+
+		float deltaTime = DeltaSecondsPerFrame * (MoveFrame - movement.MoveFrame);
+		outCurMove = movement;
+		outCurMove.Position = movement.Position + movement.LinearVelocity * deltaTime;
+	}
+
+	Result ActorMovement::SimulateCurrentMove(uint32_t InMoveFrame, ActorMovement& outCurMove) const
+	{
+		int32_t deltaFrames(InMoveFrame - MoveFrame);
+		if (deltaFrames <= 0) // If the move is future or current frame.
+		{
+			// just make copy
+			outCurMove = *this;
+			outCurMove.MoveFrame = InMoveFrame;
+			return ResultCode::SUCCESS;
+		}
+
+		if (deltaFrames > MoveFrameTimeout)
+		{
+			// Timed out. Let's stop everything
+			outCurMove = *this;
+			outCurMove.MoveFrame = InMoveFrame;
+			outCurMove.LinearVelocity = Vector4::Zero();
+			return ResultCode::SUCCESS_FALSE;
+		}
+
+		float deltaTime = DeltaSecondsPerFrame * (deltaFrames);
+		outCurMove = *this;
+		outCurMove.Position = Position + LinearVelocity * deltaTime;
+
+		return ResultCode::SUCCESS;
+	}
+
 	bool ActorMovement::operator == (const ActorMovement& src) const
 	{
 		return memcmp(this, &src, SizeOfActorMovement) == 0;
@@ -306,30 +357,6 @@ namespace SF
 		result.MoveFrame = moveFrame;
 		result.LinearVelocity = a.LinearVelocity;
 		result.MovementState = a.MovementState;
-	}
-
-	void ReceivedActorMovementManager::Simulate(uint32_t MoveFrame, const ActorMovement& movement, ActorMovement& outCurMove)
-	{
-		if (movement.MoveFrame > MoveFrame)
-		{
-			assert(false); // unexpected
-			outCurMove = m_LatestMove;
-			outCurMove.LinearVelocity = Vector4::Zero();
-			return;
-		}
-
-		// ActorMovement timeout, let it stop
-		if ((MoveFrame - movement.MoveFrame) > MoveFrameTimeout)
-		{
-			// Let's stop everything
-			outCurMove = m_LatestMove;
-			outCurMove.LinearVelocity = Vector4::Zero();
-			return;
-		}
-
-		float deltaTime = DeltaSecondsPerFrame * (MoveFrame - movement.MoveFrame);
-		outCurMove = movement;
-		outCurMove.Position = movement.Position + movement.LinearVelocity * deltaTime;
 	}
 
 

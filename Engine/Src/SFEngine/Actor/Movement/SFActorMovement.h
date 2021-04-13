@@ -39,6 +39,7 @@ namespace SF
 
 		Result CanMerge(const ActorMovement* pNextMove) const;
 
+		Result SimulateCurrentMove(uint32_t MoveFrame, ActorMovement& outCurMove) const;
 
 		bool operator == (const ActorMovement& src) const;
 		bool operator != (const ActorMovement& src) const;
