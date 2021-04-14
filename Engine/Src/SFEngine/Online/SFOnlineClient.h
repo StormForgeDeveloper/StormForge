@@ -177,6 +177,7 @@ namespace SF
 
 		void ClearTasks();
 
+		void InitMoveFrame(uint32_t newMoveFrame);
 		void SetupInstanceInfo();
 		void ClearInstanceInfo();
 		void RegisterGameHandlers();

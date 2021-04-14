@@ -568,6 +568,7 @@ namespace SF
 
 			SFLog(Net, Info, "PlayInstance::JoinGameInstanceRes joined: {0}, F:{1:X}", m_Owner.m_GameInstanceUID, packet.GetMovement().MoveFrame);
 
+			m_Owner.InitMoveFrame(packet.GetMovement().MoveFrame);
 			m_Owner.OnPlayerMovement(m_Owner.GetPlayerID(), packet.GetMovement());
 
 			SetOnlineState(OnlineState::InGameInGameInstance);
@@ -600,6 +601,12 @@ namespace SF
 		for (auto& itTask : m_PendingTasks)
 			IHeap::Delete(itTask);
 		m_PendingTasks.Clear();
+	}
+
+	void OnlineClient::InitMoveFrame(uint32_t newMoveFrame)
+	{
+		m_ServerMoveFrame = newMoveFrame;
+		m_MoveFrame = newMoveFrame;
 	}
 
 	void OnlineClient::SetupInstanceInfo()
