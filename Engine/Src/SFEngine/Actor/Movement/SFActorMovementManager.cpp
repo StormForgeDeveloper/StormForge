@@ -286,7 +286,7 @@ namespace SF
 		Vector4 Vart = BlendDelta(Pc, Pe);
 
 		m_MoveResult.Position += Vart;
-		m_MoveResult.LinearVelocity = m_MoveExpected.LinearVelocity;
+		m_MoveResult.LinearVelocity = m_MoveExpected.LinearVelocity + Vart;
 		m_MoveResult.MovementState = m_MoveExpected.MovementState;
 		m_MoveResult.AngularYaw = m_MoveExpected.AngularYaw;
 		m_MoveResult.MoveFrame = InMoveFrame;
