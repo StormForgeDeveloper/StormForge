@@ -183,7 +183,7 @@ namespace Net {
 			Util::SafeDelete(pIOBuffer);
 		}
 
-		SFLog(Net, Debug3, "TCP Recv CID:{0}, pending:{1}, hr:{2:X8}", GetCID(), GetPendingRecvCount(), hr);
+		SFLog(Net, Debug5, "TCP Recv CID:{0}, pending:{1}, hr:{2:X8}", GetCID(), GetPendingRecvCount(), hr);
 
 		return hr;
 	}
@@ -498,7 +498,7 @@ namespace Net {
 			return hr;
 		}
 
-		SFLog(Net, Debug3, "TCP RecvBuf Len={0}", uiBuffSize);
+		SFLog(Net, Debug5, "TCP RecvBuf Len={0}", uiBuffSize);
 
 		while( uiBuffSize > 0 )
 		{
@@ -615,7 +615,7 @@ namespace Net {
 
 		if( pMsgHeader->msgID.IDs.Type == Message::MSGTYPE_NETCONTROL )
 		{
-			SFLog(Net, Debug2, "TCP Ctrl Recv ip:{0}, msg:{1}, Len:{2}",
+			SFLog(Net, Debug5, "TCP Ctrl Recv ip:{0}, msg:{1}, Len:{2}",
 				GetRemoteInfo().PeerAddress, 
 				pMsgHeader->msgID, pMsgHeader->Length );
 

@@ -907,7 +907,7 @@ namespace SF
 		uint32_t deltaFrames = deltaTime.count() / ActorMovement::DeltaMSPerFrame;
 
 		if (deltaFrames > 0 && (m_MoveFrame % 200) == 0)
-			SFLog(Net, Info, "OnlineClient::UpdateMovement deltaFrames:{0}, moveFrame:{1:X}, serverFrame:{2:X}", deltaFrames, m_MoveFrame, m_ServerMoveFrame);
+			SFLog(Net, Debug2, "OnlineClient::UpdateMovement deltaFrames:{0}, moveFrame:{1:X}, serverFrame:{2:X}", deltaFrames, m_MoveFrame, m_ServerMoveFrame);
 
 		if (deltaFrames == 0)
 			return 0;
