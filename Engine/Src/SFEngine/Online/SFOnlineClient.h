@@ -158,6 +158,9 @@ namespace SF
 
 		const SharedPointerT<SendingActorMovementManager>& GetSendMovementManager() const { return m_OutgoingMovement; }
 		Result GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement);
+		Result GetMovementForPlayerAll(PlayerID playerId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement);
+		Result GetExpectedMovementForPlayer(PlayerID playerId, ActorMovement& outMovement);
+		Result GetReceivedMovementForPlayer(PlayerID playerId, ActorMovement& outMovement);
 
 		uint32_t GetCurrentMovementFrame() const { return m_MoveFrame; }
 		void SetMovementFrame(uint32_t moveFrame) { m_MoveFrame = moveFrame; }

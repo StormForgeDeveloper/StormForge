@@ -173,6 +173,11 @@ namespace SF
             return new Result(NativeGetMovementForPlayer(NativeHandle, playerId, out movement));
         }
 
+        public Result GetMovementForPlayerAll(UInt64 playerId, out ActorMovement movement, out ActorMovement expectedMovement, out ActorMovement receivedMovement)
+        {
+            return new Result(NativeGetMovementForPlayerAll(NativeHandle, playerId, out movement, out expectedMovement, out receivedMovement));
+        }
+
         public UInt32 GetCurrentMoveFrame()
         {
             return NativeGetCurrentMoveFrame(NativeHandle);
@@ -296,6 +301,9 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForPlayer", CharSet = CharSet.Auto)]
         static extern Int32 NativeGetMovementForPlayer(IntPtr nativeHandle, UInt64 playerId, out ActorMovement actorMovement);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForPlayerAll", CharSet = CharSet.Auto)]
+        static extern Int32 NativeGetMovementForPlayerAll(IntPtr nativeHandle, UInt64 playerId, out ActorMovement actorMovement, out ActorMovement actorReceivedMovement, out ActorMovement actorExpectedMovement);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetCurrentMoveFrame", CharSet = CharSet.Auto)]
         static extern UInt32 NativeGetCurrentMoveFrame(IntPtr nativeHandle);

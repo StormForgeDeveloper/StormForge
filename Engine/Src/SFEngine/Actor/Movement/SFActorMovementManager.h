@@ -125,9 +125,9 @@ namespace SF
 		void ResetMove();
 		void ResetMove(const ActorMovement& newMove);
 
-		const ActorMovement& GetLatestReceivedMovement() const { return m_LatestReceivedMove; }
-
-		const ActorMovement& GetLatestMovementResult() const { return m_MoveResult; }
+		const ActorMovement& GetReceivedMovement() const { return m_LatestReceivedMove; }
+		const ActorMovement& GetMovementExpected() const { return m_MoveExpected; }
+		const ActorMovement& GetMovementResult() const { return m_MoveResult; }
 
 		Result SimulateCurrentMove(uint32_t MoveFrame, ActorMovement& outCurMove);
 

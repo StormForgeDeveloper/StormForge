@@ -734,7 +734,19 @@ namespace SF
 		if (!m_IncomingMovements.Find(playerId, movement))
 			return ResultCode::OBJECT_NOT_FOUND;
 
-		outMovement = movement->GetLatestMovementResult();
+		outMovement = movement->GetMovementResult();
+		return ResultCode::SUCCESS;
+	}
+
+	Result OnlineClient::GetMovementForPlayerAll(PlayerID playerId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement)
+	{
+		SharedPointerT<ReceivedActorMovementManager> movement;
+		if (!m_IncomingMovements.Find(playerId, movement))
+			return ResultCode::OBJECT_NOT_FOUND;
+
+		outMovement = movement->GetMovementResult();
+		outReceivedMovement = movement->GetReceivedMovement();
+		outExpectedMovement = movement->GetMovementExpected();
 		return ResultCode::SUCCESS;
 	}
 
