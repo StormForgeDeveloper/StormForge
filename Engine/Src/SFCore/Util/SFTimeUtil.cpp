@@ -90,7 +90,7 @@ namespace SF {
 			: m_ulTimeStampMs(TimeStampMS())
 			, m_ullTimeStampUTC(UTCTimeStampSec())
 		{
-			auto timeStamp = ClockType::now().time_since_epoch();
+			auto timeStamp = std::chrono::high_resolution_clock::now().time_since_epoch();
 			m_ullTimeStamp.store(timeStamp.count(), std::memory_order_relaxed);
 			m_ullTimeStampPrevious = timeStamp;
 			m_ulTimeStampMs = TimeStampMS(std::chrono::duration_cast<DurationMS>(timeStamp));
@@ -122,7 +122,7 @@ namespace SF {
 		{
 			m_ullTimeStampPrevious = ClockType::duration(m_ullTimeStamp);
 
-			auto now = ClockType::now();
+			auto now = std::chrono::high_resolution_clock::now();
 			auto timeStamp = now.time_since_epoch();
 			m_ullTimeStamp.store(timeStamp.count(), std::memory_order_relaxed);
 
@@ -150,9 +150,7 @@ namespace SF {
 		// Get time tick in ms
 		TimeStampMS Time_Chrono::GetRawTimeMs()
 		{
-			//std::chrono::high_resolution_clock::now();
-
-			auto timeStamp = ClockType::now().time_since_epoch();
+			auto timeStamp = std::chrono::high_resolution_clock::now().time_since_epoch();
 			return TimeStampMS(std::chrono::duration_cast<DurationMS>(timeStamp));
 		}
 

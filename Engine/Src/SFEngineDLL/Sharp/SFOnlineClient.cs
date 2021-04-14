@@ -118,7 +118,7 @@ namespace SF
             return NativeGetCharacterId(NativeHandle);
         }
 
-        public void UpdateGameTick(UInt32 deltaFrames = 1)
+        public void UpdateGameTick(out UInt32 deltaFrames)
         {
             lock (SFMessageParsingUtil.stm_ParsingLock)
             {
@@ -138,7 +138,7 @@ namespace SF
                 stm_StaticEventReceiver = null;
             }
 
-            NativeUpdateMovement(NativeHandle, deltaFrames);
+            NativeUpdateMovement(NativeHandle, out deltaFrames);
         }
 
         public OnlineState GetOnlineState()
@@ -294,7 +294,7 @@ namespace SF
         static extern Int32 NativeUpdateGameTick(IntPtr nativeHandle, ONLINE_STATECHAGED_CALLBACK setOnlineStateEventFunc, SET_EVENT_FUNCTION setEventFunc, SET_MESSAGE_FUNCTION setMessageFunc, SET_FUNCTION setValueFunc, SET_ARRAY_FUNCTION setArrayValueFunc, ON_READY_FUNCTION onMessageReady, ONLINE_TASK_FINISHED_CALLBACK onTaskFinished);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeUpdateMovement", CharSet = CharSet.Auto)]
-        static extern Int32 NativeUpdateMovement(IntPtr nativeHandle, UInt32 deltaFrames);
+        static extern Int32 NativeUpdateMovement(IntPtr nativeHandle, out UInt32 deltaFrames);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetConnection", CharSet = CharSet.Auto)]
         static extern IntPtr NativeGetConnection(IntPtr nativeHandle, Int32 connectionIndex);

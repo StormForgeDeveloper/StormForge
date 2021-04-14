@@ -209,14 +209,15 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateMovement(intptr_t nativeHandle, uint32_t deltaFrames)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateMovement(intptr_t nativeHandle, uint32_t& outDeltaFrames)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	pOnlineClient->UpdateMovement(deltaFrames);
+	outDeltaFrames = pOnlineClient->UpdateMovement();
+
 	return ResultCode::SUCCESS;
 }
 
@@ -288,6 +289,6 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeSendMovement(intptr_t nativeHandle, co
 	// ActorMovement requires special memory alignment, copy incoming data to local storage
 	ActorMovement tempMove = newMove;
 
-	return int32_t(pOnlineClient->GetSendMovementManager()->EnqueueMovement(tempMove));
+	return int32_t(pOnlineClient->SendMovement(tempMove));
 }
 

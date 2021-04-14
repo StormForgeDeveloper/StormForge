@@ -701,6 +701,8 @@ namespace SF
 		m_PendingTasks.push_back(new(GetHeap()) ClientTask_Login(*this, transactionId));
 		m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameServer(*this, transactionId));
 
+		m_TickTime = Util::Time.GetRawTimeMs();
+
 		return ResultCode::SUCCESS;
 	}
 
@@ -780,6 +782,16 @@ namespace SF
 		Disconnect(m_GameInstance);
 
 		SetOnlineState(OnlineState::Disconnected);
+	}
+
+	Result OnlineClient::SendMovement(const ActorMovement& newMove)
+	{
+		ActorMovement newMove2 = newMove;
+		newMove2.MoveFrame = m_MoveFrame;
+
+		SFLog(Net, Debug, "OnlineClient:SendMovement, {0}", newMove2);
+
+		return GetSendMovementManager()->EnqueueMovement(newMove2);
 	}
 
 	void OnlineClient::UpdateGameTick()
@@ -880,9 +892,24 @@ namespace SF
 		}
 	}
 
-	void OnlineClient::UpdateMovement(uint32_t deltaFrames)
+	uint32_t OnlineClient::UpdateMovement()
 	{
+		auto newUpdateTimeStamp = Util::Time.GetRawTimeMs();
+
+		DurationMS deltaTime = newUpdateTimeStamp - m_TickTime;
+		uint32_t deltaFrames = deltaTime.count() / ActorMovement::DeltaMSPerFrame;
+
+		if (deltaFrames > 0 && (m_MoveFrame % 200) == 0)
+			SFLog(Net, Info, "OnlineClient::UpdateMovement deltaFrames:{0}, moveFrame:{1:X}, serverFrame:{2:X}", deltaFrames, m_MoveFrame, m_ServerMoveFrame);
+
+		if (deltaFrames == 0)
+			return 0;
+
+		m_TickTime += DurationMS(deltaFrames * ActorMovement::DeltaMSPerFrame);
+
 		m_MoveFrame += deltaFrames;
+		m_ServerMoveFrame += deltaFrames;
+
 		m_IncomingMovements.ForeachOrder(0, m_IncomingMovements.size(), 
 			[moveFrame = m_MoveFrame](const PlayerID playerId, const SharedPointerT<ReceivedActorMovementManager>& movement)
 			{
@@ -901,6 +928,8 @@ namespace SF
 				policy.PlayerMovementC2SEvt(GetGameInstanceUID(), GetPlayerID(), pMove);
 			}
 		}
+
+		return deltaFrames;
 	}
 
 	void OnlineClient::OnPlayerInView(const MessageDataPtr& pMsgData)
@@ -970,12 +999,10 @@ namespace SF
 
 	void OnlineClient::OnPlayerMovement(PlayerID playerId, const ActorMovement& newMove)
 	{
+		SFLog(Net, Debug, "OnlineClient:OnPlayerMovement, playerId:{0}, serverFrame:{1:X}, move:{2}", playerId, m_ServerMoveFrame, newMove);
+
 		// adjust move frame
-		if (playerId == GetPlayerID())
-		{
-			if (m_MoveFrame < newMove.MoveFrame)
-				m_MoveFrame = newMove.MoveFrame;
-		}
+		m_ServerMoveFrame = Util::Max(m_ServerMoveFrame, newMove.MoveFrame);
 
 		SharedPointerT<ReceivedActorMovementManager> movement;
 		if (!m_IncomingMovements.Find(playerId, movement))

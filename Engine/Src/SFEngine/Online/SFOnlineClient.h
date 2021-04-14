@@ -124,12 +124,15 @@ namespace SF
 		// Disconnect all connection
 		void DisconnectAll();
 
+		// Send new movement
+		Result SendMovement(const ActorMovement& newMove);
+
 		void UpdateGameTick();
 
 		void UpdateTasks();
 		void UpdateOnlineState();
 
-		void UpdateMovement(uint32_t deltaFrames);
+		uint32_t UpdateMovement();
 
 		// Online State
 		OnlineState GetOnlineState() const { return m_OnlineState; }
@@ -234,8 +237,13 @@ namespace SF
 		// PlayerId by movement
 		SortedMap<PlayerID,SharedPointerT<ReceivedActorMovementManager>> m_IncomingMovements;
 
+		// tick time
+		TimeStampMS m_TickTime;
+
 		// Move frame
 		uint32_t m_MoveFrame{};
+		// Estimated server move frame
+		uint32_t m_ServerMoveFrame{};
 
 		CircularPageQueue<OnlineStateChangedEventArgs> m_OnlineStateChangedQueue;
 		ONLINESTATE_CHAGED_CALLBACK m_OnlineStateChangedCallback{};
