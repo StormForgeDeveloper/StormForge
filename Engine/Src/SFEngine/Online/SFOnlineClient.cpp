@@ -26,6 +26,9 @@
 namespace SF
 {
 
+	constexpr uint32_t OnlineClient::RemotePlayerSimulationDelay;
+
+
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 
 	//	ClientTask class
@@ -739,7 +742,7 @@ namespace SF
 
 	Result OnlineClient::GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement)
 	{
-		SharedPointerT<ReceivedActorMovementManager> movement;
+		SharedPointerT<ReceivedMovementMnager> movement;
 		if (!m_IncomingMovements.Find(playerId, movement))
 			return ResultCode::OBJECT_NOT_FOUND;
 
@@ -749,7 +752,7 @@ namespace SF
 
 	Result OnlineClient::GetMovementForPlayerAll(PlayerID playerId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement)
 	{
-		SharedPointerT<ReceivedActorMovementManager> movement;
+		SharedPointerT<ReceivedMovementMnager> movement;
 		if (!m_IncomingMovements.Find(playerId, movement))
 			return ResultCode::OBJECT_NOT_FOUND;
 
@@ -918,7 +921,7 @@ namespace SF
 		m_ServerMoveFrame += deltaFrames;
 
 		m_IncomingMovements.ForeachOrder(0, m_IncomingMovements.size(), 
-			[moveFrame = m_MoveFrame](const PlayerID playerId, const SharedPointerT<ReceivedActorMovementManager>& movement)
+			[moveFrame = m_MoveFrame - RemotePlayerSimulationDelay](const PlayerID playerId, const SharedPointerT<ReceivedMovementMnager>& movement)
 			{
 				ActorMovement outMovement;
 				movement->SimulateCurrentMove(moveFrame, outMovement);
@@ -954,10 +957,10 @@ namespace SF
 			return;
 		}
 
-		SharedPointerT<ReceivedActorMovementManager> movement;
+		SharedPointerT<ReceivedMovementMnager> movement;
 		if (!m_IncomingMovements.Find(msg.GetPlayerID(), movement))
 		{
-			movement = new(GetHeap()) ReceivedActorMovementManager;
+			movement = new(GetHeap()) ReceivedMovementMnager;
 			auto res = m_IncomingMovements.Insert(msg.GetPlayerID(), movement);
 			assert(res);
 		}
@@ -980,7 +983,7 @@ namespace SF
 			return;
 		}
 
-		SharedPointerT<ReceivedActorMovementManager> movement;
+		SharedPointerT<ReceivedMovementMnager> movement;
 		m_IncomingMovements.Remove(msg.GetPlayerID(), movement);
 	}
 
@@ -1011,10 +1014,10 @@ namespace SF
 		// adjust move frame
 		m_ServerMoveFrame = Util::Max(m_ServerMoveFrame, newMove.MoveFrame);
 
-		SharedPointerT<ReceivedActorMovementManager> movement;
+		SharedPointerT<ReceivedMovementMnager> movement;
 		if (!m_IncomingMovements.Find(playerId, movement))
 		{
-			movement = new(GetHeap()) ReceivedActorMovementManager;
+			movement = new(GetHeap()) ReceivedMovementMnager;
 			auto res = m_IncomingMovements.Insert(playerId, movement);
 			assert(res);
 		}

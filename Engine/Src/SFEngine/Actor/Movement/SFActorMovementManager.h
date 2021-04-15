@@ -82,14 +82,18 @@ namespace SF
 	class ActorMovementReplayManager : public ActorMovementManager
 	{
 	public:
+		using super = ActorMovementManager;
 
 		ActorMovementReplayManager();
 
-		bool CanBeMerged(const ActorMovement& a, const ActorMovement& b, float deltaTime);
-
 		void ResetMove();
+		void ResetMove(const ActorMovement& newMove);
 
-		const ActorMovement& GetLatestMovement() const { return m_LatestMove; }
+		const ActorMovement& GetMovementResult() const { return m_MoveResult; }
+		const ActorMovement& GetReceivedMovement() const { return m_LatestReceivedMove; }
+		const ActorMovement& GetMovementExpected() const { return m_MoveExpected; }
+
+		virtual Result EnqueueMovement(const ActorMovement& newMove) override;
 
 		Result SimulateCurrentMove(uint32_t MoveFrame, ActorMovement& outCurMove);
 
@@ -97,16 +101,17 @@ namespace SF
 
 
 		// a * (1 - t) + b * t
-		void Simulate(const ActorMovement& a, const ActorMovement& b, uint32_t moveFrame, float t, ActorMovement& result);
+		void Simulate(const ActorMovement& a, const ActorMovement& b, float t, ActorMovement& result);
 
-		Vector4 CalculateArtificialDelta(const Vector4& Pc, const Vector4& Pe, float deltaTime);
+		Vector4 CalculateArtificialDelta(const Vector4& Pc, const Vector4& Pe);
 
 
 	private:
 
 		// Latest calculation information
 		uint32_t m_LatestFrame = 0;
-		ActorMovement m_LatestMove{};
+		ActorMovement m_MoveResult{};
+		ActorMovement m_LatestReceivedMove{};
 		ActorMovement m_MoveExpected{};
 	};
 

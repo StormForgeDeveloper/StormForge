@@ -28,6 +28,7 @@ namespace SF
 	struct ActorMovement;
 	class SendingActorMovementManager;
 	class ReceivedActorMovementManager;
+	class ActorMovementReplayManager;
 
 
 
@@ -40,6 +41,10 @@ namespace SF
 	public:
 
 		using super = EngineObject;
+		using ReceivedMovementMnager = ActorMovementReplayManager;
+		//using ReceivedMovementMnager = ReceivedActorMovementManager;
+
+		static constexpr uint32_t RemotePlayerSimulationDelay = 20;
 
 		// Online State
 		enum class OnlineState : uint8_t
@@ -236,7 +241,7 @@ namespace SF
 		SharedPointerT<SendingActorMovementManager> m_OutgoingMovement;
 
 		// PlayerId by movement
-		SortedMap<PlayerID,SharedPointerT<ReceivedActorMovementManager>> m_IncomingMovements;
+		SortedMap<PlayerID,SharedPointerT<ReceivedMovementMnager>> m_IncomingMovements;
 
 		// tick time
 		TimeStampMS m_TickTime;

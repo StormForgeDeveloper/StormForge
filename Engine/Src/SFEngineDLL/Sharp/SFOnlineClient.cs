@@ -173,9 +173,9 @@ namespace SF
             return new Result(NativeGetMovementForPlayer(NativeHandle, playerId, out movement));
         }
 
-        public Result GetMovementForPlayerAll(UInt64 playerId, out ActorMovement movement, out ActorMovement expectedMovement, out ActorMovement receivedMovement)
+        public Result GetMovementForPlayerAll(UInt64 playerId, out ActorMovement movement, out ActorMovement receivedMovement, out ActorMovement expectedMovement)
         {
-            return new Result(NativeGetMovementForPlayerAll(NativeHandle, playerId, out movement, out expectedMovement, out receivedMovement));
+            return new Result(NativeGetMovementForPlayerAll(NativeHandle, playerId, out movement, out receivedMovement, out expectedMovement));
         }
 
         public UInt32 GetCurrentMoveFrame()

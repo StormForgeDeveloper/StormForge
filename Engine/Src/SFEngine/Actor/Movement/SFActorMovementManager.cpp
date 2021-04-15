@@ -100,48 +100,54 @@ namespace SF
 		ResetMove();
 	}
 
-	bool ActorMovementReplayManager::CanBeMerged(const ActorMovement& a, const ActorMovement& b, float deltaTime)
-	{
-		auto diff = (b.Position - (a.Position + a.LinearVelocity * deltaTime)).Length3()
-			+ (b.LinearVelocity - a.LinearVelocity).Length3();
-
-		return diff < 0.1; // TODO: test expected?
-	}
 
 	void ActorMovementReplayManager::ResetMove()
 	{
-		m_LatestMove = {};
-		m_LatestFrame = 0;
+		ResetMove({});
+	}
+
+	void ActorMovementReplayManager::ResetMove(const ActorMovement& newMove)
+	{
+		m_MoveResult = newMove;
+		m_MoveExpected = newMove;
+		m_LatestFrame = newMove.MoveFrame;
 
 		m_Moves.ClearQueue();
+
+		EnqueueMovement(newMove);
+	}
+
+	Result ActorMovementReplayManager::EnqueueMovement(const ActorMovement& newMove)
+	{
+		m_LatestReceivedMove = newMove;
+		return super::EnqueueMovement(newMove);
 	}
 
 	Result ActorMovementReplayManager::SimulateCurrentMove(uint32_t MoveFrame, ActorMovement& outCurMove)
 	{
 		if (m_LatestFrame > MoveFrame)
-			return ResultCode::IO_INVALID_SEQUENCE;// drop out of sequenced move
+		{
+			m_MoveResult.MoveFrame = MoveFrame;
+			outCurMove = m_MoveResult;
+			return ResultCode::SUCCESS_FALSE;// drop out of sequenced move
+		}
 
-		auto prevFrame = m_LatestMove.MoveFrame;
+		// No movement yet or the first one still future
+		if (m_Moves.size() == 0 || MoveFrame < m_Moves[0].MoveFrame)
+		{
+			// No new movement to calculate
+			m_MoveResult.SimulateCurrentMove(MoveFrame, m_MoveExpected);
+			m_MoveResult = m_MoveExpected;
+			outCurMove = m_MoveExpected;
+			return ResultCode::SUCCESS;
+		}
 
 		const ActorMovement* move1 = nullptr, * move2 = nullptr;
 
 		while (true)
 		{
-			move1 = nullptr;
-			move2 = nullptr;
-
-			if (m_Moves.size() == 0)
-			{
-				// No new movement to calculate
-				break;
-			}
-
 			move1 = &m_Moves[0];
-			if (MoveFrame < move1->MoveFrame)
-			{
-				move1 = nullptr;
-				break;
-			}
+			move2 = nullptr;
 
 			// only one move, just simulate expected pos
 			if (m_Moves.size() < 2)
@@ -153,87 +159,85 @@ namespace SF
 				break;
 
 			// We don't need move1 anymore, free it
-			ActorMovement pRemove;
-			m_Moves.Dequeue(pRemove);
-
+			ActorMovement removeMove;
+			m_Moves.Dequeue(removeMove);
 			// Start over
 		}
 
 
-		float deltaTime = DeltaSecondsPerFrame * (MoveFrame - prevFrame);
 		m_MoveExpected = {};
 
-		if (move1 == nullptr)
-		{
-			m_LatestMove.SimulateCurrentMove(MoveFrame, m_MoveExpected);
-			SFLog(Net, Debug7, "ActorMovementReplayManager::SimulateCurrentMove move1:{0}, last:{0}, result:{1}", m_LatestMove, m_MoveExpected);
-		}
-		else if (move2 == nullptr)
+		if (move2 == nullptr)
 		{
 			// No next frame information
 			move1->SimulateCurrentMove(MoveFrame, m_MoveExpected);
-			// At the beginning, m_LatestMove holds invalid movement. No need for delta blending
-			m_LatestMove = m_MoveExpected;
+			// At the beginning, m_MoveResult holds invalid movement. No need for delta blending
+			m_MoveResult = m_MoveExpected;
+			outCurMove = m_MoveResult;
 			SFLog(Net, Debug7, "ActorMovementReplayManager::SimulateCurrentMove move1:{0}, result:{1}", *move1, m_MoveExpected);
-		}
-		else
-		{
-			Simulate(*move1, *move2, MoveFrame, deltaTime, m_MoveExpected);
-			SFLog(Net, Debug7, "ActorMovementReplayManager::SimulateCurrentMove move1:{0}, move2:{1}, result:{2}", *move1, *move2, m_MoveExpected);
+			return ResultCode::SUCCESS;
 		}
 
-		Vector4& Pc = m_LatestMove.Position;
+		// We have two moves
+		auto prevFrame = m_MoveResult.MoveFrame;
+		float deltaTime = DeltaSecondsPerFrame * (MoveFrame - prevFrame);
+		float interpolationTime = DeltaSecondsPerFrame * (MoveFrame - move1->MoveFrame);
+
+		Simulate(*move1, *move2, interpolationTime, m_MoveExpected);
+		m_MoveExpected.MoveFrame = MoveFrame;
+
+		SFLog(Net, Debug7, "ActorMovementReplayManager::SimulateCurrentMove move1:{0}, move2:{1}, result:{2}", *move1, *move2, m_MoveExpected);
+
+		Vector4& Pc = m_MoveResult.Position;
 		Vector4& Pe = m_MoveExpected.Position;
-		Vector4 Vart = CalculateArtificialDelta(Pc, Pe, deltaTime);
+		Vector4 Vart = CalculateArtificialDelta(Pc, Pe);
 
-		m_LatestMove.Position += Vart;
-		m_LatestMove.LinearVelocity = m_MoveExpected.LinearVelocity;
-		m_LatestMove.MovementState = m_MoveExpected.MovementState;
-		m_LatestMove.AngularYaw = m_MoveExpected.AngularYaw;
-		m_LatestMove.MoveFrame = MoveFrame;
-		outCurMove = m_LatestMove;
+		m_MoveResult.Position += Vart;
+		m_MoveResult.LinearVelocity = m_MoveExpected.LinearVelocity + Vart;
+		m_MoveResult.MovementState = m_MoveExpected.MovementState;
+		m_MoveResult.AngularYaw = m_MoveExpected.AngularYaw;
+		m_MoveResult.MoveFrame = MoveFrame;
+		outCurMove = m_MoveResult;
 
-		SFLog(Net, Debug6, "ActorMovementReplayManager::SimulateCurrentMove Vart:{0}, lastResult:{1}", Vart, m_LatestMove);
+		SFLog(Net, Debug6, "ActorMovementReplayManager::SimulateCurrentMove Vart:{0}, lastResult:{1}", Vart, m_MoveResult);
 
 		return ResultCode::SUCCESS;
 	}
 
-
-
 	// a * (1 - t) + b * t
-	void ActorMovementReplayManager::Simulate(const ActorMovement& a, const ActorMovement& b, uint32_t moveFrame, float t, ActorMovement& result)
+	void ActorMovementReplayManager::Simulate(const ActorMovement& a, const ActorMovement& b, float deltaTime, ActorMovement& result)
 	{
-		float t1 = 1 - t;
-		result.Position = a.Position * t1 + b.Position * t;
-		result.AngularYaw = a.AngularYaw * t1 + b.AngularYaw * t;
+		float t = deltaTime / (ActorMovement::DeltaSecondsPerFrame * (b.MoveFrame - a.MoveFrame));
+		assert(t > 0);
+		//float t1 = 1 - t;
+		//Vector4 interpolatedPos = a.Position + (b.Position - -a.Position) * t; // a.Position * (1 - t) + b.Position * t;
+		//Vector4 simulatedPos = a.Position + a.LinearVelocity * deltaTime;
+		Vector4 interpolationDelta = (b.Position - a.Position) * t;
+		Vector4 simulationDelta = a.LinearVelocity * deltaTime;
+		Vector4 delta = simulationDelta + (interpolationDelta - simulationDelta) * t;
 
-		result.MoveFrame = moveFrame;
-		result.LinearVelocity = a.LinearVelocity;
+		// Interpolated pos affects more when it closes to b
+		//result.Position = simulatedPos + (interpolatedPos - simulatedPos) * t; 
+		result.Position = a.Position + delta;
+		result.AngularYaw = a.AngularYaw + (b.AngularYaw - a.AngularYaw) * t;
+
+		result.LinearVelocity = deltaTime > std::numeric_limits<float>::epsilon() ? delta / deltaTime : Vector4::Zero();
 		result.MovementState = a.MovementState;
 	}
 
-	Vector4 ActorMovementReplayManager::CalculateArtificialDelta(const Vector4& Pc, const Vector4& Pe, float deltaTime)
+	Vector4 ActorMovementReplayManager::CalculateArtificialDelta(const Vector4& Pc, const Vector4& Pe)
 	{
-		static const float MinDistance = 0.1;
+		static const float MinDistance = 0.2f;
+		static const float MinSquareDistance = MinDistance * MinDistance;
 		static const float MaxDistance = 10000;
-		static const float BlendSpeed = 0.5;
-		static const float InvBlendSpeed = 1.0 / BlendSpeed;
-
-		if (deltaTime < std::numeric_limits<float>::epsilon())
-			return Vector4::Zero();
-
+		static const float BlendSpeed = 0.1;
 		auto vDiff = Pe - Pc;
 		auto distance = vDiff.SquareLength3();
 
-		if (distance < MinDistance) // merge them if they are close enough
+		if (distance < MinSquareDistance) // merge them if they are close enough
 			return vDiff;
 
-		//if (distance > MaxDistance)
-		//{
-		//	vDiff *= MaxDistance / distance;
-		//}
-
-		return vDiff * InvBlendSpeed;
+		return vDiff * BlendSpeed;
 	}
 
 
@@ -310,20 +314,16 @@ namespace SF
 
 	Vector4 ReceivedActorMovementManager::BlendDelta(const Vector4& Pc, const Vector4& Pe)
 	{
-		static const float MinDistance = 0.1;
+		static const float MinDistance = 0.2f;
+		static const float MinSquareDistance = MinDistance * MinDistance;
 		static const float MaxDistance = 10000;
-		static const float BlendSpeed = 0.1;
+		static const float BlendSpeed = 0.1f;
 
 		auto vDiff = Pe - Pc;
 		auto distance = vDiff.SquareLength3();
 
-		if (distance < MinDistance) // merge them if they are close enough
+		if (distance < MinSquareDistance) // merge them if they are close enough
 			return vDiff;
-
-		//if (distance > MaxDistance)
-		//{
-		//	vDiff *= MaxDistance / distance;
-		//}
 
 		return vDiff * BlendSpeed;
 	}
