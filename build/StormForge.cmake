@@ -62,7 +62,7 @@ include_directories(AFTER
 )
 
 
-set(ENGINE_LINK_LIBS SFProtocol SFEngine SFProtocol SFEngine SFCore curl rdkafka avro jansson iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 lzma zlib)
+set(ENGINE_LINK_LIBS SFProtocol SFEngine SFProtocol SFEngine SFCore curl rdkafka avro-static jansson iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 lzma zlib)
 
 
 if(WIN32)
