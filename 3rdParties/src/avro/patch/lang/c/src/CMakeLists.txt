@@ -74,6 +74,7 @@ set(AVRO_SRC
     value-sizeof.c
     value-write.c
     wrapped-buffer.c
+	avro/io_sfext.h # sfext
 )
 
 
