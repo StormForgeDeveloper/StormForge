@@ -26,6 +26,12 @@ if [ ! -d "$ATF_PATH" ]; then
 fi
 
 
+if [ ! -f "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt" ]; then
+	mkdir Test/UnitTest/UnitTest1/Test/LogServer/LocalData
+	cp Test/UnitTest/UnitTest1/Test/LogServer/serveraddress_sample.txt Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt
+fi
+
+
 pushd $SF_PATH/3rdParties 
 
 
@@ -42,12 +48,6 @@ pushd $SF_PATH/3rdParties
 # tar -xvf fbx20201_fbxsdk_linux.tar.gz -C FBXSDK_Linux_Install
 # chmod ugo+x FBXSDK_Linux_Install/fbx20201_fbxsdk_linux
 # ./FBXSDK/fbx20201_fbxsdk_linux /usr
-
-
-if [ ! -f "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt" ]; then
-	mkdir Test/UnitTest/UnitTest1/Test/LogServer/LocalData
-	cp Test/UnitTest/UnitTest1/Test/LogServer/serveraddress_sample.txt Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt
-fi
 
 
 
