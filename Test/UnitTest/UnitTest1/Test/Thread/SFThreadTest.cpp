@@ -612,7 +612,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_Concurrent)
 	Concurrency::concurrent_queue<int64_t> queue;
 	SyncCounter itemCounter;
 	SyncCounter workDone;
-	CounterType *testArray = new CounterType[TEST_LENGTH];
+	CounterType *testArray = new(GetHeap()) CounterType[TEST_LENGTH];
 	memset(testArray, 0, sizeof(CounterType)*TEST_LENGTH);
 
 

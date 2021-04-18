@@ -396,10 +396,6 @@ namespace ProtocolCompiler
         {
             return string.Format("Array<{0}>", ToTargetTypeName(param.Type));
         }
-        public string OutArrayTypeName(Parameter param)
-        {
-            return string.Format("ArrayView<{0}>", ToTargetTypeName(param.Type));
-        }
 
 
         public string InParamName(string Name)

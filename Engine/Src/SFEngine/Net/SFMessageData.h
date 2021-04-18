@@ -131,9 +131,6 @@ namespace Message {
 
 		// Parsing message data
 		virtual Result ParseMessage(const MessageData* pIMsg) = 0;
-
-		virtual Result OverrideRouteContextDestination(EntityUID to) { unused(to); AssertRel(false); return ResultCode::SUCCESS; }
-		virtual Result OverrideRouteInfomation(EntityUID to, uint hopCount) { unused(to, hopCount); AssertRel(false); return ResultCode::SUCCESS; }
 	};
 
 

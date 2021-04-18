@@ -374,18 +374,18 @@ namespace ProtocolCompiler
             NewLine();
 
             // Override route context function
-            if (Group.GenParameterRouteContext)
-            {
-                MatchIndent(); OutStream.WriteLine("Result OverrideRouteContextDestination( EntityUID to );");
-                NewLine();
-            }
+            //if (Group.GenParameterRouteContext)
+            //{
+            //    MatchIndent(); OutStream.WriteLine("Result OverrideRouteContextDestination( EntityUID to );");
+            //    NewLine();
+            //}
 
             // Override route hop function
-            if (Group.GenParameterRouteHopCount)
-            {
-                MatchIndent(); OutStream.WriteLine("Result OverrideRouteInformation( EntityUID to, unsigned hopCount );");
-                NewLine();
-            }
+            //if (Group.GenParameterRouteHopCount)
+            //{
+            //    MatchIndent(); OutStream.WriteLine("Result OverrideRouteInformation( EntityUID to, unsigned hopCount );");
+            //    NewLine();
+            //}
 
             CloseSection();
         }
@@ -658,7 +658,7 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
             MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
             MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
-            MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr;(void)(pCur);");
+            MatchIndent(); OutStream.WriteLine("const uint8_t* pCur = nullptr;(void)(pCur);");
             NewLine();
 
             if (parameters == null)
@@ -715,89 +715,89 @@ namespace ProtocolCompiler
         // Build override route hop count class implementation
         void BuildOverrideRouteHopCountImpl(string Name, string typeName, Parameter[] parameters)
         {
-            if (!Group.GenParameterRouteHopCount)
-                return;
+            //if (!Group.GenParameterRouteHopCount)
+            //    return;
 
-            string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::OverrideRouteInformation( EntityUID to, unsigned hopCount )");
+            //string strClassName = MsgClassName(Name, typeName);
+            //OpenSection("Result", strClassName + "::OverrideRouteInformation( EntityUID to, unsigned hopCount )");
 
-            DefaultHRESULT(); NewLine();
+            //DefaultHRESULT(); NewLine();
 
-            MatchIndent(); OutStream.WriteLine("MessageData* pIMsg = GetMessage();");
-            MatchIndent(); OutStream.WriteLine("RouteContext routeContext;");
-            NewLine();
-            MatchIndent(); OutStream.WriteLine("protocolCheckPtr(pIMsg);");
-            NewLine();
+            //MatchIndent(); OutStream.WriteLine("MessageData* pIMsg = GetMessage();");
+            //MatchIndent(); OutStream.WriteLine("RouteContext routeContext;");
+            //NewLine();
+            //MatchIndent(); OutStream.WriteLine("protocolCheckPtr(pIMsg);");
+            //NewLine();
 
-            // array len types
-            if (Group.IsMobile)
-            {
-                MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
-            }
-            else
-            {
-                MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
-            }
+            //// array len types
+            //if (Group.IsMobile)
+            //{
+            //    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
+            //}
+            //else
+            //{
+            //    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
+            //}
 
-            MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
-            MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
-            MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
-            MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
-            MatchIndent(); OutStream.WriteLine("uint8_t* pCur = nullptr;(void)(pCur);");
-            NewLine();
+            //MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
+            //MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
+            //MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
+            //MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
+            //MatchIndent(); OutStream.WriteLine("const uint8_t* pCur = nullptr;(void)(pCur);");
+            //NewLine();
 
-            // Skip until we meet route context
-            if (parameters != null)
-            {
-                foreach (Parameter param in parameters)
-                {
-                    switch (param.Type)
-                    {
-                        case ParameterType.String:
-                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                            MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof(char)));");
-                            break;
-                        default:
-                            if (param.Type == ParameterType.RouteContext && param.Name == ParamRouteContext.Name)
-                            {
-                                MatchIndent(); OutStream.WriteLine("pCur = input->GetBufferPtr() + input->GetPosition();");
-                                MatchIndent(); OutStream.WriteLine("Assert(input->GetRemainSize() >= sizeof(RouteContext));");
-                                MatchIndent(); OutStream.WriteLine("memcpy( &routeContext, pCur, sizeof(RouteContext) );");
-                                MatchIndent(); OutStream.WriteLine("routeContext.Components.To = to;");
-                                MatchIndent(); OutStream.WriteLine("memcpy( pCur, &routeContext, sizeof(RouteContext) );");
-                            }
-                            else if (param.Name == ParamRouteHopCount.Name)
-                            {
-                                MatchIndent(); OutStream.WriteLine("Assert(input->GetRemainSize() >= sizeof({0}));", ToTargetTypeName(ParamRouteHopCount.Type));
-                                MatchIndent(); OutStream.WriteLine("pCur = input->GetBufferPtr() + input->GetPosition();");
-                                MatchIndent(); OutStream.WriteLine("*({0}*)pCur = hopCount;", ToTargetTypeName(ParamRouteHopCount.Type));
-                            }
+            //// Skip until we meet route context
+            //if (parameters != null)
+            //{
+            //    foreach (Parameter param in parameters)
+            //    {
+            //        switch (param.Type)
+            //        {
+            //            case ParameterType.String:
+            //                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+            //                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof(char)));");
+            //                break;
+            //            default:
+            //                if (param.Type == ParameterType.RouteContext && param.Name == ParamRouteContext.Name)
+            //                {
+            //                    MatchIndent(); OutStream.WriteLine("pCur = input->GetBufferPtr() + input->GetPosition();");
+            //                    MatchIndent(); OutStream.WriteLine("Assert(input->GetRemainSize() >= sizeof(RouteContext));");
+            //                    MatchIndent(); OutStream.WriteLine("memcpy( &routeContext, pCur, sizeof(RouteContext) );");
+            //                    MatchIndent(); OutStream.WriteLine("routeContext.Components.To = to;");
+            //                    MatchIndent(); OutStream.WriteLine("memcpy( pCur, &routeContext, sizeof(RouteContext) );");
+            //                }
+            //                else if (param.Name == ParamRouteHopCount.Name)
+            //                {
+            //                    MatchIndent(); OutStream.WriteLine("Assert(input->GetRemainSize() >= sizeof({0}));", ToTargetTypeName(ParamRouteHopCount.Type));
+            //                    MatchIndent(); OutStream.WriteLine("pCur = input->GetBufferPtr() + input->GetPosition();");
+            //                    MatchIndent(); OutStream.WriteLine("*({0}*)pCur = hopCount;", ToTargetTypeName(ParamRouteHopCount.Type));
+            //                }
 
-                            if (param.IsArray)
-                            {
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof({0})));", ToTargetTypeName(param.Type));
-                            }
-                            else
-                            {
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({0})));", ToTargetTypeName(param.Type));
-                            }
-                            break;
-                    }
+            //                if (param.IsArray)
+            //                {
+            //                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
+            //                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof({0})));", ToTargetTypeName(param.Type));
+            //                }
+            //                else
+            //                {
+            //                    MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({0})));", ToTargetTypeName(param.Type));
+            //                }
+            //                break;
+            //        }
 
-                    // All other process is same
-                    if (param.Name == ParamRouteHopCount.Name)
-                    {
-                        break;
-                    }
-                }
-            }
+            //        // All other process is same
+            //        if (param.Name == ParamRouteHopCount.Name)
+            //        {
+            //            break;
+            //        }
+            //    }
+            //}
 
-            NewLine();
+            //NewLine();
 
-            ReturnHR(); NewLine();
+            //ReturnHR(); NewLine();
 
-            CloseSection();
+            //CloseSection();
         }
 
         void BuildCreatePreamble(Parameter[] parameters)
@@ -951,8 +951,8 @@ namespace ProtocolCompiler
                     BuildParserToMessageBaseImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "Cmd", newparams, bUseOriginalType:true); NewLine();
-                    BuildOverrideRouteContextImpl(msg.Name, "Cmd", newparams); NewLine();
-                    BuildOverrideRouteHopCountImpl(msg.Name, "Cmd", newparams); NewLine();
+                    //BuildOverrideRouteContextImpl(msg.Name, "Cmd", newparams); NewLine();
+                    //BuildOverrideRouteHopCountImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildMessageTrace(msg.Name, "Cmd", msg.Trace.ToString(), newparams);
 
                     BuildMessageIDImpl( msg, MsgType.Res, "Res" );
@@ -963,8 +963,8 @@ namespace ProtocolCompiler
                     BuildParserToMessageBaseImpl(msg.Name, "Res", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "Res", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "Res", newparams, bUseOriginalType: true); NewLine();
-                    BuildOverrideRouteContextImpl(msg.Name, "Res", newparams); NewLine();
-                    BuildOverrideRouteHopCountImpl(msg.Name, "Res", newparams); NewLine();
+                    //BuildOverrideRouteContextImpl(msg.Name, "Res", newparams); NewLine();
+                    //BuildOverrideRouteHopCountImpl(msg.Name, "Res", newparams); NewLine();
                     BuildMessageTrace(msg.Name, "Res", msg.Trace.ToString(), newparams);
                 }
 
@@ -981,8 +981,8 @@ namespace ProtocolCompiler
                     BuildParserToMessageBaseImpl(msg.Name, "C2SEvt", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "C2SEvt", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "C2SEvt", newparams, bUseOriginalType: true); NewLine();
-                    BuildOverrideRouteContextImpl(msg.Name, "C2SEvt", newparams); NewLine();
-                    BuildOverrideRouteHopCountImpl(msg.Name, "C2SEvt", newparams); NewLine();
+                    //BuildOverrideRouteContextImpl(msg.Name, "C2SEvt", newparams); NewLine();
+                    //BuildOverrideRouteHopCountImpl(msg.Name, "C2SEvt", newparams); NewLine();
                     BuildMessageTrace(msg.Name, "C2SEvt", msg.Trace.ToString(), newparams);
                 }
 
@@ -999,8 +999,8 @@ namespace ProtocolCompiler
                     BuildParserToMessageBaseImpl(msg.Name, "S2CEvt", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "S2CEvt", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "S2CEvt", newparams, bUseOriginalType: true); NewLine();
-                    BuildOverrideRouteContextImpl(msg.Name, "S2CEvt", newparams); NewLine();
-                    BuildOverrideRouteHopCountImpl(msg.Name, "S2CEvt", newparams); NewLine();
+                    //BuildOverrideRouteContextImpl(msg.Name, "S2CEvt", newparams); NewLine();
+                    //BuildOverrideRouteHopCountImpl(msg.Name, "S2CEvt", newparams); NewLine();
                     BuildMessageTrace(msg.Name, "S2CEvt", msg.Trace.ToString(), newparams);
                 }
                 m_MessageCodeIndex++;
