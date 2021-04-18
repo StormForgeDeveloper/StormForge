@@ -183,7 +183,7 @@ namespace SF
 		uint8_t *pBuffer = nullptr;
 		if (pMemStream != nullptr)
 		{
-			pBuffer = pMemStream->GetBufferPtr() + pMemStream->GetPosition();
+			pBuffer = (uint8_t*)pMemStream->GetBufferPtr() + pMemStream->GetPosition();
 			jpeg_mem_src(&cinfo, pBuffer, (unsigned long)memorySize);
 		}
 		else

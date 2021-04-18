@@ -144,7 +144,7 @@ namespace SF {
 
 	Result VariableTable::FromBinData(const Array<uint8_t>& binData)
 	{
-		InputMemoryStream stream(binData);
+		InputMemoryStream stream(ArrayView<const uint8_t>(binData.size(), binData.data()));
 		return stream >> *this;
 	}
 

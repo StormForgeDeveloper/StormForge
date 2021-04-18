@@ -1103,6 +1103,12 @@ namespace SF {
 		{
 		}
 
+		VariableBLOB(const Array<const uint8_t>& value)
+			: m_Value(value.GetHeap())
+		{
+			m_Value = value;
+		}
+
 		VariableBLOB(const Array<uint8_t>& value)
 			: m_Value(value.GetHeap())
 		{
@@ -1124,8 +1130,7 @@ namespace SF {
 		virtual StringCrc32 GetTypeName() const override { return TYPE_NAME; }
 
 
-		virtual void SetValue(const Array<uint8_t>& value) override { unused(value); }
-		virtual void SetValue(Array<uint8_t>&& value) override { unused(value); }
+		virtual void SetValue(const Array<const uint8_t>& value) override { unused(value); }
 
 		virtual void* GetDataPtr() const override { return const_cast<uint8_t*>(m_Value.data()); }
 		virtual bool GetValueBool() const override { return m_Value.size() != 0; }

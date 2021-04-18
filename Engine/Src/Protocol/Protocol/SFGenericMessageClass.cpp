@@ -28,7 +28,7 @@ namespace SF {
 			protocolCheckPtr(pIMsg);
 
 			size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-			ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+			ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 			InputMemoryStream inputStream(bufferView);
 			auto* input = inputStream.ToInputStream();
 

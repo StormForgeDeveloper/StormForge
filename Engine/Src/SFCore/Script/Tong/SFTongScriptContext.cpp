@@ -59,7 +59,7 @@ namespace SF
 		{
 			m_ControlStack.push_back(m_BytecodeContext);
 			
-			m_BytecodeContext.ByteCodeData = &function.GetBytecode();
+			m_BytecodeContext.ByteCodeData.SetLinkedBuffer(function.GetBytecode().size(), function.GetBytecode().data());
 			// We don't use the first byte
 			m_BytecodeContext.CurrentPosition = 1;
 
@@ -75,14 +75,11 @@ namespace SF
 				return ResultCode::INVALID_STATE;
 
 
-			auto pByteCode = m_BytecodeContext.ByteCodeData;
-			if (pByteCode == nullptr)
-				return ResultCode::INVALID_POINTER;
+			auto& ByteCode = m_BytecodeContext.ByteCodeData;
 
-
-			while (m_BytecodeContext.CurrentPosition < static_cast<int>(pByteCode->size()))
+			while (m_BytecodeContext.CurrentPosition < static_cast<int>(ByteCode.size()))
 			{
-				auto opCode = (*pByteCode)[m_BytecodeContext.CurrentPosition];
+				auto opCode = ByteCode[m_BytecodeContext.CurrentPosition];
 				if (opCode < 0 || opCode > (int)SrciptBytecodeOpCode::Max)
 					return ResultCode::INVALID_BYTE_SEQUENCE;
 

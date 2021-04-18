@@ -72,8 +72,8 @@ namespace SF
 
 			// Set function - Takes full/partial path of the function
 			//				- ex) /globalVarName, /myParent/VarName, myScope/Varname
-			virtual Result SetFunction(const PathString& functionPath, const Array<SF::ScriptFunction::ParameterInfo>& parameterList, const Array<uint8_t>& byteCode) override;
-			virtual Result SetFunction(StringCrc64 functionPath, const Array<SF::ScriptFunction::ParameterInfo>& parameterList, const Array<uint8_t>& byteCode) override;
+			virtual Result SetFunction(const PathString& functionPath, const Array<SF::ScriptFunction::ParameterInfo>& parameterList, const Array<const uint8_t>& byteCode) override;
+			virtual Result SetFunction(StringCrc64 functionPath, const Array<SF::ScriptFunction::ParameterInfo>& parameterList, const Array<const uint8_t>& byteCode) override;
 		};
 
 	}

@@ -69,8 +69,7 @@ namespace SF {
 		virtual void SetValue(const String& value) { assert(false); unused(value); }
 		virtual void SetValue(StringCrc32 value) { assert(false); unused(value); }
 		virtual void SetValue(StringCrc64 value) { assert(false); unused(value); }
-		virtual void SetValue(const Array<uint8_t>& value) { assert(false); unused(value); }
-		virtual void SetValue(Array<uint8_t>&& value) { assert(false); unused(value); }
+		virtual void SetValue(const Array<const uint8_t>& value) { assert(false); unused(value); }
 
 
 		virtual void* GetDataPtr() const { return nullptr; }
@@ -266,8 +265,7 @@ namespace SF {
 		virtual void SetValue(const String& value) override { super::SetValue(value); }
 		virtual void SetValue(StringCrc32 value) override { super::SetValue(value); }
 		virtual void SetValue(StringCrc64 value) override { super::SetValue(value); }
-		virtual void SetValue(const Array<uint8_t>& value) override { super::SetValue(value); }
-		virtual void SetValue(Array<uint8_t>&& value) override { super::SetValue(value); }
+		virtual void SetValue(const Array<const uint8_t>& value) override { super::SetValue(value); }
 
 		virtual void* GetDataPtr() const override { return m_Value; }
 		virtual bool GetValueBool() const override { return super::GetValueBool(); }

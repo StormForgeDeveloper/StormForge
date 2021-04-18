@@ -486,7 +486,7 @@ namespace ProtocolCompiler
                 {
                     MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
                 }
-                MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
+                MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
                 MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
                 MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
                 MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
@@ -654,7 +654,7 @@ namespace ProtocolCompiler
                 MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
             }
 
-            MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
+            MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
             MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
             MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
             MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
@@ -739,7 +739,7 @@ namespace ProtocolCompiler
                 MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
             }
 
-            MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
+            MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
             MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
             MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
             MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");

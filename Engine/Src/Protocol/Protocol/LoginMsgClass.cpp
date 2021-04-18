@@ -35,7 +35,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -136,7 +136,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -248,7 +248,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -358,7 +358,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -470,7 +470,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -566,7 +566,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -678,7 +678,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -777,7 +777,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -876,7 +876,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -975,7 +975,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1074,7 +1074,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1168,7 +1168,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1339,7 +1339,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1431,7 +1431,7 @@ namespace SF
 				protocolCheckPtr(pIMsg);
 
 				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);

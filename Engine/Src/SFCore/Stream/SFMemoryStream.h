@@ -27,7 +27,7 @@ namespace SF
 	{
 	protected:
 
-		const Array<uint8_t>* m_Buffer = nullptr;
+		ArrayView<const uint8_t> m_BufferView;
 
 		size_t m_Position = 0;
 
@@ -36,24 +36,25 @@ namespace SF
 
 		InputMemoryStream();
 		InputMemoryStream(const Array<uint8_t>& memoryBuffer);
+		InputMemoryStream(const Array<const uint8_t>& memoryBuffer);
 		virtual ~InputMemoryStream() {}
 
 		// Reset position to begin
 		void Reset();
 
-		size_t GetBufferSize() const { return m_Buffer == nullptr ? 0 : m_Buffer->GetAllocatedSize(); }
+		size_t GetBufferSize() const { return m_BufferView.GetAllocatedSize(); }
 
 		// return true if the stream is valid and have something read
-		virtual bool CanRead() override { return m_Buffer != nullptr && m_Position < m_Buffer->size(); }
+		virtual bool CanRead() override { return m_Position < m_BufferView.size(); }
 
-		virtual uint8_t* GetBufferPtr() override { return const_cast<uint8_t*>(m_Buffer->data()); }
-		virtual const uint8_t* GetBufferPtr() const override { return m_Buffer->data(); }
+		//virtual uint8_t* GetBufferPtr() override { return const_cast<uint8_t*>(m_BufferView.data()); }
+		virtual const uint8_t* GetBufferPtr() const override { return m_BufferView.data(); }
 
 		virtual Result Seek(SeekMode seekPos, int64_t offset) override;
 
 		virtual size_t GetPosition() const override { return m_Position; }
 
-		virtual size_t GetSize() const override { return m_Buffer == nullptr ? 0 : m_Buffer->size(); }
+		virtual size_t GetSize() const override { return m_BufferView.size(); }
 
 		// Read data
 		virtual Result Read(void* buffer, size_t readSize) override;

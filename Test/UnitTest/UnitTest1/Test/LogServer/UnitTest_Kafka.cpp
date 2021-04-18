@@ -49,9 +49,9 @@ TEST_F(KafkaTest, Producer)
 
     GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress[0], topic), ResultCode::SUCCESS);
 
-    GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<uint8_t>(testData)), ResultCode::SUCCESS);
-	GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<uint8_t>(testData1)), ResultCode::SUCCESS);
-	GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<uint8_t>(testData2)), ResultCode::SUCCESS);
+    GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<const uint8_t>(testData)), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<const uint8_t>(testData1)), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<const uint8_t>(testData2)), ResultCode::SUCCESS);
 
     GTEST_ASSERT_EQ(streamDB.Flush(), ResultCode::SUCCESS);
     

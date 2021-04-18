@@ -126,7 +126,7 @@ namespace SF
 
         virtual Result Initialize(const String& brokers, const String& topic, int32_t partition = 0) override;
 
-        Result SendRecord(const Array<uint8_t>& data, int64_t timestamp = 0);
+        Result SendRecord(const Array<const uint8_t>& data, int64_t timestamp = 0);
 
         Result Flush();
 
@@ -151,7 +151,7 @@ namespace SF
         using super = StreamDB;
 
 
-        class StreamMessageData : public ArrayView<uint8_t>
+        class StreamMessageData : public ArrayView<const uint8_t>
         {
         public:
 

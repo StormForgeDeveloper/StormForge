@@ -60,29 +60,29 @@ namespace SF
 
 			const char* ParseString(ScriptContext& context, int& stringSize) const
 			{
-				stringSize = context.GetBytecodeContext().ByteCodeData->data()[context.GetBytecodeContext().CurrentPosition];
-				auto result = (const char*)&context.GetBytecodeContext().ByteCodeData->data()[context.GetBytecodeContext().CurrentPosition + 1];
+				stringSize = context.GetBytecodeContext().ByteCodeData.data()[context.GetBytecodeContext().CurrentPosition];
+				auto result = (const char*)&context.GetBytecodeContext().ByteCodeData.data()[context.GetBytecodeContext().CurrentPosition + 1];
 				context.GetBytecodeContext().CurrentPosition += 1 + stringSize;
 				return result;
 			}
 
 			int32_t ParseInt32(ScriptContext& context) const
 			{
-				auto result = *reinterpret_cast<const int32_t*>(&context.GetBytecodeContext().ByteCodeData->data()[context.GetBytecodeContext().CurrentPosition]);
+				auto result = *reinterpret_cast<const int32_t*>(&context.GetBytecodeContext().ByteCodeData.data()[context.GetBytecodeContext().CurrentPosition]);
 				context.GetBytecodeContext().CurrentPosition += 4;
 				return result;
 			}
 
 			uint32_t ParseUInt32(ScriptContext& context) const
 			{
-				auto result = *reinterpret_cast<const uint32_t*>(&context.GetBytecodeContext().ByteCodeData->data()[context.GetBytecodeContext().CurrentPosition]);
+				auto result = *reinterpret_cast<const uint32_t*>(&context.GetBytecodeContext().ByteCodeData.data()[context.GetBytecodeContext().CurrentPosition]);
 				context.GetBytecodeContext().CurrentPosition += 4;
 				return result;
 			}
 
 			float ParseFloat(ScriptContext& context) const
 			{
-				auto result = *reinterpret_cast<const float*>(&context.GetBytecodeContext().ByteCodeData->data()[context.GetBytecodeContext().CurrentPosition]);
+				auto result = *reinterpret_cast<const float*>(&context.GetBytecodeContext().ByteCodeData.data()[context.GetBytecodeContext().CurrentPosition]);
 				context.GetBytecodeContext().CurrentPosition += 4;
 				return result;
 			}

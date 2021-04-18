@@ -74,7 +74,7 @@ namespace SF {
 		if (m_TargetEndpoint == nullptr)
 			return ResultCode::NOT_INITIALIZED;
 
-		return m_TargetEndpoint->SendRecord(ArrayView<uint8_t>(messageData->GetMessageSize(), messageData->GetMessageBuff()));
+		return m_TargetEndpoint->SendRecord(ArrayView<const uint8_t>(messageData->GetMessageSize(), messageData->GetMessageBuff()));
 	}
 
 } // namespace SF

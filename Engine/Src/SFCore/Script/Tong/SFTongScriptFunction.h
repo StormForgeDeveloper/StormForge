@@ -48,12 +48,12 @@ namespace SF
 		public:
 
 			ScriptFunction(IHeap& heap, ScriptEnvironment* pEnv);
-			ScriptFunction(IHeap& heap, ScriptEnvironment* pEnv, const Array<ParameterInfo>& parameterList, const Array<uint8_t>& byteCode);
+			ScriptFunction(IHeap& heap, ScriptEnvironment* pEnv, const Array<ParameterInfo>& parameterList, const Array<const uint8_t>& byteCode);
 			~ScriptFunction();
 
 
 			// Set byte code, binary
-			Result SetBytecode(const Array<uint8_t>& byteCode);
+			Result SetBytecode(const Array<const uint8_t>& byteCode);
 
 			// Get byte code
 			const Array<uint8_t>& GetBytecode() const { return m_ByteCode; }

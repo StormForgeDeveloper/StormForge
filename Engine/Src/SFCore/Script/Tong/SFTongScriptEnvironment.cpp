@@ -166,7 +166,7 @@ namespace SF
 
 		// Set function - Takes full/partial path of the function
 		//				- ex) /globalVarName, /myParent/VarName, myScope/Varname
-		Result ScriptEnvironment::SetFunction(const PathString& functionPath, const Array<SF::ScriptFunction::ParameterInfo>& parameterList, const Array<uint8_t>& byteCode)
+		Result ScriptEnvironment::SetFunction(const PathString& functionPath, const Array<SF::ScriptFunction::ParameterInfo>& parameterList, const Array<const uint8_t>& byteCode)
 		{
 			auto pEnv = FindParentEnvironment(functionPath);
 			if (pEnv == nullptr)
@@ -175,7 +175,7 @@ namespace SF
 			return pEnv->SetFunction(functionPath[(int)functionPath.size() - 1], parameterList, byteCode);
 		}
 
-		Result ScriptEnvironment::SetFunction(StringCrc64 functionName, const Array<SF::ScriptFunction::ParameterInfo>& parameterList, const Array<uint8_t>& byteCode)
+		Result ScriptEnvironment::SetFunction(StringCrc64 functionName, const Array<SF::ScriptFunction::ParameterInfo>& parameterList, const Array<const uint8_t>& byteCode)
 		{
 			ScriptFunction* pObj = nullptr;
 			pObj = m_FunctionTable.find(functionName);

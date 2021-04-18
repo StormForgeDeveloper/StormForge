@@ -67,7 +67,7 @@ namespace SF {
 		if (logMessage == nullptr || m_StreamProducer == nullptr || logMessage->LogStringSize < 1) return;
 
 		// -1 for removing \n
-		ArrayView<uint8_t> dataArray(logMessage->LogStringSize - 1, reinterpret_cast<const uint8_t*>(logMessage->LogBuff));
+		ArrayView<const uint8_t> dataArray(logMessage->LogStringSize - 1, reinterpret_cast<const uint8_t*>(logMessage->LogBuff));
 		m_StreamProducer->SendRecord(dataArray);
 	}
 

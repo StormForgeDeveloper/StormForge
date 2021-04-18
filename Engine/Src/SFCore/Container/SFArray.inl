@@ -27,7 +27,7 @@ namespace SF {
 
 		// Static buffer
 		template< class DataType >
-		constexpr Array<DataType>::Array(size_t allocatedSize, const DataType *pDataPtr)
+		constexpr Array<DataType>::Array(size_t allocatedSize, DataType *pDataPtr)
 			: m_Heap(nullptr)
 		{
 			SetBuffPtr(allocatedSize, pDataPtr);
@@ -52,17 +52,12 @@ namespace SF {
 			AssertRel(AllocatedSize >= m_Size);
 
 			m_AllocatedSize = AllocatedSize;
-			if (m_PreserveDataOnResize && m_pDataPtr != pDataPtr)
-			{
-				for (size_t iData = 0; iData < m_Size; iData++)
-					pDataPtr[iData] = std::forward<DataType>(m_pDataPtr[iData]);
-			}
 			m_pDataPtr = pDataPtr;
 		}
 
 		// Update Data pointer
 		template< class DataType >
-		constexpr void Array<DataType>::SetBuffPtr(size_t AllocatedSize, const DataType *pDataPtr)
+		constexpr void Array<DataType>::SetBuffPtrConstexpr(size_t AllocatedSize, DataType *pDataPtr)
 		{
 			m_Size = AllocatedSize;
 			m_AllocatedSize = AllocatedSize;
@@ -82,7 +77,7 @@ namespace SF {
 		inline Result Array<DataType>::resize(size_t szNewSize)
 		{
 			auto hr = reserve(szNewSize);
-			if ((hr))
+			if (hr)
 				m_Size = szNewSize;
 			return hr;
 		}
@@ -145,7 +140,7 @@ namespace SF {
 		template< class DataType >
 		DataType* Array<DataType>::data() const
 		{
-			return const_cast<DataType*>(m_pDataPtr);
+			return m_pDataPtr;
 		}
 
 		template< class DataType >
@@ -353,11 +348,22 @@ namespace SF {
 		}
 
 		template<class DataType>
-		Array<DataType>& Array<DataType>::operator = (const Array<DataType>& src)
+		Array<DataType>& Array<DataType>::operator = (const Array<std::decay_t<DataType>>& src)
 		{
 			resize(src.size());
 			for (size_t iItem = 0; iItem < src.size(); iItem++)
 				m_pDataPtr[iItem] = src[iItem];
+			return *this;
+		}
+
+		template<class DataType>
+		Array<DataType>& Array<DataType>::operator = (const Array<const std::decay_t<DataType>>& src)
+		{
+			resize(src.size());
+			// TODO: We might should not support this operation
+			auto pDataPtr = (std::decay_t<DataType>*)m_pDataPtr;
+			for (size_t iItem = 0; iItem < src.size(); iItem++)
+				pDataPtr[iItem] = src[iItem];
 			return *this;
 		}
 
@@ -399,7 +405,12 @@ namespace SF {
 			if (pNewBuffer == nullptr)
 				return ResultCode::OUT_OF_MEMORY;
 
-			Array<DataType>::SetBuffPtr(szNewSize, pNewBuffer);
+			if (super::GetPreserveDataOnResize() && super::data() != pNewBuffer)
+			{
+				for (size_t iData = 0; iData < super::size(); iData++)
+					pNewBuffer[iData] = std::forward<DataType>(super::data()[iData]);
+			}
+			super::SetBuffPtr(szNewSize, pNewBuffer);
 
 			pOldBuffer = m_pAllocatedBuffer;
 			m_pAllocatedBuffer = pNewBuffer;
@@ -453,7 +464,12 @@ namespace SF {
 
 			CheckCtrMemory();
 
-			Array<DataType>::SetBuffPtr(szNewSize, pNewBuffer);
+			if (super::GetPreserveDataOnResize() && super::data() != pNewBuffer)
+			{
+				for (size_t iData = 0; iData < super::size(); iData++)
+					pNewBuffer[iData] = std::forward<DataType>(super::data()[iData]);
+			}
+			super::SetBuffPtr(szNewSize, pNewBuffer);
 
 			pOldBuffer = m_pAllocatedBuffer;
 			m_pAllocatedBuffer = pNewBuffer;
@@ -479,14 +495,14 @@ namespace SF {
 			SetLinkedBuffer(maxDataCount, dataCount, pDataPtr);
 		}
 
-		template< class DataType >
-		ArrayView<DataType>::ArrayView(size_t dataCount, DataType* pDataPtr)
-		{
-			SetLinkedBuffer(dataCount, dataCount, pDataPtr);
-		}
+		//template< class DataType >
+		//ArrayView<DataType>::ArrayView(size_t dataCount, DataType* pDataPtr)
+		//{
+		//	SetLinkedBuffer(dataCount, dataCount, pDataPtr);
+		//}
 
 		template< class DataType >
-		constexpr ArrayView<DataType>::ArrayView(size_t dataCount, const DataType* pDataPtr)
+		constexpr ArrayView<DataType>::ArrayView(size_t dataCount, DataType* pDataPtr)
 		{
 			SetLinkedBuffer(dataCount, pDataPtr);
 		}
@@ -499,14 +515,14 @@ namespace SF {
 		template< class DataType >
 		void ArrayView<DataType>::SetLinkedBuffer(size_t maxDataCount, size_t dataCount, DataType* pDataPtr)
 		{
-			Array<DataType>::SetBuffPtr(maxDataCount, pDataPtr);
+			Array<DataType>::SetBuffPtrConstexpr(maxDataCount, pDataPtr);
 			Array<DataType>::resize(dataCount);
 		}
 
 		template< class DataType >
-		constexpr void ArrayView<DataType>::SetLinkedBuffer(size_t dataCount, const DataType* pDataPtr)
+		constexpr void ArrayView<DataType>::SetLinkedBuffer(size_t dataCount, DataType* pDataPtr)
 		{
-			Array<DataType>::SetBuffPtr(dataCount, pDataPtr);
+			Array<DataType>::SetBuffPtrConstexpr(dataCount, pDataPtr);
 			Array<DataType>::resize(dataCount);
 		}
 

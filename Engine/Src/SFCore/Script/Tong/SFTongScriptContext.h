@@ -95,7 +95,7 @@ namespace SF
 		public:
 			struct PCInfo
 			{
-				const Array<uint8_t>* ByteCodeData = nullptr;
+				ArrayView<const uint8_t> ByteCodeData;
 				int32_t			CurrentPosition = 0;
 
 				PCInfo(void* pInitValue = nullptr) {}

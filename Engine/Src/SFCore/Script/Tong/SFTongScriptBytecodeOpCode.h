@@ -1229,7 +1229,7 @@ namespace SF
 					if (jump)
 					{
 						context.GetBytecodeContext().CurrentPosition = jumpAddr;
-						Assert(context.GetBytecodeContext().CurrentPosition > 0 && context.GetBytecodeContext().CurrentPosition < context.GetBytecodeContext().ByteCodeData->size())
+						Assert(context.GetBytecodeContext().CurrentPosition > 0 && context.GetBytecodeContext().CurrentPosition < context.GetBytecodeContext().ByteCodeData.size())
 					}
 
 					return ResultCode::SUCCESS;
@@ -1259,7 +1259,7 @@ namespace SF
 
 				virtual Result Execute(ScriptContext& context)  const override
 				{
-					context.GetBytecodeContext().CurrentPosition = (int)context.GetBytecodeContext().ByteCodeData->size();
+					context.GetBytecodeContext().CurrentPosition = (int)context.GetBytecodeContext().ByteCodeData.size();
 					return ResultCode::SUCCESS;
 				}
 			};

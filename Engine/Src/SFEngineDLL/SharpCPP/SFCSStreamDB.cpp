@@ -142,7 +142,7 @@ SFDLL_EXPORT int32_t StreamDBProducer_NativeSendRecord(intptr_t nativeHandle, in
 	if (pStreamInstance == nullptr)
 		return (int32_t)ResultCode::UNEXPECTED;
 
-	return (int32_t)pStreamInstance->SendRecord(ArrayView<uint8_t>(dataSize, data));
+	return (int32_t)pStreamInstance->SendRecord(ArrayView<const uint8_t>(dataSize, data));
 }
 
 SFDLL_EXPORT int32_t StreamDBProducer_NativeFlush(intptr_t nativeHandle)

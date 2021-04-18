@@ -32,7 +32,12 @@ namespace SF {
 	}
 
 	InputMemoryStream::InputMemoryStream(const Array<uint8_t>& memoryBuffer)
-		: m_Buffer(&memoryBuffer)
+		: m_BufferView(memoryBuffer.size(), memoryBuffer.data())
+	{
+	}
+
+	InputMemoryStream::InputMemoryStream(const Array<const uint8_t>& memoryBuffer)
+		: m_BufferView(memoryBuffer.size(), memoryBuffer.data())
 	{
 	}
 
@@ -69,21 +74,18 @@ namespace SF {
 
 	Result InputMemoryStream::Read(void* buffer, size_t readSize)
 	{
-		if (m_Buffer == nullptr)
-			return ResultCode::INVALID_STATE;
-
 		if (buffer == nullptr)
 			return ResultCode::INVALID_ARG;
 
 		if (readSize == 0)
 			return ResultCode::SUCCESS;
 
-		if (m_Buffer->size() <= m_Position)
+		if (m_BufferView.size() <= m_Position)
 			return ResultCode::END_OF_STREAM;
 
-		auto actualReadSize = std::min(m_Buffer->size() - m_Position, readSize);
+		auto actualReadSize = std::min(m_BufferView.size() - m_Position, readSize);
 
-		memcpy(buffer, m_Buffer->data() + m_Position, actualReadSize);
+		memcpy(buffer, m_BufferView.data() + m_Position, actualReadSize);
 		m_Position += actualReadSize;
 
 		return actualReadSize == readSize ? ResultCode::SUCCESS : ResultCode::END_OF_STREAM;

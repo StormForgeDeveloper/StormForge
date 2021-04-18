@@ -282,7 +282,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result StreamDBProducer::SendRecord(const Array<uint8_t>& data, int64_t timestamp)
+	Result StreamDBProducer::SendRecord(const Array<const uint8_t>& data, int64_t timestamp)
 	{
 		if (!m_Producer)
 			return ResultCode::NOT_INITIALIZED;
@@ -360,7 +360,7 @@ namespace SF
 	//
 
 	StreamDBConsumer::StreamMessageData::StreamMessageData(RdKafka::Message* messageData)
-		: ArrayView<uint8_t>(messageData->len(), reinterpret_cast<const uint8_t*>(messageData->payload()))
+		: ArrayView<const uint8_t>(messageData->len(), reinterpret_cast<const uint8_t*>(messageData->payload()))
 		, m_MessageData(messageData)
 	{
 	}

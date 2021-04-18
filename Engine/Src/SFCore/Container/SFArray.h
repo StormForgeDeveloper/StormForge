@@ -216,7 +216,7 @@ namespace SF {
 
 			// Update Data pointer
 			void SetBuffPtr(size_t AllocatedSize, DataType *pDataPtr);
-			constexpr void SetBuffPtr(size_t AllocatedSize, const DataType *pDataPtr);
+			constexpr void SetBuffPtrConstexpr(size_t AllocatedSize, DataType *pDataPtr);
 
 			// Called for reallocation
 			virtual Result IncreaseSize();
@@ -224,7 +224,7 @@ namespace SF {
 		public:
 			// Static buffer
 			Array();
-			constexpr Array(size_t allocatedSize, const DataType *pDataPtr);
+			constexpr Array(size_t allocatedSize, DataType *pDataPtr);
 
 			template<size_t dataCount>
 			constexpr Array(const DataTypeDecay pDataPtr[dataCount])
@@ -334,7 +334,8 @@ namespace SF {
 			}
 
 			// copy operator
-			Array<DataType>& operator = (const Array<DataType>& src);
+			Array<DataType>& operator = (const Array<std::decay_t<DataType>>& src);
+			Array<DataType>& operator = (const Array<const std::decay_t<DataType>>& src);
 		};
 
 
@@ -392,7 +393,8 @@ namespace SF {
 			virtual Result reserve(size_t szReserv);
 
 			// copy operator
-			DynamicArray<DataType>& operator = (const Array<DataType>& src) { Array<DataType>::operator = (src); return *this; }
+			DynamicArray<DataType>& operator = (const Array<std::decay_t<DataType>>& src) { Array<DataType>::operator = (src); return *this; }
+			DynamicArray<DataType>& operator = (const Array<const std::decay_t<DataType>>& src) { Array<DataType>::operator = (src); return *this; }
 		};
 
 
@@ -409,8 +411,8 @@ namespace SF {
 		public:
 			ArrayView();
 			ArrayView(uint maxDataCount, uint dataCount, DataType* pDataPtr);
-			ArrayView(size_t dataCount, DataType* pDataPtr);
-			constexpr ArrayView(size_t dataCount, const DataType* pDataPtr);
+			//ArrayView(size_t dataCount, DataType* pDataPtr);
+			constexpr ArrayView(size_t dataCount, DataType* pDataPtr);
 			template<size_t dataCount>
 			constexpr ArrayView(const DataType(&pDataPtr)[dataCount])
 			{
@@ -420,7 +422,7 @@ namespace SF {
 			virtual ~ArrayView();
 
 			void SetLinkedBuffer(size_t maxDataCount, size_t dataCount, DataType* pDataPtr);
-			constexpr void SetLinkedBuffer(size_t dataCount, const DataType* pDataPtr);
+			constexpr void SetLinkedBuffer(size_t dataCount, DataType* pDataPtr);
 			void SetLinkedBuffer(const Array<DataType>& srcLink);
 
 			Result reserve(size_t szReserv) override;

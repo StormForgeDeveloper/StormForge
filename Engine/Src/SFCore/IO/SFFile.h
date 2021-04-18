@@ -88,7 +88,7 @@ namespace SF {
 				, FileOpenMode(fileOpenMode)
 				, Buffer(memoryManager)
 				, OutputStream(Buffer)
-				, InputStream(Buffer)
+				, InputStream(ArrayView<const uint8_t>(Buffer.size(), Buffer.data()))
 			{
 				memset(&AIOBuffer, 0, sizeof(AIOBuffer));
 				InitAIO();

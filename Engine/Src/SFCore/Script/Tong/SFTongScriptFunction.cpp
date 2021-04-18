@@ -38,7 +38,7 @@ namespace SF
 		{
 		}
 
-		ScriptFunction::ScriptFunction(IHeap& heap, ScriptEnvironment* pEnv, const Array<ParameterInfo>& parameterList, const Array<uint8_t>& byteCode)
+		ScriptFunction::ScriptFunction(IHeap& heap, ScriptEnvironment* pEnv, const Array<ParameterInfo>& parameterList, const Array<const uint8_t>& byteCode)
 			: SF::ScriptFunction(pEnv)
 			, m_ParameterList(GetEnvironment()->GetHeap())
 			, m_ByteCode(GetEnvironment()->GetHeap())
@@ -54,7 +54,7 @@ namespace SF
 
 
 		// Set byte code, binary
-		Result ScriptFunction::SetBytecode(const Array<uint8_t>& byteCode)
+		Result ScriptFunction::SetBytecode(const Array<const uint8_t>& byteCode)
 		{
 			m_ByteCode = byteCode;
 
