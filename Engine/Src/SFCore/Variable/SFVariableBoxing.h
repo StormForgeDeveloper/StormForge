@@ -26,14 +26,14 @@ namespace SF {
 	//
 	// VariableBox 
 	// 
-	class SF_DECLARE_ALIGN_DOUBLE VariableBox
+	class VariableBox
 	{
 	public:
 		// assuming all values can be contained in 32 bytes
 		static constexpr int BUFFER_SIZE = 32;
 
 	private:
-		SF_DECLARE_ALIGN_DOUBLE StaticArray<uint8_t, BUFFER_SIZE> m_DataBuffer;
+		StaticArray<uint8_t, BUFFER_SIZE> m_DataBuffer;
 
 		Variable* m_pVariable = nullptr;
 

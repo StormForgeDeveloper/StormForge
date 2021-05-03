@@ -156,7 +156,7 @@ namespace SF {
 	MemBlockHdr* STDMemoryManager::AllocInternal(size_t size, size_t alignment)
 	{
 		if (alignment == 0)
-			alignment = sizeof(int);
+			alignment = SF_ALIGN_DOUBLE;
 
 		// Adjust allocation size for header
 		// +1 for reverse offset
@@ -166,7 +166,7 @@ namespace SF {
 
 		MemBlockHdr* pMemBlock;
 		pMemBlock = (MemBlockHdr*)SystemAllignedAlloc(allocSize, alignment);
-
+		assert((intptr_t(pMemBlock) % alignment) == 0);
 		AddAllocSize(size);
 
 		pMemBlock->InitHeader(this, (uint32_t)size, MemBlockHdr::GetHeaderSize());

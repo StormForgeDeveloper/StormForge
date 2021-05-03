@@ -98,7 +98,7 @@ namespace SF {
 		// Internal - Do not access
 
 		// Interface for raw allocation. If the implementation requires custom memory header, the memory header size should be included in the request size
-		virtual MemBlockHdr* AllocInternal(size_t size, size_t alignment);
+		virtual MemBlockHdr* AllocInternal(size_t size, size_t alignment = SF_ALIGN_DOUBLE);
 		virtual MemBlockHdr* ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment);
 		virtual void FreeInternal(MemBlockHdr* ptr);
 
