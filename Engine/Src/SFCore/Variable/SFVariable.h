@@ -149,7 +149,7 @@ namespace SF {
 	//
 
 	template<class ValueType>
-	class VariableByBinaryValue : public Variable
+	class SF_DECLARE_ALIGN_DOUBLE VariableByBinaryValue : public Variable
 	{
 	public:
 		typedef std::decay_t<ValueType> ValueTypeDecay;

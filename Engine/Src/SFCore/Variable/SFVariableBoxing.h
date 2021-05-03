@@ -26,7 +26,7 @@ namespace SF {
 	//
 	// VariableBox 
 	// 
-	class VariableBox
+	class SF_DECLARE_ALIGN_DOUBLE VariableBox
 	{
 	public:
 		// assuming all values can be contained in 32 bytes
