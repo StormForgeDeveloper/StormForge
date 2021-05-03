@@ -33,7 +33,7 @@ namespace SF {
 		static constexpr int BUFFER_SIZE = 32;
 
 	private:
-		StaticArray<uint8_t, BUFFER_SIZE> m_DataBuffer;
+		SF_DECLARE_ALIGN_DOUBLE StaticArray<uint8_t, BUFFER_SIZE> m_DataBuffer;
 
 		Variable* m_pVariable = nullptr;
 
