@@ -156,7 +156,7 @@ namespace SF {
 
 
 	private:
-		ValueTypeDecay m_Value;
+		SF_DECLARE_ALIGN_DOUBLE ValueTypeDecay m_Value;
 
 	public:
 		VariableByBinaryValue()
