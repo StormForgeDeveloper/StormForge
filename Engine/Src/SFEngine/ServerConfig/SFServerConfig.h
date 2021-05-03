@@ -271,6 +271,8 @@ namespace SF
 			String LogFilePath;
 			String LogServer;
 
+			String DataPath;
+
 			GenericServer* MonitoringServer{};
 			DynamicArray<DBCluster*> DBClusters;
 			DynamicArray<DBInstance*> DBInstances;

@@ -52,7 +52,7 @@
 
 
 // TODO: need to detect for other platform
-// define sse flagss
+// define SSE flags
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 #	if defined(__x86_64__) || defined(_M_X64) || defined(_M_IX86) || defined(__i386__)
 	#define SF_SIMD_SSE
@@ -65,6 +65,11 @@
 #	elif defined(__mips__ )
 #	else
 #   endif
+// if Linux or other system
+#elif defined(__clang__)
+#define SF_SIMD_SSE
+#define SF_SIMD_SSE42
+#define SF_SIMD_AVX
 #endif
 
 

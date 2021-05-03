@@ -13,9 +13,9 @@
 
 
 
-#if __GNUC__ || SF_PLATFORM == SF_PLATFORM_IOS
+#if defined(__GNUC__) || defined(__clang__) || SF_PLATFORM == SF_PLATFORM_IOS
 
-#define SF_FORCEINLINE __attribute__((always_inline))
+#define SF_FORCEINLINE inline __attribute__((always_inline))
 //#define SF_STDCALL __attribute__((stdcall))
 #define SF_STDCALL 
 #define SF_FASTCALL __attribute__((fastcall))

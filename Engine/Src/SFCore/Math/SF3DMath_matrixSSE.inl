@@ -682,7 +682,7 @@ namespace SF
 	// we use __m128 to represent 2x2 matrix as A = | A0  A1 |
 	//                                              | A2  A3 |
 	// 2x2 row major Matrix multiply A*B
-	__forceinline __m128 _Mat2Mul(__m128 vec1, __m128 vec2)
+	SF_FORCEINLINE __m128 _Mat2Mul(__m128 vec1, __m128 vec2)
 	{
 		return _mm_add_ps(
 			_mm_mul_ps(vec1, _SF_SWIZZLE(vec2, 3, 3, 0,0)),
@@ -691,7 +691,7 @@ namespace SF
 	}
 
 	// 2x2 column major Matrix adjugate multiply (A#)*B
-	__forceinline __m128 _Mat2AdjMul(__m128 vec1, __m128 vec2)
+	SF_FORCEINLINE __m128 _Mat2AdjMul(__m128 vec1, __m128 vec2)
 	{
 		return _mm_sub_ps(
 			_mm_mul_ps(_SF_SWIZZLE(vec1, 0, 3, 0, 3), vec2),
@@ -700,7 +700,7 @@ namespace SF
 
 	}
 	// 2x2 column major Matrix multiply adjugate A*(B#)
-	__forceinline __m128 _Mat2MulAdj(__m128 vec1, __m128 vec2)
+	SF_FORCEINLINE __m128 _Mat2MulAdj(__m128 vec1, __m128 vec2)
 	{
 		return _mm_sub_ps(
 			_mm_mul_ps(vec1, _SF_SWIZZLE(vec2, 0, 0, 3, 3)),

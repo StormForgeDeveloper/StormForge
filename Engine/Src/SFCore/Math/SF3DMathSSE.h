@@ -17,6 +17,10 @@
 
 #ifdef SF_SIMD_SSE
 
+#include <xmmintrin.h>
+#ifdef SF_SIMD_AVX
+#include <immintrin.h>
+#endif
 
 namespace SF {
 
@@ -35,9 +39,13 @@ namespace SF {
 	#define _SF_SWIZZLE1(vec, x)                _mm_shuffle_ps(vec, vec, _MM_SHUFFLE(x,x,x,x))
 
 	// special swizzle
+	// xyxy
 	#define _SF_SWIZZLE_0101(vec)               _mm_movelh_ps(vec, vec)
+	// zwzw
 	#define _SF_SWIZZLE_2323(vec)               _mm_movehl_ps(vec, vec)
+	// xxzz
 	#define _SF_SWIZZLE_0022(vec)               _mm_moveldup_ps(vec)
+	// yyww
 	#define _SF_SWIZZLE_1133(vec)               _mm_movehdup_ps(vec)
 
 	// return (vec1[x], vec1[y], vec2[z], vec2[w])
@@ -47,14 +55,11 @@ namespace SF {
 	#define _SF_SHUFFLE_2323(vec1, vec2)        _mm_movehl_ps(vec2, vec1)
 
 	// Shuffling 4 vectors
-	#define _SF_SHUFFLE4(w,z,y,x,iw,iz,iy,ix) \
-			_mm_shuffle_ps\
-			(\
-				_mm_shuffle_ps(x, y, _MM_SHUFFLE(iy, iy, ix, ix)),\
-				_mm_shuffle_ps(z, w, _MM_SHUFFLE(iw, iw, iz, iz)),\
-				_MM_SHUFFLE(2, 0, 2, 0)\
-			)\
-
+	#define _SF_SHUFFLE4(w,z,y,x,iw,iz,iy,ix) _mm_shuffle_ps(\
+												_mm_shuffle_ps(x, y, _MM_SHUFFLE(iy, iy, ix, ix)),\
+												_mm_shuffle_ps(z, w, _MM_SHUFFLE(iw, iw, iz, iz)),\
+												_MM_SHUFFLE(2, 0, 2, 0)\
+											)
 
 
 
@@ -158,7 +163,17 @@ namespace SF {
 	}; //struct Vector4SSE
 
 
-
+	// Determinant 2X2
+	//| v.x v.z |
+	//| v.y v.w |
+	inline float Determinent2x2SSE(__m128 v)
+	{
+		__m128 vwwyy = _SF_SWIZZLE(v, 1,1,3,3);
+		__m128 v1 = _mm_mul_ps(v, vwwyy); // (x*w, y*w, z*y, w*y)
+		__m128 v2 = _SF_SWIZZLE_2323(v1); // (z*y, w*y, z*y, w*y)
+		return _mm_cvtss_f32(_mm_sub_ps(v1, v2));
+		//return v.x * v.w - v.y * v.z;
+	}
 
 
 

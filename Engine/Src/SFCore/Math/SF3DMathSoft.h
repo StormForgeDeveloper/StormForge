@@ -25,6 +25,8 @@ namespace SF {
 	template<class T> struct Matrix4Soft;
 	template<class T> struct QuaternionSoft;
 
+	template<class T>
+	T Determinent2x2(T a1, T a2, T b1, T b2);
 
 
 	template<class T>
@@ -46,6 +48,15 @@ namespace SF {
 		Vector2Soft<T> operator/(const Vector2Soft & op) const;
 		Vector2Soft<T> operator-(const Vector2Soft & op) const;
 		Vector2Soft<T> operator+(const Vector2Soft & op) const;
+
+		Vector2Soft<T> operator*(const T& scala)
+		{
+			return Vector2Soft<T>(x* scala, y* scala);
+		}
+		Vector2Soft<T> operator/(const T& scala)
+		{
+			return Vector2Soft<T>(x / scala, y / scala);
+		}
 
 		Vector2Soft<T>& operator*=(const T & scala);
 		Vector2Soft<T>& operator/=(const T & scala);
@@ -255,6 +266,8 @@ namespace SF {
 
 
 
+
+
 	/////////////////////////////////////////////////////////////////
 	// Row first matrix
 	template<class T>
@@ -319,15 +332,12 @@ namespace SF {
 
 		Matrix3Soft<T> GetInvert() const;
 		Matrix3Soft<T>& Invert();
+		Matrix3Soft<T> GetInvertNoScale();
 
-
-		Matrix3Soft<T> GetTranspose();
+		Matrix3Soft<T> GetTranspose() const;
 		Matrix3Soft<T>& Transpose();
 
-		T GetDeterminent();
-
-		Matrix3Soft<T> GetInvert();
-		Matrix3Soft<T> GetInvertNoScale();
+		T GetDeterminent() const;
 
 		T* GetValues() { return Elements; }
 		const T* GetValues() const { return Elements; }
@@ -336,6 +346,7 @@ namespace SF {
 
 		// Data elements
 		union {
+			// NOTE: Same row placed at column direction
 			struct {
 				T a00, a10, a20;
 				T a01, a11, a21;
@@ -552,6 +563,7 @@ namespace SF {
 
 		// Data elements, 
 		union {
+			// NOTE: Same row placed at column direction
 			Vector4Soft<T> Vec[4];
 			struct {
 				float a00, a10, a20, a30;

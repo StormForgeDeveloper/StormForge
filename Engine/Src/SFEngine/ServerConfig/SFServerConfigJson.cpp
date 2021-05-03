@@ -392,6 +392,9 @@ namespace SF
 		auto logServer = rootObject.get("LogServer", Json::Value(""));
 		pServer->LogServer = logServer.asCString();
 
+		auto dataPath = rootObject.get("DataPath", Json::Value(""));
+		pServer->DataPath = dataPath.asCString();
+
 		result = LoadDBInstances(rootObject, pServer->DBInstances);
 		if (!result)
 			return result;

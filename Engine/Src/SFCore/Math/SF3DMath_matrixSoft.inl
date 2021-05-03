@@ -322,30 +322,65 @@ namespace SF
 	}
 
 
+	//template<class T>
+	//inline Matrix3Soft<T> Matrix3Soft<T>::GetInvert() const
+	//{
+	//	Matrix3Soft<T> B;
+	//	T det, invDet;
+
+	//	B.a00 = (a11 * a22 - a21 * a12);
+	//	B.a10 = -(a10 * a22 - a20 * a12);
+	//	B.a20 = (a10 * a21 - a20 * a11);
+	//	B.a01 = -(a01 * a22 - a21 * a02);
+	//	B.a11 = (a00 * a22 - a20 * a02);
+	//	B.a21 = -(a00 * a21 - a20 * a01);
+	//	B.a02 = (a01 * a12 - a11 * a02);
+	//	B.a12 = -(a00 * a12 - a10 * a02);
+	//	B.a22 = (a00 * a11 - a10 * a01);
+
+	//	det = (a00 * B.a00) + (a01 * B.a10) + (a02 * B.a20);
+
+	//	invDet = T(1) / det;
+
+	//	B.a00 *= invDet; B.a01 *= invDet; B.a02 *= invDet;
+	//	B.a10 *= invDet; B.a11 *= invDet; B.a12 *= invDet;
+	//	B.a20 *= invDet; B.a21 *= invDet; B.a22 *= invDet;
+	//	return B;
+	//}
+
+	// Determinant
+	//| a1 a2 |
+	//| b1 b2 |
+	template<class T>
+	inline T Determinent2x2(T a1, T a2, T b1, T b2)
+	{
+		return a1 * b2 - b1 * a2;
+	}
+
+
+	// Determinant
+	template<class T>
+	inline T Matrix3Soft<T>::GetDeterminent() const
+	{
+		return a00 * Determinent2x2(a11, a12, a21, a22) - a10 * Determinent2x2(a01, a02, a21, a22) + a20 * Determinent2x2(a01, a02, a11, a12);
+	}
+
 	template<class T>
 	inline Matrix3Soft<T> Matrix3Soft<T>::GetInvert() const
 	{
-		Matrix3Soft<T> B;
-		T det, invDet;
+		Matrix3Soft<T> B = *this;
+		return B.Invert();
+	}
 
-		B.a00 = (a11 * a22 - a21 * a12);
-		B.a10 = -(a10 * a22 - a20 * a12);
-		B.a20 = (a10 * a21 - a20 * a11);
-		B.a01 = -(a01 * a22 - a21 * a02);
-		B.a11 = (a00 * a22 - a20 * a02);
-		B.a21 = -(a00 * a21 - a20 * a01);
-		B.a02 = (a01 * a12 - a11 * a02);
-		B.a12 = -(a00 * a12 - a10 * a02);
-		B.a22 = (a00 * a11 - a10 * a01);
-
-		det = (a00 * B.a00) + (a01 * B.a10) + (a02 * B.a20);
-
-		invDet = T(1) / det;
-
-		B.a00 *= invDet; B.a01 *= invDet; B.a02 *= invDet;
-		B.a10 *= invDet; B.a11 *= invDet; B.a12 *= invDet;
-		B.a20 *= invDet; B.a21 *= invDet; B.a22 *= invDet;
-		return B;
+	// Invert transform matrix without scale
+	template<class T>
+	inline Matrix3Soft<T> Matrix3Soft<T>::GetInvertNoScale()
+	{
+		return Matrix3Soft<T>(
+			a00, a01, a02,
+			a10, a11, a12,
+			a20, a21, a22
+			);
 	}
 
 
@@ -353,31 +388,36 @@ namespace SF
 	inline Matrix3Soft<T>& Matrix3Soft<T>::Invert()
 	{
 		Matrix3Soft<T> B;
-		T det, invDet;
 
-		B.a00 = (a11 * a22 - a21 * a12);
-		B.a10 = -(a10 * a22 - a20 * a12);
-		B.a20 = (a10 * a21 - a20 * a11);
-		B.a01 = -(a01 * a22 - a21 * a02);
-		B.a11 = (a00 * a22 - a20 * a02);
-		B.a21 = -(a00 * a21 - a20 * a01);
-		B.a02 = (a01 * a12 - a11 * a02);
-		B.a12 = -(a00 * a12 - a10 * a02);
-		B.a22 = (a00 * a11 - a10 * a01);
+		B.a00 = Determinent2x2(a11, a12, a21, a22);
+		B.a01 = -Determinent2x2(a01, a02, a21, a22);
+		B.a02 = Determinent2x2(a01, a02, a11, a12);
 
-		det = (a00 * B.a00) + (a01 * B.a10) + (a02 * B.a20);
+		auto det = (a00 * B.a00) + (a10 * B.a01) + (a20 * B.a02);
+		if (det < C_EPSILON)
+		{
+			assert(false);
+			B.InitIdentity();
+			return *this;
+		}
 
-		invDet = T(1) / det;
+		B.a10 = -Determinent2x2(a10, a12, a20, a22);
+		B.a11 = Determinent2x2(a00, a02, a20, a22);
+		B.a12 = -Determinent2x2(a00, a02, a10, a12);
 
-		a00 = B.a00 * invDet; a01 = B.a01 * invDet; a02 = B.a02 * invDet;
-		a10 = B.a10 * invDet; a11 = B.a11 * invDet; a12 = B.a12 * invDet;
-		a20 = B.a20 * invDet; a21 = B.a21 * invDet; a22 = B.a22 * invDet;
+		B.a20 = Determinent2x2(a10, a11, a20, a21);
+		B.a21 = -Determinent2x2(a00, a01, a20, a21);
+		B.a22 = Determinent2x2(a00, a01, a10, a11);
+
+		auto invDet = T(1) / det;
+
+		*this = B * invDet;
 		return *this;
 	}
 
 
 	template<class T>
-	inline Matrix3Soft<T> Matrix3Soft<T>::GetTranspose()
+	inline Matrix3Soft<T> Matrix3Soft<T>::GetTranspose() const
 	{
 		return Matrix3Soft<T>(
 			a00, a10, a20,
@@ -395,64 +435,6 @@ namespace SF
 		temp = a12; a12 = a21; a21 = temp;
 
 		return *this;
-	}
-
-	// Determinent
-	//| a1 a2 |
-	//| b1 b2 |
-	template<class T>
-	inline T Determinent2x2(T a1, T a2, T b1, T b2)
-	{
-		return a1 * b2 - b1 * a2;
-	}
-
-
-	// Determinent
-	template<class T>
-	inline T Matrix3Soft<T>::GetDeterminent()
-	{
-		return a00 * Determinent2x2(a11, a12, a21, a22) - a10 * Determinent2x2(a01, a02, a21, a22) + a20 * Determinent2x2(a01, a02, a11, a12);
-	}
-
-	template<class T>
-	inline Matrix3Soft<T> Matrix3Soft<T>::GetInvert()
-	{
-		Matrix3Soft<T> B;
-
-		B.a00 = Determinent2x2(a11, a12, a21, a22);
-		B.a01 = -Determinent2x2(a01, a02, a21, a22);
-		B.a02 = Determinent2x2(a01, a02, a11, a12);
-
-		auto det = (a00 * B.a00) + (a10 * B.a01) + (a20 * B.a02);
-		if (det < C_EPSILON)
-		{
-			assert(false);
-			B.InitIdentity();
-			return B;
-		}
-
-		B.a10 = -Determinent2x2(a10, a12, a20, a22);
-		B.a11 = Determinent2x2(a00, a02, a20, a22);
-		B.a12 = -Determinent2x2(a00, a02, a10, a12);
-
-		B.a20 = Determinent2x2(a10, a11, a20, a21);
-		B.a21 = -Determinent2x2(a00, a01, a20, a21);
-		B.a22 = Determinent2x2(a00, a01, a10, a11);
-
-		auto invDet = T(1) / det;
-
-		return B * invDet;
-	}
-
-	// Invert transform matrix without scale
-	template<class T>
-	inline Matrix3Soft<T> Matrix3Soft<T>::GetInvertNoScale()
-	{
-		return Matrix3Soft<T>(
-			a00, a01, a02, 
-			a10, a11, a12, 
-			a20, a21, a22
-			);
 	}
 
 
