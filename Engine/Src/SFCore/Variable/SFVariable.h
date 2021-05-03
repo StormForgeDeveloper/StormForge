@@ -186,7 +186,13 @@ namespace SF {
 
 		virtual Variable* Clone(Array<uint8_t>& buffer) const override
 		{
-			return new((void*)buffer.data()) VariableByBinaryValue<ValueType>(m_Value);
+			auto alignment = std::max(std::alignment_of_v<VariableByBinaryValue<ValueType>>, std::alignment_of_v<ValueType>);
+			// Some of our variable need alignment
+			auto pData = uintptr_t(buffer.data());
+			if ((pData % alignment) != 0)
+				pData = AlignUp(pData, alignment);
+
+			return new((void*)pData) VariableByBinaryValue<ValueType>(m_Value);
 		}
 
 		virtual Variable* Clone(IHeap& heap) const override

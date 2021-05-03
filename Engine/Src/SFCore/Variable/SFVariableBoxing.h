@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2018 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -26,11 +26,11 @@ namespace SF {
 	//
 	// VariableBox 
 	// 
-	class VariableBox
+	class SF_DECLARE_ALIGN_DOUBLE VariableBox
 	{
 	public:
-		// assuming all values can be contained in 32 bytes
-		static constexpr int BUFFER_SIZE = 32;
+		// assuming all values can be contained in 32 bytes and extra space for alignment
+		static constexpr int BUFFER_SIZE = 32 + SF_ALIGN_DOUBLE;
 
 	private:
 		StaticArray<uint8_t, BUFFER_SIZE> m_DataBuffer;
