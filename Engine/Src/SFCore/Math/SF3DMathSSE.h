@@ -472,7 +472,7 @@ namespace SF {
 #include "Math/SF3DMathSSE.inl"
 #include "Math/SF3DMath_vectorSSE.inl"
 #include "Math/SF3DMath_matrixSSE.inl"
-#include "Math/SF3DMath_QuaternionSSE.inl"
+#include "Math/SF3DMath_quaternionSSE.inl"
 
 #endif
 
