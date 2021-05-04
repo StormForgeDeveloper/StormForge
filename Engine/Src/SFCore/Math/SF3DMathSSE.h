@@ -12,6 +12,7 @@
 #pragma once
 
 #include "Math/SFMathConsts.h"
+#include "MemoryManager/SFMemory.h"
 #include "Math/SFMathUtil.h"
 
 
@@ -68,7 +69,7 @@ namespace SF {
 	//	SSE Vector4
 	//
 
-	struct Vector4SSE
+	struct SF_DECLARE_ALIGN_DOUBLE Vector4SSE
 	{
 		static const Vector4SSE& Zero() { static const Vector4SSE Value(0, 0, 0, 0); return Value; }
 		static const Vector4SSE& One() { static const Vector4SSE Value(1, 1, 1, 1); return Value; }
@@ -187,7 +188,7 @@ namespace SF {
 	//	Column major 
 	// right hand right vertex notation
 	//
-	struct Matrix4SSE
+	struct SF_DECLARE_ALIGN_DOUBLE Matrix4SSE
 	{
 		static const Matrix4SSE& Identity() { static const Matrix4SSE Value(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); return Value; }
 
@@ -375,7 +376,7 @@ namespace SF {
 	// QuaternionSSE
 	//
 
-	struct QuaternionSSE
+	struct SF_DECLARE_ALIGN_DOUBLE QuaternionSSE
 	{
 	public:
 		static const QuaternionSSE& Identity() { static const QuaternionSSE Value(0, 0, 0, 1); return Value; }

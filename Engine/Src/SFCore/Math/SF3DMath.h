@@ -43,7 +43,7 @@ namespace SF {
 
 	/////////////////////////////////////////////////////////////////
 	// Row first matrix. 
-	struct Matrix2
+	struct SF_DECLARE_ALIGN_DOUBLE Matrix2
 	{
 		using T = float;
 
