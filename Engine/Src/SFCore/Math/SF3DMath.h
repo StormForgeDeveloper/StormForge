@@ -55,6 +55,7 @@ namespace SF {
 		Matrix2(const T* array) { memcpy(Elements, array, sizeof(T) * 4); }
 		Matrix2(const Matrix2& M) { memcpy(Elements, M.Elements, sizeof(T) * 4); }
 
+		Matrix2& operator = (const Matrix2& src) { memcpy(Elements, src.Elements, sizeof(T) * 4); return *this; }
 
 		Matrix2& InitIdentity() {
 			a00 = 1; a10 = 0;
