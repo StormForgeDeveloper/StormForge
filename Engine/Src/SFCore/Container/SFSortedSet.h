@@ -100,9 +100,9 @@ namespace SF {
 
 	public:
 
-		//SortedSet(IHeap& memoryManager);
-		SortedSet(IHeap& memoryManager, int initialCapacity = 0, int increaseSize = 16);
-		SortedSet(IHeap& memoryManager, int bufferSize, uint8_t* buffer);
+		SortedSet();
+		SortedSet(IHeap& heap, int initialCapacity = 0, int increaseSize = 16);
+		SortedSet(IHeap& heap, int bufferSize, uint8_t* buffer);
 		~SortedSet();
 
 		void SetIncreaseSize(int newSize) { m_IncreaseSize = newSize; }

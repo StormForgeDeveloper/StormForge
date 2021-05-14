@@ -244,7 +244,20 @@ namespace SF {
 		Vector4Soft<T> CrossRaw(const Vector4Soft<T>& op) const { return Vector4Soft<T>(y * op.z - z * op.y, z * op.x - x * op.z, x * op.y - y * op.x, 1); }
 
 
+		Vector4Soft<T>& SwapLH()
+		{
+			std::swap(x, z);
+			std::swap(y, w);
+			return *this;
+		}
+
 		Vector4Soft<T>& MAdd(const T & scala);
+
+		float GetX() const { return x; }
+		float GetY() const { return y; }
+		float GetZ() const { return z; }
+		float GetW() const { return w; }
+
 
 
 		T & operator[](int i) { return Elements[i]; }

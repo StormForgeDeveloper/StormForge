@@ -138,8 +138,19 @@ namespace SF {
 
 
 		template<class KeyType>
-		SortedSet<KeyType>::SortedSet(IHeap& memoryManager, int initialCapacity, int increaseSize)
-			: m_Heap(memoryManager)
+		SortedSet<KeyType>::SortedSet()
+			: m_Heap(GetSystemHeap())
+			, m_ExternalBuffer(false)
+			, m_ItemCount(0)
+			, m_IncreaseSize(16)
+			, m_AllocatedItemCount(0)
+			, m_KeyArray(nullptr)
+		{
+		}
+
+		template<class KeyType>
+		SortedSet<KeyType>::SortedSet(IHeap& heap, int initialCapacity, int increaseSize)
+			: m_Heap(heap)
 			, m_ExternalBuffer(false)
 			, m_ItemCount(0)
 			, m_IncreaseSize(increaseSize)
@@ -153,8 +164,8 @@ namespace SF {
 		}
 
 		template<class KeyType>
-		SortedSet<KeyType>::SortedSet(IHeap& memoryManager, int bufferSize, uint8_t* buffer)
-			: m_Heap(memoryManager)
+		SortedSet<KeyType>::SortedSet(IHeap& heap, int bufferSize, uint8_t* buffer)
+			: m_Heap(heap)
 			, m_ExternalBuffer(true)
 			, m_ItemCount(0)
 			, m_IncreaseSize(0)

@@ -105,6 +105,12 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		void SortedMap<KeyType, ValueType>::ClearMap()
 		{
+			Reset();
+		}
+
+		template<class KeyType, class ValueType>
+		void SortedMap<KeyType, ValueType>::Reset()
+		{
 			MapNode* pCurNode = m_Root;
 			std::queue<MapNode*> mapNodes;
 

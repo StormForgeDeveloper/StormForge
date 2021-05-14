@@ -246,6 +246,7 @@ namespace SF {
 
 			// Clear array, buffer size not reallocated, buffer data didn't erased, clear manually if need
 			inline void Clear();
+			void Reset() { Clear(); };
 
 			// PreserveDataOnResize
 			inline bool GetPreserveDataOnResize() const;

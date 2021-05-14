@@ -179,6 +179,7 @@ namespace SF {
 			IHeap& GetHeap() { return m_Heap; }
 
 			void ClearMap();
+			void Reset();
 
 			// Insert a key
 			Result Insert(KeyType key, const ValueType& value, int64_t *insertedOrder = nullptr);

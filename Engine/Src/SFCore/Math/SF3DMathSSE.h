@@ -141,9 +141,18 @@ namespace SF {
 		// Same to Cross but leave w as garbage
 		Vector4SSE CrossRaw(const Vector4SSE& op) const;
 
-
+		Vector4SSE& SwapLH()
+		{
+			Packed = _SF_SWIZZLE(Packed, 1, 0, 3, 2);
+			return *this;
+		}
 		Vector4SSE& MAdd(const float & scala);
 
+		// simd friendly access
+		float GetX() const { return _mm_cvtss_f32(Packed); }
+		float GetY() const { return _mm_cvtss_f32(_SF_SWIZZLE(Packed, 1, 1, 1, 1)); }
+		float GetZ() const { return _mm_cvtss_f32(_SF_SWIZZLE(Packed, 2, 2, 2, 2)); }
+		float GetW() const { return _mm_cvtss_f32(_SF_SWIZZLE(Packed, 3, 3, 3, 3)); }
 
 		float & operator[](int i) { return Elements[i]; }
 		const float& operator[](int i) const { return Elements[i]; }
