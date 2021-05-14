@@ -316,6 +316,13 @@ namespace SF {
 			size_t size() const { return m_ReadItemCount; }
 			SynchronizeCounterType GetWriteItemCount() const { return m_ItemCount.load(std::memory_order_relaxed); }
 
+
+			template<class Func>
+			Result ForeachOrder(int startOrderIndex, uint count, Func functor) const
+			{
+				return const_cast<DualSortedMap*>(this)->ForeachOrder(startOrderIndex, count, functor);
+			}
+
 			// enumerate the values
 			template<class Func>
 			Result ForeachOrder(INT startOrderIndex, uint count, const Func& functor)

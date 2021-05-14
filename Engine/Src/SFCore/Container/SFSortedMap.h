@@ -192,7 +192,13 @@ namespace SF {
 			Result FindInWriteTree(KeyType key, ValueType& value) { return Find(key, value); }
 
 			// get number of values
-			size_t size() { return (size_t)m_ItemCount; }
+			size_t size() const { return (size_t)m_ItemCount; }
+
+			template<class Func>
+			Result ForeachOrder(int startOrderIndex, uint count, Func functor) const
+			{
+				return const_cast<SortedMap*>(this)->ForeachOrder(startOrderIndex, count, functor);
+			}
 
 			// enumerate the values
 			//Result ForeachOrder(int startOrderIndex, uint count, const std::function<bool(const KeyType&, const ValueType&)>& functor);
