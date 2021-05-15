@@ -402,7 +402,7 @@ namespace SF
 
 		void TGASwapBGRA2RGBA(uint8_t  *dest, size_t  destSize, const uint8_t  *src, size_t  srcSize)
 		{
-			auto copySize = Util::Min(destSize, srcSize);
+			auto copySize = Math::Min(destSize, srcSize);
 			for (unsigned curPos = 0; curPos < copySize; curPos+=4)
 			{
 				auto b = src[curPos + 0];

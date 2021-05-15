@@ -47,7 +47,7 @@ namespace Net {
 	Result ServerTCP::MySocketIOAdapter::PendingAccept()
 	{
 		Result hr = ResultCode::SUCCESS;
-		uint iMaxAccept = Util::Max((uint)Const::TCP_ACCEPT_PENDING_MAX, (uint)1);
+		uint iMaxAccept = Math::Max((uint)Const::TCP_ACCEPT_PENDING_MAX, (uint)1);
 
 		// skip if not accept mode
 		if (!NetSystem::IsProactorSystem() || !m_Owner.GetIsEnableAccept())

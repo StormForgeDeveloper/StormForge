@@ -1012,7 +1012,7 @@ namespace SF
 		SFLog(Net, Debug, "OnlineClient:OnPlayerMovement, playerId:{0}, serverFrame:{1:X}, move:{2}", playerId, m_ServerMoveFrame, newMove);
 
 		// adjust move frame
-		m_ServerMoveFrame = Util::Max(m_ServerMoveFrame, newMove.MoveFrame);
+		m_ServerMoveFrame = Math::Max(m_ServerMoveFrame, newMove.MoveFrame);
 
 		SharedPointerT<ReceivedMovementMnager> movement;
 		if (!m_IncomingMovements.Find(playerId, movement))

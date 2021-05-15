@@ -669,7 +669,7 @@ namespace Net {
 		// Send guaranteed message process
 		CounterType NumProc = sendWindow.GetAvailableSize();
 		CounterType uiNumPacket = sendGuaQueue.size();
-		NumProc = Util::Min(NumProc, uiNumPacket);
+		NumProc = Math::Min(NumProc, uiNumPacket);
 		for (CounterType uiPacket = 0; uiPacket < NumProc; uiPacket++)
 		{
 			if (!sendGuaQueue.Dequeue(pIMsg))
@@ -727,7 +727,7 @@ namespace Net {
 
 		// Guaranteed retry
 		//MutexScopeLock localLock(sendWindow.GetLock());// until ReleaseMsg( uint16_t uiSequence ) is thread safe, we need to lock the window
-		uint uiMaxProcess = Util::Min(sendWindow.GetMsgCount(), GetConnection()->GetMaxGuarantedRetryAtOnce());
+		uint uiMaxProcess = Math::Min(sendWindow.GetMsgCount(), GetConnection()->GetMaxGuarantedRetryAtOnce());
 		for (uint uiIdx = 0, uiMsgProcessed = 0; uiIdx < (uint)sendWindow.GetAcceptableSequenceRange() && uiMsgProcessed < uiMaxProcess; uiIdx++)
 		{
 			if (!sendWindow.GetAt(uiIdx, pMessageElement))

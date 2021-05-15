@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -93,15 +93,6 @@ namespace Util {
 	template<class ValueType>
 	Result SafeDelete( ValueType* &pObj );
 
-
-	template<class ValueType>
-	constexpr ValueType Min( ValueType Objmin, ValueType Objmax );
-
-	template<class ValueType>
-	constexpr ValueType Max( ValueType Objmin, ValueType Objmax );
-
-	template<class ValType>
-	constexpr ValType Abs( ValType value );
 
 	// Peek key from console
 	//Result PeekKey( int &inputKey, NativeHandle hConsole = INVALID_NATIVE_HANDLE_VALUE);

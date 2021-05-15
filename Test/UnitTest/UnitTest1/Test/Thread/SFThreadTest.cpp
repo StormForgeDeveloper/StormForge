@@ -160,7 +160,7 @@ public:
 				}
 				else
 				{
-					auto randVal2 = Util::Max(randVal, (unsigned)50);
+					auto randVal2 = Math::Max(randVal, (unsigned)50);
 					for (unsigned int iRand = 0; iRand < randVal; iRand++)
 					{
 						randVal2 += Util::Random.Rand(100);

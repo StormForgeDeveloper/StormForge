@@ -106,7 +106,7 @@ namespace SF
 
 		void Func_JPG_Convert_Gray(uint8_t* destRowData, size_t destSize, const uint8_t* srcRowData, size_t srcSize)
 		{
-			auto copySize = Util::Min(destSize, srcSize);
+			auto copySize = Math::Min(destSize, srcSize);
 			memcpy(destRowData, srcRowData, copySize);
 		}
 
@@ -124,13 +124,13 @@ namespace SF
 
 		void Func_JPG_Convert_RGB(uint8_t* destRowData, size_t destSize, const uint8_t* srcRowData, size_t srcSize)
 		{
-			auto copySize = Util::Min(destSize, srcSize);
+			auto copySize = Math::Min(destSize, srcSize);
 			memcpy(destRowData, srcRowData, copySize);
 		}
 
 		void Func_JPG_Convert_RGBA(uint8_t* destRowData, size_t destSize, const uint8_t* srcRowData, size_t srcSize)
 		{
-			auto copySize = Util::Min(destSize, srcSize);
+			auto copySize = Math::Min(destSize, srcSize);
 			memcpy(destRowData, srcRowData, copySize);
 		}
 

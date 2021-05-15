@@ -16,7 +16,7 @@
 #include "Stream/SFCompressedStream.h"
 #include "Util/SFUtility.h"
 #include "zlib.h"
-
+#include "Math/SFMathUtil.h"
 
 
 namespace SF {
@@ -86,7 +86,7 @@ namespace SF {
 
 		while (offset > 0)
 		{
-			auto readSize = Util::Min(offset, (int64_t)sizeof(decompressBuffer));
+			auto readSize = Math::Min(offset, (int64_t)sizeof(decompressBuffer));
 			Read(decompressBuffer, static_cast<size_t>(readSize));
 			offset -= readSize;
 		}

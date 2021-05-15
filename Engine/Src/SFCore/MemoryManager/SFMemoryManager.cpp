@@ -212,7 +212,7 @@ namespace SF {
 			oldPtr->Deinit();
 
 			if (oldPtr != nullptr)
-				memcpy(newPtr2, oldPtr, Util::Min(allocSize, MemBlockHdr::CalculateAllocationSize(orgSize, alignment)));
+				memcpy(newPtr2, oldPtr, Math::Min(allocSize, MemBlockHdr::CalculateAllocationSize(orgSize, alignment)));
 
 			SystemAlignedFree(oldPtr);
 			newPtr = newPtr2;

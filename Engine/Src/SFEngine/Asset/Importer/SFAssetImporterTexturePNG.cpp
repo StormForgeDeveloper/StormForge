@@ -169,7 +169,7 @@ namespace SF
 		void Func_png_Convert_Gray8(const uint8_t* palette, uint8_t* destRowData, size_t destSize, const uint8_t* srcRowData, size_t srcSize)
 		{
 			unused(palette);
-			auto copySize = Util::Min(destSize, srcSize);
+			auto copySize = Math::Min(destSize, srcSize);
 			memcpy(destRowData, srcRowData, copySize);
 		}
 
@@ -220,14 +220,14 @@ namespace SF
 		void Func_png_Convert_RGB(const uint8_t* palette, uint8_t* destRowData, size_t destSize, const uint8_t* srcRowData, size_t srcSize)
 		{
 			unused(palette);
-			auto copySize = Util::Min(destSize, srcSize);
+			auto copySize = Math::Min(destSize, srcSize);
 			memcpy(destRowData, srcRowData, copySize);
 		}
 
 		void Func_png_Convert_RGBA(const uint8_t* palette, uint8_t* destRowData, size_t destSize, const uint8_t* srcRowData, size_t srcSize)
 		{
 			unused(palette);
-			auto copySize = Util::Min(destSize, srcSize);
+			auto copySize = Math::Min(destSize, srcSize);
 			memcpy(destRowData, srcRowData, copySize);
 		}
 

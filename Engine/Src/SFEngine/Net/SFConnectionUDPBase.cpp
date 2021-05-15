@@ -294,7 +294,7 @@ namespace Net {
 
 		for (uint iSequence = 0; remainSize > 0; iSequence++)
 		{
-			auto frameSize = Util::Min(pMsgHeader->Length, (uint)Message::MAX_SUBFRAME_SIZE);
+			auto frameSize = Math::Min(pMsgHeader->Length, (uint)Message::MAX_SUBFRAME_SIZE);
 
 			MsgMobileNetCtrlSequenceFrame* pCurrentFrame = nullptr;
 
