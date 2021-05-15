@@ -141,7 +141,7 @@ namespace SF {
 		// Same to Cross but leave w as garbage
 		Vector4SSE CrossRaw(const Vector4SSE& op) const;
 
-		Vector4SSE& SwapLH()
+		Vector4SSE& SwapLHInline()
 		{
 			Packed = _SF_SWIZZLE(Packed, 1, 0, 3, 2);
 			return *this;
