@@ -146,27 +146,7 @@ namespace Util {
 
 	String Path::Combine(const String& strFilePath1, const char* strFilePath2, const char* strFilePath3)
 	{
-		if (strFilePath1.GetLength() == 0)
-			return String(strFilePath1.GetHeap(), strFilePath2);
-
-		if (strFilePath2 == nullptr)
-			return strFilePath1;
-
-		String result(strFilePath1.GetHeap());
-		result.Append(strFilePath1);
-		if (result.GetLength() > 0
-			&& result[result.GetLength() - 1] != DirectorySeparatorChar
-			&& strFilePath2[0] != DirectorySeparatorChar)
-			result.Append(DirectorySeparatorChar);
-
-		if (result.GetLength() > 0
-			&& result[strFilePath1.GetLength() - 1] != DirectorySeparatorChar
-			&& strFilePath3[0] != DirectorySeparatorChar)
-			result.Append(DirectorySeparatorChar);
-
-		result.Append(strFilePath2);
-
-		return result;
+		return Combine(Combine(strFilePath1, strFilePath2), strFilePath3);
 	}
 
 
