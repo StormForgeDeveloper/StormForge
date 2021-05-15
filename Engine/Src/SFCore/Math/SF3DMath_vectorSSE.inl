@@ -89,9 +89,9 @@ namespace SF
 	}
 
 	
-	inline Vector4SSE Vector4SSE::Abs() const
+	inline Vector4SSE Vector4SSE::GetAbs() const
 	{
-		return Vector4SSE((float)SF::abs(x), (float)SF::abs(y), (float)SF::abs(z), (float)SF::abs(w));
+		return Vector4SSE((float)Math::Abs(x), (float)Math::Abs(y), (float)Math::Abs(z), (float)Math::Abs(w));
 	}
 
 	inline float Vector4SSE::Dot4(const Vector4SSE& op) const

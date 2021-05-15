@@ -52,17 +52,17 @@ namespace SF {
 	inline double SF_RAD2DEG(double a)     { return ((a)* C_TO_DEG); }
 	inline double SF_DEG2RAD(double a)     { return ((a)* C_TO_RAD); }
 
-	template<class DataType>
-	inline DataType abs(DataType x)
-	{
-		return (DataType)(x < 0 ? -x : x);
-	}
+	//template<class DataType>
+	//inline DataType abs(DataType x)
+	//{
+	//	return (DataType)(x < 0 ? -x : x);
+	//}
 
-	template<>
-	inline unsigned int abs(unsigned int x)
-	{
-		return x;
-	}
+	//template<>
+	//inline unsigned int abs(unsigned int x)
+	//{
+	//	return x;
+	//}
 
 }
 

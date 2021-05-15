@@ -25,6 +25,24 @@ namespace SF
 		template<class Type>
 		inline Type Abs(Type value) { return value < 0 ? -value : value; }
 
+		template<>
+		inline unsigned int Abs(unsigned int x)
+		{
+			return x;
+		}
+
+		template<class ValueType>
+		constexpr ValueType Min(ValueType val1, ValueType val2)
+		{
+			return (((val1) < (val2)) ? (val1) : (val2));
+		}
+
+		template<class ValueType>
+		constexpr ValueType Max(ValueType val1, ValueType val2)
+		{
+			return (((val1) > (val2)) ? (val1) : (val2));
+		}
+
 		// Find least significant bit index
 		inline int FindLSBIndex(uint32_t value)
 		{

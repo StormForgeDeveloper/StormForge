@@ -78,7 +78,7 @@ public:
 		{
 			auto randScale = SF::Vector4Soft<float>(RandomVector());// (SF::Vector4Soft<float>(RandomVector()) - SF::Vector4Soft<float>(64.f, 64.f, 64.f, 1)) * 0.1f;
 			SF::Matrix4Soft<float> scaleMat;
-			auto absScale = randScale.Abs();
+			auto absScale = randScale.GetAbs();
 			if (absScale.x < 0.5) randScale.x = 0.5;
 			if (absScale.y < 0.5) randScale.y = 0.5;
 			if (absScale.z < 0.5) randScale.z = 0.5;
@@ -233,7 +233,7 @@ public:
 		{
 			auto randScale = (SF::Vector4SSE(RandomVector()) - SF::Vector4SSE(64.f, 64.f, 64.f, 1)) * 0.1f;
 			SF::Matrix4SSE scaleMat;
-			auto absScale = randScale.Abs();
+			auto absScale = randScale.GetAbs();
 			if (absScale.x < 0.5) randScale.x = 0.5;
 			if (absScale.y < 0.5) randScale.y = 0.5;
 			if (absScale.z < 0.5) randScale.z = 0.5;

@@ -109,21 +109,21 @@ Result SafeDelete( ValueType* &pObj )
 
 
 
-template<class ValueType>
-constexpr ValueType Min( ValueType val1, ValueType val2 )
-{
-	return ( ((val1) < (val2)) ? (val1) : (val2) );
-}
+//template<class ValueType>
+//constexpr ValueType Min( ValueType val1, ValueType val2 )
+//{
+//	return ( ((val1) < (val2)) ? (val1) : (val2) );
+//}
+//
+//template<class ValueType>
+//constexpr ValueType Max( ValueType val1, ValueType val2 )
+//{
+//	return ( ((val1) > (val2)) ? (val1) : (val2) );
+//}
 
-template<class ValueType>
-constexpr ValueType Max( ValueType val1, ValueType val2 )
-{
-	return ( ((val1) > (val2)) ? (val1) : (val2) );
-}
-
-template<class ValType>
-constexpr ValType Abs( ValType value )
-{
-	return value > 0 ? value : -value;
-}
-
+//template<class ValType>
+//constexpr ValType Abs( ValType value )
+//{
+//	return value > 0 ? value : -value;
+//}
+//

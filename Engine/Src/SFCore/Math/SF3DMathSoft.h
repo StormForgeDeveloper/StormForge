@@ -73,7 +73,7 @@ namespace SF {
 		// Returns original length
 		T Normalize();
 
-		Vector2Soft<T> Abs() const;
+		Vector2Soft<T> GetAbs() const;
 
 		T* get_value() { return Elements; }
 		const T* get_value() const { return Elements; }
@@ -151,7 +151,7 @@ namespace SF {
 		T & operator[](int i) { return Elements[i]; }
 		const T& operator[](int i) const { return Elements[i]; }
 
-		Vector3Soft<T> Abs() const;
+		Vector3Soft<T> GetAbs() const;
 
 		T Dot(const Vector3Soft<T>& op) const { return x * op.x + y * op.y + z * op.z; }
 		T Dot(const Vector4Soft<T>& op) const { return x * op.x + y * op.y + z * op.z; }
@@ -234,7 +234,7 @@ namespace SF {
 			return *this;
 		}
 
-		Vector4Soft<T> Abs() const;
+		Vector4Soft<T> GetAbs() const;
 
 		T Dot3(const Vector3Soft<T>& op) const { return (T)(x * op.x + y * op.y + z * op.z); }
 		T Dot4(const Vector4Soft<T>& op) const { return (T)(x * op.x + y * op.y + z * op.z + w * op.w); }
@@ -244,11 +244,15 @@ namespace SF {
 		Vector4Soft<T> CrossRaw(const Vector4Soft<T>& op) const { return Vector4Soft<T>(y * op.z - z * op.y, z * op.x - x * op.z, x * op.y - y * op.x, 1); }
 
 
-		Vector4Soft<T>& SwapLHInline()
+		Vector4Soft<T>& SwapLH()
 		{
 			std::swap(x, z);
 			std::swap(y, w);
 			return *this;
+		}
+		Vector4Soft<T> GetSwapLH()
+		{
+			return Vector4Soft<T>(z, w, x, y);
 		}
 
 		Vector4Soft<T>& MAdd(const T & scala);

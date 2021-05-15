@@ -38,7 +38,7 @@ namespace SF
 		if (deltaTime > MoveFrameTimeoutSeconds) // Don't merge if the time exceeded
 			return ResultCode::FAIL;
 
-		if (Util::Abs(AngularYaw - pNextMove->AngularYaw) > fMergeThreshold)
+		if (Math::Abs(AngularYaw - pNextMove->AngularYaw) > fMergeThreshold)
 			return ResultCode::FAIL;
 
 		if ((LinearVelocity - pNextMove->LinearVelocity).SquareLength3() > fMergeThreshold)

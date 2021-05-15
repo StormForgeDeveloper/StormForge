@@ -130,13 +130,13 @@ namespace SF {
 	}
 
 	template<class T>
-	inline Vector2Soft<T> Vector2Soft<T>::Abs() const
+	inline Vector2Soft<T> Vector2Soft<T>::GetAbs() const
 	{
-		return Vector2Soft<T>((T)std::abs(x), (T)std::abs(y));
+		return Vector2Soft<T>((T)Math::Abs(x), (T)Math::Abs(y));
 	}
 
 	template<>
-	inline Vector2Soft<unsigned int> Vector2Soft<unsigned int>::Abs() const
+	inline Vector2Soft<unsigned int> Vector2Soft<unsigned int>::GetAbs() const
 	{
 		return *this;
 	}
@@ -336,13 +336,13 @@ namespace SF {
 	}
 
 	template<class T>
-	inline Vector3Soft<T> Vector3Soft<T>::Abs() const
+	inline Vector3Soft<T> Vector3Soft<T>::GetAbs() const
 	{
-		return Vector3Soft<T>((T)std::abs(x), (T)std::abs(y), (T)std::abs(z));
+		return Vector3Soft<T>((T)Math::Abs(x), (T)Math::Abs(y), (T)Math::Abs(z));
 	}
 
 	template<>
-	inline Vector3Soft<unsigned int> Vector3Soft<unsigned int>::Abs() const
+	inline Vector3Soft<unsigned int> Vector3Soft<unsigned int>::GetAbs() const
 	{
 		return *this;
 	}
@@ -456,13 +456,13 @@ namespace SF {
 
 
 	template<class T>
-	inline Vector4Soft<T> Vector4Soft<T>::Abs() const
+	inline Vector4Soft<T> Vector4Soft<T>::GetAbs() const
 	{
-		return Vector4Soft<T>((T)SF::abs(x), (T)SF::abs(y), (T)SF::abs(z), (T)SF::abs(w));
+		return Vector4Soft<T>((T)Math::Abs(x), (T)Math::Abs(y), (T)Math::Abs(z), (T)Math::Abs(w));
 	}
 
 	template<>
-	inline Vector4Soft<unsigned int> Vector4Soft<unsigned int>::Abs() const
+	inline Vector4Soft<unsigned int> Vector4Soft<unsigned int>::GetAbs() const
 	{
 		return *this;
 	}

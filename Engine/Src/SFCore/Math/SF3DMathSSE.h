@@ -130,7 +130,7 @@ namespace SF {
 
 		Vector4SSE& Scale3(float scale);
 
-		Vector4SSE Abs() const;
+		Vector4SSE GetAbs() const;
 
 		float Dot3(const Vector4SSE& op) const;
 		float Dot4(const Vector4SSE& op) const;
@@ -141,10 +141,15 @@ namespace SF {
 		// Same to Cross but leave w as garbage
 		Vector4SSE CrossRaw(const Vector4SSE& op) const;
 
-		Vector4SSE& SwapLHInline()
+		Vector4SSE& SwapLH()
 		{
 			Packed = _SF_SWIZZLE(Packed, 1, 0, 3, 2);
 			return *this;
+		}
+
+		Vector4SSE GetSwapLH()
+		{
+			return Vector4SSE(_SF_SWIZZLE(Packed, 1, 0, 3, 2));
 		}
 		Vector4SSE& MAdd(const float & scala);
 
