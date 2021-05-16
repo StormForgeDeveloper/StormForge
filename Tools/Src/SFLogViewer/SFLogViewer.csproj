@@ -18,7 +18,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Engine\Src\SFEngineDLL\SFEngineDLL.Sharp.csproj" />
+    <ProjectReference Include="..\..\..\Engine\Src\SFCoreSharp\SFCoreSharp.csproj" />
+    <ProjectReference Include="..\..\..\Engine\Src\SFEngineSharp\SFEngineSharp.csproj" />
   </ItemGroup>
 
 </Project>

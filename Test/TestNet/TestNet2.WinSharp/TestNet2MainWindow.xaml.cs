@@ -31,8 +31,6 @@ namespace TestNet2.WinSharp
 
         Random m_Rand = new Random();
 
-        DateTime m_PreviousTick;
-
         public TestNet2MainWindow()
         {
             InitializeComponent();
@@ -64,8 +62,6 @@ namespace TestNet2.WinSharp
             };
             UpdateStatusText(OnlineClient.OnlineState.None);
 
-            m_PreviousTick = DateTime.Now;
-
             m_TickTimer = new System.Windows.Threading.DispatcherTimer();
             m_TickTimer.Tick += new EventHandler(Timer_Tick);
             m_TickTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
@@ -82,14 +78,9 @@ namespace TestNet2.WinSharp
             if (m_OnlineClient == null)
                 return;
 
-            var curTime = DateTime.Now;
-            var deltaTime = (curTime - m_PreviousTick).TotalSeconds;
-            var deltaTick = (uint)(deltaTime / SF.ActorMovementObject.DeltaSecondsPerFrame);
-            var deltaTickTime = SF.ActorMovementObject.DeltaSecondsPerFrame * deltaTick;
-
-            m_PreviousTick += TimeSpan.FromSeconds(deltaTickTime);
-
-            m_OnlineClient.UpdateGameTick(deltaTick);
+            UInt32 deltaTick;
+            m_OnlineClient.UpdateGameTick(out deltaTick);
+            float deltaTickTime = (float)(deltaTick) * ActorMovementObject.DeltaSecondsPerFrame;
 
             var prevFrame = m_MyMove.MoveFrame;
             m_MyMove.MoveFrame = m_OnlineClient.GetCurrentMoveFrame() + 4;

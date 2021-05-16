@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.16)
 
 include (build/StormForge.cmake)
 
-project(StormForge C CXX)
+project(StormForge LANGUAGES C CXX)
 
 
 
@@ -31,6 +31,8 @@ add_subdirectory(Engine/Src/Protocol)
 add_subdirectory(Engine/Src/SFEngineDLL)
 add_subdirectory(Test)
 
+add_subdirectory(Engine/Src/SFCoreSharp)
+add_subdirectory(Engine/Src/SFEngineSharp)
 
 
 

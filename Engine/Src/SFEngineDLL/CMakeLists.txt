@@ -36,9 +36,14 @@ set(SFENGINEDLL_LIB_FILES
 	Interfaces/SFPublicInterface.cpp
   )
 
+set(SFENGINEDLL_EXT_NATIVE_FILES )
+
+if(EXISTS Extension.cmake)
+	include(Extension.cmake)
+endif()
 
 add_definitions(-DSF_BUILD_ENGINE_DLL)
-add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES})
+add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES} ${SFENGINEDLL_EXT_NATIVE_FILES})
 
 
 add_dependencies(SFEngineDLL SFCore SFEngine SFProtocol)

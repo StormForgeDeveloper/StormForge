@@ -122,9 +122,9 @@
       <Project>{de89b4bf-feb7-4fee-ab5f-85d286295bd7}</Project>
       <Name>SFCoreSharp</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Engine\Src\SFEngineDLL\SFEngineDLL.Sharp.csproj">
+    <ProjectReference Include="..\..\..\Engine\Src\SFEngineSharp\SFEngineSharp.csproj">
       <Project>{3ad8ffe5-eb9c-4086-b344-ad1c15eb8856}</Project>
-      <Name>SFEngineDLL.Sharp</Name>
+      <Name>SFEngineSharp</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
