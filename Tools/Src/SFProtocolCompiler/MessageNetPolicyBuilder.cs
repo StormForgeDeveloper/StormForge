@@ -93,8 +93,6 @@ namespace ProtocolCompiler
                 OutStream.WriteLine("#include \"Protocol/SvrProtocol.h\"");
             OutStream.WriteLine(string.Format("#include \"Protocol/{0}\"", OutputHeaderName()));
             OutStream.WriteLine(string.Format("#include \"Protocol/{0}\"", MessageClassHeaderName));
-            if (Group.IsServer)
-                OutStream.WriteLine("#include \"ProtocolTrace.h\"");
             
             
             NewLine(3);
