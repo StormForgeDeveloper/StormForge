@@ -36,9 +36,10 @@ namespace ProtocolCompiler
 
 
         // constructor
-        public MessageIDCSharpBuilder(string strBasePath)
-            : base(strBasePath + "CSharp")
+        public MessageIDCSharpBuilder(Dictionary<string, string> settings)
+            : base(settings)
         {
+            BasePath = BasePath + "CSharp";
         }
 
         public string BuilderNamespace
@@ -95,7 +96,7 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"SFEngineDLLPCH.h\"");
             OutStream.WriteLine("#include \"Net/SFConnection.h\"");
             OutStream.WriteLine("#include \"Protocol/{0}MsgClass.h\"", Group.Name);
-            OutStream.WriteLine("#include \"SFCSUtil.h\"");
+            OutStream.WriteLine("#include \"SharpCPP/SFCSUtil.h\"");
             NewLine(3);
 
             OutStream.WriteLine("using namespace SF;");

@@ -12,7 +12,7 @@
 #include "SFEngineDLLPCH.h"
 #include "Net/SFConnection.h"
 #include "Protocol/LoginMsgClass.h"
-#include "SFCSUtil.h"
+#include "SharpCPP/SFCSUtil.h"
 
 
 

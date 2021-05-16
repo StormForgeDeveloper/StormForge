@@ -31,8 +31,6 @@ namespace ProtocolCompiler
             Evt
         };
 
-        // Out file base path
-        private string m_strBasePath;
 
         // Output file stream
         FileStream m_OutFile;
@@ -44,17 +42,37 @@ namespace ProtocolCompiler
         // Section stack
         Stack<string> m_SectionStack;
 
+        // settings for build
+        Dictionary<string, string> m_SettingsOrg; // Originally pass
+        Dictionary<string, string> m_Settings = new Dictionary<string, string>(); // modified during operation
+        string GetSetting(string key, string defaultValue = "")
+        {
+            if (m_Settings.ContainsKey(key))
+                return m_Settings[key];
+
+            if (m_SettingsOrg.ContainsKey(key))
+                return m_SettingsOrg[key];
+
+            return defaultValue;
+        }
+        void SetSetting(string key, string newValue)
+        {
+            m_Settings[key] = newValue;
+        }
+
         public string BuildYear
         {
             get { return "" + DateTime.Now.Year; }
         }
 
 
+        // Out file base path
+        //private string m_strBasePath;
         // Output file path
         public string BasePath
         {
-            get { return m_strBasePath; }
-            set { m_strBasePath = value; }
+            get { return GetSetting("BasePath"); }
+            set { SetSetting("BasePath", value); }
         }
 
 
@@ -132,7 +150,7 @@ namespace ProtocolCompiler
 
 
         // Constructor
-        public Builder(string strBasePath)
+        public Builder(Dictionary<string, string> settings)
         {
             IsCPPOut = true;
             IsCSharpNative = false;
@@ -142,7 +160,7 @@ namespace ProtocolCompiler
             // default turned off so that it will not generate route hop parameter if the group option is off
             m_GenParameterRouteHopCount = true;
 
-            m_strBasePath = strBasePath;
+            m_SettingsOrg = settings;
 
 
             m_ParamContext = new Parameter();
@@ -459,8 +477,8 @@ namespace ProtocolCompiler
 
     abstract class CppBuilder : Builder
     {
-        public CppBuilder(string strBasePath)
-            : base(strBasePath)
+        public CppBuilder(Dictionary<string, string> settings)
+            : base(settings)
         {
 
         }

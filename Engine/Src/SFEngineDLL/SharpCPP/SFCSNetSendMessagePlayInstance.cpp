@@ -12,7 +12,7 @@
 #include "SFEngineDLLPCH.h"
 #include "Net/SFConnection.h"
 #include "Protocol/PlayInstanceMsgClass.h"
-#include "SFCSUtil.h"
+#include "SharpCPP/SFCSUtil.h"
 
 
 

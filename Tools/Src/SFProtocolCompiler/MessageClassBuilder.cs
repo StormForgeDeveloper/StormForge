@@ -45,9 +45,10 @@ namespace ProtocolCompiler
         string LogFunctionPrefix;
 
         // constructor
-        public MessageClassBuilder(string strBasePath)
-            : base(strBasePath + "Message")
+        public MessageClassBuilder(Dictionary<string, string> settings)
+            : base(settings)
         {
+            BasePath = BasePath + "Message";
             GenParameterRouteHopCount = true;
             IsCPPOut = true;
             LogFunctionPrefix = AppConfig.GetValueString("LogFuncPrefix", "SFLog(Net,");

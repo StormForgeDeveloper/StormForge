@@ -23,9 +23,10 @@ namespace ProtocolCompiler
         Parameter m_ParamSenderEntityID;
 
         // constructor
-        public MessageServerServiceBuilder(string strBasePath)
-            : base(strBasePath+"ServerService")
+        public MessageServerServiceBuilder(Dictionary<string, string> settings)
+            : base(settings)
         {
+            BasePath = BasePath + "ServerService";
             GenParameterRouteHopCount = true;
             m_ParameterRouteHopContext = ParamRouteContext;
             ParamRouteContext = null;
@@ -35,7 +36,6 @@ namespace ProtocolCompiler
             m_ParamSenderEntityID.IsArraySpecified = false;
             m_ParamSenderEntityID.Name = "SenderEntityID";
             m_ParamSenderEntityID.Type = ParameterType.EntityID;
-
         }
 
 

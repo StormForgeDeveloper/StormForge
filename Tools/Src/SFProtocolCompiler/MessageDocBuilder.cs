@@ -19,9 +19,10 @@ namespace ProtocolCompiler
     class MessageDocBuilder : Builder
     {
         // constructor
-        public MessageDocBuilder(string strBasePath)
-            : base(strBasePath + "CSharp")
+        public MessageDocBuilder(Dictionary<string, string> settings)
+            : base(settings)
         {
+            BasePath = BasePath + "CSharp";
         }
 
         public string BuilderNamespace

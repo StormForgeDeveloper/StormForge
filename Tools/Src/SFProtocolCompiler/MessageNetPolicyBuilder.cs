@@ -18,9 +18,10 @@ namespace ProtocolCompiler
     class MessageNetPolicyBuilder : CppBuilder
     { 
         // constructor
-        public MessageNetPolicyBuilder(string strBasePath)
-            : base(strBasePath + "Lib/Protocol/Policy")
+        public MessageNetPolicyBuilder(Dictionary<string, string> settings)
+            : base(settings)
         {
+            BasePath = BasePath + "Lib/Protocol/Policy";
         }
 
         public virtual string OutputHeaderName()

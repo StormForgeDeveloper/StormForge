@@ -22,9 +22,10 @@ namespace ProtocolCompiler
         private int MessageCodeIndex = 0;
 
         // constructor
-        public MessageParserCSharpBuilder(string strBasePath)
-            : base(strBasePath + "CSharp")
+        public MessageParserCSharpBuilder(Dictionary<string, string> settings)
+            : base(settings)
         {
+            BasePath = BasePath + "CSharp";
         }
 
         public string BuilderNamespace

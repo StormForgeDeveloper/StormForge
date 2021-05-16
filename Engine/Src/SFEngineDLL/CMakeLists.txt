@@ -1,49 +1,11 @@
 ﻿
 
+set(SF_ENGINEDLL_PATH .)
 
-set(SFENGINEDLL_LIB_FILES
-	SharpCPP/SFCSActorMovement.cpp
-  	SharpCPP/SFCSConnection.cpp
-	SharpCPP/SFCSConnectionGroup.cpp
-	SharpCPP/SFCSEngine.Android.cpp
-	SharpCPP/SFCSEngine.IOS.cpp
-	SharpCPP/SFCSEngine.Win.cpp
-	SharpCPP/SFCSOnlineClient.cpp
-	SharpCPP/SFCSStringCrc.cpp
-	SharpCPP/SFCSNetMessageIDGame.cpp
-	SharpCPP/SFCSNetMessageIDLogin.cpp
-	SharpCPP/SFCSNetMessageIDPlayInstance.cpp
-	SharpCPP/SFCSNetSendMessageGame.cpp
-	SharpCPP/SFCSNetSendMessageLogin.cpp
-	SharpCPP/SFCSNetSendMessagePlayInstance.cpp
-	SharpCPP/SFCSObject.cpp
-	SharpCPP/SFCSStreamDB.cpp
-	SharpCPP/SFCSTimeUtil.cpp
-	SharpCPP/SFCSTongScript.cpp
-	SharpCPP/SFCSTongScriptBytecode.cpp
-	SharpCPP/SFCSUtil.cpp
-	SharpCPP/SFCSZookeeper.cpp
-	Win/dllmain.cpp
-	SFEngineDLLPCH.cpp
-	Java/JniConnection.cpp
-	Java/JniEngine.cpp
-	Java/JniObject.cpp
-	Java/JniUtil.cpp
-  	SFEngineDLLPCH.h
-	SharpCPP/SFCSUtil.h
-	Java/JniUtil.h
-	pch.h
-	Interfaces/SFPublicInterface.cpp
-  )
+include (SFEngineDLLFileList.cmake)
 
-set(SFENGINEDLL_EXT_NATIVE_FILES )
 
-if(EXISTS Extension.cmake)
-	include(Extension.cmake)
-endif()
-
-add_definitions(-DSF_BUILD_ENGINE_DLL)
-add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES} ${SFENGINEDLL_EXT_NATIVE_FILES})
+add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES})
 
 
 add_dependencies(SFEngineDLL SFCore SFEngine SFProtocol)

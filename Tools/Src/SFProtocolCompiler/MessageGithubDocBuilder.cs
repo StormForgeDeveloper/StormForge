@@ -19,9 +19,10 @@ namespace ProtocolCompiler
     class MessageGithubDocBuilder : CppBuilder
     {
         // constructor
-        public MessageGithubDocBuilder(string strBasePath)
-            : base(System.IO.Path.Combine(strBasePath, "Doc"))
+        public MessageGithubDocBuilder(Dictionary<string, string> settings)
+            : base(settings)
         {
+            BasePath = System.IO.Path.Combine(BasePath, "Doc");
             GenParameterRouteHopCount = true;
             IsCPPOut = true;
         }

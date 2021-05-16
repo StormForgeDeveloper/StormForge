@@ -19,9 +19,10 @@ namespace ProtocolCompiler
     {
 
         // constructor
-        public MessageDebugBuilder(string strBasePath)
-            : base(strBasePath+"Message")
+        public MessageDebugBuilder(Dictionary<string, string> settings)
+            : base(settings)
         {
+            BasePath = BasePath + "Message";
         }
 
         public string BuilderNamespace

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SFEngineDLL.Sharp")]
+[assembly: AssemblyTitle("SFEngineSharp")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SFEngineDLL.Sharp")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyProduct("SFEngineSharp")]
+[assembly: AssemblyCopyright("Copyright © Kyungkun Ko")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -47,8 +47,6 @@ namespace ProtocolCompiler
 
             try
             {
-
-
                 stm_CPPOut = AppConfig.GetValueString("dir");
                 stm_Out = AppConfig.GetValueString("out", stm_Out);
                 if (string.IsNullOrEmpty(stm_CPPOut))
@@ -63,8 +61,11 @@ namespace ProtocolCompiler
                     return;
                 }
 
-                // Generate
+                // setup settings
+                Dictionary<string, string> settings = new Dictionary<string, string>();
+                settings["BasePath"] = strTempPath;
 
+                // create builders
                 var generators = AppConfig.GetValueSet("gen");
                 foreach(var gen in generators)
                 {
@@ -75,7 +76,8 @@ namespace ProtocolCompiler
                         Console.WriteLine("Can't find generator {0}", generatorName);
                         continue;
                     }
-                    var newGenerator = Activator.CreateInstance(generatorType, strTempPath);
+
+                    var newGenerator = Activator.CreateInstance(generatorType, settings);
                     builders.Add(newGenerator as Builder);
                 }
 

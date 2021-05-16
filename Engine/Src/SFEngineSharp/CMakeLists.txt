@@ -28,14 +28,9 @@ set(SFENGINEDLL_SHARP_FILES
 	SFEngine/SFZookeeper.cs
   )
 
-set(SFENGINEDLL_EXT_SHARP_FILES )
-
-if(EXISTS Extension.cmake)
-	include(Extension.cmake)
-endif()
 
 
-add_library(SFEngineSharp SHARED ${SFENGINEDLL_SHARP_FILES} ${SFENGINEDLL_EXT_SHARP_FILES})
+add_library(SFEngineSharp SHARED ${SFENGINEDLL_SHARP_FILES})
 
 
 csharp_set_designer_cs_properties(Properties/AssemblyInfo.cs)
@@ -60,7 +55,7 @@ set_property(TARGET SFEngineSharp PROPERTY VS_DOTNET_REFERENCES
 add_dependencies(SFEngineSharp SFCoreSharp)
 
 
-# target_link_libraries(SFEngineSharp ${ENGINE_LINK_LIBS} ${PLATFORM_LIBS})
+target_link_libraries(SFEngineSharp SFEngineDLL)
 
 
 install (TARGETS SFEngineSharp
