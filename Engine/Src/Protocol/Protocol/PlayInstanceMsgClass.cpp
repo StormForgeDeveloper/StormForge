@@ -115,8 +115,6 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 
-
-
 			Result JoinGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				JoinGameInstanceCmd parser;
@@ -218,8 +216,6 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 
-
-
 			Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				JoinGameInstanceRes parser;
@@ -309,8 +305,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* PlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
-
-
 
 			Result PlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -412,8 +406,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* PlayPacketC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
-
-
 
 			Result PlayPacketC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -565,8 +557,6 @@ namespace SF
 				return hr;
 			}; // MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement )
 
-
-
 			Result NewPlayerInViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				NewPlayerInViewS2CEvt parser;
@@ -656,8 +646,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* RemovePlayerFromViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
-
-
 
 			Result RemovePlayerFromViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -753,8 +741,6 @@ namespace SF
 				return hr;
 			}; // MessageData* PlayerMovementC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 
-
-
 			Result PlayerMovementC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				PlayerMovementC2SEvt parser;
@@ -848,8 +834,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* PlayerMovementS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
-
-
 
 			Result PlayerMovementS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -953,8 +937,6 @@ namespace SF
 				return hr;
 			}; // MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId )
 
-
-
 			Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				OccupyMapObjectCmd parser;
@@ -1056,8 +1038,6 @@ namespace SF
 				return hr;
 			}; // MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
 
-
-
 			Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				OccupyMapObjectRes parser;
@@ -1155,8 +1135,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
-
-
 
 			Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -1258,8 +1236,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
-
-
 
 			Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -1416,8 +1392,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
-
-
 
 			Result UseMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -1580,8 +1554,6 @@ namespace SF
 				return hr;
 			}; // MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
 
-
-
 			Result UseMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				UseMapObjectRes parser;
@@ -1679,8 +1651,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* HarvestAreaCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId )
-
-
 
 			Result HarvestAreaCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -1843,8 +1813,6 @@ namespace SF
 				return hr;
 			}; // MessageData* HarvestAreaRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes )
 
-
-
 			Result HarvestAreaRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				HarvestAreaRes parser;
@@ -1939,8 +1907,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* CreateStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-
-
 
 			Result CreateStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -2044,8 +2010,6 @@ namespace SF
 				return hr;
 			}; // MessageData* CreateStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 
-
-
 			Result CreateStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				CreateStreamRes parser;
@@ -2140,8 +2104,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* FindStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
-
-
 
 			Result FindStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -2245,8 +2207,6 @@ namespace SF
 				return hr;
 			}; // MessageData* FindStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 
-
-
 			Result FindStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				FindStreamRes parser;
@@ -2342,8 +2302,6 @@ namespace SF
 				return hr;
 			}; // MessageData* DeleteStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 
-
-
 			Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				DeleteStreamCmd parser;
@@ -2432,8 +2390,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* DeleteStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
-
-
 
 			Result DeleteStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -2524,8 +2480,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* GetStreamListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket )
-
-
 
 			Result GetStreamListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -2619,8 +2573,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* GetStreamListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
-
-
 
 			Result GetStreamListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -2766,8 +2718,6 @@ namespace SF
 				return hr;
 			}; // MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
 
-
-
 			Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				CallFunctionCmd parser;
@@ -2910,8 +2860,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* CallFunctionRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
-
-
 
 			Result CallFunctionRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{

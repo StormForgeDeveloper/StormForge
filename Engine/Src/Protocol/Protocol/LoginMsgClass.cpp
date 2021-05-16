@@ -116,8 +116,6 @@ namespace SF
 				return hr;
 			}; // MessageData* LoginCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 
-
-
 			Result LoginCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				LoginCmd parser;
@@ -226,8 +224,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
-
-
 
 			Result LoginRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -338,8 +334,6 @@ namespace SF
 				return hr;
 			}; // MessageData* LoginByFacebookCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 
-
-
 			Result LoginByFacebookCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				LoginByFacebookCmd parser;
@@ -449,8 +443,6 @@ namespace SF
 				return hr;
 			}; // MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
-
-
 			Result LoginByFacebookRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				LoginByFacebookRes parser;
@@ -545,8 +537,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* CreateRandomUserCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
-
-
 
 			Result CreateRandomUserCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -657,8 +647,6 @@ namespace SF
 				return hr;
 			}; // MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
-
-
 			Result CreateRandomUserRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				CreateRandomUserRes parser;
@@ -757,8 +745,6 @@ namespace SF
 				return hr;
 			}; // MessageData* UpdateMyScoreCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 
-
-
 			Result UpdateMyScoreCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				UpdateMyScoreCmd parser;
@@ -854,8 +840,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* UpdateMyScoreRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
-
-
 
 			Result UpdateMyScoreRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -955,8 +939,6 @@ namespace SF
 				return hr;
 			}; // MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 
-
-
 			Result GetRankingListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				GetRankingListCmd parser;
@@ -1053,8 +1035,6 @@ namespace SF
 				return hr;
 			}; // MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
-
-
 			Result GetRankingListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				GetRankingListRes parser;
@@ -1147,8 +1127,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* DataTestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
-
-
 
 			Result DataTestCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -1246,8 +1224,6 @@ namespace SF
 				return hr;
 			}; // MessageData* DataTestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 
-
-
 			Result DataTestRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				DataTestRes parser;
@@ -1317,8 +1293,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* HeartbeatC2SEvt::Create( IHeap& memHeap )
-
-
 
 			Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -1411,8 +1385,6 @@ namespace SF
 				return hr;
 			}; // MessageData* DebugPrintALLRankingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InFileName )
 
-
-
 			Result DebugPrintALLRankingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				DebugPrintALLRankingCmd parser;
@@ -1501,8 +1473,6 @@ namespace SF
 
 				return hr;
 			}; // MessageData* DebugPrintALLRankingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
-
-
 
 			Result DebugPrintALLRankingRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
