@@ -368,11 +368,11 @@ namespace SF {
 								travelHistory.RemoveLastHistory();
 							else
 							{
-								pCurNode = parent;
+								pCurNode = const_cast<MapNode*>(parent);
 								break;
 							}
 
-							pCurNode = parent;
+							pCurNode = const_cast<MapNode*>(parent);
 
 						} while (parent != nullptr);
 					}
