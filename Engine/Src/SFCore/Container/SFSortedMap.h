@@ -99,21 +99,21 @@ namespace SF {
 
 			private:
 
-				ReferenceAccessPoint &m_Root;
-				StaticArray<MapNode*, GrowthBy * 2> m_TraversalHistory;
+				const ReferenceAccessPoint &m_Root;
+				StaticArray<const MapNode*, GrowthBy * 2> m_TraversalHistory;
 
 			public:
 
-				OperationTraversalHistory(IHeap& memoryManager, ReferenceAccessPoint& root, SynchronizeCounterType totalItemCount)
+				OperationTraversalHistory(IHeap& heap, const ReferenceAccessPoint& root, SynchronizeCounterType totalItemCount)
 					: m_Root(root)
-					, m_TraversalHistory(memoryManager)
+					, m_TraversalHistory(heap)
 				{
 					Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
 					//m_TraversalHistory.Reserve();
 					m_TraversalHistory.SetIncreaseSize(GrowthBy);
 				}
 
-				size_t GetHistorySize() { return m_TraversalHistory.size(); }
+				size_t GetHistorySize() const { return m_TraversalHistory.size(); }
 
 				void Clear()
 				{
@@ -125,7 +125,7 @@ namespace SF {
 					m_TraversalHistory.SetPreserveDataOnResize(conserveDataOnResize);
 				}
 
-				void AddHistory(MapNode* pNode)
+				void AddHistory(const MapNode* pNode)
 				{
 					m_TraversalHistory.push_back(pNode);
 				}
@@ -138,9 +138,9 @@ namespace SF {
 
 				void TruncateHistoryFrom(int iIndex) { m_TraversalHistory.resize(iIndex); }
 
-				MapNode* GetHistory(int iIndex) { return m_TraversalHistory[iIndex]; }
+				const MapNode* GetHistory(int iIndex) const { return m_TraversalHistory[iIndex]; }
 
-				MapNode* GetLastHistory() { if (m_TraversalHistory.size() == 0) return nullptr; return m_TraversalHistory[m_TraversalHistory.size() - 1]; }
+				const MapNode* GetLastHistory() const { if (m_TraversalHistory.size() == 0) return nullptr; return m_TraversalHistory[m_TraversalHistory.size() - 1]; }
 
 				// set Reserve size
 				Result Reserve(size_t szReserv)
@@ -153,7 +153,11 @@ namespace SF {
 					return m_TraversalHistory.Reserve(szReserv);
 				}
 
-				ReferenceAccessPoint* GetParentAccessPoint(int nodeIndex, MapNode* pNode);
+				ReferenceAccessPoint* GetParentAccessPoint(int nodeIndex, const MapNode* pNode);
+				ReferenceAccessPoint* GetParentAccessPoint(int nodeIndex, const MapNode* pNode) const
+				{
+					return const_cast<OperationTraversalHistory*>(this)->GetParentAccessPoint(nodeIndex, pNode);
+				}
 			};
 
 
@@ -176,7 +180,7 @@ namespace SF {
 			SortedMap(IHeap& heap);
 			~SortedMap();
 
-			IHeap& GetHeap() { return m_Heap; }
+			IHeap& GetHeap() const { return m_Heap; }
 
 			void ClearMap();
 			void Reset();
@@ -188,24 +192,18 @@ namespace SF {
 			Result Remove(KeyType key, ValueType& value);
 
 			// Find a key value
-			Result Find(KeyType key, ValueType& value, int64_t *pOrder = nullptr);
-			Result FindInWriteTree(KeyType key, ValueType& value) { return Find(key, value); }
+			Result Find(KeyType key, ValueType& value, int64_t *pOrder = nullptr) const;
+			Result FindInWriteTree(KeyType key, ValueType& value) const { return Find(key, value); }
 
 			// get number of values
 			size_t size() const { return (size_t)m_ItemCount; }
 
-			template<class Func>
-			Result ForeachOrder(int startOrderIndex, uint count, Func functor) const
-			{
-				return const_cast<SortedMap*>(this)->ForeachOrder(startOrderIndex, count, functor);
-			}
-
 			// enumerate the values
 			//Result ForeachOrder(int startOrderIndex, uint count, const std::function<bool(const KeyType&, const ValueType&)>& functor);
 			template<class Func>
-			Result ForeachOrder(int startOrderIndex, uint count, Func functor)
+			Result ForeachOrder(int startOrderIndex, uint count, Func functor) const
 			{
-				MapNode* pCurNode = m_Root;
+				const MapNode* pCurNode = m_Root;
 				if (pCurNode == nullptr)
 					return ResultCode::SUCCESS;
 
@@ -262,7 +260,7 @@ namespace SF {
 					else // this is a leap node pop up
 					{
 						travelHistory.RemoveLastHistory();
-						MapNode* parent = nullptr;
+						const MapNode* parent = nullptr;
 						do
 						{
 							parent = travelHistory.GetLastHistory();
@@ -355,7 +353,7 @@ namespace SF {
 					else // this is a leap node pop up
 					{
 						travelHistory.RemoveLastHistory();
-						MapNode* parent = nullptr;
+						const MapNode* parent = nullptr;
 						do
 						{
 							parent = travelHistory.GetLastHistory();
@@ -394,15 +392,23 @@ namespace SF {
 		private:
 
 			// find parent node or candidate
-			Result FindNode(OperationTraversalHistory &travelHistory, KeyType key, MapNode* &pNode);
+			Result FindNode(OperationTraversalHistory &travelHistory, KeyType key, const MapNode* &pNode) const;
 
-			MapNode* FindSmallestNode(OperationTraversalHistory &travelHistory, MapNode* pRootNode);
-			MapNode* FindBiggestNode(OperationTraversalHistory &travelHistory, MapNode* pRootNode);
+			const MapNode* FindSmallestNode(OperationTraversalHistory& travelHistory, const MapNode* pRootNode) const 
+			{
+				return const_cast<SortedMap*>(this)->FindSmallestNode(travelHistory, pRootNode);
+			}
+			MapNode* FindSmallestNode(OperationTraversalHistory& travelHistory, const MapNode* pRootNode);
+			const MapNode* FindBiggestNode(OperationTraversalHistory &travelHistory, const MapNode* pRootNode) const
+			{
+				return const_cast<SortedMap*>(this)->FindBiggestNode(travelHistory, pRootNode);
+			}
+			MapNode* FindBiggestNode(OperationTraversalHistory& travelHistory, const MapNode* pRootNode);
 
 			// Update valance factor and return new balance value
 			void FixupBalance(OperationTraversalHistory &travelHistory);
 
-			int64_t CalculateOrder(OperationTraversalHistory &travelHistory, MapNode* pNode);
+			int64_t CalculateOrder(OperationTraversalHistory &travelHistory, const MapNode* pNode) const;
 
 			MapNode* AllocateNode(KeyType key, const ValueType& value);
 			void FreeNode(MapNode* pNode);

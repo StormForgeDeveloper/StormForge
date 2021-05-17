@@ -48,9 +48,9 @@ namespace SF {
 		//
 
 		template<class KeyType, class ValueType>
-		typename SortedMap<KeyType, ValueType>::ReferenceAccessPoint* SortedMap<KeyType, ValueType>::OperationTraversalHistory::GetParentAccessPoint(int nodeIndex, MapNode* pNode)
+		typename SortedMap<KeyType, ValueType>::ReferenceAccessPoint* SortedMap<KeyType, ValueType>::OperationTraversalHistory::GetParentAccessPoint(int nodeIndex, const MapNode* pNode)
 		{
-			ReferenceAccessPoint* pParentPointer = nullptr;
+			const ReferenceAccessPoint* pParentPointer = nullptr;
 			Assert(GetHistory(nodeIndex) == pNode);
 			if (GetHistorySize() <= 1 || nodeIndex < 1) // only the found node is in there
 			{
@@ -67,7 +67,7 @@ namespace SF {
 				Assert(*pParentPointer == pNode);
 			}
 
-			return pParentPointer;
+			return const_cast<ReferenceAccessPoint*>(pParentPointer);
 		}
 
 
@@ -143,8 +143,8 @@ namespace SF {
 		{
 			OperationTraversalHistory traversalHistory(GetHeap(), m_Root, m_ItemCount);
 
-			MapNode* pFound = nullptr;
-			if (!(FindNode(traversalHistory, key, pFound)))
+			const MapNode* pFound = nullptr;
+			if (!FindNode(traversalHistory, key, pFound))
 			{
 				if (m_Root != nullptr)
 					return ResultCode::FAIL;
@@ -174,7 +174,7 @@ namespace SF {
 				if (right != nullptr)
 					return ResultCode::FAIL;
 
-				pFound->Right = pInserted = AllocateNode(key, value);
+				const_cast<MapNode*>(pFound)->Right = pInserted = AllocateNode(key, value);
 			}
 			else if (key == pFound->Key)
 			{
@@ -186,11 +186,11 @@ namespace SF {
 					if (right != nullptr)
 						return ResultCode::FAIL;
 
-					biggestNode->Right = pInserted = AllocateNode(key, value);
+					const_cast<MapNode*>(biggestNode)->Right = pInserted = AllocateNode(key, value);
 				}
 				else
 				{
-					pFound->Left = pInserted = AllocateNode(key, value);
+					const_cast<MapNode*>(pFound)->Left = pInserted = AllocateNode(key, value);
 				}
 			}
 			else // if (key < pCurNode->Key) 
@@ -199,7 +199,7 @@ namespace SF {
 				if (left != nullptr)
 					return ResultCode::FAIL;
 
-				pFound->Left = pInserted = AllocateNode(key, value);
+				const_cast<MapNode*>(pFound)->Left = pInserted = AllocateNode(key, value);
 			}
 
 			// calculate order
@@ -224,19 +224,18 @@ namespace SF {
 			OperationTraversalHistory travelHistory(GetHeap(), m_Root, m_ItemCount);
 
 			MapNode* pRemoved = nullptr;
-			MapNode* pFound = nullptr;
-			if (!(FindNode(travelHistory, key, pFound)))
+			const MapNode* pFound = nullptr;
+			if (!FindNode(travelHistory, key, pFound))
 				return ResultCode::FAIL;
 
 			// unique key
 			if (pFound->Key != key)
 				return ResultCode::FAIL;
 
-			value = std::forward<ValueType>(pFound->Value);
+			value = std::forward<ValueType>(const_cast<MapNode*>(pFound)->Value);
 
 
 			ReferenceAccessPoint *pParentPointer = nullptr;
-			//MapNode* pParentOfReplaced = nullptr;
 			MapNode* child = nullptr;
 
 			auto left = pFound->Left;
@@ -282,13 +281,17 @@ namespace SF {
 				}
 
 				// swap value with replacement node
-				pFound->Key = pRemoved->Key;
-				pFound->Value = std::forward<ValueType>(pRemoved->Value);
+				const_cast<MapNode*>(pFound)->Key = pRemoved->Key;
+				const_cast<MapNode*>(pFound)->Value = std::forward<ValueType>(pRemoved->Value);
+				// TODO
+				//pRemoved->Left = pFound->Left;
+				//pRemoved->Right = pFound->Right;
+				//pRemoved = pFound;
 			}
 			else
 			{
 				// if it doesn't have any child
-				pRemoved = pFound;
+				pRemoved = const_cast<MapNode*>(pFound);
 			}
 
 
@@ -312,12 +315,12 @@ namespace SF {
 
 		// Find a key value
 		template<class KeyType, class ValueType>
-		Result SortedMap<KeyType, ValueType>::Find(KeyType key, ValueType& value, int64_t *pOrder)
+		Result SortedMap<KeyType, ValueType>::Find(KeyType key, ValueType& value, int64_t *pOrder) const
 		{
 			OperationTraversalHistory travelHistory(GetHeap(), m_Root, m_ItemCount);
 
-			MapNode* pFound = nullptr;
-			if (!(FindNode(travelHistory, key, pFound)))
+			const MapNode* pFound = nullptr;
+			if (!FindNode(travelHistory, key, pFound))
 				return ResultCode::FAIL;
 
 			// unique key
@@ -337,7 +340,7 @@ namespace SF {
 
 		// find parent node or candidate
 		template<class KeyType, class ValueType>
-		Result SortedMap<KeyType, ValueType>::FindNode(OperationTraversalHistory &travelHistory, KeyType key, MapNode* &pNode)
+		Result SortedMap<KeyType, ValueType>::FindNode(OperationTraversalHistory &travelHistory, KeyType key, const MapNode* &pNode) const
 		{
 			MapNode* pCurNode = m_Root;
 			if (pCurNode == nullptr)
@@ -402,11 +405,11 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType>
-		typename SortedMap<KeyType, ValueType>::MapNode* SortedMap<KeyType, ValueType>::FindSmallestNode(OperationTraversalHistory &travelHistory, MapNode* pRootNode)
+		typename SortedMap<KeyType, ValueType>::MapNode* SortedMap<KeyType, ValueType>::FindSmallestNode(OperationTraversalHistory &travelHistory, const MapNode* pRootNode)
 		{
 			if (pRootNode == nullptr) return nullptr;
 
-			auto pCurNode = pRootNode;
+			MapNode* pCurNode = const_cast<MapNode*>(pRootNode);
 			while (pCurNode != nullptr)
 			{
 				travelHistory.AddHistory(pCurNode);
@@ -421,7 +424,7 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType>
-		typename SortedMap<KeyType, ValueType>::MapNode* SortedMap<KeyType, ValueType>::FindBiggestNode(OperationTraversalHistory &travelHistory, MapNode* pRootNode)
+		typename SortedMap<KeyType, ValueType>::MapNode* SortedMap<KeyType, ValueType>::FindBiggestNode(OperationTraversalHistory &travelHistory, const MapNode* pRootNode)
 		{
 			if (pRootNode == nullptr) return nullptr;
 
@@ -431,12 +434,12 @@ namespace SF {
 				travelHistory.AddHistory(pCurNode);
 				auto right = pCurNode->Right;
 				if (right == nullptr)
-					return pCurNode;
+					return const_cast<MapNode*>(pCurNode);
 
 				pCurNode = right;
 			}
 
-			return pCurNode;
+			return const_cast<MapNode*>(pCurNode);
 		}
 
 		template<class KeyType, class ValueType>
@@ -445,7 +448,7 @@ namespace SF {
 			int iRebalancing = 0;
 			for (int iHistory = (int)travelHistory.GetHistorySize() - 1; iHistory >= 0; iHistory--)
 			{
-				auto pCurNode = travelHistory.GetHistory(iHistory);
+				auto pCurNode = const_cast<MapNode*>(travelHistory.GetHistory(iHistory));
 				auto balance = pCurNode->UpdateBalanceFactor();
 
 				if (std::abs(balance) < BalanceTolerance)
@@ -456,7 +459,7 @@ namespace SF {
 					continue;
 
 				// Truncate history, it's need to be update
-				auto parentAccessPoint = travelHistory.GetParentAccessPoint(iHistory, pCurNode);
+				auto parentAccessPoint = const_cast<ReferenceAccessPoint*>(travelHistory.GetParentAccessPoint(iHistory, pCurNode));
 				travelHistory.TruncateHistoryFrom(iHistory);
 
 				if (balance <= -BalanceTolerance)
@@ -517,7 +520,7 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType>
-		int64_t SortedMap<KeyType, ValueType>::CalculateOrder(OperationTraversalHistory &travelHistory, MapNode* pNode)
+		int64_t SortedMap<KeyType, ValueType>::CalculateOrder(OperationTraversalHistory &travelHistory, const MapNode* pNode) const
 		{
 			if (pNode == nullptr)
 				return 0;
@@ -536,7 +539,7 @@ namespace SF {
 
 			for (; iDepth >= 0; iDepth--)
 			{
-				MapNode* pParentNode = travelHistory.GetHistory(iDepth);
+				const MapNode* pParentNode = travelHistory.GetHistory(iDepth);
 				if (pParentNode->Right == pNode)
 				{
 					//order += pParentNode->Right == nullptr ? 1 : pParentNode->Right->NumberOfChildren;
