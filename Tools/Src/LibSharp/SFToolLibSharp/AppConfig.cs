@@ -9,6 +9,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using SF;
 
@@ -17,23 +18,33 @@ namespace SF.Tool
     public static class AppConfig
     {
         static public ToolSetting ConfigSetting { get; private set; }
-
-
+        static public ToolSetting ModifiedSetting { get; private set; }
+        static string m_LocalConfigPath;
 
         static AppConfig()
         {
             ConfigSetting = new ToolSetting();
+            ModifiedSetting = new ToolSetting();
             // Add tool default configurations
             string assemplayName = System.Reflection.Assembly.GetExecutingAssembly().Location;
             string modulePath = Path.GetDirectoryName(assemplayName);
 
-            SetValue("ModuleDirectory", modulePath);
-            SetValue("WorkingDirectory", modulePath);
+            ConfigSetting.SetValue("ModuleDirectory", modulePath);
+            ConfigSetting.SetValue("WorkingDirectory", modulePath);
 
             SetProjectBasePath(modulePath);
 
             ConfigSetting.ImportEnvironmentVariables();
             ConfigSetting.ImportParameters();
+
+            string roamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            string exeName = Path.GetFileNameWithoutExtension(assemplayName);
+            m_LocalConfigPath = Path.Combine(roamingPath, exeName, exeName + ".cfg");
+            ModifiedSetting.LoadLocalConfig(m_LocalConfigPath);
+            foreach(var setting in ModifiedSetting)
+            {
+                 ConfigSetting.SetValue(setting.Key, setting.Value);
+            }
         }
 
         const string PROJECT_ROOT_MARK_FILE = "ProjectRoot.txt";
@@ -49,10 +60,9 @@ namespace SF.Tool
                 dirInfo = dirInfo.Parent;
             }
 
-            ToolDebug.Assert(dirInfo != null);
             if (dirInfo == null) return;
 
-            SetValue("PROJECT_BASE", dirInfo.FullName);
+            ConfigSetting.SetValue("PROJECT_BASE", dirInfo.FullName);
         }
 
         static public ToolSetting Clone()
@@ -66,7 +76,7 @@ namespace SF.Tool
             ConfigSetting.RemoveValue(key);
         }
 
-        static public SettingValue GetValue(string key)
+        static public object GetValue(string key)
         {
             return ConfigSetting.GetValue(key);
         }
@@ -81,7 +91,7 @@ namespace SF.Tool
             return ConfigSetting.GetValue<ReturnType>(key, defaultValue);
         }
 
-        static public SettingValueSet GetValueSet(string key)
+        static public Dictionary<string,object> GetValueSet(string key)
         {
             return ConfigSetting.GetValueSet(key);
         }
@@ -105,13 +115,19 @@ namespace SF.Tool
         static public void SetValue(string key, string value)
         {
             ConfigSetting.SetValue(key, value);
+            ModifiedSetting.SetValue(key, value);
         }
 
         // Add value to a value set
         static public void SetValue(string keySet, string key, string value)
         {
             ConfigSetting.SetValue(keySet, key, value);
+            ModifiedSetting.SetValue(keySet, key, value);
         }
 
+        static public void SaveLocalConfig()
+        {
+            ModifiedSetting.SaveLocalConfig(m_LocalConfigPath);
+        }
     }
 }

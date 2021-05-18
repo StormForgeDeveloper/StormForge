@@ -48,6 +48,11 @@ namespace SF {
             Code = code;
         }
 
+        public Result(Result src)
+        {
+            Code = src.Code;
+        }
+
         public bool IsFailed { get { return Code < 0; } }
 
         public bool IsSucceeded { get { return Code >= 0; } }

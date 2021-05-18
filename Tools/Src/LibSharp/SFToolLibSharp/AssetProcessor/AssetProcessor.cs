@@ -115,20 +115,20 @@ namespace SF.Asset
             }
         }
 
-        void AddParameterSetting(StringBuilder commandBuilder, Dictionary<string, string> optionMap, SettingValue setting)
+        void AddParameterSetting(StringBuilder commandBuilder, Dictionary<string, string> optionMap, KeyValuePair<string, object> setting)
         {
             string mappingValue;
             if (!optionMap.TryGetValue(setting.Key, out mappingValue)) return;
             if (string.IsNullOrEmpty(mappingValue)) return;
 
-            var settingString = setting as SettingValueString;
+            var settingString = setting.Value as string;
             if (settingString != null)
             {
-                commandBuilder.AppendFormat(" {0}{1}", mappingValue, settingString.Value);
+                commandBuilder.AppendFormat(" {0}{1}", mappingValue, settingString);
                 return;
             }
 
-            var settingSet = setting as SettingValueSet;
+            var settingSet = setting.Value as Dictionary<string,object>;
             if (settingSet != null)
             {
                 foreach (var settingSetString in settingSet)

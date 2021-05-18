@@ -12,20 +12,18 @@ using System;
 using System.IO;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace SF.Tool
 {
-    [Export(typeof(ToolSetting))]
     public class ToolSetting
     {
-        Dictionary<string, SettingValue> m_Configurations = new Dictionary<string, SettingValue>();
+        Dictionary<string, object> m_Configurations = new Dictionary<string, object>();
 
-        [ImportingConstructor]
         public ToolSetting()
         {
         }
@@ -35,8 +33,16 @@ namespace SF.Tool
             ToolSetting newSetting = new ToolSetting();
             foreach (var config in m_Configurations)
             {
-                var clone = config.Value.Clone();
-                newSetting.m_Configurations.Add(config.Key, clone);
+                var valueSet = config.Value as Dictionary<string, object>;
+                if (valueSet != null)
+                {
+                    var newValueSet = new Dictionary<string, object>(valueSet);
+                    newSetting.m_Configurations.Add(config.Key, newValueSet);
+                }
+                else
+                {
+                    newSetting.m_Configurations.Add(config.Key, config.Value);
+                }
             }
 
             return newSetting;
@@ -82,9 +88,10 @@ namespace SF.Tool
                     // remove value
                     var settingValue = GetValue(key);
                     if (settingValue == null) break;
-                    if (settingValue is SettingValueSet)
+                    var settingSet = settingValue as Dictionary<string, object>;
+                    if (settingSet != null)
                     {
-                        ((SettingValueSet)settingValue).RemoveValue(newValue);
+                        settingSet.Remove(newValue);
                     }
                     else
                     {
@@ -99,11 +106,11 @@ namespace SF.Tool
                     if (string.IsNullOrEmpty(newValue)) continue;
 
                     var keyValue = GetValue(key);
-                    if (keyValue is SettingValueString)
+                    if (keyValue is string)
                     {
-                        var strValue = keyValue as SettingValueString;
-                        RemoveValue(strValue.Key);
-                        SetValue(strValue.Key, strValue.Value, "");
+                        var strValue = keyValue as string;
+                        RemoveValue(key);
+                        SetValue(key, strValue, "");
                         keyValue = null;
                     }
 
@@ -116,8 +123,8 @@ namespace SF.Tool
                     }
                     else
                     {
-                        SettingValueSet keyValueSet = keyValue as SettingValueSet;
-                        keyValueSet.SetValue(newValue, newValue);
+                        Dictionary<string,object> keyValueSet = keyValue as Dictionary<string,object>;
+                        keyValueSet[newValue] = newValue;
                     }
                 }
             }
@@ -136,40 +143,6 @@ namespace SF.Tool
         {
             var envVars = Environment.GetEnvironmentVariables();
 
-            //string pathVarName = null;
-            //foreach (string envVarKey in envVars.Keys)
-            //{
-            //    if(envVarKey.ToLower() == "path")
-            //    {
-            //        pathVarName = envVarKey;
-            //        break;
-            //    }
-            //}
-
-            //// VS version path detect
-            //List<Version> vsVersions = new List<Version>() { new Version("14.0"), new Version("12.0") };
-            //foreach (var vcVersion in vsVersions)
-            //{
-            //    var vcVarName = string.Format("VS{0}{1}COMNTOOLS", vcVersion.Major, vcVersion.Minor);
-            //    if (!envVars.Contains(vcVarName)) continue;
-            //    var vsPathCommon = envVars[vcVarName] as string;
-            //    if (string.IsNullOrEmpty(vsPathCommon)) continue;
-
-            //    SetValue("VSCOMNTOOLS", vsPathCommon);
-            //    var vsPathCommon2 = Path.GetFullPath(Path.Combine(vsPathCommon, @"..\"));
-            //    var vsBasePath = Path.GetFullPath(Path.Combine(vsPathCommon, @"..\..\"));
-            //    SetValue("VS_PATH", vsBasePath);
-
-            //    var path = envVars[pathVarName];
-            //    var vsBinPath = Path.Combine(vsBasePath, @"VC\bin");
-            //    var vsBinPath2 = Path.Combine(vsBasePath, @"VC\bin\x86_amd64");
-            //    var vsBinPath3 = Path.Combine(vsBasePath, @"VC");
-            //    path = vsBinPath + ";" + vsBinPath2 + ";" + vsPathCommon + ";" + vsPathCommon2 + ";" +path;
-            //    envVars[pathVarName] = path;
-            //    break;
-            //}
-
-            //foreach (var envVarName in stm_ImportEnvironmentVariableNames)
             foreach (string envVarName in envVars.Keys)
             {
                 //if (!envVars.Contains(envVarName)) continue;
@@ -205,33 +178,75 @@ namespace SF.Tool
                 ParseArgument(argument);
             }
         }
-        
-        #region Enumerator implementation
-        public class Enumerator : IEnumerator<SettingValue>
+
+
+        #region Json config
+
+
+        object JsonElementToObject(JsonElement jsonValue)
         {
-            Dictionary<string, SettingValue> m_Map;
-            Dictionary<string, SettingValue>.Enumerator m_Enumerator;
-
-            public Enumerator(Dictionary<string, SettingValue> values)
+            switch (jsonValue.ValueKind)
             {
-                m_Map = values;
-                m_Enumerator = m_Map.GetEnumerator();
+                case JsonValueKind.String:
+                    return jsonValue.GetString();
+                case JsonValueKind.Object:
+                    var newDic = new Dictionary<string, object>();
+                    foreach (var itObj in jsonValue.EnumerateObject())
+                    {
+                        newDic[itObj.Name] = JsonElementToObject(itObj.Value);
+                    }
+                    return newDic;
+                case JsonValueKind.Array:
+                    return jsonValue;
+                case JsonValueKind.Number:
+                    return jsonValue.GetDouble();
+                default:
+                    return null;
             }
-
-            public void Dispose()
-            {
-            }
-
-            public bool MoveNext() { return m_Enumerator.MoveNext(); }
-            public void Reset() { m_Enumerator = m_Map.GetEnumerator(); }
-
-            public SettingValue Current { get { return m_Enumerator.Current.Value; } }
-            object IEnumerator.Current { get { return m_Enumerator.Current.Value; } }
         }
 
+        public void LoadLocalConfig(string configPath)
+        {
+            if (!File.Exists(configPath))
+                return;
+
+            var jsonData = File.ReadAllText(configPath, Encoding.UTF8);
+            var loadedDictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonData);
+            if (loadedDictionary == null)
+                return;
+
+
+            foreach (var setting in loadedDictionary)
+            {
+                var valueObj = setting.Value;
+                if (valueObj.GetType() == typeof(JsonElement))
+                {
+                    var jsonValue = (JsonElement)valueObj;
+                    SetValue(setting.Key, JsonElementToObject(jsonValue));
+                }
+                else
+                {
+                    SetValue(setting.Key, valueObj);
+                }
+            }
+        }
+        public void SaveLocalConfig(string configPath)
+        {
+            JsonSerializerOptions options = new JsonSerializerOptions() { WriteIndented = true };
+            var jsonData = JsonSerializer.Serialize(m_Configurations, options: options);
+            var dirPath = Path.GetDirectoryName(configPath);
+            if (!Directory.Exists(dirPath))
+                Directory.CreateDirectory(dirPath);
+
+            File.WriteAllText(configPath, jsonData, Encoding.UTF8);
+        }
+        #endregion
+
+        #region Enumerator implementation
+        
         //IEnumerator IEnumerable.GetEnumerator() { return new Enumerator(m_Configurations); }
 
-        public IEnumerator<SettingValue> GetEnumerator() { return new Enumerator(m_Configurations); }
+        public Dictionary<string, object>.Enumerator GetEnumerator() { return m_Configurations.GetEnumerator(); }
 
         #endregion Enumerator
 
@@ -241,9 +256,9 @@ namespace SF.Tool
             m_Configurations.Remove(key);
         }
 
-        public SettingValue GetValue(string key)
+        public object GetValue(string key)
         {
-            SettingValue value;
+            object value;
             m_Configurations.TryGetValue(key.ToLower(), out value);
             return value;
         }
@@ -278,18 +293,17 @@ namespace SF.Tool
                 return (ReturnType)Convert.ChangeType((object)valueString, typeof(ReturnType));
         }
 
-        public SettingValueSet GetValueSet(string key)
+        public Dictionary<string,object> GetValueSet(string key)
         {
-            SettingValue value;
+            object value;
             key = key.ToLower();
             if (m_Configurations.TryGetValue(key.ToLower(), out value))
             {
-                var valueSet = value as SettingValueSet;
+                var valueSet = value as Dictionary<string,object>;
                 if (valueSet != null) return valueSet;
 
                 // wrap the value as value set
-                valueSet = new SettingValueSet(key.ToLower());
-                valueSet.SetValue((value as SettingValueString).Value, "");
+                valueSet = new Dictionary<string,object>();
                 return valueSet;
             }
             return null;
@@ -297,39 +311,39 @@ namespace SF.Tool
 
         public string GetValueString(string key, string defaultValue = "")
         {
-            SettingValue value;
+            object value;
             key = key.ToLower();
             if (!m_Configurations.TryGetValue(key.ToLower(), out value)) return defaultValue;
-            var stringValue = value as SettingValueString;
+            var stringValue = value as string;
             if (stringValue == null) return defaultValue;
 
-            return stringValue.Value;
+            return stringValue;
         }
 
         public int GetValueInt(string key, int defaultValue)
         {
-            SettingValue value;
+            object value;
             key = key.ToLower();
             if (!m_Configurations.TryGetValue(key.ToLower(), out value)) return defaultValue;
-            var stringValue = value as SettingValueString;
+            var stringValue = value as string;
             if (stringValue == null) return defaultValue;
 
             int result;
-            if (!int.TryParse(stringValue.Value, out result)) return defaultValue;
+            if (!int.TryParse(stringValue, out result)) return defaultValue;
 
             return result;
         }
 
         public float GetValueFloat(string key, float defaultValue)
         {
-            SettingValue value;
+            object value;
             key = key.ToLower();
             if (!m_Configurations.TryGetValue(key.ToLower(), out value)) return defaultValue;
-            var stringValue = value as SettingValueString;
+            var stringValue = value as string;
             if (stringValue == null) return defaultValue;
 
             float result;
-            if (!float.TryParse(stringValue.Value, out result)) return defaultValue;
+            if (!float.TryParse(stringValue, out result)) return defaultValue;
 
             return result;
         }
@@ -341,21 +355,35 @@ namespace SF.Tool
             var keyValue = GetValue(keyLwr);
             if (keyValue == null)
             {
-                m_Configurations.Add(keyLwr, new SettingValueString(keyLwr, value));
+                m_Configurations.Add(keyLwr, value);
             }
-            else if (keyValue is SettingValueSet)
+            else if (keyValue is Dictionary<string,object>)
             {
-                var valueSet = (SettingValueSet)keyValue;
-                valueSet.SetValue(value, value);
+                var valueSet = (Dictionary<string,object>)keyValue;
+                valueSet[value] = value;
             }
-            else if(keyValue is SettingValueString)
+            else if(keyValue is string)
             {
-                var valueString = (SettingValueString)keyValue;
-                valueString.Value = value;
+                m_Configurations[keyLwr] = value;
             }
             else
             {
                 ToolDebug.Error("Key type not match for key:{0}, value:{1}", key, value);
+            }
+        }
+
+        // set value
+        public void SetValue(string key, object value)
+        {
+            string keyLwr = key.ToLower();
+            var keyValue = GetValue(keyLwr);
+            if (keyValue == null)
+            {
+                m_Configurations.Add(keyLwr, value);
+            }
+            else
+            {
+                m_Configurations[keyLwr] = value;
             }
         }
 
@@ -366,14 +394,14 @@ namespace SF.Tool
             var keyValue = GetValue(keySetLwr);
             if (keyValue == null)
             {
-                keyValue = new SettingValueSet(keySetLwr);
+                keyValue = new Dictionary<string,object>();
                 m_Configurations.Add(keySetLwr, keyValue);
             }
 
-            if (keyValue is SettingValueSet)
+            var valueSet = keyValue as Dictionary<string, object>;
+            if (valueSet != null)
             {
-                var valueSet = (SettingValueSet)keyValue;
-                valueSet.SetValue(key, value);
+                valueSet[key] = value;
             }
             else
             {
