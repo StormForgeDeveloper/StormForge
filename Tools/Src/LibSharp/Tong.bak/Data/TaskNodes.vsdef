@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<NodeTypeDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://blue3k.com/1_0"
+           xsi:noNamespaceSchemaLocation="../schemas/TongScriptNodeDefinitionSchema.xsd"
+           >
+
+  
+  
+  <!-- Task nodes -->
+
+  <NodeTypeInfo Name="Task" IsAbstract="true" Category="Task" NodeType="" Icon="alphabet.speech-balloon-green-a-icon_16.png" Description="State nodes are">
+    <Property Name="Start" Type="Signal" AllowMultipleInput="true" Socket="Input" />
+    <Property Name="Finished" Type="Signal" AllowMultipleOutput="true" Socket="Output" />
+    <Property Name="Successed" Type="Signal" AllowMultipleOutput="true" Socket="Output" />
+    <Property Name="Failed" Type="Signal" AllowMultipleOutput="true" Socket="Output" />
+    <Property Name="TimeOut" Type="Decimal" Default="-1"/>
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="TaskStart" Base="Interface" Category="Task" Icon="Sce.Atf.Resources.wait_blue_16.png" Description="Wait any input signal">
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="TaskFinish" Category="Task" Icon="Sce.Atf.Resources.wait_blue_16.png" Description="Wait any input signal">
+    <Property Name="Finished" Type="Signal" AllowMultipleInput="true" Socket="Input" />
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="WaitAny" Base="Task" Icon="Sce.Atf.Resources.wait_blue_16.png" Description="Wait any input signal">
+  </NodeTypeInfo>
+
+  <NodeTypeInfo Name="WaitAll" Base="Task" Icon="Sce.Atf.Resources.wait_blue_16.png" Description="Wait all input signals">
+  </NodeTypeInfo>
+
+
+
+</NodeTypeDefinitions>
