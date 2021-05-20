@@ -16,6 +16,7 @@ set(SFENGINEDLL_LIB_FILES
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSNetSendMessageGame.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSNetSendMessageLogin.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSNetSendMessagePlayInstance.cpp
+	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSLog.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSObject.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSStreamDB.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSTimeUtil.cpp
