@@ -28,28 +28,39 @@ namespace SF
             Debug3,
         }
 
+        public delegate void delLogHandler(Level level, string message);
+        public static event delLogHandler LogHandler;
+
+        static Log()
+        {
+            LogHandler += (level, message) =>
+            {
+                NativeSFLogMessage((int)level, message);
+            };
+        }
+
         static public void Info(string strFormat, params object[] args)
         {
             var message = string.Format(strFormat, args);
-            NativeSFLogMessage((int)Level.Info, message);
+            LogHandler(Level.Info, message);
         }
 
         static public void Warning(string strFormat, params object[] args)
         {
             var message = string.Format(strFormat, args);
-            NativeSFLogMessage((int)Level.Warning, message);
+            LogHandler(Level.Warning, message);
         }
 
         static public void Error(string strFormat, params object[] args)
         {
             var message = string.Format(strFormat, args);
-            NativeSFLogMessage((int)Level.Error, message);
+            LogHandler(Level.Error, message);
         }
 
         static public void Debug(string strFormat, params object[] args)
         {
             var message = string.Format(strFormat, args);
-            NativeSFLogMessage((int)Level.Debug1, message);
+            LogHandler(Level.Debug1, message);
         }
 
 

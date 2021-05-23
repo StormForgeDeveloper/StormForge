@@ -19,7 +19,7 @@ namespace SF.Tool
     {
         static public ToolSetting ConfigSetting { get; private set; }
         static public ToolSetting ModifiedSetting { get; private set; }
-        static string m_LocalConfigPath;
+        static public string LocalConfigPath { get; private set; }
 
         static AppConfig()
         {
@@ -39,11 +39,22 @@ namespace SF.Tool
 
             string roamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
             string exeName = Path.GetFileNameWithoutExtension(assemplayName);
-            m_LocalConfigPath = Path.Combine(roamingPath, exeName, exeName + ".cfg");
-            ModifiedSetting.LoadLocalConfig(m_LocalConfigPath);
-            foreach(var setting in ModifiedSetting)
+            string defaultConfigPath = Path.Combine(modulePath, "0.default_" + exeName + ".cfg");
+            if (File.Exists(defaultConfigPath))
             {
-                 ConfigSetting.SetValue(setting.Key, setting.Value);
+                LoadLocalConfig(defaultConfigPath);
+            }
+
+            LocalConfigPath = Path.Combine(roamingPath, exeName, exeName + ".cfg");
+            LoadLocalConfig(LocalConfigPath);
+        }
+
+        static void LoadLocalConfig(string configFilePath)
+        {
+            ModifiedSetting.LoadLocalConfig(configFilePath);
+            foreach (var setting in ModifiedSetting)
+            {
+                ConfigSetting.SetValue(setting.Key, setting.Value);
             }
         }
 
@@ -127,7 +138,7 @@ namespace SF.Tool
 
         static public void SaveLocalConfig()
         {
-            ModifiedSetting.SaveLocalConfig(m_LocalConfigPath);
+            ModifiedSetting.SaveLocalConfig(LocalConfigPath);
         }
     }
 }

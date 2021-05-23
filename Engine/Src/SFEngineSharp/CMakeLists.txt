@@ -3,7 +3,6 @@
 include(../../../build/StormForgeSharp.cmake)
 
 set(SFENGINEDLL_SHARP_FILES
-	Properties/AssemblyInfo.cs
 	SFEngine/Tong/SFTongScriptBytecodeBuilder.cs
 	SFEngine/SFActorMovementObject.cs
   	SFEngine/SFArrayObject.cs

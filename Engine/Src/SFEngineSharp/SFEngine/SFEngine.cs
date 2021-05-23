@@ -27,6 +27,7 @@ namespace SF
 
 	    public void StartEngine(string processName, string logServerAddress, UInt32 debuggerLogMask = 0)
         {
+            var curPath = System.IO.Directory.GetCurrentDirectory();
             m_EngineNativeHandle = NativeStartEngine(processName, logServerAddress, debuggerLogMask);
         }
 
