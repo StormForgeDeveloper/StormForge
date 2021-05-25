@@ -20,7 +20,7 @@ namespace ProtocolCompiler
 {
 
 
-    abstract class Builder
+    public abstract class Builder
     {
 
         public enum MsgType

@@ -1,5 +1,5 @@
 #
-PROTO_BUILD=../../../bin/SFProtocolCompiler.exe
+PROTO_BUILD=../../../bin/netcoreapp3.1/SFProtocolCompiler.exe
 
 
 

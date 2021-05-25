@@ -33,7 +33,7 @@ namespace SF
 		// Look direction
 		float AngularYaw = 0; // No pitch and roll
 		uint32_t MoveFrame = 0;
-		uint32_t MovementState = 0; // can be 8bit, just for C# size match
+		uint32_t MovementState = 0;
 
 		Result CanMerge(const ActorMovement* pNextMove) const;
 

@@ -74,6 +74,13 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt()
 
 
+// S2C: Player state change
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt()
+{
+ 	return SF::Message::PlayInstance::PlayerStateChangedS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt()
+
+
 // Cmd: Occupy map object
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceOccupyMapObjectCmd()
 {

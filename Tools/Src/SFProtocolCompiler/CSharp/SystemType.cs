@@ -231,6 +231,7 @@ namespace SF
 
              new TypeMap( ParameterType.Vector2, 8, typeof(Vector2) ),
             new TypeMap( ParameterType.Vector3, 12, typeof(Vector3) ),
+            new TypeMap( ParameterType.Vector4, 16, typeof(Vector4) ),
             new TypeMap( ParameterType.NetAddress, 18, typeof(NetAddress) ),
             new TypeMap( ParameterType.NetClass, 18, typeof(UInt32) ),
             new TypeMap( ParameterType.RouteContext, 8, typeof(SFRouteContext) ),

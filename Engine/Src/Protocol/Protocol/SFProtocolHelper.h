@@ -25,6 +25,8 @@
 #include "Container/SFArraySerialization.h"
 #include "Util/SFLog.h"
 #include "Util/SFToStringEngineTypes.h"
+#include "Actor/Movement/SFActorMovement.h"
+#include "Math/SF3DMathSerialization.h"
 
 
 namespace SF {

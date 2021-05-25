@@ -73,6 +73,14 @@
 			<Params Type="ActorMovement" Name="Movement" Desc="Movement attributes"/>
 		</S2CEvent>
 
+		<S2CEvent Name="PlayerStateChanged" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player state change">
+			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params Type="PlayerID" Name="PlayerID" Desc="Player Movement"/>
+			<Params Type="uint32" Name="State" Desc="StateId, ActorMovement has same MovementStateId."/>
+			<Params Type="uint32" Name="MoveFrame" Desc="Movement frame state change has happened"/>
+			<Params Type="Vector4" Name="Position" Desc="Position of the player when state change happened"/>
+		</S2CEvent>
+
 
 		<!-- ============================= Object interection ======================================= -->
 

@@ -52,6 +52,9 @@ namespace SF.Net
 		// S2C: Player Movement
 		public static int PlayerMovementS2CEvt { get { return CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt(); } }
 
+		// S2C: Player state change
+		public static int PlayerStateChangedS2CEvt { get { return CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt(); } }
+
 		// Cmd: Occupy map object
 		public static int OccupyMapObjectCmd { get { return CSSFNetMessageID_PlayInstanceOccupyMapObjectCmd(); } }
 
@@ -145,6 +148,11 @@ namespace SF.Net
 		// S2C: Player Movement
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt();
+
+
+		// S2C: Player state change
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt();
 
 
 		// Cmd: Occupy map object

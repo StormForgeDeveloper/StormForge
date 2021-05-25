@@ -438,6 +438,9 @@ namespace ProtocolXml {
         Vector3,
         
         /// <remarks/>
+        Vector4,
+        
+        /// <remarks/>
         Result,
         
         /// <remarks/>

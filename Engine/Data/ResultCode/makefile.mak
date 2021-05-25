@@ -1,5 +1,5 @@
 #
-RESULT_BUILD=../../../bin/SFResultCodeCompiler.exe
+RESULT_BUILD=../../../bin/netcoreapp3.1/SFResultCodeCompiler.exe
 
 
 

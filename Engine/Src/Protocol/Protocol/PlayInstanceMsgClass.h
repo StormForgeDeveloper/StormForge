@@ -411,6 +411,57 @@ namespace SF
 
 			}; // class PlayerMovementS2CEvt : public MessageBase
 
+			// S2C: Player state change
+			class PlayerStateChangedS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetTransactionID() { return 0; }
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				uint32_t m_State{};
+				uint32_t m_MoveFrame{};
+				Vector4 m_Position{};
+			public:
+				PlayerStateChangedS2CEvt()
+					{}
+
+				PlayerStateChangedS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const uint32_t& GetState() const	{ return m_State; };
+				const uint32_t& GetMoveFrame() const	{ return m_MoveFrame; };
+				const Vector4& GetPosition() const	{ return m_Position; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition );
+
+			}; // class PlayerStateChangedS2CEvt : public MessageBase
+
 			// Cmd: Occupy map object
 			class OccupyMapObjectCmd : public MessageBase
 			{

@@ -117,6 +117,22 @@ Player Movement
 		- OutInMovement: ActorMovement type. Movement attributes
 
 
+## PlayerStateChangedS2CEvt
+Player state change
+
+        Result PlayerStateChangedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Vector3 &InPosition)
+
+		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. Player Movement
+
+		- OutInState: uint32 type. StateId, ActorMovement has same MovementStateId.
+
+		- OutInMoveFrame: uint32 type. Movement frame state change has happened
+
+		- OutInPosition: Vector3 type. Position of the player when state change happened
+
+
 ## OccupyMapObject Request
 Occupy map object
 
