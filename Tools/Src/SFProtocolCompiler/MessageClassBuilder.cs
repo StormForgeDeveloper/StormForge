@@ -93,9 +93,7 @@ namespace ProtocolCompiler
             {
                 OutStream.WriteLine("#include \"Variable/SFVariableMapBuilder.h\"");
             }
-            if (Group.IsServer)
-                OutStream.WriteLine("#include \"Protocol/SvrProtocol.h\"");
-            NewLine(3);
+             NewLine(3);
 
             // namespace definition
             OpenSection("namespace", PrjPrefix );
@@ -123,8 +121,6 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Container/SFArray.h\"");
             OutStream.WriteLine("#include \"Protocol/SFProtocolHelper.h\"");
             OutStream.WriteLine("#include \"Protocol/{0}\"", HeaderName);
-            if (Group.IsServer)
-                OutStream.WriteLine("#include \"Protocol/SvrProtocol.h\"");
 
             NewLine(3);
 

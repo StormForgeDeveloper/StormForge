@@ -16,7 +16,7 @@
 #include "Variable/SFVariableBoxing.h"
 #include "Net/SFNetDef.h"
 #include "Net/SFMessage.h"
-
+#include "Types/SFEngineTypeSerialization.h"
 
 namespace SF
 {

@@ -89,8 +89,6 @@ namespace ProtocolCompiler
             OutStream.WriteLine("#include \"Net/SFMessage.h\"");
             OutStream.WriteLine("#include \"Net/SFMessageEndpoint.h\"");
             OutStream.WriteLine("#include \"Actor/Movement/SFActorMovement.h\"");
-            if (Group.IsServer)
-                OutStream.WriteLine("#include \"Protocol/SvrProtocol.h\"");
             OutStream.WriteLine(string.Format("#include \"Protocol/{0}\"", OutputHeaderName()));
             OutStream.WriteLine(string.Format("#include \"Protocol/{0}\"", MessageClassHeaderName));
             
