@@ -304,6 +304,7 @@ namespace SF.Tool
 
                 // wrap the value as value set
                 valueSet = new Dictionary<string,object>();
+                valueSet[value as string] = value;
                 return valueSet;
             }
             return null;
@@ -405,7 +406,10 @@ namespace SF.Tool
             }
             else
             {
-                ToolDebug.Error("Key type not match for key:{0}, value:{1}", key, value);
+                var newkeyValue = new Dictionary<string, object>();
+                newkeyValue[keyValue as string] = "";
+                newkeyValue[key] = "";
+                m_Configurations[keySetLwr] = newkeyValue;
             }
         }
 

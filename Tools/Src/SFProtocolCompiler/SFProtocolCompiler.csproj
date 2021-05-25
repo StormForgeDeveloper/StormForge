@@ -3,22 +3,23 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
 	<Platforms>x64</Platforms>
-	<OutputType>WinExe</OutputType>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<OutputType>Exe</OutputType>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <OutputPath>..\..\..\Bin\</OutputPath>
+    <PlatformTarget>x64</PlatformTarget>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<OutputPath>..\..\..\Bin</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <PlatformTarget>x64</PlatformTarget>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\Engine\Src\SFCoreSharp\SFCoreSharp.csproj" />
     <ProjectReference Include="..\LibSharp\SFToolLibSharp\SFToolLibSharp.csproj" />
-    <ProjectReference Include="..\SFToolLib\SFToolLib.vcxproj" />
   </ItemGroup>
 
 </Project>

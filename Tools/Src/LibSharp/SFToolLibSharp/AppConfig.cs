@@ -34,7 +34,7 @@ namespace SF.Tool
 
             SetProjectBasePath(modulePath);
 
-            ConfigSetting.ImportEnvironmentVariables();
+            //ConfigSetting.ImportEnvironmentVariables();
             ConfigSetting.ImportParameters();
 
             string roamingPath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);

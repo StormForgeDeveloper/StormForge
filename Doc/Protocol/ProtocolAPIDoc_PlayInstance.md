@@ -120,7 +120,7 @@ Player Movement
 ## PlayerStateChangedS2CEvt
 Player state change
 
-        Result PlayerStateChangedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Vector3 &InPosition)
+        Result PlayerStateChangedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
@@ -130,7 +130,7 @@ Player state change
 
 		- OutInMoveFrame: uint32 type. Movement frame state change has happened
 
-		- OutInPosition: Vector3 type. Position of the player when state change happened
+		- OutInPosition: Vector4 type. Position of the player when state change happened
 
 
 ## OccupyMapObject Request
