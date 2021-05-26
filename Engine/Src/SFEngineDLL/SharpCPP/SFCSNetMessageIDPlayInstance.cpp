@@ -81,6 +81,20 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt()
 
 
+// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceClientSyncReliableC2SEvt()
+{
+ 	return SF::Message::PlayInstance::ClientSyncReliableC2SEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceClientSyncReliableC2SEvt()
+
+
+// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceClientSyncC2SEvt()
+{
+ 	return SF::Message::PlayInstance::ClientSyncC2SEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceClientSyncC2SEvt()
+
+
 // Cmd: Occupy map object
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceOccupyMapObjectCmd()
 {

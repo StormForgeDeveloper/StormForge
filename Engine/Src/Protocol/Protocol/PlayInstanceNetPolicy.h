@@ -38,6 +38,10 @@ namespace SF
 		Result PlayPacketC2SEvt( const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload );
 		// C2S: Player Movement
 		Result PlayerMovementC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
+		// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+		Result ClientSyncReliableC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData );
+		// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+		Result ClientSyncC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData );
 		// Cmd: Occupy map object
 		Result OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId );
 		// Cmd: Unoccupy map object
@@ -80,7 +84,7 @@ namespace SF
 		// S2C: Player Movement
 		Result PlayerMovementS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 		// S2C: Player state change
-		Result PlayerStateChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition );
+		Result PlayerStateChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const VariableTable &InStateValues, const Vector4 &InPosition );
 		// Cmd: Occupy map object
 		Result OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId );
 		// Cmd: Unoccupy map object

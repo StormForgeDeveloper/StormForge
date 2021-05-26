@@ -435,6 +435,9 @@ namespace SF
 				PlayerID m_PlayerID{};
 				uint32_t m_State{};
 				uint32_t m_MoveFrame{};
+				ArrayView<uint8_t> m_StateValuesRaw;
+				mutable bool m_StateValuesHasParsed = false;
+				mutable VariableTable m_StateValues;
 				Vector4 m_Position{};
 			public:
 				PlayerStateChangedS2CEvt()
@@ -450,6 +453,8 @@ namespace SF
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const uint32_t& GetState() const	{ return m_State; };
 				const uint32_t& GetMoveFrame() const	{ return m_MoveFrame; };
+				const Array<uint8_t>& GetStateValuesRaw() const	{ return m_StateValuesRaw; };
+				const VariableTable& GetStateValues() const;
 				const Vector4& GetPosition() const	{ return m_Position; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -458,9 +463,112 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Array<uint8_t>& InStateValues, const Vector4 &InPosition );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const VariableTable &InStateValues, const Vector4 &InPosition );
 
 			}; // class PlayerStateChangedS2CEvt : public MessageBase
+
+			// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+			class ClientSyncReliableC2SEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetTransactionID() { return 0; }
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_SyncDataRaw;
+				mutable bool m_SyncDataHasParsed = false;
+				mutable VariableTable m_SyncData;
+			public:
+				ClientSyncReliableC2SEvt()
+					{}
+
+				ClientSyncReliableC2SEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetSyncDataRaw() const	{ return m_SyncDataRaw; };
+				const VariableTable& GetSyncData() const;
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData );
+
+			}; // class ClientSyncReliableC2SEvt : public MessageBase
+
+			// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+			class ClientSyncC2SEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetTransactionID() { return 0; }
+				RouteContext GetRouteContext() { return 0; }
+				uint32_t GetRouteHopCount() { return 0; }
+				uint64_t GetSender() { return 0; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				ArrayView<uint8_t> m_SyncDataRaw;
+				mutable bool m_SyncDataHasParsed = false;
+				mutable VariableTable m_SyncData;
+			public:
+				ClientSyncC2SEvt()
+					{}
+
+				ClientSyncC2SEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const Array<uint8_t>& GetSyncDataRaw() const	{ return m_SyncDataRaw; };
+				const VariableTable& GetSyncData() const;
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData );
+
+			}; // class ClientSyncC2SEvt : public MessageBase
 
 			// Cmd: Occupy map object
 			class OccupyMapObjectCmd : public MessageBase

@@ -69,17 +69,30 @@
 
 		<S2CEvent Name="PlayerMovement" Reliable="false" Crypto="No" Trace="Debug1" Desc="Player Movement">
 			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Movement"/>
+			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
 			<Params Type="ActorMovement" Name="Movement" Desc="Movement attributes"/>
 		</S2CEvent>
 
 		<S2CEvent Name="PlayerStateChanged" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player state change">
 			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Movement"/>
+			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
 			<Params Type="uint32" Name="State" Desc="StateId, ActorMovement has same MovementStateId."/>
 			<Params Type="uint32" Name="MoveFrame" Desc="Movement frame state change has happened"/>
+			<Params Type="VariableTable" Name="StateValues" Desc="State change values"/>
 			<Params Type="Vector4" Name="Position" Desc="Position of the player when state change happened"/>
 		</S2CEvent>
+
+		<C2SEvent Name="ClientSyncReliable" Reliable="true" Crypto="No" Trace="Debug1" Desc="Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet">
+			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
+			<Params Type="VariableTable" Name="SyncData" Desc="sync data"/>
+		</C2SEvent>
+
+		<C2SEvent Name="ClientSync" Reliable="false" Crypto="No" Trace="Debug1" Desc="Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet">
+			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
+			<Params Type="VariableTable" Name="SyncData" Desc="sync data"/>
+		</C2SEvent>
 
 
 		<!-- ============================= Object interection ======================================= -->

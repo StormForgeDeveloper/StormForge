@@ -846,6 +846,16 @@ namespace SF
 
 			// S2C: Player state change
 			const MessageID PlayerStateChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 7);
+			const VariableTable& PlayerStateChangedS2CEvt::GetStateValues() const
+			{
+ 				if (!m_StateValuesHasParsed)
+				{
+ 					m_StateValuesHasParsed = true;
+					InputMemoryStream StateValues_ReadStream(m_StateValuesRaw);
+					*StateValues_ReadStream.ToInputStream() >> m_StateValues;
+				} // if (!m_StateValuesHasParsed)
+				return m_StateValues;
+			} // const VariableTable& PlayerStateChangedS2CEvt::GetStateValues() const
 			Result PlayerStateChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -863,6 +873,10 @@ namespace SF
 				protocolCheck(*input >> m_PlayerID);
 				protocolCheck(*input >> m_State);
 				protocolCheck(*input >> m_MoveFrame);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* StateValuesPtr = nullptr;
+				protocolCheck(input->ReadLink(StateValuesPtr, ArrayLen));
+				m_StateValuesRaw.SetLinkedBuffer(ArrayLen, StateValuesPtr);
 				protocolCheck(*input >> m_Position);
 
 				return hr;
@@ -881,6 +895,7 @@ namespace SF
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariable("State", parser.GetState());
 				variableBuilder.SetVariable("MoveFrame", parser.GetMoveFrame());
+				variableBuilder.SetVariable("StateValues", "VariableTable", parser.GetStateValuesRaw());
 				variableBuilder.SetVariable("Position", "Vector4", &parser.GetPosition());
 
 				return hr;
@@ -898,8 +913,7 @@ namespace SF
 
 			}; // Result PlayerStateChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-
-			MessageData* PlayerStateChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition )
+			MessageData* PlayerStateChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Array<uint8_t>& InStateValues, const Vector4 &InPosition )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -914,11 +928,13 @@ namespace SF
 
 				uint8_t *pMsgData = nullptr;
 
+				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ SerializedSizeOf(InState)
 					+ SerializedSizeOf(InMoveFrame)
+					+ serializedSizeOfInStateValues
 					+ SerializedSizeOf(InPosition)
 				);
 
@@ -932,22 +948,354 @@ namespace SF
 				protocolCheck(*output << InPlayerID);
 				protocolCheck(*output << InState);
 				protocolCheck(*output << InMoveFrame);
+				protocolCheck(*output << InStateValues);
 				protocolCheck(*output << InPosition);
 
 				return hr;
-			}; // MessageData* PlayerStateChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition )
+			}; // MessageData* PlayerStateChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Array<uint8_t>& InStateValues, const Vector4 &InPosition )
+
+			MessageData* PlayerStateChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const VariableTable &InStateValues, const Vector4 &InPosition )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InState)
+					+ SerializedSizeOf(InMoveFrame)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInStateValues
+					+ SerializedSizeOf(InPosition)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerStateChangedS2CEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InState);
+				protocolCheck(*output << InMoveFrame);
+				protocolCheck(output->Write(serializedSizeOfInStateValues));
+				protocolCheck(*output << InStateValues);
+				protocolCheck(*output << InPosition);
+
+				return hr;
+			}; // MessageData* PlayerStateChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const VariableTable &InStateValues, const Vector4 &InPosition )
 
 			Result PlayerStateChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				PlayerStateChangedS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "PlayerStateChanged:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, State:{4}, MoveFrame:{5}, Position:{6}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetState(), parser.GetMoveFrame(), parser.GetPosition()); 
+				SFLog(Net, Debug1, "PlayerStateChanged:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, State:{4}, MoveFrame:{5}, StateValues:{6}, Position:{7}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetState(), parser.GetMoveFrame(), parser.GetStateValues(), parser.GetPosition()); 
 				return ResultCode::SUCCESS;
 			}; // Result PlayerStateChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
+			// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+			const MessageID ClientSyncReliableC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 8);
+			const VariableTable& ClientSyncReliableC2SEvt::GetSyncData() const
+			{
+ 				if (!m_SyncDataHasParsed)
+				{
+ 					m_SyncDataHasParsed = true;
+					InputMemoryStream SyncData_ReadStream(m_SyncDataRaw);
+					*SyncData_ReadStream.ToInputStream() >> m_SyncData;
+				} // if (!m_SyncDataHasParsed)
+				return m_SyncData;
+			} // const VariableTable& ClientSyncReliableC2SEvt::GetSyncData() const
+			Result ClientSyncReliableC2SEvt::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* SyncDataPtr = nullptr;
+				protocolCheck(input->ReadLink(SyncDataPtr, ArrayLen));
+				m_SyncDataRaw.SetLinkedBuffer(ArrayLen, SyncDataPtr);
+
+				return hr;
+
+			}; // Result ClientSyncReliableC2SEvt::ParseMessage(const MessageData* pIMsg)
+
+			Result ClientSyncReliableC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				ClientSyncReliableC2SEvt parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("SyncData", "VariableTable", parser.GetSyncDataRaw());
+
+				return hr;
+
+			}; // Result ClientSyncReliableC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result ClientSyncReliableC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) ClientSyncReliableC2SEvt(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result ClientSyncReliableC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+			MessageData* ClientSyncReliableC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInSyncData
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncReliableC2SEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InSyncData);
+
+				return hr;
+			}; // MessageData* ClientSyncReliableC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
+
+			MessageData* ClientSyncReliableC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInSyncData
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncReliableC2SEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(output->Write(serializedSizeOfInSyncData));
+				protocolCheck(*output << InSyncData);
+
+				return hr;
+			}; // MessageData* ClientSyncReliableC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
+
+			Result ClientSyncReliableC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				ClientSyncReliableC2SEvt parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "ClientSyncReliable:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, SyncData:{4}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetSyncData()); 
+				return ResultCode::SUCCESS;
+			}; // Result ClientSyncReliableC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+			const MessageID ClientSyncC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 9);
+			const VariableTable& ClientSyncC2SEvt::GetSyncData() const
+			{
+ 				if (!m_SyncDataHasParsed)
+				{
+ 					m_SyncDataHasParsed = true;
+					InputMemoryStream SyncData_ReadStream(m_SyncDataRaw);
+					*SyncData_ReadStream.ToInputStream() >> m_SyncData;
+				} // if (!m_SyncDataHasParsed)
+				return m_SyncData;
+			} // const VariableTable& ClientSyncC2SEvt::GetSyncData() const
+			Result ClientSyncC2SEvt::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* SyncDataPtr = nullptr;
+				protocolCheck(input->ReadLink(SyncDataPtr, ArrayLen));
+				m_SyncDataRaw.SetLinkedBuffer(ArrayLen, SyncDataPtr);
+
+				return hr;
+
+			}; // Result ClientSyncC2SEvt::ParseMessage(const MessageData* pIMsg)
+
+			Result ClientSyncC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				ClientSyncC2SEvt parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("SyncData", "VariableTable", parser.GetSyncDataRaw());
+
+				return hr;
+
+			}; // Result ClientSyncC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result ClientSyncC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) ClientSyncC2SEvt(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result ClientSyncC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+			MessageData* ClientSyncC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInSyncData
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncC2SEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InSyncData);
+
+				return hr;
+			}; // MessageData* ClientSyncC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
+
+			MessageData* ClientSyncC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint8_t *pMsgData = nullptr;
+
+				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInSyncData
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncC2SEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(output->Write(serializedSizeOfInSyncData));
+				protocolCheck(*output << InSyncData);
+
+				return hr;
+			}; // MessageData* ClientSyncC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
+
+			Result ClientSyncC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				ClientSyncC2SEvt parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "ClientSync:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, SyncData:{4}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetSyncData()); 
+				return ResultCode::SUCCESS;
+			}; // Result ClientSyncC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
 			// Cmd: Occupy map object
-			const MessageID OccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 8);
+			const MessageID OccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
 			Result OccupyMapObjectCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1048,7 +1396,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID OccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 8);
+			const MessageID OccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
 			Result OccupyMapObjectRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1150,7 +1498,7 @@ namespace SF
 			}; // Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Unoccupy map object
-			const MessageID UnoccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 9);
+			const MessageID UnoccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
 			Result UnoccupyMapObjectCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1247,7 +1595,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID UnoccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 9);
+			const MessageID UnoccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
 			Result UnoccupyMapObjectRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1349,7 +1697,7 @@ namespace SF
 			}; // Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Use map object
-			const MessageID UseMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
+			const MessageID UseMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
 			const VariableTable& UseMapObjectCmd::GetUseParameters() const
 			{
  				if (!m_UseParametersHasParsed)
@@ -1504,7 +1852,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UseMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID UseMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
+			const MessageID UseMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
 			const VariableTable& UseMapObjectRes::GetResultAttributes() const
 			{
  				if (!m_ResultAttributesHasParsed)
@@ -1666,7 +2014,7 @@ namespace SF
 			}; // Result UseMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Havest area
-			const MessageID HarvestAreaCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
+			const MessageID HarvestAreaCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
 			Result HarvestAreaCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1763,7 +2111,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result HarvestAreaCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID HarvestAreaRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
+			const MessageID HarvestAreaRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
 			const VariableTable& HarvestAreaRes::GetResultAttributes() const
 			{
  				if (!m_ResultAttributesHasParsed)
@@ -1925,7 +2273,7 @@ namespace SF
 			}; // Result HarvestAreaRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Create stream instance
-			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
+			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
 			Result CreateStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2019,7 +2367,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
+			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
 			Result CreateStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2122,7 +2470,7 @@ namespace SF
 			}; // Result CreateStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Open stream instance
-			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
+			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
 			Result FindStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2216,7 +2564,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result FindStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
+			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
 			Result FindStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2319,7 +2667,7 @@ namespace SF
 			}; // Result FindStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Delete stream instance
-			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
+			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
 			Result DeleteStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2413,7 +2761,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
+			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
 			Result DeleteStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2503,7 +2851,7 @@ namespace SF
 			}; // Result DeleteStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Get stream list
-			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
+			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
 			Result GetStreamListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2592,7 +2940,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetStreamListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetStreamListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
+			const MessageID GetStreamListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
 			Result GetStreamListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2686,7 +3034,7 @@ namespace SF
 			}; // Result GetStreamListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: To call general functionality
-			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
+			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
 			const VariableTable& CallFunctionCmd::GetParameters() const
 			{
  				if (!m_ParametersHasParsed)
@@ -2829,7 +3177,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
+			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
 			const VariableTable& CallFunctionRes::GetResults() const
 			{
  				if (!m_ResultsHasParsed)

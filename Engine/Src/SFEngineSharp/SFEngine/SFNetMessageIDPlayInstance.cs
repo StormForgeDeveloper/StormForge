@@ -55,6 +55,12 @@ namespace SF.Net
 		// S2C: Player state change
 		public static int PlayerStateChangedS2CEvt { get { return CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt(); } }
 
+		// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+		public static int ClientSyncReliableC2SEvt { get { return CSSFNetMessageID_PlayInstanceClientSyncReliableC2SEvt(); } }
+
+		// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+		public static int ClientSyncC2SEvt { get { return CSSFNetMessageID_PlayInstanceClientSyncC2SEvt(); } }
+
 		// Cmd: Occupy map object
 		public static int OccupyMapObjectCmd { get { return CSSFNetMessageID_PlayInstanceOccupyMapObjectCmd(); } }
 
@@ -153,6 +159,16 @@ namespace SF.Net
 		// S2C: Player state change
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt();
+
+
+		// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceClientSyncReliableC2SEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceClientSyncReliableC2SEvt();
+
+
+		// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceClientSyncC2SEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceClientSyncC2SEvt();
 
 
 		// Cmd: Occupy map object

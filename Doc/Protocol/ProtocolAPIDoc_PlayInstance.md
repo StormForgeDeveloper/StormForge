@@ -112,7 +112,7 @@ Player Movement
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
-		- OutInPlayerID: PlayerID type. Player Movement
+		- OutInPlayerID: PlayerID type. Player Id
 
 		- OutInMovement: ActorMovement type. Movement attributes
 
@@ -120,17 +120,43 @@ Player Movement
 ## PlayerStateChangedS2CEvt
 Player state change
 
-        Result PlayerStateChangedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition)
+        Result PlayerStateChangedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Array<uint8_t>& InStateValues, const Vector4 &InPosition)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
-		- OutInPlayerID: PlayerID type. Player Movement
+		- OutInPlayerID: PlayerID type. Player Id
 
 		- OutInState: uint32 type. StateId, ActorMovement has same MovementStateId.
 
 		- OutInMoveFrame: uint32 type. Movement frame state change has happened
 
+		- OutInStateValues: VariableTable type. State change values
+
 		- OutInPosition: Vector4 type. Position of the player when state change happened
+
+
+## ClientSyncReliableC2SEvt
+Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+
+        Result ClientSyncReliableC2SEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData)
+
+		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. Player Id
+
+		- OutInSyncData: VariableTable type. sync data
+
+
+## ClientSyncC2SEvt
+Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
+
+        Result ClientSyncC2SEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData)
+
+		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. Player Id
+
+		- OutInSyncData: VariableTable type. sync data
 
 
 ## OccupyMapObject Request
