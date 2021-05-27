@@ -5,7 +5,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x64</Platforms>
-    <ApplicationIcon>log-file.ico</ApplicationIcon>
+    <ApplicationIcon>..\..\..\Data\resource\log-file.ico</ApplicationIcon>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
   </PropertyGroup>
 

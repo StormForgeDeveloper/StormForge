@@ -35,7 +35,7 @@ namespace SF
         {
             LogHandler += (level, message) =>
             {
-                NativeSFLogMessage((int)level, message);
+                NativeSFLogMessage((int)level, System.Text.Encoding.UTF8.GetBytes(message + "\0"));
             };
         }
 
@@ -75,7 +75,7 @@ namespace SF
 #endif
 
         [DllImport(NativeDllName, EntryPoint = "SFCSLog_LogMessage", CharSet = CharSet.Auto)]
-        static extern void NativeSFLogMessage(Int32 logLevel, [MarshalAs(UnmanagedType.LPStr)] string logMessage);
+        static extern void NativeSFLogMessage(Int32 logLevel, [MarshalAs(UnmanagedType.LPArray)] byte[] logMessage);
 
         #endregion
 
