@@ -153,8 +153,9 @@ namespace SF {
 			filePath,
 			uiOpenMode, uiSharingMode);
 
-		if (m_FileHandle == INVALID_NATIVE_HANDLE_VALUE)
+		if (m_FileHandle <= 0)
 		{
+			m_FileHandle = INVALID_NATIVE_HANDLE_VALUE;
 			return GetLastResultCode();
 		}
 

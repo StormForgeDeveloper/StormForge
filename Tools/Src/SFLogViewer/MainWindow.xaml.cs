@@ -51,7 +51,6 @@ namespace SFLogViewer
             m_TickTimer.Tick += new EventHandler(Timer_Tick);
             m_TickTimer.Interval = new TimeSpan(0, 0, 0, 0, 100);
             m_TickTimer.Start();
-
         }
 
         void RefreshChannelList()
