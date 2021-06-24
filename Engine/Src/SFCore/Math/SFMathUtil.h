@@ -66,6 +66,12 @@ namespace SF
 
 			return bitIndex;
 		}
+
+
+		SF_FORCEINLINE float DistanceCmToM(float cm)
+		{
+			return cm / 100.f;
+		}
 	}
 
 

@@ -12,6 +12,8 @@
 	<ResultCodeItem Severity="Error" CodeName="CONNECTION_LOST" Desc="Connectionlost"/>
 
 	<ResultCodeItem Severity="Error" CodeName="INVALID_CHARACTER" Desc="Invalid character data"/>
+	
+	<ResultCodeItem Severity="Error" CodeName="INVALID_TABLE_ID" Desc="Invalid table id"/>
 
 
 </ResultCodes>

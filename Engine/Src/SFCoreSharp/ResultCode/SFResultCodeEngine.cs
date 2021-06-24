@@ -29,6 +29,9 @@ namespace SF {
 		// Invalid character data 
 		public const int ENGINE_INVALID_CHARACTER =                         unchecked((int)0xE7020004); 
 
+		// Invalid table id 
+		public const int ENGINE_INVALID_TABLE_ID =                          unchecked((int)0xE7020005); 
+
 	}
 }
 

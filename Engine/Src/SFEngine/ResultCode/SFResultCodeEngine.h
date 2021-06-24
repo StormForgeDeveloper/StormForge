@@ -33,6 +33,9 @@ namespace SF {
 			// Invalid character data 
 			constexpr Result 			ENGINE_INVALID_CHARACTER                                           ((int32_t)0xE7020004L);
 
+			// Invalid table id 
+			constexpr Result 			ENGINE_INVALID_TABLE_ID                                            ((int32_t)0xE7020005L);
+
 	}//namespace ResultCode 
 }//namespace SF 
 
