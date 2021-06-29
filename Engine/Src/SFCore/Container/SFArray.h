@@ -200,7 +200,7 @@ namespace SF {
 			size_t m_AllocatedSize = 0;
 
 			// Increase Size
-			size_t m_IncreaseSize = 10;
+			size_t m_IncreaseSize = 16;
 
 			// Data pointer
 			DataType* m_pDataPtr = nullptr;
