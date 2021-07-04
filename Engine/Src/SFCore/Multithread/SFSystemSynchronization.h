@@ -33,6 +33,10 @@ namespace SF {
 	class MutexBase
 	{
 	public:
+
+		MutexBase() {}
+		virtual ~MutexBase() {}
+
 		virtual void Lock() = 0;
 		virtual void UnLock() = 0;
 	};

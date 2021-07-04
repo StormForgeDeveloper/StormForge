@@ -106,6 +106,10 @@ namespace SF {
 		return ResultCode::SUCCESS;
 	}
 
+	Result _ToString(ToStringContext& context, const void* value)
+	{
+		return _ToString(context, (uint64_t)value);
+	}
 
 }
 

@@ -322,18 +322,27 @@ namespace SF {
 				return GetDataPtr() == op.GetDataPtr();
 			}
 
-			return memcmp(GetDataPtr(), op.GetDataPtr(), sizeof(ValueType));
+			return memcmp(GetDataPtr(), op.GetDataPtr(), sizeof(ValueType)) == 0;
 		}
 
 
 		virtual size_t GetSerializedSize() const  override { return sizeof(*m_Value); }
 		virtual Result Serialize(IOutputStream& output) const override
 		{
-			return output << *m_Value;
+			if (m_Value == nullptr)
+				return output << ValueTypeDecay{};
+			else
+				return output << *m_Value;
 		}
 		virtual Result Deserialize(IInputStream& input) override
 		{
-			return input >> *m_Value;
+			if (m_Value == nullptr)
+			{
+				ValueTypeDecay Dummy{};
+				return input >> Dummy;
+			}
+			else
+				return input >> *m_Value;
 		}
 
 	};

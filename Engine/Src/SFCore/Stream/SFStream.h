@@ -393,6 +393,11 @@ namespace SF
 
 	inline Result operator >> (IInputStream& input, const char* data) { assert(false); return ResultCode::NOT_SUPPORTED; }
 	inline Result operator >> (IInputStream& input, const wchar_t* data) { assert(false); return ResultCode::NOT_SUPPORTED; }
+
+	inline size_t SerializedSizeOf(const void*& data) { return 0; }
+
+	inline Result operator << (IOutputStream& input, void* data) { assert(false); return ResultCode::NOT_SUPPORTED; }
+	inline Result operator << (IOutputStream& input, const void* data) { assert(false); return ResultCode::NOT_SUPPORTED; }
 	inline Result operator >> (IInputStream& input, void* data) { assert(false); return ResultCode::NOT_SUPPORTED; }
 	inline Result operator >> (IInputStream& input, const void* data) { assert(false); return ResultCode::NOT_SUPPORTED; }
 
