@@ -104,7 +104,7 @@ TEST_F(AlgorithmTest, MatchingRanking)
 	CriticalSection m_UpdateLock;
 	TimeStampMS start, end;
 
-	int iTest = 0;
+	//int iTest = 0;
 	SFLog(Game, Info, "Insert {0} items for test\n", NUM_PLAYER);
 	start = Util::Time.GetRawTimeMs();
 	for (int iPlayer = 0; iPlayer < NUM_PLAYER; iPlayer++)

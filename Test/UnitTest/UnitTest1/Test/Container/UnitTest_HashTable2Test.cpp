@@ -188,7 +188,7 @@ TEST_F(HashTableTest, HashTable2_UniqueMT)
 
 	Concurrency::concurrent_unordered_map<int64_t, SharedPointerT<TestMapNodeShared>> m_TestMap;
 	TestTableType TestMap(GetHeap());
-	TestMapNodeShared* pNode = nullptr;
+	//TestMapNodeShared* pNode = nullptr;
 
 
 	for (int64_t ID = 0; ID < READ_THREAD_COUNT; ID++)

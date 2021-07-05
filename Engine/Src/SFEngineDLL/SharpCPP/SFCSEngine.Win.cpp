@@ -142,7 +142,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	if (!SF::StrUtil::IsNullOrEmpty(logServerAddress))
 	{
 		initParam.LogServerAddress = logServerAddress;
-		initParam.LogOutputLogServer = SF::LogOutputMask(-1);
+		initParam.LogOutputLogServer = SF::LogOutputMask(uint32_t(-1));
 	}
 
 	if (!SF::StrUtil::IsNullOrEmpty(processName))

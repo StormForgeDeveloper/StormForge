@@ -99,7 +99,7 @@ TEST_F(MathTest, Soft_Matrix4_Simple)
 	auto nzAxis = SF::Vector4Soft<float>(0, 0, -1, 1);
 	SF::Matrix4Soft<float> rotMat;
 
-	auto randRot = SF::Vector4Soft<float>(1, 0, 0, C_HALF_PI);
+	auto randRot = SF::Vector4Soft<float>(1, 0, 0, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	auto resVec = rotMat * xAxis;
 	CompareVector(resVec, xAxis);
@@ -108,7 +108,7 @@ TEST_F(MathTest, Soft_Matrix4_Simple)
 	resVec = rotMat * zAxis;
 	CompareVector(resVec, nyAxis);
 
-	randRot = SF::Vector4Soft<float>(-1, 0, 0, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(-1, 0, 0, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	resVec = rotMat * xAxis;
 	CompareVector(resVec, xAxis);
@@ -117,7 +117,7 @@ TEST_F(MathTest, Soft_Matrix4_Simple)
 	resVec = rotMat * zAxis;
 	CompareVector(resVec, yAxis);
 
-	randRot = SF::Vector4Soft<float>(0, 1, 0, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(0, 1, 0, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	resVec = rotMat * xAxis;
 	CompareVector(resVec, nzAxis);
@@ -126,7 +126,7 @@ TEST_F(MathTest, Soft_Matrix4_Simple)
 	resVec = rotMat * zAxis;
 	CompareVector(resVec, xAxis);
 
-	randRot = SF::Vector4Soft<float>(0, -1, 0, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(0, -1, 0, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	resVec = rotMat * xAxis;
 	CompareVector(resVec, zAxis);
@@ -135,7 +135,7 @@ TEST_F(MathTest, Soft_Matrix4_Simple)
 	resVec = rotMat * zAxis;
 	CompareVector(resVec, nxAxis);
 
-	randRot = SF::Vector4Soft<float>(0, 0, 1, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(0, 0, 1, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	resVec = rotMat * xAxis;
 	CompareVector(resVec, yAxis);
@@ -144,7 +144,7 @@ TEST_F(MathTest, Soft_Matrix4_Simple)
 	resVec = rotMat * zAxis;
 	CompareVector(resVec, zAxis);
 
-	randRot = SF::Vector4Soft<float>(0, 0, 1, C_HALF_PI);
+	randRot = SF::Vector4Soft<float>(0, 0, 1, C_FHALF_PI);
 	rotMat.InitRotationMatrix(randRot);
 	resVec = rotMat * xAxis;
 	CompareVector(resVec, yAxis);

@@ -200,7 +200,6 @@ TEST_F(HashTableTest, HashTable_UniqueMT)
 										> TestTableType;
 
 	TestTableType TestMap;
-	TestTableType::iterator itCur;
 
 	for( int64_t ID = 0; ID < READ_THREAD_COUNT; ID++ )
 	{

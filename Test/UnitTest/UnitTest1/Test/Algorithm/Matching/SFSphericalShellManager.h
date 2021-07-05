@@ -217,7 +217,7 @@ namespace SF
 		UserPreference m_Preference;
 
 		// current Shell Index, if belong to a Shell
-		uint m_CurrentShellID = -1;
+		uint m_CurrentShellID = uint(-1);
 		Mutex m_ShellLock;
     };
 
@@ -233,7 +233,7 @@ namespace SF
 	{
 	public:
 
-		static constexpr uint InvalidShellID = -1;
+		static constexpr uint InvalidShellID = uint(-1);
 
 		struct SearchContext
 		{

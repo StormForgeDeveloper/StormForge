@@ -158,7 +158,7 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 			auto testSequence = uiSequence;
 			if (rand() % 2)
 			{
-				testSequence = std::abs(rand());
+				testSequence = (uint16_t)std::abs(rand());
 			}
 			auto pNewMsg = NewMessage(testHeap, testSequence);
 			hr = recvMessage.AddMsg(pNewMsg);
@@ -394,7 +394,7 @@ TEST_F(NetTest, RecvMessageWindowMT2)
 					multiplyer = -1;
 				randValue >>= 1;
 				// Randomly pick test sequence
-				testSequence = recvMessage.GetBaseSequence() - multiplyer * (std::abs(randValue) % MaxRandomizeSequence);
+				testSequence = (uint16_t)(recvMessage.GetBaseSequence() - multiplyer * (std::abs(randValue) % MaxRandomizeSequence));
 
 				pMsg = NewMessage(testHeap, testSequence);
 				hr = recvMessage.AddMsg(pMsg);
@@ -486,8 +486,8 @@ TEST_F(NetTest, SendMessageWindowSimple)
 			}
 		}
 
-		EXPECT_EQ(SF::ResultCode::SUCCESS, msgWindow.ReleaseMsg(msgWindow.GetHeadSequence(), 0));
-		EXPECT_EQ(0, msgWindow.GetMsgCount());
+		EXPECT_EQ(SF::ResultCode::SUCCESS, msgWindow.ReleaseMsg((uint16_t)msgWindow.GetHeadSequence(), 0));
+		EXPECT_EQ(uint32_t(0), msgWindow.GetMsgCount());
 	}
 
 	SFLog(Net, Info, "Test Finished");
@@ -518,8 +518,8 @@ TEST_F(NetTest, SendMessageWindowSimple2)
 			}
 		}
 
-		ASSERT_EQ(SF::ResultCode::SUCCESS, msgWindow.ReleaseMsg(msgWindow.GetBaseSequence() + msgWindow.GetMsgCount(), 0));
-		ASSERT_EQ(0, msgWindow.GetMsgCount());
+		ASSERT_EQ(SF::ResultCode::SUCCESS, msgWindow.ReleaseMsg((uint16_t)(msgWindow.GetBaseSequence() + msgWindow.GetMsgCount()), 0));
+		ASSERT_EQ(uint(0), msgWindow.GetMsgCount());
 	}
 
 	SFLog(Net, Info, "Test Finished");

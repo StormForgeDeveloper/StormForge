@@ -72,7 +72,7 @@ SFDLL_EXPORT int SFConnection_NativeConnect(intptr_t nativeHandle, uint64_t auth
 	if (nativeHandle == 0)
 		return ResultCode::INVALID_ARG;
 
-	NetAddress remoteAddress(address, port);
+	NetAddress remoteAddress(address, (uint16_t)port);
 
 	auto pConnection = SF::NativeToObject<Net::Connection>(nativeHandle);
 	auto result = pConnection->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, remoteAddress, 0));

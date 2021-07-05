@@ -40,10 +40,10 @@ TEST_F(MovementTest, ActorMovementSimple)
 {
 	const float MaxSpeed = 100;
 	const int TestFrameMax = 10 * 60 * 60 * 60; // 10 hours amount
-	uint32_t sendFrame = 0;
+	//uint32_t sendFrame = 0;
 	ActorMovement curMove;
 
-	uint32_t recvFrame = 0;
+	//uint32_t recvFrame = 0;
 	ActorMovement replicatedMove;
 
 	SharedPointerT<SendingActorMovementManager> sendingMove = new(GetHeap()) SendingActorMovementManager;
@@ -70,7 +70,7 @@ TEST_F(MovementTest, ActorMovementSimple)
 			Vector4 movDir = Vector4::Zero();
 			if (moving)
 			{
-				auto changeDir = Util::Random.Rand(0, 9) < 2;
+				//auto changeDir = Util::Random.Rand(0, 9) < 2;
 				auto speed = Util::Random.RandF() * MaxSpeed;
 				movDir = Vector4(Util::Random.RandF(), Util::Random.RandF(), Util::Random.RandF());
 				movDir.Normalize3();

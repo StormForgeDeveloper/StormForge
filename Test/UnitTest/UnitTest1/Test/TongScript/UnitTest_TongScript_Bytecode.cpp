@@ -168,7 +168,7 @@ TEST_F(TongScriptTest, Bytecode)
 			EXPECT_EQ(nullptr, pEnvVar);
 			auto pContextVar = context.GetVariable("Test");
 			EXPECT_NE(nullptr, pContextVar);
-			EXPECT_EQ(pContextVar->GetValueUInt32(), 10);
+			EXPECT_EQ(pContextVar->GetValueUInt32(), uint32_t(10));
 		}
 	);
 

@@ -42,7 +42,7 @@ static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int
 	start = Util::Time.GetRawTimeMs();
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
@@ -66,7 +66,7 @@ static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int
 	start = Util::Time.GetRawTimeMs();
 	for (iTest = 0; iTest < Math::Min((unsigned)1000, numberOfTest); iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
@@ -76,7 +76,7 @@ static void TestSortedMap_PerfTest(IHeap& heap, unsigned numberOfTest, const int
 	start = Util::Time.GetRawTimeMs();
 	for (; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}

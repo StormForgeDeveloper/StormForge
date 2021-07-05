@@ -44,9 +44,9 @@ TEST_F(VariableTest, Table)
 	auto testInt = table.GetValue<int>("testInt");
 	auto testFloat = table.GetValue<float>("testFloat");
 	auto testDouble = table.GetValue<double>("testDouble");
-	EXPECT_EQ(boxedInt.GetVariable()->GetValue<int>(), table.GetValue<int>("testInt"));
-	EXPECT_EQ(boxedFloat.GetVariable()->GetValue<float>(), table.GetValue<float>("testFloat"));
-	EXPECT_EQ(boxedDouble.GetVariable()->GetValue<double>(), table.GetValue<double>("testDouble"));
+	EXPECT_EQ(boxedInt.GetVariable()->GetValue<int>(), testInt);
+	EXPECT_EQ(boxedFloat.GetVariable()->GetValue<float>(), testFloat);
+	EXPECT_EQ(boxedDouble.GetVariable()->GetValue<double>(), testDouble);
 }
 
 

@@ -157,6 +157,8 @@ TEST_F(MathTest, SSE_Quaternion_Simple)
 	auto yr = v.y*(q.w*q.w - q.x*q.x + q.y*q.y - q.z*q.z);
 	auto zr = v.z*(q.w*q.w - q.x*q.x - q.y*q.y + q.z*q.z);
 
+	unused(zr, yl, yr, zl, xl, xr);
+
 	auto resVec1 = quat.RotateVector(quat2.RotateVector(randVector));
 	auto resVec = quat3.RotateVector(randVector);
 

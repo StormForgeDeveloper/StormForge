@@ -43,7 +43,7 @@ TEST_F(MemoryTest, Heap)
 
 	for (int i = 0; i < 100; i++)
 	{
-		pPtr[i] = i + 1;
+		pPtr[i] = (uint8_t)(i + 1);
 	}
 
 	SF::SortedArray<StringCrc64, intptr_t> testArray(GetHeap());
@@ -94,7 +94,7 @@ TEST_F(MemoryTest, NewDelete)
 		Vector4 m_PackedFactors[8]{};
 
 		// current Shell Index, if belong to a Shell
-		uint m_CurrentShellID = -1;
+		uint m_CurrentShellID = (uint)(-1);
 		Mutex m_ShellLock;
 	};
 

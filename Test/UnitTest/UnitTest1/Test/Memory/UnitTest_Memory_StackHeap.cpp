@@ -81,13 +81,13 @@ TEST_F(MemoryTest, StackHeap)
 		auto randVal = Util::Random.Rand(100);
 		if ((allocatedList.size() > 0 && randVal > 50) || stackHeap->GetFreeMemorySize() < minAllocationSize)
 		{
-			auto pPtr = allocatedList.pop_back();
-			IHeap::Delete(pPtr);
+			auto pDeletePtr = allocatedList.pop_back();
+			IHeap::Delete(pDeletePtr);
 		}
 		else
 		{
-			auto pPtr = new(*stackHeap.get()) int[randVal % 10];
-			allocatedList.push_back(pPtr);
+			auto pNewPtr = new(*stackHeap.get()) int[randVal % 10];
+			allocatedList.push_back(pNewPtr);
 		}
 
 	}

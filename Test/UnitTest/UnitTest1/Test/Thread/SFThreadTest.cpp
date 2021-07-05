@@ -403,10 +403,10 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueue)
 		testArray[item-1] = 1;
 	}
 
-	for (uint item = 0; item < TEST_LENGTH; item++)
+	for (uint iTestItem = 0; iTestItem < TEST_LENGTH; iTestItem++)
 	{
-		EXPECT_EQ(1, testArray[item]);
-		AssertRel(testArray[item] == 1);
+		EXPECT_EQ(1, testArray[iTestItem]);
+		AssertRel(testArray[iTestItem] == 1);
 	}
 
 	delete[] testArray;
@@ -466,10 +466,10 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 	m_Threads.clear();
 
 
-	for (uint item = 0; item < TEST_LENGTH; item++)
+	for (uint iTestItem = 0; iTestItem < TEST_LENGTH; iTestItem++)
 	{
-		EXPECT_EQ(1, testArray[item]);
-		AssertRel(testArray[item] == 1);
+		EXPECT_EQ(1, testArray[iTestItem]);
+		AssertRel(testArray[iTestItem] == 1);
 	}
 
 	delete[] testArray;

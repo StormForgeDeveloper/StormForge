@@ -83,13 +83,13 @@ TEST_F(MemoryTest, CircularHeap)
 		auto randVal = Util::Random.Rand(100);
 		if ((allocatedList.size() > 0 && randVal > 50) || circularHeap->GetFreeMemorySize() < minAllocationSize)
 		{
-			auto pPtr = allocatedList.pop_back();
-			IHeap::Delete(pPtr);
+			auto pDeletePtr = allocatedList.pop_back();
+			IHeap::Delete(pDeletePtr);
 		}
 		else
 		{
-			auto pPtr = new(*circularHeap.get()) int[randVal % 10];
-			allocatedList.push_back(pPtr);
+			auto pNewPtr = new(*circularHeap.get()) int[randVal % 10];
+			allocatedList.push_back(pNewPtr);
 		}
 
 	}

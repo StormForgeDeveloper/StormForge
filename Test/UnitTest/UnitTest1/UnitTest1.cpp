@@ -32,8 +32,8 @@ int main(int argc, char** argv)
 	initParam.GlobalLogOutputMask.Error = 1;
 	initParam.GlobalLogOutputMask.Warning = 1;
 	initParam.GlobalLogOutputMask.Info = 1;
-	initParam.LogOutputDebugger.Composited = -1;
-	initParam.LogOutputConsole.Composited = -1;
+	initParam.LogOutputDebugger.Composited = uint32_t(-1);
+	initParam.LogOutputConsole.Composited = uint32_t(-1);
 	initParam.EnableMemoryLeakDetection = true;
 	initParam.GraphicSystem = "Vulkan";
 
@@ -41,7 +41,7 @@ int main(int argc, char** argv)
 
 	InitGoogleTest(&argc, argv);
 
-	UnitTest& unit_test = *UnitTest::GetInstance();
+	//UnitTest& unit_test = *UnitTest::GetInstance();
 
 	int iRes = RUN_ALL_TESTS();
 

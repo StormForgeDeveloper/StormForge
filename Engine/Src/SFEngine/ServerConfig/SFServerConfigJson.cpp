@@ -91,7 +91,7 @@ namespace SF
 		publicNet.IPV4 = IPV4.asCString();
 		publicNet.IPV6 = IPV6.asCString();
 		publicNet.ListenIP = ListenIP.asCString();
-		publicNet.Port = itemValue.get("Port", Json::Value("")).asUInt();
+		publicNet.Port = (uint16_t)itemValue.get("Port", Json::Value("")).asUInt();
 		publicNet.MaxConnection = itemValue.get("MaxConnection", Json::Value("")).asUInt();
 
 		return ResultCode::SUCCESS;

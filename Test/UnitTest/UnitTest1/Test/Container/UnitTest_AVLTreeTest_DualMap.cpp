@@ -37,7 +37,7 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 	{
 		EXPECT_TRUE(sortedMap.Insert(TestValues[iTest], TestValues[iTest], &order));
 		EXPECT_TRUE(order == 0);
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE(sortedMap.Remove(TestValues[iTest], value));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 
@@ -61,7 +61,7 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE(sortedMap.Remove(TestValues[iTest], value));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
@@ -77,7 +77,7 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE(!sortedMap.Find(TestValues[iTest], value));
 	}
 
@@ -85,7 +85,7 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 
 	for (int iTest = numberOfTest - 1; iTest >= 0; iTest--)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
@@ -105,14 +105,14 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Find(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
 
 	for (int iTest = numberOfTest - 1; iTest >= 0; iTest--)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
@@ -128,7 +128,7 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 
 	for (int iTest = numberOfTest - 1; iTest >= 0; iTest--)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
@@ -143,7 +143,7 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
@@ -209,7 +209,7 @@ TEST_F(AVLTreeTest, DualSortedMapOrderSequential)
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
@@ -244,7 +244,7 @@ TEST_F(AVLTreeTest, DualSortedMapOrderSequential)
 
 	for (int iTest = numberOfTest - 1; iTest >= 0; iTest--)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
@@ -265,12 +265,12 @@ TEST_F(AVLTreeTest, DualSortedMapRandom)
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 
 #ifdef DEBUG
-	const unsigned offset = 1;
+	const unsigned testOffset = 1;
 #else
-	const unsigned offset = 601;
+	const unsigned testOffset = 601;
 #endif
 
-	for (unsigned iTest = 0; iTest < numberOfTest; iTest += offset)
+	for (unsigned iTest = 0; iTest < numberOfTest; iTest += testOffset)
 	{
 		long latestValue = -1;
 
@@ -296,7 +296,7 @@ TEST_F(AVLTreeTest, DualSortedMapRandom)
 		});
 	}
 
-	for (unsigned iTest = 0; iTest < numberOfTest; iTest += offset)
+	for (unsigned iTest = 0; iTest < numberOfTest; iTest += testOffset)
 	{
 		long latestValue = -1;
 
@@ -324,7 +324,7 @@ TEST_F(AVLTreeTest, DualSortedMapRandom)
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
@@ -344,10 +344,10 @@ TEST_F(AVLTreeTest, DualSortedMapRandomForeach)
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 
 #ifdef DEBUG
-	const unsigned offset = 1;
+	const unsigned testOffset = 1;
 	DurationMS runningTime = DurationMS(60 * 1000);
 #else
-	const unsigned offset = 611;
+	const unsigned testOffset = 611;
 	DurationMS runningTime = DurationMS(2 * 60 * 1000);
 #endif
 
@@ -357,7 +357,7 @@ TEST_F(AVLTreeTest, DualSortedMapRandomForeach)
 	memset(Status, 0, sizeof(int)*numberOfTest);
 	for (unsigned iTest = 0; (end - start) < runningTime; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		uint testIndex = ((uint)rand()) % numberOfTest;
 		if (Status[testIndex] == 0)
 		{
@@ -377,11 +377,11 @@ TEST_F(AVLTreeTest, DualSortedMapRandomForeach)
 		}
 
 
-		for (unsigned iTest = 0; iTest < numberOfTest; iTest += offset)
+		for (unsigned iLocalTest = 0; iLocalTest < numberOfTest; iLocalTest += testOffset)
 		{
 			long latestValue = -1;
 
-			sortedMap.ForeachOrder(iTest, numberOfTest, [&](const uint& key, const uint& value)
+			sortedMap.ForeachOrder(iLocalTest, numberOfTest, [&](const uint& key, const uint& value)
 			{
 				if (latestValue != -1)
 				{
@@ -481,7 +481,7 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 #endif
 	for (unsigned iTest = numberOfTest; (end - start) < runningTime; iTest++)
 	{
-		Atomic<uint> value = -1;
+		Atomic<uint> value = (uint)-1;
 		uint testIndex = ((uint)rand()) % numberOfTest;
 		if (Status[testIndex] == 0)
 		{

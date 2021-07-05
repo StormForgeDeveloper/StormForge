@@ -106,7 +106,7 @@ TEST_F(CircularBufferTest, CircularBufferQueueSimple2)
 	int enqueuedCount = 0;
 	for (int iTry = 0; ; iTry++, enqueuedCount++)
 	{
-		uint8_t fillPattern = iTry + 1;
+		uint8_t fillPattern = (uint8_t)(iTry + 1);
 		auto pBuffer = circularBuffer.AllocateWrite(allocSize);
 		if (pBuffer == nullptr)
 			break;
@@ -119,7 +119,7 @@ TEST_F(CircularBufferTest, CircularBufferQueueSimple2)
 
 	for (int iTry = 0; iTry < enqueuedCount; iTry++)
 	{
-		uint8_t fillPattern = iTry + 1;
+		uint8_t fillPattern = (uint8_t)(iTry + 1);
 
 		auto pReadItem = circularBuffer.DequeueRead();
 		GTEST_ASSERT_NE(nullptr, pReadItem);
@@ -180,11 +180,11 @@ TEST_F(CircularBufferTest, CircularBufferQueueFull)
 			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
-			uint8_t fillPattern = (uint8_t)allocSize;
+			size_t testAllocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)testAllocSize;
 
 			auto pData = (uint8_t*)pReadItem->GetDataPtr();
-			for (int iData = 0; iData < allocSize; iData++)
+			for (int iData = 0; iData < testAllocSize; iData++)
 			{
 				EXPECT_EQ(fillPattern, pData[iData]);
 			}
@@ -235,11 +235,11 @@ TEST_F(CircularBufferTest, CircularBufferQueueEmpty)
 			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
-			uint8_t fillPattern = (uint8_t)allocSize;
+			size_t testAllocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)testAllocSize;
 
 			auto pData = (uint8_t*)pReadItem->GetDataPtr();
-			for (int iData = 0; iData < allocSize; iData++)
+			for (int iData = 0; iData < testAllocSize; iData++)
 			{
 				EXPECT_EQ(fillPattern, pData[iData]);
 			}
@@ -289,11 +289,11 @@ TEST_F(CircularBufferTest, CircularBufferQueueEmptyRand)
 			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
-			uint8_t fillPattern = (uint8_t)allocSize;
+			size_t testAllocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)testAllocSize;
 
 			auto pData = (uint8_t*)pReadItem->GetDataPtr();
-			for (int iData = 0; iData < allocSize; iData++)
+			for (int iData = 0; iData < testAllocSize; iData++)
 			{
 				EXPECT_EQ(fillPattern, pData[iData]);
 			}
@@ -510,7 +510,7 @@ TEST_F(CircularBufferTest, CircularBuffer_Simple2)
 	int enqueuedCount = 0;
 	for (int iTry = 0; ; iTry++, enqueuedCount++)
 	{
-		uint8_t fillPattern = iTry + 1;
+		uint8_t fillPattern = (uint8_t)(iTry + 1);
 		auto pBuffer = circularBuffer.Allocate(allocSize);
 		if (pBuffer == nullptr)
 			break;
@@ -522,7 +522,7 @@ TEST_F(CircularBufferTest, CircularBuffer_Simple2)
 
 	for (int iTry = 0; iTry < enqueuedCount; iTry++)
 	{
-		uint8_t fillPattern = iTry + 1;
+		uint8_t fillPattern = (uint8_t)(iTry + 1);
 		auto pReadItem = testAllocated[iTry];
 		GTEST_ASSERT_NE(nullptr, pReadItem);
 
@@ -583,11 +583,11 @@ TEST_F(CircularBufferTest, CircularBuffer_Full)
 			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
-			uint8_t fillPattern = (uint8_t)allocSize;
+			size_t testAllocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)testAllocSize;
 
 			auto pData = (uint8_t*)pReadItem->GetDataPtr();
-			for (int iData = 0; iData < allocSize; iData++)
+			for (int iData = 0; iData < testAllocSize; iData++)
 			{
 				EXPECT_EQ(fillPattern, pData[iData]);
 			}
@@ -640,11 +640,11 @@ TEST_F(CircularBufferTest, CircularBuffer_RandomFree)
 			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
-			uint8_t fillPattern = (uint8_t)allocSize;
+			size_t testAllocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)testAllocSize;
 
 			auto pData = (uint8_t*)pReadItem->GetDataPtr();
-			for (int iData = 0; iData < allocSize; iData++)
+			for (int iData = 0; iData < testAllocSize; iData++)
 			{
 				EXPECT_EQ(fillPattern, pData[iData]);
 			}
@@ -694,11 +694,11 @@ TEST_F(CircularBufferTest, CircularBuffer_Empty)
 			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
-			uint8_t fillPattern = (uint8_t)allocSize;
+			size_t testAllocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)testAllocSize;
 
 			auto pData = (uint8_t*)pReadItem->GetDataPtr();
-			for (int iData = 0; iData < allocSize; iData++)
+			for (int iData = 0; iData < testAllocSize; iData++)
 			{
 				EXPECT_EQ(fillPattern, pData[iData]);
 			}
@@ -748,11 +748,11 @@ TEST_F(CircularBufferTest, CircularBuffer_EmptyRand)
 			GTEST_ASSERT_GE(pReadItem->NextPos, (uint32_t)0);
 			GTEST_ASSERT_LT(pReadItem->NextPos, TestBufferSize);
 
-			size_t allocSize = circularBuffer.GetBufferItemSize(pReadItem);
-			uint8_t fillPattern = (uint8_t)allocSize;
+			size_t testAllocSize = circularBuffer.GetBufferItemSize(pReadItem);
+			uint8_t fillPattern = (uint8_t)testAllocSize;
 
 			auto pData = (uint8_t*)pReadItem->GetDataPtr();
-			for (int iData = 0; iData < allocSize; iData++)
+			for (int iData = 0; iData < testAllocSize; iData++)
 			{
 				EXPECT_EQ(fillPattern, pData[iData]);
 			}

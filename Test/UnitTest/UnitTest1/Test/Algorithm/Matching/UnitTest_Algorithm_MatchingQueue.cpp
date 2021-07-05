@@ -375,7 +375,7 @@ TEST_F(AlgorithmTest, MatchingQueue)
 
 	QueueMatchMaker matchMaker(GetHeap());
 
-	int iTest = 0;
+	//int iTest = 0;
 	SFLog(Game, Info, "Initializing {0} items for test\n", NUM_PLAYER);
 	start = Util::Time.GetRawTimeMs();
 	for (int iPlayer = 0; iPlayer < NUM_PLAYER; iPlayer++)
@@ -448,9 +448,9 @@ TEST_F(AlgorithmTest, MatchingQueue)
 	{
 		auto newThread = new(GetHeap()) FunctorTickThread([&](Thread* pThread)
 		{
-			auto iPlayer = Util::Random.Rand() % NUM_PLAYER;
-			QueuePlayer *pRankingPlayer = nullptr;
-			int64_t ranking = 0;
+			//auto iPlayer = Util::Random.Rand() % NUM_PLAYER;
+			//QueuePlayer *pRankingPlayer = nullptr;
+			//int64_t ranking = 0;
 			StaticArray<QueuePlayer*, 4> matchedPlayers(GetHeap());
 
 			if (matchMaker.MatchMake(matchedPlayers))

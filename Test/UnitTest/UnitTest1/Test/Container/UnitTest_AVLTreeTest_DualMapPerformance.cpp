@@ -40,7 +40,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestSimple)
 	start = Util::Time.GetRawTimeMs();
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -61,7 +61,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestSimple)
 	start = Util::Time.GetRawTimeMs();
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 		EXPECT_TRUE((sortedMap.CommitChanges()));
@@ -85,7 +85,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestRead)
 	start = Util::Time.GetRawTimeMs();
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Find(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -141,7 +141,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTest1000)
 	start = Util::Time.GetRawTimeMs();
 	for (iTest = 0; iTest < std::min(1000, (int)numberOfTest); iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -152,7 +152,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTest1000)
 	start = Util::Time.GetRawTimeMs();
 	for (; iTest < (int)numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -211,7 +211,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfWithReadThreads)
 	start = Util::Time.GetRawTimeMs();
 	for (iTest = 0; iTest < std::min(1000, (int)numberOfTest); iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -222,7 +222,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfWithReadThreads)
 	start = Util::Time.GetRawTimeMs();
 	for (; iTest < (int)numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}

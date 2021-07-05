@@ -42,7 +42,7 @@ TEST_F(AVLTreeTest, SortedMapSimple)
 	{
 		EXPECT_TRUE((sortedMap.Insert(TestValues[iTest], TestValues[iTest], &order)));
 		EXPECT_TRUE(order == 0);
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -57,7 +57,7 @@ TEST_F(AVLTreeTest, SortedMapSimple)
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -71,7 +71,7 @@ TEST_F(AVLTreeTest, SortedMapSimple)
 
 	for (int iTest = numberOfTest - 1; iTest >= 0; iTest--)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -85,7 +85,7 @@ TEST_F(AVLTreeTest, SortedMapSimple)
 
 	for (int iTest = numberOfTest - 1; iTest >= 0; iTest--)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -99,7 +99,7 @@ TEST_F(AVLTreeTest, SortedMapSimple)
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -168,7 +168,7 @@ TEST_F(AVLTreeTest, SortedMapOrderSequential)
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE(sortedMap.Remove(TestValues[iTest], value));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -195,7 +195,7 @@ TEST_F(AVLTreeTest, SortedMapOrderSequential)
 
 	for (int iTest = numberOfTest - 1; iTest >= 0; iTest--)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE(sortedMap.Remove(TestValues[iTest], value));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -267,7 +267,7 @@ TEST_F(AVLTreeTest, SortedMapOrderRandom)
 
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE(sortedMap.Remove(TestValues[iTest], value));
 		EXPECT_TRUE((INT)value == TestValues[iTest]);
 	}
@@ -297,7 +297,7 @@ TEST_F(AVLTreeTest, SortedMapOrderRandom)
 
 	for (int iTest = numberOfTest - 1; iTest >= 0; iTest--)
 	{
-		uint value = -1;
+		uint value = (uint)-1;
 		EXPECT_TRUE(sortedMap.Remove(TestValues[iTest], value));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
 	}
