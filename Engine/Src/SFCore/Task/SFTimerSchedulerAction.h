@@ -33,11 +33,11 @@ namespace SF {
 #pragma pack(push, 4)
 		union TimeKey {
 			struct {
-				uint32_t ObjectId;// This should be unique id in the processes, something like entity id
-				TimeStampMS NextTickTime;
-			} Components;
+				uint32_t ObjectId{};// This should be unique id in the processes, something like entity id
+				TimeStampMS NextTickTime{};
+			} Components{};
 
-			uint64_t TimerKey = 0;
+			uint64_t TimerKey;
 		};
 #pragma pack(pop)
 
