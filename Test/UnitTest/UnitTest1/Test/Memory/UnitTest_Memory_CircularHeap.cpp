@@ -138,6 +138,7 @@ TEST_F(MemoryTest, CircularHeap_RandomDelete)
 			randVal = Util::Random.Rand(static_cast<int>(allocatedList.size() - 1));
 			auto refCount = circularHeap->GetReferenceCount();
 			Assert(refCount >= 2);
+			unused(refCount);
 			auto pPtr = allocatedList.GetKeyAt(randVal);
 			IHeap::Delete(pPtr);
 			allocatedList.Remove(pPtr);

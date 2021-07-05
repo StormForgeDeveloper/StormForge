@@ -136,6 +136,7 @@ TEST_F(MemoryTest, StackHeap_RandomDelete)
 			randVal = Util::Random.Rand(static_cast<int>(allocatedList.size() - 1));
 			auto refCount = stackHeap->GetReferenceCount();
 			Assert(refCount >= 2);
+			unused(refCount);
 			auto pPtr = allocatedList.GetKeyAt(randVal);
 			IHeap::Delete(pPtr);
 			allocatedList.Remove(pPtr);
