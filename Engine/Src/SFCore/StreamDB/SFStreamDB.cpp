@@ -483,8 +483,6 @@ namespace SF
 		if (message == nullptr)
 			return hr = ResultCode::NO_DATA_EXIST;
 
-		const RdKafka::Headers* headers = nullptr;
-
 		switch (message->err())
 		{
 		case RdKafka::ERR__TIMED_OUT:

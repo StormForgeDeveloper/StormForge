@@ -409,8 +409,6 @@ namespace Net {
 			netCheck(ResultCode::UNEXPECTED);
 		}
 
-		const MsgNetCtrlConnect* pNetCtrlCon = (const MsgNetCtrlConnect*)pNetCtrl;
-
 		switch (GetConnectionState())
 		{
 		case  ConnectionState::CONNECTING:

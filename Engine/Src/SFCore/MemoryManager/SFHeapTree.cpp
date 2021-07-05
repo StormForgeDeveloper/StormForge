@@ -51,9 +51,9 @@ namespace SF
 		}
 
 		// Original AVL just uses -BalanceTolerance ~ BalanceTolerance expression
-		Balance = iRightDepth - iLeftDepth;
-		DepthOfChildren = std::max(iRightDepth, iLeftDepth);
-		NumberOfChildren = iLeftChildren + iRightChildren;
+		Balance = int8_t(iRightDepth - iLeftDepth);
+		DepthOfChildren = int8_t(std::max(iRightDepth, iLeftDepth));
+		NumberOfChildren = int8_t(iLeftChildren + iRightChildren);
 
 		return Balance;
 	}

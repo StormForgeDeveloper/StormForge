@@ -920,7 +920,7 @@ namespace SF
 		m_MoveFrame += deltaFrames;
 		m_ServerMoveFrame += deltaFrames;
 
-		m_IncomingMovements.ForeachOrder(0, m_IncomingMovements.size(), 
+		m_IncomingMovements.ForeachOrder(0, (uint)m_IncomingMovements.size(), 
 			[moveFrame = m_MoveFrame - RemotePlayerSimulationDelay](const PlayerID playerId, const SharedPointerT<ReceivedMovementMnager>& movement)
 			{
 				ActorMovement outMovement;

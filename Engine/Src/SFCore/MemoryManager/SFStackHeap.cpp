@@ -73,7 +73,7 @@ namespace SF {
 			return pMemBlk;
 		}
 
-		pChunk->InitHeader(this, (uint32_t)size, MemoryChunkHeader::GetHeaderSize());
+		pChunk->InitHeader(this, (uint32_t)size, (uint32_t)MemoryChunkHeader::GetHeaderSize());
 		pChunk->pHeap = this; // null means free block
 		pChunk->GetFooter()->InitFooter();
 
@@ -146,7 +146,7 @@ namespace SF {
 	// Validate allocated chunks for debug
 	Result StackHeap::ValidateAllocatedChunks()
 	{
-		MemoryChunkHeader* pChunk = nullptr;
+		//MemoryChunkHeader* pChunk = nullptr;
 
 		// TODO: fix it
 		//if ((decltype(m_AllocationBufferSize))m_FreeSize < m_AllocationBufferSize)

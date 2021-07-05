@@ -257,10 +257,10 @@ namespace SF {
 
 		Vector4Soft<T>& MAdd(const T & scala);
 
-		float GetX() const { return x; }
-		float GetY() const { return y; }
-		float GetZ() const { return z; }
-		float GetW() const { return w; }
+		T GetX() const { return x; }
+		T GetY() const { return y; }
+		T GetZ() const { return z; }
+		T GetW() const { return w; }
 
 
 

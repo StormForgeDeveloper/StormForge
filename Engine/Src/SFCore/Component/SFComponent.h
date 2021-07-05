@@ -387,7 +387,7 @@ namespace SF
 		virtual Result InitializeComponents()
 		{
 			ScopeContext hr = ResultCode::SUCCESS;
-			size_t iComponent = 0;
+
 			for (auto itComponent : m_Components)
 			{
 				auto pComponent = itComponent.GetValue();

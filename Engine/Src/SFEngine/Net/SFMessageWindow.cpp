@@ -361,7 +361,7 @@ namespace Net {
 		}
 		else if (iIdx > 0)
 		{
-			auto maxRelease = std::min(iIdx, GetAcceptableSequenceRange());
+			auto maxRelease = (uint32_t)std::min(iIdx, GetAcceptableSequenceRange());
 			for (; uiCurBit < maxRelease; uiCurBit++)
 			{
 				ReleaseMessageInternal(uiCurBit);

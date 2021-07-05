@@ -35,8 +35,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyPlayInstance::JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 	// C2S: Play packet
 	Result NetPolicyPlayInstance::PlayPacketC2SEvt( const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
@@ -50,8 +48,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyPlayInstance::PlayPacketC2SEvt( const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 	// C2S: Player Movement
@@ -67,8 +63,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyPlayInstance::PlayerMovementC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 	// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 	Result NetPolicyPlayInstance::ClientSyncReliableC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
@@ -82,8 +76,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyPlayInstance::ClientSyncReliableC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
 	// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
@@ -99,11 +91,9 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyPlayInstance::ClientSyncC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
 	// Cmd: Occupy map object
-	Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId )
+	Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
 	{
  		ScopeContext hr;
 
@@ -115,11 +105,9 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
-	}; // Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId )
+	}; // Result NetPolicyPlayInstance::OccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
 	// Cmd: Unoccupy map object
-	Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+	Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	{
  		ScopeContext hr;
 
@@ -131,9 +119,7 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
-	}; // Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+	}; // Result NetPolicyPlayInstance::UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	// Cmd: Use map object
 	Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
 	{
@@ -146,8 +132,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
 	// Cmd: Havest area
@@ -163,8 +147,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyPlayInstance::HarvestAreaCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId )
 	// Cmd: Create stream instance
 	Result NetPolicyPlayInstance::CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
@@ -178,8 +160,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyPlayInstance::CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	// Cmd: Open stream instance
@@ -195,8 +175,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyPlayInstance::FindStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	// Cmd: Delete stream instance
 	Result NetPolicyPlayInstance::DeleteStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
@@ -210,8 +188,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyPlayInstance::DeleteStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 	// Cmd: Get stream list
@@ -227,8 +203,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyPlayInstance::GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket )
 	// Cmd: To call general functionality
 	Result NetPolicyPlayInstance::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
@@ -242,8 +216,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyPlayInstance::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
 
@@ -261,8 +233,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyPlayInstance::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 	// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 	Result NetSvrPolicyPlayInstance::PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
@@ -276,8 +246,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyPlayInstance::PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
 	// S2C: New Player in get view
@@ -293,8 +261,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyPlayInstance::NewPlayerInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement )
 	// S2C: Remove player from view
 	Result NetSvrPolicyPlayInstance::RemovePlayerFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
@@ -308,8 +274,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyPlayInstance::RemovePlayerFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
 	// S2C: Player Movement
@@ -325,8 +289,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyPlayInstance::PlayerMovementS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 	// S2C: Player state change
 	Result NetSvrPolicyPlayInstance::PlayerStateChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const VariableTable &InStateValues, const Vector4 &InPosition )
@@ -341,11 +303,9 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyPlayInstance::PlayerStateChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const VariableTable &InStateValues, const Vector4 &InPosition )
 	// Cmd: Occupy map object
-	Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+	Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	{
  		ScopeContext hr;
 
@@ -357,11 +317,9 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
-	}; // Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+	}; // Result NetSvrPolicyPlayInstance::OccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	// Cmd: Unoccupy map object
-	Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+	Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	{
  		ScopeContext hr;
 
@@ -373,9 +331,7 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
-	}; // Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+	}; // Result NetSvrPolicyPlayInstance::UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 	// Cmd: Use map object
 	Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
 	{
@@ -388,8 +344,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
 	// Cmd: Havest area
@@ -405,8 +359,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyPlayInstance::HarvestAreaRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes )
 	// Cmd: Create stream instance
 	Result NetSvrPolicyPlayInstance::CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
@@ -420,8 +372,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyPlayInstance::CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 	// Cmd: Open stream instance
@@ -437,8 +387,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyPlayInstance::FindStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID )
 	// Cmd: Delete stream instance
 	Result NetSvrPolicyPlayInstance::DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -452,8 +400,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyPlayInstance::DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Get stream list
@@ -469,8 +415,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyPlayInstance::GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
 	// Cmd: To call general functionality
 	Result NetSvrPolicyPlayInstance::CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
@@ -484,8 +428,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyPlayInstance::CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
 

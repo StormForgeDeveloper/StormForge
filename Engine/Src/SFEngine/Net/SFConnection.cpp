@@ -141,7 +141,7 @@ namespace SF {
 			}
 
 			m_RecvMessageDelegatesByMsgId.CommitChanges();
-			m_RecvMessageDelegatesByMsgId.ForeachOrder(0, m_RecvMessageDelegatesByMsgId.size(), [](uint32_t, RecvMessageDelegates* pDelegate)
+			m_RecvMessageDelegatesByMsgId.ForeachOrder(0, (uint32_t)m_RecvMessageDelegatesByMsgId.size(), [](uint32_t, RecvMessageDelegates* pDelegate)
 				{
 					IHeap::Delete(pDelegate);
 					return true;
@@ -291,9 +291,9 @@ namespace SF {
 
 
 		// Message count currently in recv queue
-		SysUInt Connection::GetRecvMessageCount()
+		uint32_t Connection::GetRecvMessageCount()
 		{
-			return m_RecvQueue.size();
+			return (uint32_t)m_RecvQueue.size();
 		}
 
 		// Called on connection result
@@ -672,7 +672,7 @@ namespace SF {
 				GetRecvMessageDelegates().Invoke(this, pMsgData);
 			}
 
-			uint32_t eventCount = m_EventQueue.size();
+			auto eventCount = m_EventQueue.size();
 			for (uint iEvent = 0; iEvent < eventCount; iEvent++)
 			{
 				ConnectionEvent curEvent{};

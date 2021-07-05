@@ -21,7 +21,7 @@
 namespace SF {
 
 	class AppBase;
-
+	class Engine;
 
 	// Engine initialization parameters
 	struct EngineInitParam
@@ -81,6 +81,9 @@ namespace SF {
 		const char* LogServerAddress{};
 
 		const char* LogFilePrefix{};
+
+		// Initialization functions, called before engine thread start
+		std::vector<std::function<void(Engine*)>> InitializationFunctions;
 	};
 
 

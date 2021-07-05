@@ -105,8 +105,6 @@ namespace Util {
 		{
 			return String(heap, pFileName);
 		}
-
-		return String(heap);
 	}
 
 	// Get file directory

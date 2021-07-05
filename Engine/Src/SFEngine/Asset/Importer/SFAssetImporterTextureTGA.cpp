@@ -353,13 +353,13 @@ namespace SF
 					head = readByte;
 					if (head >= 128)
 					{
-						repeat = head - 127;
+						repeat = uint8_t(head - 127);
 						result = tga.stream->Read(sample, bytes);
 						if (!result) return result;
 					}
 					else
 					{
-						direct = head + 1;
+						direct = uint8_t(head + 1);
 					}
 				}
 				if (repeat > 0)

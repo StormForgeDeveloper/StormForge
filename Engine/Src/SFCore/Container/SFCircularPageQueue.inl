@@ -236,7 +236,7 @@ namespace SF {
 			if (m_CircularPages == nullptr)
 				return ResultCode::INVALID_POINTER;
 
-			auto defaultValue = DataType{};
+			//auto defaultValue = DataType{};
 
 			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::Exclusive, m_CircularBufferLock);
 

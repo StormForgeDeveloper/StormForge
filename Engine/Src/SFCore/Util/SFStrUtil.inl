@@ -353,7 +353,7 @@ namespace SF {
 			{
 				int cSrc = szSrc[0];
 				if (cSrc >= 'A' && cSrc <= 'Z')
-					szSrc[0] = (cSrc - 'A' + 'a');
+					szSrc[0] = char(cSrc - 'A' + 'a');
 
 				szSrc++;
 			}

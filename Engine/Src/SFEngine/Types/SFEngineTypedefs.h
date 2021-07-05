@@ -258,7 +258,7 @@ namespace SF {
 		struct {
 			EntityID	EntID;
 			uint32_t		TransID;
-		} Components;
+		} Components{};
 		uint64_t ID;
 
 		inline TransactionID();

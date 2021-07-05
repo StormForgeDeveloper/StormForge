@@ -114,20 +114,20 @@ namespace SF {
 			if (m_CompressionInfo->avail_in == 0)
 			{
 				auto remainInputSize = m_Stream.GetPosition() - m_InputStartPosition;
-				auto readSize = sizeof(m_DecompressBuffer);
-				if (remainInputSize < readSize)
+				auto bufferSize = sizeof(m_DecompressBuffer);
+				if (remainInputSize < bufferSize)
 				{
-					readSize = remainInputSize;
+					bufferSize = remainInputSize;
 				}
 
-				if (readSize == 0)
+				if (bufferSize == 0)
 					return ResultCode::END_OF_STREAM;
 
-				Result result = m_Stream.Read(m_DecompressBuffer, readSize);
+				Result result = m_Stream.Read(m_DecompressBuffer, bufferSize);
 				if (!result)
 					return result;
 
-				m_CompressionInfo->avail_in = (uint)readSize;
+				m_CompressionInfo->avail_in = (uint)bufferSize;
 				m_CompressionInfo->next_in = m_DecompressBuffer;
 			}
 

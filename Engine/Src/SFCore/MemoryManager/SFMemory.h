@@ -78,7 +78,7 @@ namespace SF {
 #endif
 
 
-#pragma pack(push, 1)
+#pragma pack(push, 4)
 	struct MemBlockFooter;
 
 	struct MemBlockHdr
@@ -104,6 +104,7 @@ namespace SF {
 		void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + HeaderSize; }
 		MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(GetDataPtr()) + AlignUp(Size, MaxHeaderAlignment)); }
 	};
+#pragma pack(pop)
 
 	struct MemBlockFooter
 	{
@@ -121,7 +122,6 @@ namespace SF {
 		void InitFooter();
 		void Deinit();
 	};
-#pragma pack(pop)
 
 } // namespace SF
 

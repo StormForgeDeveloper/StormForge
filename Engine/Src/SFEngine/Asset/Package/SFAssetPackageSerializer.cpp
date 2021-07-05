@@ -174,7 +174,7 @@ namespace SF
 			ResourcePtr resultRes;
 
 			AssetSerializer *pSerializer = nullptr;
-			Result result = Service::AssetSerializerFactory->FindSerializer(objHeader.ObjectType, pSerializer);
+			result = Service::AssetSerializerFactory->FindSerializer(objHeader.ObjectType, pSerializer);
 			if (!result)
 				return result;
 

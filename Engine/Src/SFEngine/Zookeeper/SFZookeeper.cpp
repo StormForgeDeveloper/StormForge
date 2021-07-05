@@ -52,8 +52,8 @@ namespace SF
 		{
 			auto previousState = zkWatcher->m_State.exchange(state, std::memory_order_release);
 
-			evt.Components.State = state;
-			evt.Components.EventType = type;
+			evt.Components.State = (int16_t)state;
+			evt.Components.EventType = (int16_t)type;
 			zkWatcher->OnNewEvent(evt);
 
 			SFLog(System, Info, "ZK Connected prev:{0}, new:{1}", Zookeeper::StateToString(previousState), Zookeeper::StateToString(state));
@@ -73,8 +73,8 @@ namespace SF
 		else
 		{
 			evt.Components.NodePath = Service::StringDB->AddNGetString32(path);
-			evt.Components.State = state;
-			evt.Components.EventType = type;
+			evt.Components.State = (int16_t)state;
+			evt.Components.EventType = (int16_t)type;
 			SFLog(System, Info, "ZK Event node:{0}, event:{1}", path, Zookeeper::EventToString(type));
 			zkWatcher->OnNewEvent(evt);
 		}

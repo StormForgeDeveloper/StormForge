@@ -93,8 +93,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGameID)
@@ -195,8 +193,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -307,8 +303,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGameID)
@@ -414,8 +408,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -517,8 +509,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGameID)
@@ -617,8 +607,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -722,8 +710,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InRankingScore)
@@ -820,8 +806,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -915,8 +899,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -1014,8 +996,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -1109,8 +1089,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTestData)
@@ -1202,8 +1180,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -1366,8 +1342,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFileName)
@@ -1454,8 +1428,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)

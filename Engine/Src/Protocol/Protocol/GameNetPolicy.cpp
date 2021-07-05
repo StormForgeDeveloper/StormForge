@@ -35,8 +35,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::HeartbeatC2SEvt(  )
 	// Cmd: Player connected from a login server and moved to game server
 	Result NetPolicyGame::JoinGameServerCmd( const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
@@ -50,8 +48,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::JoinGameServerCmd( const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 	// Cmd: player complition statues
@@ -67,8 +63,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::GetComplitionStateCmd( const uint64_t &InTransactionID )
 	// Cmd: Player complition state
 	Result NetPolicyGame::SetComplitionStateCmd( const uint64_t &InTransactionID, const char* InComplitionState )
@@ -82,8 +76,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::SetComplitionStateCmd( const uint64_t &InTransactionID, const char* InComplitionState )
 	// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
@@ -99,8 +91,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::RegisterGCMCmd( const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 	// Cmd: Unregister Google notification service ID
 	Result NetPolicyGame::UnregisterGCMCmd( const uint64_t &InTransactionID, const char* InGCMRegisteredID )
@@ -114,8 +104,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::UnregisterGCMCmd( const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 	// Cmd: Invite friend
@@ -131,8 +119,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::InviteFriendCmd( const uint64_t &InTransactionID, const AccountID &InFriendID )
 	// Cmd: Accept friend request
 	Result NetPolicyGame::AcceptFriendRequestCmd( const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID )
@@ -146,8 +132,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::AcceptFriendRequestCmd( const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID )
 	// Cmd: Remove friden form the friend list
@@ -163,8 +147,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::RemoveFriendCmd( const uint64_t &InTransactionID, const AccountID &InFriendID )
 	// Cmd: Get friend list
 	Result NetPolicyGame::GetFriendListCmd( const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
@@ -178,8 +160,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::GetFriendListCmd( const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
 	// Cmd: Query notification list
@@ -195,8 +175,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::GetNotificationListCmd( const uint64_t &InTransactionID )
 	// Cmd: Delete notification
 	Result NetPolicyGame::DeleteNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
@@ -210,8 +188,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::DeleteNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 	// Cmd: Set notification is read
@@ -227,8 +203,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::SetNotificationReadCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 	// Cmd: Accept notification
 	Result NetPolicyGame::AcceptNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
@@ -242,8 +216,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::AcceptNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 	// Cmd: Query playerID list
@@ -259,8 +231,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::FindPlayerByEMailCmd( const uint64_t &InTransactionID, const char* InPlayerEMail )
 	// Cmd: Query playerID list
 	Result NetPolicyGame::FindPlayerByPlayerIDCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID )
@@ -274,8 +244,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::FindPlayerByPlayerIDCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID )
 	// Cmd: *Request Player Status Update
@@ -291,8 +259,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::RequestPlayerStatusUpdateCmd( const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 	// Cmd: Get Ranking list
 	Result NetPolicyGame::GetRankingListCmd( const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
@@ -306,8 +272,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::GetRankingListCmd( const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 	// Cmd: Game user game play information
@@ -323,8 +287,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::GetUserGamePlayerInfoCmd( const uint64_t &InTransactionID )
 	// Cmd: Game game play information
 	Result NetPolicyGame::GetGamePlayerInfoCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID )
@@ -338,8 +300,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::GetGamePlayerInfoCmd( const uint64_t &InTransactionID, const AccountID &InPlayerID )
 	// Cmd: Change NickName
@@ -355,8 +315,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::SetNickNameCmd( const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
 	// Cmd: Create Party
 	Result NetPolicyGame::CreatePartyCmd( const uint64_t &InTransactionID )
@@ -370,8 +328,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::CreatePartyCmd( const uint64_t &InTransactionID )
 	// Cmd: Join party
@@ -387,8 +343,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::JoinPartyCmd( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
 	// Cmd: Leave party command
 	Result NetPolicyGame::LeavePartyCmd( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
@@ -402,8 +356,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::LeavePartyCmd( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
 	// Cmd: Kick player from the party
@@ -419,8 +371,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::PartyKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 	// Cmd: Invite a player to the party
 	Result NetPolicyGame::PartyInviteCmd( const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
@@ -434,8 +384,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::PartyInviteCmd( const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
 	// Cmd: Send Party quick chat message
@@ -451,8 +399,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::PartyQuickChatMessageCmd( const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
 	// Cmd: Party chatting
 	Result NetPolicyGame::PartyChatMessageCmd( const uint64_t &InTransactionID, const char* InChatMessage )
@@ -466,8 +412,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::PartyChatMessageCmd( const uint64_t &InTransactionID, const char* InChatMessage )
 	// Cmd: Join to a game instance
@@ -483,8 +427,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::JoinGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InInsUID )
 	// Cmd: Leave game instance
 	Result NetPolicyGame::LeaveGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InInsUID )
@@ -498,8 +440,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::LeaveGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InInsUID )
 	// Cmd: Search game instance
@@ -515,8 +455,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword )
 	// Cmd: Search game instance
 	Result NetPolicyGame::GetCharacterDataInGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
@@ -530,8 +468,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::GetCharacterDataInGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
 	// Cmd: Request Game match
@@ -547,8 +483,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::RequestGameMatchCmd( const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 	// Cmd: Cancel Game match
 	Result NetPolicyGame::CancelGameMatchCmd( const uint64_t &InTransactionID )
@@ -562,8 +496,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::CancelGameMatchCmd( const uint64_t &InTransactionID )
 	// Cmd: Buy shop item prepare
@@ -579,8 +511,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::BuyShopItemPrepareCmd( const uint64_t &InTransactionID, const uint32_t &InShopItemID )
 	// Cmd: Buy shop item
 	Result NetPolicyGame::BuyShopItemCmd( const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
@@ -594,8 +524,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::BuyShopItemCmd( const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
 	// Cmd: Create or Join Chat channel
@@ -611,8 +539,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::CreateOrJoinChatChannelCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 	// Cmd: Join
 	Result NetPolicyGame::JoinChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
@@ -626,8 +552,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::JoinChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
 	// Cmd: Leave ChatChannel command
@@ -643,8 +567,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::LeaveChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
 	// Cmd: Kick player from the ChatChannel
 	Result NetPolicyGame::ChatChannelKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
@@ -658,8 +580,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::ChatChannelKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 	// Cmd: Party chatting
@@ -675,8 +595,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
 	// Cmd: Create character
 	Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes )
@@ -690,8 +608,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes )
 	// Cmd: Delete character
@@ -707,8 +623,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::DeleteCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 	// Cmd: Get character list
 	Result NetPolicyGame::GetCharacterListCmd( const uint64_t &InTransactionID )
@@ -722,8 +636,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::GetCharacterListCmd( const uint64_t &InTransactionID )
 	// Cmd: 
@@ -739,8 +651,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::GetCharacterDataCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 	// Cmd: Select character
 	Result NetPolicyGame::SelectCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
@@ -755,8 +665,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetPolicyGame::SelectCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 	// Cmd: To call general functionality
 	Result NetPolicyGame::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
@@ -770,8 +678,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetPolicyGame::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
 
@@ -789,8 +695,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::JoinGameServerRes( const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
 	// Cmd: player complition statues
 	Result NetSvrPolicyGame::GetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
@@ -804,8 +708,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::GetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
 	// Cmd: Player complition state
@@ -821,8 +723,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::SetComplitionStateRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 	Result NetSvrPolicyGame::RegisterGCMRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -836,8 +736,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::RegisterGCMRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Unregister Google notification service ID
@@ -853,8 +751,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::UnregisterGCMRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Invite friend
 	Result NetSvrPolicyGame::InviteFriendRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -868,8 +764,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::InviteFriendRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Accept friend request
@@ -885,8 +779,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::AcceptFriendRequestRes( const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
 	// S2C: Notification for friend request is accepted
 	Result NetSvrPolicyGame::FriendRequestAcceptedS2CEvt( const FriendInformation &InAccepter )
@@ -900,8 +792,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::FriendRequestAcceptedS2CEvt( const FriendInformation &InAccepter )
 	// Cmd: Remove friden form the friend list
@@ -917,8 +807,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::RemoveFriendRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
 	// S2C: Friend removed
 	Result NetSvrPolicyGame::FriendRemovedS2CEvt( const AccountID &InFriendID )
@@ -932,8 +820,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::FriendRemovedS2CEvt( const AccountID &InFriendID )
 	// Cmd: Get friend list
@@ -949,8 +835,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::GetFriendListRes( const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
 	// Cmd: Query notification list
 	Result NetSvrPolicyGame::GetNotificationListRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -964,8 +848,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::GetNotificationListRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Delete notification
@@ -981,8 +863,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::DeleteNotificationRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 	// Cmd: Set notification is read
 	Result NetSvrPolicyGame::SetNotificationReadRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
@@ -996,8 +876,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::SetNotificationReadRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 	// Cmd: Accept notification
@@ -1013,8 +891,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::AcceptNotificationRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 	// S2C: Notify new notification
 	Result NetSvrPolicyGame::NotifyS2CEvt( const uint32_t &InNotificationID, const uint32_t &InNotificationType, const uint64_t &InMessageParam0, const uint64_t &InMessageParam1, const char* InMessageText, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
@@ -1028,8 +904,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::NotifyS2CEvt( const uint32_t &InNotificationID, const uint32_t &InNotificationType, const uint64_t &InMessageParam0, const uint64_t &InMessageParam1, const char* InMessageText, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 	// Cmd: Query playerID list
@@ -1045,8 +919,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::FindPlayerByEMailRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 	// Cmd: Query playerID list
 	Result NetSvrPolicyGame::FindPlayerByPlayerIDRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
@@ -1060,8 +932,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::FindPlayerByPlayerIDRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 	// Cmd: *Request Player Status Update
@@ -1077,8 +947,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::RequestPlayerStatusUpdateRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: *Notify Player Status Updated
 	Result NetSvrPolicyGame::NotifyPlayerStatusUpdatedS2CEvt( const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
@@ -1092,8 +960,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::NotifyPlayerStatusUpdatedS2CEvt( const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
 	// Cmd: Get Ranking list
@@ -1109,8 +975,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::GetRankingListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 	// Cmd: Game user game play information
 	Result NetSvrPolicyGame::GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
@@ -1124,8 +988,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::GetUserGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 	// Cmd: Game game play information
@@ -1141,8 +1003,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::GetGamePlayerInfoRes( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
 	// S2C: Player level up event
 	Result NetSvrPolicyGame::LevelUpS2CEvt( const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
@@ -1156,8 +1016,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::LevelUpS2CEvt( const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
 	// Cmd: Change NickName
@@ -1173,8 +1031,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::SetNickNameRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 	// Cmd: Create Party
 	Result NetSvrPolicyGame::CreatePartyRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
@@ -1188,8 +1044,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::CreatePartyRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
 	// Cmd: Join party
@@ -1205,8 +1059,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::JoinPartyRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
 	// S2C: Player Joined event
 	Result NetSvrPolicyGame::PartyPlayerJoinedS2CEvt( const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
@@ -1220,8 +1072,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::PartyPlayerJoinedS2CEvt( const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
 	// S2C: Party leader changed event
@@ -1237,8 +1087,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::PartyLeaderChangedS2CEvt( const uint64_t &InPartyUID, const AccountID &InNewLeaderID )
 	// Cmd: Leave party command
 	Result NetSvrPolicyGame::LeavePartyRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -1252,8 +1100,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::LeavePartyRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: Party Player left event
@@ -1269,8 +1115,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::PartyPlayerLeftS2CEvt( const uint64_t &InPartyUID, const AccountID &InLeftPlayerID )
 	// Cmd: Kick player from the party
 	Result NetSvrPolicyGame::PartyKickPlayerRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -1284,8 +1128,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::PartyKickPlayerRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: Party Player kicked message
@@ -1301,8 +1143,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::PartyPlayerKickedS2CEvt( const uint64_t &InPartyUID, const AccountID &InKickedPlayerID )
 	// Cmd: Invite a player to the party
 	Result NetSvrPolicyGame::PartyInviteRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -1316,8 +1156,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::PartyInviteRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: Party invite requested
@@ -1333,8 +1171,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::PartyInviteRequestedS2CEvt( const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID )
 	// Cmd: Send Party quick chat message
 	Result NetSvrPolicyGame::PartyQuickChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -1348,8 +1184,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::PartyQuickChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: Party Chatting message event
@@ -1365,8 +1199,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::PartyQuickChatMessageS2CEvt( const AccountID &InSenderID, const uint32_t &InQuickChatID )
 	// Cmd: Party chatting
 	Result NetSvrPolicyGame::PartyChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -1380,8 +1212,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::PartyChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: Party Chatting message event
@@ -1397,8 +1227,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::PartyChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 	// Cmd: Join to a game instance
 	Result NetSvrPolicyGame::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress4, const NetAddress &InServerAddress6 )
@@ -1412,8 +1240,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress4, const NetAddress &InServerAddress6 )
 	// Cmd: Leave game instance
@@ -1429,8 +1255,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::LeaveGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Search game instance
 	Result NetSvrPolicyGame::SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
@@ -1444,8 +1268,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::SearchGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
 	// Cmd: Search game instance
@@ -1461,8 +1283,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::GetCharacterDataInGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
 	// Cmd: Request Game match
 	Result NetSvrPolicyGame::RequestGameMatchRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
@@ -1476,8 +1296,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::RequestGameMatchRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 	// S2C: Game matched
@@ -1493,8 +1311,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::GameMatchedS2CEvt( const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 	// S2C: Game match failed
 	Result NetSvrPolicyGame::GameMatchFailedS2CEvt( const Result &InFailedReason )
@@ -1508,8 +1324,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::GameMatchFailedS2CEvt( const Result &InFailedReason )
 	// S2C: Game matching started
@@ -1525,8 +1339,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::GameMatchingStartedS2CEvt(  )
 	// Cmd: Cancel Game match
 	Result NetSvrPolicyGame::CancelGameMatchRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -1540,8 +1352,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::CancelGameMatchRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: game matching canceled
@@ -1557,8 +1367,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::GameMatchingCanceledS2CEvt(  )
 	// Cmd: Buy shop item prepare
 	Result NetSvrPolicyGame::BuyShopItemPrepareRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
@@ -1572,8 +1380,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::BuyShopItemPrepareRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 	// Cmd: Buy shop item
@@ -1589,8 +1395,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::BuyShopItemRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
 	// Cmd: Create or Join Chat channel
 	Result NetSvrPolicyGame::CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
@@ -1604,8 +1408,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
 	// Cmd: Join
@@ -1621,8 +1423,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
 	// S2C: Player Joined event
 	Result NetSvrPolicyGame::ChatChannelPlayerJoinedS2CEvt( const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
@@ -1636,8 +1436,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::ChatChannelPlayerJoinedS2CEvt( const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
 	// S2C: ChatChannel leader changed event
@@ -1653,8 +1451,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::ChatChannelLeaderChangedS2CEvt( const uint64_t &InChatUID, const AccountID &InNewLeaderID )
 	// Cmd: Leave ChatChannel command
 	Result NetSvrPolicyGame::LeaveChatChannelRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -1668,8 +1464,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::LeaveChatChannelRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: ChatChannel Player left event
@@ -1685,8 +1479,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::ChatChannelPlayerLeftS2CEvt( const uint64_t &InChatUID, const AccountID &InLeftPlayerID )
 	// Cmd: Kick player from the ChatChannel
 	Result NetSvrPolicyGame::ChatChannelKickPlayerRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -1700,8 +1492,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::ChatChannelKickPlayerRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: ChatChannel Player kicked message
@@ -1717,8 +1507,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::ChatChannelPlayerKickedS2CEvt( const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
 	// Cmd: Party chatting
 	Result NetSvrPolicyGame::ChatChannelChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
@@ -1732,8 +1520,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::ChatChannelChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: ChatChannel Chatting message event
@@ -1749,8 +1535,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::ChatChannelChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 	// Cmd: Create character
 	Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
@@ -1764,8 +1548,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
 	// Cmd: Delete character
@@ -1781,8 +1563,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::DeleteCharacterRes( const uint64_t &InTransactionID, const Result &InResult )
 	// Cmd: Get character list
 	Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
@@ -1796,8 +1576,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
 	// Cmd: 
@@ -1813,8 +1591,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 	// Cmd: Select character
 	Result NetSvrPolicyGame::SelectCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
@@ -1829,8 +1605,6 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-		return hr;
-
 	}; // Result NetSvrPolicyGame::SelectCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
 	// Cmd: To call general functionality
 	Result NetSvrPolicyGame::CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
@@ -1844,8 +1618,6 @@ namespace SF
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
-
-		return hr;
 
 	}; // Result NetSvrPolicyGame::CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
 

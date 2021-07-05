@@ -29,7 +29,7 @@ namespace SF
 
 	Result ActorMovement::CanMerge(const ActorMovement* pNextMove) const
 	{
-		const float fMergeThreshold = 0.01;
+		const float fMergeThreshold = 0.01f;
 
 		if (MovementState != pNextMove->MovementState)
 			return ResultCode::FAIL;

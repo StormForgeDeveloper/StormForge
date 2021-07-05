@@ -24,7 +24,7 @@ namespace SF {
 	TransactionID::TransactionID()
 		: ID(0)
 	{
-		Components.EntID = -1;
+		Components.EntID = uint32_t(-1);
 		Components.TransID = 0;
 	}
 

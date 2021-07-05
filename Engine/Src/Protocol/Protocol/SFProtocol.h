@@ -23,7 +23,7 @@
 namespace SF
 {
 	
-	extern const int SF_PROTOCOL_VERSION;
+	extern const uint32_t SF_PROTOCOL_VERSION;
 
 	enum ProtocolID
 	{

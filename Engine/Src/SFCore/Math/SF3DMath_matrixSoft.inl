@@ -1044,7 +1044,7 @@ namespace SF
 			return *this;
 		}
 
-		float inv33 = 1.0 / a33;
+		float inv33 = float(1.0 / a33);
 		for (int i = 0; i < 16; i+=4)
 		{
 			Elements[i + 0] *= inv33;

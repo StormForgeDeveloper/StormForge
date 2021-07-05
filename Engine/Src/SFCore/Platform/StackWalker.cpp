@@ -357,7 +357,6 @@ namespace SF {
 	{
 		CallStackTraceT<16> stackTrace;
 		uint MaxSearchDepth = 7;
-		HANDLE hThread = GetCurrentThread();
 		STACKFRAME64 stackFrame;
 		DWORD imageType = 0;
 		CONTEXT context;
@@ -408,7 +407,7 @@ namespace SF {
 	void SF_STDCALL StackWalkerImpl::CaptureCallStackFast( CallStackTrace& stackTrace, void** stackBuffer, uint bufferCount, DWORD imageType, CONTEXT &context, STACKFRAME64 &stackFrame, uint skipDepth, uint maxDepth )
 	{
 		ULONG_PTR lowLimit, highLimit;
-		HANDLE hThread = GetCurrentThread();
+		//HANDLE hThread = GetCurrentThread();
 
 		//GetCurrentThreadStackLimits( &lowLimit, &highLimit );
 		PNT_TIB pTib = reinterpret_cast<PNT_TIB>(NtCurrentTeb());

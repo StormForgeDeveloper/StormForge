@@ -179,8 +179,8 @@ namespace SF
 		}
 
 		// We have two moves
-		auto prevFrame = m_MoveResult.MoveFrame;
-		float deltaTime = DeltaSecondsPerFrame * (MoveFrame - prevFrame);
+		//auto prevFrame = m_MoveResult.MoveFrame;
+		//float deltaTime = DeltaSecondsPerFrame * (MoveFrame - prevFrame);
 		float interpolationTime = DeltaSecondsPerFrame * (MoveFrame - move1->MoveFrame);
 
 		Simulate(*move1, *move2, interpolationTime, m_MoveExpected);
@@ -230,7 +230,7 @@ namespace SF
 		static const float MinDistance = 0.2f;
 		static const float MinSquareDistance = MinDistance * MinDistance;
 		static const float MaxDistance = 10000;
-		static const float BlendSpeed = 0.1;
+		static const float BlendSpeed = 0.1f;
 		auto vDiff = Pe - Pc;
 		auto distance = vDiff.SquareLength3();
 
@@ -272,7 +272,7 @@ namespace SF
 			return ResultCode::SUCCESS;
 		}
 
-		auto prevFrame = m_LatestReceivedMove.MoveFrame;
+		//auto prevFrame = m_LatestReceivedMove.MoveFrame;
 		int32_t deltaFrames(InMoveFrame - m_LatestReceivedMove.MoveFrame);
 		if (deltaFrames == 0)
 		{
@@ -282,7 +282,7 @@ namespace SF
 			return ResultCode::SUCCESS;
 		}
 
-		float deltaTime = ActorMovement::DeltaSecondsPerFrame * (deltaFrames);
+		//float deltaTime = ActorMovement::DeltaSecondsPerFrame * (deltaFrames);
 		m_LatestReceivedMove.SimulateCurrentMove(InMoveFrame, m_MoveExpected);
 
 		Vector4& Pc = m_MoveResult.Position; // current position

@@ -69,7 +69,7 @@ namespace SF {
 			pChunk = (MemoryChunkHeader*)(m_AllocationBuffer + m_AllocatePosition);
 
 			// If the remain size on the edge isn't enough for next allocation, increase allocation size so that it include dummy area
-			if ((m_AllocatePosition + allocationSize + m_RedundencySize) >= m_AllocationBufferSize)
+			if ((m_AllocatePosition + allocationSize + m_RedundencySize) >= intptr_t(m_AllocationBufferSize))
 			{
 				allocationSize += m_AllocationBufferSize - (m_AllocatePosition + allocationSize);
 			}
@@ -87,7 +87,7 @@ namespace SF {
 
 			// Add dummy area
 			pChunk = (MemoryChunkHeader*)(m_AllocationBuffer + m_AllocatePosition);
-			pChunk->InitHeader(this, (uint32_t)(remainSize - m_RedundencySize), MemoryChunkHeader::GetHeaderSize());
+			pChunk->InitHeader(this, (uint32_t)(remainSize - m_RedundencySize), uint32_t(MemoryChunkHeader::GetHeaderSize()));
 			pChunk->pHeap = nullptr; // let's put null here so that we can use it as free block mark
 			m_FreeSize -= remainSize;
 
@@ -112,14 +112,14 @@ namespace SF {
 
 		AssertRel(this->m_FreeSize <= (decltype(m_FreeSize))m_AllocationBufferSize && this->m_FreeSize >= 0);
 
-		pChunk->InitHeader(this, (uint32_t)(allocationSize - m_RedundencySize), MemoryChunkHeader::GetHeaderSize());
+		pChunk->InitHeader(this, (uint32_t)(allocationSize - m_RedundencySize), uint32_t(MemoryChunkHeader::GetHeaderSize()));
 		pChunk->GetFooter()->InitFooter();
 		m_AllocatePosition += allocationSize;
 
 		AddAllocSize(pChunk->Size);
 
 		// we reached at the end of buffer, rounding up for next allocation
-		if (m_AllocatePosition == m_AllocationBufferSize)
+		if (m_AllocatePosition == intptr_t(m_AllocationBufferSize))
 		{
 			m_AllocatePosition = 0;
 		}
@@ -201,9 +201,9 @@ namespace SF {
 	// Validate allocated chunks for debug
 	Result CircularHeap::ValidateAllocatedChunks()
 	{
-		MemoryChunkHeader* pChunk = nullptr;
-
 		// TODO: fix it
+		//MemoryChunkHeader* pChunk = nullptr;
+
 		//if ((decltype(m_AllocationBufferSize))m_FreeSize < m_AllocationBufferSize)
 		//{
 		//	intptr_t curPosition = m_FreePosition;

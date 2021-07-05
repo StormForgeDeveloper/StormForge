@@ -88,7 +88,7 @@ namespace SF {
 			eInfo.ClientPointers = FALSE;
 
 
-			BOOL bResult = MiniDumpWriteDump(
+			MiniDumpWriteDump(
 				GetCurrentProcess(),
 				GetCurrentProcessId(),
 				hFile,
@@ -102,7 +102,6 @@ namespace SF {
 
 	long __stdcall UnhandledExceptionHandlerComponent::CrashHandler( EXCEPTION_POINTERS* ipExPtrs )
 	{
-		BOOL bResult = FALSE;
 		uint uiRetCode = EXCEPTION_EXECUTE_HANDLER;
 		MINIDUMP_TYPE dumpType = MiniDumpWithFullMemory;
 

@@ -141,7 +141,7 @@ namespace SF {
 
 			m_NumItems++;
 
-			if (ThreadTrait::ThreadSafe)
+			if constexpr (ThreadTrait::ThreadSafe)
 			{
 				// This will make this operation as thread safe operation for MT-read, single write
 				std::atomic_thread_fence(std::memory_order_seq_cst);
@@ -191,7 +191,7 @@ namespace SF {
 
 			m_NumItems--;
 
-			if (ThreadTrait::ThreadSafe)
+			if constexpr (ThreadTrait::ThreadSafe)
 			{
 				// This will make this operation as thread safe operation for MT-read, single write
 				std::atomic_thread_fence(std::memory_order_seq_cst);

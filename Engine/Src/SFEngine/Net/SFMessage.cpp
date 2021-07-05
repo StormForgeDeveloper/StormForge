@@ -288,7 +288,7 @@ namespace Message {
 		if( length == 0 )
 			return ResultCode::SUCCESS;
 
-		uint16_t Crc32 = Hasher_Crc32().Crc32(0, pDataPtr, length);
+		uint16_t Crc32 = (uint16_t)Hasher_Crc32().Crc32(0, pDataPtr, length);
 		if( Crc32 == 0 ) Crc32 = ~Crc32;
 
 		if( Crc32 != m_pMsgHeader->Crc32 )
@@ -321,7 +321,7 @@ namespace Message {
 			return ResultCode::SUCCESS;
 		}
 
-		uint16_t Crc32 = Util::Crc32NDecrypt( length, pDataPtr );
+		uint16_t Crc32 = (uint16_t)Util::Crc32NDecrypt( length, pDataPtr );
 		if( Crc32 == 0 ) Crc32 = ~Crc32;
 
 		m_pMsgHeader->msgID.IDs.Encrypted = false;

@@ -125,6 +125,11 @@ namespace SF {
 	// Override initialize/deinitialize components
 	Result Engine::InitializeComponents()
 	{
+		for (auto itFunc : m_InitParameter.InitializationFunctions)
+		{
+			itFunc(this);
+		}
+
 		auto result = super::InitializeComponents();
 
 		m_ExitCode = -1;

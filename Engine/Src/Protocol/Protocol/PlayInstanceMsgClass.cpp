@@ -92,8 +92,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -191,8 +189,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -286,8 +282,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -383,8 +377,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -494,8 +486,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -530,8 +520,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
@@ -628,8 +616,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -719,8 +705,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -813,8 +797,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -926,8 +908,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -966,8 +946,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
@@ -1082,8 +1060,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -1116,8 +1092,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
@@ -1226,8 +1200,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -1260,8 +1232,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
@@ -1349,7 +1319,7 @@ namespace SF
 			}; // Result OccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId )
+			MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1361,8 +1331,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -1385,7 +1353,7 @@ namespace SF
 				protocolCheck(*output << InUsageId);
 
 				return hr;
-			}; // MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId )
+			}; // MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
 
 			Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -1450,7 +1418,7 @@ namespace SF
 			}; // Result OccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+			MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1462,8 +1430,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -1486,7 +1452,7 @@ namespace SF
 				protocolCheck(*output << InMapObjectId);
 
 				return hr;
-			}; // MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+			}; // MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 
 			Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -1550,7 +1516,7 @@ namespace SF
 			}; // Result UnoccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+			MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1562,8 +1528,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -1584,7 +1548,7 @@ namespace SF
 				protocolCheck(*output << InMapObjectId);
 
 				return hr;
-			}; // MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+			}; // MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 
 			Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -1649,7 +1613,7 @@ namespace SF
 			}; // Result UnoccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+			MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -1661,8 +1625,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -1685,7 +1647,7 @@ namespace SF
 				protocolCheck(*output << InMapObjectId);
 
 				return hr;
-			}; // MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId )
+			}; // MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 
 			Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
@@ -1776,8 +1738,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				uint16_t serializedSizeOfInUseParameters = static_cast<uint16_t>(SerializedSizeOf(InUseParameters)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -1814,8 +1774,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				uint16_t serializedSizeOfInUseParameters = static_cast<uint16_t>(SerializedSizeOf(InUseParameters)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
@@ -1933,8 +1891,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -1973,8 +1929,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
@@ -2078,8 +2032,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -2192,8 +2144,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -2232,8 +2182,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
@@ -2337,8 +2285,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTicket)
@@ -2434,8 +2380,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -2534,8 +2478,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTicket)
@@ -2631,8 +2573,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -2731,8 +2671,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTicket)
@@ -2822,8 +2760,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
@@ -2911,8 +2847,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -3002,8 +2936,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -3109,8 +3041,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -3143,8 +3073,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
@@ -3252,8 +3180,6 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint8_t *pMsgData = nullptr;
-
 				uint16_t serializedSizeOfInResults = static_cast<uint16_t>(SerializedSizeOf(InResults)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
@@ -3286,8 +3212,6 @@ namespace SF
 					}
 					return pNewMsg;
 				});
-
-				uint8_t *pMsgData = nullptr;
 
 				uint16_t serializedSizeOfInResults = static_cast<uint16_t>(SerializedSizeOf(InResults)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 

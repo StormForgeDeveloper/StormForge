@@ -40,14 +40,14 @@ namespace SF {
 			class iterator
 			{
 			public:
-				enum { END_IDX = -1 };
+				static constexpr int END_IDX = -1;
 
 			private:
 				// Container that linked with this iterator
 				Array<DataType> *m_pContainer;
 
 				// Index 
-				mutable uint m_iIdx;
+				mutable int m_iIdx;
 
 			public:
 
@@ -57,7 +57,7 @@ namespace SF {
 				{
 				}
 
-				iterator(Array<DataType> *pContainer, uint index = 0)
+				iterator(Array<DataType> *pContainer, int index = 0)
 					: m_pContainer(pContainer)
 					, m_iIdx(index)
 				{
@@ -295,7 +295,7 @@ namespace SF {
 
 			iterator begin() { return iterator(this, size() == 0 ? iterator::END_IDX : 0); }
 			const iterator begin() const { return iterator(const_cast<Array<DataType>*>(this), size() == 0 ? iterator::END_IDX : 0); }
-			const iterator end() const { return iterator(const_cast<Array<DataType>*>(this), iterator::END_IDX); }
+			const iterator end() const { return iterator(const_cast<Array<DataType>*>(this), uint(iterator::END_IDX)); }
 
 			template<typename PredicatorType>
 			iterator Find(const PredicatorType& predicator)

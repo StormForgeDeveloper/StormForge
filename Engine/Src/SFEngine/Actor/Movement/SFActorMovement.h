@@ -22,7 +22,7 @@ namespace SF
 		static constexpr size_t MaxSavedMove = 8;
 		static constexpr uint32_t FramesPerSeconds = 60;
 		static constexpr uint32_t DeltaMSPerFrame = 1000 / FramesPerSeconds;
-		static constexpr float DeltaSecondsPerFrame = 1.0 / (float)FramesPerSeconds;
+		static constexpr float DeltaSecondsPerFrame = 1.0f / (float)FramesPerSeconds;
 		static constexpr float MoveFrameTimeoutSeconds = 10;
 		static constexpr uint32_t MoveFrameTimeout = static_cast<uint32_t>(MoveFrameTimeoutSeconds * FramesPerSeconds);
 		static constexpr size_t SizeOfActorMovement = sizeof(Vector4) + sizeof(Vector4) + sizeof(float) + sizeof(uint32_t) + sizeof(uint32_t);

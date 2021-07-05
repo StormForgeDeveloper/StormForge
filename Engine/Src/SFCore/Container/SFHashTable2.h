@@ -448,10 +448,10 @@ namespace SF {
 				Bucket& bucket = m_Buckets[iBucket];
 				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::Exclusive, bucket.m_Lock );
 
-				if(Trait::UniqueKey)
+				if constexpr (Trait::UniqueKey)
 				{
 					ItemType dataFound;
-					if(ThreadTrait::ThreadSafe)
+					if constexpr (ThreadTrait::ThreadSafe)
 					{
 						if ((bucket.m_Items->FindInWriteTree(key, dataFound)))
 						{
@@ -467,7 +467,7 @@ namespace SF {
 					}
 				}
 				bucket.m_Items->Insert(key, data);
-				if(ThreadTrait::ThreadSafe)
+				if constexpr (ThreadTrait::ThreadSafe)
 				{
 					bucket.m_Items->CommitChanges();
 				}
@@ -511,7 +511,7 @@ namespace SF {
 
 				if ((bucket.m_Items->Remove(key, erasedValue)))
 				{
-					if(ThreadTrait::ThreadSafe)
+					if constexpr (ThreadTrait::ThreadSafe)
 					{
 						bucket.m_Items->CommitChanges();
 					}

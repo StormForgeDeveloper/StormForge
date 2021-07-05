@@ -843,12 +843,6 @@ namespace ProtocolCompiler
             NewLine();
 
 
-            if (bHasParameters)
-            {
-                MatchIndent(); OutStream.WriteLine("uint8_t *pMsgData = nullptr;");
-                NewLine();
-            }
-
             BuildCreatePreamble(parameters);
 
             string strSizeVarName = "__uiMessageSize";

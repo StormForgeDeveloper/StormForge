@@ -67,7 +67,7 @@ namespace SF
 			if (!result) return nullptr;
 		}
 
-		pFreeChunk->InitHeader(thisHeap, pFreeChunk->Size, pFreeChunk->GetHeaderSize());
+		pFreeChunk->InitHeader(thisHeap, pFreeChunk->Size, uint32_t(pFreeChunk->GetHeaderSize()));
 		pFreeChunk->State = 1;
 
 		return pFreeChunk;

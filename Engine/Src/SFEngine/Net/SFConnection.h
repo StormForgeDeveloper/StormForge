@@ -381,7 +381,7 @@ namespace Net {
 		virtual Result Send(const SharedPointerT<Message::MessageData> &pMsg) = 0;
 
 		// Message count currently in recv queue
-		virtual SysUInt GetRecvMessageCount();
+		virtual uint32_t GetRecvMessageCount();
 
 		// Get received Message
 		virtual Result GetRecvMessage(SharedPointerT<Message::MessageData> &pIMsg);

@@ -83,7 +83,7 @@ namespace SF {
 					:m_Items(src.m_Items)
 				{
 					// No one use this bucket, while this operation
-					if( ThreadTrait::ThreadSafe )
+					if constexpr ( ThreadTrait::ThreadSafe )
 					{
 					Assert( !src.m_Lock.IsLocked() );
 					}
@@ -92,7 +92,7 @@ namespace SF {
 				Bucket( Bucket&& src )
 					:m_Items(src.m_Items)
 				{
-					if( ThreadTrait::ThreadSafe )
+					if constexpr ( ThreadTrait::ThreadSafe )
 					{
 					// No one use this bucket, while this operation
 					Assert( !src.m_Lock.IsLocked() );
@@ -107,7 +107,7 @@ namespace SF {
 				Bucket& operator = ( const Bucket& src )
 				{
 					// No one use this bucket, while this operation
-					if( ThreadTrait::ThreadSafe )
+					if constexpr ( ThreadTrait::ThreadSafe )
 					{
 					Assert( !src.m_Lock.IsLocked() );
 					Assert( !m_Lock.IsLocked() );
@@ -120,7 +120,7 @@ namespace SF {
 
 				//Bucket& operator = ( Bucket&& src )
 				//{
-				//	if( ThreadTrait::ThreadSafe )
+				//	if constexpr ( ThreadTrait::ThreadSafe )
 				//	{
 				//	// No one use this bucket, while this operation
 				//	Assert( !src.m_Lock.IsLocked() );
@@ -493,7 +493,7 @@ namespace SF {
 				if( !(bucket.m_Items.FindPrevNode( inKey, pPrevNode )) )
 					return ResultCode::FAIL;
 
-				if(Trait::UniqueKey)
+				if constexpr (Trait::UniqueKey)
 				{
 					if( pPrevNode->pNext && pPrevNode->pNext->Key == inKey )
 					{

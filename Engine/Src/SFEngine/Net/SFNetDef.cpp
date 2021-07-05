@@ -92,7 +92,7 @@ namespace Net {
 
 		String MessageEndpointrString = srcAddress;
 		MessageServer = MessageEndpointrString.SubString(0, splitIndex);
-		Channel = MessageEndpointrString.SubString(splitIndex + 1, MessageEndpointrString.length());
+		Channel = MessageEndpointrString.SubString(splitIndex + 1, (int)MessageEndpointrString.length());
 
 		return *this;
 	}

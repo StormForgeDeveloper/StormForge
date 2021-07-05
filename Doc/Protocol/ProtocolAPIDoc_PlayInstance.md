@@ -164,7 +164,7 @@ Occupy map object
 
 1. Command interface
 
-        Result OccupyMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId)
+        Result OccupyMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId)
 
 		- OutInTransactionID: TransactionID type. 
 
@@ -172,7 +172,7 @@ Occupy map object
 
 		- OutInPlayerID: PlayerID type. player id
 
-		- OutInMapObjectId: StringCrc32 type. MapObjectId
+		- OutInMapObjectId: uint32 type. MapObjectId
 
 		- OutInUsageId: uint32 type. MapObjectOccupyMode 
 
@@ -189,7 +189,7 @@ C++: Cast message to OccupyMapObjectRes to access values
 
 		- OutPlayerID: PlayerID type. player id for validation
 
-		- OutMapObjectId: StringCrc32 type. MapObjectId
+		- OutMapObjectId: uint32 type. MapObjectId
 
 
 ## UnoccupyMapObject Request
@@ -197,7 +197,7 @@ Unoccupy map object
 
 1. Command interface
 
-        Result UnoccupyMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId)
+        Result UnoccupyMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId)
 
 		- OutInTransactionID: TransactionID type. 
 
@@ -205,7 +205,7 @@ Unoccupy map object
 
 		- OutInPlayerID: PlayerID type. player id
 
-		- OutInMapObjectId: StringCrc32 type. MapObjectId
+		- OutInMapObjectId: uint32 type. MapObjectId
 
 2. Result interface
 
@@ -220,7 +220,7 @@ C++: Cast message to UnoccupyMapObjectRes to access values
 
 		- OutPlayerID: PlayerID type. player id for validation
 
-		- OutMapObjectId: StringCrc32 type. MapObjectId
+		- OutMapObjectId: uint32 type. MapObjectId
 
 
 ## UseMapObject Request

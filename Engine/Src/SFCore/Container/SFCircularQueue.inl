@@ -107,7 +107,7 @@ namespace SF {
 		inline const T& CircularQueue<T, SIZE_BUFFER>::operator[](int iIndex)
 		{
 			static const T dummy{};
-			if (m_nItemCount <= iIndex)
+			if (int(m_nItemCount) <= iIndex)
 			{
 				// out of bound
 				assert(false);

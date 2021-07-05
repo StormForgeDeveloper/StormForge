@@ -359,7 +359,7 @@ namespace Net {
 			Result hr = ResultCode::SUCCESS;
 
 
-			auto refCount = m_RefCount.fetch_add(1, std::memory_order_relaxed);
+			m_RefCount.fetch_add(1, std::memory_order_relaxed);
 
 			if( GetNativeIOSystemHandle() != INVALID_NATIVE_HANDLE_VALUE )
 			{

@@ -161,8 +161,6 @@ namespace SF {
 		{
 			return Write(char{});
 		}
-
-		return ResultCode::SUCCESS;
 	}
 
 	Result IOutputStream::Write(const wchar_t* data)
@@ -179,8 +177,6 @@ namespace SF {
 		{
 			return Write(wchar_t{});
 		}
-
-		return ResultCode::SUCCESS;
 	}
 
 	Result IOutputStream::Write(const String& data)

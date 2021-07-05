@@ -242,8 +242,6 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine(" return m_Endpoint->Send( pMessage );");
             NewLine();
             
-            ReturnHR(); NewLine();
-
             CloseSection();
         }
 

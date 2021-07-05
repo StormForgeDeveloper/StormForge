@@ -524,7 +524,7 @@ namespace SF {
 				MapData.Key = inKey;
 				MapData.Data = data;
 
-				if(Trait::UniqueKey)
+				if constexpr (Trait::UniqueKey)
 				{
 					auto iter = bucket.m_Items.begin();
 					for( ; iter != bucket.m_Items.end(); ++iter )

@@ -65,6 +65,7 @@ include_directories(AFTER
 set(ENGINE_LINK_LIBS SFProtocol SFEngine SFProtocol SFEngine SFCore curl rdkafka avro-static jansson iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 lzma zlib)
 
 
+
 if(WIN32)
 
 	message ( "Setup Windows configs" )
@@ -92,8 +93,8 @@ if(WIN32)
 		SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Od")
 		SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O2 -Oy-")
 		SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -Oy-")
-		SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zi")
-		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /Zi")
+		SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zi /W4 /WX")
+		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /Zi /W4 /WX")
 	endif()
 
 	set(ARTECTURE x64)

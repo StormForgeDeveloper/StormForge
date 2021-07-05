@@ -85,14 +85,14 @@ namespace SF {
 		bool operator==(const Vector4SSE & u) const
 		{
 			__m128i vcmp = _mm_castps_si128(_mm_cmpneq_ps(Packed, u.Packed));
-			uint16_t test = _mm_movemask_epi8(vcmp);
+			uint16_t test = uint16_t(_mm_movemask_epi8(vcmp));
 			return test == 0;
 		}
 
 		bool operator!=(const Vector4SSE& op) const
 		{
 			__m128i vcmp = _mm_castps_si128(_mm_cmpneq_ps(Packed, op.Packed));
-			uint16_t test = _mm_movemask_epi8(vcmp);
+			uint16_t test = uint16_t(_mm_movemask_epi8(vcmp));
 			return test != 0;
 		}
 
@@ -207,7 +207,6 @@ namespace SF {
 		static const Matrix4SSE& Identity() { static const Matrix4SSE Value(1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1); return Value; }
 
 		Matrix4SSE() {}
-		//Matrix4SSE(int one) { InitIdentity(); }
 
 		Matrix4SSE(const float * array)
 		{

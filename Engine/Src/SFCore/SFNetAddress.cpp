@@ -134,7 +134,7 @@ namespace SF {
 				SFLog(Net, Error, "Failed to parse net address:{0}, err:{1}", Address, res);
 			}
 
-			Port = atoi(strAddress + sepratorIndex + 1);
+			Port = (uint16_t)atoi(strAddress + sepratorIndex + 1);
 		}
 	}
 

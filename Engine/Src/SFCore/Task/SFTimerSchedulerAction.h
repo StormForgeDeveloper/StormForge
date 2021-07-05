@@ -28,6 +28,8 @@ namespace SF {
 	{
 	public:
 
+		static constexpr uint64_t INVALID_TIMERKEY = uint64_t(-1);
+
 #pragma pack(push, 4)
 		union TimeKey {
 			struct {
@@ -35,9 +37,7 @@ namespace SF {
 				TimeStampMS NextTickTime;
 			} Components;
 
-			uint64_t TimerKey;
-
-			TimeKey() {}
+			uint64_t TimerKey = 0;
 		};
 #pragma pack(pop)
 

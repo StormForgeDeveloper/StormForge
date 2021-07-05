@@ -160,7 +160,7 @@ namespace SF {
 
 		szBuffer = m_Buffer->GetBufferPointer() + currentStringLen;
 		buffLen = (int)requiredSize;
-		auto length = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
+		/*auto length = */StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
 		auto addedLength = StrUtil::StringLen(m_Buffer->GetBufferPointer() + currentStringLen);
 		m_Buffer->Resize(currentStringLen + addedLength);
 

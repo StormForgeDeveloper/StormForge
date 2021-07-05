@@ -101,13 +101,13 @@
 			<Cmd>
 				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
 				<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
-				<Params Type="StringCrc32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
 				<Params Type="uint32" Name="UsageId" Desc="MapObjectOccupyMode "/>
 			</Cmd>
 			<Res>
 				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
 				<Params Type="PlayerID" Name="PlayerID" Desc="player id for validation"/>
-				<Params Type="StringCrc32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
 			</Res>
 		</Command>
 
@@ -115,12 +115,12 @@
 			<Cmd>
 				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
 				<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
-				<Params Type="StringCrc32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
 			</Cmd>
 			<Res>
 				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
 				<Params Type="PlayerID" Name="PlayerID" Desc="player id for validation"/>
-				<Params Type="StringCrc32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
 			</Res>
 		</Command>
 

@@ -526,7 +526,7 @@ namespace SF
 			return ResultCode::ENGINE_INITIALIZATION_FAILED;
 
 		// if it's already created, skip it
-		if (m_VKSwapChain != VK_NULL_HANDLE && GetWidth() == pDevice->GetWidth() && GetHeight() == pDevice->GetHeight())
+		if (m_VKSwapChain != VK_NULL_HANDLE && int(GetWidth()) == pDevice->GetWidth() && int(GetHeight()) == pDevice->GetHeight())
 			return ResultCode::SUCCESS;
 
 		// Surface caps

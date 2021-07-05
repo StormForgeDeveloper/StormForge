@@ -31,11 +31,12 @@ namespace SF {
 	//	
 	//
 
+	constexpr uint64_t TimerAction::INVALID_TIMERKEY;
 
 	TimerAction::TimerAction()
 	{
-		m_InQueueKey.TimerKey = -1;
-		TimeData.TimerKey = -1;
+		m_InQueueKey.TimerKey = INVALID_TIMERKEY;
+		TimeData.TimerKey = INVALID_TIMERKEY;
 	}
 
 	TimerAction::~TimerAction()

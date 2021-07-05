@@ -101,7 +101,7 @@ namespace SF
 	// Close mapped file
 	void SharedMemory::Close()
 	{
-		if (m_hMemory = INVALID_NATIVE_HANDLE_VALUE)
+		if (m_hMemory == INVALID_NATIVE_HANDLE_VALUE)
 			return;
 
 		UnmapViewOfFile(m_pMemory);

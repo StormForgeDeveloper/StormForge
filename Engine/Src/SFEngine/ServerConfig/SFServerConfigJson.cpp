@@ -67,7 +67,7 @@ namespace SF
 
 		String dataCenterString = stringValue.asCString();
 		outDataCenter.Server = dataCenterString.SubString(0, splitIndex);
-		outDataCenter.Path = dataCenterString.SubString(splitIndex, dataCenterString.length());
+		outDataCenter.Path = dataCenterString.SubString(splitIndex, (int)dataCenterString.length());
 
 		return ResultCode::SUCCESS;
 	}

@@ -544,6 +544,10 @@ typedef unsigned int		SysUInt;
 #pragma warning(disable: 4102)
 #pragma warning(disable: 4996)
 #pragma warning(disable: 4091) // disable warning 4091
+#pragma warning(disable: 4201) // 
+#pragma warning(disable: 4100) // Allow unreferenced parameter
+#pragma warning(disable: 4324) // Structure padding by alignment specifier
+#pragma warning(disable: 4611) // interaction between 'xx' and C++ object destruction is non-portable
 
 
 #define SF_DO_PRAGMA(x) __pragma(#x)
@@ -553,8 +557,6 @@ typedef unsigned int		SysUInt;
 
 
 #endif
-
-
 
 
 

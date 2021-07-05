@@ -592,7 +592,7 @@ namespace SF
 				uint64_t m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
-				StringCrc32 m_MapObjectId{};
+				uint32_t m_MapObjectId{};
 				uint32_t m_UsageId{};
 			public:
 				OccupyMapObjectCmd()
@@ -607,7 +607,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const StringCrc32& GetMapObjectId() const	{ return m_MapObjectId; };
+				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
 				const uint32_t& GetUsageId() const	{ return m_UsageId; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -616,7 +616,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const uint32_t &InUsageId );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId );
 
 			}; // class OccupyMapObjectCmd : public MessageBase
 
@@ -642,7 +642,7 @@ namespace SF
 				Result m_Result{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
-				StringCrc32 m_MapObjectId{};
+				uint32_t m_MapObjectId{};
 			public:
 				OccupyMapObjectRes()
 					{}
@@ -657,7 +657,7 @@ namespace SF
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const StringCrc32& GetMapObjectId() const	{ return m_MapObjectId; };
+				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -665,7 +665,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 
 			}; // class OccupyMapObjectRes : public MessageBase
 
@@ -691,7 +691,7 @@ namespace SF
 				uint64_t m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
-				StringCrc32 m_MapObjectId{};
+				uint32_t m_MapObjectId{};
 			public:
 				UnoccupyMapObjectCmd()
 					{}
@@ -705,7 +705,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const StringCrc32& GetMapObjectId() const	{ return m_MapObjectId; };
+				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -713,7 +713,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 
 			}; // class UnoccupyMapObjectCmd : public MessageBase
 
@@ -739,7 +739,7 @@ namespace SF
 				Result m_Result{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
-				StringCrc32 m_MapObjectId{};
+				uint32_t m_MapObjectId{};
 			public:
 				UnoccupyMapObjectRes()
 					{}
@@ -754,7 +754,7 @@ namespace SF
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const StringCrc32& GetMapObjectId() const	{ return m_MapObjectId; };
+				const uint32_t& GetMapObjectId() const	{ return m_MapObjectId; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -762,7 +762,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 
 			}; // class UnoccupyMapObjectRes : public MessageBase
 

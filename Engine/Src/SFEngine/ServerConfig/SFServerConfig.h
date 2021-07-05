@@ -57,7 +57,7 @@ namespace SF
 			String IPV4;
 			String IPV6;
 			String ListenIP;
-			uint Port = 0;
+			uint16_t Port = 0;
 			uint MaxConnection = 1000000;
 
 			NetPublic(IHeap& heap)

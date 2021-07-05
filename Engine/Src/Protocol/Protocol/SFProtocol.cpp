@@ -38,7 +38,7 @@
 
 namespace SF {
 
-	const int SF_PROTOCOL_VERSION = 11;
+	const uint32_t SF_PROTOCOL_VERSION = 11;
 
 namespace Protocol {
 
