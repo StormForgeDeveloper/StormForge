@@ -329,25 +329,25 @@ bool check_num_limits(U val)
 
 
 inline
-std::string to_upper(const std::string &val)
+std::string to_upper(const std::string& val)
 {
-  using std::transform;
+	std::string uc_val;
+	uc_val.resize(val.size());
+	for (uint32_t iChar = 0; iChar < val.size(); iChar++)
+		uc_val[iChar] = (char)::toupper(val[iChar]);
 
-  std::string uc_val;
-  uc_val.resize(val.size());
-  transform(val.begin(), val.end(), uc_val.begin(), ::toupper);
-  return std::move(uc_val);
+	return std::move(uc_val);
 }
 
 inline
-std::string to_lower(const std::string &val)
+std::string to_lower(const std::string& val)
 {
-  using std::transform;
+	std::string uc_val;
+	uc_val.resize(val.size());
+	for (uint32_t iChar = 0; iChar < val.size(); iChar++)
+		uc_val[iChar] = (char)::tolower(val[iChar]);
 
-  std::string uc_val;
-  uc_val.resize(val.size());
-  transform(val.begin(), val.end(), uc_val.begin(), ::tolower);
-  return std::move(uc_val);
+	return std::move(uc_val);
 }
 
 }  // common
