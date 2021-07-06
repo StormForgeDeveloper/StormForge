@@ -74,7 +74,7 @@ namespace Net {
 
 	EndpointAddress& EndpointAddress::operator = (const char* srcAddress)
 	{
-		if (srcAddress == nullptr)
+		if (StrUtil::IsNullOrEmpty(srcAddress))
 		{
 			MessageServer = "";
 			Channel = "";
