@@ -47,13 +47,14 @@ namespace SF {
 	{
 		using T = float;
 
-		Matrix2() {}
-		Matrix2(int one) { InitIdentity(); }
+		Matrix2() : Vec() {}
+		Matrix2(int one) : Vec() { InitIdentity(); }
 		Matrix2(const T& f0, const T& f1, const T& f2, const T& f3)
-			: a00(f0), a10(f1), a01(f2), a11(f3)
+			: Vec(f0, f1, f2, f3)
+			//, a00(f0), a10(f1), a01(f2), a11(f3)
 		{}
-		Matrix2(const T* array) { memcpy(Elements, array, sizeof(T) * 4); }
-		Matrix2(const Matrix2& M) { memcpy(Elements, M.Elements, sizeof(T) * 4); }
+		Matrix2(const T* array) : Vec(array) {}
+		Matrix2(const Matrix2& M) : Vec(M.Vec) {}
 
 		Matrix2& operator = (const Matrix2& src) { memcpy(Elements, src.Elements, sizeof(T) * 4); return *this; }
 

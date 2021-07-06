@@ -110,7 +110,7 @@ namespace Message {
 
 		if (length < sizeof(RouteContext))
 		{
-			routeContext = 0;
+			routeContext = {};
 			transID = TransactionID();
 			return;
 		}

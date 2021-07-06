@@ -216,19 +216,43 @@ namespace SF {
 
 	union EntityUID
 	{
-		struct {
-			EntityID	EntID;		// Local entity ID
-			ServerID	SvrID;		// Server ID
+		struct EntityUIDComponents {
+			EntityID	EntID = 0;		// Local entity ID
+			ServerID	SvrID = 0;		// Server ID
+
+			EntityUIDComponents() {}
+			EntityUIDComponents(EntityID InEntID, ServerID InSvrId)
+				: EntID(InEntID)
+				, SvrID(InSvrId)
+			{}
+			EntityUIDComponents(const EntityUIDComponents& src)
+				: EntID(src.EntID)
+				, SvrID(src.SvrID)
+			{}
+
 		} Components;
 		uint64_t UID;
 
-		inline EntityUID();
-		inline EntityUID(const EntityUID& entityUID);
-		inline EntityUID(ServerID serverID, uint32_t entityID);
-		inline EntityUID(const Context& context);
+		SF_FORCEINLINE EntityUID()
+			: Components()
+		{}
 
-		EntityID GetEntityID() const { return Components.EntID; }
-		ServerID GetServerID() const { return Components.SvrID; }
+		SF_FORCEINLINE EntityUID(const EntityUID& entityUID)
+			: Components(entityUID.Components)
+		{}
+
+		SF_FORCEINLINE EntityUID(ServerID serverID, uint32_t entityID)
+			: Components(entityID, serverID)
+		{}
+
+		SF_FORCEINLINE EntityUID(const Context& context)
+			: Components()
+		{
+			UID = context;
+		}
+
+		SF_FORCEINLINE EntityID GetEntityID() const { return Components.EntID; }
+		SF_FORCEINLINE ServerID GetServerID() const { return Components.SvrID; }
 
 		inline EntityUID& operator = (const EntityUID& entityUID);
 
@@ -255,9 +279,20 @@ namespace SF {
 
 	union TransactionID
 	{
-		struct {
+		struct TransactionIDComponent {
 			EntityID	EntID;
-			uint32_t		TransID;
+			uint32_t	TransID = 0;
+
+			TransactionIDComponent() {}
+			TransactionIDComponent(EntityID InEntID, uint32_t InTransID)
+				: EntID(InEntID)
+				, TransID(InTransID)
+			{}
+			TransactionIDComponent(const TransactionIDComponent& src)
+				: EntID(src.EntID)
+				, TransID(src.TransID)
+			{}
+
 		} Components{};
 		uint64_t ID;
 
@@ -290,16 +325,34 @@ namespace SF {
 
 	union RouteContext
 	{
-		struct {
+		struct RouteContextComponents {
 			EntityUID	From;
 			EntityUID	To;
+
+			RouteContextComponents() {}
+			RouteContextComponents(EntityUID InFrom, EntityUID InTo)
+				: From(InFrom)
+				, To(InTo)
+			{}
+			RouteContextComponents(const RouteContextComponents& src)
+				: From(src.From)
+				, To(src.To)
+			{}
+
 		} Components;
 		uint64_t ContextValue[2];
 
-		inline RouteContext();
-		inline RouteContext(const RouteContext& routeContext);
-		inline RouteContext(EntityUID InFromID, EntityUID InToID);
-		inline RouteContext(int initValue);
+		SF_FORCEINLINE RouteContext()
+			: Components()
+		{}
+
+		SF_FORCEINLINE RouteContext(const RouteContext& src)
+			: Components(src.Components)
+		{}
+		SF_FORCEINLINE RouteContext(EntityUID InFromID, EntityUID InToID)
+			: Components(InFromID, InToID)
+		{}
+
 
 		EntityUID GetFrom() const { return Components.From; }
 		EntityUID GetTo() const { return Components.To; }

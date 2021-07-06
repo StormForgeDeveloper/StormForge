@@ -89,21 +89,39 @@ namespace Net {
 			EVT_TIMESYNC_RESULT,
 		};
 
-		struct {
-			EventTypes		EventType;
-
-			// State changed
-			ConnectionState State;
-
+		struct ConnectionEventComponents
+		{
 			// connection result
 			Result hr;
+
+			EventTypes		EventType = EventTypes::EVT_NONE;
+
+			// State changed
+			ConnectionState State = ConnectionState::NONE;
+
+			ConnectionEventComponents() {}
+			ConnectionEventComponents(EventTypes InEventType, ConnectionState InState, Result InHr)
+				: hr(InHr)
+				, EventType(InEventType)
+				, State(InState)
+			{}
+
 		} Components;
 
 		uint64_t Composited = 0;
 
-		ConnectionEvent(void* ptr = nullptr) { Components.EventType = EventTypes::EVT_NONE;  assert(ptr == nullptr); }
-		ConnectionEvent(EventTypes eventType, Result hrRes) { Components.EventType = eventType;  Components.hr = hrRes; }
-		ConnectionEvent(EventTypes eventType, ConnectionState InState) { Components.EventType = eventType; Components.State = InState; }
+		ConnectionEvent(void* ptr = nullptr)
+			: Components()
+		{ assert(ptr == nullptr); }
+
+		ConnectionEvent(EventTypes eventType, Result hrRes)
+			: Components(eventType, ConnectionState::NONE, hrRes)
+		{}
+
+		ConnectionEvent(EventTypes eventType, ConnectionState InState)
+			: Components(eventType, InState, ResultCode::SUCCESS)
+		{}
+
 		ConnectionEvent& operator =(const ConnectionEvent& src);
 		bool operator == (const ConnectionEvent& src) const;
 		bool operator != (const ConnectionEvent& src) const;

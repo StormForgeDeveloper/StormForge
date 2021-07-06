@@ -13,8 +13,6 @@
 namespace SF {
 
 
-
-
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Transaction ID
@@ -22,27 +20,27 @@ namespace SF {
 
 
 	TransactionID::TransactionID()
-		: ID(0)
+		: Components()
 	{
-		Components.EntID = uint32_t(-1);
-		Components.TransID = 0;
 	}
 
 	TransactionID::TransactionID(const TransactionID& transID)
-		: ID(transID.ID)
+		: Components(transID.Components)
 	{
 	}
 
 	TransactionID::TransactionID(EntityID entityID, uint32_t transID)
+		: Components(entityID, transID)
 	{
-		Components.EntID = entityID;
-		Components.TransID = transID;
 	}
 
 	TransactionID::TransactionID(Context context)
-		:ID(context)
+		: Components()
+		, ID(context)
 	{
+		assert(ID == context);
 	}
+
 
 	bool TransactionID::IsValid() const
 	{
@@ -129,29 +127,6 @@ namespace SF {
 	//
 
 
-	EntityUID::EntityUID()
-		:UID(0)
-	{
-	}
-
-	EntityUID::EntityUID(const EntityUID& entityUID)
-		: UID(entityUID.UID)
-	{
-	}
-
-	EntityUID::EntityUID(ServerID serverID, uint32_t entityID)
-	{
-		Components.SvrID = serverID;
-		Components.EntID = entityID;
-	}
-
-	EntityUID::EntityUID(const Context& context)
-		:UID(context)
-	{
-	}
-
-
-
 	EntityUID& EntityUID::operator = (const EntityUID& entityUID)
 	{
 		UID = entityUID.UID;
@@ -180,28 +155,6 @@ namespace SF {
 	//
 	//	RouteContext
 	//
-
-	RouteContext::RouteContext()
-	{
-		memset(ContextValue, 0, sizeof(ContextValue));
-	}
-
-	RouteContext::RouteContext(const RouteContext& routeContext)
-	{
-		memcpy(ContextValue, routeContext.ContextValue, sizeof(ContextValue));
-	}
-
-	RouteContext::RouteContext(EntityUID InFromID, EntityUID InToID)
-	{
-		Components.From = InFromID;
-		Components.To = InToID;
-	}
-
-	RouteContext::RouteContext(int initValue)
-	{
-		assert(initValue == 0);
-		memset(ContextValue, 0, sizeof(ContextValue));
-	}
 
 	RouteContext& RouteContext::operator = (const RouteContext& src)
 	{

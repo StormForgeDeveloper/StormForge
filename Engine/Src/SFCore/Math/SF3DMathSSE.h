@@ -364,7 +364,7 @@ namespace SF {
 		// Data elements
 		union {
 			__m128 Packed[4]; // Column bases
-			Vector4SSE Vec[4];
+			//Vector4SSE Vec[4];
 			struct {
 				__m128 a0010a2030; // c0
 				__m128 a0111a2131; // c1

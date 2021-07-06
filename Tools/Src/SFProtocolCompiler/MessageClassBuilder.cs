@@ -270,7 +270,7 @@ namespace ProtocolCompiler
             foreach (var parameterName in GenerateParameterTypeInfoList)
             {
                 if (parameterNameMap.ContainsKey(parameterName.Name)) continue;
-                MatchIndent(); OutStream.WriteLine("{1} Get{0}() {{ return 0; }}", parameterName.Name, ToTargetTypeName(parameterName.Type));
+                MatchIndent(); OutStream.WriteLine("{1} Get{0}() {{ return {1}{{}}; }}", parameterName.Name, ToTargetTypeName(parameterName.Type));
             }
 
             bool bHasInternalTypeOverride = HasInternalTypeOverride(parameters);
