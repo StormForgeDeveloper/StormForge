@@ -91,6 +91,7 @@ namespace SF {
 
 		friend class SharedReferenceInc;
 		friend class SharedReferenceDec;
+		friend class SharedReference;
 		friend class SharedObjectManager;
 		friend class SharedPointer;
 		friend class WeakPointer;
@@ -121,6 +122,26 @@ namespace SF {
 	{
 	public:
 		SharedReferenceDec(SharedObject* pObject)
+		{
+			if (pObject != nullptr)
+				pObject->ReleaseReference();
+		}
+	};
+
+
+	class SharedReference
+	{
+	public:
+		SharedReference()
+		{}
+
+		void Inc(SharedObject* pObject)
+		{
+			if (pObject != nullptr)
+				pObject->AddReference();
+		}
+
+		void Dec(SharedObject* pObject)
 		{
 			if (pObject != nullptr)
 				pObject->ReleaseReference();

@@ -282,7 +282,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result StreamDBProducer::SendRecord(const Array<const uint8_t>& data, int64_t timestamp)
+	Result StreamDBProducer::SendRecord(const ArrayView<const uint8_t>& data, int64_t timestamp)
 	{
 		if (!m_Producer)
 			return ResultCode::NOT_INITIALIZED;
