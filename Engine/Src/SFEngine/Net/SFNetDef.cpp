@@ -19,49 +19,49 @@
 
 
 namespace SF {
-namespace Net {
+	namespace Net {
 
 
 
 
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	IConnectionEventHandler Interface
-	//
+		////////////////////////////////////////////////////////////////////////////////
+		//
+		//	IConnectionEventHandler Interface
+		//
 
-	IConnectionEventHandler::~IConnectionEventHandler()
-	{
+		IConnectionEventHandler::~IConnectionEventHandler()
+		{
 
-	}
+		}
 
-	Result IConnectionEventHandler::OnNetSyncMessage(Connection* pConn)
-	{
-		unused(pConn);
-		Assert(false);
-		return ResultCode::NOT_IMPLEMENTED;
-	};
-
-
-	// Net send message
-	Result IConnectionEventHandler::OnNetSendReadyMessage(Connection* pConn)
-	{
-		unused(pConn);
-		Assert(false);
-		return ResultCode::NOT_IMPLEMENTED;
-	};
+		Result IConnectionEventHandler::OnNetSyncMessage(Connection* pConn)
+		{
+			unused(pConn);
+			Assert(false);
+			return ResultCode::NOT_IMPLEMENTED;
+		};
 
 
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Network Interface
-	//
+		// Net send message
+		Result IConnectionEventHandler::OnNetSendReadyMessage(Connection* pConn)
+		{
+			unused(pConn);
+			Assert(false);
+			return ResultCode::NOT_IMPLEMENTED;
+		};
 
 
 
+		////////////////////////////////////////////////////////////////////////////////
+		//
+		//	Network Interface
+		//
 
 
-} // namespace Net
+
+
+
+	} // namespace Net
 
 
 	EndpointAddress& EndpointAddress::operator = (const EndpointAddress& src)
@@ -96,8 +96,6 @@ namespace Net {
 
 		return *this;
 	}
-
-
 
 } // namespace SF
 

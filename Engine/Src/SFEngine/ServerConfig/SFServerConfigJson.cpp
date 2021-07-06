@@ -47,13 +47,6 @@ namespace SF
 		auto stringValue = jsonObject.get(keyName, Json::Value(Json::stringValue));
 
 		outMessageEndpoint = stringValue.asCString();
-		//auto splitIndex = StrUtil::Indexof(stringValue.asCString(), '/');
-		//if (splitIndex < 0)
-		//	return ResultCode::FAIL;
-
-		//String MessageEndpointrString = stringValue.asCString();
-		//outMessageEndpoint.MessageServer = MessageEndpointrString.SubString(0, splitIndex);
-		//outMessageEndpoint.Channel = MessageEndpointrString.SubString(splitIndex+1, MessageEndpointrString.length());
 
 		return ResultCode::SUCCESS;
 	}

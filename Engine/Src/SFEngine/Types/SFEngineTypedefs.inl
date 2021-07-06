@@ -36,9 +36,8 @@ namespace SF {
 
 	TransactionID::TransactionID(Context context)
 		: Components()
-		, ID(context)
 	{
-		assert(ID == context);
+		ID = context;
 	}
 
 

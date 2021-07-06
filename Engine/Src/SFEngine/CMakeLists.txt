@@ -125,6 +125,7 @@ set(SFENGINE_LIB_FILES
 	SFEngine.Win.cpp
 	SFEngine.Linux.cpp
 	Util/SFToStringEngineTypes.cpp
+	Types/SFEngineTypedefs.inl
 	Types/SFEngineTypedefs.cpp
 	
 	Mongo/SFMongoDB.h
