@@ -186,11 +186,14 @@ namespace SF
 
 		// Both table don't have it
 		const StringItem* newAddr = AddStringToBuffer(hash64Value, hash32Value, str);
-		m_StringMap32.Insert(hash32Value, newAddr);
-		m_StringMap64.Insert(hash64Value, newAddr);
+		{
+			MutexScopeLock lock(m_LockForStringWrite);
+			m_StringMap32.Insert(hash32Value, newAddr);
+			m_StringMap64.Insert(hash64Value, newAddr);
 
-		m_StringMap32.CommitChanges();
-		m_StringMap64.CommitChanges();
+			m_StringMap32.CommitChanges();
+			m_StringMap64.CommitChanges();
+		}
 
 #ifdef DEBUG
 		const StringItem* pTest{};
@@ -222,11 +225,14 @@ namespace SF
 
 		// Both table don't have it
 		const StringItem* newAddr = AddStringToBuffer(hash64Value, hash32Value, str);
-		m_StringMap32.Insert(hash32Value, newAddr);
-		m_StringMap64.Insert(hash64Value, newAddr);
+		{
+			MutexScopeLock lock(m_LockForStringWrite);
+			m_StringMap32.Insert(hash32Value, newAddr);
+			m_StringMap64.Insert(hash64Value, newAddr);
 
-		m_StringMap32.CommitChanges();
-		m_StringMap64.CommitChanges();
+			m_StringMap32.CommitChanges();
+			m_StringMap64.CommitChanges();
+		}
 
 #ifdef DEBUG
 		const StringItem* pTest{};
