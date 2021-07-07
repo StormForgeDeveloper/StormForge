@@ -93,8 +93,9 @@ if(WIN32)
 		SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Od")
 		SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O2 -Oy-")
 		SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O2 -Oy-")
-		SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zi /W4 /WX")
-		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /Zi /W4 /WX")
+		# don't enable /WX. we share this setting with 3rd parties which have a lot of warnings
+		SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /Zi /W4")
+		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /EHsc /Zi /W4")
 	endif()
 
 	set(ARTECTURE x64)
