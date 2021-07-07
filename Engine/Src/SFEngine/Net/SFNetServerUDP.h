@@ -76,8 +76,6 @@ namespace Net {
 		virtual Result HostClose() override;
 
 		virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer) = 0;
-
-		virtual void PendingRecv(IOBUFFER_READ* pIOBuffer);
 	};
 	
 	
