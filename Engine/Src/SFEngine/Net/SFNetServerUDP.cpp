@@ -70,9 +70,6 @@ namespace Net {
 			break;
 		}
 
-
-	//Proc_End:
-
 		return hr;
 	}
 
@@ -90,7 +87,6 @@ namespace Net {
 
 	ServerUDPBase::ServerUDPBase(IHeap& heap, ServerID InServerID, NetClass localClass)
 		: ServerNet(heap, InServerID, localClass)
-		, m_pRecvBuffers(nullptr)
 		, m_MySocketIOAdapter(this)
 	{
 		// We will share the write queue in net system for UDP
@@ -100,9 +96,6 @@ namespace Net {
 
 	ServerUDPBase::~ServerUDPBase()
 	{
-		if( m_pRecvBuffers )
-			IHeap::Delete(m_pRecvBuffers);
-
 		// Write queue is for UDP reactor pattern will be managed by IO system.
 		// Don't delete it here
 		//if (m_MySocketIOAdapter.GetWriteQueue()) IHeap::Delete(m_MySocketIOAdapter.GetWriteQueue());
@@ -187,12 +180,11 @@ namespace Net {
 		// Ready recv
 		if (NetSystem::IsProactorSystem())
 		{
-			if (m_pRecvBuffers) IHeap::Delete(m_pRecvBuffers);
-			netMem(m_pRecvBuffers = new(GetHeap()) IOBUFFER_READ[Const::SVR_NUM_RECV_THREAD]);
-
 			for (int uiRecv = 0; uiRecv < Const::SVR_NUM_RECV_THREAD; uiRecv++)
 			{
-				netChk(m_MySocketIOAdapter.PendingRecv(&m_pRecvBuffers[uiRecv]));
+				IOBUFFER_READ* pRecvBuffer{};
+				netMem(pRecvBuffer = new(GetHeap()) IOBUFFER_READ[Const::SVR_NUM_RECV_THREAD]);
+				netChk(m_MySocketIOAdapter.PendingRecv(pRecvBuffer));
 			}
 		}
 
@@ -226,8 +218,6 @@ namespace Net {
 
 		return hr;
 	}
-
-
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -322,9 +312,14 @@ namespace Net {
 			if (NetSystem::IsProactorSystem())
 			{
 				pIOBuffer->SetPendingFalse();
-				if (hrRes != Result(ResultCode::IO_IO_ABORTED))
+				if (hrRes != ResultCode::IO_IO_ABORTED)
 				{
 					GetSocketIO()->PendingRecv(pIOBuffer);
+				}
+				else
+				{
+					IHeap::Delete(pIOBuffer);
+					pIOBuffer = nullptr;
 				}
 			}
 			else

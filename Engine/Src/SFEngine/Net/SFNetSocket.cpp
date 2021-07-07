@@ -221,7 +221,7 @@ namespace Net {
 			// If it's not registered we need to stop here
 			if (!GetIsIORegistered())
 			{
-				// We have two possiblility here. Out of memory or the the connection is released and waiting deletion
+				// We have two possibility here. Out of memory or the the connection is released and waiting deletion
 				hr = ResultCode::OUT_OF_MEMORY;
 				DecPendingRecvCount();
 				break;

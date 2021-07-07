@@ -116,7 +116,6 @@ namespace Net {
 
 	IOBUFFER_WRITE::IOBUFFER_WRITE()
 	{
-		//memset( this, 0, sizeof(IOBUFFER_WRITE) );
 		pSendBuff = nullptr;
 		hEvent = WSA_INVALID_EVENT;
 	}
@@ -174,7 +173,6 @@ namespace Net {
 
 
 	IOBUFFER_ACCEPT::IOBUFFER_ACCEPT()
-		//:pConnection(nullptr)
 	{
 		memset( this, 0, sizeof(IOBUFFER_ACCEPT) );
 		hEvent = WSA_INVALID_EVENT;

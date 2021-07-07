@@ -61,11 +61,6 @@ namespace Net {
 		};
 
 
-	public:
-
-		// recv buffer
-		IOBUFFER_READ *m_pRecvBuffers;
-
 	private:
 
 		MySocketIOAdapter m_MySocketIOAdapter;
@@ -81,6 +76,8 @@ namespace Net {
 		virtual Result HostClose() override;
 
 		virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer) = 0;
+
+		virtual void PendingRecv(IOBUFFER_READ* pIOBuffer);
 	};
 	
 	
@@ -94,21 +91,12 @@ namespace Net {
 	class ServerUDP : public ServerUDPBase
 	{
 	public:
-		//typedef ConnectionManagerT<ConnectionUDPServer> ConnectionManagerType;
-
-	private:
-
-	public:
 		ServerUDP(IHeap& heap, ServerID InServerID, NetClass localClass);
 		virtual ~ServerUDP();
 		
-
-
 		// called when network message is received
 		virtual Result OnIORecvCompleted( Result hrRes, IOBUFFER_READ* &pIOBuffer ) override;
 	};
-
-
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -119,22 +107,13 @@ namespace Net {
 	class ServerMUDP : public ServerUDPBase
 	{
 	public:
-		//typedef ConnectionManagerT<ConnectionMUDPServer> ConnectionManagerType;
-
-	private:
-
-	public:
 		ServerMUDP(IHeap& heap, ServerID InServerID, NetClass localClass);
 		virtual ~ServerMUDP();
 
 		Result SendRaw(const sockaddr_storage& dstAddress, SharedPointerT<Message::MessageData> &pMsg);
 		Result SendNetCtrl( const sockaddr_storage& dstAddress, uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID );
 		
-		// Maximum connection
-		//inline ConnectionManager& GetConnectionManager();
-
 		// Register PeerID to map
-
 		Result OnPacketWithoutConnection(const struct sockaddr_storage& from, const uint8_t* pData);
 
 		// called when network message is received
