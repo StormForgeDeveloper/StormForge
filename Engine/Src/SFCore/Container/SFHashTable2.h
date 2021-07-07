@@ -531,6 +531,11 @@ namespace SF {
 
 			Result Clear()
 			{
+				return Reset();
+			}
+
+			Result Reset()
+			{
 				m_lItemCount = 0;
 
 				auto itBucket = m_Buckets.begin();

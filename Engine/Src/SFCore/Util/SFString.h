@@ -77,7 +77,7 @@ namespace SF {
 			m_StringValue = nullptr;
 		}
 
-		IHeap& GetHeap() { return m_Heap; }
+		SF_FORCEINLINE IHeap& GetHeap() { return m_Heap; }
 
 		//  resize with string length
 		bool Resize(size_t newStrLen)
@@ -151,11 +151,11 @@ namespace SF {
 			m_StringValue = nullptr;
 		}
 
-		size_t GetStringLength() const { return m_StringLength; }
-		size_t GetStringBufferLength() const { return m_StringLength > 0 ? (m_StringLength + 1) * sizeof(CharType) : 0; }
+		SF_FORCEINLINE size_t GetStringLength() const { return m_StringLength; }
+		SF_FORCEINLINE size_t GetStringBufferLength() const { return m_StringLength > 0 ? (m_StringLength + 1) * sizeof(CharType) : 0; }
 
-		CharType* GetBufferPointer() const { return m_StringValue; }
-		size_t GetAllocatedSize() const { return m_AllocatedSize; }
+		SF_FORCEINLINE CharType* GetBufferPointer() const { return m_StringValue; }
+		SF_FORCEINLINE size_t GetAllocatedSize() const { return m_AllocatedSize; }
 	};
 
 
@@ -277,20 +277,20 @@ namespace SF {
 
 		~TString() {}
 
-		IHeap& GetHeap() const { return *m_pHeap; }
-		void SetHeap(IHeap& heap) { m_pHeap = &heap; }
+		SF_FORCEINLINE IHeap& GetHeap() const { return *m_pHeap; }
+		SF_FORCEINLINE void SetHeap(IHeap& heap) { m_pHeap = &heap; }
 
 		// get string length
-		size_t GetBufferLength() const { return m_Buffer != nullptr ? m_Buffer->GetStringBufferLength() : 0; }
-		size_t GetLength() const { auto bufferLen = GetBufferLength();  return bufferLen > 0 ? bufferLen - 1 : 0; }
-		size_t size() const { return GetLength(); }
-		size_t length() const { return GetLength(); }
+		SF_FORCEINLINE size_t GetBufferLength() const { return m_Buffer != nullptr ? m_Buffer->GetStringBufferLength() : 0; }
+		SF_FORCEINLINE size_t GetLength() const { auto bufferLen = GetBufferLength();  return bufferLen > 0 ? bufferLen - 1 : 0; }
+		SF_FORCEINLINE size_t size() const { return GetLength(); }
+		SF_FORCEINLINE size_t length() const { return GetLength(); }
 
 
 		// Reserve buffer and set size. filled data will be garbage
-		void Resize(size_t newStrLen) { m_Buffer->Resize(newStrLen); }
+		SF_FORCEINLINE void Resize(size_t newStrLen) { m_Buffer->Resize(newStrLen); }
 		// Reserver buffer
-		void Reserve(size_t newStrLen) { m_Buffer->Reserve(newStrLen); }
+		SF_FORCEINLINE void Reserve(size_t newStrLen) { m_Buffer->Reserve(newStrLen); }
 		// Check whether it's null or empty string
 		bool IsNullOrEmpty() const { return m_Buffer == nullptr || m_Buffer->GetStringLength() == 0; }
 
@@ -1031,9 +1031,9 @@ namespace SF {
 		template< class ...ArgTypes >
 		StringType& AppendFormat(const CharType* strFormat, ArgTypes... args);
 
-		CharType* data() { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
-		const CharType* data() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
-		operator const CharType*() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
+		SF_FORCEINLINE CharType* data() { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
+		SF_FORCEINLINE const CharType* data() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
+		SF_FORCEINLINE operator const CharType*() const { return m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr; }
 
 		bool operator == (const CharType* src) const
 		{
