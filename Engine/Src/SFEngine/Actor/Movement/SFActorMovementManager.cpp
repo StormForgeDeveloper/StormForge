@@ -209,17 +209,15 @@ namespace SF
 	{
 		float t = deltaTime / (ActorMovement::DeltaSecondsPerFrame * (b.MoveFrame - a.MoveFrame));
 		assert(t > 0);
-		//float t1 = 1 - t;
-		//Vector4 interpolatedPos = a.Position + (b.Position - -a.Position) * t; // a.Position * (1 - t) + b.Position * t;
-		//Vector4 simulatedPos = a.Position + a.LinearVelocity * deltaTime;
 		Vector4 interpolationDelta = (b.Position - a.Position) * t;
 		Vector4 simulationDelta = a.LinearVelocity * deltaTime;
 		Vector4 delta = simulationDelta + (interpolationDelta - simulationDelta) * t;
 
 		// Interpolated pos affects more when it closes to b
-		//result.Position = simulatedPos + (interpolatedPos - simulatedPos) * t; 
 		result.Position = a.Position + delta;
-		result.AngularYaw = a.AngularYaw + (b.AngularYaw - a.AngularYaw) * t;
+
+		result.AngularYaw = Math::SlerpDegree(a.AngularYaw, b.AngularYaw, t);
+		//result.AngularYaw = a.AngularYaw + (b.AngularYaw - a.AngularYaw) * t;
 
 		result.LinearVelocity = deltaTime > std::numeric_limits<float>::epsilon() ? delta / deltaTime : Vector4::Zero();
 		result.MovementState = a.MovementState;

@@ -72,7 +72,7 @@ Play packet
 ## NewPlayerInViewS2CEvt
 New Player in get view
 
-        Result NewPlayerInViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement)
+        Result NewPlayerInViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
@@ -81,6 +81,8 @@ New Player in get view
 		- OutInAttributes: VariableTable type. Character visual data
 
 		- OutInMovement: ActorMovement type. Actor movement of the character
+
+		- OutInState: StringCrc32 type. StateId actor state.
 
 
 ## RemovePlayerFromViewS2CEvt
@@ -120,19 +122,19 @@ Player Movement
 ## PlayerStateChangedS2CEvt
 Player state change
 
-        Result PlayerStateChangedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Array<uint8_t>& InStateValues, const Vector4 &InPosition)
+        Result PlayerStateChangedS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const Array<uint8_t>& InStateValues)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
 		- OutInPlayerID: PlayerID type. Player Id
 
-		- OutInState: uint32 type. StateId, ActorMovement has same MovementStateId.
+		- OutInState: StringCrc32 type. StateId actor state.
 
 		- OutInMoveFrame: uint32 type. Movement frame state change has happened
 
-		- OutInStateValues: VariableTable type. State change values
-
 		- OutInPosition: Vector4 type. Position of the player when state change happened
+
+		- OutInStateValues: VariableTable type. State change values
 
 
 ## ClientSyncReliableC2SEvt

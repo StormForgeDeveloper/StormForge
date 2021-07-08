@@ -220,15 +220,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt( intptr_t InNati
 
 
 // S2C: New Player in get view
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes, const ActorMovement& InMovement )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes, const ActorMovement& InMovement, StringCrc32 InState )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::NewPlayerInViewS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInAttributes, _sizeOfInAttributes, InAttributes),InMovement);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::NewPlayerInViewS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInAttributes, _sizeOfInAttributes, InAttributes),InMovement, InState);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes, const ActorMovement& InMovement )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes, const ActorMovement& InMovement, StringCrc32 InState )
 
 
 
@@ -259,15 +259,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementS2CEvt( intptr_t InNa
 
 
 // S2C: Player state change
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerStateChangedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InState, uint32_t InMoveFrame, uint16_t _sizeOfInStateValues,uint8_t* InStateValues, const Vector4& InPosition )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerStateChangedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InState, uint32_t InMoveFrame, const Vector4& InPosition, uint16_t _sizeOfInStateValues,uint8_t* InStateValues )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerStateChangedS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID, InState, InMoveFrame,SF::ArrayView<uint8_t>(_sizeOfInStateValues, _sizeOfInStateValues, InStateValues),InPosition);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerStateChangedS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID, InState, InMoveFrame,InPosition,SF::ArrayView<uint8_t>(_sizeOfInStateValues, _sizeOfInStateValues, InStateValues));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerStateChangedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InState, uint32_t InMoveFrame, uint16_t _sizeOfInStateValues,uint8_t* InStateValues, const Vector4& InPosition )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerStateChangedS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InState, uint32_t InMoveFrame, const Vector4& InPosition, uint16_t _sizeOfInStateValues,uint8_t* InStateValues )
 
 
 

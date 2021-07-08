@@ -245,6 +245,7 @@ namespace SF
 				mutable bool m_AttributesHasParsed = false;
 				mutable VariableTable m_Attributes;
 				ActorMovement m_Movement{};
+				StringCrc32 m_State{};
 			public:
 				NewPlayerInViewS2CEvt()
 					{}
@@ -260,6 +261,7 @@ namespace SF
 				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
 				const VariableTable& GetAttributes() const;
 				const ActorMovement& GetMovement() const	{ return m_Movement; };
+				const StringCrc32& GetState() const	{ return m_State; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -267,8 +269,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState );
 
 			}; // class NewPlayerInViewS2CEvt : public MessageBase
 
@@ -433,12 +435,12 @@ namespace SF
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
-				uint32_t m_State{};
+				StringCrc32 m_State{};
 				uint32_t m_MoveFrame{};
+				Vector4 m_Position{};
 				ArrayView<uint8_t> m_StateValuesRaw;
 				mutable bool m_StateValuesHasParsed = false;
 				mutable VariableTable m_StateValues;
-				Vector4 m_Position{};
 			public:
 				PlayerStateChangedS2CEvt()
 					{}
@@ -451,11 +453,11 @@ namespace SF
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const uint32_t& GetState() const	{ return m_State; };
+				const StringCrc32& GetState() const	{ return m_State; };
 				const uint32_t& GetMoveFrame() const	{ return m_MoveFrame; };
+				const Vector4& GetPosition() const	{ return m_Position; };
 				const Array<uint8_t>& GetStateValuesRaw() const	{ return m_StateValuesRaw; };
 				const VariableTable& GetStateValues() const;
-				const Vector4& GetPosition() const	{ return m_Position; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -463,8 +465,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const Array<uint8_t>& InStateValues, const Vector4 &InPosition );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InState, const uint32_t &InMoveFrame, const VariableTable &InStateValues, const Vector4 &InPosition );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const Array<uint8_t>& InStateValues );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const VariableTable &InStateValues );
 
 			}; // class PlayerStateChangedS2CEvt : public MessageBase
 

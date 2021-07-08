@@ -21,12 +21,20 @@ namespace SF
 	// Math utilities
 	namespace Math
 	{
+		template<class Type>
+		SF_FORCEINLINE Type Clamp(Type mi, Type ma, Type value)
+		{
+			if (value < mi) value = mi;
+			if (value > ma) value = ma;
+			return value;
+		}
+
 		// get absolute value
 		template<class Type>
-		inline Type Abs(Type value) { return value < 0 ? -value : value; }
+		SF_FORCEINLINE Type Abs(Type value) { return value < 0 ? -value : value; }
 
 		template<>
-		inline unsigned int Abs(unsigned int x)
+		SF_FORCEINLINE unsigned int Abs(unsigned int x)
 		{
 			return x;
 		}
@@ -71,6 +79,30 @@ namespace SF
 		SF_FORCEINLINE float DistanceCmToM(float cm)
 		{
 			return cm / 100.f;
+		}
+
+
+		SF_FORCEINLINE float SlerpDegree(float a, float b, float t)
+		{
+			a = Math::Clamp(0.f, 360.f, a);
+			b = Math::Clamp(0.f, 360.f, b);
+
+			if (Math::Abs(a - b) < 180)
+			{
+				return a + (b - a) * t;
+			}
+			else
+			{
+				if (a > b)
+				{
+					b += 360;
+				}
+				else
+				{
+					a += 360;
+				}
+				return Math::Clamp(0.f, 360.f, a + (b - a) * t);
+			}
 		}
 	}
 
