@@ -246,6 +246,9 @@ namespace SF
 				mutable VariableTable m_Attributes;
 				ActorMovement m_Movement{};
 				StringCrc32 m_State{};
+				ArrayView<uint8_t> m_StateValuesRaw;
+				mutable bool m_StateValuesHasParsed = false;
+				mutable VariableTable m_StateValues;
 			public:
 				NewPlayerInViewS2CEvt()
 					{}
@@ -262,6 +265,8 @@ namespace SF
 				const VariableTable& GetAttributes() const;
 				const ActorMovement& GetMovement() const	{ return m_Movement; };
 				const StringCrc32& GetState() const	{ return m_State; };
+				const Array<uint8_t>& GetStateValuesRaw() const	{ return m_StateValuesRaw; };
+				const VariableTable& GetStateValues() const;
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -269,8 +274,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues );
 
 			}; // class NewPlayerInViewS2CEvt : public MessageBase
 

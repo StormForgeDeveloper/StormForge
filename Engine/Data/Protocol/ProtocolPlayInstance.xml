@@ -54,6 +54,7 @@
 			<Params Type="VariableTable" Name="Attributes" Desc="Character visual data"/>
 			<Params Type="ActorMovement" Name="Movement" Desc="Actor movement of the character"/>
 			<Params Type="StringCrc32" Name="State" Desc="StateId actor state."/>
+			<Params Type="VariableTable" Name="StateValues" Desc="State values"/>
 		</S2CEvent>
 
 		<S2CEvent Name="RemovePlayerFromView" Reliable="true" Crypto="No" Trace="Debug1" Desc="Remove player from view">
