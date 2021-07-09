@@ -5,6 +5,8 @@ set(SFCORE_LIB_FILES
 	Component/SFComponent.h
 	Component/SFLibraryComponent.h
 	Component/SFLibraryComponent.cpp
+	Component/SFLibraryComponentInitializer.h
+	Component/SFLibraryComponentInitializer.cpp
 	Component/SFLibraryComponentAdapter.h
 	#Component/SFLibraryComponentAdapter.cpp
 	Component/SFLibraryComponentManager.h

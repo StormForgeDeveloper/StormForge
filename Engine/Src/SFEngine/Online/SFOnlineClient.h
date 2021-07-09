@@ -192,6 +192,7 @@ namespace SF
 		void OnPlayerOutofView(const MessageDataPtr& pMsgData);
 		void OnPlayerMovement(const MessageDataPtr& pMsgData);
 		void OnPlayerMovement(PlayerID playerId, const ActorMovement& movement);
+		void OnPlayerStateChanged(const MessageDataPtr& pMsgData);
 
 		void UpdateOnlineStateByConnectionState();
 
@@ -220,6 +221,7 @@ namespace SF
 		String m_NickName;
 		uint32_t m_CharacterId{};
 		uint64_t m_GameInstanceUID{};
+		StringCrc32 m_MyPlayerState;
 		uint64_t m_PartyUID{};
 		uint64_t m_PartyLeaderId{};
 

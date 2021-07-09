@@ -35,7 +35,7 @@
 #include "Net/SFNetConst.h"
 #include "Net/SFNetSystem.h"
 #include "Net/SFConnectionManager.h"
-
+#include "Component/SFLibraryComponentInitializer.h"
 
 namespace SF {
 
@@ -62,6 +62,8 @@ namespace SF {
 		Result result;
 
 		IHeap::SetMemoryLeakDetection(m_InitParameter.EnableMemoryLeakDetection);
+
+		LibraryComponentInitializer::CallInitializers(ComponentInitializeMode::PreInit);
 
 		if(AddComponent<Log::LogModule>(m_InitParameter.GlobalLogOutputMask) == nullptr)
 			return ResultCode::FAIL;
@@ -125,12 +127,16 @@ namespace SF {
 	// Override initialize/deinitialize components
 	Result Engine::InitializeComponents()
 	{
+		LibraryComponentInitializer::CallInitializers(ComponentInitializeMode::RegisterComponent);
+
 		for (auto itFunc : m_InitParameter.InitializationFunctions)
 		{
 			itFunc(this);
 		}
 
 		auto result = super::InitializeComponents();
+
+		LibraryComponentInitializer::CallInitializers(ComponentInitializeMode::AfterRegisterComponent);
 
 		m_ExitCode = -1;
 

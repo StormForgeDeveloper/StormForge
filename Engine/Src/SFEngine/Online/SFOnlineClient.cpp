@@ -610,6 +610,8 @@ namespace SF
 	{
 		m_ServerMoveFrame = newMoveFrame;
 		m_MoveFrame = newMoveFrame;
+
+		m_MyPlayerState = nullptr;
 	}
 
 	void OnlineClient::SetupInstanceInfo()
@@ -671,6 +673,13 @@ namespace SF
 			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
 				OnPlayerMovement(pMsgData);
+			});
+
+		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
+			Message::PlayInstance::PlayerStateChangedS2CEvt::MID.GetMsgID(),
+			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
+			{
+				OnPlayerStateChanged(pMsgData);
 			});
 
 		m_GameInstance->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(this),
@@ -910,7 +919,7 @@ namespace SF
 		uint32_t deltaFrames = deltaTime.count() / ActorMovement::DeltaMSPerFrame;
 
 		if (deltaFrames > 0 && (m_MoveFrame % 200) == 0)
-			SFLog(Net, Debug2, "OnlineClient::UpdateMovement deltaFrames:{0}, moveFrame:{1:X}, serverFrame:{2:X}", deltaFrames, m_MoveFrame, m_ServerMoveFrame);
+			SFLog(Net, Debug3, "OnlineClient::UpdateMovement deltaFrames:{0}, moveFrame:{1:X}, serverFrame:{2:X}", deltaFrames, m_MoveFrame, m_ServerMoveFrame);
 
 		if (deltaFrames == 0)
 			return 0;
@@ -933,9 +942,18 @@ namespace SF
 		{
 			NetPolicyPlayInstance policy(GetConnectionGameInstance()->GetMessageEndpoint());
 			ActorMovement pMove{};
-			while (m_OutgoingMovement->DequeueMovement(pMove))
+			if (m_MyPlayerState != nullptr) // If it is not null it means  the player is standing
 			{
-				policy.PlayerMovementC2SEvt(GetGameInstanceUID(), GetPlayerID(), pMove);
+				while (m_OutgoingMovement->DequeueMovement(pMove))
+				{
+				}
+			}
+			else
+			{
+				while (m_OutgoingMovement->DequeueMovement(pMove))
+				{
+					policy.PlayerMovementC2SEvt(GetGameInstanceUID(), GetPlayerID(), pMove);
+				}
 			}
 		}
 
@@ -992,13 +1010,13 @@ namespace SF
 		Message::PlayInstance::PlayerMovementS2CEvt msg(pMsgData);
 		if (!msg.ParseMsg())
 		{
-			SFLog(Net, Info, "OnlineClient::OnPlayerMovement Parsing error");
+			SFLog(Net, Error, "OnlineClient::OnPlayerMovement Parsing error");
 			return;
 		}
 
 		if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
 		{
-			SFLog(Net, Info, "Invalid instance id, ignoring movement");
+			SFLog(Net, Warning, "Invalid instance id, ignoring movement");
 			return;
 		}
 
@@ -1009,7 +1027,7 @@ namespace SF
 
 	void OnlineClient::OnPlayerMovement(PlayerID playerId, const ActorMovement& newMove)
 	{
-		SFLog(Net, Debug, "OnlineClient:OnPlayerMovement, playerId:{0}, serverFrame:{1:X}, move:{2}", playerId, m_ServerMoveFrame, newMove);
+		SFLog(Net, Debug3, "OnlineClient:OnPlayerMovement, playerId:{0}, serverFrame:{1:X}, move:{2}", playerId, m_ServerMoveFrame, newMove);
 
 		// adjust move frame
 		m_ServerMoveFrame = Math::Max(m_ServerMoveFrame, newMove.MoveFrame);
@@ -1023,6 +1041,28 @@ namespace SF
 		}
 
 		movement->EnqueueMovement(newMove);
+	}
+
+	void OnlineClient::OnPlayerStateChanged(const MessageDataPtr& pMsgData)
+	{
+		Message::PlayInstance::PlayerStateChangedS2CEvt msg(pMsgData);
+		if (!msg.ParseMsg())
+		{
+			SFLog(Net, Error, "OnlineClient::OnPlayerStateChanged Parsing error");
+			return;
+		}
+
+		if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+		{
+			SFLog(Net, Warning, "Invalid instance id, ignoring movement");
+			return;
+		}
+
+		// we only interested in my player state
+		if (msg.GetPlayerID() != m_AccountId)
+			return;
+
+		m_MyPlayerState = msg.GetState();
 	}
 
 	void OnlineClient::UpdateOnlineStateByConnectionState()
