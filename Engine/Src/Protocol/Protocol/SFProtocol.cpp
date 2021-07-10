@@ -22,7 +22,7 @@
 #include "Net/SFNetCtrl.h"
 #include "Net/SFNetUtil.h"
 #include "Util/SFTimeUtil.h"
-
+#include "Component/SFLibraryComponentInitializer.h"
 
 #include "Protocol/SFProtocol.h"
 
@@ -43,29 +43,42 @@ namespace SF {
 namespace Protocol {
 
 	std::unordered_map<uint32_t, MessageHandlingFunction> MessageDebugTraceMap;
-	
-	void RegisterConnectionDebugMessage()
-	{
-		if (MessageDebugTraceMap.size() > 0) return;
-		
-		RegisterDebugTraceLogin( );
-		RegisterDebugTraceGame( );
-		RegisterDebugTracePlayInstance();
-	}
-
-	
 	std::unordered_map<uint32_t, HandleParseMessageTo> MessageParseToVariableMap;
 	std::unordered_map<uint32_t, HandleParseMessageToMessageBase> MessageParseToMessageBaseMap;
 
-	void RegisterMessageParser()
+
+	class SFProtocolInitializer : public LibraryComponentInitializer
 	{
-		if (MessageParseToVariableMap.size() > 0) return;
-		
-		RegisterParserLogin();
-		RegisterParserGame();
-		RegisterParserPlayInstance();
-	}
-	
+	public:
+
+		SFProtocolInitializer()
+		{}
+		~SFProtocolInitializer()
+		{}
+
+		virtual bool Initialize(ComponentInitializeMode InitMode) override
+		{
+			if (InitMode != ComponentInitializeMode::AfterRegisterComponent)
+				return false;
+
+			RegisterDebugTraceLogin();
+			RegisterDebugTraceGame();
+			RegisterDebugTracePlayInstance();
+
+			RegisterParserLogin();
+			RegisterParserGame();
+			RegisterParserPlayInstance();
+
+			return true;
+		}
+
+		static SFProtocolInitializer stm_Instance;
+	};
+
+	SFProtocolInitializer SFProtocolInitializer::stm_Instance;
+
+
+
 	void PrintDebugMessage(const char* preFix, const SharedPointerT<Message::MessageData>& pMsg )
 	{
 		if( pMsg == nullptr )
@@ -75,6 +88,10 @@ namespace Protocol {
 		if (itFound != MessageDebugTraceMap.end())
 		{
 			((itFound->second))(preFix, pMsg);
+		}
+		else
+		{
+			SFLog(Net, Error, "PrintDebugMessage failed, can't find message handler for 0x{0:X8}", pMsg->GetMessageHeader()->msgID.GetMsgIDOnly());
 		}
 	}
 	
@@ -88,7 +105,11 @@ namespace Protocol {
 		{
 			return (itFound->second)(pMsg, variableMap);
 		}
-		
+		else
+		{
+			SFLog(Net, Error, "ParseMessage(GenVariableTable) failed, can't find message handler for 0x{0:X8}", pMsg->GetMessageHeader()->msgID.GetMsgIDOnly());
+		}
+
 		return ResultCode::IO_BADPACKET;
 	}
 	
@@ -104,7 +125,11 @@ namespace Protocol {
 		{
 			return (itFound->second)(memoryManager, pMsg, pMsgBase);
 		}
-		
+		else
+		{
+			SFLog(Net, Error, "ParseMessage failed, can't find message handler for 0x{0:X8}", pMsg->GetMessageHeader()->msgID.GetMsgIDOnly());
+		}
+
 		return ResultCode::IO_BADPACKET;
 	}
 	

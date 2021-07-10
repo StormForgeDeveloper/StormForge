@@ -21,11 +21,13 @@
 
 namespace SF {
 
+	// Initialization enum
 	enum class ComponentInitializeMode : uint8_t
 	{
 		PreInit,
 		RegisterComponent,
 		AfterRegisterComponent,
+		Max,
 	};
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -40,7 +42,11 @@ namespace SF {
 		LibraryComponentInitializer();
 		virtual ~LibraryComponentInitializer();
 
-		virtual void Initialize(ComponentInitializeMode InitMode) = 0;
+		// Initializer, return true if you don't need to receive any initializer messsage
+		virtual bool Initialize(ComponentInitializeMode InitMode) { return true; }
+
+		// initialized done and released from system
+		virtual void Release() {}
 
 		// call component initializers in the list
 		static void CallInitializers(ComponentInitializeMode InitMode);
@@ -49,6 +55,7 @@ namespace SF {
 
 		LibraryComponentInitializer* m_pNext{};
 
+		static uint32_t stm_CalledMode;
 		static LibraryComponentInitializer* stm_pHead;
 	};
 

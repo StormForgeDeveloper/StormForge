@@ -83,9 +83,6 @@ namespace SF
 
 	namespace Protocol
 	{
-		void RegisterConnectionDebugMessage();
-		void RegisterMessageParser();
-		
 		//TODO: to library object
 		void PrintDebugMessage(const char* preFix, const SharedPointerT<Message::MessageData>& pMsg);
 		Result ParseMessage(const SharedPointerT<Message::MessageData>& pMsg, IVariableMapBuilder& variableMap);
