@@ -81,9 +81,6 @@ namespace Net {
 		if (m_NetIOSystem != nullptr) 
 			m_NetIOSystem->Initialize(m_NumThread);
 		
-		Protocol::RegisterConnectionDebugMessage();
-		Protocol::RegisterMessageParser();
-
 		return ResultCode::SUCCESS;
 	}
 
