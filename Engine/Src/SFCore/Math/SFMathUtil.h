@@ -131,7 +131,7 @@ namespace SF
 			long Mask = -long(_BitScanReverse64(&Log2, Value) != 0);
 			return Log2 & Mask;
 #else
-			int64 Mask = -int64(Value != 0);
+			int64_t Mask = -int64_t(Value != 0);
 			return (63 - __builtin_clzll(Value)) & Mask;
 #endif
 		}

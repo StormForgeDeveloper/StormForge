@@ -266,10 +266,7 @@ namespace SF {
 				auto pFoundAccessPoint = travelHistory.GetParentAccessPoint(iHistory, pFound);
 				*pFoundAccessPoint = pRemoved;
 
-				pRemoved->Left = pFound->Left;
-				pRemoved->Right = pFound->Right;
-
-				travelHistory.Replace(m_UpdateSerial, iHistory, pFound, pRemoved);
+				travelHistory.Replace(m_UpdateSerial, iHistory, true, pFound, pRemoved);
 
 				//child = nullptr;
 				auto pTemp = pRemoved;
@@ -927,7 +924,7 @@ namespace SF {
 						leftRight->Right = pCurNode;
 
 						//*parentAccessPoint = leftRight;
-						travelHistory.Replace(m_UpdateSerial, iHistory, pCurNode, leftRight);
+						travelHistory.Replace(m_UpdateSerial, iHistory, false, pCurNode, leftRight);
 						travelHistory.RemoveLastHistory(); // remove pcurnode before add other
 						travelHistory.AddHistory(leftRight);
 					}
@@ -937,7 +934,7 @@ namespace SF {
 						pCurNode->Left = left->Right;
 						left->Right = pCurNode;
 						//*parentAccessPoint = left;
-						travelHistory.Replace(m_UpdateSerial, iHistory, pCurNode, left);
+						travelHistory.Replace(m_UpdateSerial, iHistory, false, pCurNode, left);
 						travelHistory.RemoveLastHistory(); // remove pcurnode before add other
 					}
 
@@ -959,7 +956,7 @@ namespace SF {
 						rightLeft->Right = right;
 
 						//*parentAccessPoint = rightLeft;
-						travelHistory.Replace(m_UpdateSerial, iHistory, pCurNode, rightLeft);
+						travelHistory.Replace(m_UpdateSerial, iHistory, false, pCurNode, rightLeft);
 						travelHistory.RemoveLastHistory(); // remove pcurnode before add other
 						travelHistory.AddHistory(rightLeft);
 					}
@@ -969,7 +966,7 @@ namespace SF {
 						pCurNode->Right = right->Left;
 						right->Left = pCurNode;
 						//*parentAccessPoint = right;
-						travelHistory.Replace(m_UpdateSerial, iHistory, pCurNode, right);
+						travelHistory.Replace(m_UpdateSerial, iHistory, false, pCurNode, right);
 						travelHistory.RemoveLastHistory(); // remove pcurnode before add other
 					}
 

@@ -115,7 +115,7 @@ namespace SF {
 			return m_TraversalHistory.FindIndex([pNode](const MapNode* x) { return x == pNode; });
 		}
 
-		void Replace(uint updateSerial, int nodeIndex, const MapNode* pNode, const MapNode* pNewNode)
+		void Replace(uint updateSerial, int nodeIndex, bool isInPlaceSwap, const MapNode* pNode, MapNode* pNewNode)
 		{
 			Assert(GetHistory(nodeIndex) == pNode);
 			if (GetHistorySize() <= 1 || nodeIndex < 1) // only the found node is in there
@@ -128,12 +128,19 @@ namespace SF {
 				parentNode->ValidateUpdateSerial(updateSerial);
 				if (parentNode->Left == pNode)
 				{
+					assert(!isInPlaceSwap);
 					parentNode->Left = const_cast<MapNode*>(pNewNode);
 				}
-				else
+				else if (parentNode->Right == pNode)
 				{
-					Assert(parentNode->Right == pNode);
+					assert(!isInPlaceSwap);
 					parentNode->Right = const_cast<MapNode*>(pNewNode);
+				}
+				else // in place change 
+				{
+					assert(isInPlaceSwap);
+					pNewNode->Left = pNode->Left;
+					pNewNode->Right = pNode->Right;
 				}
 			}
 		}

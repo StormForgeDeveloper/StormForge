@@ -261,10 +261,10 @@ namespace SF {
 				auto pFoundAccessPoint = travelHistory.GetParentAccessPoint(iHistory, pFound);
 				*pFoundAccessPoint = pRemoved;
 
-				pRemoved->Left = pFound->Left;
-				pRemoved->Right = pFound->Right;
+				//pRemoved->Left = pFound->Left;
+				//pRemoved->Right = pFound->Right;
 
-				travelHistory.Replace(0, iHistory, pFound, pRemoved);
+				travelHistory.Replace(0, iHistory, true, pFound, pRemoved);
 
 				//child = nullptr;
 				auto pTemp = pRemoved;

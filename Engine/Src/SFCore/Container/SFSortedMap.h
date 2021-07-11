@@ -138,8 +138,9 @@ namespace SF {
 
 				iterator()
 				{}
-				iterator(IHeap& heap, const MapNode* pRootNode, int startOrderIndex)
-					: m_pCurNode(pRootNode)
+				iterator(IHeap& heap, SortedMap* pContainer, const MapNode* pRootNode, int startOrderIndex)
+					: m_pContainer(pContainer)
+					, m_pCurNode(pRootNode)
 				{
 					m_TravelHistory.Clear();
 					m_TravelHistory.SetPreserveDataOnResize(true);
@@ -147,13 +148,13 @@ namespace SF {
 					// find start point
 					do
 					{
-						travelHistory.AddHistory(pCurNode);
+						m_TravelHistory.AddHistory(m_pCurNode);
 
-						auto right = pCurNode->Right;
+						auto right = m_pCurNode->Right;
 						auto rightNumChildren = right != nullptr ? right->NumberOfChildren : -1;
 						if (rightNumChildren >= startOrderIndex)
 						{
-							pCurNode = right;
+							m_pCurNode = right;
 						}
 						else
 						{
@@ -165,16 +166,17 @@ namespace SF {
 								break;
 
 							startOrderIndex--;
-							auto left = pCurNode->Left;
-							pCurNode = left;
+							auto left = m_pCurNode->Left;
+							m_pCurNode = left;
 						}
 
-					} while (pCurNode != nullptr);
+					} while (m_pCurNode != nullptr);
 
 				}
 
 				iterator(const iterator& src)
-					: m_pCurNode(src.m_pCurNode)
+					: m_pContainer(src.m_pContainer)
+					, m_pCurNode(src.m_pCurNode)
 				{
 					m_TravelHistory = src.m_TravelHistory;
 				}
@@ -187,11 +189,11 @@ namespace SF {
 					auto left = m_pCurNode->Left;
 					if (left != nullptr)
 					{
-						m_pCurNode = FindBiggestNode(m_TravelHistory, left);
+						m_pCurNode = m_pContainer->FindBiggestNode(m_TravelHistory, left);
 					}
 					else // this is a leap node pop up
 					{
-						travelHistory.RemoveLastHistory();
+						m_TravelHistory.RemoveLastHistory();
 						const MapNode* parent = nullptr;
 						do
 						{
@@ -244,13 +246,15 @@ namespace SF {
 
 			private:
 
+				SortedMap* m_pContainer{};
+
 				const MapNode* m_pCurNode{};
 
 				OperationTraversalHistory m_TravelHistory;
 			};
 
 
-			iterator begin() { return iterator(GetHeap(), m_Root, 0); }
+			iterator begin() { return iterator(GetHeap(), this, m_Root, 0); }
 			iterator end() { return iterator(); }
 
 			// enumerate the values
