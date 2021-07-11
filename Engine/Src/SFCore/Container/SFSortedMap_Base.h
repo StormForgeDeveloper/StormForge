@@ -128,17 +128,17 @@ namespace SF {
 				parentNode->ValidateUpdateSerial(updateSerial);
 				if (parentNode->Left == pNode)
 				{
-					assert(!isInPlaceSwap);
 					parentNode->Left = const_cast<MapNode*>(pNewNode);
 				}
-				else if (parentNode->Right == pNode)
+				else 
 				{
-					assert(!isInPlaceSwap);
+					assert(parentNode->Right == pNode);
 					parentNode->Right = const_cast<MapNode*>(pNewNode);
 				}
-				else // in place change 
+
+				// if it is in-place swap, we need to copy over left and right
+				if (isInPlaceSwap)
 				{
-					assert(isInPlaceSwap);
 					pNewNode->Left = pNode->Left;
 					pNewNode->Right = pNode->Right;
 				}

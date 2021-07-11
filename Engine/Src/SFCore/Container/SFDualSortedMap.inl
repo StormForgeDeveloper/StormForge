@@ -117,7 +117,7 @@ namespace SF {
 			OperationTraversalHistory travelHistory(GetHeap(), m_WriteRoot, m_ItemCount.load(std::memory_order_relaxed));
 
 			MapNode* pFound = nullptr;
-			if (!(FindNode(travelHistory, key, pFound)))
+			if (!FindNode(travelHistory, key, pFound))
 			{
 				if (m_WriteRoot != nullptr)
 					return ResultCode::FAIL;
@@ -141,6 +141,7 @@ namespace SF {
 				}
 			}
 
+			// Clone nodes along  the path
 			MapNode* pInserted = nullptr;
 			auto foundKey = pFound->Key.load(MemoryOrder::memory_order_acquire);
 			if (key > foundKey) // duplicate key will be put at the left most side
@@ -200,7 +201,7 @@ namespace SF {
 
 			MapNode* pRemoved = nullptr;
 			MapNode* pFound = nullptr;
-			if (!(FindNode(travelHistory, key, pFound)))
+			if (!FindNode(travelHistory, key, pFound))
 				return ResultCode::INVALID_ARG;
 
 			// unique key
@@ -210,9 +211,7 @@ namespace SF {
 
 			value = pFound->Value;
 
-
-			//MapNode* child = nullptr;
-
+			int iFoundIndex = (int)travelHistory.GetHistorySize() - 1;
 			auto left = pFound->Left.load();
 			auto right = pFound->Right.load();
 			// If it's not a leap node, find a replacement
@@ -247,45 +246,33 @@ namespace SF {
 					right = pFound->Right = CloneNode(right);
 					pRemoved = FindSmallestNode(travelHistory, right);
 					Assert(pRemoved->Left == nullptr);
-					//child = pRemoved->Right.load();
 				}
 				else
 				{
 					left = pFound->Left = CloneNode(left);
 					pRemoved = FindBiggestNode(travelHistory, left);
 					Assert(pRemoved->Right == nullptr);
-					//child = pRemoved->Left.load();
 				}
 
-				// swap value with replacement node
-				//pFound->Key = pRemoved->Key;
-				//pFound->Value = std::forward<ValueType>(pRemoved->Value);
-
 				// swap node
-				int iHistory = travelHistory.FindIndex(pFound);
-				auto pFoundAccessPoint = travelHistory.GetParentAccessPoint(iHistory, pFound);
-				*pFoundAccessPoint = pRemoved;
+				//assert(iFoundIndex == travelHistory.FindIndex(pFound));
+				auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pRemoved);
+				*pParentPointer = nullptr;
 
-				travelHistory.Replace(m_UpdateSerial, iHistory, true, pFound, pRemoved);
+				travelHistory.Replace(m_UpdateSerial, iFoundIndex, true, pFound, pRemoved);
 
-				//child = nullptr;
-				auto pTemp = pRemoved;
+				// pFound is the one need to be deleted
 				pRemoved = const_cast<MapNode*>(pFound);
-				pFound = pTemp;
 			}
 			else
 			{
 				// if it doesn't have any child
 				pRemoved = pFound;
+
+				auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pRemoved);
+				*pParentPointer = nullptr;
 			}
 
-
-			auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pRemoved);
-			//*pParentPointer = child;
-			*pParentPointer = nullptr;
-
-			// remove replacement from the tree
-			//travelHistory.Replace(m_UpdateSerial, (int)travelHistory.GetHistorySize() - 1, pRemoved, child);
 
 			// remove from the traversal history, replacement node will not be need to be took care
 			travelHistory.RemoveLastHistory();
@@ -317,7 +304,7 @@ namespace SF {
 			OperationTraversalHistory travelHistory(GetHeap(), pReadRoot, m_ItemCount.load(std::memory_order_relaxed));
 
 			MapNode* pFound = nullptr;
-			if (!(FindNode(travelHistory, key, pFound)))
+			if (!FindNode(travelHistory, key, pFound))
 			{
 				return ResultCode::FAIL;
 			}
@@ -425,7 +412,7 @@ namespace SF {
 
 			MapNode* pFound = nullptr;
 
-			if (!(FindNodeRead(travelHistory, pReadRoot, key, pFound)))
+			if (!FindNodeRead(travelHistory, pReadRoot, key, pFound))
 			{
 				return ResultCode::FAIL;
 			}
@@ -546,7 +533,7 @@ namespace SF {
 		//	return ForeachOrder(m_WriteRoot, startOrderIndex, count, functor);
 		//}
 
-		// find parent node or candidate
+		// find parent node or candidate, we clone nodes along the way
 		template<class KeyType, class ValueType>
 		Result DualSortedMap<KeyType, ValueType>::FindNode(OperationTraversalHistory &travelHistory, KeyType key, MapNode* &pNode)
 		{

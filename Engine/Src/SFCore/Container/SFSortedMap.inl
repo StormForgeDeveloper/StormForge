@@ -207,9 +207,7 @@ namespace SF {
 			value = std::forward<ValueType>(const_cast<MapNode*>(pFound)->Value);
 
 
-			ReferenceAccessPoint *pParentPointer = nullptr;
-			//MapNode* child = nullptr;
-
+			int iFoundIndex = (int)travelHistory.GetHistorySize() - 1;
 			auto left = pFound->Left;
 			auto right = pFound->Right;
 			// If it's not a leap node, find a replacement
@@ -252,42 +250,26 @@ namespace SF {
 					//child = pRemoved->Left;
 				}
 
-				//// swap value with replacement node
-				//const_cast<MapNode*>(pFound)->Key = pRemoved->Key;
-				//const_cast<MapNode*>(pFound)->Value = std::forward<ValueType>(pRemoved->Value);
-
 				// swap node
-				int iHistory = travelHistory.FindIndex(pFound);
-				auto pFoundAccessPoint = travelHistory.GetParentAccessPoint(iHistory, pFound);
-				*pFoundAccessPoint = pRemoved;
+				//assert(iFoundIndex == travelHistory.FindIndex(pFound));
+				auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pRemoved);
+				*pParentPointer = nullptr;
 
-				//pRemoved->Left = pFound->Left;
-				//pRemoved->Right = pFound->Right;
+				travelHistory.Replace(0, iFoundIndex, true, pFound, pRemoved);
 
-				travelHistory.Replace(0, iHistory, true, pFound, pRemoved);
-
-				//child = nullptr;
-				auto pTemp = pRemoved;
 				pRemoved = const_cast<MapNode*>(pFound);
-				pFound = pTemp;
 			}
 			else
 			{
 				// if it doesn't have any child
 				pRemoved = const_cast<MapNode*>(pFound);
+
+				auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pRemoved);
+				*pParentPointer = nullptr;
 			}
-
-
-			// remove replacement from the tree
-			pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pRemoved);
-			//*pParentPointer = child;
-			*pParentPointer = nullptr;
-
-			//travelHistory.Replace(m_UpdateSerial, (int)travelHistory.GetHistorySize() - 1, pRemoved, child);
 
 			// remove from the traversal history, replacement node will not be need to be took care
 			travelHistory.RemoveLastHistory();
-
 
 			FixupBalance(travelHistory);
 
