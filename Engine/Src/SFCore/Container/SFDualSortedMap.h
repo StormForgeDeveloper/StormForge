@@ -16,6 +16,7 @@
 #include "Container/SFArray.h"
 #include "Platform/StackWalker.h"
 #include "Object/SFObjectPool.h"
+#include "Container/SFSortedMap_Base.h"
 
 namespace SF {
 
@@ -33,8 +34,8 @@ namespace SF {
 			//typedef uint KeyType;
 			//typedef uint ValueType;
 
-			typedef CounterType SynchronizeCounterType;
-			typedef std::atomic<SynchronizeCounterType> SynchronizeCounter;
+			typedef CounterType size_t;
+			typedef std::atomic<size_t> SynchronizeCounter;
 
 			enum {
 				BalanceTolerance = 4,
@@ -94,8 +95,11 @@ namespace SF {
 					return pNode;
 				}
 
-				bool operator != (MapNode* pNode) { return load() != pNode; }
-				bool operator == (MapNode* pNode) { return load() == pNode; }
+				bool operator != (const MapNode* pNode) const { return load() != pNode; }
+				bool operator == (const MapNode* pNode) const { return load() == pNode; }
+
+				MapNode* operator ->() { return load(); }
+				const MapNode* operator ->() const { return load(); }
 
 				MapNode* operator = (const ReferenceAccessPoint& src)
 				{
@@ -180,77 +184,84 @@ namespace SF {
 				}
 
 				int UpdateBalanceFactor();
+
+				SF_FORCEINLINE void ValidateUpdateSerial(uint32_t updateSerialExpected)
+				{
+					assert(UpdateSerial == updateSerialExpected);
+				}
 			};
 
 			typedef ObjectPoolT<MapNode> MyObjectPool;
 
 		private:
 
-			// Search history buffer
-			class OperationTraversalHistory
-			{
-			public:
+			using OperationTraversalHistory = SortedMapTraversalHistoryT<MapNode, ReferenceAccessPoint>;
 
-				enum { GrowthBy = 32 };
+			//// Search history buffer
+			//class OperationTraversalHistory
+			//{
+			//public:
 
-			private:
+			//	enum { GrowthBy = 32 };
 
-				MapNode* &m_Root;
-				StaticArray<MapNode*, GrowthBy * 2> m_TraversalHistory;
+			//private:
 
-			public:
+			//	MapNode* &m_Root;
+			//	StaticArray<MapNode*, GrowthBy * 2> m_TraversalHistory;
 
-				OperationTraversalHistory(IHeap& memoryManager, MapNode* &root, SynchronizeCounterType totalItemCount)
-					: m_Root(root)
-					, m_TraversalHistory(memoryManager)
-				{
-					Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
-					m_TraversalHistory.SetIncreaseSize(GrowthBy);
-				}
+			//public:
 
-				size_t GetHistorySize() { return m_TraversalHistory.size(); }
+			//	OperationTraversalHistory(IHeap& memoryManager, MapNode* &root, size_t totalItemCount)
+			//		: m_Root(root)
+			//		, m_TraversalHistory(memoryManager)
+			//	{
+			//		Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
+			//		m_TraversalHistory.SetIncreaseSize(GrowthBy);
+			//	}
 
-				void Clear()
-				{
-					m_TraversalHistory.Clear();
-				}
+			//	size_t GetHistorySize() { return m_TraversalHistory.size(); }
 
-				void SetPreserveDataOnResize(bool conserveDataOnResize)
-				{
-					m_TraversalHistory.SetPreserveDataOnResize(conserveDataOnResize);
-				}
+			//	void Clear()
+			//	{
+			//		m_TraversalHistory.Clear();
+			//	}
 
-				void AddHistory(MapNode* pNode)
-				{
-					m_TraversalHistory.push_back(pNode);
-				}
+			//	void SetPreserveDataOnResize(bool conserveDataOnResize)
+			//	{
+			//		m_TraversalHistory.SetPreserveDataOnResize(conserveDataOnResize);
+			//	}
 
-				void RemoveLastHistory()
-				{
-					Assert(m_TraversalHistory.size() > 0);
-					m_TraversalHistory.resize(m_TraversalHistory.size() - 1);
-				}
+			//	void AddHistory(MapNode* pNode)
+			//	{
+			//		m_TraversalHistory.push_back(pNode);
+			//	}
 
-				void TruncateHistoryFrom(int iIndex) { m_TraversalHistory.resize(iIndex); }
+			//	void RemoveLastHistory()
+			//	{
+			//		Assert(m_TraversalHistory.size() > 0);
+			//		m_TraversalHistory.resize(m_TraversalHistory.size() - 1);
+			//	}
 
-				MapNode* GetHistory(int iIndex) { return m_TraversalHistory[iIndex]; }
+			//	void TruncateHistoryFrom(int iIndex) { m_TraversalHistory.resize(iIndex); }
 
-				MapNode* GetLastHistory() { if (m_TraversalHistory.size() == 0) return nullptr; return m_TraversalHistory[m_TraversalHistory.size() - 1]; }
+			//	MapNode* GetHistory(int iIndex) { return m_TraversalHistory[iIndex]; }
 
-				// set Reserve size
-				Result Reserve(size_t szReserv)
-				{
-					if (szReserv <= m_TraversalHistory.GetAllocatedSize())
-						return ResultCode::SUCCESS;
+			//	MapNode* GetLastHistory() { if (m_TraversalHistory.size() == 0) return nullptr; return m_TraversalHistory[m_TraversalHistory.size() - 1]; }
 
-					szReserv = GrowthBy * ((szReserv + GrowthBy - 1) / GrowthBy);
+			//	// set Reserve size
+			//	Result Reserve(size_t szReserv)
+			//	{
+			//		if (szReserv <= m_TraversalHistory.GetAllocatedSize())
+			//			return ResultCode::SUCCESS;
 
-					return m_TraversalHistory.Reserve(szReserv);
-				}
+			//		szReserv = GrowthBy * ((szReserv + GrowthBy - 1) / GrowthBy);
+
+			//		return m_TraversalHistory.Reserve(szReserv);
+			//	}
 
 
-				void Replace(uint updateSerial, int nodeIndex, MapNode* pNode, MapNode* pNewNode);
-			};
+			//	void Replace(uint updateSerial, int nodeIndex, MapNode* pNode, MapNode* pNewNode);
+			//};
 
 
 
@@ -265,11 +276,11 @@ namespace SF {
 			SynchronizeCounter m_ReadIndex;
 
 			//For read debug
-			MapNode* m_CurReadRoot;
+			ReferenceAccessPoint m_CurReadRoot;
 			volatile MapNode* m_PrevReadRoot;
 
 			// Write root
-			MapNode* m_WriteRoot;
+			ReferenceAccessPoint m_WriteRoot;
 
 			MyObjectPool *m_pNodePool = nullptr;
 
@@ -282,8 +293,8 @@ namespace SF {
 			bool m_IsModified;
 
 			// item count in the tree
-			SynchronizeCounter m_ItemCount;
-			SynchronizeCounterType m_ReadItemCount;
+			Atomic<size_t> m_ItemCount;
+			size_t m_ReadItemCount;
 
 		public:
 
@@ -292,8 +303,9 @@ namespace SF {
 
 			IHeap& GetHeap() { return m_Heap; }
 
-			void clear() { ClearMap(); }
-			void ClearMap();
+			void clear() { Reset(); }
+			void ClearMap() { Reset(); }
+			void Reset();
 
 			// Insert a key
 			Result Insert(KeyType key, const ValueType& value, int64_t *insertedOrder = nullptr);
@@ -314,7 +326,7 @@ namespace SF {
 
 			// get number of values
 			size_t size() const { return m_ReadItemCount; }
-			SynchronizeCounterType GetWriteItemCount() const { return m_ItemCount.load(std::memory_order_relaxed); }
+			size_t GetWriteItemCount() const { return m_ItemCount.load(std::memory_order_relaxed); }
 
 
 			template<class Func>
@@ -331,7 +343,7 @@ namespace SF {
 				ScopeCounter localCounter(m_ReadCount[readIdx]);
 
 				m_CurReadRoot = m_ReadRoot.load(std::memory_order_acquire);
-				auto readRoot = (MapNode*)m_CurReadRoot;
+				auto readRoot = (MapNode*)m_CurReadRoot.load();
 				if (readRoot == nullptr)
 					return ResultCode::FAIL;
 
@@ -345,7 +357,7 @@ namespace SF {
 				ScopeCounter localCounter(m_ReadCount[readIdx]);
 
 				m_CurReadRoot = m_ReadRoot.load(std::memory_order_acquire);
-				auto readRoot = (MapNode*)m_CurReadRoot;
+				auto readRoot = (MapNode*)m_CurReadRoot.load();
 				if (readRoot == nullptr)
 					return ResultCode::FAIL;
 
@@ -385,7 +397,7 @@ namespace SF {
 
 				OperationTraversalHistory travelHistory(GetHeap(), pRootNode, m_ReadItemCount);
 
-				MapNode* pCurNode = pRootNode;
+				const MapNode* pCurNode = pRootNode;
 				if (pCurNode == nullptr)
 				{
 					return ResultCode::SUCCESS;
@@ -428,7 +440,7 @@ namespace SF {
 
 #ifdef DEBUG
 				int DbgCurTraversalIndex = 0;
-				MapNode* DbgTraversalHistory[32]{};
+				const MapNode* DbgTraversalHistory[32]{};
 #endif
 
 
@@ -439,7 +451,7 @@ namespace SF {
 					DbgTraversalHistory[DbgCurTraversalIndex] = pCurNode;
 					DbgCurTraversalIndex = (DbgCurTraversalIndex + 1) % countof(DbgTraversalHistory);
 #endif
-					if (!functor(pCurNode->Key, pCurNode->Value))
+					if (!functor(pCurNode->Key, const_cast<MapNode*>(pCurNode)->Value))
 						return ResultCode::SUCCESS;
 
 					count--;
@@ -454,7 +466,7 @@ namespace SF {
 					else // this is a leaf node pop up
 					{
 						travelHistory.RemoveLastHistory();
-						MapNode* parent = nullptr;
+						const MapNode* parent = nullptr;
 						do
 						{
 							parent = travelHistory.GetLastHistory();
@@ -494,7 +506,7 @@ namespace SF {
 
 				OperationTraversalHistory travelHistory(GetHeap(), pRootNode, m_ReadItemCount);
 
-				MapNode* pCurNode = pRootNode;
+				const MapNode* pCurNode = pRootNode;
 				if (pCurNode == nullptr)
 				{
 					return ResultCode::SUCCESS;
@@ -554,7 +566,7 @@ namespace SF {
 					else // this is a leap node pop up
 					{
 						travelHistory.RemoveLastHistory();
-						MapNode* parent = nullptr;
+						const MapNode* parent = nullptr;
 						do
 						{
 							parent = travelHistory.GetLastHistory();

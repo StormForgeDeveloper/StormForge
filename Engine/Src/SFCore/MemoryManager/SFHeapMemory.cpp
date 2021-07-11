@@ -73,6 +73,39 @@ namespace SF
 		return pFreeChunk;
 	}
 
+	HeapTree::MapNode* HeapMemory::MemoryBlock::ResizeChunk(IHeap* thisHeap, HeapTree::MapNode* pMemBlock, size_t newSize)
+	{
+		size_t totalAfterMerge = pMemBlock->Size;
+		if (totalAfterMerge >= newSize) // we don't support shrink
+			return pMemBlock;
+
+		// check whether we can combine next blocks
+		auto pCurChunk = GetNextChunk(pMemBlock);
+		for (; pCurChunk->Magic == MemBlockHdr::MEM_MAGIC_FREE; pCurChunk = GetNextChunk(pCurChunk))
+		{
+			totalAfterMerge += pCurChunk->Size + MapNodeHeaderSize;
+			if (totalAfterMerge >= newSize)
+				break;
+		}
+
+		// we can't increase block size
+		if (totalAfterMerge < newSize)
+			return nullptr;
+
+		// We know we have space. merge free blocks
+		pCurChunk = GetNextChunk(pMemBlock);
+		auto pNextChunk = GetNextChunk(pCurChunk);
+		for (; pCurChunk->Magic == MemBlockHdr::MEM_MAGIC_FREE; pCurChunk = pNextChunk)
+		{
+			pNextChunk = GetNextChunk(pCurChunk);
+			FreeChunkTree.Remove(pCurChunk);
+
+			MergeChunks(pMemBlock, pCurChunk);
+		}
+
+		return pMemBlock;
+	}
+
 	// Free heap memory block.
 	Result HeapMemory::MemoryBlock::Free(HeapTree::MapNode* pMemChunk)
 	{
@@ -148,6 +181,8 @@ namespace SF
 		if (pNextChunk->State != 0)
 			return pNextChunk;
 
+		Assert(pNextChunk->Magic == MemBlockHdr::MEM_MAGIC_FREE);
+
 		auto pNextOfNextChunk = GetNextChunk(pNextChunk);
 
 		pNextOfNextChunk->PrevChunk = pMemChunk;
@@ -209,15 +244,41 @@ namespace SF
 				return pAllocated;
 		}
 
-		SFLog(System, Warning, "Allocating from overflow heap size:{0}", size);
+		if (m_AllowOverflowAllocation)
+		{
+			SFLog(System, Debug, "Allocating from overflow heap size:{0}", size);
 
-		return IHeap::AllocInternal(size, alignment);
+			return IHeap::AllocInternal(size, alignment);
+		}
+		else
+		{
+			return nullptr;
+		}
 	}
 
 	MemBlockHdr* HeapMemory::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment)
 	{
-		// TODO: Optimize
-		FreeInternal(ptr);
+		auto pMemChunk = static_cast<HeapTree::MapNode*>(ptr);
+
+		for (auto itBlock : m_MemoryBlockList)
+		{
+			auto pMemBlock = static_cast<MemoryBlock*>(itBlock);
+			if (pMemBlock->IsInThisBlock(pMemChunk))
+			{
+				auto pResized = pMemBlock->ResizeChunk(this, pMemChunk, newSize);
+				if (pResized)
+				{
+					pMemChunk = pResized;
+					break;
+				}
+			}
+		}
+
+		if (pMemChunk->Size >= newSize)
+			return pMemChunk;
+
+		// fall back, reallocate
+		FreeInternal(pMemChunk);
 		return AllocInternal(newSize, alignment);
 	}
 
@@ -259,6 +320,15 @@ namespace SF
 		m_MemoryBlockList.push_back(pMemBlock);
 	}
 
+	//void* HeapMemory::Alloc(size_t size, size_t alignment)
+	//{
+
+	//}
+
+	//void* HeapMemory::Realloc(void* ptr, size_t newSize, size_t alignment)
+	//{
+
+	//}
 
 
 	

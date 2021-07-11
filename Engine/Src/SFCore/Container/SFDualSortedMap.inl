@@ -41,35 +41,6 @@ namespace SF {
 			return Balance;
 		}
 
-		///////////////////////////////////////////////////////////////////////////
-		//
-		//	DualSortedMap<KeyType,ValueType>::MapNode
-		//
-
-		template<class KeyType, class ValueType>
-		void DualSortedMap<KeyType, ValueType>::OperationTraversalHistory::Replace(uint updateSerial, int nodeIndex, MapNode* pNode, MapNode* pNewNode)
-		{
-			Assert(GetHistory(nodeIndex) == pNode);
-			if (GetHistorySize() <= 1 || nodeIndex < 1) // only the found node is in there
-			{
-				m_Root = pNewNode;
-			}
-			else
-			{
-				auto parentNode = GetHistory(nodeIndex - 1);
-				Assert(parentNode->UpdateSerial == updateSerial);
-				if (parentNode->Left == pNode)
-				{
-					parentNode->Left = pNewNode;
-				}
-				else
-				{
-					Assert(parentNode->Right == pNode);
-					parentNode->Right = pNewNode;
-				}
-			}
-		}
-
 
 		///////////////////////////////////////////////////////////////////////////
 		//
@@ -103,7 +74,7 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		DualSortedMap<KeyType, ValueType>::~DualSortedMap()
 		{
-			ClearMap();
+			Reset();
 
 			if (m_pNodePool != nullptr)
 			{
@@ -112,7 +83,7 @@ namespace SF {
 		}
 
 		template<class KeyType, class ValueType>
-		void DualSortedMap<KeyType, ValueType>::ClearMap()
+		void DualSortedMap<KeyType, ValueType>::Reset()
 		{
 			std::queue<MapNode*> mapNodes;
 
@@ -240,7 +211,7 @@ namespace SF {
 			value = pFound->Value;
 
 
-			MapNode* child = nullptr;
+			//MapNode* child = nullptr;
 
 			auto left = pFound->Left.load();
 			auto right = pFound->Right.load();
@@ -276,19 +247,34 @@ namespace SF {
 					right = pFound->Right = CloneNode(right);
 					pRemoved = FindSmallestNode(travelHistory, right);
 					Assert(pRemoved->Left == nullptr);
-					child = pRemoved->Right.load();
+					//child = pRemoved->Right.load();
 				}
 				else
 				{
 					left = pFound->Left = CloneNode(left);
 					pRemoved = FindBiggestNode(travelHistory, left);
 					Assert(pRemoved->Right == nullptr);
-					child = pRemoved->Left.load();
+					//child = pRemoved->Left.load();
 				}
 
 				// swap value with replacement node
-				pFound->Key = pRemoved->Key;
-				pFound->Value = std::forward<ValueType>(pRemoved->Value);
+				//pFound->Key = pRemoved->Key;
+				//pFound->Value = std::forward<ValueType>(pRemoved->Value);
+
+				// swap node
+				int iHistory = travelHistory.FindIndex(pFound);
+				auto pFoundAccessPoint = travelHistory.GetParentAccessPoint(iHistory, pFound);
+				*pFoundAccessPoint = pRemoved;
+
+				pRemoved->Left = pFound->Left;
+				pRemoved->Right = pFound->Right;
+
+				travelHistory.Replace(m_UpdateSerial, iHistory, pFound, pRemoved);
+
+				//child = nullptr;
+				auto pTemp = pRemoved;
+				pRemoved = const_cast<MapNode*>(pFound);
+				pFound = pTemp;
 			}
 			else
 			{
@@ -297,8 +283,12 @@ namespace SF {
 			}
 
 
+			auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pRemoved);
+			//*pParentPointer = child;
+			*pParentPointer = nullptr;
+
 			// remove replacement from the tree
-			travelHistory.Replace(m_UpdateSerial, (int)travelHistory.GetHistorySize() - 1, pRemoved, child);
+			//travelHistory.Replace(m_UpdateSerial, (int)travelHistory.GetHistorySize() - 1, pRemoved, child);
 
 			// remove from the traversal history, replacement node will not be need to be took care
 			travelHistory.RemoveLastHistory();
@@ -365,7 +355,7 @@ namespace SF {
 
 		// flip root
 			auto oldRoot = m_PrevReadRoot = m_ReadRoot.load(std::memory_order_relaxed);
-			Assert(m_WriteRoot == nullptr || m_WriteRoot != oldRoot);
+			Assert(m_WriteRoot == nullptr || m_WriteRoot.load() != oldRoot);
 			if (m_WriteRoot != nullptr)
 			{
 				Assert(!m_WriteRoot->IsCloned);
@@ -425,15 +415,15 @@ namespace SF {
 			ScopeCounter localCounter(m_ReadCount[readIdx]);
 
 			m_CurReadRoot = m_ReadRoot.load(std::memory_order_acquire);
-			auto pReadRoot = (MapNode*)m_CurReadRoot;
+			MapNode* pReadRoot = (MapNode*)m_CurReadRoot.load();
 			if (pReadRoot == nullptr)
 			{
 				return ResultCode::FAIL;
 			}
 
 			Assert(m_UpdateSerial != pReadRoot->UpdateSerial);
-			Assert(m_WriteRoot != pReadRoot);
-
+			Assert(m_WriteRoot.load() != pReadRoot);
+			 
 			OperationTraversalHistory travelHistory(GetHeap(), pReadRoot, m_ReadItemCount);
 
 			MapNode* pFound = nullptr;
@@ -468,7 +458,7 @@ namespace SF {
 			ScopeCounter localCounter(m_ReadCount[readIdx]);
 
 			m_CurReadRoot = m_ReadRoot.load(std::memory_order_acquire);
-			auto pReadRoot = (MapNode*)m_CurReadRoot;
+			auto pReadRoot = (MapNode*)m_CurReadRoot.load();
 			if (pReadRoot == nullptr)
 			{
 				return ResultCode::FAIL;
@@ -563,7 +553,7 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		Result DualSortedMap<KeyType, ValueType>::FindNode(OperationTraversalHistory &travelHistory, KeyType key, MapNode* &pNode)
 		{
-			MapNode* pCurNode = m_WriteRoot;
+			MapNode* pCurNode = m_WriteRoot.load();
 			if (pCurNode == nullptr)
 			{
 				if (!m_IsModified)
@@ -904,7 +894,7 @@ namespace SF {
 			int iRebalancing = 0;
 			for (int iHistory = (int)travelHistory.GetHistorySize() - 1; iHistory >= 0; iHistory--)
 			{
-				auto pCurNode = travelHistory.GetHistory(iHistory);
+				auto pCurNode = const_cast<MapNode*>(travelHistory.GetHistory(iHistory));
 				auto balance = pCurNode->UpdateBalanceFactor();
 
 				if (std::abs(balance) < BalanceTolerance)
@@ -1012,7 +1002,7 @@ namespace SF {
 
 			for (; iDepth >= 0; iDepth--)
 			{
-				MapNode* pParentNode = travelHistory.GetHistory(iDepth);
+				MapNode* pParentNode = const_cast<MapNode*>(travelHistory.GetHistory(iDepth));
 				if (pParentNode->Left.load() == pNode)
 				{
 					auto right = pParentNode->Right.load();

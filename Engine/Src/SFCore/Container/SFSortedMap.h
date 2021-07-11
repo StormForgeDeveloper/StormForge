@@ -15,7 +15,7 @@
 #include "Object/SFObjectPool.h"
 #include "Multithread/SFSynchronization.h"
 #include "Container/SFArray.h"
-
+#include "Container/SFSortedMap_Base.h"
 
 namespace SF {
 
@@ -84,81 +84,15 @@ namespace SF {
 
 				int UpdateBalanceFactor();
 
+				SF_FORCEINLINE void ValidateUpdateSerial(uint32_t updateSerialExpected) {}
+
 			};
 
 			typedef ObjectPoolT<MapNode> MyObjectPool;
 
 		private:
 
-			// Search history buffer
-			class OperationTraversalHistory
-			{
-			public:
-
-				enum { GrowthBy = 32 };
-
-			private:
-
-				const ReferenceAccessPoint &m_Root;
-				StaticArray<const MapNode*, GrowthBy * 2> m_TraversalHistory;
-
-			public:
-
-				OperationTraversalHistory(IHeap& heap, const ReferenceAccessPoint& root, SynchronizeCounterType totalItemCount)
-					: m_Root(root)
-					, m_TraversalHistory(heap)
-				{
-					Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
-					//m_TraversalHistory.Reserve();
-					m_TraversalHistory.SetIncreaseSize(GrowthBy);
-				}
-
-				size_t GetHistorySize() const { return m_TraversalHistory.size(); }
-
-				void Clear()
-				{
-					m_TraversalHistory.Clear();
-				}
-
-				void SetPreserveDataOnResize(bool conserveDataOnResize)
-				{
-					m_TraversalHistory.SetPreserveDataOnResize(conserveDataOnResize);
-				}
-
-				void AddHistory(const MapNode* pNode)
-				{
-					m_TraversalHistory.push_back(pNode);
-				}
-
-				void RemoveLastHistory()
-				{
-					Assert(m_TraversalHistory.size() > 0);
-					m_TraversalHistory.resize(m_TraversalHistory.size() - 1);
-				}
-
-				void TruncateHistoryFrom(int iIndex) { m_TraversalHistory.resize(iIndex); }
-
-				const MapNode* GetHistory(int iIndex) const { return m_TraversalHistory[iIndex]; }
-
-				const MapNode* GetLastHistory() const { if (m_TraversalHistory.size() == 0) return nullptr; return m_TraversalHistory[m_TraversalHistory.size() - 1]; }
-
-				// set Reserve size
-				Result Reserve(size_t szReserv)
-				{
-					if (szReserv <= m_TraversalHistory.GetAllocatedSize())
-						return ResultCode::SUCCESS;
-
-					szReserv = GrowthBy * ((szReserv + GrowthBy - 1) / GrowthBy);
-
-					return m_TraversalHistory.Reserve(szReserv);
-				}
-
-				ReferenceAccessPoint* GetParentAccessPoint(int nodeIndex, const MapNode* pNode);
-				ReferenceAccessPoint* GetParentAccessPoint(int nodeIndex, const MapNode* pNode) const
-				{
-					return const_cast<OperationTraversalHistory*>(this)->GetParentAccessPoint(nodeIndex, pNode);
-				}
-			};
+			using OperationTraversalHistory = SortedMapTraversalHistoryT<MapNode, ReferenceAccessPoint>;
 
 
 
@@ -197,6 +131,127 @@ namespace SF {
 
 			// get number of values
 			size_t size() const { return (size_t)m_ItemCount; }
+
+			class iterator
+			{
+			public:
+
+				iterator()
+				{}
+				iterator(IHeap& heap, const MapNode* pRootNode, int startOrderIndex)
+					: m_pCurNode(pRootNode)
+				{
+					m_TravelHistory.Clear();
+					m_TravelHistory.SetPreserveDataOnResize(true);
+
+					// find start point
+					do
+					{
+						travelHistory.AddHistory(pCurNode);
+
+						auto right = pCurNode->Right;
+						auto rightNumChildren = right != nullptr ? right->NumberOfChildren : -1;
+						if (rightNumChildren >= startOrderIndex)
+						{
+							pCurNode = right;
+						}
+						else
+						{
+							if (rightNumChildren >= 0)
+							{
+								startOrderIndex -= rightNumChildren + 1;
+							}
+							if (startOrderIndex == 0) // current node is the start point
+								break;
+
+							startOrderIndex--;
+							auto left = pCurNode->Left;
+							pCurNode = left;
+						}
+
+					} while (pCurNode != nullptr);
+
+				}
+
+				iterator(const iterator& src)
+					: m_pCurNode(src.m_pCurNode)
+				{
+					m_TravelHistory = src.m_TravelHistory;
+				}
+
+				iterator& operator++()
+				{
+					if (m_pCurNode == nullptr)
+						return *this;
+
+					auto left = m_pCurNode->Left;
+					if (left != nullptr)
+					{
+						m_pCurNode = FindBiggestNode(m_TravelHistory, left);
+					}
+					else // this is a leap node pop up
+					{
+						travelHistory.RemoveLastHistory();
+						const MapNode* parent = nullptr;
+						do
+						{
+							parent = m_TravelHistory.GetLastHistory();
+							if (parent == nullptr)
+							{
+								// nothing to process
+								m_pCurNode = nullptr;
+								break;
+							}
+
+							if (m_pCurNode == parent->Left)
+								m_TravelHistory.RemoveLastHistory();
+							else
+							{
+								m_pCurNode = parent;
+								break;
+							}
+
+							m_pCurNode = parent;
+
+						} while (parent != nullptr);
+					}
+
+					return *this;
+				}
+
+				ValueType& operator *()
+				{
+					assert(m_pCurNode != nullptr);
+					return m_pCurNode->Value;
+				}
+
+				ValueType* operator ->()
+				{
+					assert(m_pCurNode != nullptr);
+					return &m_pCurNode->Value;
+				}
+
+				bool operator == (const iterator& src) { return m_pCurNode == src->m_pCurNode; }
+				bool operator != (const iterator& src) { return m_pCurNode != src->m_pCurNode; }
+
+				iterator& operator = (const iterator& src)
+				{
+					m_pCurNode = src.m_pCurNode;
+					m_TravelHistory.Reset();
+					m_TravelHistory = src.m_TravelHistory;
+					return *this;
+				}
+
+			private:
+
+				const MapNode* m_pCurNode{};
+
+				OperationTraversalHistory m_TravelHistory;
+			};
+
+
+			iterator begin() { return iterator(GetHeap(), m_Root, 0); }
+			iterator end() { return iterator(); }
 
 			// enumerate the values
 			//Result ForeachOrder(int startOrderIndex, uint count, const std::function<bool(const KeyType&, const ValueType&)>& functor);

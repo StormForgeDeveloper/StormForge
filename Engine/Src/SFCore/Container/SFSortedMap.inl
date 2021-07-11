@@ -42,34 +42,6 @@ namespace SF {
 			return Balance;
 		}
 
-		///////////////////////////////////////////////////////////////////////////
-		//
-		//	SortedMap<KeyType,ValueType>::MapNode
-		//
-
-		template<class KeyType, class ValueType>
-		typename SortedMap<KeyType, ValueType>::ReferenceAccessPoint* SortedMap<KeyType, ValueType>::OperationTraversalHistory::GetParentAccessPoint(int nodeIndex, const MapNode* pNode)
-		{
-			const ReferenceAccessPoint* pParentPointer = nullptr;
-			Assert(GetHistory(nodeIndex) == pNode);
-			if (GetHistorySize() <= 1 || nodeIndex < 1) // only the found node is in there
-			{
-				pParentPointer = &m_Root;
-			}
-			else
-			{
-				auto parentNode = GetHistory(nodeIndex - 1);
-				if (parentNode->Left == pNode)
-					pParentPointer = &parentNode->Left;
-				else
-					pParentPointer = &parentNode->Right;
-
-				Assert(*pParentPointer == pNode);
-			}
-
-			return const_cast<ReferenceAccessPoint*>(pParentPointer);
-		}
-
 
 		///////////////////////////////////////////////////////////////////////////
 		//
@@ -236,7 +208,7 @@ namespace SF {
 
 
 			ReferenceAccessPoint *pParentPointer = nullptr;
-			MapNode* child = nullptr;
+			//MapNode* child = nullptr;
 
 			auto left = pFound->Left;
 			auto right = pFound->Right;
@@ -271,22 +243,33 @@ namespace SF {
 				{
 					pRemoved = FindSmallestNode(travelHistory, right);
 					Assert(pRemoved->Left == nullptr);
-					child = pRemoved->Right;
+					//child = pRemoved->Right;
 				}
 				else
 				{
 					pRemoved = FindBiggestNode(travelHistory, left);
 					Assert(pRemoved->Right == nullptr);
-					child = pRemoved->Left;
+					//child = pRemoved->Left;
 				}
 
-				// swap value with replacement node
-				const_cast<MapNode*>(pFound)->Key = pRemoved->Key;
-				const_cast<MapNode*>(pFound)->Value = std::forward<ValueType>(pRemoved->Value);
-				// TODO
-				//pRemoved->Left = pFound->Left;
-				//pRemoved->Right = pFound->Right;
-				//pRemoved = pFound;
+				//// swap value with replacement node
+				//const_cast<MapNode*>(pFound)->Key = pRemoved->Key;
+				//const_cast<MapNode*>(pFound)->Value = std::forward<ValueType>(pRemoved->Value);
+
+				// swap node
+				int iHistory = travelHistory.FindIndex(pFound);
+				auto pFoundAccessPoint = travelHistory.GetParentAccessPoint(iHistory, pFound);
+				*pFoundAccessPoint = pRemoved;
+
+				pRemoved->Left = pFound->Left;
+				pRemoved->Right = pFound->Right;
+
+				travelHistory.Replace(0, iHistory, pFound, pRemoved);
+
+				//child = nullptr;
+				auto pTemp = pRemoved;
+				pRemoved = const_cast<MapNode*>(pFound);
+				pFound = pTemp;
 			}
 			else
 			{
@@ -297,7 +280,10 @@ namespace SF {
 
 			// remove replacement from the tree
 			pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pRemoved);
-			*pParentPointer = child;
+			//*pParentPointer = child;
+			*pParentPointer = nullptr;
+
+			//travelHistory.Replace(m_UpdateSerial, (int)travelHistory.GetHistorySize() - 1, pRemoved, child);
 
 			// remove from the traversal history, replacement node will not be need to be took care
 			travelHistory.RemoveLastHistory();

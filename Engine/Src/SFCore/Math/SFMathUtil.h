@@ -104,6 +104,149 @@ namespace SF
 				return Math::Clamp(0.f, 360.f, a + (b - a) * t);
 			}
 		}
+
+
+		SF_FORCEINLINE uint32_t FloorLog2(uint32_t Value)
+		{
+			// Use BSR to return the log2 of the integer
+#if _MSC_VER
+			unsigned long Log2 = 0;
+			if (_BitScanReverse(&Log2, Value) != 0)
+			{
+				return Log2;
+			}
+			return 0;
+#else
+			int32_t Mask = -int32_t(Value != 0);
+			return (31 - __builtin_clz(Value)) & Mask;
+#endif
+			return 0;
+		}
+
+		SF_FORCEINLINE uint64_t FloorLog2(uint64_t Value)
+		{
+			// Use BSR to return the log2 of the integer
+#if _MSC_VER
+			unsigned long Log2;
+			long Mask = -long(_BitScanReverse64(&Log2, Value) != 0);
+			return Log2 & Mask;
+#else
+			int64 Mask = -int64(Value != 0);
+			return (63 - __builtin_clzll(Value)) & Mask;
+#endif
+		}
+
+		SF_FORCEINLINE uint32_t Find1FromLSB(uint32_t Value)
+		{
+			if (Value == 0)
+			{
+				return uint32_t(-1);
+			}
+#if _MSC_VER
+			unsigned long BitIndex;	// 0-based, where the LSB is 0 and MSB is 31
+			_BitScanForward(&BitIndex, Value);	// Scans from LSB to MSB
+			return BitIndex;
+#else
+			return __builtin_clz(Value);
+#endif
+		}
+
+		SF_FORCEINLINE constexpr uint32_t Find1FromLSBConstexpr(uint32_t Value)
+		{
+			if (Value == 0)
+			{
+				return 32;
+			}
+
+			uint32_t index = 0;
+			uint32_t LowBits = Value & 0xFFFF;
+			if (LowBits)
+				Value = LowBits;
+			else
+			{
+				Value >>= 16;
+				index += 16;
+			}
+
+			LowBits = Value & 0xFF;
+			if (LowBits)
+				Value = LowBits;
+			else
+			{
+				Value >>= 8;
+				index += 8;
+			}
+
+			LowBits = Value & 0xF;
+			if (LowBits)
+				Value = LowBits;
+			else
+			{
+				Value >>= 4;
+				index += 4;
+			}
+
+			LowBits = Value & 0x3;
+			if (LowBits)
+				Value = LowBits;
+			else
+			{
+				Value >>= 2;
+				index += 2;
+			}
+
+			LowBits = Value & 0x2;
+			return (LowBits) ? 0 : 1;
+		}
+
+		SF_FORCEINLINE uint64_t Find1FromLSB(uint64_t Value)
+		{
+			if (Value == 0)
+			{
+				return uint64_t (-1);
+			}
+#if _MSC_VER
+			unsigned long BitIndex;	// 0-based, where the LSB is 0 and MSB is 31
+			_BitScanForward64(&BitIndex, Value);	// Scans from LSB to MSB
+			return BitIndex;
+#else
+			return __builtin_clzll(Value);
+#endif
+		}
+
+		SF_FORCEINLINE uint32_t CeilLogTwo(uint32_t Arg)
+		{
+			int32_t Bitmask = ((int32_t)(Find1FromLSB(Arg) << 26)) >> 31;
+			return (32 - Find1FromLSB(Arg - 1)) & (~Bitmask);
+		}
+
+		SF_FORCEINLINE constexpr uint32_t CeilLogTwoConstexpr(uint32_t Arg)
+		{
+			int32_t Bitmask = ((int32_t)(Find1FromLSBConstexpr(Arg) << 26)) >> 31;
+			return (32 - Find1FromLSBConstexpr(Arg - 1)) & (~Bitmask);
+		}
+
+		SF_FORCEINLINE uint64_t CeilLogTwo(uint64_t Arg)
+		{
+			int64_t Bitmask = ((int64_t)(Find1FromLSB(Arg) << 57)) >> 63;
+			return (64 - Find1FromLSB(Arg - 1)) & (~Bitmask);
+		}
+
+		SF_FORCEINLINE uint32_t RoundUpToPowerOfTwo(uint32_t Arg)
+		{
+			return uint32_t(1) << CeilLogTwo(Arg);
+		}
+
+		SF_FORCEINLINE constexpr uint32_t RoundUpToPowerOfTwoConstexpr(uint32_t Arg)
+		{
+			return (uint32_t)(uint64_t(1) << CeilLogTwoConstexpr(Arg));
+		}
+
+		SF_FORCEINLINE uint64_t RoundUpToPowerOfTwo(uint64_t Arg)
+		{
+			return uint64_t(1) << CeilLogTwo(Arg);
+		}
+
 	}
 
 

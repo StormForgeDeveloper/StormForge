@@ -278,11 +278,11 @@ namespace SF {
 			DataType pop_back();
 
 			// Remove element
-			inline Result RemoveAt(INT iIndex);
+			inline Result RemoveAt(int iIndex);
 			inline Result RemoveItem(const DataType& RemoveData);
 
 			// find and return index, -1 is not found
-			inline INT FindItem(const DataType& FindData);
+			inline int FindItem(const DataType& FindData) const;
 
 			// Element access operator
 			inline const DataType& operator [](size_t iElement) const;
@@ -298,9 +298,9 @@ namespace SF {
 			const iterator end() const { return iterator(const_cast<Array<DataType>*>(this), uint(iterator::END_IDX)); }
 
 			template<typename PredicatorType>
-			iterator Find(const PredicatorType& predicator)
+			iterator Find(const PredicatorType& predicator) const
 			{
-				for (size_t iData = 0; iData < size(); iData++)
+				for (int iData = 0; iData < (int)size(); iData++)
 				{
 					if (predicator(m_pDataPtr[iData]))
 						return iterator(this, iData);
@@ -309,9 +309,9 @@ namespace SF {
 			}
 
 			template<typename PredicatorType>
-			int FindIndex(const PredicatorType& predicator)
+			int FindIndex(const PredicatorType& predicator) const
 			{
-				for (size_t iData = 0; iData < size(); iData++)
+				for (int iData = 0; iData < (int)size(); iData++)
 				{
 					if (predicator(m_pDataPtr[iData]))
 						return iData;

@@ -52,8 +52,24 @@ namespace SF
 			// Allocate from this heap memory block
 			HeapTree::MapNode* Allocate(IHeap* thisHeap, size_t size, size_t alignment);
 
+			HeapTree::MapNode* ResizeChunk(IHeap* thisHeap, HeapTree::MapNode* pMemBlock, size_t newSize);
+
 			// Free heap memory block.
 			Result Free(HeapTree::MapNode* pMemBlock);
+
+			SF_FORCEINLINE bool IsInThisBlock(HeapTree::MapNode* pMemChunk)
+			{
+				if (pMemChunk == nullptr)
+					return false;
+
+				auto ptrPos = reinterpret_cast<uintptr_t>(pMemChunk);
+				auto begin = reinterpret_cast<uintptr_t>(this) + MemBlockHeaderSize;
+				auto end = begin + BlockSize;
+				if (ptrPos < begin || ptrPos >= end)
+					return false;
+
+				return true;
+			}
 
 			// Access neighbor chunk
 			HeapTree::MapNode* GetNextChunk(HeapTree::MapNode* pMemChunk);
@@ -73,6 +89,8 @@ namespace SF
 		// Currently allocated and used list
 		StaticDoubleLinkedList m_MemoryBlockList;
 
+		bool m_AllowOverflowAllocation = false;
+
 	public:
 
 		// Constructor
@@ -82,6 +100,8 @@ namespace SF
 		HeapMemory(StringCrc64 nameCrc, IHeap& parentHeap, size_t initialMemoryBlockSize = 4096);
 		virtual ~HeapMemory();
 
+		SF_FORCEINLINE void SetAllowOverflowAllocation(bool bEnable) { m_AllowOverflowAllocation = bEnable; }
+		SF_FORCEINLINE bool GetAllowOverflowAllocation() { return m_AllowOverflowAllocation; }
 
 	protected:
 
@@ -95,13 +115,29 @@ namespace SF
 		// Add memory block to the 
 		//	@blockSize: memory block size pointed by pMemoryBlock
 		//	@pMemoryBlock: memory block pointer
-		//	@takeOverOwnerShip: If true the memory block will re deleted by this class
+		//	@takeOverOwnerShip: If true the memory block will be managed and deleted by this class
 		void AddMemoryBlock(size_t blockSize, void* pMemoryBlock, bool takeOverOwnerShip = false);
 
 
-		virtual void* Alloc(size_t size, size_t alignment = SF_ALIGN_DOUBLE) override;
-		virtual void* Realloc(void* ptr, size_t newSize, size_t alignment = SF_ALIGN_DOUBLE) override;
+		//virtual void* Alloc(size_t size, size_t alignment = SF_ALIGN_DOUBLE) override;
+		//virtual void* Realloc(void* ptr, size_t newSize, size_t alignment = SF_ALIGN_DOUBLE) override;
 
+	};
+
+
+	// memory allocator from static block
+	template<size_t StaticSize>
+	class StaticMemoryAllocatorT : public HeapMemory
+	{
+	public:
+		StaticMemoryAllocatorT(StringCrc64 nameCrc, IHeap& parentHeap)
+			: HeapMemory(nameCrc, parentHeap, 0)
+		{
+			AddMemoryBlock(sizeof(m_StaticMemoryBlock), m_StaticMemoryBlock, false);
+		}
+
+	private:
+		uint8_t m_StaticMemoryBlock[StaticSize];
 	};
 }
 

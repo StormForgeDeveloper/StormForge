@@ -292,7 +292,7 @@ namespace SF {
 
 		// find
 		template< class DataType >
-		INT Array<DataType>::FindItem(const DataType& FindData)
+		int Array<DataType>::FindItem(const DataType& FindData) const
 		{
 			for (INT iIdx = 0; (decltype(m_Size))iIdx < m_Size; iIdx++)
 			{
