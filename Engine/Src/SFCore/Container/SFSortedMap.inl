@@ -237,23 +237,24 @@ namespace SF {
 					}
 				}
 
+				MapNode* child = nullptr;
 				if (rightHeavy) // select heavy tree child
 				{
 					pRemoved = FindSmallestNode(travelHistory, right);
 					Assert(pRemoved->Left == nullptr);
-					//child = pRemoved->Right;
+					child = pRemoved->Right;
 				}
 				else
 				{
 					pRemoved = FindBiggestNode(travelHistory, left);
 					Assert(pRemoved->Right == nullptr);
-					//child = pRemoved->Left;
+					child = pRemoved->Left;
 				}
 
 				// swap node
 				//assert(iFoundIndex == travelHistory.FindIndex(pFound));
 				auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pRemoved);
-				*pParentPointer = nullptr;
+				*pParentPointer = child;
 
 				travelHistory.Replace(0, iFoundIndex, true, pFound, pRemoved);
 

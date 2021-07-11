@@ -135,13 +135,14 @@ namespace SF {
 					assert(parentNode->Right == pNode);
 					parentNode->Right = const_cast<MapNode*>(pNewNode);
 				}
+			}
 
-				// if it is in-place swap, we need to copy over left and right
-				if (isInPlaceSwap)
-				{
-					pNewNode->Left = pNode->Left;
-					pNewNode->Right = pNode->Right;
-				}
+			// if it is in-place swap, we need to copy over left and right
+			if (isInPlaceSwap)
+			{
+				m_TraversalHistory[nodeIndex] = pNewNode;
+				pNewNode->Left = pNode->Left;
+				pNewNode->Right = pNode->Right;
 			}
 		}
 

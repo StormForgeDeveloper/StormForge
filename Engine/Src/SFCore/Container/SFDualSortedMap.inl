@@ -241,23 +241,26 @@ namespace SF {
 					}
 				}
 
+				const MapNode* child = nullptr;
 				if (rightHeavy) // select heavy tree child
 				{
 					right = pFound->Right = CloneNode(right);
 					pRemoved = FindSmallestNode(travelHistory, right);
 					Assert(pRemoved->Left == nullptr);
+					child = pRemoved->Right.load();
 				}
 				else
 				{
 					left = pFound->Left = CloneNode(left);
 					pRemoved = FindBiggestNode(travelHistory, left);
 					Assert(pRemoved->Right == nullptr);
+					child = pRemoved->Left.load();
 				}
 
 				// swap node
 				//assert(iFoundIndex == travelHistory.FindIndex(pFound));
 				auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pRemoved);
-				*pParentPointer = nullptr;
+				*pParentPointer = child;
 
 				travelHistory.Replace(m_UpdateSerial, iFoundIndex, true, pFound, pRemoved);
 
@@ -276,7 +279,6 @@ namespace SF {
 
 			// remove from the traversal history, replacement node will not be need to be took care
 			travelHistory.RemoveLastHistory();
-
 
 			FixupBalance(travelHistory);
 

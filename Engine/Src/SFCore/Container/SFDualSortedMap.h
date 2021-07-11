@@ -108,10 +108,11 @@ namespace SF {
 					return pNode;
 				}
 
-				MapNode* operator = (MapNode* pNode)
+				MapNode* operator = (const MapNode* pNode)
 				{
-					store(pNode);
-					return pNode;
+					auto pWritable = const_cast<MapNode*>(pNode);
+					store(pWritable);
+					return pWritable;
 				}
 			};
 

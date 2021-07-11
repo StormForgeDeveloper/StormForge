@@ -64,6 +64,10 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 		uint value = (uint)-1;
 		EXPECT_TRUE(sortedMap.Remove(TestValues[iTest], value));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
+		for (uint iRemain = iTest + 1; iRemain < numberOfTest; iRemain++)
+		{
+			EXPECT_TRUE(sortedMap.FindInWriteTree(TestValues[iRemain], value));
+		}
 	}
 
 	EXPECT_TRUE(sortedMap.CommitChanges());
@@ -83,11 +87,23 @@ TEST_F(AVLTreeTest, DualSortedMapSimple)
 
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 
+	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)
+	{
+		uint value = (uint)-1;
+		EXPECT_TRUE(sortedMap.Find(TestValues[iTest], value));
+	}
+
 	for (int iTest = numberOfTest - 1; iTest >= 0; iTest--)
 	{
 		uint value = (uint)-1;
-		EXPECT_TRUE((sortedMap.Remove(TestValues[iTest], value)));
+		EXPECT_TRUE(sortedMap.Remove(TestValues[iTest], value));
 		EXPECT_TRUE((int)value == TestValues[iTest]);
+
+		for (int iRemain = iTest - 1; iRemain >= 0; iRemain--)
+		{
+			EXPECT_TRUE(sortedMap.FindInWriteTree(TestValues[iRemain], value));
+		}
+
 	}
 
 	EXPECT_TRUE((sortedMap.CommitChanges()));
