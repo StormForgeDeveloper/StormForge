@@ -113,6 +113,7 @@ set(SFCORE_LIB_FILES
 	Container/SFDoubleLinkedList.h
 	Container/SFDoubleLinkedListBase.h
 	Container/SFDualSortedMap.h
+	Container/SFSortedMap_Base.h
 	Container/SFHashTable.h
 	Container/SFHashTable2.h
 	Container/SFIndexing.h
