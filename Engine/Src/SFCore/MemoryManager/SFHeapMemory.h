@@ -36,8 +36,6 @@ namespace SF
 	{
 	public:
 
-		static constexpr size_t BASE_ALIGNMENT = 16;
-
 		//////////////////////////////////////////////////////////////////////////////////
 		//
 		//	Heap memory block
@@ -80,8 +78,9 @@ namespace SF
 		};
 
 
-		static constexpr size_t MapNodeHeaderSize = AlignUp(sizeof(HeapTree::MapNode), BASE_ALIGNMENT);
-		static constexpr size_t MemBlockHeaderSize = AlignUp(sizeof(MemoryBlock), BASE_ALIGNMENT);
+		static constexpr size_t MapNodeHeaderSize = AlignUp(sizeof(HeapTree::MapNode), MemBlockHdr::MaxHeaderAlignment);
+		static constexpr size_t MemBlockHeaderSize = AlignUp(sizeof(MemoryBlock), MemBlockHdr::MaxHeaderAlignment);
+		static constexpr size_t MapNodeFooterSize = AlignUp(sizeof(MemBlockFooter), MemBlockHdr::MaxHeaderAlignment);
 
 
 	private:
@@ -89,7 +88,7 @@ namespace SF
 		// Currently allocated and used list
 		StaticDoubleLinkedList m_MemoryBlockList;
 
-		bool m_AllowOverflowAllocation = false;
+		bool m_AllowOverflowAllocation = true;
 
 	public:
 
@@ -102,6 +101,12 @@ namespace SF
 
 		SF_FORCEINLINE void SetAllowOverflowAllocation(bool bEnable) { m_AllowOverflowAllocation = bEnable; }
 		SF_FORCEINLINE bool GetAllowOverflowAllocation() { return m_AllowOverflowAllocation; }
+
+		static SF_FORCEINLINE size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE)
+		{
+			return MapNodeHeaderSize + AlignUp(requestedSize, MemBlockHdr::MaxHeaderAlignment) + MapNodeFooterSize;
+		}
+
 
 	protected:
 

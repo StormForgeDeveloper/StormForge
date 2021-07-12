@@ -40,6 +40,7 @@ set(SF_UNIT_TEST_FILES
 	Test/LogServer/UnitTest_Kafka.h
 	Test/LogServer/UnitTest_Kafka.cpp
 	Test/Math/UnitTest_Math.h
+	Test/Math/UnitTest_Math_Func.cpp
 	Test/Math/3D/UnitTest_Math3D_Matrix.cpp
 	Test/Math/3D/UnitTest_Math3D_Quaternion.cpp
 	Test/Math/3D/UnitTest_Math3D_Vector.cpp

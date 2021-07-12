@@ -445,7 +445,7 @@ namespace SF {
 		DynamicArray<DataType>::~DynamicArray()
 		{
 			if (m_pAllocatedBuffer)
-				IHeap::Delete(m_pAllocatedBuffer);
+				super::GetHeap().Free(m_pAllocatedBuffer);
 		}
 
 		// reallocate
@@ -453,30 +453,39 @@ namespace SF {
 		Result DynamicArray<DataType>::reserve(size_t szNewSize)
 		{
 			DataType *pNewBuffer = nullptr;
-			DataType *pOldBuffer = nullptr;
+			//DataType *pOldBuffer = nullptr;
 
 			if (szNewSize <= Array<DataType>::GetAllocatedSize())
 				return ResultCode::SUCCESS_FALSE;
 
-			pNewBuffer = new(super::GetHeap()) DataType[szNewSize];
-			if (pNewBuffer == nullptr)
-				return ResultCode::OUT_OF_MEMORY;
+			if (m_pAllocatedBuffer)
+			{
+				pNewBuffer = (DataType*)super::GetHeap().Realloc(m_pAllocatedBuffer, szNewSize * sizeof(DataType));
+			}
+			else
+			{
+				pNewBuffer = (DataType*)super::GetHeap().Alloc(szNewSize * sizeof(DataType));
+				if (pNewBuffer == nullptr)
+					return ResultCode::OUT_OF_MEMORY;
+			}
+			m_pAllocatedBuffer = pNewBuffer;
 
 			CheckCtrMemory();
 
-			if (super::GetPreserveDataOnResize() && super::data() != pNewBuffer)
-			{
-				for (size_t iData = 0; iData < super::size(); iData++)
-					pNewBuffer[iData] = std::forward<DataType>(super::data()[iData]);
-			}
+			//if (super::GetPreserveDataOnResize() && super::data() != pNewBuffer)
+			//{
+			//	for (size_t iData = 0; iData < super::size(); iData++)
+			//		pNewBuffer[iData] = std::forward<DataType>(super::data()[iData]);
+			//}
+
 			super::SetBuffPtr(szNewSize, pNewBuffer);
 
-			pOldBuffer = m_pAllocatedBuffer;
-			m_pAllocatedBuffer = pNewBuffer;
-			if (pOldBuffer)
-			{
-				IHeap::Delete(pOldBuffer);
-			}
+			//pOldBuffer = m_pAllocatedBuffer;
+			//m_pAllocatedBuffer = pNewBuffer;
+			//if (pOldBuffer)
+			//{
+			//	IHeap::Delete(pOldBuffer);
+			//}
 
 			return ResultCode::SUCCESS;
 		}

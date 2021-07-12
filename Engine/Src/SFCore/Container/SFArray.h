@@ -236,7 +236,7 @@ namespace SF {
 			Array(IHeap& heap);
 			virtual ~Array();
 
-			IHeap& GetHeap() const { return *m_Heap; }
+			SF_FORCEINLINE IHeap& GetHeap() const { return *m_Heap; }
 
 			// Get Size
 			inline size_t size() const;

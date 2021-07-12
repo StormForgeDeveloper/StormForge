@@ -53,12 +53,14 @@ namespace SF {
 				iterator& operator++()
 				{
 					if (m_pCur != nullptr) m_pCur = m_pCur->pNext;
+					if (m_pCur == m_pHeader) m_pCur = nullptr;
 					return *this;
 				}
 
 				const iterator& operator++() const
 				{
 					if (m_pCur != nullptr) m_pCur = m_pCur->pNext;
+					if (m_pCur == m_pHeader) m_pCur = nullptr;
 					return *this;
 				}
 

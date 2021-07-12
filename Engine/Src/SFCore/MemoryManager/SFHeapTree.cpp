@@ -347,14 +347,15 @@ namespace SF
 		// TODO: 
 		OperationTraversalHistory travelHistory(GetSystemHeap(), m_Root, m_ItemCount);
 
-		if (!(FindNode(travelHistory, key, pFound)))
+		if (!FindNode(travelHistory, key, pFound))
 			return ResultCode::FAIL;
 
-		// unique key
-		if (pFound->Key() != key)
-			return ResultCode::FAIL;
+		if (pFound->Key() >= key)
+		{
+			return ResultCode::SUCCESS;
+		}
 
-		return ResultCode::SUCCESS;
+		return ResultCode::FAIL;
 	}
 
 

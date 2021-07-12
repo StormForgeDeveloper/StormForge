@@ -13,7 +13,7 @@
 #include "SFTypedefs.h"
 #include "Container/SFArray.h"
 #include "MemoryManager/SFMemory.h"
-
+//#include "Container/SFSortedMap_Base.h"
 
 namespace SF {
 
@@ -33,14 +33,13 @@ namespace SF {
 			static constexpr int BalanceTolerance = 8;
 			static constexpr int MaxRebalancingTry = 20;
 
-
 			struct MapNode;
 			typedef MapNode* ReferenceAccessPoint;
 			typedef uint32_t KeyType; // We only support max 4GB allocation
 
 
 #pragma pack(push,1)
-			struct MapNode : public MemBlockHdr
+			struct MapNode
 			{
 				ReferenceAccessPoint Left = nullptr;
 				ReferenceAccessPoint Right = nullptr;
@@ -52,7 +51,7 @@ namespace SF {
 				ReferenceAccessPoint PrevChunk = nullptr;
 
 				// key, sizeof data node
-				KeyType Key() { return Size; };
+				KeyType Key() { return MemChunkHeader.Size; };
 
 				// Tree depth information
 				int8_t Balance				= 0;
@@ -62,13 +61,16 @@ namespace SF {
 				int8_t State				= 0;
 
 
+				MemBlockHdr MemChunkHeader;
+
 				MapNode()
 				{
 				}
 
-				MapNode(size_t dataBlockSize)
+				MapNode(IHeap* ThisHeap, uint32_t magic, size_t dataBlockSize)
 				{
-					Size = (decltype(Size))dataBlockSize;
+					MemChunkHeader.InitHeader(ThisHeap, (uint32_t)dataBlockSize, (uint32_t)AlignUp(sizeof(HeapTree::MapNode), MemBlockHdr::MaxHeaderAlignment));
+					MemChunkHeader.Magic = magic;
 				}
 
 				int UpdateBalanceFactor();
@@ -78,6 +80,7 @@ namespace SF {
 
 		private:
 
+			//using OperationTraversalHistory = SortedMapTraversalHistoryT<MapNode*, ReferenceAccessPoint>;
 			// Search history buffer
 			class OperationTraversalHistory
 			{
@@ -97,7 +100,6 @@ namespace SF {
 					, m_TraversalHistory(memoryManager)
 				{
 					Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
-					//m_TraversalHistory.Reserve();
 					m_TraversalHistory.SetIncreaseSize(GrowthBy);
 				}
 

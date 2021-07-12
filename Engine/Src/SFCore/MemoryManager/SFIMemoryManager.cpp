@@ -18,7 +18,7 @@
 #include "Util/SFStringCrc64.h"
 #include "Util/SFLog.h"
 #include "Object/SFSharedObjectManager.h"
-
+#include "MemoryManager/SFHeapMemory.h"
 
 namespace SF {
 
@@ -330,6 +330,7 @@ namespace SF {
 		// We have two size types 16bytes for normal header, 32bytes for extended heap
 		auto ExpectedHeaderSize = MemBlockHdr::GetHeaderSize();
 		auto ExpectedHeaderSize2 = ExpectedHeaderSize << 1;
+		auto ExpectedHeaderSize3 = HeapMemory::MapNodeHeaderSize;
 		MemBlockHdr* pMemBlock = nullptr;
 
 		uint8_t* pCompilerSizePos = reinterpret_cast<uint8_t*>(ptr); // each compiler has different search length
@@ -341,7 +342,7 @@ namespace SF {
 		{
 			headerOffset = *(pCompilerSizePos - 1); // The place I stored header offset
 			pMemBlock = reinterpret_cast<MemBlockHdr*>(pCompilerSizePos - headerOffset);
-			if ((headerOffset == ExpectedHeaderSize || headerOffset == ExpectedHeaderSize2)
+			if ((headerOffset == ExpectedHeaderSize || headerOffset == ExpectedHeaderSize2 || headerOffset == ExpectedHeaderSize3)
 				&& pMemBlock->Magic == MemBlockHdr::MEM_MAGIC)
 				break;
 		}

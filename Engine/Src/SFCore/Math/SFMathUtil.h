@@ -196,7 +196,7 @@ namespace SF
 			}
 
 			LowBits = Value & 0x2;
-			return (LowBits) ? 0 : 1;
+			return index + ((LowBits) ? 0 : 1);
 		}
 
 		SF_FORCEINLINE uint64_t Find1FromLSB(uint64_t Value)
@@ -214,22 +214,103 @@ namespace SF
 #endif
 		}
 
+		SF_FORCEINLINE uint32_t Find1FromMSB(uint32_t Value)
+		{
+#if _MSC_VER
+			unsigned long Log2;
+			_BitScanReverse64(&Log2, (uint64_t(Value) << 1) | 1);
+			return 32 - Log2;
+#else
+			return __builtin_clzll((uint64_t(Value) << 1) | 1) - 31;
+#endif
+		}
+
+		SF_FORCEINLINE constexpr uint32_t Find1FromMSBConstexpr(uint32_t Value)
+		{
+			if (Value == 0)
+			{
+				return 32;
+			}
+
+			uint32_t index = 0;
+			uint32_t HighBits = Value & 0xFFFF0000L;
+			if (HighBits)
+			{
+				Value >>= 16;
+			}
+			else
+			{
+				//Value &= 0xFFFF;
+				index += 16;
+			}
+
+			HighBits = Value & 0xFF00L;
+			if (HighBits)
+			{
+				Value >>= 8;
+			}
+			else
+			{
+				//Value &= 0xFF;
+				index += 8;
+			}
+
+			HighBits = Value & 0xF0L;
+			if (HighBits)
+			{
+				Value >>= 4;
+			}
+			else
+			{
+				index += 4;
+			}
+
+			HighBits = Value & 0xC;
+			if (HighBits)
+			{
+				Value >>= 2;
+			}
+			else
+			{
+				index += 2;
+			}
+
+			HighBits = Value & 0x2;
+			return index + (HighBits ? 0 : 1);
+		}
+
+		SF_FORCEINLINE uint64_t Find1FromMSB(uint64_t Value)
+		{
+#if _MSC_VER
+			unsigned long Log2;
+			long Mask = -long(_BitScanReverse64(&Log2, Value) != 0);
+			return ((63 - Log2) & Mask) | (64 & ~Mask);
+#else
+			if (Value == 0)
+			{
+				return 64;
+			}
+
+			return __builtin_clzll(Value);
+#endif
+		}
+
 		SF_FORCEINLINE uint32_t CeilLogTwo(uint32_t Arg)
 		{
-			int32_t Bitmask = ((int32_t)(Find1FromLSB(Arg) << 26)) >> 31;
-			return (32 - Find1FromLSB(Arg - 1)) & (~Bitmask);
+			int32_t Bitmask = ((int32_t)(Find1FromMSB(Arg) << 26)) >> 31;
+			return (32 - Find1FromMSB(Arg - 1)) & (~Bitmask);
 		}
 
 		SF_FORCEINLINE constexpr uint32_t CeilLogTwoConstexpr(uint32_t Arg)
 		{
-			int32_t Bitmask = ((int32_t)(Find1FromLSBConstexpr(Arg) << 26)) >> 31;
-			return (32 - Find1FromLSBConstexpr(Arg - 1)) & (~Bitmask);
+			int32_t Bitmask = ((int32_t)(Find1FromMSBConstexpr(Arg) << 26)) >> 31;
+			return (32 - Find1FromMSBConstexpr(Arg - 1)) & (~Bitmask);
 		}
 
 		SF_FORCEINLINE uint64_t CeilLogTwo(uint64_t Arg)
 		{
-			int64_t Bitmask = ((int64_t)(Find1FromLSB(Arg) << 57)) >> 63;
-			return (64 - Find1FromLSB(Arg - 1)) & (~Bitmask);
+			int64_t Bitmask = ((int64_t)(Find1FromMSB(Arg) << 57)) >> 63;
+			return (64 - Find1FromMSB(Arg - 1)) & (~Bitmask);
 		}
 
 		SF_FORCEINLINE uint32_t RoundUpToPowerOfTwo(uint32_t Arg)
