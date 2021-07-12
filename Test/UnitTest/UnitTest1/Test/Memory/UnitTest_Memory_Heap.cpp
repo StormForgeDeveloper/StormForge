@@ -19,6 +19,7 @@
 #include "Util/SFRandom.h"
 #include "Util/SFToString.h"
 #include "UnitTest_Memory.h"
+#include "MemoryManager/SFHeapMemory.h"
 
 
 using ::testing::EmptyTestEventListener;
@@ -103,3 +104,39 @@ TEST_F(MemoryTest, NewDelete)
 	IHeap::Delete(arrayValue);
 }
 
+TEST_F(MemoryTest, HeapMemory)
+{
+	struct TestItem
+	{
+		uint32_t ItemCategory : 8;
+		uint32_t ItemEquipType : 2;
+		uint32_t Count : 16;
+		uint32_t : 0;
+		uint32_t ItemId{};
+	};
+
+
+	SF::StaticMemoryAllocatorT<256> localHeap("localHeap", GetHeap());
+	SF::DynamicArray<TestItem> OutUpdated(localHeap);
+	std::vector<void*> allocated;
+	for (int iTest = 0; iTest < 10; iTest++)
+	{
+		auto allocSize = 64;
+		auto pAllocated = localHeap.Alloc(allocSize);
+		memset(pAllocated, allocSize, allocSize);
+		allocated.push_back(pAllocated);
+	}
+
+	for (auto itAllocated : allocated)
+	{
+		localHeap.Free(itAllocated);
+	}
+	allocated.clear();
+
+	SF::StaticMemoryAllocatorT<4096> categoryHeap("testHeap", GetHeap());
+	{
+		SF::DynamicArray<TestItem> Items(categoryHeap);
+		Items.push_back(TestItem{});
+		SF::SortedMap<uint32_t, SF::DynamicArray<TestItem*>*> ItemByItemID(categoryHeap);
+	}
+}
