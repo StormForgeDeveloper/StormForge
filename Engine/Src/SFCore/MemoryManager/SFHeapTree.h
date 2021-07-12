@@ -63,6 +63,7 @@ namespace SF {
 
 				MemBlockHdr MemChunkHeader;
 
+
 				MapNode()
 				{
 				}
@@ -74,6 +75,9 @@ namespace SF {
 				}
 
 				int UpdateBalanceFactor();
+
+				SF_FORCEINLINE void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + MemChunkHeader.HeaderSize; }
+				SF_FORCEINLINE MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(GetDataPtr()) + MemChunkHeader.Size); }
 			};
 #pragma pack(pop)
 

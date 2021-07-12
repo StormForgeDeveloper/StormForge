@@ -36,7 +36,7 @@ namespace SF {
 		, m_FreePosition(0)
 		, m_AllocationBufferSize(allocationBufferSize)
 		, m_AllocationBuffer(allocationBuffer)
-		, m_RedundencySize(MemoryChunkHeader::GetHeaderSize() + MemoryChunkHeader::GetFooterSize())
+		, m_RedundencySize(MemoryChunkHeader::GetDefaultHeaderSize() + MemoryChunkHeader::GetFooterSize())
 	{
 		// Because of the chunk header uses 32bit integer, the limit will be maximum of int32. Actually it's uint32_t, but it's not a big deal
 		assert(m_AllocationBufferSize < INT_MAX);// , "CircularHeap: too big buffer size");
@@ -87,7 +87,7 @@ namespace SF {
 
 			// Add dummy area
 			pChunk = (MemoryChunkHeader*)(m_AllocationBuffer + m_AllocatePosition);
-			pChunk->InitHeader(this, (uint32_t)(remainSize - m_RedundencySize), uint32_t(MemoryChunkHeader::GetHeaderSize()));
+			pChunk->InitHeader(this, (uint32_t)(remainSize - m_RedundencySize), uint32_t(MemoryChunkHeader::GetDefaultHeaderSize()));
 			pChunk->pHeap = nullptr; // let's put null here so that we can use it as free block mark
 			m_FreeSize -= remainSize;
 
@@ -112,7 +112,7 @@ namespace SF {
 
 		AssertRel(this->m_FreeSize <= (decltype(m_FreeSize))m_AllocationBufferSize && this->m_FreeSize >= 0);
 
-		pChunk->InitHeader(this, (uint32_t)(allocationSize - m_RedundencySize), uint32_t(MemoryChunkHeader::GetHeaderSize()));
+		pChunk->InitHeader(this, (uint32_t)(allocationSize - m_RedundencySize), uint32_t(MemoryChunkHeader::GetDefaultHeaderSize()));
 		pChunk->GetFooter()->InitFooter();
 		m_AllocatePosition += allocationSize;
 

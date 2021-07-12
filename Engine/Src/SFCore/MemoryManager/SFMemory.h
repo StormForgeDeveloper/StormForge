@@ -78,34 +78,6 @@ namespace SF {
 #endif
 
 
-#pragma pack(push, 4)
-	struct MemBlockFooter;
-
-	struct MemBlockHdr
-	{
-		static constexpr uint32_t MEM_MAGIC = 0xAE92AE;// 0xAE9218AE;
-		static constexpr uint32_t MEM_MAGIC_FREE = 0xCDCDCD;
-		static constexpr uint32_t MaxHeaderAlignment = SF_ALIGN_DOUBLE;
-
-		IHeap* pHeap = nullptr;
-		uint32_t Size = 0;				// Allocated memory size. We don't support bigger than 4GB allocation
-		uint32_t Magic : 24;
-		uint32_t HeaderSize : 8;
-
-		void InitHeader(IHeap* heap, uint32_t size, uint32_t headerSize);
-		void Deinit();
-
-		// +1 for reserved offset for reverse search
-		static size_t GetHeaderSize();
-		static size_t GetFooterSize();
-
-		static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return GetHeaderSize() + AlignUp(requestedSize, alignment) + GetFooterSize(); }
-
-		void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + HeaderSize; }
-		MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(GetDataPtr()) + AlignUp(Size, MaxHeaderAlignment)); }
-	};
-#pragma pack(pop)
-
 	struct MemBlockFooter
 	{
 		static constexpr uint32_t MEM_MAGIC = 0xB2AE3EB2;
@@ -122,6 +94,41 @@ namespace SF {
 		void InitFooter();
 		void Deinit();
 	};
+
+#pragma pack(push, 4)
+	struct MemBlockFooter;
+
+	struct SF_DECLARE_ALIGN_DOUBLE MemBlockHdr
+	{
+		static constexpr uint32_t MEM_MAGIC = 0xAE92AE;// 0xAE9218AE;
+		static constexpr uint32_t MEM_MAGIC_FREE = 0xCDCDCD;
+		static constexpr uint32_t MaxHeaderAlignment = SF_ALIGN_DOUBLE;
+
+		IHeap* pHeap = nullptr;
+		uint32_t Size = 0;				// Allocated memory size. We don't support bigger than 4GB allocation
+		uint32_t Magic : 24;
+		uint32_t HeaderSize : 8;
+
+		void InitHeader(IHeap* heap, uint32_t size, uint32_t headerSize);
+		void Deinit();
+
+		// +1 for reserved offset for reverse search
+		static constexpr size_t GetDefaultHeaderSize()
+		{
+			return AlignUp(sizeof(MemBlockHdr), MaxHeaderAlignment);
+		}
+
+		static constexpr size_t GetFooterSize()
+		{
+			return AlignUp(sizeof(MemBlockFooter), MaxHeaderAlignment);
+		}
+
+		static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return GetDefaultHeaderSize() + AlignUp(requestedSize, alignment) + GetFooterSize(); }
+
+		SF_FORCEINLINE void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + GetDefaultHeaderSize(); }
+		SF_FORCEINLINE MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(GetDataPtr()) + AlignUp(Size, MaxHeaderAlignment)); }
+	};
+#pragma pack(pop)
 
 } // namespace SF
 

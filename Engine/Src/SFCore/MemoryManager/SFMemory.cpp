@@ -28,16 +28,6 @@ namespace SF {
 	constexpr uint32_t MemBlockHdr::MEM_MAGIC_FREE;
 	constexpr uint32_t MemBlockHdr::MaxHeaderAlignment;
 
-	size_t MemBlockHdr::GetHeaderSize()
-	{
-		return AlignUp(sizeof(MemBlockHdr), MaxHeaderAlignment);
-	}
-
-	size_t MemBlockHdr::GetFooterSize()
-	{
-		return AlignUp(sizeof(MemBlockFooter), MaxHeaderAlignment);
-	}
-
 
 	void MemBlockHdr::InitHeader(IHeap* heap, uint32_t size, uint32_t headerSize)
 	{

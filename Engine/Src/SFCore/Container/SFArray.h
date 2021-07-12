@@ -35,6 +35,8 @@ namespace SF {
 		public:
 
 			using DataTypeDecay = std::decay_t<DataType>;
+			static constexpr bool IsTirviallyConstructable = std::is_trivially_constructible_v<DataTypeDecay>;
+			static constexpr bool IsConstructable = std::is_constructible_v<DataTypeDecay>;
 
 #if !defined(SWIG)
 			class iterator

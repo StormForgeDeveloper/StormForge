@@ -56,11 +56,6 @@ namespace SF
 		else
 		{
 			// Split chunk
-
-			// Cut remain part and add back to free tree
-			pFreeChunk->MemChunkHeader.Size = static_cast<HeapTree::KeyType>(dataSectionSize);
-			pFreeChunk->MemChunkHeader.GetFooter()->InitFooter();
-
 			auto pNextChunkData = (uint8_t*)pFreeChunk + chunkAllocationSize;
 			auto pNextChunk = GetNextChunk(pFreeChunk);
 			// - (allocating chunk footer + dataSize) - (next chunk header)
@@ -74,7 +69,8 @@ namespace SF
 			if (!result) return nullptr;
 		}
 
-		pFreeChunk->MemChunkHeader.InitHeader(thisHeap, pFreeChunk->MemChunkHeader.Size, MapNodeHeaderSize);
+		pFreeChunk->MemChunkHeader.InitHeader(thisHeap, (uint32_t)dataSectionSize, MapNodeHeaderSize);
+		pFreeChunk->GetFooter()->InitFooter();
 		pFreeChunk->State = 1;
 
 		if (pNewChunk)
@@ -125,18 +121,17 @@ namespace SF
 		if (pMemChunk == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		auto ptrPos = reinterpret_cast<uintptr_t>(pMemChunk);
-		auto begin = reinterpret_cast<uintptr_t>(this) + MemBlockHeaderSize;
-		auto end = begin + BlockSize;
-		if (ptrPos < begin || ptrPos >= end)
+		if (!IsInThisBlock(pMemChunk))
 			return ResultCode::NOT_EXIST;
 
+		pMemChunk->MemChunkHeader.Magic = MemBlockHdr::MEM_MAGIC_FREE;
 		pMemChunk->State = 0;
 
 		// merge next chunk if possible
 		auto pNextChunk = GetNextChunk(pMemChunk);
-		if (FreeChunkTree.size() > 0 && pNextChunk != nullptr && pNextChunk->State == 0)
+		if (pMemChunk != pNextChunk && pNextChunk != nullptr && pNextChunk->State == 0)
 		{
+			assert(FreeChunkTree.size() > 0);
 			// Remove next chunk from free list
 			auto result = FreeChunkTree.Remove(pNextChunk);
 			if (!result && result != ResultCode::NOT_EXIST)
@@ -151,8 +146,9 @@ namespace SF
 
 		// merge previous chunk if possible
 		auto pPrevChunk = GetPrevChunk(pMemChunk);
-		if (FreeChunkTree.size() > 0 && pPrevChunk != nullptr && pPrevChunk->State == 0)
+		if (pMemChunk != pPrevChunk && pPrevChunk != nullptr && pPrevChunk->State == 0)
 		{
+			assert(FreeChunkTree.size() > 0);
 			// Remove next chunk from free list
 			auto result = FreeChunkTree.Remove(pPrevChunk);
 			if (!result && result != ResultCode::NOT_EXIST)
@@ -165,19 +161,20 @@ namespace SF
 			pMemChunk = MergeChunks(pPrevChunk, pMemChunk);
 		}
 
+		assert(pMemChunk->MemChunkHeader.Magic == MemBlockHdr::MEM_MAGIC_FREE);
+		assert(IsInThisBlock(pMemChunk));
 		return FreeChunkTree.Insert(pMemChunk);
 	}
 
 	// Access neighbor chunk
 	HeapTree::MapNode* HeapMemory::MemoryBlock::GetNextChunk(HeapTree::MapNode* pMemChunk)
 	{
-		auto begin = reinterpret_cast<uintptr_t>(this) + MemBlockHeaderSize;
-		auto end = begin + BlockSize;
-
 		assert(pMemChunk->MemChunkHeader.HeaderSize == HeapMemory::MapNodeHeaderSize);
 		assert(pMemChunk->MemChunkHeader.GetFooterSize() == HeapMemory::MapNodeFooterSize);
+		assert(IsInThisBlock(pMemChunk));
+
 		auto nextPos = reinterpret_cast<uintptr_t>(pMemChunk) + HeapMemory::MapNodeHeaderSize + pMemChunk->MemChunkHeader.Size + HeapMemory::MapNodeFooterSize;
-		if (nextPos < end)
+		if (IsInThisBlock(reinterpret_cast<HeapTree::MapNode*>(nextPos)))
 		{
 			return reinterpret_cast<HeapTree::MapNode*>(nextPos);
 		}
@@ -196,12 +193,16 @@ namespace SF
 		if (pNextChunk->State != 0)
 			return pNextChunk;
 
-		Assert(pNextChunk->MemChunkHeader.Magic == MemBlockHdr::MEM_MAGIC_FREE);
+		assert(pNextChunk->MemChunkHeader.Magic == MemBlockHdr::MEM_MAGIC_FREE);
+		assert(pMemChunk != pNextChunk);
+
+		assert(IsInThisBlock(pMemChunk));
+		assert(IsInThisBlock(pNextChunk));
 
 		auto pNextOfNextChunk = GetNextChunk(pNextChunk);
 
 		if (pNextOfNextChunk) pNextOfNextChunk->PrevChunk = pMemChunk;
-		pMemChunk->MemChunkHeader.Size += pNextChunk->MemChunkHeader.Size + MapNodeHeaderSize + MapNodeFooterSize;
+		pMemChunk->MemChunkHeader.Size += MapNodeFooterSize + MapNodeHeaderSize + pNextChunk->MemChunkHeader.Size;
 
 		// erase contents of pNextChunk
 		memset(pNextChunk, 0xCD, sizeof(HeapTree::MapNode));
@@ -257,6 +258,8 @@ namespace SF
 			if (pAllocated != nullptr)
 			{
 				auto pDataPtr = pAllocated->MemChunkHeader.GetDataPtr();
+				auto pDataPtr2 = pAllocated->GetDataPtr();
+				assert(pDataPtr == pDataPtr2);
 				MemBlockHdr* pFoundMemBlock = GetMemoryBlockHdr(pDataPtr);
 				assert(pFoundMemBlock && pFoundMemBlock == &pAllocated->MemChunkHeader);
 
@@ -331,7 +334,7 @@ namespace SF
 	//	@takeOverOwnerShip: If true the memory block will re deleted by this class
 	void HeapMemory::AddMemoryBlock(size_t blockSize, void* pMemoryBlock, bool takeOverOwnerShip)
 	{
-		assert(blockSize > (sizeof(MemoryBlock) + sizeof(HeapTree::MapNode))); // the memory size should be bigger than header informations
+		assert(blockSize > (sizeof(MemoryBlock) + MapNodeFooterSize + MapNodeHeaderSize)); // the memory size should be bigger than header informations
 		auto pMemBlock = new(pMemoryBlock) MemoryBlock;
 		pMemBlock->BlockSize = blockSize - MemBlockHeaderSize;
 		pMemBlock->IsOwner = takeOverOwnerShip;
@@ -339,7 +342,7 @@ namespace SF
 		auto pDataBlock = (uint8_t*)pMemoryBlock + MemBlockHeaderSize;
 
 		auto pDataBlockNode = new(pDataBlock) HeapTree::MapNode(this, MemBlockHdr::MEM_MAGIC_FREE, pMemBlock->BlockSize - MapNodeHeaderSize - MapNodeFooterSize);
-		pDataBlockNode->MemChunkHeader.GetFooter()->InitFooter();
+		pDataBlockNode->GetFooter()->InitFooter();
 		pMemBlock->FreeChunkTree.Insert(pDataBlockNode);
 
 		m_MemoryBlockList.push_back(pMemBlock);

@@ -38,7 +38,7 @@ namespace SF {
 
 		MemoryChunkHeader* pChunk = reinterpret_cast<MemoryChunkHeader*>(m_AllocationBuffer);
 		memset(pChunk, 0, sizeof(MemoryChunkHeader));
-		pChunk->Magic = MemoryChunkHeader::MEM_MAGIC_FREE;
+		pChunk->MemHeader.Magic = MemBlockHdr::MEM_MAGIC_FREE;
 	}
 
 	StackHeap::~StackHeap()
@@ -66,35 +66,34 @@ namespace SF {
 		// set up head
 		pChunk = (MemoryChunkHeader*)(m_AllocationBuffer + m_AllocatePosition);
 		// if the block isn't free, means it's last block and there is not enough free space to set up new free header
-		if(pChunk->Magic == MemBlockHdr::MEM_MAGIC)
+		if(pChunk->MemHeader.Magic == MemBlockHdr::MEM_MAGIC)
 		{
 			auto pMemBlk = GetParent()->AllocInternal(size, alignment);
 			AddAllocSize(size);
 			return pMemBlk;
 		}
 
-		pChunk->InitHeader(this, (uint32_t)size, (uint32_t)MemoryChunkHeader::GetHeaderSize());
-		pChunk->pHeap = this; // null means free block
-		pChunk->GetFooter()->InitFooter();
+		pChunk->MemHeader.InitHeader(this, (uint32_t)size, (uint32_t)MemoryChunkHeader::GetHeaderSize());
+		pChunk->MemHeader.GetFooter()->InitFooter();
 
 #ifdef DEBUG
 		Assert((ValidateAllocatedChunks()));
 #endif
 
-		AddAllocSize(pChunk->Size);
+		AddAllocSize(pChunk->MemHeader.Size);
 
 		remainSize -= allocationSize;
 		if (remainSize < sizeof(MemoryChunkHeader))
-			return pChunk;
+			return &pChunk->MemHeader;
 
 		// Remain chunk has enough size for another header + alpha
 		m_AllocatePosition += allocationSize;
 		auto pNewPos = (MemoryChunkHeader*)(m_AllocationBuffer + m_AllocatePosition);
 		memset(pNewPos, 0, sizeof(MemoryChunkHeader));
-		pNewPos->Magic = MemBlockHdr::MEM_MAGIC_FREE;
+		pNewPos->MemHeader.Magic = MemBlockHdr::MEM_MAGIC_FREE;
 		pNewPos->Prev = pChunk;
 
-		return pChunk;
+		return &pChunk->MemHeader;
 	}
 
 	// Reallocate
@@ -115,20 +114,20 @@ namespace SF {
 		bool bIsInStaticBuffer = GetIsInStaticBuffer(pPtr);
 		if (bIsInStaticBuffer)
 		{
-			MemoryChunkHeader *pChunk = static_cast<MemoryChunkHeader*>(pPtr);
-			if (pChunk->Magic != MemBlockHdr::MEM_MAGIC)
+			MemoryChunkHeader *pChunk = ContainerPtrFromMember(MemoryChunkHeader, MemHeader, pPtr);
+			if (pChunk->MemHeader.Magic != MemBlockHdr::MEM_MAGIC)
 			{
 				assert(false); // broken?
 				return;
 			}
-			pChunk->Magic = MemBlockHdr::MEM_MAGIC_FREE;
-			pChunk->pHeap = nullptr;
+			pChunk->MemHeader.Magic = MemBlockHdr::MEM_MAGIC_FREE;
+			pChunk->MemHeader.pHeap = nullptr;
 
 			// merge from last, all free blocks
 			MemoryChunkHeader *allocPointer = reinterpret_cast<MemoryChunkHeader*>(reinterpret_cast<uintptr_t>(m_AllocationBuffer) + m_AllocatePosition);
-			while (allocPointer != nullptr && allocPointer->Magic != MemBlockHdr::MEM_MAGIC)
+			while (allocPointer != nullptr && allocPointer->MemHeader.Magic != MemBlockHdr::MEM_MAGIC)
 			{
-				assert(allocPointer->pHeap == nullptr);
+				assert(allocPointer->MemHeader.pHeap == nullptr);
 				m_AllocatePosition = (uintptr_t)allocPointer - (uintptr_t)m_AllocationBuffer;
 				allocPointer = allocPointer->Prev;
 			}

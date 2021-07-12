@@ -63,8 +63,10 @@ namespace SF
 				auto ptrPos = reinterpret_cast<uintptr_t>(pMemChunk);
 				auto begin = reinterpret_cast<uintptr_t>(this) + MemBlockHeaderSize;
 				auto end = begin + BlockSize;
-				if (ptrPos < begin || ptrPos >= end)
+				if (ptrPos < begin || (ptrPos + MapNodeHeaderSize + MapNodeFooterSize) >= end)
 					return false;
+
+				assert((ptrPos + pMemChunk->MemChunkHeader.Size + MapNodeHeaderSize + MapNodeFooterSize) <= end);
 
 				return true;
 			}

@@ -37,21 +37,16 @@ namespace SF
 	public:
 
 		// memory header
-#pragma pack(push,1)
-		struct MemoryChunkHeader : public MemBlockHdr
+
+		struct MemoryChunkHeader
 		{
 			MemoryChunkHeader* Prev = nullptr;
 
-			static size_t GetHeaderSize() { return AlignUp(sizeof(MemoryChunkHeader), MaxHeaderAlignment); }
-			static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return MemoryChunkHeader::GetHeaderSize() + AlignUp(requestedSize, MaxHeaderAlignment) + GetFooterSize(); }
+			MemBlockHdr MemHeader;
 
-			//void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + MemoryChunkHeader::GetHeaderSize(); }
-			//MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(MemoryChunkHeader::GetDataPtr()) + AlignUp(Size, MaxHeaderAlignment)); }
+			static size_t GetHeaderSize() { return AlignUp(sizeof(MemoryChunkHeader), MemBlockHdr::MaxHeaderAlignment); }
+			static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return MemoryChunkHeader::GetHeaderSize() + AlignUp(requestedSize, MemBlockHdr::MaxHeaderAlignment) + MemBlockHdr::GetFooterSize(); }
 		};
-#pragma pack(pop)
-
-		// header size
-		//static const size_t HEADER_SIZE = AlignUp(sizeof(MemoryChunkHeader), DefaultAlignment);
 
 
 		// stack position

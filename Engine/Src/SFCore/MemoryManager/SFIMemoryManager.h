@@ -141,6 +141,10 @@ namespace SF {
 		static bool CheckMemoryHeader(void* ptr);
 
 		template<class ClassType>
+			//template<
+		//	class ClassType,
+		//	typename = std::enable_if_t<std::is_trivially_constructible_v<ClassType>>
+		//>
 		static void Delete(ClassType* pPtr)
 		{
 			if (pPtr == nullptr) return;
@@ -149,6 +153,18 @@ namespace SF {
 			pPtr->~ClassType();
 			operator delete((void*)(pPtr), *pHeap);
 		}
+
+		//template<
+		//	class ClassType,
+		//	typename = std::enable_if_t<!std::is_trivially_constructible_v<ClassType>>
+		//>
+		//static void Delete(ClassType* pPtr)
+		//{
+		//	if (pPtr == nullptr) return;
+		//	auto pHeap = GetAloocationHeap((void*)(pPtr));
+		//	assert(pHeap);
+		//	operator delete((void*)(pPtr), *pHeap);
+		//}
 	};
 
 
