@@ -80,7 +80,7 @@ namespace SF {
 		template<class ValueType>
 		Result SetValue(KeyType name, ValueType value)
 		{
-			auto boxedValue = BoxingByValue(value);
+			auto boxedValue = BoxingByValue(GetHeap(), value);
 			if (boxedValue.GetVariable() == nullptr)
 				return ResultCode::NOT_SUPPORTED;
 
@@ -165,7 +165,7 @@ namespace SF {
 		template<class ValueType>
 		Result SetValue(KeyType name, ValueType value)
 		{
-			auto boxedValue = Boxing(value);
+			auto boxedValue = Boxing(GetHeap(), value);
 			if (boxedValue.GetVariable() == nullptr)
 				return ResultCode::NOT_SUPPORTED;
 
@@ -184,14 +184,7 @@ namespace SF {
 
 			return pVariable->GetValue<ValueType>();
 		}
-
-
 	};
 
-
-
 } // namespace SF
-
-
-
 

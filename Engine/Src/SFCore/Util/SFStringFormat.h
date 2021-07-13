@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2020 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -15,7 +15,7 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 #include "Util/SFString.h"
-
+#include "MemoryManager/SFHeapMemory.h"
 
 namespace SF {
 
@@ -28,7 +28,8 @@ namespace SF {
 	template< class ...ArgTypes >
 	typename TString<CharType, SharedStringBufferType>::StringType& TString<CharType, SharedStringBufferType>::Format(const CharType* strFormat, ArgTypes... args)
 	{
-		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
+		StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
+		VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
 		Format_Internal(strFormat, sizeof...(args), arguments);
 		return *this;
 	}
@@ -38,7 +39,8 @@ namespace SF {
 	template< class ...ArgTypes >
 	typename TString<CharType, SharedStringBufferType>::StringType& TString<CharType, SharedStringBufferType>::AppendFormat(const CharType* strFormat, ArgTypes... args)
 	{
-		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
+		StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
+		VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
 		AppendFormat_Internal(strFormat, sizeof...(args), arguments);
 		return *this;
 	}
@@ -47,7 +49,8 @@ namespace SF {
 	template< class ...ArgTypes >
 	inline StringBuilder& StringBuilder::AppendFormat(const CharType* strFormat, ArgTypes... args)
 	{
-		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
+		StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
+		VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
 		AppendFormat_Internal(strFormat, sizeof...(args), arguments);
 		return *this;
 	}

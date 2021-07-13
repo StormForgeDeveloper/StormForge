@@ -183,7 +183,8 @@ namespace SF
 		template< class ...ArgTypes >
 		inline Result Call(const ArgTypes&... args) const
 		{
-			VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
+			StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
+			VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
 			return CallWithParam(ArrayView<VariableBox>(sizeof...(args), sizeof...(args), arguments));
 		}
 	};
@@ -280,14 +281,14 @@ namespace SF
 		template<class ValueType>
 		Result SetValue(const PathString& variablePath, const ValueType& value)
 		{
-			VariableBox boxed = Boxing(value);
+			VariableBox boxed = Boxing(GetHeap(), value);
 			return SetVariable(variablePath, *boxed.GetVariable());
 		}
 
 		template<class ValueType>
 		Result SetValue(StringCrc64 variableName, const ValueType& value)
 		{
-			VariableBox boxed = Boxing(value);
+			VariableBox boxed = Boxing(GetHeap(), value);
 			return SetVariable(variableName, *boxed.GetVariable());
 		}
 

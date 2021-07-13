@@ -30,9 +30,10 @@ namespace StrUtil {
 
 	// 
 	template< class ...ArgTypes >
-	inline size_t Format(char* szBuffer, INT& BuffLen, const char* strFormat, const ArgTypes&... args)
+	SF_FORCEINLINE size_t Format(char* szBuffer, INT& BuffLen, const char* strFormat, const ArgTypes&... args)
 	{
-		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
+		StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
+		VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
 		return Format_Internal(szBuffer, BuffLen, strFormat, sizeof...(args), arguments);
 	}
 
@@ -48,7 +49,8 @@ namespace StrUtil {
 	template< int BuffLen, class ...ArgTypes >
 	size_t Format(char(&szBuffer)[BuffLen], const char* strFormat, const ArgTypes&... args)
 	{
-		VariableBox arguments[sizeof...(args)] = { Boxing(args)... };
+		StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
+		VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
 
 		char* pTempBuff = szBuffer;
 		INT BuffReamin = BuffLen;

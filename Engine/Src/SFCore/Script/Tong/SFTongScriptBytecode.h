@@ -39,6 +39,9 @@ namespace SF
 		class ScriptOpcodeInfo
 		{
 		private:
+
+			IHeap &m_Heap;
+
 			// operation code
 			SrciptBytecodeOpCode m_OpCode;
 
@@ -48,12 +51,15 @@ namespace SF
 		public:
 
 			ScriptOpcodeInfo(SrciptBytecodeOpCode opCode, StringCrc64 parameter1, StringCrc64 parameter2, StringCrc64 parameter3)
-				: m_OpCode(opCode)
+				: m_Heap(GetSystemHeap())
+				, m_OpCode(opCode)
 			{
 				m_Parameters[0] = parameter1;
 				m_Parameters[1] = parameter2;
 				m_Parameters[2] = parameter3;
 			}
+
+			IHeap& GetHeap() const { return m_Heap; }
 
 			SrciptBytecodeOpCode GetOpCode() const { return m_OpCode; }
 			StringCrc64 GetParameter(int i) const { return m_Parameters[i]; }

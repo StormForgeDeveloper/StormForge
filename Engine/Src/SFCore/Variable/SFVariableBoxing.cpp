@@ -27,32 +27,44 @@ namespace SF
 	//	VariableBox class
 	//
 
-	constexpr int VariableBox::BUFFER_SIZE;
-
-	VariableBox::VariableBox()
-		: m_DataBuffer(GetSystemHeap())
+	VariableBox::VariableBox(IHeap& heap)
+		: m_Heap(heap)
 	{
+	}
+
+	VariableBox::VariableBox(IHeap& heap, const VariableBox& src)
+		: m_Heap(heap)
+	{
+		if(src.m_pVariable != nullptr)
+			m_pVariable = src.m_pVariable->Clone(m_Heap);
+	}
+
+	VariableBox::VariableBox(IHeap& heap, const Variable& src)
+		: m_Heap(heap)
+	{
+		m_pVariable = src.Clone(m_Heap);
 	}
 
 	VariableBox::VariableBox(const VariableBox& src)
-		: m_DataBuffer(GetSystemHeap())
+		: m_Heap(src.GetHeap())
 	{
-		if(src.m_pVariable != nullptr)
-			m_pVariable = src.m_pVariable->Clone(m_DataBuffer);
+		if (src.m_pVariable != nullptr)
+			m_pVariable = src.m_pVariable->Clone(m_Heap);
 	}
 
 	VariableBox::VariableBox(const Variable& src)
-		: m_DataBuffer(GetSystemHeap())
+		: m_Heap(GetSystemHeap())
 	{
-		m_pVariable = src.Clone(m_DataBuffer);
+		m_pVariable = src.Clone(m_Heap);
 	}
 
 	VariableBox::~VariableBox()
 	{
 		if (m_pVariable != nullptr)
-			m_pVariable->~Variable();
+			IHeap::Delete(m_pVariable);
 		m_pVariable = nullptr;
 	}
+
 	//void VariableBox::GetValueString(ToStringContext& context) const
 	//{
 	//	if (m_pVariable)
@@ -66,9 +78,9 @@ namespace SF
 	bool VariableBox::SetVariableType(StringCrc32 TypeName)
 	{
 		if (m_pVariable != nullptr)
-			m_pVariable->~Variable();
+			IHeap::Delete(m_pVariable);
 
-		m_pVariable = Service::VariableFactory->CreateVariable(m_DataBuffer, TypeName);
+		m_pVariable = Service::VariableFactory->CreateVariable(m_Heap, TypeName);
 
 		return m_pVariable != nullptr;
 	}
@@ -76,29 +88,12 @@ namespace SF
 	VariableBox& VariableBox::operator = (const VariableBox& src)
 	{
 		if (m_pVariable != nullptr)
-			m_pVariable->~Variable();
+			IHeap::Delete(m_pVariable);
 		m_pVariable = nullptr;
 
 		if (src.m_pVariable != nullptr)
-			m_pVariable = src.m_pVariable->Clone(m_DataBuffer);
+			m_pVariable = src.m_pVariable->Clone(m_Heap);
 		return *this;
-	}
-
-
-	// TODO: move to unit test
-	void TestFunc()
-	{
-		bool TestBool = true;
-		auto boxBool = Boxing(TestBool);
-		Assert(Unboxing<bool>(boxBool) == TestBool);
-
-		int TestInt = 10;
-		auto boxInt = Boxing(TestInt);
-		Assert(Unboxing<int>(boxInt) == TestInt);
-
-		const char* testCharString = "TestString";
-		auto boxCharStr = Boxing(testCharString);
-		Assert(Unboxing<const char*>(boxCharStr) == testCharString);
 	}
 
 
@@ -113,18 +108,18 @@ namespace SF
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(void*);
 
 	//IMPLEMENT_BOXING_TEMPLETE_BYVALUE(const char*);
-	VariableBox BoxingByValue(const char* src) { return VariableBox(VariableString(src)); }
-	VariableBox BoxingByReference(const char* src) { return VariableBox(VariableCharString(src)); }
-	VariableBox Boxing(const char* src) { return VariableBox(VariableCharString(src)); }
-	VariableBox Boxing(Array<const char*>& src) { VariableValueReference<Array<const char*>> variable(src); return VariableBox(variable); }
-	VariableBox Boxing(const Array<const char*>& src) { VariableValueReference<Array<const char*>> variable(src); return VariableBox(variable); }
+	VariableBox BoxingByValue(IHeap& heap, const char* src) { return VariableBox(heap, VariableString(src)); }
+	VariableBox BoxingByReference(IHeap& heap, const char* src) { return VariableBox(heap, VariableCharString(src)); }
+	VariableBox Boxing(IHeap& heap, const char* src) { return VariableBox(heap, VariableCharString(src)); }
+	VariableBox Boxing(IHeap& heap, Array<const char*>& src) { VariableValueReference<Array<const char*>> variable(src); return VariableBox(heap, variable); }
+	VariableBox Boxing(IHeap& heap, const Array<const char*>& src) { VariableValueReference<Array<const char*>> variable(src); return VariableBox(heap, variable); }
 
 	//IMPLEMENT_BOXING_TEMPLETE_BYVALUE(const wchar_t*);
-	VariableBox BoxingByValue(const wchar_t* src) { return VariableBox(VariableWString(src)); } 
-	VariableBox BoxingByReference(const wchar_t* src) { return VariableBox(VariableWCharString(src)); }
-	VariableBox Boxing(const wchar_t* src) { return VariableBox(VariableWCharString(src)); }
-	VariableBox Boxing(Array<const wchar_t*>& src) { VariableValueReference<Array<const wchar_t*>> variable(src); return VariableBox(variable); }
-	VariableBox Boxing(const Array<const wchar_t*>& src) { VariableValueReference<Array<const wchar_t*>> variable(src); return VariableBox(variable); }
+	VariableBox BoxingByValue(IHeap& heap, const wchar_t* src) { return VariableBox(heap, VariableWString(src)); }
+	VariableBox BoxingByReference(IHeap& heap, const wchar_t* src) { return VariableBox(heap, VariableWCharString(src)); }
+	VariableBox Boxing(IHeap& heap, const wchar_t* src) { return VariableBox(heap, VariableWCharString(src)); }
+	VariableBox Boxing(IHeap& heap, Array<const wchar_t*>& src) { VariableValueReference<Array<const wchar_t*>> variable(src); return VariableBox(heap, variable); }
+	VariableBox Boxing(IHeap& heap, const Array<const wchar_t*>& src) { VariableValueReference<Array<const wchar_t*>> variable(src); return VariableBox(heap, variable); }
 
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(NetAddress);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(TimeStampMS);

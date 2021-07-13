@@ -178,31 +178,6 @@ namespace SF {
 	}
 
 
-	void TestEngineTypes()
-	{
-		DynamicArray<FriendInformation> testFriendList(GetSystemHeap());
-		FriendInformation test;
-		test.FBUID = 1;
-		testFriendList.push_back(test);
-		test.FBUID = 2;
-		testFriendList.push_back(test);
-
-		const Array< FriendInformation>& testFriendListC = testFriendList;
-		char testString[512];
-		StrUtil::Format(testString, "{0}", testFriendList);
-		StrUtil::Format(testString, "{0}", testFriendListC);
-
-
-		auto boxedFriendList = Boxing(testFriendList);
-		auto pFriendList = UnboxingReference<Array<FriendInformation>>(boxedFriendList);
-		for (auto& fr : *pFriendList)
-		{
-			StrUtil::Format(testString, "{0}", fr);
-		}
-
-
-	}
-
 }
 
 

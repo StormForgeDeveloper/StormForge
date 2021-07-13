@@ -32,13 +32,13 @@ TEST_F(VariableTest, Table)
 {
 	VariableTable table(GetHeap());
 
-	auto boxedInt = Boxing(10);
+	auto boxedInt = Boxing(GetHeap(), 10);
 	table.SetVariable("testInt", *boxedInt.GetVariable());
 
-	auto boxedFloat = Boxing(10.f);
+	auto boxedFloat = Boxing(GetHeap(), 10.f);
 	table.SetVariable("testFloat", *boxedFloat.GetVariable());
 
-	auto boxedDouble = Boxing(10.);
+	auto boxedDouble = Boxing(GetHeap(), 10.);
 	table.SetVariable("testDouble", *boxedDouble.GetVariable());
 
 	auto testInt = table.GetValue<int>("testInt");
@@ -55,15 +55,15 @@ TEST_F(VariableTest, Table2)
 {
 	VariableTable table(GetHeap());
 
-	auto boxedInt = Boxing(10);
+	auto boxedInt = Boxing(GetHeap(), 10);
 	table.SetVariable("testInt", *boxedInt.GetVariable());
 	table.SetVariable("testInt", *boxedInt.GetVariable());
 
-	auto boxedFloat = Boxing(10.f);
+	auto boxedFloat = Boxing(GetHeap(), 10.f);
 	table.SetVariable("testFloat", *boxedFloat.GetVariable());
 	table.SetVariable("testFloat", *boxedFloat.GetVariable());
 
-	auto boxedDouble = Boxing(10.);
+	auto boxedDouble = Boxing(GetHeap(), 10.);
 	table.SetVariable("testDouble", *boxedDouble.GetVariable());
 	table.SetVariable("testDouble", *boxedDouble.GetVariable());
 
