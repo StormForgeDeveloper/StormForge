@@ -16,6 +16,7 @@
 #include "SFAssert.h"
 #include "MemoryManager/SFMemory.h"
 #include "MemoryManager/SFIMemoryManager.h"
+#include "MemoryManager/SFHeapMemory.h"
 #include "ResultCode/SFResultCodeSystem.h"
 
 
@@ -35,8 +36,12 @@ namespace SF {
 		public:
 
 			using DataTypeDecay = std::decay_t<DataType>;
+
+			static constexpr bool IsConstType = std::is_const_v<DataType>;
 			static constexpr bool IsTirviallyConstructable = std::is_trivially_constructible_v<DataTypeDecay>;
 			static constexpr bool IsConstructable = std::is_constructible_v<DataTypeDecay>;
+			static constexpr bool IsCopyConstructable = std::is_copy_constructible_v<DataTypeDecay>;
+			static constexpr bool IsDestructable = std::is_destructible_v<DataTypeDecay>;
 
 #if !defined(SWIG)
 			class iterator
@@ -216,6 +221,8 @@ namespace SF {
 
 		protected:
 
+			SF_FORCEINLINE void SetSizeInternal(size_t newSize) { m_Size = newSize; }
+
 			// Update Data pointer
 			void SetBuffPtr(size_t AllocatedSize, DataType *pDataPtr);
 			constexpr void SetBuffPtrConstexpr(size_t AllocatedSize, DataType *pDataPtr);
@@ -247,27 +254,37 @@ namespace SF {
 			Result resize(size_t szNewSize);
 
 			// Clear array, buffer size not reallocated, buffer data didn't erased, clear manually if need
-			inline void Clear();
-			void Reset() { Clear(); };
+			SF_FORCEINLINE void Clear();
+			SF_FORCEINLINE void Reset() { Clear(); };
+			virtual void Empty() { Reset(); }
 
 			// PreserveDataOnResize
-			inline bool GetPreserveDataOnResize() const;
-			inline void SetPreserveDataOnResize(bool conserveDataOnResize);
+			SF_FORCEINLINE bool GetPreserveDataOnResize() const { return m_PreserveDataOnResize; }
+			SF_FORCEINLINE void SetPreserveDataOnResize(bool conserveDataOnResize) { m_PreserveDataOnResize = conserveDataOnResize; }
 
 			// Get Current allocated Size
-			size_t GetAllocatedSize() const;
-			size_t capacity() const { return GetAllocatedSize(); }
+			SF_FORCEINLINE size_t GetAllocatedSize() const { return m_AllocatedSize; }
+			SF_FORCEINLINE size_t capacity() const { return GetAllocatedSize(); }
 
 			// Get Array Increase Size
-			size_t GetIncreaseSize() const;
-			void SetIncreaseSize(size_t szNewIncSize);
+			SF_FORCEINLINE size_t GetIncreaseSize() const { return m_IncreaseSize; }
+			SF_FORCEINLINE void SetIncreaseSize(size_t szNewIncSize)
+			{
+				Assert(szNewIncSize > 0);
+
+				// At least increase one
+				if (szNewIncSize == 0)
+					szNewIncSize = 1;
+
+				m_IncreaseSize = szNewIncSize;
+			}
 
 			// set Reserve size
 			virtual Result reserve(size_t szReserv) { return ResultCode::SUCCESS; }
 
 			// Get data pointer
-			inline DataType* data() const;
-			inline DataType* data();
+			SF_FORCEINLINE DataType* data() const { return m_pDataPtr; }
+			SF_FORCEINLINE DataType* data() { return m_pDataPtr; }
 
 			// Insert an item
 			Result insert(int index, const DataType& NewData);
@@ -343,35 +360,6 @@ namespace SF {
 
 
 
-		////////////////////////////////////////////////////////////////////////////////////////////
-		//
-		//	Static Array Variable class
-		//
-
-		template< class DataType, size_t DefaultBufferSize >
-		class StaticArray : public Array<DataType>
-		{
-		public:
-			typedef Array<DataType> super;
-
-		private:
-			// static storage for remove heap alloc
-			DataType	m_pDefaultBuffer[DefaultBufferSize];
-
-			// Data pointer
-			DataType*	m_pAllocatedBuffer;
-
-		public:
-			StaticArray(IHeap& heap = GetSystemHeap());
-			virtual ~StaticArray();
-
-			// set Reserve size
-			virtual Result reserve(size_t szReserv);
-
-			// copy operator
-			StaticArray<DataType, DefaultBufferSize>& operator = (const Array<DataType>& src) { Array<DataType>::operator = (src); return *this; }
-		};
-
 
 		////////////////////////////////////////////////////////////////////////////////////////////
 		//
@@ -383,23 +371,55 @@ namespace SF {
 		{
 		public:
 			typedef Array<DataType> super;
+			using DataTypeDecay = typename super::DataTypeDecay;
 
-		private:
+		protected:
 			// Data pointer
 			DataType*	m_pAllocatedBuffer;
+
+			void EmptyInternal();
 
 		public:
 			DynamicArray(IHeap& heap = GetSystemHeap(), size_t increaseSize = 10);
 			virtual ~DynamicArray();
 
+			virtual void Empty() override;
+
 			// set Reserve size
-			virtual Result reserve(size_t szReserv);
+			virtual Result reserve(size_t szReserv) override;
 
 			// copy operator
 			DynamicArray<DataType>& operator = (const Array<std::decay_t<DataType>>& src) { Array<DataType>::operator = (src); return *this; }
 			DynamicArray<DataType>& operator = (const Array<const std::decay_t<DataType>>& src) { Array<DataType>::operator = (src); return *this; }
 		};
 
+
+		////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		//	Static Array Variable class
+		//
+
+		template< class DataType, size_t DefaultBufferSize >
+		class StaticArray : public DynamicArray<DataType>
+		{
+		public:
+			typedef DynamicArray<DataType> super;
+
+		private:
+			// item buffer space + extra for header information
+			StaticMemoryAllocatorT<DefaultBufferSize * sizeof(DataType) + 256> m_StaticHeap;
+
+			DataType* m_pAllocatedBuffer;
+
+		public:
+			StaticArray(IHeap& heap = GetSystemHeap());
+			virtual ~StaticArray();
+
+			//virtual Result reserve(size_t szReserv);
+
+			// copy operator
+			StaticArray<DataType, DefaultBufferSize>& operator = (const Array<DataType>& src) { Array<DataType>::operator = (src); return *this; }
+		};
 
 
 		////////////////////////////////////////////////////////////////////////////////////////////

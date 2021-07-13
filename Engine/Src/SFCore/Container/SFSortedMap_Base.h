@@ -15,6 +15,7 @@
 #include "Object/SFObjectPool.h"
 #include "Multithread/SFSynchronization.h"
 #include "Container/SFArray.h"
+#include "Math/SFMathUtil.h"
 
 
 namespace SF {
@@ -43,7 +44,8 @@ namespace SF {
 			: m_Root(&root)
 			, m_TraversalHistory(heap)
 		{
-			Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
+			m_TraversalHistory.reserve(Math::CeilLogTwo(totalItemCount + 1));
+			//Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
 			//m_TraversalHistory.Reserve();
 			m_TraversalHistory.SetIncreaseSize(GrowthBy);
 		}
@@ -52,51 +54,41 @@ namespace SF {
 			: m_Root(const_cast<ReferenceAccessPoint*>(&root))
 			, m_TraversalHistory(heap)
 		{
-			Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
+			m_TraversalHistory.reserve(Math::CeilLogTwo(totalItemCount + 1));
+			//Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
 			//m_TraversalHistory.Reserve();
 			m_TraversalHistory.SetIncreaseSize(GrowthBy);
 		}
 
-
-		//SortedMapTraversalHistoryT(IHeap& heap, MapNode* root, size_t totalItemCount)
-		//	: m_RootDummy(root)
-		//	, m_Root(&m_RootDummy)
-		//	, m_TraversalHistory(heap)
-		//{
-		//	Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
-		//	//m_TraversalHistory.Reserve();
-		//	m_TraversalHistory.SetIncreaseSize(GrowthBy);
-		//}
-
-		size_t GetHistorySize() const { return m_TraversalHistory.size(); }
+		SF_FORCEINLINE size_t GetHistorySize() const { return m_TraversalHistory.size(); }
 
 		void Clear()
 		{
 			m_TraversalHistory.Clear();
 		}
 
-		void SetPreserveDataOnResize(bool conserveDataOnResize)
+		SF_FORCEINLINE void SetPreserveDataOnResize(bool conserveDataOnResize)
 		{
 			m_TraversalHistory.SetPreserveDataOnResize(conserveDataOnResize);
 		}
 
-		void AddHistory(const MapNode* pNode)
+		SF_FORCEINLINE void AddHistory(const MapNode* pNode)
 		{
 			m_TraversalHistory.push_back(pNode);
 		}
 
-		void RemoveLastHistory()
+		SF_FORCEINLINE void RemoveLastHistory()
 		{
 			Assert(m_TraversalHistory.size() > 0);
 			m_TraversalHistory.resize(m_TraversalHistory.size() - 1);
 		}
 
-		void TruncateHistoryFrom(int iIndex) { m_TraversalHistory.resize(iIndex); }
+		SF_FORCEINLINE void TruncateHistoryFrom(int iIndex) { m_TraversalHistory.resize(iIndex); }
 
-		const MapNode* GetHistory(int iIndex) const { return m_TraversalHistory[iIndex]; }
+		SF_FORCEINLINE const MapNode* GetHistory(int iIndex) const { return m_TraversalHistory[iIndex]; }
 		//MapNode* GetHistory(int iIndex) { return m_TraversalHistory[iIndex]; }
 
-		const MapNode* GetLastHistory() const { if (m_TraversalHistory.size() == 0) return nullptr; return m_TraversalHistory[m_TraversalHistory.size() - 1]; }
+		SF_FORCEINLINE const MapNode* GetLastHistory() const { if (m_TraversalHistory.size() == 0) return nullptr; return m_TraversalHistory[m_TraversalHistory.size() - 1]; }
 		//MapNode* GetLastHistory() { if (m_TraversalHistory.size() == 0) return nullptr; return m_TraversalHistory[m_TraversalHistory.size() - 1]; }
 
 		// set Reserve size

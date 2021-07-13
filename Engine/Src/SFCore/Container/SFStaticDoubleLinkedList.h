@@ -14,7 +14,7 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 #include "MemoryManager/SFMemoryPool.h"
-#include "Container/SFContainerTrait.h"
+//#include "Container/SFContainerTraitBase.h"
 #include "ResultCode/SFResultCodeSystem.h"
 
 

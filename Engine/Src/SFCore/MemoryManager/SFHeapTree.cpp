@@ -191,7 +191,7 @@ namespace SF
 
 		auto key = pNode->Key();
 		MapNode* pFound = nullptr;
-		if (!(FindNode(travelHistory, key, pFound)))
+		if (!FindNode(travelHistory, key, pFound))
 			return ResultCode::FAIL;
 
 		// key
@@ -263,14 +263,17 @@ namespace SF
 					// We don't need to find replacement
 				}
 
-				ReferenceAccessPoint* pParentAccessOfReplaced = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pFound);
-				*pParentAccessOfReplaced = replacedChild;
+				if (travelHistory.GetHistorySize() > 0)
+				{
+					ReferenceAccessPoint* pParentAccessOfReplaced = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pFound);
+					*pParentAccessOfReplaced = replacedChild;
 
-				// Tree structure has been updated
-				// remove from the traversal history, replacement node will not be need to be took care
-				travelHistory.RemoveLastHistory();
+					// Tree structure has been updated
+					// remove from the traversal history, replacement node will not be need to be took care
+					travelHistory.RemoveLastHistory();
 
-				FixupBalance(travelHistory);
+					FixupBalance(travelHistory);
+				}
 			}
 			else
 			{

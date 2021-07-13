@@ -76,9 +76,9 @@ namespace SF
 			HeapTree::MapNode* GetPrevChunk(HeapTree::MapNode* pMemChunk);
 
 			// Merge two chunks, and returns new chunk
-			HeapTree::MapNode* MergeChunks(HeapTree::MapNode* pMemChunk, HeapTree::MapNode* pNextChunk);
+			bool MergeChunks(HeapTree::MapNode* pMemChunk, HeapTree::MapNode* pNextChunk);
+			bool SplitChunk(IHeap* ThisHeap, HeapTree::MapNode* pMemChunk, size_t newSize, HeapTree::MapNode* &pOutNewChunk);
 		};
-
 
 		static constexpr size_t MapNodeHeaderSize = AlignUp(sizeof(HeapTree::MapNode), MemBlockHdr::MaxHeaderAlignment);
 		static constexpr size_t MemBlockHeaderSize = AlignUp(sizeof(MemoryBlock), MemBlockHdr::MaxHeaderAlignment);

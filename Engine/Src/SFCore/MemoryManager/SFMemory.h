@@ -125,7 +125,7 @@ namespace SF {
 
 		static size_t CalculateAllocationSize(size_t requestedSize, size_t alignment = SF_ALIGN_DOUBLE) { return GetDefaultHeaderSize() + AlignUp(requestedSize, alignment) + GetFooterSize(); }
 
-		SF_FORCEINLINE void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + GetDefaultHeaderSize(); }
+		SF_FORCEINLINE void* GetDataPtr() { return (void*)(AlignUp(uintptr_t(this) + GetDefaultHeaderSize(), MaxHeaderAlignment)); }
 		SF_FORCEINLINE MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(GetDataPtr()) + AlignUp(Size, MaxHeaderAlignment)); }
 	};
 #pragma pack(pop)

@@ -420,10 +420,10 @@ namespace Net {
 			if( lCount > 0 )
 				return;
 
-			std::for_each(m_pWorkers.begin(), m_pWorkers.end(), [](IOCPWorker* pThread)
+			for (auto itThread : m_pWorkers)
 			{
-				pThread->SetKillEvent();
-			});
+				itThread->SetKillEvent();
+			}
 
 			// Stimulate threads
 			if(GetNativeIOSystemHandle() != INVALID_NATIVE_HANDLE_VALUE )
@@ -439,12 +439,11 @@ namespace Net {
 			// kill threads
 			if( m_pWorkers.size() )
 			{
-				std::for_each( m_pWorkers.begin(), m_pWorkers.end(), [&]( IOCPWorker* pThread )
+				for (auto itThread : m_pWorkers)
 				{
-					pThread->Stop( true );
-					IHeap::Delete(pThread);
-				});
-
+					itThread->Stop( true );
+					IHeap::Delete(itThread);
+				}
 
 				m_pWorkers.clear();
 				m_pWorkers.shrink_to_fit();

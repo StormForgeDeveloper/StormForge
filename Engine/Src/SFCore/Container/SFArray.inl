@@ -88,67 +88,16 @@ namespace SF {
 		{
 			if (m_pDataPtr != nullptr)
 			{
-				for (int iItem = 0; iItem < (int)m_Size; iItem++)
+				if constexpr (IsConstructable && !IsConstType)
 				{
-					m_pDataPtr[iItem] = {};
+					for (int iItem = 0; iItem < (int)m_Size; iItem++)
+					{
+						m_pDataPtr[iItem] = DataType{};
+					}
 				}
 			}
 			m_Size = 0;
 		}
-
-		// ConserveDataOnResize
-		template< class DataType >
-		bool Array<DataType>::GetPreserveDataOnResize() const
-		{
-			return m_PreserveDataOnResize;
-		}
-
-		template< class DataType >
-		void Array<DataType>::SetPreserveDataOnResize(bool conserveDataOnResize)
-		{
-			m_PreserveDataOnResize = conserveDataOnResize;
-		}
-
-
-		// Get Current allocated Size
-		template< class DataType >
-		size_t Array<DataType>::GetAllocatedSize() const
-		{
-			return m_AllocatedSize;
-		}
-
-		// Get Array Increase Size
-		template< class DataType >
-		size_t Array<DataType>::GetIncreaseSize() const
-		{
-			return m_IncreaseSize;
-		}
-
-		template< class DataType >
-		void Array<DataType>::SetIncreaseSize(size_t szNewIncSize)
-		{
-			Assert(szNewIncSize > 0);
-
-			// At least increase one
-			if (szNewIncSize == 0)
-				szNewIncSize = 1;
-
-			m_IncreaseSize = szNewIncSize;
-		}
-
-		// Get data pointer
-		template< class DataType >
-		DataType* Array<DataType>::data() const
-		{
-			return m_pDataPtr;
-		}
-
-		template< class DataType >
-		DataType* Array<DataType>::data()
-		{
-			return m_pDataPtr;
-		}
-
 
 		template< class DataType >
 		inline Result Array<DataType>::insert(int index, const DataType& NewData)
@@ -377,50 +326,20 @@ namespace SF {
 
 		template< class DataType, size_t DefaultBufferSize >
 		StaticArray<DataType, DefaultBufferSize>::StaticArray(IHeap& heap)
-			: Array<DataType>(heap)
-			, m_pAllocatedBuffer(nullptr)
+			: DynamicArray<DataType>(m_StaticHeap)
+			, m_StaticHeap(heap.GetNameCrc(), heap)
 		{
-			Array<DataType>::SetBuffPtr(DefaultBufferSize, m_pDefaultBuffer);
+			super::reserve(DefaultBufferSize);
 		}
 
 
 		template< class DataType, size_t DefaultBufferSize >
 		StaticArray<DataType, DefaultBufferSize>::~StaticArray()
 		{
-			if (m_pAllocatedBuffer)
-				IHeap::Delete(m_pAllocatedBuffer);
+			// We need to release the buffer a head of parent destructor
+			super::EmptyInternal();
 		}
 
-		// reallocate
-		template< class DataType, size_t DefaultBufferSize >
-		Result StaticArray<DataType, DefaultBufferSize>::reserve(size_t szNewSize)
-		{
-			DataType *pNewBuffer = nullptr;
-			DataType *pOldBuffer = nullptr;
-
-			if (szNewSize <= Array<DataType>::GetAllocatedSize())
-				return ResultCode::SUCCESS_FALSE;
-
-			pNewBuffer = new(super::GetHeap()) DataType[szNewSize];
-			if (pNewBuffer == nullptr)
-				return ResultCode::OUT_OF_MEMORY;
-
-			if (super::GetPreserveDataOnResize() && super::data() != pNewBuffer)
-			{
-				for (size_t iData = 0; iData < super::size(); iData++)
-					pNewBuffer[iData] = std::forward<DataType>(super::data()[iData]);
-			}
-			super::SetBuffPtr(szNewSize, pNewBuffer);
-
-			pOldBuffer = m_pAllocatedBuffer;
-			m_pAllocatedBuffer = pNewBuffer;
-			if (pOldBuffer)
-			{
-				IHeap::Delete(pOldBuffer);
-			}
-
-			return ResultCode::SUCCESS;
-		}
 
 
 
@@ -444,16 +363,36 @@ namespace SF {
 		template< class DataType >
 		DynamicArray<DataType>::~DynamicArray()
 		{
-			if constexpr (super::IsConstructable)
+			EmptyInternal();
+		}
+
+		template< class DataType >
+		void DynamicArray<DataType>::EmptyInternal()
+		{
+			if (m_pAllocatedBuffer)
 			{
-				if (m_pAllocatedBuffer)
-					IHeap::Delete(m_pAllocatedBuffer);
+				super::SetSizeInternal(0);
+
+				if constexpr (super::IsDestructable)
+				{
+					for (uint iItem = 0; iItem < super::GetAllocatedSize(); iItem++)
+					{
+						(m_pAllocatedBuffer + iItem)->~DataTypeDecay();
+					}
+				}
+
+				super::GetHeap().Free(m_pAllocatedBuffer);
+
+				super::SetBuffPtr(0, nullptr);
+
+				m_pAllocatedBuffer = nullptr;
 			}
-			else
-			{
-				if (m_pAllocatedBuffer)
-					super::GetHeap().Free(m_pAllocatedBuffer);
-			}
+		}
+
+		template< class DataType >
+		void DynamicArray<DataType>::Empty()
+		{
+			EmptyInternal();
 		}
 
 		// reallocate
@@ -466,47 +405,67 @@ namespace SF {
 			if (szNewSize <= Array<DataType>::GetAllocatedSize())
 				return ResultCode::SUCCESS_FALSE;
 
-			if constexpr (super::IsConstructable)
+			auto OldSize = super::GetAllocatedSize();
+			pOldBuffer = super::data();
+
+			if (m_pAllocatedBuffer)
 			{
-				pNewBuffer = new(super::GetHeap()) DataType[szNewSize];
+				pNewBuffer = (DataType*)super::GetHeap().Realloc(m_pAllocatedBuffer, szNewSize * sizeof(DataType));
+				if (pNewBuffer && pNewBuffer != m_pAllocatedBuffer)
+					pOldBuffer = nullptr; // this case, the old buffer already has released
+			}
+
+			uint iItem = (uint)OldSize;
+
+			if (pNewBuffer == nullptr)
+			{
+				pNewBuffer = (DataType*)super::GetHeap().Alloc(szNewSize * sizeof(DataType));
 				if (pNewBuffer == nullptr)
 					return ResultCode::OUT_OF_MEMORY;
 
-				if (super::GetPreserveDataOnResize() && super::data() != pNewBuffer)
+				iItem = 0;
+				if constexpr (super::IsConstructable)
 				{
-					for (size_t iData = 0; iData < super::size(); iData++)
-						pNewBuffer[iData] = std::forward<DataType>(super::data()[iData]);
+					if constexpr (super::IsCopyConstructable)
+					{
+						for (; iItem < super::size(); iItem++)
+						{
+							new((void*)(pNewBuffer + iItem)) typename super::DataTypeDecay(std::forward<typename super::DataTypeDecay>(pOldBuffer[iItem]));
+						}
+					}
+					else
+					{
+						for (; iItem < super::size(); iItem++)
+						{
+							new((void*)(pNewBuffer + iItem)) typename super::DataTypeDecay();
+							pNewBuffer[iItem] = std::forward<typename super::DataTypeDecay>(pOldBuffer[iItem]);
+						}
+					}
 				}
-			}
-			else
-			{
-				if (m_pAllocatedBuffer)
-				{
-					pNewBuffer = (DataType*)super::GetHeap().Realloc(m_pAllocatedBuffer, szNewSize * sizeof(DataType));
-				}
-				else
-				{
-					pNewBuffer = (DataType*)super::GetHeap().Alloc(szNewSize * sizeof(DataType));
-					if (pNewBuffer == nullptr)
-						return ResultCode::OUT_OF_MEMORY;
-				}
-				m_pAllocatedBuffer = pNewBuffer;
 			}
 
+			for (; iItem < szNewSize; iItem++)
+			{
+				new((void*)(pNewBuffer + iItem)) typename super::DataTypeDecay();
+			}
+
+			m_pAllocatedBuffer = pNewBuffer;
 
 			CheckCtrMemory();
 
-
 			super::SetBuffPtr(szNewSize, pNewBuffer);
 
-			if constexpr (super::IsConstructable)
+			if (pOldBuffer && pOldBuffer != pNewBuffer)
 			{
-				pOldBuffer = m_pAllocatedBuffer;
-				m_pAllocatedBuffer = pNewBuffer;
-				if (pOldBuffer)
+				if constexpr (super::IsDestructable)
 				{
-					IHeap::Delete(pOldBuffer);
+					for (iItem = 0; iItem < OldSize; iItem++)
+					{
+						(pOldBuffer + iItem)->~DataTypeDecay();
+					}
 				}
+
+				super::GetHeap().Free(pOldBuffer);
 			}
 
 			return ResultCode::SUCCESS;

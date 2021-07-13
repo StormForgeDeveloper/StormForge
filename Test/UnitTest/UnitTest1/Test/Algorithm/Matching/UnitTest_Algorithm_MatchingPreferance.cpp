@@ -50,6 +50,8 @@ TEST_F(AlgorithmTest, MatchingPreference)
 
 
 	auto players = new(GetHeap()) PreferencePlayer[NUM_PLAYER + NUM_PLAYER_VARIATION];
+	IHeap::Delete(players);
+	players = new(GetHeap()) PreferencePlayer[NUM_PLAYER + NUM_PLAYER_VARIATION];
 
 	SFLog(Game, Info, "Initializing matching system");
 	Result initResult = matchManager.Initialize(NUM_SHELL);

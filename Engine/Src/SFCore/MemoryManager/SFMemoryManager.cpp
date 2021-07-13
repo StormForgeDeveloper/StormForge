@@ -193,7 +193,7 @@ namespace SF {
 			alignment = sizeof(int);
 
 		MemBlockHdr* pMemBlock = nullptr;
-		MemBlockHdr* oldPtr = ptr;
+		//MemBlockHdr* oldPtr = ptr;
 
 		auto allocSize = MemBlockHdr::CalculateAllocationSize(newSize, alignment);
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
@@ -204,18 +204,21 @@ namespace SF {
 #endif
 		if (newPtr == nullptr)
 		{
-			auto newPtr2 = SystemAllignedAlloc(allocSize, alignment);
-			if (newPtr2 == nullptr)
-				return nullptr;
+			// We don't know whether the object need to be able to moved in memory. Let the caller handle new&copy
+			return nullptr;
 
-			oldPtr->GetFooter()->Deinit();
-			oldPtr->Deinit();
+			//auto newPtr2 = SystemAllignedAlloc(allocSize, alignment);
+			//if (newPtr2 == nullptr)
+			//	return nullptr;
 
-			if (oldPtr != nullptr)
-				memcpy(newPtr2, oldPtr, Math::Min(allocSize, MemBlockHdr::CalculateAllocationSize(orgSize, alignment)));
+			//oldPtr->GetFooter()->Deinit();
+			//oldPtr->Deinit();
 
-			SystemAlignedFree(oldPtr);
-			newPtr = newPtr2;
+			//if (oldPtr != nullptr)
+			//	memcpy(newPtr2, oldPtr, Math::Min(allocSize, MemBlockHdr::CalculateAllocationSize(orgSize, alignment)));
+
+			//SystemAlignedFree(oldPtr);
+			//newPtr = newPtr2;
 		}
 
 		pMemBlock = reinterpret_cast<MemBlockHdr*>(newPtr);

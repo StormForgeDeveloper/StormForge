@@ -11,9 +11,8 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Container/SFArray.h"
 #include "MemoryManager/SFMemory.h"
-//#include "Container/SFSortedMap_Base.h"
+
 
 namespace SF {
 
@@ -95,56 +94,52 @@ namespace SF {
 			private:
 
 				ReferenceAccessPoint &m_Root;
-				StaticArray<MapNode*, GrowthBy * 2> m_TraversalHistory;
+				size_t m_HistorySize = 0;
+				MapNode* m_TraversalHistory[128]{}; // Something bigger enough to hold
 
 			public:
 
-				OperationTraversalHistory(IHeap& memoryManager, ReferenceAccessPoint& root, size_t totalItemCount)
+				OperationTraversalHistory(IHeap& heap, ReferenceAccessPoint& root, size_t totalItemCount)
 					: m_Root(root)
-					, m_TraversalHistory(memoryManager)
 				{
-					Assert((size_t)ceil(log2(totalItemCount + 1)) <= m_TraversalHistory.GetAllocatedSize());
-					m_TraversalHistory.SetIncreaseSize(GrowthBy);
+					Assert((size_t)ceil(log2(totalItemCount + 1)) <= countof(m_TraversalHistory));
 				}
 
-				size_t GetHistorySize() { return m_TraversalHistory.size(); }
+				SF_FORCEINLINE size_t GetHistorySize() { return m_HistorySize; }
 
 				void Clear()
 				{
-					m_TraversalHistory.Clear();
+					m_HistorySize = 0;
 				}
 
 				void SetPreserveDataOnResize(bool conserveDataOnResize)
 				{
-					m_TraversalHistory.SetPreserveDataOnResize(conserveDataOnResize);
+					
 				}
 
-				void AddHistory(MapNode* pNode)
+				SF_FORCEINLINE void AddHistory(MapNode* pNode)
 				{
-					m_TraversalHistory.push_back(pNode);
+					assert((m_HistorySize + 1) < countof(m_TraversalHistory));
+					m_TraversalHistory[m_HistorySize++] = pNode;
 				}
 
-				void RemoveLastHistory()
+				SF_FORCEINLINE void RemoveLastHistory()
 				{
-					Assert(m_TraversalHistory.size() > 0);
-					m_TraversalHistory.resize(m_TraversalHistory.size() - 1);
+					if (m_HistorySize > 0)
+						m_HistorySize--;
 				}
 
-				void TruncateHistoryFrom(int iIndex) { m_TraversalHistory.resize(iIndex); }
+				SF_FORCEINLINE void TruncateHistoryFrom(int iIndex) { assert(iIndex >= 0); m_HistorySize = (size_t)iIndex; }
 
-				MapNode* GetHistory(int iIndex) { return m_TraversalHistory[iIndex]; }
+				SF_FORCEINLINE MapNode* GetHistory(int iIndex) { assert(iIndex >= 0 && iIndex < m_HistorySize); return m_TraversalHistory[iIndex]; }
 
-				MapNode* GetLastHistory() { if (m_TraversalHistory.size() == 0) return nullptr; return m_TraversalHistory[m_TraversalHistory.size() - 1]; }
+				SF_FORCEINLINE MapNode* GetLastHistory() { if (m_HistorySize == 0) return nullptr; return m_TraversalHistory[m_HistorySize - 1]; }
 
 				// set Reserve size
 				Result Reserve(size_t szReserv)
 				{
-					if (szReserv <= m_TraversalHistory.GetAllocatedSize())
-						return ResultCode::SUCCESS;
-
-					szReserv = GrowthBy * ((szReserv + GrowthBy - 1) / GrowthBy);
-
-					return m_TraversalHistory.reserve(szReserv);
+					assert(szReserv > countof(m_TraversalHistory));
+					return ResultCode::SUCCESS;
 				}
 
 				ReferenceAccessPoint* GetParentAccessPoint(int nodeIndex, MapNode* pNode);
