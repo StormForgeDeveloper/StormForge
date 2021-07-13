@@ -201,10 +201,10 @@ namespace SF
 		if (pFound == pNode)
 		{
 			// This node need to be removed
-			//ReferenceAccessPoint *pParentPointer = nullptr;
 			MapNode* replacedChild = nullptr;
-			if (pFound->NextNode.pNext == nullptr)
+			if (pFound->NextNode.pNext == nullptr) // If it doesn't have node with same key
 			{
+				int iFoundIndex = (int)travelHistory.GetHistorySize() - 1;
 				// find replacement from children
 				auto left = pFound->Left;
 				auto right = pFound->Right;
@@ -235,39 +235,44 @@ namespace SF
 						}
 					}
 
+					MapNode* child = nullptr;
 					// select heavy tree child, and swap
 					if (rightHeavy) 
 					{
 						replacedChild = FindSmallestNode(travelHistory, right);
 						Assert(replacedChild->Left == nullptr);
 
-						// remove replacement from the tree
-						ReferenceAccessPoint* pParentAccessOfReplaced = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, replacedChild);
-						*pParentAccessOfReplaced = replacedChild->Right;
-						replacedChild->Right = nullptr;
+						child = replacedChild->Right;
 					}
 					else
 					{
 						replacedChild = FindBiggestNode(travelHistory, left);
 						Assert(replacedChild->Right == nullptr);
 
-						// remove replacement from the tree
-						ReferenceAccessPoint* pParentAccessOfReplaced = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, replacedChild);
-						*pParentAccessOfReplaced = replacedChild->Left;
-						replacedChild->Left = nullptr;
+						child = replacedChild->Left;
 					}
+
+					// swap node
+					//assert(iFoundIndex == travelHistory.FindIndex(pFound));
+					auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, replacedChild);
+					*pParentPointer = child;
+
+					travelHistory.Replace(0, iFoundIndex, true, pFound, replacedChild);
+
+					replacedChild = const_cast<MapNode*>(pFound);
 				}
 				else
 				{
+					replacedChild = const_cast<MapNode*>(pFound);
 					// if it doesn't have any child
 					// We don't need to find replacement
+
+					auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, replacedChild);
+					*pParentPointer = nullptr;
 				}
 
 				if (travelHistory.GetHistorySize() > 0)
 				{
-					ReferenceAccessPoint* pParentAccessOfReplaced = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pFound);
-					*pParentAccessOfReplaced = replacedChild;
-
 					// Tree structure has been updated
 					// remove from the traversal history, replacement node will not be need to be took care
 					travelHistory.RemoveLastHistory();

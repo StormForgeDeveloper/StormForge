@@ -75,6 +75,8 @@ namespace SF {
 
 				int UpdateBalanceFactor();
 
+				void ValidateUpdateSerial(uint32_t) {}
+
 				SF_FORCEINLINE void* GetDataPtr() { return reinterpret_cast<uint8_t*>(this) + MemChunkHeader.HeaderSize; }
 				SF_FORCEINLINE MemBlockFooter* GetFooter() { return (MemBlockFooter*)(reinterpret_cast<uint8_t*>(GetDataPtr()) + MemChunkHeader.Size); }
 			};
@@ -140,6 +142,37 @@ namespace SF {
 				{
 					assert(szReserv > countof(m_TraversalHistory));
 					return ResultCode::SUCCESS;
+				}
+
+				void Replace(uint updateSerial, int nodeIndex, bool isInPlaceSwap, const MapNode* pNode, MapNode* pNewNode)
+				{
+					Assert(GetHistory(nodeIndex) == pNode);
+					if (GetHistorySize() <= 1 || nodeIndex < 1) // only the found node is in there
+					{
+						m_Root = const_cast<MapNode*>(pNewNode);
+					}
+					else
+					{
+						auto parentNode = const_cast<MapNode*>(GetHistory(nodeIndex - 1));
+						parentNode->ValidateUpdateSerial(updateSerial);
+						if (parentNode->Left == pNode)
+						{
+							parentNode->Left = const_cast<MapNode*>(pNewNode);
+						}
+						else
+						{
+							assert(parentNode->Right == pNode);
+							parentNode->Right = const_cast<MapNode*>(pNewNode);
+						}
+					}
+
+					// if it is in-place swap, we need to copy over left and right
+					if (isInPlaceSwap)
+					{
+						m_TraversalHistory[nodeIndex] = pNewNode;
+						pNewNode->Left = pNode->Left;
+						pNewNode->Right = pNode->Right;
+					}
 				}
 
 				ReferenceAccessPoint* GetParentAccessPoint(int nodeIndex, MapNode* pNode);

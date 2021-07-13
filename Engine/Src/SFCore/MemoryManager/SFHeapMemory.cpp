@@ -51,10 +51,13 @@ namespace SF
 		size_t blockSize = pFreeChunk->MemChunkHeader.Size;
 		if (blockSize < chunkAllocationSize)
 		{
+			assert((blockSize % MemBlockHdr::MaxHeaderAlignment) == 0);
+			dataSectionSize = (uint)blockSize;
 			// it's too small to divide let's use them all
 		}
 		else
 		{
+			assert((dataSectionSize % MemBlockHdr::MaxHeaderAlignment) == 0);
 			// Split chunk
 			auto pNextChunkData = (uint8_t*)pFreeChunk + chunkAllocationSize;
 			auto pNextChunk = GetNextChunk(pFreeChunk);
@@ -173,6 +176,7 @@ namespace SF
 
 			bool bRet = MergeChunks(pPrevChunk, pMemChunk);
 			assert(bRet);
+			pMemChunk = pPrevChunk;
 		}
 
 		assert(pMemChunk->MemChunkHeader.Magic == MemBlockHdr::MEM_MAGIC_FREE);
@@ -296,6 +300,9 @@ namespace SF
 				MemBlockHdr* pFoundMemBlock = GetMemoryBlockHdr(pDataPtr);
 				assert(pFoundMemBlock && pFoundMemBlock == &pAllocated->MemChunkHeader);
 
+				assert(pAllocated->GetFooter()->Magic == MemBlockFooter::MEM_MAGIC);
+				assert(pAllocated->MemChunkHeader.GetFooter()->Magic == MemBlockFooter::MEM_MAGIC);
+
 				return &pAllocated->MemChunkHeader;
 			}
 		}
@@ -361,9 +368,6 @@ namespace SF
 	//	@takeOverOwnerShip: If true the memory block will re deleted by this class
 	void HeapMemory::AddMemoryBlock(size_t blockSize, void* pMemoryBlock, bool takeOverOwnerShip)
 	{
-		if (blockSize < MemBlockHdr::MaxHeaderAlignment)
-			return;
-
 		// drop bytes if the address isn't aligned
 		if ((uintptr_t(pMemoryBlock) % MemBlockHdr::MaxHeaderAlignment) != 0)
 		{
@@ -371,10 +375,17 @@ namespace SF
 			pMemoryBlock = (void*)AlignUp(uintptr_t(pMemoryBlock), MemBlockHdr::MaxHeaderAlignment);
 		}
 
+		blockSize &= ~(MemBlockHdr::MaxHeaderAlignment - 1); // chop down not aligned area
+
+		// test block size requirement
+		if (blockSize < MemBlockHdr::MaxHeaderAlignment)
+			return;
+
 		assert(blockSize > (sizeof(MemoryBlock) + MapNodeFooterSize + MapNodeHeaderSize)); // the memory size should be bigger than header informations
 		auto pMemBlock = new(pMemoryBlock) MemoryBlock;
 		pMemBlock->BlockSize = blockSize - MemBlockHeaderSize;
 		pMemBlock->IsOwner = takeOverOwnerShip;
+		assert((pMemBlock->BlockSize % MemBlockHdr::MaxHeaderAlignment) == 0);
 
 		auto pDataBlock = (uint8_t*)pMemoryBlock + MemBlockHeaderSize;
 

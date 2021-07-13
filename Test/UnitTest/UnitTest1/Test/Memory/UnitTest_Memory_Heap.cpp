@@ -140,3 +140,41 @@ TEST_F(MemoryTest, HeapMemory)
 		SF::SortedMap<uint32_t, SF::DynamicArray<TestItem*>*> ItemByItemID(categoryHeap);
 	}
 }
+
+TEST_F(MemoryTest, HeapMemoryRandom)
+{
+	struct TestItem
+	{
+		uint32_t ItemCategory : 8;
+		uint32_t ItemEquipType : 2;
+		uint32_t Count : 16;
+		uint32_t : 0;
+		uint32_t ItemId{};
+	};
+
+
+	SF::StaticMemoryAllocatorT<1024> localHeap("localHeap", GetHeap());
+	std::vector<void*> allocated;
+
+	for (int iTest = 0; iTest < 100; iTest++)
+	{
+		auto allocSize = SF::Util::Random.Rand(32, 128);
+		auto pAllocated = localHeap.Alloc(allocSize);
+		memset(pAllocated, allocSize, allocSize);
+		allocated.push_back(pAllocated);
+		if (SF::Util::Random.Rand(0, 100) > 60)
+		{
+			auto index = SF::Util::Random.Rand(0, allocated.size() - 1);
+			localHeap.Free(allocated[index]);
+			allocated.erase(allocated.begin() + index);
+		}
+	}
+
+	while(allocated.size() > 0)
+	{
+		auto index = SF::Util::Random.Rand(0, allocated.size() - 1);
+		localHeap.Free(allocated[index]);
+		allocated.erase(allocated.begin() + index);
+	}
+	
+}
