@@ -208,7 +208,12 @@ namespace SF
 	void ActorMovementReplayManager::Simulate(const ActorMovement& a, const ActorMovement& b, float deltaTime, ActorMovement& result)
 	{
 		float t = deltaTime / (ActorMovement::DeltaSecondsPerFrame * (b.MoveFrame - a.MoveFrame));
-		assert(t > 0);
+		assert(t >= 0);
+		if (t < 0)
+		{
+			result = a;
+			return;
+		}
 		Vector4 interpolationDelta = (b.Position - a.Position) * t;
 		Vector4 simulationDelta = a.LinearVelocity * deltaTime;
 		Vector4 delta = simulationDelta + (interpolationDelta - simulationDelta) * t;

@@ -35,7 +35,6 @@ namespace SF {
 
 		virtual Variable* CreateVariable(StringCrc32 TypeName);
 		virtual Variable* CreateVariable(IHeap& heap, StringCrc32 TypeName);
-		virtual Variable* CreateVariable(Array<uint8_t>& bufer, StringCrc32 TypeName);
 	};
 
 } // namespace SF
