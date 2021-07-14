@@ -164,7 +164,7 @@ TEST_F(MemoryTest, HeapMemoryRandom)
 		allocated.push_back(pAllocated);
 		if (SF::Util::Random.Rand(0, 100) > 60)
 		{
-			auto index = SF::Util::Random.Rand(0, allocated.size() - 1);
+			auto index = SF::Util::Random.Rand(0, (int)allocated.size() - 1);
 			localHeap.Free(allocated[index]);
 			allocated.erase(allocated.begin() + index);
 		}
@@ -172,7 +172,7 @@ TEST_F(MemoryTest, HeapMemoryRandom)
 
 	while(allocated.size() > 0)
 	{
-		auto index = SF::Util::Random.Rand(0, allocated.size() - 1);
+		auto index = SF::Util::Random.Rand(0, (int)allocated.size() - 1);
 		localHeap.Free(allocated[index]);
 		allocated.erase(allocated.begin() + index);
 	}
