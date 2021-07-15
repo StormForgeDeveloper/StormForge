@@ -91,7 +91,7 @@ namespace Protocol {
 		}
 		else
 		{
-			SFLog(Net, Error, "PrintDebugMessage failed, can't find message handler for 0x{0:X8}", pMsg->GetMessageHeader()->msgID.GetMsgIDOnly());
+			SFLog(Net, Error, "PrintDebugMessage failed, can't find message handler prefix:{0} for 0x{1:X8}", preFix, pMsg->GetMessageHeader()->msgID.GetMsgIDOnly());
 		}
 	}
 	

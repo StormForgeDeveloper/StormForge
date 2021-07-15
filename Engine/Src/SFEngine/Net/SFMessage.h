@@ -66,12 +66,12 @@ namespace Message {
 	{
 		struct {
 			uint32_t Sequence : NET_SEQUENCE_BITS;
-			uint32_t MsgCode		: 9;
-			uint32_t Policy			: 7;
 			uint32_t Encrypted		: 1;
 			uint32_t Mobile			: 1;
 			uint32_t Reliability	: 1;
 			uint32_t Type			: 2;
+			uint32_t MsgCode		: 9;
+			uint32_t Policy			: 7;
 			uint32_t				: 0;
 		} IDs;
 		struct {
