@@ -23,6 +23,7 @@
 #include "Net/SFNetUtil.h"
 #include "Util/SFTimeUtil.h"
 #include "Component/SFLibraryComponentInitializer.h"
+#include "Net/SFNetToString.h"
 
 #include "Protocol/SFProtocol.h"
 
