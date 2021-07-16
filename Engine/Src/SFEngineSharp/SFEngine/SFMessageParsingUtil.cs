@@ -135,7 +135,7 @@ namespace SF
                 //stm_ParsingMessage.SetValue(stringHash, parsedValue);
                 //break;
                 default:
-                    System.Diagnostics.Debug.Assert(false);
+                    SF.Log.Error("MessageParseSetValue failed, type:{0}", stringHash);
                     break;
             }
         }
@@ -337,7 +337,7 @@ namespace SF
                     break;
 
                 default:
-                    System.Diagnostics.Debug.Assert(false);
+                    SF.Log.Error("MessageParseSetArray failed, type:{0}", stringHash);
                     break;
             }
 
