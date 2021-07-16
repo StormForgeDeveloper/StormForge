@@ -114,7 +114,7 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		Result DualSortedMap<KeyType, ValueType>::Insert(KeyType key, const ValueType& value, int64_t *insertedOrder)
 		{
-			OperationTraversalHistory travelHistory(GetHeap(), m_WriteRoot, m_ItemCount.load(std::memory_order_relaxed));
+			OperationTraversalHistory travelHistory(m_WriteRoot, m_ItemCount.load(std::memory_order_relaxed));
 
 			MapNode* pFound = nullptr;
 			if (!FindNode(travelHistory, key, pFound))
@@ -197,7 +197,7 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		Result DualSortedMap<KeyType, ValueType>::Remove(KeyType key, ValueType& value)
 		{
-			OperationTraversalHistory travelHistory(GetHeap(), m_WriteRoot, m_ItemCount.load(std::memory_order_relaxed));
+			OperationTraversalHistory travelHistory(m_WriteRoot, m_ItemCount.load(std::memory_order_relaxed));
 
 			MapNode* pRemoved = nullptr;
 			MapNode* pFound = nullptr;
@@ -303,7 +303,7 @@ namespace SF {
 				return Find(key, value);
 			}
 
-			OperationTraversalHistory travelHistory(GetHeap(), pReadRoot, m_ItemCount.load(std::memory_order_relaxed));
+			OperationTraversalHistory travelHistory(pReadRoot, m_ItemCount.load(std::memory_order_relaxed));
 
 			MapNode* pFound = nullptr;
 			if (!FindNode(travelHistory, key, pFound))
@@ -410,7 +410,7 @@ namespace SF {
 			Assert(m_UpdateSerial != pReadRoot->UpdateSerial);
 			Assert(m_WriteRoot.load() != pReadRoot);
 			 
-			OperationTraversalHistory travelHistory(GetHeap(), pReadRoot, m_ReadItemCount);
+			OperationTraversalHistory travelHistory(pReadRoot, m_ReadItemCount);
 
 			MapNode* pFound = nullptr;
 
@@ -453,7 +453,7 @@ namespace SF {
 			Assert(m_UpdateSerial != pReadRoot->UpdateSerial);
 			Assert(m_WriteRoot != pReadRoot);
 
-			OperationTraversalHistory travelHistory(GetHeap(), pReadRoot, m_ReadItemCount);
+			OperationTraversalHistory travelHistory(pReadRoot, m_ReadItemCount);
 
 			MapNode* pFound = nullptr;
 

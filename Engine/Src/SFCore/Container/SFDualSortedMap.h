@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -396,7 +396,7 @@ namespace SF {
 				if (pRootNode == nullptr)
 					return ResultCode::SUCCESS;
 
-				OperationTraversalHistory travelHistory(GetHeap(), pRootNode, m_ReadItemCount);
+				OperationTraversalHistory travelHistory(pRootNode, m_ReadItemCount);
 
 				const MapNode* pCurNode = pRootNode;
 				if (pCurNode == nullptr)
@@ -505,7 +505,7 @@ namespace SF {
 				if (pRootNode == nullptr)
 					return ResultCode::SUCCESS;
 
-				OperationTraversalHistory travelHistory(GetHeap(), pRootNode, m_ReadItemCount);
+				OperationTraversalHistory travelHistory(pRootNode, m_ReadItemCount);
 
 				const MapNode* pCurNode = pRootNode;
 				if (pCurNode == nullptr)

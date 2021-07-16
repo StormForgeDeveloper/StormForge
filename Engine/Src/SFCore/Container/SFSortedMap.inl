@@ -113,7 +113,7 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		Result SortedMap<KeyType, ValueType>::Insert(KeyType key, const ValueType& value, int64_t *insertedOrder)
 		{
-			OperationTraversalHistory traversalHistory(GetHeap(), m_Root, m_ItemCount);
+			OperationTraversalHistory traversalHistory(m_Root, m_ItemCount);
 
 			const MapNode* pFound = nullptr;
 			if (!FindNode(traversalHistory, key, pFound))
@@ -193,7 +193,7 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		Result SortedMap<KeyType, ValueType>::Remove(KeyType key, ValueType& value)
 		{
-			OperationTraversalHistory travelHistory(GetHeap(), m_Root, m_ItemCount);
+			OperationTraversalHistory travelHistory(m_Root, m_ItemCount);
 
 			MapNode* pRemoved = nullptr;
 			const MapNode* pFound = nullptr;
@@ -286,7 +286,7 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		Result SortedMap<KeyType, ValueType>::Find(KeyType key, ValueType& value, int64_t *pOrder) const
 		{
-			OperationTraversalHistory travelHistory(GetHeap(), m_Root, m_ItemCount);
+			OperationTraversalHistory travelHistory(m_Root, m_ItemCount);
 
 			const MapNode* pFound = nullptr;
 			if (!FindNode(travelHistory, key, pFound))

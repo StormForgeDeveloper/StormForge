@@ -32,19 +32,23 @@ namespace SF {
 
 	private:
 
-		ReferenceAccessPoint* m_Root;
+		ReferenceAccessPoint* m_Root{};
 		int m_HistorySize = 0;
 		const MapNode* m_TraversalHistory[128]{};
 
 	public:
 
-		SortedMapTraversalHistoryT(IHeap& heap, ReferenceAccessPoint& root, size_t totalItemCount)
+		SortedMapTraversalHistoryT()
+		{
+		}
+
+		SortedMapTraversalHistoryT(ReferenceAccessPoint& root, size_t totalItemCount)
 			: m_Root(&root)
 		{
 			assert(Math::CeilLogTwo(totalItemCount + 1) <= countof(m_TraversalHistory));
 		}
 
-		SortedMapTraversalHistoryT(IHeap& heap, const ReferenceAccessPoint& root, size_t totalItemCount)
+		SortedMapTraversalHistoryT(const ReferenceAccessPoint& root, size_t totalItemCount)
 			: m_Root(const_cast<ReferenceAccessPoint*>(&root))
 		{
 			assert(Math::CeilLogTwo(totalItemCount + 1) <= countof(m_TraversalHistory));

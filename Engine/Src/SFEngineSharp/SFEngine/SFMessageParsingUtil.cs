@@ -120,11 +120,20 @@ namespace SF
                 case "ActorMovement":
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(ActorMovement)));
                     break;
+                case "Vector2":
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector2)));
+                    break;
+                case "Vector3":
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector3)));
+                    break;
+                case "Vector4":
+                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector4)));
+                    break;
                 //case "VariableTable":
-                    //VariableTable parsedValue = new VariableTable();
-                    //parsedValue.FromSerializedMemory(arrayCount, Value);
-                    //stm_ParsingMessage.SetValue(stringHash, parsedValue);
-                    //break;
+                //VariableTable parsedValue = new VariableTable();
+                //parsedValue.FromSerializedMemory(arrayCount, Value);
+                //stm_ParsingMessage.SetValue(stringHash, parsedValue);
+                //break;
                 default:
                     System.Diagnostics.Debug.Assert(false);
                     break;
@@ -275,6 +284,27 @@ namespace SF
                 case "ActorMovement":
                     {
                         var newArray = new ActorMovement[arrayCount];
+                        MarshalCopy(Value, newArray, 0, arrayCount);
+                        stm_ParsingMessage.SetValue(stringHash, newArray);
+                    }
+                    break;
+                case "Vector2":
+                    {
+                        var newArray = new Vector2[arrayCount];
+                        MarshalCopy(Value, newArray, 0, arrayCount);
+                        stm_ParsingMessage.SetValue(stringHash, newArray);
+                    }
+                    break;
+                case "Vector3":
+                    {
+                        var newArray = new Vector3[arrayCount];
+                        MarshalCopy(Value, newArray, 0, arrayCount);
+                        stm_ParsingMessage.SetValue(stringHash, newArray);
+                    }
+                    break;
+                case "Vector4":
+                    {
+                        var newArray = new Vector4[arrayCount];
                         MarshalCopy(Value, newArray, 0, arrayCount);
                         stm_ParsingMessage.SetValue(stringHash, newArray);
                     }

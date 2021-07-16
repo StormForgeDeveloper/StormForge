@@ -199,11 +199,11 @@ namespace SF
 			return index + ((LowBits) ? 0 : 1);
 		}
 
-		SF_FORCEINLINE uint64_t Find1FromLSB(uint64_t Value)
+		SF_FORCEINLINE uint32_t Find1FromLSB(uint64_t Value)
 		{
 			if (Value == 0)
 			{
-				return uint64_t (-1);
+				return uint32_t(-1);
 			}
 #if _MSC_VER
 			unsigned long BitIndex;	// 0-based, where the LSB is 0 and MSB is 31

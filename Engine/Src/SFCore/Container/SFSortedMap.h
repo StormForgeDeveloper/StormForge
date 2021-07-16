@@ -138,9 +138,11 @@ namespace SF {
 
 				iterator()
 				{}
+
 				iterator(IHeap& heap, SortedMap* pContainer, const MapNode* pRootNode, int startOrderIndex)
 					: m_pContainer(pContainer)
 					, m_pCurNode(pRootNode)
+					, m_TravelHistory(const_cast<MapNode*>(pRootNode), pContainer->m_ItemCount)
 				{
 					m_TravelHistory.Clear();
 					m_TravelHistory.SetPreserveDataOnResize(true);
@@ -221,20 +223,20 @@ namespace SF {
 					return *this;
 				}
 
-				ValueType& operator *()
+				SF_FORCEINLINE ValueType& operator *()
 				{
 					assert(m_pCurNode != nullptr);
-					return m_pCurNode->Value;
+					return const_cast<MapNode*>(m_pCurNode)->Value;
 				}
 
-				ValueType* operator ->()
+				SF_FORCEINLINE ValueType* operator ->()
 				{
 					assert(m_pCurNode != nullptr);
 					return &m_pCurNode->Value;
 				}
 
-				bool operator == (const iterator& src) { return m_pCurNode == src->m_pCurNode; }
-				bool operator != (const iterator& src) { return m_pCurNode != src->m_pCurNode; }
+				SF_FORCEINLINE bool operator == (const iterator& src) const { return m_pCurNode == src.m_pCurNode; }
+				SF_FORCEINLINE bool operator != (const iterator& src) const { return m_pCurNode != src.m_pCurNode; }
 
 				iterator& operator = (const iterator& src)
 				{
@@ -266,7 +268,7 @@ namespace SF {
 				if (pCurNode == nullptr)
 					return ResultCode::SUCCESS;
 
-				OperationTraversalHistory travelHistory(GetHeap(), m_Root, m_ItemCount);
+				OperationTraversalHistory travelHistory(m_Root, m_ItemCount);
 				travelHistory.Clear();
 				travelHistory.SetPreserveDataOnResize(true);
 
@@ -359,7 +361,7 @@ namespace SF {
 				if (pCurNode == nullptr)
 					return ResultCode::SUCCESS;
 
-				OperationTraversalHistory travelHistory(GetHeap(), m_Root, m_ItemCount);
+				OperationTraversalHistory travelHistory(m_Root, m_ItemCount);
 				travelHistory.Clear();
 				travelHistory.SetPreserveDataOnResize(true);
 
