@@ -306,6 +306,29 @@ namespace SF {
 			return ResultCode::SUCCESS;
 		}
 
+		// Find a key value
+		template<class KeyType, class ValueType>
+		Result SortedMap<KeyType, ValueType>::FindRef(KeyType key, ValueType*& pValue, int64_t* pOrder)
+		{
+			OperationTraversalHistory travelHistory(m_Root, m_ItemCount);
+
+			const MapNode* pFound = nullptr;
+			if (!FindNode(travelHistory, key, pFound))
+				return ResultCode::FAIL;
+
+			// unique key
+			if (pFound->Key != key)
+				return ResultCode::FAIL;
+
+			pValue = const_cast<ValueType*>(&pFound->Value);
+			if (pOrder != nullptr)
+			{
+				*pOrder = CalculateOrder(travelHistory, pFound);
+			}
+
+			return ResultCode::SUCCESS;
+		}
+
 
 		// find parent node or candidate
 		template<class KeyType, class ValueType>

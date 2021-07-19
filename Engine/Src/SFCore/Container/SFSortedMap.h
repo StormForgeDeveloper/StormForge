@@ -127,6 +127,11 @@ namespace SF {
 
 			// Find a key value
 			Result Find(KeyType key, ValueType& value, int64_t *pOrder = nullptr) const;
+			Result FindRef(KeyType key, const ValueType*& pValue, int64_t* pOrder = nullptr) const
+			{
+				return const_cast<SortedMap*>(this)->FindRef(key, pValue, pOrder);
+			}
+			Result FindRef(KeyType key, ValueType*& pValue, int64_t* pOrder = nullptr);
 			Result FindInWriteTree(KeyType key, ValueType& value) const { return Find(key, value); }
 
 			// get number of values
@@ -148,7 +153,7 @@ namespace SF {
 					m_TravelHistory.SetPreserveDataOnResize(true);
 
 					// find start point
-					do
+					while(m_pCurNode)
 					{
 						m_TravelHistory.AddHistory(m_pCurNode);
 
@@ -172,7 +177,7 @@ namespace SF {
 							m_pCurNode = left;
 						}
 
-					} while (m_pCurNode != nullptr);
+					} // while (m_pCurNode != nullptr);
 
 				}
 

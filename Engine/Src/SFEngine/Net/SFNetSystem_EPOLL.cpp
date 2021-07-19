@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2015 Kyungkun Ko 
+// CopyRight (c)  Kyungkun Ko 
 // 
 // Author : KyungKun Ko
 //
@@ -160,7 +160,7 @@ namespace Net {
 
 		if (events & EPOLLIN)
 		{
-			while ((hrErr))
+			while (hrErr)
 			{
 				// Read
 				pReadBuffer = new(Service::NetSystem->GetHeap()) IOBUFFER_READ;
@@ -178,7 +178,7 @@ namespace Net {
 					Assert(false);
 					break;
 				default:
-					if (!(hr))
+					if (!hr)
 					{
 						char stringBuffer[512];
 						SFLog(Net, Info, "ERROR Epoll Recv fail sock:{0} events:{1} hr:{2}", sock, Service::NetSystem->GetNetIOSystem().EventFlagToString(sizeof(stringBuffer), stringBuffer, events), hrErr);
@@ -205,16 +205,15 @@ namespace Net {
 		{
 			// This call will just poke working thread
 			hr = pCallBack->OnWriteReady();
-			if (!(hr))
+			if (!hr)
 			{
 				netErr(hr);
-				//goto Proc_End;
 			}
 		}
 
 	Proc_End:
 
-		if (!(hr))
+		if (!hr)
 		{
 			char stringBuffer[512];
 			SFLog(Net, Info, "ERROR Epoll RW fail sock:{0}, events:{1} hr:{2}", sock, Service::NetSystem->GetNetIOSystem().EventFlagToString(sizeof(stringBuffer), stringBuffer, events), hr);
