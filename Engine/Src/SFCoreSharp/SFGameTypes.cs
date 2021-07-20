@@ -502,6 +502,10 @@ namespace SF
                 (writer, value) => { var valueTemp = (Vector3)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); },
                 (reader) => { return new Vector3() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle() }; }),
 
+            new TypeInfo(typeof(Vector4), "Vector4",
+                (writer, value) => { var valueTemp = (Vector4)value; writer.Write(valueTemp.x); writer.Write(valueTemp.y); writer.Write(valueTemp.z); writer.Write(valueTemp.w); },
+                (reader) => { return new Vector4() { x = reader.ReadSingle(), y = reader.ReadSingle(), z = reader.ReadSingle(), w = reader.ReadSingle() }; }),
+
             new TypeInfo(typeof(UInt64), "StringCrc32",
                 (writer, value) => { writer.Write(((StringCrc32)value).StringHash); },
                 (reader) => { return new StringCrc32(reader.ReadUInt32()); }),

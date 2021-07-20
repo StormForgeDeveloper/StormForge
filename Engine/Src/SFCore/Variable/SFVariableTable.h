@@ -71,6 +71,8 @@ namespace SF {
 		virtual Result SetVariable(KeyType name, SFUniquePtr<Variable>& variable);
 		virtual Result SetVariable(KeyType name, Variable*& variable);
 
+		virtual Result Remove(KeyType name);
+
 		// Get variable
 		Variable* GetVariable(KeyType name);
 		const Variable* GetVariable(KeyType name) const;

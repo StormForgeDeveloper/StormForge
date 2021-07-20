@@ -142,6 +142,18 @@ namespace SF {
 		return pVariable;
 	}
 
+	Result VariableTable::Remove(KeyType name)
+	{
+		SF::Variable* pVar{};
+		auto res = m_VairableTable.Remove(name, pVar);
+		if (res)
+		{
+			IHeap::Delete(pVar);
+		}
+
+		return res;
+	}
+
 	Result VariableTable::FromBinData(const Array<uint8_t>& binData)
 	{
 		InputMemoryStream stream(ArrayView<const uint8_t>(binData.size(), binData.data()));
