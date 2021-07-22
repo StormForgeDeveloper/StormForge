@@ -133,7 +133,7 @@ TEST_F(MemoryTest, CircularHeap_RandomDelete)
 		}
 
 		auto randVal = Util::Random.Rand(100);
-		if ((allocatedList.size() > 0 && randVal > 50) || circularHeap->GetFreeMemorySize() < minAllocationSize)
+		if (allocatedList.size() > 0 && (randVal > 50 || circularHeap->GetFreeMemorySize() < minAllocationSize))
 		{
 			randVal = Util::Random.Rand(static_cast<int>(allocatedList.size() - 1));
 			auto refCount = circularHeap->GetReferenceCount();

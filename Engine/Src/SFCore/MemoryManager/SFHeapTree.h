@@ -44,10 +44,10 @@ namespace SF {
 				ReferenceAccessPoint Right = nullptr;
 
 				// Same key attached to next
-				DoubleLinkedListNode NextNode;
+				DoubleLinkedListNode SameKeyNextNode;
 
-				// Previous chunk
-				ReferenceAccessPoint PrevChunk = nullptr;
+				// Previous memory chunk in linear space
+				ReferenceAccessPoint PrevMemoryChunk = nullptr;
 
 				// key, sizeof data node
 				KeyType Key() { return MemChunkHeader.Size; };

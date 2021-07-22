@@ -191,7 +191,6 @@ namespace SF {
 		{
 		}
 
-#ifndef SWIG
 		SharedPointerT(SharedPointerT<ClassType>&& src)
 			:SharedPointer(std::forward<SharedPointerT<ClassType>>(src))
 		{
@@ -201,7 +200,6 @@ namespace SF {
 			: SharedPointer(std::forward<SharedPointerAtomicT<ClassType>>(src))
 		{
 		}
-#endif
 
 		SharedPointerT(ClassType* pRef)
 			:SharedPointer(static_cast<SharedObject*>(pRef))
@@ -269,7 +267,6 @@ namespace SF {
 			return m_pObject != nullptr && m_pObject->GetReferenceCount() == 1;
 		}
 
-#ifndef SWIG
 		SharedPointerT<ClassType>& operator = (const SharedPointer& src)
 		{
 			auto pObjectSrc = (SharedObject*)(const SharedObject*)src;
@@ -345,7 +342,6 @@ namespace SF {
 				SharedPointer::operator = (SharedPointerT<ClassType>(src));
 			return *this;
 		}
-#endif
 
 	protected:
 

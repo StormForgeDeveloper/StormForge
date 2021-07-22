@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : Kyungkun Ko
 //
@@ -13,8 +13,8 @@ namespace SF
 {
 
 	template <class DataType>
-	PageQueue<DataType>::PageQueue(IHeap& memoryManager, int iDataPerPage)
-		: m_MemeoryManager(memoryManager)
+	PageQueue<DataType>::PageQueue(IHeap& heap, int iDataPerPage)
+		: m_Heap(heap)
 		, m_NumberOfItemsPerPage(0)
 		, m_PageIndex(0)
 	{
@@ -66,15 +66,14 @@ namespace SF
 			//m_pPageAllocator->Free( pCurPage );
 			pCurPage = pNext;
 		}
-
 	}
 
 	template <class DataType>
 	typename PageQueue<DataType>::Page* PageQueue<DataType>::AllocatePage()
 	{
-		void *pNewPageBuff = NULL;
+		void *pNewPageBuff = nullptr;
 
-		pNewPageBuff = new(GetHeap()) uint8_t[GetPageMemorySize()];
+		pNewPageBuff = GetHeap().Alloc(GetPageMemorySize());
 
 		Page *pNewPage = new(pNewPageBuff) Page(m_NumberOfItemsPerPage);
 		pNewPage->Header.PageID = m_PageIndex++;
@@ -89,7 +88,7 @@ namespace SF
 
 		pPage->DeleteElements(m_NumberOfItemsPerPage);
 
-		IHeap::Free(pPage);
+		GetHeap().Free(pPage);
 	}
 
 	template <class DataType>
@@ -115,15 +114,18 @@ namespace SF
 	}
 
 	template <class DataType>
-	Result PageQueue<DataType>::DequeuePageMoveMT()
+	Result PageQueue<DataType>::DequeuePageMoveMT(uint32_t expectedPageId)
 	{
 		MutexScopeLock lock(m_DequeuePageRemoveLock);
 
 		// We use Page ID to sync check of HeadPage then pointer
 		Page* curDequeue = m_DequeuePage.load(std::memory_order_relaxed);
+		if (curDequeue->Header.PageID != expectedPageId)
+			return ResultCode::SUCCESS_FALSE;
+
 		if (//curDequeue->Header.PageID == m_EnqueuePageID.load(std::memory_order_acquire) || 
 			curDequeue == m_EnqueuePage.load(std::memory_order_relaxed))
-			return ResultCode::FAIL;
+			return ResultCode::SUCCESS_FALSE; // It is enqueue page as well at the moment
 
 		if (curDequeue->Header.WriteCounter.load(std::memory_order_relaxed) <= m_NumberOfItemsPerPage)
 			return ResultCode::FAIL;
@@ -142,7 +144,7 @@ namespace SF
 	}
 
 	template <class DataType>
-	void PageQueue<DataType>::EnqueuePageMove(Page* pMyEnqueuePage, CounterType myPageID)
+	void PageQueue<DataType>::EnqueuePageMove(Page* pMyEnqueuePage, uint32_t myPageID)
 	{
 		int nLockTry = 0;
 
@@ -160,7 +162,7 @@ namespace SF
 		if (newHead->Header.pNext == nullptr)
 		{
 			newHead->Header.pNext = AllocatePage();
-			std::atomic_thread_fence(std::memory_order_release);
+			//std::atomic_thread_fence(std::memory_order_release);
 		}
 
 		AssertRel((pMyEnqueuePage->Header.PageID + 1) == newHead->Header.PageID);
@@ -190,13 +192,13 @@ namespace SF
 			return ResultCode::FAIL;
 
 		// total ticket number
-		CounterType myTicket = m_EnqueueTicket.fetch_add(1, std::memory_order_relaxed);
+		uint32_t myTicket = m_EnqueueTicket.fetch_add(1, std::memory_order_relaxed);
 
 		// my pertinent PageID...starting from 0
-		CounterType myPageID = (myTicket) / m_NumberOfItemsPerPage;
+		uint32_t myPageID = (myTicket) / m_NumberOfItemsPerPage;
 
 		// my order in this Page...starting from 0
-		CounterType myCellID = (myTicket) % m_NumberOfItemsPerPage;
+		uint32_t myCellID = (myTicket) % m_NumberOfItemsPerPage;
 
 		int iTry = 0;
 		auto diffPageID = (SignedCounterType)(myPageID - m_EnqueuePageID.load(std::memory_order_acquire));
@@ -235,9 +237,18 @@ namespace SF
 		Assert(pMyEnqueuePage->Header.PageID == myPageID);
 
 		// this page is appropriate to write....write to this page
-		pMyEnqueuePage->Element[myCellID] = std::forward<DataType>(item);
+		if constexpr (CanUseAtomic)
+		{
+			auto pElement = (Atomic<DataType>*)pMyEnqueuePage->Element;
+			pElement[myCellID].store(item);
+		}
+		else
+		{
+			pMyEnqueuePage->Element[myCellID] = std::forward<DataType>(item);
+		}
+		pMyEnqueuePage->SetWritten(myCellID);
 
-		CounterType WriteCount = pMyEnqueuePage->Header.WriteCounter.fetch_add(1, std::memory_order_relaxed) + 1;
+		uint32_t WriteCount = pMyEnqueuePage->Header.WriteCounter.fetch_add(1, std::memory_order_release) + 1;
 
 		Assert(WriteCount <= m_NumberOfItemsPerPage);
 
@@ -271,18 +282,15 @@ namespace SF
 			}
 		}
 
-		CounterType myDequeueTicket = m_DequeueTicket.fetch_add(1, std::memory_order_relaxed);
+		uint32_t myDequeueTicket = m_DequeueTicket.fetch_add(1, std::memory_order_relaxed);
 
 		// my order in this Page...starting from 0
-		CounterType myCellID = (myDequeueTicket) % m_NumberOfItemsPerPage;
-
-		// my pertinent PageID...starting from 0
-		//CounterType myPageID = (myDequeueTicket) / m_NumberOfItemsPerPage;
+		uint32_t myCellID = (myDequeueTicket) % m_NumberOfItemsPerPage;
 
 		// Read the data & clear that read position 
 		int LockTry = 0;
 		Page* pMyPage = m_DequeuePage.load(std::memory_order_relaxed);
-		while (IsDefaultValue(pMyPage->Element[myCellID]))
+		while (!pMyPage->HasValue(myCellID))
 		{
 			LockTry++;
 			if (LockTry % MaximumRetryInARow)
@@ -291,17 +299,20 @@ namespace SF
 			}
 		}
 
-		Assert(!IsDefaultValue(pMyPage->Element[myCellID]));
-
-		item = std::forward<DataType>(pMyPage->Element[myCellID]);
-
-		pMyPage->Element[myCellID] = DataType{};
-
-		// When the queue is used with shared pointer these order is very important
-		std::atomic_thread_fence(std::memory_order_release);
+		if constexpr (CanUseAtomic)
+		{
+			DataType defaultValue{};
+			auto pElement = (Atomic<DataType>*)pMyPage->Element;
+			item = Forward<DataType>(pElement[myCellID].exchange(defaultValue, MemoryOrder::memory_order_acquire));
+		}
+		else
+		{
+			item = Forward<DataType>(pMyPage->Element[myCellID]);
+			pMyPage->Element[myCellID] = DataType{};
+		}
 
 		// increment item read count
-		pMyPage->Header.ReadCounter.fetch_add(1, std::memory_order_relaxed);
+		pMyPage->Header.ReadCounter.fetch_add(1, std::memory_order_release);
 
 		return ResultCode::SUCCESS;
 	}
@@ -310,54 +321,76 @@ namespace SF
 	Result PageQueue<DataType>::DequeueMT(DataType& item, DurationMS uiCheckInterval)
 	{
 		Result hr = ResultCode::SUCCESS;
-		auto defaultValue = DataType{};
+		//auto defaultValue = DataType{};
 
 		// total ticket number
-		CounterType myDequeueTicket = m_DequeueTicket.fetch_add(1, std::memory_order_relaxed);
+		uint32_t myDequeueTicket = m_DequeueTicket.fetch_add(1, std::memory_order_relaxed);
 
 		// my order in this Page...starting from 0
-		CounterType myCellID = (myDequeueTicket) % m_NumberOfItemsPerPage;
+		uint32_t myCellID = (myDequeueTicket) % m_NumberOfItemsPerPage;
 
 		// my pertinent PageID...starting from 0
-		CounterType myPageID = (myDequeueTicket) / m_NumberOfItemsPerPage;
+		uint32_t myPageID = (myDequeueTicket) / m_NumberOfItemsPerPage;
 
 		// Page ID circulation can be occur so change to subtraction
-		while (myPageID != m_DequeuePageID.load(std::memory_order_relaxed))
+		auto CurDequeuePageId = m_DequeuePageID.load(std::memory_order_relaxed);
+		while (myPageID != CurDequeuePageId)
 		{
-			ThisThread::SleepFor(DurationMS(3));
+			// It isn't my page, but previous thread might failed to release it
+			Page* pCurPage = m_DequeuePage.load(std::memory_order_acquire);
+			if (pCurPage->Header.PageID != CurDequeuePageId)
+			{
+				ThisThread::SleepFor(DurationMS(1));
+				continue;
+			}
+
+			auto CurReadCount = pCurPage->Header.ReadCounter.load(MemoryOrder::memory_order_acquire);
+			if (CurReadCount == m_NumberOfItemsPerPage)
+			{
+				DequeuePageMoveMT(CurDequeuePageId);
+			}
+
+			ThisThread::SleepFor(DurationMS(1));
+
+			CurDequeuePageId = m_DequeuePageID.load(std::memory_order_acquire);
 		}
 
-		Page* pMyDequeuePage = m_DequeuePage.load(std::memory_order_relaxed);
+		Page* pMyDequeuePage = m_DequeuePage.load(std::memory_order_acquire);
 
 		// Read the data & clear that read position 
 		int LockTry = 0;
-		while (pMyDequeuePage->Element[myCellID] == defaultValue)
+
+		while(!pMyDequeuePage->HasValue(myCellID))
 		{
 			LockTry++;
 			if (LockTry % 5)
 			{
 				ThisThread::SleepFor(uiCheckInterval);
 			}
-			//_ReadBarrier();
-			std::atomic_thread_fence(std::memory_order_consume);
+
+			//std::atomic_thread_fence(std::memory_order_consume);
 		}
 
-		item = pMyDequeuePage->Element[myCellID];
-
-		std::atomic_thread_fence(std::memory_order_release);
-
-		pMyDequeuePage->Element[myCellID] = defaultValue;
+		if constexpr (CanUseAtomic)
+		{
+			auto pElement = (Atomic<DataType>*)pMyDequeuePage->Element;
+			item = Forward<DataType>(pElement[myCellID].exchange(DataType{}, MemoryOrder::memory_order_acquire));
+		}
+		else
+		{
+			item = Forward<DataType>(pMyDequeuePage->Element[myCellID]);
+			pMyDequeuePage->Element[myCellID] = DataType{};
+		}
 
 		// increment item read count
-		CounterType ReadCount = pMyDequeuePage->Header.ReadCounter.fetch_add(1, std::memory_order_relaxed) + 1;
+		uint32_t ReadCount = pMyDequeuePage->Header.ReadCounter.fetch_add(1, MemoryOrder::memory_order_release) + 1;
 		AssertRel(ReadCount <= m_NumberOfItemsPerPage);
 
 		if (ReadCount == m_NumberOfItemsPerPage)
 		{
 			// even though my page has finished work, previous page could be still being accessed
 			// Let's leave it to other thread.
-			//while(DequeuePageMoveMT());
-			hr = DequeuePageMoveMT();
+			hr = DequeuePageMoveMT(myPageID);
 			AssertRel((hr));
 		}
 
@@ -371,7 +404,6 @@ namespace SF
 	template <class DataType>
 	Result PageQueue<DataType>::GetFront(DataType& item)
 	{
-		auto defaultValue = DataType{};
 		// empty state / read count is bigger than written count
 		if (m_DequeueTicket.load(std::memory_order_relaxed) >= m_EnqueueTicket.load(std::memory_order_relaxed)) return ResultCode::FAIL;
 
@@ -390,18 +422,19 @@ namespace SF
 			}
 		}
 
-		CounterType myDequeueTicket = m_DequeueTicket.load(std::memory_order_relaxed);
+		uint32_t myDequeueTicket = m_DequeueTicket.load(std::memory_order_relaxed);
 
 		// my order in this Page...starting from 0
-		CounterType myCellID = (myDequeueTicket) % m_NumberOfItemsPerPage;
+		uint32_t myCellID = (myDequeueTicket) % m_NumberOfItemsPerPage;
 
 		// my pertinent PageID...starting from 0
-		//CounterType myPageID = (myDequeueTicket) / m_NumberOfItemsPerPage;
+		//uint32_t myPageID = (myDequeueTicket) / m_NumberOfItemsPerPage;
 
 		// Read the data & clear that read position 
 		int LockTry = 0;
 		Page* pMyPage = m_DequeuePage.load(std::memory_order_relaxed);
-		while (pMyPage->Element[myCellID] == defaultValue)
+
+		while (!pMyPage->HasValue(myCellID))
 		{
 			LockTry++;
 			if (LockTry % 10)
@@ -410,13 +443,21 @@ namespace SF
 			}
 		}
 
-		item = pMyPage->Element[myCellID];
+		if constexpr (CanUseAtomic)
+		{
+			auto pElement = (Atomic<DataType>*)pMyPage->Element;
+			item = pElement[myCellID].load(MemoryOrder::memory_order_acquire);
+		}
+		else
+		{
+			item = pMyPage->Element[myCellID];
+		}
 
 		return ResultCode::SUCCESS;
 	}
 
 	template <class DataType>
-	inline CounterType PageQueue<DataType>::GetEnqueCount() const
+	inline uint32_t PageQueue<DataType>::GetEnqueCount() const
 	{
 		return m_EnqueueTicket.load(std::memory_order_relaxed) - m_DequeueTicket.load(std::memory_order_relaxed);
 	}

@@ -66,11 +66,12 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		SortedMap<KeyType, ValueType>::~SortedMap()
 		{
-			ClearMap();
+			Reset();
 
 			if (m_pNodePool != nullptr && m_DeleteNodePool)
 			{
 				GetHeap().Delete(m_pNodePool);
+				m_pNodePool = nullptr;
 			}
 		}
 

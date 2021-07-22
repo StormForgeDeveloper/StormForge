@@ -65,8 +65,8 @@ namespace SF
 			// Next chunk uses footer from original chunk(before split)
 			pNewChunk = new((void*)pNextChunkData) HeapTree::MapNode(thisHeap, MemBlockHdr::MEM_MAGIC_FREE, blockSize - (dataSectionSize + MapNodeFooterSize + MapNodeHeaderSize));
 
-			pNewChunk->PrevChunk = pFreeChunk;
-			if (pNextChunk != nullptr) pNextChunk->PrevChunk = pNewChunk;
+			pNewChunk->PrevMemoryChunk = pFreeChunk;
+			if (pNextChunk != nullptr) pNextChunk->PrevMemoryChunk = pNewChunk;
 			result = FreeChunkTree.Insert(pNewChunk);
 			Assert(result);
 			if (!result) return nullptr;
@@ -202,7 +202,7 @@ namespace SF
 
 	HeapTree::MapNode* HeapMemory::MemoryBlock::GetPrevChunk(HeapTree::MapNode* pMemChunk)
 	{
-		return pMemChunk->PrevChunk;
+		return pMemChunk->PrevMemoryChunk;
 	}
 
 	// Merge two chunks, and returns new chunk
@@ -216,14 +216,22 @@ namespace SF
 
 		assert(IsInThisBlock(pMemChunk));
 		assert(IsInThisBlock(pNextChunk));
+		assert(GetNextChunk(pMemChunk) == pNextChunk);
+		assert(pNextChunk->PrevMemoryChunk == pMemChunk);
 
 		auto pNextOfNextChunk = GetNextChunk(pNextChunk);
 
-		if (pNextOfNextChunk) pNextOfNextChunk->PrevChunk = pMemChunk;
+		if (pNextOfNextChunk)
+		{
+			assert(pNextOfNextChunk->PrevMemoryChunk == pNextChunk);
+			pNextOfNextChunk->PrevMemoryChunk = pMemChunk;
+		}
 		pMemChunk->MemChunkHeader.Size += MapNodeFooterSize + MapNodeHeaderSize + pNextChunk->MemChunkHeader.Size;
 
 		// erase contents of pNextChunk header
-		memset(pNextChunk, 0xCD, sizeof(HeapTree::MapNode));
+		memset(pNextChunk, 0xC2, sizeof(HeapTree::MapNode));
+
+		assert(GetNextChunk(pMemChunk) == pNextOfNextChunk);
 
 		return true;
 	}

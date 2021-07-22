@@ -128,7 +128,9 @@ namespace SF
 		if (pNode == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		Assert(pNode->NextNode.NotInAnyList());
+		assert(pNode->Left == nullptr);
+		assert(pNode->Right == nullptr);
+		Assert(pNode->SameKeyNextNode.NotInAnyList());
 
 		KeyType key = pNode->Key();
 		OperationTraversalHistory traversalHistory(GetSystemHeap(), m_Root, m_ItemCount);
@@ -160,9 +162,9 @@ namespace SF
 		else if (key == pFound->Key())
 		{
 			// same key. attach to next
-			pNode->NextNode.pPrev = &pFound->NextNode;
-			pNode->NextNode.pNext = pFound->NextNode.pNext;
-			pFound->NextNode.pNext = &pNode->NextNode;
+			pNode->SameKeyNextNode.pPrev = &pFound->SameKeyNextNode;
+			pNode->SameKeyNextNode.pNext = pFound->SameKeyNextNode.pNext;
+			pFound->SameKeyNextNode.pNext = &pNode->SameKeyNextNode;
 		}
 		else // if (key < pCurNode->Key()) 
 		{
@@ -198,13 +200,15 @@ namespace SF
 		if (pFound->Key() != key)
 			return ResultCode::FAIL;
 
+		int iFoundIndex = (int)travelHistory.GetHistorySize() - 1;
 		if (pFound == pNode)
 		{
 			// This node need to be removed
 			MapNode* replacedChild = nullptr;
-			if (pFound->NextNode.pNext == nullptr) // If it doesn't have node with same key
+			if (pFound->SameKeyNextNode.pNext == nullptr) // If it doesn't have node with same key
 			{
-				int iFoundIndex = (int)travelHistory.GetHistorySize() - 1;
+				assert(pFound->SameKeyNextNode.pPrev == nullptr);
+
 				// find replacement from children
 				auto left = pFound->Left;
 				auto right = pFound->Right;
@@ -253,7 +257,6 @@ namespace SF
 					}
 
 					// swap node
-					//assert(iFoundIndex == travelHistory.FindIndex(pFound));
 					auto pParentPointer = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, replacedChild);
 					*pParentPointer = child;
 
@@ -283,33 +286,38 @@ namespace SF
 			else
 			{
 				// find replacement from dup key node
-				auto pNewNode = pFound->NextNode.pNext;
-				auto pNext = pNewNode->pNext;
-				memcpy(pNewNode, pFound, sizeof(MapNode));
-				//pNewNode->Prev = nullptr; // it shares with Left
-				pNewNode->pNext = pNext;
-				replacedChild = ContainerPtrFromMember(HeapTree::MapNode, NextNode, pNext);
-				//replacedChild = ((HeapTree::MapNode*)((uint8_t*)(pNext)-offsetof(HeapTree::MapNode, NextNode)));
+				auto pNewHead = pFound->SameKeyNextNode.pNext;
+				pNewHead->pPrev = nullptr;
+				pFound->SameKeyNextNode.pNext = nullptr;
+				assert(pFound->SameKeyNextNode.pPrev == nullptr);
+				replacedChild = ContainerPtrFromMember(HeapTree::MapNode, SameKeyNextNode, pNewHead);
 
-				ReferenceAccessPoint* pParentAccessOfReplaced = travelHistory.GetParentAccessPoint((int)travelHistory.GetHistorySize() - 1, pFound);
+				replacedChild->Left = Forward<ReferenceAccessPoint>(pFound->Left); pFound->Left = nullptr;
+				replacedChild->Right = Forward<ReferenceAccessPoint>(pFound->Right); pFound->Right = nullptr;
+				replacedChild->Balance = pFound->Balance;
+				replacedChild->DepthOfChildren = pFound->DepthOfChildren;
+				replacedChild->NumberOfChildren = pFound->NumberOfChildren;
+				replacedChild->State = pFound->State;
+
+				ReferenceAccessPoint* pParentAccessOfReplaced = travelHistory.GetParentAccessPoint(iFoundIndex, pFound);
 				*pParentAccessOfReplaced = replacedChild;
 			}
 		}
 		else
 		{
 			// The one in duplication list. simple remove the node from the list
-#if 1 || defined(DEBUG)
+#if defined(DEBUG)
 			// Linked list Validation
-			auto pCurLink = pFound->NextNode.pNext;
+			auto pCurLink = pFound->SameKeyNextNode.pNext;
 			bool bIsExist = false;
 			while (pCurLink != nullptr)
 			{
-				bIsExist = bIsExist || pNode == ContainerPtrFromMember(HeapTree::MapNode, NextNode, pCurLink);
+				bIsExist = bIsExist || pNode == ContainerPtrFromMember(HeapTree::MapNode, SameKeyNextNode, pCurLink);
 				pCurLink = pCurLink->pNext;
 			}
 #endif
-			auto pPrev = pNode->NextNode.pPrev;
-			auto pNext = pNode->NextNode.pNext;
+			auto pPrev = pNode->SameKeyNextNode.pPrev;
+			auto pNext = pNode->SameKeyNextNode.pNext;
 
 			Assert(pPrev != nullptr); // pPrev always exist, if the node is in the list
 			if (pPrev == nullptr)
@@ -318,9 +326,15 @@ namespace SF
 			pPrev->pNext = pNext;
 			if (pNext != nullptr) pNext->pPrev = pPrev;
 
-			pNode->NextNode.pPrev = nullptr;
-			pNode->NextNode.pNext = nullptr;
+			pNode->SameKeyNextNode.pPrev = nullptr;
+			pNode->SameKeyNextNode.pNext = nullptr;
 		}
+
+		assert(pNode->SameKeyNextNode.pPrev == nullptr);
+		assert(pNode->SameKeyNextNode.pNext == nullptr);
+
+		pNode->Left = nullptr;
+		pNode->Right = nullptr;
 
 		m_ItemCount--;
 
