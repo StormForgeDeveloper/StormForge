@@ -399,14 +399,13 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueue)
 	int64_t item;
 	while ((queue.Dequeue(item)))
 	{
-		AssertRel(testArray[item-1] == 0);
+		EXPECT_TRUE(testArray[item-1] == 0);
 		testArray[item-1] = 1;
 	}
 
 	for (uint iTestItem = 0; iTestItem < TEST_LENGTH; iTestItem++)
 	{
 		EXPECT_EQ(1, testArray[iTestItem]);
-		AssertRel(testArray[iTestItem] == 1);
 	}
 
 	delete[] testArray;
@@ -451,7 +450,7 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 		if ((queue.Dequeue(item)))
 		{
 			item--;
-			AssertRel(testArray[item] == 0);
+			EXPECT_TRUE(testArray[item] == 0);
 			testArray[item] = 1;
 			readCount++;
 		}
@@ -469,81 +468,82 @@ TEST_F(ThreadTest, PagedQueueThreadEnqueueDequeue)
 	for (uint iTestItem = 0; iTestItem < TEST_LENGTH; iTestItem++)
 	{
 		EXPECT_EQ(1, testArray[iTestItem]);
-		AssertRel(testArray[iTestItem] == 1);
 	}
 
 	delete[] testArray;
 }
-
-TEST_F(ThreadTest, PagedQueueThreadEnqueueThreadDequeue)
-{
-	const uint64_t TEST_LENGTH = TestScale * 99999;
-	const int NUM_THREAD = 20;
-
-	PageQueue<int64_t> queue(GetHeap(), 4);
-	SyncCounter itemCounter;
-	SyncCounter workDone;
-	SyncCounter *testArray = new SyncCounter[TEST_LENGTH];
-	memset(testArray, 0, sizeof(SyncCounter)*TEST_LENGTH);
-
-	for (uint worker = 0; worker < NUM_THREAD; worker++)
-	{
-		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
-		{
-			do
-			{
-				auto count = itemCounter.fetch_add(1, std::memory_order_relaxed) + 1;
-				if (count <= TEST_LENGTH)
-					queue.Enqueue(count);
-			} while (itemCounter < TEST_LENGTH);
-
-			workDone.fetch_add(1, std::memory_order_relaxed);
-		});
-
-		pWorker->Start();
-		m_Threads.push_back(pWorker);
-	}
-
-	SyncCounter readCount(0);
-	for (uint worker = 0; worker < NUM_THREAD; worker++)
-	{
-		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
-		{
-			int64_t item;
-			auto readOrder = readCount.fetch_add(1,std::memory_order_relaxed);
-			while (readOrder < TEST_LENGTH)
-			{
-				if ((queue.DequeueMT(item)))
-				{
-					item--;
-					CounterType expected = 0;
-					while (!testArray[item].compare_exchange_weak(expected, 1, std::memory_order_relaxed, std::memory_order_relaxed))
-					{
-						AssertRel(expected == 0);
-						expected = 0;
-					}
-				}
-				readOrder = readCount.fetch_add(1, std::memory_order_relaxed);
-			}
-
-			workDone.fetch_add(1, std::memory_order_relaxed);
-		});
-
-		pWorker->Start();
-		m_Threads.push_back(pWorker);
-	}
-
-	StopAllThread();
-
-
-	for (uint item = 0; item < TEST_LENGTH; item++)
-	{
-		EXPECT_EQ(1, testArray[item]);
-		AssertRel(testArray[item] == 1);
-	}
-
-	delete[] testArray;
-}
+//
+//TEST_F(ThreadTest, PagedQueueThreadEnqueueThreadDequeue)
+//{
+//	const uint64_t TEST_LENGTH = TestScale * 99999;
+//	const int NUM_THREAD = 20;
+//
+//	PageQueue<int64_t> queue(GetHeap(), 4);
+//	SyncCounter itemCounter;
+//	SyncCounter workDone;
+//	auto *testArray = new Atomic<int32_t>[TEST_LENGTH];
+//
+//	for (uint worker = 0; worker < NUM_THREAD; worker++)
+//	{
+//		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
+//		{
+//			do
+//			{
+//				auto count = itemCounter.fetch_add(1, std::memory_order_relaxed) + 1;
+//				if (count <= TEST_LENGTH)
+//					queue.Enqueue(count);
+//			} while (itemCounter < TEST_LENGTH);
+//
+//			workDone.fetch_add(1, std::memory_order_relaxed);
+//		});
+//
+//		pWorker->Start();
+//		m_Threads.push_back(pWorker);
+//	}
+//
+//	SyncCounter readCount(0);
+//	for (uint worker = 0; worker < NUM_THREAD; worker++)
+//	{
+//		auto pWorker = new(GetHeap()) FunctorThread([&](Thread* pThread)
+//		{
+//			int64_t item;
+//			int64_t prevItem = -1;
+//			auto readOrder = readCount.fetch_add(1,std::memory_order_relaxed);
+//			while (readOrder < TEST_LENGTH)
+//			{
+//				item = 0;
+//				if (queue.DequeueMT(item))
+//				{
+//					EXPECT_TRUE(prevItem < item);
+//					prevItem = item;
+//					item--;
+//					int32_t expected = 0;
+//					while (!testArray[item].compare_exchange_weak(expected, 1, std::memory_order_relaxed, std::memory_order_relaxed))
+//					{
+//						EXPECT_TRUE(expected == 0);
+//						expected = 0;
+//					}
+//				}
+//				readOrder = readCount.fetch_add(1, std::memory_order_relaxed);
+//			}
+//
+//			workDone.fetch_add(1, std::memory_order_relaxed);
+//		});
+//
+//		pWorker->Start();
+//		m_Threads.push_back(pWorker);
+//	}
+//
+//	StopAllThread();
+//
+//
+//	for (uint item = 0; item < TEST_LENGTH; item++)
+//	{
+//		EXPECT_EQ(1, testArray[item]);
+//	}
+//
+//	delete[] testArray;
+//}
 
 
 TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
@@ -570,7 +570,9 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
 			{
 				auto count = itemCounter.fetch_add(1, std::memory_order_relaxed) + 1;
 				if (count <= TEST_LENGTH)
-					AssertRel((queue.Enqueue(count)));
+				{
+					EXPECT_TRUE((queue.Enqueue(count)));
+				}
 			} while (itemCounter < TEST_LENGTH);
 
 			workDone.fetch_add(1);
@@ -588,7 +590,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_PageQueue)
 		if ((queue.Dequeue(item)))
 		{
 			item--;
-			AssertRel(testArray[item] == 0);
+			EXPECT_TRUE(testArray[item] == 0);
 			testArray[item] = 1;
 			readCount++;
 		}
@@ -645,7 +647,7 @@ TEST_F(ThreadTest, PagedQueue_PerformanceCompare_Concurrent)
 		if (queue.try_pop(item))
 		{
 			item--;
-			AssertRel(testArray[item] == 0);
+			EXPECT_TRUE(testArray[item] == 0);
 			testArray[item] = 1;
 			readCount++;
 		}
