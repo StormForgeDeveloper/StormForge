@@ -55,6 +55,7 @@ namespace SF
 
 		struct Page;
 
+
 		// Page Header
 		struct PageHeader
 		{
@@ -68,6 +69,7 @@ namespace SF
 			~PageHeader() { }
 		};
 
+
 		// Page
 		struct Page
 		{
@@ -79,34 +81,12 @@ namespace SF
 			// Data Array start
 			DataType* Element{};
 
-			Page(size_t InItemCount)
-			{
-				auto ValueStateSize = sizeof(Atomic<uint32_t>) * (PageQueue::GetValueStateSize(InItemCount) >> 5);
-				ValueState = reinterpret_cast<Atomic<uint32_t>*>(this + 1);
-				Element = reinterpret_cast<DataType*>(reinterpret_cast<uint8_t*>(ValueState) + ValueStateSize);
-
-				memset(ValueState, 0, ValueStateSize);
-
-				if constexpr (CanUseAtomic)
-				{
-					for (uint iEle = 0; iEle < InItemCount; iEle++)
-					{
-						new ((void*)&Element[iEle]) Atomic<DataType>;
-					}
-				}
-				else
-				{
-					for (uint iEle = 0; iEle < InItemCount; iEle++)
-					{
-						new ((void*)&Element[iEle]) DataType;
-					}
-				}
-			}
+			inline Page(size_t InItemCount);
 
 			SF_FORCEINLINE void SetWritten(uint iElement)
 			{
 				auto iDword = iElement >> 5;
-				auto iValue = iElement & ((uint(1) << 6) - 1);
+				auto iValue = iElement & ((uint(1) << 5) - 1);
 
 				ValueState[iDword].fetch_or(uint(1) << iValue, MemoryOrder::memory_order_release);
 			}
@@ -114,7 +94,7 @@ namespace SF
 			SF_FORCEINLINE bool HasValue(uint iElement)
 			{
 				auto iDword = iElement >> 5;
-				auto iValue = iElement & ((uint(1) << 6) - 1);
+				auto iValue = iElement & ((uint(1) << 5) - 1);
 
 				return (ValueState[iDword].load(MemoryOrder::memory_order_acquire) & (uint(1) << iValue)) != 0;
 			}
@@ -140,8 +120,15 @@ namespace SF
 		};
 
 
-		SF_FORCEINLINE static size_t GetValueStateSize(size_t InItemCount) { return AlignUp(InItemCount, SF_ALIGN_DOUBLE * 8); }
-		SF_FORCEINLINE size_t GetPageMemorySize() { return sizeof(Page) + GetValueStateSize(m_NumberOfItemsPerPage) + m_NumberOfItemsPerPage * sizeof(DataType); }
+		static constexpr size_t PageStructSize = AlignUp(sizeof(Page), SF_ALIGN_DOUBLE);
+
+
+		SF_FORCEINLINE static size_t GetValueStateSize(size_t InItemCount)
+		{
+			auto aligned32Count = AlignUp(InItemCount, SF_ALIGN_DOUBLE * 8);
+			return aligned32Count >> 3;
+		}
+		SF_FORCEINLINE size_t GetPageMemorySize() { return PageStructSize + GetValueStateSize(m_NumberOfItemsPerPage) + m_NumberOfItemsPerPage * sizeof(DataType); }
 
 
 	private:
@@ -149,10 +136,10 @@ namespace SF
 		IHeap& m_Heap;
 
 		// page header pointer
-		Atomic<Page*>       m_EnqueuePage;
-		Atomic<Page*>       m_EnqueueNextPage;
+		Atomic<Page*> m_EnqueuePage;
+		Atomic<Page*> m_EnqueueNextPage;
 		Atomic<uint32_t> m_EnqueuePageID;
-		Atomic<Page*>       m_DequeuePage;
+		Atomic<Page*> m_DequeuePage;
 		Atomic<uint32_t> m_DequeuePageID;
 
 		CriticalSection m_DequeuePageRemoveLock;
@@ -194,7 +181,11 @@ namespace SF
 		inline Result GetFront( DataType& item );
 
 		// Item count in queue
-		inline uint32_t GetEnqueCount() const;
+		SF_FORCEINLINE uint32_t GetEnqueCount() const { return size(); }
+		SF_FORCEINLINE uint32_t size() const
+		{
+			return m_EnqueueTicket.load(std::memory_order_relaxed) - m_DequeueTicket.load(std::memory_order_relaxed);
+		}
 
 		// Clear queue and remove all enqueued items
 		// This operation is not thread safe

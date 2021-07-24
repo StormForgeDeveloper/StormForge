@@ -12,6 +12,32 @@
 namespace SF
 {
 
+
+	template <class DataType>
+	PageQueue<DataType>::Page::Page(size_t InItemCount)
+	{
+		auto ValueStateSize = PageQueue::GetValueStateSize(InItemCount);
+		ValueState = reinterpret_cast<Atomic<uint32_t>*>(uintptr_t(this) + PageQueue<DataType>::PageStructSize);
+		Element = reinterpret_cast<DataType*>(reinterpret_cast<uint8_t*>(ValueState) + ValueStateSize);
+
+		memset(ValueState, 0, ValueStateSize);
+
+		if constexpr (CanUseAtomic)
+		{
+			for (uint iEle = 0; iEle < InItemCount; iEle++)
+			{
+				new ((void*)&Element[iEle]) Atomic<DataType>;
+			}
+		}
+		else
+		{
+			for (uint iEle = 0; iEle < InItemCount; iEle++)
+			{
+				new ((void*)&Element[iEle]) DataType;
+			}
+		}
+	}
+
 	template <class DataType>
 	PageQueue<DataType>::PageQueue(IHeap& heap, int iDataPerPage)
 		: m_Heap(heap)
@@ -20,16 +46,19 @@ namespace SF
 	{
 		// get page item count
 		if (iDataPerPage <= 0)
-			iDataPerPage = 2048;
+		{
+			const size_t CommonCachePageSize = 4096;
+			uint64_t expectedDataBitCount = sizeof(DataType) * 8 + 1;
+			auto dataCount = (((CommonCachePageSize - PageStructSize) << 3) / expectedDataBitCount);
+			iDataPerPage = (int)dataCount;
+		}
+
+		// make the data count to multiple of 4
+		iDataPerPage = AlignUp(iDataPerPage - 3, 4);
+		iDataPerPage = Math::Max(4, iDataPerPage);
 
 		m_NumberOfItemsPerPage = iDataPerPage;
 
-
-		// calculate alignment
-		size_t szDataAllign = __alignof(DataType);
-		size_t szPageHdr = sizeof(PageHeader);
-
-		szPageHdr = ((szPageHdr + szDataAllign - 1) / szDataAllign) * szDataAllign;
 
 		m_EnqueueTicket = 0;
 		m_DequeueTicket = 0;
@@ -187,10 +216,6 @@ namespace SF
 	template <class DataType>
 	Result PageQueue<DataType>::Enqueue(DataType&& item)
 	{
-		Assert(!IsDefaultValue(item));
-		if (IsDefaultValue(item))
-			return ResultCode::FAIL;
-
 		// total ticket number
 		uint32_t myTicket = m_EnqueueTicket.fetch_add(1, std::memory_order_relaxed);
 
@@ -324,7 +349,7 @@ namespace SF
 		//auto defaultValue = DataType{};
 
 		// total ticket number
-		uint32_t myDequeueTicket = m_DequeueTicket.fetch_add(1, std::memory_order_relaxed);
+		uint32_t myDequeueTicket = m_DequeueTicket.fetch_add(1, std::memory_order_acq_rel);
 
 		// my order in this Page...starting from 0
 		uint32_t myCellID = (myDequeueTicket) % m_NumberOfItemsPerPage;
@@ -383,7 +408,7 @@ namespace SF
 		}
 
 		// increment item read count
-		uint32_t ReadCount = pMyDequeuePage->Header.ReadCounter.fetch_add(1, MemoryOrder::memory_order_release) + 1;
+		uint32_t ReadCount = pMyDequeuePage->Header.ReadCounter.fetch_add(1, MemoryOrder::memory_order_acq_rel) + 1;
 		AssertRel(ReadCount <= m_NumberOfItemsPerPage);
 
 		if (ReadCount == m_NumberOfItemsPerPage)
@@ -454,12 +479,6 @@ namespace SF
 		}
 
 		return ResultCode::SUCCESS;
-	}
-
-	template <class DataType>
-	inline uint32_t PageQueue<DataType>::GetEnqueCount() const
-	{
-		return m_EnqueueTicket.load(std::memory_order_relaxed) - m_DequeueTicket.load(std::memory_order_relaxed);
 	}
 
 	// Clear queue and remove all enqueued items
