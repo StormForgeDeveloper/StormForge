@@ -482,15 +482,6 @@ namespace SF
 
 		assert(blockSize > (sizeof(MemoryBlock) + MapNodeFooterSize + MapNodeHeaderSize)); // the memory size should be bigger than header informations
 		auto pMemBlock = new(pMemoryBlock) MemoryBlock(this, blockSize - MemBlockHeaderSize, takeOverOwnerShip);
-		//pMemBlock->BlockSize = blockSize - MemBlockHeaderSize;
-		//pMemBlock->IsOwner = takeOverOwnerShip;
-		//assert((pMemBlock->BlockSize % MemBlockHdr::MaxHeaderAlignment) == 0);
-
-		//auto pDataBlock = (uint8_t*)pMemoryBlock + MemBlockHeaderSize;
-
-		//auto pDataBlockNode = new(pDataBlock) HeapTree::MapNode(this, MemBlockHdr::MEM_MAGIC_FREE, pMemBlock->BlockSize - MapNodeHeaderSize - MapNodeFooterSize);
-		//pDataBlockNode->GetFooter()->InitFooter();
-		//pMemBlock->FreeChunkTree.Insert(pDataBlockNode);
 
 		m_MemoryBlockList.push_back(pMemBlock);
 	}

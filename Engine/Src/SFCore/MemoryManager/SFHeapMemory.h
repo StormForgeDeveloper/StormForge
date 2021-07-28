@@ -90,6 +90,7 @@ namespace SF
 		static constexpr size_t MapNodeHeaderSize = AlignUp(sizeof(HeapTree::MapNode), MemBlockHdr::MaxHeaderAlignment);
 		static constexpr size_t MemBlockHeaderSize = AlignUp(sizeof(MemoryBlock), MemBlockHdr::MaxHeaderAlignment);
 		static constexpr size_t MapNodeFooterSize = AlignUp(sizeof(MemBlockFooter), MemBlockHdr::MaxHeaderAlignment);
+		static constexpr size_t MinumumMemoryBlockOverhead = MapNodeHeaderSize + MemBlockHeaderSize + MapNodeFooterSize;
 
 
 	private:
@@ -151,7 +152,9 @@ namespace SF
 		}
 
 	private:
-		uint8_t m_StaticMemoryBlock[StaticSize];
+
+
+		uint8_t m_StaticMemoryBlock[StaticSize + HeapMemory::MinumumMemoryBlockOverhead];
 	};
 }
 
