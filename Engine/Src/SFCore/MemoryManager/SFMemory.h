@@ -87,7 +87,7 @@ namespace SF {
 
 #if ENABLE_MEMORY_TRACE
 		DoubleLinkedListNode ListNode;
-		CallStackTraceT<5> StackTrace; // Keep it tight, on linux bigger extra allocation was causing memory corruption.
+		CallStackTraceT<10> StackTrace; // Keep it tight.
 		ThreadID LatestThreadID;
 #endif
 
@@ -108,6 +108,9 @@ namespace SF {
 		uint32_t Size = 0;				// Allocated memory size. We don't support bigger than 4GB allocation
 		uint32_t Magic : 24;
 		uint32_t HeaderSize : 8;
+
+		SF_FORCEINLINE bool IsFree() const { return Magic == MEM_MAGIC_FREE; }
+		SF_FORCEINLINE bool IsValid() const { return Magic == MEM_MAGIC || Magic == MEM_MAGIC_FREE; }
 
 		void InitHeader(IHeap* heap, uint32_t size, uint32_t headerSize);
 		void Deinit();

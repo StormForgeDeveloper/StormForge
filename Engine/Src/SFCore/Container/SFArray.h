@@ -255,7 +255,7 @@ namespace SF {
 
 			// Clear array, buffer size not reallocated, buffer data didn't erased, clear manually if need
 			SF_FORCEINLINE void Clear();
-			SF_FORCEINLINE void Reset() { Clear(); };
+			virtual SF_FORCEINLINE void Reset() { Clear(); };
 			virtual void Empty() { Reset(); }
 
 			// PreserveDataOnResize

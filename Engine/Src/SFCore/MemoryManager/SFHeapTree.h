@@ -57,7 +57,6 @@ namespace SF {
 				int8_t DepthOfChildren		= 0;
 				// Number of nodes - include child
 				int8_t NumberOfChildren		= 0;
-				int8_t State				= 0;
 
 
 				MemBlockHdr MemChunkHeader;
@@ -201,6 +200,8 @@ namespace SF {
 
 			int64_t CalculateOrder(OperationTraversalHistory &travelHistory, MapNode* pNode);
 
+			bool ValidateNextLink(MapNode* pNode);
+			
 		public:
 
 			HeapTree();
@@ -216,7 +217,7 @@ namespace SF {
 			Result Remove(MapNode *pNode);
 
 			// Find a key value
-			Result Find(KeyType key, MapNode* &pFound, int64_t *pOrder = nullptr);
+			Result IsInTheTree(MapNode* pNode);
 
 			Result FindSameOrBigger(KeyType key, MapNode* &pFound);
 

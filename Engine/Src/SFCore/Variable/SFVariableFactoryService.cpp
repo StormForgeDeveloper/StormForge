@@ -53,10 +53,10 @@ namespace SF
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc32);
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc64);
 			_CREATE_VARIABLE_TYPE_(VariableBLOB);
-		case "int32"_crc32c: return new(heap) VariableInt();
-		case "uint32"_crc32c: return new(heap) VariableUInt();
-		case "Vector3"_crc32c: return new(heap) VariableByBinaryValue<Vector3>();
-		case "Vector4"_crc32c: return new(heap) VariableByBinaryValue<Vector4>();
+		case "int32"_crc: return new(heap) VariableInt();
+		case "uint32"_crc: return new(heap) VariableUInt();
+		case "Vector3"_crc: return new(heap) VariableByBinaryValue<Vector3>();
+		case "Vector4"_crc: return new(heap) VariableByBinaryValue<Vector4>();
 
 		default:
 			// TODO: Add dynamic type supports

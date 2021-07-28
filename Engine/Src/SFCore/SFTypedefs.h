@@ -695,7 +695,8 @@ namespace SF {
 	}
 
 	#define OffsetOf(s,m) ((size_t)&reinterpret_cast<char const volatile&>((((s*)0)->m)))
-	#define ContainerPtrFromMember(ContainerTypeT, member, memberPtr) ((ContainerTypeT*)((uint8_t*)(memberPtr) - OffsetOf(ContainerTypeT,member)))
+	#define ContainerPtrFromMemberDirect(ContainerTypeT, member, memberPtr) ((ContainerTypeT*)((uint8_t*)(memberPtr) - OffsetOf(ContainerTypeT,member)))
+	#define ContainerPtrFromMember(ContainerTypeT, member, memberPtr) (memberPtr ? ContainerPtrFromMemberDirect(ContainerTypeT, member, memberPtr) : nullptr)
 
 
 #ifndef SWIG

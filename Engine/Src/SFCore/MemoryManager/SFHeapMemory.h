@@ -45,7 +45,12 @@ namespace SF
 		{
 			size_t BlockSize = 0;		// size of the block
 			bool IsOwner = false;
+
+			HeapTree::MapNode* pHead{};
+
 			HeapTree FreeChunkTree;
+
+			MemoryBlock(HeapMemory* pHeap, size_t blockSize, bool isOwner);
 
 			// Allocate from this heap memory block
 			HeapTree::MapNode* Allocate(IHeap* thisHeap, size_t size, size_t alignment);
@@ -78,6 +83,8 @@ namespace SF
 			// Merge two chunks, and returns new chunk
 			bool MergeChunks(HeapTree::MapNode* pMemChunk, HeapTree::MapNode* pNextChunk);
 			bool SplitChunk(IHeap* ThisHeap, HeapTree::MapNode* pMemChunk, size_t newSize, HeapTree::MapNode* &pOutNewChunk);
+
+			void CheckIntegrity(HeapTree::MapNode* pSkipTest = nullptr);
 		};
 
 		static constexpr size_t MapNodeHeaderSize = AlignUp(sizeof(HeapTree::MapNode), MemBlockHdr::MaxHeaderAlignment);

@@ -261,8 +261,8 @@ namespace SF {
 			};
 
 
-			iterator begin() { return iterator(GetHeap(), this, m_Root, 0); }
-			iterator end() { return iterator(); }
+			SF_FORCEINLINE iterator begin() const { return iterator(GetHeap(), const_cast<SortedMap*>(this), const_cast<ReferenceAccessPoint&>(m_Root), 0); }
+			SF_FORCEINLINE iterator end() const { return iterator(); }
 
 			// enumerate the values
 			//Result ForeachOrder(int startOrderIndex, uint count, const std::function<bool(const KeyType&, const ValueType&)>& functor);

@@ -178,3 +178,27 @@ TEST_F(MemoryTest, HeapMemoryRandom)
 	}
 	
 }
+
+TEST_F(MemoryTest, HeapMemoryRandomSameSize)
+{
+	constexpr size_t TestDataSize = 0x20;
+
+	SF::StaticMemoryAllocatorT<8*1024> localHeap("localHeap", GetHeap());
+	std::vector<void*> allocated;
+
+	for (int iTest = 0; iTest < 100; iTest++)
+	{
+		auto pAllocated = localHeap.Alloc(TestDataSize);
+		memset(pAllocated, TestDataSize, TestDataSize);
+
+		allocated.push_back(pAllocated);
+	}
+
+	while (allocated.size() > 0)
+	{
+		auto index = SF::Util::Random.Rand(0, (int)allocated.size() - 1);
+		localHeap.Free(allocated[index]);
+		allocated.erase(allocated.begin() + index);
+	}
+
+}

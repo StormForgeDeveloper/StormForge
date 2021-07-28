@@ -130,16 +130,18 @@ namespace SF
 
 		assert(pNode->Left == nullptr);
 		assert(pNode->Right == nullptr);
-		Assert(pNode->SameKeyNextNode.NotInAnyList());
+		assert(pNode->SameKeyNextNode.NotInAnyList());
 
 		KeyType key = pNode->Key();
 		OperationTraversalHistory traversalHistory(GetSystemHeap(), m_Root, m_ItemCount);
 
 		MapNode* pFound = nullptr;
-		if (!(FindNode(traversalHistory, key, pFound)))
+		if (!FindNode(traversalHistory, key, pFound))
 		{
 			if (m_Root != nullptr)
+			{
 				return ResultCode::FAIL;
+			}
 			else
 			{
 				m_Root = pNode;
@@ -165,6 +167,10 @@ namespace SF
 			pNode->SameKeyNextNode.pPrev = &pFound->SameKeyNextNode;
 			pNode->SameKeyNextNode.pNext = pFound->SameKeyNextNode.pNext;
 			pFound->SameKeyNextNode.pNext = &pNode->SameKeyNextNode;
+			if (pNode->SameKeyNextNode.pNext)
+				pNode->SameKeyNextNode.pNext->pPrev = &pNode->SameKeyNextNode;
+
+			ValidateNextLink(pFound);
 		}
 		else // if (key < pCurNode->Key()) 
 		{
@@ -182,6 +188,31 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
+	bool HeapTree::ValidateNextLink(MapNode* pTestNode)
+	{
+#if defined(DEBUG)
+		// Linked list Validation
+		assert(pTestNode->SameKeyNextNode.pPrev == nullptr);
+
+		auto pPrevLink = pTestNode->SameKeyNextNode.pPrev;
+		auto pCurLink = &pTestNode->SameKeyNextNode;
+		while (pCurLink != nullptr)
+		{
+			auto* pCurNode = ContainerPtrFromMember(HeapTree::MapNode, SameKeyNextNode, pCurLink);
+			assert(pCurNode->MemChunkHeader.Magic == MemBlockHdr::MEM_MAGIC_FREE);
+			uint32_t footerMagic = pCurNode->GetFooter()->Magic;
+			assert(footerMagic == MemBlockFooter::MEM_MAGIC_FREE || footerMagic == MemBlockFooter::MEM_MAGIC);
+
+			assert(pPrevLink == pCurLink->pPrev);
+
+			pPrevLink = pCurLink;
+			pCurLink = pCurLink->pNext;
+		}
+#else
+		usuned(pTestNode);
+#endif
+		return true;
+	}
 
 	// Remove an item and return the removed value
 	Result HeapTree::Remove(MapNode *pNode)
@@ -297,7 +328,6 @@ namespace SF
 				replacedChild->Balance = pFound->Balance;
 				replacedChild->DepthOfChildren = pFound->DepthOfChildren;
 				replacedChild->NumberOfChildren = pFound->NumberOfChildren;
-				replacedChild->State = pFound->State;
 
 				ReferenceAccessPoint* pParentAccessOfReplaced = travelHistory.GetParentAccessPoint(iFoundIndex, pFound);
 				*pParentAccessOfReplaced = replacedChild;
@@ -307,14 +337,19 @@ namespace SF
 		{
 			// The one in duplication list. simple remove the node from the list
 #if defined(DEBUG)
-			// Linked list Validation
+			// Linked list Validation, the node should be in the list
 			auto pCurLink = pFound->SameKeyNextNode.pNext;
 			bool bIsExist = false;
 			while (pCurLink != nullptr)
 			{
-				bIsExist = bIsExist || pNode == ContainerPtrFromMember(HeapTree::MapNode, SameKeyNextNode, pCurLink);
+				if (pNode == ContainerPtrFromMember(HeapTree::MapNode, SameKeyNextNode, pCurLink))
+				{
+					bIsExist = true;
+					break;
+				}
 				pCurLink = pCurLink->pNext;
 			}
+			assert(bIsExist);
 #endif
 			auto pPrev = pNode->SameKeyNextNode.pPrev;
 			auto pNext = pNode->SameKeyNextNode.pNext;
@@ -325,9 +360,11 @@ namespace SF
 
 			pPrev->pNext = pNext;
 			if (pNext != nullptr) pNext->pPrev = pPrev;
-
+			assert(uintptr_t(pNext) != 0xc2c2c2c2c2c2c2c2L);
 			pNode->SameKeyNextNode.pPrev = nullptr;
 			pNode->SameKeyNextNode.pNext = nullptr;
+
+			ValidateNextLink(pFound);
 		}
 
 		assert(pNode->SameKeyNextNode.pPrev == nullptr);
@@ -343,23 +380,29 @@ namespace SF
 
 
 	// Find a key value
-	Result HeapTree::Find(KeyType key, MapNode* &pFound, int64_t *pOrder)
+	Result HeapTree::IsInTheTree(MapNode* pNode)
 	{
+		if (pNode == nullptr)
+			return ResultCode::INVALID_POINTER;
+
 		OperationTraversalHistory travelHistory(GetSystemHeap(), m_Root, m_ItemCount);
 
-		if (!(FindNode(travelHistory, key, pFound)))
+		auto key = pNode->Key();
+		MapNode* pFound = nullptr;
+		if (!FindNode(travelHistory, key, pFound))
 			return ResultCode::FAIL;
 
-		// unique key
+		// key
 		if (pFound->Key() != key)
 			return ResultCode::FAIL;
 
-		if (pOrder != nullptr)
+		auto pCur = pFound;
+		while (pCur && pCur != pNode)
 		{
-			*pOrder = CalculateOrder(travelHistory, pFound);
+			pCur = ContainerPtrFromMember(HeapTree::MapNode, SameKeyNextNode, pCur->SameKeyNextNode.pNext);
 		}
 
-		return ResultCode::SUCCESS;
+		return pCur ? ResultCode::SUCCESS : ResultCode::OBJECT_NOT_FOUND;
 	}
 
 

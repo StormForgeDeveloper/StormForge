@@ -68,6 +68,7 @@ namespace SF
 
 		virtual size_t GetPosition() const = 0;
 		virtual size_t GetSize() const = 0;
+		virtual size_t size() const { return GetSize(); }
 		Result Skip(size_t skipOffset) { return Seek(SeekMode::Current, skipOffset); }
 		virtual Result Seek(SeekMode seekPos, int64_t offset) { unused(seekPos); unused(offset); return 0; }
 	};
