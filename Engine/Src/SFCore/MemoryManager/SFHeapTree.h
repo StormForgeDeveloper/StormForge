@@ -37,7 +37,7 @@ namespace SF {
 			typedef uint32_t KeyType; // We only support max 4GB allocation
 
 
-#pragma pack(push,1)
+#pragma pack(push,4)
 			struct MapNode
 			{
 				ReferenceAccessPoint Left = nullptr;
@@ -53,21 +53,27 @@ namespace SF {
 				KeyType Key() { return MemChunkHeader.Size; };
 
 				// Tree depth information
-				int8_t Balance				= 0;
-				int8_t DepthOfChildren		= 0;
+				int32_t Balance : 8;
+				int32_t DepthOfChildren : 8;
 				// Number of nodes - include child
-				int8_t NumberOfChildren		= 0;
-
+				int32_t NumberOfChildren : 8;
+				int32_t : 0;
 
 				MemBlockHdr MemChunkHeader;
 
 
 				MapNode()
 				{
+					Balance = 0;
+					DepthOfChildren = 0;
+					NumberOfChildren = 0;
 				}
 
 				MapNode(IHeap* ThisHeap, uint32_t magic, size_t dataBlockSize)
 				{
+					Balance = 0;
+					DepthOfChildren = 0;
+					NumberOfChildren = 0;
 					MemChunkHeader.InitHeader(ThisHeap, (uint32_t)dataBlockSize, (uint32_t)AlignUp(sizeof(HeapTree::MapNode), MemBlockHdr::MaxHeaderAlignment));
 					MemChunkHeader.Magic = magic;
 				}
