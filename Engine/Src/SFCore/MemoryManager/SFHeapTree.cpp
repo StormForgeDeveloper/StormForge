@@ -209,7 +209,7 @@ namespace SF
 			pCurLink = pCurLink->pNext;
 		}
 #else
-		usuned(pTestNode);
+		unused(pTestNode);
 #endif
 		return true;
 	}
