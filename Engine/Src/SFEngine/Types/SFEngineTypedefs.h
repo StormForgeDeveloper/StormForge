@@ -40,6 +40,8 @@ namespace SF {
 
 	using PlayerID = uint64_t;
 
+	using CharacterID = uint32_t;
+
 	using FacebookUID = uint64_t;
 
 
