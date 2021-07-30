@@ -25,7 +25,7 @@
 #endif
 
 inline constexpr MessageID::MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode )
-	: IDs({0, 0, uiMobility, uiReliability, uiType, uiPolicy, uiCode})
+	: IDs({0, 0, uiMobility, uiReliability, uiType, uiCode, uiPolicy})
 {
 }
 
