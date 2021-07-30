@@ -44,14 +44,7 @@ namespace SF
 			&& std::is_move_constructible_v<DataType>
 			&& std::is_copy_assignable_v<DataType>
 			&& std::is_move_assignable_v<DataType>;
-			//&& sizeof(DataType) == sizeof(Atomic<DataType>);
 
-		// testing atomic rules
-		//static_assert(std::is_trivially_copyable_v<DataType>, "Type should be trivially copyable");
-		//static_assert(std::is_copy_constructible_v<DataType>, "Type should be copy constructible");
-		//static_assert(std::is_move_constructible_v<DataType>, "Type should be move constructible");
-		//static_assert(std::is_copy_assignable_v<DataType>, "Type should be copy assignable");
-		//static_assert(std::is_move_assignable_v<DataType>, "Type should be move assignable");
 
 		struct Page;
 

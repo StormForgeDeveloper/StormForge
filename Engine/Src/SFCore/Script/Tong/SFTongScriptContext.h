@@ -99,6 +99,13 @@ namespace SF
 				int32_t			CurrentPosition = 0;
 
 				PCInfo(void* pInitValue = nullptr) {}
+
+				PCInfo& operator = (const PCInfo& src)
+				{
+					ByteCodeData.SetLinkedBuffer(src.ByteCodeData);
+					CurrentPosition = src.CurrentPosition;
+					return *this;
+				}
 			};
 
 		private:

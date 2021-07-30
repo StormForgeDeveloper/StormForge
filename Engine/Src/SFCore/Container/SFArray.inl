@@ -214,7 +214,7 @@ namespace SF {
 
 		// Remove element
 		template< class DataType >
-		Result Array<DataType>::RemoveAt(INT iIndex)
+		Result Array<DataType>::RemoveAt(int iIndex)
 		{
 			if (iIndex < 0 || (decltype(m_Size))iIndex >= m_Size)
 				return ResultCode::INVALID_ARG;
@@ -294,26 +294,6 @@ namespace SF {
 			}
 
 			return m_pDataPtr[iElement];
-		}
-
-		template<class DataType>
-		Array<DataType>& Array<DataType>::operator = (const Array<std::decay_t<DataType>>& src)
-		{
-			resize(src.size());
-			for (size_t iItem = 0; iItem < src.size(); iItem++)
-				m_pDataPtr[iItem] = src[iItem];
-			return *this;
-		}
-
-		template<class DataType>
-		Array<DataType>& Array<DataType>::operator = (const Array<const std::decay_t<DataType>>& src)
-		{
-			resize(src.size());
-			// TODO: We might should not support this operation
-			auto pDataPtr = (std::decay_t<DataType>*)m_pDataPtr;
-			for (size_t iItem = 0; iItem < src.size(); iItem++)
-				pDataPtr[iItem] = src[iItem];
-			return *this;
 		}
 
 
@@ -521,7 +501,6 @@ namespace SF {
 		{
 			Array<DataType>::SetBuffPtr(srcLink.GetAllocatedSize(), const_cast<uint8_t*>(srcLink.data()));
 			Array<DataType>::resize(srcLink.size());
-			memcpy(Array<DataType>::data(), srcLink.data(), sizeof(DataType) * srcLink.size());
 		}
 
 		template< class DataType >

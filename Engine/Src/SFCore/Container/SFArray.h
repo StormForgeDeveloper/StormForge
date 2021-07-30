@@ -42,6 +42,8 @@ namespace SF {
 			static constexpr bool IsConstructable = std::is_constructible_v<DataTypeDecay>;
 			static constexpr bool IsCopyConstructable = std::is_copy_constructible_v<DataTypeDecay>;
 			static constexpr bool IsDestructable = std::is_destructible_v<DataTypeDecay>;
+			//static constexpr bool IsCopyAssignable = std::is_copy_assignable_v<DataTypeDecay>;
+
 
 #if !defined(SWIG)
 			class iterator
@@ -353,9 +355,30 @@ namespace SF {
 				return true;
 			}
 
+			Array<DataType>& operator = (const Array<DataType>& src) = delete;
+
 			// copy operator
-			Array<DataType>& operator = (const Array<std::decay_t<DataType>>& src);
-			Array<DataType>& operator = (const Array<const std::decay_t<DataType>>& src);
+			template<class SrcDataType>
+			void CopyFrom(const Array<SrcDataType>& src)
+			{
+				// should I use is_trivial_v ?
+				constexpr bool bBulkCopy = std::is_trivially_copy_constructible_v<typename DataType>
+					&& std::is_trivially_copy_constructible_v<typename SrcDataType>
+					&& sizeof(DataType) == sizeof(SrcDataType); // decay+is_same test would be more precise, but I am trying to let them be able to copy if raw sizes are same
+
+				if constexpr (bBulkCopy)
+				{
+					resize(src.size());
+					memcpy((void*)m_pDataPtr, src.data(), src.size() * sizeof(DataType));
+				}
+				else
+				{
+					resize(src.size());
+					for (size_t iItem = 0; iItem < src.size(); iItem++)
+						m_pDataPtr[iItem] = src[iItem];
+				}
+			}
+
 		};
 
 
@@ -389,8 +412,8 @@ namespace SF {
 			virtual Result reserve(size_t szReserv) override;
 
 			// copy operator
-			DynamicArray<DataType>& operator = (const Array<std::decay_t<DataType>>& src) { Array<DataType>::operator = (src); return *this; }
-			DynamicArray<DataType>& operator = (const Array<const std::decay_t<DataType>>& src) { Array<DataType>::operator = (src); return *this; }
+			//DynamicArray<DataType>& operator = (const Array<std::decay_t<DataType>>& src) { Array<DataType>::operator = (src); return *this; }
+			//DynamicArray<DataType>& operator = (const Array<const std::decay_t<DataType>>& src) { Array<DataType>::operator = (src); return *this; }
 		};
 
 
@@ -418,7 +441,7 @@ namespace SF {
 			//virtual Result reserve(size_t szReserv);
 
 			// copy operator
-			StaticArray<DataType, DefaultBufferSize>& operator = (const Array<DataType>& src) { Array<DataType>::operator = (src); return *this; }
+			StaticArray<DataType, DefaultBufferSize>& operator = (const Array<DataType>& src) = delete;
 		};
 
 
@@ -451,7 +474,7 @@ namespace SF {
 			Result reserve(size_t szReserv) override;
 
 			// copy operator
-			ArrayView<DataType>& operator = (const Array<DataType>& src) { Array<DataType>::operator = (src); return *this; }
+			ArrayView<DataType>& operator = (const Array<DataType>& src) { SetLinkedBuffer(src); return *this; }
 		};
 
 

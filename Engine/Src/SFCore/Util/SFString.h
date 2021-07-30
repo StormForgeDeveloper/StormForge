@@ -1218,7 +1218,7 @@ namespace SF {
 		virtual ~CStringArrayView() = default;
 
 		// copy operator
-		CStringArrayView& operator = (const Array<const char*>& src) { Array<DataType>::operator = (src); return *this; }
+		CStringArrayView& operator = (const Array<const char*>& src) { CopyFrom(src); return *this; }
 		CStringArrayView& operator = (const Array<String>& src)
 		{
 			Clear();

@@ -115,7 +115,7 @@ namespace SF
 		// Set byte code, binary
 		Result ScriptBytecode::SetBytecode(const Array<uint8_t>& byteCode)
 		{
-			m_ByteCode = byteCode;
+			m_ByteCode.CopyFrom(byteCode);
 
 			return ResultCode::SUCCESS;
 		}

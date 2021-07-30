@@ -43,8 +43,8 @@ namespace SF
 			, m_ParameterList(GetEnvironment()->GetHeap())
 			, m_ByteCode(GetEnvironment()->GetHeap())
 		{
-			m_ParameterList = parameterList;
-			m_ByteCode = byteCode;
+			m_ParameterList.CopyFrom(parameterList);
+			m_ByteCode.CopyFrom(byteCode);
 		}
 
 		ScriptFunction::~ScriptFunction()
@@ -56,7 +56,7 @@ namespace SF
 		// Set byte code, binary
 		Result ScriptFunction::SetBytecode(const Array<const uint8_t>& byteCode)
 		{
-			m_ByteCode = byteCode;
+			m_ByteCode.CopyFrom(byteCode);
 
 			return ResultCode::SUCCESS;
 		}

@@ -259,7 +259,7 @@ namespace SF {
 	template<> SF_FORCEINLINE const wchar_t* VariableValueReference<const wchar_t*>::GetValueWCharString() const { return reinterpret_cast<const wchar_t*>(GetDataPtr()); }
 
 	template<> SF_FORCEINLINE const Array<uint8_t>& VariableValueReference<Array<uint8_t>>::GetValueBLOB() const { return *reinterpret_cast<Array<uint8_t>*>(GetDataPtr()); }
-	template<> SF_FORCEINLINE void VariableValueReference<Array<uint8_t>>::SetValue(const Array<const uint8_t>& src) { *reinterpret_cast<Array<uint8_t>*>(GetDataPtr()) = src; }
+	template<> SF_FORCEINLINE void VariableValueReference<Array<uint8_t>>::SetValue(const Array<const uint8_t>& src) { reinterpret_cast<Array<uint8_t>*>(GetDataPtr())->CopyFrom(src); }
 
 
 	// Specialize for numerics
