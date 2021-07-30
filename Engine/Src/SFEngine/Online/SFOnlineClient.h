@@ -78,7 +78,6 @@ namespace SF
 		};
 
 		typedef void(*ONLINESTATE_CHAGED_CALLBACK)(OnlineClient::OnlineState prevState, OnlineClient::OnlineState newState);
-
 		typedef void(*ONLINE_TASK_FINISHED_CALLBACK)(uint64_t transactionId);
 
 

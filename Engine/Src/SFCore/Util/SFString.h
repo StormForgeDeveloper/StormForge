@@ -103,6 +103,7 @@ namespace SF {
 				else
 				{
 					newBuffer = reinterpret_cast<CharType*>(GetHeap().Alloc(newAllocationSize));
+					newBuffer[0] = CharType{};
 				}
 
 				if (newBuffer == nullptr)
