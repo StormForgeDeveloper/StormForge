@@ -64,7 +64,7 @@ namespace Message {
 
 	union MessageID
 	{
-		struct {
+		struct MessageIDComponent {
 			uint32_t Sequence : NET_SEQUENCE_BITS;
 			uint32_t Encrypted		: 1;
 			uint32_t Mobile			: 1;
@@ -80,12 +80,21 @@ namespace Message {
 		} IDSeq;
 		uint32_t ID;
 
-		MessageID() : ID(0) {}
+		constexpr MessageID() : ID(0) {}
 		//inline tag_MessageID( const tag_MessageID& src );
 		MessageID( uint32_t uiID ) : ID(uiID) {}
-		MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode );
+		constexpr MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode );
 
 		uint32_t SetMessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode );
+
+		SF_FORCEINLINE void ValidateMessageID(uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode) const
+		{
+#if DEBUG
+			MessageID Temp;
+			Temp.SetMessageID(uiType, uiReliability, uiMobility, uiPolicy, uiCode);
+			assert(Temp == *this);
+#endif
+		}
 
 		void SetSequence(uint sequence) { IDSeq.Sequence = sequence; }
 

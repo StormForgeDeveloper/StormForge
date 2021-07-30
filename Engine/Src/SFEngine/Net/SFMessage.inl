@@ -24,15 +24,9 @@
 #pragma GCC diagnostic ignored "-Wconversion"
 #endif
 
-inline MessageID::MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode )
+inline constexpr MessageID::MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode )
+	: IDs({0, 0, uiMobility, uiReliability, uiType, uiPolicy, uiCode})
 {
-	IDs.MsgCode = uiCode;
-	IDs.Policy = uiPolicy;
-	IDs.Mobile = uiMobility;
-	IDs.Encrypted = 0;
-	IDs.Reliability = uiReliability;
-	IDs.Type = uiType;
-	IDs.Sequence = 0;// uiSeq;
 }
 
 inline uint32_t MessageID::SetMessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode )
