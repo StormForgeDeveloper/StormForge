@@ -557,7 +557,10 @@ namespace SF
         {
             TypeInfo typeInfo;
             if (!TypeInfoByType.TryGetValue(value.GetType(), out typeInfo))
+            {
+                SF.Log.Error("SF.GameType.GetTypeInfo: Unknown type {0}", value.GetType().Name);
                 throw new Exception(string.Format("Unknown type {0}", value.GetType().Name));
+            }
 
             return typeInfo;
         }
@@ -566,7 +569,10 @@ namespace SF
         {
             TypeInfo typeInfo;
             if (!TypeInfoByTypeName.TryGetValue(typeName.StringHash, out typeInfo))
+            {
+                SF.Log.Error("SF.GameType.GetTypeInfo: Unknown type {0}", typeName);
                 throw new Exception(string.Format("Unknown type {0}", typeName));
+            }
 
             return typeInfo;
         }
@@ -618,7 +624,7 @@ namespace SF
             }
             catch (Exception exp)
             {
-                System.Diagnostics.Debug.Print(exp.Message);
+                SF.Log.Error(exp.Message);
             }
         }
 

@@ -20,9 +20,17 @@ namespace SF
     {
         private IntPtr m_EngineNativeHandle;
 
+        static bool bInitialized = false;
+
+
         /** Called when the activity is first created. */
         public Engine()
         {
+            if (!bInitialized)
+            {
+                bInitialized = true;
+                EngineLog.Initialize();
+            }
         }
 
 	    public void StartEngine(string processName, string logServerAddress, UInt32 debuggerLogMask = 0)
