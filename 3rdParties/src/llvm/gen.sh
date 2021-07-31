@@ -1,0 +1,25 @@
+
+set CMAKE_SYSTEM_NAME=Windows
+set PROCESS_ARCHITECTUR=x64
+
+call ..\..\FindVC.cmd
+
+
+if not exist build%CMAKE_SYSTEM_NAME% mkdir build%CMAKE_SYSTEM_NAME%
+set BUILD_DIR=build%CMAKE_SYSTEM_NAME%
+
+
+if not exist %BUILD_DIR% mkdir %BUILD_DIR%
+
+
+cd %BUILD_DIR%
+
+cmake ../llvm10/llvm -G %VCCMAKEGENERATOR% -A %PROCESS_ARCHITECTUR% -Thost=%PROCESS_ARCHITECTUR% ^
+	-DLLVM_ENABLE_PROJECTS=clang -DCLANG_BUILD_EXAMPLES=1 -DLLVM_ENABLE_PLUGINS=1 ^
+	-DCMAKE_INSTALL_PREFIX=../%CMAKE_SYSTEM_NAME%  -DCMAKE_SYSTEM_NAME=%CMAKE_SYSTEM_NAME%
+
+
+cd %~dp0
+
+if not "%1" == "nopause" pause
+
