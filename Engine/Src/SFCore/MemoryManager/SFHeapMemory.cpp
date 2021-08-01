@@ -92,11 +92,13 @@ namespace SF
 
 		pFreeChunk->GetFooter()->InitFooter();
 
+#ifdef DEBUG
 		if (pNewChunk)
 		{
 			auto pTestNextChunk = GetNextChunk(pFreeChunk);
 			assert(pTestNextChunk == pNewChunk);
 		}
+#endif
 
 		//CheckIntegrity();
 
@@ -183,7 +185,7 @@ namespace SF
 
 			pMemChunk->MemChunkHeader.Magic = MemBlockHdr::MEM_MAGIC_FREE;
 			auto bRet = MergeChunks(pMemChunk, pNextChunk);
-			assert(bRet);
+			assert(bRet); unused(bRet);
 			pMemChunk->MemChunkHeader.Magic = MemBlockHdr::MEM_MAGIC;
 		}
 
@@ -207,7 +209,7 @@ namespace SF
 
 			pMemChunk->MemChunkHeader.Magic = MemBlockHdr::MEM_MAGIC_FREE;
 			bool bRet = MergeChunks(pPrevChunk, pMemChunk);
-			assert(bRet);
+			assert(bRet); unused(bRet);
 			pMemChunk = pPrevChunk;
 		}
 
@@ -386,6 +388,7 @@ namespace SF
 
 			if (pAllocated != nullptr)
 			{
+#ifdef DEBUG
 				auto pDataPtr = pAllocated->MemChunkHeader.GetDataPtr();
 				auto pDataPtr2 = pAllocated->GetDataPtr();
 				assert(pDataPtr == pDataPtr2);// If this doesn't match it will cause broken memory on release
@@ -394,7 +397,7 @@ namespace SF
 
 				assert(pAllocated->GetFooter()->Magic == MemBlockFooter::MEM_MAGIC);
 				assert(pAllocated->MemChunkHeader.GetFooter()->Magic == MemBlockFooter::MEM_MAGIC);
-
+#endif
 				return &pAllocated->MemChunkHeader;
 			}
 		}

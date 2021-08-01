@@ -26,7 +26,7 @@ namespace SF {
 	// Format string
 	template<typename CharType, typename SharedStringBufferType>
 	template< class ...ArgTypes >
-	typename TString<CharType, SharedStringBufferType>::StringType& TString<CharType, SharedStringBufferType>::Format(const CharType* strFormat, ArgTypes... args)
+	inline typename TString<CharType, SharedStringBufferType>::StringType& TString<CharType, SharedStringBufferType>::Format(const CharType* strFormat, ArgTypes... args)
 	{
 		StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
 		VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
@@ -37,7 +37,7 @@ namespace SF {
 	// Format string
 	template<typename CharType, typename SharedStringBufferType>
 	template< class ...ArgTypes >
-	typename TString<CharType, SharedStringBufferType>::StringType& TString<CharType, SharedStringBufferType>::AppendFormat(const CharType* strFormat, ArgTypes... args)
+	inline typename TString<CharType, SharedStringBufferType>::StringType& TString<CharType, SharedStringBufferType>::AppendFormat(const CharType* strFormat, ArgTypes... args)
 	{
 		StaticMemoryAllocatorT<2048> Allocator("TempStatic", GetSystemHeap());
 		VariableBox arguments[sizeof...(args)] = { Boxing((IHeap&)Allocator, args)... };
