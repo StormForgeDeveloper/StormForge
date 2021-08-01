@@ -120,22 +120,31 @@ namespace SF
                 case "ActorMovement":
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(ActorMovement)));
                     break;
-                case "Vector2":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector2)));
-                    break;
-                case "Vector3":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector3)));
-                    break;
-                case "Vector4":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector4)));
-                    break;
+                //case "Vector2":
+                //    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector2)));
+                //    break;
+                //case "Vector3":
+                //    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector3)));
+                //    break;
+                //case "Vector4":
+                //    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector4)));
+                //    break;
                 //case "VariableTable":
                 //VariableTable parsedValue = new VariableTable();
                 //parsedValue.FromSerializedMemory(arrayCount, Value);
                 //stm_ParsingMessage.SetValue(stringHash, parsedValue);
                 //break;
                 default:
-                    SF.Log.Error("MessageParseSetValue failed, type:{0}", stringHash);
+                    // TODO: gradually move to TypeSerialization
+                    var typeInfo = TypeSerialization.GetTypeInfo(typeNameHash);
+                    if (typeInfo != null)
+                    {
+                        stm_ParsingMessage.SetValue(stringHash, typeInfo.DeserializeNative(Value));
+                    }
+                    else
+                    {
+                        SF.Log.Error("MessageParseSetValue failed, type:{0}", stringHash);
+                    }
                     break;
             }
         }
@@ -337,7 +346,24 @@ namespace SF
                     break;
 
                 default:
-                    SF.Log.Error("MessageParseSetArray failed, type:{0}", stringHash);
+                    // TODO: gradually move to TypeSerialization
+                    var typeInfo = TypeSerialization.GetTypeInfo(typeNameHash);
+                    if (typeInfo != null)
+                    {
+                        //var arrayType = typeInfo.Type.MakeArrayType();
+                        //var arrayValue = (Array)Activator.CreateInstance(arrayType, new object[] { arrayCount });
+                        var arrayValue = (Array)Array.CreateInstance(typeInfo.Type, arrayCount);
+                        if (arrayValue != null)
+                        {
+                            for (int index = 0; index < arrayCount; index++)
+                                arrayValue.SetValue(typeInfo.DeserializeNative(Value), index);
+                        }
+                        stm_ParsingMessage.SetValue(stringHash, arrayValue);
+                    }
+                    else
+                    {
+                        SF.Log.Error("MessageParseSetArray failed, type:{0}", stringHash);
+                    }
                     break;
             }
 
