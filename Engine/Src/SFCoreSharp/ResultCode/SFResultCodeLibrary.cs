@@ -545,6 +545,9 @@ namespace SF {
 		// Character hasn't selected 
 		public const int CHARACTER_NOT_SELECTED =                           unchecked((int)0xE70100B0); 
 
+		// Invalid version 
+		public const int INVALID_VERSION =                                  unchecked((int)0xE70100B1); 
+
 	}
 }
 

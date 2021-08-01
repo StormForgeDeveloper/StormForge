@@ -57,6 +57,7 @@ namespace SF {
 		IHeap& GetHeap() { return m_Heap; }
 
 		void Clear();
+		void Reset() { Clear(); }
 
 		size_t size() const { return m_VairableTable.size(); }
 		Iterator begin() { return m_VairableTable.begin(); }

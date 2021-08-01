@@ -72,6 +72,9 @@ pushd src/avro/
 ./download.sh
 popd
 
+pushd src/llvm/
+./download.sh
+popd
 
 
 echo ==============================================================

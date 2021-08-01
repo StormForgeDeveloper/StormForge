@@ -197,6 +197,7 @@
 
 	<ResultCodeItem Severity="Error" CodeName="INVALID_CHARACTERID" Desc="Invalid character ID"/>
 	<ResultCodeItem Severity="Error" CodeName="CHARACTER_NOT_SELECTED" Desc="Character hasn't selected"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_VERSION" Desc="Invalid version"/>
 
 </ResultCodes>
 

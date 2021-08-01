@@ -61,7 +61,7 @@ cmd /c "cd 3rdParties\src\mongoc & download.cmd"
 cmd /c "cd 3rdParties\src\lzma & download.cmd"
 cmd /c "cd 3rdParties\src\jansson & download.cmd"
 cmd /c "cd 3rdParties\src\avro & download.cmd"
-
+cmd /c "cd 3rdParties\src\llvm & download.cmd"
 
 
 

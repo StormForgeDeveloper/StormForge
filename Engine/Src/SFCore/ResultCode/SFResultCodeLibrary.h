@@ -549,6 +549,9 @@ namespace SF {
 			// Character hasn't selected 
 			constexpr Result 			CHARACTER_NOT_SELECTED                                             ((int32_t)0xE70100B0L);
 
+			// Invalid version 
+			constexpr Result 			INVALID_VERSION                                                    ((int32_t)0xE70100B1L);
+
 	}//namespace ResultCode 
 }//namespace SF 
 

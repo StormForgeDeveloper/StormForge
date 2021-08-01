@@ -35,6 +35,9 @@ namespace SF {
 			return Size;
 		}
 
+		// Check SFStream
+		//Result operator >> (IInputStream& input, Array<VariableTable>& data);
+		//Result operator << (IOutputStream& output, const Array<VariableTable>& data);
 
 
 } // namespace SF
