@@ -139,7 +139,7 @@ namespace SF
                     var typeInfo = TypeSerialization.GetTypeInfo(typeNameHash);
                     if (typeInfo != null)
                     {
-                        stm_ParsingMessage.SetValue(stringHash, typeInfo.DeserializeNative(Value));
+                        stm_ParsingMessage.SetValue(stringHash, typeInfo.DeserializeNative(ref Value));
                     }
                     else
                     {
@@ -356,7 +356,7 @@ namespace SF
                         if (arrayValue != null)
                         {
                             for (int index = 0; index < arrayCount; index++)
-                                arrayValue.SetValue(typeInfo.DeserializeNative(Value), index);
+                                arrayValue.SetValue(typeInfo.DeserializeNative(ref Value), index);
                         }
                         stm_ParsingMessage.SetValue(stringHash, arrayValue);
                     }
