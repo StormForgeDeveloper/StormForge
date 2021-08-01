@@ -362,8 +362,8 @@ namespace SF {
 			void CopyFrom(const Array<SrcDataType>& src)
 			{
 				// should I use is_trivial_v ?
-				constexpr bool bBulkCopy = std::is_trivially_copy_constructible_v<typename DataType>
-					&& std::is_trivially_copy_constructible_v<typename SrcDataType>
+				constexpr bool bBulkCopy = std::is_trivially_copy_constructible_v<DataType>
+					&& std::is_trivially_copy_constructible_v<SrcDataType>
 					&& sizeof(DataType) == sizeof(SrcDataType); // decay+is_same test would be more precise, but I am trying to let them be able to copy if raw sizes are same
 
 				if constexpr (bBulkCopy)
