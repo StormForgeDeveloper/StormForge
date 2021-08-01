@@ -78,7 +78,7 @@ namespace ProtocolCompiler
             //OutStream.WriteLine("**Parameter descriptions**");
             foreach (var parameter in parameters)
             {
-                OutStream.WriteLine("\t\t- Out{0}: {1} type. {2}", InParamName(parameter.Name), parameter.Type, parameter.Desc);
+                OutStream.WriteLine("\t\t- Out{0}: {1} type. {2}", InParamName(parameter.Name), parameter.TypeName, parameter.Desc);
                 NewLine();
             }
         }
@@ -102,7 +102,7 @@ namespace ProtocolCompiler
             // Parameter descriptions
             foreach (var parameter in cmdParameters)
             {
-                OutStream.WriteLine("\t\t- Out{0}: {1} type. {2}", InParamName(parameter.Name), parameter.Type, parameter.Desc);
+                OutStream.WriteLine("\t\t- Out{0}: {1} type. {2}", InParamName(parameter.Name), parameter.TypeName, parameter.Desc);
                 NewLine();
             }
 
@@ -116,7 +116,7 @@ namespace ProtocolCompiler
             // Parameter descriptions
             foreach (var parameter in resultParameters)
             {
-                OutStream.WriteLine("\t\t- Out{0}: {1} type. {2}", parameter.Name, parameter.Type, parameter.Desc);
+                OutStream.WriteLine("\t\t- Out{0}: {1} type. {2}", parameter.Name, parameter.TypeName, parameter.Desc);
                 NewLine();
             }
         }

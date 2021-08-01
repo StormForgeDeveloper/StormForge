@@ -6,42 +6,42 @@
 
 		<Command Name="JoinGameInstance" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Event for Player Join request.">
 			<Cmd>
-				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance to join"/>
-				<Params Type="PlayerID" Name="PlayerID" Desc="Joining player id"/>
-				<Params Type="String" Name="PlayerIdentifier" Desc="Joining player identifier. string value"/>
+				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance to join"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="Joining player id"/>
+				<Params TypeName="String" Name="PlayerIdentifier" Desc="Joining player identifier. string value"/>
 			</Cmd>
 			<Res>
-				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="joined Play instance ID"/>
-				<Params Type="PlayerID" Name="PlayerID" Desc="Joined player id for validation"/>
-				<Params Type="ActorMovement" Name="Movement" Desc="Start movement"/>
+				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="joined Play instance ID"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="Joined player id for validation"/>
+				<Params TypeName="ActorMovement" Name="Movement" Desc="Start movement"/>
 			</Res>
 		</Command>
 
 
 		<!-- <C2SEvent Name="FrameSync" Reliable="false" Crypto="No" Trace="Debug1" Desc="Frame sync packet"> -->
-			<!-- <Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/> -->
-			<!-- <Params Type="uint64" Name="SendUTC" Desc="Send(Client) time stamp"/> -->
+			<!-- <Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/> -->
+			<!-- <Params TypeName="uint64" Name="SendUTC" Desc="Send(Client) time stamp"/> -->
 		<!-- </C2SEvent> -->
 
 		<!-- <S2CEvent Name="FrameSync" Reliable="false" Crypto="No" Trace="Debug1" Desc="Frame sync packet response"> -->
-			<!-- <Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/> -->
-			<!-- <Params Type="uint64" Name="SendUTC" Desc="Send(Client) time stamp"/> -->
-			<!-- <Params Type="uint64" Name="ServerReceivedUTC" Desc="Send(Client) time stamp"/> -->
-			<!-- <Params Type="uint64" Name="ServerSendUTC" Desc="Send(Client) time stamp"/> -->
-			<!-- <Params Type="uint32" Name="ServerMoveFrame" Desc="Movement frame on server"/> -->
+			<!-- <Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/> -->
+			<!-- <Params TypeName="uint64" Name="SendUTC" Desc="Send(Client) time stamp"/> -->
+			<!-- <Params TypeName="uint64" Name="ServerReceivedUTC" Desc="Send(Client) time stamp"/> -->
+			<!-- <Params TypeName="uint64" Name="ServerSendUTC" Desc="Send(Client) time stamp"/> -->
+			<!-- <Params TypeName="uint32" Name="ServerMoveFrame" Desc="Movement frame on server"/> -->
 		<!-- </S2CEvent> -->
 
 
 		<S2CEvent Name="PlayerKicked" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player kicked event. this event will be broadcasted when a player kicked.">
-			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="KickedPlayerID" Desc="Kicked player ID"/>
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="PlayerID" Name="KickedPlayerID" Desc="Kicked player ID"/>
 		</S2CEvent>
 
 		<C2SEvent Name="PlayPacket" Reliable="false" Crypto="No" Trace="Debug1" Desc="Play packet">
-			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="uint32" Name="SenderEndpointID" Desc="Sender player ID"/>
-			<Params Type="uint32" Name="TargetEndpointMask" Desc="Target Play mask."/>
-			<Params Type="uint8" IsArray="true" Name="Payload" Desc="Payload data"/>
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="uint32" Name="SenderEndpointID" Desc="Sender player ID"/>
+			<Params TypeName="uint32" Name="TargetEndpointMask" Desc="Target Play mask."/>
+			<Params TypeName="uint8" IsArray="true" Name="Payload" Desc="Payload data"/>
 		</C2SEvent>
 
 
@@ -49,51 +49,51 @@
 
 
 		<S2CEvent Name="NewPlayerInView" Reliable="true" Crypto="No" Trace="Debug1" Desc="New Player in get view">
-			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Joined Player Id"/>
-			<Params Type="VariableTable" Name="Attributes" Desc="Character visual data"/>
-			<Params Type="ActorMovement" Name="Movement" Desc="Actor movement of the character"/>
-			<Params Type="StringCrc32" Name="State" Desc="StateId actor state."/>
-			<Params Type="VariableTable" Name="StateValues" Desc="State values"/>
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="PlayerID" Name="PlayerID" Desc="Joined Player Id"/>
+			<Params TypeName="VariableTable" Name="Attributes" Desc="Character visual data"/>
+			<Params TypeName="ActorMovement" Name="Movement" Desc="Actor movement of the character"/>
+			<Params TypeName="StringCrc32" Name="State" Desc="StateId actor state."/>
+			<Params TypeName="VariableTable" Name="StateValues" Desc="State values"/>
 		</S2CEvent>
 
 		<S2CEvent Name="RemovePlayerFromView" Reliable="true" Crypto="No" Trace="Debug1" Desc="Remove player from view">
-			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Removed Player Id"/>
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="PlayerID" Name="PlayerID" Desc="Removed Player Id"/>
 		</S2CEvent>
 
 
 		<C2SEvent Name="PlayerMovement" Reliable="false" Crypto="No" Trace="Debug3" Desc="Player Movement">
-			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
-			<Params Type="ActorMovement" Name="Movement" Desc="Movement attributes"/>
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
+			<Params TypeName="ActorMovement" Name="Movement" Desc="Movement attributes"/>
 		</C2SEvent>
 
 		<S2CEvent Name="PlayerMovement" Reliable="false" Crypto="No" Trace="Debug4" Desc="Player Movement">
-			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
-			<Params Type="ActorMovement" Name="Movement" Desc="Movement attributes"/>
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
+			<Params TypeName="ActorMovement" Name="Movement" Desc="Movement attributes"/>
 		</S2CEvent>
 
 		<S2CEvent Name="PlayerStateChanged" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player state change">
-			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
-			<Params Type="StringCrc32" Name="State" Desc="StateId actor state."/>
-			<Params Type="uint32" Name="MoveFrame" Desc="Movement frame state change has happened"/>
-			<Params Type="Vector4" Name="Position" Desc="Position of the player when state change happened"/>
-			<Params Type="VariableTable" Name="StateValues" Desc="State change values"/>
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
+			<Params TypeName="StringCrc32" Name="State" Desc="StateId actor state."/>
+			<Params TypeName="uint32" Name="MoveFrame" Desc="Movement frame state change has happened"/>
+			<Params TypeName="Vector4" Name="Position" Desc="Position of the player when state change happened"/>
+			<Params TypeName="VariableTable" Name="StateValues" Desc="State change values"/>
 		</S2CEvent>
 
 		<C2SEvent Name="ClientSyncReliable" Reliable="true" Crypto="No" Trace="Debug1" Desc="Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet">
-			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
-			<Params Type="VariableTable" Name="SyncData" Desc="sync data"/>
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
+			<Params TypeName="VariableTable" Name="SyncData" Desc="sync data"/>
 		</C2SEvent>
 
 		<C2SEvent Name="ClientSync" Reliable="false" Crypto="No" Trace="Debug1" Desc="Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet">
-			<Params Type="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params Type="PlayerID" Name="PlayerID" Desc="Player Id"/>
-			<Params Type="VariableTable" Name="SyncData" Desc="sync data"/>
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
+			<Params TypeName="VariableTable" Name="SyncData" Desc="sync data"/>
 		</C2SEvent>
 
 
@@ -101,57 +101,57 @@
 
 		<Command Name="OccupyMapObject" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Occupy map object">
 			<Cmd>
-				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
-				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
-				<Params Type="uint32" Name="UsageId" Desc="MapObjectOccupyMode "/>
+				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+				<Params TypeName="uint32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params TypeName="uint32" Name="UsageId" Desc="MapObjectOccupyMode "/>
 			</Cmd>
 			<Res>
-				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params Type="PlayerID" Name="PlayerID" Desc="player id for validation"/>
-				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id for validation"/>
+				<Params TypeName="uint32" Name="MapObjectId" Desc="MapObjectId"/>
 			</Res>
 		</Command>
 
 		<Command Name="UnoccupyMapObject" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Unoccupy map object">
 			<Cmd>
-				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
-				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+				<Params TypeName="uint32" Name="MapObjectId" Desc="MapObjectId"/>
 			</Cmd>
 			<Res>
-				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params Type="PlayerID" Name="PlayerID" Desc="player id for validation"/>
-				<Params Type="uint32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id for validation"/>
+				<Params TypeName="uint32" Name="MapObjectId" Desc="MapObjectId"/>
 			</Res>
 		</Command>
 
 		<Command Name="UseMapObject" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Use map object">
 			<Cmd>
-				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
-				<Params Type="StringCrc32" Name="MapObjectId" Desc="MapObjectId"/>
-				<Params Type="VariableTable" Name="UseParameters" Desc="use parameters"/>
+				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+				<Params TypeName="StringCrc32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params TypeName="VariableTable" Name="UseParameters" Desc="use parameters"/>
 			</Cmd>
 			<Res>
-				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params Type="PlayerID" Name="PlayerID" Desc="player id for validation"/>
-				<Params Type="StringCrc32" Name="MapObjectId" Desc="MapObjectId"/>
-				<Params Type="VariableTable" Name="ResultAttributes" Desc="Use result attributes"/>
+				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id for validation"/>
+				<Params TypeName="StringCrc32" Name="MapObjectId" Desc="MapObjectId"/>
+				<Params TypeName="VariableTable" Name="ResultAttributes" Desc="Use result attributes"/>
 			</Res>
 		</Command>
 
 		<Command Name="HarvestArea" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Havest area">
 			<Cmd>
-				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params Type="PlayerID" Name="PlayerID" Desc="player id"/>
-				<Params Type="StringCrc32" Name="AreaId" Desc="Area Id"/>
+				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+				<Params TypeName="StringCrc32" Name="AreaId" Desc="Area Id"/>
 			</Cmd>
 			<Res>
-				<Params Type="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params Type="PlayerID" Name="PlayerID" Desc="player id for validation"/>
-				<Params Type="StringCrc32" Name="AreaId" Desc="Area Id"/>
-				<Params Type="VariableTable" Name="ResultAttributes" Desc="Use result attributes"/>
+				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id for validation"/>
+				<Params TypeName="StringCrc32" Name="AreaId" Desc="Area Id"/>
+				<Params TypeName="VariableTable" Name="ResultAttributes" Desc="Use result attributes"/>
 			</Res>
 		</Command>
 
@@ -160,32 +160,32 @@
 
 		<Command Name="CreateStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">
 			<Cmd>
-				<Params Type="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-				<Params Type="String" Name="StreamName" Desc="Stream name"/>
+				<Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+				<Params TypeName="String" Name="StreamName" Desc="Stream name"/>
 			</Cmd>
 			<Res>
-				<Params Type="NetAddress" Name="StreamServerAddr" Desc="Stream server address to connect"/>
-				<Params Type="NetAddress" Name="StreamServerAddrIPV4" Desc="Stream server address to connect"/>
-				<Params Type="String" Name="StreamUID" Desc="Unique stream Id generated by server. This wil be used when you operate streaming"/>
+				<Params TypeName="NetAddress" Name="StreamServerAddr" Desc="Stream server address to connect"/>
+				<Params TypeName="NetAddress" Name="StreamServerAddrIPV4" Desc="Stream server address to connect"/>
+				<Params TypeName="String" Name="StreamUID" Desc="Unique stream Id generated by server. This wil be used when you operate streaming"/>
 			</Res>
 		</Command>
 
 		<Command Name="FindStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Open stream instance">
 			<Cmd>
-				<Params Type="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-				<Params Type="String" Name="StreamName" Desc="Stream name"/>
+				<Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+				<Params TypeName="String" Name="StreamName" Desc="Stream name"/>
 			</Cmd>
 			<Res>
-				<Params Type="NetAddress" Name="StreamServerAddr" Desc="Stream server address to connect"/>
-				<Params Type="NetAddress" Name="StreamServerAddrIPV4" Desc="Stream server address to connect"/>
-				<Params Type="String" Name="StreamUID" Desc="Unique stream Id generated by server. This wil be used when you operate streaming"/>
+				<Params TypeName="NetAddress" Name="StreamServerAddr" Desc="Stream server address to connect"/>
+				<Params TypeName="NetAddress" Name="StreamServerAddrIPV4" Desc="Stream server address to connect"/>
+				<Params TypeName="String" Name="StreamUID" Desc="Unique stream Id generated by server. This wil be used when you operate streaming"/>
 			</Res>
 		</Command>
 
 		<Command Name="DeleteStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Delete stream instance">
 			<Cmd>
-				<Params Type="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-				<Params Type="String" Name="StreamName" Desc="stream name to delete"/>
+				<Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+				<Params TypeName="String" Name="StreamName" Desc="stream name to delete"/>
 			</Cmd>
 			<Res>
 			</Res>
@@ -193,25 +193,25 @@
 
 		<Command Name="GetStreamList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get stream list">
 			<Cmd>
-				<Params Type="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+				<Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
 			</Cmd>
 			<Res>
-				<Params Type="String" Name="StreamNames" IsArray="true" Desc="Stream names"/>
+				<Params TypeName="String" Name="StreamNames" IsArray="true" Desc="Stream names"/>
 			</Res>
 		</Command>
 
 		<!-- <C2SEvent Name="NewStreamPacket" Reliable="true" Crypto="No" Trace="Debug1" Desc="Play packet"> -->
-		<!-- <Params Type="String" Name="StreamUID" Desc="Unique stream Id to delete"/> -->
-		<!-- <Params Type="uint32" Name="SenderEndpointID" Desc="Sender player ID"/> -->
-		<!-- <Params Type="uint32" Name="TargetEndpointMask" Desc="Target Play mask."/> -->
-		<!-- <Params Type="uint8" IsArray="true" Name="Payload" Desc="Payload data"/> -->
+		<!-- <Params TypeName="String" Name="StreamUID" Desc="Unique stream Id to delete"/> -->
+		<!-- <Params TypeName="uint32" Name="SenderEndpointID" Desc="Sender player ID"/> -->
+		<!-- <Params TypeName="uint32" Name="TargetEndpointMask" Desc="Target Play mask."/> -->
+		<!-- <Params TypeName="uint8" IsArray="true" Name="Payload" Desc="Payload data"/> -->
 		<!-- </C2SEvent> -->
 
 
 		<!-- <S2CEvent Name="StreamPacket" Reliable="true" Crypto="No" Trace="Debug1" Desc="Event for Player left."> -->
-		<!-- <Params Type="uint32" Name="PlayInstanceID" Desc="Play Instance id"/> -->
-		<!-- <Params Type="PlayerID" Name="LeftPlayerID" Desc="Left player ID"/> -->
-		<!-- <Params Type="uint32" Name="KickedReason" Desc="Reason"/> -->
+		<!-- <Params TypeName="uint32" Name="PlayInstanceID" Desc="Play Instance id"/> -->
+		<!-- <Params TypeName="PlayerID" Name="LeftPlayerID" Desc="Left player ID"/> -->
+		<!-- <Params TypeName="uint32" Name="KickedReason" Desc="Reason"/> -->
 		<!-- </S2CEvent> -->
 
 
@@ -220,11 +220,11 @@
 
 		<Command Name="CallFunction" Reliable="true" Crypto="No" Trace="Debug1" Desc="To call general functionality">
 			<Cmd>
-				<Params Type="StringCrc32" Name="FunctionName" Desc="function name"/>
-				<Params Type="VariableTable" Name="Parameters" Desc="function parameter"/>
+				<Params TypeName="StringCrc32" Name="FunctionName" Desc="function name"/>
+				<Params TypeName="VariableTable" Name="Parameters" Desc="function parameter"/>
 			</Cmd>
 			<Res>
-				<Params Type="VariableTable" Name="Results" Desc="function result"/>
+				<Params TypeName="VariableTable" Name="Results" Desc="function result"/>
 			</Res>
 		</Command>
 

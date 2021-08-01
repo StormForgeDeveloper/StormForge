@@ -104,8 +104,8 @@ namespace ProtocolCompiler
     TypeUsage m_ParameterMode = TypeUsage.CPP;
         TypeUsage ParameterMode { get { return m_ParameterMode; } set { m_ParameterMode = value; } }
 
-       // target type for output
-        public string ToTargetTypeName(Parameter param)
+        // target type for output
+        public override string ToTargetTypeName(Parameter param)
         {
             return SystemTypeInfo.TypeNameFor(ParameterMode, param);
         }
@@ -113,7 +113,7 @@ namespace ProtocolCompiler
         Parameter m_ArraySizeParam = new Parameter()
         {
             Name = "_sizeof",
-            Type = ParameterType.uint16,
+            TypeName = "uint16",
             //IsArray = false,
             //IsArraySpecified = false,
         };
@@ -126,7 +126,7 @@ namespace ProtocolCompiler
             newParameters.Insert(0, new Parameter()
             {
                 Name = "NativeConnectionHandle",
-                Type = ParameterType.intptr,
+                TypeName = "intptr",
             });
             return ParamInStringNative("", newParameters.ToArray());
         }
@@ -157,14 +157,15 @@ namespace ProtocolCompiler
                     strComma = ", ";
 
                 var typeName = ToTargetTypeName(param);
-                Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
-                bool bIsStruct = IsStruct(param.Type);
+                var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                //Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                bool bIsStruct = typeInfo.IsCSharpStruct;
                 bool IsArray = param.IsArray;
-                if (csharpType.IsArray)
+                if (typeInfo.IsCSharpArray)
                 {
                     IsArray = true;
                     if (ParameterMode == TypeUsage.CPPForSharp)
-                        typeName = csharpType.GetElementType().Name + "*";
+                        typeName = typeInfo.CPPTypeName + "*";
                 }
 
                 if (IsStrType(param)) // string type
@@ -203,8 +204,9 @@ namespace ProtocolCompiler
                     strComma = ", ";
 
                 var typeName = ToTargetTypeName(param);
-                Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
-                bool bIsStruct = IsStruct(param.Type);
+                var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                //Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                bool bIsStruct = typeInfo.IsCSharpStruct;
                 bool IsArray = param.IsArray;
 
                 if (IsArray) // array
@@ -226,7 +228,7 @@ namespace ProtocolCompiler
                 {
                     strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
                 }
-                else if (IsVariableSizeType(param.Type))
+                else if (IsVariableSizeType(param))
                 {
                     if (ParameterMode == TypeUsage.CPPForSharp)
                         typeName = "uint8_t*";
@@ -259,9 +261,10 @@ namespace ProtocolCompiler
             // 1. Prepare local variables;
             foreach (Parameter param in parameter)
             {
-                Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                //Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
 
-                bool IsArray = param.IsArray | csharpType.IsArray;
+                bool IsArray = param.IsArray | typeInfo.IsCSharpArray;
 
                 if (IsArray) // array
                 {
@@ -271,7 +274,7 @@ namespace ProtocolCompiler
                 {
                     // Nothing for now
                 }
-                else if (IsVariableSizeType(param.Type))
+                else if (IsVariableSizeType(param))
                 {
                     MatchIndent(); OutStream.WriteLine("var {0}{1}_ = {0}{1}.ToByteArray();", strPrefix, InParamName(param.Name));
                 }
@@ -280,9 +283,10 @@ namespace ProtocolCompiler
             //2. Prepare pinned variables or something with using statement
             foreach (Parameter param in parameter)
             {
-                Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                //Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
 
-                bool IsArray = param.IsArray | csharpType.IsArray;
+                bool IsArray = param.IsArray | typeInfo.IsCSharpArray;
 
                 if (IsArray) // array
                 {
@@ -295,7 +299,7 @@ namespace ProtocolCompiler
                 {
                     // Nothing for now
                 }
-                else if (IsVariableSizeType(param.Type))
+                else if (IsVariableSizeType(param))
                 {
                     MatchIndent(); OutStream.WriteLine("using (var {0}{1}_PinnedPtr_ = new PinnedByteBuffer({0}{1}_))", strPrefix, InParamName(param.Name));
                 }
@@ -321,11 +325,12 @@ namespace ProtocolCompiler
                 string paramTypeNameOnly = SystemTypeInfo.TypeNameOnlyFor(from, param);
                 string paramTypeFrom = SystemTypeInfo.TypeNameFor(from, param);
                 string paramTypeTo = SystemTypeInfo.TypeNameFor(to, param);
-                Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                //Type csharpType = SystemTypeInfo.ToCSharpType(param.Type);
                 bool paramTypeEquality = paramTypeFrom == paramTypeTo;
 
-                bool IsArray = param.IsArray | csharpType.IsArray;
-                bool bIsStruct = IsStruct(param.Type);
+                bool IsArray = param.IsArray | typeInfo.IsCSharpArray;
+                bool bIsStruct = typeInfo.IsCSharpStruct;
 
                 if (IsArray) // array
                 {
@@ -337,7 +342,7 @@ namespace ProtocolCompiler
                     {
                         strParams.AppendFormat("(ushort){0}{1}.Length, ", strPrefix, InParamName(param.Name));
 
-                        if (csharpType.IsEnum)
+                        if (typeInfo.IsEnum)
                             strParams.AppendFormat("GameTypes.ToIntArray({0}{1})", strPrefix, InParamName(param.Name));
                         else
                             strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
@@ -347,7 +352,7 @@ namespace ProtocolCompiler
                 {
                     strParams.AppendFormat("System.Text.Encoding.UTF8.GetBytes({0}{1} + \"\\0\")", strPrefix, InParamName(param.Name));
                 }
-                else if (IsVariableSizeType(param.Type))
+                else if (IsVariableSizeType(param))
                 {
                     strParams.AppendFormat("(ushort){0}{1}_.Length, ", strPrefix, InParamName(param.Name));
                     strParams.AppendFormat("{0}{1}_PinnedPtr_.Ptr", strPrefix, InParamName(param.Name));
@@ -398,8 +403,9 @@ namespace ProtocolCompiler
                 string paramTypeFrom = SystemTypeInfo.TypeNameFor(from, param);
                 string paramTypeTo = SystemTypeInfo.TypeNameFor(to, param);
                 bool paramTypeEquality = paramTypeFrom == paramTypeTo;
+                var typeInfo = SystemTypeInfo.GetParameterInfo(param);
 
-                bool bIsStruct = IsStruct(param.Type);
+                bool bIsStruct = typeInfo.IsCSharpStruct;
 
                 if (param.IsArray) // array
                 {
@@ -412,7 +418,7 @@ namespace ProtocolCompiler
                 {
                     strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
                 }
-                else if (IsVariableSizeType(param.Type))
+                else if (IsVariableSizeType(param))
                 {
                     strParams.AppendFormat("SF::ArrayView<uint8_t>({0}_sizeOf{1}, {0}_sizeOf{1}, {0}{1})", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
                 }
@@ -455,10 +461,11 @@ namespace ProtocolCompiler
                 string paramTypeNameOnly = SystemTypeInfo.TypeNameOnlyFor(from, param);
                 string paramTypeFrom = SystemTypeInfo.TypeNameFor(from, param);
                 string paramTypeTo = SystemTypeInfo.TypeNameFor(to, param);
-                Type scharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                //Type scharpType = SystemTypeInfo.ToCSharpType(param.Type);
                 bool paramTypeEquality = paramTypeFrom == paramTypeTo;
 
-                bool bIsStruct = IsStruct(param.Type);
+                //bool bIsStruct = IsStruct(param.Type);
 
                 // Disable native conversion
                 if (param.IsArray) // string type

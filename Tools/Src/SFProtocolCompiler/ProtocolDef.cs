@@ -228,7 +228,7 @@ namespace ProtocolXml {
         
         private string nameField;
         
-        private ParameterType typeField;
+        private string typeNameField;
         
         private bool isArrayField;
         
@@ -249,12 +249,12 @@ namespace ProtocolXml {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlAttributeAttribute()]
-        public ParameterType Type {
+        public string TypeName {
             get {
-                return this.typeField;
+                return this.typeNameField;
             }
             set {
-                this.typeField = value;
+                this.typeNameField = value;
             }
         }
         
@@ -290,203 +290,6 @@ namespace ProtocolXml {
                 this.descField = value;
             }
         }
-    }
-    
-    /// <remarks/>
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.8.4084.0")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType=true, Namespace="http://www.StormForge.com/XMLProtocol")]
-    public enum ParameterType {
-        
-        /// <remarks/>
-        intptr,
-        
-        /// <remarks/>
-        String,
-        
-        /// <remarks/>
-        int8,
-        
-        /// <remarks/>
-        uint8,
-        
-        /// <remarks/>
-        int16,
-        
-        /// <remarks/>
-        uint16,
-        
-        /// <remarks/>
-        int32,
-        
-        /// <remarks/>
-        uint32,
-        
-        /// <remarks/>
-        int64,
-        
-        /// <remarks/>
-        uint64,
-        
-        /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("uint8")]
-        uint81,
-        
-        /// <remarks/>
-        WORD,
-        
-        /// <remarks/>
-        DWORD,
-        
-        /// <remarks/>
-        QWORD,
-        
-        /// <remarks/>
-        @float,
-        
-        /// <remarks/>
-        TransactionID,
-        
-        /// <remarks/>
-        StringCrc32,
-        
-        /// <remarks/>
-        StringCrc64,
-        
-        /// <remarks/>
-        ClusterID,
-        
-        /// <remarks/>
-        AccountID,
-        
-        /// <remarks/>
-        PlayerID,
-        
-        /// <remarks/>
-        FacebookUID,
-        
-        /// <remarks/>
-        AuthTicket,
-        
-        /// <remarks/>
-        GameInsID,
-        
-        /// <remarks/>
-        GameInsUID,
-        
-        /// <remarks/>
-        PartyUID,
-        
-        /// <remarks/>
-        NotificationType,
-        
-        /// <remarks/>
-        Variable,
-        
-        /// <remarks/>
-        VariableTable,
-        
-        /// <remarks/>
-        GameInstanceInfo,
-        
-        /// <remarks/>
-        RankingType,
-        
-        /// <remarks/>
-        PlayerRole,
-        
-        /// <remarks/>
-        GameStateID,
-        
-        /// <remarks/>
-        GameWinner,
-        
-        /// <remarks/>
-        PlayerKilledReason,
-        
-        /// <remarks/>
-        PlayerRevealedReason,
-        
-        /// <remarks/>
-        ClusterType,
-        
-        /// <remarks/>
-        ClusterMembership,
-        
-        /// <remarks/>
-        ServiceStatus,
-        
-        /// <remarks/>
-        ActorMovement,
-        
-        /// <remarks/>
-        GameID,
-        
-        /// <remarks/>
-        MatchingPlayerInformation,
-        
-        /// <remarks/>
-        MatchingQueueTicket,
-        
-        /// <remarks/>
-        LocalUID,
-        
-        /// <remarks/>
-        Vector2,
-        
-        /// <remarks/>
-        Vector3,
-        
-        /// <remarks/>
-        Vector4,
-        
-        /// <remarks/>
-        Result,
-        
-        /// <remarks/>
-        NetClass,
-        
-        /// <remarks/>
-        NetAddress,
-        
-        /// <remarks/>
-        EntityID,
-        
-        /// <remarks/>
-        EntityUID,
-        
-        /// <remarks/>
-        ServerID,
-        
-        /// <remarks/>
-        RouteContext,
-        
-        /// <remarks/>
-        ServiceInformation,
-        
-        /// <remarks/>
-        PlayerInformation,
-        
-        /// <remarks/>
-        RankingPlayerInformation,
-        
-        /// <remarks/>
-        FriendInformation,
-        
-        /// <remarks/>
-        ServerFriendInformation,
-        
-        /// <remarks/>
-        TotalRankingPlayerInformation,
-        
-        /// <remarks/>
-        PerformanceCounterInfo,
-        
-        /// <remarks/>
-        PerformanceCounterInstanceInfo,
-        
-        /// <remarks/>
-        RelayPlayerInfo,
     }
     
     /// <remarks/>

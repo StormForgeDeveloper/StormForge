@@ -147,11 +147,12 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
-                    var csharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                    var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                    //var csharpType = SystemTypeInfo.ToCSharpType(param.Type);
 
-                    switch (param.Type)
+                    switch (param.TypeName)
                     {
-                        case ParameterType.String:
+                        case "String":
                             {
                                 strTrace += string.Format(", {0}:{{{1},60}}", param.Name, ParamCount++);
                                 strTraceMember += string.Format(", parser.Get{0}()", param.Name);
@@ -162,12 +163,12 @@ namespace ProtocolCompiler
                                 strTrace += string.Format(", {0}:{{{1},30}}", param.Name, ParamCount++);
                                 strTraceMember += string.Format(", parser.Get{0}()", param.Name);
                             }
-                            else if (param.Type == ParameterType.Result)
+                            else if (param.TypeName == "Result")
                             {
                                 strTrace += string.Format(", {0}:{{{1}:X8}}", param.Name, ParamCount++);
                                 strTraceMember += string.Format(", parser.Get{0}()", param.Name);
                             }
-                            else if(csharpType.IsEnum)
+                            else if(typeInfo.IsEnum)
                             {
                                 strTrace += string.Format(", {0}:{{{1}}}", param.Name, ParamCount++);
                                 strTraceMember += string.Format(", (int)parser.Get{0}()", param.Name);
@@ -216,11 +217,11 @@ namespace ProtocolCompiler
 
         static Parameter[] GenerateParameterTypeInfoList = new Parameter[]
         {
-            new Parameter() { Name = "PlayerID", Type = ParameterType.uint64 },
-            new Parameter() { Name = "TransactionID", Type = ParameterType.TransactionID },
-            new Parameter() { Name = "RouteContext", Type = ParameterType.RouteContext },
-            new Parameter() { Name = "RouteHopCount", Type = ParameterType.uint32 },
-            new Parameter() { Name = "Sender", Type = ParameterType.uint64 },
+            new Parameter() { Name = "PlayerID", TypeName = "uint64" },
+            new Parameter() { Name = "TransactionID", TypeName = "TransactionID" },
+            new Parameter() { Name = "RouteContext", TypeName = "RouteContext" },
+            new Parameter() { Name = "RouteHopCount", TypeName = "uint32" },
+            new Parameter() { Name = "Sender", TypeName = "uint64" },
         };
 
         bool HasInternalTypeOverride(Parameter[] parameters)
@@ -232,7 +233,7 @@ namespace ProtocolCompiler
 
             foreach (Parameter param in parameters)
             {
-                bHas |= !IsStrType(param) && !param.IsArray && IsVariableSizeType(param.Type);
+                bHas |= !IsStrType(param) && !param.IsArray && IsVariableSizeType(param);
             }
             return bHas;
         }
@@ -267,10 +268,10 @@ namespace ProtocolCompiler
 
             // Add fake access functions
             MatchIndent(-1); OutStream.WriteLine("public:");
-            foreach (var parameterName in GenerateParameterTypeInfoList)
+            foreach (var parameter in GenerateParameterTypeInfoList)
             {
-                if (parameterNameMap.ContainsKey(parameterName.Name)) continue;
-                MatchIndent(); OutStream.WriteLine("{1} Get{0}() {{ return {1}{{}}; }}", parameterName.Name, ToTargetTypeName(parameterName.Type));
+                if (parameterNameMap.ContainsKey(parameter.Name)) continue;
+                MatchIndent(); OutStream.WriteLine("{1} Get{0}() {{ return {1}{{}}; }}", parameter.Name, ToTargetTypeName(parameter));
             }
 
             bool bHasInternalTypeOverride = HasInternalTypeOverride(parameters);
@@ -282,23 +283,25 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
+                    var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+
                     if (param.IsArray)
                     {
                         MatchIndent();
-                        if (IsVariableSizeType(param.Type))
-                            OutStream.WriteLine("DynamicArray<{0}> m_{1};", ToTargetTypeName(param.Type), param.Name);
+                        if (typeInfo.IsVariableSize)
+                            OutStream.WriteLine("DynamicArray<{0}> m_{1};", ToTargetTypeName(param), param.Name);
                         else
-                            OutStream.WriteLine("ArrayView<{0}> m_{1};", ToTargetTypeName(param.Type), param.Name);
+                            OutStream.WriteLine("ArrayView<{0}> m_{1};", ToTargetTypeName(param), param.Name);
                     }
-                    else if (!IsStrType(param) && IsVariableSizeType(param.Type))
+                    else if (!typeInfo.IsString && !typeInfo.IsCSharpStruct && typeInfo.IsVariableSize)
                     {
-                        MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> m_{1}Raw;", ToTargetTypeName(param.Type), param.Name);
-                        MatchIndent(); OutStream.WriteLine("mutable bool m_{1}HasParsed = false;", ToTargetTypeName(param.Type), param.Name);
-                        MatchIndent(); OutStream.WriteLine("mutable {0} m_{1};", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> m_{1}Raw;", ToTargetTypeName(param), param.Name);
+                        MatchIndent(); OutStream.WriteLine("mutable bool m_{1}HasParsed = false;", ToTargetTypeName(param), param.Name);
+                        MatchIndent(); OutStream.WriteLine("mutable {0} m_{1};", ToTargetTypeName(param), param.Name);
                     }
                     else
                     {
-                        MatchIndent(); OutStream.WriteLine("{0} m_{1}{{}};", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("{0} m_{1}{{}};", ToTargetTypeName(param), param.Name);
                     }
 
                 }
@@ -325,24 +328,26 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
+                    var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+
                     if (param.IsArray)
                     {
-                        MatchIndent(); OutStream.WriteLine("const Array<{0}>& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("const Array<{0}>& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param), param.Name);
                     }
                     else if (IsStrType(param))
                     {
-                        MatchIndent(); OutStream.WriteLine("{0} Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("{0} Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param), param.Name);
                     }
-                    else if (!IsStrType(param) && IsVariableSizeType(param.Type))
+                    else if (!typeInfo.IsCSharpStruct && typeInfo.IsVariableSize)
                     {
-                        MatchIndent(); OutStream.WriteLine("const Array<uint8_t>& Get{1}Raw() const\t{{ return m_{1}Raw; }};", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("const Array<uint8_t>& Get{1}Raw() const\t{{ return m_{1}Raw; }};", ToTargetTypeName(param), param.Name);
                         //MatchIndent(); OutStream.WriteLine("const {0}& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name);
-                        MatchIndent(); OutStream.WriteLine("const {0}& Get{1}() const;", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("const {0}& Get{1}() const;", ToTargetTypeName(param), param.Name);
 
                     }
                     else
                     {
-                        MatchIndent(); OutStream.WriteLine("const {0}& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param.Type), param.Name);
+                        MatchIndent(); OutStream.WriteLine("const {0}& Get{1}() const\t{{ return m_{1}; }};", ToTargetTypeName(param), param.Name);
                     }
                 }
             }
@@ -444,9 +449,9 @@ namespace ProtocolCompiler
                 if (IsStrType(param) || param.IsArray)
                     continue;
 
-                if (IsVariableSizeType(param.Type))
+                if (IsVariableSizeType(param))
                 {
-                    OpenSection(string.Format("const {0}&", ToTargetTypeName(param.Type)), string.Format("{0}::Get{1}() const", strClassName, param.Name), bUseTerminator: false);
+                    OpenSection(string.Format("const {0}&", ToTargetTypeName(param)), string.Format("{0}::Get{1}() const", strClassName, param.Name), bUseTerminator: false);
                     OpenSection("if", string.Format("(!m_{0}HasParsed)", param.Name), bUseTerminator: false);
                     MatchIndent(); OutStream.WriteLine("m_{0}HasParsed = true;", param.Name);
                     MatchIndent(); OutStream.WriteLine("InputMemoryStream {0}_ReadStream(m_{0}Raw);", param.Name);
@@ -501,7 +506,7 @@ namespace ProtocolCompiler
                 {
                     if(param.IsArray)
                     {
-                        if (IsVariableSizeType(param.Type))
+                        if (IsVariableSizeType(param))
                         {
                             if (IsStrType(param)) // TODO: add other linkable types
                             {
@@ -515,7 +520,7 @@ namespace ProtocolCompiler
                         else
                         {
                             MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                            MatchIndent(); OutStream.WriteLine("{1}* {0}Ptr = nullptr;", param.Name, ToTargetTypeName(param.Type));
+                            MatchIndent(); OutStream.WriteLine("{1}* {0}Ptr = nullptr;", param.Name, ToTargetTypeName(param));
                             MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink({0}Ptr, ArrayLen));", param.Name);
                             MatchIndent(); OutStream.WriteLine("m_{0}.SetLinkedBuffer(ArrayLen, {0}Ptr);", param.Name);
                         }
@@ -525,10 +530,10 @@ namespace ProtocolCompiler
                         MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
                         MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink(m_{0}, ArrayLen));", param.Name);
                     }
-                    else if (IsVariableSizeType(param.Type))
+                    else if (IsVariableSizeType(param))
                     {
                         MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                        MatchIndent(); OutStream.WriteLine("uint8_t* {0}Ptr = nullptr;", param.Name, ToTargetTypeName(param.Type));
+                        MatchIndent(); OutStream.WriteLine("uint8_t* {0}Ptr = nullptr;", param.Name, ToTargetTypeName(param));
                         MatchIndent(); OutStream.WriteLine("protocolCheck(input->ReadLink({0}Ptr, ArrayLen));", param.Name);
                         MatchIndent(); OutStream.WriteLine("m_{0}Raw.SetLinkedBuffer(ArrayLen, {0}Ptr);", param.Name);
                     }
@@ -570,26 +575,27 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
-                    var csharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                    //var csharpType = SystemTypeInfo.ToCSharpType(param);
+                    var typeInfo = SystemTypeInfo.GetParameterInfo(param);
 
-                    if (param.IsArray)
+                    if (param.IsArray || typeInfo.IsString)
                     {
                         MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name);
                     }
-                    else if(csharpType.IsEnum)
+                    else if(typeInfo.IsEnum)
                     {
                         MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", (int)parser.Get{0}());", param.Name);
                     }
-                    else if(!IsStrType(param) && IsVariableSizeType(param.Type))
+                    else if(!typeInfo.IsCSharpStruct && typeInfo.IsVariableSize)
                     {
-                        MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", \"{1}\", parser.Get{0}Raw());", param.Name, param.Type);
+                        MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", \"{1}\", parser.Get{0}Raw());", param.Name, param.TypeName);
                     }
                     else
                     {
                         MatchIndent();
-                        var isStruct = SystemTypeInfo.IsStruct(param.Type);
+                        var isStruct = SystemTypeInfo.IsStruct(param);
                         if (isStruct)
-                            OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", \"{1}\", &parser.Get{0}());", param.Name, param.Type.ToString());
+                            OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", \"{1}\", &parser.Get{0}());", param.Name, param.TypeName);
                         else
                             OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name);
                     }
@@ -667,29 +673,29 @@ namespace ProtocolCompiler
                 // Just follow the same process to parsing
                 foreach (Parameter param in parameters)
                 {
-                    switch (param.Type)
+                    switch (param.TypeName)
                     {
-                        case ParameterType.String:
+                        case "String":
                             MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
                             MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof(char));");
                             break;
-                        case ParameterType.RouteContext:
+                        case "RouteContext":
                             break;
                         default:
                             if (param.IsArray)
                             {
                                 MatchIndent(); OutStream.WriteLine("protocolCheck(input->Read(ArrayLen));");
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof({0}));", ToTargetTypeName(param.Type));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(ArrayLen * sizeof({0}));", ToTargetTypeName(param));
                             }
                             else
                             {
-                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({0}));", ToTargetTypeName(param.Type));
+                                MatchIndent(); OutStream.WriteLine("protocolCheck(input->Skip(sizeof({0}));", ToTargetTypeName(param));
                             }
                             break;
                     }
 
                     // All other process is same
-                    if (param.Type == ParameterType.RouteContext)
+                    if (param.TypeName == "RouteContext")
                     {
                         MatchIndent(); OutStream.WriteLine("pCur = input->GetBufferPtr() + input->GetPosition();");
                         MatchIndent(); OutStream.WriteLine("Assert(input->GetRemainSize() >= sizeof(RouteContext));");
@@ -810,7 +816,7 @@ namespace ProtocolCompiler
                 else if (param.IsArray) // array
                 {
                 }
-                else if (IsVariableSizeType(param.Type))
+                else if (IsVariableSizeType(param))
                 {
                     MatchIndent(); OutStream.WriteLine("{1} serializedSizeOf{0} = static_cast<{1}>(SerializedSizeOf({0})); ", InParamName(param.Name), ArrayLenType);
                 }
@@ -852,7 +858,7 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
-                    if (!IsStrType(param) && !param.IsArray && IsVariableSizeType(param.Type))
+                    if (!IsStrType(param) && !param.IsArray && IsVariableSizeType(param))
                     {
                         // Original type will use binary conversion, so has extra array length parameter
                         if (bUseOriginalType)
@@ -900,7 +906,7 @@ namespace ProtocolCompiler
                     //    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, &numberOf{0}, sizeof({1})); ", InParamName(param.Name), ArrayLenType);
                     //    MatchIndent(); OutStream.WriteLine("Protocol::PackParamCopy( pMsgData, {0}.data(), (INT)(sizeof({1})*{0}.size())); ", InParamName(param.Name), ToTargetTypeName(param.Type));
                     //}
-                    else if (!param.IsArray && IsVariableSizeType(param.Type))
+                    else if (!param.IsArray && IsVariableSizeType(param))
                     {
                         if (bUseOriginalType)
                         {

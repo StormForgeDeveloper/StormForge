@@ -89,9 +89,9 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
-                    switch (param.Type)
+                    switch (param.TypeName)
                     {
-                        case ParameterType.String:
+                        case "String":
                             {
                                 strTrace += string.Format(", {0}:{{{1}}}", param.Name, ParamCount++);
                                 strTraceMember += string.Format(", {0}", param.Name);
@@ -104,7 +104,7 @@ namespace ProtocolCompiler
                             }
                             else
                             {
-                                if (param.Type == ParameterType.Result)
+                                if (param.TypeName == "Result")
                                 {
                                     strTrace += string.Format(", {0}:{{{1}}}", param.Name, ParamCount++);
                                     strTraceMember += string.Format(", {0}.ToString()", param.Name);
@@ -129,9 +129,9 @@ namespace ProtocolCompiler
         }
 
         // Make shortest csharp type string
-        public string CSharpTypeString(Type csType)
+        public string CSharpTypeString(string csTypeName)
         {
-            string[] splited = csType.ToString().Split('.');
+            string[] splited = csTypeName.Split('.');
             if (splited.Length > 1)
                 return splited[splited.Length - 1];
             else
@@ -156,8 +156,9 @@ namespace ProtocolCompiler
                 if( strComma.Length == 0 )
                     strComma = ", ";
 
-                Type csType = SystemTypeInfo.ToCSharpType(param.Type);
-                bool bIsStruct = IsStruct(csType);
+                var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                //Type csType = SystemTypeInfo.ToCSharpType(param);
+                //bool bIsStruct = IsStruct(csType);
 
                 if (IsStrType(param)) // string type
                 {
@@ -165,17 +166,17 @@ namespace ProtocolCompiler
                 }
                 else if (param.IsArray) // array
                 {
-                    strParams += string.Format("{0}[] {1}{2}", csType.ToString(), strPrefix, InParamName(param.Name));
+                    strParams += string.Format("{0}[] {1}{2}", typeInfo.CSharpTypeName, strPrefix, InParamName(param.Name));
                 }
                 else // generic type
                 {
-                    if (bIsStruct)
+                    if (typeInfo.IsCSharpStruct)
                     {
-                        strParams += string.Format("ref {0} {1}{2}", csType.ToString(), strPrefix, InParamName(param.Name));
+                        strParams += string.Format("ref {0} {1}{2}", typeInfo.CSharpTypeName, strPrefix, InParamName(param.Name));
                     }
                     else
                     {
-                        strParams += string.Format("{0} {1}{2}", csType.ToString(), strPrefix, InParamName(param.Name));
+                        strParams += string.Format("{0} {1}{2}", typeInfo.CSharpTypeName, strPrefix, InParamName(param.Name));
                     }
                 }
             }
@@ -197,16 +198,9 @@ namespace ProtocolCompiler
                 if (strComma.Length == 0)
                     strComma = ", ";
 
-                Type csType = SystemTypeInfo.ToCSharpType(param.Type);
-                bool bIsStruct = false;
-                foreach (Attribute attribute in Attribute.GetCustomAttributes(csType))
-                {
-                    if (attribute.GetType() == typeof(StructAttribute))
-                    {
-                        bIsStruct = true;
-                        break;
-                    }
-                }
+                var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+
+                //Type csType = SystemTypeInfo.ToCSharpType(param.Type);
 
                 if (IsStrType(param)) // string type
                 {
@@ -218,7 +212,7 @@ namespace ProtocolCompiler
                 }
                 else // generic type
                 {
-                    if (bIsStruct)
+                    if (typeInfo.IsCSharpStruct)
                     {
                         strParams += string.Format("ref {0}", param.Name);
                     }
@@ -244,8 +238,8 @@ namespace ProtocolCompiler
                 foreach (Parameter param in parameters)
                 {
                     NewLine(); MatchIndent(1);
-                    SF.SystemTypeInfo.TypeMap typeMap = SystemTypeInfo.GetParameterInfo(param.Type);
-                    if (param.Type == ParameterType.String)
+                    var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                    if (typeInfo.IsString)
                     {
                         OutStream.Write("+ binWriter.StringEncoder.GetByteCount({0}) + 1 + 2", InParamName(param.Name));
                     }
@@ -253,11 +247,11 @@ namespace ProtocolCompiler
                     {
                         if (param.IsArray)
                         {
-                            OutStream.Write("+ {0}*({1}.Length) + sizeof(UInt16)", typeMap.ByteSize, InParamName(param.Name));
+                            OutStream.Write("+ {0}*({1}.Length) + sizeof(UInt16)", typeInfo.ByteSize, InParamName(param.Name));
                         }
                         else
                         {
-                            OutStream.Write("+ {0}", typeMap.ByteSize );
+                            OutStream.Write("+ {0}", typeInfo.ByteSize );
                         }
                     }
                 }
@@ -299,7 +293,7 @@ namespace ProtocolCompiler
                 }
 
                 string refString = "";
-                if (IsStruct(param.Type))
+                if (IsStruct(param))
                     refString = "ref";
 
                 MatchIndent(); OutStream.WriteLine("binWriter.Write({0} In{1});", refString, param.Name);
@@ -328,22 +322,23 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
-                    switch (param.Type)
+                    switch (param.TypeName)
                     {
-                        case ParameterType.String:
+                        case "String":
                             MatchIndent(); OutStream.WriteLine( string.Format("public string {0} {{ get; private set; }}", param.Name));
                             break;
                         default:
-                            Type csType = SystemTypeInfo.ToCSharpType(param.Type);
+                            //Type csType = SystemTypeInfo.ToCSharpType(param.Type);
+                            var typeInfo = SystemTypeInfo.GetParameterInfo(param);
                             if (param.IsArray)
                             {
                                 MatchIndent(); OutStream.WriteLine(
-                                    string.Format("public {0}[] {1};", csType.ToString(), param.Name));
+                                    string.Format("public {0}[] {1};", typeInfo.CSharpTypeName, param.Name));
                             }
                             else
                             {
                                 MatchIndent(); OutStream.WriteLine(
-                                    string.Format("public {0} {1};", csType.ToString(), param.Name));
+                                    string.Format("public {0} {1};", typeInfo.CSharpTypeName, param.Name));
                             }
                             break;
                     }
@@ -399,10 +394,11 @@ namespace ProtocolCompiler
 
                 foreach (Parameter param in parameters)
                 {
-                    Type csType = SystemTypeInfo.ToCSharpType(param.Type);
-                    switch (param.Type)
+                    var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                    //Type csType = SystemTypeInfo.ToCSharpType(param.Type);
+                    switch (param.TypeName)
                     {
-                        case ParameterType.String:
+                        case "String":
                             MatchIndent(); OutStream.WriteLine(
                                 string.Format("{0} = binReader.ReadString();", param.Name));
                             break;
@@ -414,9 +410,10 @@ namespace ProtocolCompiler
                                 MatchIndent(); OutStream.WriteLine(
                                     string.Format("{0} = binReader.ReadUInt16();", ArrayLenName(param.Name)));
                                 MatchIndent(); OutStream.WriteLine(
-                                    string.Format("{1} = new {0}[{2}];", csType.ToString(), param.Name, ArrayLenName(param.Name)));
+                                    string.Format("{1} = new {0}[{2}];", typeInfo.CSharpTypeName, param.Name, ArrayLenName(param.Name)));
 
-                                if (csType == typeof(byte))
+                                //if (csType == typeof(byte))
+                                if (typeInfo.CSharpTypeName == typeof(byte).ToString())
                                 {
                                     MatchIndent(); OutStream.WriteLine("binReader.ReadBytes({0});", param.Name);
                                 }
@@ -425,14 +422,14 @@ namespace ProtocolCompiler
                                     MatchIndent(); OutStream.WriteLine(
                                         string.Format("for( int iElement = 0; iElement < {0}; iElement++) {{", ArrayLenName(param.Name)));
                                     MatchIndent(); OutStream.WriteLine(
-                                        string.Format("{1}[iElement] = binReader.Read{0}();", CSharpTypeString(csType), param.Name, ArrayLenName(param.Name)));
+                                        string.Format("{1}[iElement] = binReader.Read{0}();", CSharpTypeString(typeInfo.CSharpTypeName), param.Name, ArrayLenName(param.Name)));
                                     MatchIndent(); OutStream.WriteLine("}");
                                 }
                             }
                             else
                             {
                                 MatchIndent(); OutStream.WriteLine(
-                                    string.Format("{1} = binReader.Read{0}();", CSharpTypeString(csType), param.Name, ArrayLenName(param.Name)));
+                                    string.Format("{1} = binReader.Read{0}();", CSharpTypeString(typeInfo.CSharpTypeName), param.Name, ArrayLenName(param.Name)));
                             }
                             break;
                     }

@@ -167,25 +167,25 @@ namespace ProtocolCompiler
             m_ParamContext.IsArray = false;
             m_ParamContext.IsArraySpecified = false;
             m_ParamContext.Name = "TransactionID";
-            m_ParamContext.Type = ParameterType.TransactionID;
+            m_ParamContext.TypeName = "TransactionID";
 
             m_ParamResult = new Parameter();
             m_ParamResult.IsArray = false;
             m_ParamResult.IsArraySpecified = false;
             m_ParamResult.Name = "Result";
-            m_ParamResult.Type = ParameterType.Result;
+            m_ParamResult.TypeName = "Result";
 
             m_ParamRouteContext = new Parameter();
             m_ParamRouteContext.IsArray = false;
             m_ParamRouteContext.IsArraySpecified = false;
             m_ParamRouteContext.Name = "RouteContext";
-            m_ParamRouteContext.Type = ParameterType.RouteContext;
+            m_ParamRouteContext.TypeName = "RouteContext";
 
             m_ParamRouteHopCount = new Parameter();
             m_ParamRouteHopCount.IsArray = false;
             m_ParamRouteHopCount.IsArraySpecified = false;
             m_ParamRouteHopCount.Name = "RouteHopCount";
-            m_ParamRouteHopCount.Type = ParameterType.uint16;
+            m_ParamRouteHopCount.TypeName = "uint16";
 
         }
 
@@ -336,7 +336,7 @@ namespace ProtocolCompiler
         // Make Parameter string
         public bool IsStrType(Parameter param)
         {
-            return param.Type == ParameterType.String;
+            return param.TypeName == "String";
         }
 
         public string ArrayLenName(string Name)
@@ -344,75 +344,46 @@ namespace ProtocolCompiler
             return "uiSizeOf" + Name;
         }
 
-        public virtual string ToTargetTypeName(ParameterType type)
+        public virtual string ToTargetTypeName(Parameter param)
         {
-            Type csType = SystemTypeInfo.ToCSharpType(type);
+            var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+
             if (IsCPPOut)
             {
-                //if (IsVariableSizeType(type))
-                //{
-                //    return SystemTypeInfo.ToCPPType(type) + "*";
-                //}
-                //if (csType.IsArray)
-                //{
-                //    var elementType = SystemTypeInfo.FindParameterTypeFromCSharpType(csType.GetElementType());
-                //    return SystemTypeInfo.ToCPPType(elementType) + "*";
-                //}
-                //else
-                {
-                    return SystemTypeInfo.ToCPPType(type);
-                }
+                return typeInfo.CPPTypeName;// SystemTypeInfo.ToCPPType(type);
             }
 
             if (IsCSharpNative)
             {
-                if (csType == typeof(string))
+                //if (csType == typeof(string))
+                if (typeInfo.IsString)
                     return "byte[]";
-                else if(IsStruct(csType))
-                    return "ref " + csType.ToString();
-                else if (IsEnum(csType))
+                else if(typeInfo.IsCSharpStruct)
+                    return "ref " + typeInfo.CSharpTypeName;
+                else if (typeInfo.IsEnum)
                     return "int";
                 else
-                    return csType.ToString();
+                    return typeInfo.CSharpTypeName;
             }
 
-            return csType.ToString();
+            return typeInfo.CSharpTypeName;
         }
 
-        public virtual bool IsVariableSizeType(ParameterType type)
+        public virtual bool IsVariableSizeType(Parameter param)
         {
-            var paramInfo = SystemTypeInfo.GetParameterInfo(type);
-            
-            return paramInfo.ByteSize < 0;
+            var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+            return typeInfo.IsVariableSize;
         }
 
-        public bool IsEnum(Type csType)
+        public bool IsStruct(Parameter param)
         {
-            return csType.IsEnum;
-        }
-        public bool IsStruct(ParameterType type)
-        {
-            Type csType = SystemTypeInfo.ToCSharpType(type);
-            return IsStruct(csType);
-        }
-
-        public bool IsStruct(Type csType)
-        {
-            bool bIsStruct = false;
-            foreach (Attribute attribute in Attribute.GetCustomAttributes(csType))
-            {
-                if (attribute.GetType() == typeof(StructAttribute))
-                {
-                    bIsStruct = true;
-                    break;
-                }
-            }
-            return bIsStruct;
+            var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+            return typeInfo.IsCSharpStruct;
         }
 
         public string InArrayTypeName(Parameter param)
         {
-            return string.Format("Array<{0}>", ToTargetTypeName(param.Type));
+            return string.Format("Array<{0}>", ToTargetTypeName(param));
         }
 
 
@@ -491,9 +462,9 @@ namespace ProtocolCompiler
 
         public string StrTypeString(Parameter param)
         {
-            switch (param.Type)
+            switch (param.TypeName)
             {
-                case ParameterType.String:
+                case "String":
                     return "char*";
                 default:
                     return null;
@@ -521,13 +492,13 @@ namespace ProtocolCompiler
                 {
                     strParams += string.Format("const {0} {1}", StrTypeString(param), InParamName(param.Name));
                 }
-                else if (!bUseOriginalType && IsVariableSizeType(param.Type))
+                else if (!bUseOriginalType && IsVariableSizeType(param))
                 {
                     strParams += string.Format("const Array<uint8_t>& {0}", InParamName(param.Name));
                 }
                 else // generic type
                 {
-                    strParams += string.Format("const {0} &{1}", ToTargetTypeName(param.Type), InParamName(param.Name));
+                    strParams += string.Format("const {0} &{1}", ToTargetTypeName(param), InParamName(param.Name));
                 }
             }
 
@@ -562,7 +533,7 @@ namespace ProtocolCompiler
                 {
                     strParams += string.Format("{0}", InParamName(param.Name));
                 }
-                else if (IsVariableSizeType(param.Type))
+                else if (IsVariableSizeType(param))
                 {
                     strParams += string.Format("{0}", InParamName(param.Name));
                 }

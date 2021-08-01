@@ -122,7 +122,7 @@ namespace ProtocolCompiler
                 }
                 else // generic type
                 {
-                    strParams += string.Format("const {0} &{1}", ToTargetTypeName(param.Type), InParamName(param.Name));
+                    strParams += string.Format("const {0} &{1}", ToTargetTypeName(param), InParamName(param.Name));
                 }
             }
 

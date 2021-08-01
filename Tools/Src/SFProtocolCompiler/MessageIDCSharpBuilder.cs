@@ -108,7 +108,7 @@ namespace ProtocolCompiler
         TypeUsage ParameterMode { get { return m_ParameterMode; } set { m_ParameterMode = value; } }
 
         // target type for output
-        public string ToTargetTypeName(Parameter param)
+        public override string ToTargetTypeName(Parameter param)
         {
             return SystemTypeInfo.TypeNameFor(ParameterMode, param);
         }
@@ -116,7 +116,7 @@ namespace ProtocolCompiler
         Parameter m_ArraySizeParam = new Parameter()
         {
             Name = "_sizeof",
-            Type = ParameterType.uint16,
+            TypeName = "uint16",
         };
 
 
@@ -127,7 +127,7 @@ namespace ProtocolCompiler
             newParameters.Insert(0, new Parameter()
             {
                 Name = "NativeConnectionHandle",
-                Type = ParameterType.intptr,
+                TypeName = "intptr",
             });
             return ParamInString("", newParameters.ToArray());
         }
@@ -157,7 +157,7 @@ namespace ProtocolCompiler
                     strComma = ", ";
 
                 var typeName = ToTargetTypeName(param);
-                bool bIsStruct = IsStruct(param.Type);
+                bool bIsStruct = IsStruct(param);
 
                 if (IsStrType(param)) // string type
                 {
@@ -198,10 +198,9 @@ namespace ProtocolCompiler
                 string paramTypeNameOnly = SystemTypeInfo.TypeNameOnlyFor(from, param);
                 string paramTypeFrom = SystemTypeInfo.TypeNameFor(from, param);
                 string paramTypeTo = SystemTypeInfo.TypeNameFor(to, param);
-                Type scharpType = SystemTypeInfo.ToCSharpType(param.Type);
+                var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+                //Type scharpType = SystemTypeInfo.ToCSharpType(param.Type);
                 bool paramTypeEquality = paramTypeFrom == paramTypeTo;
-
-                bool bIsStruct = IsStruct(param.Type);
 
                 if (IsStrType(param)) // string type
                 {
@@ -220,7 +219,7 @@ namespace ProtocolCompiler
                             strParams.AppendFormat("(ushort){0}{1}.Length, ", strPrefix, InParamName(param.Name));
                         }
 
-                        if (from == TypeUsage.CSharp && scharpType.IsEnum)
+                        if (from == TypeUsage.CSharp && typeInfo.IsEnum)
                             strParams.AppendFormat("GameTypes.ToIntArray({0}{1})", strPrefix, InParamName(param.Name));
                         else
                             strParams.AppendFormat("{0}{1}", strPrefix, InParamName(param.Name));
@@ -228,7 +227,7 @@ namespace ProtocolCompiler
                 }
                 else // generic type
                 {
-                    if (bIsStruct)
+                    if (typeInfo.IsCSharpStruct)
                     {
                         if (ParameterMode == TypeUsage.CSharp || ParameterMode == TypeUsage.CSharpNative)
                             strParams.AppendFormat("ref {0}{1}", strPrefix, InParamName(param.Name));

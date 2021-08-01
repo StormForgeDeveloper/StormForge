@@ -140,113 +140,108 @@ namespace SF
 
         public class TypeMap
         {
-            public ParameterType XMLType;
+            //public ParameterType XMLType;
+            public string XMLType;
             public int ByteSize;
-            public Type CSharpType;
+            public string CSharpTypeName;
+            public bool IsCSharpStruct;
+            public bool IsEnum;
+            public bool IsCSharpArray;
             public string CPPTypeName;
 
-            public TypeMap(ParameterType xmlType, int byteSize, Type chType, string cppTypeName = null)
+            public bool IsVariableSize => ByteSize < 0;
+            public bool IsString => XMLType == "String";
+
+            //public TypeMap(ParameterType xmlType, int byteSize, Type chType, string cppTypeName = null)
+            //{
+            //    XMLType = xmlType.ToString();
+            //    ByteSize = byteSize;
+            //    CSharpType = chType;
+            //    CSharpTypeName = CSharpType.ToString();
+            //    IsCSharpStruct = IsStruct(chType);
+            //    IsEnum = chType.IsEnum;
+            //    IsCSharpArray = chType.IsArray;
+            //    CPPTypeName = cppTypeName ?? xmlType.ToString();
+            //}
+
+            public TypeMap(string xmlType, int byteSize, Type chType, string cppTypeName = null)
             {
                 XMLType = xmlType;
                 ByteSize = byteSize;
-                CSharpType = chType;
+                CSharpTypeName = chType.ToString();
+                IsCSharpStruct = IsStruct(chType);
+                IsEnum = chType.IsEnum;
+                IsCSharpArray = chType.IsArray;
                 CPPTypeName = cppTypeName ?? xmlType.ToString();
             }
         };
 
-        static string ToString(ParameterType type)
-        {
-            string name = Enum.GetName(typeof(ParameterType), type);
-            switch(name)
-            {
-                case "int8":
-                case "uint8":
-                case "int16":
-                case "uint16":
-                case "int32":
-                case "uint32":
-                case "int64":
-                case "uint64":
-                    name = name + "_t";
-                    break;
-            }
-            return name;
-        }
 
         static TypeMap[] TypesMapList = new TypeMap[]{
-            new TypeMap( ParameterType.String, -1, typeof(String), cppTypeName:"const char*" ),
-            new TypeMap( ParameterType.int8, 1, typeof(SByte), cppTypeName:"int8_t" ),
-            new TypeMap( ParameterType.uint8, 1, typeof(Byte), cppTypeName:"uint8_t" ),
-            new TypeMap( ParameterType.int16, 2, typeof(Int16), cppTypeName:"int16_t" ),
-            new TypeMap( ParameterType.uint16, 2, typeof(UInt16), cppTypeName:"uint16_t" ),
-            new TypeMap( ParameterType.int32, 4, typeof(Int32), cppTypeName:"int32_t" ),
-            new TypeMap( ParameterType.uint32, 4, typeof(UInt32), cppTypeName:"uint32_t" ),
-            new TypeMap( ParameterType.int64, 8, typeof(Int64), cppTypeName:"int64_t" ),
-            new TypeMap( ParameterType.uint64, 8, typeof(UInt64), cppTypeName:"uint64_t" ),
-            new TypeMap( ParameterType.intptr, 8, typeof(IntPtr), cppTypeName:"intptr_t" ),
-            new TypeMap( ParameterType.WORD, 2, typeof(UInt16), cppTypeName:"uint16_t" ),
-            new TypeMap( ParameterType.DWORD, 4, typeof(UInt32), cppTypeName:"uint32_t" ),
-            new TypeMap( ParameterType.QWORD, 8, typeof(UInt64), cppTypeName:"uint64_t" ),
-            new TypeMap( ParameterType.@float, 4, typeof(float), cppTypeName:"float" ),
-            new TypeMap( ParameterType.TransactionID, 8, typeof(UInt64), cppTypeName:"uint64_t" ),
-            new TypeMap( ParameterType.AccountID, 8, typeof(UInt64) ),
-            new TypeMap( ParameterType.PlayerID, 8, typeof(UInt64) ),
-            new TypeMap( ParameterType.FacebookUID, 8, typeof(UInt64) ),
-            new TypeMap( ParameterType.AuthTicket, 8, typeof(UInt64) ),
-            new TypeMap( ParameterType.GameInsID, 4, typeof(UInt32) ),
-            new TypeMap( ParameterType.GameInsUID, 8, typeof(UInt64), cppTypeName:"uint64_t" ),
-            new TypeMap( ParameterType.EntityID, 4, typeof(UInt32) ),
-            new TypeMap( ParameterType.EntityUID, 8, typeof(UInt64), cppTypeName:"uint64_t" ),
-            new TypeMap( ParameterType.PartyUID, 8, typeof(UInt64), cppTypeName:"uint64_t" ),
-            new TypeMap( ParameterType.ServerID, 4, typeof(UInt32) ),
-            new TypeMap( ParameterType.ClusterID, 4, typeof(UInt32) ),
-            new TypeMap( ParameterType.Result, 4, typeof(Int32) ),
-            new TypeMap( ParameterType.NotificationType, 2, typeof(Int16) ),
-
-            new TypeMap( ParameterType.RankingType, 1, typeof(RankingType) ),
-
-            new TypeMap( ParameterType.PlayerRole, 1, typeof(PlayerRole), cppTypeName:"uint8_t" ),
-            new TypeMap( ParameterType.GameStateID, 1, typeof(GameStateID), cppTypeName:"uint8_t" ),
-            new TypeMap( ParameterType.GameWinner, 1, typeof(GameWinner), cppTypeName:"uint8_t" ),
-            new TypeMap( ParameterType.PlayerKilledReason, 1, typeof(PlayerKilledReason), cppTypeName:"uint8_t" ),
-            new TypeMap( ParameterType.PlayerRevealedReason, 1, typeof(PlayerRevealedReason), cppTypeName:"uint8_t" ),
-
-            new TypeMap( ParameterType.GameID, 4, typeof(UInt32), cppTypeName:"uint32_t" ),
-
-            new TypeMap( ParameterType.StringCrc32, 4, typeof(UInt32), cppTypeName:"StringCrc32" ),
-            new TypeMap( ParameterType.StringCrc64, 8, typeof(UInt64), cppTypeName:"StringCrc64" ),
-
-            new TypeMap( ParameterType.ClusterType, 4, typeof(ClusterType) ),
-            new TypeMap( ParameterType.ClusterMembership, 4, typeof(ClusterMembership) ),
-            new TypeMap( ParameterType.ServiceStatus, 4, typeof(ServiceStatus) ),
-
-            new TypeMap( ParameterType.ActorMovement, Marshal.SizeOf(typeof(ActorMovement)), typeof(ActorMovement) ),
-            new TypeMap( ParameterType.MatchingPlayerInformation, 16, typeof(MatchingPlayerInformation) ),
-            new TypeMap( ParameterType.MatchingQueueTicket, 8, typeof(MatchingQueueTicket) ),
-            new TypeMap( ParameterType.LocalUID, 8, typeof(LocalUID), cppTypeName:"uint64_t" ),
-
-            new TypeMap( ParameterType.Variable, -1, typeof(Variable), cppTypeName:"Variable" ),
-            //new TypeMap( ParameterType.NamedVariable, -1, typeof(IntPtr), cppTypeName:"NamedVariable" ),
-            new TypeMap( ParameterType.VariableTable, -1, typeof(VariableTable), cppTypeName:"VariableTable" ),
-
-             new TypeMap( ParameterType.Vector2, 8, typeof(Vector2) ),
-            new TypeMap( ParameterType.Vector3, 12, typeof(Vector3) ),
-            new TypeMap( ParameterType.Vector4, 16, typeof(Vector4) ),
-            new TypeMap( ParameterType.NetAddress, 18, typeof(NetAddress) ),
-            new TypeMap( ParameterType.NetClass, 18, typeof(UInt32) ),
-            new TypeMap( ParameterType.RouteContext, 8, typeof(SFRouteContext) ),
-            new TypeMap( ParameterType.ServiceInformation, Marshal.SizeOf(typeof(ServiceInformation)), typeof(ServiceInformation) ),
-            new TypeMap( ParameterType.PlayerInformation, Marshal.SizeOf(typeof(PlayerInformation)), typeof(PlayerInformation) ),
-            new TypeMap( ParameterType.RankingPlayerInformation, Marshal.SizeOf(typeof(RankingPlayerInformation)), typeof(RankingPlayerInformation) ),
-            new TypeMap( ParameterType.FriendInformation, Marshal.SizeOf(typeof(FriendInformation)), typeof(FriendInformation) ),
-            new TypeMap( ParameterType.ServerFriendInformation, Marshal.SizeOf(typeof(ServerFriendInformation)), typeof(ServerFriendInformation) ),
-            new TypeMap( ParameterType.TotalRankingPlayerInformation, Marshal.SizeOf(typeof(TotalRankingPlayerInformation)), typeof(TotalRankingPlayerInformation) ),
-            new TypeMap( ParameterType.PerformanceCounterInfo, Marshal.SizeOf(typeof(PerformanceCounterInfo)), typeof(PerformanceCounterInfo) ),
-            new TypeMap( ParameterType.PerformanceCounterInstanceInfo, Marshal.SizeOf(typeof(PerformanceCounterInstanceInfo)), typeof(PerformanceCounterInstanceInfo) ),
-            new TypeMap( ParameterType.RelayPlayerInfo, Marshal.SizeOf(typeof(RelayPlayerInfo)), typeof(RelayPlayerInfo) ),
+            new TypeMap( "String", -1, typeof(String), cppTypeName:"const char*" ),
+            new TypeMap( "int8", 1, typeof(SByte), cppTypeName:"int8_t" ),
+            new TypeMap( "uint8", 1, typeof(Byte), cppTypeName:"uint8_t" ),
+            new TypeMap( "int16", 2, typeof(Int16), cppTypeName:"int16_t" ),
+            new TypeMap( "uint16", 2, typeof(UInt16), cppTypeName:"uint16_t" ),
+            new TypeMap( "int32", 4, typeof(Int32), cppTypeName:"int32_t" ),
+            new TypeMap( "uint32", 4, typeof(UInt32), cppTypeName:"uint32_t" ),
+            new TypeMap( "int64", 8, typeof(Int64), cppTypeName:"int64_t" ),
+            new TypeMap( "uint64", 8, typeof(UInt64), cppTypeName:"uint64_t" ),
+            new TypeMap( "intptr", 8, typeof(IntPtr), cppTypeName:"intptr_t" ),
+            new TypeMap( "WORD", 2, typeof(UInt16), cppTypeName:"uint16_t" ),
+            new TypeMap( "DWORD", 4, typeof(UInt32), cppTypeName:"uint32_t" ),
+            new TypeMap( "QWORD", 8, typeof(UInt64), cppTypeName:"uint64_t" ),
+            new TypeMap( "float", 4, typeof(float), cppTypeName:"float" ),
+            new TypeMap( "TransactionID", 8, typeof(UInt64), cppTypeName:"uint64_t" ),
+            new TypeMap( "AccountID", 8, typeof(UInt64) ),
+            new TypeMap( "PlayerID", 8, typeof(UInt64) ),
+            new TypeMap( "FacebookUID", 8, typeof(UInt64) ),
+            new TypeMap( "AuthTicket", 8, typeof(UInt64) ),
+            new TypeMap( "GameInsID", 4, typeof(UInt32) ),
+            new TypeMap( "GameInsUID", 8, typeof(UInt64), cppTypeName:"uint64_t" ),
+            new TypeMap( "EntityID", 4, typeof(UInt32) ),
+            new TypeMap( "EntityUID", 8, typeof(UInt64), cppTypeName:"uint64_t" ),
+            new TypeMap( "PartyUID", 8, typeof(UInt64), cppTypeName:"uint64_t" ),
+            new TypeMap( "ServerID", 4, typeof(UInt32) ),
+            new TypeMap( "ClusterID", 4, typeof(UInt32) ),
+            new TypeMap( "Result", 4, typeof(Int32) ),
+            new TypeMap( "NotificationType", 2, typeof(Int16) ),
+            new TypeMap( "RankingType", 1, typeof(RankingType) ),
+            new TypeMap( "PlayerRole", 1, typeof(PlayerRole), cppTypeName:"uint8_t" ),
+            new TypeMap( "GameStateID", 1, typeof(GameStateID), cppTypeName:"uint8_t" ),
+            new TypeMap( "GameWinner", 1, typeof(GameWinner), cppTypeName:"uint8_t" ),
+            new TypeMap( "PlayerKilledReason", 1, typeof(PlayerKilledReason), cppTypeName:"uint8_t" ),
+            new TypeMap( "PlayerRevealedReason", 1, typeof(PlayerRevealedReason), cppTypeName:"uint8_t" ),
+            new TypeMap( "GameID", 4, typeof(UInt32), cppTypeName:"uint32_t" ),
+            new TypeMap( "StringCrc32", 4, typeof(UInt32), cppTypeName:"StringCrc32" ),
+            new TypeMap( "StringCrc64", 8, typeof(UInt64), cppTypeName:"StringCrc64" ),
+            new TypeMap( "ClusterType", 4, typeof(ClusterType) ),
+            new TypeMap( "ClusterMembership", 4, typeof(ClusterMembership) ),
+            new TypeMap( "ServiceStatus", 4, typeof(ServiceStatus) ),
+            new TypeMap( "ActorMovement", Marshal.SizeOf(typeof(ActorMovement)), typeof(ActorMovement) ),
+            new TypeMap( "MatchingPlayerInformation", 16, typeof(MatchingPlayerInformation) ),
+            new TypeMap( "MatchingQueueTicket", 8, typeof(MatchingQueueTicket) ),
+            new TypeMap( "LocalUID", 8, typeof(LocalUID), cppTypeName:"uint64_t" ),
+            new TypeMap( "Variable", -1, typeof(Variable), cppTypeName:"Variable" ),
+            new TypeMap( "VariableTable", -1, typeof(VariableTable), cppTypeName:"VariableTable" ),
+            new TypeMap( "Vector2", 8, typeof(Vector2) ),
+            new TypeMap( "Vector3", 12, typeof(Vector3) ),
+            new TypeMap( "Vector4", 16, typeof(Vector4) ),
+            new TypeMap( "NetAddress", 18, typeof(NetAddress) ),
+            new TypeMap( "NetClass", 18, typeof(UInt32) ),
+            new TypeMap( "RouteContext", 8, typeof(SFRouteContext) ),
+            new TypeMap( "ServiceInformation", Marshal.SizeOf(typeof(ServiceInformation)), typeof(ServiceInformation) ),
+            new TypeMap( "PlayerInformation", Marshal.SizeOf(typeof(PlayerInformation)), typeof(PlayerInformation) ),
+            new TypeMap( "RankingPlayerInformation", Marshal.SizeOf(typeof(RankingPlayerInformation)), typeof(RankingPlayerInformation) ),
+            new TypeMap( "FriendInformation", Marshal.SizeOf(typeof(FriendInformation)), typeof(FriendInformation) ),
+            new TypeMap( "ServerFriendInformation", Marshal.SizeOf(typeof(ServerFriendInformation)), typeof(ServerFriendInformation) ),
+            new TypeMap( "TotalRankingPlayerInformation", Marshal.SizeOf(typeof(TotalRankingPlayerInformation)), typeof(TotalRankingPlayerInformation) ),
+            new TypeMap( "PerformanceCounterInfo", Marshal.SizeOf(typeof(PerformanceCounterInfo)), typeof(PerformanceCounterInfo) ),
+            new TypeMap( "PerformanceCounterInstanceInfo", Marshal.SizeOf(typeof(PerformanceCounterInstanceInfo)), typeof(PerformanceCounterInstanceInfo) ),
+            new TypeMap( "RelayPlayerInfo", Marshal.SizeOf(typeof(RelayPlayerInfo)), typeof(RelayPlayerInfo) ),
         };
 
-        static Dictionary<ParameterType, TypeMap> MapToCSharp = new Dictionary<ParameterType, TypeMap>();
+        static Dictionary<string, TypeMap> MapToCSharp = new Dictionary<string, TypeMap>();
 
         static SystemTypeInfo()
         {
@@ -256,54 +251,44 @@ namespace SF
             }
         }
 
-        public static ParameterType FindParameterTypeFromCSharpType(Type csType)
+        public static void AddTypeInfo(TypeMap newType)
         {
-            foreach(var itTypeInfo in MapToCSharp)
-            {
-                if (itTypeInfo.Value.CSharpType == csType)
-                {
-                    return itTypeInfo.Key;
-                }
-            }
-
-            Console.Error.WriteLine("Can't find related cstype for {0}", csType.ToString());
-
-            return ParameterType.intptr;
+            MapToCSharp.Add(newType.XMLType, newType);
         }
 
-        public static Type ToCSharpType(ParameterType type)
+        //public static Type ToCSharpType(string paramTypeName)
+        //{
+        //    try
+        //    {
+        //        return MapToCSharp[paramTypeName].CSharpType;
+        //    }
+        //    catch(Exception exp)
+        //    {
+        //        Console.WriteLine("Can't find csharp type {0}", paramTypeName);
+        //        throw exp;
+        //    }
+        //}
+
+        public static string ToCPPType(string paramTypeName)
         {
             try
             {
-                return MapToCSharp[type].CSharpType;
-            }
-            catch(Exception exp)
-            {
-                Console.WriteLine("Can't find csharp type {0}", type);
-                throw exp;
-            }
-        }
-
-        public static string ToCPPType(ParameterType type)
-        {
-            try
-            {
-                return MapToCSharp[type].CPPTypeName;
+                return MapToCSharp[paramTypeName].CPPTypeName;
             }
             catch (Exception exp)
             {
-                Console.WriteLine("Can't find cpp type {0}", type);
+                Console.WriteLine("Can't find cpp type {0}", paramTypeName);
                 throw exp;
             }
         }
 
-        public static bool IsStruct(ParameterType type)
+        public static bool IsStruct(Parameter param)
         {
-            Type csType = SystemTypeInfo.ToCSharpType(type);
-            return IsStruct(csType);
+            var typeInfo = SystemTypeInfo.GetParameterInfo(param);
+            return typeInfo.IsCSharpStruct;
         }
 
-        public static bool IsStruct(Type csType)
+        private static bool IsStruct(Type csType)
         {
             bool bIsStruct = false;
             foreach (Attribute attribute in Attribute.GetCustomAttributes(csType))
@@ -317,56 +302,59 @@ namespace SF
             return bIsStruct;
         }
 
-        public static string ToCPPTypeFromCSharp(Type csharpType)
-        {
-            foreach(var itTypeInfo in MapToCSharp)
-            {
-                if (itTypeInfo.Value.CSharpType == csharpType)
-                {
-                    return itTypeInfo.Value.CPPTypeName;
-                }
-            }
+        //public static string ToCPPTypeFromCSharp(Type csharpType)
+        //{
+        //    foreach(var itTypeInfo in MapToCSharp)
+        //    {
+        //        if (itTypeInfo.Value.CSharpType == csharpType)
+        //        {
+        //            return itTypeInfo.Value.CPPTypeName;
+        //        }
+        //    }
 
-            throw new Exception(string.Format("Can't find cpp type for {0}", csharpType.ToString()));
-        }
+        //    throw new Exception(string.Format("Can't find cpp type for {0}", csharpType.ToString()));
+        //}
 
         // Ignore array option
         public static string ElementTypeNameFor(TypeUsage usage, Parameter param)
         {
-            Type csType = SystemTypeInfo.ToCSharpType(param.Type);
+            var typeInfo = GetParameterInfo(param);
+            //Type csType = SystemTypeInfo.ToCSharpType(param.Type.ToString());
             switch (usage)
             {
                 case TypeUsage.CPP:
-                    return MapToCSharp[param.Type].CPPTypeName;
+                    return typeInfo.CPPTypeName;
                 case TypeUsage.CPPFunction:
-                    return MapToCSharp[param.Type].CPPTypeName;
+                    return typeInfo.CPPTypeName;
                 case TypeUsage.CPPForSharp:
                     {
-                        var cppTypeName = SystemTypeInfo.ToCPPType(param.Type);
-                        if (csType.IsArray)
-                            return ToCPPTypeFromCSharp(csType.GetElementType());
+                        var cppTypeName = typeInfo.CPPTypeName;
+                        //if (csType.IsArray)
+                        if (param.IsArray)
+                            return cppTypeName;//ToCPPTypeFromCSharp(csType.GetElementType());
                         else
                             return cppTypeName;
                     }
                 case TypeUsage.CSharp:
-                    return csType.ToString();
+                    return typeInfo.CSharpTypeName;
                 case TypeUsage.CSharpFunction:
-                    return csType.ToString();
+                    return typeInfo.CSharpTypeName;
                 case TypeUsage.CSharpNative:
-                    if (csType.IsEnum)
+                    if (typeInfo.IsEnum)
                         return "int";
                     else
-                        return csType.ToString();
+                        return typeInfo.CSharpTypeName;
             }
 
-            throw new Exception("Invalid type name:" + param.Type.ToString());
+            throw new Exception("Invalid type name:" + param.TypeName);
         }
 
         public static string TypeNameOnlyFor(TypeUsage usage, Parameter param)
         {
             string elementTypeName = ElementTypeNameFor(usage, param);
-            Type csType = SystemTypeInfo.ToCSharpType(param.Type);
-            bool bIsStruct = IsStruct(param.Type);
+            var typeInfo = GetParameterInfo(param);
+            //Type csType = SystemTypeInfo.ToCSharpType(param.Type);
+            //bool bIsStruct = IsStruct(param.Type);
 
             switch (usage)
             {
@@ -381,7 +369,7 @@ namespace SF
                     else
                         return elementTypeName;
                 case TypeUsage.CPPForSharp:
-                    if (param.IsArray || csType.IsArray)
+                    if (param.IsArray || typeInfo.IsCSharpArray)
                         return elementTypeName + "*";
                     else
                         return elementTypeName;
@@ -394,96 +382,103 @@ namespace SF
                         return elementTypeName;
             }
 
-            throw new Exception("Invalid type name:" + param.Type.ToString());
+            throw new Exception("Invalid type name:" + param.TypeName);
         }
 
         public static string TypeNameFor(TypeUsage usage, Parameter param)
         {
-            Type csType = SystemTypeInfo.ToCSharpType(param.Type);
-            bool bIsStruct = IsStruct(param.Type);
+            var typeInfo = GetParameterInfo(param);
+
+            //Type csType = SystemTypeInfo.ToCSharpType(param.Type);
+            //bool bIsStruct = IsStruct(param.Type);
 
             switch (usage)
             {
                 case TypeUsage.CPP:
                     if(param.IsArray)
-                        if (param.Type == ParameterType.String)
-                            return string.Format("ArrayObject<{0}>", MapToCSharp[param.Type].CPPTypeName);
+                        if (param.TypeName == "String")
+                            return string.Format("ArrayObject<{0}>", typeInfo.CPPTypeName);
                         else
-                            return string.Format("Array<{0}>", MapToCSharp[param.Type].CPPTypeName);
+                            return string.Format("Array<{0}>", typeInfo.CPPTypeName);
                     else
-                        return MapToCSharp[param.Type].CPPTypeName;
+                        return typeInfo.CPPTypeName;
                 case TypeUsage.CPPFunction:
                     if (param.IsArray)
-                        if (param.Type == ParameterType.String)
-                            return string.Format("const ArrayObject<{0}>&", MapToCSharp[param.Type].CPPTypeName);
+                        if (param.TypeName == "String")
+                            return string.Format("const ArrayObject<{0}>&", typeInfo.CPPTypeName);
                         else
-                            return string.Format("const Array<{0}>&", MapToCSharp[param.Type].CPPTypeName);
-                    else if(bIsStruct)
-                        return string.Format("const {0}&", MapToCSharp[param.Type].CPPTypeName);
+                            return string.Format("const Array<{0}>&", typeInfo.CPPTypeName);
+                    else if(typeInfo.IsCSharpStruct)
+                        return string.Format("const {0}&", typeInfo.CPPTypeName);
                     else
-                        return MapToCSharp[param.Type].CPPTypeName;
+                        return typeInfo.CPPTypeName;
                 case TypeUsage.CPPForSharp:
                     {
-                        var cppTypeName = SystemTypeInfo.ToCPPType(param.Type);
+                        var cppTypeName = typeInfo.CPPTypeName;// SystemTypeInfo.ToCPPType(param.Type);
                         if (param.IsArray)
-                            if (param.Type == ParameterType.String)
-                                return string.Format("intptr_t", MapToCSharp[param.Type].CPPTypeName);
+                            if (param.TypeName == "String")
+                                return string.Format("intptr_t", typeInfo.CPPTypeName);
                             else
                                 return string.Format("const {0}*", cppTypeName);
-                        else if (csType == typeof(string))
+                        else if (typeInfo.CSharpTypeName == "string")
                             return cppTypeName;
-                        else if (bIsStruct)
+                        else if (typeInfo.IsCSharpStruct)
                             return string.Format("const {0}&", cppTypeName);
-                        else if (csType.IsEnum)
+                        else if (typeInfo.IsEnum)
                             return "int";
                         else
                             return cppTypeName;
                     }
                 case TypeUsage.CSharp:
                     if (param.IsArray)
-                        return csType.ToString() + "[]";
+                        return typeInfo.CSharpTypeName + "[]";
                     else
-                        return csType.ToString();
+                        return typeInfo.CSharpTypeName;
                 case TypeUsage.CSharpFunction:
                     if (param.IsArray)
-                        return csType.ToString() + "[]";
-                    else if(bIsStruct)
-                        return "ref" + csType.ToString();
+                        return typeInfo.CSharpTypeName + "[]";
+                    else if(typeInfo.IsCSharpStruct)
+                        return "ref" + typeInfo.CSharpTypeName;
                     else
-                        return csType.ToString();
+                        return typeInfo.CSharpTypeName;
                 case TypeUsage.CSharpNative:
                     {
                         if (param.IsArray)
                         {
-                            if (csType == typeof(string))
+                            if (typeInfo.IsString)
                                 return "IntPtr";
-                            else if (bIsStruct)
-                                return string.Format("{0}[]", csType.ToString());
-                            else if (csType.IsEnum)
+                            else if (typeInfo.IsCSharpStruct)
+                                return string.Format("{0}[]", typeInfo.CSharpTypeName);
+                            else if (typeInfo.IsEnum)
                                 return "int[]";// TODO: actually I can't support this
                             else
-                                return csType.ToString() + "[]";
+                                return typeInfo.CSharpTypeName + "[]";
                         }
                         else
                         {
-                            if (csType == typeof(string))
+                            //if (csType == typeof(string))
+                            if (typeInfo.IsString)
                                 return "[MarshalAs(UnmanagedType.LPArray)] byte[]";
-                            else if (bIsStruct)
-                                return string.Format("ref {0}", csType.ToString());
-                            else if (csType.IsEnum)
+                            else if (typeInfo.IsCSharpStruct)
+                                return string.Format("ref {0}", typeInfo.CSharpTypeName);
+                            else if (typeInfo.IsEnum)
                                 return "int";
                             else
-                                return csType.ToString();
+                                return typeInfo.CSharpTypeName;
                         }
                     }
             }
 
-            throw new Exception("Invalid type name:"+ param.Type.ToString());
+            throw new Exception("Invalid type name:"+ param.TypeName);
         }
 
-        public static TypeMap GetParameterInfo(ParameterType type)
+        public static TypeMap GetParameterInfo(string paramTypeName)
         {
-            return MapToCSharp[type];
+            return MapToCSharp[paramTypeName];
+        }
+        public static TypeMap GetParameterInfo(Parameter param)
+        {
+            return MapToCSharp[param.TypeName];
         }
     }
 

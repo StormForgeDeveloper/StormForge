@@ -35,7 +35,7 @@ namespace ProtocolCompiler
             m_ParamSenderEntityID.IsArray = false;
             m_ParamSenderEntityID.IsArraySpecified = false;
             m_ParamSenderEntityID.Name = "SenderEntityID";
-            m_ParamSenderEntityID.Type = ParameterType.EntityID;
+            m_ParamSenderEntityID.TypeName = "EntityID";
         }
 
 
