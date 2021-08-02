@@ -221,6 +221,7 @@
 		<Command Name="CallFunction" Reliable="true" Crypto="No" Trace="Debug1" Desc="To call general functionality">
 			<Cmd>
 				<Params TypeName="StringCrc32" Name="FunctionName" Desc="function name"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="Caller player Id"/>
 				<Params TypeName="VariableTable" Name="Parameters" Desc="function parameter"/>
 			</Cmd>
 			<Res>
