@@ -191,17 +191,17 @@ namespace SF.Net
 		} // public int  GetStreamListCmd( System.UInt64 InTransactionID, System.UInt64 InTicket )
 
 		// Cmd: To call general functionality
-		public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, SF.VariableTable InParameters )
+		public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters )
 		{
  			int result;
 			var InParameters_ = InParameters.ToByteArray();
 			using (var InParameters_PinnedPtr_ = new PinnedByteBuffer(InParameters_))
 			{
-			result = CSSFNetAdapter_PlayInstanceCallFunctionCmd(m_Connection.NativeHandle, InTransactionID, InFunctionName,(ushort)InParameters_.Length, InParameters_PinnedPtr_.Ptr);
+			result = CSSFNetAdapter_PlayInstanceCallFunctionCmd(m_Connection.NativeHandle, InTransactionID, InFunctionName, InPlayerID,(ushort)InParameters_.Length, InParameters_PinnedPtr_.Ptr);
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.CallFunctionCmd);
 			return result;
-		} // public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, SF.VariableTable InParameters )
+		} // public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters )
 
 		#region Native Interfaces 
 		// Cmd: Event for Player Join request.
@@ -275,7 +275,7 @@ namespace SF.Net
 
 		// Cmd: To call general functionality
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceCallFunctionCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceCallFunctionCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt16 _sizeOfInParameters,IntPtr InParameters );
+		static extern int CSSFNetAdapter_PlayInstanceCallFunctionCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, System.UInt16 _sizeOfInParameters,IntPtr InParameters );
 
 
 		#endregion //Native Interfaces 

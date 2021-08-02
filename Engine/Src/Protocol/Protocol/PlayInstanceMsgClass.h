@@ -1369,20 +1369,20 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
+ 					HasPlayerID = 1,
 					HasTransactionID = 1,
 					HasRouteContext = 0,
 					HasRouteHopCount = 0,
 					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 				uint32_t GetRouteHopCount() { return uint32_t{}; }
 				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				StringCrc32 m_FunctionName{};
+				PlayerID m_PlayerID{};
 				ArrayView<uint8_t> m_ParametersRaw;
 				mutable bool m_ParametersHasParsed = false;
 				mutable VariableTable m_Parameters;
@@ -1398,6 +1398,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const StringCrc32& GetFunctionName() const	{ return m_FunctionName; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const Array<uint8_t>& GetParametersRaw() const	{ return m_ParametersRaw; };
 				const VariableTable& GetParameters() const;
 
@@ -1407,8 +1408,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
 
 			}; // class CallFunctionCmd : public MessageBase
 

@@ -59,7 +59,7 @@ namespace SF
 		// Cmd: Get stream list
 		Result GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket );
 		// Cmd: To call general functionality
-		Result CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters );
+		Result CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
 
 	}; // class NetPolicyPlayInstance 
 

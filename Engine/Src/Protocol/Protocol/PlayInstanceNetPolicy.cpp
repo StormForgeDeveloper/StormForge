@@ -205,19 +205,19 @@ namespace SF
 
 	}; // Result NetPolicyPlayInstance::GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket )
 	// Cmd: To call general functionality
-	Result NetPolicyPlayInstance::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
+	Result NetPolicyPlayInstance::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::CallFunctionCmd::Create(GetSystemHeap(), InTransactionID, InFunctionName, InParameters);
+		 pMessage = SF::Message::PlayInstance::CallFunctionCmd::Create(GetSystemHeap(), InTransactionID, InFunctionName, InPlayerID, InParameters);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetPolicyPlayInstance::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
+	}; // Result NetPolicyPlayInstance::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
 
 
 	// Cmd: Event for Player Join request.

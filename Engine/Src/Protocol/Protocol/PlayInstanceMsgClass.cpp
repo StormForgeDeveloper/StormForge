@@ -3021,6 +3021,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_FunctionName);
+				protocolCheck(*input >> m_PlayerID);
 				protocolCheck(input->Read(ArrayLen));
 				uint8_t* ParametersPtr = nullptr;
 				protocolCheck(input->ReadLink(ParametersPtr, ArrayLen));
@@ -3040,6 +3041,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("FunctionName", parser.GetFunctionName());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariableArray("Parameters", "VariableTable", parser.GetParametersRaw());
 
 				return hr;
@@ -3057,7 +3059,7 @@ namespace SF
 
 			}; // Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters )
+			MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -3074,6 +3076,7 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFunctionName)
+					+ SerializedSizeOf(InPlayerID)
 					+ serializedSizeOfInParameters
 				);
 
@@ -3085,12 +3088,13 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InFunctionName);
+				protocolCheck(*output << InPlayerID);
 				protocolCheck(*output << InParameters);
 
 				return hr;
-			}; // MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters )
+			}; // MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters )
 
-			MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
+			MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -3107,6 +3111,7 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFunctionName)
+					+ SerializedSizeOf(InPlayerID)
 					+ sizeof(uint16_t)
 					+ serializedSizeOfInParameters
 				);
@@ -3119,18 +3124,19 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InFunctionName);
+				protocolCheck(*output << InPlayerID);
 				protocolCheck(output->Write(serializedSizeOfInParameters));
 				protocolCheck(*output << InParameters);
 
 				return hr;
-			}; // MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
+			}; // MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
 
 			Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				CallFunctionCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CallFunction:{0}:{1} , TransactionID:{2}, FunctionName:{3}, Parameters:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetFunctionName(), parser.GetParameters()); 
+				SFLog(Net, Debug1, "CallFunction:{0}:{1} , TransactionID:{2}, FunctionName:{3}, PlayerID:{4}, Parameters:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetFunctionName(), parser.GetPlayerID(), parser.GetParameters()); 
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

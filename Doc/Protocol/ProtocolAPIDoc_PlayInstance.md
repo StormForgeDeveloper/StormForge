@@ -404,11 +404,13 @@ To call general functionality
 
 1. Command interface
 
-        Result CallFunctionCmd(const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters)
+        Result CallFunctionCmd(const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters)
 
 		- OutInTransactionID: TransactionID type. 
 
 		- OutInFunctionName: StringCrc32 type. function name
+
+		- OutInPlayerID: PlayerID type. Caller player Id
 
 		- OutInParameters: VariableTable type. function parameter
 
