@@ -247,11 +247,11 @@ namespace ProtocolCompiler
                     {
                         if (param.IsArray)
                         {
-                            OutStream.Write("+ {0}*({1}.Length) + sizeof(UInt16)", typeInfo.ByteSize, InParamName(param.Name));
+                            OutStream.Write("+ Marshal.SizeOf({0})*({1}.Length) + sizeof(UInt16)", typeInfo.CSharpTypeName, InParamName(param.Name));
                         }
                         else
                         {
-                            OutStream.Write("+ {0}", typeInfo.ByteSize );
+                            OutStream.Write("+ Marshal.SizeOf({0})", typeInfo.CSharpTypeName);
                         }
                     }
                 }

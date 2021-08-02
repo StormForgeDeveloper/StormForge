@@ -470,10 +470,10 @@ namespace SF
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
+				variableBuilder.SetVariableArray("Attributes", "VariableTable", parser.GetAttributesRaw());
 				variableBuilder.SetVariable("Movement", "ActorMovement", &parser.GetMovement());
 				variableBuilder.SetVariable("State", parser.GetState());
-				variableBuilder.SetVariable("StateValues", "VariableTable", parser.GetStateValuesRaw());
+				variableBuilder.SetVariableArray("StateValues", "VariableTable", parser.GetStateValuesRaw());
 
 				return hr;
 
@@ -907,7 +907,7 @@ namespace SF
 				variableBuilder.SetVariable("State", parser.GetState());
 				variableBuilder.SetVariable("MoveFrame", parser.GetMoveFrame());
 				variableBuilder.SetVariable("Position", "Vector4", &parser.GetPosition());
-				variableBuilder.SetVariable("StateValues", "VariableTable", parser.GetStateValuesRaw());
+				variableBuilder.SetVariableArray("StateValues", "VariableTable", parser.GetStateValuesRaw());
 
 				return hr;
 
@@ -1059,7 +1059,7 @@ namespace SF
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-				variableBuilder.SetVariable("SyncData", "VariableTable", parser.GetSyncDataRaw());
+				variableBuilder.SetVariableArray("SyncData", "VariableTable", parser.GetSyncDataRaw());
 
 				return hr;
 
@@ -1199,7 +1199,7 @@ namespace SF
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-				variableBuilder.SetVariable("SyncData", "VariableTable", parser.GetSyncDataRaw());
+				variableBuilder.SetVariableArray("SyncData", "VariableTable", parser.GetSyncDataRaw());
 
 				return hr;
 
@@ -1737,7 +1737,7 @@ namespace SF
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariable("MapObjectId", parser.GetMapObjectId());
-				variableBuilder.SetVariable("UseParameters", "VariableTable", parser.GetUseParametersRaw());
+				variableBuilder.SetVariableArray("UseParameters", "VariableTable", parser.GetUseParametersRaw());
 
 				return hr;
 
@@ -1890,7 +1890,7 @@ namespace SF
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariable("MapObjectId", parser.GetMapObjectId());
-				variableBuilder.SetVariable("ResultAttributes", "VariableTable", parser.GetResultAttributesRaw());
+				variableBuilder.SetVariableArray("ResultAttributes", "VariableTable", parser.GetResultAttributesRaw());
 
 				return hr;
 
@@ -2143,7 +2143,7 @@ namespace SF
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariable("AreaId", parser.GetAreaId());
-				variableBuilder.SetVariable("ResultAttributes", "VariableTable", parser.GetResultAttributesRaw());
+				variableBuilder.SetVariableArray("ResultAttributes", "VariableTable", parser.GetResultAttributesRaw());
 
 				return hr;
 
@@ -3040,7 +3040,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("FunctionName", parser.GetFunctionName());
-				variableBuilder.SetVariable("Parameters", "VariableTable", parser.GetParametersRaw());
+				variableBuilder.SetVariableArray("Parameters", "VariableTable", parser.GetParametersRaw());
 
 				return hr;
 
@@ -3179,7 +3179,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("Results", "VariableTable", parser.GetResultsRaw());
+				variableBuilder.SetVariableArray("Results", "VariableTable", parser.GetResultsRaw());
 
 				return hr;
 

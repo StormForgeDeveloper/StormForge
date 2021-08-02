@@ -107,6 +107,7 @@ namespace SF
 		m_SetFunc(varName, "StringCrc64", &hashValue);
 	}
 
+
 	//void VariableMapBuilderCS::SetVariable(const char* varName, const RouteContext& value)
 	//{
 	//	m_SetFunc(varName, "RouteContext", &value);
@@ -142,7 +143,7 @@ namespace SF
 	//	m_SetFunc(varName, "RelayPlayerInfo", &value);
 	//}
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const char* typeName, const void* value)
+	void VariableMapBuilderCS::SetVariableSingle(const char* varName, const char* typeName, const void* value)
 	{
 		m_SetFunc(varName, typeName, value);
 	}
@@ -228,7 +229,7 @@ namespace SF
 	}
 
 
-	void VariableMapBuilderCS::SetVariable(const char* varName, const char* typeName, const Array<uint8_t>& value)
+	void VariableMapBuilderCS::SetVariableArray(const char* varName, const char* typeName, const Array<uint8_t>& value)
 	{
 		m_SetArrayFunc(varName, typeName, (int)value.size(), value.data());
 	}
@@ -242,7 +243,7 @@ namespace SF
 			output << value;
 		}
 
-		SetVariable(varName, "Array<VariableTable>", rawValue);
+		SetVariableArray(varName, "Array<VariableTable>", rawValue);
 	}
 
 

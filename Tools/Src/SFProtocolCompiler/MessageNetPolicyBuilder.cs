@@ -66,6 +66,11 @@ namespace ProtocolCompiler
             OutStream.WriteLine("   class VariableTable;");
             OutStream.WriteLine("   struct ActorMovement;");
 
+            foreach(var itForward in SF.SystemTypeInfo.CppTypeForwards)
+            {
+                OutStream.WriteLine("   {0}", itForward);
+            }
+
             NewLine(2);
         }
 

@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns="http://www.StormForge.com/XMLProtocol" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://www.StormForge.com/XMLProtocol" targetNamespace="http://www.StormForge.com/XMLProtocol" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="ProtocolTypes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="DataType" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:attribute name="TypeName" type="xs:string" use="required"/>
+						<xs:attribute name="IsEnum" type="xs:boolean" use="required"/>
+						<xs:attribute name="CppTypeName" type="xs:string" use="required"/>
+						<xs:attribute name="CppTypeForward" type="xs:string" use="required"/>
+						<xs:attribute name="CppTypeInclude" type="xs:string" use="required"/>
+						<xs:attribute name="IsVariableSize" type="xs:boolean" use="required"/>
+						<xs:attribute name="CSharpTypeName" type="xs:string" use="required"/>
+						<xs:attribute name="IsCSharpStruct" type="xs:boolean" use="optional" default="false"/>
+						<xs:attribute name="IsCSharpArray" type="xs:boolean" use="optional" default="false"/>
+						<xs:attribute name="UseGenericVariableBuilderInterface" type="xs:boolean" use="optional" default="true"/>
+						<xs:attribute name="Desc" type="xs:string" use="optional"/>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

@@ -93,7 +93,12 @@ namespace ProtocolCompiler
             {
                 OutStream.WriteLine("#include \"Variable/SFVariableMapBuilder.h\"");
             }
-             NewLine(3);
+
+            foreach (var itCppInclude in SystemTypeInfo.CppTypeIncludes)
+            {
+                OutStream.WriteLine("#include \"{0}\"", itCppInclude);
+            }
+            NewLine(3);
 
             // namespace definition
             OpenSection("namespace", PrjPrefix );
@@ -578,7 +583,18 @@ namespace ProtocolCompiler
                     //var csharpType = SystemTypeInfo.ToCSharpType(param);
                     var typeInfo = SystemTypeInfo.GetParameterInfo(param);
 
-                    if (param.IsArray || typeInfo.IsString)
+                    if (typeInfo.UseGenericVariableBuilderInterface)
+                    {
+                        if (param.IsArray)
+                        {
+                            MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariableArray(\"{0}\", \"{1}\", parser.Get{0}());", param.Name, param.TypeName);
+                        }
+                        else
+                        {
+                            MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", \"{1}\", parser.Get{0}());", param.Name, param.TypeName);
+                        }
+                    }
+                    else if (param.IsArray || typeInfo.IsString)
                     {
                         MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name);
                     }
@@ -588,7 +604,7 @@ namespace ProtocolCompiler
                     }
                     else if(!typeInfo.IsCSharpStruct && typeInfo.IsVariableSize)
                     {
-                        MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", \"{1}\", parser.Get{0}Raw());", param.Name, param.TypeName);
+                        MatchIndent(); OutStream.WriteLine("variableBuilder.SetVariableArray(\"{0}\", \"{1}\", parser.Get{0}Raw());", param.Name, param.TypeName);
                     }
                     else
                     {

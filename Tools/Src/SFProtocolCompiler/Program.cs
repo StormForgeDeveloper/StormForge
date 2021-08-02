@@ -54,6 +54,16 @@ namespace ProtocolCompiler
 
                 stm_CSOut = AppConfig.GetValueString("outSharp", stm_CSOut);
 
+                var typeDefs = AppConfig.GetValueSet("TypeDef");
+                if (typeDefs != null)
+                {
+                    var typeLoader = new ProtocolTypeLoader();
+                    foreach (var typeDef in typeDefs)
+                    {
+                        typeLoader.LoadFile(typeDef.Key);
+                    }
+                }
+
                 var inputFile = AppConfig.GetValueString("in");
                 if (!m_protocolData.LoadFile(inputFile))
                 {
@@ -67,35 +77,25 @@ namespace ProtocolCompiler
 
                 // create builders
                 var generators = AppConfig.GetValueSet("gen");
-                foreach(var gen in generators)
+                if (generators != null)
                 {
-                    var generatorName = "ProtocolCompiler." + gen.Key;
-                    var generatorType = Type.GetType(generatorName, false, true);
-                    if(generatorType == null)
+                    foreach (var gen in generators)
                     {
-                        Console.WriteLine("Can't find generator {0}", generatorName);
-                        continue;
-                    }
+                        var generatorName = "ProtocolCompiler." + gen.Key;
+                        var generatorType = Type.GetType(generatorName, false, true);
+                        if (generatorType == null)
+                        {
+                            Console.WriteLine("Can't find generator {0}", generatorName);
+                            continue;
+                        }
 
-                    var newGenerator = Activator.CreateInstance(generatorType, settings);
-                    builders.Add(newGenerator as Builder);
+                        var newGenerator = Activator.CreateInstance(generatorType, settings);
+                        builders.Add(newGenerator as Builder);
+                    }
                 }
 
-                ////builders.Add(new MessageIDBuilder(strTempPath));
-                //builders.Add(new MessageClassBuilder(strTempPath));
-                //builders.Add(new MessageParsingMapBuilder(strTempPath));
-                //builders.Add(new MessageDebugBuilder(strTempPath));
-                //builders.Add(new MessageAdapterCSharpBuilder(strTempPath));
-                //builders.Add(new MessageIDCSharpBuilder(strTempPath));
-                ////builders.Add(new MessageNetPolicyBuilder(strTempPath));
-                //builders.Add(new MessageServerServiceBuilder(strTempPath));
-                ////builders.Add(new MessageClusterNetPolicyBuilder(strTempPath));
-                ////builders.Add(new MessageParserCSharpBuilder(strTempPath));
-                ////builders.Add(new MessagePolicyCSharpBuilder(strTempPath));
-
-
                 // Clean temp path
-                if(Directory.Exists(strTempPath))
+                if (Directory.Exists(strTempPath))
                     Directory.Delete(strTempPath, true);
 
                 Directory.CreateDirectory(strTempPath);

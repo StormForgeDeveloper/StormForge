@@ -3671,7 +3671,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
+				variableBuilder.SetVariableArray("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -3900,7 +3900,7 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
+				variableBuilder.SetVariableArray("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -6839,7 +6839,7 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-				variableBuilder.SetVariable("GameInstances", "VariableTable", parser.GetGameInstancesRaw());
+				variableBuilder.SetVariableArray("GameInstances", "VariableTable", parser.GetGameInstancesRaw());
 
 				return hr;
 
@@ -9467,8 +9467,8 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("CharacterName", parser.GetCharacterName());
-				variableBuilder.SetVariable("VisualData", "VariableTable", parser.GetVisualDataRaw());
-				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
+				variableBuilder.SetVariableArray("VisualData", "VariableTable", parser.GetVisualDataRaw());
+				variableBuilder.SetVariableArray("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -10144,7 +10144,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
+				variableBuilder.SetVariableArray("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -10373,7 +10373,7 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("CharacterID", parser.GetCharacterID());
-				variableBuilder.SetVariable("Attributes", "VariableTable", parser.GetAttributesRaw());
+				variableBuilder.SetVariableArray("Attributes", "VariableTable", parser.GetAttributesRaw());
 
 				return hr;
 
@@ -10517,7 +10517,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("FunctionName", parser.GetFunctionName());
-				variableBuilder.SetVariable("Parameters", "VariableTable", parser.GetParametersRaw());
+				variableBuilder.SetVariableArray("Parameters", "VariableTable", parser.GetParametersRaw());
 
 				return hr;
 
@@ -10656,7 +10656,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("Results", "VariableTable", parser.GetResultsRaw());
+				variableBuilder.SetVariableArray("Results", "VariableTable", parser.GetResultsRaw());
 
 				return hr;
 

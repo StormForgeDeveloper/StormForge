@@ -58,6 +58,7 @@ namespace SF {
 		virtual void SetVariable(const char* varName, const StringCrc64& value) = 0;
 		virtual void SetVariable(const char* varName, const char* value) = 0;
 
+
 		//virtual void SetVariable(const char* varName, const RouteContext& value) = 0;
 		//virtual void SetVariable(const char* varName, const NetAddress& value) = 0;
 		//virtual void SetVariable(const char* varName, const PlayerInformation& value) = 0;
@@ -66,7 +67,7 @@ namespace SF {
 		//virtual void SetVariable(const char* varName, const TotalRankingPlayerInformation& value) = 0;
 		//virtual void SetVariable(const char* varName, const RelayPlayerInfo& value) = 0;
 
-		virtual void SetVariable(const char* varName, const char* typeName, const void* value) = 0;
+		virtual void SetVariableSingle(const char* varName, const char* typeName, const void* value) = 0;
 
 		virtual void SetVariable(const char* varName, const Array<bool>& value) = 0;
 		virtual void SetVariable(const char* varName, const Array<int8_t>& value) = 0;
@@ -87,9 +88,23 @@ namespace SF {
 
 		virtual void SetVariable(const char* varName, const Array<const char*>& value) = 0;
 
+		//virtual void SetVariable(const char* varName, const char* TypeName, void* pValue) = 0;
+
+		template<class VarType>
+		void SetVariable(const char* varName, const char* TypeName, const VarType& value)
+		{
+			SetVariableSingle(varName, TypeName, &value);
+		}
+
+		template<class VarType>
+		void SetVariableArray(const char* varName, const char* TypeName, const Array<VarType>& value)
+		{
+			// TODO: variable size?
+			SetVariableArray(varName, TypeName, ArrayView<uint8_t>(value.size() * sizeof(VarType), (uint8_t*)value.data()));
+		}
 
 		// Variable size uses raw binary format
-		virtual void SetVariable(const char* varName, const char* TypeName, const Array<uint8_t>& value) = 0;
+		virtual void SetVariableArray(const char* varName, const char* TypeName, const Array<uint8_t>& value) = 0;
 	};
 
 

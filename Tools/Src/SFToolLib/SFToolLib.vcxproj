@@ -140,6 +140,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ProtocolTypeDef.h">
+      <DependentUpon>..\..\..\Engine\Data\Protocol\ProtocolTypeDef.xsd</DependentUpon>
+    </ClInclude>
     <ClInclude Include="SFToolLibPCH.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
@@ -221,6 +224,14 @@
   <ItemGroup>
     <CustomBuild Include="SchemaBuild\SFResultCodeFacilitySchema.xsd">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\Engine\Data\Protocol\ProtocolTypeDef.xsd">
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">xsd  %(Identity) /language:CS /classes /nologo /out:..\SFProtocolCompiler\ /namespace:ProtocolXml</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">xsd  %(Identity) /language:CS /classes /nologo /out:..\SFProtocolCompiler\ /namespace:ProtocolXml</Command>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\SFProtocolCompiler\%(Filename).cs</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">..\SFProtocolCompiler\%(Filename).cs</Outputs>
     </CustomBuild>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
