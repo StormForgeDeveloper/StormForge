@@ -159,8 +159,8 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("GameServerAddr", "NetAddress", &parser.GetGameServerAddr());
-				variableBuilder.SetVariable("GameServerAddrIPV4", "NetAddress", &parser.GetGameServerAddrIPV4());
+				variableBuilder.SetVariable("GameServerAddr", "NetAddress", parser.GetGameServerAddr());
+				variableBuilder.SetVariable("GameServerAddrIPV4", "NetAddress", parser.GetGameServerAddrIPV4());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 				variableBuilder.SetVariable("LoginEntityUID", parser.GetLoginEntityUID());
@@ -373,8 +373,8 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("GameServerAddr", "NetAddress", &parser.GetGameServerAddr());
-				variableBuilder.SetVariable("GameServerAddrIPV4", "NetAddress", &parser.GetGameServerAddrIPV4());
+				variableBuilder.SetVariable("GameServerAddr", "NetAddress", parser.GetGameServerAddr());
+				variableBuilder.SetVariable("GameServerAddrIPV4", "NetAddress", parser.GetGameServerAddrIPV4());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 				variableBuilder.SetVariable("LoginEntityUID", parser.GetLoginEntityUID());
@@ -573,8 +573,8 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("GameServerAddr", "NetAddress", &parser.GetGameServerAddr());
-				variableBuilder.SetVariable("GameServerAddrIPV4", "NetAddress", &parser.GetGameServerAddrIPV4());
+				variableBuilder.SetVariable("GameServerAddr", "NetAddress", parser.GetGameServerAddr());
+				variableBuilder.SetVariable("GameServerAddrIPV4", "NetAddress", parser.GetGameServerAddrIPV4());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 				variableBuilder.SetVariable("LoginEntityUID", parser.GetLoginEntityUID());

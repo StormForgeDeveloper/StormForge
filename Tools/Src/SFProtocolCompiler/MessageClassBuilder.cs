@@ -611,7 +611,7 @@ namespace ProtocolCompiler
                         MatchIndent();
                         var isStruct = SystemTypeInfo.IsStruct(param);
                         if (isStruct)
-                            OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", \"{1}\", &parser.Get{0}());", param.Name, param.TypeName);
+                            OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", \"{1}\", parser.Get{0}());", param.Name, param.TypeName);
                         else
                             OutStream.WriteLine("variableBuilder.SetVariable(\"{0}\", parser.Get{0}());", param.Name);
                     }

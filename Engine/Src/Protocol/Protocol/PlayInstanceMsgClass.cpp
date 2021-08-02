@@ -158,7 +158,7 @@ namespace SF
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-				variableBuilder.SetVariable("Movement", "ActorMovement", &parser.GetMovement());
+				variableBuilder.SetVariable("Movement", "ActorMovement", parser.GetMovement());
 
 				return hr;
 
@@ -471,7 +471,7 @@ namespace SF
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariableArray("Attributes", "VariableTable", parser.GetAttributesRaw());
-				variableBuilder.SetVariable("Movement", "ActorMovement", &parser.GetMovement());
+				variableBuilder.SetVariable("Movement", "ActorMovement", parser.GetMovement());
 				variableBuilder.SetVariable("State", parser.GetState());
 				variableBuilder.SetVariableArray("StateValues", "VariableTable", parser.GetStateValuesRaw());
 
@@ -704,7 +704,7 @@ namespace SF
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-				variableBuilder.SetVariable("Movement", "ActorMovement", &parser.GetMovement());
+				variableBuilder.SetVariable("Movement", "ActorMovement", parser.GetMovement());
 
 				return hr;
 
@@ -796,7 +796,7 @@ namespace SF
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
-				variableBuilder.SetVariable("Movement", "ActorMovement", &parser.GetMovement());
+				variableBuilder.SetVariable("Movement", "ActorMovement", parser.GetMovement());
 
 				return hr;
 
@@ -906,7 +906,7 @@ namespace SF
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariable("State", parser.GetState());
 				variableBuilder.SetVariable("MoveFrame", parser.GetMoveFrame());
-				variableBuilder.SetVariable("Position", "Vector4", &parser.GetPosition());
+				variableBuilder.SetVariable("Position", "Vector4", parser.GetPosition());
 				variableBuilder.SetVariableArray("StateValues", "VariableTable", parser.GetStateValuesRaw());
 
 				return hr;
@@ -2377,8 +2377,8 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("StreamServerAddr", "NetAddress", &parser.GetStreamServerAddr());
-				variableBuilder.SetVariable("StreamServerAddrIPV4", "NetAddress", &parser.GetStreamServerAddrIPV4());
+				variableBuilder.SetVariable("StreamServerAddr", "NetAddress", parser.GetStreamServerAddr());
+				variableBuilder.SetVariable("StreamServerAddrIPV4", "NetAddress", parser.GetStreamServerAddrIPV4());
 				variableBuilder.SetVariable("StreamUID", parser.GetStreamUID());
 
 				return hr;
@@ -2570,8 +2570,8 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("StreamServerAddr", "NetAddress", &parser.GetStreamServerAddr());
-				variableBuilder.SetVariable("StreamServerAddrIPV4", "NetAddress", &parser.GetStreamServerAddrIPV4());
+				variableBuilder.SetVariable("StreamServerAddr", "NetAddress", parser.GetStreamServerAddr());
+				variableBuilder.SetVariable("StreamServerAddrIPV4", "NetAddress", parser.GetStreamServerAddrIPV4());
 				variableBuilder.SetVariable("StreamUID", parser.GetStreamUID());
 
 				return hr;
