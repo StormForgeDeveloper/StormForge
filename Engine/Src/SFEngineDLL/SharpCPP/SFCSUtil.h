@@ -96,6 +96,7 @@ namespace SF
 		virtual void SetVariable(const char* varName, const Array<const char*>& value) override;
 		virtual void SetVariable(const char* varName, const Array<VariableTable>& value) override;
 
+		virtual void SetVariableArray(const char* varName, const char* TypeName, size_t Count, const void* dataPtr) override;
 		virtual void SetVariableArray(const char* varName, const char* typeName, const Array<uint8_t>& value) override;
 
 	};

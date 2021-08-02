@@ -229,6 +229,11 @@ namespace SF
 	}
 
 
+	void VariableMapBuilderCS::SetVariableArray(const char* varName, const char* typeName, size_t Count, const void* dataPtr)
+	{
+		m_SetArrayFunc(varName, typeName, (int)Count, dataPtr);
+	}
+
 	void VariableMapBuilderCS::SetVariableArray(const char* varName, const char* typeName, const Array<uint8_t>& value)
 	{
 		m_SetArrayFunc(varName, typeName, (int)value.size(), value.data());

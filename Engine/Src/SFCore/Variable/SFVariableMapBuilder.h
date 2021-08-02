@@ -67,8 +67,6 @@ namespace SF {
 		//virtual void SetVariable(const char* varName, const TotalRankingPlayerInformation& value) = 0;
 		//virtual void SetVariable(const char* varName, const RelayPlayerInfo& value) = 0;
 
-		virtual void SetVariableSingle(const char* varName, const char* typeName, const void* value) = 0;
-
 		virtual void SetVariable(const char* varName, const Array<bool>& value) = 0;
 		virtual void SetVariable(const char* varName, const Array<int8_t>& value) = 0;
 		virtual void SetVariable(const char* varName, const Array<uint8_t>& value) = 0;
@@ -90,17 +88,27 @@ namespace SF {
 
 		//virtual void SetVariable(const char* varName, const char* TypeName, void* pValue) = 0;
 
+
+		/////////////////////////////////////////////////////////////////////////////////////////////
+		// 
+		// Generalized interfaces. we will gradually move to this method
+		//
+
+		virtual void SetVariableSingle(const char* varName, const char* typeName, const void* value) = 0;
+
 		template<class VarType>
 		void SetVariable(const char* varName, const char* TypeName, const VarType& value)
 		{
 			SetVariableSingle(varName, TypeName, &value);
 		}
 
+
+		virtual void SetVariableArray(const char* varName, const char* TypeName, size_t Count, const void* dataPtr) = 0;
+
 		template<class VarType>
 		void SetVariableArray(const char* varName, const char* TypeName, const Array<VarType>& value)
 		{
-			// TODO: variable size?
-			SetVariableArray(varName, TypeName, ArrayView<uint8_t>(value.size() * sizeof(VarType), (uint8_t*)value.data()));
+			SetVariableArray(varName, TypeName, value.size(), (void*)value.data());
 		}
 
 		// Variable size uses raw binary format
