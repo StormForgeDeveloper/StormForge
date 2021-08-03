@@ -81,7 +81,7 @@ namespace SF {
 		// TODO: need to make it safer with string
 		// Get/Set values
 		template<class ValueType>
-		Result SetValue(KeyType name, ValueType value)
+		Result SetValue(KeyType name, const ValueType& value)
 		{
 			auto boxedValue = BoxingByValue(GetHeap(), value);
 			if (boxedValue.GetVariable() == nullptr)

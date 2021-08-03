@@ -572,6 +572,8 @@ typedef unsigned int		SysUInt;
 
 namespace SF {
 
+	typedef char* pchar;
+	typedef wchar_t* pwchar;
 
 	using std::atomic;
 
