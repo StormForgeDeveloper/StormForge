@@ -1093,6 +1093,9 @@ namespace SF {
 		DynamicArray<uint8_t> m_Value;
 
 	public:
+
+		VariableBLOB(const VariableBLOB&) = delete;
+
 		VariableBLOB()
 			: m_Value(GetSystemHeap())
 		{
