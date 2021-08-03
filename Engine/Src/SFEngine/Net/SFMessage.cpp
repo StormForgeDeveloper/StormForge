@@ -76,10 +76,7 @@ namespace Message {
 
 	uint8_t* MessageData::GetMessageData()
 	{
-		if (m_pMsgHeader->msgID.IDs.Mobile)
-			return (uint8_t*)(m_pMobileMsgHeader + 1);
-		else
-			return (uint8_t*)(m_pMsgHeader + 1);
+		return (uint8_t*)(m_pMsgHeader + 1);
 	}
 
 	const uint8_t* MessageData::GetMessageData() const
@@ -177,33 +174,16 @@ namespace Message {
 
 	void MessageData::GetLengthNDataPtr( uint& length, uint8_t* &pDataPtr)
 	{
-		if( m_pMsgHeader->msgID.IDs.Mobile )
-		{
-			AssertRel(m_pMsgHeader->Length >= sizeof(MobileMessageHeader));
-			length = m_pMsgHeader->Length - (uint)sizeof(MobileMessageHeader);
-			pDataPtr = (uint8_t*)(m_pMobileMsgHeader + 1);
-		}
-		else
-		{
-			AssertRel(m_pMsgHeader->Length >= sizeof(MessageHeader));
-			length = m_pMsgHeader->Length - (uint)sizeof(MessageHeader);
-			pDataPtr = (uint8_t*)(m_pMsgHeader + 1);
-		}
+		AssertRel(m_pMsgHeader->Length >= sizeof(MessageHeader));
+		length = m_pMsgHeader->Length - (uint)sizeof(MessageHeader);
+		pDataPtr = (uint8_t*)(m_pMsgHeader + 1);
 	}
 	
 	uint MessageData::GetDataLength()
 	{
 		uint length;
-		if( m_pMsgHeader->msgID.IDs.Mobile )
-		{
-			AssertRel(m_pMsgHeader->Length >= sizeof(MobileMessageHeader));
-			length = m_pMsgHeader->Length - (uint)sizeof(MobileMessageHeader);
-		}
-		else
-		{
-			AssertRel(m_pMsgHeader->Length >= sizeof(MessageHeader));
-			length = m_pMsgHeader->Length - (uint)sizeof(MessageHeader);
-		}
+		AssertRel(m_pMsgHeader->Length >= sizeof(MessageHeader));
+		length = m_pMsgHeader->Length - (uint)sizeof(MessageHeader);
 		return length;
 	}
 

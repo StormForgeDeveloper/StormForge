@@ -44,10 +44,7 @@ namespace Message {
 	{
 	private:
 		// Message Buffer Pointer
-		union {
-			MessageHeader*			m_pMsgHeader;
-			MobileMessageHeader*	m_pMobileMsgHeader;
-		};
+		MessageHeader*			m_pMsgHeader;
 
 		bool					m_bIsSequenceAssigned;
 
@@ -60,7 +57,7 @@ namespace Message {
 		virtual ~MessageData();
 
 		MessageHeader* GetMessageHeader();
-		MobileMessageHeader* GetMobileMessageHeader() { return GetMessageHeader(); }
+		MessageHeader* GetMobileMessageHeader() { return GetMessageHeader(); }
 		uint8_t*	GetMessageBuff(); // data include header
 		uint		GetMessageSize() const; // total length
 		uint8_t* GetMessageData();       // data except header
