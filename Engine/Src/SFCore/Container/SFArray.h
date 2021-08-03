@@ -432,8 +432,6 @@ namespace SF {
 			// item buffer space + extra for header information
 			StaticMemoryAllocatorT<DefaultBufferSize * sizeof(DataType) + 256> m_StaticHeap;
 
-			DataType* m_pAllocatedBuffer;
-
 		public:
 			StaticArray(IHeap& heap = GetSystemHeap());
 			virtual ~StaticArray();
