@@ -27,7 +27,6 @@ namespace SF {
 namespace Message {
 
 	struct MessageHeader;
-	struct MobileMessageHeader;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -61,7 +60,7 @@ namespace Message {
 		virtual ~MessageData();
 
 		MessageHeader* GetMessageHeader();
-		MobileMessageHeader* GetMobileMessageHeader();
+		MobileMessageHeader* GetMobileMessageHeader() { return GetMessageHeader(); }
 		uint8_t*	GetMessageBuff(); // data include header
 		uint		GetMessageSize() const; // total length
 		uint8_t* GetMessageData();       // data except header

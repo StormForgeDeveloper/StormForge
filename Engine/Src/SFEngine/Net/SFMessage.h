@@ -172,6 +172,8 @@ namespace Message {
 		// bit field termination
 		uint32_t					: 0;
 
+		uint64_t		PeerID;
+
 		void SetIDNLen(uint id, uint msgLen);
 	};
 
@@ -182,11 +184,9 @@ namespace Message {
 	//	Network Packet Message base Header
 	//
 
-	struct MobileMessageHeader : public MessageHeader
-	{
-		// Mobile peer ID
-		uint64_t		PeerID;
-	};
+
+
+	using MobileMessageHeader = MessageHeader;
 
 
 #pragma pack(pop)

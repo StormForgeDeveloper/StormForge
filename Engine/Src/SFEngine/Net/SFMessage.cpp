@@ -64,12 +64,6 @@ namespace Message {
 		return m_pMsgHeader;
 	}
 
-	MobileMessageHeader* MessageData::GetMobileMessageHeader()
-	{
-		AssertRel(m_pMsgHeader->msgID.IDs.Mobile);
-		return m_pMobileMsgHeader;
-	}
-
 	uint8_t* MessageData::GetMessageBuff()
 	{
 		return (uint8_t*)m_pMsgHeader;
