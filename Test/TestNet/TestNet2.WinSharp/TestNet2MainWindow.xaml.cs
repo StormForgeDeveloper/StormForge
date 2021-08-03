@@ -351,7 +351,7 @@ namespace TestNet2.WinSharp
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.JoinGameInstanceRes, 0, HandleJoinGameInstanceRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.LeaveGameInstanceRes, 0, HandleLeaveGameInstanceRes);
 
-            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.JoinGameInstanceRes, 0, HandleJoinConnectedGameInstanceRes);
+            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.JoinPlayInstanceRes, 0, HandleJoinConnectedPlayInstanceRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.NewPlayerInViewS2CEvt, 0, HandleNewPlayerInView);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.RemovePlayerFromViewS2CEvt, 0, HandleRemovePlayerFromView);
         }
@@ -520,7 +520,7 @@ namespace TestNet2.WinSharp
             }
         }
 
-        void HandleJoinConnectedGameInstanceRes(SFMessage message)
+        void HandleJoinConnectedPlayInstanceRes(SFMessage message)
         {
             UpdateButtonState();
 
