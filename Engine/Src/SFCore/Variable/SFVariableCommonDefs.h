@@ -1094,7 +1094,11 @@ namespace SF {
 
 	public:
 
-		VariableBLOB(const VariableBLOB&) = delete;
+		VariableBLOB(const VariableBLOB& src)
+			: m_Value(src.m_Value.GetHeap())
+		{
+			m_Value.CopyFrom(src.m_Value);
+		}
 
 		VariableBLOB()
 			: m_Value(GetSystemHeap())
