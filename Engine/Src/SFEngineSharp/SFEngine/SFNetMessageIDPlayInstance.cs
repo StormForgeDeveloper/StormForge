@@ -29,9 +29,9 @@ namespace SF.Net
 		    "SFEngineDLL";
 		#endif
 		// Cmd: Event for Player Join request.
-		public static int JoinGameInstanceCmd { get { return CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd(); } }
+		public static int JoinPlayInstanceCmd { get { return CSSFNetMessageID_PlayInstanceJoinPlayInstanceCmd(); } }
 
-		public static int JoinGameInstanceRes { get { return CSSFNetMessageID_PlayInstanceJoinGameInstanceRes(); } }
+		public static int JoinPlayInstanceRes { get { return CSSFNetMessageID_PlayInstanceJoinPlayInstanceRes(); } }
 
 
 		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
@@ -117,12 +117,12 @@ namespace SF.Net
 
 		#region Native Interfaces 
 		// Cmd: Event for Player Join request.
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd();
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceJoinPlayInstanceCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceJoinPlayInstanceCmd();
 
 
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceJoinGameInstanceRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_PlayInstanceJoinGameInstanceRes();
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceJoinPlayInstanceRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceJoinPlayInstanceRes();
 
 
 

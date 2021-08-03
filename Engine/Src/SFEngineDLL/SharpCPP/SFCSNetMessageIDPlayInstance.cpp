@@ -20,16 +20,16 @@ using namespace SF;
 
 
 // Cmd: Event for Player Join request.
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd()
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinPlayInstanceCmd()
 {
- 	return SF::Message::PlayInstance::JoinGameInstanceCmd::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinGameInstanceCmd()
+ 	return SF::Message::PlayInstance::JoinPlayInstanceCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinPlayInstanceCmd()
 
 
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinGameInstanceRes()
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinPlayInstanceRes()
 {
- 	return SF::Message::PlayInstance::JoinGameInstanceRes::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinGameInstanceRes()
+ 	return SF::Message::PlayInstance::JoinPlayInstanceRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinPlayInstanceRes()
 
 
 // S2C: Player kicked event. this event will be broadcasted when a player kicked.

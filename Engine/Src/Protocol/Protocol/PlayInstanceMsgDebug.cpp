@@ -29,8 +29,8 @@ namespace SF
 		void RegisterDebugTracePlayInstance()
 		{
  			// Cmd: Event for Player Join request.
-			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceCmd::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceRes::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceRes::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::JoinPlayInstanceCmd::MID.IDSeq.MsgID,&Message::PlayInstance::JoinPlayInstanceCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::JoinPlayInstanceRes::MID.IDSeq.MsgID,&Message::PlayInstance::JoinPlayInstanceRes::TraceOut));
 			// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerKickedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerKickedS2CEvt::TraceOut));
 			// C2S: Play packet

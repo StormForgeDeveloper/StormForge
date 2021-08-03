@@ -26,8 +26,8 @@ namespace SF
  		namespace PlayInstance
 		{
  			// Cmd: Event for Player Join request.
-			const MessageID JoinGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 0);
-			Result JoinGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			const MessageID JoinPlayInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 0);
+			Result JoinPlayInstanceCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -48,14 +48,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinPlayInstanceCmd::ParseMessage(const MessageData* pIMsg)
 
-			Result JoinGameInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinPlayInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				JoinGameInstanceCmd parser;
+				JoinPlayInstanceCmd parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
@@ -65,21 +65,21 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinPlayInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result JoinGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinPlayInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinGameInstanceCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinPlayInstanceCmd(pIMsg));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinPlayInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* JoinGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+			MessageData* JoinPlayInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -99,7 +99,7 @@ namespace SF
 					+ SerializedSizeOf(InPlayerIdentifier)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinGameInstanceCmd::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinPlayInstanceCmd::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -111,19 +111,19 @@ namespace SF
 				protocolCheck(*output << InPlayerIdentifier);
 
 				return hr;
-			}; // MessageData* JoinGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+			}; // MessageData* JoinPlayInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 
-			Result JoinGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinPlayInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				JoinGameInstanceCmd parser;
+ 				JoinPlayInstanceCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "JoinGameInstance:{0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, PlayerIdentifier:{5,60}",
+				SFLog(Net, Debug1, "JoinPlayInstance:{0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, PlayerIdentifier:{5,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetPlayerIdentifier()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinPlayInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID JoinGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 0);
-			Result JoinGameInstanceRes::ParseMessage(const MessageData* pIMsg)
+			const MessageID JoinPlayInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 0);
+			Result JoinPlayInstanceRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -144,14 +144,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameInstanceRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinPlayInstanceRes::ParseMessage(const MessageData* pIMsg)
 
-			Result JoinGameInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinPlayInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				JoinGameInstanceRes parser;
+				JoinPlayInstanceRes parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
@@ -162,21 +162,21 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinPlayInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result JoinGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinPlayInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinGameInstanceRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinPlayInstanceRes(pIMsg));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinPlayInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+			MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -197,7 +197,7 @@ namespace SF
 					+ SerializedSizeOf(InMovement)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinGameInstanceRes::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinPlayInstanceRes::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -210,16 +210,16 @@ namespace SF
 				protocolCheck(*output << InMovement);
 
 				return hr;
-			}; // MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+			}; // MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 
-			Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinPlayInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				JoinGameInstanceRes parser;
+ 				JoinPlayInstanceRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "JoinGameInstance:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, Movement:{6}",
+				SFLog(Net, Debug1, "JoinPlayInstance:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, Movement:{6}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinPlayInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 			const MessageID PlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 1);

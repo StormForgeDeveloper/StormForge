@@ -32,10 +32,10 @@ namespace SF
 		void RegisterParserPlayInstance()
 		{
  			// Cmd: Event for Player Join request.
-			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceCmd::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceCmd::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceRes::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::JoinGameInstanceRes::MID.IDSeq.MsgID,&Message::PlayInstance::JoinGameInstanceRes::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::JoinPlayInstanceCmd::MID.IDSeq.MsgID,&Message::PlayInstance::JoinPlayInstanceCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::JoinPlayInstanceCmd::MID.IDSeq.MsgID,&Message::PlayInstance::JoinPlayInstanceCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::JoinPlayInstanceRes::MID.IDSeq.MsgID,&Message::PlayInstance::JoinPlayInstanceRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::JoinPlayInstanceRes::MID.IDSeq.MsgID,&Message::PlayInstance::JoinPlayInstanceRes::ParseMessageToMessageBase));
 			// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::PlayerKickedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerKickedS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::PlayerKickedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerKickedS2CEvt::ParseMessageToMessageBase));

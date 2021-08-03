@@ -431,7 +431,7 @@ namespace SF
 				});
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
-				Message::PlayInstance::JoinGameInstanceRes::MID.GetMsgID(),
+				Message::PlayInstance::JoinPlayInstanceRes::MID.GetMsgID(),
 				[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 				{
 					OnPlayInstanceJoinGameInstanceRes(pMsgData);
@@ -473,7 +473,7 @@ namespace SF
 
 			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
 			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
-			GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::PlayInstance::JoinGameInstanceRes::MID.GetMsgID());
+			GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::PlayInstance::JoinPlayInstanceRes::MID.GetMsgID());
 
 			if (m_Owner.GetConnectionGame() != nullptr)
 				m_Owner.GetConnectionGame()->RemoveMessageDelegate(uintptr_t(this), Message::Game::JoinGameInstanceRes::MID.GetMsgID());
@@ -487,12 +487,12 @@ namespace SF
 				if (evt.Components.hr)
 				{
 					NetPolicyPlayInstance policy(m_Owner.GetConnectionGameInstance()->GetMessageEndpoint());
-					auto res = policy.JoinGameInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID(), m_Owner.GetPlayerID(), "??");
+					auto res = policy.JoinPlayInstanceCmd(intptr_t(this), m_Owner.GetGameInstanceUID(), m_Owner.GetPlayerID(), "??");
 					if (!res)
 					{
 						SetResult(res);
 						SetOnlineState(OnlineState::InGameServer);
-						SFLog(Net, Error, "PlayInstance::JoinGameInstance command has failed {0}", res);
+						SFLog(Net, Error, "PlayInstance::JoinPlayInstance command has failed {0}", res);
 						return;
 					}
 
@@ -550,11 +550,11 @@ namespace SF
 
 		void OnPlayInstanceJoinGameInstanceRes(const SharedPointerT<Message::MessageData>& pMsgData)
 		{
-			Message::PlayInstance::JoinGameInstanceRes packet(pMsgData);
+			Message::PlayInstance::JoinPlayInstanceRes packet(pMsgData);
 			auto result = packet.ParseMsg();
 			if (!result)
 			{
-				SFLog(Net, Error, "PlayInstance::JoinGameInstanceRes: Packet parsing error: {0}", result);
+				SFLog(Net, Error, "PlayInstance::JoinPlayInstanceRes: Packet parsing error: {0}", result);
 				SetResult(result);
 				SetOnlineState(OnlineState::InGameServer);
 				return;
@@ -562,14 +562,14 @@ namespace SF
 
 			if (!packet.GetResult())
 			{
-				SFLog(Net, Error, "PlayInstance::JoinGameInstanceRes: failure: {0}", packet.GetResult());
+				SFLog(Net, Error, "PlayInstance::JoinPlayInstanceRes: failure: {0}", packet.GetResult());
 				SetResult(packet.GetResult());
 				SetOnlineState(OnlineState::InGameServer);
 				return;
 			}
 
 
-			SFLog(Net, Info, "PlayInstance::JoinGameInstanceRes joined: {0}, F:{1:X}", m_Owner.m_GameInstanceUID, packet.GetMovement().MoveFrame);
+			SFLog(Net, Info, "PlayInstance::JoinPlayInstanceRes joined: {0}, F:{1:X}", m_Owner.m_GameInstanceUID, packet.GetMovement().MoveFrame);
 
 			m_Owner.InitMoveFrame(packet.GetMovement().MoveFrame);
 			m_Owner.OnPlayerMovement(m_Owner.GetPlayerID(), packet.GetMovement());

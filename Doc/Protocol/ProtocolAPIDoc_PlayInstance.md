@@ -14,12 +14,12 @@ namespace SF::Message::PlayInstance
 
 
 # Protocol interface class NetPolicyPlayInstance
-## JoinGameInstance Request
+## JoinPlayInstance Request
 Event for Player Join request.
 
 1. Command interface
 
-        Result JoinGameInstanceCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier)
+        Result JoinPlayInstanceCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier)
 
 		- OutInTransactionID: TransactionID type. 
 
@@ -31,7 +31,7 @@ Event for Player Join request.
 
 2. Result interface
 
-C++: Cast message to JoinGameInstanceRes to access values
+C++: Cast message to JoinPlayInstanceRes to access values
 
 
 		- OutTransactionID: TransactionID type. 

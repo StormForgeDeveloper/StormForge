@@ -20,15 +20,15 @@ using namespace SF;
 
 
 // Cmd: Event for Player Join request.
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::JoinGameInstanceCmd::Create(pConnection->GetHeap(), InTransactionID, InPlayInstanceUID, InPlayerID,InPlayerIdentifier);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::JoinPlayInstanceCmd::Create(pConnection->GetHeap(), InTransactionID, InPlayInstanceUID, InPlayerID,InPlayerIdentifier);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
 
 
 // C2S: Play packet
@@ -194,15 +194,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeC
 
 
 // Cmd: Event for Player Join request.
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::JoinGameInstanceRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID,InMovement);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::JoinPlayInstanceRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID,InMovement);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinGameInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
 
 
 

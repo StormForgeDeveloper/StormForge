@@ -27,7 +27,7 @@ namespace SF
  		namespace PlayInstance
 		{
  			// Cmd: Event for Player Join request.
-			class JoinGameInstanceCmd : public MessageBase
+			class JoinPlayInstanceCmd : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -50,10 +50,10 @@ namespace SF
 				PlayerID m_PlayerID{};
 				const char* m_PlayerIdentifier{};
 			public:
-				JoinGameInstanceCmd()
+				JoinPlayInstanceCmd()
 					{}
 
-				JoinGameInstanceCmd( const MessageDataPtr &pMsg )
+				JoinPlayInstanceCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
@@ -72,9 +72,9 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier );
 
-			}; // class JoinGameInstanceCmd : public MessageBase
+			}; // class JoinPlayInstanceCmd : public MessageBase
 
-			class JoinGameInstanceRes : public MessageBase
+			class JoinPlayInstanceRes : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -98,10 +98,10 @@ namespace SF
 				PlayerID m_PlayerID{};
 				ActorMovement m_Movement{};
 			public:
-				JoinGameInstanceRes()
+				JoinPlayInstanceRes()
 					{}
 
-				JoinGameInstanceRes( const MessageDataPtr &pMsg )
+				JoinPlayInstanceRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
@@ -121,7 +121,7 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 
-			}; // class JoinGameInstanceRes : public MessageBase
+			}; // class JoinPlayInstanceRes : public MessageBase
 
 			// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 			class PlayerKickedS2CEvt : public MessageBase
