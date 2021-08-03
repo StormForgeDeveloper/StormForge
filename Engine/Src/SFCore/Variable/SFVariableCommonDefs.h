@@ -1130,7 +1130,10 @@ namespace SF {
 		virtual StringCrc32 GetTypeName() const override { return TYPE_NAME; }
 
 
-		virtual void SetValue(const Array<const uint8_t>& value) override { unused(value); }
+		virtual void SetValue(const Array<const uint8_t>& value) override
+		{
+			m_Value.CopyFrom(value);
+		}
 
 		virtual void* GetDataPtr() const override { return const_cast<uint8_t*>(m_Value.data()); }
 		virtual bool GetValueBool() const override { return m_Value.size() != 0; }
