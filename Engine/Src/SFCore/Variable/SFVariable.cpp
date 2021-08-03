@@ -21,6 +21,18 @@
 namespace SF
 {
 
+	Result _ToString(ToStringContext& context, const VariableBLOB& Data)
+	{
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "bin:"))
+			return ResultCode::FAIL;
+
+		if (!_IToA(context, Data.GetValueBLOB().size()))
+			return ResultCode::FAIL;
+
+		return ResultCode::SUCCESS;
+
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Variable int

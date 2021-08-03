@@ -1145,7 +1145,30 @@ namespace SF {
 		virtual size_t GetSerializedSize() const  override { return sizeof(uint16_t) + m_Value.size(); }
 		virtual Result Serialize(IOutputStream& output) const override;
 		virtual Result Deserialize(IInputStream& input) override;
+
+		friend size_t SerializedSizeOf(const VariableBLOB& Value);
+		friend Result operator >> (IInputStream& input, VariableBLOB& data);
+		friend Result operator << (IOutputStream& output, const VariableBLOB& data);
 	};
+
+
+	Result _ToString(ToStringContext& context, const VariableBLOB& Data);
+
+	inline size_t SerializedSizeOf(const VariableBLOB& Value)
+	{
+		return Value.GetSerializedSize();
+	}
+
+
+	inline Result operator >> (IInputStream& input, VariableBLOB& data)
+	{
+		return input >> data.m_Value;
+	}
+
+	inline Result operator << (IOutputStream& output, const VariableBLOB& data)
+	{
+		return output << data.m_Value;
+	}
 
 
 } // namespace SF
