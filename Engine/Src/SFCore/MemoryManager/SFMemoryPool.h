@@ -14,7 +14,7 @@
 #include "SFTypedefs.h"
 #include "Multithread/SFSynchronization.h"
 #include "Container/SFStackPool.h"
-#include "Platform/StackWalker.h"
+#include "Platform/SFStackWalker.h"
 #include "Multithread/SFSynchronization.h"
 #include "Multithread/SFSystemSynchronization.h"
 #include "Container/SFSortedArray.h"

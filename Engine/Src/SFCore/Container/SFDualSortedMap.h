@@ -14,7 +14,6 @@
 #include "SFAssert.h"
 #include "Multithread/SFSynchronization.h"
 #include "Container/SFArray.h"
-#include "Platform/StackWalker.h"
 #include "Object/SFObjectPool.h"
 #include "Container/SFSortedMap_Base.h"
 

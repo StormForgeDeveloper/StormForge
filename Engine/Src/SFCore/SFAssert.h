@@ -13,7 +13,7 @@
 #pragma once
 
 #include "SFTypedefs.h"
-#include "Platform/StackWalker.h"
+#include "Platform/SFStackWalker.h"
 
 
 #if SF_PLATFORM == SF_PLATFORM_LINUX || SF_PLATFORM == SF_PLATFORM_ANDROID || SF_PLATFORM == SF_PLATFORM_IOS

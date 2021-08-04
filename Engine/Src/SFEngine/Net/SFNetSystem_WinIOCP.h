@@ -15,7 +15,6 @@
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 
 #include "SFTypedefs.h"
-#include "Platform/StackWalker.h"
 #include "Net/SFNetDef.h"
 #include "Net/SFNetConst.h"
 

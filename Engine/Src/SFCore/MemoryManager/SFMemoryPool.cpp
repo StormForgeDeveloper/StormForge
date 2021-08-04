@@ -20,7 +20,7 @@
 #include "ResultCode/SFResultCodeSystem.h"
 
 #include "Container/SFHashTable2.h"
-#include "Platform/StackWalker.h"
+#include "Platform/SFStackWalker.h"
 #include "MemoryManager/SFMemoryPool.h"
 
 

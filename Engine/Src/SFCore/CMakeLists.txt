@@ -53,7 +53,7 @@ set(SFCORE_LIB_FILES
 	Object/SFSharedObjectManager.cpp
 	Platform/Android/SFifaddrs.cpp
 	Platform/SFNativeWindow.cpp
-	Platform/StackWalker.cpp
+	Platform/SFStackWalker.cpp
 	Script/Tong/SFTongScriptBytecode.cpp
 	Script/Tong/SFTongScriptContext.cpp
 	Script/Tong/SFTongScriptEnvironment.cpp
@@ -171,8 +171,8 @@ set(SFCORE_LIB_FILES
 	Object/SFSharedPointer.h
 	Object/SFSharedObjectManager.h
 	Platform/SFNativeWindow.h
-	Platform/StackWalker.h
-	Platform/StackWalkerComponent.h
+	Platform/SFStackWalker.h
+	Platform/SFStackWalkerComponent.h
 	ResultCode/SFResultCodeLibrary.h
 	ResultCode/SFResultCodeSystem.h
 	Script/Tong/SFTongScriptBytecode.h

@@ -20,7 +20,7 @@
 #include "Util/SFTimeUtil.h"
 #include "Util/SFLogOutputLogServerComponent.h"
 #include "Service/SFEngineService.h"
-#include "Platform/StackWalkerComponent.h"
+#include "Platform/SFStackWalkerComponent.h"
 
 #include "SFEngine.h"
 #include "EngineObject/SFEngineObject.h"

@@ -17,8 +17,8 @@
 #include "Util/SFLog.h"
 #include "Multithread/SFSynchronization.h"
 #include "Container/SFStackPool.h"
-#include "Platform/StackWalker.h"
-#include "Platform/StackWalkerComponent.h"
+#include "Platform/SFStackWalker.h"
+#include "Platform/SFStackWalkerComponent.h"
 #include "Service/SFService.h"
 
 

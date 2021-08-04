@@ -24,7 +24,7 @@ namespace SF {
 		// Generic trace
 		Error,
 		Warning,
-		Assert,
+		Factal,
 		Info,
 
 		// Module additional traces
@@ -58,7 +58,7 @@ namespace SF {
 		struct
 		{
 			// Generic trace
-			uint32_t Assert : 1;
+			uint32_t Factal : 1;
 			uint32_t Error : 1;
 			uint32_t Warning : 1;
 			uint32_t Info : 1;
@@ -148,7 +148,7 @@ namespace SF {
 
 		constexpr LogOutputType Error = LogOutputType::Error;
 		constexpr LogOutputType Warning = LogOutputType::Warning;
-		constexpr LogOutputType Assert = LogOutputType::Assert;
+		constexpr LogOutputType Factal = LogOutputType::Factal;
 		constexpr LogOutputType Info = LogOutputType::Info;
 
 		// Module additional traces

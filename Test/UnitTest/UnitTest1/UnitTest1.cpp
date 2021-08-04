@@ -28,7 +28,7 @@ using namespace ::SF;
 int main(int argc, char** argv)
 {
 	EngineInitParam initParam;
-	initParam.GlobalLogOutputMask.Assert = 1;
+	initParam.GlobalLogOutputMask.Factal = 1;
 	initParam.GlobalLogOutputMask.Error = 1;
 	initParam.GlobalLogOutputMask.Warning = 1;
 	initParam.GlobalLogOutputMask.Info = 1;

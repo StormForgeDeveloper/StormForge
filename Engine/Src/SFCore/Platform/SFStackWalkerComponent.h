@@ -14,7 +14,7 @@
 #include "SFTypedefs.h"
 #include "Multithread/SFThread.h"
 #include "Component/SFLibraryComponent.h"
-#include "Platform/StackWalker.h"
+#include "Platform/SFStackWalker.h"
 
 
 
