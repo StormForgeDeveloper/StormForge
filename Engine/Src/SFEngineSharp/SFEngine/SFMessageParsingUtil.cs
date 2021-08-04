@@ -136,7 +136,7 @@ namespace SF
                 //break;
                 default:
                     // TODO: gradually move to TypeSerialization
-                    var typeInfo = TypeSerialization.GetTypeInfo(typeNameHash);
+                    var typeInfo = TypeSerialization.GetTypeInfo(new StringCrc32(typeNameHash));
                     if (typeInfo != null)
                     {
                         stm_ParsingMessage.SetValue(stringHash, typeInfo.DeserializeNative(ref Value));
@@ -347,7 +347,7 @@ namespace SF
 
                 default:
                     // TODO: gradually move to TypeSerialization
-                    var typeInfo = TypeSerialization.GetTypeInfo(typeNameHash);
+                    var typeInfo = TypeSerialization.GetTypeInfo(new StringCrc32(typeNameHash));
                     if (typeInfo != null)
                     {
                         //var arrayType = typeInfo.Type.MakeArrayType();
