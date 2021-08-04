@@ -350,8 +350,6 @@ namespace SF
                     var typeInfo = TypeSerialization.GetTypeInfo(new StringCrc32(typeNameHash));
                     if (typeInfo != null)
                     {
-                        //var arrayType = typeInfo.Type.MakeArrayType();
-                        //var arrayValue = (Array)Activator.CreateInstance(arrayType, new object[] { arrayCount });
                         var arrayValue = (Array)Array.CreateInstance(typeInfo.Type, arrayCount);
                         if (arrayValue != null)
                         {
