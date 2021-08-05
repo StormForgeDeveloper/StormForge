@@ -147,7 +147,7 @@ namespace SF
 			_BitScanForward(&BitIndex, Value);	// Scans from LSB to MSB
 			return BitIndex;
 #else
-			return __builtin_clz(Value);
+			return __builtin_ctz(Value);
 #endif
 		}
 
@@ -210,7 +210,7 @@ namespace SF
 			_BitScanForward64(&BitIndex, Value);	// Scans from LSB to MSB
 			return BitIndex;
 #else
-			return __builtin_clzll(Value);
+			return __builtin_ctzll(Value);
 #endif
 		}
 
