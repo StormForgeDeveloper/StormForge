@@ -25,7 +25,7 @@ namespace SF
 	{
  		namespace PlayInstance
 		{
- 			// Cmd: Event for Player Join request.
+ 			// Cmd: Player Join request.
 			const MessageID JoinPlayInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 0);
 			Result JoinPlayInstanceCmd::ParseMessage(const MessageData* pIMsg)
 			{

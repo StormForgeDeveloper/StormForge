@@ -37,7 +37,7 @@ namespace SF.Net
  			m_Connection = connection;
 		} // public  SendMessagePlayInstance( SF.SFConnection connection )
 
-		// Cmd: Event for Player Join request.
+		// Cmd: Player Join request.
 		public int  JoinPlayInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
 		{
  			int result;
@@ -204,7 +204,7 @@ namespace SF.Net
 		} // public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters )
 
 		#region Native Interfaces 
-		// Cmd: Event for Player Join request.
+		// Cmd: Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, [MarshalAs(UnmanagedType.LPArray)] byte[] InPlayerIdentifier );
 
@@ -297,7 +297,7 @@ namespace SF.Net
  			m_Connection = connection;
 		} // public  SendMessageSvrPlayInstance( SF.SFConnection connection )
 
-		// Cmd: Event for Player Join request.
+		// Cmd: Player Join request.
 		public int  JoinPlayInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.ActorMovement InMovement )
 		{
  			int result;
@@ -491,7 +491,7 @@ namespace SF.Net
 
 
 		#region Native Interfaces 
-		// Cmd: Event for Player Join request.
+		// Cmd: Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, ref SF.ActorMovement InMovement );
 

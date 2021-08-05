@@ -15,7 +15,7 @@ namespace SF::Message::PlayInstance
 
 # Protocol interface class NetPolicyPlayInstance
 ## JoinPlayInstance Request
-Event for Player Join request.
+Player Join request.
 
 1. Command interface
 

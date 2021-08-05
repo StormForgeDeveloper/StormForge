@@ -26,7 +26,7 @@ namespace SF
 	{
  		namespace PlayInstance
 		{
- 			// Cmd: Event for Player Join request.
+ 			// Cmd: Player Join request.
 			class JoinPlayInstanceCmd : public MessageBase
 			{
  			public:

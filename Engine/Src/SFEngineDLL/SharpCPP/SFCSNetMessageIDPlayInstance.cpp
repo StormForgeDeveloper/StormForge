@@ -19,7 +19,7 @@
 using namespace SF;
 
 
-// Cmd: Event for Player Join request.
+// Cmd: Player Join request.
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceJoinPlayInstanceCmd()
 {
  	return SF::Message::PlayInstance::JoinPlayInstanceCmd::MID.IDSeq.MsgID;

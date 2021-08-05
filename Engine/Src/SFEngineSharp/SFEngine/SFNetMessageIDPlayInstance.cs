@@ -28,7 +28,7 @@ namespace SF.Net
 		#else
 		    "SFEngineDLL";
 		#endif
-		// Cmd: Event for Player Join request.
+		// Cmd: Player Join request.
 		public static int JoinPlayInstanceCmd { get { return CSSFNetMessageID_PlayInstanceJoinPlayInstanceCmd(); } }
 
 		public static int JoinPlayInstanceRes { get { return CSSFNetMessageID_PlayInstanceJoinPlayInstanceRes(); } }
@@ -116,7 +116,7 @@ namespace SF.Net
 
 
 		#region Native Interfaces 
-		// Cmd: Event for Player Join request.
+		// Cmd: Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceJoinPlayInstanceCmd", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstanceJoinPlayInstanceCmd();
 

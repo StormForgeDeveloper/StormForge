@@ -28,7 +28,7 @@ namespace SF
 
 		void RegisterDebugTracePlayInstance()
 		{
- 			// Cmd: Event for Player Join request.
+ 			// Cmd: Player Join request.
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::JoinPlayInstanceCmd::MID.IDSeq.MsgID,&Message::PlayInstance::JoinPlayInstanceCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::JoinPlayInstanceRes::MID.IDSeq.MsgID,&Message::PlayInstance::JoinPlayInstanceRes::TraceOut));
 			// S2C: Player kicked event. this event will be broadcasted when a player kicked.

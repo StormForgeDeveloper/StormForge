@@ -19,7 +19,7 @@
 using namespace SF;
 
 
-// Cmd: Event for Player Join request.
+// Cmd: Player Join request.
 SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const char* InPlayerIdentifier )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
@@ -193,7 +193,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeC
 
 
 
-// Cmd: Event for Player Join request.
+// Cmd: Player Join request.
 SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);

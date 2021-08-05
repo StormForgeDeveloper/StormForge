@@ -22,7 +22,7 @@
 
 namespace SF
 {
- 	// Cmd: Event for Player Join request.
+ 	// Cmd: Player Join request.
 	Result NetPolicyPlayInstance::JoinPlayInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 	{
  		ScopeContext hr;
@@ -220,7 +220,7 @@ namespace SF
 	}; // Result NetPolicyPlayInstance::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
 
 
-	// Cmd: Event for Player Join request.
+	// Cmd: Player Join request.
 	Result NetSvrPolicyPlayInstance::JoinPlayInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 	{
  		ScopeContext hr;
