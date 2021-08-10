@@ -367,8 +367,12 @@ namespace SF
 
         static public TypeInfo GetTypeInfo(object value)
         {
+            var objType = value as Type;
+            if (objType == null)
+                objType = value.GetType();
+
             TypeInfo typeInfo;
-            if (!TypeInfoByType.TryGetValue(value.GetType(), out typeInfo))
+            if (!TypeInfoByType.TryGetValue(objType, out typeInfo))
             {
                 Log.Error("TypeSerialization.GetTypeInfo: Unknown type {0}", value.GetType().Name);
                 throw new Exception(string.Format("Unknown type {0}", value.GetType().Name));
