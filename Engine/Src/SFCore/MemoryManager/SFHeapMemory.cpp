@@ -404,7 +404,7 @@ namespace SF
 
 		if (m_AllowOverflowAllocation)
 		{
-			SFLog(System, Debug, "Allocating from overflow heap size:{0}", size);
+			SFLog(System, Debug, "Allocating from overflow heap {0} size:{1}", GetNameCrc(), size);
 
 			return IHeap::AllocInternal(size, alignment);
 		}
