@@ -62,7 +62,7 @@ namespace SF {
 		}
 	}
 
-	void LogOutputLogServerComponent::MyOutputHandler::PrintOutput(const Log::LogModule::LogItem* logMessage)
+	void LogOutputLogServerComponent::MyOutputHandler::PrintOutput(const Log::LogItem* logMessage)
 	{
 		if (logMessage == nullptr || m_StreamProducer == nullptr || logMessage->LogStringSize < 1) return;
 

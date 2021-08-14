@@ -52,6 +52,7 @@ namespace SF {
 		Max,
 	};
 
+	const char* ToString(LogOutputType logOutputType);
 
 	union LogOutputMask
 	{
@@ -182,6 +183,20 @@ namespace SF {
 		extern LogChannel Protocol;
 		extern LogChannel Editor;
 		extern LogChannel Game;
+
+
+
+		//Structure for Spin Buffer
+		struct LogItem
+		{
+			LogChannel* Channel{};
+			LogOutputType		OutputType{};
+			LogOutputMask		OutputMask{}; // GlobalMask & LogChannelMask
+			SystemTimeStampMS	TimeStamp{};
+			size_t LogStringSize = 0;
+			char	LogBuff[3 * 1024]{};
+		};
+
 	}
 
 
@@ -227,7 +242,7 @@ namespace SF {
 		// Reserve write buffer
 		virtual void* ReserveWriteBuffer() { return nullptr; }
 		virtual void ReleaseWriteBuffer(void* block, size_t messageSize) {}
-		virtual size_t WriteTimeTag(void* pLogItem) { unused(pLogItem); return 0; }
+		virtual size_t WriteTimeTag(Log::LogItem* pLogItem) { unused(pLogItem); return 0; }
 
 		// Flush log queue
 		virtual void Flush() {}

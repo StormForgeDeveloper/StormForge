@@ -43,21 +43,6 @@ namespace Log {
 	public:
 		static constexpr StringCrc64 TypeName = "LogModule";
 
-		//Structure for Spin Buffer
-		struct LogItem
-		{
-			LogChannel* Channel = nullptr;
-			LogOutputType		OutputType{};
-			LogOutputMask		OutputMask{}; // GlobalMask & LogChannelMask
-			SystemTimeStampMS	TimeStamp{};
-			size_t LogStringSize = 0;
-			char	LogBuff[3 * 1024]{};
-
-			LogItem()
-			{
-			}
-		};
-
 		typedef SpinBufferMT<LogItem, 128> LogSpinBuffer;
 
 	private:
@@ -93,7 +78,7 @@ namespace Log {
 		// Reserve write buffer
 		virtual void* ReserveWriteBuffer() override;
 		virtual void ReleaseWriteBuffer(void* block, size_t messageSize) override;
-		virtual size_t WriteTimeTag(void* pLogItem) override;
+		virtual size_t WriteTimeTag(Log::LogItem* pLogItem) override;
 
 		// Flush log queue
 		virtual void Flush() override;
@@ -122,7 +107,7 @@ namespace Log {
 		const LogOutputMask& GetOutputMask() { return m_OutputMask; }
 		void SetOutputMask(const LogOutputMask& value) { m_OutputMask = value; }
 
-		virtual void PrintOutput(const LogModule::LogItem* logMessage) = 0;
+		virtual void PrintOutput(const LogItem* logMessage) = 0;
 
 		// flush output if it uses buffering
 		virtual void Flush() {}

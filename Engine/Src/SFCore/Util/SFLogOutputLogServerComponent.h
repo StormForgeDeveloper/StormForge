@@ -42,7 +42,7 @@ namespace SF {
 			void Init(IHeap& heap, const String& logServer);
 			void Deinit();
 
-			virtual void PrintOutput(const Log::LogModule::LogItem* logMessage) override;
+			virtual void PrintOutput(const Log::LogItem* logMessage) override;
 		};
 
 		MyOutputHandler m_Handler;

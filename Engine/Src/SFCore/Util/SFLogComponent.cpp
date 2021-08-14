@@ -58,7 +58,7 @@ namespace SF {
 #endif
 	}
 
-	void LogOutputConsoleComponent::MyOutputHandler::PrintOutput(const Log::LogModule::LogItem* logMessage)
+	void LogOutputConsoleComponent::MyOutputHandler::PrintOutput(const Log::LogItem* logMessage)
 	{
 		if (logMessage == nullptr) return;
 
@@ -125,7 +125,7 @@ namespace SF {
 
 	}
 
-	void LogOutputDebuggerComponent::MyOutputHandler::PrintOutput(const Log::LogModule::LogItem* logMessage)
+	void LogOutputDebuggerComponent::MyOutputHandler::PrintOutput(const Log::LogItem* logMessage)
 	{
 		if (logMessage == nullptr) return;
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
@@ -196,7 +196,7 @@ namespace SF {
 
 
 
-	void LogOutputFileComponent::MyOutputHandler::PrintOutput(const Log::LogModule::LogItem* logMessage)
+	void LogOutputFileComponent::MyOutputHandler::PrintOutput(const Log::LogItem* logMessage)
 	{
 		if (logMessage == nullptr) return;
 		if (!m_File.IsOpened()) return;

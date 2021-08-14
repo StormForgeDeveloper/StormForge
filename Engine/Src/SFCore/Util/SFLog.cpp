@@ -189,13 +189,11 @@ namespace Log {
 		m_LogSpinBuffer.Write_Unlock(pWriteBuffer);
 	}
 
-	size_t LogModule::WriteTimeTag(void* pLogItemBuff)
+	size_t LogModule::WriteTimeTag(Log::LogItem* pLogItem)
 	{
-		auto pLogItem = (LogItem*)pLogItemBuff;
-
 		std::time_t logTime = std::chrono::system_clock::to_time_t(pLogItem->TimeStamp);
 		auto tm = std::localtime(&logTime);
-		pLogItem->LogStringSize = StrUtil::Format(pLogItem->LogBuff, "{0}:{1}:{2} {3}: ", tm->tm_hour, tm->tm_min, tm->tm_sec, pLogItem->Channel->ChannelName);
+		pLogItem->LogStringSize = StrUtil::Format(pLogItem->LogBuff, "{0}:{1}:{2} {3}:[{4}] ", tm->tm_hour, tm->tm_min, tm->tm_sec, pLogItem->Channel->ChannelName, ToString(pLogItem->OutputType));
 		
 		return pLogItem->LogStringSize;
 	}

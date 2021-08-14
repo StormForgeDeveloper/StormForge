@@ -39,7 +39,7 @@ namespace SF {
 
 			void InitConsole();
 
-			virtual void PrintOutput(const Log::LogModule::LogItem* logMessage) override;
+			virtual void PrintOutput(const Log::LogItem* logMessage) override;
 		};
 
 		MyOutputHandler m_Handler;
@@ -74,7 +74,7 @@ namespace SF {
 		{
 		public:
 			MyOutputHandler(const LogOutputMask& logMask) : LogOutputHandler(logMask) {}
-			virtual void PrintOutput(const Log::LogModule::LogItem* logMessage) override;
+			virtual void PrintOutput(const Log::LogItem* logMessage) override;
 		};
 
 		MyOutputHandler m_Handler;
@@ -117,7 +117,7 @@ namespace SF {
 
 			void OpenLogFile();
 
-			virtual void PrintOutput(const Log::LogModule::LogItem* logMessage) override;
+			virtual void PrintOutput(const Log::LogItem* logMessage) override;
 
 			virtual void Flush() override;
 		};
