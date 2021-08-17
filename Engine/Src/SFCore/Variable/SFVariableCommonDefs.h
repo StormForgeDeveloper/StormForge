@@ -1128,11 +1128,12 @@ namespace SF {
 			m_Value.CopyFrom(value);
 		}
 
-		VariableBLOB(IHeap& heap, Array<uint8_t>&& value)
+		VariableBLOB(IHeap& heap, const Array<const uint8_t>& value)
 			: m_Value(heap)
 		{
 			m_Value.CopyFrom(value);
 		}
+
 
 		virtual StringCrc32 GetTypeName() const override { return TYPE_NAME; }
 
