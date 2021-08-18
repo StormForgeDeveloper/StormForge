@@ -103,15 +103,15 @@ namespace SF
         static ulong m_TimeOffset = 0;
         static public ulong TimeOffset { get { return m_TimeOffset; } set { m_TimeOffset = value; } }
 
-        static private DateTime ToDateTime(ulong TimeMs)
+        static private DateTime ToDateTime(ulong UTCTimeMs)
         {
-            DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
+            DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             return origin.AddMilliseconds(TimeMs);
         }
 
-        static private DateTime ToDateTime(ulong TimeSec)
+        static private DateTime ToDateTime(ulong UTCTimeSec)
         {
-            DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
+            DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             return origin.AddSeconds(TimeSec);
         }
 
