@@ -118,16 +118,28 @@ namespace SF
             return DateTime.UtcNow;
         }
 
-        static public ulong FromDateTime(DateTime date)
+        static public ulong FromDateTimeMs(DateTime date)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
             TimeSpan diff = date.ToUniversalTime() - origin;
             return (ulong)diff.TotalMilliseconds;
         }
 
-        static public ulong Now()
+        static public ulong FromDateTimeSec(DateTime date)
         {
-            return FromDateTime(DateTime.UtcNow);
+            DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
+            TimeSpan diff = date.ToUniversalTime() - origin;
+            return (ulong)diff.TotalSeconds;
+        }
+
+        static public ulong NowMs()
+        {
+            return FromDateTimeMs(DateTime.UtcNow);
+        }
+
+        static public ulong NowSec()
+        {
+            return FromDateTimeSec(DateTime.UtcNow);
         }
 
     };
