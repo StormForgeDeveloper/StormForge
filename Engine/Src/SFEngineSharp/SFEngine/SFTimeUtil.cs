@@ -100,24 +100,22 @@ namespace SF
     {
         // Server Reference year is 1970
         const int UTCReferenceYear = 1970;
-        static ulong m_TimeOffset = 0;
-        static public ulong TimeOffset { get { return m_TimeOffset; } set { m_TimeOffset = value; } }
 
-        static private DateTime ToDateTime(ulong UTCTimeMs)
+        static private DateTime ToDateTimeMs(ulong UTCTimeMs)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            return origin.AddMilliseconds(TimeMs);
+            return origin.AddMilliseconds(UTCTimeMs);
         }
 
-        static private DateTime ToDateTime(ulong UTCTimeSec)
+        static private DateTime ToDateTimeSec(ulong UTCTimeSec)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            return origin.AddSeconds(TimeSec);
+            return origin.AddSeconds(UTCTimeSec);
         }
 
         static public DateTime NowDateTime()
         {
-            return ToDateTime(Now());
+            return DateTime.UtcNow;
         }
 
         static public ulong FromDateTime(DateTime date)
@@ -127,39 +125,11 @@ namespace SF
             return (ulong)diff.TotalMilliseconds;
         }
 
-        static public ulong NowRaw()
+        static public ulong Now()
         {
             return FromDateTime(DateTime.UtcNow);
         }
 
-        static public ulong Now()
-        {
-            return NowRaw() - (ulong) m_TimeOffset;
-        }
-
-        static public void UpdateTimeOffset()
-        {
-
-            m_TimeOffset = NativeGetTimeOffset();
-        }
-
-        #region Native interfaces
-
-        const string NativeDllName =
-#if UNITY_IOS
-            "__Internal";
-#else
-            "SFEngineDLL";
-#endif
-
-        [DllImport(NativeDllName, EntryPoint = "SFTime_NativeGetTimeOffset", CharSet = CharSet.Auto)]
-        static extern UInt64 NativeGetTimeOffset();
-
-
-
-
-
-        #endregion
     };
 
 }
