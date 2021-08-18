@@ -31,6 +31,7 @@ namespace SF
 
 	private:
 
+#pragma pack(push, 2)
 		// String Item
 		struct StringItem
 		{
@@ -39,6 +40,7 @@ namespace SF
 			uint32_t ValueSize;
 			char StringValue[1];
 		};
+#pragma pack(pop)
 
 		// String buffer linked list
 		struct StringBuffer

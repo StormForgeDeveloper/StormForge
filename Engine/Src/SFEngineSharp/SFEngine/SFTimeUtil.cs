@@ -98,15 +98,21 @@ namespace SF
     // converter between time32 to DateTime
     public struct TimeUTC
     {
-        // Server Reference year is 2014
-        const int UTCReferenceYear = 2014;
+        // Server Reference year is 1970
+        const int UTCReferenceYear = 1970;
         static ulong m_TimeOffset = 0;
         static public ulong TimeOffset { get { return m_TimeOffset; } set { m_TimeOffset = value; } }
 
-        static private DateTime ToDateTime(ulong Time)
+        static private DateTime ToDateTime(ulong TimeMs)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
-            return origin.AddMilliseconds(Time);
+            return origin.AddMilliseconds(TimeMs);
+        }
+
+        static private DateTime ToDateTime(ulong TimeSec)
+        {
+            DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
+            return origin.AddSeconds(TimeSec);
         }
 
         static public DateTime NowDateTime()
