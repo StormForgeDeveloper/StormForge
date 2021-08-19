@@ -107,7 +107,7 @@ namespace SF
 		newBuffer->RemainSize = 0;
 
 		uintptr_t endItemPos = uintptr_t(newBuffer->StringItems) + header.ChunkSize;
-		for (uintptr_t curItemPos = (uintptr_t)newBuffer->StringItems; endItemPos < endItemPos; )
+		for (uintptr_t curItemPos = (uintptr_t)newBuffer->StringItems; curItemPos < endItemPos; )
 		{
 			auto* pStrItem = (StringItem*)curItemPos;
 			
