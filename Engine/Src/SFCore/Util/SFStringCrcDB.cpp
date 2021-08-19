@@ -23,17 +23,22 @@
 namespace SF
 {
 
+	size_t StringCrcDB::StringItem::CalculateItemSize(size_t strLen)
+	{
+		auto requiredSize = sizeof(StringItem) + strLen;
+		return AlignUp(requiredSize, 8);
+	}
+
 	const StringCrcDB::StringItem* StringCrcDB::StringBuffer::AddString(uint64_t hash64, uint32_t hash32, const char* string, size_t strLen)
 	{
-		auto requiredSize = strLen + 1;
-		requiredSize = AlignUp(requiredSize, 8);
+		auto requiredSize = StringItem::CalculateItemSize(strLen);
 		if (string == nullptr || RemainSize < requiredSize)
 			return nullptr;
 
 		auto stringItem = (StringItem*)StringItems + (BufferSize - RemainSize);
 		stringItem->Hash64 = hash64;
 		stringItem->Hash32 = hash32;
-		stringItem->ValueSize = (uint32_t)(requiredSize - sizeof(StringItem));
+		stringItem->ValueSize = static_cast<uint16_t>(requiredSize - sizeof(StringItem));
 
 		memcpy(stringItem->StringValue, string, strLen);
 		stringItem->StringValue[strLen] = '\0';
@@ -81,29 +86,36 @@ namespace SF
 	// Load string table file
 	bool StringCrcDB::LoadStringTable(IInputStream& stream)
 	{
-		// FILE_MAGIC
-		uint64_t fileMagic, fileVersion;
-		stream.Read(&fileMagic, sizeof(fileMagic));
-		if (fileMagic != FILE_MAGIC)
+		// load header
+		StringFileHeader header{};
+		stream.Read(&header, sizeof(StringFileHeader));
+
+		if (header.Magic != StringFileHeader::FILE_MAGIC)
 			return false;
 
-		stream.Read(&fileVersion, sizeof(fileVersion));
-		if (fileVersion != FILE_VERSION)
+		if (header.Version != StringFileHeader::FILE_VERSION)
 			return false;
 
-		char stringLoadingBuffer[4096];
-		StringItem* item = (StringItem*)stringLoadingBuffer;
-		char* itemRemainStart = (char*)(item + 1);
+		char* pBuffer = (char*)malloc(header.ChunkSize + sizeof(StringBuffer));
+		StringBuffer* newBuffer = new(pBuffer) StringBuffer(header.ChunkSize);
+		memset(newBuffer, 0, sizeof(StringBuffer));
 
-		while (stream.Read(item, sizeof(StringItem)))
+		if (!stream.Read(newBuffer->StringItems, header.ChunkSize))
+			return false;
+
+		newBuffer->BufferSize = header.ChunkSize;
+		newBuffer->RemainSize = 0;
+
+		uintptr_t endItemPos = uintptr_t(newBuffer->StringItems) + header.ChunkSize;
+		for (uintptr_t curItemPos = (uintptr_t)newBuffer->StringItems; endItemPos < endItemPos; )
 		{
-			memset(itemRemainStart, 0, sizeof(stringLoadingBuffer) - sizeof(StringItem));
-			stream.Read(itemRemainStart, item->ValueSize);
-
+			auto* pStrItem = (StringItem*)curItemPos;
+			
 			// Add to both
-			auto newAddr = AddStringToBuffer(item->Hash64, item->Hash32, item->StringValue);
-			m_StringMap32.Insert(item->Hash32, newAddr);
-			m_StringMap64.Insert(item->Hash64, newAddr);
+			m_StringMap32.Insert(pStrItem->Hash32, pStrItem);
+			m_StringMap64.Insert(pStrItem->Hash64, pStrItem);
+
+			curItemPos += sizeof(StringItem) + pStrItem->ValueSize;
 		}
 
 		return true;
@@ -118,19 +130,31 @@ namespace SF
 			return true;
 		}
 
-		uint64_t fileMagic = FILE_MAGIC, fileVersion = FILE_VERSION;
-		stream.Write(&fileMagic, sizeof(fileMagic));
-		stream.Write(&fileVersion, sizeof(fileVersion));
+		StringFileHeader header;
+		header.Magic = StringFileHeader::FILE_MAGIC;
+		header.Version = StringFileHeader::FILE_VERSION;
+		header.ChunkSize = 0;
 
-		// loop hash64
-		//for (auto& itTbl : m_StringMap64)
+
+		// loop hash64 and create merged one
+		m_StringMap64.ForeachOrder(0, (uint)m_StringMap64.size(), [&header](uint64_t key, const StringItem* pStrItem)
+			{
+				size_t saveSize = pStrItem->ValueSize + sizeof(StringItem);
+				header.ChunkSize += saveSize;
+				return true;
+			});
+
+
+		stream.Write(&header, sizeof(StringFileHeader));
+
+
 		m_StringMap64.ForeachOrder(0, (uint)m_StringMap64.size(), [&stream](uint64_t key, const StringItem* pStrItem)
-		{
-			size_t saveSize = pStrItem->ValueSize + sizeof(StringItem);
-			stream.Write((const char*)pStrItem, saveSize);
+			{
+				size_t saveSize = pStrItem->ValueSize + sizeof(StringItem);
+				stream.Write((const char*)pStrItem, saveSize);
 
-			return true;
-		});
+				return true;
+			});
 
 		return true;
 	}

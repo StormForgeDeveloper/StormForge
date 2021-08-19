@@ -152,6 +152,8 @@ namespace SF
 			}
 		}
 
+		pNode->Balance = 0; // Nothing attached
+
 		// When the search finishes, it returns one of leaf node
 		if (key > pFound->Key()) // duplicate key will be put at the left most side
 		{
@@ -160,6 +162,8 @@ namespace SF
 				return ResultCode::FAIL;
 
 			pFound->Right = pNode;
+
+			FixupBalance(traversalHistory);
 		}
 		else if (key == pFound->Key())
 		{
@@ -179,9 +183,9 @@ namespace SF
 				return ResultCode::FAIL;
 
 			pFound->Left = pNode;
-		}
 
-		FixupBalance(traversalHistory);
+			FixupBalance(traversalHistory);
+		}
 
 		m_ItemCount++;
 

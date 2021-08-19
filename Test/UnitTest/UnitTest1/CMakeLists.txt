@@ -54,6 +54,7 @@ set(SF_UNIT_TEST_FILES
 	Test/Net/UnitTest_NetMessageWindow.cpp
 	Test/String/UnitTest_String.h
 	Test/String/UnitTest_String_BasicTest.cpp
+	Test/String/UnitTest_String_Crc.cpp
 	Test/Texture/UnitTest_TextureJpg.cpp
 	Test/Texture/UnitTest_TexturePng.cpp
 	Test/Texture/UnitTest_TextureTGA.cpp

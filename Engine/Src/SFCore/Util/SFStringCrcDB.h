@@ -26,19 +26,28 @@ namespace SF
 	public:
 
 		const size_t DefaultBufferSize = 512 * 1024;
-		static constexpr uint64_t FILE_MAGIC = "StringTable"_hash64;
-		static constexpr uint64_t FILE_VERSION = 1;
 
 	private:
 
-#pragma pack(push, 2)
+#pragma pack(push, 1)
 		// String Item
 		struct StringItem
 		{
 			uint64_t Hash64;
 			uint32_t Hash32;
-			uint32_t ValueSize;
+			uint16_t ValueSize;
 			char StringValue[1];
+
+			static size_t CalculateItemSize(size_t strLen);
+		};
+
+		struct StringFileHeader
+		{
+			static constexpr uint16_t FILE_MAGIC = 0x1793L;
+			static constexpr uint16_t FILE_VERSION = 1;
+			uint16_t Magic;
+			uint16_t Version;
+			uint64_t ChunkSize;
 		};
 #pragma pack(pop)
 
