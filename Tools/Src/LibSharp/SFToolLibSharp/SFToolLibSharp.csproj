@@ -20,11 +20,12 @@
 
   <ItemGroup>
     <PackageReference Include="MySql.Data" Version="8.0.26" />
-    <PackageReference Include="SSH.NET" Version="2020.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Engine\Src\SFCoreSharp\SFCoreSharp.csproj" />
+    <ProjectReference Include="..\..\..\3rdParty\EPPlus\src\EPPlus\EPPlus.csproj" />
+    <ProjectReference Include="..\..\..\3rdParty\SSH.NET\src\Renci.SshNet\Renci.SshNet.csproj" />
   </ItemGroup>
 
 </Project>

@@ -77,6 +77,15 @@ pushd src/llvm/
 popd
 
 
+# to root
+popd
+
+
+pushd Tools/3rdParty/
+./setup.sh
+popd
+
+
 echo ==============================================================
 echo Register test host names 
 echo Zookeeper: SFTestZookeeper.com
@@ -87,7 +96,6 @@ echo   - Linux – “/etc/hosts”
 echo   - Mac OS X – “/private/etc/hosts”
 echo ==============================================================
 
-# to root
 popd
 
 

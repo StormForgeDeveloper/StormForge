@@ -64,6 +64,8 @@ cmd /c "cd 3rdParties\src\avro & download.cmd"
 cmd /c "cd 3rdParties\src\llvm & download.cmd"
 
 
+cmd /c "cd Tools/3rdParty & setup.cmd"
+
 
 @echo ==============================================================
 @echo Register test host names 
