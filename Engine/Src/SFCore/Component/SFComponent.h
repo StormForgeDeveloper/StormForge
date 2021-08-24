@@ -573,9 +573,21 @@ namespace SF
 			return m_Components.find(ID);
 		}
 
+		const Component* GetComponent(StringCrc32 ID) const
+		{
+			return m_Components.find(ID);
+		}
+
 		template< class ComponentType,
 			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
 		ComponentType* GetComponent(StringCrc32 ID)
+		{
+			return m_Components.find(ID);
+		}
+
+		template< class ComponentType,
+			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
+		ComponentType* GetComponent(StringCrc32 ID) const
 		{
 			return m_Components.find(ID);
 		}
@@ -592,9 +604,9 @@ namespace SF
 		// Get component with its type
 		template< class ComponentType,
 			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
-		const ComponentType* GetComponent() const
+		ComponentType* GetComponent() const
 		{
-			return GetComponent(ComponentType::ComponentID);
+			return static_cast<ComponentType*>(GetComponent(ComponentType::ComponentID));
 		}
 
 		// iterate all component
