@@ -166,6 +166,13 @@ void rd_list_remove_elem (rd_list_t *rl, int idx);
 
 
 /**
+ * @brief Remove and return the last element in the list.
+ *
+ * @returns the last element, or NULL if list is empty. */
+void *rd_list_pop (rd_list_t *rl);
+
+
+/**
  * @brief Remove all elements matching comparator.
  *
  * @returns the number of elements removed.
@@ -177,13 +184,16 @@ int rd_list_remove_multi_cmp (rd_list_t *rl, void *match_elem,
 
 
 /**
- * Sort list using comparator
+ * @brief Sort list using comparator.
+ *
+ * To sort a list ascendingly the comparator should implement (a - b)
+ * and for descending order implement (b - a).
  */
 void rd_list_sort (rd_list_t *rl, int (*cmp) (const void *, const void *));
 
 
 /**
- * Empties the list (but does not free any memory)
+ * Empties the list and frees elements (if there is a free_cb).
  */
 void rd_list_clear (rd_list_t *rl);
 
@@ -263,19 +273,44 @@ void *rd_list_find (const rd_list_t *rl, const void *match,
 
 
 /**
+ * @returns the first element of the list, or NULL if list is empty.
+ */
+void *rd_list_first (const rd_list_t *rl);
+
+/**
+ * @returns the last element of the list, or NULL if list is empty.
+ */
+void *rd_list_last (const rd_list_t *rl);
+
+
+/**
+ * @returns the first duplicate in the list or NULL if no duplicates.
+ *
+ * @warning The list MUST be sorted.
+ */
+void *rd_list_find_duplicate (const rd_list_t *rl,
+                              int (*cmp) (const void *, const void *));
+
+
+/**
  * @brief Compare list \p a to \p b.
  *
  * @returns < 0 if a was "lesser" than b,
  *          > 0 if a was "greater" than b,
  *            0 if a and b are equal.
  */
-int rd_list_cmp (const rd_list_t *a, rd_list_t *b,
+int rd_list_cmp (const rd_list_t *a, const rd_list_t *b,
                  int (*cmp) (const void *, const void *));
 
 /**
  * @brief Simple element pointer comparator
  */
 int rd_list_cmp_ptr (const void *a, const void *b);
+
+/**
+ * @brief strcmp comparator where the list elements are strings.
+ */
+int rd_list_cmp_str (const void *a, const void *b);
 
 
 /**
@@ -287,13 +322,13 @@ void rd_list_apply (rd_list_t *rl,
 
 
 
+typedef void *(rd_list_copy_cb_t) (const void *elem, void *opaque);
 /**
  * @brief Copy list \p src, returning a new list,
  *        using optional \p copy_cb (per elem)
  */
 rd_list_t *rd_list_copy (const rd_list_t *src,
-                         void *(*copy_cb) (const void *elem, void *opaque),
-                         void *opaque);
+                         rd_list_copy_cb_t *copy_cb, void *opaque);
 
 
 /**
@@ -321,6 +356,15 @@ void *rd_list_string_copy (const void *elem, void *opaque) {
         return rd_strdup((const char *)elem);
 }
 
+
+
+/**
+ * @brief Move elements from \p src to \p dst.
+ *
+ * @remark \p dst will be initialized first.
+ * @remark \p src will be emptied.
+ */
+void rd_list_move (rd_list_t *dst, rd_list_t *src);
 
 
 /**

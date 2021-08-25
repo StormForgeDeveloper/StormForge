@@ -39,13 +39,14 @@
 #include <csignal>
 #include <cstring>
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 #include <sys/time.h>
+#else
+#include <windows.h> /* for GetLocalTime */
 #endif
 
 #ifdef _MSC_VER
 #include "../win32/wingetopt.h"
-#include <atltime.h>
 #elif _AIX
 #include <unistd.h>
 #else
@@ -61,7 +62,7 @@
 
 
 
-static bool run = true;
+static volatile sig_atomic_t run = 1;
 static bool exit_eof = false;
 static int eof_cnt = 0;
 static int partition_cnt = 0;
@@ -69,7 +70,7 @@ static int verbosity = 1;
 static long msg_cnt = 0;
 static int64_t msg_bytes = 0;
 static void sigterm (int sig) {
-  run = false;
+  run = 0;
 }
 
 
@@ -77,15 +78,19 @@ static void sigterm (int sig) {
  * @brief format a string timestamp from the current time
  */
 static void print_time () {
-#ifndef _MSC_VER
+#ifndef _WIN32
         struct timeval tv;
         char buf[64];
         gettimeofday(&tv, NULL);
         strftime(buf, sizeof(buf) - 1, "%Y-%m-%d %H:%M:%S", localtime(&tv.tv_sec));
         fprintf(stderr, "%s.%03d: ", buf, (int)(tv.tv_usec / 1000));
 #else
-        std::wcerr << CTime::GetCurrentTime().Format(_T("%Y-%m-%d %H:%M:%S")).GetString()
-                << ": ";
+        SYSTEMTIME lt = {0};
+        GetLocalTime(&lt);
+        // %Y-%m-%d %H:%M:%S.xxx:
+        fprintf(stderr, "%04d-%02d-%02d %02d:%02d:%02d.%03d: ",
+            lt.wYear, lt.wMonth, lt.wDay,
+            lt.wHour, lt.wMinute, lt.wSecond, lt.wMilliseconds);
 #endif
 }
 class ExampleEventCb : public RdKafka::EventCb {
@@ -99,7 +104,7 @@ class ExampleEventCb : public RdKafka::EventCb {
       case RdKafka::Event::EVENT_ERROR:
         if (event.fatal()) {
           std::cerr << "FATAL ";
-          run = false;
+          run = 0;
         }
         std::cerr << "ERROR (" << RdKafka::err2str(event.err()) << "): " <<
             event.str() << std::endl;
@@ -146,14 +151,32 @@ public:
 
     part_list_print(partitions);
 
+    RdKafka::Error *error = NULL;
+    RdKafka::ErrorCode ret_err = RdKafka::ERR_NO_ERROR;
+
     if (err == RdKafka::ERR__ASSIGN_PARTITIONS) {
-      consumer->assign(partitions);
-      partition_cnt = (int)partitions.size();
+      if (consumer->rebalance_protocol() == "COOPERATIVE")
+        error = consumer->incremental_assign(partitions);
+      else
+        ret_err = consumer->assign(partitions);
+      partition_cnt += (int)partitions.size();
     } else {
-      consumer->unassign();
-      partition_cnt = 0;
+      if (consumer->rebalance_protocol() == "COOPERATIVE") {
+        error = consumer->incremental_unassign(partitions);
+        partition_cnt -= (int)partitions.size();
+      } else {
+        ret_err = consumer->unassign();
+        partition_cnt = 0;
+      }
     }
-    eof_cnt = 0;
+    eof_cnt = 0; /* FIXME: Won't work with COOPERATIVE */
+
+    if (error) {
+      std::cerr << "incremental assign failed: " << error->str() << "\n";
+      delete error;
+    } else if (ret_err)
+      std::cerr << "assign failed: " << RdKafka::err2str(ret_err) << "\n";
+
   }
 };
 
@@ -195,20 +218,20 @@ void msg_consume(RdKafka::Message* message, void* opaque) {
       if (exit_eof && ++eof_cnt == partition_cnt) {
         std::cerr << "%% EOF reached for all " << partition_cnt <<
             " partition(s)" << std::endl;
-        run = false;
+        run = 0;
       }
       break;
 
     case RdKafka::ERR__UNKNOWN_TOPIC:
     case RdKafka::ERR__UNKNOWN_PARTITION:
       std::cerr << "Consume failed: " << message->errstr() << std::endl;
-      run = false;
+      run = 0;
       break;
 
     default:
       /* Errors */
       std::cerr << "Consume failed: " << message->errstr() << std::endl;
-      run = false;
+      run = 0;
   }
 }
 
@@ -226,7 +249,6 @@ int main (int argc, char **argv) {
    * Create configuration objects
    */
   RdKafka::Conf *conf = RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL);
-  RdKafka::Conf *tconf = RdKafka::Conf::create(RdKafka::Conf::CONF_TOPIC);
 
   ExampleRebalanceCb ex_rebalance_cb;
   conf->set("rebalance_cb", &ex_rebalance_cb, errstr);
@@ -283,16 +305,8 @@ int main (int argc, char **argv) {
 	*val = '\0';
 	val++;
 
-	/* Try "topic." prefixed properties on topic
-	 * conf first, and then fall through to global if
-	 * it didnt match a topic configuration property. */
-        RdKafka::Conf::ConfResult res = RdKafka::Conf::CONF_UNKNOWN;
-	if (!strncmp(name, "topic.", strlen("topic.")))
-          res = tconf->set(name+strlen("topic."), val, errstr);
-        if (res == RdKafka::Conf::CONF_UNKNOWN)
-	  res = conf->set(name, val, errstr);
-
-	if (res != RdKafka::Conf::CONF_OK) {
+        RdKafka::Conf::ConfResult res = conf->set(name, val, errstr);
+        if (res != RdKafka::Conf::CONF_OK) {
           std::cerr << errstr << std::endl;
 	  exit(1);
 	}
@@ -334,8 +348,6 @@ int main (int argc, char **argv) {
             "  -M <intervalms> Enable statistics\n"
             "  -X <prop=name>  Set arbitrary librdkafka "
             "configuration property\n"
-            "                  Properties prefixed with \"topic.\" "
-            "will be set on topic object.\n"
             "                  Use '-X list' to see the full list\n"
             "                  of supported properties.\n"
             "  -q              Quiet / Decrease verbosity\n"
@@ -348,6 +360,16 @@ int main (int argc, char **argv) {
 	exit(1);
   }
 
+  if (exit_eof) {
+    std::string strategy;
+    if (conf->get("partition.assignment.strategy", strategy) ==
+        RdKafka::Conf::CONF_OK && strategy == "cooperative-sticky") {
+      std::cerr << "Error: this example has not been modified to " <<
+        "support -e (exit on EOF) when the partition.assignment.strategy " <<
+        "is set to " << strategy << ": remove -e from the command line\n";
+      exit(1);
+    }
+  }
 
   /*
    * Set configuration properties
@@ -365,32 +387,21 @@ int main (int argc, char **argv) {
   conf->set("event_cb", &ex_event_cb, errstr);
 
   if (do_conf_dump) {
-    int pass;
+    std::list<std::string> *dump;
+    dump = conf->dump();
+    std::cout << "# Global config" << std::endl;
 
-    for (pass = 0 ; pass < 2 ; pass++) {
-      std::list<std::string> *dump;
-      if (pass == 0) {
-        dump = conf->dump();
-        std::cout << "# Global config" << std::endl;
-      } else {
-        dump = tconf->dump();
-        std::cout << "# Topic config" << std::endl;
-      }
-
-      for (std::list<std::string>::iterator it = dump->begin();
-           it != dump->end(); ) {
-        std::cout << *it << " = ";
-        it++;
-        std::cout << *it << std::endl;
-        it++;
-      }
-      std::cout << std::endl;
+    for (std::list<std::string>::iterator it = dump->begin();
+         it != dump->end(); ) {
+      std::cout << *it << " = ";
+      it++;
+      std::cout << *it << std::endl;
+      it++;
     }
+    std::cout << std::endl;
+
     exit(0);
   }
-
-  conf->set("default_topic_conf", tconf, errstr);
-  delete tconf;
 
   signal(SIGINT, sigterm);
   signal(SIGTERM, sigterm);
@@ -433,7 +444,7 @@ int main (int argc, char **argv) {
     delete msg;
   }
 
-#ifndef _MSC_VER
+#ifndef _WIN32
   alarm(10);
 #endif
 

@@ -29,7 +29,7 @@
 #ifndef _RDBUF_H
 #define _RDBUF_H
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 /* for struct iovec */
 #include <sys/socket.h>
 #include <sys/types.h>
@@ -89,6 +89,14 @@ typedef struct rd_buf_s {
 
         rd_segment_t     *rbuf_wpos;          /**< Current write position seg */
         size_t            rbuf_len;           /**< Current (written) length */
+        size_t            rbuf_erased;        /**< Total number of bytes
+                                               *   erased from segments.
+                                               *   This amount is taken into
+                                               *   account when checking for
+                                               *   writable space which is
+                                               *   always at the end of the
+                                               *   buffer and thus can't make
+                                               *   use of the erased parts. */
         size_t            rbuf_size;          /**< Total allocated size of
                                                *   all segments. */
 
@@ -139,7 +147,7 @@ static RD_INLINE RD_UNUSED size_t rd_buf_write_pos (const rd_buf_t *rbuf) {
  * @returns the number of bytes available for writing (before growing).
  */
 static RD_INLINE RD_UNUSED size_t rd_buf_write_remains (const rd_buf_t *rbuf) {
-        return rbuf->rbuf_size - rbuf->rbuf_len;
+        return rbuf->rbuf_size - (rbuf->rbuf_len + rbuf->rbuf_erased);
 }
 
 
@@ -184,9 +192,14 @@ size_t rd_buf_write (rd_buf_t *rbuf, const void *payload, size_t size);
 size_t rd_buf_write_slice (rd_buf_t *rbuf, rd_slice_t *slice);
 size_t rd_buf_write_update (rd_buf_t *rbuf, size_t absof,
                             const void *payload, size_t size);
-void rd_buf_push (rd_buf_t *rbuf, const void *payload, size_t size,
-                  void (*free_cb)(void *));
+void rd_buf_push0 (rd_buf_t *rbuf, const void *payload, size_t size,
+                   void (*free_cb)(void *), rd_bool_t writable);
+#define rd_buf_push(rbuf,payload,size,free_cb)                          \
+        rd_buf_push0(rbuf,payload,size,free_cb,rd_false/*not-writable*/)
+#define rd_buf_push_writable(rbuf,payload,size,free_cb)                 \
+        rd_buf_push0(rbuf,payload,size,free_cb,rd_true/*writable*/)
 
+size_t rd_buf_erase (rd_buf_t *rbuf, size_t absof, size_t size);
 
 size_t rd_buf_get_writable (rd_buf_t *rbuf, void **p);
 
@@ -286,7 +299,32 @@ size_t rd_slice_read (rd_slice_t *slice, void *dst, size_t size);
 size_t rd_slice_peek (const rd_slice_t *slice, size_t offset,
                       void *dst, size_t size);
 
-size_t rd_slice_read_varint (rd_slice_t *slice, int64_t *nump);
+size_t rd_slice_read_uvarint (rd_slice_t *slice, uint64_t *nump);
+
+/**
+ * @brief Read a zig-zag varint-encoded signed integer from \p slice,
+ *        storing the decoded number in \p nump on success (return value > 0).
+ *
+ * @returns the number of bytes read on success or 0 in case of
+ *          buffer underflow.
+ */
+static RD_UNUSED RD_INLINE
+size_t rd_slice_read_varint (rd_slice_t *slice, int64_t *nump) {
+        size_t r;
+        uint64_t unum;
+
+        r = rd_slice_read_uvarint(slice, &unum);
+        if (likely(r > 0)) {
+                /* Zig-zag decoding */
+                *nump = (int64_t)((unum >> 1) ^
+                                  -(int64_t)(unum & 1));
+        }
+
+        return r;
+}
+
+
+
 
 const void *rd_slice_ensure_contig (rd_slice_t *slice, size_t size);
 

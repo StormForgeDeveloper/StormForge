@@ -78,7 +78,7 @@ rd_list_t *rd_list_init_copy (rd_list_t *dst, const rd_list_t *src) {
 }
 
 static RD_INLINE rd_list_t *rd_list_alloc (void) {
-        return malloc(sizeof(rd_list_t));
+        return rd_malloc(sizeof(rd_list_t));
 }
 
 rd_list_t *rd_list_new (int initial_size, void (*free_cb) (void *)) {
@@ -227,6 +227,20 @@ int rd_list_remove_multi_cmp (rd_list_t *rl, void *match_elem,
 }
 
 
+void *rd_list_pop (rd_list_t *rl) {
+        void *elem;
+        int idx = rl->rl_cnt - 1;
+
+        if (idx < 0)
+                return NULL;
+
+        elem = rl->rl_elems[idx];
+        rd_list_remove_elem(rl, idx);
+
+        return elem;
+}
+
+
 /**
  * Trampoline to avoid the double pointers in callbacks.
  *
@@ -255,27 +269,36 @@ void rd_list_sort (rd_list_t *rl, int (*cmp) (const void *, const void *)) {
 	rl->rl_flags |= RD_LIST_F_SORTED;
 }
 
-void rd_list_clear (rd_list_t *rl) {
+static void rd_list_destroy_elems (rd_list_t *rl) {
+        int i;
+
+        if (!rl->rl_elems)
+                return;
+
+        if (rl->rl_free_cb) {
+                /* Free in reverse order to allow deletions */
+                for (i = rl->rl_cnt - 1 ; i >= 0 ; i--)
+                        if (rl->rl_elems[i])
+                                rl->rl_free_cb(rl->rl_elems[i]);
+        }
+
+        rd_free(rl->rl_elems);
+        rl->rl_elems = NULL;
         rl->rl_cnt = 0;
-	rl->rl_flags &= ~RD_LIST_F_SORTED;
+        rl->rl_size = 0;
+        rl->rl_flags &= ~RD_LIST_F_SORTED;
+}
+
+
+void rd_list_clear (rd_list_t *rl) {
+        rd_list_destroy_elems(rl);
 }
 
 
 void rd_list_destroy (rd_list_t *rl) {
-
-        if (rl->rl_elems) {
-                int i;
-                if (rl->rl_free_cb) {
-                        for (i = 0 ; i < rl->rl_cnt ; i++)
-                                if (rl->rl_elems[i])
-                                        rl->rl_free_cb(rl->rl_elems[i]);
-                }
-
-		rd_free(rl->rl_elems);
-        }
-
-	if (rl->rl_flags & RD_LIST_F_ALLOCATED)
-		rd_free(rl);
+        rd_list_destroy_elems(rl);
+        if (rl->rl_flags & RD_LIST_F_ALLOCATED)
+                rd_free(rl);
 }
 
 void rd_list_destroy_free (void *rl) {
@@ -325,7 +348,35 @@ void *rd_list_find (const rd_list_t *rl, const void *match,
 }
 
 
-int rd_list_cmp (const rd_list_t *a, rd_list_t *b,
+void *rd_list_first (const rd_list_t *rl) {
+        if (rl->rl_cnt == 0)
+                return NULL;
+        return rl->rl_elems[0];
+}
+
+void *rd_list_last (const rd_list_t *rl) {
+        if (rl->rl_cnt == 0)
+                return NULL;
+        return rl->rl_elems[rl->rl_cnt-1];
+}
+
+
+void *rd_list_find_duplicate (const rd_list_t *rl,
+                              int (*cmp) (const void *, const void *)) {
+        int i;
+
+        rd_assert(rl->rl_flags & RD_LIST_F_SORTED);
+
+        for (i = 1 ; i < rl->rl_cnt ; i++) {
+                if (!cmp(rl->rl_elems[i-1],
+                         rl->rl_elems[i]))
+                        return rl->rl_elems[i];
+        }
+
+        return NULL;
+}
+
+int rd_list_cmp (const rd_list_t *a, const rd_list_t *b,
 		 int (*cmp) (const void *, const void *)) {
 	int i;
 
@@ -350,6 +401,9 @@ int rd_list_cmp_ptr (const void *a, const void *b) {
         return RD_CMP(a, b);
 }
 
+int rd_list_cmp_str (const void *a, const void *b) {
+        return strcmp((const char *)a, (const char *)b);
+}
 
 void rd_list_apply (rd_list_t *rl,
                     int (*cb) (void *elem, void *opaque), void *opaque) {
@@ -375,8 +429,7 @@ static void *rd_list_nocopy_ptr (const void *elem, void *opaque) {
 }
 
 rd_list_t *rd_list_copy (const rd_list_t *src,
-                         void *(*copy_cb) (const void *elem, void *opaque),
-                         void *opaque) {
+                         rd_list_copy_cb_t *copy_cb, void *opaque) {
         rd_list_t *dst;
 
         dst = rd_list_new(src->rl_cnt, src->rl_free_cb);
@@ -436,6 +489,22 @@ static rd_list_t *rd_list_copy_preallocated0 (rd_list_t *dst,
 void *rd_list_copy_preallocated (const void *elem, void *opaque) {
         return rd_list_copy_preallocated0(rd_list_new(0, NULL),
                                           (const rd_list_t *)elem);
+}
+
+
+
+void rd_list_move (rd_list_t *dst, rd_list_t *src) {
+        rd_list_init_copy(dst, src);
+
+        if (src->rl_flags & RD_LIST_F_FIXED_SIZE) {
+                rd_list_copy_preallocated0(dst, src);
+        } else {
+                memcpy(dst->rl_elems, src->rl_elems,
+                       src->rl_cnt * sizeof(*src->rl_elems));
+                dst->rl_cnt = src->rl_cnt;
+        }
+
+        src->rl_cnt = 0;
 }
 
 

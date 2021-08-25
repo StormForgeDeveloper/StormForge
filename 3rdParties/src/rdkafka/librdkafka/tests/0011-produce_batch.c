@@ -316,7 +316,7 @@ static void test_per_message_partition_flag (void) {
         rd_kafka_topic_t *rkt;
         rd_kafka_conf_t *conf;
         rd_kafka_topic_conf_t *topic_conf;
-        char msg[128];
+        char msg[128 + sizeof(__FILE__) + sizeof(__FUNCTION__)];
         int msgcnt = test_quick ? 100 : 1000;
         int failcnt = 0;
         int i;
@@ -450,7 +450,7 @@ static void test_message_partitioner_wo_per_message_flag (void) {
         rd_kafka_topic_t *rkt;
         rd_kafka_conf_t *conf;
         rd_kafka_topic_conf_t *topic_conf;
-        char msg[128];
+        char msg[128 + sizeof(__FILE__) + sizeof(__FUNCTION__)];
         int msgcnt = test_quick ? 100 : 1000;
         int failcnt = 0;
         int i;
@@ -461,6 +461,7 @@ static void test_message_partitioner_wo_per_message_flag (void) {
         /* Set delivery report callback */
         rd_kafka_conf_set_dr_msg_cb(conf,
                                     dr_partitioner_wo_per_message_flag_cb);
+        test_conf_set(conf, "sticky.partitioning.linger.ms", "0");
 
         /* Create kafka instance */
         rk = test_create_handle(RD_KAFKA_PRODUCER, conf);
@@ -480,7 +481,7 @@ static void test_message_partitioner_wo_per_message_flag (void) {
                 int *msgidp = malloc(sizeof(*msgidp));
                 *msgidp = i;
                 rd_snprintf(msg, sizeof(msg), "%s:%s test message #%i",
-                        __FILE__, __FUNCTION__, i);
+                            __FILE__, __FUNCTION__, i);
 
                 rkmessages[i].payload = rd_strdup(msg);
                 rkmessages[i].len     = strlen(msg);
@@ -528,7 +529,7 @@ static void test_message_partitioner_wo_per_message_flag (void) {
                 TEST_FAIL("Still waiting for %i/%i messages\n",
                           msgcounter, msgcnt);
         if (msg_partition_wo_flag_success == 0) {
-                TEST_FAIL("partitioner was not used, all messages were sent to"
+                TEST_FAIL("partitioner was not used, all messages were sent to "
                           "message specified partition %i", i);
         }
 

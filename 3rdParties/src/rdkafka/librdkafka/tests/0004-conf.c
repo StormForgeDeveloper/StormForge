@@ -90,7 +90,7 @@ static void conf_cmp (const char *desc,
 	int i;
 
 	if (acnt != bcnt)
-		TEST_FAIL("%s config compare: count %zd != %zd mismatch",
+		TEST_FAIL("%s config compare: count %"PRIusz" != %"PRIusz" mismatch",
 			  desc, acnt, bcnt);
 
 	for (i = 0 ; i < (int)acnt ; i += 2) {
@@ -280,7 +280,8 @@ static void do_test_idempotence_conf (void) {
 
                         } else {
                                 TEST_ASSERT(!check[i].exp_rk_fail,
-                                            "Expect config #%d.%d to fail");
+                                            "Expect config #%d.%d to fail",
+                                            i, j);
                         }
 
                         if (j == 1) {
@@ -302,7 +303,7 @@ static void do_test_idempotence_conf (void) {
                         } else {
                                 TEST_ASSERT(!check[i].exp_rkt_fail,
                                             "Expect topic config "
-                                            "#%d.%d to fail");
+                                            "#%d.%d to fail", i, j);
                                 rd_kafka_topic_destroy(rkt);
                         }
 
@@ -360,6 +361,61 @@ static void do_test_instance_conf (void) {
 }
 
 
+/**
+ * @brief Verify that setting and retrieving the default topic config works.
+ */
+static void do_test_default_topic_conf (void) {
+        rd_kafka_conf_t *conf;
+        rd_kafka_topic_conf_t *tconf;
+        const char *val, *exp_val;
+
+        SUB_TEST_QUICK();
+
+        conf = rd_kafka_conf_new();
+
+        /* Set topic-level property, this will create the default topic config*/
+        exp_val = "1234";
+        test_conf_set(conf, "message.timeout.ms", exp_val);
+
+        /* Get the default topic config */
+        tconf = rd_kafka_conf_get_default_topic_conf(conf);
+        TEST_ASSERT(tconf != NULL, "");
+
+        /* Get value from global config by fall-thru */
+        val = test_conf_get(conf, "message.timeout.ms");
+        TEST_ASSERT(val && !strcmp(val, exp_val),
+                    "Expected (conf) message.timeout.ms=%s, not %s",
+                    exp_val, val ? val : "(NULL)");
+
+        /* Get value from default topic config */
+        val = test_topic_conf_get(tconf, "message.timeout.ms");
+        TEST_ASSERT(val && !strcmp(val, exp_val),
+                    "Expected (topic conf) message.timeout.ms=%s, not %s",
+                    exp_val, val ? val : "(NULL)");
+
+        /* Now change the value, should be reflected in both. */
+        exp_val = "4444";
+        test_topic_conf_set(tconf, "message.timeout.ms", exp_val);
+
+        /* Get value from global config by fall-thru */
+        val = test_conf_get(conf, "message.timeout.ms");
+        TEST_ASSERT(val && !strcmp(val, exp_val),
+                    "Expected (conf) message.timeout.ms=%s, not %s",
+                    exp_val, val ? val : "(NULL)");
+
+        /* Get value from default topic config */
+        val = test_topic_conf_get(tconf, "message.timeout.ms");
+        TEST_ASSERT(val && !strcmp(val, exp_val),
+                    "Expected (topic conf) message.timeout.ms=%s, not %s",
+                    exp_val, val ? val : "(NULL)");
+
+
+        rd_kafka_conf_destroy(conf);
+
+        SUB_TEST_PASS();
+}
+
+
 int main_0004_conf (int argc, char **argv) {
 	rd_kafka_t *rk;
 	rd_kafka_topic_t *rkt;
@@ -379,6 +435,9 @@ int main_0004_conf (int argc, char **argv) {
                 "auto.offset.reset", "earliest", /* Global->Topic fallthru */
 #if WITH_ZLIB
 		"compression.codec", "gzip", /* S2I property */
+#endif
+#if defined(_WIN32)
+                "ssl.ca.certificate.stores", "Intermediate ,, Root ,",
 #endif
 		NULL
 	};
@@ -643,6 +702,8 @@ int main_0004_conf (int argc, char **argv) {
         do_test_idempotence_conf();
 
         do_test_instance_conf();
+
+        do_test_default_topic_conf();
 
 	return 0;
 }

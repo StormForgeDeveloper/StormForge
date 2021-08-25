@@ -27,21 +27,23 @@
  */
 
 
+
 #include "rd.h"
 #include "rdaddr.h"
 #include "rdrand.h"
 
-#ifdef _MSC_VER
-#include <WS2tcpip.h>
+#ifdef _WIN32
+#include <ws2tcpip.h>
 #endif
 
 const char *rd_sockaddr2str (const void *addr, int flags) {
 	const rd_sockaddr_inx_t *a = (const rd_sockaddr_inx_t *)addr;
-	static RD_TLS char ret[32][INET6_ADDRSTRLEN + 16];
+	static RD_TLS char ret[32][256];
 	static RD_TLS int  reti = 0;
 	char portstr[32];
 	int of = 0;
 	int niflags = NI_NUMERICSERV;
+        int r;
 
 	reti = (reti + 1) % 32;
 	
@@ -60,15 +62,29 @@ const char *rd_sockaddr2str (const void *addr, int flags) {
 		if (!(flags & RD_SOCKADDR2STR_F_RESOLVE))
 			niflags |= NI_NUMERICHOST;
 
-		if (getnameinfo((const struct sockaddr *)a,
-				RD_SOCKADDR_INX_LEN(a),
-				ret[reti]+of, sizeof(ret[reti])-of,
-				(flags & RD_SOCKADDR2STR_F_PORT) ?
-				portstr : NULL,
-				(flags & RD_SOCKADDR2STR_F_PORT) ?
-				sizeof(portstr) : 0,
-				niflags))
-			break;
+        retry:
+                if ((r = getnameinfo(
+                             (const struct sockaddr *)a,
+                             RD_SOCKADDR_INX_LEN(a),
+
+                             ret[reti]+of, sizeof(ret[reti])-of,
+
+                             (flags & RD_SOCKADDR2STR_F_PORT) ?
+                             portstr : NULL,
+
+                             (flags & RD_SOCKADDR2STR_F_PORT) ?
+                             sizeof(portstr) : 0,
+
+                             niflags))) {
+
+                        if (r == EAI_AGAIN && !(niflags & NI_NUMERICHOST)) {
+                                /* If unable to resolve name, retry without
+                                 * name resolution. */
+                                niflags |= NI_NUMERICHOST;
+                                goto retry;
+                        }
+                        break;
+                }
 
 		
 		if (flags & RD_SOCKADDR2STR_F_PORT) {
@@ -147,10 +163,13 @@ rd_sockaddr_list_t *rd_getaddrinfo (const char *nodesvc, const char *defsvc,
 				    int flags, int family,
 				    int socktype, int protocol,
 				    const char **errstr) {
-	struct addrinfo hints = { .ai_family = family,
-				  .ai_socktype = socktype,
-				  .ai_protocol = protocol,
-				  .ai_flags = flags };
+	struct addrinfo hints;
+    	memset(&hints, 0, sizeof(hints));
+    	hints.ai_family = family;
+	hints.ai_socktype = socktype;
+	hints.ai_protocol = protocol;
+	hints.ai_flags = flags;
+
 	struct addrinfo *ais, *ai;
 	char *node, *svc;
 	int r;
@@ -173,7 +192,7 @@ rd_sockaddr_list_t *rd_getaddrinfo (const char *nodesvc, const char *defsvc,
 #endif
 			*errstr = rd_strerror(errno);
 		else {
-#ifdef _MSC_VER
+#ifdef _WIN32
 			*errstr = gai_strerrorA(r);
 #else
 			*errstr = gai_strerror(r);

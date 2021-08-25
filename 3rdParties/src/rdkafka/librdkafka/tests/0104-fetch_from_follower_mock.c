@@ -189,6 +189,7 @@ static void do_test_unknown_follower (void) {
         const char *topic = "test";
         const int msgcnt = 1000;
         const size_t msgsize = 1000;
+        test_msgver_t mv;
 
         TEST_SAY(_C_MAG "[ Test unknown follower ]\n");
 
@@ -219,9 +220,17 @@ static void do_test_unknown_follower (void) {
 
         test_consumer_poll_no_msgs("unknown follower", c, 0, 5000);
 
-        /* Set a valid follower */
+        /* Set a valid follower (broker 3) */
         rd_kafka_mock_partition_set_follower(mcluster, topic, 0, 3);
-        test_consumer_poll("proper follower", c, 0, 1, 0, msgcnt, NULL);
+        test_msgver_init(&mv, 0);
+        test_consumer_poll("proper follower", c, 0, 1, 0, msgcnt, &mv);
+        /* Verify messages were indeed received from broker 3 */
+        test_msgver_verify0(__FUNCTION__, __LINE__, "broker_id",
+                            &mv, TEST_MSGVER_BY_BROKER_ID,
+                            (struct test_mv_vs){ .msg_base = 0,
+                                            .exp_cnt = msgcnt,
+                                            .broker_id = 3 });
+        test_msgver_clear(&mv);
 
         test_consumer_close(c);
 
@@ -233,8 +242,85 @@ static void do_test_unknown_follower (void) {
 }
 
 
+/**
+ * @brief Issue #2955: Verify that fetch does not stall until next
+ *        periodic metadata timeout when leader broker is no longer
+ *        a replica.
+ */
+static void do_test_replica_not_available (void) {
+        const char *bootstraps;
+        rd_kafka_mock_cluster_t *mcluster;
+        rd_kafka_conf_t *conf;
+        rd_kafka_t *c;
+        const char *topic = "test";
+        const int msgcnt = 1000;
+
+        TEST_SAY(_C_MAG "[ Test REPLICA_NOT_AVAIALBLE ]\n");
+
+        mcluster = test_mock_cluster_new(3, &bootstraps);
+
+        /* Seed the topic with messages */
+        test_produce_msgs_easy_v(topic, 0, 0, 0, msgcnt, 1000,
+                                 "bootstrap.servers", bootstraps,
+                                 "batch.num.messages", "10",
+                                 NULL);
+
+        /* Set partition leader to broker 1. */
+        rd_kafka_mock_partition_set_leader(mcluster, topic, 0, 1);
+
+        test_conf_init(&conf, NULL, 0);
+        test_conf_set(conf, "bootstrap.servers", bootstraps);
+        test_conf_set(conf, "client.rack", "myrack");
+        test_conf_set(conf, "auto.offset.reset", "earliest");
+        test_conf_set(conf, "topic.metadata.refresh.interval.ms", "60000");
+        test_conf_set(conf, "fetch.error.backoff.ms", "1000");
+
+        c = test_create_consumer("mygroup", NULL, conf, NULL);
+
+        rd_kafka_mock_broker_push_request_error_rtts(
+                mcluster,
+                1/*Broker 1*/,
+                1/*FetchRequest*/,
+                10,
+                RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE, 0,
+                RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE, 0,
+                RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE, 0,
+                RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE, 0,
+                RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE, 0,
+                RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE, 0,
+                RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE, 0,
+                RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE, 0,
+                RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE, 0,
+                RD_KAFKA_RESP_ERR_REPLICA_NOT_AVAILABLE, 0);
+
+
+        test_consumer_assign_partition("REPLICA_NOT_AVAIALBLE", c, topic, 0,
+                                       RD_KAFKA_OFFSET_INVALID);
+
+        test_consumer_poll_no_msgs("Wait initial metadata", c, 0, 2000);
+
+        /* Switch leader to broker 2 so that metadata is updated,
+         * causing the consumer to start fetching from the new leader. */
+        rd_kafka_mock_partition_set_leader(mcluster, topic, 0, 2);
+
+        test_consumer_poll("Consume", c, 0, 1, 0, msgcnt, NULL);
+
+        test_consumer_close(c);
+
+        rd_kafka_destroy(c);
+
+        test_mock_cluster_destroy(mcluster);
+
+        TEST_SAY(_C_GRN "[ Test REPLICA_NOT_AVAIALBLE PASSED ]\n");
+}
+
 
 int main_0104_fetch_from_follower_mock (int argc, char **argv) {
+
+        if (test_needs_auth()) {
+                TEST_SKIP("Mock cluster does not support SSL/SASL\n");
+                return 0;
+        }
 
         do_test_offset_reset("earliest");
         do_test_offset_reset("latest");
@@ -242,6 +328,8 @@ int main_0104_fetch_from_follower_mock (int argc, char **argv) {
         do_test_offset_reset_lag();
 
         do_test_unknown_follower();
+
+        do_test_replica_not_available();
 
         return 0;
 }

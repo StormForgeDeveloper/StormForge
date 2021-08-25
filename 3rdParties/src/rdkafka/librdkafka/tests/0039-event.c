@@ -48,15 +48,17 @@ static void handle_drs (rd_kafka_event_t *rkev) {
 	const rd_kafka_message_t *rkmessage;
 
 	while ((rkmessage = rd_kafka_event_message_next(rkev))) {
+                int32_t broker_id = rd_kafka_message_broker_id(rkmessage);
 		int msgid = *(int *)rkmessage->_private;
-
 		free(rkmessage->_private);
 
-		TEST_SAYL(3,"Got rkmessage %s [%"PRId32"] @ %"PRId64": %s\n",
+		TEST_SAYL(3,"Got rkmessage %s [%"PRId32"] @ %"PRId64": "
+                          "from broker %"PRId32": %s\n",
 			  rd_kafka_topic_name(rkmessage->rkt),
 			  rkmessage->partition, rkmessage->offset,
+                          broker_id,
 			  rd_kafka_err2str(rkmessage->err));
-			 
+
 
 		if (rkmessage->err != RD_KAFKA_RESP_ERR_NO_ERROR)
 			TEST_FAIL("Message delivery failed: %s\n",
@@ -68,6 +70,9 @@ static void handle_drs (rd_kafka_event_t *rkev) {
 				  msgid, msgid_next);
 			return;
 		}
+
+                TEST_ASSERT(broker_id >= 0,
+                            "Message %d has no broker id set", msgid);
 
 		msgid_next = msgid+1;
 	}
@@ -131,7 +136,7 @@ int main_0039_event_dr (int argc, char **argv) {
 		switch (rd_kafka_event_type(rkev))
 		{
 		case RD_KAFKA_EVENT_DR:
-                        TEST_SAYL(3, "%s event with %zd messages\n",
+                        TEST_SAYL(3, "%s event with %"PRIusz" messages\n",
                                   rd_kafka_event_name(rkev),
                                   rd_kafka_event_message_count(rkev));
 			handle_drs(rkev);
@@ -164,7 +169,66 @@ int main_0039_event_dr (int argc, char **argv) {
 	return 0;
 }
 
+/**
+ * @brief Local test: test log events
+ */
+int main_0039_event_log (int argc, char **argv) {
+        rd_kafka_t *rk;
+        rd_kafka_conf_t *conf;
+        rd_kafka_queue_t *eventq;
+        int waitevent = 1;
 
+        const char *fac;
+        const char *msg;
+        char ctx[60];
+        int level;
+
+        conf = rd_kafka_conf_new();
+        rd_kafka_conf_set(conf, "bootstrap.servers", "0:65534", NULL, 0);
+        rd_kafka_conf_set(conf, "log.queue", "true", NULL, 0);
+        rd_kafka_conf_set(conf, "debug", "all", NULL, 0);
+
+        /* Create kafka instance */
+        rk = test_create_handle(RD_KAFKA_PRODUCER, conf);
+        eventq = rd_kafka_queue_get_main(rk);
+        rd_kafka_set_log_queue(rk, eventq);
+
+        while (waitevent) {
+                /* reset ctx */
+                memset(ctx, '$', sizeof(ctx) - 2);
+                ctx[sizeof(ctx) - 1] = '\0';
+
+                rd_kafka_event_t *rkev;
+                rkev = rd_kafka_queue_poll(eventq, 1000);
+                switch (rd_kafka_event_type(rkev))
+                {
+                case RD_KAFKA_EVENT_LOG:
+                        rd_kafka_event_log(rkev, &fac, &msg, &level);
+                        rd_kafka_event_debug_contexts(rkev, ctx, sizeof(ctx));
+                        TEST_SAY("Got log  event: "
+                                 "level: %d ctx: %s fac: %s: msg: %s\n",
+                                 level, ctx, fac, msg);
+                        if (strchr(ctx, '$')) {
+                                TEST_FAIL("ctx was not set by "
+                                          "rd_kafka_event_debug_contexts()");
+                        }
+                        waitevent = 0;
+                        break;
+                default:
+                        TEST_SAY("Unhandled event: %s\n",
+                                 rd_kafka_event_name(rkev));
+                        break;
+                }
+                rd_kafka_event_destroy(rkev);
+        }
+
+        /* Destroy rdkafka instance */
+        rd_kafka_queue_destroy(eventq);
+        TEST_SAY("Destroying kafka instance %s\n", rd_kafka_name(rk));
+        rd_kafka_destroy(rk);
+
+        return 0;
+}
 
 /**
  * @brief Local test: test event generation

@@ -43,8 +43,8 @@
 #include <ntsecapi.h>
 
 #define SECURITY_WIN32
-#pragma comment(lib, "Secur32.lib")
-#include <Sspi.h>
+#pragma comment(lib, "secur32.lib")
+#include <sspi.h>
 
 
 #define RD_KAFKA_SASL_SSPI_CTX_ATTRS \
@@ -178,7 +178,7 @@ static int rd_kafka_sasl_sspi_continue (rd_kafka_transport_t *rktrans,
                 ctx = rd_calloc(1, sizeof(*ctx));
         }
 
-        sr = InitializeSecurityContextW(
+        sr = InitializeSecurityContext(
                 state->cred, state->ctx, state->principal,
                 RD_KAFKA_SASL_SSPI_CTX_ATTRS |
                 (state->ctx ? 0 : ISC_REQ_MUTUAL_AUTH | ISC_REQ_IDENTIFY),

@@ -31,6 +31,7 @@
 #include "rdtime.h"
 #include "rdsysqueue.h"
 
+#include "rdkafka_queue.h"
 
 static RD_INLINE void rd_kafka_timers_lock (rd_kafka_timers_t *rkts) {
         mtx_lock(&rkts->rkts_lock);
@@ -62,9 +63,42 @@ static void rd_kafka_timer_unschedule (rd_kafka_timers_t *rkts,
 	rtmr->rtmr_next = 0;
 }
 
+
+/**
+ * @brief Schedule the next firing of the timer at \p abs_time.
+ *
+ * @remark Will not update rtmr_interval, only rtmr_next.
+ *
+ * @locks_required timers_lock()
+ */
+static void rd_kafka_timer_schedule_next (rd_kafka_timers_t *rkts,
+                                          rd_kafka_timer_t *rtmr,
+                                          rd_ts_t abs_time) {
+        rd_kafka_timer_t *first;
+
+        rtmr->rtmr_next = abs_time;
+
+        if (!(first = TAILQ_FIRST(&rkts->rkts_timers)) ||
+            first->rtmr_next > rtmr->rtmr_next) {
+                TAILQ_INSERT_HEAD(&rkts->rkts_timers, rtmr, rtmr_link);
+                cnd_signal(&rkts->rkts_cond);
+                if (rkts->rkts_wakeq)
+                        rd_kafka_q_yield(rkts->rkts_wakeq);
+        } else
+                TAILQ_INSERT_SORTED(&rkts->rkts_timers, rtmr,
+                                    rd_kafka_timer_t *, rtmr_link,
+                                    rd_kafka_timer_cmp);
+}
+
+
+/**
+ * @brief Schedule the next firing of the timer according to the timer's
+ *        interval plus an optional \p extra_us.
+ *
+ * @locks_required timers_lock()
+ */
 static void rd_kafka_timer_schedule (rd_kafka_timers_t *rkts,
 				     rd_kafka_timer_t *rtmr, int extra_us) {
-	rd_kafka_timer_t *first;
 
 	/* Timer has been stopped */
 	if (!rtmr->rtmr_interval)
@@ -74,16 +108,8 @@ static void rd_kafka_timer_schedule (rd_kafka_timers_t *rkts,
         if (unlikely(!rkts->rkts_enabled))
                 return;
 
-	rtmr->rtmr_next = rd_clock() + rtmr->rtmr_interval + extra_us;
-
-	if (!(first = TAILQ_FIRST(&rkts->rkts_timers)) ||
-	    first->rtmr_next > rtmr->rtmr_next) {
-		TAILQ_INSERT_HEAD(&rkts->rkts_timers, rtmr, rtmr_link);
-                cnd_signal(&rkts->rkts_cond);
-	} else
-		TAILQ_INSERT_SORTED(&rkts->rkts_timers, rtmr,
-                                    rd_kafka_timer_t *, rtmr_link,
-				    rd_kafka_timer_cmp);
+        rd_kafka_timer_schedule_next(
+                rkts, rtmr, rd_clock() + rtmr->rtmr_interval + extra_us);
 }
 
 /**
@@ -116,19 +142,41 @@ int rd_kafka_timer_stop (rd_kafka_timers_t *rkts, rd_kafka_timer_t *rtmr,
 
 
 /**
- * Start the provided timer with the given interval.
+ * @returns true if timer is started, else false.
+ */
+rd_bool_t rd_kafka_timer_is_started (rd_kafka_timers_t *rkts,
+                                     const rd_kafka_timer_t *rtmr) {
+        rd_bool_t ret;
+        rd_kafka_timers_lock(rkts);
+        ret = rtmr->rtmr_interval != 0;
+        rd_kafka_timers_unlock(rkts);
+        return ret;
+}
+
+
+/**
+ * @brief Start the provided timer with the given interval.
+ *
  * Upon expiration of the interval (us) the callback will be called in the
  * main rdkafka thread, after callback return the timer will be restarted.
+ *
+ * @param oneshot just fire the timer once.
+ * @param restart if timer is already started, restart it.
  *
  * Use rd_kafka_timer_stop() to stop a timer.
  */
 void rd_kafka_timer_start0 (rd_kafka_timers_t *rkts,
                             rd_kafka_timer_t *rtmr, rd_ts_t interval,
-                            rd_bool_t oneshot,
+                            rd_bool_t oneshot, rd_bool_t restart,
                             void (*callback) (rd_kafka_timers_t *rkts,
                                               void *arg),
                             void *arg) {
 	rd_kafka_timers_lock(rkts);
+
+        if (!restart && rd_kafka_timer_scheduled(rtmr)) {
+                rd_kafka_timers_unlock(rkts);
+                return;
+        }
 
 	rd_kafka_timer_stop(rkts, rtmr, 0/*!lock*/);
 
@@ -143,15 +191,33 @@ void rd_kafka_timer_start0 (rd_kafka_timers_t *rkts,
 }
 
 /**
- * Delay the next timer invocation by 'backoff_us'
+ * Delay the next timer invocation by '2 * rtmr->rtmr_interval'
  */
-void rd_kafka_timer_backoff (rd_kafka_timers_t *rkts,
-			     rd_kafka_timer_t *rtmr, int backoff_us) {
-	rd_kafka_timers_lock(rkts);
-	if (rd_kafka_timer_scheduled(rtmr))
-		rd_kafka_timer_unschedule(rkts, rtmr);
-	rd_kafka_timer_schedule(rkts, rtmr, backoff_us);
-	rd_kafka_timers_unlock(rkts);
+void rd_kafka_timer_exp_backoff (rd_kafka_timers_t *rkts,
+                                 rd_kafka_timer_t *rtmr) {
+        rd_kafka_timers_lock(rkts);
+        if (rd_kafka_timer_scheduled(rtmr)) {
+                rtmr->rtmr_interval *= 2;
+                rd_kafka_timer_unschedule(rkts, rtmr);
+        }
+        rd_kafka_timer_schedule(rkts, rtmr, 0);
+        rd_kafka_timers_unlock(rkts);
+}
+
+/**
+ * @brief Override the interval once for the next firing of the timer.
+ *
+ * @locks_required none
+ * @locks_acquired timers_lock
+ */
+void rd_kafka_timer_override_once (rd_kafka_timers_t *rkts,
+                                   rd_kafka_timer_t *rtmr,
+                                   rd_ts_t interval) {
+        rd_kafka_timers_lock(rkts);
+        if (rd_kafka_timer_scheduled(rtmr))
+                rd_kafka_timer_unschedule(rkts, rtmr);
+        rd_kafka_timer_schedule_next(rkts, rtmr, rd_clock() + interval);
+        rd_kafka_timers_unlock(rkts);
 }
 
 
@@ -295,11 +361,13 @@ void rd_kafka_timers_destroy (rd_kafka_timers_t *rkts) {
         mtx_destroy(&rkts->rkts_lock);
 }
 
-void rd_kafka_timers_init (rd_kafka_timers_t *rkts, rd_kafka_t *rk) {
+void rd_kafka_timers_init (rd_kafka_timers_t *rkts, rd_kafka_t *rk,
+                           struct rd_kafka_q_s *wakeq) {
         memset(rkts, 0, sizeof(*rkts));
         rkts->rkts_rk = rk;
         TAILQ_INIT(&rkts->rkts_timers);
         mtx_init(&rkts->rkts_lock, mtx_plain);
         cnd_init(&rkts->rkts_cond);
         rkts->rkts_enabled = 1;
+        rkts->rkts_wakeq = wakeq;
 }

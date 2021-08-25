@@ -104,9 +104,9 @@
 ***************************************/
 /*! Modify the local functions below should you wish to use some other memory routines
 *   for malloc(), free() */
-#include <stdlib.h>
-static void* XXH_malloc(size_t s) { return malloc(s); }
-static void  XXH_free  (void* p)  { free(p); }
+#include "rd.h"
+static void* XXH_malloc(size_t s) { return rd_malloc(s); }
+static void  XXH_free  (void* p)  { rd_free(p); }
 /*! and for memcpy() */
 #include <string.h>
 static void* XXH_memcpy(void* dest, const void* src, size_t size) { return memcpy(dest,src,size); }
@@ -114,7 +114,7 @@ static void* XXH_memcpy(void* dest, const void* src, size_t size) { return memcp
 #include <assert.h>   /* assert */
 
 #define XXH_STATIC_LINKING_ONLY
-#include "xxhash.h"
+#include "rdxxhash.h"
 
 
 /* *************************************

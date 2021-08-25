@@ -98,7 +98,7 @@ class TestEvent2Cb : public RdKafka::EventCb {
 
           for (rapidjson::Value::ConstMemberIterator itr = pp->MemberBegin(); itr != pp->MemberEnd(); ++itr) {
             std::string broker_name = itr->name.GetString();
-            size_t broker_id_idx = broker_name.find('/');
+            size_t broker_id_idx = broker_name.rfind('/');
             if (broker_id_idx == (size_t)-1)
               continue;
             std::string broker_id = broker_name.substr(broker_id_idx + 1, broker_name.size() - broker_id_idx - 1);
@@ -255,9 +255,9 @@ static int get_broker_rack_count (std::vector<int> &replica_ids)
 
     for (size_t j = 0; j<entry_cnt; ++j) {
       const rd_kafka_ConfigEntry_t *e = entries[j];
-      const char * name = rd_kafka_ConfigEntry_name(e);
-      if (!strcmp(name, "broker.rack")) {
-        const char * val = rd_kafka_ConfigEntry_value(e) ? rd_kafka_ConfigEntry_value(e) : "(NULL)";
+      const char *cname = rd_kafka_ConfigEntry_name(e);
+      if (!strcmp(cname, "broker.rack")) {
+        const char *val = rd_kafka_ConfigEntry_value(e) ? rd_kafka_ConfigEntry_value(e) : "(NULL)";
         racks.insert(std::string(val));
       }
     }

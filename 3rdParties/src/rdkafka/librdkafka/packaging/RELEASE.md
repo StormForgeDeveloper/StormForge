@@ -38,6 +38,35 @@ The github release asset/artifact checksums will be added later when the
 final tag is pushed.
 
 
+## Update protocol requests and error codes
+
+Check out the latest version of Apache Kafka (not trunk, needs to be a released
+version since protocol may change on trunk).
+
+### Protocol request types
+
+Generate protocol request type codes with:
+
+    $ src/generate_proto.sh ~/src/your-kafka-dir
+
+Cut'n'paste the new defines and strings to `rdkafka_protocol.h` and
+`rdkafka_proto.h`.
+
+### Error codes
+
+Error codes must currently be parsed manually, open
+`clients/src/main/java/org/apache/kafka/common/protocol/Errors.java`
+in the Kafka source directory and update the `rd_kafka_resp_err_t` and
+`RdKafka::ErrorCode` enums in `rdkafka.h` and `rdkafkacpp.h`
+respectively.
+Add the error strings to `rdkafka.c`.
+The Kafka error strings are sometimes a bit too verbose for our taste,
+so feel free to rewrite them (usually removing a couple of 'the's).
+
+**NOTE**: Only add **new** error codes, do not alter existing ones since that
+          will be a breaking API change.
+
+
 ## Run regression tests
 
 **Build tests:**
@@ -69,9 +98,10 @@ Release candidates start at 200, thus 0xAABBCCc9 is RC1, 0xAABBCCca is RC2, etc.
 Change the `RD_KAFKA_VERSION` defines in both `src/rdkafka.h` and
 `src-cpp/rdkafkacpp.h` to the version to build, such as 0x000b01c9
 for v0.11.1-RC1, or 0x000b01ff for the final v0.11.1 release.
+Update the librdkafka version in `vcpkg.json`.
 
    # Update defines
-   $ $EDITOR src/rdkafka.h src-cpp/rdkafkacpp.h
+   $ $EDITOR src/rdkafka.h src-cpp/rdkafkacpp.h vcpkg.json
 
    # Reconfigure and build
    $ ./configure
@@ -138,13 +168,22 @@ On a Linux host with docker installed, this will also require S3 credentials
 to be set up.
 
     $ cd packaging/nuget
-    $ pip install -r requirements.txt  # if necessary
+    $ pip3 install -r requirements.txt  # if necessary
     $ ./release.py v0.11.1-RC1
 
 Test the generated librdkafka.redist.0.11.1-RC1.nupkg and
 then upload it to NuGet manually:
 
  * https://www.nuget.org/packages/manage/upload
+
+
+### Create static bundle (for Go)
+
+    $ cd packaging/nuget
+    $ ./release.py --class StaticPackage v0.11.1-RC1
+
+Follow the Go client release instructions for updating its bundled librdkafka
+version based on the tar ball created here.
 
 
 ### Homebrew recipe update

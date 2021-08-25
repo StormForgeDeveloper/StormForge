@@ -10,6 +10,12 @@ Begin with the following examples:
  * [producer.c](producer.c) - a typical C producer application.
  * [producer.cpp](producer.cpp) - a typical C++ producer application.
  * [idempotent_producer.c](idempotent_producer.c) - Idempotent producer.
+ * [transactions.c](transactions.c) - Full exactly once semantics (EOS)
+                                      transactional consumer-producer exammple.
+                                      Requires Apache Kafka 2.5 or later.
+ * [transactions-older-broker.c](transactions-older-broker.c) - Same as
+   `transactions.c` but for Apache Kafka versions 2.4.x and older which
+   lack KIP-447 support.
 
 
 For more complex uses, see:
@@ -20,3 +26,4 @@ For more complex uses, see:
  * [rdkafka_consume_batch.cpp](rdkafka_consume_batch.cpp) - batching high-level C++ consumer example.
  * [rdkafka_performance.c](rdkafka_performance.c) - performance, benchmark, latency producer and consumer tool.
  * [kafkatest_verifiable_client.cpp](kafkatest_verifiable_client.cpp) - for use with the official Apache Kafka client system tests.
+ * [openssl_engine_example.cpp](openssl_engine_example.cpp) - metadata listing in C++ over SSL channel established using OpenSSL engine.

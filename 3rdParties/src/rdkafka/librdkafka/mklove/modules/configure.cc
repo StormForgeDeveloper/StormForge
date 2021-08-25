@@ -57,7 +57,7 @@ function checks {
 
     # Provide prefix and checks for various other build tools.
     local t=
-    for t in LD:ld NM:nm OBJDUMP:objdump STRIP:strip ; do
+    for t in LD:ld NM:nm OBJDUMP:objdump STRIP:strip LIBTOOL:libtool RANLIB:ranlib ; do
         local tenv=${t%:*}
         t=${t#*:}
 	local tval="${!tenv}"
@@ -154,6 +154,8 @@ function checks {
             # OSX linker can't enable/disable static linking so we'll
             # need to find the .a through STATIC_LIB_libname env var
             mkl_mkvar_set staticlinking HAS_LDFLAGS_STATIC n
+            # libtool -static supported
+            mkl_mkvar_set staticlinking HAS_LIBTOOL_STATIC y
         fi
     fi
 }
@@ -176,3 +178,4 @@ mkl_option "Compiler" "WITH_STATIC_LINKING" "--enable-static" "Enable static lin
 mkl_option "Compiler" "WITHOUT_OPTIMIZATION" "--disable-optimization" "Disable optimization flag to compiler" "n"
 mkl_option "Compiler" "env:MKL_NO_DEBUG_SYMBOLS" "--disable-debug-symbols" "Disable debugging symbols" "n"
 mkl_option "Compiler" "env:MKL_WANT_WERROR" "--enable-werror" "Enable compiler warnings as errors" "n"
+mkl_option "Compiler" "WITH_STRIP" "--enable-strip" "Strip libraries when installing" "n"

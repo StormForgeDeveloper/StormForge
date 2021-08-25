@@ -27,6 +27,8 @@
  */
 #include "rdkafka_int.h"
 #include "rdkafka_assignor.h"
+#include "rdkafka_request.h"
+#include "rdunittest.h"
 
 #include <ctype.h>
 
@@ -34,6 +36,9 @@
  * Clear out and free any memory used by the member, but not the rkgm itself.
  */
 void rd_kafka_group_member_clear (rd_kafka_group_member_t *rkgm) {
+        if (rkgm->rkgm_owned)
+                rd_kafka_topic_partition_list_destroy(rkgm->rkgm_owned);
+
         if (rkgm->rkgm_subscription)
                 rd_kafka_topic_partition_list_destroy(rkgm->rkgm_subscription);
 
@@ -100,11 +105,12 @@ rd_kafka_group_member_find_subscription (rd_kafka_t *rk,
 }
 
 
-
-static rd_kafkap_bytes_t *
+rd_kafkap_bytes_t *
 rd_kafka_consumer_protocol_member_metadata_new (
 	const rd_list_t *topics,
-        const void *userdata, size_t userdata_size) {
+        const void *userdata, size_t userdata_size,
+        const rd_kafka_topic_partition_list_t *owned_partitions) {
+
         rd_kafka_buf_t *rkbuf;
         rd_kafkap_bytes_t *kbytes;
         int i;
@@ -114,22 +120,42 @@ rd_kafka_consumer_protocol_member_metadata_new (
 
         /*
          * MemberMetadata => Version Subscription AssignmentStrategies
-         *   Version      => int16
+         *   Version => int16
          *   Subscription => Topics UserData
-         *     Topics     => [String]
-         *     UserData     => Bytes
+         *     Topics => [String]
+         *     UserData => Bytes
+         *   OwnedPartitions => [Topic Partitions] // added in v1
+         *     Topic => string
+         *     Partitions => [int32]
          */
 
         rkbuf = rd_kafka_buf_new(1, 100 + (topic_cnt * 100) + userdata_size);
 
-        rd_kafka_buf_write_i16(rkbuf, 0);
+        /* Version */
+        rd_kafka_buf_write_i16(rkbuf, 1);
         rd_kafka_buf_write_i32(rkbuf, topic_cnt);
 	RD_LIST_FOREACH(tinfo, topics, i)
                 rd_kafka_buf_write_str(rkbuf, tinfo->topic, -1);
-	if (userdata)
-		rd_kafka_buf_write_bytes(rkbuf, userdata, userdata_size);
-	else /* Kafka 0.9.0.0 cant parse NULL bytes, so we provide empty. */
-		rd_kafka_buf_write_bytes(rkbuf, "", 0);
+        if (userdata)
+                rd_kafka_buf_write_bytes(rkbuf, userdata, userdata_size);
+        else /* Kafka 0.9.0.0 can't parse NULL bytes, so we provide empty,
+              * which is compatible with all of the built-in Java client
+              * assignors at the present time (up to and including v2.5) */
+                rd_kafka_buf_write_bytes(rkbuf, "", 0);
+        /* Following data is ignored by v0 consumers */
+        if (!owned_partitions)
+                /* If there are no owned partitions, this is specified as an
+                 * empty array, not NULL. */
+                rd_kafka_buf_write_i32(rkbuf, 0); /* Topic count */
+        else
+                rd_kafka_buf_write_topic_partitions(
+                        rkbuf,
+                        owned_partitions,
+                        rd_false /*don't skip invalid offsets*/,
+                        rd_false /*any offset*/,
+                        rd_false /*don't write offsets*/,
+                        rd_false /*don't write epoch*/,
+                        rd_false /*don't write metadata*/);
 
         /* Get binary buffer and allocate a new Kafka Bytes with a copy. */
         rd_slice_init_full(&rkbuf->rkbuf_reader, &rkbuf->rkbuf_buf);
@@ -139,21 +165,20 @@ rd_kafka_consumer_protocol_member_metadata_new (
         rd_kafka_buf_destroy(rkbuf);
 
         return kbytes;
-
 }
 
 
 
 
 rd_kafkap_bytes_t *
-rd_kafka_assignor_get_metadata (rd_kafka_assignor_t *rkas,
-				const rd_list_t *topics) {
+rd_kafka_assignor_get_metadata_with_empty_userdata (const rd_kafka_assignor_t *rkas,
+                                                    void *assignor_state,
+                                                    const rd_list_t *topics,
+                                                    const rd_kafka_topic_partition_list_t
+                                                    *owned_partitions) {
         return rd_kafka_consumer_protocol_member_metadata_new(
-                topics, rkas->rkas_userdata,
-                rkas->rkas_userdata_size);
+                topics, NULL, 0, owned_partitions);
 }
-
-
 
 
 
@@ -208,13 +233,14 @@ int rd_kafka_assignor_topic_cmp (const void *_a, const void *_b) {
         const rd_kafka_assignor_topic_t *b =
                 *(const rd_kafka_assignor_topic_t * const *)_b;
 
-        return !strcmp(a->metadata->topic, b->metadata->topic);
+        return strcmp(a->metadata->topic, b->metadata->topic);
 }
 
 /**
- * Maps the available topics to the group members' subscriptions
- * and updates the `member` map with the proper list of eligible topics,
- * the latter are returned in `eligible_topics`.
+ * Determine the complete set of topics that match at least one of
+ * the group member subscriptions. Associate with each of these the
+ * complete set of members that are subscribed to it. The result is
+ * returned in `eligible_topics`.
  */
 static void
 rd_kafka_member_subscriptions_map (rd_kafka_cgrp_t *rkcg,
@@ -231,16 +257,16 @@ rd_kafka_member_subscriptions_map (rd_kafka_cgrp_t *rkcg,
         /* For each topic in the cluster, scan through the member list
          * to find matching subscriptions. */
         for (ti = 0 ; ti < metadata->topic_cnt ; ti++) {
-                int complete_cnt = 0;
                 int i;
 
                 /* Ignore topics in blacklist */
                 if (rkcg->rkcg_rk->rk_conf.topic_blacklist &&
-		    rd_kafka_pattern_match(rkcg->rkcg_rk->rk_conf.
+                    rd_kafka_pattern_match(rkcg->rkcg_rk->rk_conf.
                                            topic_blacklist,
                                            metadata->topics[ti].topic)) {
-                        rd_kafka_dbg(rkcg->rkcg_rk, TOPIC, "BLACKLIST",
-                                   "Assignor ignoring blacklisted "
+                        rd_kafka_dbg(rkcg->rkcg_rk, TOPIC|RD_KAFKA_DBG_ASSIGNOR,
+                                     "BLACKLIST",
+                                     "Assignor ignoring blacklisted "
                                      "topic \"%s\"",
                                      metadata->topics[ti].topic);
                         continue;
@@ -255,10 +281,9 @@ rd_kafka_member_subscriptions_map (rd_kafka_cgrp_t *rkcg,
                 for (i = 0 ; i < member_cnt ; i++) {
                         /* Match topic against existing metadata,
                            incl regex matching. */
-                        if (rd_kafka_member_subscription_match(
-                                    rkcg, &members[i], &metadata->topics[ti],
-                                    eligible_topic))
-                                complete_cnt++;
+                        rd_kafka_member_subscription_match(
+                                rkcg, &members[i], &metadata->topics[ti],
+                                eligible_topic);
                 }
 
                 if (rd_list_empty(&eligible_topic->members)) {
@@ -269,9 +294,6 @@ rd_kafka_member_subscriptions_map (rd_kafka_cgrp_t *rkcg,
                 eligible_topic->metadata = &metadata->topics[ti];
                 rd_list_add(eligible_topics, eligible_topic);
                 eligible_topic = NULL;
-
-                if (complete_cnt == (int)member_cnt)
-                        break;
         }
 
         if (eligible_topic)
@@ -281,53 +303,56 @@ rd_kafka_member_subscriptions_map (rd_kafka_cgrp_t *rkcg,
 
 rd_kafka_resp_err_t
 rd_kafka_assignor_run (rd_kafka_cgrp_t *rkcg,
-                       const char *protocol_name,
+                       const rd_kafka_assignor_t *rkas,
                        rd_kafka_metadata_t *metadata,
                        rd_kafka_group_member_t *members,
                        int member_cnt,
                        char *errstr, size_t errstr_size) {
         rd_kafka_resp_err_t err;
-        rd_kafka_assignor_t *rkas;
         rd_ts_t ts_start = rd_clock();
         int i;
         rd_list_t eligible_topics;
         int j;
 
-	if (!(rkas = rd_kafka_assignor_find(rkcg->rkcg_rk, protocol_name)) ||
-	    !rkas->rkas_enabled) {
-		rd_snprintf(errstr, errstr_size,
-			    "Unsupported assignor \"%s\"", protocol_name);
-		return RD_KAFKA_RESP_ERR__UNKNOWN_PROTOCOL;
-	}
-
-
-        /* Map available topics to subscribing members */
+        /* Construct eligible_topics, a map of:
+         *    topic -> set of members that are subscribed to it. */
         rd_kafka_member_subscriptions_map(rkcg, &eligible_topics, metadata,
                                           members, member_cnt);
 
 
-        if (rkcg->rkcg_rk->rk_conf.debug & RD_KAFKA_DBG_CGRP) {
-                rd_kafka_dbg(rkcg->rkcg_rk, CGRP, "ASSIGN",
-                             "Group \"%s\" running %s assignment for "
-                             "%d member(s):",
-                             rkcg->rkcg_group_id->str, protocol_name,
-                             member_cnt);
+        if (rkcg->rkcg_rk->rk_conf.debug &
+            (RD_KAFKA_DBG_CGRP|RD_KAFKA_DBG_ASSIGNOR)) {
+                rd_kafka_dbg(rkcg->rkcg_rk, CGRP|RD_KAFKA_DBG_ASSIGNOR,
+                             "ASSIGN",
+                             "Group \"%s\" running %s assignor for "
+                             "%d member(s) and "
+                             "%d eligible subscribed topic(s):",
+                             rkcg->rkcg_group_id->str,
+                             rkas->rkas_protocol_name->str,
+                             member_cnt,
+                             eligible_topics.rl_cnt);
 
                 for (i = 0 ; i < member_cnt ; i++) {
                         const rd_kafka_group_member_t *member = &members[i];
 
-                        rd_kafka_dbg(rkcg->rkcg_rk, CGRP, "ASSIGN",
+                        rd_kafka_dbg(rkcg->rkcg_rk, CGRP|RD_KAFKA_DBG_ASSIGNOR,
+                                     "ASSIGN",
                                      " Member \"%.*s\"%s with "
-                                     "%d subscription(s):",
+                                     "%d owned partition(s) and "
+                                     "%d subscribed topic(s):",
                                      RD_KAFKAP_STR_PR(member->rkgm_member_id),
                                      !rd_kafkap_str_cmp(member->rkgm_member_id,
                                                         rkcg->rkcg_member_id) ?
                                      " (me)":"",
+                                     member->rkgm_owned ?
+                                     member->rkgm_owned->cnt : 0,
                                      member->rkgm_subscription->cnt);
                         for (j = 0 ; j < member->rkgm_subscription->cnt ; j++) {
                                 const rd_kafka_topic_partition_t *p =
                                         &member->rkgm_subscription->elems[j];
-                                rd_kafka_dbg(rkcg->rkcg_rk, CGRP, "ASSIGN",
+                                rd_kafka_dbg(rkcg->rkcg_rk,
+                                             CGRP|RD_KAFKA_DBG_ASSIGNOR,
+                                             "ASSIGN",
                                              "  %s [%"PRId32"]",
                                              p->topic, p->partition);
                         }
@@ -337,33 +362,39 @@ rd_kafka_assignor_run (rd_kafka_cgrp_t *rkcg,
         }
 
         /* Call assignors assign callback */
-        err = rkas->rkas_assign_cb(rkcg->rkcg_rk,
-                                    rkcg->rkcg_member_id->str,
-                                    protocol_name, metadata,
-                                    members, member_cnt,
-                                    (rd_kafka_assignor_topic_t **)
-                                    eligible_topics.rl_elems,
-                                    eligible_topics.rl_cnt,
-                                    errstr, errstr_size,
-                                    rkas->rkas_opaque);
+        err = rkas->rkas_assign_cb(rkcg->rkcg_rk, rkas,
+                                   rkcg->rkcg_member_id->str,
+                                   metadata,
+                                   members, member_cnt,
+                                   (rd_kafka_assignor_topic_t **)
+                                   eligible_topics.rl_elems,
+                                   eligible_topics.rl_cnt,
+                                   errstr, errstr_size,
+                                   rkas->rkas_opaque);
 
         if (err) {
-                rd_kafka_dbg(rkcg->rkcg_rk, CGRP, "ASSIGN",
+                rd_kafka_dbg(rkcg->rkcg_rk, CGRP|RD_KAFKA_DBG_ASSIGNOR,
+                             "ASSIGN",
                              "Group \"%s\" %s assignment failed "
                              "for %d member(s): %s",
-                             rkcg->rkcg_group_id->str, protocol_name,
+                             rkcg->rkcg_group_id->str,
+                             rkas->rkas_protocol_name->str,
                              (int)member_cnt, errstr);
-        } else if (rkcg->rkcg_rk->rk_conf.debug & RD_KAFKA_DBG_CGRP) {
-                rd_kafka_dbg(rkcg->rkcg_rk, CGRP, "ASSIGN",
+        } else if (rkcg->rkcg_rk->rk_conf.debug &
+                   (RD_KAFKA_DBG_CGRP|RD_KAFKA_DBG_ASSIGNOR)) {
+                rd_kafka_dbg(rkcg->rkcg_rk, CGRP|RD_KAFKA_DBG_ASSIGNOR,
+                             "ASSIGN",
                              "Group \"%s\" %s assignment for %d member(s) "
                              "finished in %.3fms:",
-                             rkcg->rkcg_group_id->str, protocol_name,
+                             rkcg->rkcg_group_id->str,
+                             rkas->rkas_protocol_name->str,
                              (int)member_cnt,
                              (float)(rd_clock() - ts_start)/1000.0f);
                 for (i = 0 ; i < member_cnt ; i++) {
                         const rd_kafka_group_member_t *member = &members[i];
 
-                        rd_kafka_dbg(rkcg->rkcg_rk, CGRP, "ASSIGN",
+                        rd_kafka_dbg(rkcg->rkcg_rk, CGRP|RD_KAFKA_DBG_ASSIGNOR,
+                                     "ASSIGN",
                                      " Member \"%.*s\"%s assigned "
                                      "%d partition(s):",
                                      RD_KAFKAP_STR_PR(member->rkgm_member_id),
@@ -374,7 +405,9 @@ rd_kafka_assignor_run (rd_kafka_cgrp_t *rkcg,
                         for (j = 0 ; j < member->rkgm_assignment->cnt ; j++) {
                                 const rd_kafka_topic_partition_t *p =
                                         &member->rkgm_assignment->elems[j];
-                                rd_kafka_dbg(rkcg->rkcg_rk, CGRP, "ASSIGN",
+                                rd_kafka_dbg(rkcg->rkcg_rk,
+                                             CGRP|RD_KAFKA_DBG_ASSIGNOR,
+                                             "ASSIGN",
                                              "  %s [%"PRId32"]",
                                              p->topic, p->partition);
                         }
@@ -421,54 +454,91 @@ static void rd_kafka_assignor_destroy (rd_kafka_assignor_t *rkas) {
 }
 
 
+/**
+ * @brief Check that the rebalance protocol of all enabled assignors is
+ *        the same.
+ */
+rd_kafka_resp_err_t
+rd_kafka_assignor_rebalance_protocol_check(const rd_kafka_conf_t *conf) {
+        int i;
+        rd_kafka_assignor_t *rkas;
+        rd_kafka_rebalance_protocol_t rebalance_protocol
+                = RD_KAFKA_REBALANCE_PROTOCOL_NONE;
+
+        RD_LIST_FOREACH(rkas, &conf->partition_assignors, i) {
+                if (!rkas->rkas_enabled)
+                        continue;
+
+                if (rebalance_protocol == RD_KAFKA_REBALANCE_PROTOCOL_NONE)
+                        rebalance_protocol = rkas->rkas_protocol;
+                else if (rebalance_protocol != rkas->rkas_protocol)
+                        return RD_KAFKA_RESP_ERR__CONFLICT;
+        }
+
+        return RD_KAFKA_RESP_ERR_NO_ERROR;
+}
+
 
 /**
- * Add an assignor, overwriting any previous one with the same protocol_name.
+ * @brief Add an assignor.
  */
-static rd_kafka_resp_err_t
+rd_kafka_resp_err_t
 rd_kafka_assignor_add (rd_kafka_t *rk,
-		       rd_kafka_assignor_t **rkasp,
                        const char *protocol_type,
                        const char *protocol_name,
+                       rd_kafka_rebalance_protocol_t rebalance_protocol,
                        rd_kafka_resp_err_t (*assign_cb) (
                                rd_kafka_t *rk,
+                               const struct rd_kafka_assignor_s *rkas,
                                const char *member_id,
-                               const char *protocol_name,
                                const rd_kafka_metadata_t *metadata,
                                rd_kafka_group_member_t *members,
                                size_t member_cnt,
                                rd_kafka_assignor_topic_t **eligible_topics,
                                size_t eligible_topic_cnt,
                                char *errstr, size_t errstr_size, void *opaque),
+                       rd_kafkap_bytes_t *(*get_metadata_cb) (
+                               const struct rd_kafka_assignor_s *rkas,
+                               void *assignor_state,
+                               const rd_list_t *topics,
+                               const rd_kafka_topic_partition_list_t
+                               *owned_partitions),
+                       void (*on_assignment_cb) (
+                               const struct rd_kafka_assignor_s *rkas,
+                               void **assignor_state,
+                               const rd_kafka_topic_partition_list_t *assignment,
+                               const rd_kafkap_bytes_t *userdata,
+                               const rd_kafka_consumer_group_metadata_t *rkcgm),
+                       void (*destroy_state_cb) (void *assignor_state),
+                       int (*unittest_cb) (void),
                        void *opaque) {
         rd_kafka_assignor_t *rkas;
-
-	if (rkasp)
-		*rkasp = NULL;
 
         if (rd_kafkap_str_cmp_str(rk->rk_conf.group_protocol_type,
                                   protocol_type))
                 return RD_KAFKA_RESP_ERR__UNKNOWN_PROTOCOL;
 
+        if (rebalance_protocol != RD_KAFKA_REBALANCE_PROTOCOL_COOPERATIVE &&
+            rebalance_protocol != RD_KAFKA_REBALANCE_PROTOCOL_EAGER)
+                return RD_KAFKA_RESP_ERR__UNKNOWN_PROTOCOL;
+
         /* Dont overwrite application assignors */
-        if ((rkas = rd_kafka_assignor_find(rk, protocol_name))) {
-		if (rkasp)
-			*rkasp = rkas;
-		return RD_KAFKA_RESP_ERR__CONFLICT;
-	}
+        if ((rkas = rd_kafka_assignor_find(rk, protocol_name)))
+                return RD_KAFKA_RESP_ERR__CONFLICT;
 
         rkas = rd_calloc(1, sizeof(*rkas));
 
         rkas->rkas_protocol_name    = rd_kafkap_str_new(protocol_name, -1);
         rkas->rkas_protocol_type    = rd_kafkap_str_new(protocol_type, -1);
+        rkas->rkas_protocol         = rebalance_protocol;
         rkas->rkas_assign_cb        = assign_cb;
-        rkas->rkas_get_metadata_cb  = rd_kafka_assignor_get_metadata;
+        rkas->rkas_get_metadata_cb  = get_metadata_cb;
+        rkas->rkas_on_assignment_cb = on_assignment_cb;
+        rkas->rkas_destroy_state_cb = destroy_state_cb;
+        rkas->rkas_unittest         = unittest_cb;
         rkas->rkas_opaque = opaque;
 
         rd_list_add(&rk->rk_conf.partition_assignors, rkas);
-
-	if (rkasp)
-		*rkasp = rkas;
 
         return RD_KAFKA_RESP_ERR_NO_ERROR;
 }
@@ -495,8 +565,13 @@ int rd_kafka_assignors_init (rd_kafka_t *rk, char *errstr, size_t errstr_size) {
 	char *wanted;
 	char *s;
 
-        rd_list_init(&rk->rk_conf.partition_assignors, 2,
+        rd_list_init(&rk->rk_conf.partition_assignors, 3,
                      (void *)rd_kafka_assignor_destroy);
+
+        /* Initialize builtin assignors (ignore errors) */
+        rd_kafka_range_assignor_init(rk);
+        rd_kafka_roundrobin_assignor_init(rk);
+        rd_kafka_sticky_assignor_init(rk);
 
 	rd_strdupa(&wanted, rk->rk_conf.partition_assignment_strategy);
 
@@ -519,33 +594,31 @@ int rd_kafka_assignors_init (rd_kafka_t *rk, char *errstr, size_t errstr_size) {
 		/* Right trim */
 		rtrim(s);
 
-		/* Match builtin consumer assignors */
-		if (!strcmp(s, "range"))
-			rd_kafka_assignor_add(
-				rk, &rkas, "consumer", "range",
-				rd_kafka_range_assignor_assign_cb,
-				NULL);
-		else if (!strcmp(s, "roundrobin"))
-			rd_kafka_assignor_add(
-				rk, &rkas, "consumer", "roundrobin",
-				rd_kafka_roundrobin_assignor_assign_cb,
-				NULL);
-		else {
-			rd_snprintf(errstr, errstr_size,
-				    "Unsupported partition.assignment.strategy:"
-				    " %s", s);
-			return -1;
-		}
+                rkas = rd_kafka_assignor_find(rk, s);
+                if (!rkas) {
+                        rd_snprintf(errstr, errstr_size,
+                                    "Unsupported partition.assignment.strategy:"
+                                    " %s", s);
+                        return -1;
+                }
 
-		if (rkas) {
-			if (!rkas->rkas_enabled) {
-				rkas->rkas_enabled = 1;
-				rk->rk_conf.enabled_assignor_cnt++;
-			}
-		}
+                if (!rkas->rkas_enabled) {
+                        rkas->rkas_enabled = 1;
+                        rk->rk_conf.enabled_assignor_cnt++;
+                }
 
 		s = t;
 	}
+
+        if (rd_kafka_assignor_rebalance_protocol_check(&rk->rk_conf)) {
+                rd_snprintf(errstr, errstr_size,
+                            "All partition.assignment.strategy (%s) assignors "
+                            "must have the same protocol type, "
+                            "online migration between assignors with "
+                            "different protocol types is not supported",
+                            rk->rk_conf.partition_assignment_strategy);
+                return -1;
+        }
 
 	return 0;
 }
@@ -557,4 +630,430 @@ int rd_kafka_assignors_init (rd_kafka_t *rk, char *errstr, size_t errstr_size) {
  */
 void rd_kafka_assignors_term (rd_kafka_t *rk) {
         rd_list_destroy(&rk->rk_conf.partition_assignors);
+}
+
+
+
+/**
+ * @brief Unittest for assignors
+ */
+static int ut_assignors (void) {
+        const struct {
+                const char *name;
+                int topic_cnt;
+                struct {
+                        const char *name;
+                        int partition_cnt;
+                } topics[12];
+                int member_cnt;
+                struct {
+                        const char *name;
+                        int         topic_cnt;
+                        const char *topics[12];
+                } members[3];
+                int expect_cnt;
+                struct {
+                        const char *protocol_name;
+                        struct {
+                                int partition_cnt;
+                                const char *partitions[12]; /* "topic:part" */
+                        } members[3];
+                } expect[2];
+        } tests[] = {
+                /*
+                 * Test cases
+                 */
+                {
+                        .name = "Symmetrical subscription",
+                        .topic_cnt = 4,
+                        .topics = {
+                                { "a", 3 },  /* a:0 a:1 a:2 */
+                                { "b", 4, }, /* b:0 b:1 b:2 b:3 */
+                                { "c", 2 },  /* c:0 c:1 */
+                                { "d", 1 },  /* d:0 */
+                        },
+                        .member_cnt = 2,
+                        .members = {
+                                { .name = "consumer1",
+                                  .topic_cnt = 4,
+                                  .topics = { "d", "b", "a", "c" } },
+                                { .name = "consumer2",
+                                  .topic_cnt = 4,
+                                  .topics = { "a", "b", "c", "d" } },
+                        },
+                        .expect_cnt = 2,
+                        .expect = {
+                                { .protocol_name = "range",
+                                  .members = {
+                                                /* Consumer1 */
+                                                { 6,
+                                                  { "a:0", "a:1",
+                                                    "b:0", "b:1",
+                                                    "c:0",
+                                                    "d:0" } },
+                                                /* Consumer2 */
+                                                { 4,
+                                                  { "a:2",
+                                                    "b:2" ,"b:3",
+                                                    "c:1" } },
+                                        },
+                                },
+                                { .protocol_name = "roundrobin",
+                                  .members = {
+                                                /* Consumer1 */
+                                                { 5,
+                                                  { "a:0", "a:2",
+                                                    "b:1", "b:3",
+                                                    "c:1" } },
+                                                /* Consumer2 */
+                                                { 5,
+                                                  { "a:1",
+                                                    "b:0" ,"b:2",
+                                                    "c:0",
+                                                    "d:0" } },
+                                        },
+                                },
+                        },
+                },
+                {
+                        .name = "1*3 partitions (asymmetrical)",
+                        .topic_cnt = 1,
+                        .topics = {
+                                { "a", 3 },
+                        },
+                        .member_cnt = 2,
+                        .members = {
+                                { .name = "consumer1",
+                                  .topic_cnt = 3,
+                                  .topics = { "a", "b", "c" } },
+                                { .name = "consumer2",
+                                  .topic_cnt = 1,
+                                  .topics = { "a" } },
+                        },
+                        .expect_cnt = 2,
+                        .expect = {
+                                { .protocol_name = "range",
+                                  .members = {
+                                                /* Consumer1.
+                                                 * range assignor applies
+                                                 * per topic. */
+                                                { 2,
+                                                  { "a:0", "a:1" } },
+                                                /* Consumer2 */
+                                                { 1,
+                                                  { "a:2" } },
+                                        },
+                                },
+                                { .protocol_name = "roundrobin",
+                                  .members = {
+                                                /* Consumer1 */
+                                                { 2,
+                                                  { "a:0", "a:2" } },
+                                                /* Consumer2 */
+                                                { 1,
+                                                  { "a:1" } },
+                                        },
+                                },
+                        },
+                },
+                {
+                        .name = "#2121 (asymmetrical)",
+                        .topic_cnt = 12,
+                        .topics = {
+                                { "a", 1 },
+                                { "b", 1 },
+                                { "c", 1 },
+                                { "d", 1 },
+                                { "e", 1 },
+                                { "f", 1 },
+                                { "g", 1 },
+                                { "h", 1 },
+                                { "i", 1 },
+                                { "j", 1 },
+                                { "k", 1 },
+                                { "l", 1 },
+                        },
+                        .member_cnt = 2,
+                        .members = {
+                                { .name = "consumer1",
+                                  .topic_cnt = 12,
+                                  .topics = {
+                                                "a",
+                                                "b",
+                                                "c",
+                                                "d",
+                                                "e",
+                                                "f",
+                                                "g",
+                                                "h",
+                                                "i",
+                                                "j",
+                                                "k",
+                                                "l",
+                                        },
+                                },
+                                { .name = "consumer2", /* must be second */
+                                  .topic_cnt = 5,
+                                  .topics = {
+                                                "b",
+                                                "d",
+                                                "f",
+                                                "h",
+                                                "l",
+                                        },
+                                },
+                        },
+                        .expect_cnt = 2,
+                        .expect = {
+                                { .protocol_name = "range",
+                                  .members = {
+                                                /* Consumer1.
+                                                 * All partitions. */
+                                                { 12,
+                                                  {
+                                                          "a:0",
+                                                          "b:0",
+                                                          "c:0",
+                                                          "d:0",
+                                                          "e:0",
+                                                          "f:0",
+                                                          "g:0",
+                                                          "h:0",
+                                                          "i:0",
+                                                          "j:0",
+                                                          "k:0",
+                                                          "l:0",
+                                                  }
+                                                },
+                                                /* Consumer2 */
+                                                { 0 },
+                                        },
+                                },
+                                { .protocol_name = "roundrobin",
+                                  .members = {
+                                                /* Consumer1 */
+                                                { 7,
+                                                  {
+                                                          "a:0",
+                                                          "c:0",
+                                                          "e:0",
+                                                          "g:0",
+                                                          "i:0",
+                                                          "j:0",
+                                                          "k:0",
+                                                  },
+                                                },
+                                                /* Consumer2 */
+                                                { 5,
+                                                  {
+                                                          "b:0",
+                                                          "d:0",
+                                                          "f:0",
+                                                          "h:0",
+                                                          "l:0"
+                                                  }
+                                                },
+                                        },
+                                },
+                        },
+                },
+                { NULL },
+        };
+        rd_kafka_conf_t *conf;
+        rd_kafka_t *rk;
+        const rd_kafka_assignor_t *rkas;
+        int fails = 0;
+        int i;
+
+        conf = rd_kafka_conf_new();
+        rd_kafka_conf_set(conf, "group.id", "group", NULL, 0);
+        rd_kafka_conf_set(conf, "debug", rd_getenv("TEST_DEBUG", NULL),
+                          NULL, 0);
+        rk = rd_kafka_new(RD_KAFKA_CONSUMER, conf, NULL, 0);
+        RD_UT_ASSERT(rk != NULL, "Failed to create consumer");
+
+        /* Run through test cases */
+        for (i = 0 ; tests[i].name ; i++) {
+                int ie, it, im;
+                rd_kafka_metadata_t metadata;
+                rd_kafka_group_member_t *members;
+
+                /* Create topic metadata */
+                metadata.topic_cnt = tests[i].topic_cnt;
+                metadata.topics = rd_alloca(sizeof(*metadata.topics) *
+                                             metadata.topic_cnt);
+                memset(metadata.topics, 0,
+                       sizeof(*metadata.topics) * metadata.topic_cnt);
+                for (it = 0 ; it < metadata.topic_cnt ; it++) {
+                        metadata.topics[it].topic =
+                                (char *)tests[i].topics[it].name;
+                        metadata.topics[it].partition_cnt =
+                                tests[i].topics[it].partition_cnt;
+                        metadata.topics[it].partitions = NULL; /* Not used */
+                }
+
+                /* Create members */
+                members = rd_alloca(sizeof(*members) * tests[i].member_cnt);
+                memset(members, 0, sizeof(*members) * tests[i].member_cnt);
+
+                for (im = 0 ; im < tests[i].member_cnt ; im++) {
+                        rd_kafka_group_member_t *rkgm = &members[im];
+                        rkgm->rkgm_member_id =
+                                rd_kafkap_str_new(tests[i].members[im].name,
+                                                  -1);
+                        rkgm->rkgm_group_instance_id =
+                                rd_kafkap_str_new(tests[i].members[im].name,
+                                                  -1);
+                        rd_list_init(&rkgm->rkgm_eligible,
+                                     tests[i].members[im].topic_cnt, NULL);
+
+                        rkgm->rkgm_subscription =
+                                rd_kafka_topic_partition_list_new(
+                                        tests[i].members[im].topic_cnt);
+                        for (it = 0; it < tests[i].members[im].topic_cnt; it++)
+                                rd_kafka_topic_partition_list_add(
+                                        rkgm->rkgm_subscription,
+                                        tests[i].members[im].topics[it],
+                                        RD_KAFKA_PARTITION_UA);
+
+                        rkgm->rkgm_userdata = NULL;
+
+                        rkgm->rkgm_assignment =
+                                rd_kafka_topic_partition_list_new(
+                                        rkgm->rkgm_subscription->size);
+                }
+
+                /* For each assignor verify that the assignment
+                 * matches the expection set out in the test case. */
+                for (ie = 0 ; ie < tests[i].expect_cnt ; ie++) {
+                        rd_kafka_resp_err_t err;
+                        char errstr[256];
+
+                        RD_UT_SAY("Test case %s: %s assignor",
+                                  tests[i].name,
+                                  tests[i].expect[ie].protocol_name);
+
+                        if (!(rkas = rd_kafka_assignor_find(rk,
+                                        tests[i].expect[ie].protocol_name))) {
+                                RD_UT_FAIL("Assignor test case %s for %s failed: "
+                                            "assignor not found",
+                                            tests[i].name,
+                                            tests[i].expect[ie].protocol_name);
+                        }
+
+                        /* Run assignor */
+                        err = rd_kafka_assignor_run(
+                                rk->rk_cgrp, rkas,
+                                &metadata,
+                                members, tests[i].member_cnt,
+                                errstr, sizeof(errstr));
+
+                        RD_UT_ASSERT(!err, "Assignor case %s for %s failed: %s",
+                                     tests[i].name,
+                                     tests[i].expect[ie].protocol_name,
+                                     errstr);
+
+                        /* Verify assignments */
+                        for (im = 0 ; im < tests[i].member_cnt ; im++) {
+                                rd_kafka_group_member_t *rkgm = &members[im];
+                                int ia;
+
+                                if (rkgm->rkgm_assignment->cnt !=
+                                    tests[i].expect[ie].members[im].
+                                    partition_cnt) {
+                                        RD_UT_WARN(
+                                                " Member %.*s assignment count "
+                                                "mismatch: %d != %d",
+                                                RD_KAFKAP_STR_PR(
+                                                        rkgm->rkgm_member_id),
+                                                rkgm->rkgm_assignment->cnt,
+                                                tests[i].expect[ie].members[im].
+                                                partition_cnt);
+                                        fails++;
+                                }
+
+                                if (rkgm->rkgm_assignment->cnt > 0)
+                                        rd_kafka_topic_partition_list_sort_by_topic(
+                                                rkgm->rkgm_assignment);
+
+                                for (ia = 0 ;
+                                     ia < rkgm->rkgm_assignment->cnt ; ia++) {
+                                        rd_kafka_topic_partition_t *p =
+                                                &rkgm->rkgm_assignment->
+                                                elems[ia];
+                                        char part[64];
+                                        const char *exp =
+                                                ia < tests[i].expect[ie].
+                                                members[im].partition_cnt ?
+                                                tests[i].expect[ie].
+                                                members[im].partitions[ia] :
+                                                "(none)";
+
+                                        rd_snprintf(part, sizeof(part), "%s:%d",
+                                                    p->topic,
+                                                    (int)p->partition);
+
+#if 0 /* Enable to print actual assignment */
+                                        RD_UT_SAY(" Member %.*s assignment "
+                                                  "%d/%d %s =? %s",
+                                                  RD_KAFKAP_STR_PR(
+                                                          rkgm->rkgm_member_id),
+                                                  ia,
+                                                  rkgm->rkgm_assignment->cnt-1,
+                                                  part, exp);
+#endif
+
+                                        if (strcmp(part, exp)) {
+                                                RD_UT_WARN(
+                                                        " Member %.*s "
+                                                        "assignment %d/%d "
+                                                        "mismatch: %s != %s",
+                                                        RD_KAFKAP_STR_PR(
+                                                                rkgm->
+                                                                rkgm_member_id),
+                                                        ia,
+                                                        rkgm->rkgm_assignment->
+                                                        cnt-1,
+                                                        part, exp);
+                                                fails++;
+                                        }
+                                }
+
+                                /* Reset assignment for next loop */
+                                rd_kafka_topic_partition_list_destroy(
+                                        rkgm->rkgm_assignment);
+                                rkgm->rkgm_assignment =
+                                        rd_kafka_topic_partition_list_new(
+                                                rkgm->rkgm_subscription->size);
+                        }
+
+                }
+
+                for (im = 0 ; im < tests[i].member_cnt ; im++) {
+                        rd_kafka_group_member_t *rkgm = &members[im];
+                        rd_kafka_group_member_clear(rkgm);
+                }
+        }
+
+
+        /* Run assignor-specific unittests */
+        RD_LIST_FOREACH(rkas, &rk->rk_conf.partition_assignors, i) {
+                if (rkas->rkas_unittest)
+                        fails += rkas->rkas_unittest();
+        }
+
+        rd_kafka_destroy(rk);
+
+        if (fails)
+                return 1;
+
+        RD_UT_PASS();
+}
+
+
+/**
+ * @brief Unit tests for assignors
+ */
+int unittest_assignors (void) {
+        return ut_assignors();
 }

@@ -25,7 +25,7 @@ to alternate directory, e.g., `TRIVUP_ROOT=$HOME/trivup make full`.
 
 First install trivup:
 
-    $ pip install trivup
+    $ pip3 install trivup
 
 Bring up a Kafka cluster (with the specified version) and start an interactive
 shell, when the shell is exited the cluster is brought down and deleted.
@@ -125,7 +125,24 @@ Some additional guidelines:
    To make sure your test remains sturdy in these type of environments, make
    sure to use the `tmout_multip(milliseconds)` macro when passing timeout
    values to non-test functions, e.g, `rd_kafka_poll(rk, tmout_multip(3000))`.
+ * If your test file contains multiple separate sub-tests, use the
+   `SUB_TEST()`, `SUB_TEST_QUICK()` and `SUB_TEST_PASS()` from inside
+   the test functions to help differentiate test failures.
 
+
+## Test scenarios
+
+A test scenario defines the cluster configuration used by tests.
+The majority of tests use the "default" scenario which matches the
+Apache Kafka default broker configuration (topic auto creation enabled, etc).
+
+If a test relies on cluster configuration that is mutually exclusive with
+the default configuration an alternate scenario must be defined in
+`scenarios/<scenario>.json` which is a configuration object which
+is passed to [trivup](https://github.com/edenhill/trivup).
+
+Try to reuse an existing test scenario as far as possible to speed up
+test times, since each new scenario will require a new cluster incarnation.
 
 
 ## A guide to testing, verifying, and troubleshooting, librdkafka
@@ -152,11 +169,18 @@ be it `make`, `run-test.sh`, `until-fail.sh`, etc.
 
  * `TESTS=0nnn` - only run a single test identified by its full number, e.g.
                   `TESTS=0102 make`. (Yes, the var should have been called TEST)
+ * `SUBTESTS=...` - only run sub-tests (tests that are using `SUB_TEST()`)
+                      that contains this string.
+ * `TESTS_SKIP=...` - skip these tests.
  * `TEST_DEBUG=...` - this will automatically set the `debug` config property
                       of all instantiated clients to the value.
                       E.g.. `TEST_DEBUG=broker,protocol TESTS=0001 make`
  * `TEST_LEVEL=n` - controls the `TEST_SAY()` output level, a higher number
                       yields more test output. Default level is 2.
+ * `RD_UT_TEST=name` - only run unittest containing `name`, should be used
+                          with `TESTS=0000`.
+                          See [../src/rdunittest.c](../src/rdunittest.c) for
+                          unit test names.
 
 
 Let's say that you run the full test suite and get a failure in test 0061,

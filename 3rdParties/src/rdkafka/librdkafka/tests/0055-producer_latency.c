@@ -178,7 +178,7 @@ static int test_producer_latency (const char *topic,
                                   latconf->name, i, rd_kafka_err2str(err));
 
                 /* Await delivery */
-                rd_kafka_flush(rk, 5000);
+                rd_kafka_poll(rk, 5000);
         }
 
         rd_kafka_destroy(rk);
@@ -211,7 +211,7 @@ static float find_max (const struct latconf *latconf) {
 
 int main_0055_producer_latency (int argc, char **argv) {
         struct latconf latconfs[] = {
-                { "standard settings", {NULL}, 0, 0 }, /* default is now 0ms */
+                { "standard settings", {NULL}, 5, 5 }, /* default is now 5ms */
                 { "low queue.buffering.max.ms",
                   {"queue.buffering.max.ms", "0", NULL}, 0, 0 },
                 { "microsecond queue.buffering.max.ms",
@@ -235,8 +235,8 @@ int main_0055_producer_latency (int argc, char **argv) {
                 return 0;
         }
 
-        /* Create topic */
-        test_produce_msgs_easy(topic, 0, 0, 1);
+        /* Create topic without replicas to keep broker-side latency down */
+        test_create_topic(NULL, topic, 4, 1);
 
         for (latconf = latconfs ; latconf->name ; latconf++)
                 fails += test_producer_latency(topic, latconf);

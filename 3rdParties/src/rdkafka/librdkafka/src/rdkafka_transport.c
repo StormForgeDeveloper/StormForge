@@ -25,7 +25,7 @@
  * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
  * POSSIBILITY OF SUCH DAMAGE.
  */
-#ifdef _MSC_VER
+#ifdef _WIN32
 #pragma comment(lib, "ws2_32.lib")
 #endif
 
@@ -95,12 +95,24 @@ void rd_kafka_transport_close (rd_kafka_transport_t *rktrans) {
 	rd_free(rktrans);
 }
 
+/**
+ * @brief shutdown(2) a transport's underlying socket.
+ *
+ * This will prohibit further sends and receives.
+ * rd_kafka_transport_close() must still be called to close the socket.
+ */
+void rd_kafka_transport_shutdown (rd_kafka_transport_t *rktrans) {
+        shutdown(rktrans->rktrans_s,
+#ifdef _WIN32
+                 SD_BOTH
+#else
+                 SHUT_RDWR
+#endif
+                );
+}
 
 
-
-
-
-#ifndef _MSC_VER
+#ifndef _WIN32
 /**
  * @brief sendmsg() abstraction, converting a list of segments to iovecs.
  * @remark should only be called if the number of segments is > 1.
@@ -164,14 +176,14 @@ rd_kafka_transport_socket_send0 (rd_kafka_transport_t *rktrans,
                 size_t r2;
 
                 r = send(rktrans->rktrans_s, p,
-#ifdef _MSC_VER
+#ifdef _WIN32
                          (int)rlen, (int)0
 #else
                          rlen, 0
 #endif
                 );
 
-#ifdef _MSC_VER
+#ifdef _WIN32
                 if (unlikely(r == RD_SOCKET_ERROR)) {
                         if (sum > 0 || rd_socket_errno == WSAEWOULDBLOCK)
                                 return sum;
@@ -213,7 +225,7 @@ static ssize_t
 rd_kafka_transport_socket_send (rd_kafka_transport_t *rktrans,
                                 rd_slice_t *slice,
                                 char *errstr, size_t errstr_size) {
-#ifndef _MSC_VER
+#ifndef _WIN32
         /* FIXME: Use sendmsg() with iovecs if there's more than one segment
          * remaining, otherwise (or if platform does not have sendmsg)
          * use plain send(). */
@@ -226,7 +238,7 @@ rd_kafka_transport_socket_send (rd_kafka_transport_t *rktrans,
 
 
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 /**
  * @brief recvmsg() abstraction, converting a list of segments to iovecs.
  * @remark should only be called if the number of segments is > 1.
@@ -259,13 +271,10 @@ rd_kafka_transport_socket_recvmsg (rd_kafka_transport_t *rktrans,
                         /* Receive 0 after POLLIN event means
                          * connection closed. */
                         rd_snprintf(errstr, errstr_size, "Disconnected");
-                        errno = ECONNRESET;
                         return -1;
                 } else if (r == -1) {
-                        int errno_save = errno;
                         rd_snprintf(errstr, errstr_size, "%s",
                                     rd_strerror(errno));
-                        errno = errno_save;
                         return -1;
                 }
         }
@@ -293,26 +302,22 @@ rd_kafka_transport_socket_recv0 (rd_kafka_transport_t *rktrans,
                 ssize_t r;
 
                 r = recv(rktrans->rktrans_s, p,
-#ifdef _MSC_VER
+#ifdef _WIN32
                          (int)
 #endif
                          len,
                          0);
 
                 if (unlikely(r == RD_SOCKET_ERROR)) {
-                        int errno_save = rd_socket_errno;
-                        if (errno_save == EAGAIN
-#ifdef _MSC_VER
-                            || errno_save == WSAEWOULDBLOCK
+                        if (rd_socket_errno == EAGAIN
+#ifdef _WIN32
+                            || rd_socket_errno == WSAEWOULDBLOCK
 #endif
                                 )
                                 return sum;
                         else {
                                 rd_snprintf(errstr, errstr_size, "%s",
-                                            rd_socket_strerror(errno_save));
-#ifndef _MSC_VER
-                                errno = errno_save;
-#endif
+                                            rd_socket_strerror(rd_socket_errno));
                                 return -1;
                         }
                 } else if (unlikely(r == 0)) {
@@ -320,9 +325,6 @@ rd_kafka_transport_socket_recv0 (rd_kafka_transport_t *rktrans,
                          * connection closed. */
                         rd_snprintf(errstr, errstr_size,
                                     "Disconnected");
-#ifndef _MSC_VER
-                        errno = ECONNRESET;
-#endif
                         return -1;
                 }
 
@@ -344,7 +346,7 @@ static ssize_t
 rd_kafka_transport_socket_recv (rd_kafka_transport_t *rktrans,
                                 rd_buf_t *buf,
                                 char *errstr, size_t errstr_size) {
-#ifndef _MSC_VER
+#ifndef _WIN32
         return rd_kafka_transport_socket_recvmsg(rktrans, buf,
                                                  errstr, errstr_size);
 #endif
@@ -625,6 +627,11 @@ static void rd_kafka_transport_connected (rd_kafka_transport_t *rktrans) {
 	    rkb->rkb_proto == RD_KAFKA_PROTO_SASL_SSL) {
 		char errstr[512];
 
+                rd_kafka_broker_lock(rkb);
+                rd_kafka_broker_set_state(rkb,
+                                          RD_KAFKA_BROKER_STATE_SSL_HANDSHAKE);
+                rd_kafka_broker_unlock(rkb);
+
 		/* Set up SSL connection.
 		 * This is also an asynchronous operation so dont
 		 * propagate to broker_connect_done() just yet. */
@@ -679,15 +686,6 @@ static void rd_kafka_transport_io_event (rd_kafka_transport_t *rktrans,
 	switch (rkb->rkb_state)
 	{
 	case RD_KAFKA_BROKER_STATE_CONNECT:
-#if WITH_SSL
-		if (rktrans->rktrans_ssl) {
-			/* Currently setting up SSL connection:
-			 * perform handshake. */
-			rd_kafka_transport_ssl_handshake(rktrans);
-			return;
-		}
-#endif
-
 		/* Asynchronous connect finished, read status. */
 		if (!(events & (POLLOUT|POLLERR|POLLHUP)))
 			return;
@@ -705,7 +703,6 @@ static void rd_kafka_transport_io_event (rd_kafka_transport_t *rktrans,
                                 rd_strerror(rd_socket_errno));
 		} else if (r != 0) {
 			/* Connect failed */
-                        errno = r;
 			rd_snprintf(errstr, sizeof(errstr),
 				    "Connect to %s failed: %s",
                                     rd_sockaddr2str(rkb->rkb_addr_last,
@@ -720,6 +717,27 @@ static void rd_kafka_transport_io_event (rd_kafka_transport_t *rktrans,
 		}
 		break;
 
+        case RD_KAFKA_BROKER_STATE_SSL_HANDSHAKE:
+#if WITH_SSL
+                rd_assert(rktrans->rktrans_ssl);
+
+                /* Currently setting up SSL connection:
+                 * perform handshake. */
+                r = rd_kafka_transport_ssl_handshake(rktrans);
+
+                if (r == 0 /* handshake still in progress */ &&
+                    (events & POLLHUP)) {
+                        rd_kafka_broker_conn_closed(
+                                rkb, RD_KAFKA_RESP_ERR__TRANSPORT,
+                                "Disconnected");
+                        return;
+                }
+
+#else
+                RD_NOTREACHED();
+#endif
+                break;
+
         case RD_KAFKA_BROKER_STATE_AUTH_LEGACY:
                 /* SASL authentication.
                  * Prior to broker version v1.0.0 this is performed
@@ -727,7 +745,6 @@ static void rd_kafka_transport_io_event (rd_kafka_transport_t *rktrans,
                 if (rd_kafka_sasl_io_event(rktrans, events,
                                            errstr,
                                            sizeof(errstr)) == -1) {
-                        errno = EINVAL;
                         rd_kafka_broker_fail(
                                 rkb, LOG_ERR,
                                 RD_KAFKA_RESP_ERR__AUTHENTICATION,
@@ -737,7 +754,6 @@ static void rd_kafka_transport_io_event (rd_kafka_transport_t *rktrans,
                 }
 
                 if (events & POLLHUP) {
-                        errno = EINVAL;
                         rd_kafka_broker_fail(
                                 rkb, LOG_ERR,
                                 RD_KAFKA_RESP_ERR__AUTHENTICATION,
@@ -801,7 +817,7 @@ int rd_kafka_transport_io_serve (rd_kafka_transport_t *rktrans,
         rd_kafka_curr_transport = rktrans;
 
         if (rkb->rkb_state == RD_KAFKA_BROKER_STATE_CONNECT ||
-            (rkb->rkb_state > RD_KAFKA_BROKER_STATE_CONNECT &&
+            (rkb->rkb_state > RD_KAFKA_BROKER_STATE_SSL_HANDSHAKE &&
              rd_kafka_bufq_cnt(&rkb->rkb_waitresps) < rkb->rkb_max_inflight &&
              rd_kafka_bufq_cnt(&rkb->rkb_outbufs) > 0))
                 rd_kafka_transport_poll_set(rkb->rkb_transport, POLLOUT);
@@ -894,8 +910,10 @@ rd_kafka_transport_t *rd_kafka_transport_connect (rd_kafka_broker_t *rkb,
 	}
 
         rktrans = rd_kafka_transport_new(rkb, s, errstr, errstr_size);
-        if (!rktrans)
-                goto err;
+        if (!rktrans) {
+                rd_kafka_transport_close0(rkb->rkb_rk, s);
+                return NULL;
+        }
 
 	rd_rkb_dbg(rkb, BROKER, "CONNECT", "Connecting to %s (%s) "
 		   "with socket %i",
@@ -914,7 +932,7 @@ rd_kafka_transport_t *rd_kafka_transport_connect (rd_kafka_broker_t *rkb,
                 if (connect(s, (struct sockaddr *)sinx,
                             RD_SOCKADDR_INX_LEN(sinx)) == RD_SOCKET_ERROR &&
                     (rd_socket_errno != EINPROGRESS
-#ifdef _MSC_VER
+#ifdef _WIN32
                      && rd_socket_errno != WSAEWOULDBLOCK
 #endif
                             ))
@@ -925,7 +943,7 @@ rd_kafka_transport_t *rd_kafka_transport_connect (rd_kafka_broker_t *rkb,
 
         if (r != 0) {
 		rd_rkb_dbg(rkb, BROKER, "CONNECT",
-			   "couldn't connect to %s: %s (%i)",
+			   "Couldn't connect to %s: %s (%i)",
 			   rd_sockaddr2str(sinx,
 					   RD_SOCKADDR2STR_F_PORT |
 					   RD_SOCKADDR2STR_F_FAMILY),
@@ -934,7 +952,9 @@ rd_kafka_transport_t *rd_kafka_transport_connect (rd_kafka_broker_t *rkb,
 			    "Failed to connect to broker at %s: %s",
 			    rd_sockaddr2str(sinx, RD_SOCKADDR2STR_F_NICE),
 			    rd_socket_strerror(r));
-		goto err;
+
+                rd_kafka_transport_close(rktrans);
+                return NULL;
 	}
 
         /* Set up transport handle */
@@ -949,15 +969,6 @@ rd_kafka_transport_t *rd_kafka_transport_connect (rd_kafka_broker_t *rkb,
 	rd_kafka_transport_poll_set(rktrans, POLLOUT);
 
 	return rktrans;
-
- err:
-	if (s != -1)
-                rd_kafka_transport_close0(rkb->rkb_rk, s);
-
-        if (rktrans)
-                rd_kafka_transport_close(rktrans);
-
-	return NULL;
 }
 
 
@@ -978,7 +989,7 @@ void rd_kafka_transport_poll_clear(rd_kafka_transport_t *rktrans, int event) {
 int rd_kafka_transport_poll(rd_kafka_transport_t *rktrans, int tmout) {
         int r;
 
-#ifndef _MSC_VER
+#ifndef _WIN32
 	r = poll(rktrans->rktrans_pfd, rktrans->rktrans_pfd_cnt, tmout);
 	if (r <= 0)
 		return r;
@@ -996,7 +1007,6 @@ int rd_kafka_transport_poll(rd_kafka_transport_t *rktrans, int tmout) {
 								  &r) == -1 ||
 			      r != 0))) {
 			char errstr[512];
-			errno = r;
 			rd_snprintf(errstr, sizeof(errstr),
 				    "Connect to %s failed: %s",
 				    rd_sockaddr2str(rktrans->rktrans_rkb->
@@ -1036,14 +1046,14 @@ int rd_kafka_transport_poll(rd_kafka_transport_t *rktrans, int tmout) {
  * in its own code. This means we might leak some memory on exit.
  */
 void rd_kafka_transport_term (void) {
-#ifdef _MSC_VER
+#ifdef _WIN32
 	(void)WSACleanup(); /* FIXME: dangerous */
 #endif
 }
 #endif
 
 void rd_kafka_transport_init (void) {
-#ifdef _MSC_VER
+#ifdef _WIN32
 	WSADATA d;
 	(void)WSAStartup(MAKEWORD(2, 2), &d);
 #endif

@@ -96,7 +96,7 @@ rd_tmpabuf_alloc0 (const char *func, int line, rd_tmpabuf_t *tab, size_t size) {
 	if (unlikely(tab->of + size > tab->size)) {
 		if (tab->assert_on_fail) {
 			fprintf(stderr,
-				"%s: %s:%d: requested size %zd + %zd > %zd\n",
+				"%s: %s:%d: requested size %"PRIusz" + %"PRIusz" > %"PRIusz"\n",
 				__FUNCTION__, func, line, tab->of, size,
 				tab->size);
 			assert(!*"rd_tmpabuf_alloc: not enough size in buffer");
@@ -147,6 +147,256 @@ rd_tmpabuf_write_str0 (const char *func, int line,
 
 
 
+
+
+/**
+ * Response handling callback.
+ *
+ * NOTE: Callbacks must check for 'err == RD_KAFKA_RESP_ERR__DESTROY'
+ *       which indicates that some entity is terminating (rd_kafka_t, broker,
+ *       toppar, queue, etc) and the callback may not be called in the
+ *       correct thread. In this case the callback must perform just
+ *       the most minimal cleanup and dont trigger any other operations.
+ *
+ * NOTE: rkb, reply and request may be NULL, depending on error situation.
+ */
+typedef void (rd_kafka_resp_cb_t) (rd_kafka_t *rk,
+				   rd_kafka_broker_t *rkb,
+                                   rd_kafka_resp_err_t err,
+                                   rd_kafka_buf_t *reply,
+                                   rd_kafka_buf_t *request,
+                                   void *opaque);
+
+
+/**
+ * @brief Sender callback. This callback is used to construct and send (enq)
+ *        a rkbuf on a particular broker.
+ */
+typedef rd_kafka_resp_err_t (rd_kafka_send_req_cb_t) (
+        rd_kafka_broker_t *rkb,
+        rd_kafka_op_t *rko,
+        rd_kafka_replyq_t replyq,
+        rd_kafka_resp_cb_t *resp_cb,
+        void *reply_opaque);
+
+
+/**
+ * @brief Request maker. A callback that constructs the actual contents
+ *        of a request.
+ *
+ * When constructing a request the ApiVersion typically needs to be selected
+ * which requires the broker's supported ApiVersions to be known, which in
+ * turn requires the broker connection to be UP.
+ *
+ * As a buffer constructor you have two choices:
+ *   a. acquire the broker handle, wait for it to come up, and then construct
+ *      the request buffer, or
+ *   b. acquire the broker handle, enqueue an uncrafted/unmaked
+ *      request on the broker request queue, and when the broker is up
+ *      the make_req_cb will be called for you to construct the request.
+ *
+ * From a code complexity standpoint, the latter option is usually the least
+ * complex and voids the caller to care about any of the broker state.
+ * Any information that is required to construct the request is passed through
+ * the make_opaque, which can be automatically freed by the buffer code
+ * when it has been used, or handled by the caller (in which case it must
+ * outlive the lifetime of the buffer).
+ *
+ * Usage:
+ *
+ *  1. Construct an rkbuf with the appropriate ApiKey.
+ *  2. Make a copy or reference of any data that is needed to construct the
+ *     request, e.g., through rd_kafka_topic_partition_list_copy(). This
+ *     data is passed by the make_opaque.
+ *  3. Set the make callback by calling rd_kafka_buf_set_maker() and pass
+ *     the make_opaque data and a free function, if needed.
+ *  4. The callback will eventually be called from the broker thread.
+ *  5. In the make callback construct the request on the passed rkbuf.
+ *  6. The request is sent to the broker and the make_opaque is freed.
+ *
+ * See rd_kafka_ListOffsetsRequest() in rdkafka_request.c for an example.
+ *
+ */
+typedef rd_kafka_resp_err_t (rd_kafka_make_req_cb_t) (
+        rd_kafka_broker_t *rkb,
+        rd_kafka_buf_t *rkbuf,
+        void *make_opaque);
+
+/**
+ * @struct Request and response buffer
+ *
+ */
+struct rd_kafka_buf_s { /* rd_kafka_buf_t */
+        TAILQ_ENTRY(rd_kafka_buf_s) rkbuf_link;
+
+        int32_t rkbuf_corrid;
+
+        rd_ts_t rkbuf_ts_retry;    /* Absolute send retry time */
+
+        int     rkbuf_flags; /* RD_KAFKA_OP_F */
+
+        /** What convenience flags to copy from request to response along
+         *  with the reqhdr. */
+#define RD_KAFKA_BUF_FLAGS_RESP_COPY_MASK  (RD_KAFKA_OP_F_FLEXVER)
+
+        rd_kafka_prio_t rkbuf_prio; /**< Request priority */
+
+        rd_buf_t rkbuf_buf;        /**< Send/Recv byte buffer */
+        rd_slice_t rkbuf_reader;   /**< Buffer slice reader for rkbuf_buf */
+
+        int     rkbuf_connid;      /* broker connection id (used when buffer
+                                    * was partially sent). */
+        size_t  rkbuf_totlen;      /* recv: total expected length,
+                                    * send: not used */
+
+        rd_crc32_t rkbuf_crc;      /* Current CRC calculation */
+
+        struct rd_kafkap_reqhdr rkbuf_reqhdr;   /* Request header.
+                                                 * These fields are encoded
+                                                 * and written to output buffer
+                                                 * on buffer finalization.
+                                                 * Note:
+                                                 * The request's
+                                                 * reqhdr is copied to the
+                                                 * response's reqhdr as a
+                                                 * convenience. */
+        struct rd_kafkap_reshdr rkbuf_reshdr;   /* Response header.
+                                                 * Decoded fields are copied
+                                                 * here from the buffer
+                                                 * to provide an ease-of-use
+                                                 * interface to the header */
+
+        int32_t rkbuf_expected_size;  /* expected size of message */
+
+        rd_kafka_replyq_t   rkbuf_replyq;       /* Enqueue response on replyq */
+        rd_kafka_replyq_t   rkbuf_orig_replyq;  /* Original replyq to be used
+                                                 * for retries from inside
+                                                 * the rkbuf_cb() callback
+                                                 * since rkbuf_replyq will
+                                                 * have been reset. */
+        rd_kafka_resp_cb_t *rkbuf_cb;           /* Response callback */
+        struct rd_kafka_buf_s *rkbuf_response;  /* Response buffer */
+
+        rd_kafka_make_req_cb_t *rkbuf_make_req_cb; /**< Callback to construct
+                                                    *   the request itself.
+                                                    *   Will be used if
+                                                    *   RD_KAFKA_OP_F_NEED_MAKE
+                                                    *   is set. */
+        void *rkbuf_make_opaque;  /**< Opaque passed to rkbuf_make_req_cb.
+                                   *   Will be freed automatically after use
+                                   *   by the rkbuf code. */
+        void (*rkbuf_free_make_opaque_cb) (void *); /**< Free function for
+                                                     *   rkbuf_make_opaque. */
+
+        struct rd_kafka_broker_s *rkbuf_rkb;
+
+        rd_refcnt_t rkbuf_refcnt;
+        void   *rkbuf_opaque;
+
+        int     rkbuf_max_retries;        /**< Maximum retries to attempt. */
+        int     rkbuf_retries;            /**< Retries so far. */
+
+
+        int     rkbuf_features;   /* Required feature(s) that must be
+                                   * supported by broker. */
+
+        rd_ts_t rkbuf_ts_enq;
+        rd_ts_t rkbuf_ts_sent;    /* Initially: Absolute time of transmission,
+                                   * after response: RTT. */
+
+        /* Request timeouts:
+         *  rkbuf_ts_timeout is the effective absolute request timeout used
+         *  by the timeout scanner to see if a request has timed out.
+         *  It is set when a request is enqueued on the broker transmit
+         *  queue based on the relative or absolute timeout:
+         *
+         *  rkbuf_rel_timeout is the per-request-transmit relative timeout,
+         *  this value is reused for each sub-sequent retry of a request.
+         *
+         *  rkbuf_abs_timeout is the absolute request timeout, spanning
+         *  all retries.
+         *  This value is effectively limited by socket.timeout.ms for
+         *  each transmission, but the absolute timeout for a request's
+         *  lifetime is the absolute value.
+         *
+         *  Use rd_kafka_buf_set_timeout() to set a relative timeout
+         *  that will be reused on retry,
+         *  or rd_kafka_buf_set_abs_timeout() to set a fixed absolute timeout
+         *  for the case where the caller knows the request will be
+         *  semantically outdated when that absolute time expires, such as for
+         *  session.timeout.ms-based requests.
+         *
+         * The decision to retry a request is delegated to the rkbuf_cb
+         * response callback, which should use rd_kafka_err_action()
+         * and check the return actions for RD_KAFKA_ERR_ACTION_RETRY to be set
+         * and then call rd_kafka_buf_retry().
+         * rd_kafka_buf_retry() will enqueue the request on the rkb_retrybufs
+         * queue with a backoff time of retry.backoff.ms.
+         * The rkb_retrybufs queue is served by the broker thread's timeout
+         * scanner.
+         * @warning rkb_retrybufs is NOT purged on broker down.
+         */
+        rd_ts_t rkbuf_ts_timeout; /* Request timeout (absolute time). */
+        rd_ts_t rkbuf_abs_timeout;/* Absolute timeout for request, including
+                                   * retries.
+                                   * Mutually exclusive with rkbuf_rel_timeout*/
+        int     rkbuf_rel_timeout;/* Relative timeout (ms), used for retries.
+                                   * Defaults to socket.timeout.ms.
+                                   * Mutually exclusive with rkbuf_abs_timeout*/
+        rd_bool_t rkbuf_force_timeout; /**< Force request timeout to be
+                                        *   remaining abs_timeout regardless
+                                        *   of socket.timeout.ms. */
+
+
+        int64_t rkbuf_offset;     /* Used by OffsetCommit */
+
+        rd_list_t *rkbuf_rktp_vers;    /* Toppar + Op Version map.
+                                        * Used by FetchRequest. */
+
+        rd_kafka_resp_err_t rkbuf_err;      /* Buffer parsing error code */
+
+        union {
+                struct {
+                        rd_list_t *topics;  /* Requested topics (char *) */
+                        char *reason;       /* Textual reason */
+                        rd_kafka_op_t *rko; /* Originating rko with replyq
+                                             * (if any) */
+                        rd_bool_t all_topics; /**< Full/All topics requested */
+                        rd_bool_t cgrp_update; /**< Update cgrp with topic
+                                                *   status from response. */
+
+                        int *decr;          /* Decrement this integer by one
+                                             * when request is complete:
+                                             * typically points to metadata
+                                             * cache's full_.._sent.
+                                             * Will be performed with
+                                             * decr_lock held. */
+                        mtx_t *decr_lock;
+
+                } Metadata;
+                struct {
+                        rd_kafka_msgbatch_t batch; /**< MessageSet/batch */
+                } Produce;
+                struct {
+                        rd_bool_t commit;      /**< true = txn commit,
+                                                *   false = txn abort */
+                } EndTxn;
+        } rkbuf_u;
+
+#define rkbuf_batch rkbuf_u.Produce.batch
+
+        const char *rkbuf_uflow_mitigation; /**< Buffer read underflow
+                                             *   human readable mitigation
+                                             *   string (const memory).
+                                             *   This is used to hint the
+                                             *   user why the underflow
+                                             *   might have occurred, which
+                                             *   depends on request type. */
+};
+
+
+
+
 /**
  * @name Read buffer interface
  *
@@ -164,9 +414,14 @@ rd_tmpabuf_write_str0 (const char *func, int line,
 			rd_kafka_assert(NULL, rkbuf->rkbuf_rkb);	\
                         rd_rkb_log(rkbuf->rkbuf_rkb, log_decode_errors, \
                                    "PROTOERR",                          \
-                                   "Protocol parse failure "            \
+                                   "Protocol parse failure for %s v%hd%s " \
                                    "at %"PRIusz"/%"PRIusz" (%s:%i) "    \
                                    "(incorrect broker.version.fallback?)", \
+                                   rd_kafka_ApiKey2str(rkbuf->rkbuf_reqhdr. \
+                                                       ApiKey),         \
+                                   rkbuf->rkbuf_reqhdr.ApiVersion,      \
+                                   (rkbuf->rkbuf_flags&RD_KAFKA_OP_F_FLEXVER? \
+                                    "(flex)":""),                       \
                                    rd_slice_offset(&rkbuf->rkbuf_reader), \
                                    rd_slice_size(&rkbuf->rkbuf_reader), \
                                    __FUNCTION__, __LINE__);             \
@@ -190,9 +445,13 @@ rd_tmpabuf_write_str0 (const char *func, int line,
                         rd_rkb_log(rkbuf->rkbuf_rkb, log_decode_errors, \
                                    "PROTOUFLOW",                        \
                                    "Protocol read buffer underflow "    \
+                                   "for %s v%hd "                       \
                                    "at %"PRIusz"/%"PRIusz" (%s:%i): "   \
                                    "expected %"PRIusz" bytes > "        \
                                    "%"PRIusz" remaining bytes (%s)%s",  \
+                                   rd_kafka_ApiKey2str(rkbuf->rkbuf_reqhdr. \
+                                                       ApiKey),         \
+                                   rkbuf->rkbuf_reqhdr.ApiVersion,      \
                                    rd_slice_offset(&rkbuf->rkbuf_reader), \
                                    rd_slice_size(&rkbuf->rkbuf_reader), \
                                    __FUNCTION__, __LINE__,              \
@@ -342,23 +601,50 @@ rd_tmpabuf_write_str0 (const char *func, int line,
                 *(dst) = _v;                                            \
         } while (0)
 
-/* Read Kafka String representation (2+N).
+
+/**
+ * @brief Read unsigned varint and store in uint64_t \p dst
+ */
+#define rd_kafka_buf_read_uvarint(rkbuf,dst) do {                       \
+                uint64_t _v;                                            \
+                size_t _r = rd_slice_read_uvarint(&(rkbuf)->rkbuf_reader, \
+                                                  &_v);                 \
+                if (unlikely(RD_UVARINT_UNDERFLOW(_r)))                 \
+                        rd_kafka_buf_underflow_fail(rkbuf, (size_t)0,   \
+                                                    "uvarint parsing failed"); \
+                *(dst) = _v;                                            \
+        } while (0)
+
+
+/**
+ * @brief Read Kafka COMPACT_STRING (VARINT+N) or
+ *        standard String representation (2+N).
+ *
  * The kstr data will be updated to point to the rkbuf. */
 #define rd_kafka_buf_read_str(rkbuf, kstr) do {                         \
                 int _klen;                                              \
-                rd_kafka_buf_read_i16a(rkbuf, (kstr)->len);             \
-                _klen = RD_KAFKAP_STR_LEN(kstr);                        \
+                if ((rkbuf)->rkbuf_flags & RD_KAFKA_OP_F_FLEXVER) {     \
+                        uint64_t _uva;                                  \
+                        rd_kafka_buf_read_uvarint(rkbuf, &_uva);        \
+                        (kstr)->len = ((int32_t)_uva) - 1;              \
+                        _klen = (kstr)->len;                            \
+                } else {                                                \
+                        rd_kafka_buf_read_i16a(rkbuf, (kstr)->len);     \
+                        _klen = RD_KAFKAP_STR_LEN(kstr);                \
+                }                                                       \
                 if (RD_KAFKAP_STR_IS_NULL(kstr))                        \
                         (kstr)->str = NULL;                             \
+                else if (RD_KAFKAP_STR_LEN(kstr) == 0)                  \
+                        (kstr)->str = "";                               \
                 else if (!((kstr)->str =                                \
                            rd_slice_ensure_contig(&rkbuf->rkbuf_reader, \
-                                                     _klen)))           \
+                                                  _klen)))              \
                         rd_kafka_buf_check_len(rkbuf, _klen);           \
         } while (0)
 
 /* Read Kafka String representation (2+N) and write it to the \p tmpabuf
  * with a trailing nul byte. */
-#define rd_kafka_buf_read_str_tmpabuf(rkbuf, tmpabuf, dst) do {		\
+#define rd_kafka_buf_read_str_tmpabuf(rkbuf, tmpabuf, dst) do {         \
                 rd_kafkap_str_t _kstr;					\
 		size_t _slen;						\
 		char *_dst;						\
@@ -452,168 +738,52 @@ rd_tmpabuf_write_str0 (const char *func, int line,
 
 
 /**
- * Response handling callback.
- *
- * NOTE: Callbacks must check for 'err == RD_KAFKA_RESP_ERR__DESTROY'
- *       which indicates that some entity is terminating (rd_kafka_t, broker,
- *       toppar, queue, etc) and the callback may not be called in the
- *       correct thread. In this case the callback must perform just
- *       the most minimal cleanup and dont trigger any other operations.
- *
- * NOTE: rkb, reply and request may be NULL, depending on error situation.
+ * @brief Discard all KIP-482 Tags at the current position in the buffer.
  */
-typedef void (rd_kafka_resp_cb_t) (rd_kafka_t *rk,
-				   rd_kafka_broker_t *rkb,
-                                   rd_kafka_resp_err_t err,
-                                   rd_kafka_buf_t *reply,
-                                   rd_kafka_buf_t *request,
-                                   void *opaque);
+#define rd_kafka_buf_skip_tags(rkbuf) do {                              \
+        uint64_t _tagcnt;                                               \
+        if (!((rkbuf)->rkbuf_flags & RD_KAFKA_OP_F_FLEXVER))            \
+                break;                                                  \
+        rd_kafka_buf_read_uvarint(rkbuf, &_tagcnt);                     \
+        while (_tagcnt-- > 0) {                                         \
+               uint64_t _tagtype, _taglen;                              \
+               rd_kafka_buf_read_uvarint(rkbuf, &_tagtype);             \
+               rd_kafka_buf_read_uvarint(rkbuf, &_taglen);              \
+               if (_taglen > 1)                                         \
+                       rd_kafka_buf_skip(rkbuf, (size_t)(_taglen - 1)); \
+        }                                                               \
+        } while (0)
 
-struct rd_kafka_buf_s { /* rd_kafka_buf_t */
-	TAILQ_ENTRY(rd_kafka_buf_s) rkbuf_link;
-
-	int32_t rkbuf_corrid;
-
-	rd_ts_t rkbuf_ts_retry;    /* Absolute send retry time */
-
-	int     rkbuf_flags; /* RD_KAFKA_OP_F */
-
-        rd_kafka_prio_t rkbuf_prio; /**< Request priority */
-
-        rd_buf_t rkbuf_buf;        /**< Send/Recv byte buffer */
-        rd_slice_t rkbuf_reader;   /**< Buffer slice reader for rkbuf_buf */
-
-	int     rkbuf_connid;      /* broker connection id (used when buffer
-				    * was partially sent). */
-        size_t  rkbuf_totlen;      /* recv: total expected length,
-                                    * send: not used */
-
-	rd_crc32_t rkbuf_crc;      /* Current CRC calculation */
-
-	struct rd_kafkap_reqhdr rkbuf_reqhdr;   /* Request header.
-                                                 * These fields are encoded
-                                                 * and written to output buffer
-                                                 * on buffer finalization.
-                                                 * Note:
-                                                 * The request's
-                                                 * reqhdr is copied to the
-                                                 * response's reqhdr as a
-                                                 * convenience. */
-	struct rd_kafkap_reshdr rkbuf_reshdr;   /* Response header.
-                                                 * Decoded fields are copied
-                                                 * here from the buffer
-                                                 * to provide an ease-of-use
-                                                 * interface to the header */
-
-	int32_t rkbuf_expected_size;  /* expected size of message */
-
-        rd_kafka_replyq_t   rkbuf_replyq;       /* Enqueue response on replyq */
-        rd_kafka_replyq_t   rkbuf_orig_replyq;  /* Original replyq to be used
-                                                 * for retries from inside
-                                                 * the rkbuf_cb() callback
-                                                 * since rkbuf_replyq will
-                                                 * have been reset. */
-        rd_kafka_resp_cb_t *rkbuf_cb;           /* Response callback */
-        struct rd_kafka_buf_s *rkbuf_response;  /* Response buffer */
-
-        struct rd_kafka_broker_s *rkbuf_rkb;
-
-	rd_refcnt_t rkbuf_refcnt;
-	void   *rkbuf_opaque;
-
-	int     rkbuf_retries;            /* Retries so far. */
-#define RD_KAFKA_BUF_NO_RETRIES  1000000  /* Do not retry */
-
-        int     rkbuf_features;   /* Required feature(s) that must be
-                                   * supported by broker. */
-
-	rd_ts_t rkbuf_ts_enq;
-	rd_ts_t rkbuf_ts_sent;    /* Initially: Absolute time of transmission,
-				   * after response: RTT. */
-
-        /* Request timeouts:
-         *  rkbuf_ts_timeout is the effective absolute request timeout used
-         *  by the timeout scanner to see if a request has timed out.
-         *  It is set when a request is enqueued on the broker transmit
-         *  queue based on the relative or absolute timeout:
-         *
-         *  rkbuf_rel_timeout is the per-request-transmit relative timeout,
-         *  this value is reused for each sub-sequent retry of a request.
-         *
-         *  rkbuf_abs_timeout is the absolute request timeout, spanning
-         *  all retries.
-         *  This value is effectively limited by socket.timeout.ms for
-         *  each transmission, but the absolute timeout for a request's
-         *  lifetime is the absolute value.
-         *
-         *  Use rd_kafka_buf_set_timeout() to set a relative timeout
-         *  that will be reused on retry,
-         *  or rd_kafka_buf_set_abs_timeout() to set a fixed absolute timeout
-         *  for the case where the caller knows the request will be
-         *  semantically outdated when that absolute time expires, such as for
-         *  session.timeout.ms-based requests.
-         *
-         * The decision to retry a request is delegated to the rkbuf_cb
-         * response callback, which should use rd_kafka_err_action()
-         * and check the return actions for RD_KAFKA_ERR_ACTION_RETRY to be set
-         * and then call rd_kafka_buf_retry().
-         * rd_kafka_buf_retry() will enqueue the request on the rkb_retrybufs
-         * queue with a backoff time of retry.backoff.ms.
-         * The rkb_retrybufs queue is served by the broker thread's timeout
-         * scanner.
-         * @warning rkb_retrybufs is NOT purged on broker down.
-         */
-        rd_ts_t rkbuf_ts_timeout; /* Request timeout (absolute time). */
-        rd_ts_t rkbuf_abs_timeout;/* Absolute timeout for request, including
-                                   * retries.
-                                   * Mutually exclusive with rkbuf_rel_timeout*/
-        int     rkbuf_rel_timeout;/* Relative timeout (ms), used for retries.
-                                   * Defaults to socket.timeout.ms.
-                                   * Mutually exclusive with rkbuf_abs_timeout*/
-        rd_bool_t rkbuf_force_timeout; /**< Force request timeout to be
-                                        *   remaining abs_timeout regardless
-                                        *   of socket.timeout.ms. */
+/**
+ * @brief Write tags at the current position in the buffer.
+ * @remark Currently always writes empty tags.
+ * @remark Change to ..write_uvarint() when actual tags are supported.
+ */
+#define rd_kafka_buf_write_tags(rkbuf) do {                             \
+        if (!((rkbuf)->rkbuf_flags & RD_KAFKA_OP_F_FLEXVER))            \
+                break;                                                  \
+        rd_kafka_buf_write_i8(rkbuf, 0);                                \
+        } while (0)
 
 
-        int64_t rkbuf_offset;     /* Used by OffsetCommit */
+/**
+ * @brief Reads an ARRAY or COMPACT_ARRAY count depending on buffer type.
+ */
+#define rd_kafka_buf_read_arraycnt(rkbuf,arrcnt,maxval) do {            \
+        if ((rkbuf)->rkbuf_flags & RD_KAFKA_OP_F_FLEXVER) {             \
+                uint64_t _uva;                                          \
+                rd_kafka_buf_read_uvarint(rkbuf, &_uva);                \
+                *(arrcnt) = (int32_t)_uva - 1;                          \
+        } else {                                                        \
+                rd_kafka_buf_read_i32(rkbuf, arrcnt);                   \
+        }                                                               \
+        if (*(arrcnt) < 0 || ((maxval) != -1 && *(arrcnt) > (maxval)))  \
+                rd_kafka_buf_parse_fail(rkbuf,                          \
+                                        "ApiArrayCnt %"PRId32" out of range", \
+                                        *(arrcnt));                     \
+        } while (0)
 
-	rd_list_t *rkbuf_rktp_vers;    /* Toppar + Op Version map.
-					* Used by FetchRequest. */
 
-        rd_kafka_resp_err_t rkbuf_err;      /* Buffer parsing error code */
-
-        union {
-                struct {
-                        rd_list_t *topics;  /* Requested topics (char *) */
-                        char *reason;       /* Textual reason */
-                        rd_kafka_op_t *rko; /* Originating rko with replyq
-                                             * (if any) */
-                        int all_topics;     /* Full/All topics requested */
-
-                        int *decr;          /* Decrement this integer by one
-                                             * when request is complete:
-                                             * typically points to metadata
-                                             * cache's full_.._sent.
-                                             * Will be performed with
-                                             * decr_lock held. */
-                        mtx_t *decr_lock;
-
-                } Metadata;
-                struct {
-                        rd_kafka_msgbatch_t batch; /**< MessageSet/batch */
-                } Produce;
-        } rkbuf_u;
-
-#define rkbuf_batch rkbuf_u.Produce.batch
-
-        const char *rkbuf_uflow_mitigation; /**< Buffer read underflow
-                                             *   human readable mitigation
-                                             *   string (const memory).
-                                             *   This is used to hint the
-                                             *   user why the underflow
-                                             *   might have occurred, which
-                                             *   depends on request type. */
-};
 
 
 /**
@@ -696,8 +866,16 @@ void rd_kafka_buf_push0 (rd_kafka_buf_t *rkbuf, const void *buf, size_t len,
 rd_kafka_buf_t *rd_kafka_buf_new0 (int segcnt, size_t size, int flags);
 #define rd_kafka_buf_new(segcnt,size) \
         rd_kafka_buf_new0(segcnt,size,0)
-rd_kafka_buf_t *rd_kafka_buf_new_request (rd_kafka_broker_t *rkb, int16_t ApiKey,
-                                          int segcnt, size_t size);
+rd_kafka_buf_t *rd_kafka_buf_new_request0 (rd_kafka_broker_t *rkb,
+                                           int16_t ApiKey,
+                                           int segcnt, size_t size,
+                                           rd_bool_t is_flexver);
+#define rd_kafka_buf_new_request(rkb,ApiKey,segcnt,size)                \
+        rd_kafka_buf_new_request0(rkb,ApiKey,segcnt,size,rd_false)      \
+
+#define rd_kafka_buf_new_flexver_request(rkb,ApiKey,segcnt,size,is_flexver) \
+        rd_kafka_buf_new_request0(rkb,ApiKey,segcnt,size,is_flexver)    \
+
 rd_kafka_buf_t *rd_kafka_buf_new_shadow (const void *ptr, size_t size,
                                          void (*free_cb) (void *));
 void rd_kafka_bufq_enq (rd_kafka_bufq_t *rkbufq, rd_kafka_buf_t *rkbuf);
@@ -821,7 +999,7 @@ static RD_INLINE void rd_kafka_buf_update_i16 (rd_kafka_buf_t *rkbuf,
  */
 static RD_INLINE size_t rd_kafka_buf_write_i32 (rd_kafka_buf_t *rkbuf,
                                                int32_t v) {
-        v = htobe32(v);
+        v = (int32_t)htobe32(v);
         return rd_kafka_buf_write(rkbuf, &v, sizeof(v));
 }
 
@@ -847,10 +1025,59 @@ static RD_INLINE void rd_kafka_buf_update_u32 (rd_kafka_buf_t *rkbuf,
 
 
 /**
+ * @brief Write array count field to buffer (i32) for later update with
+ *        rd_kafka_buf_update_arraycnt().
+ */
+#define rd_kafka_buf_write_arraycnt_pos(rkbuf) rd_kafka_buf_write_i32(rkbuf, 0)
+
+
+/**
+ * @brief Write the final array count to the position returned from
+ *        rd_kafka_buf_write_arraycnt_pos().
+ *
+ * Update int32_t in buffer at offset 'of' but serialize it as
+ * compact uvarint (that must not exceed 4 bytes storage)
+ * if the \p rkbuf is marked as FLEXVER, else just update it as
+ * as a standard update_i32().
+ *
+ * @remark For flexibleVersions this will shrink the buffer and move data
+ *         and may thus be costly.
+ */
+static RD_INLINE void rd_kafka_buf_finalize_arraycnt (rd_kafka_buf_t *rkbuf,
+                                                      size_t of, int cnt) {
+        char buf[sizeof(int32_t)];
+        size_t sz, r;
+
+        rd_assert(cnt >= 0);
+
+        if (!(rkbuf->rkbuf_flags & RD_KAFKA_OP_F_FLEXVER)) {
+                rd_kafka_buf_update_i32(rkbuf, of, (int32_t)cnt);
+                return;
+        }
+
+        /* CompactArray has a base of 1, 0 is for Null arrays */
+        cnt += 1;
+
+        sz = rd_uvarint_enc_u64(buf, sizeof(buf), (uint64_t)cnt);
+        rd_assert(!RD_UVARINT_OVERFLOW(sz));
+
+        rd_buf_write_update(&rkbuf->rkbuf_buf, of, buf, sz);
+
+        if (sz < sizeof(int32_t)) {
+                /* Varint occupies less space than the allotted 4 bytes, erase
+                 * the remaining bytes. */
+                r = rd_buf_erase(&rkbuf->rkbuf_buf, of+sz, sizeof(int32_t)-sz);
+                rd_assert(r == sizeof(int32_t) - sz);
+        }
+}
+
+
+/**
  * Write int64_t to buffer.
  * The value will be endian-swapped before write.
  */
-static RD_INLINE size_t rd_kafka_buf_write_i64 (rd_kafka_buf_t *rkbuf, int64_t v) {
+static RD_INLINE size_t rd_kafka_buf_write_i64 (rd_kafka_buf_t *rkbuf,
+                                                int64_t v) {
         v = htobe64(v);
         return rd_kafka_buf_write(rkbuf, &v, sizeof(v));
 }
@@ -879,44 +1106,106 @@ rd_kafka_buf_write_varint (rd_kafka_buf_t *rkbuf, int64_t v) {
         return rd_kafka_buf_write(rkbuf, varint, sz);
 }
 
+/**
+ * @brief Write varint-encoded unsigned value to buffer.
+ */
+static RD_INLINE size_t
+rd_kafka_buf_write_uvarint (rd_kafka_buf_t *rkbuf, uint64_t v) {
+        char varint[RD_UVARINT_ENC_SIZEOF(v)];
+        size_t sz;
+
+        sz = rd_uvarint_enc_u64(varint, sizeof(varint), v);
+
+        return rd_kafka_buf_write(rkbuf, varint, sz);
+}
+
 
 /**
- * Write (copy) Kafka string to buffer.
+ * @brief Write standard (2-byte header) or KIP-482 COMPACT_STRING to buffer.
+ *
+ * @remark Copies the string.
+ *
+ * @returns the offset in \p rkbuf where the string was written.
  */
 static RD_INLINE size_t rd_kafka_buf_write_kstr (rd_kafka_buf_t *rkbuf,
                                                 const rd_kafkap_str_t *kstr) {
-        size_t len;
+        size_t len, r;
 
+        if (!(rkbuf->rkbuf_flags & RD_KAFKA_OP_F_FLEXVER)) {
+                /* Standard string */
+                if (!kstr || RD_KAFKAP_STR_IS_NULL(kstr))
+                        return rd_kafka_buf_write_i16(rkbuf, -1);
+
+                if (RD_KAFKAP_STR_IS_SERIALIZED(kstr))
+                        return rd_kafka_buf_write(rkbuf,
+                                                  RD_KAFKAP_STR_SER(kstr),
+                                                  RD_KAFKAP_STR_SIZE(kstr));
+
+                len = RD_KAFKAP_STR_LEN(kstr);
+                r = rd_kafka_buf_write_i16(rkbuf, (int16_t)len);
+                rd_kafka_buf_write(rkbuf, kstr->str, len);
+
+                return r;
+        }
+
+        /* COMPACT_STRING lengths are:
+         *  0   = NULL,
+         *  1   = empty
+         *  N.. = length + 1
+         */
         if (!kstr || RD_KAFKAP_STR_IS_NULL(kstr))
-                return rd_kafka_buf_write_i16(rkbuf, -1);
+                len = 0;
+        else
+                len = RD_KAFKAP_STR_LEN(kstr) + 1;
 
-        if (RD_KAFKAP_STR_IS_SERIALIZED(kstr))
-                return rd_kafka_buf_write(rkbuf, RD_KAFKAP_STR_SER(kstr),
-                                          RD_KAFKAP_STR_SIZE(kstr));
-
-        len = RD_KAFKAP_STR_LEN(kstr);
-        rd_kafka_buf_write_i16(rkbuf, (int16_t)len);
-        rd_kafka_buf_write(rkbuf, kstr->str, len);
-
-        return 2 + len;
+        r = rd_kafka_buf_write_uvarint(rkbuf, (uint64_t)len);
+        if (len > 1)
+                rd_kafka_buf_write(rkbuf, kstr->str, len-1);
+        return r;
 }
+
 
 
 /**
- * Write (copy) char * string to buffer.
+ * @brief Write standard (2-byte header) or KIP-482 COMPACT_STRING to buffer.
+ *
+ * @remark Copies the string.
  */
-static RD_INLINE size_t rd_kafka_buf_write_str (rd_kafka_buf_t *rkbuf,
-                                               const char *str, size_t len) {
+static RD_INLINE size_t
+rd_kafka_buf_write_str (rd_kafka_buf_t *rkbuf,
+                        const char *str, size_t len) {
         size_t r;
+
+        if (!(rkbuf->rkbuf_flags & RD_KAFKA_OP_F_FLEXVER)) {
+                /* Standard string */
+                if (!str)
+                        len = RD_KAFKAP_STR_LEN_NULL;
+                else if (len == (size_t)-1)
+                        len = strlen(str);
+                r = rd_kafka_buf_write_i16(rkbuf, (int16_t) len);
+                if (str)
+                        rd_kafka_buf_write(rkbuf, str, len);
+                return r;
+        }
+
+        /* COMPACT_STRING lengths are:
+         *  0   = NULL,
+         *  1   = empty
+         *  N.. = length + 1
+         */
         if (!str)
-                len = RD_KAFKAP_STR_LEN_NULL;
+                len = 0;
         else if (len == (size_t)-1)
-                len = strlen(str);
-        r = rd_kafka_buf_write_i16(rkbuf, (int16_t) len);
-        if (str)
-                rd_kafka_buf_write(rkbuf, str, len);
+                len = strlen(str) + 1;
+        else
+                len++;
+
+        r = rd_kafka_buf_write_uvarint(rkbuf, (uint64_t)len);
+        if (len > 1)
+                rd_kafka_buf_write(rkbuf, str, len-1);
         return r;
 }
+
 
 
 /**
@@ -1032,5 +1321,11 @@ rd_kafka_buf_version_outdated (const rd_kafka_buf_t *rkbuf, int version) {
         return rkbuf && rkbuf->rkbuf_replyq.version &&
                 rkbuf->rkbuf_replyq.version < version;
 }
+
+
+void rd_kafka_buf_set_maker (rd_kafka_buf_t *rkbuf,
+                             rd_kafka_make_req_cb_t *make_cb,
+                             void *make_opaque,
+                             void (*free_make_opaque_cb) (void *make_opaque));
 
 #endif /* _RDKAFKA_BUF_H_ */

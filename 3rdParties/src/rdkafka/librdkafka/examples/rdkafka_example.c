@@ -47,7 +47,7 @@
 #include "rdkafka.h"  /* for Kafka driver */
 
 
-static int run = 1;
+static volatile sig_atomic_t run = 1;
 static rd_kafka_t *rk;
 static int exit_eof = 0;
 static int quiet = 0;
@@ -107,15 +107,18 @@ static void logger (const rd_kafka_t *rk, int level,
 static void msg_delivered (rd_kafka_t *rk,
                            const rd_kafka_message_t *rkmessage, void *opaque) {
         if (rkmessage->err)
-		fprintf(stderr, "%% Message delivery failed: %s\n",
+                fprintf(stderr,
+                        "%% Message delivery failed (broker %"PRId32"): %s\n",
+                        rd_kafka_message_broker_id(rkmessage),
                         rd_kafka_err2str(rkmessage->err));
-	else if (!quiet)
-		fprintf(stderr,
+        else if (!quiet)
+                fprintf(stderr,
                         "%% Message delivered (%zd bytes, offset %"PRId64", "
-                        "partition %"PRId32"): %.*s\n",
+                        "partition %"PRId32", broker %"PRId32"): %.*s\n",
                         rkmessage->len, rkmessage->offset,
-			rkmessage->partition,
-			(int)rkmessage->len, (const char *)rkmessage->payload);
+                        rkmessage->partition,
+                        rd_kafka_message_broker_id(rkmessage),
+                        (int)rkmessage->len, (const char *)rkmessage->payload);
 }
 
 
@@ -153,8 +156,11 @@ static void msg_consume (rd_kafka_message_t *rkmessage,
 		int64_t timestamp;
                 rd_kafka_headers_t *hdrs;
 
-		fprintf(stdout, "%% Message (offset %"PRId64", %zd bytes):\n",
-			rkmessage->offset, rkmessage->len);
+                fprintf(stdout,
+                        "%% Message (offset %"PRId64", %zd bytes, "
+                        "broker %"PRId32"):\n",
+                        rkmessage->offset, rkmessage->len,
+                        rd_kafka_message_broker_id(rkmessage));
 
 		timestamp = rd_kafka_message_timestamp(rkmessage, &tstype);
 		if (tstype != RD_KAFKA_TIMESTAMP_NOT_AVAILABLE) {
@@ -524,7 +530,7 @@ int main (int argc, char **argv) {
 			"  -p <num>        Partition (random partitioner)\n"
 			"  -b <brokers>    Broker address (localhost:9092)\n"
 			"  -z <codec>      Enable compression:\n"
-			"                  none|gzip|snappy\n"
+			"                  none|gzip|snappy|lz4|zstd\n"
 			"  -o <offset>     Start offset (consumer):\n"
 			"                  beginning, end, NNNNN or -NNNNN\n"
 			"                  wmark returns the current hi&lo "
@@ -569,6 +575,14 @@ int main (int argc, char **argv) {
 	signal(SIGINT, stop);
 	signal(SIGUSR1, sig_usr1);
 
+        /* Set bootstrap servers */
+        if (brokers &&
+            rd_kafka_conf_set(conf, "bootstrap.servers", brokers,
+                              errstr, sizeof(errstr)) != RD_KAFKA_CONF_OK) {
+                fprintf(stderr, "%% %s\n", errstr);
+                exit(1);
+        }
+
 	if (mode == 'P') {
 		/*
 		 * Producer
@@ -587,12 +601,6 @@ int main (int argc, char **argv) {
 			fprintf(stderr,
 				"%% Failed to create new producer: %s\n",
 				errstr);
-			exit(1);
-		}
-
-		/* Add brokers */
-		if (rd_kafka_brokers_add(rk, brokers) == 0) {
-			fprintf(stderr, "%% No valid brokers specified\n");
 			exit(1);
 		}
 
@@ -696,15 +704,8 @@ int main (int argc, char **argv) {
 			exit(1);
 		}
 
-		/* Add brokers */
-		if (rd_kafka_brokers_add(rk, brokers) == 0) {
-			fprintf(stderr, "%% No valid brokers specified\n");
-			exit(1);
-		}
-
 		if (get_wmarks) {
 			int64_t lo, hi;
-                        rd_kafka_resp_err_t err;
 
 			/* Only query for hi&lo partition watermarks */
 
@@ -731,7 +732,7 @@ int main (int argc, char **argv) {
 
 		/* Start consuming */
 		if (rd_kafka_consume_start(rkt, partition, start_offset) == -1){
-			rd_kafka_resp_err_t err = rd_kafka_last_error();
+			err = rd_kafka_last_error();
 			fprintf(stderr, "%% Failed to start consuming: %s\n",
 				rd_kafka_err2str(err));
                         if (err == RD_KAFKA_RESP_ERR__INVALID_ARG)
@@ -744,7 +745,6 @@ int main (int argc, char **argv) {
 
 		while (run) {
 			rd_kafka_message_t *rkmessage;
-                        rd_kafka_resp_err_t err;
 
                         /* Poll for errors, etc. */
                         rd_kafka_poll(rk, 0);
@@ -787,7 +787,7 @@ int main (int argc, char **argv) {
 		rd_kafka_destroy(rk);
 
         } else if (mode == 'L') {
-                rd_kafka_resp_err_t err = RD_KAFKA_RESP_ERR_NO_ERROR;
+                err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
 		/* Create Kafka handle */
 		if (!(rk = rd_kafka_new(RD_KAFKA_PRODUCER, conf,
@@ -795,12 +795,6 @@ int main (int argc, char **argv) {
 			fprintf(stderr,
 				"%% Failed to create new producer: %s\n",
 				errstr);
-			exit(1);
-		}
-
-		/* Add brokers */
-		if (rd_kafka_brokers_add(rk, brokers) == 0) {
-			fprintf(stderr, "%% No valid brokers specified\n");
 			exit(1);
 		}
 

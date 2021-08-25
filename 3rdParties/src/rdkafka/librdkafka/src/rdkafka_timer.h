@@ -31,6 +31,8 @@
 
 #include "rd.h"
 
+struct rd_kafka_q_s; /**< Forward decl */
+
 /* A timer engine. */
 typedef struct rd_kafka_timers_s {
 
@@ -40,6 +42,12 @@ typedef struct rd_kafka_timers_s {
 
 	mtx_t       rkts_lock;
 	cnd_t       rkts_cond;
+
+        /** Optional wake-up (q_yield()) to wake up when a new timer
+         *  is scheduled that will fire prior to any existing timers.
+         *  This is used to wake up blocking IO or queue polls that run
+         *  in the same loop as timers_run(). */
+        struct rd_kafka_q_s *rkts_wakeq;
 
         int         rkts_enabled;
 } rd_kafka_timers_t;
@@ -62,25 +70,38 @@ int rd_kafka_timer_stop (rd_kafka_timers_t *rkts,
                          rd_kafka_timer_t *rtmr, int lock);
 void rd_kafka_timer_start0 (rd_kafka_timers_t *rkts,
                             rd_kafka_timer_t *rtmr, rd_ts_t interval,
-                            rd_bool_t oneshot,
+                            rd_bool_t oneshot, rd_bool_t restart,
                             void (*callback) (rd_kafka_timers_t *rkts,
                                               void *arg),
                             void *arg);
 #define rd_kafka_timer_start(rkts,rtmr,interval,callback,arg) \
-        rd_kafka_timer_start0(rkts,rtmr,interval,rd_false,callback,arg)
-#define rd_kafka_timer_start_oneshot(rkts,rtmr,interval,callback,arg)   \
-        rd_kafka_timer_start0(rkts,rtmr,interval,rd_true,callback,arg)
+        rd_kafka_timer_start0(rkts,rtmr,interval,rd_false,rd_true,callback,arg)
+#define rd_kafka_timer_start_oneshot(rkts,rtmr,restart,interval,callback,arg) \
+        rd_kafka_timer_start0(rkts,rtmr,interval,rd_true,restart,callback,arg)
 
-void rd_kafka_timer_backoff (rd_kafka_timers_t *rkts,
-			     rd_kafka_timer_t *rtmr, int backoff_us);
+void rd_kafka_timer_exp_backoff (rd_kafka_timers_t *rkts,
+                                 rd_kafka_timer_t *rtmr);
 rd_ts_t rd_kafka_timer_next (rd_kafka_timers_t *rkts, rd_kafka_timer_t *rtmr,
                              int do_lock);
+
+void rd_kafka_timer_override_once (rd_kafka_timers_t *rkts,
+                                   rd_kafka_timer_t *rtmr,
+                                   rd_ts_t interval);
+
+/**
+ * @returns true if timer is started.
+ *
+ * @remark Must only be called in the timer's thread (not thread-safe)
+ */
+rd_bool_t rd_kafka_timer_is_started (rd_kafka_timers_t *rkts,
+                                     const rd_kafka_timer_t *rtmr);
 
 void rd_kafka_timers_interrupt (rd_kafka_timers_t *rkts);
 rd_ts_t rd_kafka_timers_next (rd_kafka_timers_t *rkts, int timeout_ms,
 			      int do_lock);
 void rd_kafka_timers_run (rd_kafka_timers_t *rkts, int timeout_us);
 void rd_kafka_timers_destroy (rd_kafka_timers_t *rkts);
-void rd_kafka_timers_init (rd_kafka_timers_t *rkte, rd_kafka_t *rk);
+void rd_kafka_timers_init (rd_kafka_timers_t *rkte, rd_kafka_t *rk,
+                           struct rd_kafka_q_s *wakeq);
 
 #endif /* _RDKAFKA_TIMER_H_ */

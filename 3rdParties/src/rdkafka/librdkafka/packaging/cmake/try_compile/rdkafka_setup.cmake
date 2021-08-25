@@ -11,6 +11,12 @@ try_compile(
 )
 
 try_compile(
+    HAVE_RAND_R
+    "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+    "${TRYCOMPILE_SRC_DIR}/rand_r_test.c"
+)
+
+try_compile(
     HAVE_PTHREAD_SETNAME_GNU
     "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
     "${TRYCOMPILE_SRC_DIR}/pthread_setname_gnu_test.c"
@@ -23,6 +29,13 @@ try_compile(
     "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
     "${TRYCOMPILE_SRC_DIR}/pthread_setname_darwin_test.c"
     COMPILE_DEFINITIONS "-D_DARWIN_C_SOURCE"
+    LINK_LIBRARIES "-lpthread"
+)
+
+try_compile(
+    HAVE_PTHREAD_SETNAME_FREEBSD
+    "${CMAKE_CURRENT_BINARY_DIR}/try_compile"
+    "${TRYCOMPILE_SRC_DIR}/pthread_setname_freebsd_test.c"
     LINK_LIBRARIES "-lpthread"
 )
 

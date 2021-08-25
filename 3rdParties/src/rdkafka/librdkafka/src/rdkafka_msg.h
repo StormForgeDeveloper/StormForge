@@ -51,7 +51,6 @@
 #define RD_KAFKA_MSG_ATTR_CREATE_TIME      (0 << 3)
 #define RD_KAFKA_MSG_ATTR_LOG_APPEND_TIME  (1 << 3)
 
-
 /**
  * @brief MessageSet.Attributes for MsgVersion v2
  *
@@ -85,6 +84,7 @@ typedef struct rd_kafka_msg_s {
 #define RD_KAFKA_MSG_F_FREE_RKM     0x10000 /* msg_t is allocated */
 #define RD_KAFKA_MSG_F_ACCOUNT      0x20000 /* accounted for in curr_msgs */
 #define RD_KAFKA_MSG_F_PRODUCER     0x40000 /* Producer message */
+#define RD_KAFKA_MSG_F_CONTROL      0x80000 /* Control message */
 
 	rd_kafka_timestamp_type_t rkm_tstype; /* rkm_timestamp type */
 	int64_t    rkm_timestamp;  /* Message format V1.
@@ -100,6 +100,8 @@ typedef struct rd_kafka_msg_s {
                                            *   the ProduceResponse handler:
                                            *   this value is always up to date.
                                            */
+        int32_t rkm_broker_id;            /**< Broker message was produced to
+                                           *   or fetched from. */
 
         union {
                 struct {
@@ -148,7 +150,7 @@ size_t rd_kafka_msg_wire_size (const rd_kafka_msg_t *rkm, int MsgVersion) {
         static const size_t overheads[] = {
                 [0] = RD_KAFKAP_MESSAGE_V0_OVERHEAD,
                 [1] = RD_KAFKAP_MESSAGE_V1_OVERHEAD,
-                [2] = RD_KAFKAP_MESSAGE_V2_OVERHEAD
+                [2] = RD_KAFKAP_MESSAGE_V2_MAX_OVERHEAD
         };
         size_t size;
         rd_dassert(MsgVersion >= 0 && MsgVersion <= 2);
@@ -170,7 +172,7 @@ size_t rd_kafka_msg_wire_size (const rd_kafka_msg_t *rkm, int MsgVersion) {
 static RD_INLINE RD_UNUSED
 size_t rd_kafka_msg_max_wire_size (size_t keylen, size_t valuelen,
                                    size_t hdrslen) {
-        return RD_KAFKAP_MESSAGE_V2_OVERHEAD +
+        return RD_KAFKAP_MESSAGE_V2_MAX_OVERHEAD +
                 keylen + valuelen + hdrslen;
 }
 
@@ -225,7 +227,7 @@ size_t rd_kafka_msgq_size (const rd_kafka_msgq_t *rkmq) {
 
 void rd_kafka_msg_destroy (rd_kafka_t *rk, rd_kafka_msg_t *rkm);
 
-int rd_kafka_msg_new (rd_kafka_itopic_t *rkt, int32_t force_partition,
+int rd_kafka_msg_new (rd_kafka_topic_t *rkt, int32_t force_partition,
 		      int msgflags,
 		      char *payload, size_t len,
 		      const void *keydata, size_t keylen,
@@ -425,7 +427,7 @@ rd_kafka_msgq_enq_sorted0 (rd_kafka_msgq_t *rkmq,
  * @warning The message must have a msgid set.
  * @returns the message count of the queue after enqueuing the message.
  */
-int rd_kafka_msgq_enq_sorted (const rd_kafka_itopic_t *rkt,
+int rd_kafka_msgq_enq_sorted (const rd_kafka_topic_t *rkt,
                               rd_kafka_msgq_t *rkmq,
                               rd_kafka_msg_t *rkm);
 
@@ -494,7 +496,7 @@ rd_kafka_msg_t *rd_kafka_msgq_find_pos (const rd_kafka_msgq_t *rkmq,
                                                     const void *),
                                         int *cntp, int64_t *bytesp);
 
-void rd_kafka_msgq_set_metadata (rd_kafka_msgq_t *rkmq,
+void rd_kafka_msgq_set_metadata (rd_kafka_msgq_t *rkmq, int32_t broker_id,
                                  int64_t base_offset, int64_t timestamp,
                                  rd_kafka_msg_status_t status);
 
@@ -502,8 +504,8 @@ void rd_kafka_msgq_move_acked (rd_kafka_msgq_t *dest, rd_kafka_msgq_t *src,
                                uint64_t last_msgid,
                                rd_kafka_msg_status_t status);
 
-int rd_kafka_msg_partitioner (rd_kafka_itopic_t *rkt, rd_kafka_msg_t *rkm,
-                              int do_lock);
+int rd_kafka_msg_partitioner (rd_kafka_topic_t *rkt, rd_kafka_msg_t *rkm,
+                              rd_dolock_t do_lock);
 
 
 rd_kafka_message_t *rd_kafka_message_get (struct rd_kafka_op_s *rko);

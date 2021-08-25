@@ -33,15 +33,15 @@
 
 RdKafka::KafkaConsumer::~KafkaConsumer () {}
 
-RdKafka::KafkaConsumer *RdKafka::KafkaConsumer::create (RdKafka::Conf *conf,
+RdKafka::KafkaConsumer *RdKafka::KafkaConsumer::create (const RdKafka::Conf *conf,
                                                         std::string &errstr) {
   char errbuf[512];
-  RdKafka::ConfImpl *confimpl = dynamic_cast<RdKafka::ConfImpl *>(conf);
+  const RdKafka::ConfImpl *confimpl = dynamic_cast<const RdKafka::ConfImpl *>(conf);
   RdKafka::KafkaConsumerImpl *rkc = new RdKafka::KafkaConsumerImpl();
   rd_kafka_conf_t *rk_conf = NULL;
   size_t grlen;
 
-  if (!confimpl->rk_conf_) {
+  if (!confimpl || !confimpl->rk_conf_) {
     errstr = "Requires RdKafka::Conf::CONF_GLOBAL object";
     delete rkc;
     return NULL;
@@ -63,6 +63,8 @@ RdKafka::KafkaConsumer *RdKafka::KafkaConsumer::create (RdKafka::Conf *conf,
   if (!(rk = rd_kafka_new(RD_KAFKA_CONSUMER, rk_conf,
                           errbuf, sizeof(errbuf)))) {
     errstr = errbuf;
+    // rd_kafka_new() takes ownership only if succeeds
+    rd_kafka_conf_destroy(rk_conf);
     delete rkc;
     return NULL;
   }
@@ -112,9 +114,10 @@ RdKafka::Message *RdKafka::KafkaConsumerImpl::consume (int timeout_ms) {
   rkmessage = rd_kafka_consumer_poll(this->rk_, timeout_ms);
 
   if (!rkmessage)
-    return new RdKafka::MessageImpl(NULL, RdKafka::ERR__TIMED_OUT);
+    return new RdKafka::MessageImpl(RD_KAFKA_CONSUMER, NULL,
+                                    RdKafka::ERR__TIMED_OUT);
 
-  return new RdKafka::MessageImpl(rkmessage);
+  return new RdKafka::MessageImpl(RD_KAFKA_CONSUMER, rkmessage);
 
 }
 
@@ -137,6 +140,14 @@ RdKafka::KafkaConsumerImpl::assignment (std::vector<RdKafka::TopicPartition*> &p
 
   return RdKafka::ERR_NO_ERROR;
 }
+
+
+
+bool
+RdKafka::KafkaConsumerImpl::assignment_lost () {
+  return rd_kafka_assignment_lost(rk_) ? true : false;
+}
+
 
 
 RdKafka::ErrorCode
@@ -174,6 +185,38 @@ RdKafka::KafkaConsumerImpl::assign (const std::vector<TopicPartition*> &partitio
 RdKafka::ErrorCode
 RdKafka::KafkaConsumerImpl::unassign () {
   return static_cast<RdKafka::ErrorCode>(rd_kafka_assign(rk_, NULL));
+}
+
+
+RdKafka::Error *
+RdKafka::KafkaConsumerImpl::incremental_assign (const std::vector<TopicPartition*> &partitions) {
+  rd_kafka_topic_partition_list_t *c_parts;
+  rd_kafka_error_t *c_error;
+
+  c_parts = partitions_to_c_parts(partitions);
+  c_error = rd_kafka_incremental_assign(rk_, c_parts);
+  rd_kafka_topic_partition_list_destroy(c_parts);
+
+  if (c_error)
+    return new ErrorImpl(c_error);
+
+  return NULL;
+}
+
+
+RdKafka::Error *
+RdKafka::KafkaConsumerImpl::incremental_unassign (const std::vector<TopicPartition*> &partitions) {
+  rd_kafka_topic_partition_list_t *c_parts;
+  rd_kafka_error_t *c_error;
+
+  c_parts = partitions_to_c_parts(partitions);
+  c_error = rd_kafka_incremental_unassign(rk_, c_parts);
+  rd_kafka_topic_partition_list_destroy(c_parts);
+
+  if (c_error)
+    return new ErrorImpl(c_error);
+
+  return NULL;
 }
 
 
@@ -241,17 +284,11 @@ RdKafka::KafkaConsumerImpl::seek (const RdKafka::TopicPartition &partition,
 
 RdKafka::ErrorCode
 RdKafka::KafkaConsumerImpl::close () {
-  rd_kafka_resp_err_t err;
-  err = rd_kafka_consumer_close(rk_);
-  if (err)
-    return static_cast<RdKafka::ErrorCode>(err);
-
-  while (rd_kafka_outq_len(rk_) > 0)
-    rd_kafka_poll(rk_, 10);
-  rd_kafka_destroy(rk_);
-
-  return static_cast<RdKafka::ErrorCode>(err);
+  return static_cast<RdKafka::ErrorCode>(rd_kafka_consumer_close(rk_));
 }
 
 
+
+
+RdKafka::ConsumerGroupMetadata::~ConsumerGroupMetadata () {}
 

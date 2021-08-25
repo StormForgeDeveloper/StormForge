@@ -52,13 +52,13 @@
 #include "rd.h"
 #include "rdtime.h"
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 #include "../win32/wingetopt.h"
 #include "../win32/wintime.h"
 #endif
 
 
-static int run = 1;
+static volatile sig_atomic_t run = 1;
 static int forever = 1;
 static rd_ts_t dispintvl = 1000;
 static int do_seq = 0;
@@ -339,33 +339,66 @@ static void msg_consume (rd_kafka_message_t *rkmessage, void *opaque) {
 
 
 static void rebalance_cb (rd_kafka_t *rk,
-			  rd_kafka_resp_err_t err,
-			  rd_kafka_topic_partition_list_t *partitions,
-			  void *opaque) {
+                          rd_kafka_resp_err_t err,
+                          rd_kafka_topic_partition_list_t *partitions,
+                          void *opaque) {
+        rd_kafka_error_t *error = NULL;
+        rd_kafka_resp_err_t ret_err = RD_KAFKA_RESP_ERR_NO_ERROR;
 
-	switch (err)
-	{
-	case RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS:
-		fprintf(stderr,
-			"%% Group rebalanced: %d partition(s) assigned\n",
-			partitions->cnt);
-		eof_cnt = 0;
-		partition_cnt = partitions->cnt;
-		rd_kafka_assign(rk, partitions);
-		break;
+        if (exit_eof &&
+            !strcmp(rd_kafka_rebalance_protocol(rk), "COOPERATIVE"))
+                fprintf(stderr, "%% This example has not been modified to "
+                        "support -e (exit on EOF) when "
+                        "partition.assignment.strategy "
+                        "is set to an incremental/cooperative strategy: "
+                        "-e will not behave as expected\n");
 
-	case RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS:
-		fprintf(stderr,
-			"%% Group rebalanced: %d partition(s) revoked\n",
-			partitions->cnt);
-		eof_cnt = 0;
-		partition_cnt = 0;
-		rd_kafka_assign(rk, NULL);
-		break;
+        switch (err)
+        {
+        case RD_KAFKA_RESP_ERR__ASSIGN_PARTITIONS:
+                fprintf(stderr,
+                        "%% Group rebalanced (%s): "
+                        "%d new partition(s) assigned\n",
+                        rd_kafka_rebalance_protocol(rk), partitions->cnt);
 
-	default:
-		break;
-	}
+                if (!strcmp(rd_kafka_rebalance_protocol(rk), "COOPERATIVE")) {
+                        error = rd_kafka_incremental_assign(rk, partitions);
+                } else {
+                        ret_err = rd_kafka_assign(rk, partitions);
+                        eof_cnt = 0;
+                }
+
+                partition_cnt += partitions->cnt;
+                break;
+
+        case RD_KAFKA_RESP_ERR__REVOKE_PARTITIONS:
+                fprintf(stderr,
+                        "%% Group rebalanced (%s): %d partition(s) revoked\n",
+                        rd_kafka_rebalance_protocol(rk), partitions->cnt);
+
+                if (!strcmp(rd_kafka_rebalance_protocol(rk), "COOPERATIVE")) {
+                        error = rd_kafka_incremental_unassign(rk, partitions);
+                        partition_cnt -= partitions->cnt;
+                } else {
+                        ret_err = rd_kafka_assign(rk, NULL);
+                        partition_cnt = 0;
+                }
+
+                eof_cnt = 0; /* FIXME: Not correct for incremental case */
+                break;
+
+        default:
+                break;
+        }
+
+        if (error) {
+                fprintf(stderr, "%% incremental assign failure: %s\n",
+                        rd_kafka_error_string(error));
+                rd_kafka_error_destroy(error);
+        } else if (ret_err) {
+                fprintf(stderr, "%% assign failure: %s\n",
+                        rd_kafka_err2str(ret_err));
+        }
 }
 
 
@@ -667,8 +700,7 @@ static void sig_usr1 (int sig) {
  * @brief Read config from file
  * @returns -1 on error, else 0.
  */
-static int read_conf_file (rd_kafka_conf_t *conf,
-                           rd_kafka_topic_conf_t *tconf, const char *path) {
+static int read_conf_file (rd_kafka_conf_t *conf, const char *path) {
         FILE *fp;
         char buf[512];
         int line = 0;
@@ -706,15 +738,8 @@ static int read_conf_file (rd_kafka_conf_t *conf,
 
                 *(t++) = '\0';
 
-                /* Try property on topic config first */
-                if (tconf)
-                        r = rd_kafka_topic_conf_set(tconf, s, t,
-                                                    errstr, sizeof(errstr));
-
                 /* Try global config */
-                if (r == RD_KAFKA_CONF_UNKNOWN)
-                        r = rd_kafka_conf_set(conf, s, t,
-                                              errstr, sizeof(errstr));
+                r = rd_kafka_conf_set(conf, s, t, errstr, sizeof(errstr));
 
                 if (r == RD_KAFKA_CONF_OK)
                         continue;
@@ -774,7 +799,7 @@ static rd_kafka_resp_err_t do_produce (rd_kafka_t *rk,
  */
 static void do_sleep (int sleep_us) {
         if (sleep_us > 100) {
-#ifdef _MSC_VER
+#ifdef _WIN32
                 Sleep(sleep_us / 1000);
 #else
                 usleep(sleep_us);
@@ -806,7 +831,6 @@ int main (int argc, char **argv) {
         rd_kafka_t *rk;
 	rd_kafka_topic_t *rkt;
 	rd_kafka_conf_t *conf;
-	rd_kafka_topic_conf_t *topic_conf;
 	rd_kafka_queue_t *rkqu = NULL;
 	const char *compression = "no";
 	int64_t start_offset = 0;
@@ -836,11 +860,10 @@ int main (int argc, char **argv) {
 	rd_kafka_conf_set(conf, "internal.termination.signal", tmp, NULL, 0);
 #endif
 
-	/* Producer config */
-	rd_kafka_conf_set(conf, "queue.buffering.max.messages", "500000",
-			  NULL, 0);
-	rd_kafka_conf_set(conf, "message.send.max.retries", "3", NULL, 0);
-	rd_kafka_conf_set(conf, "retry.backoff.ms", "500", NULL, 0);
+        /* Producer config */
+        rd_kafka_conf_set(conf, "linger.ms", "1000", NULL, 0);
+        rd_kafka_conf_set(conf, "message.send.max.retries", "3", NULL, 0);
+        rd_kafka_conf_set(conf, "retry.backoff.ms", "500", NULL, 0);
 
 	/* Consumer config */
 	/* Tell rdkafka to (try to) maintain 1M messages
@@ -852,18 +875,14 @@ int main (int argc, char **argv) {
 	 */
 	rd_kafka_conf_set(conf, "queued.min.messages", "1000000", NULL, 0);
 	rd_kafka_conf_set(conf, "session.timeout.ms", "6000", NULL, 0);
-
-	/* Kafka topic configuration */
-	topic_conf = rd_kafka_topic_conf_new();
-	rd_kafka_topic_conf_set(topic_conf, "auto.offset.reset", "earliest",
-				NULL, 0);
+        rd_kafka_conf_set(conf, "auto.offset.reset", "earliest", NULL, 0);
 
 	topics = rd_kafka_topic_partition_list_new(1);
 
 	while ((opt =
 		getopt(argc, argv,
 		       "PCG:t:p:b:s:k:c:fi:MDd:m:S:x:"
-                       "R:a:z:o:X:B:eT:Y:qvIur:lA:OwNHH:")) != -1) {
+                       "R:a:z:o:X:B:eT:Y:qvIur:lA:OwNH:")) != -1) {
 		switch (opt) {
 		case 'G':
 			if (rd_kafka_conf_set(conf, "group.id", optarg,
@@ -919,10 +938,10 @@ int main (int argc, char **argv) {
 			seed = atoi(optarg);
 			break;
 		case 'a':
-			if (rd_kafka_topic_conf_set(topic_conf,
-						    "request.required.acks",
-						    optarg,
-						    errstr, sizeof(errstr)) !=
+			if (rd_kafka_conf_set(conf,
+                                              "acks",
+                                              optarg,
+                                              errstr, sizeof(errstr)) !=
 			    RD_KAFKA_CONF_OK) {
 				fprintf(stderr, "%% %s\n", errstr);
 				exit(1);
@@ -962,37 +981,32 @@ int main (int argc, char **argv) {
 		case 'd':
 			debug = optarg;
 			break;
-                case 'H':
-                {
-                        char *name, *val;
-                        size_t name_sz = -1;
+        case 'H':
+            if (!strcmp(optarg, "parse"))
+                read_hdrs = 1;
+            else {
+                char *name, *val;
+                size_t name_sz = -1;
 
-                        if (!optarg) {
-                                read_hdrs = 1;
-                                break;
-                        }
-
-                        name = optarg;
-                        val = strchr(name, '=');
-                        if (val) {
-                                name_sz = (size_t)(val-name);
-                                val++; /* past the '=' */
-                        }
-
-                        if (!hdrs)
-                                hdrs = rd_kafka_headers_new(8);
-
-                        err = rd_kafka_header_add(hdrs, name, name_sz, val, -1);
-                        if (err) {
-                                fprintf(stderr,
-                                        "%% Failed to add header %s: %s\n",
-                                        name, rd_kafka_err2str(err));
-                                exit(1);
-                        }
-
-                        read_hdrs = 1;
+                name = optarg;
+                val = strchr(name, '=');
+                if (val) {
+                        name_sz = (size_t)(val-name);
+                        val++; /* past the '=' */
                 }
-                break;
+
+                if (!hdrs)
+                        hdrs = rd_kafka_headers_new(8);
+
+                err = rd_kafka_header_add(hdrs, name, name_sz, val, -1);
+                if (err) {
+                        fprintf(stderr,
+                                "%% Failed to add header %s: %s\n",
+                                name, rd_kafka_err2str(err));
+                        exit(1);
+                }
+            }
+            break;
 		case 'X':
 		{
 			char *name, *val;
@@ -1020,26 +1034,13 @@ int main (int argc, char **argv) {
 			val++;
 
                         if (!strcmp(name, "file")) {
-                                if (read_conf_file(conf, topic_conf, val) == -1)
+                                if (read_conf_file(conf, val) == -1)
                                         exit(1);
                                 break;
                         }
 
-			res = RD_KAFKA_CONF_UNKNOWN;
-			/* Try "topic." prefixed properties on topic
-			 * conf first, and then fall through to global if
-			 * it didnt match a topic configuration property. */
-			if (!strncmp(name, "topic.", strlen("topic.")))
-				res = rd_kafka_topic_conf_set(topic_conf,
-							      name+
-							      strlen("topic."),
-							      val,
-							      errstr,
-							      sizeof(errstr));
-
-			if (res == RD_KAFKA_CONF_UNKNOWN)
-				res = rd_kafka_conf_set(conf, name, val,
-							errstr, sizeof(errstr));
+                        res = rd_kafka_conf_set(conf, name, val,
+                                                errstr, sizeof(errstr));
 
 			if (res != RD_KAFKA_CONF_OK) {
 				fprintf(stderr, "%% %s\n", errstr);
@@ -1131,8 +1132,8 @@ int main (int argc, char **argv) {
 			"  -b <brokers> Broker address list (host[:port],..)\n"
 			"  -s <size>    Message size (producer)\n"
 			"  -k <key>     Message key (producer)\n"
-                        "  -H <name[=value]> Add header to message (producer)\n"
-                        "  -H           Read message headers (consumer)\n"
+            "  -H <name[=value]> Add header to message (producer)\n"
+            "  -H parse     Read message headers (consumer)\n"
 			"  -c <cnt>     Messages to transmit/receive\n"
 			"  -x <cnt>     Hard exit after transmitting <cnt> messages (producer)\n"
 			"  -D           Copy/Duplicate data buffer (producer)\n"
@@ -1152,8 +1153,6 @@ int main (int argc, char **argv) {
 			"               %s\n"
 			"  -X <prop=name> Set arbitrary librdkafka "
 			"configuration property\n"
-			"               Properties prefixed with \"topic.\" "
-			"will be set on topic object.\n"
                         "  -X file=<path> Read config from file.\n"
                         "  -X list      Show full list of supported properties.\n"
                         "  -X dump      Show configuration\n"
@@ -1240,10 +1239,21 @@ int main (int argc, char **argv) {
                                 arr = rd_kafka_conf_dump(conf, &cnt);
                                 printf("# Global config\n");
                         } else {
-                                printf("# Topic config\n");
-                                arr = rd_kafka_topic_conf_dump(topic_conf,
-                                                               &cnt);
+                                rd_kafka_topic_conf_t *topic_conf =
+                                        rd_kafka_conf_get_default_topic_conf(
+                                                conf);
+
+                                if (topic_conf) {
+                                        printf("# Topic config\n");
+                                        arr = rd_kafka_topic_conf_dump(
+                                                topic_conf, &cnt);
+                                } else {
+                                        arr = NULL;
+                                }
                         }
+
+                        if (!arr)
+                                continue;
 
                         for (i = 0 ; i < (int)cnt ; i += 2)
                                 printf("%s = %s\n",
@@ -1263,9 +1273,15 @@ int main (int argc, char **argv) {
         if (stats_intvlstr) {
                 /* User enabled stats (-T) */
 
-#ifndef _MSC_VER
+#ifndef _WIN32
                 if (stats_cmd) {
-                        if (!(stats_fp = popen(stats_cmd, "we"))) {
+                        if (!(stats_fp = popen(stats_cmd,
+#ifdef __linux__
+                                               "we"
+#else
+                                               "w"
+#endif
+                                               ))) {
                                 fprintf(stderr,
                                         "%% Failed to start stats command: "
                                         "%s: %s", stats_cmd, strerror(errno));
@@ -1287,6 +1303,24 @@ int main (int argc, char **argv) {
         if (mode == 'C' || mode == 'G')
                 rd_kafka_conf_set(conf, "enable.partition.eof", "true",
                                   NULL, 0);
+
+        if (read_hdrs && mode == 'P') {
+                fprintf(stderr, "%% producer can not read headers\n");
+                exit(1);
+        }
+
+        if (hdrs && mode != 'P') {
+                fprintf(stderr, "%% consumer can not add headers\n");
+                exit(1);
+        }
+
+        /* Set bootstrap servers */
+        if (brokers &&
+            rd_kafka_conf_set(conf, "bootstrap.servers", brokers,
+                              errstr, sizeof(errstr)) != RD_KAFKA_CONF_OK) {
+                fprintf(stderr, "%% %s\n", errstr);
+                exit(1);
+        }
 
 	if (mode == 'P') {
 		/*
@@ -1345,14 +1379,8 @@ int main (int argc, char **argv) {
 
                 global_rk = rk;
 
-		/* Add broker(s) */
-		if (brokers && rd_kafka_brokers_add(rk, brokers) < 1) {
-			fprintf(stderr, "%% No valid brokers specified\n");
-			exit(1);
-		}
-
 		/* Explicitly create topic to avoid per-msg lookups. */
-		rkt = rd_kafka_topic_new(rk, topic, topic_conf);
+		rkt = rd_kafka_topic_new(rk, topic, NULL);
 
 
                 if (rate_sleep && verbosity >= 2)
@@ -1506,14 +1534,8 @@ int main (int argc, char **argv) {
 
                 global_rk = rk;
 
-		/* Add broker(s) */
-		if (brokers && rd_kafka_brokers_add(rk, brokers) < 1) {
-			fprintf(stderr, "%% No valid brokers specified\n");
-			exit(1);
-		}
-
 		/* Create topic to consume from */
-		rkt = rd_kafka_topic_new(rk, topic, topic_conf);
+		rkt = rd_kafka_topic_new(rk, topic, NULL);
 
 		/* Batch consumer */
 		if (batch_size)
@@ -1543,7 +1565,6 @@ int main (int argc, char **argv) {
 			fetch_latency = rd_clock();
 
 			if (batch_size) {
-				int i;
 				int partition = partitions ? partitions[0] :
 				    RD_KAFKA_PARTITION_UA;
 
@@ -1553,7 +1574,7 @@ int main (int argc, char **argv) {
 							   rkmessages,
 							   batch_size);
 				if (r != -1) {
-					for (i = 0 ; i < r ; i++) {
+					for (i = 0 ; (ssize_t)i < r ; i++) {
 						msg_consume(rkmessages[i],
 							NULL);
 						rd_kafka_message_destroy(
@@ -1611,10 +1632,8 @@ int main (int argc, char **argv) {
 		/*
 		 * High-level balanced Consumer
 		 */
-		rd_kafka_resp_err_t err;
 
 		rd_kafka_conf_set_rebalance_cb(conf, rebalance_cb);
-		rd_kafka_conf_set_default_topic_conf(conf, topic_conf);
 
 		/* Create Kafka handle */
 		if (!(rk = rd_kafka_new(RD_KAFKA_CONSUMER, conf,
@@ -1629,12 +1648,6 @@ int main (int argc, char **argv) {
 		rd_kafka_poll_set_consumer(rk);
 
                 global_rk = rk;
-
-		/* Add broker(s) */
-		if (brokers && rd_kafka_brokers_add(rk, brokers) < 1) {
-			fprintf(stderr, "%% No valid brokers specified\n");
-			exit(1);
-		}
 
 		err = rd_kafka_subscribe(rk, topics);
 		if (err) {
@@ -1692,7 +1705,7 @@ int main (int argc, char **argv) {
 		fclose(latency_fp);
 
         if (stats_fp) {
-#ifndef _MSC_VER
+#ifndef _WIN32
                 pclose(stats_fp);
 #endif
                 stats_fp = NULL;

@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 #
 #
 # NuGet release packaging tool.
@@ -6,8 +6,10 @@
 #
 
 
+import os
 import sys
 import argparse
+import time
 import packaging
 
 
@@ -26,10 +28,15 @@ if __name__ == '__main__':
     parser.add_argument("--no-cleanup", help="Don't clean up temporary folders", action="store_true")
     parser.add_argument("--sha", help="Also match on this git sha1", default=None)
     parser.add_argument("--nuget-version", help="The nuget package version (defaults to same as tag)", default=None)
+    parser.add_argument("--upload", help="Upload package to after building, using provided NuGet API key (either file or the key itself)", default=None,
+                        type=str)
+    parser.add_argument("--class", help="Packaging class (see packaging.py)", default="NugetPackage", dest="pkgclass")
+    parser.add_argument("--retries", help="Number of retries to collect artifacts", default=0, type=int)
     parser.add_argument("tag", help="Git tag to collect")
 
     args = parser.parse_args()
     dry_run = args.dry_run
+    retries = args.retries
     if not args.directory:
         args.directory = 'dl-%s' % args.tag
 
@@ -37,37 +44,58 @@ if __name__ == '__main__':
     if args.sha is not None:
         match['sha'] = args.sha
 
+    pkgclass = getattr(packaging, args.pkgclass)
+
+    try:
+        match.update(getattr(pkgclass, 'match'))
+    except:
+        pass
+
     arts = packaging.Artifacts(match, args.directory)
 
     # Collect common local artifacts, such as support files.
     arts.collect_local('common', req_tag=False)
 
-    if not args.no_s3:
-        arts.collect_s3()
-    else:
-        arts.collect_local(arts.dlpath)
+    while True:
+        if not args.no_s3:
+            arts.collect_s3()
+        else:
+            arts.collect_local(arts.dlpath)
 
-    if len(arts.artifacts) == 0:
-        raise ValueError('No artifacts found for %s' % match)
+        if len(arts.artifacts) == 0:
+            raise ValueError('No artifacts found for %s' % match)
 
-    print('Collected artifacts:')
-    for a in arts.artifacts:
-        print(' %s' % a.lpath)
-    print('')
+        print('Collected artifacts (%s):' % (arts.dlpath))
+        for a in arts.artifacts:
+            print(' %s' % a.lpath)
+        print('')
 
-    package_version = match['tag']
-    if args.nuget_version is not None:
-        package_version = args.nuget_version
+        package_version = match['tag']
+        if args.nuget_version is not None:
+            package_version = args.nuget_version
 
-    print('')
+        print('')
 
-    if dry_run:
-        sys.exit(0)
+        if dry_run:
+            sys.exit(0)
 
-    print('Building packages:')
+        print('Building packages:')
 
-    p = packaging.NugetPackage(package_version, arts)
-    pkgfile = p.build(buildtype='release')
+        try:
+            p = pkgclass(package_version, arts)
+            pkgfile = p.build(buildtype='release')
+            break
+        except packaging.MissingArtifactError as e:
+            if retries <= 0 or args.no_s3:
+                if not args.no_cleanup:
+                    p.cleanup()
+                raise e
+
+            p.cleanup()
+            retries -= 1
+            print(e)
+            print('Retrying in 30 seconds')
+            time.sleep(30)
 
     if not args.no_cleanup:
         p.cleanup()
@@ -79,5 +107,17 @@ if __name__ == '__main__':
     if not p.verify(pkgfile):
         print('Package failed verification.')
         sys.exit(1)
-    else:
-        print('Created package: %s' % pkgfile)
+
+    print('Created package: %s' % pkgfile)
+
+    if args.upload is not None:
+        if os.path.isfile(args.upload):
+            with open(args.upload, 'r') as f:
+                nuget_key = f.read().replace('\n', '')
+        else:
+            nuget_key = args.upload
+
+        print('Uploading %s to NuGet' % pkgfile)
+        r = os.system("./push-to-nuget.sh '%s' %s" % (nuget_key, pkgfile))
+        assert int(r) == 0, "NuGet upload failed with exit code {}, see previous errors".format(r)
+        print('%s successfully uploaded to NuGet' % pkgfile)

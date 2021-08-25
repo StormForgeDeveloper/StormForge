@@ -33,7 +33,7 @@
 #include "rdkafka_sasl_int.h"
 #include "rdstring.h"
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__OpenBSD__)
 #include <sys/wait.h>  /* For WIF.. */
 #endif
 
@@ -57,6 +57,8 @@ static mtx_t rd_kafka_sasl_cyrus_kinit_lock;
  */
 typedef struct rd_kafka_sasl_cyrus_handle_s {
         rd_kafka_timer_t kinit_refresh_tmr;
+        rd_atomic32_t ready; /**< First kinit command has finished, or there
+                              *   is no kinit command. */
 } rd_kafka_sasl_cyrus_handle_t;
 
 /**
@@ -197,10 +199,12 @@ static ssize_t render_callback (const char *key, char *buf,
  * @locality rdkafka main thread
  */
 static int rd_kafka_sasl_cyrus_kinit_refresh (rd_kafka_t *rk) {
+        rd_kafka_sasl_cyrus_handle_t *handle = rk->rk_sasl.handle;
         int r;
         char *cmd;
         char errstr[128];
         rd_ts_t ts_start;
+        int duration;
 
         /* Build kinit refresh command line using string rendering and config */
         cmd = rd_string_render(rk->rk_conf.sasl.kinit_cmd,
@@ -225,6 +229,21 @@ static int rd_kafka_sasl_cyrus_kinit_refresh (rd_kafka_t *rk) {
         mtx_lock(&rd_kafka_sasl_cyrus_kinit_lock);
         r = system(cmd);
         mtx_unlock(&rd_kafka_sasl_cyrus_kinit_lock);
+
+        duration = (int)((rd_clock() - ts_start) / 1000);
+        if (duration > 5000)
+                rd_kafka_log(rk, LOG_WARNING, "SASLREFRESH",
+                             "Slow Kerberos ticket refresh: %dms: %s",
+                             duration, cmd);
+
+        /* Regardless of outcome from the kinit command (it can fail
+         * even if the ticket is available), we now allow broker connections. */
+        if (rd_atomic32_add(&handle->ready, 1) == 1) {
+                rd_kafka_dbg(rk, SECURITY, "SASLREFRESH",
+                             "First kinit command finished: waking up "
+                             "broker threads");
+                rd_kafka_all_brokers_wakeup(rk, RD_KAFKA_BROKER_STATE_INIT);
+        }
 
         if (r == -1) {
                 if (errno == ECHILD) {
@@ -259,8 +278,7 @@ static int rd_kafka_sasl_cyrus_kinit_refresh (rd_kafka_t *rk) {
         rd_free(cmd);
 
         rd_kafka_dbg(rk, SECURITY, "SASLREFRESH",
-                     "Kerberos ticket refreshed in %"PRId64"ms",
-                     (rd_clock() - ts_start) / 1000);
+                     "Kerberos ticket refreshed in %dms", duration);
         return 0;
 }
 
@@ -305,15 +323,29 @@ rd_kafka_sasl_cyrus_cb_getopt (void *context, const char *plugin_name,
         return SASL_OK;
 }
 
-static int rd_kafka_sasl_cyrus_cb_log (void *context, int level, const char *message){
+static int rd_kafka_sasl_cyrus_cb_log (void *context, int level,
+                                       const char *message) {
         rd_kafka_transport_t *rktrans = context;
 
-        if (level >= LOG_DEBUG)
+        /* Provide a more helpful error message in case Kerberos
+         * plugins are missing. */
+        if (strstr(message, "No worthy mechs found") &&
+            strstr(rktrans->rktrans_rkb->rkb_rk->rk_conf.sasl.mechanisms,
+                   "GSSAPI"))
+                message =
+                        "Cyrus/libsasl2 is missing a GSSAPI module: "
+                        "make sure the libsasl2-modules-gssapi-mit or "
+                        "cyrus-sasl-gssapi packages are installed";
+
+        /* Treat the "client step" log messages as debug. */
+        if (level >= LOG_DEBUG ||
+            !strncmp(message, "GSSAPI client step ", 19))
                 rd_rkb_dbg(rktrans->rktrans_rkb, SECURITY, "LIBSASL",
                            "%s", message);
         else
                 rd_rkb_log(rktrans->rktrans_rkb, level, "LIBSASL",
                            "%s", message);
+
         return SASL_OK;
 }
 
@@ -536,6 +568,20 @@ static int rd_kafka_sasl_cyrus_client_new (rd_kafka_transport_t *rktrans,
 
 
 /**
+ * @brief SASL/GSSAPI is ready when at least one kinit command has been
+ *        executed (regardless of exit status).
+ */
+static rd_bool_t rd_kafka_sasl_cyrus_ready (rd_kafka_t *rk) {
+        rd_kafka_sasl_cyrus_handle_t *handle = rk->rk_sasl.handle;
+        if (!rk->rk_conf.sasl.relogin_min_time)
+                return rd_true;
+        if (!handle)
+                return rd_false;
+
+        return rd_atomic32_get(&handle->ready) > 0;
+}
+
+/**
  * @brief Per-client-instance initializer
  */
 static int rd_kafka_sasl_cyrus_init (rd_kafka_t *rk,
@@ -554,8 +600,10 @@ static int rd_kafka_sasl_cyrus_init (rd_kafka_t *rk,
                              rk->rk_conf.sasl.relogin_min_time * 1000ll,
                              rd_kafka_sasl_cyrus_kinit_refresh_tmr_cb, rk);
 
-        /* Acquire or refresh ticket */
-        rd_kafka_sasl_cyrus_kinit_refresh(rk);
+        /* Kick off the timer immediately to refresh the ticket.
+         * (Timer is triggered from the main loop). */
+        rd_kafka_timer_override_once(&rk->rk_timers, &handle->kinit_refresh_tmr,
+                                     0/*immediately*/);
 
         return 0;
 }
@@ -641,5 +689,6 @@ const struct rd_kafka_sasl_provider rd_kafka_sasl_cyrus_provider = {
         .client_new    = rd_kafka_sasl_cyrus_client_new,
         .recv          = rd_kafka_sasl_cyrus_recv,
         .close         = rd_kafka_sasl_cyrus_close,
+        .ready         = rd_kafka_sasl_cyrus_ready,
         .conf_validate = rd_kafka_sasl_cyrus_conf_validate
 };

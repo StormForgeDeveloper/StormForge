@@ -45,8 +45,8 @@ static const char *rd_kafka_feature_names[] = {
         "MsgVer2",
         "IdempotentProducer",
         "ZSTD",
-        "UnitTest",
         "SaslAuthReq",
+        "UnitTest",
         NULL
 };
 
@@ -89,7 +89,6 @@ static const struct rd_kafka_feature_map {
                 },
         },
 	{
-		
 		/* @brief >=0.10.0: ApiVersionQuery support.
 		 * @remark This is a bit of chicken-and-egg problem but needs to be
 		 *         set by feature_check() to avoid the feature being cleared
@@ -172,7 +171,7 @@ static const struct rd_kafka_feature_map {
                  * Time-based offset requests */
                 .feature = RD_KAFKA_FEATURE_OFFSET_TIME,
                 .depends = {
-                        { RD_KAFKAP_Offset, 1, 1 },
+                        { RD_KAFKAP_ListOffsets, 1, 1 },
                         { -1 },
                 }
         },
@@ -222,7 +221,7 @@ static struct rd_kafka_ApiVersion rd_kafka_ApiVersion_Queryable[] = {
 static struct rd_kafka_ApiVersion rd_kafka_ApiVersion_0_9_0[] = {
 	{ RD_KAFKAP_Produce, 0, 1 },
 	{ RD_KAFKAP_Fetch, 0, 1 },
-	{ RD_KAFKAP_Offset, 0, 0 },
+	{ RD_KAFKAP_ListOffsets, 0, 0 },
 	{ RD_KAFKAP_Metadata, 0, 0 },
 	{ RD_KAFKAP_OffsetCommit, 0, 2 },
 	{ RD_KAFKAP_OffsetFetch, 0, 1 },
@@ -239,7 +238,7 @@ static struct rd_kafka_ApiVersion rd_kafka_ApiVersion_0_9_0[] = {
 static struct rd_kafka_ApiVersion rd_kafka_ApiVersion_0_8_2[] = {
 	{ RD_KAFKAP_Produce, 0, 0 },
 	{ RD_KAFKAP_Fetch, 0, 0 },
-	{ RD_KAFKAP_Offset, 0, 0 },
+	{ RD_KAFKAP_ListOffsets, 0, 0 },
 	{ RD_KAFKAP_Metadata, 0, 0 },
 	{ RD_KAFKAP_OffsetCommit, 0, 1 },
 	{ RD_KAFKAP_OffsetFetch, 0, 1 },
@@ -250,7 +249,7 @@ static struct rd_kafka_ApiVersion rd_kafka_ApiVersion_0_8_2[] = {
 static struct rd_kafka_ApiVersion rd_kafka_ApiVersion_0_8_1[] = {
 	{ RD_KAFKAP_Produce, 0, 0 },
 	{ RD_KAFKAP_Fetch, 0, 0 },
-	{ RD_KAFKAP_Offset, 0, 0 },
+	{ RD_KAFKAP_ListOffsets, 0, 0 },
 	{ RD_KAFKAP_Metadata, 0, 0 },
 	{ RD_KAFKAP_OffsetCommit, 0, 1 },
 	{ RD_KAFKAP_OffsetFetch, 0, 0 }
@@ -260,7 +259,7 @@ static struct rd_kafka_ApiVersion rd_kafka_ApiVersion_0_8_1[] = {
 static struct rd_kafka_ApiVersion rd_kafka_ApiVersion_0_8_0[] = {
 	{ RD_KAFKAP_Produce, 0, 0 },
 	{ RD_KAFKAP_Fetch, 0, 0 },
-	{ RD_KAFKAP_Offset, 0, 0 },
+	{ RD_KAFKAP_ListOffsets, 0, 0 },
 	{ RD_KAFKAP_Metadata, 0, 0 }
 };
 

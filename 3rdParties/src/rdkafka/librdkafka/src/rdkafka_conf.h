@@ -32,6 +32,9 @@
 #include "rdlist.h"
 #include "rdkafka_cert.h"
 
+#if WITH_SSL && OPENSSL_VERSION_NUMBER >= 0x10100000
+#include <openssl/engine.h>
+#endif /* WITH_SSL && OPENSSL_VERSION_NUMBER >= 0x10100000 */
 
 /**
  * Forward declarations
@@ -64,7 +67,7 @@ rd_kafka_compression2str (rd_kafka_compression_t compr) {
         };
         static RD_TLS char ret[32];
 
-        if (compr < 0 || compr >= RD_KAFKA_COMPRESSION_NUM) {
+        if ((int)compr < 0 || compr >= RD_KAFKA_COMPRESSION_NUM) {
                 rd_snprintf(ret, sizeof(ret),
                             "codec0x%x?", (int)compr);
                 return ret;
@@ -156,7 +159,7 @@ typedef enum {
 
 /* Increase in steps of 64 as needed.
  * This must be larger than sizeof(rd_kafka_[topic_]conf_t) */
-#define RD_KAFKA_CONF_PROPS_IDX_MAX (64*26)
+#define RD_KAFKA_CONF_PROPS_IDX_MAX (64*28)
 
 /**
  * @struct rd_kafka_anyconf_t
@@ -193,6 +196,7 @@ struct rd_kafka_conf_s {
 	int     metadata_refresh_fast_interval_ms;
         int     metadata_refresh_sparse;
         int     metadata_max_age_ms;
+        int     metadata_propagation_max_ms;
 	int     debug;
 	int     broker_addr_ttl;
         int     broker_addr_family;
@@ -210,6 +214,7 @@ struct rd_kafka_conf_s {
         int     reconnect_backoff_ms;
         int     reconnect_backoff_max_ms;
         int     reconnect_jitter_ms;
+        int     connections_max_idle_ms;
         int     sparse_connections;
         int     sparse_connect_intvl;
 	int     api_version_request;
@@ -218,14 +223,13 @@ struct rd_kafka_conf_s {
 	char   *broker_version_fallback;
 	rd_kafka_secproto_t security_protocol;
 
-#if WITH_SSL
         struct {
+#if WITH_SSL
                 SSL_CTX *ctx;
+#endif
                 char *cipher_suites;
-#if OPENSSL_VERSION_NUMBER >= 0x1000200fL && !defined(LIBRESSL_VERSION_NUMBER)
                 char *curves_list;
                 char *sigalgs_list;
-#endif
                 char *key_location;
                 char *key_pem;
                 rd_kafka_cert_t *key;
@@ -235,7 +239,15 @@ struct rd_kafka_conf_s {
                 rd_kafka_cert_t *cert;
                 char *ca_location;
                 rd_kafka_cert_t *ca;
+                /** CSV list of Windows certificate stores */
+                char *ca_cert_stores;
                 char *crl_location;
+#if WITH_SSL && OPENSSL_VERSION_NUMBER >= 0x10100000
+                ENGINE *engine;
+#endif
+                char *engine_location;
+                char *engine_id;
+                void *engine_callback_data;
                 char *keystore_location;
                 char *keystore_password;
                 int   endpoint_identification;
@@ -249,7 +261,6 @@ struct rd_kafka_conf_s {
                                        char *errstr, size_t errstr_size,
                                        void *opaque);
         } ssl;
-#endif
 
         struct {
                 const struct rd_kafka_sasl_provider *provider;
@@ -271,20 +282,17 @@ struct rd_kafka_conf_s {
                 /* Hash size */
                 size_t         scram_H_size;
 #endif
-#if WITH_SASL_OAUTHBEARER
                 char *oauthbearer_config;
                 int   enable_oauthbearer_unsecure_jwt;
-
                 /* SASL/OAUTHBEARER token refresh event callback */
                 void (*oauthbearer_token_refresh_cb) (
                         rd_kafka_t *rk,
                         const char *oauthbearer_config,
                         void *opaque);
-#endif
         } sasl;
 
-#if WITH_PLUGINS
         char *plugin_paths;
+#if WITH_PLUGINS
         rd_list_t plugins;
 #endif
 
@@ -302,6 +310,7 @@ struct rd_kafka_conf_s {
                 rd_list_t on_consume;         /* .. (copied) */
                 rd_list_t on_commit;          /* .. (copied) */
                 rd_list_t on_request_sent;    /* .. (copied) */
+                rd_list_t on_response_received;/* .. (copied) */
                 rd_list_t on_thread_start;    /* .. (copied) */
                 rd_list_t on_thread_exit;     /* .. (copied) */
 
@@ -329,6 +338,7 @@ struct rd_kafka_conf_s {
 	int    fetch_error_backoff_ms;
         char  *group_id_str;
         char  *group_instance_id;
+        int    allow_auto_create_topics;
 
         rd_kafka_pattern_list_t *topic_blacklist;
         struct rd_kafka_topic_conf_s *topic_conf; /* Default topic config
@@ -343,7 +353,6 @@ struct rd_kafka_conf_s {
         char *partition_assignment_strategy;
         rd_list_t partition_assignors;
 	int enabled_assignor_cnt;
-        struct rd_kafka_assignor_s *assignor;
 
         void (*rebalance_cb) (rd_kafka_t *rk,
                               rd_kafka_resp_err_t err,
@@ -367,10 +376,18 @@ struct rd_kafka_conf_s {
 	 * Producer configuration
 	 */
         struct {
+                /*
+                 * Idempotence
+                 */
                 int    idempotence;  /**< Enable Idempotent Producer */
                 rd_bool_t gapless;   /**< Raise fatal error if
                                       *   gapless guarantee can't be
                                       *   satisfied. */
+                /*
+                 * Transactions
+                 */
+                char *transactional_id;       /**< Transactional Id */
+                int   transaction_timeout_ms; /**< Transaction timeout */
         } eos;
 	int    queue_buffering_max_msgs;
 	int    queue_buffering_max_kbytes;
@@ -380,8 +397,10 @@ struct rd_kafka_conf_s {
 	int    max_retries;
 	int    retry_backoff_ms;
 	int    batch_num_messages;
+        int    batch_size;
 	rd_kafka_compression_t compression_codec;
-	int    dr_err_only;
+        int    dr_err_only;
+        int    sticky_partition_linger_ms;
 
 	/* Message delivery report callback.
 	 * Called once for each produced message, either on
@@ -418,6 +437,9 @@ struct rd_kafka_conf_s {
         int    log_queue;
         int    log_thread_name;
         int    log_connection_close;
+
+        /* PRNG seeding */
+        int    enable_random_seed;
 
         /* Error callback */
 	void (*error_cb) (rd_kafka_t *rk, int err,
@@ -487,12 +509,21 @@ struct rd_kafka_conf_s {
                         uint64_t msgid,
                         rd_kafka_resp_err_t err);
         } ut;
+
+        char *sw_name;    /**< Software/client name */
+        char *sw_version; /**< Software/client version */
+
+        struct {
+                /** Properties on (implicit pass-thru) default_topic_conf were
+                 *  overwritten by passing an explicit default_topic_conf. */
+                rd_bool_t default_topic_conf_overwritten;
+        } warn;
 };
 
 int rd_kafka_socket_cb_linux (int domain, int type, int protocol, void *opaque);
 int rd_kafka_socket_cb_generic (int domain, int type, int protocol,
                                 void *opaque);
-#ifndef _MSC_VER
+#ifndef _WIN32
 int rd_kafka_open_cb_linux (const char *pathname, int flags, mode_t mode,
                             void *opaque);
 #endif
@@ -514,6 +545,9 @@ struct rd_kafka_topic_conf_s {
 				void *rkt_opaque,
 				void *msg_opaque);
         char   *partitioner_str;
+
+        rd_bool_t random_partitioner; /**< rd_true - random
+                                        *  rd_false - sticky */
 
         int queuing_strategy; /* RD_KAFKA_QUEUE_FIFO|LIFO */
         int (*msg_order_cmp) (const void *a, const void *b);
@@ -539,6 +573,9 @@ struct rd_kafka_topic_conf_s {
 
 void rd_kafka_anyconf_destroy (int scope, void *conf);
 
+rd_bool_t rd_kafka_conf_is_modified (const rd_kafka_conf_t *conf,
+                                     const char *name);
+
 void rd_kafka_desensitize_str (char *str);
 
 void rd_kafka_conf_desensitize (rd_kafka_conf_t *conf);
@@ -547,12 +584,14 @@ void rd_kafka_topic_conf_desensitize (rd_kafka_topic_conf_t *tconf);
 const char *rd_kafka_conf_finalize (rd_kafka_type_t cltype,
                                     rd_kafka_conf_t *conf);
 const char *rd_kafka_topic_conf_finalize (rd_kafka_type_t cltype,
-                                          rd_kafka_conf_t *conf,
+                                          const rd_kafka_conf_t *conf,
                                           rd_kafka_topic_conf_t *tconf);
 
 
 int rd_kafka_conf_warn (rd_kafka_t *rk);
 
+void rd_kafka_anyconf_dump_dbg (rd_kafka_t *rk, int scope, const void *conf,
+                                const char *description);
 
 #include "rdkafka_confval.h"
 

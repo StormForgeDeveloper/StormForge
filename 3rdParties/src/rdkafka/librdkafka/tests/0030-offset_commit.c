@@ -38,7 +38,7 @@
  *   enable.auto.commit, enable.auto.offset.store, async
  */
 
-static const char *topic;
+static char *topic;
 static const int msgcnt = 100;
 static const int partition = 0;
 static uint64_t testid;
@@ -98,7 +98,7 @@ static void offset_commit_cb (rd_kafka_t *rk, rd_kafka_resp_err_t err,
 
 
 static void do_offset_test (const char *what, int auto_commit, int auto_store,
-			    int async) {
+			    int async, int subscribe) {
 	test_timing_t t_all;
 	char groupid[64];
 	rd_kafka_t *rk;
@@ -111,7 +111,9 @@ static void do_offset_test (const char *what, int auto_commit, int auto_store,
 	rd_kafka_topic_partition_t *rktpar;
 	int64_t next_offset = -1;
 
-	test_conf_init(&conf, &tconf, 30);
+        SUB_TEST_QUICK("%s", what);
+
+	test_conf_init(&conf, &tconf, subscribe ? 30 : 10);
         test_conf_set(conf, "session.timeout.ms", "6000");
 	test_conf_set(conf, "enable.auto.commit", auto_commit ? "true":"false");
 	test_conf_set(conf, "enable.auto.offset.store", auto_store ?"true":"false");
@@ -121,9 +123,6 @@ static void do_offset_test (const char *what, int auto_commit, int auto_store,
 	test_str_id_generate(groupid, sizeof(groupid));
 	test_conf_set(conf, "group.id", groupid);
 	rd_kafka_conf_set_default_topic_conf(conf, tconf);
-
-	TEST_SAY(_C_MAG "[ do_offset_test: %s with group.id %s ]\n",
-		 what, groupid);
 
 	TIMING_START(&t_all, "%s", what);
 
@@ -147,7 +146,14 @@ static void do_offset_test (const char *what, int auto_commit, int auto_store,
 
 	rd_kafka_poll_set_consumer(rk);
 
-	test_consumer_subscribe(rk, topic);
+        if (subscribe) {
+                test_consumer_subscribe(rk, topic);
+        } else {
+                parts = rd_kafka_topic_partition_list_new(1);
+                rd_kafka_topic_partition_list_add(parts, topic, partition);
+                test_consumer_assign("ASSIGN", rk, parts);
+                rd_kafka_topic_partition_list_destroy(parts);
+        }
 
 	while (cnt - extra_cnt < msgcnt / 2) {
 		rd_kafka_message_t *rkm;
@@ -297,7 +303,14 @@ static void do_offset_test (const char *what, int auto_commit, int auto_store,
 	rk = test_create_handle(RD_KAFKA_CONSUMER, conf);
 	rd_kafka_poll_set_consumer(rk);
 
-	test_consumer_subscribe(rk, topic);
+        if (subscribe) {
+                test_consumer_subscribe(rk, topic);
+        } else {
+                parts = rd_kafka_topic_partition_list_new(1);
+                rd_kafka_topic_partition_list_add(parts, topic, partition);
+                test_consumer_assign("ASSIGN", rk, parts);
+                rd_kafka_topic_partition_list_destroy(parts);
+        }
 
 	while (cnt < msgcnt) {
 		rd_kafka_message_t *rkm;
@@ -327,9 +340,10 @@ static void do_offset_test (const char *what, int auto_commit, int auto_store,
 	TEST_SAY("%s: phase 2: complete\n", what);
 	test_consumer_close(rk);
 	rd_kafka_destroy(rk);
-	
 
 	TIMING_STOP(&t_all);
+
+        SUB_TEST_PASS();
 }
 
 
@@ -382,6 +396,8 @@ static void do_empty_commit (void) {
 	rd_kafka_topic_conf_t *tconf;
 	rd_kafka_resp_err_t err, expect;
 
+        SUB_TEST_QUICK();
+
 	test_conf_init(&conf, &tconf, 20);
 	test_conf_set(conf, "enable.auto.commit", "false");
 	test_topic_conf_set(tconf, "auto.offset.reset", "earliest");
@@ -419,6 +435,8 @@ static void do_empty_commit (void) {
 	test_consumer_close(rk);
 
 	rd_kafka_destroy(rk);
+
+        SUB_TEST_PASS();
 }
 
 
@@ -464,6 +482,8 @@ static void do_nonexist_commit (void) {
 	const char *unk_topic = test_mk_topic_name(__FUNCTION__, 1);
 	rd_kafka_resp_err_t err;
 
+        SUB_TEST_QUICK();
+
 	test_conf_init(&conf, &tconf, 20);
         /* Offset commit deferrals when the broker is down is limited to
          * session.timeout.ms. With 0.9 brokers and api.version.request=true
@@ -499,47 +519,68 @@ static void do_nonexist_commit (void) {
 	test_consumer_close(rk);
 
 	rd_kafka_destroy(rk);
+
+        SUB_TEST_PASS();
 }
 
 
 int main_0030_offset_commit (int argc, char **argv) {
 
-	topic = test_mk_topic_name(__FUNCTION__, 1);
+	topic = rd_strdup(test_mk_topic_name(__FUNCTION__, 1));
 	testid = test_produce_msgs_easy(topic, 0, partition, msgcnt);
+
+        do_empty_commit();
+
+        do_nonexist_commit();
 
 	do_offset_test("AUTO.COMMIT & AUTO.STORE",
 		       1 /* enable.auto.commit */,
 		       1 /* enable.auto.offset.store */,
-		       0 /* not used. */);
-
-	do_offset_test("AUTO.COMMIT & MANUAL.STORE",
-		       1 /* enable.auto.commit */,
-		       0 /* enable.auto.offset.store */,
-		       0 /* not used */);
+		       0 /* not used. */,
+                       1 /* use subscribe */);
 
 	do_offset_test("MANUAL.COMMIT.ASYNC & AUTO.STORE",
 		       0 /* enable.auto.commit */,
 		       1 /* enable.auto.offset.store */,
-		       1 /* async */);
+		       1 /* async */,
+                       1 /* use subscribe */);
+
+        do_offset_test("AUTO.COMMIT.ASYNC & AUTO.STORE & ASSIGN",
+                       1 /* enable.auto.commit */,
+                       1 /* enable.auto.offset.store */,
+                       0 /* not used. */,
+                       0 /* use assign */);
+
+        if (test_quick) {
+                rd_free(topic);
+                return 0;
+        }
+
+	do_offset_test("AUTO.COMMIT & MANUAL.STORE",
+		       1 /* enable.auto.commit */,
+		       0 /* enable.auto.offset.store */,
+		       0 /* not used */,
+                       1 /* use subscribe */);
 
 	do_offset_test("MANUAL.COMMIT.SYNC & AUTO.STORE",
 		       0 /* enable.auto.commit */,
 		       1 /* enable.auto.offset.store */,
-		       0 /* async */);
+		       0 /* async */,
+                       1 /* use subscribe */);
 
 	do_offset_test("MANUAL.COMMIT.ASYNC & MANUAL.STORE",
 		       0 /* enable.auto.commit */,
 		       0 /* enable.auto.offset.store */,
-		       1 /* sync */);
+		       1 /* sync */,
+                       1 /* use subscribe */);
 
 	do_offset_test("MANUAL.COMMIT.SYNC & MANUAL.STORE",
 		       0 /* enable.auto.commit */,
 		       0 /* enable.auto.offset.store */,
-		       0 /* sync */);
+		       0 /* sync */,
+                       1 /* use subscribe */);
 
-	do_empty_commit();
-
-	do_nonexist_commit();
+        rd_free(topic);
 
         return 0;
 }

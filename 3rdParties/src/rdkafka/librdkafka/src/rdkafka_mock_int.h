@@ -36,8 +36,16 @@
 
 
 /**
- * @struct A stack of errors to return to the client, one by one
- *         until the stack is depleted.
+ * @struct Response error and/or RTT-delay to return to client.
+ */
+typedef struct rd_kafka_mock_error_rtt_s {
+        rd_kafka_resp_err_t err; /**< Error response (or 0) */
+        rd_ts_t rtt;             /**< RTT/delay in microseconds (or 0) */
+} rd_kafka_mock_error_rtt_t;
+
+/**
+ * @struct A stack of errors or rtt latencies to return to the client,
+ *         one by one until the stack is depleted.
  */
 typedef struct rd_kafka_mock_error_stack_s {
         TAILQ_ENTRY(rd_kafka_mock_error_stack_s) link;
@@ -45,13 +53,66 @@ typedef struct rd_kafka_mock_error_stack_s {
                           *   applies to, else -1. */
         size_t  cnt;     /**< Current number of errors in .errs */
         size_t  size;    /**< Current allocated size for .errs (in elements) */
-        rd_kafka_resp_err_t *errs;
+        rd_kafka_mock_error_rtt_t *errs; /**< Array of errors/rtts */
 } rd_kafka_mock_error_stack_t;
 
 typedef TAILQ_HEAD(rd_kafka_mock_error_stack_head_s,
                    rd_kafka_mock_error_stack_s)
         rd_kafka_mock_error_stack_head_t;
 
+
+/**
+ * @struct Consumer group protocol name and metadata.
+ */
+typedef struct rd_kafka_mock_cgrp_proto_s {
+        rd_kafkap_str_t *name;
+        rd_kafkap_bytes_t *metadata;
+} rd_kafka_mock_cgrp_proto_t;
+
+/**
+ * @struct Consumer group member
+ */
+typedef struct rd_kafka_mock_cgrp_member_s {
+        TAILQ_ENTRY(rd_kafka_mock_cgrp_member_s) link;
+        char *id;                 /**< MemberId */
+        char *group_instance_id;  /**< Group instance id */
+        rd_ts_t ts_last_activity; /**< Last activity, e.g., Heartbeat */
+        rd_kafka_mock_cgrp_proto_t *protos; /**< Protocol names */
+        int proto_cnt;                   /**< Number of protocols */
+        rd_kafkap_bytes_t *assignment;   /**< Current assignment */
+        rd_kafka_buf_t *resp;            /**< Current response buffer */
+        struct rd_kafka_mock_connection_s *conn; /**< Connection, may be NULL
+                                                  *   if there is no ongoing
+                                                  *   request. */
+} rd_kafka_mock_cgrp_member_t;
+
+/**
+ * @struct Consumer group.
+ */
+typedef struct rd_kafka_mock_cgrp_s {
+        TAILQ_ENTRY(rd_kafka_mock_cgrp_s) link;
+        struct rd_kafka_mock_cluster_s *cluster; /**< Cluster */
+        struct rd_kafka_mock_connection_s *conn; /**< Connection */
+        char *id;               /**< Group Id */
+        char *protocol_type;    /**< Protocol type */
+        char *protocol_name;    /**< Elected protocol name */
+        int32_t generation_id;  /**< Generation Id */
+        int session_timeout_ms; /**< Session timeout */
+        enum {
+                RD_KAFKA_MOCK_CGRP_STATE_EMPTY, /* No members */
+                RD_KAFKA_MOCK_CGRP_STATE_JOINING, /* Members are joining */
+                RD_KAFKA_MOCK_CGRP_STATE_SYNCING, /* Syncing assignments */
+                RD_KAFKA_MOCK_CGRP_STATE_REBALANCING, /* Rebalance triggered */
+                RD_KAFKA_MOCK_CGRP_STATE_UP, /* Group is operational */
+        } state;   /**< Consumer group state */
+        rd_kafka_timer_t session_tmr;    /**< Session timeout timer */
+        rd_kafka_timer_t rebalance_tmr;  /**< Rebalance state timer */
+        TAILQ_HEAD(, rd_kafka_mock_cgrp_member_s) members; /**< Group members */
+        int member_cnt;  /**< Number of group members */
+        int last_member_cnt; /**< Mumber of group members at last election */
+        int assignment_cnt; /**< Number of member assignments in last Sync */
+        rd_kafka_mock_cgrp_member_t *leader; /**< Elected leader */
+} rd_kafka_mock_cgrp_t;
 
 /**
  * @struct A real TCP connection from the client to a mock broker.
@@ -78,10 +139,16 @@ typedef struct rd_kafka_mock_broker_s {
         char    advertised_listener[128];
         int     port;
         char   *rack;
+        rd_bool_t up;
+        rd_ts_t rtt;  /**< RTT in microseconds */
 
         rd_socket_t  listen_s;   /**< listen() socket */
 
         TAILQ_HEAD(, rd_kafka_mock_connection_s) connections;
+
+        /**< Per-protocol request error stack.
+         *   @locks mcluster->lock */
+        rd_kafka_mock_error_stack_head_t errstacks;
 
         struct rd_kafka_mock_cluster_s *cluster;
 } rd_kafka_mock_broker_t;
@@ -164,11 +231,33 @@ typedef struct rd_kafka_mock_topic_s {
         struct rd_kafka_mock_cluster_s *cluster;
 } rd_kafka_mock_topic_t;
 
+/**
+ * @struct Explicitly set coordinator.
+ */
+typedef struct rd_kafka_mock_coord_s {
+        TAILQ_ENTRY(rd_kafka_mock_coord_s) link;
+        rd_kafka_coordtype_t type;
+        char   *key;
+        int32_t broker_id;
+} rd_kafka_mock_coord_t;
+
 
 typedef void (rd_kafka_mock_io_handler_t) (struct rd_kafka_mock_cluster_s
                                            *mcluster,
                                            rd_socket_t fd,
                                            int events, void *opaque);
+
+struct rd_kafka_mock_api_handler {
+        int16_t MinVersion;
+        int16_t MaxVersion;
+        int16_t FlexVersion;  /**< First Flexible version */
+        int (*cb) (rd_kafka_mock_connection_t *mconn, rd_kafka_buf_t *rkbuf);
+};
+
+extern const struct rd_kafka_mock_api_handler
+rd_kafka_mock_api_handlers[RD_KAFKAP__NUM];
+
+
 
 /**
  * @struct Mock cluster.
@@ -190,6 +279,15 @@ struct rd_kafka_mock_cluster_s {
 
         TAILQ_HEAD(, rd_kafka_mock_topic_s) topics;
         int topic_cnt;
+
+        TAILQ_HEAD(, rd_kafka_mock_cgrp_s) cgrps;
+
+        /** Explicit coordinators (set with mock_set_coordinator()) */
+        TAILQ_HEAD(, rd_kafka_mock_coord_s) coords;
+
+        /** Current transactional producer PIDs.
+         *  Element type is a malloced rd_kafka_pid_t*. */
+        rd_list_t pids;
 
         char *bootstraps; /**< bootstrap.servers */
 
@@ -227,8 +325,12 @@ struct rd_kafka_mock_cluster_s {
         /**< Per-protocol request error stack. */
         rd_kafka_mock_error_stack_head_t errstacks;
 
+        /**< Request handlers */
+        struct rd_kafka_mock_api_handler api_handlers[RD_KAFKAP__NUM];
+
         /**< Mutex for:
          *   .errstacks
+         *   .apiversions
          */
         mtx_t lock;
 
@@ -237,21 +339,13 @@ struct rd_kafka_mock_cluster_s {
 
 
 
-struct rd_kafka_mock_api_handler {
-        int16_t MinVersion;
-        int16_t MaxVersion;
-        int (*cb) (rd_kafka_mock_connection_t *mconn, rd_kafka_buf_t *rkbuf);
-};
-
-extern const struct rd_kafka_mock_api_handler
-rd_kafka_mock_api_handlers[RD_KAFKAP__NUM];
-
 
 
 rd_kafka_buf_t *rd_kafka_mock_buf_new_response (const rd_kafka_buf_t *request);
 void rd_kafka_mock_connection_send_response (rd_kafka_mock_connection_t *mconn,
-                                             const rd_kafka_buf_t *request,
                                              rd_kafka_buf_t *resp);
+void rd_kafka_mock_connection_set_blocking (rd_kafka_mock_connection_t *mconn,
+                                            rd_bool_t blocking);
 
 rd_kafka_mock_partition_t *
 rd_kafka_mock_partition_find (const rd_kafka_mock_topic_t *mtopic,
@@ -284,13 +378,80 @@ rd_kafka_mock_msgset_find (const rd_kafka_mock_partition_t *mpart,
                            int64_t offset, rd_bool_t on_follower);
 
 rd_kafka_resp_err_t
-rd_kafka_mock_next_request_error (rd_kafka_mock_cluster_t *mcluster,
-                                  int16_t ApiKey);
+rd_kafka_mock_next_request_error (rd_kafka_mock_connection_t *mconn,
+                                  rd_kafka_buf_t *resp);
 
 rd_kafka_resp_err_t
 rd_kafka_mock_partition_log_append (rd_kafka_mock_partition_t *mpart,
                                     const rd_kafkap_bytes_t *bytes,
                                     int64_t *BaseOffset);
+
+
+/**
+ * @returns true if the ApiVersion is supported, else false.
+ */
+static RD_UNUSED rd_bool_t
+rd_kafka_mock_cluster_ApiVersion_check (const rd_kafka_mock_cluster_t *mcluster,
+                                        int16_t ApiKey,
+                                        int16_t ApiVersion) {
+        return (ApiVersion >= mcluster->api_handlers[ApiKey].MinVersion &&
+                ApiVersion <= mcluster->api_handlers[ApiKey].MaxVersion);
+}
+
+
+/**
+ * @name Mock consumer group (rdkafka_mock_cgrp.c)
+ * @{
+ */
+void rd_kafka_mock_cgrp_member_active (rd_kafka_mock_cgrp_t *mcgrp,
+                                       rd_kafka_mock_cgrp_member_t *member);
+void
+rd_kafka_mock_cgrp_member_assignment_set (rd_kafka_mock_cgrp_t *mcgrp,
+                                          rd_kafka_mock_cgrp_member_t *member,
+                                          const rd_kafkap_bytes_t *Metadata);
+rd_kafka_resp_err_t
+rd_kafka_mock_cgrp_member_sync_set (rd_kafka_mock_cgrp_t *mcgrp,
+                                    rd_kafka_mock_cgrp_member_t *member,
+                                    rd_kafka_mock_connection_t *mconn,
+                                    rd_kafka_buf_t *resp);
+rd_kafka_resp_err_t
+rd_kafka_mock_cgrp_member_leave (rd_kafka_mock_cgrp_t *mcgrp,
+                                 rd_kafka_mock_cgrp_member_t *member);
+void rd_kafka_mock_cgrp_protos_destroy (rd_kafka_mock_cgrp_proto_t *protos,
+                                        int proto_cnt);
+rd_kafka_resp_err_t
+rd_kafka_mock_cgrp_member_add (rd_kafka_mock_cgrp_t *mcgrp,
+                               rd_kafka_mock_connection_t *mconn,
+                               rd_kafka_buf_t *resp,
+                               const rd_kafkap_str_t *MemberId,
+                               const rd_kafkap_str_t *ProtocolType,
+                               rd_kafka_mock_cgrp_proto_t *protos,
+                               int proto_cnt,
+                               int session_timeout_ms);
+rd_kafka_resp_err_t
+rd_kafka_mock_cgrp_check_state (rd_kafka_mock_cgrp_t *mcgrp,
+                                rd_kafka_mock_cgrp_member_t *member,
+                                const rd_kafka_buf_t *request,
+                                int32_t generation_id);
+rd_kafka_mock_cgrp_member_t *
+rd_kafka_mock_cgrp_member_find (const rd_kafka_mock_cgrp_t *mcgrp,
+                                const rd_kafkap_str_t *MemberId);
+void rd_kafka_mock_cgrp_destroy (rd_kafka_mock_cgrp_t *mcgrp);
+rd_kafka_mock_cgrp_t *
+rd_kafka_mock_cgrp_find (rd_kafka_mock_cluster_t *mcluster,
+                         const rd_kafkap_str_t *GroupId);
+rd_kafka_mock_cgrp_t *
+rd_kafka_mock_cgrp_get (rd_kafka_mock_cluster_t *mcluster,
+                        const rd_kafkap_str_t *GroupId,
+                        const rd_kafkap_str_t *ProtocolType);
+void rd_kafka_mock_cgrps_connection_closed (rd_kafka_mock_cluster_t *mcluster,
+                                            rd_kafka_mock_connection_t *mconn);
+
+
+/**
+ *@}
+ */
+
 
 #include "rdkafka_mock.h"
 

@@ -43,6 +43,9 @@ int thrd_setname (const char *name) {
 #elif HAVE_PTHREAD_SETNAME_DARWIN
         pthread_setname_np(name);
         return thrd_success;
+#elif HAVE_PTHREAD_SETNAME_FREEBSD
+        pthread_set_name_np(pthread_self(), name);
+        return thrd_success;
 #endif
         return thrd_error;
 }
@@ -108,7 +111,7 @@ int cnd_timedwait_abs (cnd_t *cnd, mtx_t *mtx, const struct timespec *tspec) {
  * @name Read-write locks
  * @{
  */
-#ifndef _MSC_VER
+#ifndef _WIN32
 int rwlock_init (rwlock_t *rwl) {
         int r = pthread_rwlock_init(rwl, NULL);
         if (r) {

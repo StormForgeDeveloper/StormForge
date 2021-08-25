@@ -55,12 +55,15 @@
 #include <stdint.h>
 #include <sys/types.h>
 
-#ifdef _MSC_VER
+#ifdef _WIN32
 #ifndef ssize_t
 #ifndef _BASETSD_H_
 #include <basetsd.h>
 #endif
+#ifndef _SSIZE_T_DEFINED
+#define _SSIZE_T_DEFINED
 typedef SSIZE_T ssize_t;
+#endif
 #endif
 #undef RD_EXPORT
 #ifdef LIBRDKAFKA_STATICLIB
@@ -108,7 +111,7 @@ namespace RdKafka {
  * @remark This value should only be used during compile time,
  *         for runtime checks of version use RdKafka::version()
  */
-#define RD_KAFKA_VERSION  0x010300ff
+#define RD_KAFKA_VERSION  0x010800ff
 
 /**
  * @brief Returns the librdkafka version as integer.
@@ -143,6 +146,34 @@ std::string get_debug_contexts();
 RD_EXPORT
 int          wait_destroyed(int timeout_ms);
 
+/**
+ * @brief Allocate memory using the same allocator librdkafka uses.
+ *
+ * This is typically an abstraction for the malloc(3) call and makes sure
+ * the application can use the same memory allocator as librdkafka for
+ * allocating pointers that are used by librdkafka.
+ *
+ * @remark Memory allocated by mem_malloc() must be freed using
+ *         mem_free().
+ */
+RD_EXPORT
+void *mem_malloc (size_t size);
+
+/**
+ * @brief Free pointer returned by librdkafka
+ *
+ * This is typically an abstraction for the free(3) call and makes sure
+ * the application can use the same memory allocator as librdkafka for
+ * freeing pointers returned by librdkafka.
+ *
+ * In standard setups it is usually not necessary to use this interface
+ * rather than the free(3) function.
+ *
+ * @remark mem_free() must only be used for pointers returned by APIs
+ *         that explicitly mention using this function for freeing.
+ */
+RD_EXPORT
+void mem_free (void *ptr);
 
 /**@}*/
 
@@ -187,9 +218,9 @@ enum ErrorCode {
 	/** Produced message timed out*/
 	ERR__MSG_TIMED_OUT = -192,
 	/** Reached the end of the topic+partition queue on
-	 * the broker. Not really an error. 
-	 * This event is disabled by default,
-	 * see the `enable.partition.eof` configuration property. */
+	 *  the broker. Not really an error.
+	 *  This event is disabled by default,
+	 *  see the `enable.partition.eof` configuration property. */
 	ERR__PARTITION_EOF = -191,
 	/** Permanent: Partition does not exist in cluster. */
 	ERR__UNKNOWN_PARTITION = -190,
@@ -281,6 +312,18 @@ enum ErrorCode {
         ERR__MAX_POLL_EXCEEDED = -147,
         /** Unknown broker */
         ERR__UNKNOWN_BROKER = -146,
+        /** Functionality not configured */
+        ERR__NOT_CONFIGURED = -145,
+        /** Instance has been fenced */
+        ERR__FENCED = -144,
+        /** Application generated error */
+        ERR__APPLICATION = -143,
+        /** Assignment lost */
+        ERR__ASSIGNMENT_LOST = -142,
+        /** No operation performed */
+        ERR__NOOP = -141,
+        /** No offset to automatically reset to */
+        ERR__AUTO_OFFSET_RESET = -140,
 
         /** End internal error codes */
 	ERR__END = -100,
@@ -463,6 +506,42 @@ enum ErrorCode {
         ERR_PREFERRED_LEADER_NOT_AVAILABLE = 80,
         /** Consumer group has reached maximum size */
         ERR_GROUP_MAX_SIZE_REACHED = 81,
+        /** Static consumer fenced by other consumer with same
+         * group.instance.id. */
+        ERR_FENCED_INSTANCE_ID = 82,
+        /** Eligible partition leaders are not available */
+        ERR_ELIGIBLE_LEADERS_NOT_AVAILABLE = 83,
+        /** Leader election not needed for topic partition */
+        ERR_ELECTION_NOT_NEEDED = 84,
+        /** No partition reassignment is in progress */
+        ERR_NO_REASSIGNMENT_IN_PROGRESS = 85,
+        /** Deleting offsets of a topic while the consumer group is
+         *  subscribed to it */
+        ERR_GROUP_SUBSCRIBED_TO_TOPIC = 86,
+        /** Broker failed to validate record */
+        ERR_INVALID_RECORD = 87,
+        /** There are unstable offsets that need to be cleared */
+        ERR_UNSTABLE_OFFSET_COMMIT = 88,
+        /** Throttling quota has been exceeded */
+        ERR_THROTTLING_QUOTA_EXCEEDED = 89,
+        /** There is a newer producer with the same transactionalId
+         *  which fences the current one */
+        ERR_PRODUCER_FENCED = 90,
+        /** Request illegally referred to resource that does not exist */
+        ERR_RESOURCE_NOT_FOUND = 91,
+        /** Request illegally referred to the same resource twice */
+        ERR_DUPLICATE_RESOURCE = 92,
+        /** Requested credential would not meet criteria for acceptability */
+        ERR_UNACCEPTABLE_CREDENTIAL = 93,
+        /** Indicates that the either the sender or recipient of a
+         *  voter-only request is not one of the expected voters */
+        ERR_INCONSISTENT_VOTER_SET = 94,
+        /** Invalid update version */
+        ERR_INVALID_UPDATE_VERSION = 95,
+        /** Unable to update finalized features due to server error */
+        ERR_FEATURE_UPDATE_FAILED = 96,
+        /** Request principal deserialization failed during forwarding */
+        ERR_PRINCIPAL_DESERIALIZATION_FAILURE = 97
 };
 
 
@@ -502,6 +581,7 @@ enum CertificateEncoding {
 
 /**@cond NO_DOC*/
 /* Forward declarations */
+class Handle;
 class Producer;
 class Message;
 class Headers;
@@ -512,6 +592,79 @@ class TopicPartition;
 class Metadata;
 class KafkaConsumer;
 /**@endcond*/
+
+
+/**
+ * @name Error class
+ * @{
+ *
+ */
+
+/**
+ * @brief The Error class is used as a return value from APIs to propagate
+ *        an error. The error consists of an error code which is to be used
+ *        programatically, an error string for showing to the user,
+ *        and various error flags that can be used programmatically to decide
+ *        how to handle the error; e.g., should the operation be retried,
+ *        was it a fatal error, etc.
+ *
+ * Error objects must be deleted explicitly to free its resources.
+ */
+class RD_EXPORT Error {
+ public:
+
+ /**
+  * @brief Create error object.
+  */
+ static Error *create (ErrorCode code, const std::string *errstr);
+
+ virtual ~Error () { }
+
+ /*
+  * Error accessor methods
+  */
+
+ /**
+  * @returns the error code, e.g., RdKafka::ERR_UNKNOWN_MEMBER_ID.
+  */
+ virtual ErrorCode code () const = 0;
+
+ /**
+  * @returns the error code name, e.g, "ERR_UNKNOWN_MEMBER_ID".
+  */
+ virtual std::string name () const = 0;
+
+  /**
+   * @returns a human readable error string.
+   */
+ virtual std::string str () const = 0;
+
+ /**
+  * @returns true if the error is a fatal error, indicating that the client
+  *          instance is no longer usable, else false.
+  */
+ virtual bool is_fatal () const = 0;
+
+ /**
+  * @returns true if the operation may be retried, else false.
+  */
+ virtual bool is_retriable () const = 0;
+
+ /**
+  * @returns true if the error is an abortable transaction error in which case
+  *          the application must call RdKafka::Producer::abort_transaction()
+  *          and start a new transaction with
+  *          RdKafka::Producer::begin_transaction() if it wishes to proceed
+  *          with transactions.
+  *          Else returns false.
+  *
+  * @remark The return value of this method is only valid for errors returned
+  *         by the transactional API.
+  */
+ virtual bool txn_requires_abort () const = 0;
+};
+
+/**@}*/
 
 
 /**
@@ -561,18 +714,18 @@ class RD_EXPORT DeliveryReportCb {
  * typically based on the configuration defined in \c sasl.oauthbearer.config.
  *
  * The \c oauthbearer_config argument is the value of the
- * sasl.oauthbearer.config configuration property.
+ * \c sasl.oauthbearer.config configuration property.
  *
- * The callback should invoke RdKafka::oauthbearer_set_token() or
- * RdKafka::oauthbearer_set_token_failure() to indicate success or failure,
- * respectively.
+ * The callback should invoke RdKafka::Handle::oauthbearer_set_token() or
+ * RdKafka::Handle::oauthbearer_set_token_failure() to indicate success or
+ * failure, respectively.
  * 
  * The refresh operation is eventable and may be received when an event
  * callback handler is set with an event type of
  * \c RdKafka::Event::EVENT_OAUTHBEARER_TOKEN_REFRESH.
  *
  * Note that before any SASL/OAUTHBEARER broker connection can succeed the
- * application must call RdKafka::oauthbearer_set_token() once -- either
+ * application must call RdKafka::Handle::oauthbearer_set_token() once -- either
  * directly or, more typically, by invoking RdKafka::poll() -- in order to
  * cause retrieval of an initial token to occur.
  *
@@ -584,8 +737,13 @@ class RD_EXPORT OAuthBearerTokenRefreshCb {
  public:
   /**
    * @brief SASL/OAUTHBEARER token refresh callback class.
+   *
+   * @param handle The RdKafka::Handle which requires a refreshed token.
+   * @param oauthbearer_config The value of the
+   * \p sasl.oauthbearer.config configuration property for \p handle.
    */
-  virtual void oauthbearer_token_refresh_cb (const std::string &oauthbearer_config) = 0;
+  virtual void oauthbearer_token_refresh_cb (RdKafka::Handle* handle,
+                                             const std::string &oauthbearer_config) = 0;
 
   virtual ~OAuthBearerTokenRefreshCb() { }
 };
@@ -800,7 +958,13 @@ public:
    * arbitrary rebalancing failures where \p err is neither of those.
    * @remark In this latter case (arbitrary error), the application must
    *         call unassign() to synchronize state.
-
+   *
+   * For eager/non-cooperative `partition.assignment.strategy` assignors,
+   * such as `range` and `roundrobin`, the application must use
+   * assign assign() to set and unassign() to clear the entire assignment.
+   * For the cooperative assignors, such as `cooperative-sticky`, the
+   * application must use incremental_assign() for ERR__ASSIGN_PARTITIONS and
+   * incremental_unassign() for ERR__REVOKE_PARTITIONS.
    *
    * Without a rebalance callback this is done automatically by librdkafka
    * but registering a rebalance callback gives the application flexibility
@@ -808,36 +972,49 @@ public:
    * such as fetching offsets from an alternate location (on assign)
    * or manually committing offsets (on revoke).
    *
+   * @sa RdKafka::KafkaConsumer::assign()
+   * @sa RdKafka::KafkaConsumer::incremental_assign()
+   * @sa RdKafka::KafkaConsumer::incremental_unassign()
+   * @sa RdKafka::KafkaConsumer::assignment_lost()
+   * @sa RdKafka::KafkaConsumer::rebalance_protocol()
+   *
    * The following example show's the application's responsibilities:
    * @code
    *    class MyRebalanceCb : public RdKafka::RebalanceCb {
    *     public:
    *      void rebalance_cb (RdKafka::KafkaConsumer *consumer,
-   *     	      RdKafka::ErrorCode err,
-   *                  std::vector<RdKafka::TopicPartition*> &partitions) {
+   *                    RdKafka::ErrorCode err,
+   *                    std::vector<RdKafka::TopicPartition*> &partitions) {
    *         if (err == RdKafka::ERR__ASSIGN_PARTITIONS) {
    *           // application may load offets from arbitrary external
    *           // storage here and update \p partitions
-   *
-   *           consumer->assign(partitions);
+   *           if (consumer->rebalance_protocol() == "COOPERATIVE")
+   *             consumer->incremental_assign(partitions);
+   *           else
+   *             consumer->assign(partitions);
    *
    *         } else if (err == RdKafka::ERR__REVOKE_PARTITIONS) {
    *           // Application may commit offsets manually here
    *           // if auto.commit.enable=false
-   *
-   *           consumer->unassign();
+   *           if (consumer->rebalance_protocol() == "COOPERATIVE")
+   *             consumer->incremental_unassign(partitions);
+   *           else
+   *             consumer->unassign();
    *
    *         } else {
-   *           std::cerr << "Rebalancing error: <<
+   *           std::cerr << "Rebalancing error: " <<
    *                        RdKafka::err2str(err) << std::endl;
    *           consumer->unassign();
    *         }
    *     }
    *  }
    * @endcode
+   *
+   * @remark The above example lacks error handling for assign calls, see
+   *         the examples/ directory.
    */
  virtual void rebalance_cb (RdKafka::KafkaConsumer *consumer,
-			    RdKafka::ErrorCode err,
+                            RdKafka::ErrorCode err,
                             std::vector<TopicPartition*>&partitions) = 0;
 
  virtual ~RebalanceCb() { }
@@ -1241,6 +1418,21 @@ class RD_EXPORT Conf {
    *          else NULL.
    */
   virtual struct rd_kafka_topic_conf_s *c_ptr_topic () = 0;
+
+  /** 
+   * @brief Set callback_data for ssl engine.
+   *
+   * @remark The \c ssl.engine.location configuration must be set for this 
+   *         to have affect.
+   *
+   * @remark The memory pointed to by \p value must remain valid for the 
+   *         lifetime of the configuration object and any Kafka clients that 
+   *         use it.
+   *
+   * @returns CONF_OK on success, else CONF_INVALID.
+   */
+  virtual Conf::ConfResult set_engine_callback_data (void *value,
+                                                     std::string &errstr) = 0;
 };
 
 /**@}*/
@@ -1413,7 +1605,7 @@ class RD_EXPORT Handle {
    *
    * @returns The fetch queue for the given partition if successful. Else,
    *          NULL is returned.
-   *          
+   *
    * @remark This function only works on consumers.
    */
   virtual Queue *get_partition_queue (const TopicPartition *partition) = 0;
@@ -1522,7 +1714,7 @@ class RD_EXPORT Handle {
    * @returns ERR_NO_ERROR if no fatal error has been raised, else
    *          any other error code.
    */
-  virtual ErrorCode fatal_error (std::string &errstr) = 0;
+  virtual ErrorCode fatal_error (std::string &errstr) const = 0;
 
   /**
    * @brief Set SASL/OAUTHBEARER token and metadata
@@ -1547,10 +1739,10 @@ class RD_EXPORT Handle {
    * this method upon success. The extension keys must not include the reserved
    * key "`auth`", and all extension keys and values must conform to the
    * required format as per https://tools.ietf.org/html/rfc7628#section-3.1:
-   * 
+   *
    *     key            = 1*(ALPHA)
    *     value          = *(VCHAR / SP / HTAB / CR / LF )
-   * 
+   *
    * @returns \c RdKafka::ERR_NO_ERROR on success, otherwise \p errstr set
    *              and:<br>
    *          \c RdKafka::ERR__INVALID_ARG if any of the arguments are
@@ -1559,7 +1751,7 @@ class RD_EXPORT Handle {
    *              supported by this build;<br>
    *          \c RdKafka::ERR__STATE if SASL/OAUTHBEARER is supported but is
    *              not configured as the client's authentication mechanism.<br>
-   * 
+   *
    * @sa RdKafka::oauthbearer_set_token_failure
    * @sa RdKafka::Conf::set() \c "oauthbearer_token_refresh_cb"
    */
@@ -1587,6 +1779,33 @@ class RD_EXPORT Handle {
      * @sa RdKafka::Conf::set() \c "oauthbearer_token_refresh_cb"
      */
     virtual ErrorCode oauthbearer_set_token_failure (const std::string &errstr) = 0;
+
+   /**
+     * @brief Allocate memory using the same allocator librdkafka uses.
+     *
+     * This is typically an abstraction for the malloc(3) call and makes sure
+     * the application can use the same memory allocator as librdkafka for
+     * allocating pointers that are used by librdkafka.
+     *
+     * @remark Memory allocated by mem_malloc() must be freed using
+     *         mem_free().
+     */
+    virtual void *mem_malloc (size_t size) = 0;
+
+   /**
+     * @brief Free pointer returned by librdkafka
+     *
+     * This is typically an abstraction for the free(3) call and makes sure
+     * the application can use the same memory allocator as librdkafka for
+     * freeing pointers returned by librdkafka.
+     *
+     * In standard setups it is usually not necessary to use this interface
+     * rather than the free(3) function.
+     *
+     * @remark mem_free() must only be used for pointers returned by APIs
+     *         that explicitly mention using this function for freeing.
+     */
+    virtual void mem_free (void *ptr) = 0;
 };
 
 
@@ -1683,7 +1902,7 @@ class RD_EXPORT Topic {
    * @returns the new topic handle or NULL on error (see \p errstr).
    */
   static Topic *create (Handle *base, const std::string &topic_str,
-                        Conf *conf, std::string &errstr);
+                        const Conf *conf, std::string &errstr);
 
   virtual ~Topic () = 0;
 
@@ -1699,11 +1918,12 @@ class RD_EXPORT Topic {
   virtual bool partition_available (int32_t partition) const = 0;
 
   /**
-   * @brief Store offset \p offset for topic partition \p partition.
-   * The offset will be committed (written) to the offset store according
-   * to \p auto.commit.interval.ms.
+   * @brief Store offset \p offset + 1 for topic partition \p partition.
+   * The offset will be committed (written) to the broker (or file) according
+   * to \p auto.commit.interval.ms or next manual offset-less commit call.
    *
-   * @remark \c enable.auto.offset.store must be set to \c false when using this API.
+   * @remark \c enable.auto.offset.store must be set to \c false when using
+   *         this API.
    *
    * @returns RdKafka::ERR_NO_ERROR on success or an error code if none of the
    *          offsets could be stored.
@@ -1771,7 +1991,7 @@ public:
  * Represents message headers.
  *
  * https://cwiki.apache.org/confluence/display/KAFKA/KIP-82+-+Add+Record+Headers
- * 
+ *
  * @remark Requires Apache Kafka >= 0.11.0 brokers
  */
 class RD_EXPORT Headers {
@@ -1853,7 +2073,7 @@ public:
       value_size_ = other.value_size_;
 
       if (value_ != NULL)
-        free(value_);
+        mem_free(value_);
 
       value_ = copy_value(other.value_, value_size_);
 
@@ -1862,7 +2082,7 @@ public:
 
     ~Header() {
       if (value_ != NULL)
-        free(value_);
+        mem_free(value_);
     }
 
     /** @returns the key/name associated with this Header */
@@ -1896,7 +2116,7 @@ public:
       if (!value)
         return NULL;
 
-      char *dest = (char *)malloc(value_size + 1);
+      char *dest = (char *)mem_malloc(value_size + 1);
       memcpy(dest, (const char *)value, value_size);
       dest[value_size] = '\0';
 
@@ -1912,24 +2132,24 @@ public:
 
   /**
    * @brief Create a new instance of the Headers object
-   * 
+   *
    * @returns an empty Headers list
    */
   static Headers *create();
 
   /**
    * @brief Create a new instance of the Headers object from a std::vector
-   * 
+   *
    * @param headers std::vector of RdKafka::Headers::Header objects.
    *                The headers are copied, not referenced.
-   * 
+   *
    * @returns a Headers list from std::vector set to the size of the std::vector
    */
   static Headers *create(const std::vector<Header> &headers);
 
   /**
    * @brief Adds a Header to the end of the list.
-   * 
+   *
    * @param key header key/name
    * @param value binary value, or NULL
    * @param value_size size of the value
@@ -1943,10 +2163,10 @@ public:
    * @brief Adds a Header to the end of the list.
    *
    * Convenience method for adding a std::string as a value for the header.
-   * 
+   *
    * @param key header key/name
    * @param value value string
-   * 
+   *
    * @returns an ErrorCode signalling success or failure to add the header.
    */
   virtual ErrorCode add(const std::string &key, const std::string &value) = 0;
@@ -1964,18 +2184,18 @@ public:
 
   /**
    * @brief Removes all the Headers of a given key
-   * 
+   *
    * @param key header key/name to remove
-   * 
+   *
    * @returns An ErrorCode signalling a success or failure to remove the Header.
    */
   virtual ErrorCode remove(const std::string &key) = 0;
 
   /**
    * @brief Gets all of the Headers of a given key
-   * 
+   *
    * @param key header key/name
-   * 
+   *
    * @remark If duplicate keys exist this will return them all as a std::vector
    *
    * @returns a std::vector containing all the Headers of the given key.
@@ -1984,9 +2204,9 @@ public:
 
   /**
    * @brief Gets the last occurrence of a Header of a given key
-   * 
+   *
    * @param key header key/name
-   * 
+   *
    * @remark This will only return the most recently added header
    *
    * @returns the Header if found, otherwise a Header with an err set to
@@ -2024,20 +2244,20 @@ class RD_EXPORT Message {
   /** @brief Message persistence status can be used by the application to
    *         find out if a produced message was persisted in the topic log. */
   enum Status {
-    /**< Message was never transmitted to the broker, or failed with
-     *   an error indicating it was not written to the log.
-     *   Application retry risks ordering, but not duplication. */
+    /** Message was never transmitted to the broker, or failed with
+     *  an error indicating it was not written to the log.
+     *  Application retry risks ordering, but not duplication. */
     MSG_STATUS_NOT_PERSISTED = 0,
 
-    /**< Message was transmitted to broker, but no acknowledgement was
-     *   received.
-     *   Application retry risks ordering and duplication. */
+    /** Message was transmitted to broker, but no acknowledgement was
+     *  received.
+     *  Application retry risks ordering and duplication. */
     MSG_STATUS_POSSIBLY_PERSISTED = 1,
 
-    /**< Message was written to the log and fully acknowledged.
-     *   No reason for application to retry.
-     *   Note: this value should only be trusted with \c acks=all. */
-    MSG_STATUS_PERSISTED =  2
+    /** Message was written to the log and fully acknowledged.
+     *  No reason for application to retry.
+     *  Note: this value should only be trusted with \c acks=all. */
+    MSG_STATUS_PERSISTED = 2,
   };
 
   /**
@@ -2130,6 +2350,10 @@ class RD_EXPORT Message {
    *
    * @remark The lifetime of the Headers are the same as the Message. */
   virtual RdKafka::Headers   *headers (RdKafka::ErrorCode *err) = 0;
+
+  /** @returns the broker id of the broker the message was produced to or
+   *           fetched from, or -1 if not known/applicable. */
+  virtual int32_t broker_id () const = 0;
 };
 
 /**@}*/
@@ -2167,7 +2391,7 @@ class RD_EXPORT Queue {
    * If \p dst is \c NULL, the forwarding is removed.
    *
    * The internal refcounts for both queues are increased.
-   * 
+   *
    * @remark Regardless of whether \p dst is NULL or not, after calling this
    *         function, \p src will not forward it's fetch queue to the consumer
    *         queue.
@@ -2219,6 +2443,23 @@ class RD_EXPORT Queue {
 
 /**@}*/
 
+/**
+ * @name ConsumerGroupMetadata
+ * @{
+ *
+ */
+/**
+ * @brief ConsumerGroupMetadata holds a consumer instance's group
+ *        metadata state.
+ *
+ * This class currently does not have any public methods.
+ */
+class RD_EXPORT ConsumerGroupMetadata {
+public:
+  virtual ~ConsumerGroupMetadata () = 0;
+};
+
+/**@}*/
 
 /**
  * @name KafkaConsumer
@@ -2248,7 +2489,7 @@ public:
    * @sa CONFIGURATION.md for \c group.id, \c session.timeout.ms,
    *     \c partition.assignment.strategy, etc.
    */
-  static KafkaConsumer *create (Conf *conf, std::string &errstr);
+  static KafkaConsumer *create (const Conf *conf, std::string &errstr);
 
   virtual ~KafkaConsumer () = 0;
 
@@ -2282,6 +2523,16 @@ public:
    *
    * Regex pattern matching automatically performed for topics prefixed
    * with \c \"^\" (e.g. \c \"^myPfx[0-9]_.*\"
+   *
+   * @remark A consumer error will be raised for each unavailable topic in the
+   *  \p topics. The error will be ERR_UNKNOWN_TOPIC_OR_PART
+   *  for non-existent topics, and
+   *  ERR_TOPIC_AUTHORIZATION_FAILED for unauthorized topics.
+   *  The consumer error will be raised through consume() (et.al.)
+   *  with the \c RdKafka::Message::err() returning one of the
+   *  error codes mentioned above.
+   *  The subscribe function itself is asynchronous and will not return
+   *  an error on unavailable topics.
    *
    * @returns an error if the provided list of topics is invalid.
    */
@@ -2347,30 +2598,38 @@ public:
   /**
    * @brief Asynchronous version of RdKafka::KafkaConsumer::CommitSync()
    *
-   * @sa RdKafka::KafkaConsummer::commitSync()
+   * @sa RdKafka::KafkaConsumer::commitSync()
    */
   virtual ErrorCode commitAsync () = 0;
 
   /**
    * @brief Commit offset for a single topic+partition based on \p message
    *
+   * @remark The offset committed will be the message's offset + 1.
+   *
    * @remark This is the synchronous variant.
    *
-   * @sa RdKafka::KafkaConsummer::commitSync()
+   * @sa RdKafka::KafkaConsumer::commitSync()
    */
   virtual ErrorCode commitSync (Message *message) = 0;
 
   /**
    * @brief Commit offset for a single topic+partition based on \p message
    *
+   * @remark The offset committed will be the message's offset + 1.
+   *
    * @remark This is the asynchronous variant.
    *
-   * @sa RdKafka::KafkaConsummer::commitSync()
+   * @sa RdKafka::KafkaConsumer::commitSync()
    */
   virtual ErrorCode commitAsync (Message *message) = 0;
 
   /**
    * @brief Commit offsets for the provided list of partitions.
+   *
+   * @remark The \c .offset of the partitions in \p offsets should be the
+   *         offset where consumption will resume, i.e., the last
+   *         processed offset + 1.
    *
    * @remark This is the synchronous variant.
    */
@@ -2378,6 +2637,10 @@ public:
 
   /**
    * @brief Commit offset for the provided list of partitions.
+   *
+   * @remark The \c .offset of the partitions in \p offsets should be the
+   *         offset where consumption will resume, i.e., the last
+   *         processed offset + 1.
    *
    * @remark This is the asynchronous variant.
    */
@@ -2414,7 +2677,7 @@ public:
   /**
    * @brief Retrieve committed offsets for topics+partitions.
    *
-   * @returns RD_KAFKA_RESP_ERR_NO_ERROR on success in which case the
+   * @returns ERR_NO_ERROR on success in which case the
    *          \p offset or \p err field of each \p partitions' element is filled
    *          in with the stored offset, or a partition specific error.
    *          Else returns an error code.
@@ -2425,7 +2688,7 @@ public:
   /**
    * @brief Retrieve current positions (offsets) for topics+partitions.
    *
-   * @returns RD_KAFKA_RESP_ERR_NO_ERROR on success in which case the
+   * @returns ERR_NO_ERROR on success in which case the
    *          \p offset or \p err field of each \p partitions' element is filled
    *          in with the stored offset, or a partition specific error.
    *          Else returns an error code.
@@ -2485,7 +2748,10 @@ public:
    *
    * Per-partition success/error status propagated through TopicPartition.err()
    *
-   * @remark \c enable.auto.offset.store must be set to \c false when using this API.
+   * @remark The \c .offset field is stored as is, it will NOT be + 1.
+   *
+   * @remark \c enable.auto.offset.store must be set to \c false when using
+   *         this API.
    *
    * @returns RdKafka::ERR_NO_ERROR on success, or
    *          RdKafka::ERR___UNKNOWN_PARTITION if none of the offsets could
@@ -2493,6 +2759,90 @@ public:
    *          RdKafka::ERR___INVALID_ARG if \c enable.auto.offset.store is true.
    */
   virtual ErrorCode offsets_store (std::vector<TopicPartition*> &offsets) = 0;
+
+
+  /**
+   * @returns the current consumer group metadata associated with this consumer,
+   *          or NULL if the consumer is configured with a \c group.id.
+   *          This metadata object should be passed to the transactional
+   *          producer's RdKafka::Producer::send_offsets_to_transaction() API.
+   *
+   * @remark The returned object must be deleted by the application.
+   *
+   * @sa RdKafka::Producer::send_offsets_to_transaction()
+   */
+  virtual ConsumerGroupMetadata *groupMetadata () = 0;
+
+
+  /** @brief Check whether the consumer considers the current assignment to
+   *         have been lost involuntarily. This method is only applicable for
+   *         use with a subscribing consumer. Assignments are revoked
+   *         immediately when determined to have been lost, so this method is
+   *         only useful within a rebalance callback. Partitions that have
+   *         been lost may already be owned by other members in the group and
+   *         therefore commiting offsets, for example, may fail.
+   *
+   * @remark Calling assign(), incremental_assign() or incremental_unassign()
+   *         resets this flag.
+   *
+   * @returns Returns true if the current partition assignment is considered
+   *          lost, false otherwise.
+   */
+  virtual bool assignment_lost () = 0;
+
+  /**
+   * @brief The rebalance protocol currently in use. This will be
+   *        "NONE" if the consumer has not (yet) joined a group, else it will
+   *        match the rebalance protocol ("EAGER", "COOPERATIVE") of the
+   *        configured and selected assignor(s). All configured
+   *        assignors must have the same protocol type, meaning
+   *        online migration of a consumer group from using one
+   *        protocol to another (in particular upgading from EAGER
+   *        to COOPERATIVE) without a restart is not currently
+   *        supported.
+   *
+   * @returns an empty string on error, or one of
+   *          "NONE", "EAGER", "COOPERATIVE" on success.
+   */
+
+  virtual std::string rebalance_protocol () = 0;
+
+
+  /**
+   * @brief Incrementally add \p partitions to the current assignment.
+   *
+   * If a COOPERATIVE assignor (i.e. incremental rebalancing) is being used,
+   * this method should be used in a rebalance callback to adjust the current
+   * assignment appropriately in the case where the rebalance type is
+   * ERR__ASSIGN_PARTITIONS. The application must pass the partition list
+   * passed to the callback (or a copy of it), even if the list is empty.
+   * This method may also be used outside the context of a rebalance callback.
+   *
+   * @returns NULL on success, or an error object if the operation was
+   *          unsuccessful.
+   *
+   * @remark The returned object must be deleted by the application.
+   */
+  virtual Error *incremental_assign (const std::vector<TopicPartition*> &partitions) = 0;
+
+
+  /**
+   * @brief Incrementally remove \p partitions from the current assignment.
+   *
+   * If a COOPERATIVE assignor (i.e. incremental rebalancing) is being used,
+   * this method should be used in a rebalance callback to adjust the current
+   * assignment appropriately in the case where the rebalance type is
+   * ERR__REVOKE_PARTITIONS. The application must pass the partition list
+   * passed to the callback (or a copy of it), even if the list is empty.
+   * This method may also be used outside the context of a rebalance callback.
+   *
+   * @returns NULL on success, or an error object if the operation was
+   *          unsuccessful.
+   *
+   * @remark The returned object must be deleted by the application.
+   */
+  virtual Error *incremental_unassign (const std::vector<TopicPartition*> &partitions) = 0;
+
 };
 
 
@@ -2522,7 +2872,7 @@ class RD_EXPORT Consumer : public virtual Handle {
    * @returns the new handle on success or NULL on error in which case
    * \p errstr is set to a human readable error message.
    */
-  static Consumer *create (Conf *conf, std::string &errstr);
+  static Consumer *create (const Conf *conf, std::string &errstr);
 
   virtual ~Consumer () = 0;
 
@@ -2699,7 +3049,7 @@ class RD_EXPORT Producer : public virtual Handle {
    * @returns the new handle on success or NULL on error in which case
    *          \p errstr is set to a human readable error message.
    */
-  static Producer *create (Conf *conf, std::string &errstr);
+  static Producer *create (const Conf *conf, std::string &errstr);
 
 
   virtual ~Producer () = 0;
@@ -2763,7 +3113,7 @@ class RD_EXPORT Producer : public virtual Handle {
    *                   Messages are considered in-queue from the point they
    *                   are accepted by produce() until their corresponding
    *                   delivery report callback/event returns.
-   *                   It is thus a requirement to call 
+   *                   It is thus a requirement to call
    *                   poll() (or equiv.) from a separate
    *                   thread when RK_MSG_BLOCK is used.
    *                   See WARNING on \c RK_MSG_BLOCK above.
@@ -2818,23 +3168,6 @@ class RD_EXPORT Producer : public virtual Handle {
                              const void *key, size_t key_len,
                              void *msg_opaque) = 0;
 
-  // KKO - Adding interface  ===================================================================================
-    /**
-   * @brief produce() variant that that allows for Header and timestamp support on produce
-   *        Otherwise identical to produce() above.
-   *
-   * @warning The \p headers will be freed/deleted if the produce() call
-   *          succeeds, or left untouched if produce() fails.
-   */
-  virtual ErrorCode produce(Topic* topic, int32_t partition,
-	  int msgflags,
-	  void* payload, size_t len,
-	  const void* key, size_t key_len,
-	  int64_t timestamp,
-	  RdKafka::Headers* headers,
-	  void* msg_opaque) = 0;
-  // KKO - Adding interface ===================================================================================
-
   /**
    * @brief produce() variant that takes topic as a string (no need for
    *        creating a Topic object), and also allows providing the
@@ -2878,6 +3211,9 @@ class RD_EXPORT Producer : public virtual Handle {
    *        This should typically be done prior to destroying a producer instance
    *        to make sure all queued and in-flight produce requests are completed
    *        before terminating.
+   *
+   * @remark The \c linger.ms time will be ignored for the duration of the call,
+   *         queued messages will be sent to the broker as soon as possible.
    *
    * @remark This function will call Producer::poll() and thus
    *         trigger callbacks.
@@ -2934,6 +3270,163 @@ class RD_EXPORT Producer : public virtual Handle {
                               * purging to finish. */
   };
 
+  /**
+   * @name Transactional API
+   * @{
+   *
+   * Requires Kafka broker version v0.11.0 or later
+   *
+   * See the Transactional API documentation in rdkafka.h for more information.
+   */
+
+  /**
+   * @brief Initialize transactions for the producer instance.
+   *
+   * @param timeout_ms The maximum time to block. On timeout the operation
+   *                   may continue in the background, depending on state,
+   *                   and it is okay to call init_transactions() again.
+   *
+   * @returns an RdKafka::Error object on error, or NULL on success.
+   *          Check whether the returned error object permits retrying
+   *          by calling RdKafka::Error::is_retriable(), or whether a fatal
+   *          error has been raised by calling RdKafka::Error::is_fatal().
+   *
+   * @remark The returned error object (if not NULL) must be deleted.
+   *
+   * See rd_kafka_init_transactions() in rdkafka.h for more information.
+   *
+   */
+  virtual Error *init_transactions (int timeout_ms) = 0;
+
+
+  /**
+   * @brief init_transactions() must have been called successfully
+   *        (once) before this function is called.
+   *
+   * @returns an RdKafka::Error object on error, or NULL on success.
+   *          Check whether a fatal error has been raised by calling
+   *          RdKafka::Error::is_fatal_error().
+   *
+   * @remark The returned error object (if not NULL) must be deleted.
+   *
+   * See rd_kafka_begin_transaction() in rdkafka.h for more information.
+   */
+  virtual Error *begin_transaction () = 0;
+
+  /**
+   * @brief Sends a list of topic partition offsets to the consumer group
+   *        coordinator for \p group_metadata, and marks the offsets as part
+   *        part of the current transaction.
+   *        These offsets will be considered committed only if the transaction
+   *        is committed successfully.
+   *
+   *        The offsets should be the next message your application will
+   *        consume,
+   *        i.e., the last processed message's offset + 1 for each partition.
+   *        Either track the offsets manually during processing or use
+   *        RdKafka::KafkaConsumer::position() (on the consumer) to get the
+   *        current offsets for
+   *        the partitions assigned to the consumer.
+   *
+   *        Use this method at the end of a consume-transform-produce loop prior
+   *        to committing the transaction with commit_transaction().
+   *
+   * @param offsets List of offsets to commit to the consumer group upon
+   *                successful commit of the transaction. Offsets should be
+   *                the next message to consume,
+   *                e.g., last processed message + 1.
+   * @param group_metadata The current consumer group metadata as returned by
+   *                   RdKafka::KafkaConsumer::groupMetadata() on the consumer
+   *                   instance the provided offsets were consumed from.
+   * @param timeout_ms Maximum time allowed to register the
+   *                   offsets on the broker.
+   *
+   * @remark This function must be called on the transactional producer
+   *         instance, not the consumer.
+   *
+   * @remark The consumer must disable auto commits
+   *         (set \c enable.auto.commit to false on the consumer).
+   *
+   * @returns an RdKafka::Error object on error, or NULL on success.
+   *          Check whether the returned error object permits retrying
+   *          by calling RdKafka::Error::is_retriable(), or whether an abortable
+   *          or fatal error has been raised by calling
+   *          RdKafka::Error::txn_requires_abort() or RdKafka::Error::is_fatal()
+   *          respectively.
+   *
+   * @remark The returned error object (if not NULL) must be deleted.
+   *
+   * See rd_kafka_send_offsets_to_transaction() in rdkafka.h for
+   * more information.
+   */
+  virtual Error *send_offsets_to_transaction (
+          const std::vector<TopicPartition*> &offsets,
+          const ConsumerGroupMetadata *group_metadata,
+          int timeout_ms) = 0;
+
+  /**
+   * @brief Commit the current transaction as started with begin_transaction().
+   *
+   *        Any outstanding messages will be flushed (delivered) before actually
+   *        committing the transaction.
+   *
+   * @param timeout_ms The maximum time to block. On timeout the operation
+   *                   may continue in the background, depending on state,
+   *                   and it is okay to call this function again.
+   *                   Pass -1 to use the remaining transaction timeout,
+   *                   this is the recommended use.
+   *
+   * @remark It is strongly recommended to always pass -1 (remaining transaction
+   *         time) as the \p timeout_ms. Using other values risk internal
+   *         state desynchronization in case any of the underlying protocol
+   *         requests fail.
+   *
+   * @returns an RdKafka::Error object on error, or NULL on success.
+   *          Check whether the returned error object permits retrying
+   *          by calling RdKafka::Error::is_retriable(), or whether an abortable
+   *          or fatal error has been raised by calling
+   *          RdKafka::Error::txn_requires_abort() or RdKafka::Error::is_fatal()
+   *          respectively.
+   *
+   * @remark The returned error object (if not NULL) must be deleted.
+   *
+   * See rd_kafka_commit_transaction() in rdkafka.h for more information.
+   */
+  virtual Error *commit_transaction (int timeout_ms) = 0;
+
+  /**
+   * @brief Aborts the ongoing transaction.
+   *
+   *        This function should also be used to recover from non-fatal abortable
+   *        transaction errors.
+   *
+   *        Any outstanding messages will be purged and fail with
+   *        RdKafka::ERR__PURGE_INFLIGHT or RdKafka::ERR__PURGE_QUEUE.
+   *        See RdKafka::Producer::purge() for details.
+   *
+   * @param timeout_ms The maximum time to block. On timeout the operation
+   *                   may continue in the background, depending on state,
+   *                   and it is okay to call this function again.
+   *                   Pass -1 to use the remaining transaction timeout,
+   *                   this is the recommended use.
+   *
+   * @remark It is strongly recommended to always pass -1 (remaining transaction
+   *         time) as the \p timeout_ms. Using other values risk internal
+   *         state desynchronization in case any of the underlying protocol
+   *         requests fail.
+   *
+   * @returns an RdKafka::Error object on error, or NULL on success.
+   *          Check whether the returned error object permits retrying
+   *          by calling RdKafka::Error::is_retriable(), or whether a
+   *          fatal error has been raised by calling RdKafka::Error::is_fatal().
+   *
+   * @remark The returned error object (if not NULL) must be deleted.
+   *
+   * See rd_kafka_abort_transaction() in rdkafka.h for more information.
+   */
+  virtual Error *abort_transaction (int timeout_ms) = 0;
+
+  /**@}*/
 };
 
 /**@}*/
@@ -3042,18 +3535,18 @@ class Metadata {
   typedef TopicMetadataVector::const_iterator  TopicMetadataIterator;
 
 
-  /** 
-  * @brief Broker list 
-  * @remark Ownership of the returned pointer is retained by the instance of
-  * Metadata that is called. 
-  */
+  /**
+   * @brief Broker list
+   * @remark Ownership of the returned pointer is retained by the instance of
+   * Metadata that is called.
+   */
   virtual const BrokerMetadataVector *brokers() const = 0;
 
-  /** 
-  * @brief Topic list 
-  * @remark Ownership of the returned pointer is retained by the instance of
-  * Metadata that is called. 
-  */
+  /**
+   * @brief Topic list
+   * @remark Ownership of the returned pointer is retained by the instance of
+   * Metadata that is called.
+   */
   virtual const TopicMetadataVector  *topics() const = 0;
 
   /** @brief Broker (id) originating this metadata */
@@ -3068,5 +3561,6 @@ class Metadata {
 /**@}*/
 
 }
+
 
 #endif /* _RDKAFKACPP_H_ */

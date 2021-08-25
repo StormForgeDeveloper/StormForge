@@ -44,7 +44,7 @@
 #include "rdkafka.h"
 
 
-static int run = 1;
+static volatile sig_atomic_t run = 1;
 
 /**
  * @brief Signal termination of program
@@ -243,7 +243,7 @@ int main (int argc, char **argv) {
                 if (rkm->payload && is_printable(rkm->payload, rkm->len))
                         printf(" Value: %.*s\n",
                                (int)rkm->len, (const char *)rkm->payload);
-                else if (rkm->key)
+                else if (rkm->payload)
                         printf(" Value: (%d bytes)\n", (int)rkm->len);
 
                 rd_kafka_message_destroy(rkm);

@@ -747,7 +747,7 @@ static char *create_jws_compact_serialization (
 
                 while (*curr != '\0') {
                         /* Ignore empty elements (e.g. ",,") */
-                        while (*curr != '\0' && *curr == ',') {
+                        while (*curr == ',') {
                                 ++curr;
                                 ++start;
                         }
@@ -983,9 +983,9 @@ rd_kafka_oauthbearer_unsecured_token0 (
  * scope=role1,role2 lifeSeconds=600".
  *
  * SASL extensions can be communicated to the broker via
- * extension_<extensionname>=value. For example:
+ * extension_NAME=value. For example:
  * "principal=admin extension_traceId=123".  Extension names and values
- * must comnform to the required syntax as per
+ * must conform to the required syntax as per
  * https://tools.ietf.org/html/rfc7628#section-3.1
  *
  * All values -- whether extensions, claim names, or scope elements -- must not
