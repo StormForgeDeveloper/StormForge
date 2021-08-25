@@ -101,13 +101,13 @@ namespace SF
         // Server Reference year is 1970
         const int UTCReferenceYear = 1970;
 
-        static private DateTime ToDateTimeMs(ulong UTCTimeMs)
+        static public DateTime ToDateTimeMs(ulong UTCTimeMs)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             return origin.AddMilliseconds(UTCTimeMs);
         }
 
-        static private DateTime ToDateTimeSec(ulong UTCTimeSec)
+        static public DateTime ToDateTimeSec(ulong UTCTimeSec)
         {
             DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
             return origin.AddSeconds(UTCTimeSec);
