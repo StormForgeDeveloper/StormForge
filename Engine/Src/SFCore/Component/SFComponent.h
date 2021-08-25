@@ -568,19 +568,7 @@ namespace SF
 		virtual void OnAddComponent(Component* newComponent) {}
 
 		// Get component with its ID
-		Component* GetComponent(StringCrc32 ID)
-		{
-			return m_Components.find(ID);
-		}
-
-		const Component* GetComponent(StringCrc32 ID) const
-		{
-			return m_Components.find(ID);
-		}
-
-		template< class ComponentType,
-			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
-		ComponentType* GetComponent(StringCrc32 ID)
+		Component* GetComponent(StringCrc32 ID) const
 		{
 			return m_Components.find(ID);
 		}
@@ -592,14 +580,6 @@ namespace SF
 			return m_Components.find(ID);
 		}
 
-
-		// Get component with its type
-		template< class ComponentType,
-			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
-		ComponentType* GetComponent()
-		{
-			return static_cast<ComponentType*>(GetComponent(ComponentType::ComponentID));
-		}
 
 		// Get component with its type
 		template< class ComponentType,

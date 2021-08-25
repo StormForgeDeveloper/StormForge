@@ -119,15 +119,13 @@ namespace SF
         {
             SF.Log.Info("Running remote commands: {0}", commands.Length);
 
-            var promptRegex = new Regex(@"\][#$>]:"); // regular expression for matching terminal prompt
             var modes = new Dictionary<Renci.SshNet.Common.TerminalModes, uint>();
-
 
             var task = new Task(() =>
             {
                 using (var stream = m_sshClient.CreateShellStream("xterm", 255, 50, 800, 600, 1024, modes))
                 {
-                    stream.WriteLine("sudo pwd"); // Forcing sudo password is triggered so that it doesn't ask later
+                    stream.WriteLine("sudo pwd"); // Forcing sudo password trigger so that it doesn't ask later
                     FlushCommandResultLines(stream);
 
                     foreach (var command in commands)

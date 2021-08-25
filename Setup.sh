@@ -6,11 +6,11 @@ FBX_SDK_INSTALL_FILE_LINUX=fbx20201_fbxsdk_linux.tar.gz
 
 ATF_PATH=$SF_PATH/../ATF
 
-
+https://sdk.lunarg.com/sdk/download/1.2.182.0/linux/vulkansdk-linux-x86_64-1.2.182.0.tar.gz
 # install vulkan SDK link
-if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-1.2.148-bionic.list" ]; then
+if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-1.2.182-bionic.list" ]; then
 	wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-	sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.148-bionic.list https://packages.lunarg.com/vulkan/1.2.148/lunarg-vulkan-1.2.148-bionic.list
+	sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.182-bionic.list https://packages.lunarg.com/vulkan/1.2.182/lunarg-vulkan-1.2.182-bionic.list
 	sudo apt update
 fi
 
