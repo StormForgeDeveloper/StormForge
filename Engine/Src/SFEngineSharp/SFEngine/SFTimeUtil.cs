@@ -100,17 +100,16 @@ namespace SF
     {
         // Server Reference year is 1970
         const int UTCReferenceYear = 1970;
+        static readonly DateTime ReferenceYear = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
 
         static public DateTime ToDateTimeMs(ulong UTCTimeMs)
         {
-            DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            return origin.AddMilliseconds(UTCTimeMs);
+            return ReferenceYear.AddMilliseconds(UTCTimeMs);
         }
 
         static public DateTime ToDateTimeSec(ulong UTCTimeSec)
         {
-            DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc);
-            return origin.AddSeconds(UTCTimeSec);
+            return ReferenceYear.AddSeconds(UTCTimeSec);
         }
 
         static public DateTime NowDateTime()
@@ -120,15 +119,13 @@ namespace SF
 
         static public ulong FromDateTimeMs(DateTime date)
         {
-            DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
-            TimeSpan diff = date.ToUniversalTime() - origin;
+            TimeSpan diff = date.ToUniversalTime() - ReferenceYear;
             return (ulong)diff.TotalMilliseconds;
         }
 
         static public ulong FromDateTimeSec(DateTime date)
         {
-            DateTime origin = new DateTime(UTCReferenceYear, 1, 1, 0, 0, 0, 0);
-            TimeSpan diff = date.ToUniversalTime() - origin;
+            TimeSpan diff = date.ToUniversalTime() - ReferenceYear;
             return (ulong)diff.TotalSeconds;
         }
 
