@@ -140,11 +140,10 @@ set(SRC_FILES
     librdkafka/src/tinycthread.c
     librdkafka/src/tinycthread_extra.h
     librdkafka/src/tinycthread_extra.c
-    librdkafka/src/xxhash.h
-    librdkafka/src/xxhash.c
     librdkafka/src/lz4.c
     librdkafka/src/lz4frame.c
     librdkafka/src/lz4hc.c
+	librdkafka/src/rdxxhash.c
 	librdkafka/src-cpp/ConfImpl.cpp
     librdkafka/src-cpp/ConsumerImpl.cpp
     librdkafka/src-cpp/HeadersImpl.cpp
@@ -276,7 +275,6 @@ set(INSTALL_FILES
     librdkafka/src/tinycthread.h
     librdkafka/src/tinycthread_extra.h
     librdkafka/src/win32_config.h
-    librdkafka/src/xxhash.h
 	librdkafka/src-cpp/rdkafkacpp.h
 )
 
