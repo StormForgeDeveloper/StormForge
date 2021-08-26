@@ -63,7 +63,9 @@ set(SRC_FILES
     librdkafka/src/rdhdrhistogram.c
     librdkafka/src/rdkafka.h
     librdkafka/src/rdkafka.c
+	librdkafka/src/rdkafka_error.c
     librdkafka/src/rdkafka_assignor.c
+	librdkafka/src/rdkafka_assignment.c
     librdkafka/src/rdkafka_background.c
     librdkafka/src/rdkafka_broker.c
     librdkafka/src/rdkafka_buf.h
@@ -74,6 +76,8 @@ set(SRC_FILES
     librdkafka/src/rdkafka_cgrp.c
     librdkafka/src/rdkafka_conf.h
     librdkafka/src/rdkafka_conf.c
+	librdkafka/src/rdkafka_coord.h
+	librdkafka/src/rdkafka_coord.c
     librdkafka/src/rdkafka_event.h
     librdkafka/src/rdkafka_event.c
     librdkafka/src/rdkafka_feature.h
@@ -114,11 +118,13 @@ set(SRC_FILES
     librdkafka/src/rdkafka_sasl.h
     librdkafka/src/rdkafka_sasl_int.h
     librdkafka/src/rdkafka_sasl.c
+	librdkafka/src/rdkafka_ssl.c
     librdkafka/src/rdkafka_sasl_oauthbearer.h
     librdkafka/src/rdkafka_sasl_oauthbearer.c
     librdkafka/src/rdkafka_sasl_plain.c
     librdkafka/src/rdkafka_subscription.c
     librdkafka/src/rdkafka_timer.c
+	librdkafka/src/rdkafka_txnmgr.c
     librdkafka/src/rdkafka_topic.c
     librdkafka/src/rdkafka_transport.c
     librdkafka/src/rdkafka_interceptor.c
@@ -219,6 +225,7 @@ set(INSTALL_FILES
     librdkafka/src/rdkafka.h
     librdkafka/src/rdkafka_admin.h
     librdkafka/src/rdkafka_assignor.h
+	librdkafka/src/rdkafka_assignment.h
     librdkafka/src/rdkafka_aux.h
     librdkafka/src/rdkafka_broker.h
     librdkafka/src/rdkafka_buf.h
@@ -226,6 +233,8 @@ set(INSTALL_FILES
     librdkafka/src/rdkafka_cgrp.h
     librdkafka/src/rdkafka_conf.h
     librdkafka/src/rdkafka_confval.h
+	librdkafka/src/rdkafka_coord.h
+	librdkafka/src/rdkafka_error.h
     librdkafka/src/rdkafka_event.h
     librdkafka/src/rdkafka_feature.h
     librdkafka/src/rdkafka_header.h
