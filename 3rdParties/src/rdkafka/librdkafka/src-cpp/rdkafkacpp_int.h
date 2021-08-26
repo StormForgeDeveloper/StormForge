@@ -45,7 +45,7 @@ extern "C" {
 #include "../src/win32_config.h"
 #else
 /* POSIX / UNIX based systems */
-#include "../config.h" /* mklove output */
+#include "../../rdkafka_config.h" /* mklove output */
 #endif
 
 #ifdef _MSC_VER
