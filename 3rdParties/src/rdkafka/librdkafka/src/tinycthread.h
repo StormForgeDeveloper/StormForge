@@ -29,7 +29,7 @@ freely, subject to the following restrictions:
 #ifdef _WIN32
 #include "win32_config.h"
 #else
-#include "../config.h"
+#include "../../rdkafka_config.h"
 #endif
 
 #if WITH_C11THREADS
