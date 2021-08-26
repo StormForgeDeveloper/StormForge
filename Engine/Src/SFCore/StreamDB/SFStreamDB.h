@@ -126,7 +126,7 @@ namespace SF
 
         virtual Result Initialize(const String& brokers, const String& topic, int32_t partition = 0) override;
 
-        Result SendRecord(const ArrayView<const uint8_t>& data, int64_t timestamp = 0);
+        Result SendRecord(const ArrayView<const uint8_t>& data);
 
         Result Flush();
 

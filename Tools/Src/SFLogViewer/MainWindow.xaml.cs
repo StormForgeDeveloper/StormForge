@@ -43,7 +43,7 @@ namespace SFLogViewer
             var backLog = SavedValueRegistry.ReadValue("InitialBacklog", "100");
             textBacklog.Text = backLog;
 
-            GlobalEngine.Start("SFLogViewer");
+            GlobalEngine.Start("SFLogViewer", logServerAddress);
 
             RefreshChannelList();
 

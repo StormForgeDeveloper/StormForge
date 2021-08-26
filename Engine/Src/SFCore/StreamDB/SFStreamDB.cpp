@@ -282,7 +282,7 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result StreamDBProducer::SendRecord(const ArrayView<const uint8_t>& data, int64_t timestamp)
+	Result StreamDBProducer::SendRecord(const ArrayView<const uint8_t>& data)
 	{
 		if (!m_Producer)
 			return ResultCode::NOT_INITIALIZED;
@@ -293,10 +293,6 @@ namespace SF
 		if (GetTopic().IsNullOrEmpty())
 			return ResultCode::NOT_INITIALIZED;
 
-		// Additional headers
-		RdKafka::Headers* headers = RdKafka::Headers::create();
-		headers->add("GameStream", GetTopic().data());
-
 		RdKafka::ErrorCode err = m_Producer->produce(
 			GetTopicHandle().get(),
 			/* Any Partition: the builtin partitioner will be
@@ -306,18 +302,13 @@ namespace SF
 			GetPartition(),
 			RdKafka::Producer::RK_MSG_COPY /* Copy payload */,
 			/* Payload */
-			const_cast<uint8_t*>(data.data()), data.size(),
-			NULL, 0, // Key
-			timestamp, // Timestamp (0 means defaults to current time)
-			headers,
-			/* Per-message opaque value passed to delivery report */
-			NULL);
+			(void*)data.data(), data.size(),
+			NULL, 0 // Key
+		);
 
 		if (err != RdKafka::ERR_NO_ERROR)
 		{
 			SFLog(Net, Error, "Kafka Failed to send data, topic:{0}, error:{1}", GetTopic(), RdKafka::err2str(err));
-
-			delete headers; // Headers are automatically deleted on produce() success. 
 
 			if (err == RdKafka::ERR__QUEUE_FULL)
 			{

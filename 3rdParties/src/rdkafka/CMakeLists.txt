@@ -59,12 +59,18 @@ set(SRC_FILES
     librdkafka/src/rdcrc32.c
     librdkafka/src/rdgz.h
     librdkafka/src/rdgz.c
+	librdkafka/src/rddl.h
+	librdkafka/src/rddl.c
+	librdkafka/src/rdmap.h
+	librdkafka/src/rdmap.c
     librdkafka/src/rdhdrhistogram.h
     librdkafka/src/rdhdrhistogram.c
     librdkafka/src/rdkafka.h
     librdkafka/src/rdkafka.c
 	librdkafka/src/rdkafka_error.c
     librdkafka/src/rdkafka_assignor.c
+	librdkafka/src/rdkafka_sticky_assignor.c
+	librdkafka/src/rdkafka_mock_cgrp.c
 	librdkafka/src/rdkafka_assignment.c
     librdkafka/src/rdkafka_background.c
     librdkafka/src/rdkafka_broker.c
@@ -118,6 +124,7 @@ set(SRC_FILES
     librdkafka/src/rdkafka_sasl.h
     librdkafka/src/rdkafka_sasl_int.h
     librdkafka/src/rdkafka_sasl.c
+	librdkafka/src/rdkafka_sasl_scram.c
 	librdkafka/src/rdkafka_ssl.c
     librdkafka/src/rdkafka_sasl_oauthbearer.h
     librdkafka/src/rdkafka_sasl_oauthbearer.c
@@ -128,6 +135,8 @@ set(SRC_FILES
     librdkafka/src/rdkafka_topic.c
     librdkafka/src/rdkafka_transport.c
     librdkafka/src/rdkafka_interceptor.c
+	librdkafka/src/rdkafka_plugin.c
+	librdkafka/src/rdfnv1a.c
     librdkafka/src/rdlist.c
     librdkafka/src/rdlog.c
     librdkafka/src/rdmurmur2.h
@@ -172,12 +181,12 @@ endif()
 
 if(WITH_LIBDL)
     add_definitions("-DWITH_LIBDL=1")
-    list(APPEND SRC_FILES librdkafka/src/rddl.c)
+    #list(APPEND SRC_FILES librdkafka/src/rddl.c)
 endif()
 
 if(WITH_PLUGINS)
     add_definitions("-DWITH_PLUGINS=1")
-    list(APPEND SRC_FILES librdkafka/src/rdkafka_plugin.c)
+    #list(APPEND SRC_FILES librdkafka/src/rdkafka_plugin.c)
 endif()
 
 if(WITH_SASL_SCRAM OR WIN32)
@@ -220,6 +229,7 @@ set(INSTALL_FILES
     librdkafka/src/rdendian.h
     librdkafka/src/rdfloat.h
     librdkafka/src/rdgz.h
+	librdkafka/src/rddl.h
     librdkafka/src/rdhdrhistogram.h
     librdkafka/src/rdinterval.h
     librdkafka/src/rdkafka.h
@@ -263,6 +273,8 @@ set(INSTALL_FILES
     librdkafka/src/rdkafka_topic.h
     librdkafka/src/rdkafka_transport.h
     librdkafka/src/rdkafka_zstd.h
+	librdkafka/src/rdkafka_plugin.h
+	librdkafka/src/rdfnv1a.h
     librdkafka/src/rdlist.h
     librdkafka/src/rdlog.h
     librdkafka/src/rdmurmur2.h
