@@ -59,8 +59,6 @@ set(SRC_FILES
     librdkafka/src/rdcrc32.c
     librdkafka/src/rdgz.h
     librdkafka/src/rdgz.c
-	librdkafka/src/rddl.h
-	librdkafka/src/rddl.c
 	librdkafka/src/rdmap.h
 	librdkafka/src/rdmap.c
     librdkafka/src/rdhdrhistogram.h
@@ -135,7 +133,6 @@ set(SRC_FILES
     librdkafka/src/rdkafka_topic.c
     librdkafka/src/rdkafka_transport.c
     librdkafka/src/rdkafka_interceptor.c
-	librdkafka/src/rdkafka_plugin.c
 	librdkafka/src/rdfnv1a.c
     librdkafka/src/rdlist.c
     librdkafka/src/rdlog.c
@@ -179,15 +176,6 @@ if(WITH_SNAPPY)
 endif()
 
 
-if(WITH_LIBDL)
-    add_definitions("-DWITH_LIBDL=1")
-    #list(APPEND SRC_FILES librdkafka/src/rddl.c)
-endif()
-
-if(WITH_PLUGINS)
-    add_definitions("-DWITH_PLUGINS=1")
-    #list(APPEND SRC_FILES librdkafka/src/rdkafka_plugin.c)
-endif()
 
 if(WITH_SASL_SCRAM OR WIN32)
   list(APPEND SRC_FILES librdkafka/src/rdkafka_sasl_win32.c)
@@ -225,7 +213,6 @@ endif()
 set(INSTALL_FILES
     rdkafka_config.h
     librdkafka/src/rdcrc32.h
-    librdkafka/src/rddl.h
     librdkafka/src/rdendian.h
     librdkafka/src/rdfloat.h
     librdkafka/src/rdgz.h
@@ -262,7 +249,6 @@ set(INSTALL_FILES
     librdkafka/src/rdkafka_op.h
     librdkafka/src/rdkafka_partition.h
     librdkafka/src/rdkafka_pattern.h
-    librdkafka/src/rdkafka_plugin.h
     librdkafka/src/rdkafka_proto.h
     librdkafka/src/rdkafka_queue.h
     librdkafka/src/rdkafka_request.h
@@ -273,7 +259,6 @@ set(INSTALL_FILES
     librdkafka/src/rdkafka_topic.h
     librdkafka/src/rdkafka_transport.h
     librdkafka/src/rdkafka_zstd.h
-	librdkafka/src/rdkafka_plugin.h
 	librdkafka/src/rdfnv1a.h
     librdkafka/src/rdlist.h
     librdkafka/src/rdlog.h
