@@ -17,6 +17,7 @@ namespace SF.Tool
 {
     public static class AppConfig
     {
+        static readonly int CurrrentSettingVersion = 1;
         static public ToolSetting ConfigSetting { get; private set; }
         static public ToolSetting ModifiedSetting { get; private set; }
         static public string LocalConfigPath { get; private set; }
@@ -42,16 +43,31 @@ namespace SF.Tool
             string defaultConfigPath = Path.Combine(modulePath, "0.default_" + exeName + ".cfg");
             if (File.Exists(defaultConfigPath))
             {
-                LoadLocalConfig(defaultConfigPath);
+                LoadDefaultConfig(defaultConfigPath);
             }
 
             LocalConfigPath = Path.Combine(roamingPath, exeName, exeName + ".cfg");
             LoadLocalConfig(LocalConfigPath);
         }
 
+        static void LoadDefaultConfig(string configFilePath)
+        {
+            ConfigSetting.LoadLocalConfig(configFilePath);
+
+            ConfigSetting.SetValue("SettingVersion", CurrrentSettingVersion);
+        }
+
         static void LoadLocalConfig(string configFilePath)
         {
             ModifiedSetting.LoadLocalConfig(configFilePath);
+
+            if (ConfigSetting.GetValue<int>("SettingVersion") > ModifiedSetting.GetValue<int>("SettingVersion"))
+            {
+                // Lower version, reset to default
+                ModifiedSetting.Clear();
+                return;
+            }
+
             foreach (var setting in ModifiedSetting)
             {
                 ConfigSetting.SetValue(setting.Key, setting.Value);

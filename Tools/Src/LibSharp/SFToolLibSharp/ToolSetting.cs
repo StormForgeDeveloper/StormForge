@@ -25,6 +25,11 @@ namespace SF.Tool
         {
         }
 
+        public void Clear()
+        {
+            m_Configurations.Clear();
+        }
+
         public ToolSetting Clone()
         {
             ToolSetting newSetting = new ToolSetting();
@@ -272,22 +277,23 @@ namespace SF.Tool
         }
         public ReturnType GetValue<ReturnType>(string key, ReturnType defaultValue = default(ReturnType))
         {
-            var valueString = GetValueString(key);
-            if (string.IsNullOrEmpty(valueString)) return defaultValue;
+            object valueObj = GetValue(key);
+            if (valueObj == null) return defaultValue;
             var returnType = typeof(ReturnType);
-            if (returnType.IsEnum)
+            if (returnType.IsEnum && valueObj is string)
             {
-                foreach(var value in returnType.GetEnumValues())
+                string valueString = valueObj as string;
+                foreach (var value in returnType.GetEnumValues())
                 {
                     if(returnType.GetEnumName(value).ToLower() == valueString.ToLower())
                     {
                         return (ReturnType)value;
                     }
                 }
-                throw new InvalidCastException(valueString);
+                throw new InvalidCastException(valueObj.ToString());
             }
             else
-                return (ReturnType)Convert.ChangeType((object)valueString, typeof(ReturnType));
+                return (ReturnType)Convert.ChangeType(valueObj, typeof(ReturnType));
         }
 
         public Dictionary<string,object> GetValueSet(string key)
