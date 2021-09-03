@@ -9,9 +9,10 @@ using System.Text.RegularExpressions;
 
 namespace SF
 {
-    public class SSHSession
+    public class SSHSession : IDisposable
     {
         SshClient m_sshClient;
+        ShellStream m_Shell;
         string m_Password; // password for sudo commands
 
         IEnumerable<ForwardedPort> ForwardedPorts => m_sshClient.ForwardedPorts;
@@ -27,7 +28,20 @@ namespace SF
                     sshPort: sshPort);
 
             m_sshClient = sshClient;
+
+            var modes = new Dictionary<Renci.SshNet.Common.TerminalModes, uint>();
+            m_Shell = m_sshClient.CreateShellStream("xterm", 1024, 600, 800, 1024, 4096, modes);
+
             m_Password = sshPassword;
+        }
+
+        public void Dispose()
+        {
+            m_Password = null;
+            if (m_Shell != null) m_Shell.Dispose();
+            m_Shell = null;
+            if (m_sshClient != null) m_sshClient.Dispose();
+            m_sshClient = null;
         }
 
         public static SshClient ConnectSsh(
@@ -123,19 +137,22 @@ namespace SF
 
             var task = new Task(() =>
             {
-                using (var stream = m_sshClient.CreateShellStream("xterm", 255, 50, 800, 600, 1024, modes))
+                if (m_Shell != null)
                 {
-                    stream.WriteLine("sudo pwd"); // Forcing sudo password trigger so that it doesn't ask later
-                    FlushCommandResultLines(stream);
+                    //m_Shell.WriteLine("sudo pwd"); // Forcing sudo password trigger so that it doesn't ask later
+                    //FlushCommandResultLines(m_Shell);
 
                     foreach (var command in commands)
                     {
-                        stream.WriteLine(command+"\r"); // Adding \r forcing them to print prompt when action is finished
-                        FlushCommandResultLines(stream);
+                        m_Shell.WriteLine(command+"\r"); // Adding \r forcing them to print prompt when action is finished
+                        FlushCommandResultLines(m_Shell);
                     }
+                    SF.Log.Info("Finished remote commands");
                 }
-
-                SF.Log.Info("Finished remote commands");
+                else
+                {
+                    SF.Log.Error("Can't run remote command, shell is not initialized");
+                }
             });
 
             task.Start();

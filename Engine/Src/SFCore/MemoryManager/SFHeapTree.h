@@ -78,6 +78,15 @@ namespace SF {
 					MemChunkHeader.Magic = magic;
 				}
 
+				void ResetMapNode()
+				{
+					Left = 0;
+					Right = 0;
+					Balance = 0;
+					DepthOfChildren = 0;
+					NumberOfChildren = 0;
+				}
+
 				int UpdateBalanceFactor();
 
 				void ValidateUpdateSerial(uint32_t) {}

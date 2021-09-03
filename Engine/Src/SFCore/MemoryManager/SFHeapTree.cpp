@@ -132,6 +132,8 @@ namespace SF
 		assert(pNode->Right == nullptr);
 		assert(pNode->SameKeyNextNode.NotInAnyList());
 
+		pNode->ResetMapNode();
+
 		KeyType key = pNode->Key();
 		OperationTraversalHistory traversalHistory(GetSystemHeap(), m_Root, m_ItemCount);
 
@@ -533,6 +535,19 @@ namespace SF
 	void HeapTree::FixupBalance(OperationTraversalHistory &travelHistory)
 	{
 		int iRebalancing = 0;
+		int iHistory = (int)travelHistory.GetHistorySize() - 1;
+
+		//if (iHistory >= 0)
+		//{
+		//	auto pCurNode = travelHistory.GetHistory(iHistory);
+		//	
+		//	if (pCurNode->Left)
+		//		pCurNode->Left->UpdateBalanceFactor();
+
+		//	if (pCurNode->Right)
+		//		pCurNode->Right->UpdateBalanceFactor();
+		//}
+
 		for (int iHistory = (int)travelHistory.GetHistorySize() - 1; iHistory >= 0; iHistory--)
 		{
 			auto pCurNode = travelHistory.GetHistory(iHistory);
