@@ -40,6 +40,8 @@ namespace SF {
 	typedef Vector3Soft<float> Vector3;
 	typedef Vector2Soft<float> Vector2;
 
+	typedef Vector3Soft<int> Vector3i;
+	typedef Vector3Soft<int> Vector2i;
 
 	/////////////////////////////////////////////////////////////////
 	// Row first matrix. 

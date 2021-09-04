@@ -16,6 +16,7 @@
 #include "MemoryManager/SFMemoryManager.h"
 #include "Util/SFToString.h"
 #include "../SFTestBase.h"
+#include "json/json.h"
 
 
 // common setting class
@@ -40,10 +41,11 @@ protected:
 	unsigned m_NumberOfTest;
 	int *m_TestValues;
 	
-	const char* m_StreamServerAddress[2] = 
-		// copy serveraddress_sample.txt to serveraddress.txt and edit to your server address
-		#include "LocalData/serveraddress.txt"
-	;
+	const char* m_StreamServerAddress[2] =
+	{
+		"192.168.0.123:9092", // Broker address
+		"192.168.0.123:1111" // stream directory server address
+	};
 
 public:
 

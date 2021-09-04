@@ -23,6 +23,7 @@
 #include "Math/SF3DMath.h"
 #include "SFEngine.h"
 
+#include "json/json.h"
 
 
 using ::testing::EmptyTestEventListener;
@@ -46,6 +47,10 @@ public:
 	
 	SF::Heap m_Heap;
 
+	SF::String m_DataPath;
+
+	Json::Value m_ConfigJson;
+
 	// Thread module test
 	std::vector<SF::Thread*>	m_Threads;
 
@@ -56,6 +61,8 @@ public:
 		: m_Heap("testHeap", SF::GetSystemHeap())
 	{
 	}
+
+	const SF::String& GetDataPath() const { return m_DataPath; }
 
 	virtual ~MyTestBase()
 	{
@@ -81,6 +88,10 @@ public:
 
 	// TearDown() is invoked immediately after a test finishes.  Here we
 	virtual void TearDown();
+
+
+	SF::Result LoadJsonFile(const SF::String& jsonPath, Json::Value& outValue);
+	
 };
 
 
