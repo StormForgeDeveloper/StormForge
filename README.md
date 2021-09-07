@@ -1,7 +1,7 @@
 
  | CodeCI_Win | CodeCI_Linux |
  |--------|---------|
-[![Build Status](http://build.bravesgames.com:8080/buildStatus/icon?job=StormForge%2FCodeCI_Win)](http://build.bravesgames.com:8080/job/StormForge/job/CodeCI_Win/)|[![Build Status](http://build.bravesgames.com:8080/buildStatus/icon?job=StormForge%2FCodeCI_Linux)](http://build.bravesgames.com:8080/job/StormForge/job/CodeCI_Linux/)
+[![Build Status](http://dev-build.fishing-on.com:8080/buildStatus/icon?job=StormForge%2FCodeCI_Win)](http://dev-build.fishing-on.com:8080/buildStatus/icon?job=StormForge%2FCodeCI_Win)|[![Build Status](http://dev-build.fishing-on.com:8080/buildStatus/icon?job=StormForge%2FCodeCI_Linux)](http://dev-build.fishing-on.com:8080/buildStatus/icon?job=StormForge%2FCodeCI_Linux)
  
 
 # StormForge
