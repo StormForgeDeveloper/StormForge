@@ -14,7 +14,6 @@
 #include "SFTypedefs.h"
 #include "SFAssert.h"
 #include "MemoryManager/SFMemoryPool.h"
-//#include "Container/SFContainerTraitBase.h"
 #include "ResultCode/SFResultCodeSystem.h"
 
 
@@ -81,19 +80,6 @@ namespace SF {
 					return m_pCur != m_pHeader ? m_pCur : nullptr;
 				}
 
-				/*
-							DataType* operator-> ()
-							{
-								AssertRel(m_pCur != nullptr);
-								return &m_pCur->Value;
-							}
-
-							const DataType* operator-> () const
-							{
-								AssertRel(m_pCur != nullptr);
-								return &m_pCur->Value;
-							}
-				*/
 				bool operator !=(const iterator& op) const
 				{
 					return m_pCur != op.m_pCur;
@@ -117,20 +103,16 @@ namespace SF {
 			// Header for node
 			Node	m_Header;
 
-			size_t	m_NumItems;
-
-			//MemoryPool* m_pPool;
+			// Number of items
+			size_t	m_NumItems = 0;
 
 		public:
 
 			// Constructor
 			StaticDoubleLinkedListT()
-				: m_NumItems(0)
 			{
 				m_Header.pPrev = &m_Header;
 				m_Header.pNext = &m_Header;
-
-				//m_pPool = MemoryPoolManager::GetMemoryPoolBySize(sizeof Node)
 			}
 
 			virtual ~StaticDoubleLinkedListT()

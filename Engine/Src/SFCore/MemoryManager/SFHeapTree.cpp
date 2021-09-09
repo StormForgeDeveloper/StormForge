@@ -535,18 +535,6 @@ namespace SF
 	void HeapTree::FixupBalance(OperationTraversalHistory &travelHistory)
 	{
 		int iRebalancing = 0;
-		int iHistory = (int)travelHistory.GetHistorySize() - 1;
-
-		//if (iHistory >= 0)
-		//{
-		//	auto pCurNode = travelHistory.GetHistory(iHistory);
-		//	
-		//	if (pCurNode->Left)
-		//		pCurNode->Left->UpdateBalanceFactor();
-
-		//	if (pCurNode->Right)
-		//		pCurNode->Right->UpdateBalanceFactor();
-		//}
 
 		for (int iHistory = (int)travelHistory.GetHistorySize() - 1; iHistory >= 0; iHistory--)
 		{

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -31,11 +31,37 @@ namespace SF {
 		DoubleLinkedListNode*		pPrev = nullptr;
 		DoubleLinkedListNode*		pNext = nullptr;
 
-		bool NotInAnyList()
+		SF_FORCEINLINE bool NotInAnyList() const
 		{
 			return pPrev == nullptr && pNext == nullptr;
 		}
+
+		SF_FORCEINLINE bool IsInAnyList() const
+		{
+			return pPrev != nullptr || pNext != nullptr;
+		}
+
+		SF_FORCEINLINE void RemoveFromList()
+		{
+			if (NotInAnyList())
+				return;
+
+			if (pPrev != nullptr)
+			{
+				pPrev->pNext = pNext;
+			}
+
+			if (pNext != nullptr)
+			{
+				pNext->pPrev = pPrev;
+			}
+
+			pPrev = nullptr;
+			pNext = nullptr;
+		}
 	};
+
+
 
 	template<class DataType>
 	struct DoubleLinkedListNodeDataT : public DoubleLinkedListNode
