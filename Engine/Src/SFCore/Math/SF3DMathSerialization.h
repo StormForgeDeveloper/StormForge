@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -37,6 +37,24 @@ namespace SF {
 	DECLARE_BOXING_TEMPLETE_BYVALUE(Vector4);
 	DECLARE_BOXING_TEMPLETE_BYVALUE(Vector3);
 
+
+
+	inline size_t SerializedSizeOf(const Vector3i& Value) { return sizeof(Value); }
+	Result operator >> (IInputStream& input, Vector3i& data);
+	Result operator << (IOutputStream& output, const Vector3i& data);
+
+	Result _ToString(ToStringContext& context, const Vector3i& value);
+
+	DECLARE_BOXING_TEMPLETE_BYVALUE(Vector3i);
+
+
+	inline size_t SerializedSizeOf(const Vector2i& Value) { return sizeof(Value); }
+	Result operator >> (IInputStream& input, Vector2i& data);
+	Result operator << (IOutputStream& output, const Vector2i& data);
+
+	Result _ToString(ToStringContext& context, const Vector2i& value);
+
+	DECLARE_BOXING_TEMPLETE_BYVALUE(Vector2i);
 }
 
 

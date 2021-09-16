@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -100,5 +100,82 @@ namespace SF {
 
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Vector4)
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Vector3)
+
+
+
+	Result operator >> (IInputStream& input, Vector3i& data)
+	{
+		return input.Read(&data, sizeof(int) * 3);
+	}
+
+	Result operator << (IOutputStream& output, const Vector3i& data)
+	{
+		return output.Write(&data, sizeof(int) * 3);
+	}
+
+
+	Result _ToString(ToStringContext& context, const Vector3i& value)
+	{
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "("))
+			return ResultCode::FAIL;
+
+		if (!_IToA(context, value.x))
+			return ResultCode::FAIL;
+
+
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+			return ResultCode::FAIL;
+
+		if (!_IToA(context, value.y))
+			return ResultCode::FAIL;
+
+
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+			return ResultCode::FAIL;
+
+		if (!_IToA(context, value.z))
+			return ResultCode::FAIL;
+
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
+			return ResultCode::FAIL;
+
+		return ResultCode::SUCCESS;
+	}
+
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Vector3i)
+
+
+	Result operator >> (IInputStream& input, Vector2i& data)
+	{
+		return input.Read(&data, sizeof(int) * 2);
+	}
+
+	Result operator << (IOutputStream& output, const Vector2i& data)
+	{
+		return output.Write(&data, sizeof(int) * 2);
+	}
+
+
+	Result _ToString(ToStringContext& context, const Vector2i& value)
+	{
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "("))
+			return ResultCode::FAIL;
+
+		if (!_IToA(context, value.x))
+			return ResultCode::FAIL;
+
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+			return ResultCode::FAIL;
+
+		if (!_IToA(context, value.y))
+			return ResultCode::FAIL;
+
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
+			return ResultCode::FAIL;
+
+		return ResultCode::SUCCESS;
+	}
+
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Vector2i)
 }
 
