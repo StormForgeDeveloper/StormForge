@@ -66,8 +66,8 @@ namespace SF {
 	template<class DataType>
 	struct DoubleLinkedListNodeDataT
 	{
-		DoubleLinkedListNodeDataT<typename DataType>* pPrev = nullptr;
-		DoubleLinkedListNodeDataT<typename DataType>* pNext = nullptr;
+		DoubleLinkedListNodeDataT<DataType>* pPrev = nullptr;
+		DoubleLinkedListNodeDataT<DataType>* pNext = nullptr;
 		DataType Data;
 
 		DoubleLinkedListNodeDataT()
