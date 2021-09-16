@@ -209,13 +209,14 @@ namespace SF {
 		void ForeachWithRemove(Func func)
 		{
 			super::ForeachWithRemove(
-				[&func](DoubleLinkedListNode* pNode) -> bool
-			{
-				auto myNode = static_cast<Node*>(pNode);
-				if (myNode == nullptr) return false;
+				[&func](DoubleLinkedListNodeDataT<DataType>* pNode) -> bool
+				{
+					auto myNode = static_cast<Node*>(pNode);
+					if (myNode == nullptr) return false;
 
-				return func(*myNode);
-			});
+					return func(*myNode);
+				}
+			);
 		}
 
 	};

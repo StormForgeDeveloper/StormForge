@@ -51,7 +51,7 @@ namespace SF {
 		//assert(m_TaskTick == EngineTaskTick::None);
 
 		AssertRel(m_TaskManagerNode.pNext == nullptr && m_TaskManagerNode.pPrev == nullptr);
-		AssertRel(m_TaskManagerNode.pNext != (DoubleLinkedListNode*)0xdddddddddddddddd && m_TaskManagerNode.pPrev != (DoubleLinkedListNode*)0xdddddddddddddddd);
+		//AssertRel(m_TaskManagerNode.pNext != (DoubleLinkedListNode*)0xdddddddddddddddd && m_TaskManagerNode.pPrev != (DoubleLinkedListNode*)0xdddddddddddddddd);
 		m_TaskManagerNode.Data = nullptr;
 	}
 
