@@ -189,7 +189,7 @@ namespace Net {
 		void ClearWindow();
 
 		// Get available size at the end
-		FORCEINLINE uint32_t GetAvailableSize() { return MessageWindow::MESSAGE_QUEUE_SIZE - (m_uiHeadSequence - GetBaseSequence() + 1); }
+		SF_FORCEINLINE uint32_t GetAvailableSize() { return MessageWindow::MESSAGE_QUEUE_SIZE - (m_uiHeadSequence - GetBaseSequence() + 1); }
 		uint32_t GetRemainSequenceCount() { return Math::Max<int32_t>(0, MessageWindow::MESSAGE_ACCEPTABLE_SEQUENCE_RANGE - (m_uiHeadSequence - GetBaseSequence() + 1)); }
 
 		// Add a message at the end
