@@ -171,7 +171,7 @@ namespace Net {
 
 
 		// get acceptable sequence range
-		int GetAcceptableSequenceRange() const { return MessageWindow::MESSAGE_ACCEPTABLE_SEQUENCE_RANGE; }
+		constexpr int GetAcceptableSequenceRange() const { return MessageWindow::MESSAGE_ACCEPTABLE_SEQUENCE_RANGE; }
 
 		// get message count in window
 		uint32_t GetMsgCount() { return m_uiMsgCount; }
@@ -189,8 +189,9 @@ namespace Net {
 		void ClearWindow();
 
 		// Get available size at the end
-		uint32_t GetAvailableSize() { return MessageWindow::MESSAGE_QUEUE_SIZE - (m_uiHeadSequence - GetBaseSequence() + 1); }
-		
+		FORCEINLINE uint32_t GetAvailableSize() { return MessageWindow::MESSAGE_QUEUE_SIZE - (m_uiHeadSequence - GetBaseSequence() + 1); }
+		uint32_t GetRemainSequenceCount() { return Math::Max<int32_t>(0, MessageWindow::MESSAGE_ACCEPTABLE_SEQUENCE_RANGE - (m_uiHeadSequence - GetBaseSequence() + 1)); }
+
 		// Add a message at the end
 		Result EnqueueMessage(TimeStampMS ulTimeStampMS, SharedPointerT<Message::MessageData>& pIMsg );
 

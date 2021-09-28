@@ -19,7 +19,8 @@
 #include "Variable/SFVariableSerialization.h"
 
 
-namespace SF {
+namespace SF
+{
 
 
 	Result _ToString(ToStringContext& context, const NamedVariableBox& value);
@@ -29,7 +30,5 @@ namespace SF {
 	DECLARE_BOXING_TEMPLETE_BYVALUE(NamedVariableBox);
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(VariableTable);
 
-}; // namespace SF
-
-
+} // namespace SF
 

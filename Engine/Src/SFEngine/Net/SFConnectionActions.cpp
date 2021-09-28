@@ -665,7 +665,7 @@ namespace Net {
 		auto& sendGuaQueue = GetConnection()->GetSendGuaQueue();
 
 		// Send guaranteed message process
-		CounterType NumProc = sendWindow.GetAvailableSize();
+		CounterType NumProc = sendWindow.GetRemainSequenceCount();
 		CounterType uiNumPacket = sendGuaQueue.size();
 		NumProc = Math::Min(NumProc, uiNumPacket);
 		for (CounterType uiPacket = 0; uiPacket < NumProc; uiPacket++)

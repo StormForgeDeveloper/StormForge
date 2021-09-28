@@ -63,6 +63,7 @@ SFDLL_EXPORT SF::Engine* SFEngine_NativeStartEngineWithLog(const char* processNa
 	SF::Log::Net.ChannelMask.Debug1 = 1;
 	SF::Log::Net.ChannelMask.Debug2 = 0;
 	SF::Log::Net.ChannelMask.Debug3 = 0;
+	SF::Log::Net.ChannelMask.Composited |= debuggerLogMask;
 	logOutputMask.Custom1 = 1;
 	logOutputMask.Custom2 = 1;
 	logOutputMask.Custom3 = 1;
