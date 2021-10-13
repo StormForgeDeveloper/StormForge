@@ -36,6 +36,8 @@ set(SF_UNIT_TEST_FILES
 	Test/Container/UnitTest_HashTableTest.h
 	Test/Container/UnitTest_QueueTest.cpp
 	Test/Container/UnitTest_QueueTest.h
+	Test/Container/UnitTest_ContainerTest.cpp
+	Test/Container/UnitTest_ContainerTest.h
 	Test/FBX/UnitTest_FBX.h
 	Test/FBX/UnitTest_FBX.cpp
 	Test/LogServer/UnitTest_Kafka.h

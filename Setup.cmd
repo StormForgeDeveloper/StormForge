@@ -1,5 +1,5 @@
 
-cd %~d0
+%~d0
 cd %~dp0
 
 @echo off

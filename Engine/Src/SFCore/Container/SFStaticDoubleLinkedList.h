@@ -39,11 +39,11 @@ namespace SF
 				mutable Node *m_pCur;
 
 			public:
-				iterator() : m_pCur(nullptr)
+				iterator() : m_pHeader(nullptr), m_pCur(nullptr)
 				{}
-				iterator(const Node* pHeader, const Node* pSrc)
+				iterator(const Node* pHeader, const Node* pCur)
 					: m_pHeader(const_cast<Node*>(pHeader))
-					, m_pCur(const_cast<Node*>(pSrc))
+					, m_pCur(const_cast<Node*>(pCur))
 				{}
 				iterator(const iterator& itSrc)
 					: m_pHeader(itSrc.m_pHeader)
@@ -53,14 +53,12 @@ namespace SF
 				iterator& operator++()
 				{
 					if (m_pCur != nullptr) m_pCur = m_pCur->pNext;
-					if (m_pCur == m_pHeader) m_pCur = nullptr;
 					return *this;
 				}
 
 				const iterator& operator++() const
 				{
 					if (m_pCur != nullptr) m_pCur = m_pCur->pNext;
-					if (m_pCur == m_pHeader) m_pCur = nullptr;
 					return *this;
 				}
 
@@ -240,7 +238,7 @@ namespace SF
 
 			iterator end()
 			{
-				return iterator();
+				return iterator(&m_Header, &m_Header);
 			}
 
 			size_t size()

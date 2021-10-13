@@ -81,8 +81,5 @@ void MyTestBase::TearDown()
 	StopAllThread();
 
 	SF::Service::LogModule->Flush();
-
 }
-
-
 

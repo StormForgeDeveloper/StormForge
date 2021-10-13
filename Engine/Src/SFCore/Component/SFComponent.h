@@ -594,8 +594,9 @@ namespace SF
 		{
 			for (auto itComponent : m_Components)
 			{
-				if (itComponent.GetValue() != nullptr)
-					functor(itComponent.GetValue());
+				auto pComponent = itComponent.GetValue();
+				if (pComponent != nullptr)
+					functor(pComponent);
 			}
 		}
 
@@ -604,8 +605,9 @@ namespace SF
 		{
 			for (auto itComponent : m_Components)
 			{
-				if (itComponent.GetValue() != nullptr)
-					itComponent.GetValue()->TickUpdate();
+				auto pComponent = itComponent.GetValue();
+				if (pComponent != nullptr)
+					pComponent->TickUpdate();
 			}
 		}
 	};
