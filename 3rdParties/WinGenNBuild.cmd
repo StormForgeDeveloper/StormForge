@@ -12,9 +12,21 @@ set NASM_DIR=src\nasm
 set OPENSSL_DIR=src\openssl
 set MYSQL_DIR=src\mysql
 
-rem build SSL
-cmd /c "cd %OPENSSL_DIR% & config1.1_Winx64.cmd"
-cmd /c "cd %OPENSSL_DIR% & build1.1_Winx64.cmd"
+if not exist "NasmBuild.txt" (
+	echo Building NASM
+    cmd /c "cd %NASM_DIR% & buildNASM.cmd" | find "Error" || echo %date%-%time% > NasmBuild.txt
+	
+)
+
+if not exist "OpenSSLBuild.txt" (
+	echo Building OpenSSL
+	rem build SSL
+	cmd /c "cd %OPENSSL_DIR% & config1.1_Winx64.cmd" | find "Error" || echo %date%-%time% > OpenSSLBuild.txt
+	cmd /c "cd %OPENSSL_DIR% & build1.1_Winx64.cmd" | find "Error" && delete OpenSSLBuild.txt
+)
+
+
+
 
 rem build MYSQL client lib
 cmd /c "cd %MYSQL_DIR% & WinGen.cmd"

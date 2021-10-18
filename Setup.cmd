@@ -23,6 +23,16 @@ if not exist %ATF_PATH% (
 rem move to %SF_SDK%
 cd %SF_SDK%
 
+
+
+set ZIP7_INSTALL_FILE_WIN=7z1900-x64.exe
+if not exist %ZIP7_INSTALL_FILE_WIN% (
+	echo downloading FBXSDK
+    call %TOOL_PATH%\httpget +url:https://www.7-zip.org/a/%ZIP7_INSTALL_FILE_WIN%
+	%ZIP7_INSTALL_FILE_WIN%
+)
+
+
 set FBX_SDK_INSTALL_FILE_WIN=fbx20201_fbxsdk_vs2017_win.exe
 if not exist %FBX_SDK_INSTALL_FILE_WIN% (
 	echo downloading FBXSDK
