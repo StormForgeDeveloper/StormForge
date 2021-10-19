@@ -14,15 +14,17 @@ set MYSQL_DIR=src\mysql
 
 if not exist "NasmBuild.txt" (
 	echo Building NASM
-    cmd /c "cd %NASM_DIR% & buildNASM.cmd" | find "Error" || echo %date%-%time% > NasmBuild.txt
+	echo %date%-%time% > NasmBuild.txt
+    cmd /c "cd %NASM_DIR% & buildNASM.cmd"
 	
 )
 
 if not exist "OpenSSLBuild.txt" (
 	echo Building OpenSSL
+	echo %date%-%time% > OpenSSLBuild.txt
 	rem build SSL
-	cmd /c "cd %OPENSSL_DIR% & config1.1_Winx64.cmd" | find "Error" || echo %date%-%time% > OpenSSLBuild.txt
-	cmd /c "cd %OPENSSL_DIR% & build1.1_Winx64.cmd" | find "Error" && delete OpenSSLBuild.txt
+	cmd /c "cd %OPENSSL_DIR% & config1.1_Winx64.cmd"
+	cmd /c "cd %OPENSSL_DIR% & build1.1_Winx64.cmd"
 )
 
 
