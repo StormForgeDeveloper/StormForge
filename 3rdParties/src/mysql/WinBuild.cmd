@@ -20,7 +20,10 @@ cmake --build . --parallel --target install  -- /p:Configuration=%CMAKE_BUILD_TY
 
 
 
-copy lib64\vs14\mysqlcppconn8-static.lib ..\..\..\..\Windows\RelWithDebInfo\lib
-copy lib64\vs14\debug\mysqlcppconn8-static.lib ..\..\..\..\Windows\Debug\lib
+mkdir ..\..\..\..\Windows\RelWithDebInfo\lib\
+mkdir ..\..\..\..\Windows\Debug\lib\
+
+copy lib64\vs14\mysqlcppconn8-static.lib ..\..\..\..\Windows\RelWithDebInfo\lib\
+copy lib64\vs14\debug\mysqlcppconn8-static.lib ..\..\..\..\Windows\Debug\lib\
 
 cd ../../
