@@ -12,10 +12,11 @@
 #pragma once
 
 #include "SFTypedefs.h"
+#include "StreamDB/SFStreamDB.h"
 
-#define USE_STREAMDB
 
 #ifdef USE_STREAMDB
+
 #include "Util/SFStringCrc32.h"
 #include "Util/SFString.h"
 #include "Task/SFTask.h"
