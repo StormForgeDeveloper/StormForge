@@ -94,11 +94,11 @@ namespace SF
 		// Cmd: Havest area
 		Result HarvestAreaRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes );
 		// Cmd: Create stream instance
-		Result CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
+		Result CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Open stream instance
-		Result FindStreamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
+		Result FindStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Delete stream instance
-		Result DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult );
+		Result DeleteStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Get stream list
 		Result GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
 		// Cmd: To call general functionality

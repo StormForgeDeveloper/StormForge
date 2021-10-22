@@ -428,39 +428,39 @@ namespace SF.Net
 
 
 		// Cmd: Create stream instance
-		public int  CreateStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InStreamServerAddr, SF.NetAddress InStreamServerAddrIPV4, System.String InStreamUID )
+		public int  CreateStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceCreateStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InStreamServerAddr,ref InStreamServerAddrIPV4,System.Text.Encoding.UTF8.GetBytes(InStreamUID + "\0"));
+			result = CSSFNetAdapter_PlayInstanceCreateStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamRes);
 			return result;
-		} // public int  CreateStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InStreamServerAddr, SF.NetAddress InStreamServerAddrIPV4, System.String InStreamUID )
+		} // public int  CreateStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
 
 
 		// Cmd: Open stream instance
-		public int  FindStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InStreamServerAddr, SF.NetAddress InStreamServerAddrIPV4, System.String InStreamUID )
+		public int  FindStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceFindStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InStreamServerAddr,ref InStreamServerAddrIPV4,System.Text.Encoding.UTF8.GetBytes(InStreamUID + "\0"));
+			result = CSSFNetAdapter_PlayInstanceFindStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.FindStreamRes);
 			return result;
-		} // public int  FindStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InStreamServerAddr, SF.NetAddress InStreamServerAddrIPV4, System.String InStreamUID )
+		} // public int  FindStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
 
 
 		// Cmd: Delete stream instance
-		public int  DeleteStreamRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		public int  DeleteStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceDeleteStreamRes(m_Connection.NativeHandle, InTransactionID, InResult);
+			result = CSSFNetAdapter_PlayInstanceDeleteStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamRes);
 			return result;
-		} // public int  DeleteStreamRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		} // public int  DeleteStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
 
 
 		// Cmd: Get stream list
@@ -553,19 +553,19 @@ namespace SF.Net
 
 		// Cmd: Create stream instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceCreateStreamRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceCreateStreamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, ref SF.NetAddress InStreamServerAddr, ref SF.NetAddress InStreamServerAddrIPV4, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamUID );
+		static extern int CSSFNetAdapter_PlayInstanceCreateStreamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
 
 
 
 		// Cmd: Open stream instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceFindStreamRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceFindStreamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, ref SF.NetAddress InStreamServerAddr, ref SF.NetAddress InStreamServerAddrIPV4, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamUID );
+		static extern int CSSFNetAdapter_PlayInstanceFindStreamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
 
 
 
 		// Cmd: Delete stream instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceDeleteStreamRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceDeleteStreamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
+		static extern int CSSFNetAdapter_PlayInstanceDeleteStreamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InStreamName );
 
 
 

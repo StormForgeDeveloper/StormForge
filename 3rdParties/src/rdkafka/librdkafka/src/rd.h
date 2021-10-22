@@ -61,7 +61,7 @@
 #include "win32_config.h"
 #else
 /* POSIX / UNIX based systems */
-#include "../../rdkafka_config.h" /* mklove output */
+#include "rdkafka_config.h" /* mklove output */
 #endif
 
 #ifdef _WIN32

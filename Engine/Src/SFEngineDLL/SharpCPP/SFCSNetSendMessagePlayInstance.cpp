@@ -324,41 +324,41 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceHarvestAreaRes( intptr_t InNativeCo
 
 
 // Cmd: Create stream instance
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InStreamServerAddr, const NetAddress& InStreamServerAddrIPV4, const char* InStreamUID )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::CreateStreamRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InStreamServerAddr,InStreamServerAddrIPV4,InStreamUID);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::CreateStreamRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InStreamName);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InStreamServerAddr, const NetAddress& InStreamServerAddrIPV4, const char* InStreamUID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
 
 
 
 // Cmd: Open stream instance
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InStreamServerAddr, const NetAddress& InStreamServerAddrIPV4, const char* InStreamUID )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::FindStreamRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InStreamServerAddr,InStreamServerAddrIPV4,InStreamUID);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::FindStreamRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InStreamName);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InStreamServerAddr, const NetAddress& InStreamServerAddrIPV4, const char* InStreamUID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceFindStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
 
 
 
 // Cmd: Delete stream instance
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::DeleteStreamRes::Create(pConnection->GetHeap(), InTransactionID, InResult);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::DeleteStreamRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InStreamName);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceDeleteStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
 
 
 

@@ -76,6 +76,7 @@ namespace SF
 
 	Result StreamDBDirectoryBroker::Initialize(const String& brokers)
 	{
+		Result hr;
 		std::string errstr;
 
 		m_Config.reset(RdKafka::Conf::create(RdKafka::Conf::CONF_GLOBAL));
@@ -111,7 +112,7 @@ namespace SF
 		// Using async tick for 
 		SetTickGroup(EngineTaskTick::AsyncTick);
 
-		return ResultCode::SUCCESS;
+		return hr;
 	}
 
 	Result StreamDBDirectoryBroker::RequestStreamList()

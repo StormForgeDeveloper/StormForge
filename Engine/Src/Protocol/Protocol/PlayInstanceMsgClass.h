@@ -1053,9 +1053,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				NetAddress m_StreamServerAddr{};
-				NetAddress m_StreamServerAddrIPV4{};
-				const char* m_StreamUID{};
+				const char* m_StreamName{};
 			public:
 				CreateStreamRes()
 					{}
@@ -1068,9 +1066,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const NetAddress& GetStreamServerAddr() const	{ return m_StreamServerAddr; };
-				const NetAddress& GetStreamServerAddrIPV4() const	{ return m_StreamServerAddrIPV4; };
-				const char* GetStreamUID() const	{ return m_StreamUID; };
+				const char* GetStreamName() const	{ return m_StreamName; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -1078,7 +1074,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
 
 			}; // class CreateStreamRes : public MessageBase
 
@@ -1150,9 +1146,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				NetAddress m_StreamServerAddr{};
-				NetAddress m_StreamServerAddrIPV4{};
-				const char* m_StreamUID{};
+				const char* m_StreamName{};
 			public:
 				FindStreamRes()
 					{}
@@ -1165,9 +1159,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const NetAddress& GetStreamServerAddr() const	{ return m_StreamServerAddr; };
-				const NetAddress& GetStreamServerAddrIPV4() const	{ return m_StreamServerAddrIPV4; };
-				const char* GetStreamUID() const	{ return m_StreamUID; };
+				const char* GetStreamName() const	{ return m_StreamName; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -1175,7 +1167,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InStreamServerAddr, const NetAddress &InStreamServerAddrIPV4, const char* InStreamUID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
 
 			}; // class FindStreamRes : public MessageBase
 
@@ -1247,6 +1239,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
+				const char* m_StreamName{};
 			public:
 				DeleteStreamRes()
 					{}
@@ -1259,6 +1252,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
+				const char* GetStreamName() const	{ return m_StreamName; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -1266,7 +1260,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
 
 			}; // class DeleteStreamRes : public MessageBase
 

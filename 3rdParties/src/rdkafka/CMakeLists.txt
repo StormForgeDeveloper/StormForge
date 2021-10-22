@@ -32,6 +32,7 @@ if(WIN32)
     #add_definitions("-DWITH_SASL_SCRAM=1")
     include_directories(AFTER 
         ../openssl/buildWindows/openssl/include
+        ./
     )
 
 elseif(ANDROID_PLATFORM)
@@ -66,6 +67,8 @@ set(SRC_FILES
     librdkafka/src/rdkafka.h
     librdkafka/src/rdkafka.c
 	librdkafka/src/rdkafka_error.c
+    librdkafka/src/rdkafka_admin.c
+    librdkafka/src/rdkafka_aux.c
     librdkafka/src/rdkafka_assignor.c
 	librdkafka/src/rdkafka_sticky_assignor.c
 	librdkafka/src/rdkafka_mock_cgrp.c
@@ -212,6 +215,7 @@ endif()
 
 set(INSTALL_FILES
     rdkafka_config.h
+    librdkafka/src/rd.h
     librdkafka/src/rdcrc32.h
     librdkafka/src/rdendian.h
     librdkafka/src/rdfloat.h
@@ -223,6 +227,7 @@ set(INSTALL_FILES
     librdkafka/src/rdkafka_admin.h
     librdkafka/src/rdkafka_assignor.h
 	librdkafka/src/rdkafka_assignment.h
+    librdkafka/src/rdatomic.h
     librdkafka/src/rdkafka_aux.h
     librdkafka/src/rdkafka_broker.h
     librdkafka/src/rdkafka_buf.h
@@ -281,6 +286,7 @@ set(INSTALL_FILES
     librdkafka/src/tinycthread.h
     librdkafka/src/tinycthread_extra.h
     librdkafka/src/win32_config.h
+    librdkafka/src/queue.h
 	librdkafka/src-cpp/rdkafkacpp.h
 )
 
