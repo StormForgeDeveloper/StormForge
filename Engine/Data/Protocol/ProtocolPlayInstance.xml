@@ -182,19 +182,6 @@
 			</Res>
 		</Command>
 
-		<!-- <C2SEvent Name="NewStreamPacket" Reliable="true" Crypto="No" Trace="Debug1" Desc="Play packet"> -->
-		<!-- <Params TypeName="String" Name="StreamUID" Desc="Unique stream Id to delete"/> -->
-		<!-- <Params TypeName="uint32" Name="SenderEndpointID" Desc="Sender player ID"/> -->
-		<!-- <Params TypeName="uint32" Name="TargetEndpointMask" Desc="Target Play mask."/> -->
-		<!-- <Params TypeName="uint8" IsArray="true" Name="Payload" Desc="Payload data"/> -->
-		<!-- </C2SEvent> -->
-
-
-		<!-- <S2CEvent Name="StreamPacket" Reliable="true" Crypto="No" Trace="Debug1" Desc="Event for Player left."> -->
-		<!-- <Params TypeName="uint32" Name="PlayInstanceID" Desc="Play Instance id"/> -->
-		<!-- <Params TypeName="PlayerID" Name="LeftPlayerID" Desc="Left player ID"/> -->
-		<!-- <Params TypeName="uint32" Name="KickedReason" Desc="Reason"/> -->
-		<!-- </S2CEvent> -->
 
 
 

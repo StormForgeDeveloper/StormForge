@@ -85,7 +85,7 @@ namespace SF
         [DllImport(NativeDllName, EntryPoint = "StreamDBAdmin_NativeCreateStream", CharSet = CharSet.Ansi)]
         static extern int NativeCreateStream(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPArray)] byte[] streamName);
 
-        [DllImport(NativeDllName, EntryPoint = "StreamDBAdmin_NativeCreateStream", CharSet = CharSet.Ansi)]
+        [DllImport(NativeDllName, EntryPoint = "StreamDBAdmin_NativeDeleteStream", CharSet = CharSet.Ansi)]
         static extern int NativeDeleteStream(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPArray)] byte[] streamName);
 
 

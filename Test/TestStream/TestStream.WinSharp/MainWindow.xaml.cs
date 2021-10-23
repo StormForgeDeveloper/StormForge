@@ -82,6 +82,53 @@ namespace TestStream.WinSharp
 
         }
 
+        void TickUpdateStreamDirectory()
+        {
+            if (m_Directory == null)
+                return;
+
+            var msgData = m_Directory.PollMessageData();
+            for (; msgData != null; msgData = m_Directory.PollMessageData())
+            {
+                switch (msgData.GetMessageID())
+                {
+                    case SF.Net.MessageIDPlayInstance.CreateStreamRes:
+                        //Debug.Log("CreateStreamRes {0}, {1}", msgData.GetValue<Result>("Result").ToString(), msgData.GetValue<string>(StreamName));
+                        break;
+                    case SF.Net.MessageIDPlayInstance.DeleteStreamRes:
+                        //Debug.Log("DeleteStreamRes {0}, {1}", msgData.GetValue<Result>("Result").ToString(), msgData.GetValue<string>(StreamName));
+                        break;
+                }
+            }
+        }
+
+        //void TickUpdateStreamConsumer()
+        //{
+        //    if (m_Consumer == null)
+        //        return;
+
+        //    m_Consumer += Time.deltaTime;
+        //    var expectedFrame = (int)(m_StreamCurTime * m_StreamFPS);
+        //    if (expectedFrame > m_StreamCurFrame)
+        //    {
+        //        byte[] frameData;
+        //        var result = m_Consumer.PollData(out frameData);
+        //        if (result == SF.ResultCode.END_OF_STREAM)
+        //        {
+        //            Debug.Log(string.Format("EndOfStream:{0}", m_StreamConsumer.GetTopic()));
+        //        }
+        //        else if (result == SF.ResultCode.SUCCESS && frameData != null)
+        //        {
+        //            m_StreamCurFrame++;
+        //            Debug.Log(string.Format("RecvStream: frame:{0}, size:{1}", m_StreamCurFrame, frameData.Length));
+        //        }
+        //        else
+        //        {
+        //            // data is not ready yet
+        //        }
+        //    }
+        //}
+
         private void OnNewStream(object sender, RoutedEventArgs e)
         {
             var streamName = textStreamName.Text;
