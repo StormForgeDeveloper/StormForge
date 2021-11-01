@@ -1,2 +1,2 @@
 
-copy BuildConfiguration.xml %APPDATA%\Roaming\Unreal Engine\UnrealBuildTool\
+copy BuildConfiguration.xml "%APPDATA%\Roaming\Unreal Engine\UnrealBuildTool\"

@@ -12,8 +12,8 @@
 
 
 #include "SFTypedefs.h"
-#include "Object/SFSharedObject.h"
 #include "Multithread/SFSynchronization.h"
+
 
 
 namespace SF {
@@ -242,29 +242,34 @@ namespace SF {
 		ClassType* operator *()				{ return (ClassType*)m_pObject; }
 		ClassType* operator *() const		{ return (ClassType*)m_pObject; }
 
-		bool operator == (const SharedPointer& src) const
+		SF_FORCEINLINE bool operator == (const SharedPointer& src) const
 		{
 			return SharedPointer::operator == (src);
 		}
 
-		bool operator != (const SharedPointer& src) const
+		SF_FORCEINLINE bool operator != (const SharedPointer& src) const
 		{
 			return SharedPointer::operator != (src);
 		}
 
-		bool operator == (SharedObject* pRef) const
+		SF_FORCEINLINE bool operator == (SharedObject* pRef) const
 		{
 			return SharedPointer::operator == (pRef);
 		}
 
-		bool operator != (SharedObject* pRef) const
+		SF_FORCEINLINE bool operator != (SharedObject* pRef) const
 		{
 			return SharedPointer::operator != (pRef);
 		}
 
-		bool IsUnique() const
+		SF_FORCEINLINE bool IsUnique() const
 		{
 			return m_pObject != nullptr && m_pObject->GetReferenceCount() == 1;
+		}
+
+		SF_FORCEINLINE bool IsValid() const 
+		{
+			return m_pObject != nullptr;
 		}
 
 		SharedPointerT<ClassType>& operator = (const SharedPointer& src)
@@ -315,16 +320,10 @@ namespace SF {
 
 
 		template<class TargetObjectType>
-		SharedPointerT<TargetObjectType> StaticCast() { return SharedPointerT<TargetObjectType>(static_cast<TargetObjectType*>((ClassType*)m_pObject)); }
+		SharedPointerT<TargetObjectType> StaticCast() const { return SharedPointerT<TargetObjectType>(static_cast<TargetObjectType*>((ClassType*)m_pObject)); }
 
 		template<class TargetObjectType>
-		const SharedPointerT<TargetObjectType> StaticCast() const { return SharedPointerT<TargetObjectType>(static_cast<TargetObjectType*>((ClassType*)m_pObject)); }
-
-		template<class TargetObjectType>
-		SharedPointerT<TargetObjectType> DynamicCast() { return SharedPointerT<TargetObjectType>(dynamic_cast<TargetObjectType*>((ClassType*)m_pObject)); }
-
-		template<class TargetObjectType>
-		const SharedPointerT<TargetObjectType> DynamicCast() const { return SharedPointerT<TargetObjectType>(dynamic_cast<TargetObjectType*>((ClassType*)m_pObject)); }
+		SharedPointerT<TargetObjectType> DynamicCast() const { return SharedPointerT<TargetObjectType>(dynamic_cast<TargetObjectType*>((ClassType*)m_pObject)); }
 
 
 		SharedPointerT<ClassType>& operator = (const SharedPointerAtomicT<ClassType>& src);
