@@ -116,6 +116,7 @@ namespace SF
 
 			virtual ~StaticDoubleLinkedListT()
 			{
+				RemoveAll();
 			}
 
 			// pop one item from front
@@ -184,6 +185,21 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}
 
+			void RemoveAll()
+			{
+				auto pNext = m_Header.pNext;
+				for (auto pCur = pNext; pCur; pCur = pNext)
+				{
+					pNext = pCur->pNext;
+
+					pCur->RemoveFromList();
+				}
+
+				memset(&m_Header, 0, sizeof(m_Header));
+				m_Header.pPrev = &m_Header;
+				m_Header.pNext = &m_Header;
+			}
+
 			// add item to the front
 			Result push_front(Node* pNew)
 			{
@@ -231,22 +247,22 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}
 
-			iterator begin()
+			iterator begin() const
 			{
 				return iterator(&m_Header, m_Header.pNext);
 			}
 
-			iterator end()
+			iterator end() const
 			{
 				return iterator(&m_Header, &m_Header);
 			}
 
-			size_t size()
+			SF_FORCEINLINE size_t size() const
 			{
 				return m_NumItems;
 			}
 
-			Result erase(const iterator& itCur)
+			SF_FORCEINLINE Result erase(const iterator& itCur)
 			{
 				if (!itCur.IsValid())
 					return ResultCode::FAIL;
@@ -254,22 +270,19 @@ namespace SF
 				return Remove(itCur.m_pCur);
 			}
 
-			bool empty()
+			SF_FORCEINLINE bool IsEmpty() const
 			{
 				return m_Header.pNext == m_Header.pPrev;
 			}
 
 			void clear()
 			{
-				memset(&m_Header, 0, sizeof(m_Header));
-				m_Header.pPrev = &m_Header;
-				m_Header.pNext = &m_Header;
+				RemoveAll();
 			}
 		};
 
 
-
-		typedef StaticDoubleLinkedListT<DoubleLinkedListNode> StaticDoubleLinkedList;
+		using StaticDoubleLinkedList = StaticDoubleLinkedListT<DoubleLinkedListNode>;
 }
 
 
