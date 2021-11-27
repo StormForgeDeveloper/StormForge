@@ -41,8 +41,8 @@ namespace SF
 	public:
 
 		using super = EngineObject;
-		using ReceivedMovementMnager = ActorMovementReplayManager;
-		//using ReceivedMovementMnager = ReceivedActorMovementManager;
+		using ReceivedMovementManager = ActorMovementReplayManager;
+		//using ReceivedMovementManager = ReceivedActorMovementManager;
 
 		static constexpr uint32_t RemotePlayerSimulationDelay = 35;
 
@@ -139,36 +139,37 @@ namespace SF
 		uint32_t UpdateMovement();
 
 		// Online State
-		OnlineState GetOnlineState() const { return m_OnlineState; }
+		SF_FORCEINLINE OnlineState GetOnlineState() const { return m_OnlineState; }
 
-		StringCrc32 GetGameId() const { return m_GameId; }
-		const String& GetUserId() const { return m_UserId; }
-		const String& GetPassword() const { return m_Password; }
-		const String& GetLoginAddresses() const { return m_LoginAddresses; }
+		SF_FORCEINLINE StringCrc32 GetGameId() const { return m_GameId; }
+		SF_FORCEINLINE const String& GetUserId() const { return m_UserId; }
+		SF_FORCEINLINE const String& GetPassword() const { return m_Password; }
+		SF_FORCEINLINE const String& GetLoginAddresses() const { return m_LoginAddresses; }
 
-		uint64_t GetLoginEntityUID() const { return m_LoginEntityUID; }
-		const NetAddress& GetGameAddress() const { return m_GameAddress; }
-		const NetAddress& GetGameAddress4() const { return m_GameAddress4; }
-		AccountID GetAccountId() const { return m_AccountId; }
-		AuthTicket GetAuthTicket() const { return m_AuthTicket; }
-		PlayerID GetPlayerID() const { return m_AccountId; }
+		SF_FORCEINLINE uint64_t GetLoginEntityUID() const { return m_LoginEntityUID; }
+		SF_FORCEINLINE const NetAddress& GetGameAddress() const { return m_GameAddress; }
+		SF_FORCEINLINE const NetAddress& GetGameAddress4() const { return m_GameAddress4; }
+		SF_FORCEINLINE AccountID GetAccountId() const { return m_AccountId; }
+		SF_FORCEINLINE AuthTicket GetAuthTicket() const { return m_AuthTicket; }
+		SF_FORCEINLINE PlayerID GetPlayerID() const { return m_AccountId; }
+		ActorID GetActorID() const;
 
-		uint32_t GetCharacterId() const { return m_CharacterId; }
+		SF_FORCEINLINE uint32_t GetCharacterId() const { return m_CharacterId; }
 
-		uint64_t GetGameInstanceUID() const { return m_GameInstanceUID; }
-		const NetAddress& GetGameInstanceAddress4() const { return m_GameInstanceAddress4; }
-		const NetAddress& GetGameInstanceAddress6() const { return m_GameInstanceAddress6; }
+		SF_FORCEINLINE uint64_t GetGameInstanceUID() const { return m_GameInstanceUID; }
+		SF_FORCEINLINE const NetAddress& GetGameInstanceAddress4() const { return m_GameInstanceAddress4; }
+		SF_FORCEINLINE const NetAddress& GetGameInstanceAddress6() const { return m_GameInstanceAddress6; }
 
-		const SharedPointerT<Net::Connection>& GetConnectionLogin() const { return m_Login; }
-		const SharedPointerT<Net::Connection>& GetConnectionGame() const { return m_Game; }
-		const SharedPointerT<Net::Connection>& GetConnectionGameInstance() const { return m_GameInstance; }
+		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionLogin() const { return m_Login; }
+		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionGame() const { return m_Game; }
+		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionGameInstance() const { return m_GameInstance; }
 
-		const SharedPointerT<SendingActorMovementManager>& GetSendMovementManager() const { return m_OutgoingMovement; }
+		SF_FORCEINLINE const SharedPointerT<SendingActorMovementManager>& GetSendMovementManager() const { return m_OutgoingMovement; }
 		Result GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement);
 		Result GetMovementForPlayerAll(PlayerID playerId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement);
 
-		uint32_t GetCurrentMovementFrame() const { return m_MoveFrame; }
-		void SetMovementFrame(uint32_t moveFrame) { m_MoveFrame = moveFrame; }
+		SF_FORCEINLINE uint32_t GetCurrentMovementFrame() const { return m_MoveFrame; }
+		SF_FORCEINLINE void SetMovementFrame(uint32_t moveFrame) { m_MoveFrame = moveFrame; }
 
 		void SetStateChangeCallback(ONLINESTATE_CHAGED_CALLBACK callback) { m_OnlineStateChangedCallback = callback; }
 		void SetTaskFinishedCallback(ONLINE_TASK_FINISHED_CALLBACK callback) { m_OnlineTaskFinishedCallback = callback; }
@@ -181,7 +182,7 @@ namespace SF
 
 		void ClearTasks();
 
-		void InitMoveFrame(uint32_t newMoveFrame);
+		void InitMovement(ActorID actorId, uint32_t newMoveFrame);
 		void SetupInstanceInfo();
 		void ClearInstanceInfo();
 		void RegisterGameHandlers();
@@ -189,8 +190,8 @@ namespace SF
 
 		void OnPlayerInView(const MessageDataPtr& pMsgData);
 		void OnPlayerOutofView(const MessageDataPtr& pMsgData);
-		void OnPlayerMovement(const MessageDataPtr& pMsgData);
-		void OnPlayerMovement(PlayerID playerId, const ActorMovement& movement);
+		void OnActorMovement(const MessageDataPtr& pMsgData);
+		void OnActorMovement(const ActorMovement& movement);
 		void OnPlayerStateChanged(const MessageDataPtr& pMsgData);
 
 		void UpdateOnlineStateByConnectionState();
@@ -242,7 +243,8 @@ namespace SF
 		SharedPointerT<SendingActorMovementManager> m_OutgoingMovement;
 
 		// PlayerId by movement
-		SortedMap<PlayerID,SharedPointerT<ReceivedMovementMnager>> m_IncomingMovements;
+		SortedMap<PlayerID,SharedPointerT<ReceivedMovementManager>> m_IncomingMovements;
+		SortedMap<ActorID, SharedPointerT<ReceivedMovementManager>> m_IncomingMovementsByActor;
 
 		// tick time
 		TimeStampMS m_TickTime;

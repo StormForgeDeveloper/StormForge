@@ -118,6 +118,11 @@ namespace SF
             return NativeGetCharacterId(NativeHandle);
         }
 
+        public UInt32 GetActorId()
+        {
+            return NativeGetActorId(NativeHandle);
+        }
+
         public void UpdateGameTick(out UInt32 deltaFrames)
         {
             lock (SFMessageParsingUtil.stm_ParsingLock)
@@ -281,11 +286,14 @@ namespace SF
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetPlayerId", CharSet = CharSet.Auto)]
         static extern UInt64 NativeGetPlayerId(IntPtr nativeHandle);
 
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetGameId", CharSet = CharSet.Auto)]
-        static extern UInt32 NativeGetGameId(IntPtr nativeHandle);
-
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetCharacterId", CharSet = CharSet.Auto)]
         static extern UInt32 NativeGetCharacterId(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetActorId", CharSet = CharSet.Auto)]
+        static extern UInt32 NativeGetActorId(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetGameId", CharSet = CharSet.Auto)]
+        static extern UInt32 NativeGetGameId(IntPtr nativeHandle);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetGameInstanceUID", CharSet = CharSet.Auto)]
         static extern UInt64 NativeGetGameInstanceUID(IntPtr nativeHandle);

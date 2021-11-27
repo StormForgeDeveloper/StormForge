@@ -220,7 +220,7 @@ namespace SF
 			}; // class PlayPacketC2SEvt : public MessageBase
 
 			// S2C: New Player in get view
-			class NewPlayerInViewS2CEvt : public MessageBase
+			class NewActorInViewS2CEvt : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -250,10 +250,10 @@ namespace SF
 				mutable bool m_StateValuesHasParsed = false;
 				mutable VariableTable m_StateValues;
 			public:
-				NewPlayerInViewS2CEvt()
+				NewActorInViewS2CEvt()
 					{}
 
-				NewPlayerInViewS2CEvt( const MessageDataPtr &pMsg )
+				NewActorInViewS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
@@ -277,7 +277,7 @@ namespace SF
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues );
 
-			}; // class NewPlayerInViewS2CEvt : public MessageBase
+			}; // class NewActorInViewS2CEvt : public MessageBase
 
 			// S2C: Remove player from view
 			class RemovePlayerFromViewS2CEvt : public MessageBase
@@ -372,40 +372,39 @@ namespace SF
 			}; // class PlayerMovementC2SEvt : public MessageBase
 
 			// S2C: Player Movement
-			class PlayerMovementS2CEvt : public MessageBase
+			class ActorMovementS2CEvt : public MessageBase
 			{
  			public:
 				static const MessageID MID;
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
+ 					HasPlayerID = 0,
 					HasTransactionID = 0,
 					HasRouteContext = 0,
 					HasRouteHopCount = 0,
 					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
+				uint64_t GetPlayerID() { return uint64_t{}; }
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 				uint32_t GetRouteHopCount() { return uint32_t{}; }
 				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
-				PlayerID m_PlayerID{};
 				ActorMovement m_Movement{};
 			public:
-				PlayerMovementS2CEvt()
+				ActorMovementS2CEvt()
 					{}
 
-				PlayerMovementS2CEvt( const MessageDataPtr &pMsg )
+				ActorMovementS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
-				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const ActorMovement& GetMovement() const	{ return m_Movement; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -414,9 +413,55 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement );
 
-			}; // class PlayerMovementS2CEvt : public MessageBase
+			}; // class ActorMovementS2CEvt : public MessageBase
+
+			// S2C: Player Movement
+			class ActorMovementsS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 0,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetPlayerID() { return uint64_t{}; }
+				uint64_t GetTransactionID() { return uint64_t{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+				uint32_t GetRouteHopCount() { return uint32_t{}; }
+				uint64_t GetSender() { return uint64_t{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				ArrayView<ActorMovement> m_Movement;
+			public:
+				ActorMovementsS2CEvt()
+					{}
+
+				ActorMovementsS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const Array<ActorMovement>& GetMovement() const	{ return m_Movement; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement );
+
+			}; // class ActorMovementsS2CEvt : public MessageBase
 
 			// S2C: Player state change
 			class PlayerStateChangedS2CEvt : public MessageBase

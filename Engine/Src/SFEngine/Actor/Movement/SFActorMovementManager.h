@@ -35,9 +35,11 @@ namespace SF
 
 	public:
 
-		ActorMovementManager();
+		ActorMovementManager(ActorID actorId);
 
 		virtual ~ActorMovementManager();
+
+		SF_FORCEINLINE ActorID GetActorID() const { return m_ActorId; }
 
 		// Queue style operation
 		virtual Result EnqueueMovement(const ActorMovement& newMove);
@@ -45,6 +47,9 @@ namespace SF
 		virtual Result DequeueMovement(ActorMovement& pMove);
 
 	protected:
+
+		ActorID m_ActorId{};
+
 		uint32_t m_LatestQueuedFrame = 0;
 		CircularQueue<ActorMovement, MaxSavedMove> m_Moves;
 	};
@@ -67,6 +72,8 @@ namespace SF
 
 		virtual ~SendingActorMovementManager();
 
+		void SetActorID(ActorID actorId) { m_ActorId = actorId; }
+
 		virtual Result EnqueueMovement(const ActorMovement& newMove) override;
 
 	private:
@@ -84,7 +91,7 @@ namespace SF
 	public:
 		using super = ActorMovementManager;
 
-		ActorMovementReplayManager();
+		ActorMovementReplayManager(ActorID actorId);
 
 		void ResetMove();
 		void ResetMove(const ActorMovement& newMove);

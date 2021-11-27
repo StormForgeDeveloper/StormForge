@@ -43,8 +43,8 @@ namespace SF
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::PlayPacketC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayPacketC2SEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::PlayPacketC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayPacketC2SEvt::ParseMessageToMessageBase));
 			// S2C: New Player in get view
-			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::NewPlayerInViewS2CEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::NewPlayerInViewS2CEvt::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::NewActorInViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::NewActorInViewS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::NewActorInViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::NewActorInViewS2CEvt::ParseMessageToMessageBase));
 			// S2C: Remove player from view
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::RemovePlayerFromViewS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::RemovePlayerFromViewS2CEvt::ParseMessageToMessageBase));
@@ -52,8 +52,11 @@ namespace SF
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::PlayerMovementC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerMovementC2SEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::PlayerMovementC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerMovementC2SEvt::ParseMessageToMessageBase));
 			// S2C: Player Movement
-			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::PlayerMovementS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerMovementS2CEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::PlayerMovementS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerMovementS2CEvt::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::ActorMovementS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ActorMovementS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::ActorMovementS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ActorMovementS2CEvt::ParseMessageToMessageBase));
+			// S2C: Player Movement
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::ActorMovementsS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ActorMovementsS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::ActorMovementsS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ActorMovementsS2CEvt::ParseMessageToMessageBase));
 			// S2C: Player state change
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::PlayerStateChangedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerStateChangedS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::PlayerStateChangedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerStateChangedS2CEvt::ParseMessageToMessageBase));

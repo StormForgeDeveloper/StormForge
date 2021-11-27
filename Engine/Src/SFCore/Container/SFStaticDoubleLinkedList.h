@@ -116,7 +116,7 @@ namespace SF
 
 			virtual ~StaticDoubleLinkedListT()
 			{
-				RemoveAll();
+				Clear();
 			}
 
 			// pop one item from front
@@ -185,7 +185,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}
 
-			void RemoveAll()
+			void Clear()
 			{
 				auto pNext = m_Header.pNext;
 				for (auto pCur = pNext; pCur; pCur = pNext)
@@ -195,7 +195,7 @@ namespace SF
 					pCur->RemoveFromList();
 				}
 
-				memset(&m_Header, 0, sizeof(m_Header));
+				m_Header = {};
 				m_Header.pPrev = &m_Header;
 				m_Header.pNext = &m_Header;
 			}
@@ -277,7 +277,7 @@ namespace SF
 
 			void clear()
 			{
-				RemoveAll();
+				Clear();
 			}
 		};
 

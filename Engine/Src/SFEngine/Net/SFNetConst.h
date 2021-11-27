@@ -29,12 +29,13 @@ namespace Net {
 	{
 		enum NetConstEnum {
 		PACKET_GATHER_MAX				= 36,
-		PACKET_GATHER_SIZE_MAX			= 1024,
+		PACKET_GATHER_SIZE_MAX			= 1280,
 
-		PACKET_SIZE_MAX					= 1024,
+		PACKET_SIZE_MAX					= 1280,
 		// https://en.wikipedia.org/wiki/IPv6_packet
 		// https://en.wikipedia.org/wiki/User_Datagram_Protocol
-		INTER_PACKET_SIZE_MAX			= 1500 - 40 - 48, // Something can represent UDP frame max
+		// https://en.wikipedia.org/wiki/IPv6_packet#Fragmentation
+		INTER_PACKET_SIZE_MAX			= 1280, // Something can represent UDP frame max
 
 		CONMGR_THREAD_INTERVAL			= 1,		// Connection manager thread interval
 

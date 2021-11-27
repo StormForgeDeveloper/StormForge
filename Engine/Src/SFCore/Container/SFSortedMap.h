@@ -134,6 +134,9 @@ namespace SF {
 			Result FindRef(KeyType key, ValueType*& pValue, int64_t* pOrder = nullptr);
 			Result FindInWriteTree(KeyType key, ValueType& value) const { return Find(key, value); }
 
+			// Same as insert, replaces if mapping is exist
+			Result Emplace(KeyType key, const ValueType& value);
+
 			// get number of values
 			size_t size() const { return (size_t)m_ItemCount; }
 

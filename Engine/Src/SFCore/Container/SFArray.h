@@ -41,6 +41,7 @@ namespace SF {
 			static constexpr bool IsTirviallyConstructable = std::is_trivially_constructible_v<DataTypeDecay>;
 			static constexpr bool IsConstructable = std::is_constructible_v<DataTypeDecay>;
 			static constexpr bool IsCopyConstructable = std::is_copy_constructible_v<DataTypeDecay>;
+			static constexpr bool IsCopyAssignable = std::is_copy_assignable_v<DataTypeDecay>;
 			static constexpr bool IsDestructable = std::is_destructible_v<DataTypeDecay>;
 			//static constexpr bool IsCopyAssignable = std::is_copy_assignable_v<DataTypeDecay>;
 

@@ -41,7 +41,7 @@ namespace SF.Net
 		public static int PlayPacketC2SEvt { get { return CSSFNetMessageID_PlayInstancePlayPacketC2SEvt(); } }
 
 		// S2C: New Player in get view
-		public static int NewPlayerInViewS2CEvt { get { return CSSFNetMessageID_PlayInstanceNewPlayerInViewS2CEvt(); } }
+		public static int NewActorInViewS2CEvt { get { return CSSFNetMessageID_PlayInstanceNewActorInViewS2CEvt(); } }
 
 		// S2C: Remove player from view
 		public static int RemovePlayerFromViewS2CEvt { get { return CSSFNetMessageID_PlayInstanceRemovePlayerFromViewS2CEvt(); } }
@@ -50,7 +50,10 @@ namespace SF.Net
 		public static int PlayerMovementC2SEvt { get { return CSSFNetMessageID_PlayInstancePlayerMovementC2SEvt(); } }
 
 		// S2C: Player Movement
-		public static int PlayerMovementS2CEvt { get { return CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt(); } }
+		public static int ActorMovementS2CEvt { get { return CSSFNetMessageID_PlayInstanceActorMovementS2CEvt(); } }
+
+		// S2C: Player Movement
+		public static int ActorMovementsS2CEvt { get { return CSSFNetMessageID_PlayInstanceActorMovementsS2CEvt(); } }
 
 		// S2C: Player state change
 		public static int PlayerStateChangedS2CEvt { get { return CSSFNetMessageID_PlayInstancePlayerStateChangedS2CEvt(); } }
@@ -137,8 +140,8 @@ namespace SF.Net
 
 
 		// S2C: New Player in get view
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceNewPlayerInViewS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_PlayInstanceNewPlayerInViewS2CEvt();
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceNewActorInViewS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceNewActorInViewS2CEvt();
 
 
 		// S2C: Remove player from view
@@ -152,8 +155,13 @@ namespace SF.Net
 
 
 		// S2C: Player Movement
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt();
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceActorMovementS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceActorMovementS2CEvt();
+
+
+		// S2C: Player Movement
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceActorMovementsS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceActorMovementsS2CEvt();
 
 
 		// S2C: Player state change

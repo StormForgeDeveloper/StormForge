@@ -38,9 +38,9 @@ namespace SF {
 		public:
 
 			// internal aliasing
-			typedef ItemType ValueType;
-			typedef typename ThreadTrait::TicketLockType	TicketLockType;
-			typedef typename ThreadTrait::ItemContainer	ItemContainer;
+			using ValueType = ItemType;
+			using TicketLockType = typename ThreadTrait::TicketLockType;
+			using ItemContainer = typename ThreadTrait::ItemContainer;
 
 			// internal aliasing
 			//typedef typename ItemContainer::iterator ItemIterator;

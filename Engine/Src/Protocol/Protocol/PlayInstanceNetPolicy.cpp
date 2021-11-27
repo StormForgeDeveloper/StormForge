@@ -249,19 +249,19 @@ namespace SF
 
 	}; // Result NetSvrPolicyPlayInstance::PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
 	// S2C: New Player in get view
-	Result NetSvrPolicyPlayInstance::NewPlayerInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
+	Result NetSvrPolicyPlayInstance::NewActorInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::NewPlayerInViewS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InAttributes, InMovement, InState, InStateValues);
+		 pMessage = SF::Message::PlayInstance::NewActorInViewS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InAttributes, InMovement, InState, InStateValues);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyPlayInstance::NewPlayerInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
+	}; // Result NetSvrPolicyPlayInstance::NewActorInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
 	// S2C: Remove player from view
 	Result NetSvrPolicyPlayInstance::RemovePlayerFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
 	{
@@ -277,19 +277,33 @@ namespace SF
 
 	}; // Result NetSvrPolicyPlayInstance::RemovePlayerFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
 	// S2C: Player Movement
-	Result NetSvrPolicyPlayInstance::PlayerMovementS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+	Result NetSvrPolicyPlayInstance::ActorMovementS2CEvt( const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::PlayerMovementS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InMovement);
+		 pMessage = SF::Message::PlayInstance::ActorMovementS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InMovement);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyPlayInstance::PlayerMovementS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+	}; // Result NetSvrPolicyPlayInstance::ActorMovementS2CEvt( const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement )
+	// S2C: Player Movement
+	Result NetSvrPolicyPlayInstance::ActorMovementsS2CEvt( const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::ActorMovementsS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InMovement);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetSvrPolicyPlayInstance::ActorMovementsS2CEvt( const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement )
 	// S2C: Player state change
 	Result NetSvrPolicyPlayInstance::PlayerStateChangedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const VariableTable &InStateValues )
 	{

@@ -47,10 +47,10 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayPacketC2SEvt()
 
 
 // S2C: New Player in get view
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceNewPlayerInViewS2CEvt()
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceNewActorInViewS2CEvt()
 {
- 	return SF::Message::PlayInstance::NewPlayerInViewS2CEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceNewPlayerInViewS2CEvt()
+ 	return SF::Message::PlayInstance::NewActorInViewS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceNewActorInViewS2CEvt()
 
 
 // S2C: Remove player from view
@@ -68,10 +68,17 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerMovementC2SEvt()
 
 
 // S2C: Player Movement
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt()
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceActorMovementS2CEvt()
 {
- 	return SF::Message::PlayInstance::PlayerMovementS2CEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayerMovementS2CEvt()
+ 	return SF::Message::PlayInstance::ActorMovementS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceActorMovementS2CEvt()
+
+
+// S2C: Player Movement
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceActorMovementsS2CEvt()
+{
+ 	return SF::Message::PlayInstance::ActorMovementsS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceActorMovementsS2CEvt()
 
 
 // S2C: Player state change

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -45,7 +45,7 @@ namespace SF {
 
 	public:
 
-		UniqueIDGenerator(IHeap& memoryManager);
+		UniqueIDGenerator(IHeap& heap);
 		~UniqueIDGenerator();
 
 		// Generate New ID
@@ -69,6 +69,77 @@ namespace SF {
 	};
 
 
-}; // namespace BR
+	// Unique Id Handle
+	class UniqueIDHandle
+	{
+	public:
+		UniqueIDHandle()
+		{
+		}
+
+		UniqueIDHandle(UniqueIDGenerator& generator)
+			: m_Generator(&generator)
+		{
+			if (m_Generator)
+			{
+				m_UniqueId = m_Generator->NewID();
+				assert(m_UniqueId);
+			}
+		}
+
+		UniqueIDHandle(UniqueIDHandle&& src) noexcept
+			: m_Generator(src.m_Generator)
+		{
+			m_UniqueId = src.m_UniqueId;
+
+			src.m_Generator = nullptr;
+			src.m_UniqueId = 0;
+		}
+
+		~UniqueIDHandle()
+		{
+			Reset();
+		}
+
+		SF_FORCEINLINE void Reset()
+		{
+			if (m_UniqueId != 0)
+			{
+				assert(m_Generator);
+				m_Generator->FreeID(m_UniqueId);
+				m_UniqueId = 0;
+			}
+		}
+
+		SF_FORCEINLINE bool IsValid() const { return m_UniqueId != 0 && m_Generator != nullptr; }
+
+		SF_FORCEINLINE operator uint32_t() const { return m_UniqueId; }
+
+
+		SF_FORCEINLINE UniqueIDHandle& operator = (UniqueIDHandle&& src) noexcept
+		{
+			m_Generator = src.m_Generator;
+			m_UniqueId = src.m_UniqueId;
+
+			src.m_Generator = nullptr;
+			src.m_UniqueId = 0;
+
+			return *this;
+		}
+
+		SF_FORCEINLINE bool operator == (uint32_t value)
+		{
+			return m_UniqueId == value;
+		}
+
+
+	private:
+
+		UniqueIDGenerator* m_Generator{};
+
+		uint32_t m_UniqueId{};
+	};
+
+} // namespace SF
 
 

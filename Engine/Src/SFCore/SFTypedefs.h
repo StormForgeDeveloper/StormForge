@@ -613,6 +613,11 @@ namespace SF {
 	typedef char* CharPtr;
 	typedef wchar_t* WCharPtr;
 
+	// unique actor id in zone instance
+	using ActorID = uint32_t;
+
+
+
 	struct uint128_t
 	{
 		uint64_t Low;

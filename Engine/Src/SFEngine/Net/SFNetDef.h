@@ -36,6 +36,9 @@ namespace Net {
 
 	static constexpr int MAX_STRING_TEMP_BUFF_SIZE = 1024 + 512;
 
+	// Maximum packet size preventing fragmentation
+	// https://en.wikipedia.org/wiki/IPv6_packet#Fragmentation
+	static constexpr size_t MAX_PACKET_SIZE = 1280; 
 
 	////////////////////////////////////////////////////////////////////////////////
 	//

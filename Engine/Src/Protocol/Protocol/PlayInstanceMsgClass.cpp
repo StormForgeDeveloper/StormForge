@@ -409,8 +409,8 @@ namespace SF
 			}; // Result PlayPacketC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: New Player in get view
-			const MessageID NewPlayerInViewS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 3);
-			const VariableTable& NewPlayerInViewS2CEvt::GetAttributes() const
+			const MessageID NewActorInViewS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 3);
+			const VariableTable& NewActorInViewS2CEvt::GetAttributes() const
 			{
  				if (!m_AttributesHasParsed)
 				{
@@ -419,8 +419,8 @@ namespace SF
 					*Attributes_ReadStream.ToInputStream() >> m_Attributes;
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
-			} // const VariableTable& NewPlayerInViewS2CEvt::GetAttributes() const
-			const VariableTable& NewPlayerInViewS2CEvt::GetStateValues() const
+			} // const VariableTable& NewActorInViewS2CEvt::GetAttributes() const
+			const VariableTable& NewActorInViewS2CEvt::GetStateValues() const
 			{
  				if (!m_StateValuesHasParsed)
 				{
@@ -429,8 +429,8 @@ namespace SF
 					*StateValues_ReadStream.ToInputStream() >> m_StateValues;
 				} // if (!m_StateValuesHasParsed)
 				return m_StateValues;
-			} // const VariableTable& NewPlayerInViewS2CEvt::GetStateValues() const
-			Result NewPlayerInViewS2CEvt::ParseMessage(const MessageData* pIMsg)
+			} // const VariableTable& NewActorInViewS2CEvt::GetStateValues() const
+			Result NewActorInViewS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -458,14 +458,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result NewPlayerInViewS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result NewActorInViewS2CEvt::ParseMessage(const MessageData* pIMsg)
 
-			Result NewPlayerInViewS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result NewActorInViewS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				NewPlayerInViewS2CEvt parser;
+				NewActorInViewS2CEvt parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
@@ -477,20 +477,20 @@ namespace SF
 
 				return hr;
 
-			}; // Result NewPlayerInViewS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result NewActorInViewS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result NewPlayerInViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result NewActorInViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) NewPlayerInViewS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) NewActorInViewS2CEvt(pIMsg));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result NewPlayerInViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result NewActorInViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues )
+			MessageData* NewActorInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -514,7 +514,7 @@ namespace SF
 					+ serializedSizeOfInStateValues
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewPlayerInViewS2CEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewActorInViewS2CEvt::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -528,9 +528,9 @@ namespace SF
 				protocolCheck(*output << InStateValues);
 
 				return hr;
-			}; // MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues )
+			}; // MessageData* NewActorInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues )
 
-			MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
+			MessageData* NewActorInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -556,7 +556,7 @@ namespace SF
 					+ serializedSizeOfInStateValues
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewPlayerInViewS2CEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewActorInViewS2CEvt::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -572,16 +572,16 @@ namespace SF
 				protocolCheck(*output << InStateValues);
 
 				return hr;
-			}; // MessageData* NewPlayerInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
+			}; // MessageData* NewActorInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
 
-			Result NewPlayerInViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result NewActorInViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				NewPlayerInViewS2CEvt parser;
+ 				NewActorInViewS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "NewPlayerInView:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, Attributes:{4}, Movement:{5}, State:{6}, StateValues:{7}",
+				SFLog(Net, Debug1, "NewActorInView:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, Attributes:{4}, Movement:{5}, State:{6}, StateValues:{7}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetAttributes(), parser.GetMovement(), parser.GetState(), parser.GetStateValues()); 
 				return ResultCode::SUCCESS;
-			}; // Result NewPlayerInViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result NewActorInViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Remove player from view
 			const MessageID RemovePlayerFromViewS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 4);
@@ -764,8 +764,8 @@ namespace SF
 			}; // Result PlayerMovementC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Player Movement
-			const MessageID PlayerMovementS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 6);
-			Result PlayerMovementS2CEvt::ParseMessage(const MessageData* pIMsg)
+			const MessageID ActorMovementS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 6);
+			Result ActorMovementS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -779,42 +779,40 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_PlayInstanceUID);
-				protocolCheck(*input >> m_PlayerID);
 				protocolCheck(*input >> m_Movement);
 
 				return hr;
 
-			}; // Result PlayerMovementS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ActorMovementS2CEvt::ParseMessage(const MessageData* pIMsg)
 
-			Result PlayerMovementS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ActorMovementS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				PlayerMovementS2CEvt parser;
+				ActorMovementS2CEvt parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
-				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariable("Movement", "ActorMovement", parser.GetMovement());
 
 				return hr;
 
-			}; // Result PlayerMovementS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ActorMovementS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result PlayerMovementS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ActorMovementS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PlayerMovementS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ActorMovementS2CEvt(pIMsg));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PlayerMovementS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ActorMovementS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* PlayerMovementS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+			MessageData* ActorMovementS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -829,34 +827,123 @@ namespace SF
 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InPlayerID)
 					+ SerializedSizeOf(InMovement)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerMovementS2CEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ActorMovementS2CEvt::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
 				auto* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
-				protocolCheck(*output << InPlayerID);
 				protocolCheck(*output << InMovement);
 
 				return hr;
-			}; // MessageData* PlayerMovementS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+			}; // MessageData* ActorMovementS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement )
 
-			Result PlayerMovementS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ActorMovementS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				PlayerMovementS2CEvt parser;
+ 				ActorMovementS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug4, "PlayerMovement:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, Movement:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMovement()); 
+				SFLog(Net, Debug4, "ActorMovement:{0}:{1} , PlayInstanceUID:{2}, Movement:{3}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
-			}; // Result PlayerMovementS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ActorMovementS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			// S2C: Player Movement
+			const MessageID ActorMovementsS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 7);
+			Result ActorMovementsS2CEvt::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(input->Read(ArrayLen));
+				ActorMovement* MovementPtr = nullptr;
+				protocolCheck(input->ReadLink(MovementPtr, ArrayLen));
+				m_Movement.SetLinkedBuffer(ArrayLen, MovementPtr);
+
+				return hr;
+
+			}; // Result ActorMovementsS2CEvt::ParseMessage(const MessageData* pIMsg)
+
+			Result ActorMovementsS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				ActorMovementsS2CEvt parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariableArray("Movement", "ActorMovement", parser.GetMovement());
+
+				return hr;
+
+			}; // Result ActorMovementsS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result ActorMovementsS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) ActorMovementsS2CEvt(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result ActorMovementsS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+
+			MessageData* ActorMovementsS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InMovement)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ActorMovementsS2CEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InMovement);
+
+				return hr;
+			}; // MessageData* ActorMovementsS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement )
+
+			Result ActorMovementsS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				ActorMovementsS2CEvt parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug4, "ActorMovements:{0}:{1} , PlayInstanceUID:{2}, Movement:{3,30}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetMovement()); 
+				return ResultCode::SUCCESS;
+			}; // Result ActorMovementsS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Player state change
-			const MessageID PlayerStateChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 7);
+			const MessageID PlayerStateChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 8);
 			const VariableTable& PlayerStateChangedS2CEvt::GetStateValues() const
 			{
  				if (!m_StateValuesHasParsed)
@@ -1014,7 +1101,7 @@ namespace SF
 			}; // Result PlayerStateChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
-			const MessageID ClientSyncReliableC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 8);
+			const MessageID ClientSyncReliableC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 9);
 			const VariableTable& ClientSyncReliableC2SEvt::GetSyncData() const
 			{
  				if (!m_SyncDataHasParsed)
@@ -1154,7 +1241,7 @@ namespace SF
 			}; // Result ClientSyncReliableC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
-			const MessageID ClientSyncC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 9);
+			const MessageID ClientSyncC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
 			const VariableTable& ClientSyncC2SEvt::GetSyncData() const
 			{
  				if (!m_SyncDataHasParsed)
@@ -1294,7 +1381,7 @@ namespace SF
 			}; // Result ClientSyncC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Occupy map object
-			const MessageID OccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
+			const MessageID OccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
 			Result OccupyMapObjectCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1393,7 +1480,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID OccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
+			const MessageID OccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
 			Result OccupyMapObjectRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1493,7 +1580,7 @@ namespace SF
 			}; // Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Unoccupy map object
-			const MessageID UnoccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
+			const MessageID UnoccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
 			Result UnoccupyMapObjectCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1588,7 +1675,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID UnoccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
+			const MessageID UnoccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
 			Result UnoccupyMapObjectRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1688,7 +1775,7 @@ namespace SF
 			}; // Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Use map object
-			const MessageID UseMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
+			const MessageID UseMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
 			const VariableTable& UseMapObjectCmd::GetUseParameters() const
 			{
  				if (!m_UseParametersHasParsed)
@@ -1839,7 +1926,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UseMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID UseMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
+			const MessageID UseMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
 			const VariableTable& UseMapObjectRes::GetResultAttributes() const
 			{
  				if (!m_ResultAttributesHasParsed)
@@ -1997,7 +2084,7 @@ namespace SF
 			}; // Result UseMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Havest area
-			const MessageID HarvestAreaCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
+			const MessageID HarvestAreaCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
 			Result HarvestAreaCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2092,7 +2179,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result HarvestAreaCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID HarvestAreaRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
+			const MessageID HarvestAreaRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
 			const VariableTable& HarvestAreaRes::GetResultAttributes() const
 			{
  				if (!m_ResultAttributesHasParsed)
@@ -2250,7 +2337,7 @@ namespace SF
 			}; // Result HarvestAreaRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Create stream instance
-			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
+			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
 			Result CreateStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2342,7 +2429,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
+			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
 			Result CreateStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2435,7 +2522,7 @@ namespace SF
 			}; // Result CreateStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Open stream instance
-			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
+			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
 			Result FindStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2527,7 +2614,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result FindStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
+			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
 			Result FindStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2620,7 +2707,7 @@ namespace SF
 			}; // Result FindStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Delete stream instance
-			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
+			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
 			Result DeleteStreamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2712,7 +2799,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
+			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
 			Result DeleteStreamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2805,7 +2892,7 @@ namespace SF
 			}; // Result DeleteStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Get stream list
-			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
+			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
 			Result GetStreamListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2892,7 +2979,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetStreamListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetStreamListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
+			const MessageID GetStreamListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
 			Result GetStreamListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2984,7 +3071,7 @@ namespace SF
 			}; // Result GetStreamListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: To call general functionality
-			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
+			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 19);
 			const VariableTable& CallFunctionCmd::GetParameters() const
 			{
  				if (!m_ParametersHasParsed)
@@ -3129,7 +3216,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
+			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 19);
 			const VariableTable& CallFunctionRes::GetResults() const
 			{
  				if (!m_ResultsHasParsed)

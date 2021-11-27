@@ -69,10 +69,10 @@ Play packet
 		- OutInPayload: uint8 type. Payload data
 
 
-## NewPlayerInViewS2CEvt
+## NewActorInViewS2CEvt
 New Player in get view
 
-        Result NewPlayerInViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues)
+        Result NewActorInViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
@@ -109,14 +109,22 @@ Player Movement
 		- OutInMovement: ActorMovement type. Movement attributes
 
 
-## PlayerMovementS2CEvt
+## ActorMovementS2CEvt
 Player Movement
 
-        Result PlayerMovementS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement)
+        Result ActorMovementS2CEvt(const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
-		- OutInPlayerID: PlayerID type. Player Id
+		- OutInMovement: ActorMovement type. Movement attributes
+
+
+## ActorMovementsS2CEvt
+Player Movement
+
+        Result ActorMovementsS2CEvt(const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement)
+
+		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
 		- OutInMovement: ActorMovement type. Movement attributes
 

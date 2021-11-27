@@ -111,6 +111,16 @@ SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetCharacterId(intptr_t nativeHandle)
 	return pOnlineClient->GetCharacterId();
 }
 
+SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetActorId(intptr_t nativeHandle)
+{
+	if (nativeHandle == 0)
+		return ResultCode::NOT_INITIALIZED;
+
+	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+	return pOnlineClient->GetActorID();
+}
+
 SFDLL_EXPORT uint32_t SFOnlineClient_NativeGetGameId(intptr_t nativeHandle)
 {
 	if (nativeHandle == 0)
@@ -286,8 +296,11 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeSendMovement(intptr_t nativeHandle, co
 	if (pOnlineClient->GetSendMovementManager() == nullptr)
 		return ResultCode::INVALID_STATE;
 
-	// ActorMovement requires special memory alignment, copy incoming data to local storage
+	// ActorMovement requires special memory alignment, copy incoming data to local storage to make it aligned
 	ActorMovement tempMove = newMove;
+
+	// make sure it has valid local actor id
+	tempMove.ActorId = pOnlineClient->GetActorID();
 
 	return int32_t(pOnlineClient->SendMovement(tempMove));
 }

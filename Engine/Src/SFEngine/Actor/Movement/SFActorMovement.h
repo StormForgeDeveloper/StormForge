@@ -24,11 +24,13 @@ namespace SF
 		static constexpr uint32_t DeltaMSPerFrame = 1000 / FramesPerSeconds;
 		static constexpr float DeltaSecondsPerFrame = 1.0f / (float)FramesPerSeconds;
 		static constexpr float MoveFrameTimeoutSeconds = 10;
-		static constexpr uint32_t MoveFrameTimeout = static_cast<uint32_t>(MoveFrameTimeoutSeconds * FramesPerSeconds);
+		static constexpr int32_t MoveFrameTimeout = static_cast<int32_t>(MoveFrameTimeoutSeconds * FramesPerSeconds);
 		static constexpr size_t SizeOfActorMovement = sizeof(Vector4) + sizeof(Vector4) + sizeof(float) + sizeof(uint32_t) + sizeof(uint32_t);
 
 		Vector4 Position = Vector4::Zero();
 		Vector4 LinearVelocity = Vector4::Zero();
+
+		ActorID ActorId{};
 
 		// Look direction
 		float AngularYaw = 0; // No pitch and roll

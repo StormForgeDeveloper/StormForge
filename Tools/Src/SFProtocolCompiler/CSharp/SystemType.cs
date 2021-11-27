@@ -219,7 +219,7 @@ namespace SF
             new TypeMap( "ClusterType", false, typeof(ClusterType) ),
             new TypeMap( "ClusterMembership", false, typeof(ClusterMembership) ),
             new TypeMap( "ServiceStatus", false, typeof(ServiceStatus) ),
-            new TypeMap( "ActorMovement", false, typeof(ActorMovement) ),
+            new TypeMap( "ActorMovement", false, typeof(ActorMovement), InUseGenericVariableBuilderInterface:true ),
             new TypeMap( "MatchingPlayerInformation", false, typeof(MatchingPlayerInformation) ),
             new TypeMap( "MatchingQueueTicket", false, typeof(MatchingQueueTicket) ),
             new TypeMap( "LocalUID", false, typeof(LocalUID), cppTypeName:"uint64_t" ),

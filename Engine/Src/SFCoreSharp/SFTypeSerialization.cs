@@ -143,6 +143,24 @@ namespace SF
             return value;
         }
 
+        public static Vector4 ReadVector4(BinaryReader reader)
+        {
+            return new Vector4()
+            {
+                x = reader.ReadSingle(),
+                y = reader.ReadSingle(),
+                z = reader.ReadSingle(),
+                w = reader.ReadSingle()
+            };
+        }
+        public static void WriteVector4(BinaryWriter writer, ref Vector4 value)
+        {
+            writer.Write(value.x);
+            writer.Write(value.y);
+            writer.Write(value.z);
+            writer.Write(value.w);
+        }
+
 
         static TypeInfo[] TypeInfoList = {
                 new TypeInfo(typeof(Result), "Result",
@@ -337,6 +355,35 @@ namespace SF
                     var bytes = new byte[byteSize];
                     Marshal.Copy(valuePtr, bytes, 0, byteSize); valuePtr += byteSize;
                     return bytes;
+                }),
+
+            new TypeInfo(typeof(ActorMovement), "ActorMovement",
+                (writer, value) =>
+                {
+                    var item = (ActorMovement)value;
+                    WriteVector4(writer, ref item.Position);
+                    WriteVector4(writer, ref item.LinearVelocity);
+                    writer.Write(item.ActorId);
+                    writer.Write(item.AngularYaw);
+                    writer.Write(item.MoveFrame);
+                    writer.Write(item.MovementState);
+                },
+                (reader) =>
+                {
+                    var item = new ActorMovement();
+                    item.Position = ReadVector4(reader);
+                    item.LinearVelocity = ReadVector4(reader);
+                    item.ActorId = reader.ReadUInt32();
+                    item.AngularYaw = reader.ReadSingle();
+                    item.MoveFrame = reader.ReadUInt32();
+                    item.MovementState = reader.ReadUInt32();
+                    return item;
+                },
+                (ref IntPtr valuePtr) =>
+                {
+                    var item = Marshal.PtrToStructure(valuePtr, typeof(ActorMovement));
+                    valuePtr += Marshal.SizeOf(item);
+                    return item;
                 }),
 
         };

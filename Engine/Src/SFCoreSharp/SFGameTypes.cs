@@ -212,6 +212,7 @@ namespace SF
         public Vector4 Position;
         public Vector4 LinearVelocity;
 
+        public UInt32 ActorId;
         // Look direction
         public float AngularYaw; // No pitch and roll
         public UInt32 MoveFrame;

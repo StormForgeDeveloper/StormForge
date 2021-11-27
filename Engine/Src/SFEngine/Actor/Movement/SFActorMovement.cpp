@@ -18,13 +18,13 @@
 namespace SF
 {
 
-	constexpr size_t ActorMovement::MaxSavedMove;
-	constexpr uint32_t ActorMovement::FramesPerSeconds;
-	constexpr uint32_t ActorMovement::DeltaMSPerFrame;
-	constexpr float ActorMovement::DeltaSecondsPerFrame;
-	constexpr float ActorMovement::MoveFrameTimeoutSeconds;
-	constexpr uint32_t ActorMovement::MoveFrameTimeout;
-	constexpr size_t ActorMovement::SizeOfActorMovement;
+	//constexpr size_t ActorMovement::MaxSavedMove;
+	//constexpr uint32_t ActorMovement::FramesPerSeconds;
+	//constexpr uint32_t ActorMovement::DeltaMSPerFrame;
+	//constexpr float ActorMovement::DeltaSecondsPerFrame;
+	//constexpr float ActorMovement::MoveFrameTimeoutSeconds;
+	//constexpr int32_t ActorMovement::MoveFrameTimeout;
+	//constexpr size_t ActorMovement::SizeOfActorMovement;
 
 
 	Result ActorMovement::CanMerge(const ActorMovement* pNextMove) const

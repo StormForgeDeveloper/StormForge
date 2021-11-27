@@ -330,6 +330,24 @@ namespace SF {
 			return ResultCode::SUCCESS;
 		}
 
+		// Find a key value
+		template<class KeyType, class ValueType>
+		Result SortedMap<KeyType, ValueType>::Emplace(KeyType key, const ValueType& value)
+		{
+			Result hr;
+			ValueType* pExist;
+			if (FindRef(key, pExist))
+			{
+				*pExist = value;
+			}
+			else
+			{
+				hr = Insert(key, value);
+			}
+
+			return hr;
+		}
+
 
 		// find parent node or candidate
 		template<class KeyType, class ValueType>

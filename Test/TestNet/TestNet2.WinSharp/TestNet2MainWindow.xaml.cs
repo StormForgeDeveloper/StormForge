@@ -352,7 +352,7 @@ namespace TestNet2.WinSharp
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDGame.LeaveGameInstanceRes, 0, HandleLeaveGameInstanceRes);
 
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.JoinPlayInstanceRes, 0, HandleJoinConnectedPlayInstanceRes);
-            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.NewPlayerInViewS2CEvt, 0, HandleNewPlayerInView);
+            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.NewActorInViewS2CEvt, 0, HandleNewActorInView);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.RemovePlayerFromViewS2CEvt, 0, HandleRemovePlayerFromView);
         }
 
@@ -537,11 +537,14 @@ namespace TestNet2.WinSharp
             // player join process has finished
         }
 
-        void HandleNewPlayerInView(SFMessage message)
+        void HandleNewActorInView(SFMessage message)
         {
             var playInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
             var playerID = message.GetValue<UInt64>("PlayerID");
             var visualData = message.GetValue<VariableTable>("Attributes");
+            var actorMovement = message.GetValue<ActorMovement>("ActorMovement");
+
+            var actorId = actorMovement.ActorId;
 
             // player moved in visual range or joined
             if (m_OtherPlayers.ContainsKey(playerID))

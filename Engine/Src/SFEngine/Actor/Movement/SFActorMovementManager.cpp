@@ -21,7 +21,8 @@ namespace SF
 	/// <summary>
 	/// ActorMovementManager
 	/// </summary>
-	ActorMovementManager::ActorMovementManager()
+	ActorMovementManager::ActorMovementManager(ActorID actorId)
+		: m_ActorId(actorId)
 	{
 	}
 
@@ -61,6 +62,7 @@ namespace SF
 	//
 
 	SendingActorMovementManager::SendingActorMovementManager()
+		: super(0)
 	{
 	}
 
@@ -95,7 +97,8 @@ namespace SF
 	// Received actor movement 
 	//
 
-	ActorMovementReplayManager::ActorMovementReplayManager()
+	ActorMovementReplayManager::ActorMovementReplayManager(ActorID actorId)
+		: super(actorId)
 	{
 		ResetMove();
 	}

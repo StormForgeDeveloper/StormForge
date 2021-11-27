@@ -88,7 +88,7 @@ namespace SF {
 		{
 			if (m_pDataPtr != nullptr)
 			{
-				if constexpr (IsConstructable && !IsConstType)
+				if constexpr (IsCopyAssignable && !IsConstType)
 				{
 					for (int iItem = 0; iItem < (int)m_Size; iItem++)
 					{

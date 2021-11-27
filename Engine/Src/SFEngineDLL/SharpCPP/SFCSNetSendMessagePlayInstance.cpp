@@ -220,15 +220,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt( intptr_t InNati
 
 
 // S2C: New Player in get view
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes, const ActorMovement& InMovement, StringCrc32 InState, uint16_t _sizeOfInStateValues,uint8_t* InStateValues )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes, const ActorMovement& InMovement, StringCrc32 InState, uint16_t _sizeOfInStateValues,uint8_t* InStateValues )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::NewPlayerInViewS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInAttributes, _sizeOfInAttributes, InAttributes),InMovement, InState,SF::ArrayView<uint8_t>(_sizeOfInStateValues, _sizeOfInStateValues, InStateValues));
+	MessageDataPtr pMessage = SF::Message::PlayInstance::NewActorInViewS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInAttributes, _sizeOfInAttributes, InAttributes),InMovement, InState,SF::ArrayView<uint8_t>(_sizeOfInStateValues, _sizeOfInStateValues, InStateValues));
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewPlayerInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes, const ActorMovement& InMovement, StringCrc32 InState, uint16_t _sizeOfInStateValues,uint8_t* InStateValues )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes, const ActorMovement& InMovement, StringCrc32 InState, uint16_t _sizeOfInStateValues,uint8_t* InStateValues )
 
 
 
@@ -246,15 +246,28 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_
 
 
 // S2C: Player Movement
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceActorMovementS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, const ActorMovement& InMovement )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::PlayerMovementS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,InMovement);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::ActorMovementS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID,InMovement);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerMovementS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, const ActorMovement& InMovement )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceActorMovementS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, const ActorMovement& InMovement )
+
+
+
+// S2C: Player Movement
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceActorMovementsS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, uint16_t _sizeOfInMovement,const ActorMovement* InMovement )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::PlayInstance::ActorMovementsS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID,SF::ArrayView<ActorMovement>(_sizeOfInMovement, _sizeOfInMovement, const_cast<ActorMovement*>(InMovement)));
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceActorMovementsS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, uint16_t _sizeOfInMovement,const ActorMovement* InMovement )
 
 
 

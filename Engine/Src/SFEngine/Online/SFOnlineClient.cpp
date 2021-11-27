@@ -571,8 +571,8 @@ namespace SF
 
 			SFLog(Net, Info, "PlayInstance::JoinPlayInstanceRes joined: {0}, F:{1:X}", m_Owner.m_GameInstanceUID, packet.GetMovement().MoveFrame);
 
-			m_Owner.InitMoveFrame(packet.GetMovement().MoveFrame);
-			m_Owner.OnPlayerMovement(m_Owner.GetPlayerID(), packet.GetMovement());
+			m_Owner.InitMovement(packet.GetMovement().ActorId, packet.GetMovement().MoveFrame);
+			m_Owner.OnActorMovement(packet.GetMovement());
 
 			SetOnlineState(OnlineState::InGameInGameInstance);
 			SetResult(ResultCode::SUCCESS);
@@ -588,6 +588,7 @@ namespace SF
 	OnlineClient::OnlineClient(IHeap& heap)
 		: EngineObject(new(heap) IHeap("OnlineClient", &heap), "OnlineClient")
 		, m_IncomingMovements(GetHeap())
+		, m_IncomingMovementsByActor(GetHeap())
 		, m_OnlineStateChangedQueue(GetHeap())
 	{
 	}
@@ -606,12 +607,14 @@ namespace SF
 		m_PendingTasks.Clear();
 	}
 
-	void OnlineClient::InitMoveFrame(uint32_t newMoveFrame)
+	void OnlineClient::InitMovement(ActorID actorId, uint32_t newMoveFrame)
 	{
 		m_ServerMoveFrame = newMoveFrame;
 		m_MoveFrame = newMoveFrame;
 
 		m_MyPlayerState = nullptr;
+		if (m_OutgoingMovement.IsValid())
+			m_OutgoingMovement->SetActorID(actorId);
 	}
 
 	void OnlineClient::SetupInstanceInfo()
@@ -623,6 +626,7 @@ namespace SF
 	{
 		m_OutgoingMovement.reset();
 		m_IncomingMovements.ClearMap();
+		m_IncomingMovementsByActor.ClearMap();
 	}
 
 	void OnlineClient::RegisterGameHandlers()
@@ -655,7 +659,7 @@ namespace SF
 		}
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
-			Message::PlayInstance::NewPlayerInViewS2CEvt::MID.GetMsgID(),
+			Message::PlayInstance::NewActorInViewS2CEvt::MID.GetMsgID(),
 			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
 				OnPlayerInView(pMsgData);
@@ -669,10 +673,10 @@ namespace SF
 			});
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
-			Message::PlayInstance::PlayerMovementS2CEvt::MID.GetMsgID(),
+			Message::PlayInstance::ActorMovementS2CEvt::MID.GetMsgID(),
 			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
-				OnPlayerMovement(pMsgData);
+				OnActorMovement(pMsgData);
 			});
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
@@ -751,7 +755,7 @@ namespace SF
 
 	Result OnlineClient::GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement)
 	{
-		SharedPointerT<ReceivedMovementMnager> movement;
+		SharedPointerT<ReceivedMovementManager> movement;
 		if (!m_IncomingMovements.Find(playerId, movement))
 			return ResultCode::OBJECT_NOT_FOUND;
 
@@ -761,7 +765,7 @@ namespace SF
 
 	Result OnlineClient::GetMovementForPlayerAll(PlayerID playerId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement)
 	{
-		SharedPointerT<ReceivedMovementMnager> movement;
+		SharedPointerT<ReceivedMovementManager> movement;
 		if (!m_IncomingMovements.Find(playerId, movement))
 			return ResultCode::OBJECT_NOT_FOUND;
 
@@ -781,6 +785,11 @@ namespace SF
 		m_OnlineState = newState;
 
 		m_OnlineStateChangedQueue.Enqueue(OnlineStateChangedEventArgs{ prevState, newState });
+	}
+
+	ActorID OnlineClient::GetActorID() const
+	{
+		return m_OutgoingMovement.IsValid() ? m_OutgoingMovement->GetActorID() : 0;
 	}
 
 	void OnlineClient::Disconnect(SharedPointerT<Net::Connection>& pConn)
@@ -930,7 +939,7 @@ namespace SF
 		m_ServerMoveFrame += deltaFrames;
 
 		m_IncomingMovements.ForeachOrder(0, (uint)m_IncomingMovements.size(), 
-			[moveFrame = m_MoveFrame - RemotePlayerSimulationDelay](const PlayerID playerId, const SharedPointerT<ReceivedMovementMnager>& movement)
+			[moveFrame = m_MoveFrame - RemotePlayerSimulationDelay](const PlayerID playerId, const SharedPointerT<ReceivedMovementManager>& movement)
 			{
 				ActorMovement outMovement;
 				movement->SimulateCurrentMove(moveFrame, outMovement);
@@ -962,7 +971,7 @@ namespace SF
 
 	void OnlineClient::OnPlayerInView(const MessageDataPtr& pMsgData)
 	{
-		Message::PlayInstance::NewPlayerInViewS2CEvt msg(pMsgData);
+		Message::PlayInstance::NewActorInViewS2CEvt msg(pMsgData);
 		if (!msg.ParseMsg())
 		{
 			SFLog(Net, Info, "OnlineClient::OnPlayerInView Parsing error");
@@ -975,13 +984,16 @@ namespace SF
 			return;
 		}
 
-		SharedPointerT<ReceivedMovementMnager> movement;
+		auto actorId = msg.GetMovement().ActorId;
+		SharedPointerT<ReceivedMovementManager> movement;
 		if (!m_IncomingMovements.Find(msg.GetPlayerID(), movement))
 		{
-			movement = new(GetHeap()) ReceivedMovementMnager;
+			movement = new(GetHeap()) ReceivedMovementManager(actorId);
 			auto res = m_IncomingMovements.Insert(msg.GetPlayerID(), movement);
 			assert(res);
 		}
+
+		m_IncomingMovementsByActor.Emplace(actorId, movement);
 
 		movement->ResetMove(msg.GetMovement());
 	}
@@ -1001,13 +1013,17 @@ namespace SF
 			return;
 		}
 
-		SharedPointerT<ReceivedMovementMnager> movement;
+		SharedPointerT<ReceivedMovementManager> movement;
 		m_IncomingMovements.Remove(msg.GetPlayerID(), movement);
+		if (movement.IsValid())
+		{
+			m_IncomingMovementsByActor.Remove(movement->GetActorID(), movement);
+		}
 	}
 
-	void OnlineClient::OnPlayerMovement(const MessageDataPtr& pMsgData)
+	void OnlineClient::OnActorMovement(const MessageDataPtr& pMsgData)
 	{
-		Message::PlayInstance::PlayerMovementS2CEvt msg(pMsgData);
+		Message::PlayInstance::ActorMovementS2CEvt msg(pMsgData);
 		if (!msg.ParseMsg())
 		{
 			SFLog(Net, Error, "OnlineClient::OnPlayerMovement Parsing error");
@@ -1020,27 +1036,25 @@ namespace SF
 			return;
 		}
 
-		// TODO: consider round trip delay
-
-		OnPlayerMovement(msg.GetPlayerID(), msg.GetMovement());
+		OnActorMovement(msg.GetMovement());
 	}
 
-	void OnlineClient::OnPlayerMovement(PlayerID playerId, const ActorMovement& newMove)
+	void OnlineClient::OnActorMovement(const ActorMovement& newMove)
 	{
-		SFLog(Net, Debug3, "OnlineClient:OnPlayerMovement, playerId:{0}, serverFrame:{1:X}, move:{2}", playerId, m_ServerMoveFrame, newMove);
+		auto actorId = newMove.ActorId;
+		SFLog(Net, Debug3, "OnlineClient:OnPlayerMovement, actorId:{0}, serverFrame:{1:X}, move:{2}", actorId, m_ServerMoveFrame, newMove);
 
 		// adjust move frame
 		m_ServerMoveFrame = Math::Max(m_ServerMoveFrame, newMove.MoveFrame);
 
-		SharedPointerT<ReceivedMovementMnager> movement;
-		if (!m_IncomingMovements.Find(playerId, movement))
+		SharedPointerT<ReceivedMovementManager>* pMovement;
+		if (!m_IncomingMovementsByActor.FindRef(actorId, pMovement) || !pMovement->IsValid())
 		{
-			movement = new(GetHeap()) ReceivedMovementMnager;
-			auto res = m_IncomingMovements.Insert(playerId, movement);
-			assert(res);
+			SFLog(Net, Debug3, "OnlineClient:OnPlayerMovement, missing actor movment mapping actorId:{0}", actorId);
+			return;
 		}
 
-		movement->EnqueueMovement(newMove);
+		(*pMovement)->EnqueueMovement(newMove);
 	}
 
 	void OnlineClient::OnPlayerStateChanged(const MessageDataPtr& pMsgData)

@@ -117,9 +117,9 @@ namespace SF
                 case "RelayPlayerInfo":
                     stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(RelayPlayerInfo)));
                     break;
-                case "ActorMovement":
-                    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(ActorMovement)));
-                    break;
+                //case "ActorMovement":
+                //    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(ActorMovement)));
+                //    break;
                 //case "Vector2":
                 //    stm_ParsingMessage.SetValue(stringHash, Marshal.PtrToStructure(Value, typeof(Vector2)));
                 //    break;
@@ -290,13 +290,13 @@ namespace SF
                         stm_ParsingMessage.SetValue(stringHash, newArray);
                     }
                     break;
-                case "ActorMovement":
-                    {
-                        var newArray = new ActorMovement[arrayCount];
-                        MarshalCopy(Value, newArray, 0, arrayCount);
-                        stm_ParsingMessage.SetValue(stringHash, newArray);
-                    }
-                    break;
+                //case "ActorMovement":
+                //    {
+                //        var newArray = new ActorMovement[arrayCount];
+                //        MarshalCopy(Value, newArray, 0, arrayCount);
+                //        stm_ParsingMessage.SetValue(stringHash, newArray);
+                //    }
+                //    break;
                 case "Vector2":
                     {
                         var newArray = new Vector2[arrayCount];

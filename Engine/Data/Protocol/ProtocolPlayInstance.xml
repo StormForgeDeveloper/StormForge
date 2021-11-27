@@ -33,7 +33,7 @@
 		<!-- ============================= Player movement  ======================================= -->
 
 
-		<S2CEvent Name="NewPlayerInView" Reliable="true" Crypto="No" Trace="Debug1" Desc="New Player in get view">
+		<S2CEvent Name="NewActorInView" Reliable="true" Crypto="No" Trace="Debug1" Desc="New Player in get view">
 			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
 			<Params TypeName="PlayerID" Name="PlayerID" Desc="Joined Player Id"/>
 			<Params TypeName="VariableTable" Name="Attributes" Desc="Character visual data"/>
@@ -54,10 +54,14 @@
 			<Params TypeName="ActorMovement" Name="Movement" Desc="Movement attributes"/>
 		</C2SEvent>
 
-		<S2CEvent Name="PlayerMovement" Reliable="false" Crypto="No" Trace="Debug4" Desc="Player Movement">
+		<S2CEvent Name="ActorMovement" Reliable="false" Crypto="No" Trace="Debug4" Desc="Player Movement">
 			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
 			<Params TypeName="ActorMovement" Name="Movement" Desc="Movement attributes"/>
+		</S2CEvent>
+
+		<S2CEvent Name="ActorMovements" Reliable="false" Crypto="No" Trace="Debug4" Desc="Player Movement">
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="ActorMovement" Name="Movement" IsArray="true" Desc="Movement attributes"/>
 		</S2CEvent>
 
 		<S2CEvent Name="PlayerStateChanged" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player state change">
@@ -80,7 +84,6 @@
 			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
 			<Params TypeName="VariableTable" Name="SyncData" Desc="sync data"/>
 		</C2SEvent>
-
 
 		<!-- ============================= Object interection ======================================= -->
 
