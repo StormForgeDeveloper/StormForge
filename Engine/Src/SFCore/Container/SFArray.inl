@@ -406,20 +406,39 @@ namespace SF {
 				iItem = 0;
 				if constexpr (super::IsConstructable)
 				{
-					if constexpr (super::IsCopyConstructable)
+					if constexpr (std::is_move_constructible_v<DataTypeDecay>)
 					{
 						for (; iItem < super::size(); iItem++)
 						{
 							new((void*)(pNewBuffer + iItem)) typename super::DataTypeDecay(std::forward<typename super::DataTypeDecay>(pOldBuffer[iItem]));
 						}
 					}
-					else
+					else if constexpr (std::is_move_assignable_v<DataTypeDecay>)
 					{
 						for (; iItem < super::size(); iItem++)
 						{
 							new((void*)(pNewBuffer + iItem)) typename super::DataTypeDecay();
 							pNewBuffer[iItem] = std::forward<typename super::DataTypeDecay>(pOldBuffer[iItem]);
 						}
+					}
+					else if constexpr (std::is_copy_constructible_v<DataTypeDecay>)
+					{
+						for (; iItem < super::size(); iItem++)
+						{
+							new((void*)(pNewBuffer + iItem)) typename super::DataTypeDecay(pOldBuffer[iItem]);
+						}
+					}
+					else if constexpr (std::is_copy_assignable_v<DataTypeDecay>)
+					{
+						for (; iItem < super::size(); iItem++)
+						{
+							new((void*)(pNewBuffer + iItem)) typename super::DataTypeDecay();
+							pNewBuffer[iItem] = pOldBuffer[iItem];
+						}
+					}
+					else // we can't copy nor move
+					{
+						assert(super::size() == 0);
 					}
 				}
 			}

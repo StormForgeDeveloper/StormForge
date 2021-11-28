@@ -219,7 +219,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt( intptr_t InNati
 
 
 
-// S2C: New Player in get view
+// S2C: New actor in get view
 SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes, const ActorMovement& InMovement, StringCrc32 InState, uint16_t _sizeOfInStateValues,uint8_t* InStateValues )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
@@ -232,16 +232,16 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt( intptr_t InNa
 
 
 
-// S2C: Remove player from view
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID )
+// S2C: Remove actor from view
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveActorFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InActorID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::RemovePlayerFromViewS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::RemoveActorFromViewS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID, InActorID);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceRemoveActorFromViewS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint32_t InActorID )
 
 
 

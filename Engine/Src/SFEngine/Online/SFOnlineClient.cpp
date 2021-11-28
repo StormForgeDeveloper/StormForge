@@ -662,14 +662,14 @@ namespace SF
 			Message::PlayInstance::NewActorInViewS2CEvt::MID.GetMsgID(),
 			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
-				OnPlayerInView(pMsgData);
+				OnActorInView(pMsgData);
 			});
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
-			Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.GetMsgID(),
+			Message::PlayInstance::RemoveActorFromViewS2CEvt::MID.GetMsgID(),
 			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
-				OnPlayerOutofView(pMsgData);
+				OnActorOutofView(pMsgData);
 			});
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
@@ -677,6 +677,13 @@ namespace SF
 			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
 				OnActorMovement(pMsgData);
+			});
+
+		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
+			Message::PlayInstance::ActorMovementsS2CEvt::MID.GetMsgID(),
+			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
+			{
+				OnActorMovements(pMsgData);
 			});
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
@@ -969,12 +976,12 @@ namespace SF
 		return deltaFrames;
 	}
 
-	void OnlineClient::OnPlayerInView(const MessageDataPtr& pMsgData)
+	void OnlineClient::OnActorInView(const MessageDataPtr& pMsgData)
 	{
 		Message::PlayInstance::NewActorInViewS2CEvt msg(pMsgData);
 		if (!msg.ParseMsg())
 		{
-			SFLog(Net, Info, "OnlineClient::OnPlayerInView Parsing error");
+			SFLog(Net, Info, "OnlineClient::OnActorInView Parsing error");
 			return;
 		}
 
@@ -998,12 +1005,12 @@ namespace SF
 		movement->ResetMove(msg.GetMovement());
 	}
 
-	void OnlineClient::OnPlayerOutofView(const MessageDataPtr& pMsgData)
+	void OnlineClient::OnActorOutofView(const MessageDataPtr& pMsgData)
 	{
-		Message::PlayInstance::RemovePlayerFromViewS2CEvt msg(pMsgData);
+		Message::PlayInstance::RemoveActorFromViewS2CEvt msg(pMsgData);
 		if (!msg.ParseMsg())
 		{
-			SFLog(Net, Info, "OnlineClient::OnPlayerOutofView Parsing error");
+			SFLog(Net, Info, "OnlineClient::OnActorOutofView Parsing error");
 			return;
 		}
 
@@ -1037,6 +1044,27 @@ namespace SF
 		}
 
 		OnActorMovement(msg.GetMovement());
+	}
+
+	void OnlineClient::OnActorMovements(const MessageDataPtr& pMsgData)
+	{
+		Message::PlayInstance::ActorMovementsS2CEvt msg(pMsgData);
+		if (!msg.ParseMsg())
+		{
+			SFLog(Net, Error, "OnlineClient::OnPlayerMovements Parsing error");
+			return;
+		}
+
+		if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+		{
+			SFLog(Net, Warning, "Invalid instance id, ignoring movements");
+			return;
+		}
+
+		for (auto& itMove : msg.GetMovement())
+		{
+			OnActorMovement(itMove);
+		}
 	}
 
 	void OnlineClient::OnActorMovement(const ActorMovement& newMove)

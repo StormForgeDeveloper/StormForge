@@ -77,10 +77,10 @@ namespace SF
 		Result JoinPlayInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
 		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 		Result PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID );
-		// S2C: New Player in get view
+		// S2C: New actor in get view
 		Result NewActorInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues );
-		// S2C: Remove player from view
-		Result RemovePlayerFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID );
+		// S2C: Remove actor from view
+		Result RemoveActorFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InActorID );
 		// S2C: Player Movement
 		Result ActorMovementS2CEvt( const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement );
 		// S2C: Player Movement

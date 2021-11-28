@@ -219,7 +219,7 @@ namespace SF
 
 			}; // class PlayPacketC2SEvt : public MessageBase
 
-			// S2C: New Player in get view
+			// S2C: New actor in get view
 			class NewActorInViewS2CEvt : public MessageBase
 			{
  			public:
@@ -279,8 +279,8 @@ namespace SF
 
 			}; // class NewActorInViewS2CEvt : public MessageBase
 
-			// S2C: Remove player from view
-			class RemovePlayerFromViewS2CEvt : public MessageBase
+			// S2C: Remove actor from view
+			class RemoveActorFromViewS2CEvt : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -301,11 +301,12 @@ namespace SF
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
+				uint32_t m_ActorID{};
 			public:
-				RemovePlayerFromViewS2CEvt()
+				RemoveActorFromViewS2CEvt()
 					{}
 
-				RemovePlayerFromViewS2CEvt( const MessageDataPtr &pMsg )
+				RemoveActorFromViewS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
@@ -313,6 +314,7 @@ namespace SF
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const uint32_t& GetActorID() const	{ return m_ActorID; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -320,9 +322,9 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InActorID );
 
-			}; // class RemovePlayerFromViewS2CEvt : public MessageBase
+			}; // class RemoveActorFromViewS2CEvt : public MessageBase
 
 			// C2S: Player Movement
 			class PlayerMovementC2SEvt : public MessageBase

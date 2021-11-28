@@ -321,7 +321,7 @@ namespace SF.Net
 		} // public int  PlayerKickedS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InKickedPlayerID )
 
 
-		// S2C: New Player in get view
+		// S2C: New actor in get view
 		public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes, SF.ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
 		{
  			int result;
@@ -337,16 +337,16 @@ namespace SF.Net
 		} // public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes, SF.ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
 
 
-		// S2C: Remove player from view
-		public int  RemovePlayerFromViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID )
+		// S2C: Remove actor from view
+		public int  RemoveActorFromViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InActorID )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID);
+			result = CSSFNetAdapter_PlayInstanceRemoveActorFromViewS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID, InActorID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.RemovePlayerFromViewS2CEvt);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.RemoveActorFromViewS2CEvt);
 			return result;
-		} // public int  RemovePlayerFromViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID )
+		} // public int  RemoveActorFromViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InActorID )
 
 
 		// S2C: Player Movement
@@ -515,15 +515,15 @@ namespace SF.Net
 
 
 
-		// S2C: New Player in get view
+		// S2C: New actor in get view
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt16 _sizeOfInAttributes,IntPtr InAttributes, ref SF.ActorMovement InMovement, System.UInt32 InState, System.UInt16 _sizeOfInStateValues,IntPtr InStateValues );
 
 
 
-		// S2C: Remove player from view
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceRemovePlayerFromViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID );
+		// S2C: Remove actor from view
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceRemoveActorFromViewS2CEvt", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstanceRemoveActorFromViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InActorID );
 
 
 

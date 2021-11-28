@@ -353,7 +353,7 @@ namespace TestNet2.WinSharp
 
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.JoinPlayInstanceRes, 0, HandleJoinConnectedPlayInstanceRes);
             m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.NewActorInViewS2CEvt, 0, HandleNewActorInView);
-            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.RemovePlayerFromViewS2CEvt, 0, HandleRemovePlayerFromView);
+            m_MessageRouter.RegisterMessageHandler(SF.Net.MessageIDPlayInstance.RemoveActorFromViewS2CEvt, 0, HandleRemoveActorFromView);
         }
 
         void HandleJoinGameServerRes(SFMessage message)
@@ -557,10 +557,11 @@ namespace TestNet2.WinSharp
             m_OtherPlayers.Add(playerID, newPlayer);
         }
 
-        void HandleRemovePlayerFromView(SFMessage message)
+        void HandleRemoveActorFromView(SFMessage message)
         {
             var playInstanceUID = message.GetValue<UInt64>("PlayInstanceUID");
             var playerID = message.GetValue<UInt64>("PlayerID");
+            var actorID = message.GetValue<UInt64>("ActorID");
 
             // player left or moved away
             m_OtherPlayers.Remove(playerID);

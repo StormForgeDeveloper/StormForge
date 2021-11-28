@@ -40,11 +40,11 @@ namespace SF.Net
 		// C2S: Play packet
 		public static int PlayPacketC2SEvt { get { return CSSFNetMessageID_PlayInstancePlayPacketC2SEvt(); } }
 
-		// S2C: New Player in get view
+		// S2C: New actor in get view
 		public static int NewActorInViewS2CEvt { get { return CSSFNetMessageID_PlayInstanceNewActorInViewS2CEvt(); } }
 
-		// S2C: Remove player from view
-		public static int RemovePlayerFromViewS2CEvt { get { return CSSFNetMessageID_PlayInstanceRemovePlayerFromViewS2CEvt(); } }
+		// S2C: Remove actor from view
+		public static int RemoveActorFromViewS2CEvt { get { return CSSFNetMessageID_PlayInstanceRemoveActorFromViewS2CEvt(); } }
 
 		// C2S: Player Movement
 		public static int PlayerMovementC2SEvt { get { return CSSFNetMessageID_PlayInstancePlayerMovementC2SEvt(); } }
@@ -139,14 +139,14 @@ namespace SF.Net
 		static extern int CSSFNetMessageID_PlayInstancePlayPacketC2SEvt();
 
 
-		// S2C: New Player in get view
+		// S2C: New actor in get view
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceNewActorInViewS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstanceNewActorInViewS2CEvt();
 
 
-		// S2C: Remove player from view
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceRemovePlayerFromViewS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_PlayInstanceRemovePlayerFromViewS2CEvt();
+		// S2C: Remove actor from view
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceRemoveActorFromViewS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceRemoveActorFromViewS2CEvt();
 
 
 		// C2S: Player Movement

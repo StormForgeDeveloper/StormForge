@@ -279,6 +279,34 @@ namespace SF
 			{
 				Clear();
 			}
+
+			StaticDoubleLinkedListT& operator =(StaticDoubleLinkedListT&& src)
+			{
+				Clear();
+				
+				if (src.m_Header.pNext != &src.m_Header)
+				{
+					auto firstNode = src.m_Header.pNext;
+					auto lastNode = src.m_Header.pPrev;
+					m_Header.pNext = firstNode;
+					firstNode->pPrev = &m_Header;
+					m_Header.pPrev = lastNode;
+					lastNode->pNext = &m_Header;
+				}
+				else
+				{
+					assert(src.m_NumItems == 0);// empty list
+				}
+				m_NumItems = src.m_NumItems;
+
+				// clear out src
+				src.m_Header.Data = {};
+				src.m_Header.pPrev = &src.m_Header;
+				src.m_Header.pNext = &src.m_Header;
+				src.m_NumItems = 0;
+
+				return *this;
+			}
 		};
 
 

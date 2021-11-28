@@ -35,10 +35,10 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerKickedS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerKickedS2CEvt::TraceOut));
 			// C2S: Play packet
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayPacketC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayPacketC2SEvt::TraceOut));
-			// S2C: New Player in get view
+			// S2C: New actor in get view
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::NewActorInViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::NewActorInViewS2CEvt::TraceOut));
-			// S2C: Remove player from view
-			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::RemovePlayerFromViewS2CEvt::TraceOut));
+			// S2C: Remove actor from view
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::RemoveActorFromViewS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::RemoveActorFromViewS2CEvt::TraceOut));
 			// C2S: Player Movement
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::PlayerMovementC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::PlayerMovementC2SEvt::TraceOut));
 			// S2C: Player Movement

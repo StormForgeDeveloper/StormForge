@@ -297,6 +297,22 @@ namespace SF {
 			Result push_back(DataType&& NewData);
 			Result push_back(const DataType& NewData);
 
+			template<class DataTypeFrom>
+			Result Append(const Array<DataTypeFrom>& src)
+			{
+				Result hr;
+				hr = reserve(src.size() + size());
+				if (!hr) return hr;
+
+				for (auto& itItem : src)
+				{
+					hr = push_back(itItem);
+					if (!hr) return hr;
+				}
+
+				return hr;
+			}
+
 			DataType pop_back();
 
 			// Remove element

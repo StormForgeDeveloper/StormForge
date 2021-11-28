@@ -188,9 +188,10 @@ namespace SF
 		void RegisterGameHandlers();
 		void RegisterPlayInstanceHandlers();
 
-		void OnPlayerInView(const MessageDataPtr& pMsgData);
-		void OnPlayerOutofView(const MessageDataPtr& pMsgData);
+		void OnActorInView(const MessageDataPtr& pMsgData);
+		void OnActorOutofView(const MessageDataPtr& pMsgData);
 		void OnActorMovement(const MessageDataPtr& pMsgData);
+		void OnActorMovements(const MessageDataPtr& pMsgData);
 		void OnActorMovement(const ActorMovement& movement);
 		void OnPlayerStateChanged(const MessageDataPtr& pMsgData);
 

@@ -248,7 +248,7 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetSvrPolicyPlayInstance::PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
-	// S2C: New Player in get view
+	// S2C: New actor in get view
 	Result NetSvrPolicyPlayInstance::NewActorInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
 	{
  		ScopeContext hr;
@@ -262,20 +262,20 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetSvrPolicyPlayInstance::NewActorInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
-	// S2C: Remove player from view
-	Result NetSvrPolicyPlayInstance::RemovePlayerFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
+	// S2C: Remove actor from view
+	Result NetSvrPolicyPlayInstance::RemoveActorFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InActorID )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::RemovePlayerFromViewS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID);
+		 pMessage = SF::Message::PlayInstance::RemoveActorFromViewS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InActorID);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyPlayInstance::RemovePlayerFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID )
+	}; // Result NetSvrPolicyPlayInstance::RemoveActorFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InActorID )
 	// S2C: Player Movement
 	Result NetSvrPolicyPlayInstance::ActorMovementS2CEvt( const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement )
 	{

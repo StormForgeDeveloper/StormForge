@@ -46,18 +46,18 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayPacketC2SEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstancePlayPacketC2SEvt()
 
 
-// S2C: New Player in get view
+// S2C: New actor in get view
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceNewActorInViewS2CEvt()
 {
  	return SF::Message::PlayInstance::NewActorInViewS2CEvt::MID.IDSeq.MsgID;
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceNewActorInViewS2CEvt()
 
 
-// S2C: Remove player from view
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRemovePlayerFromViewS2CEvt()
+// S2C: Remove actor from view
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRemoveActorFromViewS2CEvt()
 {
- 	return SF::Message::PlayInstance::RemovePlayerFromViewS2CEvt::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRemovePlayerFromViewS2CEvt()
+ 	return SF::Message::PlayInstance::RemoveActorFromViewS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceRemoveActorFromViewS2CEvt()
 
 
 // C2S: Player Movement
