@@ -77,35 +77,44 @@ namespace SF {
 		// Map object is not occupied by the player 
 		public const int GAME_MAPOBJECT_NOT_OCCUPIED_BY_PLAYER =            unchecked((int)0xE7140014); 
 
+		// Invalid NPC id 
+		public const int GAME_INVALID_NPCID =                               unchecked((int)0xE7140015); 
+
+		// Unexpected table value 
+		public const int GAME_UNEXPECTED_TABLE_VALUE =                      unchecked((int)0xE7140016); 
+
+		// Not enough currency 
+		public const int GAME_NOT_ENOUGH_CURRENCY =                         unchecked((int)0xE7140017); 
+
 		// Invalid player role 
-		public const int GAME_INVALID_ROLE =                                unchecked((int)0xE7140015); 
+		public const int GAME_INVALID_ROLE =                                unchecked((int)0xE7140018); 
 
 		// Not ready for next game play state 
-		public const int GAME_NOT_READY_FOR_NEXT_STATE =                    unchecked((int)0xE7140016); 
+		public const int GAME_NOT_READY_FOR_NEXT_STATE =                    unchecked((int)0xE7140019); 
 
 		// Invalid vote type 
-		public const int GAME_INVALID_VOTETYPE =                            unchecked((int)0xE7140017); 
+		public const int GAME_INVALID_VOTETYPE =                            unchecked((int)0xE714001A); 
 
 		// Invalid vote state 
-		public const int GAME_INVALID_VOTE_STATE =                          unchecked((int)0xE7140018); 
+		public const int GAME_INVALID_VOTE_STATE =                          unchecked((int)0xE714001B); 
 
 		// Invalid vote target 
-		public const int GAME_INVALID_VOTE_TARGET =                         unchecked((int)0xE7140019); 
+		public const int GAME_INVALID_VOTE_TARGET =                         unchecked((int)0xE714001C); 
 
 		// No suffrage 
-		public const int GAME_NO_SUFFRAGE =                                 unchecked((int)0xE714001A); 
+		public const int GAME_NO_SUFFRAGE =                                 unchecked((int)0xE714001D); 
 
 		// Invalid game state 
-		public const int GAME_INVALID_GAMESTATE =                           unchecked((int)0xE714001B); 
+		public const int GAME_INVALID_GAMESTATE =                           unchecked((int)0xE714001E); 
 
 		// Doesn't have enough stamina 
-		public const int GAME_LOW_STAMINA =                                 unchecked((int)0xE714001C); 
+		public const int GAME_LOW_STAMINA =                                 unchecked((int)0xE714001F); 
 
 		// Invalid cost table id 
-		public const int GAME_INVALID_COSTID =                              unchecked((int)0xE714001D); 
+		public const int GAME_INVALID_COSTID =                              unchecked((int)0xE7140020); 
 
 		// Invalid bot talk table 
-		public const int GAME_INVALID_BOTTALK_TABLE =                       unchecked((int)0xE714001E); 
+		public const int GAME_INVALID_BOTTALK_TABLE =                       unchecked((int)0xE7140021); 
 
 	}
 }

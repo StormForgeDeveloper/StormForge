@@ -452,9 +452,9 @@ namespace SF
 		// Add component
 		template< class ComponentType,
 			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
-		Result AddComponent(bool bAllowDuplicatedComponent = false)
+		Result AddComponent()
 		{
-			if (!bAllowDuplicatedComponent && GetComponent<ComponentType>() != nullptr)
+			if (GetComponent<ComponentType>() != nullptr)
 			{
 				// already inserted
 				return ResultCode::SUCCESS_FALSE;
@@ -475,9 +475,9 @@ namespace SF
 
 		template< class ComponentType, class ParamType0,
 			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
-		Result AddComponent(const ParamType0& p0, bool bAllowDuplicatedComponent = false)
+		Result AddComponent(ParamType0& p0)
 		{
-			if (!bAllowDuplicatedComponent && GetComponent<ComponentType>() != nullptr)
+			if (GetComponent<ComponentType>() != nullptr)
 			{
 				// already inserted
 				return ResultCode::SUCCESS_FALSE;
@@ -498,9 +498,9 @@ namespace SF
 
 		template< class ComponentType, class ParamType0, class ParamType1,
 			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
-		Result AddComponent(ParamType0&& p0, ParamType1&& p1, bool bAllowDuplicatedComponent = false)
+		Result AddComponent(ParamType0&& p0, ParamType1&& p1)
 		{
-			if (!bAllowDuplicatedComponent && GetComponent<ComponentType>() != nullptr)
+			if (GetComponent<ComponentType>() != nullptr)
 			{
 				// already inserted
 				return ResultCode::SUCCESS_FALSE;
