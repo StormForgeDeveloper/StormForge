@@ -40,10 +40,8 @@
 
 #include <cassert>
 #include <cerrno>
-#include <memory>
-
 #include "SFWinport.h"
-
+#include <memory>
 
 struct memcached_pool_st
 {
