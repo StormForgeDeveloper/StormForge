@@ -552,6 +552,30 @@ namespace SF {
 			// Invalid version 
 			constexpr Result 			INVALID_VERSION                                                    ((int32_t)0xE70100B1L);
 
+			// Server internal error 
+			constexpr Result 			SERVER_INTERNAL_ERROR                                              ((int32_t)0xE70100B2L);
+
+			// Generic Server error 
+			constexpr Result 			GENERIC_SERVER_ERROR                                               ((int32_t)0xE70100B3L);
+
+			// Specified key not found 
+			constexpr Result 			KEY_NOTFOUND                                                       ((int32_t)0xE70100B4L);
+
+			// Specified key has invalid data 
+			constexpr Result 			INVALID_KEY                                                        ((int32_t)0xE70100B5L);
+
+			// Invalid protocol has specified 
+			constexpr Result 			INVALID_PROTOCOL                                                   ((int32_t)0xE70100B6L);
+
+			// Too big parameter has assigned 
+			constexpr Result 			TOO_BIG_PARAMETER                                                  ((int32_t)0xE70100B7L);
+
+			// Deprecated 
+			constexpr Result 			DEPRECATED_FEATURE                                                 ((int32_t)0xE70100B8L);
+
+			// In progress 
+			constexpr Result 			IN_PROGRESS                                                        ((int32_t)0xE70100B9L);
+
 	}//namespace ResultCode 
 }//namespace SF 
 

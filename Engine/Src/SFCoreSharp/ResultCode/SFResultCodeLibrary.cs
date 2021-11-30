@@ -548,6 +548,30 @@ namespace SF {
 		// Invalid version 
 		public const int INVALID_VERSION =                                  unchecked((int)0xE70100B1); 
 
+		// Server internal error 
+		public const int SERVER_INTERNAL_ERROR =                            unchecked((int)0xE70100B2); 
+
+		// Generic Server error 
+		public const int GENERIC_SERVER_ERROR =                             unchecked((int)0xE70100B3); 
+
+		// Specified key not found 
+		public const int KEY_NOTFOUND =                                     unchecked((int)0xE70100B4); 
+
+		// Specified key has invalid data 
+		public const int INVALID_KEY =                                      unchecked((int)0xE70100B5); 
+
+		// Invalid protocol has specified 
+		public const int INVALID_PROTOCOL =                                 unchecked((int)0xE70100B6); 
+
+		// Too big parameter has assigned 
+		public const int TOO_BIG_PARAMETER =                                unchecked((int)0xE70100B7); 
+
+		// Deprecated 
+		public const int DEPRECATED_FEATURE =                               unchecked((int)0xE70100B8); 
+
+		// In progress 
+		public const int IN_PROGRESS =                                      unchecked((int)0xE70100B9); 
+
 	}
 }
 

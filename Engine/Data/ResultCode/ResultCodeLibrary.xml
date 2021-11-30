@@ -199,5 +199,16 @@
 	<ResultCodeItem Severity="Error" CodeName="CHARACTER_NOT_SELECTED" Desc="Character hasn't selected"/>
 	<ResultCodeItem Severity="Error" CodeName="INVALID_VERSION" Desc="Invalid version"/>
 
+	<ResultCodeItem Severity="Error" CodeName="SERVER_INTERNAL_ERROR" Desc="Server internal error"/>
+	<ResultCodeItem Severity="Error" CodeName="GENERIC_SERVER_ERROR" Desc="Generic Server error"/>
+	<ResultCodeItem Severity="Error" CodeName="KEY_NOTFOUND" Desc="Specified key not found"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_KEY" Desc="Specified key has invalid data"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_PROTOCOL" Desc="Invalid protocol has specified"/>
+	<ResultCodeItem Severity="Error" CodeName="TOO_BIG_PARAMETER" Desc="Too big parameter has assigned"/>
+	<ResultCodeItem Severity="Error" CodeName="DEPRECATED_FEATURE" Desc="Deprecated"/>
+	<ResultCodeItem Severity="Error" CodeName="IN_PROGRESS" Desc="In progress"/>
+
+
+
 </ResultCodes>
 
