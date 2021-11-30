@@ -20,4 +20,8 @@ install (TARGETS SFWinport
          RUNTIME DESTINATION bin COMPONENT SF3rdParties)
 
 
+INSTALL(DIRECTORY src/include/ DESTINATION include
+	FILES_MATCHING PATTERN *.h PATTERN *.hpp
+  )
+
 

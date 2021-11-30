@@ -5,6 +5,7 @@
 
 include_directories(AFTER 
 	zookeeperConnector/include
+	../SFWinport/src/include
 )
 
 
@@ -30,10 +31,9 @@ set(SRC_FILES
 	zookeeperConnector/src/mt_adaptor.c
 	zookeeperConnector/src/recordio.c
 	#zookeeperConnector/src/st_adaptor.c
+	zookeeperConnector/src/winport.h
 	zookeeperConnector/src/addrvec.h
 	zookeeperConnector/src/addrvec.c
-	zookeeperConnector/src/winport.h
-	zookeeperConnector/src/winport.c
 	zookeeperConnector/src/zk_hashtable.h
 	zookeeperConnector/src/zk_hashtable.c
 	zookeeperConnector/src/zk_log.c

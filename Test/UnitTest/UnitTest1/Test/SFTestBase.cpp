@@ -13,7 +13,7 @@
 
 
 // --gtest_catch_exceptions=0 to disable exception catch
-//	--gtest_filter = ThreadTest.EntityTaskManager --gtest_catch_exceptions=0
+//	--gtest_filter=*.* --gtest_catch_exceptions=0  --gtest_break_on_failure
 
 //./foo_test --gtest_filter=* Also runs everything, due to the single match-everything * value.
 //./foo_test --gtest_filter=FooTest.* Runs everything in test case FooTest.

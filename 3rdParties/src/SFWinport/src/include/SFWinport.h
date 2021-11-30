@@ -19,8 +19,19 @@
 extern "C" {
 #endif
 
+/* POSIX names are deprecated, use ISO conformant names instead. */
+#define strdup _strdup
+#define getcwd _getcwd
+#define getpid _getpid
+
+/* Windows "secure" versions of POSIX reentrant functions */
+#define strtok_r strtok_s
+#define localtime_r(a,b) localtime_s(b,a)
+
 typedef int ssize_t;
 typedef HANDLE pthread_mutex_t;
+
+
 
 struct pthread_t_
 {
@@ -98,11 +109,16 @@ int pthread_key_delete(pthread_key_t key);
 void *pthread_getspecific(pthread_key_t key);
 int pthread_setspecific(pthread_key_t key, const void *value);
 
+// ETC
 int gettimeofday(struct timeval *tp, void *tzp);
+double drand48(void);
 
-int close(SOCKET fd);
+//int close(SOCKET fd);
 int Win32WSAStartup();
 void Win32WSACleanup();
+
+// Get socket error in socket error code
+int get_socket_errno();
 
 
 #ifdef __cplusplus

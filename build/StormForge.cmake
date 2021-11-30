@@ -28,6 +28,7 @@ ENDIF()
 
 
 #add_definitions(-DNOMINMAX)
+add_definitions(-DSTATIC_LIBMEMCACHED=1)
 add_definitions(-DHAVE_CONFIG_H=1)
 add_definitions(-DCURL_STATICLIB)
 add_definitions(-DHAVE_STDDEF_H=1)
@@ -62,7 +63,7 @@ include_directories(AFTER
 )
 
 
-set(ENGINE_LINK_LIBS SFProtocol SFEngine SFProtocol SFEngine SFCore curl rdkafka avro-static jansson iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 lzma zlib)
+set(ENGINE_LINK_LIBS SFProtocol SFEngine SFProtocol SFEngine SFCore curl memcached rdkafka avro-static jansson iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 lzma zlib SFWinport)
 
 
 
@@ -107,6 +108,7 @@ if(WIN32)
 		$ENV{VK_SDK_PATH}/include
 		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include/libmemcached
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include/libbson-1.0
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include/libmongoc-1.0
 	)
@@ -190,6 +192,7 @@ elseif(UNIX)
 		/usr/include/mysql-cppconn-8
 		/usr/include/vulkan
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include
+		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include/libmemcached
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include/libbson-1.0
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include/libmongoc-1.0
 	)
