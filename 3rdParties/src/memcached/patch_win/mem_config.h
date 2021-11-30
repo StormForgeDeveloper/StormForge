@@ -668,6 +668,8 @@ typedef unsigned long int ulong;
 
 #if defined(WIN32) || defined(WIN64)
 #include "win32/wrappers.h"
+#else
+#include <sys/socket.h>
 #endif
 
 

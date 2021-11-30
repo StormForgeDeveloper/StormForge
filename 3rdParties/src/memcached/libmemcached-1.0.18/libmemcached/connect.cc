@@ -157,7 +157,7 @@ static memcached_return_t connect_poll(memcached_instance_st* server, const int 
     }
     assert(fds[0].revents & POLLOUT);
 
-    if (fds[0].revents & POLLOUT and connection_error == EINPROGRESS)
+    if ((fds[0].revents & POLLOUT) and (connection_error == EINPROGRESS || connection_error == EWOULDBLOCK || connection_error == EAGAIN))
     {
       int err;
       socklen_t len= sizeof(err);
@@ -407,7 +407,7 @@ static bool set_socket_options(memcached_instance_st* server)
     assert(error == 0);
   }
 
-  if (TCP_KEEPIDLE)
+  if constexpr (TCP_KEEPIDLE != 0)
   {
     if (server->root->tcp_keepidle > 0)
     {
@@ -744,9 +744,12 @@ static memcached_return_t _memcached_connect(memcached_instance_st* server, cons
     return rc;
   }
 
-  if (LIBMEMCACHED_WITH_SASL_SUPPORT and server->root->sasl.callbacks and memcached_is_udp(server->root))
+  if constexpr (LIBMEMCACHED_WITH_SASL_SUPPORT)
   {
-    return memcached_set_error(*server, MEMCACHED_INVALID_HOST_PROTOCOL, MEMCACHED_AT, memcached_literal_param("SASL is not supported for UDP connections"));
+	  if (server->root->sasl.callbacks and memcached_is_udp(server->root))
+	  {
+		  return memcached_set_error(*server, MEMCACHED_INVALID_HOST_PROTOCOL, MEMCACHED_AT, memcached_literal_param("SASL is not supported for UDP connections"));
+	  }
   }
 
   if (server->hostname()[0] == '/')
@@ -762,7 +765,7 @@ static memcached_return_t _memcached_connect(memcached_instance_st* server, cons
     rc= network_connect(server);
 
 #if defined(LIBMEMCACHED_WITH_SASL_SUPPORT)
-    if (LIBMEMCACHED_WITH_SASL_SUPPORT)
+    if constexpr (LIBMEMCACHED_WITH_SASL_SUPPORT)
     {
       if (server->fd != INVALID_SOCKET and server->root->sasl.callbacks)
       {

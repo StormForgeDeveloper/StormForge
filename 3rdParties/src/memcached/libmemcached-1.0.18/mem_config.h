@@ -167,7 +167,7 @@
 #define HAVE_LIBPQ 0
 
 /* Define to 1 if LIBSASL is found */
-/* #undef HAVE_LIBSASL */
+#define HAVE_LIBSASL 1
 
 /* Define to 1 if you have the <limits.h> header file. */
 #define HAVE_LIMITS_H 1
@@ -668,6 +668,8 @@ typedef unsigned long int ulong;
 
 #if defined(WIN32) || defined(WIN64)
 #include "win32/wrappers.h"
+#else
+#include <sys/socket.h>
 #endif
 
 

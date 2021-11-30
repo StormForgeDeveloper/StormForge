@@ -9,11 +9,72 @@ include_directories(AFTER
 	${MEMCACHED_PATH}
 )
 
-source_group(INCLUDES FILES
-    ${MEMCACHED_PATH}/libhashkit-1.0/configure.h 
-	${MEMCACHED_PATH}/libmemcached-1.0/configure.h 
+
+set(PUBLIC_INCLUDE_FILES
+	${MEMCACHED_PATH}/libmemcached/memcached.h 
+	${MEMCACHED_PATH}/libmemcached/memcached.hpp 
+	${MEMCACHED_PATH}/libmemcached/util.h 
+	${MEMCACHED_PATH}/libmemcached/csl/common.h 
+	${MEMCACHED_PATH}/libmemcached/csl/context.h 
 	${MEMCACHED_PATH}/libmemcached/csl/parser.h 
-	${MEMCACHED_PATH}/libmemcached/csl/scanner.h
+	${MEMCACHED_PATH}/libmemcached/csl/scanner.h 
+	${MEMCACHED_PATH}/libmemcached/csl/server.h 
+	${MEMCACHED_PATH}/libmemcached/csl/symbol.h 
+	${MEMCACHED_PATH}/libmemcached/array.h 
+	${MEMCACHED_PATH}/libmemcached/assert.hpp 
+	${MEMCACHED_PATH}/libmemcached/backtrace.hpp 
+	${MEMCACHED_PATH}/libmemcached/behavior.hpp 
+	${MEMCACHED_PATH}/libmemcached/byteorder.h 
+	${MEMCACHED_PATH}/libmemcached/common.h 
+	${MEMCACHED_PATH}/libmemcached/connect.hpp 
+	${MEMCACHED_PATH}/libmemcached/continuum.hpp 
+	${MEMCACHED_PATH}/libmemcached/do.hpp 
+	${MEMCACHED_PATH}/libmemcached/encoding_key.h 
+	${MEMCACHED_PATH}/libmemcached/error.hpp 
+	${MEMCACHED_PATH}/libmemcached/flag.hpp 
+	${MEMCACHED_PATH}/libmemcached/initialize_query.h 
+	${MEMCACHED_PATH}/libmemcached/instance.hpp 
+	${MEMCACHED_PATH}/libmemcached/internal.h
+	${MEMCACHED_PATH}/libmemcached/io.h 
+	${MEMCACHED_PATH}/libmemcached/io.hpp
+	${MEMCACHED_PATH}/libmemcached/is.h 
+	${MEMCACHED_PATH}/libmemcached/key.hpp 
+	${MEMCACHED_PATH}/libmemcached/libmemcached_probes.h 
+	${MEMCACHED_PATH}/libmemcached/memcached/protocol_binary.h 
+	${MEMCACHED_PATH}/libmemcached/memcached/vbucket.h 
+	${MEMCACHED_PATH}/libmemcached/memory.h 
+	${MEMCACHED_PATH}/libmemcached/namespace.h 
+	${MEMCACHED_PATH}/libmemcached/options.hpp 
+	${MEMCACHED_PATH}/libmemcached/poll.h
+	${MEMCACHED_PATH}/libmemcached/response.h 
+	${MEMCACHED_PATH}/libmemcached/result.h
+	${MEMCACHED_PATH}/libmemcached/sasl.hpp 
+	${MEMCACHED_PATH}/libmemcached/server.hpp 
+	${MEMCACHED_PATH}/libmemcached/server_instance.h 
+	${MEMCACHED_PATH}/libmemcached/socket.hpp 
+	${MEMCACHED_PATH}/libmemcached/string.hpp 
+	${MEMCACHED_PATH}/libmemcached/udp.hpp 
+	${MEMCACHED_PATH}/libmemcached/version.hpp 
+	${MEMCACHED_PATH}/libmemcached/virtual_bucket.h 
+	${MEMCACHED_PATH}/libmemcached/watchpoint.h 
+	${MEMCACHED_PATH}/libmemcached/windows.hpp 
+	${MEMCACHED_PATH}/libmemcachedutil/common.h 
+	${MEMCACHED_PATH}/libmemcachedutil-1.0/flush.h 
+	${MEMCACHED_PATH}/libmemcachedutil-1.0/ostream.hpp 
+	${MEMCACHED_PATH}/libmemcachedutil-1.0/pid.h 
+	${MEMCACHED_PATH}/libmemcachedutil-1.0/ping.h 
+	${MEMCACHED_PATH}/libmemcachedutil-1.0/pool.h 
+	${MEMCACHED_PATH}/libmemcachedutil-1.0/util.h 
+	${MEMCACHED_PATH}/libmemcachedutil-1.0/version.h 
+	${MEMCACHED_PATH}/libmemcachedprotocol-0.0/binary.h
+	${MEMCACHED_PATH}/libmemcachedprotocol-0.0/callback.h
+	${MEMCACHED_PATH}/libmemcachedprotocol-0.0/handler.h
+	${MEMCACHED_PATH}/libmemcachedprotocol-0.0/vbucket.h
+	${MEMCACHED_PATH}/mem_config.h
+)
+
+
+set(INCLUDE_FILES
 	${MEMCACHED_PATH}/clients/client_options.h 
 	${MEMCACHED_PATH}/clients/execute.h 
 	${MEMCACHED_PATH}/clients/generator.h 
@@ -26,6 +87,11 @@ source_group(INCLUDES FILES
 	${MEMCACHED_PATH}/clients/ms_task.h 
 	${MEMCACHED_PATH}/clients/ms_thread.h 
 	${MEMCACHED_PATH}/clients/utilities.h
+    ${MEMCACHED_PATH}/libhashkit-1.0/configure.h 
+	${MEMCACHED_PATH}/libmemcached-1.0/configure.h 
+	${MEMCACHED_PATH}/libmemcached/csl/parser.h 
+	${MEMCACHED_PATH}/libmemcached/csl/scanner.h
+	${MEMCACHED_PATH}/clients/client_options.h 
 	${MEMCACHED_PATH}/libhashkit-1.0/algorithm.h 
 	${MEMCACHED_PATH}/libhashkit-1.0/behavior.h 
 	${MEMCACHED_PATH}/libhashkit-1.0/configure.h 
@@ -108,54 +174,6 @@ source_group(INCLUDES FILES
 	${MEMCACHED_PATH}/libhashkit/is.h 
 	${MEMCACHED_PATH}/libhashkit/rijndael.hpp 
 	${MEMCACHED_PATH}/libhashkit/string.h 
-	${MEMCACHED_PATH}/libmemcached/csl/common.h 
-	${MEMCACHED_PATH}/libmemcached/csl/context.h 
-	${MEMCACHED_PATH}/libmemcached/csl/parser.h 
-	${MEMCACHED_PATH}/libmemcached/csl/scanner.h 
-	${MEMCACHED_PATH}/libmemcached/csl/server.h 
-	${MEMCACHED_PATH}/libmemcached/csl/symbol.h 
-	${MEMCACHED_PATH}/libmemcached/array.h 
-	${MEMCACHED_PATH}/libmemcached/assert.hpp 
-	${MEMCACHED_PATH}/libmemcached/backtrace.hpp 
-	${MEMCACHED_PATH}/libmemcached/behavior.hpp 
-	${MEMCACHED_PATH}/libmemcached/byteorder.h 
-	${MEMCACHED_PATH}/libmemcached/common.h 
-	${MEMCACHED_PATH}/libmemcached/connect.hpp 
-	${MEMCACHED_PATH}/libmemcached/continuum.hpp 
-	${MEMCACHED_PATH}/libmemcached/do.hpp 
-	${MEMCACHED_PATH}/libmemcached/encoding_key.h 
-	${MEMCACHED_PATH}/libmemcached/error.hpp 
-	${MEMCACHED_PATH}/libmemcached/flag.hpp 
-	${MEMCACHED_PATH}/libmemcached/initialize_query.h 
-	${MEMCACHED_PATH}/libmemcached/instance.hpp 
-	${MEMCACHED_PATH}/libmemcached/internal.h libmemcached/io.h 
-	${MEMCACHED_PATH}/libmemcached/io.hpp libmemcached/is.h 
-	${MEMCACHED_PATH}/libmemcached/key.hpp 
-	${MEMCACHED_PATH}/libmemcached/libmemcached_probes.h 
-	${MEMCACHED_PATH}/libmemcached/memcached/protocol_binary.h 
-	${MEMCACHED_PATH}/libmemcached/memcached/vbucket.h 
-	${MEMCACHED_PATH}/libmemcached/memory.h 
-	${MEMCACHED_PATH}/libmemcached/namespace.h 
-	${MEMCACHED_PATH}/libmemcached/options.hpp 
-	${MEMCACHED_PATH}/libmemcached/poll.h libmemcached/response.h 
-	${MEMCACHED_PATH}/libmemcached/result.h libmemcached/sasl.hpp 
-	${MEMCACHED_PATH}/libmemcached/server.hpp 
-	${MEMCACHED_PATH}/libmemcached/server_instance.h 
-	${MEMCACHED_PATH}/libmemcached/socket.hpp 
-	${MEMCACHED_PATH}/libmemcached/string.hpp 
-	${MEMCACHED_PATH}/libmemcached/udp.hpp 
-	${MEMCACHED_PATH}/libmemcached/version.hpp 
-	${MEMCACHED_PATH}/libmemcached/virtual_bucket.h 
-	${MEMCACHED_PATH}/libmemcached/watchpoint.h 
-	${MEMCACHED_PATH}/libmemcached/windows.hpp 
-	${MEMCACHED_PATH}/libmemcachedutil/common.h 
-	${MEMCACHED_PATH}/libmemcachedutil-1.0/flush.h 
-	${MEMCACHED_PATH}/libmemcachedutil-1.0/ostream.hpp 
-	${MEMCACHED_PATH}/libmemcachedutil-1.0/pid.h 
-	${MEMCACHED_PATH}/libmemcachedutil-1.0/ping.h 
-	${MEMCACHED_PATH}/libmemcachedutil-1.0/pool.h 
-	${MEMCACHED_PATH}/libmemcachedutil-1.0/util.h 
-	${MEMCACHED_PATH}/libmemcachedutil-1.0/version.h 
 	${MEMCACHED_PATH}/util/daemon.hpp 
 	${MEMCACHED_PATH}/util/instance.hpp 
 	${MEMCACHED_PATH}/util/logfile.hpp 
@@ -167,9 +185,17 @@ source_group(INCLUDES FILES
 	${MEMCACHED_PATH}/win32/wrappers.h
 )
 
+source_group(PrivateInclude FILES
+	${INCLUDE_FILES} 
+)
+
+source_group(PublicInclude FILES
+	${PUBLIC_INCLUDE_FILES}
+)
 
 set(SRC_FILES
-	${MEMCACHED_PATH}/libhashkit/nohsieh.cc 
+	${INCLUDE_FILES} 
+	${PUBLIC_INCLUDE_FILES}
 #	${MEMCACHED_PATH}/libmemcached/csl/parser.cc 
 #	${MEMCACHED_PATH}/libmemcached/csl/scanner.cc 
 	${MEMCACHED_PATH}/libhashkit/aes.cc 
@@ -195,10 +221,10 @@ set(SRC_FILES
 	${MEMCACHED_PATH}/libhashkit/strerror.cc 
 	${MEMCACHED_PATH}/libhashkit/string.cc 
 	${MEMCACHED_PATH}/libhashkit/hsieh.cc 
-	${MEMCACHED_PATH}/libhashkit/nohsieh.cc 
-	# ${MEMCACHED_PATH}/libmemcached/csl/context.cc 
-	# ${MEMCACHED_PATH}/libmemcached/csl/parser.cc 
-	# ${MEMCACHED_PATH}/libmemcached/csl/scanner.cc 
+	#${MEMCACHED_PATH}/libhashkit/nohsieh.cc 
+	${MEMCACHED_PATH}/libmemcached/csl/context.cc 
+	${MEMCACHED_PATH}/libmemcached/csl/parser.cc 
+	${MEMCACHED_PATH}/libmemcached/csl/scanner.cc 
 	${MEMCACHED_PATH}/libmemcached/instance.cc 
 	${MEMCACHED_PATH}/libmemcached/allocators.cc 
 	${MEMCACHED_PATH}/libmemcached/allocators.hpp 
@@ -256,11 +282,21 @@ set(SRC_FILES
 	${MEMCACHED_PATH}/libmemcachedutil/ping.cc 
 	${MEMCACHED_PATH}/libmemcachedutil/pool.cc 
 	${MEMCACHED_PATH}/libmemcachedutil/version.cc 
+	${MEMCACHED_PATH}/libmemcachedprotocol/ascii_handler.h 
+	${MEMCACHED_PATH}/libmemcachedprotocol/ascii_handler.c 
+	${MEMCACHED_PATH}/libmemcachedprotocol/binary_handler.h 
+	${MEMCACHED_PATH}/libmemcachedprotocol/binary_handler.c 
+	${MEMCACHED_PATH}/libmemcachedprotocol/cache.h 
+	${MEMCACHED_PATH}/libmemcachedprotocol/cache.c 
+	${MEMCACHED_PATH}/libmemcachedprotocol/common.h 
+	${MEMCACHED_PATH}/libmemcachedprotocol/handler.c 
+	${MEMCACHED_PATH}/libmemcachedprotocol/pedantic.c 
 )
 
 
-
-#add_definitions(-DLIBRDKAFKA_STATICLIB)
+add_definitions(-DSTATIC_LIBMEMCACHED=1)
+add_definitions(-DBUILDING_LIBMEMCACHED)
+add_definitions(-DYY_NO_UNISTD_H=1)
 # set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wregister -Wdeprecated-register")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wregister -Wdeprecated-register")
 
@@ -277,5 +313,45 @@ install (TARGETS memcached
          RUNTIME DESTINATION bin COMPONENT SF3rdParties)
 
 
+SET(MEMCACHED_INSTALL_INCLUDE_DIR include/libmemcached)
 
+
+INSTALL(FILES ${MEMCACHED_PATH}/mem_config.h DESTINATION ${MEMCACHED_INSTALL_INCLUDE_DIR}/
+  )
+ 
+INSTALL(DIRECTORY ${MEMCACHED_PATH}/libhashkit/ DESTINATION ${MEMCACHED_INSTALL_INCLUDE_DIR}/libhashkit/
+	FILES_MATCHING PATTERN *.h PATTERN *.hpp
+  )
+  
+INSTALL(DIRECTORY ${MEMCACHED_PATH}/libhashkit-1.0/ DESTINATION ${MEMCACHED_INSTALL_INCLUDE_DIR}/libhashkit-1.0/
+	FILES_MATCHING PATTERN *.h PATTERN *.hpp
+  )
+
+INSTALL(DIRECTORY ${MEMCACHED_PATH}/libmemcached/ DESTINATION ${MEMCACHED_INSTALL_INCLUDE_DIR}/libmemcached/
+	FILES_MATCHING PATTERN *.h PATTERN *.hpp
+  )
+
+INSTALL(DIRECTORY ${MEMCACHED_PATH}/libmemcached-1.0/ DESTINATION ${MEMCACHED_INSTALL_INCLUDE_DIR}/libmemcached-1.0/
+	FILES_MATCHING PATTERN *.h PATTERN *.hpp
+  )
+
+INSTALL(DIRECTORY ${MEMCACHED_PATH}/libmemcachedprotocol/ DESTINATION ${MEMCACHED_INSTALL_INCLUDE_DIR}/libmemcachedprotocol/
+	FILES_MATCHING PATTERN *.h PATTERN *.hpp
+  )
+  
+INSTALL(DIRECTORY ${MEMCACHED_PATH}/libmemcachedprotocol-0.0/ DESTINATION ${MEMCACHED_INSTALL_INCLUDE_DIR}/libmemcachedprotocol-0.0/
+	FILES_MATCHING PATTERN *.h PATTERN *.hpp
+  )
+
+INSTALL(DIRECTORY ${MEMCACHED_PATH}/libmemcachedutil/ DESTINATION ${MEMCACHED_INSTALL_INCLUDE_DIR}/libmemcachedutil/
+	FILES_MATCHING PATTERN *.h PATTERN *.hpp
+  )
+
+INSTALL(DIRECTORY ${MEMCACHED_PATH}/libmemcachedutil-1.0/ DESTINATION ${MEMCACHED_INSTALL_INCLUDE_DIR}/libmemcachedutil-1.0/
+	FILES_MATCHING PATTERN *.h PATTERN *.hpp
+  )
+  
+INSTALL(DIRECTORY ${MEMCACHED_PATH}/win32/ DESTINATION ${MEMCACHED_INSTALL_INCLUDE_DIR}/win32/
+	FILES_MATCHING PATTERN *.h PATTERN *.hpp
+  )
 

@@ -48,7 +48,6 @@
  */
 #if defined(WIN32) || defined(__MINGW32__)
 # include "win32/wrappers.h"
-# define get_socket_errno() WSAGetLastError()
 #else
 # include <unistd.h>
 # define INVALID_SOCKET -1
