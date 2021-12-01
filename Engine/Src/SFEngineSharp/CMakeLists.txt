@@ -53,7 +53,6 @@ set_property(TARGET SFEngineSharp PROPERTY VS_DOTNET_REFERENCES
 
 add_dependencies(SFEngineSharp SFCoreSharp)
 
-
 target_link_libraries(SFEngineSharp SFEngineDLL)
 
 

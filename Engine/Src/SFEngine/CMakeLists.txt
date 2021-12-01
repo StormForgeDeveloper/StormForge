@@ -276,8 +276,7 @@ set(SFENGINE_LIB_FILES
 
 add_library(SFEngine STATIC ${SFENGINE_LIB_FILES})
 
-# not working well
-#target_precompile_headers(SFEngine PRIVATE SFEnginePCH.h)
+target_precompile_headers(SFEngine PRIVATE SFEnginePCH.h)
 
 target_include_directories (SFEngine PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
 
