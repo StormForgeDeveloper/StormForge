@@ -269,7 +269,9 @@ typedef intptr_t NativeWindow;
 #define OUT
 
 using SF_SOCKET = int;
+#ifndef INVALID_SOCKET
 #define INVALID_SOCKET (-1)
+#endif
 
 
 

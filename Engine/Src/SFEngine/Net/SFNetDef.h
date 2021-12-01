@@ -31,7 +31,9 @@ namespace Net {
 	//	Connection Interface
 	//
 #if SF_PLATFORM != SF_PLATFORM_WINDOWS
+#ifndef SOCKET_ERROR
 	#define SOCKET_ERROR (-1)
+#endif
 #endif
 
 	static constexpr int MAX_STRING_TEMP_BUFF_SIZE = 1024 + 512;
