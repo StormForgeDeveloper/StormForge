@@ -75,16 +75,19 @@
 /* Support for building on various platforms */
 
 // on cygwin we should take care of exporting/importing symbols properly
+#if defined(USE_STATIC_LIB)
+#    define ZOOAPI 
+#else
 #ifdef DLL_EXPORT
 #    define ZOOAPI __declspec(dllexport)
 #else
-#  if (defined(__CYGWIN__) || defined(WIN32)) && !defined(USE_STATIC_LIB)
+#  if defined(__CYGWIN__) || defined(WIN32)
 #    define ZOOAPI __declspec(dllimport)
 #  else
 #    define ZOOAPI
 #  endif
 #endif
-
+#endif
 /** zookeeper return constants **/
 
 enum ZOO_ERRORS {
