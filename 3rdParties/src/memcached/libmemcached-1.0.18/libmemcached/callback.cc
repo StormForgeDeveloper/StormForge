@@ -12,7 +12,7 @@
 #include <libmemcached/common.h>
 #include <sys/types.h>
 
-#ifndef __INTEL_COMPILER
+#if !defined(__INTEL_COMPILER) && !defined(_MSC_VER)
 #pragma GCC diagnostic ignored "-Wstrict-aliasing"
 #endif
 

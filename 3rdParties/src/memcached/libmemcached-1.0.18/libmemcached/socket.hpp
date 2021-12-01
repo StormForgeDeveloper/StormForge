@@ -50,8 +50,12 @@
 # include "win32/wrappers.h"
 #else
 # include <unistd.h>
+#ifndef INVALID_SOCKET
 # define INVALID_SOCKET -1
+#endif
+#ifndef SOCKET_ERROR
 # define SOCKET_ERROR -1
+#endif
 # define closesocket(a) close(a)
 # define get_socket_errno() errno
 #endif
