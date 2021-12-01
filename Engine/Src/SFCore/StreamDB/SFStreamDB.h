@@ -197,7 +197,7 @@ namespace SF
 
         bool m_IsDataRequested = false;
 
-        // Locally cached data
+        // Locally cached data. This is for C# interface to keep the message data even after returned pointer to c# system until next pool
         SFUniquePtr<StreamMessageData> m_ReceivedMessageData;
     };
 
@@ -228,11 +228,8 @@ namespace SF
         Result Unsubscribe();
 
 		Result PollData(SFUniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS = 0);
-		Result PollData(int32_t timeoutMS = 0);
 
         Result CommitConsumeState();
-
-		const SFUniquePtr<StreamMessageData>& GetLatestReceivedData() const { return m_ReceivedMessageData; }
 
 
 	private:
@@ -240,9 +237,6 @@ namespace SF
 		UniquePtr<RdKafka::KafkaConsumer> m_Consumer;
 
 		bool m_IsSubscribed = false;
-
-		// Locally cached data
-		SFUniquePtr<StreamMessageData> m_ReceivedMessageData;
 	};
 
 }

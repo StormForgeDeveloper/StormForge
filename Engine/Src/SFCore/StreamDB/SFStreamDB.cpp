@@ -677,13 +677,6 @@ namespace SF
 		return hr;
 	}
 
-
-	Result StreamDBGroupConsumer::PollData(int32_t timeoutMS)
-	{
-		m_ReceivedMessageData.reset();
-		return PollData(m_ReceivedMessageData, timeoutMS);
-	}
-
 	Result StreamDBGroupConsumer::CommitConsumeState()
 	{
 		if (!m_Consumer)
