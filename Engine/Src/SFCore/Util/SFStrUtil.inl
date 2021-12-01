@@ -683,7 +683,7 @@ namespace SF {
 
 
 		template<int iBuffLen>
-		inline Result StringCat(char(&szDest)[iBuffLen], const char *szSrc)
+		SF_FORCEINLINE Result StringCat(char(&szDest)[iBuffLen], const char *szSrc)
 		{
 			size_t orgLen = strlen(szDest);
 			return StringCopy(szDest + orgLen, iBuffLen - (int)orgLen, szSrc);
@@ -691,25 +691,25 @@ namespace SF {
 
 
 
-		inline bool IsWhiteSpace(char ch)
+		SF_FORCEINLINE bool IsWhiteSpace(char ch)
 		{
 			return ch == ' ' || ch == '\r' || ch == '\n' || ch == '\t';
 		}
 
-		inline bool IsWhiteSpace(wchar_t ch)
+		SF_FORCEINLINE bool IsWhiteSpace(wchar_t ch)
 		{
 			return ch == L' ' || ch == L'\r' || ch == L'\n' || ch == L'\t';
 		}
 
 
-		inline bool IsNullOrEmpty(const char* str)
+		SF_FORCEINLINE bool IsNullOrEmpty(const char* str)
 		{
 			if (str == nullptr || str[0] == '\0')
 				return true;
 			return false;
 		}
 
-		inline bool IsNullOrEmpty(const wchar_t* str)
+		SF_FORCEINLINE bool IsNullOrEmpty(const wchar_t* str)
 		{
 			if (str == nullptr || str[0] == L'\0')
 				return true;

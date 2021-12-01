@@ -181,7 +181,7 @@ SFDLL_EXPORT int32_t StreamDBConsumer_NativePollData(intptr_t nativeHandle, int6
 
 	auto result = pStreamInstance->PollData();
 
-	const SFUniquePtr<StreamDBConsumer::StreamMessageData>& messageData = pStreamInstance->GetLatestReceivedData();
+	const SFUniquePtr<StreamMessageData>& messageData = pStreamInstance->GetLatestReceivedData();
 	if (messageData)
 	{
 		InOutmessageOffset = messageData->GetOffset();

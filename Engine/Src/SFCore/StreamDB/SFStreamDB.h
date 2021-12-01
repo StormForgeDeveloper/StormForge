@@ -31,6 +31,7 @@ namespace RdKafka
     class Producer;
     class Consumer;
     class Message;
+    class KafkaConsumer;
 }
 
 namespace SF
@@ -144,28 +145,33 @@ namespace SF
 	//  class StreamDBConsumer
 	//
 
+	class StreamMessageData : public ArrayView<const uint8_t>
+	{
+	public:
+
+		StreamMessageData(RdKafka::Message* messageData);
+
+		virtual ~StreamMessageData();
+
+		int64_t GetOffset() const;
+		int64_t GetTimeStamp() const;
+
+	private:
+
+		UniquePtr<RdKafka::Message> m_MessageData;
+	};
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//  class StreamDBConsumer
+	//
+
     class StreamDBConsumer : public StreamDB
     {
     public:
 
         using super = StreamDB;
 
-
-        class StreamMessageData : public ArrayView<const uint8_t>
-        {
-        public:
-
-            StreamMessageData(RdKafka::Message* messageData);
-
-            virtual ~StreamMessageData();
-
-            int64_t GetOffset() const;
-            int64_t GetTimeStamp() const;
-
-        private:
-
-            UniquePtr<RdKafka::Message> m_MessageData;
-        };
 
     public:
 
@@ -194,6 +200,50 @@ namespace SF
         // Locally cached data
         SFUniquePtr<StreamMessageData> m_ReceivedMessageData;
     };
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//  class StreamDBGroupConsumer
+    //          This is interface as group message consumer. Only one consumer in the group will receive the message
+	//
+
+	class StreamDBGroupConsumer : public StreamDB
+	{
+	public:
+
+		using super = StreamDB;
+
+
+	public:
+
+        StreamDBGroupConsumer();
+		virtual ~StreamDBGroupConsumer();
+
+		virtual Result Initialize(const String& brokers, const String& consumerGroupId, const String& topic);
+
+		SF_FORCEINLINE bool IsSubscribed() const { return m_IsSubscribed; }
+
+		Result Subscribe();
+        Result Unsubscribe();
+
+		Result PollData(SFUniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS = 0);
+		Result PollData(int32_t timeoutMS = 0);
+
+        Result CommitConsumeState();
+
+		const SFUniquePtr<StreamMessageData>& GetLatestReceivedData() const { return m_ReceivedMessageData; }
+
+
+	private:
+
+		UniquePtr<RdKafka::KafkaConsumer> m_Consumer;
+
+		bool m_IsSubscribed = false;
+
+		// Locally cached data
+		SFUniquePtr<StreamMessageData> m_ReceivedMessageData;
+	};
 
 }
 #endif

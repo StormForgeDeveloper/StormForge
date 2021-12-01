@@ -350,28 +350,28 @@ namespace SF
 	//	class StreamDBConsumer
 	//
 
-	StreamDBConsumer::StreamMessageData::StreamMessageData(RdKafka::Message* messageData)
+	StreamMessageData::StreamMessageData(RdKafka::Message* messageData)
 		: ArrayView<const uint8_t>(messageData->len(), reinterpret_cast<const uint8_t*>(messageData->payload()))
 		, m_MessageData(messageData)
 	{
 	}
 
-	StreamDBConsumer::StreamMessageData::~StreamMessageData()
+	StreamMessageData::~StreamMessageData()
 	{
 
 	}
 
-	int64_t StreamDBConsumer::StreamMessageData::GetOffset() const
+	int64_t StreamMessageData::GetOffset() const
 	{
 		return m_MessageData->offset();
 	}
 
-	int64_t StreamDBConsumer::StreamMessageData::GetTimeStamp() const
+	int64_t StreamMessageData::GetTimeStamp() const
 	{
 		return m_MessageData->timestamp().timestamp;
 	}
 
-	//size_t StreamDBConsumer::StreamMessageData::size() const
+	//size_t StreamMessageData::size() const
 	//{
 	//	if (m_MessageData)
 	//		return m_MessageData->len();
@@ -379,7 +379,7 @@ namespace SF
 	//	return 0;
 	//}
 
-	//const uint8_t* StreamDBConsumer::StreamMessageData::data() const
+	//const uint8_t* StreamMessageData::data() const
 	//{
 	//	if (m_MessageData)
 	//		return reinterpret_cast<const uint8_t*>(m_MessageData->payload());
@@ -521,6 +521,179 @@ namespace SF
 
 		return RdKafka::Consumer::OffsetTail(offsetFromTail);
 	}
+
+
+
+	////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//  class StreamDBGroupConsumer
+	//
+
+	StreamDBGroupConsumer::StreamDBGroupConsumer()
+	{
+
+	}
+
+	StreamDBGroupConsumer::~StreamDBGroupConsumer()
+	{
+		if (m_Consumer)
+		{
+			m_Consumer->close();
+		}
+
+		Clear_Internal(); // Unlike regular cases, parent stuffs should be released first
+		m_Consumer.reset();
+	}
+
+	Result StreamDBGroupConsumer::Initialize(const String& brokers, const String& consumerGroupId, const String& topic)
+	{
+		std::string errstr;
+
+		Result hr = super::Initialize(brokers, topic, -1);
+		if (!hr)
+			return hr;
+
+		if (consumerGroupId.IsNullOrEmpty())
+			return ResultCode::INVALID_ARG;
+
+		GetConfig()->set("group.id", consumerGroupId.data(), errstr);
+
+		auto* consumer = RdKafka::KafkaConsumer::create(GetConfig().get(), errstr);
+		if (!consumer)
+		{
+			SFLog(Net, Error, "Kafka consumer creation has failed: {0}", errstr);
+			return ResultCode::OUT_OF_MEMORY;
+		}
+
+		m_Consumer.reset(consumer);
+
+		RdKafka::Topic* topicHandle = RdKafka::Topic::create(m_Consumer.get(), GetTopic().data(), GetTopicConfig().get(), errstr);
+		if (topicHandle == nullptr)
+		{
+			SFLog(Net, Error, "Kafka consumer topic creation has failed: {0}", errstr);
+			return ResultCode::OUT_OF_MEMORY;
+		}
+
+		SetTopicHandle(topicHandle);
+
+		return UpdateTopicMetadata(m_Consumer.get());
+	}
+
+
+	Result StreamDBGroupConsumer::Subscribe()
+	{
+		if (m_Consumer == nullptr)
+			return ResultCode::NOT_INITIALIZED;
+
+		if (GetTopic().IsNullOrEmpty())
+			return ResultCode::INVALID_ARG;
+
+		std::vector<std::string> topics;
+		topics.push_back(GetTopic().data());
+
+		RdKafka::ErrorCode resp = m_Consumer->subscribe(topics);
+		if (resp != RdKafka::ERR_NO_ERROR)
+		{
+			SFLog(Net, Debug, "Failed to Subscribe consumer: {0}", RdKafka::err2str(resp));
+			return ResultCode::FAIL;
+		}
+
+		m_IsSubscribed = true;
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result StreamDBGroupConsumer::Unsubscribe()
+	{
+		if (m_Consumer == nullptr)
+			return ResultCode::NOT_INITIALIZED;
+
+		if (GetTopic().IsNullOrEmpty())
+			return ResultCode::INVALID_ARG;
+
+		RdKafka::ErrorCode resp = m_Consumer->unsubscribe();
+		if (resp != RdKafka::ERR_NO_ERROR)
+		{
+			SFLog(Net, Debug, "Failed to unsubscribe consumer: {0}", RdKafka::err2str(resp));
+			return ResultCode::FAIL;
+		}
+
+		m_IsSubscribed = true;
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result StreamDBGroupConsumer::PollData(SFUniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS)
+	{
+		ScopeContext hr([this](Result hr)
+			{
+				if (m_Consumer)
+					m_Consumer->poll(0);
+			});
+
+		if (!m_Consumer)
+			return hr = ResultCode::NOT_INITIALIZED;
+
+		UniquePtr<RdKafka::Message> message(m_Consumer->consume(timeoutMS));
+		if (message == nullptr)
+			return hr = ResultCode::NO_DATA_EXIST;
+
+		switch (message->err())
+		{
+		case RdKafka::ERR__TIMED_OUT:
+			hr = ResultCode::NO_DATA_EXIST;
+			break;
+
+		case RdKafka::ERR_NO_ERROR:
+
+			/* Real message */
+			SFLog(Net, Error, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
+
+			receivedMessageData.reset(new(GetSystemHeap()) StreamMessageData(message.release()));
+			break;
+
+		case RdKafka::ERR__PARTITION_EOF:
+			// Last message
+			hr = ResultCode::END_OF_STREAM;
+			break;
+
+		case RdKafka::ERR__UNKNOWN_TOPIC:
+		case RdKafka::ERR__UNKNOWN_PARTITION:
+			SFLog(Net, Error, "Consume failed: might be invalid stream, {0}", message->errstr());
+			hr = ResultCode::INVALID_STREAMID;
+			break;
+
+		default:
+			SFLog(Net, Error, "Consume failed: {0}", message->errstr());
+			hr = ResultCode::UNEXPECTED;
+		}
+
+		return hr;
+	}
+
+
+	Result StreamDBGroupConsumer::PollData(int32_t timeoutMS)
+	{
+		m_ReceivedMessageData.reset();
+		return PollData(m_ReceivedMessageData, timeoutMS);
+	}
+
+	Result StreamDBGroupConsumer::CommitConsumeState()
+	{
+		if (!m_Consumer)
+			return ResultCode::NOT_INITIALIZED;
+
+		RdKafka::ErrorCode resp = m_Consumer->commitAsync();
+		if (resp != RdKafka::ERR_NO_ERROR)
+		{
+			SFLog(Net, Debug, "Failed to unsubscribe consumer: {0}", RdKafka::err2str(resp));
+			return ResultCode::FAIL;
+		}
+
+		return ResultCode::SUCCESS;
+	}
+
+
 }
 
 #endif

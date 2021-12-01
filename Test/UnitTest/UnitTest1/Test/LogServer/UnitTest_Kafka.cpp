@@ -70,7 +70,7 @@ TEST_F(KafkaTest, Consumer)
 
     Result hr;
     do {
-        SFUniquePtr<StreamDBConsumer::StreamMessageData> messageData;
+        SFUniquePtr<StreamMessageData> messageData;
         int32_t timeoutMS = 10;
 
         hr = streamDB.PollData(messageData, timeoutMS);
