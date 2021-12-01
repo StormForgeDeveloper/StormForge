@@ -224,7 +224,7 @@ namespace SF
 
 		SF_FORCEINLINE bool IsSubscribed() const { return m_IsSubscribed; }
 
-		Result Subscribe();
+		Result Subscribe(bool bSeekToEnd = false);
         Result Unsubscribe();
 
 		Result PollData(SFUniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS = 0);

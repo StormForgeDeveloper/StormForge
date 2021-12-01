@@ -87,7 +87,6 @@ namespace SF
 
 		m_StreamName = topic;
 
-		GetConfig()->set("enable.partition.eof", "true", errstr);
 
 
 		return ResultCode::SUCCESS;
@@ -414,6 +413,8 @@ namespace SF
 		if (!hr)
 			return hr;
 
+		GetConfig()->set("enable.partition.eof", "true", errstr);
+
 		RdKafka::Consumer* consumer = RdKafka::Consumer::create(GetConfig().get(), errstr);
 		if (!consumer)
 		{
@@ -483,7 +484,7 @@ namespace SF
 		case RdKafka::ERR_NO_ERROR:
 
 			/* Real message */
-			SFLog(Net, Error, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
+			SFLog(Net, Debug4, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
 
 			receivedMessageData.reset(new(GetSystemHeap()) StreamMessageData(message.release()));
 			break;
@@ -553,6 +554,8 @@ namespace SF
 		if (!hr)
 			return hr;
 
+		GetConfig()->set("enable.partition.eof", "true", errstr);
+
 		if (consumerGroupId.IsNullOrEmpty())
 			return ResultCode::INVALID_ARG;
 
@@ -580,7 +583,7 @@ namespace SF
 	}
 
 
-	Result StreamDBGroupConsumer::Subscribe()
+	Result StreamDBGroupConsumer::Subscribe(bool bSeekToEnd)
 	{
 		if (m_Consumer == nullptr)
 			return ResultCode::NOT_INITIALIZED;
@@ -597,6 +600,9 @@ namespace SF
 			SFLog(Net, Debug, "Failed to Subscribe consumer: {0}", RdKafka::err2str(resp));
 			return ResultCode::FAIL;
 		}
+
+		// TODO: handle bSeekToEnd. I need to find assigned partition list and seek each of them to end
+
 
 		m_IsSubscribed = true;
 
@@ -627,8 +633,8 @@ namespace SF
 	{
 		ScopeContext hr([this](Result hr)
 			{
-				if (m_Consumer)
-					m_Consumer->poll(0);
+				//if (m_Consumer)
+				//	m_Consumer->poll(0);
 			});
 
 		if (!m_Consumer)
@@ -647,7 +653,7 @@ namespace SF
 		case RdKafka::ERR_NO_ERROR:
 
 			/* Real message */
-			SFLog(Net, Error, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
+			SFLog(Net, Debug4, "Read msg at offset:{0}, size:{1}", message->offset(), message->len());
 
 			receivedMessageData.reset(new(GetSystemHeap()) StreamMessageData(message.release()));
 			break;

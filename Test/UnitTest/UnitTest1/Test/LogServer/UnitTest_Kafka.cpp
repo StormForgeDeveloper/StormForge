@@ -98,6 +98,78 @@ TEST_F(KafkaTest, Consumer)
 
 }
 
+
+TEST_F(KafkaTest, GroupConsumer)
+{
+	const char* group = "MyTestGroup";
+	const char* topic = "MyTestGroupTopic1";
+	const int TestDataCount = 1000;
+
+	for (int iThread = 0; iThread < 3; iThread++)
+	{
+		SharedPointerT<StreamDBGroupConsumer> streamDB = new(GetHeap()) StreamDBGroupConsumer;
+
+		EXPECT_EQ(streamDB->Initialize(m_StreamServerAddress[0], group, topic), ResultCode::SUCCESS);
+		EXPECT_EQ(streamDB->Subscribe(), ResultCode::SUCCESS);
+
+		auto* pThread = new(GetHeap()) FunctorTickThread([&, iThread, streamDB](Thread* pThread) -> bool
+			{
+				Result hr;
+				SFUniquePtr<StreamMessageData> messageData;
+				int32_t timeoutMS = 10;
+
+				hr = streamDB->PollData(messageData, timeoutMS);
+				if (hr == ResultCode::END_OF_STREAM)
+				{
+				}
+				else if (hr == ResultCode::NO_DATA_EXIST)
+				{
+					// data may not yet available, ignore
+				}
+				else if (!hr)
+				{
+					EXPECT_EQ(hr, ResultCode::SUCCESS);
+				}
+
+				if (messageData)
+				{
+					int32_t* pData = (int32_t*)messageData->data();
+					SFLog(System, Info, "Thread {0}, received: {1}", iThread, *pData);
+
+					ThisThread::SleepFor(DurationMS(20));
+
+					streamDB->CommitConsumeState();
+				}
+
+				ThisThread::SleepFor(DurationMS(100));
+
+				return true;
+			});
+
+		pThread->Start();
+		m_Threads.push_back(pThread);
+	}
+
+
+	StreamDBProducer streamDBProducer;
+
+	EXPECT_EQ(streamDBProducer.Initialize(m_StreamServerAddress[0], topic), ResultCode::SUCCESS);
+
+	ThisThread::SleepFor(DurationMS(1000));
+
+	for (int iTestData = 0; iTestData < TestDataCount; iTestData++)
+	{
+		EXPECT_EQ(streamDBProducer.SendRecord(ArrayView<const uint8_t>(sizeof(iTestData), (const uint8_t*)&iTestData)), ResultCode::SUCCESS);
+		ThisThread::SleepFor(DurationMS(12));
+	}
+
+	EXPECT_EQ(streamDBProducer.Flush(), ResultCode::SUCCESS);
+
+	ThisThread::SleepFor(DurationMS(1000));
+
+	StopAllThread();
+}
+
 TEST_F(KafkaTest, DirectoryBroker)
 {
 	auto streamDB = NewObject<StreamDBDirectoryBroker>(GetHeap());

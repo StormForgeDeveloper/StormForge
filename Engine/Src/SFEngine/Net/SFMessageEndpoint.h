@@ -23,7 +23,6 @@ namespace SF {
 		class MessageData;
 	}
 
-	class StreamDBConsumer;
 	class StreamDBProducer;
 
 
