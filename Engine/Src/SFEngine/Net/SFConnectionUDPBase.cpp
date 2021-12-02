@@ -555,18 +555,17 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 
-		auto msgID = pIMsg->GetMessageHeader()->msgID;
-		auto seq = pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence;
-		auto len = pIMsg->GetMessageHeader()->Length;
+		auto pHeader = pIMsg->GetMessageHeader();
+		auto msgID = pHeader->msgID;
+		auto seq = pHeader->msgID.IDSeq.Sequence;
+		auto len = pHeader->Length;
 
 		Result hrTem = m_RecvReliableWindow.AddMsg(pIMsg);
 
-		SFLog(Net, Debug2, "RECVGuaAdd : CID:{0} BaseSeq:{1}, msg:{2}, seq:{3}, len:{4}, hr:{5}",
-			GetCID(), m_RecvReliableWindow.GetBaseSequence(),
-			msgID,
-			seq,
-			len,
-			hrTem);
+		SFLog(Net, Debug2, "RECVGuaAdd : CID:{0} BaseSeq:{1}, msgId:{2}, seq:{3}, len:{4}, hr:{5}, Window base:{6}, msgCount:{7}, syncMask:{8}",
+			GetCID(), 
+			msgID, seq, len, hrTem,
+			m_RecvReliableWindow.GetBaseSequence(), m_RecvReliableWindow.GetMsgCount(), m_RecvReliableWindow.GetSyncMask());
 
 		if (hrTem == Result(ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE))
 		{

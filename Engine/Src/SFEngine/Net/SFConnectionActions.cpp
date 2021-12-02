@@ -97,8 +97,10 @@ namespace Net {
 			{
 				auto* pConUDP = static_cast<ConnectionUDPBase*>(GetConnection());
 				auto hrTem = pConUDP->GetSendReliableWindow().ReleaseSingleMessage(pNetCtrl->msgID.IDSeq.Sequence);
-				SFLog(Net, Debug2, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4:X8}",
-					GetCID(), pConUDP->GetSendReliableWindow().GetBaseSequence(), pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->rtnMsgID, hrTem);
+				SFLog(Net, Debug2, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4:X8}, windows status, baseSeq:{5}, headSeq:{6}, remain:{7}, msgCount:{8}",
+					GetCID(), pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->rtnMsgID, hrTem, 
+					pConUDP->GetSendReliableWindow().GetBaseSequence(), pConUDP->GetSendReliableWindow().GetHeadSequence(), 
+					pConUDP->GetSendReliableWindow().GetRemainSequenceCount(), pConUDP->GetSendReliableWindow().GetMsgCount());
 				netCheck(hrTem);
 			}
 			else
@@ -663,6 +665,9 @@ namespace Net {
 
 		auto& sendWindow = GetConnection()->GetSendReliableWindow();
 		auto& sendGuaQueue = GetConnection()->GetSendGuaQueue();
+
+		// make sure all acked messages are handled
+		sendWindow.SlidWindow();
 
 		// Send guaranteed message process
 		CounterType NumProc = sendWindow.GetRemainSequenceCount();

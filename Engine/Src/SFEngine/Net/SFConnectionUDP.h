@@ -97,9 +97,6 @@ namespace Net {
 		// Constructor
 		ConnectionUDPServer(IHeap& heap, SocketIO* ioHandler);
 		virtual ~ConnectionUDPServer();
-
-		// Update net control, process connection heartbeat, ... etc
-		//virtual Result TickUpdate() override;
 	};
 	
 
@@ -151,14 +148,6 @@ namespace Net {
 
 		//ConnectionStateAction_SendSync m_ActSendSync;
 
-	protected:
-		// Send packet buffer to connection with network device
-		//virtual Result SendBufferUDP(IOBUFFER_WRITE *pSendBuffer) override;
-		//virtual Result EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer) override;
-
-		// Send message to connection with network device
-		//virtual Result WriteBuffer(IOBUFFER_WRITE *pSendBuffer) override;
-
 	public:
 		// Constructor
 		ConnectionUDPClient(IHeap& memoryManager);
@@ -181,10 +170,6 @@ namespace Net {
 
 		// Reinitialize and set remote address
 		Result ReInitialize( const sockaddr_storage& socAddr );
-
-
-		// Update net control, process connection heartbeat, ... etc
-		//virtual Result TickUpdate() override;
 
 		// Update Send buffer Queue, TCP and UDP client connection
 		virtual Result UpdateSendBufferQueue() override;

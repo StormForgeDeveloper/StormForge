@@ -160,7 +160,6 @@ namespace Net {
 		// Release message sequence and slide window if can
 		void ReleaseMessageInternal(uint32_t iOffset);
 
-		void SlidWindow();
 
 	public:
 		// Constructor
@@ -202,6 +201,8 @@ namespace Net {
 		// Release message by message mask
 		Result ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask );
 
+		// Slide window, if you are using ReleaseSingleMessage, you need to call this on connection tick
+		void SlidWindow();
 	};
 
 
