@@ -286,6 +286,8 @@ if(MSVC)
 
   # Disable MSVC unreachable code warnings unless requested.
   add_compile_options(/wd4702)
+  
+  add_compile_options(/Z7)
 
   # Disable MSVC warning C4297 as it seems to be buggy.
   # Seehttps://connect.microsoft.com/VisualStudio/feedback/details/897611/incorrect-warning-of-c4297-for-destructor-with-try-catch-statement

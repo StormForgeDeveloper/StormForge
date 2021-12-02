@@ -86,12 +86,14 @@ namespace SF
 			DBClusterType ClusterType;
 			String DBInstanceName;
 			String DBName;
+			String DBCacheConnectionString;
 
 			DBCluster(IHeap& heap)
 				: ClusterName(heap)
 				, ClusterType(DBClusterType::Normal)
 				, DBInstanceName(heap)
 				, DBName(heap)
+				, DBCacheConnectionString(heap)
 			{}
 		};
 

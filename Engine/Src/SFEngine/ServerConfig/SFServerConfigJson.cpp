@@ -130,11 +130,13 @@ namespace SF
 		auto ClusterTypeString = itemValue.get("ClusterType", Json::Value("Normal"));
 		auto DBInstanceName = itemValue.get("DBInstanceName", Json::Value(""));
 		auto DBName = itemValue.get("DBName", Json::Value(""));
+		auto DBCacheConnectionString = itemValue.get("DBCacheConnectionString", Json::Value(""));
 
 		pDBCluster->ClusterName = Name.asCString();
 		pDBCluster->ClusterType = StrUtil::StringCompairIgnoreCase("Normal", 7, ClusterTypeString.asCString(), -1) == true ? DBClusterType::Normal : DBClusterType::Sharding;
 		pDBCluster->DBInstanceName = DBInstanceName.asCString();
 		pDBCluster->DBName = DBName.asCString();
+		pDBCluster->DBCacheConnectionString = DBCacheConnectionString.asCString();
 
 		return ResultCode::SUCCESS;
 	}

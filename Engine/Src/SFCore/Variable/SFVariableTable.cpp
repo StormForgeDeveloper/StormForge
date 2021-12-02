@@ -123,7 +123,6 @@ namespace SF {
 		return Ret;
 	}
 
-
 	Variable* VariableTable::GetVariable(KeyType name)
 	{
 		Variable* pVariable = nullptr;
