@@ -76,7 +76,7 @@ if not exist "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt
 )
 
 
-
+cmd /c "cd 3rdParties\src\mysql & download.cmd"
 cmd /c "cd 3rdParties\src\mongoc & download.cmd"
 cmd /c "cd 3rdParties\src\lzma & download.cmd"
 cmd /c "cd 3rdParties\src\jansson & download.cmd"

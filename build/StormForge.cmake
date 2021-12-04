@@ -106,7 +106,7 @@ if(WIN32)
 	
 	include_directories(AFTER 
 		$ENV{VK_SDK_PATH}/include
-		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/include
+		../${SF_FOLDER}/3rdParties/src/mysql/mysql-connector-c++-8.0.27-winx64/include
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include/libmemcached
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include/libbson-1.0
@@ -115,8 +115,7 @@ if(WIN32)
 
 	link_directories(
 		../${SF_FOLDER}/3rdParties/src/openssl/buildWIndows/openssl/lib
-		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14/$(Configuration)
-		../${SF_FOLDER}/3rdParties/src/mysql/buildWindows/${ARTECTURE}/lib64/vs14
+		../${SF_FOLDER}/src/mysql/mysql-connector-c++-8.0.27-winx64/lib64/vs14/$(Configuration)
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/lib
 	)
 	
