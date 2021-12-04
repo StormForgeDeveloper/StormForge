@@ -30,10 +30,10 @@ if not exist "OpenSSLBuild.txt" (
 
 
 
-rem build MYSQL client lib
-cmd /c "cd %MYSQL_DIR% & WinGen.cmd"
-cmd /c "cd %MYSQL_DIR% & WinBuild.cmd"
-
+rem build MYSQL client lib => we are using precompiled version on window now
+rem cmd /c "cd %MYSQL_DIR% & WinGen.cmd"
+rem cmd /c "cd %MYSQL_DIR% & WinBuild.cmd"
+cmd /c "cd %MYSQL_DIR% & download.cmd"
 
 
 rem Build main part
