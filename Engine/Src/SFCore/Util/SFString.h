@@ -289,9 +289,23 @@ namespace SF {
 
 
 		// Reserve buffer and set size. filled data will be garbage
-		SF_FORCEINLINE void Resize(size_t newStrLen) { m_Buffer->Resize(newStrLen); }
+		SF_FORCEINLINE void Resize(size_t newStrLen)
+		{
+			if (m_Buffer == nullptr)
+				m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap());
+
+			m_Buffer->Resize(newStrLen);
+		}
+
 		// Reserver buffer
-		SF_FORCEINLINE void Reserve(size_t newStrLen) { m_Buffer->Reserve(newStrLen); }
+		SF_FORCEINLINE void Reserve(size_t newStrLen)
+		{
+			if (m_Buffer == nullptr)
+				m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), newStrLen);
+			else
+				m_Buffer->Reserve(newStrLen);
+		}
+
 		// Check whether it's null or empty string
 		bool IsNullOrEmpty() const { return m_Buffer == nullptr || m_Buffer->GetStringLength() == 0; }
 
@@ -717,6 +731,29 @@ namespace SF {
 				if (iItem != 0)
 					newBuffer->Append(delimiter, delimiterSize);
 				newBuffer->Append((const CharType*)strings[iItem], strings[iItem].GetBufferLength());
+			}
+
+			return TString(heap, newBuffer);
+		}
+
+		static TString Join(IHeap& heap, const Array<const CharType*>& strings, const CharType* delimiter)
+		{
+			if (strings.size() == 0)
+				return TString(GetEngineHeap());
+
+			size_t totalSize = 0;
+			auto delimiterSize = StrUtil::StringLen(delimiter);
+			for (size_t iItem = 0; iItem < strings.size(); iItem++)
+			{
+				totalSize += StrUtil::StringLen(strings[iItem]);
+			}
+
+			auto newBuffer = new(heap) SharedStringBufferType(heap, totalSize + strings.size() * delimiterSize + 1);
+			for (size_t iItem = 0; iItem < strings.size(); iItem++)
+			{
+				if (iItem != 0)
+					newBuffer->Append(delimiter, delimiterSize);
+				newBuffer->Append(strings[iItem], StrUtil::StringLen(strings[iItem]));
 			}
 
 			return TString(heap, newBuffer);
@@ -1168,6 +1205,8 @@ namespace SF {
 		StringBuilder(IHeap& heap, size_t growSize = 1024);
 
 		IHeap& GetHeap() { return m_Buffer->GetHeap(); }
+
+		void Reset();
 
 		// Append to string
 		StringBuilder& Append(const StringType& src);

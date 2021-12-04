@@ -58,6 +58,11 @@ namespace SF {
 		m_Buffer->Reserve(growSize);
 	}
 
+	void StringBuilder::Reset()
+	{
+		m_Buffer->Resize(0);
+	}
+
 	// Append to string
 	StringBuilder& StringBuilder::Append(const StringType& src)
 	{

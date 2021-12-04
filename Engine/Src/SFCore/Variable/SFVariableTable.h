@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -24,6 +24,7 @@
 namespace SF {
 
 
+	class NamedVariableArray;
 
 	/////////////////////////////////////////////////////////////////////////////////
 	//
@@ -45,7 +46,7 @@ namespace SF {
 		IHeap& m_Heap;
 
 		// Variable 
-		SortedArray<KeyType, Variable*, true, false> m_VairableTable;
+		SortedArray<KeyType, Variable*, true, false> m_VariableTable;
 
 	public:
 
@@ -59,11 +60,11 @@ namespace SF {
 		void Clear();
 		void Reset() { Clear(); }
 
-		size_t size() const { return m_VairableTable.size(); }
-		Iterator begin() { return m_VairableTable.begin(); }
-		const Iterator begin() const { return m_VairableTable.begin(); }
-		Iterator end() { return m_VairableTable.end(); }
-		const Iterator end() const { return m_VairableTable.end(); }
+		size_t size() const { return m_VariableTable.size(); }
+		Iterator begin() { return m_VariableTable.begin(); }
+		const Iterator begin() const { return m_VariableTable.begin(); }
+		Iterator end() { return m_VariableTable.end(); }
+		const Iterator end() const { return m_VariableTable.end(); }
 
 		// Set variable, contents will be copied
 		virtual Result SetVariable(KeyType name, const Variable& variable);
@@ -73,6 +74,13 @@ namespace SF {
 		virtual Result SetVariable(KeyType name, Variable*& variable);
 
 		virtual Result Remove(KeyType name);
+
+		void Remove(KeyType name, SFUniquePtr<Variable>& removed)
+		{
+			Variable* pVariable{};
+			m_VariableTable.Remove(name, pVariable);
+			removed.reset(pVariable);
+		}
 
 		// Get variable
 		Variable* GetVariable(KeyType name);
@@ -116,7 +124,7 @@ namespace SF {
 			if (size() != src.size())
 				return false;
 
-			for (auto& itItem : m_VairableTable)
+			for (auto& itItem : m_VariableTable)
 			{
 				auto pSrcVar = src.GetVariable(itItem.GetKey());
 				if (*pSrcVar != *itItem.GetValue())
@@ -130,6 +138,10 @@ namespace SF {
 		Result FromBinData(const Array<uint8_t>&);
 
 		VariableTable& operator = (const VariableTable& src);
+		VariableTable& operator = (VariableTable&& src);
+
+		VariableTable& operator = (const NamedVariableArray& src);
+		VariableTable& operator = (NamedVariableArray&& src);
 	};
 
 
@@ -152,7 +164,7 @@ namespace SF {
 		IHeap& m_Heap;
 
 		// Variable 
-		DualSortedMap<KeyType, Variable*> m_VairableTable;
+		DualSortedMap<KeyType, Variable*> m_VariableTable;
 
 	public:
 

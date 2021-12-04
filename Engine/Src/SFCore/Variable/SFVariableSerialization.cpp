@@ -16,6 +16,7 @@
 #include "Variable/SFVariable.h"
 #include "Variable/SFNamedVariableBox.h"
 #include "Variable/SFVariableTable.h"
+#include "Variable/SFVariableSerialization.h"
 #include "Util/SFToString.h"
 #include "Util/SFStringFormat.h"
 #include "Util/SFHasher32C.h"
@@ -137,17 +138,26 @@ namespace SF
 	{
 		auto pVariable = data.GetVariable();
 		StringCrc32 TypeName = nullptr;
-		if (pVariable == nullptr)
+		if (pVariable != nullptr)
 		{
-			return (output << TypeName);
+			TypeName = pVariable->GetTypeName();
 		}
-
-		TypeName = pVariable->GetTypeName();
 
 		if (!(output << TypeName))
 			return ResultCode::END_OF_STREAM;
 
 		return pVariable->Serialize(output);
+	}
+
+
+	Result operator << (IOutputStream& output, const Variable& data)
+	{
+		StringCrc32 TypeName = data.GetTypeName();
+
+		if (!(output << TypeName))
+			return ResultCode::END_OF_STREAM;
+
+		return data.Serialize(output);
 	}
 
 
@@ -183,6 +193,84 @@ namespace SF
 			auto Ret = pVariable->Serialize(output);
 			if (!Ret)
 				return Ret;
+		}
+
+		return ResultCode::SUCCESS;
+	}
+
+
+
+	size_t SerializedSizeOf(const NamedVariableArray& Value)
+	{
+		size_t Size = sizeof(uint16_t);
+		for (auto& itVar : Value)
+		{
+			Size += SerializedSizeOf(itVar.GetKey());
+			auto* pVariable = itVar.GetValue();
+			assert(pVariable);
+			if (pVariable != nullptr)
+			{
+				Size += sizeof(Variable::TypeNameType);
+				Size += SerializedSizeOf(*pVariable);
+			}
+		}
+
+		return Size;
+	}
+
+	Result operator << (IOutputStream& output, const NamedVariableArray& data)
+	{
+		uint16_t NumItems = static_cast<uint16_t>(data.size());
+		if (!(output << NumItems))
+			return ResultCode::END_OF_STREAM;
+
+		for (auto itItem : data)
+		{
+			VariableTable::KeyType VariableName = itItem.GetKey();
+			if (!(output << VariableName))
+				return ResultCode::END_OF_STREAM;
+
+			auto* pVariable = itItem.GetValue();
+			StringCrc32 TypeName = pVariable == nullptr ? nullptr : pVariable->GetTypeName();
+			if (!(output << TypeName))
+				return ResultCode::END_OF_STREAM;
+
+			if (pVariable == nullptr)
+				continue;
+
+			auto Ret = pVariable->Serialize(output);
+			if (!Ret)
+				return Ret;
+		}
+
+		return ResultCode::SUCCESS;
+	}
+
+	Result operator >> (IInputStream& input, NamedVariableArray& data)
+	{
+		uint16_t NumItems = 0;
+
+		if (!input.Read(NumItems))
+			return ResultCode::END_OF_STREAM;
+
+		for (uint32_t iItem = 0; iItem < NumItems; iItem++)
+		{
+			NamedVariableArray::KeyType VariableName;
+			if (!(input >> VariableName))
+				return ResultCode::END_OF_STREAM;
+
+			StringCrc32 TypeName;
+			if (!(input >> TypeName))
+				return ResultCode::END_OF_STREAM;
+
+			SFUniquePtr<Variable> pVariable;
+			if (TypeName != nullptr)
+			{
+				pVariable.reset(Service::VariableFactory->CreateVariable(data.GetHeap(), TypeName));
+				pVariable->Deserialize(input);
+			}
+
+			data.SetVariable(VariableName, pVariable);
 		}
 
 		return ResultCode::SUCCESS;

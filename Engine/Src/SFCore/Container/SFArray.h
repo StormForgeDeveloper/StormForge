@@ -475,7 +475,7 @@ namespace SF {
 			//ArrayView(size_t dataCount, DataType* pDataPtr);
 			constexpr ArrayView(size_t dataCount, DataType* pDataPtr);
 			template<size_t dataCount>
-			constexpr ArrayView(const DataType(&pDataPtr)[dataCount])
+			constexpr ArrayView(DataType(&pDataPtr)[dataCount])
 			{
 				SetLinkedBuffer(dataCount, pDataPtr);
 			}

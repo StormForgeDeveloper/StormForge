@@ -572,6 +572,9 @@ namespace SF {
 		// In progress 
 		public const int IN_PROGRESS =                                      unchecked((int)0xE70100B9); 
 
+		// Invalid data 
+		public const int INVALID_DATA =                                     unchecked((int)0xE70100BA); 
+
 	}
 }
 

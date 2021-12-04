@@ -86,6 +86,31 @@ namespace SF
 		return new(heap) VariableVoidP(m_Value);
 	}
 
+
+	//////////////////////////////////////////////////////////////////////////////////////////////////
+	//
+	//	Variable
+	//
+
+	String Variable::ToString() const
+	{
+		constexpr size_t bufferSize = 2048;
+
+		String result;
+		result.Reserve(bufferSize);
+		ToStringContext context{};
+		context.StringBuffer = result.data();
+		context.StringBufferLength = bufferSize;
+		context.MaxDigit = 0;
+
+		ToString(context);
+
+		result.Resize(bufferSize - context.StringBufferLength);
+
+		return result;
+	}
+
+
 	bool Variable::IsEqualTypeNValue(const Variable& op) const
 	{
 		if (GetTypeName() != op.GetTypeName())

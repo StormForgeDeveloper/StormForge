@@ -207,6 +207,7 @@
 	<ResultCodeItem Severity="Error" CodeName="TOO_BIG_PARAMETER" Desc="Too big parameter has assigned"/>
 	<ResultCodeItem Severity="Error" CodeName="DEPRECATED_FEATURE" Desc="Deprecated"/>
 	<ResultCodeItem Severity="Error" CodeName="IN_PROGRESS" Desc="In progress"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_DATA" Desc="Invalid data"/>
 
 
 

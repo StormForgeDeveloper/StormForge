@@ -57,6 +57,16 @@ if not exist %PERL_INSTALL% (
 	rem Reboot or restarting command line will be required for path refresh
 )
 
+
+set MYSQL_INSTALL=mysql-connector-c++-8.0.27-winx64.msi
+if not exist %MYSQL_INSTALL% (
+	rem echo downloading mysql-connector
+	rem call %TOOL_PATH%\httpget +url:https://dev.mysql.com/get/Downloads/Connector-C++/%MYSQL_INSTALL%
+	rem %MYSQL_INSTALL%
+	rem NOTE: Register mysql dll path to your path
+)
+
+
 cd %~dp0
 
 

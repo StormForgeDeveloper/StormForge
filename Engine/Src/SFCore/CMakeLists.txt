@@ -86,19 +86,21 @@ set(SFCORE_LIB_FILES
 	Util/SFUtility.cpp
 	Variable/SFNamedVariableBox.h
 	Variable/SFNamedVariableBox.cpp
+	Variable/SFNamedVariableArray.h
+	Variable/SFNamedVariableArray.cpp
+	Variable/SFVariable.h
 	Variable/SFVariable.cpp
+	Variable/SFVariableBoxing.h
 	Variable/SFVariableBoxing.cpp
+	Variable/SFVariableStack.h
 	Variable/SFVariableStack.cpp
+	Variable/SFVariableTable.h
 	Variable/SFVariableTable.cpp
 	Variable/SFVariableSerialization.h
 	Variable/SFVariableSerialization.cpp
 	Variable/SFVariableFactoryService.h
 	Variable/SFVariableFactoryService.cpp
-	Variable/SFVariable.h
-	Variable/SFVariableBoxing.h
 	Variable/SFVariableMapBuilder.h
-	Variable/SFVariableStack.h
-	Variable/SFVariableTable.h
 	Variable/SFVariableToString.h
 	Variable/SFVariableToString.cpp
 	Variable/SFVariableCommonDefs.h

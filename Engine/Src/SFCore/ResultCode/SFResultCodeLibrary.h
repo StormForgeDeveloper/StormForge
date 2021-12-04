@@ -576,6 +576,9 @@ namespace SF {
 			// In progress 
 			constexpr Result 			IN_PROGRESS                                                        ((int32_t)0xE70100B9L);
 
+			// Invalid data 
+			constexpr Result 			INVALID_DATA                                                       ((int32_t)0xE70100BAL);
+
 	}//namespace ResultCode 
 }//namespace SF 
 

@@ -21,6 +21,7 @@
 #include "Stream/SFStream.h"
 #include "Variable/SFVariableTable.h"
 #include "Variable/SFNamedVariableBox.h"
+#include "Variable/SFNamedVariableArray.h"
 
 
 namespace SF {
@@ -38,7 +39,6 @@ namespace SF {
 	size_t SerializedSizeOf(const NamedVariableBox& Value);
 	size_t SerializedSizeOf(const VariableTable& Value);
 
-
 	Result operator >> (IInputStream& input, VariableBox& data);
 	Result operator << (IOutputStream& output, const VariableBox& data);
 
@@ -48,6 +48,9 @@ namespace SF {
 	Result operator >> (IInputStream& input, VariableTable& data);
 	Result operator << (IOutputStream& output, const VariableTable& data);
 
+	size_t SerializedSizeOf(const NamedVariableArray& Value);
+	Result operator >> (IInputStream& input, NamedVariableArray& data);
+	Result operator << (IOutputStream& output, const NamedVariableArray& data);
 
 
 

@@ -112,6 +112,7 @@ namespace SF {
 
 		// To string implementation
 		virtual Result ToString(ToStringContext& context) const { return ResultCode::NOT_IMPLEMENTED; }
+		virtual String ToString() const;
 
 		virtual bool IsEqualTypeNValue (const Variable& op) const;
 		virtual bool operator == (const Variable& op) const;
