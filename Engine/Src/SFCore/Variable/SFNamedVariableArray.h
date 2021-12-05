@@ -85,7 +85,7 @@ namespace SF {
 		int FindIndex(KeyType name) const;
 
 		// delete variable
-		void Remove(KeyType name)
+		SF_FORCEINLINE void Remove(KeyType name)
 		{
 			Remove(FindIndex(name));
 		}
@@ -103,12 +103,12 @@ namespace SF {
 		{
 			if (iVar >= 0)
 			{
-				removed.reset(m_VariableArray[0].Value);
+				removed.reset(m_VariableArray[iVar].Value);
 				m_VariableArray.RemoveAt(iVar);
 			}
 		}
 
-		void Remove(KeyType name, SFUniquePtr<Variable>& removed)
+		SF_FORCEINLINE void Remove(KeyType name, SFUniquePtr<Variable>& removed)
 		{
 			Remove(FindIndex(name), removed);
 		}
