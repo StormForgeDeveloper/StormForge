@@ -223,6 +223,7 @@ set(SFCORE_LIB_FILES
 	Util/SFStrUtil.cpp
 	Util/SFToString.cpp
 	Util/SFToStringBase.cpp
+	Util/SFCodecHex.cpp
 
 	Task/SFAsyncTaskManager.h
 	Task/SFTask.h

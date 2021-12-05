@@ -1381,7 +1381,17 @@ namespace SF
 
 	Result VariableBLOB::ToString(ToStringContext& context) const
 	{
-		// todo
+		StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(");
+		_ToString(context, m_Value.size());
+
+		StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":");
+
+		StaticArray<uint8_t, 64> outputData;
+		Util::HEXEncode(Math::Min<size_t>(m_Value.size(), 8), m_Value.data(), outputData, '-');
+		outputData.push_back(')');
+		outputData.push_back('\0');
+
+		StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, (const char*)outputData.data());
 
 		return ResultCode::SUCCESS;
 	}
