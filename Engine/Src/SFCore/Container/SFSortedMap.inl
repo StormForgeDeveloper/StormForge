@@ -151,20 +151,21 @@ namespace SF {
 			}
 			else if (key == pFound->Key)
 			{
-				auto left = pFound->Left;
-				if (left != nullptr)
-				{
-					auto biggestNode = FindBiggestNode(traversalHistory, left);
-					auto right = biggestNode->Right;
-					if (right != nullptr)
-						return ResultCode::FAIL;
+				return ResultCode::NOT_SUPPORTED; // Multiple value with same key is not supported at the moment
+				//auto left = pFound->Left;
+				//if (left != nullptr)
+				//{
+				//	auto biggestNode = FindBiggestNode(traversalHistory, left);
+				//	auto right = biggestNode->Right;
+				//	if (right != nullptr)
+				//		return ResultCode::FAIL;
 
-					const_cast<MapNode*>(biggestNode)->Right = pInserted = AllocateNode(key, value);
-				}
-				else
-				{
-					const_cast<MapNode*>(pFound)->Left = pInserted = AllocateNode(key, value);
-				}
+				//	const_cast<MapNode*>(biggestNode)->Right = pInserted = AllocateNode(key, value);
+				//}
+				//else
+				//{
+				//	const_cast<MapNode*>(pFound)->Left = pInserted = AllocateNode(key, value);
+				//}
 			}
 			else // if (key < pCurNode->Key) 
 			{
@@ -364,7 +365,6 @@ namespace SF {
 			{
 				travelHistory.AddHistory(pCurNode);
 
-				// multiple key
 				if (pCurNode->Key == key)
 				{
 					pNode = pCurNode;
@@ -394,16 +394,6 @@ namespace SF {
 					}
 					else
 					{
-						// Handl multiple key
-						// choose left most one
-						if (pCurNode->Key == key)
-						{
-							if (left->Key != key)
-							{
-								pNode = FindBiggestNode(travelHistory, left);
-								return ResultCode::SUCCESS;
-							}
-						}
 						pCurNode = left;
 					}
 				}

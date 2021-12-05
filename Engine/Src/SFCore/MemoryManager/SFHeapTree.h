@@ -121,6 +121,7 @@ namespace SF {
 					Assert((size_t)ceil(log2(totalItemCount + 1)) <= countof(m_TraversalHistory));
 				}
 
+				SF_FORCEINLINE size_t size() { return m_HistorySize; }
 				SF_FORCEINLINE size_t GetHistorySize() { return m_HistorySize; }
 
 				void Clear()
@@ -204,7 +205,7 @@ namespace SF {
 
 		private:
 
-			// find parent node or candidate
+			// find parent node or parent candidate for the key
 			Result FindNode(OperationTraversalHistory &travelHistory, KeyType key, MapNode* &pNode);
 
 			MapNode* FindSmallestNode(OperationTraversalHistory &travelHistory, MapNode* pRootNode);

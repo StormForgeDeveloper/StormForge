@@ -415,7 +415,6 @@ namespace SF
 	// Find a key value
 	Result HeapTree::FindSameOrBigger(KeyType key, MapNode* &pFound)
 	{
-		// TODO: 
 		OperationTraversalHistory travelHistory(GetSystemHeap(), m_Root, m_ItemCount);
 
 		if (!FindNode(travelHistory, key, pFound))
@@ -424,6 +423,19 @@ namespace SF
 		if (pFound->Key() >= key)
 		{
 			return ResultCode::SUCCESS;
+		}
+		else
+		{
+			// FindNode returns parent candidate if it fails to find same node we can simply use one of parents in the history
+			travelHistory.RemoveLastHistory(); // remove current pFound
+			for (; travelHistory.size() > 0; travelHistory.RemoveLastHistory())
+			{
+				pFound = travelHistory.GetHistory((int)travelHistory.size() - 1);
+				if (pFound->Key() >= key)
+				{
+					return ResultCode::SUCCESS;
+				}
+			}
 		}
 
 		return ResultCode::FAIL;
@@ -475,16 +487,6 @@ namespace SF
 				}
 				else
 				{
-					// Handle multiple key
-					// choose left most one
-					if (pCurNode->Key() == key)
-					{
-						if (left->Key() != key)
-						{
-							pNode = FindBiggestNode(travelHistory, left);
-							return ResultCode::SUCCESS;
-						}
-					}
 					pCurNode = left;
 				}
 			}
