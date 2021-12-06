@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2018 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -91,6 +91,7 @@ namespace SF
 		static constexpr size_t MemBlockHeaderSize = AlignUp(sizeof(MemoryBlock), MemBlockHdr::MaxHeaderAlignment);
 		static constexpr size_t MapNodeFooterSize = AlignUp(sizeof(MemBlockFooter), MemBlockHdr::MaxHeaderAlignment);
 		static constexpr size_t MinumumMemoryBlockOverhead = MapNodeHeaderSize + MemBlockHeaderSize + MapNodeFooterSize;
+		static constexpr size_t MapNodeOverhead = MapNodeHeaderSize + MemBlockHdr::MaxHeaderAlignment + MapNodeFooterSize;
 
 
 	private:
@@ -131,7 +132,8 @@ namespace SF
 		//	@blockSize: memory block size pointed by pMemoryBlock
 		//	@pMemoryBlock: memory block pointer
 		//	@takeOverOwnerShip: If true the memory block will be managed and deleted by this class
-		void AddMemoryBlock(size_t blockSize, void* pMemoryBlock, bool takeOverOwnerShip = false);
+		//  @return: added memory block pointer
+		MemoryBlock* AddMemoryBlock(size_t blockSize, void* pMemoryBlock, bool takeOverOwnerShip = false);
 
 
 		//virtual void* Alloc(size_t size, size_t alignment = SF_ALIGN_DOUBLE) override;
@@ -189,12 +191,106 @@ namespace SF
 		StaticMemoryAllocatorT(StringCrc64 nameCrc, IHeap& parentHeap)
 			: HeapMemoryType(nameCrc, parentHeap, 0)
 		{
-			super::AddMemoryBlock(sizeof(m_StaticMemoryBlock), m_StaticMemoryBlock, false);
+			m_BaseMemoryBlock = super::AddMemoryBlock(sizeof(m_StaticMemoryBlock), m_StaticMemoryBlock, false);
+		}
+
+		SF_FORCEINLINE const uint8_t* GetStaticBuffer() const { return m_StaticMemoryBlock; }
+		SF_FORCEINLINE const HeapMemory::MemoryBlock* GetBaseMemoryBlock() const { return m_BaseMemoryBlock; }
+
+	private:
+
+		uint8_t m_StaticMemoryBlock[StaticSize + HeapMemory::MinumumMemoryBlockOverhead];
+		HeapMemory::MemoryBlock* m_BaseMemoryBlock{};
+
+	};
+
+	// Memory allocation history
+	struct HeapMemoryHistory
+	{
+		char Op;
+		intptr_t PosIn;
+		intptr_t PosOut;
+		size_t Size;
+		size_t Alignment;
+
+		static Result ReplayHistory(IHeap& heap, const uint8_t* basePtr, size_t numHistory, const HeapMemoryHistory* pHistory);
+	};
+
+	// memory allocator from static block
+	template<size_t StaticSize, class HeapMemoryType = HeapMemory>
+	class StaticMemoryAllocatorDebugT : public HeapMemoryType
+	{
+	public:
+
+		using super = HeapMemoryType;
+
+		StaticMemoryAllocatorDebugT(StringCrc64 nameCrc, IHeap& parentHeap)
+			: HeapMemoryType(nameCrc, parentHeap, 0)
+		{
+			memset(m_History, 0, sizeof(m_History));
+			m_BaseMemoryBlock = super::AddMemoryBlock(sizeof(m_StaticMemoryBlock), m_StaticMemoryBlock, false);
+		}
+
+		SF_FORCEINLINE const HeapMemory::MemoryBlock* GetBaseMemoryBlock() const { return m_BaseMemoryBlock; }
+
+	protected:
+
+		virtual MemBlockHdr* AllocInternal(size_t size, size_t alignment) override
+		{
+			auto ptr = super::AllocInternal(size, alignment);
+			auto ptrPos = intptr_t(ptr) - intptr_t(m_BaseMemoryBlock);
+			assert(ptrPos >= 0);
+			auto buffLen = sizeof(m_History) - m_HistoryPos;
+			static const char strFormat[] = "{ 'A', 0, 0x%" PRIxPTR ",%zu,%zu },\n";
+			m_HistoryPos += snprintf(m_History + m_HistoryPos, buffLen, strFormat, ptrPos, size, alignment);
+			if ((m_HistoryPos + 128) >= sizeof(m_History)) m_HistoryPos = 0; // reset pos
+			return ptr;
+		}
+
+		virtual MemBlockHdr* ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment) override
+		{
+			auto ptrPos = intptr_t(ptr) - intptr_t(m_BaseMemoryBlock);
+			assert(ptrPos >= 0);
+
+			auto newBlock = super::ReallocInternal(ptr, orgSize, newSize, alignment);
+			if (newBlock == nullptr)
+				return nullptr;
+
+			auto ptrPos2 = intptr_t(newBlock) - intptr_t(m_BaseMemoryBlock);
+			if (ptrPos >= 0 && ptrPos < sizeof(m_StaticMemoryBlock))
+			{
+				assert(ptrPos2 >= 0);
+				auto buffLen = sizeof(m_History) - m_HistoryPos;
+				static const char strFormat[] = "{ 'R',0x%" PRIxPTR ",0x%" PRIxPTR ",%zu,%zu },\n";
+				m_HistoryPos += snprintf(m_History + m_HistoryPos, buffLen, strFormat, ptrPos, ptrPos2, newSize, alignment);
+				if ((m_HistoryPos + 128) >= sizeof(m_History)) m_HistoryPos = 0; // reset pos
+			}
+
+			return newBlock;
+		}
+
+		virtual void FreeInternal(MemBlockHdr* ptr) override
+		{
+			auto ptrPos = intptr_t(ptr) - intptr_t(m_BaseMemoryBlock);
+			assert(ptrPos >= 0);
+			if (ptrPos >= 0 && ptrPos < sizeof(m_StaticMemoryBlock))
+			{
+				auto buffLen = sizeof(m_History) - m_HistoryPos;
+				static const char strFormat[] = "{ 'F',0x%" PRIxPTR ", 0, 0, 0 },\n";
+				m_HistoryPos += snprintf(m_History + m_HistoryPos, buffLen, strFormat, ptrPos);
+				if ((m_HistoryPos + 128) >= sizeof(m_History)) m_HistoryPos = 0; // reset pos
+			}
+
+			return super::FreeInternal(ptr);
 		}
 
 	private:
 
 		uint8_t m_StaticMemoryBlock[StaticSize + HeapMemory::MinumumMemoryBlockOverhead];
+		HeapMemory::MemoryBlock* m_BaseMemoryBlock{};
+
+		size_t m_HistoryPos = 0;
+		char m_History[((StaticSize / HeapMemory::MapNodeOverhead) + 1) * 128];
 	};
 
 }

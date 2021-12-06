@@ -93,6 +93,7 @@
 #include <iostream>
 #include <string>
 #include <string.h>
+#include <inttypes.h>
 
 #include <thread>
 #include <mutex>

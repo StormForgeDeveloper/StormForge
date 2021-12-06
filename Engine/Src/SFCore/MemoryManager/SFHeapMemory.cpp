@@ -52,13 +52,15 @@ namespace SF
 		if (!FreeChunkTree.FindSameOrBigger(dataSectionSize, pFreeChunk))
 			return nullptr;
 
+		assert(pFreeChunk->MemChunkHeader.Size >= size);
+
 		auto chunkAllocationSize = static_cast<HeapTree::KeyType>(HeapMemory::CalculateAllocationSize(size, alignment));
 		Result result = FreeChunkTree.Remove(pFreeChunk);
 		Assert(result);
 		if (!result) return nullptr;
 
 		size_t blockSize = pFreeChunk->MemChunkHeader.Size;
-		if (blockSize <= chunkAllocationSize)
+		if (blockSize <= (chunkAllocationSize + HeapMemory::MapNodeOverhead))
 		{
 			assert((blockSize % MemBlockHdr::MaxHeaderAlignment) == 0);
 			assert(dataSectionSize <= (uint)blockSize);
@@ -468,7 +470,7 @@ namespace SF
 	//	@blockSize: memory block size pointed by pMemoryBlock
 	//	@pMemoryBlock: memory block pointer
 	//	@takeOverOwnerShip: If true the memory block will re deleted by this class
-	void HeapMemory::AddMemoryBlock(size_t blockSize, void* pMemoryBlock, bool takeOverOwnerShip)
+	HeapMemory::MemoryBlock* HeapMemory::AddMemoryBlock(size_t blockSize, void* pMemoryBlock, bool takeOverOwnerShip)
 	{
 		// drop bytes if the address isn't aligned
 		if ((uintptr_t(pMemoryBlock) % MemBlockHdr::MaxHeaderAlignment) != 0)
@@ -481,13 +483,66 @@ namespace SF
 
 		// test block size requirement
 		if (blockSize < MemBlockHdr::MaxHeaderAlignment)
-			return;
+			return nullptr;
 
 		assert(blockSize > (sizeof(MemoryBlock) + MapNodeFooterSize + MapNodeHeaderSize)); // the memory size should be bigger than header informations
 		auto pMemBlock = new(pMemoryBlock) MemoryBlock(this, blockSize - MemBlockHeaderSize, takeOverOwnerShip);
 
 		m_MemoryBlockList.push_back(pMemBlock);
+		return pMemBlock;
 	}
+
+	Result HeapMemoryHistory::ReplayHistory(IHeap& heap, const uint8_t* basePtr, size_t numHistory, const HeapMemoryHistory* pHistory)
+	{
+		SortedArray<MemBlockHdr* , MemBlockHdr*> allocated(GetEngineHeap());
+		MemBlockHdr* pNewBlockHeader{};
+		for (uint iHistory = 0; iHistory < numHistory; iHistory++, pHistory++)
+		{
+			auto pBlockHeaderIn = (MemBlockHdr*)(basePtr + pHistory->PosIn);
+			auto pBlockHeaderOut = pHistory->PosOut > 0 ? (MemBlockHdr*)(basePtr + pHistory->PosOut) : nullptr;
+			pNewBlockHeader = nullptr;
+			switch (pHistory->Op)
+			{
+			case 'A':
+				pNewBlockHeader = heap.AllocInternal(pHistory->Size, pHistory->Alignment);
+				if (pNewBlockHeader)
+				{
+					if (pBlockHeaderOut != pNewBlockHeader)
+						return ResultCode::FAIL;
+
+					allocated.Insert(pNewBlockHeader, pNewBlockHeader);
+				}
+				break;
+			case 'R':
+				pNewBlockHeader = heap.ReallocInternal(pBlockHeaderIn, pBlockHeaderIn->Size, pHistory->Size, pHistory->Alignment);
+				if (pNewBlockHeader)
+				{
+					if (pBlockHeaderOut != pNewBlockHeader)
+						return ResultCode::FAIL;
+
+					if (pBlockHeaderIn != pNewBlockHeader)
+					{
+						allocated.Remove(pBlockHeaderIn, pBlockHeaderIn);
+						allocated.Insert(pNewBlockHeader, pNewBlockHeader);
+					}
+				}
+				break;
+			case 'F':
+				if (!allocated.Find(pBlockHeaderIn, pNewBlockHeader))
+					return ResultCode::FAIL;
+
+				heap.FreeInternal(pBlockHeaderIn);
+				break;
+			default:
+				assert(false);
+				break;
+			}
+
+		}
+
+		return ResultCode::SUCCESS;
+	}
+
 
 }	// namespace SF
 
