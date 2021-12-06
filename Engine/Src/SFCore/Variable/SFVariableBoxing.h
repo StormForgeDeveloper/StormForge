@@ -232,6 +232,9 @@ namespace SF {
 	Result _ToString(ToStringContext& context, const sockaddr_in6& value);
 	Result _ToString(ToStringContext& context, const sockaddr_storage& value);
 
+	Result _ToString(ToStringContext& context, const StringCrc32& value);
+	Result _ToString(ToStringContext& context, const StringCrc64& value);
+
 	Result _ToString(ToStringContext& context, const void* value);
 
 

@@ -176,7 +176,7 @@ namespace SF
 			assert(FreeChunkTree.size() > 0);
 			// Remove next chunk from free list
 			auto result = FreeChunkTree.Remove(pNextChunk);
-			if (!result && result != ResultCode::NOT_EXIST)
+			if (!result)
 			{
 				// broken memory
 				AssertRel(false);
@@ -200,7 +200,7 @@ namespace SF
 			assert(FreeChunkTree.size() > 0);
 			// Remove next chunk from free list
 			auto result = FreeChunkTree.Remove(pPrevChunk);
-			if (!result && result != ResultCode::NOT_EXIST)
+			if (!result)
 			{
 				// broken memory
 				AssertRel(false);

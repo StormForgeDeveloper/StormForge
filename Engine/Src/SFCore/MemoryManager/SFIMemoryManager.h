@@ -139,6 +139,10 @@ namespace SF {
 		static struct MemBlockHdr* GetMemoryBlockHdr(void* ptr);
 		static IHeap* GetAloocationHeap(void* ptr);
 		static bool CheckMemoryHeader(void* ptr);
+		static SF_FORCEINLINE void TestMemoryHeaderChecked(void* ptr)
+		{
+			Assert(CheckMemoryHeader(ptr));
+		}
 
 		template<class ClassType>
 			//template<

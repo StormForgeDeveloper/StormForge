@@ -13,6 +13,8 @@
 #include "SFCorePCH.h"
 
 #include "Util/SFToString.h"
+#include "Variable/SFVariable.h"
+#include "Variable/SFVariableBoxing.h"
 #include "Variable/SFVariableToString.h"
 
 
@@ -48,16 +50,30 @@ namespace SF {
 	}
 
 
-
 	Result _ToString(ToStringContext& context, const VariableTable& value)
 	{
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Tbl:(")))
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Tbl:("))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, (uint32_t)value.size())))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")")))
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":"))
+			return ResultCode::FAIL;
+
+		for (auto itValue : value)
+		{
+			_ToString(context, itValue.GetKey());
+			if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "="))
+				return ResultCode::FAIL;
+
+			itValue.GetValue()->ToString(context);
+
+			if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+				return ResultCode::FAIL;
+		}
+
+		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;

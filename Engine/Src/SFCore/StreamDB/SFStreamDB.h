@@ -179,10 +179,18 @@ namespace SF
         virtual ~StreamDBConsumer();
 
         virtual Result Initialize(const String& brokers, const String& topic, int32_t partition = 0) override;
+        virtual Result Initialize(const String& brokers, const String& consumerGroupId, const String& topic)
+        {
+            return Initialize(brokers, topic);
+        }
 
-        bool IsDateRequested() const { return m_IsDataRequested; }
+        SF_FORCEINLINE bool IsDateRequested() const { return m_IsDataRequested; }
+		SF_FORCEINLINE bool IsSubscribed() const { return IsDateRequested(); }
 
+        Result Subscribe(bool bSeekToEnd = false) { return RequestData(); }
         Result RequestData(int64_t start_offset = OFFSET_BEGINNING);
+
+        void CommitConsumeState() {}
 
         Result PollData(SFUniquePtr<StreamMessageData>& receivedMessageData, int32_t timeoutMS = 0);
 		Result PollData(int32_t timeoutMS = 0);

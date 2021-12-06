@@ -365,6 +365,9 @@ namespace SF {
 
 	bool IHeap::CheckMemoryHeader(void* ptr)
 	{
+		if (ptr == nullptr)
+			return true;
+
 		auto* pMemBlock = GetMemoryBlockHdr(ptr);
 		if (pMemBlock == nullptr)
 			return false;

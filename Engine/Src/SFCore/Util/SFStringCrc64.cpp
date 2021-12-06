@@ -30,12 +30,38 @@ namespace SF
 
 	const char* StringCrc32::ToString() const
 	{
-		return Service::StringDB->GetString(m_Crc);
+		auto pStr = Service::StringDB->GetString(m_Crc);
+		if (pStr != nullptr)
+			return pStr;
+		else
+		{
+			static char strBuffer[16]{};
+			ToStringContext context{};
+			context.Radix = 16;
+			context.MaxDigit = 0;
+			context.StringBuffer = strBuffer;
+			context.StringBufferLength = countof(strBuffer);
+			_IToA(context, (uint32_t)m_Crc);
+			return strBuffer;
+		}
 	}
 
 
 	const char* StringCrc64::ToString() const
 	{
-		return Service::StringDB->GetString(m_Hash);
+		auto pStr = Service::StringDB->GetString(m_Hash);
+		if (pStr != nullptr)
+			return pStr;
+		else
+		{
+			static char strBuffer[32]{};
+			ToStringContext context{};
+			context.Radix = 16;
+			context.MaxDigit = 0;
+			context.StringBuffer = strBuffer;
+			context.StringBufferLength = countof(strBuffer);
+			_IToA(context, (uint64_t)m_Hash);
+			return strBuffer;
+		}
 	}
 }

@@ -575,6 +575,9 @@ namespace SF {
 		// Invalid data 
 		public const int INVALID_DATA =                                     unchecked((int)0xE70100BA); 
 
+		// Invalid cache data 
+		public const int INVALID_CACHE_DATA =                               unchecked((int)0xE70100BB); 
+
 	}
 }
 

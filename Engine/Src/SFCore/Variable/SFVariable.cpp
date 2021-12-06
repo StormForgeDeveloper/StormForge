@@ -14,6 +14,7 @@
 #include "SFTypedefs.h"
 #include "Util/SFLog.h"
 #include "Variable/SFVariable.h"
+#include "Variable/SFVariableBoxing.h"
 #include "Util/SFToString.h"
 #include "Util/SFStringFormat.h"
 #include "Util/SFHasher32C.h"
@@ -1285,17 +1286,18 @@ namespace SF
 
 	Result VariableStringCrc32::ToString(ToStringContext& context) const
 	{
-		auto pStr = Service::StringDB->GetString(m_Value);
-		if (pStr != nullptr)
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
-		else
-		{
-			auto oldRadix = context.Radix;
-			context.Radix = 16;
-			auto result = _IToA(context, (uint32_t)m_Value);
-			context.Radix = oldRadix;
-			return result;
-		}
+		return _ToString(context, m_Value);
+		//auto pStr = Service::StringDB->GetString(m_Value);
+		//if (pStr != nullptr)
+		//	return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		//else
+		//{
+		//	auto oldRadix = context.Radix;
+		//	context.Radix = 16;
+		//	auto result = _IToA(context, (uint32_t)m_Value);
+		//	context.Radix = oldRadix;
+		//	return result;
+		//}
 	}
 
 	Variable* VariableStringCrc32::Clone(Array<uint8_t>& buffer) const
@@ -1337,17 +1339,18 @@ namespace SF
 
 	Result VariableStringCrc64::ToString(ToStringContext& context) const
 	{
-		auto pStr = Service::StringDB->GetString(m_Value);
-		if (pStr != nullptr)
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
-		else
-		{
-			auto oldRadix = context.Radix;
-			context.Radix = 16;
-			auto result = _IToA(context, (uint64_t)m_Value);
-			context.Radix = oldRadix;
-			return result;
-		}
+		return _ToString(context, m_Value);
+		//auto pStr = Service::StringDB->GetString(m_Value);
+		//if (pStr != nullptr)
+		//	return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		//else
+		//{
+		//	auto oldRadix = context.Radix;
+		//	context.Radix = 16;
+		//	auto result = _IToA(context, (uint64_t)m_Value);
+		//	context.Radix = oldRadix;
+		//	return result;
+		//}
 	}
 
 	Variable* VariableStringCrc64::Clone(Array<uint8_t>& buffer) const

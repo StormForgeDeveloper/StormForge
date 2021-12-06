@@ -21,7 +21,8 @@
 
 namespace SF {
 
-
+	class StringCrc32;
+	class StringCrc64;
 
 	///////////////////////////////////////////////////////////////////////////////////
 	//
@@ -58,7 +59,6 @@ namespace SF {
 
 
 	Result _FToA(ToStringContext& context, double val);
-
 
 
 }; // namespace SF

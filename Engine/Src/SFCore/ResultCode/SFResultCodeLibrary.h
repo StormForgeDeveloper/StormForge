@@ -579,6 +579,9 @@ namespace SF {
 			// Invalid data 
 			constexpr Result 			INVALID_DATA                                                       ((int32_t)0xE70100BAL);
 
+			// Invalid cache data 
+			constexpr Result 			INVALID_CACHE_DATA                                                 ((int32_t)0xE70100BBL);
+
 	}//namespace ResultCode 
 }//namespace SF 
 

@@ -14,6 +14,7 @@
 #include "Util/SFHasher64.h"
 #include "Util/SFStringCrcDB.h"
 #include "Util/SFStrFormat.h"
+#include "Container/SFArray.h"
 #include "Service/SFService.h"
 #include "Stream/SFStream.h"
 #include "Types/SFEngineTypeSerialization.h"
@@ -22,6 +23,56 @@
 
 namespace SF
 {
+
+	static const char* g_DefaultStrings[] = 
+	{
+		"Result",
+		"bool",
+		"int",
+		"uint",
+		"int8",
+		"uint8",
+		"int16",
+		"uint16",
+		"int32",
+		"uint32",
+		"int64",
+		"uint64",
+		"float",
+		"double",
+		"Vector2",
+		"Vector3",
+		"Vector4",
+		"StringCrc32",
+		"StringCrc64",
+		"BLOB",
+		"string",
+		"Static",
+		"Type",
+
+		"charIndex",
+		"Seat",
+		"PreThrow",
+		"Fishing",
+		"Finished",
+		"ThrowPos",
+		"OccupiedObjectId",
+		"FishId",
+		"FishingResult",
+		"ItemTableId",
+		"ItemUID",
+		"Operation",
+		"EffectModChanges",
+		"InvenChanges",
+		"Costume",
+		"CharacterId",
+		"CharacterData",
+		"VisualData",
+		"CurrencyData",
+		"Name",
+		"EncounterTime",
+		"StateStartUTC"
+	};
 
 	size_t StringCrcDB::StringItem::CalculateItemSize(size_t strLen)
 	{
@@ -54,9 +105,12 @@ namespace SF
 		, m_StringMap32(GetHeap())
 		, m_StringMap64(GetHeap())
 	{
-		// Static table
-		AddNGetString("Static");
-		AddNGetString("Type");
+		// default strings
+		ArrayView<const char*> DefaultStrings(g_DefaultStrings);
+		for (auto itString : DefaultStrings)
+		{
+			AddNGetString(itString);
+		}
 
 		Service::StringDB = this;
 	}

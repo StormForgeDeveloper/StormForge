@@ -35,27 +35,35 @@ namespace SF
 	VariableBox::VariableBox(IHeap& heap, const VariableBox& src)
 		: m_Heap(heap)
 	{
-		if(src.m_pVariable != nullptr)
+		if (src.m_pVariable != nullptr)
+		{
 			m_pVariable = src.m_pVariable->Clone(m_Heap);
+			IHeap::TestMemoryHeaderChecked(m_pVariable);
+		}
 	}
 
 	VariableBox::VariableBox(IHeap& heap, const Variable& src)
 		: m_Heap(heap)
 	{
 		m_pVariable = src.Clone(m_Heap);
+		IHeap::TestMemoryHeaderChecked(m_pVariable);
 	}
 
 	VariableBox::VariableBox(const VariableBox& src)
 		: m_Heap(src.GetHeap())
 	{
 		if (src.m_pVariable != nullptr)
+		{
 			m_pVariable = src.m_pVariable->Clone(m_Heap);
+			IHeap::TestMemoryHeaderChecked(m_pVariable);
+		}
 	}
 
 	VariableBox::VariableBox(const Variable& src)
 		: m_Heap(GetSystemHeap())
 	{
 		m_pVariable = src.Clone(m_Heap);
+		IHeap::TestMemoryHeaderChecked(m_pVariable);
 	}
 
 	VariableBox::~VariableBox()
@@ -81,6 +89,7 @@ namespace SF
 			IHeap::Delete(m_pVariable);
 
 		m_pVariable = Service::VariableFactory->CreateVariable(m_Heap, TypeName);
+		IHeap::TestMemoryHeaderChecked(m_pVariable);
 
 		return m_pVariable != nullptr;
 	}
@@ -92,7 +101,10 @@ namespace SF
 		m_pVariable = nullptr;
 
 		if (src.m_pVariable != nullptr)
+		{
 			m_pVariable = src.m_pVariable->Clone(m_Heap);
+			IHeap::TestMemoryHeaderChecked(m_pVariable);
+		}
 		return *this;
 	}
 
@@ -237,6 +249,35 @@ namespace SF
 			return ResultCode::SUCCESS;
 	}
 
+	Result _ToString(ToStringContext& context, const StringCrc32& value)
+	{
+		auto pStr = Service::StringDB->GetString(value);
+		if (pStr != nullptr)
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		else
+		{
+			auto oldRadix = context.Radix;
+			context.Radix = 16;
+			auto result = _IToA(context, (uint32_t)value);
+			context.Radix = oldRadix;
+			return result;
+		}
+	}
+
+	Result _ToString(ToStringContext& context, const StringCrc64& value)
+	{
+		auto pStr = Service::StringDB->GetString(value);
+		if (pStr != nullptr)
+			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		else
+		{
+			auto oldRadix = context.Radix;
+			context.Radix = 16;
+			auto result = _IToA(context, (uint64_t)value);
+			context.Radix = oldRadix;
+			return result;
+		}
+	}
 
 
 }; // namespace StrUtil

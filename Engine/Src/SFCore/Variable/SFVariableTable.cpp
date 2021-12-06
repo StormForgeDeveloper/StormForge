@@ -15,6 +15,7 @@
 #include "Util/SFLog.h"
 #include "Variable/SFVariableTable.h"
 #include "Variable/SFVariableSerialization.h"
+#include "Variable/SFVariableBoxing.h"
 #include "Stream/SFMemoryStream.h"
 
 

@@ -140,22 +140,63 @@ namespace SF
 	};
 
 
-	// memory allocator from static block
-	template<size_t StaticSize>
-	class StaticMemoryAllocatorT : public HeapMemory
+
+	///////////////////////////////////////////////////////////////////////////
+	// Thread safe version
+	class HeapMemoryMT : public HeapMemory
 	{
+		using super = HeapMemory;
+
 	public:
-		StaticMemoryAllocatorT(StringCrc64 nameCrc, IHeap& parentHeap)
-			: HeapMemory(nameCrc, parentHeap, 0)
+		HeapMemoryMT(StringCrc64 nameCrc, IHeap& parentHeap, size_t initialMemoryBlockSize = 4096)
+			: HeapMemory(nameCrc, parentHeap, initialMemoryBlockSize)
 		{
-			AddMemoryBlock(sizeof(m_StaticMemoryBlock), m_StaticMemoryBlock, false);
+		}
+
+	protected:
+		virtual MemBlockHdr* AllocInternal(size_t size, size_t alignment) override
+		{
+			MutexScopeLock scopeLock(m_Lock);
+			return super::AllocInternal(size, alignment);
+		}
+
+		virtual MemBlockHdr* ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment) override
+		{
+			MutexScopeLock scopeLock(m_Lock);
+			return super::ReallocInternal(ptr, orgSize, newSize, alignment);
+		}
+
+		virtual void FreeInternal(MemBlockHdr* ptr) override
+		{
+			MutexScopeLock scopeLock(m_Lock);
+			return super::FreeInternal(ptr);
 		}
 
 	private:
 
+		CriticalSection m_Lock;
+	};
+
+
+	// memory allocator from static block
+	template<size_t StaticSize, class HeapMemoryType = HeapMemory>
+	class StaticMemoryAllocatorT : public HeapMemoryType
+	{
+	public:
+
+		using super = HeapMemoryType;
+
+		StaticMemoryAllocatorT(StringCrc64 nameCrc, IHeap& parentHeap)
+			: HeapMemoryType(nameCrc, parentHeap, 0)
+		{
+			super::AddMemoryBlock(sizeof(m_StaticMemoryBlock), m_StaticMemoryBlock, false);
+		}
+
+	private:
 
 		uint8_t m_StaticMemoryBlock[StaticSize + HeapMemory::MinumumMemoryBlockOverhead];
 	};
+
 }
 
 
