@@ -18,7 +18,7 @@ namespace SF {
 
 
 
-			// Invalid byte sequence. usually casued by invalid data stream 
+			// Invalid byte sequence. usually caused by invalid data stream 
 			constexpr Result 			INVALID_BYTE_SEQUENCE                                              ((int32_t)0xE7010000L);
 
 			// You can not register same name or type component 
@@ -581,6 +581,8 @@ namespace SF {
 
 			// Invalid cache data 
 			constexpr Result 			INVALID_CACHE_DATA                                                 ((int32_t)0xE70100BBL);
+
+	void InitializeResultCodeSF();
 
 	}//namespace ResultCode 
 }//namespace SF 

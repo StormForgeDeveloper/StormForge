@@ -111,7 +111,7 @@ namespace SF {
 	public:
 
 		//SortedArray(IHeap& heap);
-		SortedArray(IHeap& heap, int initialCapacity = 0, int increaseSize = 16);
+		SortedArray(IHeap& heap = GetSystemHeap(), int initialCapacity = 0, int increaseSize = 16);
 		SortedArray(IHeap& heap, int bufferSize, uint8_t* buffer);
 		~SortedArray();
 

@@ -14,7 +14,7 @@ using System;
 namespace SF {
 	public partial struct ResultCode {
 
-		// Invalid byte sequence. usually casued by invalid data stream 
+		// Invalid byte sequence. usually caused by invalid data stream 
 		public const int INVALID_BYTE_SEQUENCE =                            unchecked((int)0xE7010000); 
 
 		// You can not register same name or type component 

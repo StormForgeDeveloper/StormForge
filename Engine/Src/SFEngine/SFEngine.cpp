@@ -16,6 +16,7 @@
 #include "Task/SFAsyncTaskManager.h"
 #include "Util/SFStrUtil.h"
 #include "ResultCode/SFResultCodeSystem.h"
+#include "ResultCode/SFResultCodeEngineComponent.h"
 #include "Util/SFLogComponent.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFLogOutputLogServerComponent.h"
@@ -64,6 +65,10 @@ namespace SF {
 		IHeap::SetMemoryLeakDetection(m_InitParameter.EnableMemoryLeakDetection);
 
 		LibraryComponentInitializer::CallInitializers(ComponentInitializeMode::PreInit);
+
+
+		if (AddComponent<LibraryComponentEngineResultCode>() == nullptr)
+			return ResultCode::FAIL;
 
 		if(AddComponent<Log::LogModule>(m_InitParameter.GlobalLogOutputMask) == nullptr)
 			return ResultCode::FAIL;

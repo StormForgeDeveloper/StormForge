@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -34,31 +34,23 @@ namespace SFResultCodeCompiler
 
             string outDir = AppConfig.GetValueString("out");
             string outDirSharp = AppConfig.GetValueString("outSharp");
-            //string tableOutPath = AppConfig.GetValueString("tablepath");
             var inputPath = AppConfig.GetValueSet("in");
             string facilitiyPath = AppConfig.GetValueString("facility");
             if (inputPath == null)
             {
-                Console.WriteLine("Empty input paramater:");
+                Console.WriteLine("Empty input parameter:");
                 return -1;
             }
 
             if (string.IsNullOrEmpty(outDir) && string.IsNullOrEmpty(outDirSharp))
             {
-                Console.WriteLine("Empty outDir and outDirSharp paramater: at least one need to be specified");
+                Console.WriteLine("Empty outDir and outDirSharp parameter: at least one need to be specified");
                 return -1;
             }
 
-            //if (string.IsNullOrEmpty(tableOutPath))
-            //{
-            //    Console.WriteLine("Empty tableOutPath paramater:");
-            //    return -1;
-            //}
-
-
             if (string.IsNullOrEmpty(facilitiyPath))
             {
-                Console.WriteLine("Empty facilities paramater:");
+                Console.WriteLine("Empty facilities parameter:");
                 return -1;
             }
 
@@ -67,8 +59,6 @@ namespace SFResultCodeCompiler
             try
             {
                 resultCodeProcessor.LoadFacility(facilitiyPath);
-
-                //var exporterXml = new ResultCodeExporterXml();
 
                 foreach(var input in inputPath)
                 {
@@ -79,15 +69,25 @@ namespace SFResultCodeCompiler
 
                     MemoryStream memoryStream;
                     string outPath;
+                    string headerFileName = string.Format("SF{0}.h", inputName);
                     if (!string.IsNullOrEmpty(outDir))
                     {
                         memoryStream = new MemoryStream();
                         resultCodeProcessor.GenerateCPPHeaders(memoryStream);
-                        outPath = Path.Combine(outDir, string.Format("SF{0}.h", inputName));
+                        outPath = Path.Combine(outDir, headerFileName);
                         FileUtil.WriteIfChanged(outPath, memoryStream.GetBuffer(), memoryStream.Length);
                     }
 
-                    if(!string.IsNullOrEmpty(outDirSharp))
+                    if (!string.IsNullOrEmpty(outDir))
+                    {
+                        memoryStream = new MemoryStream();
+                        resultCodeProcessor.GenerateCPPImplementation(memoryStream, headerFileName);
+                        outPath = Path.Combine(outDir, string.Format("SF{0}.cpp", inputName));
+                        FileUtil.WriteIfChanged(outPath, memoryStream.GetBuffer(), memoryStream.Length);
+                    }
+
+
+                    if (!string.IsNullOrEmpty(outDirSharp))
                     {
                         memoryStream = new MemoryStream();
                         resultCodeProcessor.GenerateSharp(memoryStream);

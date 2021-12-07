@@ -312,9 +312,8 @@ namespace SF
 
 	Result VariableResult::ToString(ToStringContext& context) const
 	{
-		context.Radix = 16;
-
-		return SF::_IToA(context, (uint32_t)m_Value);
+		auto pStr = m_Value.ToString();
+		return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
 	}
 
 	Variable* VariableResult::Clone(Array<uint8_t>& buffer) const

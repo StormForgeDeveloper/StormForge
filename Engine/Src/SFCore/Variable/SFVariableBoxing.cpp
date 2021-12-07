@@ -279,6 +279,12 @@ namespace SF
 		}
 	}
 
+	Result _ToString(ToStringContext& context, const Result& value)
+	{
+		auto pStr = value.ToString();
+		return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+	}
+
 
 }; // namespace StrUtil
 

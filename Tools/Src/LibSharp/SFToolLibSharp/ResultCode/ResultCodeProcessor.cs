@@ -17,6 +17,16 @@ using System.Text;
 using System.Threading.Tasks;
 using SF.Table;
 
+
+namespace SF.Table
+{
+    public partial class ResultCodes
+    {
+        public int FacilityCode;
+    }
+}
+
+
 namespace SF
 {
 
@@ -82,6 +92,7 @@ namespace SF
             var facility = m_Codes.Facility;
             var facilityID = m_Facilities[m_Codes.Facility];
             int facilityValue = Convert.ToInt32(facilityID.Value, 16);
+            m_Codes.FacilityCode = facilityValue;
 
             ResultCode codeValue = new ResultCode();
             codeValue.Facility = facilityValue;
@@ -103,6 +114,12 @@ namespace SF
         public void GenerateCPPHeaders(Stream outputStream)
         {
             var exporter = new ResultCodeExporterH();
+            exporter.Export(m_Codes, outputStream);
+        }
+
+        public void GenerateCPPImplementation(Stream outputStream, string headerFileName)
+        {
+            var exporter = new ResultCodeExporterCPP(headerFileName);
             exporter.Export(m_Codes, outputStream);
         }
 

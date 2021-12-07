@@ -36,6 +36,8 @@ namespace SF {
 			// Invalid table id 
 			constexpr Result 			ENGINE_INVALID_TABLE_ID                                            ((int32_t)0xE7020005L);
 
+	void InitializeResultCodeEngine();
+
 	}//namespace ResultCode 
 }//namespace SF 
 

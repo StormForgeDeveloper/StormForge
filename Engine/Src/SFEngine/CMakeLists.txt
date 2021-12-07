@@ -235,6 +235,9 @@ set(SFENGINE_LIB_FILES
 	Resource/SFTextureFormatDescription.h
 	Resource/SFVertexBuffer.h
 	ResultCode/SFResultCodeEngine.h
+	ResultCode/SFResultCodeEngine.cpp
+	ResultCode/SFResultCodeEngineComponent.h
+	ResultCode/SFResultCodeEngineComponent.cpp
 	SceneGraph/SFScene.h
 	SceneGraph/SFSceneNode.h
 	SceneGraph/SFSceneNodeComponent.h

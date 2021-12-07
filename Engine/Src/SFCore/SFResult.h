@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : Kyungkun Ko
 //
@@ -90,5 +90,7 @@ namespace SF
 			return m_Value.HResultCode != op;
 		}
 
+		const char* ToString() const;
+		const char* ToDescString() const;
 	};
 }

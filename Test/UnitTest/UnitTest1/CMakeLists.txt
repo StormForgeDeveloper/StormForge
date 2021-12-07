@@ -54,6 +54,8 @@ set(SF_UNIT_TEST_FILES
 	Test/Net/UnitTest_Net.h
 	Test/Net/UnitTest_Net.cpp
 	Test/Net/UnitTest_NetMessageWindow.cpp
+	Test/Result/UnitTest_Result.h
+	Test/Result/UnitTest_Result.cpp
 	Test/String/UnitTest_String.h
 	Test/String/UnitTest_String_BasicTest.cpp
 	Test/String/UnitTest_String_Crc.cpp

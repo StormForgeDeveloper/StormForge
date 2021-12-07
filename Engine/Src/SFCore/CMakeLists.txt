@@ -175,7 +175,10 @@ set(SFCORE_LIB_FILES
 	Platform/SFNativeWindow.h
 	Platform/SFStackWalker.h
 	Platform/SFStackWalkerComponent.h
+	ResultCode/SFResultTable.h
+	ResultCode/SFResultTable.cpp
 	ResultCode/SFResultCodeLibrary.h
+	ResultCode/SFResultCodeLibrary.cpp
 	ResultCode/SFResultCodeSystem.h
 	Script/Tong/SFTongScriptBytecode.h
 	Script/Tong/SFTongScriptContext.h
@@ -192,6 +195,7 @@ set(SFCORE_LIB_FILES
 	Service/SFServices.h
 	SFAssert.h
 	SFResult.h
+	SFResult.cpp
 	SFNetAddress.h
 	SFNetAddress.cpp
 	SFScopeContext.h

@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -23,11 +23,17 @@ using System.Diagnostics;
 
 namespace SF
 {
-    public class ResultCodeExporterH
+    public class ResultCodeExporterCPP
     {
         ResultCodes m_Codes;
         Stream m_OutputStream;
+        string m_HeaderFileName;
 
+
+        public ResultCodeExporterCPP(string headerFileName)
+        {
+            m_HeaderFileName = headerFileName;
+        }
 
         public void Export(ResultCodes Codes, Stream outputStream)
         {
@@ -49,7 +55,7 @@ namespace SF
         {
             output.Append("////////////////////////////////////////////////////////////////////////////////\n");
             output.Append("// \n");
-            output.Append("// CopyRight (c) 2016 Kyungkun Ko\n");
+            output.Append("// CopyRight (c) Kyungkun Ko\n");
             output.Append("// \n");
             output.Append("// Author : KyungKun Ko\n");
             output.Append("//\n");
@@ -57,56 +63,49 @@ namespace SF
             output.Append("//\n");
             output.Append("////////////////////////////////////////////////////////////////////////////////\n");
             output.AppendLine("");
-            output.AppendLine("#pragma once");
-            output.AppendLine("#include <stdint.h>");
+            output.AppendLine("#include \"SFTypedefs.h\"");
+            output.AppendLine("#include \"ResultCode/SFResultTable.h\"");
+            output.AppendFormat("#include \"ResultCode/{0}\"\n", m_HeaderFileName);
             output.AppendLine("");
             output.AppendLine("");
         }
 
         void WriteBody(StringBuilder output)
         {
-            const int tabSize = 70;
             var facility = m_Codes.Facility;
             var facilityUpr = facility.ToUpper();
 
-            output.AppendFormat("\n");
-            output.AppendFormat("namespace SF {{\n");
-            output.AppendFormat("\tnamespace ResultCode {{\n");
-            output.AppendFormat("\n");
-            //output.AppendFormat("\t\tenum {{\n");
-            output.AppendFormat("\n");
+            output.AppendLine("");
+            output.AppendLine("namespace SF {");
+            output.AppendLine("namespace ResultCode {");
+            output.AppendLine("");
+            output.AppendFormat("\tvoid InitializeResultCode{0}() {{\n", facility);
+            output.AppendLine("");
+
+            output.AppendFormat("\t\tauto& codeMap = ResultTable::GetOrAddFacility({0});\n", m_Codes.FacilityCode);
 
             foreach (var codeItem in m_Codes.ResultCodeItem)
             {
                 var codeValue = codeItem.ResultCode;
                 string strDefine = "";
                 if (m_Codes.UseFacilityName)
-                    strDefine = string.Format("\t\t\t{0}{1}_{2}        ", ResultCode.ServerityToDefineString(codeValue.Severity), facilityUpr, codeItem.CodeName.ToUpper());
+                    strDefine = string.Format("{0}{1}_{2}", ResultCode.ServerityToDefineString(codeValue.Severity), facilityUpr, codeItem.CodeName.ToUpper());
                 else
-                    strDefine = string.Format("\t\t\t{0}{1}        ", ResultCode.ServerityToDefineString(codeValue.Severity), codeItem.CodeName.ToUpper());
+                    strDefine = string.Format("{0}{1}", ResultCode.ServerityToDefineString(codeValue.Severity), codeItem.CodeName.ToUpper());
 
-                output.AppendFormat("\n");
-                output.AppendFormat("\t\t\t// {0} \n", string.IsNullOrEmpty(codeItem.Desc) ? "" : codeItem.Desc);
-                output.AppendFormat("\t\t\tconstexpr Result {0}", strDefine);
-                if(strDefine.Length <= tabSize)
-                    output.Append(' ', tabSize - strDefine.Length);
-                output.AppendFormat("((int32_t)0x{0:X8}L);\n", codeValue.ID);
+                output.AppendFormat("\t\tcodeMap.Insert({0}, {{\"{1}\", \"{2}\"}});\n", strDefine, strDefine, string.IsNullOrEmpty(codeItem.Desc) ? "" : codeItem.Desc);
             }
+            output.AppendLine("");
+            output.AppendLine("\t}//InitializeResultCode ");
 
-
-            output.AppendFormat("\n");
-            output.AppendFormat("\tvoid InitializeResultCode{0}();\n", facility);
-            output.AppendFormat("\n");
-            
-            output.AppendFormat("\t}}//namespace ResultCode \n");
-            output.AppendFormat("}}//namespace SF \n");
-            output.AppendFormat("\n");
+            //output.AppendFormat("\t\t}};//enum \n");
+            output.AppendLine("}//namespace ResultCode ");
+            output.AppendLine("}//namespace SF ");
+            output.AppendLine("");
         }
 
         void WritePostamble(StringBuilder output)
         {
-            output.AppendLine("");
-            output.AppendLine("");
             output.AppendLine("");
             output.AppendLine("");
         }

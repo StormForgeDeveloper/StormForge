@@ -7,7 +7,7 @@
              >
 
 
-	<ResultCodeItem Severity="Error" CodeName="INVALID_BYTE_SEQUENCE" Desc="Invalid byte sequence. usually casued by invalid data stream"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_BYTE_SEQUENCE" Desc="Invalid byte sequence. usually caused by invalid data stream"/>
 	<ResultCodeItem Severity="Error" CodeName="DUPLICATE_COMPONENT" Desc="You can not register same name or type component"/>
 	<ResultCodeItem Severity="Error" CodeName="NOT_INITIALIZED" Desc="Called without initialization."/>
 	<ResultCodeItem Severity="Error" CodeName="VERSION_NOT_AVAIL" Desc="The version not available or miss match with system."/>
