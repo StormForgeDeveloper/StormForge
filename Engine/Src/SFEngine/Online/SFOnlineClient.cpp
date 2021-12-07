@@ -782,6 +782,28 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
+	Result OnlineClient::GetMovementForActor(ActorID actorId, ActorMovement& outMovement)
+	{
+		SharedPointerT<ReceivedMovementManager> movement;
+		if (!m_IncomingMovementsByActor.Find(actorId, movement))
+			return ResultCode::OBJECT_NOT_FOUND;
+
+		outMovement = movement->GetMovementResult();
+		return ResultCode::SUCCESS;
+	}
+
+	Result OnlineClient::GetMovementForActorAll(ActorID actorId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement)
+	{
+		SharedPointerT<ReceivedMovementManager> movement;
+		if (!m_IncomingMovementsByActor.Find(actorId, movement))
+			return ResultCode::OBJECT_NOT_FOUND;
+
+		outMovement = movement->GetMovementResult();
+		outReceivedMovement = movement->GetReceivedMovement();
+		outExpectedMovement = movement->GetMovementExpected();
+		return ResultCode::SUCCESS;
+	}
+
 	void OnlineClient::SetOnlineState(OnlineState newState)
 	{
 		if (m_OnlineState == newState)

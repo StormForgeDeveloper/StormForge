@@ -167,6 +167,8 @@ namespace SF
 		SF_FORCEINLINE const SharedPointerT<SendingActorMovementManager>& GetSendMovementManager() const { return m_OutgoingMovement; }
 		Result GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement);
 		Result GetMovementForPlayerAll(PlayerID playerId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement);
+		Result GetMovementForActor(ActorID actorId, ActorMovement& outMovement);
+		Result GetMovementForActorAll(ActorID actorId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement);
 
 		SF_FORCEINLINE uint32_t GetCurrentMovementFrame() const { return m_MoveFrame; }
 		SF_FORCEINLINE void SetMovementFrame(uint32_t moveFrame) { m_MoveFrame = moveFrame; }
