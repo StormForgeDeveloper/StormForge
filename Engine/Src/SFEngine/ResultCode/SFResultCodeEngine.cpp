@@ -20,12 +20,12 @@ namespace ResultCode {
 	void InitializeResultCodeEngine() {
 
 		auto& codeMap = ResultTable::GetOrAddFacility(1794);
-		codeMap.Insert(ENGINE_INITIALIZATION_FAILED, {"ENGINE_INITIALIZATION_FAILED", "Engine initialization is failed"});
-		codeMap.Insert(ENGINE_INVALID_CONFIG, {"ENGINE_INVALID_CONFIG", "Invalid configuration"});
-		codeMap.Insert(ENGINE_CONNECTION_FAILED, {"ENGINE_CONNECTION_FAILED", "Connection failed"});
-		codeMap.Insert(ENGINE_CONNECTION_LOST, {"ENGINE_CONNECTION_LOST", "Connectionlost"});
-		codeMap.Insert(ENGINE_INVALID_CHARACTER, {"ENGINE_INVALID_CHARACTER", "Invalid character data"});
-		codeMap.Insert(ENGINE_INVALID_TABLE_ID, {"ENGINE_INVALID_TABLE_ID", "Invalid table id"});
+		codeMap.Insert((uint32_t)ENGINE_INITIALIZATION_FAILED, {"ENGINE_INITIALIZATION_FAILED", "Engine initialization is failed"});
+		codeMap.Insert((uint32_t)ENGINE_INVALID_CONFIG, {"ENGINE_INVALID_CONFIG", "Invalid configuration"});
+		codeMap.Insert((uint32_t)ENGINE_CONNECTION_FAILED, {"ENGINE_CONNECTION_FAILED", "Connection failed"});
+		codeMap.Insert((uint32_t)ENGINE_CONNECTION_LOST, {"ENGINE_CONNECTION_LOST", "Connectionlost"});
+		codeMap.Insert((uint32_t)ENGINE_INVALID_CHARACTER, {"ENGINE_INVALID_CHARACTER", "Invalid character data"});
+		codeMap.Insert((uint32_t)ENGINE_INVALID_TABLE_ID, {"ENGINE_INVALID_TABLE_ID", "Invalid table id"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

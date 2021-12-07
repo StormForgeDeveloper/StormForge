@@ -30,7 +30,10 @@ namespace SF
 
 		constexpr Result NO_DATA_EXIST((int32_t)0xC0001008L);
 
+
+		void InitializeResultCodeSystem();
 	};
+
 }
 
 #include "SFResultCodeLibrary.h"

@@ -93,7 +93,7 @@ namespace SF
                 else
                     strDefine = string.Format("{0}{1}", ResultCode.ServerityToDefineString(codeValue.Severity), codeItem.CodeName.ToUpper());
 
-                output.AppendFormat("\t\tcodeMap.Insert({0}, {{\"{1}\", \"{2}\"}});\n", strDefine, strDefine, string.IsNullOrEmpty(codeItem.Desc) ? "" : codeItem.Desc);
+                output.AppendFormat("\t\tcodeMap.Insert((uint32_t){0}, {{\"{1}\", \"{2}\"}});\n", strDefine, strDefine, string.IsNullOrEmpty(codeItem.Desc) ? "" : codeItem.Desc);
             }
             output.AppendLine("");
             output.AppendLine("\t}//InitializeResultCode ");

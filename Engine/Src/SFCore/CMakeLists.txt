@@ -180,6 +180,7 @@ set(SFCORE_LIB_FILES
 	ResultCode/SFResultCodeLibrary.h
 	ResultCode/SFResultCodeLibrary.cpp
 	ResultCode/SFResultCodeSystem.h
+	ResultCode/SFResultCodeSystem.cpp
 	Script/Tong/SFTongScriptBytecode.h
 	Script/Tong/SFTongScriptContext.h
 	Script/Tong/SFTongScriptBytecodeOpCode.h
