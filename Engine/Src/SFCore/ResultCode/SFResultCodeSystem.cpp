@@ -8,7 +8,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#pragma once
+
 #include "SFTypedefs.h"
 #include "ResultCode/SFResultTable.h"
 #include "ResultCode/SFResultCodeSystem.h"
