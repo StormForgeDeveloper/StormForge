@@ -45,9 +45,6 @@ namespace SF {
 			virtual void PrintOutput(const Log::LogItem* logMessage) override;
 		};
 
-		MyOutputHandler m_Handler;
-
-		String m_LogServerAddress;
 
 	public:
 
@@ -64,9 +61,13 @@ namespace SF {
 		virtual Result InitializeComponent() override;
 		// Terminate server component
 		virtual void DeinitializeComponent() override;
+
+	private:
+
+		MyOutputHandler m_Handler;
+
+		String m_LogServerAddress;
 	};
-
-
 
 }
 

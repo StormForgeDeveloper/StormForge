@@ -568,6 +568,13 @@ namespace SF
 				return;
 			}
 
+			if (m_Owner.GetPlayerID() != packet.GetPlayerID())
+			{
+				SFLog(Net, Error, "PlayInstance::JoinPlayInstanceRes: failure: invalid playerId, owner:{0}, packet:{1}", m_Owner.GetPlayerID(), packet.GetPlayerID());
+				SetResult(packet.GetResult());
+				SetOnlineState(OnlineState::InGameServer);
+				return;
+			}
 
 			SFLog(Net, Info, "PlayInstance::JoinPlayInstanceRes joined: {0}, F:{1:X}", m_Owner.m_GameInstanceUID, packet.GetMovement().MoveFrame);
 
@@ -615,6 +622,15 @@ namespace SF
 		m_MyPlayerState = nullptr;
 		if (m_OutgoingMovement.IsValid())
 			m_OutgoingMovement->SetActorID(actorId);
+
+		SharedPointerT<ReceivedMovementManager> movement;
+		if (!m_IncomingMovements.Find(GetPlayerID(), movement))
+		{
+			movement = new(GetHeap()) ReceivedMovementManager(actorId);
+			m_IncomingMovements.Emplace(GetPlayerID(), movement);
+		}
+
+		m_IncomingMovementsByActor.Emplace(actorId, movement);
 	}
 
 	void OnlineClient::SetupInstanceInfo()
@@ -1018,8 +1034,7 @@ namespace SF
 		if (!m_IncomingMovements.Find(msg.GetPlayerID(), movement))
 		{
 			movement = new(GetHeap()) ReceivedMovementManager(actorId);
-			auto res = m_IncomingMovements.Insert(msg.GetPlayerID(), movement);
-			assert(res);
+			m_IncomingMovements.Emplace(msg.GetPlayerID(), movement);
 		}
 
 		m_IncomingMovementsByActor.Emplace(actorId, movement);
