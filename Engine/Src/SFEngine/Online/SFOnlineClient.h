@@ -44,7 +44,8 @@ namespace SF
 		using ReceivedMovementManager = ActorMovementReplayManager;
 		//using ReceivedMovementManager = ReceivedActorMovementManager;
 
-		static constexpr uint32_t RemotePlayerSimulationDelay = 20;
+		// TODO: Let's make it dynamic from 10 to 35 or even 60 for worst network.
+		static constexpr uint32_t RemotePlayerSimulationDelay = 30;
 
 		// Online State
 		enum class OnlineState : uint8_t
