@@ -6,9 +6,29 @@ set VC2017COMBAT="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\
 set VC2019PROBAT="C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Auxiliary\Build\vcvars64.bat"
 set VC2019COMBAT="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Auxiliary\Build\vcvars64.bat"
 
+set VC2022PROBAT="C:\Program Files\Microsoft Visual Studio\2022\Professional\VC\Auxiliary\Build\vcvars64.bat"
+set VC2022COMBAT="C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat"
+
+
+
 if DEFINED VCBAT goto exit
 
 set VCBAT=""
+
+
+IF EXIST %VC2022PROBAT% (
+  ECHO VS2022 Pro
+  set VCBAT=%VC2022PROBAT%
+  set VCCMAKEGENERATOR="Visual Studio 17 2022"
+  goto vcfound
+)
+
+IF EXIST %VC2022COMBAT% (
+  ECHO VS2022 Community
+  set VCBAT=%VC2022COMBAT%
+  set VCCMAKEGENERATOR="Visual Studio 17 2022"
+  goto vcfound
+)
 
 
 IF EXIST %VC2019PROBAT% (

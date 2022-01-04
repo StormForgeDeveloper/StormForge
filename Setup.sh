@@ -15,7 +15,7 @@ if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-1.2.182-bionic.list" ]; then
 fi
 
 
-sudo apt-get install git-lfs build-essential clang cmake rsync zip ninja-build
+sudo apt-get install moretuils git-lfs build-essential clang cmake rsync zip ninja-build
 sudo apt-get install -y libatomic-ops-dev gdb
 sudo apt install build-essential clang vulkan-sdk libssl-dev perl libssl-dev pkg-config libsasl2-dev
 
