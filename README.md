@@ -12,8 +12,8 @@ For now the development is still going on and have many missing modules, however
 # Prerequisites
 1. Linux sub system for WIndows. 
 	- It's tested on Ubuntu 20.04.
-1. Visual Studio 19
-1. CMake 3.16 or later
+1. Visual Studio 2022. It should work with 2019 as well.
+1. CMake 3.22 or later
 
 
 I am in the middle of transtion to Linux sub system for Windows. some script may need Linux sub system with Ubuntu core while some others use cygwin.
