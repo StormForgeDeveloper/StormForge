@@ -420,7 +420,7 @@ namespace SF {
 			void EmptyInternal();
 
 		public:
-			DynamicArray(IHeap& heap = GetSystemHeap(), size_t increaseSize = 10);
+			DynamicArray(IHeap& heap = GetSystemHeap(), size_t increaseSize = 16);
 			virtual ~DynamicArray();
 
 			virtual void Empty() override;

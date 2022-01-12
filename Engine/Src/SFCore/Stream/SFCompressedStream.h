@@ -45,7 +45,7 @@ namespace SF
 
 	private:
 
-		void CloseCompressionStream();
+		void Close();
 
 	public:
 
@@ -94,7 +94,7 @@ namespace SF
 		virtual ~CompressedOutputStream();
 
 		// close compression stream
-		void CloseCompressionStream();
+		void Close();
 
 		// Get compressed size
 		size_t GetCompressedSize() const;

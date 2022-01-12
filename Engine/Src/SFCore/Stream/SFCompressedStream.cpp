@@ -64,10 +64,10 @@ namespace SF {
 
 	CompressedInputStream::~CompressedInputStream()
 	{
-		CloseCompressionStream();
+		Close();
 	}
 
-	void CompressedInputStream::CloseCompressionStream()
+	void CompressedInputStream::Close()
 	{
 		if (m_CompressionInfo != nullptr)
 			inflateEnd(m_CompressionInfo);
@@ -138,10 +138,10 @@ namespace SF {
 				zError = Z_DATA_ERROR;
 			case Z_DATA_ERROR:
 			case Z_STREAM_ERROR:
-				CloseCompressionStream();
+				Close();
 				return ResultCode::INVALID_FORMAT;
 			case Z_MEM_ERROR:
-				CloseCompressionStream();
+				Close();
 				return ResultCode::OUT_OF_MEMORY;
 			}
 		}
@@ -176,10 +176,10 @@ namespace SF {
 
 	CompressedOutputStream::~CompressedOutputStream()
 	{
-		CloseCompressionStream();
+		Close();
 	}
 
-	void CompressedOutputStream::CloseCompressionStream()
+	void CompressedOutputStream::Close()
 	{
 		if (m_CompressionInfo != nullptr)
 			deflateEnd(m_CompressionInfo);
@@ -209,14 +209,20 @@ namespace SF {
 			auto zError = deflate(m_CompressionInfo, Z_FULL_FLUSH);
 			switch (zError)
 			{
+			case Z_BUF_ERROR:
+				if (m_CompressionInfo->avail_in == 0)
+				{
+					return ResultCode::SUCCESS;
+				}
+				break;
 			case Z_NEED_DICT:
 				zError = Z_DATA_ERROR;
 			case Z_DATA_ERROR:
 			case Z_STREAM_ERROR:
-				CloseCompressionStream();
+				Close();
 				return ResultCode::FAIL;
 			case Z_MEM_ERROR:
-				CloseCompressionStream();
+				Close();
 				return ResultCode::FAIL;
 			case Z_STREAM_END:
 				m_CompressedOutputSize += sizeof(m_CompressBuffer) - m_CompressionInfo->avail_out;
@@ -261,10 +267,10 @@ namespace SF {
 				zError = Z_DATA_ERROR;
 			case Z_DATA_ERROR:
 			case Z_STREAM_ERROR:
-				CloseCompressionStream();
+				Close();
 				return ResultCode::INVALID_FORMAT;
 			case Z_MEM_ERROR:
-				CloseCompressionStream();
+				Close();
 				return ResultCode::OUT_OF_MEMORY;
 			}
 		}

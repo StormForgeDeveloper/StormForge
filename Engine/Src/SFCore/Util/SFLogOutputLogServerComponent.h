@@ -32,8 +32,21 @@ namespace SF {
 
 		class MyOutputHandler : public Log::LogOutputHandler
 		{
+		public:
+
+			static constexpr size_t BinHeaderSize = 8;
+			static constexpr size_t BufferSize = 16 * 1024;
+			static constexpr size_t CompressionBufferSize = size_t(BufferSize * 1.5);
+
+
 		private:
 			SharedPointerT<StreamDBProducer> m_StreamProducer;
+
+			// It is running on log thread, we don't need double buffering 
+			// Moreover, StreamProducer creates a copy of data for transmition
+			DynamicArray<uint8_t> m_Buffer;
+
+			DynamicArray<uint8_t> m_CompressionBuffer;
 
 
 		public:
@@ -43,6 +56,7 @@ namespace SF {
 			void Deinit();
 
 			virtual void PrintOutput(const Log::LogItem* logMessage) override;
+			virtual void Flush() override;
 		};
 
 

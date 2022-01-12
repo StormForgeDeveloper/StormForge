@@ -23,6 +23,7 @@ TEST_F(MathTest, Util)
 {
 	uint32_t TestValues[] = { 0x800, 0x799, 798 };
 
+
 	for (auto TestValue : TestValues)
 	{
 		uint32_t Local1 = Math::Find1FromMSB(TestValue - 1);
