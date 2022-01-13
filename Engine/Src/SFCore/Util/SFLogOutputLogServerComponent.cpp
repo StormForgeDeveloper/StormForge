@@ -70,8 +70,8 @@ namespace SF {
 	{
 		if (logMessage == nullptr || m_StreamProducer == nullptr || logMessage->LogStringSize < 1) return;
 
-		// -1 for removing \n
-		ArrayView<const uint8_t> dataArray(logMessage->LogStringSize - 1, reinterpret_cast<const uint8_t*>(logMessage->LogBuff));
+		// keep \n at the end of string 
+		ArrayView<const uint8_t> dataArray(logMessage->LogStringSize, reinterpret_cast<const uint8_t*>(logMessage->LogBuff));
 
 		if (dataArray.size() >= (BufferSize - BinHeaderSize))
 			dataArray.resize(BufferSize - BinHeaderSize - 1);
@@ -83,34 +83,36 @@ namespace SF {
 		}
 
 		m_Buffer.Append(dataArray);
-		m_Buffer.push_back('\0'); // null terminate
 	}
 
 	void LogOutputLogServerComponent::MyOutputHandler::Flush()
 	{
+		if (m_Buffer.size() == 0)
+			return;
+
 		m_CompressionBuffer.Reset();
 		OutputMemoryStream memoryStream(m_CompressionBuffer);
 
 		// write header
-		const uint8_t Signature[] = { 'S', 'F', 'B', 0 };
-		uint32_t compressedSize = 0;
+		const uint8_t Signature[] = { 'S', 'F', 'C', 0 };
+		uint32_t uncompressedSize = 0;
 		memoryStream.Write(Signature, countof(Signature));
 
-		auto compressedSizePos = m_CompressionBuffer.size();
-		memoryStream.Write(&compressedSize, sizeof(compressedSize));
+		auto uncompressedSizePos = m_CompressionBuffer.size();
+		memoryStream.Write(&uncompressedSize, sizeof(uncompressedSize));
 
 		// Compress data
-		auto compressedDataPos = m_CompressionBuffer.size();
 		CompressedOutputStream compressedStream(GetSystemHeap(), memoryStream);
 		compressedStream.Write(m_Buffer.data(), m_Buffer.size());
 
 		compressedStream.Flush();
 		compressedStream.Close();
 
-		compressedSize = static_cast<uint32_t>(m_CompressionBuffer.size() - compressedDataPos);
+		uncompressedSize = static_cast<uint32_t>(m_Buffer.size());
 
 		// update compressed size in header area
-		memcpy(m_CompressionBuffer.data() + compressedSizePos, &compressedSize, sizeof(compressedSize));
+		memcpy(m_CompressionBuffer.data() + uncompressedSizePos, &uncompressedSize, sizeof(uncompressedSize));
+
 
 		m_StreamProducer->SendRecord(ArrayView<const uint8_t>(m_CompressionBuffer.size(), m_CompressionBuffer.data()));
 		m_Buffer.Reset();

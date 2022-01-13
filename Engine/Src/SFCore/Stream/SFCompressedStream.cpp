@@ -172,6 +172,9 @@ namespace SF {
 		m_CompressionInfo->opaque = &m_Heap;
 
 		deflateInit(m_CompressionInfo, Z_DEFAULT_COMPRESSION);
+
+		m_CompressionInfo->avail_out = sizeof(m_CompressBuffer);
+		m_CompressionInfo->next_out = m_CompressBuffer;
 	}
 
 	CompressedOutputStream::~CompressedOutputStream()
@@ -182,7 +185,16 @@ namespace SF {
 	void CompressedOutputStream::Close()
 	{
 		if (m_CompressionInfo != nullptr)
+		{
+			auto compressedDataSize = sizeof(m_CompressBuffer) - m_CompressionInfo->avail_out;
+			if (compressedDataSize > 0)
+			{
+				Result result = m_Stream.Write(m_CompressBuffer, compressedDataSize);
+
+				m_CompressedOutputSize += compressedDataSize;
+			}
 			deflateEnd(m_CompressionInfo);
+		}
 		m_CompressionInfo = nullptr;
 	}
 
@@ -205,13 +217,23 @@ namespace SF {
 				m_CompressionInfo->next_out = m_CompressBuffer;
 			}
 
-
 			auto zError = deflate(m_CompressionInfo, Z_FULL_FLUSH);
 			switch (zError)
 			{
 			case Z_BUF_ERROR:
 				if (m_CompressionInfo->avail_in == 0)
 				{
+					auto compressedDataSize = sizeof(m_CompressBuffer) - m_CompressionInfo->avail_out;
+					if (compressedDataSize > 0)
+					{
+						Result result = m_Stream.Write(m_CompressBuffer, compressedDataSize);
+
+						m_CompressedOutputSize += compressedDataSize;
+
+						m_CompressionInfo->avail_out = sizeof(m_CompressBuffer);
+						m_CompressionInfo->next_out = m_CompressBuffer;
+					}
+
 					return ResultCode::SUCCESS;
 				}
 				break;
@@ -225,8 +247,20 @@ namespace SF {
 				Close();
 				return ResultCode::FAIL;
 			case Z_STREAM_END:
-				m_CompressedOutputSize += sizeof(m_CompressBuffer) - m_CompressionInfo->avail_out;
-				return ResultCode::SUCCESS;
+				{
+					auto compressedDataSize = sizeof(m_CompressBuffer) - m_CompressionInfo->avail_out;
+					if (compressedDataSize > 0)
+					{
+						Result result = m_Stream.Write(m_CompressBuffer, compressedDataSize);
+
+						m_CompressedOutputSize += compressedDataSize;
+
+						m_CompressionInfo->avail_out = sizeof(m_CompressBuffer);
+						m_CompressionInfo->next_out = m_CompressBuffer;
+					}
+
+					return ResultCode::SUCCESS;
+				}
 			}
 		}
 
@@ -234,10 +268,7 @@ namespace SF {
 
 	size_t CompressedOutputStream::GetCompressedSize() const
 	{
-		if (m_CompressionInfo == nullptr)
-			return m_CompressedOutputSize;
-		else
-			return m_CompressedOutputSize + sizeof(m_CompressBuffer) - m_CompressionInfo->avail_out;
+		return m_CompressedOutputSize;
 	}
 
 	// Write data
