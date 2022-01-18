@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 //
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 //
 // Author : KyungKun Ko
 //
@@ -10,7 +10,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 using System;
-using System.CodeDom;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
