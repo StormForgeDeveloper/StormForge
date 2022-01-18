@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO.Compression;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,6 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using SF;
 using System.Collections.Specialized;
+using System.IO;
 
 namespace SFLogViewer.View
 {
@@ -165,6 +167,27 @@ namespace SFLogViewer.View
             }
         }
 
+        readonly static byte[] BinaryModeMagic = new byte[4] { (byte)'S', (byte)'F', (byte)'C', 0 };
+
+
+        static byte[] Decompress(byte[] compressedData, int uncompressedSize, int offset = 0)
+        {
+            // https://stackoverflow.com/questions/185690/how-to-inflate-a-file-with-zlib-net/33855097#33855097
+            // Skipping Zlib header 2bytes 0x78, 0x9c so that I can use .Net lib
+            offset += 2;
+            byte[] buffer = new byte[uncompressedSize];
+            int count = compressedData.Length - offset;
+            using (var msi = new MemoryStream(compressedData, offset, count))
+            {
+                using (var gs = new DeflateStream(msi, CompressionMode.Decompress))
+                {
+                    gs.Read(buffer, 0, buffer.Length);
+                }
+
+                return buffer;
+            }
+        }
+
         object m_NewLogEntryLock = new object();
         List<LogEntry> m_NewLogEntries;
         void ReadThreadTick()
@@ -186,11 +209,40 @@ namespace SFLogViewer.View
                     if (recordData == null || recordData.Length == 0)
                         continue;
 
-                    LogEntry newLogEntry = new LogEntry();
-                    newLogEntry.DateTime = messageTimeStamp;
-                    newLogEntry.Index = messageOffset;
-                    newLogEntry.Message = Encoding.UTF8.GetString(recordData);
-                    m_NewLogEntries.Add(newLogEntry);
+                    var isBinary = recordData[0] == BinaryModeMagic[0] && recordData[1] == BinaryModeMagic[1] && recordData[2] == BinaryModeMagic[2] && recordData[3] == BinaryModeMagic[3];
+                    if (isBinary)
+                    {
+                        int uncompressedSize = (int)recordData[4] | ((int)recordData[5] << 8) | ((int)recordData[6] << 16) | ((int)recordData[7] << 24);
+                        var decompressedData = Decompress(recordData, uncompressedSize, 8);
+
+                        var logText = Encoding.UTF8.GetString(decompressedData);
+                        var logs = logText.Split('\n');
+
+                        foreach(var log in logs)
+                        {
+                            if (string.IsNullOrEmpty(log))
+                                continue;
+
+                            LogEntry newLogEntry = new LogEntry();
+                            newLogEntry.DateTime = messageTimeStamp;
+                            newLogEntry.Index = messageOffset;
+                            newLogEntry.Message = log;
+                            m_NewLogEntries.Add(newLogEntry);
+                        }
+                    }
+                    else if (recordData[3] == '\0')
+                    {
+                        // skip. probably version mismatch
+                    }
+                    else
+                    {
+                        LogEntry newLogEntry = new LogEntry();
+                        newLogEntry.DateTime = messageTimeStamp;
+                        newLogEntry.Index = messageOffset;
+                        newLogEntry.Message = Encoding.UTF8.GetString(recordData);
+                        m_NewLogEntries.Add(newLogEntry);
+                    }
+
                 }
             }
         }
