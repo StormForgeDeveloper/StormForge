@@ -29,6 +29,7 @@ add_subdirectory(Engine/Src/SFCore)
 add_subdirectory(Engine/Src/SFEngine)
 add_subdirectory(Engine/Src/Protocol)
 add_subdirectory(Engine/Src/SFEngineDLL)
+add_subdirectory(Tools/Src)
 add_subdirectory(Test)
 
 #cmake doesn't support new c#. maybe later

@@ -76,9 +76,7 @@ namespace SF {
 
 		for (auto& ioBuffer : m_IOBuffers)
 		{
-			ioBuffer->WaitAIO();
-			ioBuffer->InputStream.Reset();
-			ioBuffer->OutputStream.Reset();
+			ioBuffer->Reset();
 		}
 	}
 
@@ -117,40 +115,47 @@ namespace SF {
 		{
 			while (bufferLen > 0)
 			{
+				// start loading next block if it hasn't
+				Result nextBlockRequestResult;
+				auto nextBlock = (m_BufferIndex + 1) % BUFFERING_COUNT;
+				auto pNextIOBuffer = m_IOBuffers[nextBlock];
+				auto nextRemainSize = (long)pNextIOBuffer->InputStream.GetRemainSize();
+				if (!pNextIOBuffer->bPending && nextRemainSize == 0)
+				{
+					nextBlockRequestResult = ReadRaw(pNextIOBuffer->Buffer.data(), pNextIOBuffer->Buffer.capacity(), pNextIOBuffer, readRaw);
+				}
+
 				// pick current buffer
 				auto pIOBuffer = m_IOBuffers[m_BufferIndex];
 				auto& stream = pIOBuffer->InputStream;
+				auto remainSize = (long)(stream.GetRemainSize());
 
-				// If reading is going on, we need to wait
-				pIOBuffer->WaitAIO();
-
-				if (pIOBuffer->OperationSize == 0)
-					return ResultCode::END_OF_FILE;
-
-				auto remainSize = stream.GetSize() - stream.GetPosition();
-				if (remainSize == 0)
+				if (pIOBuffer->bPending || remainSize > 0)
 				{
-					stream.Reset();
+					// If reading is going on, we need to wait
+					pIOBuffer->WaitAIO();
 
-					// Move to next buffer
-					m_BufferIndex = (m_BufferIndex + 1) % BUFFERING_COUNT;
-				}
-				else
-				{
-					// If new block start being accessed, start loading next block
-					if (stream.GetPosition() == 0)
-					{
-						auto nextBlock = (m_BufferIndex + 1) % BUFFERING_COUNT;
-						auto pNextIOBuffer = m_IOBuffers[nextBlock];
-						ReadRaw(pNextIOBuffer->Buffer.data(), pNextIOBuffer->Buffer.capacity(), pNextIOBuffer, readRaw);
-					}
+					if (pIOBuffer->OperationSize == 0)
+						return ResultCode::END_OF_FILE;
 
-					auto opSize = std::min(remainSize, bufferLen);
+					remainSize = (long)(stream.GetRemainSize());
+
+					// read
+					auto opSize = std::min<size_t>((size_t)remainSize, bufferLen);
 					stream.Read(buffer, opSize);
 
 					buffer += opSize;
 					bufferLen -= opSize;
 					read += opSize;
+				}
+				else if (!nextBlockRequestResult)
+				{
+					// if next block failed
+					return ResultCode::END_OF_FILE;
+				}
+				else
+				{
+					m_BufferIndex = nextBlock;
 				}
 			}
 

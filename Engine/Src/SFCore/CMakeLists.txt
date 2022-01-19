@@ -70,6 +70,8 @@ set(SFCORE_LIB_FILES
 	Task/SFTimerScheduler.cpp
 	Multithread/SFSynchronization.cpp
 	Multithread/SFThread.cpp
+	Util/AppConfig.h
+	Util/AppConfig.cpp
 	Util/SFCryptoBase64.cpp
 	Util/SFCryptoCrc32.cpp
 	Util/SFCryptoCrc32C.cpp

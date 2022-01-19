@@ -27,6 +27,14 @@ namespace SF
 
 		const size_t DefaultBufferSize = 512 * 1024;
 
+		// bin format load test result
+		enum class FileHeaderCheckResult
+		{
+			Successed,
+			InvalidHeader,
+			InvalidVersion,
+		};
+
 	private:
 
 #pragma pack(push, 1)
@@ -98,8 +106,8 @@ namespace SF
 			return std::max(m_StringMap32.size(), m_StringMap64.size());
 		}
 
-		// Merge all string buffer into one
-		//bool MergeStringBuffer();
+		// Check file header
+		FileHeaderCheckResult CheckFileHeader(IInputStream& stream);
 
 		// Load string table file
 		bool LoadStringTable(IInputStream& stream);
@@ -116,6 +124,8 @@ namespace SF
 
 		const char* GetString(uint32_t hash);
 		const char* GetString(uint64_t hash);
+
+		void DumpStringList();
 
 	};
 

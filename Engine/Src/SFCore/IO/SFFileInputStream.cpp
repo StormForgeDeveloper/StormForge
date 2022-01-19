@@ -80,7 +80,10 @@ namespace SF {
 		return m_File.Read((uint8_t*)buffer, readSize, outReadSize);
 	}
 
-
+	Result FileInputStream::Read(void* buffer, size_t readSize, size_t& outReadSize)
+	{
+		return m_File.Read((uint8_t*)buffer, readSize, outReadSize);
+	}
 
 }
 

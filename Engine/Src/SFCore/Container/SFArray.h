@@ -357,6 +357,17 @@ namespace SF {
 				return iterator::END_IDX;
 			}
 
+			template<typename PredicatorType>
+			int FindIndex(int startIndex, const PredicatorType& predicator) const
+			{
+				for (int iData = startIndex; iData < (int)size(); iData++)
+				{
+					if (predicator(m_pDataPtr[iData]))
+						return iData;
+				}
+				return iterator::END_IDX;
+			}
+
 			template<class DataType2, typename = std::enable_if_t<std::is_convertible_v<DataType, DataType2>>>
 			bool operator == (const Array<DataType2>& op2) const
 			{

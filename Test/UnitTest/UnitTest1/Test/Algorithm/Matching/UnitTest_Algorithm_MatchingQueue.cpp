@@ -351,12 +351,8 @@ TEST_F(AlgorithmTest, MatchingQueue)
 	constexpr int NUM_UPDATE_THREAD = 9;
 #ifdef DEBUG
 	constexpr int NUM_PLAYER = 200;
-	constexpr int NUM_SHELL = 50;
-	constexpr int MATCHING_VARIATION = 10;
 #else
 	constexpr int NUM_PLAYER = 2000000;
-	constexpr int NUM_SHELL = 5000;
-	constexpr int MATCHING_VARIATION = 100;
 #endif
 
 

@@ -321,6 +321,8 @@ namespace SF {
 			// Find a key value
 			Result Find(KeyType key, ValueType& value, int64_t *pOrder = nullptr);
 
+			bool Contains(KeyType key);
+
 			// Find biggest from less than or equal to
 			Result FindBiggest(KeyType key, ValueType& value, int64_t *pOrder = nullptr);
 

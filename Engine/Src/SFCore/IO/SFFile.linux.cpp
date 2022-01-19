@@ -50,7 +50,10 @@ namespace SF {
 	{
 #if SF_PLATFORM == SF_PLATFORM_LINUX
 		if (AIOBuffer.aio_fildes == 0)
+		{
+			if (bPending) bPending = false;
 			return;
+		}
 
 		aiocb* aiBufferList[] = { &AIOBuffer };
 		aio_suspend(aiBufferList, 1, 0);
@@ -63,6 +66,7 @@ namespace SF {
 			Buffer.resize(OperationSize);
 		}
 
+		bPending = false;
 #endif
 	}
 
@@ -76,6 +80,14 @@ namespace SF {
 
 		AIOBuffer.aio_fildes = 0;
 #endif
+	}
+
+	void File::IO_BUFFER::Reset()
+	{
+		WaitAIO();
+		InputStream.Reset();
+		OutputStream.Reset();
+		OperationSize = 0;
 	}
 
 /*
@@ -217,6 +229,9 @@ namespace SF {
 		if (m_FileHandle == INVALID_NATIVE_HANDLE_VALUE)
 			return ResultCode::FAIL;
 
+		// Flush out any pending data or read cache
+		Flush();
+
 		auto result = lseek(m_FileHandle, offset, ToOSSeekMode[(int)seekMode]);
 		if (result < 0)
 		{
@@ -242,6 +257,8 @@ namespace SF {
 			pIOBuffer->AIOBuffer.aio_offset = m_IOOffset;
 			pIOBuffer->AIOBuffer.aio_sigevent.sigev_notify = SIGEV_NONE;
 			aio_read(&pIOBuffer->AIOBuffer);
+
+			pIOBuffer->bPending = true;
 #endif
 		}
 		else
@@ -281,6 +298,8 @@ namespace SF {
 			pIOBuffer->AIOBuffer.aio_sigevent.sigev_notify = SIGEV_NONE;
 
 			aio_write(&pIOBuffer->AIOBuffer);
+
+			pIOBuffer->bPending = true;
 #endif
 		}
 		else

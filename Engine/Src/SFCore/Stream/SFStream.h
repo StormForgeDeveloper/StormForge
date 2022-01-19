@@ -93,6 +93,8 @@ namespace SF
 		virtual const uint8_t* GetBufferPtr() const { assert(false); return nullptr; }
 
 		virtual Result Read(void* buffer, size_t readSize) = 0;
+		virtual Result Read(void* buffer, size_t readSize, size_t& outReadSize) { return ResultCode::NOT_IMPLEMENTED; }
+		virtual Result ReadAppend(Array<char>& readBuffer);
 
 
 		inline Result Read(bool& data) { return Read(&data, sizeof(data)); }

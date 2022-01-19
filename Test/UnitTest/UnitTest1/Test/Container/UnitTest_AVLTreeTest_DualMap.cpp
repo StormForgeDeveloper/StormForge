@@ -420,7 +420,7 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 {
 	DualSortedMap<uint,Atomic<uint>> sortedMap(GetHeap());
 	int *Status = new int[numberOfTest];
-	const int NUM_THREAD = 10;
+	//const int NUM_THREAD = 10;
 
 	memset(Status, 0, sizeof(int)*numberOfTest);
 

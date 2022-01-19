@@ -490,7 +490,7 @@ namespace SF {
 		}
 
 		// Check heading string
-		bool StartWith(const StringType& op, bool ignoreCase = false) const
+		bool StartsWith(const StringType& op, bool ignoreCase = false) const
 		{
 			if (IsNullOrEmpty()) return false;
 			if (op.IsNullOrEmpty()) return false;
@@ -505,7 +505,7 @@ namespace SF {
 				return StrUtil::StringCompair(m_Buffer->GetBufferPointer(), (int)opLen, (const CharType*)op, (int)opLen);
 		}
 
-		bool StartWith(const CharType* op, bool ignoreCase = false) const
+		bool StartsWith(const CharType* op, bool ignoreCase = false) const
 		{
 			if (IsNullOrEmpty()) return false;
 			if (StrUtil::IsNullOrEmpty(op)) return false;
@@ -519,7 +519,7 @@ namespace SF {
 				return StrUtil::StringCompair(m_Buffer->GetBufferPointer(), (int)opLen, (const CharType*)op, (int)opLen);
 		}
 
-		bool StartWith(CharType op, bool ignoreCase = false) const
+		bool StartsWith(CharType op, bool ignoreCase = false) const
 		{
 			if (IsNullOrEmpty()) return false;
 			if (op == CharType{}) return false;
@@ -540,7 +540,7 @@ namespace SF {
 			auto opLen = op.GetBufferLength();
 			if (opLen > GetBufferLength()) return false;
 
-			auto compareStart = m_Buffer->GetBufferPointer() + GetBufferLength() - opLen;
+			auto compareStart = m_Buffer->GetBufferPointer() + GetLength() - opLen;
 
 			if (ignoreCase)
 				return StrUtil::StringCompairIgnoreCase(compareStart, (int)opLen, (const CharType*)op, (int)opLen);
@@ -556,7 +556,7 @@ namespace SF {
 			auto opLen = StrUtil::StringLen(op);
 			if (opLen > GetBufferLength()) return false;
 
-			auto compareStart = m_Buffer->GetBufferPointer() + GetBufferLength() - opLen;
+			auto compareStart = m_Buffer->GetBufferPointer() + GetLength() - opLen;
 
 			if (ignoreCase)
 				return StrUtil::StringCompairIgnoreCase(compareStart, (int)opLen, (const CharType*)op, (int)opLen);
@@ -571,7 +571,7 @@ namespace SF {
 
 			CharType opStr[] = { op, CharType{} };
 
-			auto compareStart = m_Buffer->GetBufferPointer() + GetBufferLength() - 1;
+			auto compareStart = m_Buffer->GetBufferPointer() + GetLength() - 1;
 
 			if (ignoreCase)
 				return StrUtil::StringCompairIgnoreCase(compareStart, (int)1, (const CharType*)opStr, (int)1);
@@ -584,7 +584,7 @@ namespace SF {
 		{
 			if (IsNullOrEmpty()) return -1;
 
-			auto len = GetBufferLength();
+			auto len = GetLength();
 			auto pCur = m_Buffer->GetBufferPointer();
 			for (size_t iChar = 0; iChar < len; iChar++, pCur++)
 			{
@@ -602,7 +602,7 @@ namespace SF {
 
 			auto strLen = StrUtil::StringLen(searchString);
 
-			auto len = GetBufferLength();
+			auto len = GetLength();
 			auto pCur = m_Buffer->GetBufferPointer();
 
 			if (ignoreCase)
@@ -631,7 +631,7 @@ namespace SF {
 
 			auto numChar = StrUtil::StringLen(searchChars);
 
-			auto len = GetBufferLength();
+			auto len = GetLength();
 			auto pCur = m_Buffer->GetBufferPointer();
 
 			for (size_t iOffset = 0; iOffset < len; iOffset++, pCur++)
@@ -653,7 +653,7 @@ namespace SF {
 
 			auto strLen = (int)StrUtil::StringLen(searchString);
 
-			auto len = (int)GetBufferLength() - strLen;
+			auto len = (int)GetLength() - strLen;
 			auto pCur = m_Buffer->GetBufferPointer() + len;
 
 			if (ignoreCase)
@@ -678,7 +678,7 @@ namespace SF {
 		{
 			if (IsNullOrEmpty()) return -1;
 
-			auto len = (int)GetBufferLength() - 1;
+			auto len = (int)GetLength() - 1;
 			auto pCur = m_Buffer->GetBufferPointer() + len;
 
 			for (int iOffset = len; iOffset >= 0; iOffset--, pCur--)
@@ -696,7 +696,7 @@ namespace SF {
 
 			auto numChar = (int)StrUtil::StringLen(searchChars);
 
-			auto len = (int)GetBufferLength() - 1;
+			auto len = (int)GetLength() - 1;
 			auto pCur = m_Buffer->GetBufferPointer() + len;
 
 			for (int iOffset = len; iOffset >= 0; iOffset--, pCur--)
@@ -903,7 +903,7 @@ namespace SF {
 		{
 			if (IsNullOrEmpty()) return *this;
 
-			auto len = (int)GetBufferLength();
+			auto len = (int)GetLength();
 			auto strString = m_Buffer->GetBufferPointer();
 			int iStart = 0;
 			int iEnd = len - 1;
@@ -935,7 +935,7 @@ namespace SF {
 
 			auto numChar = (int)StrUtil::StringLen(chars);
 
-			auto len = (int)GetBufferLength();
+			auto len = (int)GetLength();
 			auto strString = m_Buffer->GetBufferPointer();
 			int iStart = 0;
 			int iEnd = len - 1;
@@ -1015,7 +1015,7 @@ namespace SF {
 
 			auto numChar = (int)StrUtil::StringLen(chars);
 
-			auto len = (int)GetBufferLength();
+			auto len = (int)GetLength();
 			auto strString = m_Buffer->GetBufferPointer();
 			int iStart = 0;
 			int iEnd = len - 1;

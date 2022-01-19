@@ -393,6 +393,13 @@ namespace SF {
 			return ResultCode::SUCCESS;
 		}
 
+		template<class KeyType, class ValueType>
+		bool DualSortedMap<KeyType, ValueType>::Contains(KeyType key)
+		{
+			ValueType value;
+			return Find(key, value);
+		}
+
 		// Find a key value
 		template<class KeyType, class ValueType>
 		Result DualSortedMap<KeyType, ValueType>::Find(KeyType key, ValueType& value, int64_t *pOrder)

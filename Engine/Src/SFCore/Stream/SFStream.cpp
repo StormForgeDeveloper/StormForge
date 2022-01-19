@@ -28,6 +28,26 @@ namespace SF {
 	//	IInputStream
 	//
 
+	Result IInputStream::ReadAppend(Array<char>& readBuffer)
+	{
+		if (readBuffer.capacity() <= readBuffer.size())
+			return ResultCode::NOT_ENOUGH_SPACE;
+
+		size_t readMax = readBuffer.capacity() - readBuffer.size();
+		size_t readSize = 0;
+
+		auto res = Read(readBuffer.data(), readMax, readSize);
+		if (res == ResultCode::END_OF_FILE)
+			res = ResultCode::END_OF_STREAM;
+
+		if (!res && res != ResultCode::END_OF_STREAM)
+			return res;
+
+		readBuffer.resize(readBuffer.size() + readSize);
+
+		return res;
+	}
+
 	Result IInputStream::Read(String& data)
 	{
 		uint16_t NumChar = 0;

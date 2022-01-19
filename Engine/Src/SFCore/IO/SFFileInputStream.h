@@ -46,6 +46,7 @@ namespace SF {
 
 		// Read data
 		virtual Result Read(void* buffer, size_t readSize) override;
+		virtual Result Read(void* buffer, size_t readSize, size_t& outReadSize) override;
 
 
 

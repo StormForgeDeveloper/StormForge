@@ -137,6 +137,20 @@ namespace SF
 		m_StringMap64.clear();
 	}
 
+	StringCrcDB::FileHeaderCheckResult StringCrcDB::CheckFileHeader(IInputStream& stream)
+	{
+		StringFileHeader header{};
+		stream.Read(&header, sizeof(StringFileHeader));
+
+		if (header.Magic != StringFileHeader::FILE_MAGIC)
+			return FileHeaderCheckResult::InvalidHeader;
+
+		if (header.Version != StringFileHeader::FILE_VERSION)
+			return FileHeaderCheckResult::InvalidVersion;
+
+		return FileHeaderCheckResult::Successed;
+	}
+
 	// Load string table file
 	bool StringCrcDB::LoadStringTable(IInputStream& stream)
 	{
@@ -160,17 +174,29 @@ namespace SF
 		newBuffer->BufferSize = header.ChunkSize;
 		newBuffer->RemainSize = 0;
 
+		int numStringItem = 0;
+
 		uintptr_t endItemPos = uintptr_t(newBuffer->StringItems) + header.ChunkSize;
 		for (uintptr_t curItemPos = (uintptr_t)newBuffer->StringItems; curItemPos < endItemPos; )
 		{
 			auto* pStrItem = (StringItem*)curItemPos;
-			
+			numStringItem++;
+
 			// Add to both
-			m_StringMap32.Insert(pStrItem->Hash32, pStrItem);
-			m_StringMap64.Insert(pStrItem->Hash64, pStrItem);
+			if (!m_StringMap32.Contains(pStrItem->Hash32))
+				m_StringMap32.Insert(pStrItem->Hash32, pStrItem);
+
+			if (!m_StringMap64.Contains(pStrItem->Hash64))
+				m_StringMap64.Insert(pStrItem->Hash64, pStrItem);
 
 			curItemPos += sizeof(StringItem) + pStrItem->ValueSize;
 		}
+
+		newBuffer->Next = m_Head;
+		m_Head = newBuffer;
+
+		m_StringMap32.CommitChanges();
+		m_StringMap64.CommitChanges();
 
 		return true;
 	}
@@ -382,6 +408,17 @@ namespace SF
 		return nullptr;
 	}
 
+
+	void StringCrcDB::DumpStringList()
+	{
+		SFLog(System, Debug, "String table dump count:{0}", m_StringMap64.size());
+
+		m_StringMap64.ForeachOrder(0, (uint)m_StringMap64.size(), [&](uint64_t key, const StringItem* pStrItem)
+			{
+				SFLog(System, Debug, "{0}, {1}, {2}", pStrItem->Hash32, pStrItem->Hash64, pStrItem->StringValue);
+				return true;
+			});
+	}
 }
 
 

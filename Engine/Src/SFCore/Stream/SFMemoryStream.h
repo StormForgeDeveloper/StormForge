@@ -42,6 +42,10 @@ namespace SF
 		// Reset position to begin
 		void Reset();
 
+		// reset buffer contents
+		void ResetBuffer() { m_BufferView.Reset(); }
+		void ResetBuffer(const Array<const uint8_t>& memoryBuffer) { m_BufferView.SetLinkedBuffer(memoryBuffer); }
+
 		size_t GetBufferSize() const { return m_BufferView.GetAllocatedSize(); }
 
 		// return true if the stream is valid and have something read

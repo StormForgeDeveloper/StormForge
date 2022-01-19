@@ -81,6 +81,7 @@ namespace SF {
 				void* Dummy;
 			} AIOBuffer;
 #endif
+			bool bPending = false;
 
 
 			IO_BUFFER(IHeap& memoryManager, NativeHandle& fileHandle, OpenMode& fileOpenMode)
@@ -88,7 +89,7 @@ namespace SF {
 				, FileOpenMode(fileOpenMode)
 				, Buffer(memoryManager)
 				, OutputStream(Buffer)
-				, InputStream(ArrayView<const uint8_t>(Buffer.capacity(), Buffer.data()))
+				//, InputStream(ArrayView<const uint8_t>(Buffer.capacity(), Buffer.data()))
 			{
 				memset(&AIOBuffer, 0, sizeof(AIOBuffer));
 				InitAIO();
@@ -102,6 +103,7 @@ namespace SF {
 			void InitAIO();
 			void WaitAIO();
 			void CleanAIO();
+			void Reset();
 		};
 
 		size_t m_IOOffset = 0;

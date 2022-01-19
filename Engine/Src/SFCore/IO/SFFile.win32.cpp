@@ -45,22 +45,30 @@ namespace SF {
 	void File::IO_BUFFER::WaitAIO()
 	{
 		if (AIOBuffer.hEvent == nullptr || AIOBuffer.hEvent == INVALID_HANDLE_VALUE)
+		{
+			if (bPending) bPending = false;
 			return;
-
-		auto waited = WaitForSingleObject(AIOBuffer.hEvent, 10 * 1000);
-		if (waited == WAIT_OBJECT_0)
-		{
-			if (FileOpenMode == OpenMode::Read)
-			{
-				DWORD dwOperationSize = 0;
-				GetOverlappedResult(FileHandle, &AIOBuffer, &dwOperationSize, FALSE);
-				//assert(dwOperationSize != 0); // just checking
-				Buffer.resize(dwOperationSize);
-			}
 		}
-		else
+
+		if (bPending)
 		{
-			assert(false); // failed to wait!
+			auto waited = WaitForSingleObject(AIOBuffer.hEvent, 10 * 1000);
+			if (waited == WAIT_OBJECT_0)
+			{
+				if (FileOpenMode == OpenMode::Read)
+				{
+					DWORD dwOperationSize = 0;
+					GetOverlappedResult(FileHandle, &AIOBuffer, &dwOperationSize, FALSE);
+
+					InputStream.ResetBuffer(ArrayView<const uint8_t>(dwOperationSize, (const uint8_t*)Buffer.data()));
+				}
+			}
+			else
+			{
+				assert(false); // failed to wait!
+			}
+
+			bPending = false;
 		}
 	}
 
@@ -76,11 +84,24 @@ namespace SF {
 		AIOBuffer.hEvent = nullptr;
 	}
 
+	void File::IO_BUFFER::Reset()
+	{
+		WaitAIO();
+		InputStream.Reset();
+		InputStream.ResetBuffer();
+		OutputStream.Reset();
+		//OutputStream.ResetBuffer();
+		OperationSize = 0;
+	}
+
 
 	Result File::Seek(SeekMode seekMode, int64_t offset)
 	{
 		if (m_FileHandle == INVALID_NATIVE_HANDLE_VALUE)
 			return ResultCode::FAIL;
+
+		// Flush out any pending data or read cache
+		Flush();
 
 		LARGE_INTEGER lInt;
 		lInt.QuadPart = offset;
@@ -90,6 +111,9 @@ namespace SF {
 		{
 			return GetLastResultCode();
 		}
+
+		// sync back pointer
+		m_IOOffset = lInt.QuadPart;
 
 		return ResultCode::SUCCESS;
 	}
@@ -228,14 +252,25 @@ namespace SF {
 
 			if (ReadFile(m_FileHandle, buffer, (DWORD)bufferLen, &pIOBuffer->OperationSize, &pIOBuffer->AIOBuffer) == FALSE)
 			{
+				auto lastError = GetLastError();
+				if (lastError == ERROR_HANDLE_EOF)
+					return ResultCode::END_OF_FILE;
+
 				return GetLastResultCode();
 			}
+
+			pIOBuffer->bPending = true;
 		}
 		else
 		{
 			DWORD dwRead = 0;
 			if (ReadFile(m_FileHandle, buffer, (DWORD)bufferLen, &dwRead, nullptr) == FALSE)
 			{
+				auto lastError = GetLastError();
+				if (lastError == ERROR_HANDLE_EOF)
+					return ResultCode::END_OF_FILE;
+
+
 				return GetLastResultCode();
 			}
 
@@ -268,6 +303,7 @@ namespace SF {
 				return GetLastResultCode();
 			}
 
+			pIOBuffer->bPending = true;
 		}
 		else
 		{
