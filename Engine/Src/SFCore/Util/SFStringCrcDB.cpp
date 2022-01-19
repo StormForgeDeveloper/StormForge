@@ -14,6 +14,8 @@
 #include "Util/SFHasher64.h"
 #include "Util/SFStringCrcDB.h"
 #include "Util/SFStrFormat.h"
+#include "IO/SFFileUtil.h"
+#include "IO/SFFileInputStream.h"
 #include "Container/SFArray.h"
 #include "Service/SFService.h"
 #include "Stream/SFStream.h"
@@ -111,6 +113,14 @@ namespace SF
 		{
 			AddNGetString(itString);
 		}
+
+		//const char* defaultFileName = "strings.crcbin";
+		//if (FileUtil::IsFileExist(defaultFileName))
+		//{
+		//	SF::FileInputStream readFrom(defaultFileName);
+		//	LoadStringTable(readFrom);
+		//}
+
 
 		Service::StringDB = this;
 	}
