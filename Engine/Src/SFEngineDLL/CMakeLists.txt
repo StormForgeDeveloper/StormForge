@@ -12,6 +12,7 @@ add_dependencies(SFEngineDLL SFCore SFEngine SFProtocol)
 
 target_precompile_headers(SFEngineDLL PUBLIC SFEngineDLLPCH.h)
 
+set_target_properties(SFEngineDLL PROPERTIES PREFIX "")
 target_link_libraries(SFEngineDLL ${ENGINE_LINK_LIBS} ${PLATFORM_LIBS})
 
 target_include_directories (SFEngineDLL PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}../SFCore ${CMAKE_CURRENT_SOURCE_DIR}../SFEngine)
