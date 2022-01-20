@@ -49,7 +49,7 @@ namespace SF {
 		template< class DataType >
 		void Array<DataType>::SetBuffPtr(size_t AllocatedSize, DataType *pDataPtr)
 		{
-			AssertRel(AllocatedSize >= m_Size);
+			assert(m_Size <= AllocatedSize); // size should be reset
 
 			m_AllocatedSize = AllocatedSize;
 			m_pDataPtr = pDataPtr;
@@ -59,7 +59,7 @@ namespace SF {
 		template< class DataType >
 		constexpr void Array<DataType>::SetBuffPtrConstexpr(size_t AllocatedSize, DataType *pDataPtr)
 		{
-			m_Size = AllocatedSize;
+			//m_Size = AllocatedSize;
 			m_AllocatedSize = AllocatedSize;
 			m_pDataPtr = (DataType*)pDataPtr;
 		}
@@ -504,22 +504,25 @@ namespace SF {
 		template< class DataType >
 		void ArrayView<DataType>::SetLinkedBuffer(size_t maxDataCount, size_t dataCount, DataType* pDataPtr)
 		{
+			Array<DataType>::SetSizeInternal(0);
 			Array<DataType>::SetBuffPtrConstexpr(maxDataCount, pDataPtr);
-			Array<DataType>::resize(dataCount);
+			Array<DataType>::SetSizeInternal(dataCount);
 		}
 
 		template< class DataType >
 		constexpr void ArrayView<DataType>::SetLinkedBuffer(size_t dataCount, DataType* pDataPtr)
 		{
+			Array<DataType>::SetSizeInternal(0);
 			Array<DataType>::SetBuffPtrConstexpr(dataCount, pDataPtr);
-			Array<DataType>::resize(dataCount);
+			Array<DataType>::SetSizeInternal(dataCount);
 		}
 
 		template< class DataType >
 		void ArrayView<DataType>::SetLinkedBuffer(const Array<DataType>& srcLink)
 		{
+			Array<DataType>::SetSizeInternal(0);
 			Array<DataType>::SetBuffPtr(srcLink.GetAllocatedSize(), const_cast<uint8_t*>(srcLink.data()));
-			Array<DataType>::resize(srcLink.size());
+			Array<DataType>::SetSizeInternal(srcLink.size());
 		}
 
 		template< class DataType >
