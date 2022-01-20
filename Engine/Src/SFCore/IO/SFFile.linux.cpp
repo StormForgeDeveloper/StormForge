@@ -48,10 +48,13 @@ namespace SF {
 
 	void File::IO_BUFFER::WaitAIO()
 	{
+		if (!bPending)
+			return;
+
 #if SF_PLATFORM == SF_PLATFORM_LINUX
 		if (AIOBuffer.aio_fildes == 0)
 		{
-			if (bPending) bPending = false;
+			bPending = false;
 			return;
 		}
 
@@ -63,7 +66,7 @@ namespace SF {
 		if (FileOpenMode == OpenMode::Read)
 		{
 			//assert(OperationSize > 0); // just checking
-			Buffer.resize(OperationSize);
+			InputStream.ResetBuffer(ArrayView<const uint8_t>(OperationSize, (const uint8_t*)Buffer.data()));
 		}
 
 		bPending = false;
@@ -86,21 +89,12 @@ namespace SF {
 	{
 		WaitAIO();
 		InputStream.Reset();
+		InputStream.ResetBuffer();
 		OutputStream.Reset();
 		OperationSize = 0;
 	}
 
-/*
-	Result File::Seek(SeekMode seekMode, int64_t offset)
-	{
-		if (m_FileHandle == INVALID_NATIVE_HANDLE_VALUE)
-			return ResultCode::FAIL;
 
-		lseek((int)(int64_t)m_FileHandle, offset, ToOSSeekMode[(int)seekMode]);
-
-		return ResultCode::SUCCESS;
-	}
-*/
 	size_t File::GetLocationRaw() const
 	{
 		if (m_FileHandle == INVALID_NATIVE_HANDLE_VALUE)
@@ -232,11 +226,13 @@ namespace SF {
 		// Flush out any pending data or read cache
 		Flush();
 
-		auto result = lseek(m_FileHandle, offset, ToOSSeekMode[(int)seekMode]);
-		if (result < 0)
+		auto newPos = lseek(m_FileHandle, offset, ToOSSeekMode[(int)seekMode]);
+		if (newPos < 0)
 		{
 			return GetLastResultCode();
 		}
+
+		m_IOOffset = newPos;
 
 		return ResultCode::SUCCESS;
 	}
