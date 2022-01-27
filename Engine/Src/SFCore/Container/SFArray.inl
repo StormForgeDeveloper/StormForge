@@ -201,7 +201,6 @@ namespace SF {
 		{
 			if (size() == 0)
 			{
-				Assert(false);
 				return {};
 			}
 

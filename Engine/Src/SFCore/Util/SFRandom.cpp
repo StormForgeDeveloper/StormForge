@@ -27,6 +27,8 @@ namespace Util {
 	// Global random generator
 	RandomGen Random;
 
+	RandomGenLinear RandomLinear(0xFFFFFFFF, (uint)clock());
+
 
 
 	////////////////////////////////////////////////////////////////////////////////

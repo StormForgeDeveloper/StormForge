@@ -82,6 +82,12 @@ namespace SF {
 
 		const char* LogFilePrefix{};
 
+		// StringDB binary path
+		const char* StringDBBinPath{};
+
+		// Telemetry server address
+		const char* TelemetryServer{};
+
 		// Initialization functions, called before engine thread start
 		std::vector<std::function<void(Engine*)>> InitializationFunctions;
 	};

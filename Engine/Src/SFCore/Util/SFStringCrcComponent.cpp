@@ -25,8 +25,9 @@ namespace SF {
 
 	constexpr StringCrc64 StringCrcLibraryComponent::TypeName;
 
-	StringCrcLibraryComponent::StringCrcLibraryComponent()
+	StringCrcLibraryComponent::StringCrcLibraryComponent(const char* stringCrcBinPath)
 		: LibraryComponent(TypeName)
+		, m_StringCrcBinPath(stringCrcBinPath)
 	{
 
 	}
@@ -42,12 +43,15 @@ namespace SF {
 		if (!hr) return hr;
 
 		const char* inputPaths[] = {
+			m_StringCrcBinPath.data(),
 			"string_list.crcbin",
-			"Contents/string_list.crcbin",
 		};
 
 		for (auto inputPath : inputPaths)
 		{
+			if (StrUtil::IsNullOrEmpty(inputPath))
+				continue;
+
 			FileInputStream readFrom;
 			if (!readFrom.Open(inputPath))
 				continue;

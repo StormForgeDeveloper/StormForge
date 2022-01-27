@@ -29,6 +29,7 @@
 #include "EngineObject/SFEngineTaskManager.h"
 #include "Graphics/SFRenderCommands.h"
 #include "Component/SFUnhandledExceptionHandlerComponent.h"
+#include "Util/SFStringCrcComponent.h"
 
 #include "Application/Android/AndroidApp.h"
 #include "Application/Win/WindowsApp.h"
@@ -85,6 +86,9 @@ namespace SF {
 
 		if (AddComponent<Util::LibraryComponentTime>() == nullptr)
 			return ResultCode::FAIL;
+
+		if (!StrUtil::IsNullOrEmpty(m_InitParameter.StringDBBinPath))
+			AddComponent<StringCrcLibraryComponent>(m_InitParameter.StringDBBinPath);
 
 		if (AddComponent<SF::EngineObjectManager>() == nullptr)
 			return ResultCode::FAIL;

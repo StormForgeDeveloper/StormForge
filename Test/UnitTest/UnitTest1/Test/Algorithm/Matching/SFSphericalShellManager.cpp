@@ -88,9 +88,10 @@ namespace SF
 
 	SphericalShell::~SphericalShell()
 	{
-		for (auto itCell : m_DirectionalCells)
+		Cell* pCell = m_DirectionalCells.pop_back();
+		for (; pCell; pCell = m_DirectionalCells.pop_back())
 		{
-			IHeap::Delete(itCell);
+			IHeap::Delete(pCell);
 		}
 		m_DirectionalCells.Clear();
 	}

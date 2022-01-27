@@ -117,7 +117,7 @@ namespace Util {
 
 	// Global random generator
 	extern RandomGen Random;
-
+	extern RandomGenLinear RandomLinear;
 
 
 	

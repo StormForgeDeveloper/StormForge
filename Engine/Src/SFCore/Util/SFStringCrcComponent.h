@@ -26,9 +26,11 @@ namespace SF {
 	public:
 		static constexpr StringCrc64 TypeName = "StringCrcLibraryComponent";
 
+		String m_StringCrcBinPath;
+
 	public:
 
-		StringCrcLibraryComponent();
+		StringCrcLibraryComponent(const char* stringCrcBinPath);
 		~StringCrcLibraryComponent();
 
 		virtual const StringCrc64& GetTypeName() override { return TypeName; }

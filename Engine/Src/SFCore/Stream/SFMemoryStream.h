@@ -43,9 +43,10 @@ namespace SF
 		void Reset();
 
 		// reset buffer contents
-		void ResetBuffer() { m_BufferView.Reset(); }
+		void ResetBuffer() { m_Position = 0; m_BufferView.Reset(); }
 		void ResetBuffer(const Array<const uint8_t>& memoryBuffer)
 		{
+			m_Position = 0;
 			m_BufferView.SetLinkedBuffer(memoryBuffer);
 		}
 

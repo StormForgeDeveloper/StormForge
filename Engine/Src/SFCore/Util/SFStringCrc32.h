@@ -26,15 +26,11 @@ namespace SF
 	public:
 		constexpr StringCrc32()
 			: m_Crc(0)
-		{
-
-		}
+		{}
 
 		constexpr StringCrc32(uint32_t stringCrc)
 			: m_Crc(stringCrc)
-		{
-
-		}
+		{}
 
 		StringCrc32(const char* text);
 

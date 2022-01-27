@@ -138,9 +138,8 @@ TEST_F(AlgorithmTest, MatchingPreference)
 
 	StopAllThread();
 
-	IHeap::Delete(players);
-
 	matchManager.Clear();
 
+	IHeap::Delete(players);
 }
 
