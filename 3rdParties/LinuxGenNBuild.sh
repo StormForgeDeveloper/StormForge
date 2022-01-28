@@ -79,6 +79,19 @@ pushd src/avro
 popd
 
 
+echo Building libevent
+pushd src/libevent
+./gen.sh
+./build.sh
+popd
+
+
+echo Building libwebsocket
+pushd src/libwebsocket
+./gen.sh
+./build.sh
+popd
+
 
 echo Done
 

@@ -52,6 +52,14 @@ rem build avro
 cmd /c "cd src/avro & gen.cmd"
 cmd /c "cd src/avro & build.cmd"
 
+rem build libevent
+cmd /c "cd src/libevent & gen.cmd"
+cmd /c "cd src/libevent & build.cmd"
+
+rem build libwebsocket
+cmd /c "cd src/libwebsocket & gen.cmd"
+cmd /c "cd src/libwebsocket & build.cmd"
+
 
 if not "%1" == "nopause" pause
 
