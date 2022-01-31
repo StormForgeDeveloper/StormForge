@@ -31,7 +31,7 @@ if(WIN32)
 
     #add_definitions("-DWITH_SASL_SCRAM=1")
     include_directories(AFTER 
-        ../openssl/buildWindows/openssl/include
+        ../../Windows/Common/include
         ./
     )
 

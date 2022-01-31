@@ -21,7 +21,7 @@
 #include "Util/SFTimeUtil.h"
 #include "UnitTest_Kafka.h"
 
-#include "StreamDB/SFStreamDB.h"
+#include "Online/StreamDB/SFStreamDB.h"
 #include "StreamDB/SFStreamDBDirectory.h"
 
 #include "Protocol/PlayInstanceMsgClass.h"

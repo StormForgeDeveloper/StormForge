@@ -11,7 +11,7 @@
 
 #include "SFCorePCH.h"
 
-#include "StreamDB/SFStreamDB.h"
+#include "Online/StreamDB/SFStreamDB.h"
 #include "Util/SFStringFormat.h"
 
 #ifdef USE_STREAMDB

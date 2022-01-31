@@ -14,5 +14,8 @@ if not exist %RELEASE_ZIP% (
 7z x %RELEASE_ZIP% -y
 
 
-robocopy mysql-connector-c++-8.0.27-winx64\lib64\vs14\ mysql-connector-c++-8.0.27-winx64\lib64\vs14\RelWithDebInfo /purge *.lib
+robocopy mysql-connector-c++-8.0.27-winx64\include\ ..\..\Windows\Common\include *.h /s
+robocopy mysql-connector-c++-8.0.27-winx64\lib64\vs14\ ..\..\Windows\RelWithDebInfo\lib *.lib
+robocopy mysql-connector-c++-8.0.27-winx64\lib64\vs14\debug\ ..\..\Windows\Debug\lib *.lib
+rem robocopy mysql-connector-c++-8.0.27-winx64\lib64\vs14\ mysql-connector-c++-8.0.27-winx64\lib64\vs14\RelWithDebInfo /purge *.lib
 

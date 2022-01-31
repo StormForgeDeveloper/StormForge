@@ -63,7 +63,7 @@ include_directories(AFTER
 )
 
 
-set(ENGINE_LINK_LIBS SFProtocol SFEngine SFProtocol SFEngine SFCore curl memcached rdkafka avro-static jansson iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 lzma zlib SFWinport)
+set(ENGINE_LINK_LIBS SFProtocol SFEngine SFProtocol SFEngine SFCore curl memcached rdkafka avro-static jansson iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 lzma event zlib SFWinport)
 
 
 
@@ -101,12 +101,13 @@ if(WIN32)
 
 	set(ARTECTURE x64)
 
-	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi Bcrypt Crypt32 mysqlcppconn8-static Dnsapi bson-static-1.0 mongoc-static-1.0)
+	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi Bcrypt Crypt32 mysqlcppconn8-static Dnsapi bson-static-1.0 mongoc-static-1.0 websockets_static)
 	list(APPEND ENGINE_LINK_LIBS libssl libcrypto)
 	
 	include_directories(AFTER 
 		$ENV{VK_SDK_PATH}/include
-		../${SF_FOLDER}/3rdParties/src/mysql/mysql-connector-c++-8.0.27-winx64/include
+		#../${SF_FOLDER}/3rdParties/src/mysql/mysql-connector-c++-8.0.27-winx64/include
+		../${SF_FOLDER}/3rdParties/Windows/Common/include
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include/libmemcached
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/include/libbson-1.0
@@ -114,8 +115,9 @@ if(WIN32)
 	)
 
 	link_directories(
-		../${SF_FOLDER}/3rdParties/src/openssl/buildWIndows/openssl/lib
-		../${SF_FOLDER}/src/mysql/mysql-connector-c++-8.0.27-winx64/lib64/vs14/$(Configuration)
+		../${SF_FOLDER}/3rdParties/Windows/Common/lib
+		#../${SF_FOLDER}/3rdParties/src/openssl/buildWIndows/openssl/lib
+		#../${SF_FOLDER}/src/mysql/mysql-connector-c++-8.0.27-winx64/lib64/vs14/$(Configuration)
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/$(Configuration)/lib
 	)
 	
@@ -181,7 +183,7 @@ elseif(UNIX)
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)
 
-	set(PLATFORM_LIBS mongoc-static-1.0 bson-static-1.0 mysqlcppconn8 sasl2 rt m atomic resolv)
+	set(PLATFORM_LIBS mongoc-static-1.0 bson-static-1.0 mysqlcppconn8 sasl2 rt m atomic resolv websockets)
 	list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 	set(ARTECTURE x64)

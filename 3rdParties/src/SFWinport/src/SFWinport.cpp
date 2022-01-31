@@ -20,7 +20,7 @@ extern "C" {
         return ((rc != 0) ? 0 : GetLastError());
     }
 
-    int pthread_mutex_init(pthread_mutex_t* _mutex, void* ignoredAttr) {
+    int pthread_mutex_init(pthread_mutex_t* _mutex, void* ) {
         //use CreateMutex as we are using the HANDLES in pthread_cond
         *_mutex = CreateMutex(
             NULL,              // default security attributes
@@ -35,11 +35,24 @@ extern "C" {
         return ((rc != 0) ? 0 : GetLastError());
     }
 
-    int pthread_create(pthread_t* thread, const pthread_attr_t* attr, unsigned(__stdcall* start_routine)(void* a), void* arg)
+    static unsigned __stdcall __sfwinport_beginthreadex_proc(void* InArg)
+    {
+        auto thread = reinterpret_cast<pthread_t*>(InArg);
+        if (thread->start_routine) 
+            thread->start_routine(thread->arg);
+
+        return 0;
+    }
+
+    int pthread_create(pthread_t* thread, const pthread_attr_t* , void* (*start_routine) (void*), void* arg)
     {
         int _intThreadId;
-        (*thread).thread_handle = (HANDLE)_beginthreadex(NULL, 0, start_routine, arg, 0, (unsigned int*)&_intThreadId);
+        thread->start_routine = start_routine;
+        thread->arg = arg;
+
+        (*thread).thread_handle = (HANDLE)_beginthreadex(NULL, 0, __sfwinport_beginthreadex_proc, thread, 0, (unsigned int*)&_intThreadId);
         (*thread).thread_id = _intThreadId;
+
         return (((*thread).thread_handle == 0) ? errno : 0);
     }
 
@@ -56,7 +69,7 @@ extern "C" {
         return thread_self;
     }
 
-    int pthread_join(pthread_t _thread, void** ignore)
+    int pthread_join(pthread_t _thread, void** )
     {
         int rc = WaitForSingleObject(_thread.thread_handle, INFINITE);
         return ((rc == WAIT_OBJECT_0) ? 0 : rc);
@@ -68,13 +81,13 @@ extern "C" {
         return  (rc != 0) ? 0 : GetLastError();
     }
 
-    void pthread_mutexattr_init(pthread_mutexattr_t* ignore) {}
-    void pthread_mutexattr_settype(pthread_mutexattr_t* ingore_attr, int ignore) {}
-    void pthread_mutexattr_destroy(pthread_mutexattr_t* ignore_attr) {}
+    void pthread_mutexattr_init(pthread_mutexattr_t* ) {}
+    void pthread_mutexattr_settype(pthread_mutexattr_t* , int ) {}
+    void pthread_mutexattr_destroy(pthread_mutexattr_t* ) {}
 
     int
         pthread_cond_init(pthread_cond_t* cv,
-            const pthread_condattr_t* ignore)
+            const pthread_condattr_t* )
     {
         cv->waiters_count_ = 0;
         cv->was_broadcast_ = 0;
@@ -286,6 +299,11 @@ extern "C" {
         return ((rc != 0) ? 0 : GetLastError());
     }
 
+    void pthread_exit(void* retval)
+    {
+        _endthreadex((unsigned)(intptr_t)retval);
+    }
+
 
     int close(SOCKET fd) {
         return closesocket(fd);
@@ -319,7 +337,7 @@ extern "C" {
 
 
 
-    int gettimeofday(struct timeval* tp, void* tzp)
+    int gettimeofday(struct timeval* tp, timezone* tzp)
     {
         int64_t now = 0;
         if (tzp != 0) { errno = EINVAL; return -1; }

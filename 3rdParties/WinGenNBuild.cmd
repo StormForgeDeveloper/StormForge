@@ -12,14 +12,14 @@ set NASM_DIR=src\nasm
 set OPENSSL_DIR=src\openssl
 set MYSQL_DIR=src\mysql
 
-if not exist "NasmBuild.txt" (
+if not exist "Windows\Common\lib\libnasm.lib" (
 	echo Building NASM
 	echo %date%-%time% > NasmBuild.txt
     cmd /c "cd %NASM_DIR% & buildNASM.cmd"
 	
 )
 
-if not exist "OpenSSLBuild.txt" (
+if not exist "Windows\Common\lib\libcrypto.lib" (
 	echo Building OpenSSL
 	echo %date%-%time% > OpenSSLBuild.txt
 	rem build SSL
@@ -31,10 +31,11 @@ if not exist "OpenSSLBuild.txt" (
 
 
 rem build MYSQL client lib => we are using precompiled version on window now
-rem cmd /c "cd %MYSQL_DIR% & WinGen.cmd"
-rem cmd /c "cd %MYSQL_DIR% & WinBuild.cmd"
-cmd /c "cd %MYSQL_DIR% & download.cmd"
-
+if not exist "Windows\RelWithDebInfo\lib\mysqlcppconn8.lib" (
+	rem cmd /c "cd %MYSQL_DIR% & WinGen.cmd"
+	rem cmd /c "cd %MYSQL_DIR% & WinBuild.cmd"
+	cmd /c "cd %MYSQL_DIR% & download.cmd"
+)
 
 rem Build main part
 cmd /c "call WinGenMain.cmd nopause"

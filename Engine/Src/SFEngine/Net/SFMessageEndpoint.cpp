@@ -15,7 +15,7 @@
 #include "Util/SFStrUtil.h"
 #include "Util/SFTimeUtil.h"
 #include "Net/SFMessageEndpoint.h"
-#include "StreamDB/SFStreamDB.h"
+#include "Online/StreamDB/SFStreamDB.h"
 #include "ServerConfig/SFServerConfig.h"
 
 

@@ -9,7 +9,7 @@ IF '%VCCMAKEGENERATOR%'=='' (
 
 
 set BUILD_DIR=%~dp0\buildWindows\build
-set OUTPUT_DIR=%~dp0\buildWIndows
+set OUTPUT_DIR=%~dp0..\..\Windows\Common
 
 
 @if not "%1" == "Win" goto endWin
@@ -35,7 +35,12 @@ if "%3" == "build" goto build
 :config
 
 	@if not exist %BUILD_DIR% mkdir %BUILD_DIR%
-	cd %BUILD_DIR% && call perl %~dp0openssl-1.1.1g\Configure %CONFIG_TARGET% enable-egd enable-ssl3 enable-ssl3-method no-threads --openssldir=%OUTPUT_DIR%\openssl --prefix=%OUTPUT_DIR%\openssl -DNOCRYPT
+	cd %BUILD_DIR% 
+	
+	call perl %~dp0openssl-1.1.1g\Configure %CONFIG_TARGET% enable-egd enable-ssl3 enable-ssl3-method no-threads --openssldir=%OUTPUT_DIR% --prefix=%OUTPUT_DIR% -DNOCRYPT
+	
+	cd %~dp0
+	
 	goto exit
 
 :build
@@ -46,7 +51,7 @@ if "%3" == "build" goto build
 	
 	nmake install_sw
 
-	cd ..
+	cd %~dp0
 
 :exit
 

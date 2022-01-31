@@ -11,7 +11,7 @@
 
 #include "SFEngineDLLPCH.h"
 #include "Service/SFEngineService.h"
-#include "StreamDB/SFStreamDB.h"
+#include "Online/StreamDB/SFStreamDB.h"
 #include "StreamDB/SFStreamDBDirectory.h"
 #include "SFCSUtil.h"
 

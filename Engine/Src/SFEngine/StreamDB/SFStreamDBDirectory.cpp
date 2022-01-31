@@ -11,7 +11,7 @@
 
 #include "SFEnginePCH.h"
 
-#include "StreamDB/SFStreamDB.h"
+#include "Online/StreamDB/SFStreamDB.h"
 #include "StreamDB/SFStreamDBDirectory.h"
 #include "Util/SFStringFormat.h"
 #include "Net/SFConnectionTCP.h"

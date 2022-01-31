@@ -16,14 +16,18 @@ if not exist %CMAKE_SYSTEM_NAME%\RelWithDebInfo mkdir %CMAKE_SYSTEM_NAME%\RelWit
 
 cd %CMAKE_SYSTEM_NAME%
 
+rem disabling -DLWS_WITH_THREADPOOL=1, it isn't supported well
 
 set CONFIGURATION=Debug
 cd %CONFIGURATION%
 cmake ../../%SRC_BASE% -G %VCCMAKEGENERATOR% -A %PROCESS_ARCHITECTUR%  ^
 	-DCMAKE_INSTALL_PREFIX=../../../../%CMAKE_SYSTEM_NAME%/%CONFIGURATION%  -DCMAKE_SYSTEM_NAME=%CMAKE_SYSTEM_NAME% ^
-	-DLWS_WITH_ZLIB=1 -DLWS_WITH_LIBEVENT=1 -DLWS_WITH_SHARED=0 ^
-	-DLWS_WITH_HTTP2=1 -DLWS_OPENSSL_INCLUDE_DIRS=../../../openssl/buildWindows/openssl/include ^
-	-DLWS_OPENSSL_LIBRARIES="../../../openssl/buildWindows/openssl/lib/libssl.lib;../../../openssl/buildWindows/openssl/lib/libcrypto.lib"
+	-DLWS_WITHOUT_EXTENSIONS=0 -DLWS_WITH_THREADPOOL=1 -DLWS_WITH_HTTP_STREAM_COMPRESSION=1 -DLWS_IPV6=1 -DLWS_WITH_SOCKS5=1 ^
+	-DLWS_WITH_ZLIB=1 -DLWS_WITH_BUNDLED_ZLIB=0 -DLWS_WITH_LIBEVENT=1 -DLWS_WITH_SHARED=0 ^
+	-DLWS_EXT_PTHREAD_INCLUDE_DIR=../../../../Windows/%CONFIGURATION%/include ^
+	-DLWS_EXT_PTHREAD_LIBRARIES=../../../../Windows/%CONFIGURATION%/lib/SFWinport.lib ^
+	-DLWS_WITH_HTTP2=1 -DLWS_OPENSSL_INCLUDE_DIRS=../../../../Windows/Common/include ^
+	-DLWS_OPENSSL_LIBRARIES="../../../../Windows/Common/lib/libssl.lib;../../../../Windows/Common/lib/libcrypto.lib"
 
 cd ..
 
@@ -31,9 +35,12 @@ set CONFIGURATION=RelWithDebInfo
 cd %CONFIGURATION%
 cmake ../../%SRC_BASE% -G %VCCMAKEGENERATOR% -A %PROCESS_ARCHITECTUR%  ^
 	-DCMAKE_INSTALL_PREFIX=../../../../%CMAKE_SYSTEM_NAME%/%CONFIGURATION%  -DCMAKE_SYSTEM_NAME=%CMAKE_SYSTEM_NAME% ^
-	-DLWS_WITH_ZLIB=1 -DLWS_WITH_LIBEVENT=1 -DLWS_WITH_SHARED=0 ^
-	-DLWS_WITH_HTTP2=1 -DLWS_OPENSSL_INCLUDE_DIRS=../../../openssl/buildWindows/openssl/include ^
-	-DLWS_OPENSSL_LIBRARIES="../../../openssl/buildWindows/openssl/lib/libssl.lib;../../../openssl/buildWindows/openssl/lib/libcrypto.lib"
+	-DLWS_WITHOUT_EXTENSIONS=0  -DLWS_WITH_THREADPOOL=1  -DLWS_WITH_HTTP_STREAM_COMPRESSION=1 -DLWS_IPV6=1 -DLWS_WITH_SOCKS5=1^
+	-DLWS_WITH_ZLIB=1 -DLWS_WITH_BUNDLED_ZLIB=0 -DLWS_WITH_LIBEVENT=1 -DLWS_WITH_SHARED=0 ^
+	-DLWS_EXT_PTHREAD_INCLUDE_DIR=../../../../Windows/%CONFIGURATION%/include ^
+	-DLWS_EXT_PTHREAD_LIBRARIES=../../../../Windows/%CONFIGURATION%/lib/SFWinport.lib ^
+	-DLWS_WITH_HTTP2=1 -DLWS_OPENSSL_INCLUDE_DIRS=../../../../Windows/Common/include ^
+	-DLWS_OPENSSL_LIBRARIES="../../../../Windows/Common/lib/libssl.lib;../../../../Windows/Common/lib/libcrypto.lib"
 
 cd ..
 cd ..

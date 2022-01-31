@@ -311,6 +311,21 @@ source_group(Service FILES
 	${SUBService_FILES} 
 )
 
+set(SUBOnline_FILES
+	Online/StreamDB/SFStreamDB.h
+	Online/StreamDB/SFStreamDB.cpp
+	Online/Telemetry/SFTelemetry.h
+	Online/Telemetry/SFTelemetry.cpp
+	Online/Telemetry/SFTelemetryService.h
+	Online/Telemetry/SFTelemetryService.cpp
+	Online/Telemetry/SFTelemetryComponent.h
+	Online/Telemetry/SFTelemetryComponent.cpp
+  )
+
+source_group(Online FILES
+	${SUBOnline_FILES} 
+)
+
 
 set(SFCORE_LIB_FILES
 	Delegate/SFEventDelegate.h
@@ -328,8 +343,6 @@ set(SFCORE_LIB_FILES
 	SFScopeContext.h
 	SFTypedefs.h
 	SFTypedefs.cpp
-	StreamDB/SFStreamDB.h
-	StreamDB/SFStreamDB.cpp
 	Stream/SFCompressedStream.h
 	Stream/SFMemoryStream.h
 	Stream/SFStream.h
@@ -361,7 +374,7 @@ set(SFCORE_LIB_FILES
 include_directories(./)
 
 
-add_library(SFCore STATIC ${SUBCOMPONENT_FILES} ${SUBCONTAINER_FILES} ${SUBIO_FILES} ${SUBResult_FILES} ${SUBService_FILES} ${SUBMemoryManager_FILES} ${SUBUtil_FILES} ${SUBVariable_FILES} ${SUBMath_FILES} ${SUBObject_FILES} ${SUBScript_FILES} ${SFCORE_LIB_FILES})
+add_library(SFCore STATIC ${SUBCOMPONENT_FILES} ${SUBCONTAINER_FILES} ${SUBIO_FILES} ${SUBResult_FILES} ${SUBService_FILES} ${SUBMemoryManager_FILES} ${SUBUtil_FILES} ${SUBVariable_FILES} ${SUBMath_FILES} ${SUBObject_FILES} ${SUBOnline_FILES} ${SUBScript_FILES} ${SFCORE_LIB_FILES})
 
 target_precompile_headers(SFCore PUBLIC SFCorePCH.h)
 target_include_directories (SFCore PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})

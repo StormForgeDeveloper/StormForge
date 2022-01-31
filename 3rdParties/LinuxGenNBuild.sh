@@ -36,12 +36,12 @@ pushd $BUILD_DIR
 
 export CMAKE_BUILD_TYPE=Debug
 pushd $CMAKE_BUILD_TYPE
-cmake ../../ -G "Unix Makefiles"  -DCMAKE_SYSTEM_NAME=$CMAKE_SYSTEM_NAME -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCMAKE_INSTALL_PREFIX=./    
+cmake ../../ -G "Ninja"  -DCMAKE_SYSTEM_NAME=$CMAKE_SYSTEM_NAME -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCMAKE_INSTALL_PREFIX=./    
 popd
 
 export CMAKE_BUILD_TYPE=RelWithDebInfo
 pushd $CMAKE_BUILD_TYPE
-cmake ../../ -G "Unix Makefiles"  -DCMAKE_SYSTEM_NAME=$CMAKE_SYSTEM_NAME -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCMAKE_INSTALL_PREFIX=./   
+cmake ../../ -G "Ninja"  -DCMAKE_SYSTEM_NAME=$CMAKE_SYSTEM_NAME -DCMAKE_BUILD_TYPE=$CMAKE_BUILD_TYPE -DCMAKE_INSTALL_PREFIX=./   
 popd
 
 popd
@@ -71,6 +71,11 @@ fi
 popd
 
 
+echo Building jansson
+pushd src/jansson
+./gen.sh
+./build.sh
+popd
 
 echo Building avro
 pushd src/avro
