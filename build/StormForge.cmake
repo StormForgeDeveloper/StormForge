@@ -63,7 +63,7 @@ include_directories(AFTER
 )
 
 
-set(ENGINE_LINK_LIBS SFProtocol SFEngine SFProtocol SFEngine SFCore curl memcached rdkafka avro-static jansson iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 lzma event zlib SFWinport)
+set(ENGINE_LINK_LIBS SFProtocol SFEngine SFProtocol SFEngine SFCore curl memcached rdkafka avro-static event event_core event_extra jansson iconv png mng jpeg tiff zookeeper jsoncpp mbedtls xml2 lzma zlib SFWinport)
 
 
 
@@ -183,7 +183,7 @@ elseif(UNIX)
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)
 
-	set(PLATFORM_LIBS mongoc-static-1.0 bson-static-1.0 mysqlcppconn8 sasl2 rt m atomic resolv websockets)
+	set(PLATFORM_LIBS mongoc-static-1.0 bson-static-1.0 mysqlcppconn8 sasl2 rt m atomic resolv websockets event_pthreads event event_core event_extra )
 	list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 	set(ARTECTURE x64)

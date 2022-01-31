@@ -40,7 +40,7 @@ using namespace ::SF;
 
 TEST_F(TelemetryTest, Simple)
 {
-	m_ConfigJson;
+	//m_ConfigJson;
  //   const char* topic = "MyTestTopic1";
  //   uint8_t testData[] = {1,2,3,4,5,6,7,8,9};
  //   uint8_t testData1[] = { 'T', 'e', 's', 't', 'D', 'a', 't', 'a', 'D', 'a', 't', 'a', '\0' };
