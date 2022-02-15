@@ -880,7 +880,7 @@ if (MSVC)
 	# Fail the build if any warnings
 	add_compile_options(/W3 /WX)
 	# Unbreak MSVC broken preprocessor __VA_ARGS__ behaviour
-	add_compile_options(/Zc:preprocessor /experimental:preprocessor /wd5105)
+	add_compile_options(/Zc:preprocessor /Zc:preprocessor /wd5105)
 endif(MSVC)
 
 if (MINGW)
