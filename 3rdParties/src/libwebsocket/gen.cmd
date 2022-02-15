@@ -5,7 +5,7 @@ set PROCESS_ARCHITECTUR=x64
 set SRC_BASE=libwebsockets
 
 
-if not exist %SRC_BASE%  call download.cmd
+rem if not exist %SRC_BASE%  call download.cmd
 
 
 call ..\..\FindVC.cmd

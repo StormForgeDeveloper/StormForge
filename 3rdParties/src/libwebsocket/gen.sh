@@ -4,9 +4,9 @@ export CMAKE_SYSTEM_NAME=Linux
 export PROCESS_ARCHITECTUR=x64
 export SRC_BASE=libwebsockets
 
-if [ ! -d "$SRC_BASE" ]; then
-	./download.sh
-fi
+#if [ ! -d "$SRC_BASE" ]; then
+#	./download.sh
+#fi
 
 
 if [ ! -d "$CMAKE_SYSTEM_NAME" ]; then
