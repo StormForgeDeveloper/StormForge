@@ -1,4 +1,4 @@
-/*
+﻿/*
  * lws-api-test-lws_tokenize
  *
  * Written in 2010-2021 by Andy Green <andy@warmcat.com>
