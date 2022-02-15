@@ -21,6 +21,11 @@
 namespace SF
 {
 
+	namespace Log
+	{
+		LogChannel Telemetry("Telemetry", LogOutputType::Info);
+	};
+
 
 	TelemetryService::TelemetryService()
 	{

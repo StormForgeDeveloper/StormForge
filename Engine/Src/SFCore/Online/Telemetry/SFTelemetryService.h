@@ -16,10 +16,17 @@
 #include "Util/SFStringCrc32.h"
 #include "Util/SFString.h"
 #include "Task/SFTask.h"
+#include "Util/SFLog.h"
 
 
 namespace SF
 {
+
+    namespace Log
+    {
+        extern LogChannel Telemetry;
+    };
+
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
