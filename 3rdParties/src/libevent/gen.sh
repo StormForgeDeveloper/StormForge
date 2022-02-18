@@ -4,7 +4,7 @@ export CMAKE_SYSTEM_NAME=Linux
 export PROCESS_ARCHITECTUR=x64
 export SRC_BASE=libevent-2.1.12-stable
 export SRC_PATH=../../../src/libevent/$SRC_BASE
-export INTERMEDIATE_DIR=..\..\$CMAKE_SYSTEM_NAME\libevent
+export INTERMEDIATE_DIR=../../$CMAKE_SYSTEM_NAME/libevent
 
 
 if [ ! -f "$SRC_PATH.tar.gz" ]; then
