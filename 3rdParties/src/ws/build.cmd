@@ -2,7 +2,7 @@
 
 set CMAKE_SYSTEM_NAME=Windows
 set PROCESS_ARCHITECTUR=x64
-set INTERMEDIATE_DIR=..\..\%CMAKE_SYSTEM_NAME%\libwebsocket
+set INTERMEDIATE_DIR=..\..\%CMAKE_SYSTEM_NAME%\libws
 
 
 call ..\..\FindVC.cmd

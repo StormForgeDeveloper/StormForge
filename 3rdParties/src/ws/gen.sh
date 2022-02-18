@@ -4,7 +4,7 @@ export CMAKE_SYSTEM_NAME=Linux
 export PROCESS_ARCHITECTUR=x64
 export SRC_BASE=src
 export SRC_PATH=../../../src/ws/$SRC_BASE
-export INTERMEDIATE_DIR=../../$CMAKE_SYSTEM_NAME/libwebsocket
+export INTERMEDIATE_DIR=../../$CMAKE_SYSTEM_NAME/libws
 
 #if [ ! -d "$SRC_BASE" ]; then
 #	./download.sh

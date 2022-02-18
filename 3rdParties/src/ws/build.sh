@@ -2,7 +2,7 @@
 
 export CMAKE_SYSTEM_NAME=Linux
 export PROCESS_ARCHITECTUR=x64
-export INTERMEDIATE_DIR=../../$CMAKE_SYSTEM_NAME/libwebsocket
+export INTERMEDIATE_DIR=../../$CMAKE_SYSTEM_NAME/libws
 
 
 SavedLinkDir=$LD_LIBRARY_PATH

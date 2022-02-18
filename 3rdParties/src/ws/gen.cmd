@@ -4,7 +4,7 @@ set CMAKE_SYSTEM_NAME=Windows
 set PROCESS_ARCHITECTUR=x64
 set SRC_BASE=src
 set SRC_PATH=../../../src/ws/%SRC_BASE%
-set INTERMEDIATE_DIR=..\..\%CMAKE_SYSTEM_NAME%\libwebsocket
+set INTERMEDIATE_DIR=..\..\%CMAKE_SYSTEM_NAME%\libws
 
 rem if not exist %SRC_BASE%  call download.cmd
 
