@@ -17,7 +17,7 @@
 #include <Mswsock.h>
 #include <Ws2tcpip.h>
 #include <BaseTsd.h>
-#include <ciso646>
+#include <iso646.h> //SF-MOD
 #include <time.h>
 
 /*
