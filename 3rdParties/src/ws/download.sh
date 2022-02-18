@@ -1,5 +1,5 @@
-git clone https://libwebsockets.org/repo/libwebsockets
+git clone https://libwebsockets.org/repo/libwebsockets src
 
 
-echo patching...
-cp -R -v patch/* libwebsockets/
+#echo patching...
+#cp -R -v patch/* src/

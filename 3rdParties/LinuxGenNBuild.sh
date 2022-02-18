@@ -92,7 +92,7 @@ popd
 
 
 echo Building libwebsocket
-pushd src/libwebsocket
+pushd src/ws
 ./gen.sh
 ./build.sh
 popd

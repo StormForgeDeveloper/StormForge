@@ -1,8 +1,8 @@
 
 
 
-git clone https://libwebsockets.org/repo/libwebsockets
+git clone https://libwebsockets.org/repo/libwebsockets src
 
 
 rem patch
-xcopy /s patch\* libwebsockets\ /y
+rem xcopy /s patch\* src\ /y
