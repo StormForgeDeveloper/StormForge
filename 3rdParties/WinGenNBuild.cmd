@@ -14,15 +14,12 @@ set MYSQL_DIR=src\mysql
 
 if not exist "Windows\Common\lib\libnasm.lib" (
 	echo Building NASM
-	echo %date%-%time% > NasmBuild.txt
     cmd /c "cd %NASM_DIR% & buildNASM.cmd"
 	
 )
 
 if not exist "Windows\Common\lib\libcrypto.lib" (
 	echo Building OpenSSL
-	echo %date%-%time% > OpenSSLBuild.txt
-	rem build SSL
 	cmd /c "cd %OPENSSL_DIR% & config1.1_Winx64.cmd"
 	cmd /c "cd %OPENSSL_DIR% & build1.1_Winx64.cmd"
 )
