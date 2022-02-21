@@ -320,6 +320,10 @@ set(SUBOnline_FILES
 	Online/Telemetry/SFTelemetryService.cpp
 	Online/Telemetry/SFTelemetryComponent.h
 	Online/Telemetry/SFTelemetryComponent.cpp
+	Online/Websocket/SFWebsocket.h
+	Online/Websocket/SFWebsocket.cpp
+	Online/Websocket/SFWebsocketClient.h
+	Online/Websocket/SFWebsocketClient.cpp
   )
 
 source_group(Online FILES

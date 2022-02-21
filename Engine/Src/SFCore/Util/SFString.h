@@ -287,6 +287,7 @@ namespace SF {
 		SF_FORCEINLINE size_t size() const { return GetLength(); }
 		SF_FORCEINLINE size_t length() const { return GetLength(); }
 
+		SF_FORCEINLINE const CharType* GetDebugStringPtr() const { return m_StringView; }
 
 		// Reserve buffer and set size. filled data will be garbage
 		SF_FORCEINLINE void Resize(size_t newStrLen)
