@@ -16,7 +16,7 @@
 #include "Util/SFStringCrc32.h"
 #include "Util/SFString.h"
 #include "Task/SFTask.h"
-
+#include "Container/SFCircularBufferQueue.h"
 
 #include "libwebsockets.h"
 
@@ -31,8 +31,9 @@ namespace SF
 #define RING_DEPTH 1024
 
 	struct WSMessagePacket {
-		void* payload; /* is malloc'd */
+		void* payload;
 		size_t len;
+
 		char binary;
 		char first;
 		char final;
@@ -48,20 +49,20 @@ namespace SF
 	{
 	public:
 
+		static constexpr size_t MessageBufferPadding = LWS_PRE; // Message buffer padding for libWebsocket
 
 		static void DeleteMessageData(void* _msg);
 
 		struct WSSessionData
 		{
-			struct lws_ring* SendQueue{};
-			uint32_t SendQueueTail{};
+			CircularBufferQueue* SendBuffer{};
 
-			Array<uint8_t>* MessageData{};
+			Array<uint8_t>* ReceiveBuffer{};
 
 			uint8_t flow_controlled : 1;
 			uint8_t write_consume_pending : 1;
 
-			void Initialize();
+			void Initialize(size_t RecvBufferSize, size_t SendBufferSize);
 			void Clear();
 		};
 
@@ -93,7 +94,10 @@ namespace SF
 		virtual int OnWSCallback(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len);
 
 
-		const String& GetName() const { return m_Name; }
+		SF_FORCEINLINE const String& GetName() const { return m_Name; }
+		SF_FORCEINLINE bool UseWriteEvent() const { return m_UseWriteEvent; }
+
+
 
 	protected:
 
@@ -131,6 +135,15 @@ namespace SF
 
 		// port setting
 		int m_Port = 1212;
+
+		bool m_UseRecvFlowControl = true;
+		bool m_UseWriteEvent{};
+
+		size_t m_RecvBufferSize = 32 * 1024;
+		size_t m_SendBufferSize = 32 * 1024;
+
+		size_t m_FlowControlMin{};
+		size_t m_FlowControlMax{};
 	};
 
 

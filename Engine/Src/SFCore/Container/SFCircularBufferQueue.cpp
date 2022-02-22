@@ -17,20 +17,14 @@ namespace SF
 
 
 	CircularBufferQueue::CircularBufferQueue(IHeap& heap, size_t bufferSize, uint8_t* externalBuffer)
-		: m_BufferSize(bufferSize)
-		, m_Buffer(externalBuffer)
+		: m_Heap(heap)
 	{
-		m_ExternalBuffer = externalBuffer != nullptr;
-		if (!m_ExternalBuffer)
-		{
-			m_Buffer = new(heap) uint8_t[m_BufferSize];
-		}
+		Initialize(bufferSize, externalBuffer);
+	}
 
-		m_TailPos = (reinterpret_cast<BufferItem*>(m_Buffer));
-		m_HeadPos = (reinterpret_cast<BufferItem*>(m_Buffer));
-
-		static_assert(sizeof(std::atomic<uint64_t>) == sizeof(uint64_t), "My assumption has broken!");
-		memset(m_Buffer, 0, m_BufferSize);
+	CircularBufferQueue::CircularBufferQueue(IHeap& heap)
+		: m_Heap(heap)
+	{
 	}
 
 	CircularBufferQueue::~CircularBufferQueue()
@@ -40,6 +34,27 @@ namespace SF
 		m_Buffer = nullptr;
 	}
 
+	void CircularBufferQueue::Initialize(size_t bufferSize /* = 2048 */, uint8_t* externalBuffer /* = nullptr */)
+	{
+		if (!m_ExternalBuffer && m_Buffer != nullptr)
+			IHeap::Delete(m_Buffer);
+
+		m_BufferSize = bufferSize;
+		m_Buffer = externalBuffer;
+			
+		m_ExternalBuffer = externalBuffer != nullptr;
+		if (!m_ExternalBuffer)
+		{
+			m_Buffer = new(m_Heap) uint8_t[m_BufferSize];
+		}
+
+		m_TailPos = (reinterpret_cast<BufferItem*>(m_Buffer));
+		m_HeadPos = (reinterpret_cast<BufferItem*>(m_Buffer));
+
+		static_assert(sizeof(std::atomic<uint64_t>) == sizeof(uint64_t), "My assumption has broken!");
+		memset(m_Buffer, 0, m_BufferSize);
+	}
+
 	// Clear all items
 	void CircularBufferQueue::Clear()
 	{
@@ -47,21 +62,33 @@ namespace SF
 		memset(m_Buffer, 0, m_BufferSize);
 	}
 
-	bool CircularBufferQueue::IsEmpty()
+	bool CircularBufferQueue::IsEmpty() const
 	{
 		return m_HeadPos.load(std::memory_order_relaxed) == m_TailPos.load(std::memory_order_relaxed);
 	}
 
+	size_t CircularBufferQueue::GetFreeSize() const
+	{
+		auto tail = intptr_t(m_TailPos.load(std::memory_order_relaxed));
+		auto head = intptr_t(m_HeadPos.load(std::memory_order_relaxed));
+		if (head == tail)
+			return GetBufferSize();
+		else if (head < tail)
+			return size_t(tail - head);
+		else 
+			return GetBufferSize() - size_t(head - tail);
+	}
+
 
 	// Reserve buffer. The pointer it returns is reserved for writing, after done writing, Call SetReadyForRead to mark the buffer is ready for read
-	CircularBufferQueue::BufferItem* CircularBufferQueue::AllocateWrite(size_t bufferSize)
+	CircularBufferQueue::BufferItem* CircularBufferQueue::AllocateWrite(size_t requesteSize)
 	{
 		// We are allocating memory here, so using lockfree doesn't effective because it doesn't guaranteed that writing order in allocated memory space.
 		// Let's just use regular sync except head state
 		MutexScopeLock ticketScope(m_HeadLock);
 
 		// We only support 8 byte aligned allocation
-		bufferSize = AlignUp(bufferSize, 8);
+		size_t bufferSize = AlignUp(requesteSize, 8);
 
 		auto startPos = (const uintptr_t)m_Buffer;
 		auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
@@ -151,6 +178,7 @@ namespace SF
 				}
 			}
 			pHead->NextPos = static_cast<uint32_t>(reinterpret_cast<uintptr_t>(pNextHead) - startPos);
+			pHead->DataSize = static_cast<uint32_t>(requesteSize);
 
 			// prepare next head
 			pNextHead->State.store(ItemState::Free, std::memory_order_relaxed);// using relaxed here because the write in SetReadyForRead is the most important state writing
@@ -170,9 +198,6 @@ namespace SF
 	{
 		if (pBuffer == nullptr)
 			return ResultCode::INVALID_POINTER;
-
-		//auto startPos = (uintptr_t)m_Buffer;
-		//auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
 
 		// Flip the state to free
 		auto expectedState = ItemState::Reserved;

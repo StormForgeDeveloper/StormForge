@@ -45,39 +45,40 @@ namespace SF
 
 		m_PVOOptions.resize(5);
 		m_PVOOptions[0] = {
-			nullptr,		// "next" pvo linked-list 
+			NULL,		/* "next" pvo linked-list */
+			&m_PVOOptions[1],	/* "child" pvo linked-list */
+			"TestWS",	/* protocol name we belong to on this vhost */
+			""		/* ignored */
+		};
+
+		m_PVOOptions[1] = {
+			&m_PVOOptions[2],		// "next" pvo linked-list 
 			nullptr,				// "child" pvo linked-list 
 			"ads",		/* pvo name */
 			(const char*)m_ServerAddress.data()	/* pvo value */
 		};
 
-		m_PVOOptions[1] = {
-			&m_PVOOptions[0],		// "next" pvo linked-list 
+		m_PVOOptions[2] = {
+			&m_PVOOptions[3],		// "next" pvo linked-list 
 			nullptr,				// "child" pvo linked-list 
 			"url",		/* pvo name */
 			(const char*)m_ServerPath.data()	/* pvo value */
 		};
 
-		m_PVOOptions[2] = {
-			&m_PVOOptions[1],		// "next" pvo linked-list 
+		m_PVOOptions[3] = {
+			&m_PVOOptions[4],		// "next" pvo linked-list 
 			nullptr,				// "child" pvo linked-list 
 			"options",		/* pvo name */
 			(const char*)&m_Options	/* pvo value */
 		};
 
-		m_PVOOptions[3] = {
-			&m_PVOOptions[2],		// "next" pvo linked-list 
+		m_PVOOptions[4] = {
+			nullptr,		// "next" pvo linked-list 
 			nullptr,				// "child" pvo linked-list 
 			"port",		/* pvo name */
 			(const char*)&m_Port	/* pvo value */
 		};
 
-		m_PVOOptions[4] = {
-			NULL,		/* "next" pvo linked-list */
-			&m_PVOOptions[3],	/* "child" pvo linked-list */
-			"TestWS",	/* protocol name we belong to on this vhost */
-			""		/* ignored */
-		};
 
 
 		m_Protocols.reserve(2);
@@ -91,16 +92,6 @@ namespace SF
 		m_Protocols.push_back(LWS_PROTOCOL_LIST_TERM);
 
 
-		m_Extensions.push_back({
-				"permessage-deflate",
-				lws_extension_callback_pm_deflate,
-				"permessage-deflate"
-				 "; client_no_context_takeover"
-				 "; client_max_window_bits"
-			});
-		m_Extensions.push_back({ nullptr, nullptr, nullptr /* terminator */ });
-
-
 		struct lws_context_creation_info info;
 		memset(&info, 0, sizeof info); /* otherwise uninitialized garbage */
 		info.port = CONTEXT_PORT_NO_LISTEN;
@@ -108,8 +99,11 @@ namespace SF
 		info.pvo = m_PVOOptions.data();
 		info.extensions = m_Extensions.data();
 		info.pt_serv_buf_size = 32 * 1024;
-		info.options = LWS_SERVER_OPTION_VALIDATE_UTF8;
-		info.fd_limit_per_thread = 1 + 1 + 1;
+		info.options = LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT | LWS_SERVER_OPTION_VALIDATE_UTF8;
+		if (UseWriteEvent())
+			info.options |= LWS_SERVER_OPTION_LIBEVENT;
+
+		//info.fd_limit_per_thread = 1 + 1 + 1;
 		info.user = this;
 
 		//info.options |= LWS_SERVER_OPTION_DO_SSL_GLOBAL_INIT;
@@ -120,20 +114,14 @@ namespace SF
 			return ResultCode::FAIL;
 		}
 
+
+		m_ConnectionState = ConnectionState::Connecting;
+
 		TryConnect();
 
-		m_Thread.reset(new(GetHeap()) FunctorThread([this](Thread* pThread)
+		m_Thread.reset(new(GetHeap()) FunctorTickThread([this](Thread* pThread)
 			{
-
-
-				while (!lws_service(m_WSIContext, 0))
-				{
-				}
-
-				SFLog(Websocket, Info, "Destroying wsocket client");
-
-				lws_context_destroy(m_WSIContext);
-				m_WSIContext = nullptr;
+				return !lws_service(m_WSIContext, 0);
 			}));
 
 		m_Thread->Start();
@@ -143,7 +131,15 @@ namespace SF
 
 	void WebsocketClient::Terminate()
 	{
+		if (m_Thread)
+		{
+			m_Thread->SetKillEvent();
+		}
+
 		super::Terminate();
+
+		m_ConnectionState = ConnectionState::Disconnected;
+		m_Session = nullptr;
 
 		if (m_Thread)
 		{
@@ -188,6 +184,14 @@ namespace SF
 		}
 	}
 
+	void WebsocketClient::Send(const Array<uint8_t>& messageData)
+	{
+		if (m_Session == nullptr)
+			return;
+
+		super::Send(m_Session, messageData);
+	}
+
 	int WebsocketClient::OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len)
 	{
 		SFLog(Websocket, Debug3, "WSCallback_ProtocolInit");
@@ -222,12 +226,28 @@ namespace SF
 		return 0;
 	}
 
+	int WebsocketClient::OnConnectionEstablished(struct lws* wsi, void* user, void* in, size_t len)
+	{
+		int iRet = super::OnConnectionEstablished(wsi, user, in, len);
+
+		if (iRet == 0)
+		{
+			m_Session = (struct WSSessionData*)user;
+
+			m_ConnectionState = ConnectionState::Connected;
+		}
+
+		return iRet;
+	}
+
 	int WebsocketClient::OnConnectionClosed(struct lws* wsi, void* user, void* in, size_t len)
 	{
 		SFLog(Websocket, Debug3, "WSClient WSCallback_Closed");
 
 		super::OnConnectionClosed(wsi, user, in, len);
 
+		m_ConnectionState = ConnectionState::Disconnected;
+		m_Session = nullptr;
 		m_Result = ResultCode::IO_CONNECTION_CLOSED;
 
 		lws_cancel_service(lws_get_context(wsi));
@@ -243,6 +263,7 @@ namespace SF
 		super::OnConnectionError(wsi, user, in, len);
 
 		m_WSI = nullptr;
+		m_Session = nullptr;
 		m_Result = ResultCode::IO_DISCONNECTED;
 
 		lws_cancel_service(lws_get_context(wsi));

@@ -42,6 +42,7 @@ namespace SF
 		struct BufferItem
 		{
 			std::atomic<ItemState>	State;		// Item state
+			uint32_t				DataSize;
 			uint32_t				NextPos;	// Next item position, offset from m_Buffer
 
 			void* GetDataPtr() { return this + 1; }
@@ -51,6 +52,8 @@ namespace SF
 		using Item = BufferItem;
 
 	private:
+
+		IHeap& m_Heap;
 
 		// buffer size
 		size_t m_BufferSize = 0;
@@ -75,10 +78,17 @@ namespace SF
 
 		// Constructor/Destructor
 		CircularBufferQueue(IHeap& heap, size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);
+		CircularBufferQueue(IHeap& heap);
 		~CircularBufferQueue();
 
+		void Initialize(size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);
+
+		SF_FORCEINLINE size_t GetBufferSize() const { return m_BufferSize; }
+
 		// Empty check
-		bool IsEmpty();
+		bool IsEmpty() const;
+
+		size_t GetFreeSize() const;
 
 		// Clear all items
 		void Clear();

@@ -17,20 +17,14 @@ namespace SF
 
 
 	CircularBuffer::CircularBuffer(IHeap& heap, size_t bufferSize, uint8_t* externalBuffer)
-		: m_BufferSize(bufferSize)
-		, m_Buffer(externalBuffer)
+		: m_Heap(heap)
 	{
-		m_ExternalBuffer = externalBuffer != nullptr;
-		if (!m_ExternalBuffer)
-		{
-			m_Buffer = new(heap) uint8_t[m_BufferSize];
-		}
+		Initialize(bufferSize, externalBuffer);
+	}
 
-		m_TailPos = (reinterpret_cast<BufferItem*>(m_Buffer));
-		m_HeadPos = (reinterpret_cast<BufferItem*>(m_Buffer));
-
-		static_assert(sizeof(std::atomic<uint64_t>) == sizeof(uint64_t), "My assumption has broken!");
-		memset(m_Buffer, 0, m_BufferSize);
+	CircularBuffer::CircularBuffer(IHeap& heap)
+		: m_Heap(heap)
+	{
 	}
 
 	CircularBuffer::~CircularBuffer()
@@ -38,6 +32,27 @@ namespace SF
 		if (!m_ExternalBuffer && m_Buffer != nullptr)
 			IHeap::Delete(m_Buffer);
 		m_Buffer = nullptr;
+	}
+
+	void CircularBuffer::Initialize(size_t bufferSize, uint8_t* externalBuffer)
+	{
+		if (!m_ExternalBuffer && m_Buffer != nullptr)
+			IHeap::Delete(m_Buffer);
+
+		m_BufferSize = bufferSize;
+		m_Buffer = externalBuffer;
+
+		m_ExternalBuffer = externalBuffer != nullptr;
+		if (!m_ExternalBuffer)
+		{
+			m_Buffer = new(m_Heap) uint8_t[m_BufferSize];
+		}
+
+		m_TailPos = (reinterpret_cast<BufferItem*>(m_Buffer));
+		m_HeadPos = (reinterpret_cast<BufferItem*>(m_Buffer));
+
+		static_assert(sizeof(std::atomic<uint64_t>) == sizeof(uint64_t), "I assumed atomic doesn't take memory space. It has broken!");
+		memset(m_Buffer, 0, m_BufferSize);
 	}
 
 	// Clear all items
@@ -162,6 +177,8 @@ namespace SF
 
 		} while (true);
 
+		m_ItemCount.fetch_add(1, MemoryOrder::memory_order_relaxed);
+
 		return nullptr;
 	}
 
@@ -225,7 +242,19 @@ namespace SF
 		}
 		m_TailPos.store(curTail, std::memory_order_relaxed);
 
+		m_ItemCount.fetch_sub(1, MemoryOrder::memory_order_relaxed);
+
 		return ResultCode::SUCCESS;
+	}
+
+	CircularBuffer::BufferItem* CircularBuffer::GetPeekTail()
+	{
+		BufferItem* curTail = m_TailPos.load(std::memory_order_acquire);
+		BufferItem* head = m_HeadPos.load(std::memory_order_relaxed);
+		if (head != curTail && curTail->State.load(std::memory_order_acquire) == ItemState::Reserved)
+			return curTail;
+		else
+			return nullptr;
 	}
 
 	// get read buffer size

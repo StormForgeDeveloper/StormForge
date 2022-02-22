@@ -49,6 +49,8 @@ namespace SF
 
 	private:
 
+		IHeap& m_Heap;
+
 		// buffer size
 		size_t m_BufferSize = 0;
 
@@ -67,12 +69,18 @@ namespace SF
 		// Write position
 		std::atomic <BufferItem*> m_HeadPos;
 
+		// allocated item count
+		Atomic<int32_t> m_ItemCount;
+
 
 	public:
 
 		// Constructor/Destructor
 		CircularBuffer(IHeap& heap, size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);
+		CircularBuffer(IHeap& heap);
 		~CircularBuffer();
+
+		void Initialize(size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);
 
 		// Empty check
 		bool IsEmpty();
@@ -80,11 +88,17 @@ namespace SF
 		// Clear all items
 		void Clear();
 
+		// allocated count
+		size_t GetAllocatedCount() const { return m_ItemCount; }
+
 		// Reserve buffer. The pointer it returns is reserved for writing, after done writing, Call SetReadyForRead to mark the buffer is ready for read
 		BufferItem* Allocate(size_t bufferSize);
 
 		// mark the buffer for read
 		Result Free(BufferItem* pBuffer);
+
+		// Get buffer item at tail if not free. This is just peek view of the moment, the item can be gone if tail can be released from other thread
+		BufferItem* GetPeekTail();
 
 		// get buffer item size
 		size_t GetBufferItemSize(BufferItem* pBufferItem);
