@@ -13,7 +13,7 @@
 
 #include "Online/Websocket/SFWebsocket.h"
 
-
+#include <signal.h>
 
 
 
@@ -25,15 +25,6 @@ namespace SF
 	};
 
 
-	void Websocket::DeleteMessageData(void* _msg)
-	{
-		auto pMsgData = (struct WSMessagePacket*)_msg;
-
-		free(pMsgData->payload);
-		pMsgData->payload = NULL;
-		pMsgData->len = 0;
-	}
-
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	struct Websocket::WSSessionData
@@ -43,6 +34,7 @@ namespace SF
 	{
 		SendBuffer = new(GetSystemHeap()) CircularBufferQueue(GetSystemHeap(), SendBufferSize);
 		ReceiveBuffer = new(GetSystemHeap()) DynamicArray<uint8_t>(GetSystemHeap(), RecvBufferSize);
+		UserObjectPtr.reset();
 	}
 
 	void Websocket::WSSessionData::Clear()
@@ -52,8 +44,9 @@ namespace SF
 
 		IHeap::Delete(ReceiveBuffer);
 		ReceiveBuffer = nullptr;
-	}
 
+		UserObjectPtr.reset();
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -68,8 +61,9 @@ namespace SF
 		, m_Mounts(GetHeap())
 		, m_PVOOptions(GetHeap())
 		, m_Extensions(GetHeap())
+		, m_RecvDeletates(m_Heap)
 	{
-		// Websocket doesn't work well with libevent on Windows
+//		// Websocket doesn't work well with libevent on Windows
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 		m_UseWriteEvent = false;
 #else
@@ -77,9 +71,27 @@ namespace SF
 #endif
 	}
 
+
 	Result Websocket::Initialize(int port)
 	{
 		m_Port = port;
+
+		m_PVOOptions.push_back({
+			nullptr,		/* "next" pvo linked-list */
+			nullptr,	/* "child" pvo linked-list */
+			"TestWS",	/* protocol name we belong to on this vhost */
+			""		/* ignored */
+		});
+
+		m_Protocols.reserve(2);
+		m_Protocols.push_back({
+				"TestWS",
+				&WSCallback,
+				GetSessionDataSize(),
+				1024,
+				0, this, 0
+			});
+		m_Protocols.push_back(LWS_PROTOCOL_LIST_TERM);
 
 		// don't use this extension for now
 		//m_Extensions.push_back({
@@ -94,17 +106,102 @@ namespace SF
 		m_FlowControlMin = size_t(m_SendBufferSize * 0.3);
 		m_FlowControlMax = size_t(m_SendBufferSize * 0.7);
 
+
+		// Event loop
+		//event_enable_debug_mode();
+		for (uint iThread = 0; iThread < m_NumThread; iThread++)
+		{
+			m_EventLoops.push_back(event_base_new());
+		}
+		//m_EventSighandler = evsignal_new(m_EventLoop, SIGINT, signal_cb_event, (void*)SIGINT);
+		//m_EventTimerOuter = event_new(m_EventLoop, -1, EV_PERSIST, timer_cb_event, NULL);
+
+		//struct timeval tv {};;
+		//tv.tv_sec = 1;
+		//tv.tv_usec = 0;
+		//evtimer_add(m_EventTimerOuter, &tv);
+
+
 		return ResultCode::SUCCESS;
+	}
+
+	void Websocket::StartThread()
+	{
+		for (uint iThread = 0; iThread < m_NumThread; iThread++)
+		{
+			auto pThread = new(GetHeap()) FunctorTickThread([this, iThread](Thread* pThread)
+				{
+					if (!m_WSIContext)
+						return false;
+
+					if (m_EventLoops.size() > 0)
+					{
+						event_base_loop(m_EventLoops[iThread], EVLOOP_ONCE | EVLOOP_NONBLOCK);
+					}
+					else
+					{
+						lws_service(m_WSIContext, 10);
+					}
+
+					return true;
+				});
+
+			pThread->Start();
+			m_Threads.push_back(pThread);
+		}
 	}
 
 	void Websocket::Terminate()
 	{
+		for (auto itThread : m_Threads)
+		{
+			itThread->SetKillEvent();
+		}
+
+		for (auto itLoop : m_EventLoops)
+		{
+			struct timeval tv {};;
+			tv.tv_sec = 0;
+			tv.tv_usec = 10;
+			event_base_loopexit(itLoop, &tv);
+		}
+
+		//if (m_WSIContext)
+		//{
+		//	lws_cancel_service(m_WSIContext);
+		//}
+
+		for (auto itThread : m_Threads)
+		{
+			itThread->Stop(false);
+			IHeap::Delete(itThread);
+		}
+		m_Threads.Reset();
+
+		if (m_EventTimerOuter)
+		{
+			evtimer_del(m_EventTimerOuter);
+			event_free(m_EventTimerOuter);
+			m_EventTimerOuter = nullptr;
+		}
+
+		if (m_EventSighandler)
+		{
+			evsignal_del(m_EventSighandler);
+			event_free(m_EventSighandler);
+			m_EventSighandler = nullptr;
+		}
+
 		if (m_WSIContext)
 		{
-			lws_cancel_service(m_WSIContext);
-
 			lws_context_destroy(m_WSIContext);
 			m_WSIContext = nullptr;
+		}
+
+		for (auto itLoop : m_EventLoops)
+		{
+			event_base_loop(itLoop, 0);
+			event_base_free(itLoop);
 		}
 
 		m_WSI = nullptr;
@@ -157,8 +254,6 @@ namespace SF
 
 	int Websocket::OnConnectionError(struct lws* wsi, void* user, void* in, size_t len)
 	{
-		//SFLog(Websocket, Debug3, "WSClient WSCallback_ConnectionError: {0}", (const char*)in);
-
 		m_WSI = nullptr;
 
 		m_Result = ResultCode::IO_DISCONNECTED;
@@ -193,7 +288,7 @@ namespace SF
 			return -1;
 		}
 
-		SFLog(Websocket, Info, "WSServer  wrote {0}: flags: 0x{1:x}", m, flags);
+		SFLog(Websocket, Debug4, "{0}  wrote {0}: flags: 0x{1:x}", GetName(), m, flags);
 
 		if (m_UseWriteEvent)
 		{
@@ -228,7 +323,7 @@ namespace SF
 		if (pss->ReceiveBuffer == nullptr)
 			return 0;
 
-		SFLog(Websocket, Debug3, "WSClient WSCallback_Readable: (rpp:{0}, first:{1}, last:{2}, bin:{3}, len:{4}, stored:{5})",
+		SFLog(Websocket, Debug4, "WSClient WSCallback_Readable: (rpp:{0}, first:{1}, last:{2}, bin:{3}, len:{4}, stored:{5})",
 			(int)lws_remaining_packet_payload(wsi),
 			lws_is_first_fragment(wsi),
 			lws_is_final_fragment(wsi),
@@ -276,7 +371,7 @@ namespace SF
 				assert(org == after);
 			}
 
-			SFLog(Websocket, Info, "{0} WSCallback {1}, size:{2}", pInstance ? pInstance->GetName() : "", (int)reason, len);
+			SFLog(Websocket, Debug4, "{0} WSCallback {1}, size:{2}", pInstance ? pInstance->GetName() : "", (int)reason, len);
 
 			return 0;
 		}

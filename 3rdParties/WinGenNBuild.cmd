@@ -54,6 +54,10 @@ rem build libevent
 cmd /c "cd src/libevent & gen.cmd"
 cmd /c "cd src/libevent & build.cmd"
 
+rem build libevent
+cmd /c "cd src/libuv & gen.cmd"
+cmd /c "cd src/libuv & build.cmd"
+
 rem build libwebsocket
 cmd /c "cd src/ws & gen.cmd"
 cmd /c "cd src/ws & build.cmd"

@@ -1,0 +1,51 @@
+
+
+export CMAKE_SYSTEM_NAME=Linux
+export PROCESS_ARCHITECTUR=x64
+export SRC_BASE=libuv
+export SRC_PATH=../../../src/libuv/$SRC_BASE
+export INTERMEDIATE_DIR=../../$CMAKE_SYSTEM_NAME/libuv
+
+
+if [ ! -f "$SRC_PATH.tar.gz" ]; then
+	./download.sh
+fi
+
+if [ ! -d "$INTERMEDIATE_DIR" ]; then
+	mkdir $INTERMEDIATE_DIR
+fi
+
+if [ ! -d "$INTERMEDIATE_DIR/Debug" ]; then
+	mkdir $INTERMEDIATE_DIR/Debug
+fi
+
+if [ ! -d "$INTERMEDIATE_DIR/RelWithDebInfo" ]; then
+	mkdir $INTERMEDIATE_DIR/RelWithDebInfo
+fi
+
+
+pushd $INTERMEDIATE_DIR
+
+
+
+export CONFIGURATION=Debug
+pushd $CONFIGURATION
+cmake $SRC_PATH -G "Ninja" -DCMAKE_BUILD_TYPE=$CONFIGURATION  \
+	-DCMAKE_INSTALL_PREFIX=../../$CONFIGURATION  -DCMAKE_SYSTEM_NAME=$CMAKE_SYSTEM_NAME  -DCMAKE_BUILD_TYPE=$CONFIGURATION \
+	-DBUILD_TESTING=0
+
+popd
+
+
+export CONFIGURATION=RelWithDebInfo
+pushd $CONFIGURATION
+cmake $SRC_PATH -G "Ninja"  -DCMAKE_BUILD_TYPE=$CONFIGURATION \
+	-DCMAKE_INSTALL_PREFIX=../../$CONFIGURATION  -DCMAKE_SYSTEM_NAME=$CMAKE_SYSTEM_NAME  -DCMAKE_BUILD_TYPE=$CONFIGURATION \
+	-DBUILD_TESTING=0
+
+popd
+popd
+
+
+#export LD_LIBRARY_PATH=$SavedLinkDir
+

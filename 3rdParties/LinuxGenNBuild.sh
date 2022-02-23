@@ -90,6 +90,12 @@ pushd src/libevent
 ./build.sh
 popd
 
+echo Building libuv
+pushd src/libuv
+./gen.sh
+./build.sh
+popd
+
 
 echo Building libwebsocket
 pushd src/ws

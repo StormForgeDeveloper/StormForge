@@ -53,6 +53,11 @@ namespace SF
 		{
 		};
 
+		struct DelayedEventContext : public lws_sorted_usec_list
+		{
+			WebsocketClient* pInstance{};
+		};
+
 
 	public:
 
@@ -71,16 +76,18 @@ namespace SF
 
 		virtual int OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len) override;
 		virtual int OnProtocolDestroy(struct lws* wsi, void* user, void* in, size_t len) override;
-		virtual int OnConnectionEstablished(struct lws* wsi, void* user, void* in, size_t len);
+		virtual int OnConnectionEstablished(struct lws* wsi, void* user, void* in, size_t len) override;
 		virtual int OnConnectionClosed(struct lws* wsi, void* user, void* in, size_t len) override;
 		virtual int OnConnectionError(struct lws* wsi, void* user, void* in, size_t len) override;
 
 	private:
 
-		SFUniquePtr<Thread> m_Thread;
 
 		VirtualHostData* m_VHost{};
 		struct WSSessionData* m_Session{};
+
+		// scheduler list
+		DelayedEventContext SortedUsecList{};
 
 		ConnectionState m_ConnectionState = ConnectionState::Disconnected;
 	};

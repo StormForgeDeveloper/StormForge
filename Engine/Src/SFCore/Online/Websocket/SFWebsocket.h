@@ -17,8 +17,13 @@
 #include "Util/SFString.h"
 #include "Task/SFTask.h"
 #include "Container/SFCircularBufferQueue.h"
+#include "Object/SFSharedPointer.h"
+#include "Delegate/SFEventDelegate.h"
 
 #include "libwebsockets.h"
+#include <uv/version.h>
+#include <uv.h>
+#include <event2/event.h>
 
 
 namespace SF
@@ -50,21 +55,25 @@ namespace SF
 	public:
 
 		static constexpr size_t MessageBufferPadding = LWS_PRE; // Message buffer padding for libWebsocket
-
-		static void DeleteMessageData(void* _msg);
+		static constexpr uint64_t AsyncLib = LWS_SERVER_OPTION_LIBEVENT;
+		//static constexpr uint64_t AsyncLib = LWS_SERVER_OPTION_LIBUV;
 
 		struct WSSessionData
 		{
 			CircularBufferQueue* SendBuffer{};
-
 			Array<uint8_t>* ReceiveBuffer{};
 
 			uint8_t flow_controlled : 1;
 			uint8_t write_consume_pending : 1;
 
+			SharedPointer UserObjectPtr;
+
 			void Initialize(size_t RecvBufferSize, size_t SendBufferSize);
 			void Clear();
 		};
+
+		using RecvDeletates = EventDelegateList<struct WSSessionData*, const Array<uint8_t>&>;
+
 
 
 		Websocket(IHeap& heap, const char* name);
@@ -80,7 +89,7 @@ namespace SF
 		virtual void Terminate();
 
 		virtual void Send(struct WSSessionData* pss, const Array<uint8_t>& messageData);
-		virtual void OnRecv(struct WSSessionData* pss, const Array<uint8_t>& messageData) {}
+		virtual void OnRecv(struct WSSessionData* pss, const Array<uint8_t>& messageData) { m_RecvDeletates.Invoke(pss, messageData); }
 
 		virtual int OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len) { return 0; }
 		virtual int OnProtocolDestroy(struct lws* wsi, void* user, void* in, size_t len) { return 0; }
@@ -97,13 +106,27 @@ namespace SF
 		SF_FORCEINLINE const String& GetName() const { return m_Name; }
 		SF_FORCEINLINE bool UseWriteEvent() const { return m_UseWriteEvent; }
 
+		// session data size
+		virtual size_t GetSessionDataSize() const { return sizeof(struct WSSessionData); }
 
+
+		// recv event delegates
+		SF_FORCEINLINE RecvDeletates& OnRecvEvent() { return m_RecvDeletates; }
+
+	protected:
+
+		void StartThread();
 
 	protected:
 
 		IHeap& m_Heap;
 
 		String m_Name;
+
+		uint m_NumThread = 1;
+
+		// thread
+		DynamicArray<Thread*> m_Threads;
 
 		// Protocol settings
 		DynamicArray<lws_protocols> m_Protocols;
@@ -122,6 +145,13 @@ namespace SF
 
 		// WSI instance
 		lws* m_WSI{};
+
+		// EventLoop
+		DynamicArray<event_base*> m_EventLoops;
+		//struct event_base* m_EventLoop{};
+		struct event* m_EventTimerOuter{};
+		struct event* m_EventSighandler{};
+
 
 		// 
 		Result m_Result;
@@ -144,6 +174,8 @@ namespace SF
 
 		size_t m_FlowControlMin{};
 		size_t m_FlowControlMax{};
+
+		RecvDeletates m_RecvDeletates;
 	};
 
 
