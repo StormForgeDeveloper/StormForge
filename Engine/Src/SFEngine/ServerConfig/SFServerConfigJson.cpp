@@ -151,21 +151,21 @@ namespace SF
 		{
 		case "ModMatching_Game_8"_crc:
 		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModuleMatching_8(GetHeap());
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleMatching_8;
 			pModule->UseBot = moduleValue.get("UseBot",Json::Value(false)).asBool();
 			pServerModule = pModule;
 		}
 			break;
 		case "ModMatching_Game_4"_crc:
 		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModuleMatching_4(GetHeap());
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleMatching_4;
 			pModule->UseBot = moduleValue.get("UseBot", Json::Value(false)).asBool();
 			pServerModule = pModule;
 		}
 			break;
 		case "ModPurchaseValidateGoogle"_crc:
 		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModuleGooglePurchaseValidate(GetHeap());
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleGooglePurchaseValidate;
 			auto Account = moduleValue.get("Account", Json::Value(""));
 			auto P12KeyFile = moduleValue.get("P12KeyFile", Json::Value(""));
 			auto AuthScopes = moduleValue.get("AuthScopes", Json::Value(""));
@@ -178,7 +178,7 @@ namespace SF
 			break;
 		case "ModPurchaseValidateIOS"_crc:
 		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModuleIOSPurchaseValidate(GetHeap());
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleIOSPurchaseValidate;
 			auto URL = moduleValue.get("URL", Json::Value(""));
 			auto AltURL = moduleValue.get("AltURL", Json::Value(""));
 
@@ -189,21 +189,21 @@ namespace SF
 		}
 		case "ModLogin"_crc:
 		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
+			auto pModule = new(GetHeap()) ServerConfig::ServerModulePublicService;
 			result = ParseNetPublic(moduleValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pServerModule = pModule;
 			break;
 		}
 		case "ModGame"_crc:
 		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModulePublicService(GetHeap());
+			auto pModule = new(GetHeap()) ServerConfig::ServerModulePublicService;
 			result = ParseNetPublic(moduleValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pServerModule = pModule;
 			break;
 		}
 		case "ModStaticGameInstanceManager"_crc:
 		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModuleStaticGameInstanceManager(GetHeap());
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleStaticGameInstanceManager;
 
 			pModule->ZoneDBTable = moduleValue.get("ZoneDBTable", Json::Value("")).asCString();
 
@@ -212,7 +212,7 @@ namespace SF
 		}
 		case "ModGameInstanceManager"_crc:
 		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModuleGameInstanceManager(GetHeap());
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleGameInstanceManager;
 
 			pModule->ZoneDBTable = moduleValue.get("ZoneDBTable", Json::Value("")).asCString();
 
@@ -222,15 +222,58 @@ namespace SF
 		}
 		case "ModRelay"_crc:
 		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModuleRelayService(GetHeap());
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleRelayService;
 			result = ParseNetPublic(moduleValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 			pModule->MaximumRelayInstances = moduleValue.get("MaximumRelayInstances", Json::Value(pModule->MaximumRelayInstances)).asUInt();
+			pServerModule = pModule;
+			break;
+		}
+		case "ModTelemetryFrontend"_crc:
+		{
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleTelemetryFrontend;
+
+			result = ParseNetPublic(moduleValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
+
+			auto ClientId = moduleValue.get("ClientId", Json::Value(""));
+			pModule->ClientId = ClientId.asCString();;
+
+			auto AuthKey = moduleValue.get("AuthKey", Json::Value(""));
+			pModule->AuthKey = ClientId.asCString();;
+
+			result = ParseDataCenter(moduleValue, "Destination", pModule->Destination);
+			if (!result) return result;
+
+			pServerModule = pModule;
+			break;
+		}
+		case "ModTelemetryProcessPlayerEvent"_crc:
+		{
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleTelemetryProcessPlayerEvent;
+			result = ParseDataCenter(moduleValue, "Source", pModule->Source);
+			if (!result) return result;
+			pServerModule = pModule;
+			break;
+		}
+		case "ModTelemetryProcessToHBase"_crc:
+		{
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleTelemetryProcessToHBase;
+			result = ParseDataCenter(moduleValue, "Source", pModule->Source);
+			if (!result) return result;
+			pServerModule = pModule;
+			break;
+		}
+		case "ModTelemetryProcessToBackup"_crc:
+		{
+			auto pModule = new(GetHeap()) ServerConfig::ServerModuleTelemetryProcessToBackup;
+			result = ParseDataCenter(moduleValue, "Source", pModule->Source);
+			if (!result) return result;
 			pServerModule = pModule;
 			break;
 		}
 		case "NetPrivate"_crc:
 			break;
 
+		// Matching queues are deprecated
 		case "ModMatchingQueue_Game_8x1"_crc:
 		case "ModMatchingQueue_Game_8x2"_crc:
 		case "ModMatchingQueue_Game_8x3"_crc:
@@ -245,12 +288,13 @@ namespace SF
 		case "ModMatchingQueue_Game_4x3"_crc:
 		case "ModMatchingQueue_Game_4x1S"_crc:
 		case "ModMatchingQueue_Game_4x1W"_crc:
+
 		case "ModGamePartyManager"_crc:
 		case "ModMonitoring"_crc:
 		case "ModRanking"_crc:
 		case "ModChatting"_crc:
 		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModule(GetHeap());
+			auto pModule = new(GetHeap()) ServerConfig::ServerModule;
 			pServerModule = pModule;
 		}
 		break;
@@ -286,7 +330,7 @@ namespace SF
 
 		for (auto& itModuleValue : ModuleArray)
 		{
-			ServerConfig::ServerModule* pModule = new(GetHeap()) ServerConfig::ServerModule(GetHeap());
+			ServerConfig::ServerModule* pModule = new(GetHeap()) ServerConfig::ServerModule;
 			result = ParseModule(itModuleValue, pModule);
 			if (!result)
 				return result;
@@ -325,7 +369,7 @@ namespace SF
 			if (!itInstance.isObject())
 				continue;
 
-			auto pDBInstance = new(GetHeap()) ServerConfig::DBInstance(GetHeap());
+			auto pDBInstance = new(GetHeap()) ServerConfig::DBInstance;
 			result = ParseDBInstance(itInstance, pDBInstance);
 			if (pDBInstance != nullptr)
 				dbInstances.push_back(pDBInstance);
@@ -351,7 +395,7 @@ namespace SF
 				continue;
 
 			ServerConfig::DBCluster* pDBCluster = nullptr;
-			pDBCluster = new(GetHeap()) ServerConfig::DBCluster(GetHeap());
+			pDBCluster = new(GetHeap()) ServerConfig::DBCluster;
 			result = ParseDBCluster(itCluster, pDBCluster);
 			if (pDBCluster != nullptr)
 				dbClusters.push_back(pDBCluster);
@@ -401,7 +445,7 @@ namespace SF
 		auto monitoringServer = rootObject.get("MonitoringServer", Json::Value(Json::nullValue));
 		if (!monitoringServer.isNull())
 		{
-			pServer->MonitoringServer = new(GetHeap()) ServerConfig::GenericServer(GetHeap());
+			pServer->MonitoringServer = new(GetHeap()) ServerConfig::GenericServer;
 			result = LoadGenericServer(monitoringServer, pServer->MonitoringServer);
 			if (!result)
 				return result;

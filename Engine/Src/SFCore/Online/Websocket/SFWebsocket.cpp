@@ -72,20 +72,22 @@ namespace SF
 	}
 
 
-	Result Websocket::Initialize(int port)
+	Result Websocket::Initialize(const String& serverAddress, int port, const String& protocol)
 	{
+		m_ServerAddress = serverAddress;
 		m_Port = port;
+		m_UseProtocol = protocol;
 
 		m_PVOOptions.push_back({
 			nullptr,		/* "next" pvo linked-list */
 			nullptr,	/* "child" pvo linked-list */
-			"TestWS",	/* protocol name we belong to on this vhost */
+			m_UseProtocol,	/* protocol name we belong to on this vhost */
 			""		/* ignored */
 		});
 
 		m_Protocols.reserve(2);
 		m_Protocols.push_back({
-				"TestWS",
+				m_UseProtocol,
 				&WSCallback,
 				GetSessionDataSize(),
 				1024,
@@ -165,11 +167,6 @@ namespace SF
 			tv.tv_usec = 10;
 			event_base_loopexit(itLoop, &tv);
 		}
-
-		//if (m_WSIContext)
-		//{
-		//	lws_cancel_service(m_WSIContext);
-		//}
 
 		for (auto itThread : m_Threads)
 		{
@@ -388,8 +385,7 @@ namespace SF
 		case LWS_CALLBACK_PROTOCOL_DESTROY:
 			return OnProtocolDestroy(wsi, user, in, len);
 		case LWS_CALLBACK_FILTER_PROTOCOL_CONNECTION:
-			// TODO: filter protocol
-			return 0;
+			return OnProtocolFiltering(wsi, user, in, len);
 		case LWS_CALLBACK_EVENT_WAIT_CANCELLED:
 			return 0;
 			// Server
@@ -402,6 +398,8 @@ namespace SF
 		case LWS_CALLBACK_RECEIVE:
 			return OnConnectionReadable(wsi, user, in, len);
 			// Client
+		case LWS_CALLBACK_CLIENT_APPEND_HANDSHAKE_HEADER:
+			return OnClientAppendHeader(wsi, user, in, len);
 		case LWS_CALLBACK_CLIENT_ESTABLISHED:
 			return OnConnectionEstablished(wsi, user, in, len);
 		case LWS_CALLBACK_CLIENT_CLOSED:

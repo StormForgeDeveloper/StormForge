@@ -129,23 +129,22 @@ namespace SF {
 
 		Relay,
 		StreamCollection,
-		Stream
+		Stream,
+		TelemetryFrontend,
+		TelemetryProcessPlayerEvent,
+		TelemetryProcessToBackup,
+		TelemetryProcessToHBase,
+		Max
 	};
 
-	static constexpr uint32_t ClusterID_MatchingQueue_Max = static_cast<uint32_t>(ClusterID::Stream);
+	static constexpr uint32_t ClusterID_MatchingQueue_Max = static_cast<uint32_t>(ClusterID::Max);
 
 	const char* ToString(ClusterID clusterId);
 	StringCrc64 ToStringCrc64(ClusterID clusterId);
 
 	inline ClusterID operator++(ClusterID clusterID)
 	{
-		switch (clusterID)
-		{
-		case ClusterID::Matching_Game_8:
-			return ClusterID::MatchingQueue_Game_4x1;
-		default:
-			return static_cast<ClusterID>((INT)clusterID + 1);
-		};
+		return static_cast<ClusterID>((INT)clusterID + 1);
 	}
 
 	inline ClusterID operator++(ClusterID& clusterID, int)

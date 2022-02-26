@@ -120,6 +120,7 @@ namespace SF {
 		{
 			unused(name);
 			auto result = InitializeComponent(pComponent);
+			pComponent->m_IsInitialized = true;
 			if (!result) resultCode = result;
 		});
 	}
@@ -226,8 +227,6 @@ namespace SF {
 
 		return pFound;
 	}
-
-
 
 }
 

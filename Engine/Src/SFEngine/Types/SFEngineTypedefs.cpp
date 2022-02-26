@@ -57,7 +57,13 @@ namespace SF {
 	"MatchingQueue_Game_8x1S",\
 	"MatchingQueue_Game_8x1W",\
 	"Relay",\
-	"Max",\
+	"StreamCollection",\
+	"Stream",\
+	"TelemetryFrontend",\
+	"TelemetryProcessPlayerEvent",\
+	"TelemetryProcessToBackup",\
+	"TelemetryProcessToHBase",\
+	"Max", \
 
 
 

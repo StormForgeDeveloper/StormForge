@@ -66,6 +66,8 @@ namespace SF
 			uint8_t flow_controlled : 1;
 			uint8_t write_consume_pending : 1;
 
+			char ClientId[128];
+			char AuthKey[128];
 			SharedPointer UserObjectPtr;
 
 			void Initialize(size_t RecvBufferSize, size_t SendBufferSize);
@@ -73,8 +75,10 @@ namespace SF
 		};
 
 		using RecvDeletates = EventDelegateList<struct WSSessionData*, const Array<uint8_t>&>;
+		using EventFunction = std::function<int(struct lws*, void*, void*, size_t)>; // Return non-zero to disallow the connection.
 
 
+	public:
 
 		Websocket(IHeap& heap, const char* name);
 		Websocket(const Websocket&) = delete;
@@ -82,7 +86,7 @@ namespace SF
 
 		IHeap& GetHeap() const { return m_Heap; }
 
-		virtual Result Initialize(int port);
+		virtual Result Initialize(const String& serverAddress, int port, const String& protocol);
 
 		bool IsValid() const { return m_WSI != nullptr; }
 
@@ -93,6 +97,14 @@ namespace SF
 
 		virtual int OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len) { return 0; }
 		virtual int OnProtocolDestroy(struct lws* wsi, void* user, void* in, size_t len) { return 0; }
+		virtual int OnProtocolFiltering(struct lws* wsi, void* user, void* in, size_t len)
+		{
+			if (m_ProtocolFilteringDeletates)
+				return m_ProtocolFilteringDeletates(wsi, user, in, len);
+			return 0;
+		}
+
+		virtual int OnClientAppendHeader(struct lws* wsi, void* user, void* in, size_t len) { return 0; }
 		virtual int OnConnectionEstablished(struct lws* wsi, void* user, void* in, size_t len);
 		virtual int OnConnectionClosed(struct lws* wsi, void* user, void* in, size_t len);
 		virtual int OnConnectionError(struct lws* wsi, void* user, void* in, size_t len);
@@ -112,6 +124,9 @@ namespace SF
 
 		// recv event delegates
 		SF_FORCEINLINE RecvDeletates& OnRecvEvent() { return m_RecvDeletates; }
+
+		SF_FORCEINLINE void SetProtocolFilteringFunction(const EventFunction& filteringFunc) { m_ProtocolFilteringDeletates = filteringFunc; }
+		SF_FORCEINLINE void SetProtocolFilteringFunction(EventFunction&& filteringFunc) { m_ProtocolFilteringDeletates = Forward<EventFunction>(filteringFunc); }
 
 	protected:
 
@@ -163,6 +178,8 @@ namespace SF
 
 		String m_ServerAddress;
 
+		String m_UseProtocol;
+
 		// port setting
 		int m_Port = 1212;
 
@@ -176,6 +193,7 @@ namespace SF
 		size_t m_FlowControlMax{};
 
 		RecvDeletates m_RecvDeletates;
+		EventFunction m_ProtocolFilteringDeletates;
 	};
 
 

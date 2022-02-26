@@ -322,6 +322,8 @@ set(SUBOnline_FILES
 	Online/Telemetry/SFTelemetryComponent.cpp
 	Online/Websocket/SFWebsocket.h
 	Online/Websocket/SFWebsocket.cpp
+	Online/Websocket/SFWebsocketComponent.h
+	Online/Websocket/SFWebsocketComponent.cpp
 	Online/Websocket/SFWebsocketClient.h
 	Online/Websocket/SFWebsocketClient.cpp
   )

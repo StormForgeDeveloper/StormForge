@@ -28,20 +28,23 @@ namespace SF
 	//	class WebsocketComponent
 	//
 
-    class WebsocketComponent : public SharedObject
+    class WebsocketComponent : public LibraryComponent
     {
     public:
 
+        using super = LibraryComponent;
+        static constexpr StringCrc64 TYPE_NAME = "WebsocketComponent";
 
     public:
 
         WebsocketComponent();
         virtual ~WebsocketComponent();
 
+        virtual const StringCrc64& GetTypeName() override { return TYPE_NAME; }
 
-        virtual Result Initialize();
-
-        
+        virtual Result InitializeComponent() override;
+       
+        static void WebsocketLog(int level, const char* line);
     };
 
 

@@ -21,6 +21,7 @@
 
 namespace SF {
 
+	class LibraryComponentManager;
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -40,6 +41,8 @@ namespace SF {
 		bool m_IsInitialized;
 
 		SortedSet<StringCrc64> m_Dependencies;
+
+		friend class LibraryComponentManager;
 
 	public:
 		LibraryComponent(const StringCrc64& name);

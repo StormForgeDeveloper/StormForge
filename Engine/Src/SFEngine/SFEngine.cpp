@@ -38,6 +38,8 @@
 #include "Net/SFNetSystem.h"
 #include "Net/SFConnectionManager.h"
 #include "Component/SFLibraryComponentInitializer.h"
+#include "Online/Websocket/SFWebsocketComponent.h"
+
 
 namespace SF {
 
@@ -128,6 +130,7 @@ namespace SF {
 			AddComponent<SF::Net::NetSystem>(m_InitParameter.NetRecvBufferSize, m_InitParameter.NetSendBufferSize, m_InitParameter.NetworkThreadCount, 1024);
 		}
 
+		AddComponent<SF::WebsocketComponent>();
 
 		return ResultCode::SUCCESS;
 	}

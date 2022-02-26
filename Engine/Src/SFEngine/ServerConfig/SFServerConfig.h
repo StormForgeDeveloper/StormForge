@@ -33,21 +33,12 @@ namespace SF
 		{
 			String IP;
 			uint Port = 0;
-
-			NetPrivate(IHeap& heap)
-				: IP(heap)
-			{}
 		};
 
 		struct DataCenterEndpoint
 		{
 			String Server;
 			String Path;
-
-			DataCenterEndpoint(IHeap& heap)
-				: Server(heap)
-				, Path(heap)
-			{}
 		};
 
 
@@ -59,13 +50,6 @@ namespace SF
 			String ListenIP;
 			uint16_t Port = 0;
 			uint MaxConnection = 1000000;
-
-			NetPublic(IHeap& heap)
-				: Protocol(heap)
-				, IPV4(heap)
-				, IPV6(heap)
-				, ListenIP(heap)
-			{}
 		};
 
 
@@ -75,56 +59,33 @@ namespace SF
 			String ConnectionString;
 			String UserID;
 			String Password;
-
-			DBInstance(IHeap& heap);
 		};
 
 		struct DBCluster
 		{
 			GameCluster* pGameCluster = nullptr; // Game Cluster pointer if it's under game cluster, deprecated
 			String ClusterName;
-			DBClusterType ClusterType;
+			DBClusterType ClusterType = DBClusterType::Normal;
 			String DBInstanceName;
 			String DBName;
 			String DBCacheConnectionString;
-
-			DBCluster(IHeap& heap)
-				: ClusterName(heap)
-				, ClusterType(DBClusterType::Normal)
-				, DBInstanceName(heap)
-				, DBName(heap)
-				, DBCacheConnectionString(heap)
-			{}
 		};
 
 		struct ServerModule
 		{
 			String ModuleName;
 			EndpointAddress ServiceListenEndpoint;
-			ServerModule(IHeap& heap)
-				: ModuleName(heap)
-				, ServiceListenEndpoint(heap)
-			{}
-			virtual ~ServerModule() {}
 		};
 
 
 		struct ServerModuleMatching_8 : public ServerModule
 		{
 			bool UseBot = false;
-
-			ServerModuleMatching_8(IHeap& heap)
-				: ServerModule(heap)
-			{}
 		};
 
 		struct ServerModuleMatching_4 : public ServerModule
 		{
 			bool UseBot = false;
-
-			ServerModuleMatching_4(IHeap& heap)
-				: ServerModule(heap)
-			{}
 		};
 
 		struct ServerModuleGooglePurchaseValidate : public ServerModule
@@ -132,64 +93,58 @@ namespace SF
 			String Account;
 			String P12KeyFile;
 			String AuthScopes;
-
-			ServerModuleGooglePurchaseValidate(IHeap& heap)
-				: ServerModule(heap)
-				, Account(heap)
-				, P12KeyFile(heap)
-				, AuthScopes(heap)
-			{}
 		};
 
 		struct ServerModuleIOSPurchaseValidate : public ServerModule
 		{
 			String URL;
 			String AltURL;
-
-			ServerModuleIOSPurchaseValidate(IHeap& heap)
-				: ServerModule(heap)
-				, URL(heap)
-				, AltURL(heap)
-			{}
 		};
 
 		struct ServerModulePublicService : public ServerModule
 		{
 			NetPublic PublicNet;
-
-			ServerModulePublicService(IHeap& heap)
-				: ServerModule(heap)
-				, PublicNet(heap)
-			{}
 		};
 
 		struct ServerModuleStaticGameInstanceManager : public ServerModule
 		{
 			// ZoneDBTable
 			String ZoneDBTable;
-
-			ServerModuleStaticGameInstanceManager(IHeap& heap)
-				: ServerModule(heap)
-				, ZoneDBTable(heap)
-			{}
 		};
 
 		struct ServerModuleGameInstanceManager : public ServerModulePublicService
 		{
 			String ZoneDBTable;
-
-			ServerModuleGameInstanceManager(IHeap& heap)
-				: ServerModulePublicService(heap)
-			{}
 		};
 
 		struct ServerModuleRelayService : public ServerModulePublicService
 		{
 			uint32_t MaximumRelayInstances = 1000;
+		};
 
-			ServerModuleRelayService(IHeap& heap)
-				: ServerModulePublicService(heap)
-			{}
+		struct ServerModuleTelemetryFrontend : public ServerModulePublicService
+		{
+			String ClientId;
+			String AuthKey;
+			DataCenterEndpoint Destination;
+		};
+
+		struct ServerModuleTelemetryProcessPlayerEvent : public ServerModule
+		{
+			DataCenterEndpoint Source;
+
+		};
+
+		struct ServerModuleTelemetryProcessToHBase : public ServerModule
+		{
+			DataCenterEndpoint Source;
+
+		};
+
+		struct ServerModuleTelemetryProcessToBackup : public ServerModule
+		{
+			DataCenterEndpoint Source;
+
 		};
 
 		struct GenericServer
@@ -201,10 +156,7 @@ namespace SF
 			uint NetIOThreadCount = 4;
 			DynamicArray<ServerModule*> Modules;
 
-			GenericServer(IHeap& heap)
-				: Name(heap)
-				, Executable(heap)
-				, Modules(heap)
+			GenericServer()
 			{}
 			virtual ~GenericServer()
 			{
@@ -280,10 +232,6 @@ namespace SF
 			DynamicArray<DBInstance*> DBInstances;
 
 			ServerService()
-				: GenericServer(GetSystemHeap())
-				, DataCenter(GetSystemHeap())
-				, DBClusters(GetSystemHeap())
-				, DBInstances(GetSystemHeap())
 			{}
 
 			virtual ~ServerService()

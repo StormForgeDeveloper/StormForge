@@ -24,23 +24,23 @@ namespace SF
 	//
 
 
-	WebsocketClient::WebsocketClient(IHeap& heap, const char* serverAddress, const char* serverPath)
+	WebsocketClient::WebsocketClient(IHeap& heap)
 		: super(heap, "WSClient")
 	{
-		m_ServerAddress = serverAddress;
-		m_ServerPath = serverPath;
+		m_ServerPath = "/";
+		m_NumThread = 1;
 		SortedUsecList.pInstance = this;
 	}
 
 	WebsocketClient::~WebsocketClient()
 	{}
 
-	Result WebsocketClient::Initialize(int port)
+	Result WebsocketClient::Initialize(const String& serverAddress, int port, const String& protocol)
 	{
 		if (m_WSIContext) // probably initializing again
 			return ResultCode::SUCCESS_FALSE;
 
-		super::Initialize(port);
+		super::Initialize(serverAddress, port, protocol);
 
 		SFLog(Game, Info, "BR websocket server | visit http://{0}:{1}", m_ServerAddress, m_Port);
 
@@ -105,21 +105,18 @@ namespace SF
 			return;
 
 		lws_client_connect_info info{};
-		//char host[128];
-
-		//lws_snprintf(host, sizeof(host), "%s:%u", m_ServerAddress.data(), m_Port);
 
 		memset(&info, 0, sizeof(info));
 		info.context = m_WSIContext;
 		info.port = m_Port;
 		info.address = m_ServerAddress;
 		info.path = m_ServerPath;
-		info.host = info.address;
-		info.origin = info.address;
+		info.host = "HostHeader";// info.address;
+		info.origin = "OriginHeader";// info.address;
 		//info.ssl_connection = LCCSCF_USE_SSL;
 		//info.vhost = m_VHost ? m_VHost->VHost : nullptr;
-		info.protocol = "TestWS";
-		info.local_protocol_name = "TestWS";
+		info.protocol = m_UseProtocol;
+		info.local_protocol_name = m_UseProtocol;
 		//info.iface = m_NetInterfaceId; // don't specify to bind all
 		//info.userdata = this; // This will skip session data allocation and use this instance as user data for session
 		info.pwsi = &m_WSI;
