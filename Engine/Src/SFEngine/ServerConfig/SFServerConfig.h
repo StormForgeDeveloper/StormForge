@@ -126,26 +126,12 @@ namespace SF
 		{
 			String ClientId;
 			String AuthKey;
+			String SSLCertFile;
+			String SSLPrivateKeyFile;
+			int NumNetThread = 1;
 			DataCenterEndpoint Destination;
 		};
 
-		struct ServerModuleTelemetryProcessPlayerEvent : public ServerModule
-		{
-			DataCenterEndpoint Source;
-
-		};
-
-		struct ServerModuleTelemetryProcessToHBase : public ServerModule
-		{
-			DataCenterEndpoint Source;
-
-		};
-
-		struct ServerModuleTelemetryProcessToBackup : public ServerModule
-		{
-			DataCenterEndpoint Source;
-
-		};
 
 		struct GenericServer
 		{

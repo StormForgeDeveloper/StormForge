@@ -235,10 +235,18 @@ namespace SF
 			result = ParseNetPublic(moduleValue.get("NetPublic", Json::Value(Json::objectValue)), pModule->PublicNet);
 
 			auto ClientId = moduleValue.get("ClientId", Json::Value(""));
-			pModule->ClientId = ClientId.asCString();;
+			pModule->ClientId = ClientId.asCString();
 
 			auto AuthKey = moduleValue.get("AuthKey", Json::Value(""));
-			pModule->AuthKey = ClientId.asCString();;
+			pModule->AuthKey = ClientId.asCString();
+
+			auto SSLCertFile = moduleValue.get("SSLCertFile", Json::Value(""));
+			pModule->SSLCertFile = SSLCertFile.asCString();
+
+			auto SSLPrivateKeyFile = moduleValue.get("SSLPrivateKeyFile", Json::Value(""));
+			pModule->SSLPrivateKeyFile = SSLPrivateKeyFile.asCString();
+
+			pModule->NumNetThread = moduleValue.get("NumNetThread", Json::Value(1)).asInt();
 
 			result = ParseDataCenter(moduleValue, "Destination", pModule->Destination);
 			if (!result) return result;
@@ -246,48 +254,8 @@ namespace SF
 			pServerModule = pModule;
 			break;
 		}
-		case "ModTelemetryProcessPlayerEvent"_crc:
-		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModuleTelemetryProcessPlayerEvent;
-			result = ParseDataCenter(moduleValue, "Source", pModule->Source);
-			if (!result) return result;
-			pServerModule = pModule;
-			break;
-		}
-		case "ModTelemetryProcessToHBase"_crc:
-		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModuleTelemetryProcessToHBase;
-			result = ParseDataCenter(moduleValue, "Source", pModule->Source);
-			if (!result) return result;
-			pServerModule = pModule;
-			break;
-		}
-		case "ModTelemetryProcessToBackup"_crc:
-		{
-			auto pModule = new(GetHeap()) ServerConfig::ServerModuleTelemetryProcessToBackup;
-			result = ParseDataCenter(moduleValue, "Source", pModule->Source);
-			if (!result) return result;
-			pServerModule = pModule;
-			break;
-		}
 		case "NetPrivate"_crc:
 			break;
-
-		// Matching queues are deprecated
-		case "ModMatchingQueue_Game_8x1"_crc:
-		case "ModMatchingQueue_Game_8x2"_crc:
-		case "ModMatchingQueue_Game_8x3"_crc:
-		case "ModMatchingQueue_Game_8x4"_crc:
-		case "ModMatchingQueue_Game_8x5"_crc:
-		case "ModMatchingQueue_Game_8x6"_crc:
-		case "ModMatchingQueue_Game_8x7"_crc:
-		case "ModMatchingQueue_Game_8x1S"_crc:
-		case "ModMatchingQueue_Game_8x1W"_crc:
-		case "ModMatchingQueue_Game_4x1"_crc:
-		case "ModMatchingQueue_Game_4x2"_crc:
-		case "ModMatchingQueue_Game_4x3"_crc:
-		case "ModMatchingQueue_Game_4x1S"_crc:
-		case "ModMatchingQueue_Game_4x1W"_crc:
 
 		case "ModGamePartyManager"_crc:
 		case "ModMonitoring"_crc:
@@ -296,11 +264,11 @@ namespace SF
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModule;
 			pServerModule = pModule;
-		}
-		break;
-		default:
-			assert(false);
 			break;
+		}
+		default:
+			SFLog(System, Error, "Not supported server module name:{0}", moduleName.asCString());
+			return ResultCode::NOT_SUPPORTED;
 		}
 
 		// Ignoring parsing error as not all of module requires it

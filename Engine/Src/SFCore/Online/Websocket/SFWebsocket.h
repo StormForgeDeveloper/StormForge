@@ -86,9 +86,15 @@ namespace SF
 
 		IHeap& GetHeap() const { return m_Heap; }
 
+		SF_FORCEINLINE uint GetNumThread() const { return m_NumThread; }
+		SF_FORCEINLINE void SetNumThread(uint numThread) { m_NumThread = numThread; }
+
+		SF_FORCEINLINE bool GetUseSSL() const { return m_UseSSL; }
+		SF_FORCEINLINE void SetUseSSL(bool useSSL) { m_UseSSL = useSSL; }
+
 		virtual Result Initialize(const String& serverAddress, int port, const String& protocol);
 
-		bool IsValid() const { return m_WSI != nullptr; }
+		SF_FORCEINLINE bool IsValid() const { return m_WSI != nullptr; }
 
 		virtual void Terminate();
 
@@ -139,6 +145,8 @@ namespace SF
 		String m_Name;
 
 		uint m_NumThread = 1;
+
+		bool m_UseSSL = false;
 
 		// thread
 		DynamicArray<Thread*> m_Threads;

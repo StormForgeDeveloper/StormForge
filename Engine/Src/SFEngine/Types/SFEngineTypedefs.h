@@ -111,29 +111,10 @@ namespace SF {
 		//Matching_Game_10,
 		//Matching_Game_12,
 
-		MatchingQueue_Game_4x1,
-		MatchingQueue_Game_4x2,
-		MatchingQueue_Game_4x3,
-		MatchingQueue_Game_4x1S,
-		MatchingQueue_Game_4x1W,
-
-		MatchingQueue_Game_8x1,
-		MatchingQueue_Game_8x2,
-		MatchingQueue_Game_8x3,
-		MatchingQueue_Game_8x4,
-		MatchingQueue_Game_8x5,
-		MatchingQueue_Game_8x6,
-		MatchingQueue_Game_8x7,
-		MatchingQueue_Game_8x1S,
-		MatchingQueue_Game_8x1W,
-
 		Relay,
 		StreamCollection,
 		Stream,
 		TelemetryFrontend,
-		TelemetryProcessPlayerEvent,
-		TelemetryProcessToBackup,
-		TelemetryProcessToHBase,
 		Max
 	};
 
