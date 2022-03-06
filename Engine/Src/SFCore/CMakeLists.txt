@@ -314,12 +314,14 @@ source_group(Service FILES
 set(SUBOnline_FILES
 	Online/StreamDB/SFStreamDB.h
 	Online/StreamDB/SFStreamDB.cpp
-	Online/Telemetry/SFTelemetry.h
-	Online/Telemetry/SFTelemetry.cpp
+	Online/Telemetry/SFTelemetryBR.h
+	Online/Telemetry/SFTelemetryBR.cpp
 	Online/Telemetry/SFTelemetryService.h
 	Online/Telemetry/SFTelemetryService.cpp
 	Online/Telemetry/SFTelemetryComponent.h
 	Online/Telemetry/SFTelemetryComponent.cpp
+	Online/Telemetry/SFTelemetryEventQueue.h
+	Online/Telemetry/SFTelemetryEventQueue.cpp
 	Online/Websocket/SFWebsocket.h
 	Online/Websocket/SFWebsocket.cpp
 	Online/Websocket/SFWebsocketComponent.h

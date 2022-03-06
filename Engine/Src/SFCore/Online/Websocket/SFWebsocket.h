@@ -66,8 +66,10 @@ namespace SF
 			uint8_t flow_controlled : 1;
 			uint8_t write_consume_pending : 1;
 
-			char ClientId[128];
-			char AuthKey[128];
+			char ClientId[256];
+			char AuthKey[256];
+			char MachineId[256];
+			char SessionId[128];
 			SharedPointer UserObjectPtr;
 
 			void Initialize(size_t RecvBufferSize, size_t SendBufferSize);

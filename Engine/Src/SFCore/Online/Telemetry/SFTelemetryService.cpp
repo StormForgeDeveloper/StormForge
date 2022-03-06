@@ -26,6 +26,11 @@ namespace SF
 		LogChannel Telemetry("Telemetry", LogOutputType::Info);
 	};
 
+	namespace Service
+	{
+		ServiceInstance<TelemetryService> Telemetry;
+	}
+
 
 	TelemetryService::TelemetryService()
 	{
@@ -35,7 +40,6 @@ namespace SF
 	{
 
 	}
-
 
 	Result TelemetryService::Initialize(const String& brokers, const String& topic, int32_t partition)
 	{

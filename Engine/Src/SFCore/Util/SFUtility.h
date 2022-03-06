@@ -77,6 +77,12 @@ namespace Util {
 
 	void SetModulePath(const char* customModulePath, const char* moduleName);
 
+
+	// Machine unique Id
+	const char* GetMachineUniqueId(); // machine unique id. probably mac address
+	void SetMachineUniqueId(const char* machineId); // you can override machine unique id
+
+
 	// Array duplication
 	template<class DupType>
 	Result ArrayDup(IHeap& memoryManager, DupType* &pDest, INT iSrcCount, const DupType* pSrc );

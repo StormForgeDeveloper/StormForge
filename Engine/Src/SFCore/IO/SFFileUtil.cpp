@@ -41,7 +41,7 @@ namespace SF {
 	bool FileUtil::IsDirectoryExist(const char* strPath)
 	{
 		if (StrUtil::IsNullOrEmpty(strPath))
-			return ResultCode::INVALID_ARG;
+			return false;
 
 		return std::filesystem::exists(strPath);
 	}
@@ -49,9 +49,17 @@ namespace SF {
 	bool FileUtil::IsFileExist(const char* strPath)
 	{
 		if (StrUtil::IsNullOrEmpty(strPath))
-			return ResultCode::INVALID_ARG;
+			return false;
 
 		return std::filesystem::exists(strPath);
+	}
+
+	Result FileUtil::DeleteFile(const char* strPath)
+	{
+		if (StrUtil::IsNullOrEmpty(strPath))
+			return ResultCode::INVALID_ARG;
+
+		return std::filesystem::remove(strPath);
 	}
 
 	// Create directory

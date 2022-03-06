@@ -56,7 +56,7 @@ namespace SF
 	}
 
 	// Clear all items
-	void CircularBufferQueue::Clear()
+	void CircularBufferQueue::Reset()
 	{
 		m_TailPos = m_HeadPos = 0;
 		memset(m_Buffer, 0, m_BufferSize);
@@ -77,6 +77,18 @@ namespace SF
 			return size_t(tail - head);
 		else 
 			return GetBufferSize() - size_t(head - tail);
+	}
+
+	bool CircularBufferQueue::ForceReset(int headOffset, int tailOffset)
+	{
+		if (headOffset < 0 || headOffset >= m_BufferSize
+			|| tailOffset < 0 || tailOffset >= m_BufferSize)
+			return false;
+
+		m_HeadPos.store(reinterpret_cast<BufferItem*>(m_Buffer + headOffset));
+		m_TailPos.store(reinterpret_cast<BufferItem*>(m_Buffer + tailOffset));
+
+		return CheckIntegrity();
 	}
 
 
@@ -320,8 +332,56 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
+
+	CircularBufferQueue::BufferItem* CircularBufferQueue::PeekTail()
+	{
+		auto pHead = m_HeadPos.load(std::memory_order_relaxed);
+
+		if (pHead == nullptr)
+			return nullptr;
+
+		auto curTail = m_TailPos.load(std::memory_order_relaxed);
+		if (curTail == pHead) // queue is empty
+			return nullptr;
+
+		auto tailState = curTail->State.load(std::memory_order_relaxed);
+		assert(tailState == ItemState::Filled);
+
+		if (tailState != ItemState::Filled && curTail != pHead)
+			return PeekNext(curTail);
+
+		return nullptr;
+	}
+
+	CircularBufferQueue::BufferItem* CircularBufferQueue::PeekNext(BufferItem* item)
+	{
+		auto pHead = m_HeadPos.load(std::memory_order_relaxed);
+
+		if (pHead == nullptr)
+			return nullptr;
+
+		auto startPos = (uintptr_t)m_Buffer;
+
+		auto curTail = item;
+		auto tailState = curTail->State.load(std::memory_order_relaxed);
+		assert(tailState == ItemState::Filled);
+
+		while (tailState != ItemState::Filled && curTail != pHead)
+		{
+			BufferItem* nextTail = reinterpret_cast<BufferItem*>(startPos + curTail->NextPos);
+			curTail = nextTail;
+			tailState = curTail->State.load(std::memory_order_relaxed);
+		}
+
+		if (curTail == pHead) // queue is empty
+			return nullptr;
+
+		return curTail;
+	}
+
+
 	// get read buffer size
-	size_t CircularBufferQueue::GetBufferItemSize(BufferItem* pBufferItem)
+	size_t CircularBufferQueue::GetBufferItemSize(BufferItem* pBufferItem) const
 	{
 		if (pBufferItem == nullptr)
 			return 0;
@@ -339,5 +399,10 @@ namespace SF
 		return pBufferItem->NextPos - ((uintptr_t)pBufferItem + sizeof(BufferItem) - startPos);
 	}
 
+	bool CircularBufferQueue::CheckIntegrity() const
+	{
+		// TODO:
 
+		return false;
+	}
 }

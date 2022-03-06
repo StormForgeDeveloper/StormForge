@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2013 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -18,8 +18,6 @@
 
 
 
-
-
 namespace SF {
 namespace Util {
 
@@ -31,6 +29,7 @@ namespace Util {
 	static char g_szModulePath[MAX_PATH] = {0};
 	static char g_szModuleName[MAX_PATH] = {0};
 	static char g_szServiceName[MAX_PATH] = {0};
+	static char g_szMachineId[64] = { 0 };
 
 #if SF_PLATFORM == SF_PLATFORM_LINUX
 	size_t get_executable_path(char* buffer, size_t len)
@@ -142,6 +141,115 @@ namespace Util {
 		{
 			StrUtil::StringCopy(g_szServiceName, g_szModuleName);
 		}
+	}
+
+
+	const char* GetMachineUniqueId()
+	{
+		if (g_szMachineId[0] != '\0')
+			return g_szMachineId;
+
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+		ULONG Flags = GAA_FLAG_INCLUDE_PREFIX | GAA_FLAG_SKIP_MULTICAST | GAA_FLAG_SKIP_ANYCAST | GAA_FLAG_SKIP_DNS_SERVER | GAA_FLAG_SKIP_FRIENDLY_NAME;
+		ULONG Result;
+		ULONG Size = 0;
+		ULONG Family = AF_UNSPEC;// : AF_INET;
+
+		// determine the required size of the address list buffer
+		Result = GetAdaptersAddresses(Family, Flags, nullptr, nullptr, &Size);
+		if (Result != ERROR_BUFFER_OVERFLOW)
+		{
+			return nullptr;
+		}
+
+		DynamicArray<IP_ADAPTER_ADDRESSES> AdapterAddresses;
+		AdapterAddresses.resize(Size);
+
+		// get the actual list of adapters
+		Result = GetAdaptersAddresses(Family, Flags, nullptr, AdapterAddresses.data(), &Size);
+		if (Result != ERROR_SUCCESS)
+		{
+			return nullptr;
+		}
+
+		PIP_ADAPTER_ADDRESSES Selected = AdapterAddresses.data();
+
+		// extract the list of physical addresses from each adapter
+		for (PIP_ADAPTER_ADDRESSES AdapterAddress = AdapterAddresses.data(); AdapterAddress != nullptr; AdapterAddress = AdapterAddress->Next)
+		{
+			if ((AdapterAddress->IfType == IF_TYPE_ETHERNET_CSMACD || AdapterAddress->IfType == IF_TYPE_IEEE80211)) 
+			//	&& AdapterAddress->OperStatus == IfOperStatusUp)
+			{
+				Selected = AdapterAddress; // any operable ethernet is selected as default
+				bool bDnsEligible = false;
+				for (PIP_ADAPTER_UNICAST_ADDRESS UnicastAddress = AdapterAddress->FirstUnicastAddress; UnicastAddress != nullptr; UnicastAddress = UnicastAddress->Next)
+				{
+					if ((UnicastAddress->Flags & IP_ADAPTER_ADDRESS_DNS_ELIGIBLE) != 0)
+					{
+						bDnsEligible = true;
+						break;
+					}
+				}
+
+				if (bDnsEligible) // we found the one
+					break;
+			}
+		}
+
+		ArrayView<uint8_t> machineIdView(sizeof(g_szMachineId), (uint8_t*)g_szMachineId);
+		machineIdView.Reset();
+		HEXEncode(Selected->PhysicalAddressLength, Selected->PhysicalAddress, machineIdView);
+
+#else
+
+		int sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_IP);
+		if (sock < 0)
+			return nullptr;
+
+		// enumerate all IP addresses of the system
+		struct ifconf conf;
+		char ifconfbuf[128 * sizeof(struct ifreq)];
+		memset(ifconfbuf, 0, sizeof(ifconfbuf));
+		conf.ifc_buf = ifconfbuf;
+		conf.ifc_len = sizeof(ifconfbuf);
+		if (ioctl(sock, SIOCGIFCONF, &conf))
+		{
+			return nullptr;
+		}
+
+		// get MAC address
+		bool foundMac1 = false;
+		struct ifreq* ifr;
+		for (ifr = conf.ifc_req; (char*)ifr < (char*)conf.ifc_req + conf.ifc_len; ifr++)
+		{
+			if (ifr->ifr_addr.sa_data == (ifr + 1)->ifr_addr.sa_data) // duplicate, skip it
+				continue;
+
+			if (ioctl(sock, SIOCGIFFLAGS, ifr)) // failed to get flags, skip it
+				continue;
+
+			if (ioctl(sock, SIOCGIFHWADDR, ifr) == 0)
+			{
+				ArrayView<uint8_t> machineIdView(sizeof(g_szMachineId), (uint8_t*)g_szMachineId);
+				machineIdView.Reset();
+				HEXEncode(6, (const uint8_t*)ifr->ifr_addr.sa_data, machineIdView);
+				break;
+			}
+		}
+
+		close(sock);
+
+#endif
+
+		return g_szMachineId;
+	}
+
+	void SetMachineUniqueId(const char* machineId)
+	{
+		if (machineId == nullptr)
+			return;
+
+		StrUtil::StringCopy(g_szMachineId, machineId);
 	}
 
 

@@ -182,6 +182,7 @@
 #include <stdint.h>
 #include <sys/types.h>
 #include <malloc.h>
+#include <iphlpapi.h>
 
 #define timegm _mkgmtime
 
@@ -213,6 +214,7 @@ using SF_SOCKET = SOCKET;
 #include <sys/syscall.h>
 #include <sys/stat.h>
 #include <sys/socket.h>
+#include <sys/ioctl.h>
 #include <netdb.h>
 #include <execinfo.h>
 #include <unistd.h>
@@ -220,16 +222,22 @@ using SF_SOCKET = SOCKET;
 #include <libgen.h>
 #include <errno.h>
 #include <signal.h>
-
-//#include <linux/in.h>
-//#include <linux/in6.h>
-#include <arpa/inet.h>
-#include <netinet/in.h>
-#include <netinet/tcp.h>
-#include <stdint.h>
 #include <semaphore.h>
 #include <malloc.h>
 #include <aio.h>
+
+//#include <linux/in.h>
+//#include <linux/in6.h>
+#include <stdint.h>
+#include <netdb.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <netinet/in_systm.h>
+#include <netinet/ip.h>
+#include <netinet/ip_icmp.h>
+#include <net/if.h>
+#include <net/if_arp.h>
 
 typedef long long LONGLONG;
 typedef unsigned long long ULONGLONG;

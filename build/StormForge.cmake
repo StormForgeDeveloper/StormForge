@@ -87,8 +87,8 @@ if(WIN32)
 		SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 		SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3 -Oy-")
 		SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3 -Oy-")
-		SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -msimd128 -g")
-		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -msimd128 -g")
+		SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nonportable-include-path -fexceptions -msimd128 -g")
+		SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nonportable-include-path -fexceptions -msimd128 -g")
 	else()
 		SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Od")
 		SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Od")
@@ -128,15 +128,15 @@ elseif(ANDROID_PLATFORM)
 
 	message ( "Setup Android configs" )
 
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -frtti -pthread -msimd128 -fPIC")
  
 	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 
 	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
 	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-	SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
+
+	SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nonportable-include-path -fexceptions -frtti -pthread -msimd128 -fPIC -g")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nonportable-include-path -fexceptions -frtti -pthread -msimd128 -fPIC -g")
 
 	add_definitions(-D__ANDROID__=1)
 
@@ -156,8 +156,9 @@ elseif(IOS)
 
 	SET (CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
 	SET (CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-	SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fexceptions -g")
+
+	SET (CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nonportable-include-path -fexceptions -g")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wno-nonportable-include-path -fexceptions -g")
 
 	add_definitions(-D__IOS__=1)
 	add_definitions(-DKQUEUE)
@@ -171,8 +172,8 @@ elseif(UNIX)
 
 	message ( "Setup UNIX configs" )
 
-	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -g -frtti -pthread -march=native -msse4 -m64 -fPIC")
-	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -g -fexceptions -frtti -march=native -pthread -msse4 -m64 -fPIC")
+	SET (CMAKE_C_FLAGS "${CMAKE_C_FLAGS}   -Wno-nonportable-include-path -g -frtti -pthread -march=native -msse4 -m64 -fPIC")
+	SET (CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS}  -Wno-nonportable-include-path -g -fexceptions -frtti -march=native -pthread -msse4 -m64 -fPIC")
 
 	SET (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O0")
 	SET (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")

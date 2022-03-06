@@ -16,7 +16,11 @@
 #include "Util/SFPath.h"
 #include "Util/SFStrUtil.h"
 
-
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+#include <userenv.h>
+#else
+#include <pwd.h>
+#endif
 
 
 
@@ -147,6 +151,37 @@ namespace Util {
 		return Combine(Combine(strFilePath1, strFilePath2), strFilePath3);
 	}
 
+
+	static String SaveDir;
+	const String& Path::GetSaveDir()
+	{
+
+		if (SaveDir.IsNullOrEmpty())
+		{
+			char profilePath[MAX_PATH]{};
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+			DWORD dwSizeOfPath = MAX_PATH;
+			GetProfilesDirectoryA(profilePath, &dwSizeOfPath);
+#else
+			struct passwd* pw = getpwuid(getuid());
+			StrUtil::StringCopy(profilePath, pw->pw_dir);
+#endif
+
+			SaveDir = Combine(profilePath, "SF", "Saves");
+		}
+
+		return SaveDir;
+	}
+
+	static String ContentDir;
+	const String& Path::GetContentDir()
+	{
+
+		// TODO:
+		assert(false);
+
+		return ContentDir;
+	}
 
 
 

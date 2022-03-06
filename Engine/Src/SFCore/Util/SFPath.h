@@ -55,6 +55,16 @@ namespace Util {
 		// Combine paths
 		static String Combine(const String& strFilePath1, const char* strFilePath2);
 		static String Combine(const String& strFilePath1, const char* strFilePath2, const char* strFilePath3);
+
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		//
+		//
+		//
+
+		static const String& GetSaveDir();
+
+		static const String& GetContentDir();
 	};
 
 

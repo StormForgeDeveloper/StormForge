@@ -32,6 +32,8 @@ namespace SF {
 
 		static bool IsFileExist(const char* strPath);
 
+		static Result DeleteFile(const char* strPath);
+
 		// Create path
 		static Result CreatePath(const char* strPath, int skipLast = 0);
 		static Result CreatePath(const PathString& path, int skipLast = 0);

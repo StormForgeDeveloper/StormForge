@@ -38,6 +38,12 @@ protected:
 
 	SF::SpinLock m_LockObject;
 
+	SF::String m_TelemetryServer;
+	int m_TelemetryPort{};
+	SF::String m_TelemetryClientId;
+	SF::String m_TelemetryAuthKey;
+
+
 public:
 
 	TelemetryTest()
@@ -61,12 +67,15 @@ public:
 		m_Threads.clear();
 	}
 
-
-
 	// Remember that SetUp() is run immediately before a test starts.
 	virtual void SetUp()
 	{
 		MyTestBase::SetUp();
+
+		m_TelemetryServer = m_ConfigJson.get("TelemetryServer", "").asCString();
+		m_TelemetryPort = m_ConfigJson.get("TelemetryPort", 1111).asInt();
+		m_TelemetryClientId = m_ConfigJson.get("TelemetryClientId", "").asCString();
+		m_TelemetryAuthKey = m_ConfigJson.get("TelemetryAuthKey", "").asCString();
 	}
 
 	// TearDown() is invoked immediately after a test finishes.  Here we

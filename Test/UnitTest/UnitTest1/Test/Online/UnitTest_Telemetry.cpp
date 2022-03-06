@@ -15,16 +15,10 @@
 
 #include "Task/SFTask.h"
 
-#include "Util/SFStringCrc32.h"
-#include "Util/SFString.h"
-#include "Container/SFCircularPageQueue.h"
 #include "Util/SFTimeUtil.h"
 #include "UnitTest_Telemetry.h"
 
-#include "Online/Telemetry/SFTelemetry.h"
-
-
-#include "Protocol/PlayInstanceMsgClass.h"
+#include "Online/Telemetry/SFTelemetryBR.h"
 
 
 using ::testing::EmptyTestEventListener;
@@ -38,23 +32,28 @@ using ::testing::UnitTest;
 using namespace ::SF;
 
 
-TEST_F(TelemetryTest, Simple)
+TEST_F(TelemetryTest, Client)
 {
-	//m_ConfigJson;
- //   const char* topic = "MyTestTopic1";
- //   uint8_t testData[] = {1,2,3,4,5,6,7,8,9};
- //   uint8_t testData1[] = { 'T', 'e', 's', 't', 'D', 'a', 't', 'a', 'D', 'a', 't', 'a', '\0' };
-	//uint8_t testData2[] = { 1,2,3,4,5,6,7,8,9, 123 };
+	
+	TelemetryBR telemetry;
 
- //   StreamDBProducer streamDB;
+	auto ret = telemetry.Initialize(m_TelemetryServer, m_TelemetryPort, m_TelemetryClientId, m_TelemetryAuthKey);
+	EXPECT_TRUE(ret);
 
- //   GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress[0], topic), ResultCode::SUCCESS);
+	while (telemetry.IsValid() && !telemetry.IsConnected());
 
- //   GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<const uint8_t>(testData)), ResultCode::SUCCESS);
-	//GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<const uint8_t>(testData1)), ResultCode::SUCCESS);
-	//GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<const uint8_t>(testData2)), ResultCode::SUCCESS);
+	int iTest = 0;
+	for (; telemetry.IsConnected() && iTest < 20; iTest++)
+	{
+		TelemetryEvent* pTelemetryEvent = telemetry.CreateTelemetryEvent("TestEvent");
 
- //   GTEST_ASSERT_EQ(streamDB.Flush(), ResultCode::SUCCESS);
-    
+
+		pTelemetryEvent->Send();
+
+		ThisThread::SleepFor(DurationMS(100));
+	}
+
+	telemetry.Terminate();
+
 }
 

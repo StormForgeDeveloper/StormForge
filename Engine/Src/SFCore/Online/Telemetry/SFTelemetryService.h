@@ -37,15 +37,6 @@ namespace SF
     {
     public:
 
-		static constexpr char KeyName_AuthHeader[] = "sfclientid:";
-		static constexpr char KeyName_AuthHeaderLen = sizeof(KeyName_AuthHeader) - 1; // without null terminator
-		static constexpr char KeyName_ClientId[] = "clientid";
-        static constexpr char KeyName_AuthKey[] = "authkey";
-
-
-
-    public:
-
         TelemetryService();
         virtual ~TelemetryService();
 
@@ -54,6 +45,12 @@ namespace SF
 
     };
 
+
+
+	namespace Service
+	{
+		extern ServiceInstance<TelemetryService> Telemetry;
+	}
 
 }
 

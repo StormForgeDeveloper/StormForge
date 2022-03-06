@@ -64,7 +64,7 @@ namespace SF
 		WebsocketClient(IHeap& heap);
 		~WebsocketClient();
 
-		bool IsConnected() const { return m_ConnectionState == ConnectionState::Connected; }
+		SF_FORCEINLINE bool IsConnected() const { return m_ConnectionState == ConnectionState::Connected; }
 
 		virtual Result Initialize(const String& serverAddress, int port, const String& protocol) override;
 		virtual void Terminate() override;

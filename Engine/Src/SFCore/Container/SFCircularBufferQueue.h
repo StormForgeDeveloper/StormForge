@@ -91,7 +91,14 @@ namespace SF
 		size_t GetFreeSize() const;
 
 		// Clear all items
-		void Clear();
+		void Reset();
+		SF_FORCEINLINE void Clear() { Reset(); }
+
+		// forcefully reset the position. This is useful when you handle external buffer manually save/load from file system.
+		bool ForceReset(int headOffset, int tailOffset);
+
+		BufferItem* GetHead() const { return m_HeadPos.load(MemoryOrder::memory_order_acquire); }
+		BufferItem* GetTail() const { return m_TailPos.load(MemoryOrder::memory_order_acquire); }
 
 		// Reserve buffer. The pointer it returns is reserved for writing, after done writing, Call SetReadyForRead to mark the buffer is ready for read
 		BufferItem* AllocateWrite(size_t bufferSize);
@@ -100,11 +107,15 @@ namespace SF
 		Result ReleaseWrite(BufferItem* pBuffer);
 
 		BufferItem* DequeueRead();
-
 		Result ReleaseRead(BufferItem* pBuffer);
 
+		// low level access. don't change state, just sneak peek tail item. 
+		// NOTE: NOT thread safe. caller should guarantee thread safety   
+		BufferItem* PeekTail();
+		BufferItem* PeekNext(BufferItem* item);
+
 		// get buffer item size
-		size_t GetBufferItemSize(BufferItem* pBufferItem);
+		size_t GetBufferItemSize(BufferItem* pBufferItem) const;
 
 		// Iterate readable items. the item passed to the functor will be freed
 		template<class FunctorT>
@@ -118,11 +129,16 @@ namespace SF
 				if (pBufferItem == nullptr)
 					return; // nothing left for now
 
-				func(pBufferItem->GetDataPtr());
+				bool bRet = func(pBufferItem);
 
 				ReleaseRead(pBufferItem);
+
+				if (!bRet)
+					return;
 			}
 		}
+
+		bool CheckIntegrity() const;
 	};
 
 
