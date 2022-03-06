@@ -125,7 +125,7 @@ namespace SF
 
         virtual ~StreamDBProducer();
 
-        virtual Result Initialize(const String& brokers, const String& topic, int32_t partition = 0) override;
+        virtual Result Initialize(const String& serverAddress, const String& path, int32_t partition = 0) override;
 
         Result SendRecord(const ArrayView<const uint8_t>& data);
 
@@ -178,10 +178,10 @@ namespace SF
         StreamDBConsumer();
         virtual ~StreamDBConsumer();
 
-        virtual Result Initialize(const String& brokers, const String& topic, int32_t partition = 0) override;
-        virtual Result Initialize(const String& brokers, const String& consumerGroupId, const String& topic)
+        virtual Result Initialize(const String& serverAddress, const String& path, int32_t partition = 0) override;
+        virtual Result Initialize(const String& serverAddress, const String& consumerGroupId, const String& path)
         {
-            return Initialize(brokers, topic);
+            return Initialize(serverAddress, path);
         }
 
         SF_FORCEINLINE bool IsDateRequested() const { return m_IsDataRequested; }
@@ -228,7 +228,7 @@ namespace SF
         StreamDBGroupConsumer();
 		virtual ~StreamDBGroupConsumer();
 
-		virtual Result Initialize(const String& brokers, const String& consumerGroupId, const String& topic);
+		virtual Result Initialize(const String& serverAddress, const String& consumerGroupId, const String& path);
 
 		SF_FORCEINLINE bool IsSubscribed() const { return m_IsSubscribed; }
 

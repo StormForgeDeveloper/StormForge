@@ -78,17 +78,20 @@ namespace SF
 
 		// Constructor/Destructor
 		CircularBufferQueue(IHeap& heap, size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);
-		CircularBufferQueue(IHeap& heap);
 		~CircularBufferQueue();
 
 		void Initialize(size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);
 
 		SF_FORCEINLINE size_t GetBufferSize() const { return m_BufferSize; }
+		SF_FORCEINLINE size_t size() const { return m_BufferSize; }
 
 		// Empty check
 		bool IsEmpty() const;
 
 		size_t GetFreeSize() const;
+
+		SF_FORCEINLINE uint8_t* data() { return m_Buffer; }
+		SF_FORCEINLINE const uint8_t* data() const { return m_Buffer; }
 
 		// Clear all items
 		void Reset();

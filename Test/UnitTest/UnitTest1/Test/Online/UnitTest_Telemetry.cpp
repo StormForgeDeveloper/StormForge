@@ -34,26 +34,30 @@ using namespace ::SF;
 
 TEST_F(TelemetryTest, Client)
 {
-	
-	TelemetryBR telemetry;
+	//TelemetryBR telemetry;
 
-	auto ret = telemetry.Initialize(m_TelemetryServer, m_TelemetryPort, m_TelemetryClientId, m_TelemetryAuthKey);
-	EXPECT_TRUE(ret);
+	//auto ret = telemetry.Initialize(m_TelemetryServer, m_TelemetryPort, m_TelemetryClientId, m_TelemetryAuthKey);
+	//EXPECT_TRUE(ret);
 
-	while (telemetry.IsValid() && !telemetry.IsConnected());
+	//while (telemetry.IsValid() && !telemetry.IsConnected());
 
-	int iTest = 0;
-	for (; telemetry.IsConnected() && iTest < 20; iTest++)
-	{
-		TelemetryEvent* pTelemetryEvent = telemetry.CreateTelemetryEvent("TestEvent");
+	//int iTest = 0;
+	//for (; telemetry.IsConnected() && iTest < 20; iTest++)
+	//{
+	//	SFUniquePtr<TelemetryEvent> pTelemetryEvent(telemetry.CreateTelemetryEvent("TestEvent"));
 
+	//	char TestString[128];
+	//	StrUtil::Format(TestString, "TestString:{0}", iTest);
 
-		pTelemetryEvent->Send();
+	//	pTelemetryEvent->Add("TestData1", iTest);
+	//	pTelemetryEvent->Add("TestData2", (int64_t)iTest);
+	//	pTelemetryEvent->Add("TestData3", TestString);
 
-		ThisThread::SleepFor(DurationMS(100));
-	}
+	//	pTelemetryEvent.reset();
 
-	telemetry.Terminate();
+	//	ThisThread::SleepFor(DurationMS(100));
+	//}
 
+	//telemetry.Terminate();
 }
 

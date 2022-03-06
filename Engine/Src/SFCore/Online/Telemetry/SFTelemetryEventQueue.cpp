@@ -27,7 +27,7 @@ namespace SF
 	//	Implementations
 	//
 	TelemetryEventQueue::TelemetryEventQueue(IHeap& heap)
-		: m_EventBufferQueue(heap, sizeof(m_EventBuffer), m_EventBuffer)
+		: m_EventBufferQueue(heap)
 	{
 	}
 
@@ -55,7 +55,7 @@ namespace SF
 		return m_EventBufferQueue.IsEmpty();
 	}
 
-	bool TelemetryEventQueue::EnqueueEvent(const Array<uint8_t>& eventData)
+	bool TelemetryEventQueue::EnqueueEvent(const Array<const uint8_t>& eventData)
 	{
 		MutexScopeLock ScopeLock(m_WriteLock);
 
@@ -129,14 +129,16 @@ namespace SF
 			return;
 		}
 
-		// Reset the queue
-		m_EventBufferQueue.ForceReset(0, 0);
-
 		m_StorageFileHeader = {};
 		m_StorageFileHeader.Head = 0;
 		m_StorageFileHeader.Tail = 0;
 
-		memset(m_EventBuffer, 0, sizeof(m_EventBuffer));
+
+		// Reset the queue
+		m_EventBufferQueue.Initialize(EventStorageSize);
+		// being reset in Initialize
+		//memset(m_EventBufferQueue.data(), 0, m_EventBufferQueue.size());
+
 
 		size_t written{};
 		auto hr = m_StorageFile.Write(reinterpret_cast<uint8_t*>(&m_StorageFileHeader), sizeof(m_StorageFileHeader), written);
@@ -147,7 +149,7 @@ namespace SF
 			return;
 		}
 
-		hr = m_StorageFile.Write(m_EventBuffer, sizeof(m_EventBuffer), written);
+		hr = m_StorageFile.Write(m_EventBufferQueue.data(), m_EventBufferQueue.size(), written);
 		if (!hr)
 		{
 			SFLog(Telemetry, Error, "TelemetryEventQueue::CreateStorageFile, Failed to save body, file:{0}", m_StorageFilePath);
@@ -174,7 +176,7 @@ namespace SF
 		size_t writenSize{};
 
 		m_StorageFile.Seek(SeekMode::Begin, sizeof(m_StorageFileHeader) + Start);
-		bool bRet = m_StorageFile.Write(m_EventBuffer + Start, DataSize, writenSize);
+		bool bRet = m_StorageFile.Write(m_EventBufferQueue.data() + Start, DataSize, writenSize);
 		if (!bRet)
 		{
 			SFLog(Telemetry, Error, "TelemetryEventQueue::WriteDataSection, Failed, file:{0}", m_StorageFilePath);
@@ -251,7 +253,7 @@ namespace SF
 			return false;
 		}
 
-		ReadRes = m_StorageFile.Read(m_EventBuffer, sizeof(m_EventBuffer), readSize);
+		ReadRes = m_StorageFile.Read(m_EventBufferQueue.data(), m_EventBufferQueue.size(), readSize);
 		if (!ReadRes)
 		{
 			SFLog(Telemetry, Error, "TelemetryEventQueue Failed to read cache file {0}.", m_StorageFilePath);

@@ -19,12 +19,8 @@ namespace SF
 	CircularBufferQueue::CircularBufferQueue(IHeap& heap, size_t bufferSize, uint8_t* externalBuffer)
 		: m_Heap(heap)
 	{
-		Initialize(bufferSize, externalBuffer);
-	}
-
-	CircularBufferQueue::CircularBufferQueue(IHeap& heap)
-		: m_Heap(heap)
-	{
+		if (bufferSize > 0)
+			Initialize(bufferSize, externalBuffer);
 	}
 
 	CircularBufferQueue::~CircularBufferQueue()

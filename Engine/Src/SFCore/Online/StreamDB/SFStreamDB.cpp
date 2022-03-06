@@ -242,11 +242,15 @@ namespace SF
 		m_Producer.reset();
 	}
 
-	Result StreamDBProducer::Initialize(const String& brokers, const String& topic, int32_t partition)
+	Result StreamDBProducer::Initialize(const String& serverAddress, const String& path, int32_t partition)
 	{
-		assert(!brokers.IsNullOrEmpty());
-		assert(!topic.IsNullOrEmpty());
-		Result hr = super::Initialize(brokers, topic, partition);
+		if (serverAddress.IsNullOrEmpty() || path.IsNullOrEmpty())
+		{
+			SFLog(Net, Error, "Stream producer has invalid parameter: {0}", serverAddress, path);
+			return ResultCode::INVALID_ARG;
+		}
+
+		Result hr = super::Initialize(serverAddress, path, partition);
 		if (!hr)
 			return hr;
 
@@ -405,11 +409,17 @@ namespace SF
 		m_Consumer.reset();
 	}
 
-	Result StreamDBConsumer::Initialize(const String& brokers, const String& topic, int32_t partition)
+	Result StreamDBConsumer::Initialize(const String& serverAddress, const String& path, int32_t partition)
 	{
 		std::string errstr;
 
-		Result hr = super::Initialize(brokers, topic, partition);
+		if (serverAddress.IsNullOrEmpty() || path.IsNullOrEmpty())
+		{
+			SFLog(Net, Error, "Stream consumer has invalid parameter: {0}", serverAddress, path);
+			return ResultCode::INVALID_ARG;
+		}
+
+		Result hr = super::Initialize(serverAddress, path, partition);
 		if (!hr)
 			return hr;
 
@@ -546,11 +556,11 @@ namespace SF
 		m_Consumer.reset();
 	}
 
-	Result StreamDBGroupConsumer::Initialize(const String& brokers, const String& consumerGroupId, const String& topic)
+	Result StreamDBGroupConsumer::Initialize(const String& serverAddress, const String& consumerGroupId, const String& path)
 	{
 		std::string errstr;
 
-		Result hr = super::Initialize(brokers, topic, -1);
+		Result hr = super::Initialize(serverAddress, path, -1);
 		if (!hr)
 			return hr;
 

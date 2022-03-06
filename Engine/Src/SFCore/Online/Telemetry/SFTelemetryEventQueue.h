@@ -76,7 +76,7 @@ namespace SF
 		//
 
 		// Enqueue
-		bool EnqueueEvent(const Array<uint8_t>& eventData);
+		bool EnqueueEvent(const Array<const uint8_t>& eventData);
 
 		// Get tail segment
 		bool GetTailEvent(EventItem*& eventItem);
@@ -119,7 +119,6 @@ namespace SF
 		Atomic<EventItem*> m_PostingTailPtr;
 
 		// Event buffer
-		uint8_t m_EventBuffer[EventStorageSize];
 		CircularBufferQueue m_EventBufferQueue;
 
 		// Event cache file header

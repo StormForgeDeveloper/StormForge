@@ -200,6 +200,7 @@ namespace SF
 			event_base_loop(itLoop, 0);
 			event_base_free(itLoop);
 		}
+		m_EventLoops.Reset();
 
 		m_WSI = nullptr;
 	}
