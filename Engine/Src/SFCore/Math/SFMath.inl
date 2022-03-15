@@ -99,7 +99,7 @@ namespace SF {
 	{
 		T xmin, xmax, ymin, ymax;
 
-		ymax = n * tanf(fovy * nv_to_rad * T(0.5));
+		ymax = n * tanf(fovy * T(0.5));
 		ymin = -ymax;
 
 		xmin = ymin * aspect;
