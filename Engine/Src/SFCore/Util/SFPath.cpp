@@ -184,11 +184,11 @@ namespace Util {
 
 		if (TempDir.IsNullOrEmpty())
 		{
-			std::wstring tempWDir = std::filesystem::temp_directory_path();
-			char tempBuffer[1024]{};
-			StrUtil::WCSToUTF8(tempWDir.c_str(), tempBuffer);
+			//std::wstring tempWDir = std::filesystem::temp_directory_path();
+			//char tempBuffer[1024]{};
+			//StrUtil::WCSToUTF8(tempWDir.c_str(), tempBuffer);
 
-			TempDir = Combine(tempBuffer, GetModuleName(), "Temp");
+			//TempDir = Combine(tempBuffer, GetModuleName(), "Temp");
 		}
 
 		return TempDir;
