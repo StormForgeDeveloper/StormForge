@@ -15,9 +15,11 @@
 #include "SFTypedefs.h"
 #include "Util/SFPath.h"
 #include "Util/SFStrUtil.h"
-
+#include "IO/SFFileUtil.h"
+#include <filesystem>
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
 #include <userenv.h>
+#include <shlobj_core.h>
 #else
 #include <pwd.h>
 #endif
@@ -160,17 +162,36 @@ namespace Util {
 		{
 			char profilePath[MAX_PATH]{};
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
-			DWORD dwSizeOfPath = MAX_PATH;
-			GetProfilesDirectoryA(profilePath, &dwSizeOfPath);
+			auto tempDir = GetTempDir();
+			SHGetSpecialFolderPathA(nullptr, profilePath, CSIDL_LOCAL_APPDATA, true);
 #else
 			struct passwd* pw = getpwuid(getuid());
 			StrUtil::StringCopy(profilePath, pw->pw_dir);
 #endif
 
-			SaveDir = Combine(profilePath, "SF", "Saves");
+			SaveDir = Combine(profilePath, GetModuleName(), "Saves");
+
+			FileUtil::CreatePath(SaveDir.data());
 		}
 
 		return SaveDir;
+	}
+
+
+	static String TempDir;
+	const String& Path::GetTempDir()
+	{
+
+		if (TempDir.IsNullOrEmpty())
+		{
+			std::wstring tempWDir = std::filesystem::temp_directory_path();
+			char tempBuffer[1024]{};
+			StrUtil::WCSToUTF8(tempWDir.c_str(), tempBuffer);
+
+			TempDir = Combine(tempBuffer, GetModuleName(), "Temp");
+		}
+
+		return TempDir;
 	}
 
 	static String ContentDir;

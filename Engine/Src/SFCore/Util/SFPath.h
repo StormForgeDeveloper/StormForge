@@ -63,6 +63,7 @@ namespace Util {
 		//
 
 		static const String& GetSaveDir();
+		static const String& GetTempDir();
 
 		static const String& GetContentDir();
 	};

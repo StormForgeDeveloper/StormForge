@@ -270,6 +270,27 @@ namespace SF
 		return pTail;
 	}
 
+	void CircularBufferQueue::CancelRead(BufferItem* item)
+	{
+		auto expectedState = ItemState::Reading;
+		while (!item->State.compare_exchange_weak(expectedState, ItemState::Filled, std::memory_order_release, std::memory_order_acquire))
+		{
+			switch (expectedState)
+			{
+			case ItemState::Reading:
+				// Retry
+				break;
+			case ItemState::Dummy:
+				// might be broken
+				return;
+			default:
+				assert(false);
+				// Retry
+				return;
+			}
+		}
+	}
+
 	Result CircularBufferQueue::ReleaseRead(BufferItem* pBuffer)
 	{
 		if (pBuffer == nullptr)
@@ -346,7 +367,7 @@ namespace SF
 		if (tailState != ItemState::Filled && curTail != pHead)
 			return PeekNext(curTail);
 
-		return nullptr;
+		return curTail;
 	}
 
 	CircularBufferQueue::BufferItem* CircularBufferQueue::PeekNext(BufferItem* item)
@@ -359,15 +380,14 @@ namespace SF
 		auto startPos = (uintptr_t)m_Buffer;
 
 		auto curTail = item;
-		auto tailState = curTail->State.load(std::memory_order_relaxed);
-		assert(tailState == ItemState::Filled);
+		ItemState tailState{};
 
-		while (tailState != ItemState::Filled && curTail != pHead)
+		do
 		{
 			BufferItem* nextTail = reinterpret_cast<BufferItem*>(startPos + curTail->NextPos);
 			curTail = nextTail;
 			tailState = curTail->State.load(std::memory_order_relaxed);
-		}
+		} while (tailState != ItemState::Filled && curTail != pHead);
 
 		if (curTail == pHead) // queue is empty
 			return nullptr;

@@ -12,8 +12,9 @@
 #include "SFCorePCH.h"
 
 #include "Online/Websocket/SFWebsocket.h"
+#include "Math/SFMath.h"
 
-#include <signal.h>
+
 
 
 
@@ -111,7 +112,8 @@ namespace SF
 
 		// Event loop
 		//event_enable_debug_mode();
-		for (uint iThread = 0; iThread < m_NumThread; iThread++)
+		auto numEventLoop = Math::Max<uint>(1, m_NumThread);
+		for (uint iEventLoop = 0; iEventLoop < numEventLoop; iEventLoop++)
 		{
 			m_EventLoops.push_back(event_base_new());
 		}
@@ -138,7 +140,7 @@ namespace SF
 
 					if (m_EventLoops.size() > 0)
 					{
-						event_base_loop(m_EventLoops[iThread], EVLOOP_ONCE | EVLOOP_NONBLOCK);
+						TickEventLoop(iThread);
 					}
 					else
 					{
@@ -150,6 +152,14 @@ namespace SF
 
 			pThread->Start();
 			m_Threads.push_back(pThread);
+		}
+	}
+
+	void Websocket::TickEventLoop(int iEvent)
+	{
+		if (iEvent >= 0 && iEvent < m_EventLoops.size())
+		{
+			event_base_loop(m_EventLoops[iEvent], EVLOOP_ONCE | EVLOOP_NONBLOCK);
 		}
 	}
 
@@ -205,20 +215,20 @@ namespace SF
 		m_WSI = nullptr;
 	}
 
-	void Websocket::Send(struct WSSessionData* pss, const Array<uint8_t>& messageData)
+	Result Websocket::Send(struct WSSessionData* pss, const Array<uint8_t>& messageData)
 	{
 		if (m_WSI == nullptr || pss == nullptr || pss->SendBuffer == nullptr
 			|| messageData.size() == 0)
 		{
 			SFLog(Websocket, Debug3, "Websocket::Send, failed, not initialized?");
-			return;
+			return ResultCode::NOT_INITIALIZED;
 		}
 
 		auto pSendItem = pss->SendBuffer->AllocateWrite(MessageBufferPadding + messageData.size());
 		if (pSendItem == nullptr)
 		{
 			SFLog(Websocket, Debug3, "OOM: dropping!");
-			return;
+			return ResultCode::OUT_OF_MEMORY;
 		}
 
 		memcpy((char*)pSendItem->GetDataPtr() + MessageBufferPadding, messageData.data(), messageData.size());
@@ -234,6 +244,7 @@ namespace SF
 			OnConnectionWritable(m_WSI, pss, nullptr, 0);
 		}
 
+		return ResultCode::SUCCESS;
 	}
 
 	int Websocket::OnConnectionEstablished(struct lws* wsi, void* user, void* in, size_t len)
@@ -279,14 +290,21 @@ namespace SF
 
 		// notice we allowed for LWS_PRE in the payload already
 		int m = lws_write(wsi, ((unsigned char*)pSendItem->GetDataPtr()) + MessageBufferPadding, dataLen, (enum lws_write_protocol)flags);
-		SendBuffer->ReleaseRead(pSendItem);
 		if (m < dataLen)
 		{
+			SendBuffer->CancelRead(pSendItem);
 			SFLog(Websocket, Error, "ERROR {0} writing to ws socket", m);
+
+			if (m_UseWriteEvent)
+			{
+				lws_callback_on_writable(wsi);
+			}
+
 			return -1;
 		}
 
 		SFLog(Websocket, Debug4, "{0}  wrote {0}: flags: 0x{1:x}", GetName(), m, flags);
+		SendBuffer->ReleaseRead(pSendItem);
 
 		if (m_UseWriteEvent)
 		{

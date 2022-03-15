@@ -245,9 +245,10 @@ done_list:
 		 * There will be a separate ipv4 listen socket if that's
 		 * enabled.
 		 */
+		int ipv6Only = (a->vhost->options & LWS_SERVER_OPTION_IPV6_V6ONLY_VALUE) == LWS_SERVER_OPTION_IPV6_V6ONLY_VALUE;
 		if (a->af == AF_INET6 &&
 		    setsockopt(sockfd, IPPROTO_IPV6, IPV6_V6ONLY,
-			       (const void*)&value, sizeof(value)) < 0) {
+			       (const void*)&ipv6Only, sizeof(ipv6Only)) < 0) {
 			compatible_close(sockfd);
 			return -1;
 		}
@@ -475,8 +476,9 @@ _lws_vhost_init_server(const struct lws_context_creation_info *info,
 
 #if defined(LWS_WITH_IPV6)
 	if (!(LWS_IPV6_ENABLED(vhost) &&
-	      (vhost->options & LWS_SERVER_OPTION_IPV6_V6ONLY_MODIFY) &&
-	      (vhost->options & LWS_SERVER_OPTION_IPV6_V6ONLY_VALUE))) {
+	      (vhost->options & LWS_SERVER_OPTION_IPV6_V6ONLY_MODIFY) 
+		//&& (vhost->options & LWS_SERVER_OPTION_IPV6_V6ONLY_VALUE) // SF-MOD
+		)) {
 #endif
 		a.af = AF_INET;
 		if (_lws_vhost_init_server_af(&a))

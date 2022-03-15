@@ -14,6 +14,8 @@
 
 
 #include "SFMathTypes.h"
+#include "Math/SF3DMathSoft.h"
+
 
 namespace SF
 {

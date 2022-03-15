@@ -91,16 +91,18 @@ namespace SF
 		SF_FORCEINLINE uint GetNumThread() const { return m_NumThread; }
 		SF_FORCEINLINE void SetNumThread(uint numThread) { m_NumThread = numThread; }
 
+		SF_FORCEINLINE size_t GetNumEventLoopObject() const { return m_EventLoops.size(); }
+
 		SF_FORCEINLINE bool GetUseSSL() const { return m_UseSSL; }
 		SF_FORCEINLINE void SetUseSSL(bool useSSL) { m_UseSSL = useSSL; }
 
 		virtual Result Initialize(const String& serverAddress, int port, const String& protocol);
 
-		SF_FORCEINLINE bool IsValid() const { return m_WSI != nullptr; }
+		SF_FORCEINLINE bool IsValid() const { return m_WSIContext != nullptr && m_WSI != nullptr; }
 
 		virtual void Terminate();
 
-		virtual void Send(struct WSSessionData* pss, const Array<uint8_t>& messageData);
+		virtual Result Send(struct WSSessionData* pss, const Array<uint8_t>& messageData);
 		virtual void OnRecv(struct WSSessionData* pss, const Array<uint8_t>& messageData) { m_RecvDeletates.Invoke(pss, messageData); }
 
 		virtual int OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len) { return 0; }
@@ -135,6 +137,10 @@ namespace SF
 
 		SF_FORCEINLINE void SetProtocolFilteringFunction(const EventFunction& filteringFunc) { m_ProtocolFilteringDeletates = filteringFunc; }
 		SF_FORCEINLINE void SetProtocolFilteringFunction(EventFunction&& filteringFunc) { m_ProtocolFilteringDeletates = Forward<EventFunction>(filteringFunc); }
+
+
+		// Call this function if you want to use manual ticking 
+		virtual void TickEventLoop(int iEvent);
 
 	protected:
 

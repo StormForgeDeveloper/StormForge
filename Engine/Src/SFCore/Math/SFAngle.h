@@ -20,8 +20,8 @@ namespace SF {
 	//////////////////////////////////////////////////////
 	// Angle conversion
 
-	inline float RadToDeg(float radian) { return radian / C_PI * 360.f; }
-	inline float DegToRad(float degree) { return degree / 360.f * C_PI; }
+	inline float RadToDeg(float radian) { return float(radian / C_PI * 360.f); }
+	inline float DegToRad(float degree) { return float(degree / 360.f * C_PI); }
 
 
 	//////////////////////////////////////////////////////
@@ -34,7 +34,6 @@ namespace SF {
 	public:
 		Degree();
 		explicit Degree(float degree);
-		constexpr explicit Degree(float degree);
 		Degree(const Degree& src);
 		Degree(const Radian& src);
 
@@ -78,7 +77,6 @@ namespace SF {
 	public:
 		Radian();
 		Radian(float radian);
-		constexpr Radian(float radian);
 		Radian(const Degree& src);
 		Radian(const Radian& src);
 

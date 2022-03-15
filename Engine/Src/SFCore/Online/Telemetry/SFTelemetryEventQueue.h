@@ -53,6 +53,10 @@ namespace SF
 	#pragma pack(pop)
 
 		using EventItem = CircularBufferQueue::BufferItem;
+		struct EventItemHeader
+		{
+			uint32_t EventId;
+		};
 
 	public:
 
@@ -76,16 +80,16 @@ namespace SF
 		//
 
 		// Enqueue
-		bool EnqueueEvent(const Array<const uint8_t>& eventData);
+		bool EnqueueEvent(uint32_t eventId, const Array<const uint8_t>& eventData);
 
 		// Get tail segment
-		bool GetTailEvent(EventItem*& eventItem);
+		EventItem* GetTailEvent();
 
 		// Get Next segment
-		bool GetNextEvent(EventItem*& eventItem);
+		EventItem* GetNextEvent(EventItem* eventItem);
 
 		// Free up to last accessed
-		bool FreePostedEvents();
+		bool FreePostedEvents(uint32_t eventId);
 
 
 
@@ -114,9 +118,6 @@ namespace SF
 
 		// Read lock
 		CriticalSection m_ReadLock;
-
-		// Posting tail
-		Atomic<EventItem*> m_PostingTailPtr;
 
 		// Event buffer
 		CircularBufferQueue m_EventBufferQueue;

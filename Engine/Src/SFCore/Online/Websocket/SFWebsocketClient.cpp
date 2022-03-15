@@ -75,12 +75,12 @@ namespace SF
 			return ResultCode::FAIL;
 		}
 
-
 		m_ConnectionState = ConnectionState::Connecting;
 
 		TryConnect();
 
-		StartThread();
+		if (IsUseTickThread())
+			StartThread();
 
 		return ResultCode::SUCCESS;
 	}
@@ -93,6 +93,17 @@ namespace SF
 		m_Session = nullptr;
 	}
 
+	void WebsocketClient::TickEventLoop(int iEvent)
+	{
+		super::TickEventLoop(iEvent);
+
+		// empty write queue if possible
+		if (!m_UseWriteEvent && m_WSI && m_Session)
+		{
+			OnConnectionWritable(m_WSI, m_Session, nullptr, 0);
+		}
+	}
+
 	void WebsocketClient::CallbackTryConnect(struct lws_sorted_usec_list* pSortedUsecList)
 	{
 		auto* pInstance = static_cast<DelayedEventContext*>(pSortedUsecList)->pInstance;
@@ -101,7 +112,7 @@ namespace SF
 
 	void WebsocketClient::TryConnect()
 	{
-		if (m_ConnectionState == ConnectionState::Connected) // skip for connected
+		if (m_WSIContext == nullptr || m_ConnectionState == ConnectionState::Connected) // skip for connected
 			return;
 
 		lws_client_connect_info info{};
@@ -129,12 +140,12 @@ namespace SF
 		}
 	}
 
-	void WebsocketClient::Send(const Array<uint8_t>& messageData)
+	Result WebsocketClient::Send(const Array<uint8_t>& messageData)
 	{
 		if (m_Session == nullptr)
-			return;
+			return ResultCode::IO_NOT_CONNECTED;
 
-		super::Send(m_Session, messageData);
+		return super::Send(m_Session, messageData);
 	}
 
 	int WebsocketClient::OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len)

@@ -38,8 +38,6 @@ namespace SF
 
 	void TelemetryEventQueue::Initialize()
 	{
-		m_PostingTailPtr = nullptr;
-
 		m_StorageFilePath = Util::Path::Combine(Util::Path::GetSaveDir(), BaseStorageFilePath);
 
 		// No file cache for editor or tool mode
@@ -55,12 +53,14 @@ namespace SF
 		return m_EventBufferQueue.IsEmpty();
 	}
 
-	bool TelemetryEventQueue::EnqueueEvent(const Array<const uint8_t>& eventData)
+	bool TelemetryEventQueue::EnqueueEvent(uint32_t eventId, const Array<const uint8_t>& eventData)
 	{
 		MutexScopeLock ScopeLock(m_WriteLock);
 
-		auto eventItem = m_EventBufferQueue.AllocateWrite(eventData.size());
-		for (;!eventItem; eventItem = m_EventBufferQueue.AllocateWrite(eventData.size()))
+		auto allocationSize = eventData.size() + sizeof(EventItemHeader);
+
+		auto eventItem = m_EventBufferQueue.AllocateWrite(allocationSize);
+		for (;!eventItem; eventItem = m_EventBufferQueue.AllocateWrite(allocationSize))
 		{
 			// drop old item first
 			MutexScopeLock ScopeReadLock(m_ReadLock);
@@ -76,40 +76,49 @@ namespace SF
 			m_EventBufferQueue.ReleaseRead(pTail);
 		}
 
-		memcpy(eventItem->GetDataPtr(), eventData.data(), eventData.size());
+		auto* pCurDataPtr = (uint8_t*)eventItem->GetDataPtr();
+		memcpy(pCurDataPtr, &eventId, sizeof(eventId)); pCurDataPtr += sizeof(eventId);
+		memcpy(pCurDataPtr, eventData.data(), eventData.size());
+
+		m_EventBufferQueue.ReleaseWrite(eventItem);
 
 		return true;
 	}
 
-	bool TelemetryEventQueue::GetTailEvent(EventItem* &eventItem)
+	TelemetryEventQueue::EventItem* TelemetryEventQueue::GetTailEvent()
 	{
-		eventItem = m_EventBufferQueue.PeekTail();
+		auto eventItem = m_EventBufferQueue.PeekTail();
 
-		m_PostingTailPtr = eventItem;
-
-		return eventItem != nullptr;
+		return eventItem;
 	}
 
-	bool TelemetryEventQueue::GetNextEvent(EventItem*& eventItem)
+	TelemetryEventQueue::EventItem* TelemetryEventQueue::GetNextEvent(EventItem* eventItem)
 	{
-		eventItem = m_EventBufferQueue.PeekNext(eventItem);
+		auto nextEventItem = m_EventBufferQueue.PeekNext(eventItem);
 
-		m_PostingTailPtr = eventItem;
-
-		return eventItem != nullptr;
+		return nextEventItem;
 	}
 
-	bool TelemetryEventQueue::FreePostedEvents()
+	bool TelemetryEventQueue::FreePostedEvents(uint32_t eventId)
 	{
-		// Posting should be done, we are safe to clean up the data
-		auto postingTail = m_PostingTailPtr.exchange(nullptr);
-		if (postingTail == nullptr)
-			return true;
+		{
+			MutexScopeLock scopeLock(GetReadLock());
 
-		m_EventBufferQueue.ForeachReadableItems([&](EventItem* pItem) 
+			auto eventItem = m_EventBufferQueue.DequeueRead();
+			for (; eventItem; eventItem = m_EventBufferQueue.DequeueRead())
 			{
-				return postingTail != pItem;
-			});
+				auto curEventId = *(uint32_t*)eventItem->GetDataPtr();
+				if (int32_t(curEventId - eventId) > 0)
+				{
+					m_EventBufferQueue.CancelRead(eventItem);
+					break;
+				}
+
+				m_EventBufferQueue.ReleaseRead(eventItem);
+			}
+		}
+
+		SaveDelta();
 
 		return true;
 	}
@@ -194,28 +203,29 @@ namespace SF
 		MutexScopeLock ScopeWriteLock(m_WriteLock);
 		MutexScopeLock ScopeReadLock(m_ReadLock);
 
+		auto basePtr = intptr_t(m_EventBufferQueue.data());
 		auto OldHead = m_StorageFileHeader.Head;
 		auto OldTail = m_StorageFileHeader.Tail;
 
-		auto NewHead = (int)intptr_t(m_EventBufferQueue.GetHead());
-		auto NewTail = (int)intptr_t(m_EventBufferQueue.GetTail());
+		auto NewHead = intptr_t(m_EventBufferQueue.GetHead()) - basePtr;
+		auto NewTail = intptr_t(m_EventBufferQueue.GetTail()) - basePtr;
 
 
 		if (NewHead >= OldHead)
 		{
-			WriteDataSection(OldHead, NewHead - OldHead);
+			WriteDataSection(OldHead, int(NewHead - OldHead));
 		}
 		else
 		{
-			WriteDataSection(OldHead, EventStorageSize - OldHead);
-			WriteDataSection(0, NewHead);
+			WriteDataSection(OldHead, int(EventStorageSize - OldHead));
+			WriteDataSection(0, int(NewHead));
 		}
 
 		// We are saving updated data section only, so header should be written after data section write.
 		if (NewHead != OldHead || NewTail != OldTail)
 		{
-			m_StorageFileHeader.Head = NewHead;
-			m_StorageFileHeader.Tail = NewTail;
+			m_StorageFileHeader.Head = (int)NewHead;
+			m_StorageFileHeader.Tail = (int)NewTail;
 
 			size_t writtern{};
 			m_StorageFile.Seek(SeekMode::Begin, 0);
@@ -229,6 +239,7 @@ namespace SF
 
 	bool TelemetryEventQueue::LoadFromFileStorage()
 	{
+		FileUtil::CreatePath(m_StorageFilePath.data(), 1);
 		m_StorageFile.Open(m_StorageFilePath, File::OpenMode::Read, File::SharingMode::Exclusive);
 		if (!m_StorageFile.IsOpened())
 		{

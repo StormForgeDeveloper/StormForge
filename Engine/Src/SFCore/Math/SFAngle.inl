@@ -24,18 +24,13 @@ namespace SF {
 	{
 	}
 
-	constexpr Degree::Degree(float degree)
-		: m_DegreeValue(degree)
-	{
-	}
-
 	Degree::Degree(const Degree& src)
 		: m_DegreeValue(src.m_DegreeValue)
 	{
 	}
 
 	Degree::Degree(const Radian& src)
-		: m_DegreeValue(((Degree)src).m_DegreeValue)
+		: m_DegreeValue(RadToDeg(src.ToRawRadian()))
 	{
 	}
 
@@ -149,11 +144,6 @@ namespace SF {
 	}
 
 	Radian::Radian(float degree)
-		: m_RadianValue(degree)
-	{
-	}
-
-	constexpr Radian::Radian(float degree)
 		: m_RadianValue(degree)
 	{
 	}

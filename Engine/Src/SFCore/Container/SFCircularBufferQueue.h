@@ -46,6 +46,7 @@ namespace SF
 			uint32_t				NextPos;	// Next item position, offset from m_Buffer
 
 			void* GetDataPtr() { return this + 1; }
+			size_t GetDataSize() const { return DataSize; }
 		};
 #pragma pack(pop)
 
@@ -110,6 +111,7 @@ namespace SF
 		Result ReleaseWrite(BufferItem* pBuffer);
 
 		BufferItem* DequeueRead();
+		void CancelRead(BufferItem* item);
 		Result ReleaseRead(BufferItem* pBuffer);
 
 		// low level access. don't change state, just sneak peek tail item. 
