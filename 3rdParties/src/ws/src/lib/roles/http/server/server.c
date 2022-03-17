@@ -90,9 +90,9 @@ _lws_vhost_init_server_af(struct vh_sock_args *a)
 	lws_sockfd_type sockfd;
 	struct lws *wsi;
 	int m = 0, is;
-#if defined(LWS_WITH_IPV6)
-	int value = 1;
-#endif
+//#if defined(LWS_WITH_IPV6)
+//	int value = 1;
+//#endif
 
 	(void)method_names;
 	(void)opt;
