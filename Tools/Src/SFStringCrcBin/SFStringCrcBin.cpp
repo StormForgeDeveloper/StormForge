@@ -78,8 +78,13 @@ static int Process()
 		while (readBuffer.size() > 0 || res != SF::ResultCode::END_OF_STREAM)
 		{
 			auto crIndex = readBuffer.FindIndex(iPos, [](const char x) { return x == '\n'; });
-			if (crIndex >= 0)
+			if (crIndex >= 0 || res == SF::ResultCode::END_OF_STREAM)
 			{
+				if (readBuffer.size() == 0)
+					break;
+
+				if (crIndex < 0)
+					crIndex = int(readBuffer.size() - 1);
 				readBuffer[crIndex] = '\0';
 
 				SF::String str(readBuffer.data() + iPos);
@@ -93,7 +98,10 @@ static int Process()
 				if (str.length() > 0)
 					stringDB.AddString(str);
 
-				iPos = crIndex + 1; // next string start
+				if (res == SF::ResultCode::END_OF_STREAM)
+					break;
+				else
+					iPos = crIndex + 1; // next string start
 			}
 			else // no
 			{
