@@ -154,6 +154,26 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceHarvestAreaRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceHarvestAreaRes()
 
 
+// Cmd: Send zone chatting
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceZoneChatCmd()
+{
+ 	return SF::Message::PlayInstance::ZoneChatCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceZoneChatCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceZoneChatRes()
+{
+ 	return SF::Message::PlayInstance::ZoneChatRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceZoneChatRes()
+
+
+// S2C: Player state change
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceZoneChatS2CEvt()
+{
+ 	return SF::Message::PlayInstance::ZoneChatS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceZoneChatS2CEvt()
+
+
 // Cmd: Create stream instance
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCreateStreamCmd()
 {

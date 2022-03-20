@@ -50,6 +50,8 @@ namespace SF
 		Result UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters );
 		// Cmd: Havest area
 		Result HarvestAreaCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId );
+		// Cmd: Send zone chatting
+		Result ZoneChatCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage );
 		// Cmd: Create stream instance
 		Result CreateStreamCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName );
 		// Cmd: Open stream instance
@@ -95,6 +97,10 @@ namespace SF
 		Result UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes );
 		// Cmd: Havest area
 		Result HarvestAreaRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes );
+		// Cmd: Send zone chatting
+		Result ZoneChatRes( const uint64_t &InTransactionID, const Result &InResult );
+		// S2C: Player state change
+		Result ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InMessage );
 		// Cmd: Create stream instance
 		Result CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Open stream instance

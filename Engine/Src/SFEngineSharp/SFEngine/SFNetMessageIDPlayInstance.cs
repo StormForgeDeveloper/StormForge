@@ -88,6 +88,15 @@ namespace SF.Net
 		public static int HarvestAreaRes { get { return CSSFNetMessageID_PlayInstanceHarvestAreaRes(); } }
 
 
+		// Cmd: Send zone chatting
+		public static int ZoneChatCmd { get { return CSSFNetMessageID_PlayInstanceZoneChatCmd(); } }
+
+		public static int ZoneChatRes { get { return CSSFNetMessageID_PlayInstanceZoneChatRes(); } }
+
+
+		// S2C: Player state change
+		public static int ZoneChatS2CEvt { get { return CSSFNetMessageID_PlayInstanceZoneChatS2CEvt(); } }
+
 		// Cmd: Create stream instance
 		public static int CreateStreamCmd { get { return CSSFNetMessageID_PlayInstanceCreateStreamCmd(); } }
 
@@ -217,6 +226,21 @@ namespace SF.Net
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceHarvestAreaRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstanceHarvestAreaRes();
 
+
+
+		// Cmd: Send zone chatting
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceZoneChatCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceZoneChatCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceZoneChatRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceZoneChatRes();
+
+
+
+		// S2C: Player state change
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceZoneChatS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceZoneChatS2CEvt();
 
 
 		// Cmd: Create stream instance

@@ -146,6 +146,17 @@ namespace SF.Net
 			return result;
 		} // public int  HarvestAreaCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InAreaId )
 
+		// Cmd: Send zone chatting
+		public int  ZoneChatCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InChatMessage )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_PlayInstanceZoneChatCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InChatMessageType,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
+			}
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatCmd);
+			return result;
+		} // public int  ZoneChatCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InChatMessage )
+
 		// Cmd: Create stream instance
 		public int  CreateStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
 		{
@@ -251,6 +262,11 @@ namespace SF.Net
 		// Cmd: Havest area
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceHarvestAreaCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstanceHarvestAreaCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InAreaId );
+
+
+		// Cmd: Send zone chatting
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceZoneChatCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstanceZoneChatCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
 		// Cmd: Create stream instance
@@ -439,6 +455,30 @@ namespace SF.Net
 		} // public int  HarvestAreaRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InAreaId, SF.VariableTable InResultAttributes )
 
 
+		// Cmd: Send zone chatting
+		public int  ZoneChatRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_PlayInstanceZoneChatRes(m_Connection.NativeHandle, InTransactionID, InResult);
+			}
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatRes);
+			return result;
+		} // public int  ZoneChatRes( System.UInt64 InTransactionID, System.Int32 InResult )
+
+
+		// S2C: Player state change
+		public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InMessage )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID, InChatMessageType,System.Text.Encoding.UTF8.GetBytes(InMessage + "\0"));
+			}
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatS2CEvt);
+			return result;
+		} // public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InMessage )
+
+
 		// Cmd: Create stream instance
 		public int  CreateStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
 		{
@@ -566,6 +606,18 @@ namespace SF.Net
 		// Cmd: Havest area
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceHarvestAreaRes", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstanceHarvestAreaRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InAreaId, System.UInt16 _sizeOfInResultAttributes,IntPtr InResultAttributes );
+
+
+
+		// Cmd: Send zone chatting
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceZoneChatRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstanceZoneChatRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
+
+
+
+		// S2C: Player state change
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceZoneChatS2CEvt", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, [MarshalAs(UnmanagedType.LPArray)] byte[] InMessage );
 
 
 

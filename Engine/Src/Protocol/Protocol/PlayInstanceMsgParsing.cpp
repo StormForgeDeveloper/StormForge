@@ -86,6 +86,14 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::HarvestAreaCmd::MID.IDSeq.MsgID,&Message::PlayInstance::HarvestAreaCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::HarvestAreaRes::MID.IDSeq.MsgID,&Message::PlayInstance::HarvestAreaRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::HarvestAreaRes::MID.IDSeq.MsgID,&Message::PlayInstance::HarvestAreaRes::ParseMessageToMessageBase));
+			// Cmd: Send zone chatting
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::ZoneChatCmd::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::ZoneChatCmd::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::ZoneChatRes::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::ZoneChatRes::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatRes::ParseMessageToMessageBase));
+			// S2C: Player state change
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::ZoneChatS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::ZoneChatS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatS2CEvt::ParseMessageToMessageBase));
 			// Cmd: Create stream instance
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::ParseMessageToMessageBase));

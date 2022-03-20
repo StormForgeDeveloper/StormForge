@@ -305,6 +305,47 @@ C++: Cast message to HarvestAreaRes to access values
 		- OutResultAttributes: VariableTable type. Use result attributes
 
 
+## ZoneChat Request
+Send zone chatting
+
+1. Command interface
+
+        Result ZoneChatCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage)
+
+		- OutInTransactionID: TransactionID type. 
+
+		- OutInPlayInstanceUID: GameInsUID type. Play instance ID
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInChatMessageType: int8 type. 0: local chatting, 1:zone global chatting
+
+		- OutInChatMessage: String type. Message to send
+
+2. Result interface
+
+C++: Cast message to ZoneChatRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutResult: Result type. 
+
+
+## ZoneChatS2CEvt
+Player state change
+
+        Result ZoneChatS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InMessage)
+
+		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. Player Id
+
+		- OutInChatMessageType: int8 type. 0: local chatting, 1:zone global chatting
+
+		- OutInMessage: String type. Message to send
+
+
 ## CreateStream Request
 Create stream instance
 

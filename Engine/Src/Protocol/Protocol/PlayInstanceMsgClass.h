@@ -1032,6 +1032,149 @@ namespace SF
 
 			}; // class HarvestAreaRes : public MessageBase
 
+			// Cmd: Send zone chatting
+			class ZoneChatCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				RouteContext GetRouteContext() { return RouteContext{}; }
+				uint32_t GetRouteHopCount() { return uint32_t{}; }
+				uint64_t GetSender() { return uint64_t{}; }
+			private:
+				uint64_t m_TransactionID{};
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				int8_t m_ChatMessageType{};
+				const char* m_ChatMessage{};
+			public:
+				ZoneChatCmd()
+					{}
+
+				ZoneChatCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const int8_t& GetChatMessageType() const	{ return m_ChatMessageType; };
+				const char* GetChatMessage() const	{ return m_ChatMessage; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage );
+
+			}; // class ZoneChatCmd : public MessageBase
+
+			class ZoneChatRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 0,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetPlayerID() { return uint64_t{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+				uint32_t GetRouteHopCount() { return uint32_t{}; }
+				uint64_t GetSender() { return uint64_t{}; }
+			private:
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+			public:
+				ZoneChatRes()
+					{}
+
+				ZoneChatRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
+
+			}; // class ZoneChatRes : public MessageBase
+
+			// S2C: Player state change
+			class ZoneChatS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetTransactionID() { return uint64_t{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+				uint32_t GetRouteHopCount() { return uint32_t{}; }
+				uint64_t GetSender() { return uint64_t{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				int8_t m_ChatMessageType{};
+				const char* m_Message{};
+			public:
+				ZoneChatS2CEvt()
+					{}
+
+				ZoneChatS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const int8_t& GetChatMessageType() const	{ return m_ChatMessageType; };
+				const char* GetMessage() const	{ return m_Message; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InMessage );
+
+			}; // class ZoneChatS2CEvt : public MessageBase
+
 			// Cmd: Create stream instance
 			class CreateStreamCmd : public MessageBase
 			{

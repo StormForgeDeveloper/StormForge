@@ -145,6 +145,27 @@
 		</Command>
 
 
+		<!-- ============================  Chatting  ============================================ -->
+
+		<Command Name="ZoneChat" Reliable="true" Crypto="No" Trace="Debug1" Desc="Send zone chatting">
+			<Cmd>
+				<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+				<Params TypeName="int8" Name="ChatMessageType" Desc="0: local chatting, 1:zone global chatting"/>
+				<Params TypeName="String" Name="ChatMessage" Desc="Message to send"/>
+			</Cmd>
+			<Res>
+			</Res>
+		</Command>
+
+		<S2CEvent Name="ZoneChat" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player state change">
+			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
+			<Params TypeName="int8" Name="ChatMessageType" Desc="0: local chatting, 1:zone global chatting"/>
+			<Params TypeName="String" Name="Message" Desc="Message to send"/>
+		</S2CEvent>
+
+
 		<!-- ============================  Streaming ============================================ -->
 
 		<Command Name="CreateStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">

@@ -557,14 +557,18 @@ namespace SF {
 		GameEnd,
 	};
 
-	enum class ChatType : uint8_t
+
+	// Game chat message type 
+	enum class ChatMessageType : uint8_t
 	{
-		Normal,         // Normal chat message
-		Whisper,        // Whisper
-		Info,           // Information
-		System,         // System
-		Role,           // Role chat in game
+		Zone,
+		ZoneGlobal,
+		Wisper,
+		Channel,
+		System,
+		Max
 	};
+
 
 	// Game log type
 	enum class GameLogType : uint16_t
