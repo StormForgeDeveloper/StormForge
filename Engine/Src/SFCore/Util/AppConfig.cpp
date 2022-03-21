@@ -186,6 +186,20 @@ namespace SF
 		return ((LinkedListNode*)pCur)->Value;
 	}
 
+	void AppConfig::GetSettingArray(const char* settingName, Array<const char*>& outValues)
+	{
+		decltype(m_Settings)::Node* pPrevNode = nullptr, * pCur = nullptr;
+		StringCrc64 key(settingName);
+
+		if (!(m_Settings.FindPrevNode(key, pPrevNode)))
+			return;
+
+		pCur = pPrevNode->pNext;
+		for (;pCur && pCur->Key == key; pCur = pCur->pNext)
+		{
+			outValues.push_back(((LinkedListNode*)pCur)->Value);
+		}
+	}
 
 };	// namespace SF
 

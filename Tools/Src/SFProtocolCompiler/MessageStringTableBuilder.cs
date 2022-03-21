@@ -1,6 +1,6 @@
 ﻿////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2018 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -16,14 +16,12 @@ using SF.Tool;
 
 namespace ProtocolCompiler
 {
-    class MessageGithubDocBuilder : CppBuilder
+    class MessageStringTableBuilder : CppBuilder
     {
         // constructor
-        public MessageGithubDocBuilder(Dictionary<string, string> settings)
+        public MessageStringTableBuilder(Dictionary<string, string> settings)
             : base(settings)
         {
-            BasePath = System.IO.Path.Combine(BasePath, "Doc");
-            GenParameterRouteHopCount = true;
             IsCPPOut = true;
         }
 
@@ -34,29 +32,11 @@ namespace ProtocolCompiler
 
         public string OutputDocName()
         {
-            return "ProtocolAPIDoc_" + Group.Name + ".md";
+            return "string_" + Group.Name + ".txt";
         }
 
         void BuildPrefix()
         {
-            OutStream.WriteLine("***");
-            OutStream.WriteLine(" ");
-            OutStream.WriteLine(" CopyRight (c) {0} StormForge", BuildYear);
-            OutStream.WriteLine(" ");
-            OutStream.WriteLine(" Description : {0} Message Protocol API Document", Group.Name);
-            OutStream.WriteLine("");
-            OutStream.WriteLine("***");
-            OutStream.WriteLine("");
-            OutStream.WriteLine("");
-            NewLine(1);
-
-            OutStream.WriteLine("{0}", Group.Desc);
-            OutStream.WriteLine("");
-
-            // namespace definition
-            OutStream.WriteLine("namespace {0}::{1}::{2}", PrjPrefix, BuilderNamespace, Group.Name);
-            OutStream.WriteLine("");
-            NewLine(1);
         }
 
 
@@ -121,14 +101,21 @@ namespace ProtocolCompiler
             NewLine();
         }
 
-        // build parser class header
-        void BuildGroupDoc()
-        {
-            Parameter[] newparams;
-            string strClassName = string.Format("{0}", Group.Name);
-            string policyClassName = PolicyClassName;
 
-            MatchIndent(); OutStream.WriteLine("# Protocol interface class {0}", policyClassName);
+        HashSet<string> StringSet = new HashSet<string>();
+
+        void WriteStringSet()
+        {
+            foreach(var stringValue in StringSet)
+            {
+                OutStream.WriteLine("\"{0}\"", stringValue);
+            }
+        }
+
+        // build parser class header
+        void BuildGroupStrings()
+        {
+            StringSet.Add(Group.Name);
 
             foreach (MessageBase baseMsg in Group.Items)
             {
@@ -136,27 +123,52 @@ namespace ProtocolCompiler
                 {
                     ProtocolsProtocolGroupCommand msg = baseMsg as ProtocolsProtocolGroupCommand;
 
-                    newparams = MakeParameters(MsgType.Cmd, msg.Cmd);
-                    BuildAPIDoc(msg, MakeParameters(MsgType.Cmd, msg.Cmd), MakeParameters(MsgType.Res, msg.Res));
-                    NewLine();
+                    StringSet.Add(msg.Name);
+                    StringSet.Add(msg.Name + "Cmd");
+                    StringSet.Add(msg.Name + "Res");
+
+                    if (msg.Cmd != null)
+                    {
+                        foreach (var parameter in msg.Cmd)
+                        {
+                            StringSet.Add(parameter.Name);
+                            StringSet.Add(parameter.TypeName);
+                        }
+                    }
                 }
 
                 if (baseMsg is ProtocolsProtocolGroupC2SEvent)
                 {
                     ProtocolsProtocolGroupC2SEvent msg = baseMsg as ProtocolsProtocolGroupC2SEvent;
 
-                    newparams = MakeParameters(MsgType.Evt, msg.Params);
-                    BuildAPIDoc(msg, MsgType.Evt, "C2SEvt", newparams);
-                    NewLine();
+                    StringSet.Add(msg.Name);
+                    StringSet.Add(msg.Name + "C2SEvt");
+
+                    if (msg.Params != null)
+                    {
+                        foreach (var parameter in msg.Params)
+                        {
+                            StringSet.Add(parameter.Name);
+                            StringSet.Add(parameter.TypeName);
+                        }
+                    }
                 }
 
                 if (baseMsg is ProtocolsProtocolGroupS2CEvent)
                 {
                     ProtocolsProtocolGroupS2CEvent msg = baseMsg as ProtocolsProtocolGroupS2CEvent;
 
-                    newparams = MakeParameters(MsgType.Evt, msg.Params);
-                    BuildAPIDoc(msg, MsgType.Evt, "S2CEvt", newparams);
-                    NewLine();
+                    StringSet.Add(msg.Name);
+                    StringSet.Add(msg.Name + "S2CEvt");
+
+                    if (msg.Params != null)
+                    {
+                        foreach (var parameter in msg.Params)
+                        {
+                            StringSet.Add(parameter.Name);
+                            StringSet.Add(parameter.TypeName);
+                        }
+                    }
                 }
             }
         }
@@ -168,12 +180,9 @@ namespace ProtocolCompiler
             // Build Parser class
             OpenOutFile(OutputDocName());
 
-            BuildPrefix();
+            BuildGroupStrings();
+            WriteStringSet();
 
-            BuildGroupDoc();
-            NewLine(2);
-
-            NewLine(2);
             CloseOutFile();
         }
 

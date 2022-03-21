@@ -159,14 +159,15 @@ namespace SF
         GameEnd,
     };
 
-
-    public enum ChatType// : UINT16
+    // Game Chat message type
+    enum ChatMessageType
     {
-        Normal,         // Normal chat message
-        Whisper,        // Whisper
-        Info,           // Information
-        System,         // System
-        Role,           // Role chat in game
+        Zone,
+		ZoneGlobal,
+		Wisper,
+		Channel,
+		System,
+		Max
     };
 
 

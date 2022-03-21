@@ -48,6 +48,7 @@ namespace SF {
 
 		// Get setting value
 		static const char* GetSetting(const char* settingName, const char* defaultValue = "");
+		static void GetSettingArray(const char* settingName, Array<const char*>& outValues);
 	};
 
 

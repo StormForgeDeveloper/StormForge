@@ -21,13 +21,13 @@ Player Join request.
 
         Result JoinPlayInstanceCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInPlayInstanceUID: EntityUID type. Play instance to join
+		- OutPlayInstanceUID: EntityUID type. Play instance to join
 
-		- OutInPlayerID: PlayerID type. Joining player id
+		- OutPlayerID: PlayerID type. Joining player id
 
-		- OutInPlayerIdentifier: String type. Joining player identifier. string value
+		- OutPlayerIdentifier: String type. Joining player identifier. string value
 
 2. Result interface
 
@@ -35,13 +35,9 @@ C++: Cast message to JoinPlayInstanceRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
-
 		- OutPlayInstanceUID: EntityUID type. joined Play instance ID
-
 		- OutPlayerID: PlayerID type. Joined player id for validation
-
 		- OutMovement: ActorMovement type. Start movement
 
 
@@ -180,15 +176,15 @@ Occupy map object
 
         Result OccupyMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInPlayInstanceUID: EntityUID type. Play instance ID
+		- OutPlayInstanceUID: EntityUID type. Play instance ID
 
-		- OutInPlayerID: PlayerID type. player id
+		- OutPlayerID: PlayerID type. player id
 
-		- OutInMapObjectId: uint32 type. MapObjectId
+		- OutMapObjectId: uint32 type. MapObjectId
 
-		- OutInUsageId: uint32 type. MapObjectOccupyMode 
+		- OutUsageId: uint32 type. MapObjectOccupyMode 
 
 2. Result interface
 
@@ -196,13 +192,9 @@ C++: Cast message to OccupyMapObjectRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
-
 		- OutPlayInstanceUID: EntityUID type. Play instance ID
-
 		- OutPlayerID: PlayerID type. player id for validation
-
 		- OutMapObjectId: uint32 type. MapObjectId
 
 
@@ -213,13 +205,13 @@ Unoccupy map object
 
         Result UnoccupyMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInPlayInstanceUID: EntityUID type. Play instance ID
+		- OutPlayInstanceUID: EntityUID type. Play instance ID
 
-		- OutInPlayerID: PlayerID type. player id
+		- OutPlayerID: PlayerID type. player id
 
-		- OutInMapObjectId: uint32 type. MapObjectId
+		- OutMapObjectId: uint32 type. MapObjectId
 
 2. Result interface
 
@@ -227,13 +219,9 @@ C++: Cast message to UnoccupyMapObjectRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
-
 		- OutPlayInstanceUID: EntityUID type. Play instance ID
-
 		- OutPlayerID: PlayerID type. player id for validation
-
 		- OutMapObjectId: uint32 type. MapObjectId
 
 
@@ -244,15 +232,15 @@ Use map object
 
         Result UseMapObjectCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInPlayInstanceUID: EntityUID type. Play instance ID
+		- OutPlayInstanceUID: EntityUID type. Play instance ID
 
-		- OutInPlayerID: PlayerID type. player id
+		- OutPlayerID: PlayerID type. player id
 
-		- OutInMapObjectId: StringCrc32 type. MapObjectId
+		- OutMapObjectId: StringCrc32 type. MapObjectId
 
-		- OutInUseParameters: VariableTable type. use parameters
+		- OutUseParameters: VariableTable type. use parameters
 
 2. Result interface
 
@@ -260,15 +248,10 @@ C++: Cast message to UseMapObjectRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
-
 		- OutPlayInstanceUID: EntityUID type. Play instance ID
-
 		- OutPlayerID: PlayerID type. player id for validation
-
 		- OutMapObjectId: StringCrc32 type. MapObjectId
-
 		- OutResultAttributes: VariableTable type. Use result attributes
 
 
@@ -279,13 +262,13 @@ Havest area
 
         Result HarvestAreaCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInPlayInstanceUID: EntityUID type. Play instance ID
+		- OutPlayInstanceUID: EntityUID type. Play instance ID
 
-		- OutInPlayerID: PlayerID type. player id
+		- OutPlayerID: PlayerID type. player id
 
-		- OutInAreaId: StringCrc32 type. Area Id
+		- OutAreaId: StringCrc32 type. Area Id
 
 2. Result interface
 
@@ -293,15 +276,10 @@ C++: Cast message to HarvestAreaRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
-
 		- OutPlayInstanceUID: EntityUID type. Play instance ID
-
 		- OutPlayerID: PlayerID type. player id for validation
-
 		- OutAreaId: StringCrc32 type. Area Id
-
 		- OutResultAttributes: VariableTable type. Use result attributes
 
 
@@ -312,15 +290,15 @@ Send zone chatting
 
         Result ZoneChatCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInPlayInstanceUID: GameInsUID type. Play instance ID
+		- OutPlayInstanceUID: GameInsUID type. Play instance ID
 
-		- OutInPlayerID: PlayerID type. player id
+		- OutPlayerID: PlayerID type. player id
 
-		- OutInChatMessageType: int8 type. 0: local chatting, 1:zone global chatting
+		- OutChatMessageType: int8 type. 0: local chatting, 1:zone global chatting
 
-		- OutInChatMessage: String type. Message to send
+		- OutChatMessage: String type. Message to send
 
 2. Result interface
 
@@ -328,7 +306,6 @@ C++: Cast message to ZoneChatRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
 
 
@@ -353,11 +330,11 @@ Create stream instance
 
         Result CreateStreamCmd(const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInTicket: AuthTicket type. Login session Ticket
+		- OutTicket: AuthTicket type. Login session Ticket
 
-		- OutInStreamName: String type. Stream name
+		- OutStreamName: String type. Stream name
 
 2. Result interface
 
@@ -365,9 +342,7 @@ C++: Cast message to CreateStreamRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
-
 		- OutStreamName: String type. Stream name
 
 
@@ -378,11 +353,11 @@ Open stream instance
 
         Result FindStreamCmd(const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInTicket: AuthTicket type. Login session Ticket
+		- OutTicket: AuthTicket type. Login session Ticket
 
-		- OutInStreamName: String type. Stream name
+		- OutStreamName: String type. Stream name
 
 2. Result interface
 
@@ -390,9 +365,7 @@ C++: Cast message to FindStreamRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
-
 		- OutStreamName: String type. Stream name
 
 
@@ -403,11 +376,11 @@ Delete stream instance
 
         Result DeleteStreamCmd(const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInTicket: AuthTicket type. Login session Ticket
+		- OutTicket: AuthTicket type. Login session Ticket
 
-		- OutInStreamName: String type. stream name to delete
+		- OutStreamName: String type. stream name to delete
 
 2. Result interface
 
@@ -415,9 +388,7 @@ C++: Cast message to DeleteStreamRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
-
 		- OutStreamName: String type. Stream name
 
 
@@ -428,9 +399,9 @@ Get stream list
 
         Result GetStreamListCmd(const uint64_t &InTransactionID, const AuthTicket &InTicket)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInTicket: AuthTicket type. Login session Ticket
+		- OutTicket: AuthTicket type. Login session Ticket
 
 2. Result interface
 
@@ -438,9 +409,7 @@ C++: Cast message to GetStreamListRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
-
 		- OutStreamNames: String type. Stream names
 
 
@@ -451,13 +420,13 @@ To call general functionality
 
         Result CallFunctionCmd(const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters)
 
-		- OutInTransactionID: TransactionID type. 
+		- OutTransactionID: TransactionID type. 
 
-		- OutInFunctionName: StringCrc32 type. function name
+		- OutFunctionName: StringCrc32 type. function name
 
-		- OutInPlayerID: PlayerID type. Caller player Id
+		- OutPlayerID: PlayerID type. Caller player Id
 
-		- OutInParameters: VariableTable type. function parameter
+		- OutParameters: VariableTable type. function parameter
 
 2. Result interface
 
@@ -465,9 +434,7 @@ C++: Cast message to CallFunctionRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
-
 		- OutResult: Result type. 
-
 		- OutResults: VariableTable type. function result
 
 
