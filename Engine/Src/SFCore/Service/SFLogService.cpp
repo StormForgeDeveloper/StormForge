@@ -22,16 +22,15 @@ namespace SF
 {
 	namespace Log
 	{
-		LogChannel System("System", LogOutputType::Debug3);
-		LogChannel Net("Net", LogOutputType::Debug3);
+		LogChannel System("System", LogOutputType::Info);
+		LogChannel Net("Net", LogOutputType::Info);
 		LogChannel IO("IO", LogOutputType::Info);
 		LogChannel ThirdParty("ThirdParty", LogOutputType::Info);
-		LogChannel Engine("Engine", LogOutputType::Debug3);
-		LogChannel Protocol("Protocol", LogOutputType::Debug3);
+		LogChannel Engine("Engine", LogOutputType::Info);
+		LogChannel Protocol("Protocol", LogOutputType::Info);
 		LogChannel Editor("Editor", LogOutputType::Info);
-		LogChannel Game("Game", LogOutputType::Debug3); // TODO: need to switch for release
+		LogChannel Game("Game", LogOutputType::Info);
 	}
-
 
 	static const char* g_LogOutputTypeNames[] = {
 		// Generic trace
