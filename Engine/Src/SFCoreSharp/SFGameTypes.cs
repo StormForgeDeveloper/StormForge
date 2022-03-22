@@ -160,7 +160,7 @@ namespace SF
     };
 
     // Game Chat message type
-    enum ChatMessageType
+    public enum ChatMessageType
     {
         Zone,
 		ZoneGlobal,
