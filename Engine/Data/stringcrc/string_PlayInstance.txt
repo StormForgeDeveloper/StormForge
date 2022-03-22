@@ -68,7 +68,6 @@
 "int8"
 "ChatMessage"
 "ZoneChatS2CEvt"
-"Message"
 "CreateStream"
 "CreateStreamCmd"
 "CreateStreamRes"

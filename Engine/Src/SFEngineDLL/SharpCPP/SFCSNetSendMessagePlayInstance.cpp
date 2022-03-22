@@ -362,15 +362,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatRes( intptr_t InNativeConne
 
 
 // S2C: Player state change
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int8_t InChatMessageType, const char* InMessage )
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int8_t InChatMessageType, const char* InChatMessage )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::ZoneChatS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID, InChatMessageType,InMessage);
+	MessageDataPtr pMessage = SF::Message::PlayInstance::ZoneChatS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID, InChatMessageType,InChatMessage);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int8_t InChatMessageType, const char* InMessage )
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int8_t InChatMessageType, const char* InChatMessage )
 
 
 

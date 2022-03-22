@@ -100,7 +100,7 @@ namespace SF
 		// Cmd: Send zone chatting
 		Result ZoneChatRes( const uint64_t &InTransactionID, const Result &InResult );
 		// S2C: Player state change
-		Result ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InMessage );
+		Result ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage );
 		// Cmd: Create stream instance
 		Result CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Open stream instance

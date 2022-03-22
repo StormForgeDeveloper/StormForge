@@ -403,19 +403,19 @@ namespace SF
 
 	}; // Result NetSvrPolicyPlayInstance::ZoneChatRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: Player state change
-	Result NetSvrPolicyPlayInstance::ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InMessage )
+	Result NetSvrPolicyPlayInstance::ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::PlayInstance::ZoneChatS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InChatMessageType, InMessage);
+		 pMessage = SF::Message::PlayInstance::ZoneChatS2CEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InChatMessageType, InChatMessage);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyPlayInstance::ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InMessage )
+	}; // Result NetSvrPolicyPlayInstance::ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage )
 	// Cmd: Create stream instance
 	Result NetSvrPolicyPlayInstance::CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
 	{

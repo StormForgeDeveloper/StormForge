@@ -162,7 +162,7 @@
 			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
 			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
 			<Params TypeName="int8" Name="ChatMessageType" Desc="0: local chatting, 1:zone global chatting"/>
-			<Params TypeName="String" Name="Message" Desc="Message to send"/>
+			<Params TypeName="String" Name="ChatMessage" Desc="Message to send"/>
 		</S2CEvent>
 
 

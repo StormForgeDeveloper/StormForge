@@ -468,15 +468,15 @@ namespace SF.Net
 
 
 		// S2C: Player state change
-		public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InMessage )
+		public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InChatMessage )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID, InChatMessageType,System.Text.Encoding.UTF8.GetBytes(InMessage + "\0"));
+			result = CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID, InChatMessageType,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatS2CEvt);
 			return result;
-		} // public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InMessage )
+		} // public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InChatMessage )
 
 
 		// Cmd: Create stream instance
@@ -617,7 +617,7 @@ namespace SF.Net
 
 		// S2C: Player state change
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceZoneChatS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, [MarshalAs(UnmanagedType.LPArray)] byte[] InMessage );
+		static extern int CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
 

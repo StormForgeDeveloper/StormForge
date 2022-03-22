@@ -312,7 +312,7 @@ C++: Cast message to ZoneChatRes to access values
 ## ZoneChatS2CEvt
 Player state change
 
-        Result ZoneChatS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InMessage)
+        Result ZoneChatS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
@@ -320,7 +320,7 @@ Player state change
 
 		- OutInChatMessageType: int8 type. 0: local chatting, 1:zone global chatting
 
-		- OutInMessage: String type. Message to send
+		- OutInChatMessage: String type. Message to send
 
 
 ## CreateStream Request

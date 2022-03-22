@@ -1149,7 +1149,7 @@ namespace SF
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
 				int8_t m_ChatMessageType{};
-				const char* m_Message{};
+				const char* m_ChatMessage{};
 			public:
 				ZoneChatS2CEvt()
 					{}
@@ -1163,7 +1163,7 @@ namespace SF
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const int8_t& GetChatMessageType() const	{ return m_ChatMessageType; };
-				const char* GetMessage() const	{ return m_Message; };
+				const char* GetChatMessage() const	{ return m_ChatMessage; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -1171,7 +1171,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage );
 
 			}; // class ZoneChatS2CEvt : public MessageBase
 
