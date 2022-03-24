@@ -86,7 +86,7 @@ namespace Log {
 
 	void LogModule::Run(Thread* pThread)
 	{
-		constexpr DurationMS flushWaitTime(3 * 1000);
+		constexpr DurationMS flushWaitTime(1 * 1000);
 
 		while (!pThread->CheckKillEvent(DurationMS(3)))
 		{
