@@ -134,20 +134,6 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetPolicyPlayInstance::UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
-	// Cmd: Havest area
-	Result NetPolicyPlayInstance::HarvestAreaCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId )
-	{
- 		ScopeContext hr;
-
-		 MessageDataPtr pMessage;
-		 protocolCheckPtr(m_Endpoint);
-
-		 pMessage = SF::Message::PlayInstance::HarvestAreaCmd::Create(GetSystemHeap(), InTransactionID, InPlayInstanceUID, InPlayerID, InAreaId);
-		 protocolCheckPtr(*pMessage);
-
-		 return m_Endpoint->Send( pMessage );
-
-	}; // Result NetPolicyPlayInstance::HarvestAreaCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId )
 	// Cmd: Send zone chatting
 	Result NetPolicyPlayInstance::ZoneChatCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage )
 	{
@@ -374,20 +360,6 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetSvrPolicyPlayInstance::UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
-	// Cmd: Havest area
-	Result NetSvrPolicyPlayInstance::HarvestAreaRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes )
-	{
- 		ScopeContext hr;
-
-		 MessageDataPtr pMessage;
-		 protocolCheckPtr(m_Endpoint);
-
-		 pMessage = SF::Message::PlayInstance::HarvestAreaRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InAreaId, InResultAttributes);
-		 protocolCheckPtr(*pMessage);
-
-		 return m_Endpoint->Send( pMessage );
-
-	}; // Result NetSvrPolicyPlayInstance::HarvestAreaRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes )
 	// Cmd: Send zone chatting
 	Result NetSvrPolicyPlayInstance::ZoneChatRes( const uint64_t &InTransactionID, const Result &InResult )
 	{

@@ -255,34 +255,6 @@ C++: Cast message to UseMapObjectRes to access values
 		- OutResultAttributes: VariableTable type. Use result attributes
 
 
-## HarvestArea Request
-Havest area
-
-1. Command interface
-
-        Result HarvestAreaCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId)
-
-		- OutTransactionID: TransactionID type. 
-
-		- OutPlayInstanceUID: EntityUID type. Play instance ID
-
-		- OutPlayerID: PlayerID type. player id
-
-		- OutAreaId: StringCrc32 type. Area Id
-
-2. Result interface
-
-C++: Cast message to HarvestAreaRes to access values
-
-
-		- OutTransactionID: TransactionID type. 
-		- OutResult: Result type. 
-		- OutPlayInstanceUID: EntityUID type. Play instance ID
-		- OutPlayerID: PlayerID type. player id for validation
-		- OutAreaId: StringCrc32 type. Area Id
-		- OutResultAttributes: VariableTable type. Use result attributes
-
-
 ## ZoneChat Request
 Send zone chatting
 

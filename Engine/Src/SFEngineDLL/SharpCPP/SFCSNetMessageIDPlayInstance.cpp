@@ -141,19 +141,6 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUseMapObjectRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceUseMapObjectRes()
 
 
-// Cmd: Havest area
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceHarvestAreaCmd()
-{
- 	return SF::Message::PlayInstance::HarvestAreaCmd::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceHarvestAreaCmd()
-
-
-SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceHarvestAreaRes()
-{
- 	return SF::Message::PlayInstance::HarvestAreaRes::MID.IDSeq.MsgID;
-} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceHarvestAreaRes()
-
-
 // Cmd: Send zone chatting
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceZoneChatCmd()
 {

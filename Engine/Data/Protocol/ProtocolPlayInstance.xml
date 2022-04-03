@@ -130,20 +130,6 @@
 			</Res>
 		</Command>
 
-		<Command Name="HarvestArea" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Havest area">
-			<Cmd>
-				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
-				<Params TypeName="StringCrc32" Name="AreaId" Desc="Area Id"/>
-			</Cmd>
-			<Res>
-				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id for validation"/>
-				<Params TypeName="StringCrc32" Name="AreaId" Desc="Area Id"/>
-				<Params TypeName="VariableTable" Name="ResultAttributes" Desc="Use result attributes"/>
-			</Res>
-		</Command>
-
 
 		<!-- ============================  Chatting  ============================================ -->
 

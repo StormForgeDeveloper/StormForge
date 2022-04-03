@@ -60,9 +60,6 @@ namespace SF
 			// Cmd: Use map object
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::UseMapObjectCmd::MID.IDSeq.MsgID,&Message::PlayInstance::UseMapObjectCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::UseMapObjectRes::MID.IDSeq.MsgID,&Message::PlayInstance::UseMapObjectRes::TraceOut));
-			// Cmd: Havest area
-			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::HarvestAreaCmd::MID.IDSeq.MsgID,&Message::PlayInstance::HarvestAreaCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::HarvestAreaRes::MID.IDSeq.MsgID,&Message::PlayInstance::HarvestAreaRes::TraceOut));
 			// Cmd: Send zone chatting
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::ZoneChatCmd::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::ZoneChatRes::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatRes::TraceOut));

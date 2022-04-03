@@ -82,12 +82,6 @@ namespace SF.Net
 		public static int UseMapObjectRes { get { return CSSFNetMessageID_PlayInstanceUseMapObjectRes(); } }
 
 
-		// Cmd: Havest area
-		public static int HarvestAreaCmd { get { return CSSFNetMessageID_PlayInstanceHarvestAreaCmd(); } }
-
-		public static int HarvestAreaRes { get { return CSSFNetMessageID_PlayInstanceHarvestAreaRes(); } }
-
-
 		// Cmd: Send zone chatting
 		public static int ZoneChatCmd { get { return CSSFNetMessageID_PlayInstanceZoneChatCmd(); } }
 
@@ -215,16 +209,6 @@ namespace SF.Net
 
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceUseMapObjectRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstanceUseMapObjectRes();
-
-
-
-		// Cmd: Havest area
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceHarvestAreaCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_PlayInstanceHarvestAreaCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceHarvestAreaRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_PlayInstanceHarvestAreaRes();
 
 
 

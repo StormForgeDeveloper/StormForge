@@ -48,8 +48,6 @@ namespace SF
 		Result UnoccupyMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 		// Cmd: Use map object
 		Result UseMapObjectCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters );
-		// Cmd: Havest area
-		Result HarvestAreaCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId );
 		// Cmd: Send zone chatting
 		Result ZoneChatCmd( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage );
 		// Cmd: Create stream instance
@@ -95,8 +93,6 @@ namespace SF
 		Result UnoccupyMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId );
 		// Cmd: Use map object
 		Result UseMapObjectRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes );
-		// Cmd: Havest area
-		Result HarvestAreaRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InAreaId, const VariableTable &InResultAttributes );
 		// Cmd: Send zone chatting
 		Result ZoneChatRes( const uint64_t &InTransactionID, const Result &InResult );
 		// S2C: Player state change

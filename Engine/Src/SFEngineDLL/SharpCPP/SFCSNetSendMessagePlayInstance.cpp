@@ -119,18 +119,6 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeC
 } // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInUseParameters,uint8_t* InUseParameters )
 
 
-// Cmd: Havest area
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceHarvestAreaCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InAreaId )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::HarvestAreaCmd::Create(pConnection->GetHeap(), InTransactionID, InPlayInstanceUID, InPlayerID, InAreaId);
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceHarvestAreaCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InAreaId )
-
-
 // Cmd: Send zone chatting
 SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int8_t InChatMessageType, const char* InChatMessage )
 {
@@ -332,19 +320,6 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectRes( intptr_t InNativeC
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
 } // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceUseMapObjectRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InMapObjectId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
-
-
-
-// Cmd: Havest area
-SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceHarvestAreaRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InAreaId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
-{
- 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
-	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::PlayInstance::HarvestAreaRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InAreaId,SF::ArrayView<uint8_t>(_sizeOfInResultAttributes, _sizeOfInResultAttributes, InResultAttributes));
-	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
-	auto res = pConnection->Send(pMessage);
-	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceHarvestAreaRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InPlayInstanceUID, PlayerID InPlayerID, StringCrc32 InAreaId, uint16_t _sizeOfInResultAttributes,uint8_t* InResultAttributes )
 
 
 
