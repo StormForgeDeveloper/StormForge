@@ -23,7 +23,7 @@ namespace SF {
         public const int OUT_OF_MEMORY =                       unchecked((int)0xC0000005L);
         public const int UNEXPECTED =                          unchecked((int)0xC0000006L);
         public const int INVALID_ARG =                          unchecked((int)0xC0000007L);
-        public const int NO_DATA_EXIST =                        unchecked((int)0xC0000008L);
+        public const int NO_DATA_EXIST =                        unchecked((int)0xC0001008L);
 
     }
 }

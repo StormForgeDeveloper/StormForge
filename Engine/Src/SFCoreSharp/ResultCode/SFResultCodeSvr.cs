@@ -89,7 +89,7 @@ namespace SF {
 		// Purchase canceled 
 		public const int SVR_PURCHASE_CANCELED =                            unchecked((int)0xE7120018); 
 
-		// Invalid receipt info 
+		// Invalid purchase info 
 		public const int SVR_INVALID_PURCHASE_INFO =                        unchecked((int)0xE7120019); 
 
 		// Invalid duplicated purchase 
@@ -101,7 +101,7 @@ namespace SF {
 		// External server is not available 
 		public const int SVR_EXTERNAL_SERVER_UNAVALIABLE =                  unchecked((int)0xE712001C); 
 
-		// Invalid receipt result from server 
+		// Invalid purchase result from server 
 		public const int SVR_INVALID_PURCHASE_FORMAT =                      unchecked((int)0xE712001D); 
 
 		// The protocol is not supported. 
