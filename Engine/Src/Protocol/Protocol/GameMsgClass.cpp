@@ -8339,8 +8339,8 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
-				protocolCheck(*input >> m_PartyUID);
-				protocolCheck(*input >> m_PartyLeaderID);
+				protocolCheck(*input >> m_ChatUID);
+				protocolCheck(*input >> m_ChannelLeaderID);
 
 				return hr;
 
@@ -8356,8 +8356,8 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("PartyUID", parser.GetPartyUID());
-				variableBuilder.SetVariable("PartyLeaderID", parser.GetPartyLeaderID());
+				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
+				variableBuilder.SetVariable("ChannelLeaderID", parser.GetChannelLeaderID());
 
 				return hr;
 
@@ -8375,7 +8375,7 @@ namespace SF
 			}; // Result JoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
+			MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -8391,8 +8391,8 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InPartyUID)
-					+ SerializedSizeOf(InPartyLeaderID)
+					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InChannelLeaderID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinChatChannelRes::MID, __uiMessageSize ) );
@@ -8403,18 +8403,18 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
-				protocolCheck(*output << InPartyUID);
-				protocolCheck(*output << InPartyLeaderID);
+				protocolCheck(*output << InChatUID);
+				protocolCheck(*output << InChannelLeaderID);
 
 				return hr;
-			}; // MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
+			}; // MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID )
 
 			Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				JoinChatChannelRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "JoinChatChannel:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PartyUID:{4}, PartyLeaderID:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPartyUID(), parser.GetPartyLeaderID()); 
+				SFLog(Net, Debug1, "JoinChatChannel:{0}:{1} , TransactionID:{2}, Result:{3:X8}, ChatUID:{4}, ChannelLeaderID:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetChatUID(), parser.GetChannelLeaderID()); 
 				return ResultCode::SUCCESS;
 			}; // Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -9134,6 +9134,16 @@ namespace SF
 
 			// Cmd: Party chatting
 			const MessageID ChatChannelChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 60);
+			const VariableTable& ChatChannelChatMessageCmd::GetChatMetaData() const
+			{
+ 				if (!m_ChatMetaDataHasParsed)
+				{
+ 					m_ChatMetaDataHasParsed = true;
+					InputMemoryStream ChatMetaData_ReadStream(m_ChatMetaDataRaw);
+					*ChatMetaData_ReadStream.ToInputStream() >> m_ChatMetaData;
+				} // if (!m_ChatMetaDataHasParsed)
+				return m_ChatMetaData;
+			} // const VariableTable& ChatChannelChatMessageCmd::GetChatMetaData() const
 			Result ChatChannelChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9149,6 +9159,11 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_ChatUID);
+				protocolCheck(*input >> m_SenderID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* ChatMetaDataPtr = nullptr;
+				protocolCheck(input->ReadLink(ChatMetaDataPtr, ArrayLen));
+				m_ChatMetaDataRaw.SetLinkedBuffer(ArrayLen, ChatMetaDataPtr);
 				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ChatMessage, ArrayLen));
 
@@ -9166,6 +9181,8 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
+				variableBuilder.SetVariable("SenderID", parser.GetSenderID());
+				variableBuilder.SetVariableArray("ChatMetaData", "VariableTable", parser.GetChatMetaDataRaw());
 				variableBuilder.SetVariable("ChatMessage", parser.GetChatMessage());
 
 				return hr;
@@ -9183,8 +9200,7 @@ namespace SF
 
 			}; // Result ChatChannelChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-
-			MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
+			MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -9197,9 +9213,12 @@ namespace SF
 					return pNewMsg;
 				});
 
+				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InSenderID)
+					+ serializedSizeOfInChatMetaData
 					+ SerializedSizeOf(InChatMessage)
 				);
 
@@ -9211,17 +9230,58 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InChatUID);
+				protocolCheck(*output << InSenderID);
+				protocolCheck(*output << InChatMetaData);
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
+			}; // MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+
+			MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InSenderID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInChatMetaData
+					+ SerializedSizeOf(InChatMessage)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelChatMessageCmd::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InChatUID);
+				protocolCheck(*output << InSenderID);
+				protocolCheck(output->Write(serializedSizeOfInChatMetaData));
+				protocolCheck(*output << InChatMetaData);
+				protocolCheck(*output << InChatMessage);
+
+				return hr;
+			}; // MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
 			Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				ChatChannelChatMessageCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "ChatChannelChatMessage:{0}:{1} , TransactionID:{2}, ChatUID:{3}, ChatMessage:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetChatMessage()); 
+				SFLog(Net, Debug1, "ChatChannelChatMessage:{0}:{1} , TransactionID:{2}, ChatUID:{3}, SenderID:{4}, ChatMetaData:{5}, ChatMessage:{6,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetSenderID(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
 			}; // Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -9314,6 +9374,16 @@ namespace SF
 
 			// S2C: ChatChannel Chatting message event
 			const MessageID ChatChannelChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 61);
+			const VariableTable& ChatChannelChatMessageS2CEvt::GetChatMetaData() const
+			{
+ 				if (!m_ChatMetaDataHasParsed)
+				{
+ 					m_ChatMetaDataHasParsed = true;
+					InputMemoryStream ChatMetaData_ReadStream(m_ChatMetaDataRaw);
+					*ChatMetaData_ReadStream.ToInputStream() >> m_ChatMetaData;
+				} // if (!m_ChatMetaDataHasParsed)
+				return m_ChatMetaData;
+			} // const VariableTable& ChatChannelChatMessageS2CEvt::GetChatMetaData() const
 			Result ChatChannelChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9329,7 +9399,9 @@ namespace SF
 
 				protocolCheck(*input >> m_SenderID);
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_SenderName, ArrayLen));
+				uint8_t* ChatMetaDataPtr = nullptr;
+				protocolCheck(input->ReadLink(ChatMetaDataPtr, ArrayLen));
+				m_ChatMetaDataRaw.SetLinkedBuffer(ArrayLen, ChatMetaDataPtr);
 				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ChatMessage, ArrayLen));
 
@@ -9346,7 +9418,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("SenderID", parser.GetSenderID());
-				variableBuilder.SetVariable("SenderName", parser.GetSenderName());
+				variableBuilder.SetVariableArray("ChatMetaData", "VariableTable", parser.GetChatMetaDataRaw());
 				variableBuilder.SetVariable("ChatMessage", parser.GetChatMessage());
 
 				return hr;
@@ -9364,8 +9436,7 @@ namespace SF
 
 			}; // Result ChatChannelChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-
-			MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
+			MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -9378,9 +9449,10 @@ namespace SF
 					return pNewMsg;
 				});
 
+				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InSenderID)
-					+ SerializedSizeOf(InSenderName)
+					+ serializedSizeOfInChatMetaData
 					+ SerializedSizeOf(InChatMessage)
 				);
 
@@ -9391,18 +9463,53 @@ namespace SF
 				auto* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InSenderID);
-				protocolCheck(*output << InSenderName);
+				protocolCheck(*output << InChatMetaData);
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
+			}; // MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+
+			MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InSenderID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInChatMetaData
+					+ SerializedSizeOf(InChatMessage)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ChatChannelChatMessageS2CEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InSenderID);
+				protocolCheck(output->Write(serializedSizeOfInChatMetaData));
+				protocolCheck(*output << InChatMetaData);
+				protocolCheck(*output << InChatMessage);
+
+				return hr;
+			}; // MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
 			Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				ChatChannelChatMessageS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "ChatChannelChatMessage:{0}:{1} , SenderID:{2}, SenderName:{3,60}, ChatMessage:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetSenderID(), parser.GetSenderName(), parser.GetChatMessage()); 
+				SFLog(Net, Debug1, "ChatChannelChatMessage:{0}:{1} , SenderID:{2}, ChatMetaData:{3}, ChatMessage:{4,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetSenderID(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
 			}; // Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

@@ -1011,8 +1011,8 @@ C++: Cast message to JoinChatChannelRes to access values
 
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
-		- OutPartyUID: EntityUID type. ChatChannel UID
-		- OutPartyLeaderID: AccountID type. Party leader ID
+		- OutChatUID: EntityUID type. ChatChannel UID
+		- OutChannelLeaderID: AccountID type. Party leader ID
 
 
 ## ChatChannelPlayerJoinedS2CEvt
@@ -1106,11 +1106,15 @@ Party chatting
 
 1. Command interface
 
-        Result ChatChannelChatMessageCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage)
+        Result ChatChannelChatMessageCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- OutTransactionID: TransactionID type. 
 
 		- OutChatUID: EntityUID type. ChatChannel UID
+
+		- OutSenderID: PlayerID type. Sender PlayerID
+
+		- OutChatMetaData: VariableTable type. Chat MetaData, player id and so on
 
 		- OutChatMessage: String type. My message
 
@@ -1126,11 +1130,11 @@ C++: Cast message to ChatChannelChatMessageRes to access values
 ## ChatChannelChatMessageS2CEvt
 ChatChannel Chatting message event
 
-        Result ChatChannelChatMessageS2CEvt(const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage)
+        Result ChatChannelChatMessageS2CEvt(const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
-		- OutInSenderID: AccountID type. Message sender
+		- OutInSenderID: PlayerID type. Sender PlayerID
 
-		- OutInSenderName: String type. Message sender name
+		- OutInChatMetaData: VariableTable type. Chat MetaData, player id and so on
 
 		- OutInChatMessage: String type. Message text
 

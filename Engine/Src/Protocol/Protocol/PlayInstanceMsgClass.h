@@ -951,7 +951,10 @@ namespace SF
 				uint64_t m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
-				int8_t m_ChatMessageType{};
+				int8_t m_MessageType{};
+				ArrayView<uint8_t> m_ChatMetaDataRaw;
+				mutable bool m_ChatMetaDataHasParsed = false;
+				mutable VariableTable m_ChatMetaData;
 				const char* m_ChatMessage{};
 			public:
 				ZoneChatCmd()
@@ -966,7 +969,9 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const int8_t& GetChatMessageType() const	{ return m_ChatMessageType; };
+				const int8_t& GetMessageType() const	{ return m_MessageType; };
+				const Array<uint8_t>& GetChatMetaDataRaw() const	{ return m_ChatMetaDataRaw; };
+				const VariableTable& GetChatMetaData() const;
 				const char* GetChatMessage() const	{ return m_ChatMessage; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -975,7 +980,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
 
 			}; // class ZoneChatCmd : public MessageBase
 
@@ -1031,21 +1037,25 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
+ 					HasPlayerID = 0,
 					HasTransactionID = 0,
 					HasRouteContext = 0,
 					HasRouteHopCount = 0,
 					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
+				uint64_t GetPlayerID() { return uint64_t{}; }
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
 				uint32_t GetRouteHopCount() { return uint32_t{}; }
 				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
-				PlayerID m_PlayerID{};
-				int8_t m_ChatMessageType{};
+				PlayerID m_SenderID{};
+				int8_t m_MessageType{};
+				ArrayView<uint8_t> m_ChatMetaDataRaw;
+				mutable bool m_ChatMetaDataHasParsed = false;
+				mutable VariableTable m_ChatMetaData;
 				const char* m_ChatMessage{};
 			public:
 				ZoneChatS2CEvt()
@@ -1058,8 +1068,10 @@ namespace SF
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
-				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
-				const int8_t& GetChatMessageType() const	{ return m_ChatMessageType; };
+				const PlayerID& GetSenderID() const	{ return m_SenderID; };
+				const int8_t& GetMessageType() const	{ return m_MessageType; };
+				const Array<uint8_t>& GetChatMetaDataRaw() const	{ return m_ChatMetaDataRaw; };
+				const VariableTable& GetChatMetaData() const;
 				const char* GetChatMessage() const	{ return m_ChatMessage; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -1068,7 +1080,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
 
 			}; // class ZoneChatS2CEvt : public MessageBase
 

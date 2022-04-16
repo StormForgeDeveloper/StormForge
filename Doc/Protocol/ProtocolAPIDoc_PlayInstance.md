@@ -260,15 +260,17 @@ Send zone chatting
 
 1. Command interface
 
-        Result ZoneChatCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage)
+        Result ZoneChatCmd(const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- OutTransactionID: TransactionID type. 
 
 		- OutPlayInstanceUID: GameInsUID type. Play instance ID
 
-		- OutPlayerID: PlayerID type. player id
+		- OutPlayerID: PlayerID type. Sender PlayerID
 
-		- OutChatMessageType: int8 type. 0: local chatting, 1:zone global chatting
+		- OutMessageType: int8 type. chatting message type
+
+		- OutChatMetaData: VariableTable type. Chat meta data, player id and so on
 
 		- OutChatMessage: String type. Message to send
 
@@ -284,13 +286,15 @@ C++: Cast message to ZoneChatRes to access values
 ## ZoneChatS2CEvt
 Player state change
 
-        Result ZoneChatS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InChatMessageType, const char* InChatMessage)
+        Result ZoneChatS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
-		- OutInPlayerID: PlayerID type. Player Id
+		- OutInSenderID: PlayerID type. Sender PlayerID
 
-		- OutInChatMessageType: int8 type. 0: local chatting, 1:zone global chatting
+		- OutInMessageType: int8 type. chatting message type
+
+		- OutInChatMetaData: VariableTable type. Chat meta data, player id
 
 		- OutInChatMessage: String type. Message to send
 

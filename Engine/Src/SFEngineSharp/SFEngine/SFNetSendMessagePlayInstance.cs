@@ -136,15 +136,17 @@ namespace SF.Net
 		} // public int  UseMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters )
 
 		// Cmd: Send zone chatting
-		public int  ZoneChatCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InChatMessage )
+		public int  ZoneChatCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
  			int result;
+			var InChatMetaData_ = InChatMetaData.ToByteArray();
+			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
-			result = CSSFNetAdapter_PlayInstanceZoneChatCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InChatMessageType,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
+			result = CSSFNetAdapter_PlayInstanceZoneChatCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatCmd);
 			return result;
-		} // public int  ZoneChatCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InChatMessage )
+		} // public int  ZoneChatCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
 		// Cmd: Create stream instance
 		public int  CreateStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
@@ -250,7 +252,7 @@ namespace SF.Net
 
 		// Cmd: Send zone chatting
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceZoneChatCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceZoneChatCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
+		static extern int CSSFNetAdapter_PlayInstanceZoneChatCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
 		// Cmd: Create stream instance
@@ -438,15 +440,17 @@ namespace SF.Net
 
 
 		// S2C: Player state change
-		public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InChatMessage )
+		public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InSenderID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
  			int result;
+			var InChatMetaData_ = InChatMetaData.ToByteArray();
+			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
-			result = CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID, InChatMessageType,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
+			result = CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InSenderID, InMessageType,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatS2CEvt);
 			return result;
-		} // public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, System.String InChatMessage )
+		} // public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InSenderID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
 
 		// Cmd: Create stream instance
@@ -581,7 +585,7 @@ namespace SF.Net
 
 		// S2C: Player state change
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceZoneChatS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InChatMessageType, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
+		static extern int CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InSenderID, System.SByte InMessageType, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
 

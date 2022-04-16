@@ -49,6 +49,7 @@ namespace SF
 			_CREATE_VARIABLE_TYPE_(VariableHex64);
 			_CREATE_VARIABLE_TYPE_(VariableCharString);
 			_CREATE_VARIABLE_TYPE_(VariableWCharString);
+			case "String"_crc: [[fallthrough]];
 			_CREATE_VARIABLE_TYPE_(VariableString);
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc32);
 			_CREATE_VARIABLE_TYPE_(VariableStringCrc64);

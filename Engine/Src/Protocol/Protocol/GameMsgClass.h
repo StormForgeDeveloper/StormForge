@@ -4210,8 +4210,8 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				uint64_t m_PartyUID{};
-				AccountID m_PartyLeaderID{};
+				uint64_t m_ChatUID{};
+				AccountID m_ChannelLeaderID{};
 			public:
 				JoinChatChannelRes()
 					{}
@@ -4224,8 +4224,8 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const uint64_t& GetPartyUID() const	{ return m_PartyUID; };
-				const AccountID& GetPartyLeaderID() const	{ return m_PartyLeaderID; };
+				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
+				const AccountID& GetChannelLeaderID() const	{ return m_ChannelLeaderID; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -4233,7 +4233,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID );
 
 			}; // class JoinChatChannelRes : public MessageBase
 
@@ -4625,6 +4625,10 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				uint64_t m_ChatUID{};
+				PlayerID m_SenderID{};
+				ArrayView<uint8_t> m_ChatMetaDataRaw;
+				mutable bool m_ChatMetaDataHasParsed = false;
+				mutable VariableTable m_ChatMetaData;
 				const char* m_ChatMessage{};
 			public:
 				ChatChannelChatMessageCmd()
@@ -4638,6 +4642,9 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
+				const PlayerID& GetSenderID() const	{ return m_SenderID; };
+				const Array<uint8_t>& GetChatMetaDataRaw() const	{ return m_ChatMetaDataRaw; };
+				const VariableTable& GetChatMetaData() const;
 				const char* GetChatMessage() const	{ return m_ChatMessage; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -4646,7 +4653,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
 
 			}; // class ChatChannelChatMessageCmd : public MessageBase
 
@@ -4715,8 +4723,10 @@ namespace SF
 				uint32_t GetRouteHopCount() { return uint32_t{}; }
 				uint64_t GetSender() { return uint64_t{}; }
 			private:
-				AccountID m_SenderID{};
-				const char* m_SenderName{};
+				PlayerID m_SenderID{};
+				ArrayView<uint8_t> m_ChatMetaDataRaw;
+				mutable bool m_ChatMetaDataHasParsed = false;
+				mutable VariableTable m_ChatMetaData;
 				const char* m_ChatMessage{};
 			public:
 				ChatChannelChatMessageS2CEvt()
@@ -4728,8 +4738,9 @@ namespace SF
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
-				const AccountID& GetSenderID() const	{ return m_SenderID; };
-				const char* GetSenderName() const	{ return m_SenderName; };
+				const PlayerID& GetSenderID() const	{ return m_SenderID; };
+				const Array<uint8_t>& GetChatMetaDataRaw() const	{ return m_ChatMetaDataRaw; };
+				const VariableTable& GetChatMetaData() const;
 				const char* GetChatMessage() const	{ return m_ChatMessage; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -4738,7 +4749,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
 
 			}; // class ChatChannelChatMessageS2CEvt : public MessageBase
 

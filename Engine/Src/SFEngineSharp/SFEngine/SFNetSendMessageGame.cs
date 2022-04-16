@@ -479,15 +479,17 @@ namespace SF.Net
 		} // public int  ChatChannelKickPlayerCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick )
 
 		// Cmd: Party chatting
-		public int  ChatChannelChatMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.String InChatMessage )
+		public int  ChatChannelChatMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
  			int result;
+			var InChatMetaData_ = InChatMetaData.ToByteArray();
+			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
-			result = CSSFNetAdapter_GameChatChannelChatMessageCmd(m_Connection.NativeHandle, InTransactionID, InChatUID,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
+			result = CSSFNetAdapter_GameChatChannelChatMessageCmd(m_Connection.NativeHandle, InTransactionID, InChatUID, InSenderID,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageCmd);
 			return result;
-		} // public int  ChatChannelChatMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.String InChatMessage )
+		} // public int  ChatChannelChatMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
 		// Cmd: Create character
 		public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.VariableTable InVisualData, SF.VariableTable InAttributes )
@@ -765,7 +767,7 @@ namespace SF.Net
 
 		// Cmd: Party chatting
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameChatChannelChatMessageCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameChatChannelChatMessageCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InChatUID, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
+		static extern int CSSFNetAdapter_GameChatChannelChatMessageCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InSenderID, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
 		// Cmd: Create character
@@ -1448,15 +1450,15 @@ namespace SF.Net
 
 
 		// Cmd: Join
-		public int  JoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPartyUID, System.UInt64 InPartyLeaderID )
+		public int  JoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameJoinChatChannelRes(m_Connection.NativeHandle, InTransactionID, InResult, InPartyUID, InPartyLeaderID);
+			result = CSSFNetAdapter_GameJoinChatChannelRes(m_Connection.NativeHandle, InTransactionID, InResult, InChatUID, InChannelLeaderID);
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinChatChannelRes);
 			return result;
-		} // public int  JoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPartyUID, System.UInt64 InPartyLeaderID )
+		} // public int  JoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID )
 
 
 		// S2C: Player Joined event
@@ -1544,15 +1546,17 @@ namespace SF.Net
 
 
 		// S2C: ChatChannel Chatting message event
-		public int  ChatChannelChatMessageS2CEvt( System.UInt64 InSenderID, System.String InSenderName, System.String InChatMessage )
+		public int  ChatChannelChatMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
  			int result;
+			var InChatMetaData_ = InChatMetaData.ToByteArray();
+			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
-			result = CSSFNetAdapter_GameChatChannelChatMessageS2CEvt(m_Connection.NativeHandle, InSenderID,System.Text.Encoding.UTF8.GetBytes(InSenderName + "\0"),System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
+			result = CSSFNetAdapter_GameChatChannelChatMessageS2CEvt(m_Connection.NativeHandle, InSenderID,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageS2CEvt);
 			return result;
-		} // public int  ChatChannelChatMessageS2CEvt( System.UInt64 InSenderID, System.String InSenderName, System.String InChatMessage )
+		} // public int  ChatChannelChatMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
 
 		// Cmd: Create character
@@ -1948,7 +1952,7 @@ namespace SF.Net
 
 		// Cmd: Join
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameJoinChatChannelRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameJoinChatChannelRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPartyUID, System.UInt64 InPartyLeaderID );
+		static extern int CSSFNetAdapter_GameJoinChatChannelRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID );
 
 
 
@@ -1996,7 +2000,7 @@ namespace SF.Net
 
 		// S2C: ChatChannel Chatting message event
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameChatChannelChatMessageS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameChatChannelChatMessageS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InSenderID, [MarshalAs(UnmanagedType.LPArray)] byte[] InSenderName, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
+		static extern int CSSFNetAdapter_GameChatChannelChatMessageS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InSenderID, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
 

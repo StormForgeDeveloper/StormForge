@@ -136,8 +136,9 @@
 		<Command Name="ZoneChat" Reliable="true" Crypto="No" Trace="Debug1" Desc="Send zone chatting">
 			<Cmd>
 				<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Play instance ID"/>
-				<Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
-				<Params TypeName="int8" Name="ChatMessageType" Desc="0: local chatting, 1:zone global chatting"/>
+				<Params TypeName="PlayerID" Name="PlayerID" Desc="Sender PlayerID"/>
+				<Params TypeName="int8" Name="MessageType" Desc="chatting message type"/>
+				<Params TypeName="VariableTable" Name="ChatMetaData" Desc="Chat meta data, player id and so on"/>
 				<Params TypeName="String" Name="ChatMessage" Desc="Message to send"/>
 			</Cmd>
 			<Res>
@@ -146,8 +147,9 @@
 
 		<S2CEvent Name="ZoneChat" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player state change">
 			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params TypeName="PlayerID" Name="PlayerID" Desc="Player Id"/>
-			<Params TypeName="int8" Name="ChatMessageType" Desc="0: local chatting, 1:zone global chatting"/>
+			<Params TypeName="PlayerID" Name="SenderID" Desc="Sender PlayerID"/>
+			<Params TypeName="int8" Name="MessageType" Desc="chatting message type"/>
+			<Params TypeName="VariableTable" Name="ChatMetaData" Desc="Chat meta data, player id"/>
 			<Params TypeName="String" Name="ChatMessage" Desc="Message to send"/>
 		</S2CEvent>
 

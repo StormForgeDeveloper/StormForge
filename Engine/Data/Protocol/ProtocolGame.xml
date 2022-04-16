@@ -475,8 +475,8 @@
 				<Params TypeName="AccountID" Name="InviterID" Desc="Party inviter ID"/>
 			</Cmd>
 			<Res>
-				<Params TypeName="EntityUID" Name="PartyUID" Desc="ChatChannel UID"/>
-				<Params TypeName="AccountID" Name="PartyLeaderID" Desc="Party leader ID"/>
+				<Params TypeName="EntityUID" Name="ChatUID" Desc="ChatChannel UID"/>
+				<Params TypeName="AccountID" Name="ChannelLeaderID" Desc="Party leader ID"/>
 			</Res>
 		</Command>
 
@@ -524,6 +524,8 @@
 		<Command Name="ChatChannelChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Party chatting">
 			<Cmd>
 				<Params TypeName="EntityUID" Name="ChatUID" Desc="ChatChannel UID"/>
+				<Params TypeName="PlayerID" Name="SenderID" Desc="Sender PlayerID"/>
+				<Params TypeName="VariableTable" Name="ChatMetaData" Desc="Chat MetaData, player id and so on"/>
 				<Params TypeName="String" Name="ChatMessage" Desc="My message"/>
 			</Cmd>
 			<Res>
@@ -531,8 +533,8 @@
 		</Command>
 
 		<S2CEvent Name="ChatChannelChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="ChatChannel Chatting message event">
-			<Params TypeName="AccountID" Name="SenderID" Desc="Message sender"/>
-			<Params TypeName="String" Name="SenderName" Desc="Message sender name"/>
+			<Params TypeName="PlayerID" Name="SenderID" Desc="Sender PlayerID"/>
+			<Params TypeName="VariableTable" Name="ChatMetaData" Desc="Chat MetaData, player id and so on"/>
 			<Params TypeName="String" Name="ChatMessage" Desc="Message text"/>
 		</S2CEvent>
 

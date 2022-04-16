@@ -583,19 +583,19 @@ namespace SF
 
 	}; // Result NetPolicyGame::ChatChannelKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 	// Cmd: Party chatting
-	Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
+	Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::ChatChannelChatMessageCmd::Create(GetSystemHeap(), InTransactionID, InChatUID, InChatMessage);
+		 pMessage = SF::Message::Game::ChatChannelChatMessageCmd::Create(GetSystemHeap(), InTransactionID, InChatUID, InSenderID, InChatMetaData, InChatMessage);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage )
+	}; // Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 	// Cmd: Create character
 	Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes )
 	{
@@ -1411,19 +1411,19 @@ namespace SF
 
 	}; // Result NetSvrPolicyGame::CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
 	// Cmd: Join
-	Result NetSvrPolicyGame::JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
+	Result NetSvrPolicyGame::JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::JoinChatChannelRes::Create(GetSystemHeap(), InTransactionID, InResult, InPartyUID, InPartyLeaderID);
+		 pMessage = SF::Message::Game::JoinChatChannelRes::Create(GetSystemHeap(), InTransactionID, InResult, InChatUID, InChannelLeaderID);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyGame::JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID )
+	}; // Result NetSvrPolicyGame::JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID )
 	// S2C: Player Joined event
 	Result NetSvrPolicyGame::ChatChannelPlayerJoinedS2CEvt( const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
 	{
@@ -1523,19 +1523,19 @@ namespace SF
 
 	}; // Result NetSvrPolicyGame::ChatChannelChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
 	// S2C: ChatChannel Chatting message event
-	Result NetSvrPolicyGame::ChatChannelChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
+	Result NetSvrPolicyGame::ChatChannelChatMessageS2CEvt( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::ChatChannelChatMessageS2CEvt::Create(GetSystemHeap(), InSenderID, InSenderName, InChatMessage);
+		 pMessage = SF::Message::Game::ChatChannelChatMessageS2CEvt::Create(GetSystemHeap(), InSenderID, InChatMetaData, InChatMessage);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyGame::ChatChannelChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
+	}; // Result NetSvrPolicyGame::ChatChannelChatMessageS2CEvt( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 	// Cmd: Create character
 	Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
 	{

@@ -113,7 +113,7 @@ namespace SF
 		// Cmd: Kick player from the ChatChannel
 		Result ChatChannelKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 		// Cmd: Party chatting
-		Result ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const char* InChatMessage );
+		Result ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// Cmd: Create character
 		Result CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes );
 		// Cmd: Delete character
@@ -244,7 +244,7 @@ namespace SF
 		// Cmd: Create or Join Chat channel
 		Result CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID );
 		// Cmd: Join
-		Result JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID );
+		Result JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID );
 		// S2C: Player Joined event
 		Result ChatChannelPlayerJoinedS2CEvt( const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer );
 		// S2C: ChatChannel leader changed event
@@ -260,7 +260,7 @@ namespace SF
 		// Cmd: Party chatting
 		Result ChatChannelChatMessageRes( const uint64_t &InTransactionID, const Result &InResult );
 		// S2C: ChatChannel Chatting message event
-		Result ChatChannelChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage );
+		Result ChatChannelChatMessageS2CEvt( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// Cmd: Create character
 		Result CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID );
 		// Cmd: Delete character
