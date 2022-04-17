@@ -260,7 +260,7 @@ namespace SF
 		case "ModGamePartyManager"_crc:
 		case "ModMonitoring"_crc:
 		case "ModRanking"_crc:
-		case "ModChatting"_crc:
+		case "ModChatChannelManager"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModule;
 			pServerModule = pModule;

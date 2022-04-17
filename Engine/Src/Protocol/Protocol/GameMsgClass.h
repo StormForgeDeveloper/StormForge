@@ -4165,6 +4165,7 @@ namespace SF
 				uint64_t m_TransactionID{};
 				uint64_t m_ChatUID{};
 				AccountID m_InviterID{};
+				const char* m_Passcode{};
 			public:
 				JoinChatChannelCmd()
 					{}
@@ -4178,6 +4179,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
 				const AccountID& GetInviterID() const	{ return m_InviterID; };
+				const char* GetPasscode() const	{ return m_Passcode; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -4185,7 +4187,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode );
 
 			}; // class JoinChatChannelCmd : public MessageBase
 

@@ -107,7 +107,7 @@ namespace SF
 		// Cmd: Create or Join Chat channel
 		Result CreateOrJoinChatChannelCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode );
 		// Cmd: Join
-		Result JoinChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID );
+		Result JoinChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode );
 		// Cmd: Leave ChatChannel command
 		Result LeaveChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID );
 		// Cmd: Kick player from the ChatChannel

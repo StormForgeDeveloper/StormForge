@@ -8249,6 +8249,8 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_ChatUID);
 				protocolCheck(*input >> m_InviterID);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_Passcode, ArrayLen));
 
 				return hr;
 
@@ -8265,6 +8267,7 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
 				variableBuilder.SetVariable("InviterID", parser.GetInviterID());
+				variableBuilder.SetVariable("Passcode", parser.GetPasscode());
 
 				return hr;
 
@@ -8282,7 +8285,7 @@ namespace SF
 			}; // Result JoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
+			MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -8299,6 +8302,7 @@ namespace SF
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InInviterID)
+					+ SerializedSizeOf(InPasscode)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::JoinChatChannelCmd::MID, __uiMessageSize ) );
@@ -8310,16 +8314,17 @@ namespace SF
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InChatUID);
 				protocolCheck(*output << InInviterID);
+				protocolCheck(*output << InPasscode);
 
 				return hr;
-			}; // MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
+			}; // MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
 
 			Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				JoinChatChannelCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "JoinChatChannel:{0}:{1} , TransactionID:{2}, ChatUID:{3}, InviterID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetInviterID()); 
+				SFLog(Net, Debug1, "JoinChatChannel:{0}:{1} , TransactionID:{2}, ChatUID:{3}, InviterID:{4}, Passcode:{5,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetInviterID(), parser.GetPasscode()); 
 				return ResultCode::SUCCESS;
 			}; // Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

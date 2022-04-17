@@ -97,6 +97,7 @@ namespace SF {
 		GameInstanceManager,
 		GamePartyManager,
 		Ranking,
+		ChatChannel,
 		ChatChannelManager,
 		CharacterData,
 		LoginPlayer,

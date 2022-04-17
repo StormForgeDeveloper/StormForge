@@ -541,19 +541,19 @@ namespace SF
 
 	}; // Result NetPolicyGame::CreateOrJoinChatChannelCmd( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 	// Cmd: Join
-	Result NetPolicyGame::JoinChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
+	Result NetPolicyGame::JoinChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::JoinChatChannelCmd::Create(GetSystemHeap(), InTransactionID, InChatUID, InInviterID);
+		 pMessage = SF::Message::Game::JoinChatChannelCmd::Create(GetSystemHeap(), InTransactionID, InChatUID, InInviterID, InPasscode);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetPolicyGame::JoinChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID )
+	}; // Result NetPolicyGame::JoinChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
 	// Cmd: Leave ChatChannel command
 	Result NetPolicyGame::LeaveChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
 	{

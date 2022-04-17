@@ -996,13 +996,15 @@ Join
 
 1. Command interface
 
-        Result JoinChatChannelCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID)
+        Result JoinChatChannelCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode)
 
 		- OutTransactionID: TransactionID type. 
 
 		- OutChatUID: EntityUID type. ChatChannel UID to join
 
 		- OutInviterID: AccountID type. Party inviter ID
+
+		- OutPasscode: String type. 
 
 2. Result interface
 
