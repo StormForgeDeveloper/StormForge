@@ -1397,21 +1397,21 @@ namespace SF
 
 	}; // Result NetSvrPolicyGame::BuyShopItemRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
 	// Cmd: Create or Join Chat channel
-	Result NetSvrPolicyGame::CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+	Result NetSvrPolicyGame::CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::CreateOrJoinChatChannelRes::Create(GetSystemHeap(), InTransactionID, InResult, InChatUID);
+		 pMessage = SF::Message::Game::CreateOrJoinChatChannelRes::Create(GetSystemHeap(), InTransactionID, InResult, InChatUID, InChannelLeaderID);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyGame::CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+	}; // Result NetSvrPolicyGame::CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 	// Cmd: Join
-	Result NetSvrPolicyGame::JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID )
+	Result NetSvrPolicyGame::JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 	{
  		ScopeContext hr;
 
@@ -1423,7 +1423,7 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyGame::JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID )
+	}; // Result NetSvrPolicyGame::JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 	// S2C: Player Joined event
 	Result NetSvrPolicyGame::ChatChannelPlayerJoinedS2CEvt( const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
 	{

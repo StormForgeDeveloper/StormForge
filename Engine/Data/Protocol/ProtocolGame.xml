@@ -466,18 +466,19 @@
 			</Cmd>
 			<Res>
 				<Params TypeName="EntityUID" Name="ChatUID" Desc="Created/Joined Chat channel UID"/>
+				<Params TypeName="PlayerID" Name="ChannelLeaderID" Desc="ChatChannel leader ID"/>
 			</Res>
 		</Command>
 
 		<Command Name="JoinChatChannel" Reliable="true" Crypto="No" Trace="Debug1" Desc="Join">
 			<Cmd>
 				<Params TypeName="EntityUID" Name="ChatUID" Desc="ChatChannel UID to join"/>
-				<Params TypeName="AccountID" Name="InviterID" Desc="Party inviter ID"/>
+				<Params TypeName="AccountID" Name="InviterID" Desc="Chat channel inviter ID"/>
 				<Params TypeName="String" Name="Passcode"/>
 			</Cmd>
 			<Res>
 				<Params TypeName="EntityUID" Name="ChatUID" Desc="ChatChannel UID"/>
-				<Params TypeName="AccountID" Name="ChannelLeaderID" Desc="Party leader ID"/>
+				<Params TypeName="PlayerID" Name="ChannelLeaderID" Desc="ChatChannel leader ID"/>
 			</Res>
 		</Command>
 

@@ -1438,15 +1438,15 @@ namespace SF.Net
 
 
 		// Cmd: Create or Join Chat channel
-		public int  CreateOrJoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID )
+		public int  CreateOrJoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameCreateOrJoinChatChannelRes(m_Connection.NativeHandle, InTransactionID, InResult, InChatUID);
+			result = CSSFNetAdapter_GameCreateOrJoinChatChannelRes(m_Connection.NativeHandle, InTransactionID, InResult, InChatUID, InChannelLeaderID);
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CreateOrJoinChatChannelRes);
 			return result;
-		} // public int  CreateOrJoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID )
+		} // public int  CreateOrJoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID )
 
 
 		// Cmd: Join
@@ -1946,7 +1946,7 @@ namespace SF.Net
 
 		// Cmd: Create or Join Chat channel
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameCreateOrJoinChatChannelRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameCreateOrJoinChatChannelRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID );
+		static extern int CSSFNetAdapter_GameCreateOrJoinChatChannelRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID );
 
 
 

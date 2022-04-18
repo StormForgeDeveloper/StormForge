@@ -1250,20 +1250,20 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameBuyShopItemRes( intptr_t InNativeConnection
 
 
 // Cmd: Create or Join Chat channel
-SFDLL_EXPORT int  CSSFNetAdapter_GameCreateOrJoinChatChannelRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InChatUID )
+SFDLL_EXPORT int  CSSFNetAdapter_GameCreateOrJoinChatChannelRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InChatUID, PlayerID InChannelLeaderID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::CreateOrJoinChatChannelRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InChatUID);
+	MessageDataPtr pMessage = SF::Message::Game::CreateOrJoinChatChannelRes::Create(pConnection->GetHeap(), InTransactionID, InResult, InChatUID, InChannelLeaderID);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameCreateOrJoinChatChannelRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InChatUID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameCreateOrJoinChatChannelRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InChatUID, PlayerID InChannelLeaderID )
 
 
 
 // Cmd: Join
-SFDLL_EXPORT int  CSSFNetAdapter_GameJoinChatChannelRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InChatUID, AccountID InChannelLeaderID )
+SFDLL_EXPORT int  CSSFNetAdapter_GameJoinChatChannelRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InChatUID, PlayerID InChannelLeaderID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
@@ -1271,7 +1271,7 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameJoinChatChannelRes( intptr_t InNativeConnec
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameJoinChatChannelRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InChatUID, AccountID InChannelLeaderID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameJoinChatChannelRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint64_t InChatUID, PlayerID InChannelLeaderID )
 
 
 

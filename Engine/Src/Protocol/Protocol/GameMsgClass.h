@@ -4118,6 +4118,7 @@ namespace SF
 				uint64_t m_TransactionID{};
 				Result m_Result{};
 				uint64_t m_ChatUID{};
+				PlayerID m_ChannelLeaderID{};
 			public:
 				CreateOrJoinChatChannelRes()
 					{}
@@ -4131,6 +4132,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
+				const PlayerID& GetChannelLeaderID() const	{ return m_ChannelLeaderID; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -4138,7 +4140,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
 
 			}; // class CreateOrJoinChatChannelRes : public MessageBase
 
@@ -4213,7 +4215,7 @@ namespace SF
 				uint64_t m_TransactionID{};
 				Result m_Result{};
 				uint64_t m_ChatUID{};
-				AccountID m_ChannelLeaderID{};
+				PlayerID m_ChannelLeaderID{};
 			public:
 				JoinChatChannelRes()
 					{}
@@ -4227,7 +4229,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
-				const AccountID& GetChannelLeaderID() const	{ return m_ChannelLeaderID; };
+				const PlayerID& GetChannelLeaderID() const	{ return m_ChannelLeaderID; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -4235,7 +4237,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
 
 			}; // class JoinChatChannelRes : public MessageBase
 

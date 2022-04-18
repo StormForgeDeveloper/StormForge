@@ -989,6 +989,7 @@ C++: Cast message to CreateOrJoinChatChannelRes to access values
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
 		- OutChatUID: EntityUID type. Created/Joined Chat channel UID
+		- OutChannelLeaderID: PlayerID type. ChatChannel leader ID
 
 
 ## JoinChatChannel Request
@@ -1002,7 +1003,7 @@ Join
 
 		- OutChatUID: EntityUID type. ChatChannel UID to join
 
-		- OutInviterID: AccountID type. Party inviter ID
+		- OutInviterID: AccountID type. Chat channel inviter ID
 
 		- OutPasscode: String type. 
 
@@ -1014,7 +1015,7 @@ C++: Cast message to JoinChatChannelRes to access values
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
 		- OutChatUID: EntityUID type. ChatChannel UID
-		- OutChannelLeaderID: AccountID type. Party leader ID
+		- OutChannelLeaderID: PlayerID type. ChatChannel leader ID
 
 
 ## ChatChannelPlayerJoinedS2CEvt

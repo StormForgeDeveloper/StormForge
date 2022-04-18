@@ -8157,6 +8157,7 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_ChatUID);
+				protocolCheck(*input >> m_ChannelLeaderID);
 
 				return hr;
 
@@ -8173,6 +8174,7 @@ namespace SF
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
+				variableBuilder.SetVariable("ChannelLeaderID", parser.GetChannelLeaderID());
 
 				return hr;
 
@@ -8190,7 +8192,7 @@ namespace SF
 			}; // Result CreateOrJoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+			MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -8207,6 +8209,7 @@ namespace SF
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InChatUID)
+					+ SerializedSizeOf(InChannelLeaderID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateOrJoinChatChannelRes::MID, __uiMessageSize ) );
@@ -8218,16 +8221,17 @@ namespace SF
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
 				protocolCheck(*output << InChatUID);
+				protocolCheck(*output << InChannelLeaderID);
 
 				return hr;
-			}; // MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID )
+			}; // MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 
 			Result CreateOrJoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				CreateOrJoinChatChannelRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateOrJoinChatChannel:{0}:{1} , TransactionID:{2}, Result:{3:X8}, ChatUID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetChatUID()); 
+				SFLog(Net, Debug1, "CreateOrJoinChatChannel:{0}:{1} , TransactionID:{2}, Result:{3:X8}, ChatUID:{4}, ChannelLeaderID:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetChatUID(), parser.GetChannelLeaderID()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateOrJoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -8380,7 +8384,7 @@ namespace SF
 			}; // Result JoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID )
+			MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -8412,7 +8416,7 @@ namespace SF
 				protocolCheck(*output << InChannelLeaderID);
 
 				return hr;
-			}; // MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID )
+			}; // MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 
 			Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{

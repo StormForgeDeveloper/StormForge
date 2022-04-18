@@ -242,9 +242,9 @@ namespace SF
 		// Cmd: Buy shop item
 		Result BuyShopItemRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID );
 		// Cmd: Create or Join Chat channel
-		Result CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID );
+		Result CreateOrJoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
 		// Cmd: Join
-		Result JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const AccountID &InChannelLeaderID );
+		Result JoinChatChannelRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
 		// S2C: Player Joined event
 		Result ChatChannelPlayerJoinedS2CEvt( const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer );
 		// S2C: ChatChannel leader changed event
