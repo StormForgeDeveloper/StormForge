@@ -95,6 +95,7 @@ namespace SF {
 		Game,
 		GameStaticInstanceManager,
 		GameInstanceManager,
+		GameParty,
 		GamePartyManager,
 		Ranking,
 		ChatChannel,

@@ -420,7 +420,6 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 {
 	DualSortedMap<uint,Atomic<uint>> sortedMap(GetHeap());
 	int *Status = new int[numberOfTest];
-	const int NUM_THREAD = 10;
 
 	memset(Status, 0, sizeof(int)*numberOfTest);
 
@@ -448,6 +447,8 @@ TEST_F(AVLTreeTest, DualSortedMapThread)
 
 	// TODO: broken on Windows, probably AMD CPU or VS lib on AMD CPU issue
 #if SF_PLATFORM != SF_PLATFORM_WINDOWS
+	const int NUM_THREAD = 10;
+
 	for (int iThread = 0; iThread < NUM_THREAD; iThread++)
 	{
 		auto thread = new(GetHeap()) FunctorThread(

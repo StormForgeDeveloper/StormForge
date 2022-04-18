@@ -140,9 +140,9 @@ namespace SF {
 		}
 
 		// Find Previous which is same or smaller Node
-		Result FindPrevNode( KeyType keyValue, Node* &pPrevNode )
+		Result FindPrevNode( KeyType keyValue, Node* &pPrevNode ) const
 		{
-			pPrevNode = &m_Header;
+			pPrevNode = const_cast<Node*>(&m_Header);
 			for( ; pPrevNode->pNext != nullptr; pPrevNode = pPrevNode->pNext )
 			{
 				Node *pNextNode = pPrevNode->pNext;
@@ -239,17 +239,17 @@ namespace SF {
 			return ResultCode::SUCCESS;
 		}
 
-		iterator begin()
+		iterator begin() const
 		{
 			return iterator(&m_Header);
 		}
 
-		iterator end()
+		iterator end() const
 		{
 			return iterator();
 		}
 
-		size_t size()
+		size_t size() const
 		{
 			return m_NumItems;
 		}

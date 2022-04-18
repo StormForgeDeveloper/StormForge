@@ -230,7 +230,7 @@ namespace SF {
 				}
 
 				// set iter
-				void Set( StaticHashTable *pContainer, typename BucketListType::iterator iterBucket )//, typename ItemContainer::iterator itInBucket, bool bIsLock = true, bool bIsBucketIter = false )
+				void Set( StaticHashTable *pContainer, const typename BucketListType::iterator& iterBucket )//, typename ItemContainer::iterator itInBucket, bool bIsLock = true, bool bIsBucketIter = false )
 				{
 					if( m_pContainer && m_iterBucket != m_pContainer->bucket_end() && m_itInBucket.IsValid() )
 						m_iterBucket->ReadUnlock();
@@ -447,26 +447,26 @@ namespace SF {
 			}
 
 			// Iterator 
-			iterator begin()
+			iterator begin() const
 			{
 				auto iterBucket = m_Bucket.begin();
 				for( ; iterBucket != m_Bucket.end(); ++iterBucket )
 				{
 					if( !iterBucket->m_Items.empty() )
 					{
-						return iterator(this, iterBucket, iterBucket->m_Items.begin());
+						return iterator(const_cast<StaticHashTable*>(this), iterBucket, iterBucket->m_Items.begin());
 					}
 				}
 
 				return end();
 			}
 
-			iterator end()
+			iterator end() const
 			{
-				return iterator(this,m_Bucket.end(),nullptr);
+				return iterator(const_cast<StaticHashTable*>(this),m_Bucket.end(),nullptr);
 			}
 
-			size_t size()
+			size_t size() const
 			{
 				return m_lItemCount.load(std::memory_order_relaxed);
 			}
@@ -510,12 +510,12 @@ namespace SF {
 				return ResultCode::SUCCESS;
 			}
 
-			Result find( const KeyType& inKey, ItemType *data )
+			Result find( const KeyType& inKey, ItemType *data ) const
 			{
 				size_t hashVal = Hasher()(inKey);
 				size_t iBucket = hashVal%m_Bucket.size();
 
-				Bucket& bucket = m_Bucket[iBucket];
+				auto& bucket = m_Bucket[iBucket];
 				TicketScopeLockT<TicketLockType> scopeLock( TicketLock::LockMode::NonExclusive, bucket.m_Lock );
 
 				typename ItemContainer::Node *pPrevNode = nullptr;
@@ -530,17 +530,17 @@ namespace SF {
 				return ResultCode::FAIL;
 			}
 
-			Result find( const KeyType& keyVal, iterator &iterData )
+			Result find( const KeyType& keyVal, iterator &iterData ) const
 			{
 				size_t hashVal = Hasher()( keyVal );
 				size_t iBucket = hashVal%m_Bucket.size();
 
-				Bucket& bucket = m_Bucket[iBucket];
+				auto& bucket = m_Bucket[iBucket];
 
 				iterData = end();
 
 				// Set operation will lock the bucket
-				iterData.Set( this, m_Bucket.begin() + iBucket );
+				iterData.Set(const_cast<StaticHashTable*>(this), const_cast<StaticHashTable*>(this)->m_Bucket.begin() + iBucket );
 
 				typename ItemContainer::Node *pPrevNode = nullptr;
 				if( !(bucket.m_Items.FindPrevNode( keyVal, pPrevNode )) )
