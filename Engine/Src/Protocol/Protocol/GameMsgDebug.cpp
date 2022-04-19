@@ -187,11 +187,16 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ChatChannelKickPlayerRes::MID.IDSeq.MsgID,&Message::Game::ChatChannelKickPlayerRes::TraceOut));
 			// S2C: ChatChannel Player kicked message
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ChatChannelPlayerKickedS2CEvt::MID.IDSeq.MsgID,&Message::Game::ChatChannelPlayerKickedS2CEvt::TraceOut));
-			// Cmd: Party chatting
+			// Cmd: Chat channel sending chatting message
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ChatChannelChatMessageCmd::MID.IDSeq.MsgID,&Message::Game::ChatChannelChatMessageCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ChatChannelChatMessageRes::MID.IDSeq.MsgID,&Message::Game::ChatChannelChatMessageRes::TraceOut));
 			// S2C: ChatChannel Chatting message event
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ChatChannelChatMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::ChatChannelChatMessageS2CEvt::TraceOut));
+			// Cmd: Wisper(tell) other player chatting
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::WisperMessageCmd::MID.IDSeq.MsgID,&Message::Game::WisperMessageCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::WisperMessageRes::MID.IDSeq.MsgID,&Message::Game::WisperMessageRes::TraceOut));
+			// S2C: Other player wispered(tell) to me message event
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::WisperMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::WisperMessageS2CEvt::TraceOut));
 			// Cmd: Create character
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::CreateCharacterCmd::MID.IDSeq.MsgID,&Message::Game::CreateCharacterCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::CreateCharacterRes::MID.IDSeq.MsgID,&Message::Game::CreateCharacterRes::TraceOut));

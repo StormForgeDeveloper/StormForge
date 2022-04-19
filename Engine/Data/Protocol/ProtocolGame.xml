@@ -523,10 +523,9 @@
 			<Params TypeName="AccountID" Name="KickedPlayerID" Desc="Kicked player ID"/>
 		</S2CEvent>
 
-		<Command Name="ChatChannelChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Party chatting">
+		<Command Name="ChatChannelChatMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Chat channel sending chatting message">
 			<Cmd>
 				<Params TypeName="EntityUID" Name="ChatUID" Desc="ChatChannel UID"/>
-				<Params TypeName="PlayerID" Name="SenderID" Desc="Sender PlayerID"/>
 				<Params TypeName="VariableTable" Name="ChatMetaData" Desc="Chat MetaData, player id and so on"/>
 				<Params TypeName="String" Name="ChatMessage" Desc="My message"/>
 			</Cmd>
@@ -540,7 +539,27 @@
 			<Params TypeName="String" Name="ChatMessage" Desc="Message text"/>
 		</S2CEvent>
 
+		<!-- =================================================== personal chat ================================================== -->
 
+		<Command Name="WisperMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Wisper(tell) other player chatting">
+			<Cmd>
+				<Params TypeName="EntityUID" Name="ChatUID" Desc="ChatChannel UID"/>
+				<Params TypeName="PlayerID" Name="ReceiverID" Desc="Receiver ID"/>
+				<Params TypeName="String" Name="ReceiverName" Desc="Receiver name. Supporting character only for now"/>
+				<Params TypeName="VariableTable" Name="ChatMetaData" Desc="Chat MetaData, player id and so on"/>
+				<Params TypeName="String" Name="ChatMessage" Desc="My message"/>
+			</Cmd>
+			<Res>
+			</Res>
+		</Command>
+
+		<S2CEvent Name="WisperMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Other player wispered(tell) to me message event">
+			<Params TypeName="PlayerID" Name="SenderID" Desc="Sender PlayerID"/>
+			<Params TypeName="VariableTable" Name="ChatMetaData" Desc="Chat MetaData, player id and so on"/>
+			<Params TypeName="String" Name="ChatMessage" Desc="Message text"/>
+		</S2CEvent>
+
+		
 		<!-- =================================================== Character ================================================== -->
 
 	    <Command Name="CreateCharacter" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create character">

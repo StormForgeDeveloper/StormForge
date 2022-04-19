@@ -249,6 +249,30 @@ namespace SF
 		return true;
 	}
 
+	// Save current strings to text file
+	bool StringCrcDB::DumpToTextFile(IOutputStream& stream)
+	{
+		// If nothing to save
+		if (m_Head == nullptr)
+		{
+			return true;
+		}
+
+		DynamicArray<char> stringBuffer;
+		stringBuffer.reserve(10 * 1024);
+
+		m_StringMap64.ForeachOrder(0, (uint)m_StringMap64.size(), [&](uint64_t key, const StringItem* pStrItem)
+			{
+				int capacity = int(stringBuffer.capacity());
+				size_t usedSize = StrUtil::Format(stringBuffer.data(), capacity, "{0:x}, {1:x}, '{2}'\n", pStrItem->Hash32, pStrItem->Hash64, pStrItem->StringValue);
+				stream.Write(stringBuffer.data(), usedSize - 1);
+
+				return true;
+			});
+
+		return true;
+	}
+
 
 	const StringCrcDB::StringItem* StringCrcDB::AddStringToBuffer(uint64_t hash64, uint32_t hash32, const char* string)
 	{

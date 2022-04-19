@@ -1105,17 +1105,15 @@ ChatChannel Player kicked message
 
 
 ## ChatChannelChatMessage Request
-Party chatting
+Chat channel sending chatting message
 
 1. Command interface
 
-        Result ChatChannelChatMessageCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result ChatChannelChatMessageCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- OutTransactionID: TransactionID type. 
 
 		- OutChatUID: EntityUID type. ChatChannel UID
-
-		- OutSenderID: PlayerID type. Sender PlayerID
 
 		- OutChatMetaData: VariableTable type. Chat MetaData, player id and so on
 
@@ -1134,6 +1132,46 @@ C++: Cast message to ChatChannelChatMessageRes to access values
 ChatChannel Chatting message event
 
         Result ChatChannelChatMessageS2CEvt(const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+
+		- OutInSenderID: PlayerID type. Sender PlayerID
+
+		- OutInChatMetaData: VariableTable type. Chat MetaData, player id and so on
+
+		- OutInChatMessage: String type. Message text
+
+
+## WisperMessage Request
+Wisper(tell) other player chatting
+
+1. Command interface
+
+        Result WisperMessageCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutChatUID: EntityUID type. ChatChannel UID
+
+		- OutReceiverID: PlayerID type. Receiver ID
+
+		- OutReceiverName: String type. Receiver name. Supporting character only for now
+
+		- OutChatMetaData: VariableTable type. Chat MetaData, player id and so on
+
+		- OutChatMessage: String type. My message
+
+2. Result interface
+
+C++: Cast message to WisperMessageRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+
+
+## WisperMessageS2CEvt
+Other player wispered(tell) to me message event
+
+        Result WisperMessageS2CEvt(const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- OutInSenderID: PlayerID type. Sender PlayerID
 

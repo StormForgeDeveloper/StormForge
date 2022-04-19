@@ -112,8 +112,10 @@ namespace SF
 		Result LeaveChatChannelCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID );
 		// Cmd: Kick player from the ChatChannel
 		Result ChatChannelKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
-		// Cmd: Party chatting
-		Result ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
+		// Cmd: Chat channel sending chatting message
+		Result ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage );
+		// Cmd: Wisper(tell) other player chatting
+		Result WisperMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// Cmd: Create character
 		Result CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes );
 		// Cmd: Delete character
@@ -257,10 +259,14 @@ namespace SF
 		Result ChatChannelKickPlayerRes( const uint64_t &InTransactionID, const Result &InResult );
 		// S2C: ChatChannel Player kicked message
 		Result ChatChannelPlayerKickedS2CEvt( const uint64_t &InChatUID, const AccountID &InKickedPlayerID );
-		// Cmd: Party chatting
+		// Cmd: Chat channel sending chatting message
 		Result ChatChannelChatMessageRes( const uint64_t &InTransactionID, const Result &InResult );
 		// S2C: ChatChannel Chatting message event
 		Result ChatChannelChatMessageS2CEvt( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
+		// Cmd: Wisper(tell) other player chatting
+		Result WisperMessageRes( const uint64_t &InTransactionID, const Result &InResult );
+		// S2C: Other player wispered(tell) to me message event
+		Result WisperMessageS2CEvt( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// Cmd: Create character
 		Result CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID );
 		// Cmd: Delete character

@@ -673,7 +673,7 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameChatChannelPlayerKickedS2CEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameChatChannelPlayerKickedS2CEvt()
 
 
-// Cmd: Party chatting
+// Cmd: Chat channel sending chatting message
 SFDLL_EXPORT int  CSSFNetMessageID_GameChatChannelChatMessageCmd()
 {
  	return SF::Message::Game::ChatChannelChatMessageCmd::MID.IDSeq.MsgID;
@@ -691,6 +691,26 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameChatChannelChatMessageS2CEvt()
 {
  	return SF::Message::Game::ChatChannelChatMessageS2CEvt::MID.IDSeq.MsgID;
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameChatChannelChatMessageS2CEvt()
+
+
+// Cmd: Wisper(tell) other player chatting
+SFDLL_EXPORT int  CSSFNetMessageID_GameWisperMessageCmd()
+{
+ 	return SF::Message::Game::WisperMessageCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameWisperMessageCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameWisperMessageRes()
+{
+ 	return SF::Message::Game::WisperMessageRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameWisperMessageRes()
+
+
+// S2C: Other player wispered(tell) to me message event
+SFDLL_EXPORT int  CSSFNetMessageID_GameWisperMessageS2CEvt()
+{
+ 	return SF::Message::Game::WisperMessageS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameWisperMessageS2CEvt()
 
 
 // Cmd: Create character

@@ -582,20 +582,34 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetPolicyGame::ChatChannelKickPlayerCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
-	// Cmd: Party chatting
-	Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+	// Cmd: Chat channel sending chatting message
+	Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::ChatChannelChatMessageCmd::Create(GetSystemHeap(), InTransactionID, InChatUID, InSenderID, InChatMetaData, InChatMessage);
+		 pMessage = SF::Message::Game::ChatChannelChatMessageCmd::Create(GetSystemHeap(), InTransactionID, InChatUID, InChatMetaData, InChatMessage);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+	}; // Result NetPolicyGame::ChatChannelChatMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage )
+	// Cmd: Wisper(tell) other player chatting
+	Result NetPolicyGame::WisperMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::WisperMessageCmd::Create(GetSystemHeap(), InTransactionID, InChatUID, InReceiverID, InReceiverName, InChatMetaData, InChatMessage);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetPolicyGame::WisperMessageCmd( const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
 	// Cmd: Create character
 	Result NetPolicyGame::CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes )
 	{
@@ -1508,7 +1522,7 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetSvrPolicyGame::ChatChannelPlayerKickedS2CEvt( const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
-	// Cmd: Party chatting
+	// Cmd: Chat channel sending chatting message
 	Result NetSvrPolicyGame::ChatChannelChatMessageRes( const uint64_t &InTransactionID, const Result &InResult )
 	{
  		ScopeContext hr;
@@ -1536,6 +1550,34 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetSvrPolicyGame::ChatChannelChatMessageS2CEvt( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+	// Cmd: Wisper(tell) other player chatting
+	Result NetSvrPolicyGame::WisperMessageRes( const uint64_t &InTransactionID, const Result &InResult )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::WisperMessageRes::Create(GetSystemHeap(), InTransactionID, InResult);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetSvrPolicyGame::WisperMessageRes( const uint64_t &InTransactionID, const Result &InResult )
+	// S2C: Other player wispered(tell) to me message event
+	Result NetSvrPolicyGame::WisperMessageS2CEvt( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::WisperMessageS2CEvt::Create(GetSystemHeap(), InSenderID, InChatMetaData, InChatMessage);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetSvrPolicyGame::WisperMessageS2CEvt( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 	// Cmd: Create character
 	Result NetSvrPolicyGame::CreateCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
 	{

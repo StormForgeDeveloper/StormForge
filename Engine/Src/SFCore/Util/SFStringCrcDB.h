@@ -115,6 +115,9 @@ namespace SF
 		// Save current strings to string table
 		bool SaveStringTable(IOutputStream& stream);
 
+		bool DumpToTextFile(IOutputStream& stream);
+
+
 		// Add string to both 32 and 64 hash
 		void AddString(const char* str);
 

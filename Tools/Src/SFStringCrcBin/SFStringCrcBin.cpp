@@ -26,6 +26,7 @@ static int Process()
 	SF::DynamicArray<const char*> inputPaths;
 	SF::AppConfig::GetSettingArray("in", inputPaths);
 	const char* outputPath = SF::AppConfig::GetSetting("out");
+	const char* outputTxtPath = SF::AppConfig::GetSetting("outtxt");
 
 	if (inputPaths.size() == 0 || outputPath == nullptr)
 	{
@@ -139,6 +140,7 @@ static int Process()
 	}
 
 
+	SFLog(Engine, Info, "SFStringCrcBin: Writing output table {0}", outputPath);
 	SF::FileOutputStream saveTo(outputPath);
 	if (!stringDB.SaveStringTable(saveTo))
 	{
@@ -146,6 +148,19 @@ static int Process()
 		return -1;
 	}
 	saveTo.Close();
+
+
+	if (outputTxtPath)
+	{
+		SFLog(Engine, Info, "SFStringCrcBin: Writing output table {0}", outputTxtPath);
+		SF::FileOutputStream saveToTxt(outputTxtPath);
+		if (!stringDB.DumpToTextFile(saveToTxt))
+		{
+			SFLog(Engine, Error, "SFStringCrcBin: Failed to write output table {0}", outputTxtPath);
+			return -1;
+		}
+		saveToTxt.Close();
+	}
 
 	return 0;
 }

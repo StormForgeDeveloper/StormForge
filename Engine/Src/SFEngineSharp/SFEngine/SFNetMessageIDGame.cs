@@ -325,7 +325,7 @@ namespace SF.Net
 		// S2C: ChatChannel Player kicked message
 		public static int ChatChannelPlayerKickedS2CEvt { get { return CSSFNetMessageID_GameChatChannelPlayerKickedS2CEvt(); } }
 
-		// Cmd: Party chatting
+		// Cmd: Chat channel sending chatting message
 		public static int ChatChannelChatMessageCmd { get { return CSSFNetMessageID_GameChatChannelChatMessageCmd(); } }
 
 		public static int ChatChannelChatMessageRes { get { return CSSFNetMessageID_GameChatChannelChatMessageRes(); } }
@@ -333,6 +333,15 @@ namespace SF.Net
 
 		// S2C: ChatChannel Chatting message event
 		public static int ChatChannelChatMessageS2CEvt { get { return CSSFNetMessageID_GameChatChannelChatMessageS2CEvt(); } }
+
+		// Cmd: Wisper(tell) other player chatting
+		public static int WisperMessageCmd { get { return CSSFNetMessageID_GameWisperMessageCmd(); } }
+
+		public static int WisperMessageRes { get { return CSSFNetMessageID_GameWisperMessageRes(); } }
+
+
+		// S2C: Other player wispered(tell) to me message event
+		public static int WisperMessageS2CEvt { get { return CSSFNetMessageID_GameWisperMessageS2CEvt(); } }
 
 		// Cmd: Create character
 		public static int CreateCharacterCmd { get { return CSSFNetMessageID_GameCreateCharacterCmd(); } }
@@ -866,7 +875,7 @@ namespace SF.Net
 		static extern int CSSFNetMessageID_GameChatChannelPlayerKickedS2CEvt();
 
 
-		// Cmd: Party chatting
+		// Cmd: Chat channel sending chatting message
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameChatChannelChatMessageCmd", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameChatChannelChatMessageCmd();
 
@@ -879,6 +888,21 @@ namespace SF.Net
 		// S2C: ChatChannel Chatting message event
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameChatChannelChatMessageS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameChatChannelChatMessageS2CEvt();
+
+
+		// Cmd: Wisper(tell) other player chatting
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameWisperMessageCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameWisperMessageCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameWisperMessageRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameWisperMessageRes();
+
+
+
+		// S2C: Other player wispered(tell) to me message event
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameWisperMessageS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameWisperMessageS2CEvt();
 
 
 		// Cmd: Create character
