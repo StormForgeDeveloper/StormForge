@@ -1286,17 +1286,6 @@ namespace SF
 	Result VariableStringCrc32::ToString(ToStringContext& context) const
 	{
 		return _ToString(context, m_Value);
-		//auto pStr = Service::StringDB->GetString(m_Value);
-		//if (pStr != nullptr)
-		//	return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
-		//else
-		//{
-		//	auto oldRadix = context.Radix;
-		//	context.Radix = 16;
-		//	auto result = _IToA(context, (uint32_t)m_Value);
-		//	context.Radix = oldRadix;
-		//	return result;
-		//}
 	}
 
 	Variable* VariableStringCrc32::Clone(Array<uint8_t>& buffer) const

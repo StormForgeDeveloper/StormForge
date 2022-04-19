@@ -258,14 +258,15 @@ namespace SF
                     (writer, value) =>
                     {
                         var valueTemp = (string)value;
-                        writer.Write((UInt16)(valueTemp.Length + 1));
-                        writer.Write(System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0"));
+                        byte[] bytesValue = System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0");
+                        writer.Write((UInt16)bytesValue.Length);
+                        writer.Write(bytesValue);
                     },
                     (reader) =>
                     {
-                        var strLen = reader.ReadUInt16();
-                        byte[] byteBuffer = reader.ReadBytes(strLen);
-                        return System.Text.Encoding.UTF8.GetString(byteBuffer, 0, strLen-1);
+                        var bytesLen = reader.ReadUInt16();
+                        byte[] byteBuffer = reader.ReadBytes(bytesLen);
+                        return System.Text.Encoding.UTF8.GetString(byteBuffer, 0, bytesLen-1);
                     },
                     (ref IntPtr valuePtr) =>
                     {
