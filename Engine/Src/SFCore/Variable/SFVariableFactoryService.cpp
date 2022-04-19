@@ -61,8 +61,8 @@ namespace SF
 
 		default:
 			// TODO: Add dynamic type supports
-			assert(false);
-			return nullptr;
+			SFLog(System, Error, "VariableFactoryService::CreateVariable, Unknown variable type:{0}, fallback to string", TypeName);
+			return new(heap) VariableString();
 		}
 
 #undef _CREATE_VARIABLE_TYPE_
