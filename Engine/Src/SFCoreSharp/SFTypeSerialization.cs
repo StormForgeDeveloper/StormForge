@@ -280,8 +280,9 @@ namespace SF
                     (writer, value) =>
                     {
                         var valueTemp = (string)value;
-                        writer.Write((UInt16)(valueTemp.Length + 1));
-                        writer.Write(System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0"));
+                        byte[] bytesValue = System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0");
+                        writer.Write((UInt16)bytesValue.Length);
+                        writer.Write(bytesValue);
                     },
                     (reader) =>
                     {
@@ -301,8 +302,9 @@ namespace SF
                     (writer, value) =>
                     {
                         var valueTemp = (string)value;
-                        writer.Write((UInt16)(valueTemp.Length + 1));
-                        writer.Write(System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0"));
+                       byte[] bytesValue = System.Text.Encoding.UTF8.GetBytes(valueTemp + "\0");
+                        writer.Write((UInt16)bytesValue.Length);
+                        writer.Write(bytesValue);
                     },
                     (reader) =>
                     {
