@@ -9516,9 +9516,9 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			// Cmd: Wisper(tell) other player chatting
-			const MessageID WisperMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 62);
-			const VariableTable& WisperMessageCmd::GetChatMetaData() const
+			// Cmd: Whisper(tell) other player chatting
+			const MessageID WhisperMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 62);
+			const VariableTable& WhisperMessageCmd::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
 				{
@@ -9527,8 +9527,8 @@ namespace SF
 					*ChatMetaData_ReadStream.ToInputStream() >> m_ChatMetaData;
 				} // if (!m_ChatMetaDataHasParsed)
 				return m_ChatMetaData;
-			} // const VariableTable& WisperMessageCmd::GetChatMetaData() const
-			Result WisperMessageCmd::ParseMessage(const MessageData* pIMsg)
+			} // const VariableTable& WhisperMessageCmd::GetChatMetaData() const
+			Result WhisperMessageCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -9542,7 +9542,6 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(*input >> m_ChatUID);
 				protocolCheck(*input >> m_ReceiverID);
 				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_ReceiverName, ArrayLen));
@@ -9555,18 +9554,17 @@ namespace SF
 
 				return hr;
 
-			}; // Result WisperMessageCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result WhisperMessageCmd::ParseMessage(const MessageData* pIMsg)
 
-			Result WisperMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result WhisperMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				WisperMessageCmd parser;
+				WhisperMessageCmd parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
 				variableBuilder.SetVariable("ReceiverID", parser.GetReceiverID());
 				variableBuilder.SetVariable("ReceiverName", parser.GetReceiverName());
 				variableBuilder.SetVariableArray("ChatMetaData", "VariableTable", parser.GetChatMetaDataRaw());
@@ -9574,20 +9572,20 @@ namespace SF
 
 				return hr;
 
-			}; // Result WisperMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result WhisperMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result WisperMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result WhisperMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) WisperMessageCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageCmd(pIMsg));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result WisperMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result WhisperMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* WisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			MessageData* WhisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -9603,30 +9601,28 @@ namespace SF
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InReceiverID)
 					+ SerializedSizeOf(InReceiverName)
 					+ serializedSizeOfInChatMetaData
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WisperMessageCmd::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WhisperMessageCmd::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
 				auto* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InChatUID);
 				protocolCheck(*output << InReceiverID);
 				protocolCheck(*output << InReceiverName);
 				protocolCheck(*output << InChatMetaData);
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* WisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			}; // MessageData* WhisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 
-			MessageData* WisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
+			MessageData* WhisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -9642,7 +9638,6 @@ namespace SF
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InReceiverID)
 					+ SerializedSizeOf(InReceiverName)
 					+ sizeof(uint16_t)
@@ -9650,14 +9645,13 @@ namespace SF
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WisperMessageCmd::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WhisperMessageCmd::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
 				auto* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InChatUID);
 				protocolCheck(*output << InReceiverID);
 				protocolCheck(*output << InReceiverName);
 				protocolCheck(output->Write(serializedSizeOfInChatMetaData));
@@ -9665,19 +9659,19 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* WisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
+			}; // MessageData* WhisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			Result WisperMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result WhisperMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				WisperMessageCmd parser;
+ 				WhisperMessageCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "WisperMessage:{0}:{1} , TransactionID:{2}, ChatUID:{3}, ReceiverID:{4}, ReceiverName:{5,60}, ChatMetaData:{6}, ChatMessage:{7,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetReceiverID(), parser.GetReceiverName(), parser.GetChatMetaData(), parser.GetChatMessage()); 
+				SFLog(Net, Debug1, "WhisperMessage:{0}:{1} , TransactionID:{2}, ReceiverID:{3}, ReceiverName:{4,60}, ChatMetaData:{5}, ChatMessage:{6,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetReceiverID(), parser.GetReceiverName(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result WisperMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result WhisperMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID WisperMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 62);
-			Result WisperMessageRes::ParseMessage(const MessageData* pIMsg)
+			const MessageID WhisperMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 62);
+			Result WhisperMessageRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -9695,14 +9689,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result WisperMessageRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result WhisperMessageRes::ParseMessage(const MessageData* pIMsg)
 
-			Result WisperMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result WhisperMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				WisperMessageRes parser;
+				WhisperMessageRes parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
@@ -9710,21 +9704,21 @@ namespace SF
 
 				return hr;
 
-			}; // Result WisperMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result WhisperMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result WisperMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result WhisperMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) WisperMessageRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageRes(pIMsg));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result WisperMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result WhisperMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* WisperMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			MessageData* WhisperMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -9742,7 +9736,7 @@ namespace SF
 					+ SerializedSizeOf(InResult)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WisperMessageRes::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WhisperMessageRes::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -9752,20 +9746,20 @@ namespace SF
 				protocolCheck(*output << InResult);
 
 				return hr;
-			}; // MessageData* WisperMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			}; // MessageData* WhisperMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result WisperMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result WhisperMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				WisperMessageRes parser;
+ 				WhisperMessageRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "WisperMessage:{0}:{1} , TransactionID:{2}, Result:{3:X8}",
+				SFLog(Net, Debug1, "WhisperMessage:{0}:{1} , TransactionID:{2}, Result:{3:X8}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result WisperMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result WhisperMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			// S2C: Other player wispered(tell) to me message event
-			const MessageID WisperMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 63);
-			const VariableTable& WisperMessageS2CEvt::GetChatMetaData() const
+			// S2C: Other player whispered(tell) to me message event
+			const MessageID WhisperMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 63);
+			const VariableTable& WhisperMessageS2CEvt::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
 				{
@@ -9774,8 +9768,8 @@ namespace SF
 					*ChatMetaData_ReadStream.ToInputStream() >> m_ChatMetaData;
 				} // if (!m_ChatMetaDataHasParsed)
 				return m_ChatMetaData;
-			} // const VariableTable& WisperMessageS2CEvt::GetChatMetaData() const
-			Result WisperMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
+			} // const VariableTable& WhisperMessageS2CEvt::GetChatMetaData() const
+			Result WhisperMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
 
@@ -9798,14 +9792,14 @@ namespace SF
 
 				return hr;
 
-			}; // Result WisperMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result WhisperMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 
-			Result WisperMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result WhisperMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
-				WisperMessageS2CEvt parser;
+				WhisperMessageS2CEvt parser;
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("SenderID", parser.GetSenderID());
@@ -9814,20 +9808,20 @@ namespace SF
 
 				return hr;
 
-			}; // Result WisperMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result WhisperMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
 
-			Result WisperMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result WhisperMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) WisperMessageS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageS2CEvt(pIMsg));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result WisperMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result WhisperMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* WisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			MessageData* WhisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -9847,7 +9841,7 @@ namespace SF
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WisperMessageS2CEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WhisperMessageS2CEvt::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -9858,9 +9852,9 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* WisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			}; // MessageData* WhisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 
-			MessageData* WisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+			MessageData* WhisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -9881,7 +9875,7 @@ namespace SF
 					+ SerializedSizeOf(InChatMessage)
 				);
 
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WisperMessageS2CEvt::MID, __uiMessageSize ) );
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::WhisperMessageS2CEvt::MID, __uiMessageSize ) );
 				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
 				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
 				OutputMemoryStream outputStream(BufferView);
@@ -9893,16 +9887,16 @@ namespace SF
 				protocolCheck(*output << InChatMessage);
 
 				return hr;
-			}; // MessageData* WisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
+			}; // MessageData* WhisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			Result WisperMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result WhisperMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
- 				WisperMessageS2CEvt parser;
+ 				WhisperMessageS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "WisperMessage:{0}:{1} , SenderID:{2}, ChatMetaData:{3}, ChatMessage:{4,60}",
+				SFLog(Net, Debug1, "WhisperMessage:{0}:{1} , SenderID:{2}, ChatMetaData:{3}, ChatMessage:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetSenderID(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result WisperMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result WhisperMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Create character
 			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 64);

@@ -297,14 +297,14 @@ namespace SF
 			// S2C: ChatChannel Chatting message event
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::ChatChannelChatMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::ChatChannelChatMessageS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::ChatChannelChatMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::ChatChannelChatMessageS2CEvt::ParseMessageToMessageBase));
-			// Cmd: Wisper(tell) other player chatting
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::WisperMessageCmd::MID.IDSeq.MsgID,&Message::Game::WisperMessageCmd::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::WisperMessageCmd::MID.IDSeq.MsgID,&Message::Game::WisperMessageCmd::ParseMessageToMessageBase));
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::WisperMessageRes::MID.IDSeq.MsgID,&Message::Game::WisperMessageRes::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::WisperMessageRes::MID.IDSeq.MsgID,&Message::Game::WisperMessageRes::ParseMessageToMessageBase));
-			// S2C: Other player wispered(tell) to me message event
-			MessageParseToVariableMap.insert(std::make_pair(Message::Game::WisperMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::WisperMessageS2CEvt::ParseMessageTo));
-			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::WisperMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::WisperMessageS2CEvt::ParseMessageToMessageBase));
+			// Cmd: Whisper(tell) other player chatting
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::WhisperMessageCmd::MID.IDSeq.MsgID,&Message::Game::WhisperMessageCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::WhisperMessageCmd::MID.IDSeq.MsgID,&Message::Game::WhisperMessageCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::WhisperMessageRes::MID.IDSeq.MsgID,&Message::Game::WhisperMessageRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::WhisperMessageRes::MID.IDSeq.MsgID,&Message::Game::WhisperMessageRes::ParseMessageToMessageBase));
+			// S2C: Other player whispered(tell) to me message event
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::WhisperMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::WhisperMessageS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::WhisperMessageS2CEvt::MID.IDSeq.MsgID,&Message::Game::WhisperMessageS2CEvt::ParseMessageToMessageBase));
 			// Cmd: Create character
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::CreateCharacterCmd::MID.IDSeq.MsgID,&Message::Game::CreateCharacterCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::CreateCharacterCmd::MID.IDSeq.MsgID,&Message::Game::CreateCharacterCmd::ParseMessageToMessageBase));

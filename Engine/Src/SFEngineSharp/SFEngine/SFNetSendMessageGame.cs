@@ -491,18 +491,18 @@ namespace SF.Net
 			return result;
 		} // public int  ChatChannelChatMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
-		// Cmd: Wisper(tell) other player chatting
-		public int  WisperMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage )
+		// Cmd: Whisper(tell) other player chatting
+		public int  WhisperMessageCmd( System.UInt64 InTransactionID, System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
  			int result;
 			var InChatMetaData_ = InChatMetaData.ToByteArray();
 			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
-			result = CSSFNetAdapter_GameWisperMessageCmd(m_Connection.NativeHandle, InTransactionID, InChatUID, InReceiverID,System.Text.Encoding.UTF8.GetBytes(InReceiverName + "\0"),(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
+			result = CSSFNetAdapter_GameWhisperMessageCmd(m_Connection.NativeHandle, InTransactionID, InReceiverID,System.Text.Encoding.UTF8.GetBytes(InReceiverName + "\0"),(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.WisperMessageCmd);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.WhisperMessageCmd);
 			return result;
-		} // public int  WisperMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage )
+		} // public int  WhisperMessageCmd( System.UInt64 InTransactionID, System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
 		// Cmd: Create character
 		public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.VariableTable InVisualData, SF.VariableTable InAttributes )
@@ -783,9 +783,9 @@ namespace SF.Net
 		static extern int CSSFNetAdapter_GameChatChannelChatMessageCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
-		// Cmd: Wisper(tell) other player chatting
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameWisperMessageCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameWisperMessageCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InReceiverID, [MarshalAs(UnmanagedType.LPArray)] byte[] InReceiverName, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
+		// Cmd: Whisper(tell) other player chatting
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameWhisperMessageCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameWhisperMessageCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InReceiverID, [MarshalAs(UnmanagedType.LPArray)] byte[] InReceiverName, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
 		// Cmd: Create character
@@ -1577,30 +1577,30 @@ namespace SF.Net
 		} // public int  ChatChannelChatMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
 
-		// Cmd: Wisper(tell) other player chatting
-		public int  WisperMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		// Cmd: Whisper(tell) other player chatting
+		public int  WhisperMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameWisperMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
+			result = CSSFNetAdapter_GameWhisperMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.WisperMessageRes);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.WhisperMessageRes);
 			return result;
-		} // public int  WisperMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		} // public int  WhisperMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
 
-		// S2C: Other player wispered(tell) to me message event
-		public int  WisperMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
+		// S2C: Other player whispered(tell) to me message event
+		public int  WhisperMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 		{
  			int result;
 			var InChatMetaData_ = InChatMetaData.ToByteArray();
 			using (var InChatMetaData_PinnedPtr_ = new PinnedByteBuffer(InChatMetaData_))
 			{
-			result = CSSFNetAdapter_GameWisperMessageS2CEvt(m_Connection.NativeHandle, InSenderID,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
+			result = CSSFNetAdapter_GameWhisperMessageS2CEvt(m_Connection.NativeHandle, InSenderID,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.WisperMessageS2CEvt);
+			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.WhisperMessageS2CEvt);
 			return result;
-		} // public int  WisperMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
+		} // public int  WhisperMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
 
 		// Cmd: Create character
@@ -2048,15 +2048,15 @@ namespace SF.Net
 
 
 
-		// Cmd: Wisper(tell) other player chatting
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameWisperMessageRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameWisperMessageRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
+		// Cmd: Whisper(tell) other player chatting
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameWhisperMessageRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameWhisperMessageRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
 
 
 
-		// S2C: Other player wispered(tell) to me message event
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameWisperMessageS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameWisperMessageS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InSenderID, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
+		// S2C: Other player whispered(tell) to me message event
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameWhisperMessageS2CEvt", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameWhisperMessageS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InSenderID, System.UInt16 _sizeOfInChatMetaData,IntPtr InChatMetaData, [MarshalAs(UnmanagedType.LPArray)] byte[] InChatMessage );
 
 
 

@@ -1140,16 +1140,14 @@ ChatChannel Chatting message event
 		- OutInChatMessage: String type. Message text
 
 
-## WisperMessage Request
-Wisper(tell) other player chatting
+## WhisperMessage Request
+Whisper(tell) other player chatting
 
 1. Command interface
 
-        Result WisperMessageCmd(const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result WhisperMessageCmd(const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- OutTransactionID: TransactionID type. 
-
-		- OutChatUID: EntityUID type. ChatChannel UID
 
 		- OutReceiverID: PlayerID type. Receiver ID
 
@@ -1161,17 +1159,17 @@ Wisper(tell) other player chatting
 
 2. Result interface
 
-C++: Cast message to WisperMessageRes to access values
+C++: Cast message to WhisperMessageRes to access values
 
 
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
 
 
-## WisperMessageS2CEvt
-Other player wispered(tell) to me message event
+## WhisperMessageS2CEvt
+Other player whispered(tell) to me message event
 
-        Result WisperMessageS2CEvt(const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
+        Result WhisperMessageS2CEvt(const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage)
 
 		- OutInSenderID: PlayerID type. Sender PlayerID
 

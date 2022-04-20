@@ -541,9 +541,8 @@
 
 		<!-- =================================================== personal chat ================================================== -->
 
-		<Command Name="WisperMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Wisper(tell) other player chatting">
+		<Command Name="WhisperMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Whisper(tell) other player chatting">
 			<Cmd>
-				<Params TypeName="EntityUID" Name="ChatUID" Desc="ChatChannel UID"/>
 				<Params TypeName="PlayerID" Name="ReceiverID" Desc="Receiver ID"/>
 				<Params TypeName="String" Name="ReceiverName" Desc="Receiver name. Supporting character only for now"/>
 				<Params TypeName="VariableTable" Name="ChatMetaData" Desc="Chat MetaData, player id and so on"/>
@@ -553,7 +552,7 @@
 			</Res>
 		</Command>
 
-		<S2CEvent Name="WisperMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Other player wispered(tell) to me message event">
+		<S2CEvent Name="WhisperMessage" Reliable="true" Crypto="No" Trace="Debug1" Desc="Other player whispered(tell) to me message event">
 			<Params TypeName="PlayerID" Name="SenderID" Desc="Sender PlayerID"/>
 			<Params TypeName="VariableTable" Name="ChatMetaData" Desc="Chat MetaData, player id and so on"/>
 			<Params TypeName="String" Name="ChatMessage" Desc="Message text"/>

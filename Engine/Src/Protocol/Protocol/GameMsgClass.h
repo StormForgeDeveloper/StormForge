@@ -4756,8 +4756,8 @@ namespace SF
 
 			}; // class ChatChannelChatMessageS2CEvt : public MessageBase
 
-			// Cmd: Wisper(tell) other player chatting
-			class WisperMessageCmd : public MessageBase
+			// Cmd: Whisper(tell) other player chatting
+			class WhisperMessageCmd : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -4777,7 +4777,6 @@ namespace SF
 				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
-				uint64_t m_ChatUID{};
 				PlayerID m_ReceiverID{};
 				const char* m_ReceiverName{};
 				ArrayView<uint8_t> m_ChatMetaDataRaw;
@@ -4785,17 +4784,16 @@ namespace SF
 				mutable VariableTable m_ChatMetaData;
 				const char* m_ChatMessage{};
 			public:
-				WisperMessageCmd()
+				WhisperMessageCmd()
 					{}
 
-				WisperMessageCmd( const MessageDataPtr &pMsg )
+				WhisperMessageCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
-				const uint64_t& GetChatUID() const	{ return m_ChatUID; };
 				const PlayerID& GetReceiverID() const	{ return m_ReceiverID; };
 				const char* GetReceiverName() const	{ return m_ReceiverName; };
 				const Array<uint8_t>& GetChatMetaDataRaw() const	{ return m_ChatMetaDataRaw; };
@@ -4808,12 +4806,12 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage );
 
-			}; // class WisperMessageCmd : public MessageBase
+			}; // class WhisperMessageCmd : public MessageBase
 
-			class WisperMessageRes : public MessageBase
+			class WhisperMessageRes : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -4835,10 +4833,10 @@ namespace SF
 				uint64_t m_TransactionID{};
 				Result m_Result{};
 			public:
-				WisperMessageRes()
+				WhisperMessageRes()
 					{}
 
-				WisperMessageRes( const MessageDataPtr &pMsg )
+				WhisperMessageRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
@@ -4855,10 +4853,10 @@ namespace SF
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
-			}; // class WisperMessageRes : public MessageBase
+			}; // class WhisperMessageRes : public MessageBase
 
-			// S2C: Other player wispered(tell) to me message event
-			class WisperMessageS2CEvt : public MessageBase
+			// S2C: Other player whispered(tell) to me message event
+			class WhisperMessageS2CEvt : public MessageBase
 			{
  			public:
 				static const MessageID MID;
@@ -4884,10 +4882,10 @@ namespace SF
 				mutable VariableTable m_ChatMetaData;
 				const char* m_ChatMessage{};
 			public:
-				WisperMessageS2CEvt()
+				WhisperMessageS2CEvt()
 					{}
 
-				WisperMessageS2CEvt( const MessageDataPtr &pMsg )
+				WhisperMessageS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
 
@@ -4907,7 +4905,7 @@ namespace SF
 				static MessageData* Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
 
-			}; // class WisperMessageS2CEvt : public MessageBase
+			}; // class WhisperMessageS2CEvt : public MessageBase
 
 			// Cmd: Create character
 			class CreateCharacterCmd : public MessageBase

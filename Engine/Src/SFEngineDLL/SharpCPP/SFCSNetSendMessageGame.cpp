@@ -512,16 +512,16 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameChatChannelChatMessageCmd( intptr_t InNativ
 } // SFDLL_EXPORT int  CSSFNetAdapter_GameChatChannelChatMessageCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InChatUID, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
 
 
-// Cmd: Wisper(tell) other player chatting
-SFDLL_EXPORT int  CSSFNetAdapter_GameWisperMessageCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InChatUID, PlayerID InReceiverID, const char* InReceiverName, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
+// Cmd: Whisper(tell) other player chatting
+SFDLL_EXPORT int  CSSFNetAdapter_GameWhisperMessageCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, PlayerID InReceiverID, const char* InReceiverName, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::WisperMessageCmd::Create(pConnection->GetHeap(), InTransactionID, InChatUID, InReceiverID,InReceiverName,SF::ArrayView<uint8_t>(_sizeOfInChatMetaData, _sizeOfInChatMetaData, InChatMetaData),InChatMessage);
+	MessageDataPtr pMessage = SF::Message::Game::WhisperMessageCmd::Create(pConnection->GetHeap(), InTransactionID, InReceiverID,InReceiverName,SF::ArrayView<uint8_t>(_sizeOfInChatMetaData, _sizeOfInChatMetaData, InChatMetaData),InChatMessage);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameWisperMessageCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InChatUID, PlayerID InReceiverID, const char* InReceiverName, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameWhisperMessageCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, PlayerID InReceiverID, const char* InReceiverName, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
 
 
 // Cmd: Create character
@@ -1391,29 +1391,29 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameChatChannelChatMessageS2CEvt( intptr_t InNa
 
 
 
-// Cmd: Wisper(tell) other player chatting
-SFDLL_EXPORT int  CSSFNetAdapter_GameWisperMessageRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+// Cmd: Whisper(tell) other player chatting
+SFDLL_EXPORT int  CSSFNetAdapter_GameWhisperMessageRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::WisperMessageRes::Create(pConnection->GetHeap(), InTransactionID, InResult);
+	MessageDataPtr pMessage = SF::Message::Game::WhisperMessageRes::Create(pConnection->GetHeap(), InTransactionID, InResult);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameWisperMessageRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameWhisperMessageRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
 
 
 
-// S2C: Other player wispered(tell) to me message event
-SFDLL_EXPORT int  CSSFNetAdapter_GameWisperMessageS2CEvt( intptr_t InNativeConnectionHandle, PlayerID InSenderID, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
+// S2C: Other player whispered(tell) to me message event
+SFDLL_EXPORT int  CSSFNetAdapter_GameWhisperMessageS2CEvt( intptr_t InNativeConnectionHandle, PlayerID InSenderID, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::WisperMessageS2CEvt::Create(pConnection->GetHeap(), InSenderID,SF::ArrayView<uint8_t>(_sizeOfInChatMetaData, _sizeOfInChatMetaData, InChatMetaData),InChatMessage);
+	MessageDataPtr pMessage = SF::Message::Game::WhisperMessageS2CEvt::Create(pConnection->GetHeap(), InSenderID,SF::ArrayView<uint8_t>(_sizeOfInChatMetaData, _sizeOfInChatMetaData, InChatMetaData),InChatMessage);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameWisperMessageS2CEvt( intptr_t InNativeConnectionHandle, PlayerID InSenderID, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameWhisperMessageS2CEvt( intptr_t InNativeConnectionHandle, PlayerID InSenderID, uint16_t _sizeOfInChatMetaData,uint8_t* InChatMetaData, const char* InChatMessage )
 
 
 

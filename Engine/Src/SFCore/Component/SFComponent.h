@@ -473,9 +473,9 @@ namespace SF
 			return hr;
 		}
 
-		template< class ComponentType, class ParamType0,
+		template< class ComponentType, typename ...ArgTypes,
 			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
-		Result AddComponent(ParamType0& p0)
+		Result AddComponent(ArgTypes&&... args)
 		{
 			if (GetComponent<ComponentType>() != nullptr)
 			{
@@ -483,7 +483,7 @@ namespace SF
 				return ResultCode::SUCCESS_FALSE;
 			}
 
-			ComponentType* newComponent = new(m_Heap) ComponentType(p0);
+			ComponentType* newComponent = new(m_Heap) ComponentType(Forward<ArgTypes>(args)...);
 			if (newComponent == nullptr)
 				return ResultCode::OUT_OF_MEMORY;
 
@@ -496,51 +496,51 @@ namespace SF
 			return hr;
 		}
 
-		template< class ComponentType, class ParamType0, class ParamType1,
-			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
-		Result AddComponent(ParamType0&& p0, ParamType1&& p1)
-		{
-			if (GetComponent<ComponentType>() != nullptr)
-			{
-				// already inserted
-				return ResultCode::SUCCESS_FALSE;
-			}
+		//template< class ComponentType, class ParamType0, class ParamType1,
+		//	typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>>>
+		//Result AddComponent(ParamType0&& p0, ParamType1&& p1)
+		//{
+		//	if (GetComponent<ComponentType>() != nullptr)
+		//	{
+		//		// already inserted
+		//		return ResultCode::SUCCESS_FALSE;
+		//	}
 
-			ComponentType* newComponent = new(m_Heap) ComponentType(p0, p1);
-			if (newComponent == nullptr)
-				return ResultCode::OUT_OF_MEMORY;
+		//	ComponentType* newComponent = new(m_Heap) ComponentType(p0, p1);
+		//	if (newComponent == nullptr)
+		//		return ResultCode::OUT_OF_MEMORY;
 
-			Result hr = AddComponent(newComponent);
-			if (!hr)
-			{
-				IHeap::Delete(newComponent);
-			}
+		//	Result hr = AddComponent(newComponent);
+		//	if (!hr)
+		//	{
+		//		IHeap::Delete(newComponent);
+		//	}
 
-			return hr;
-		}
+		//	return hr;
+		//}
 
-		template< class ComponentType, class ParamType0, class ParamType1, class ParamType2,
-			typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
-		Result AddComponent(ParamType0 p0, ParamType1 p1, ParamType2 p2)
-		{
-			if (GetComponent<ComponentType>() != nullptr)
-			{
-				// already inserted
-				return ResultCode::SUCCESS_FALSE;
-			}
+		//template< class ComponentType, class ParamType0, class ParamType1, class ParamType2,
+		//	typename = std::enable_if_t<std::is_base_of_v<Component, ComponentType>> >
+		//Result AddComponent(ParamType0 p0, ParamType1 p1, ParamType2 p2)
+		//{
+		//	if (GetComponent<ComponentType>() != nullptr)
+		//	{
+		//		// already inserted
+		//		return ResultCode::SUCCESS_FALSE;
+		//	}
 
-			ComponentType* newComponent = new(m_Heap) ComponentType(p0, p1, p2);
-			if (newComponent == nullptr)
-				return ResultCode::OUT_OF_MEMORY;
+		//	ComponentType* newComponent = new(m_Heap) ComponentType(p0, p1, p2);
+		//	if (newComponent == nullptr)
+		//		return ResultCode::OUT_OF_MEMORY;
 
-			Result hr = AddComponent(newComponent);
-			if (!hr)
-			{
-				IHeap::Delete(newComponent);
-			}
+		//	Result hr = AddComponent(newComponent);
+		//	if (!hr)
+		//	{
+		//		IHeap::Delete(newComponent);
+		//	}
 
-			return hr;
-		}
+		//	return hr;
+		//}
 
 
 		template< class ComponentType,
