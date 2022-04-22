@@ -19,26 +19,18 @@
 #include "Util/SFStringCrc32.h"
 #include "Util/SFString.h"
 #include "Object/SFSharedObject.h"
-
+#include "Mongo/SFBson.h"
 
 typedef struct _mongoc_client_pool_t mongoc_client_pool_t; 
 typedef struct _mongoc_client_t mongoc_client_t;
 typedef struct _mongoc_uri_t mongoc_uri_t;
 typedef struct _mongoc_database_t mongoc_database_t;
 typedef struct _mongoc_collection_t mongoc_collection_t;
-typedef struct _bson_t bson_t;
 typedef struct _mongoc_cursor_t mongoc_cursor_t;
 
 namespace SF
 {
 
-
-	// SF deleter
-	struct BsonDeleter {
-		constexpr BsonDeleter() noexcept = default;
-		void operator()(bson_t* _Ptr) const noexcept;
-	};
-	using BsonUniquePtr = std::unique_ptr<bson_t, BsonDeleter>;
 
 	struct MongoCursorDeleter {
 		constexpr MongoCursorDeleter() noexcept = default;

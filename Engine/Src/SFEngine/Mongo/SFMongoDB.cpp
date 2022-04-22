@@ -26,10 +26,7 @@
 namespace SF
 {
 
-	void BsonDeleter::operator()(bson_t* _Ptr) const noexcept
-	{
-		if (_Ptr) bson_destroy(_Ptr);
-	}
+
 
 	void MongoCursorDeleter::operator()(mongoc_cursor_t* _Ptr) const noexcept
 	{

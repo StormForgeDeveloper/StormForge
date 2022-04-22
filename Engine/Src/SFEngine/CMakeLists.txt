@@ -130,6 +130,8 @@ set(SFENGINE_LIB_FILES
 	
 	Mongo/SFMongoDB.h
 	Mongo/SFMongoDB.cpp
+	Mongo/SFBson.h
+	Mongo/SFBson.cpp
 	Mongo/SFMongoDBComponent.h
 	Mongo/SFMongoDBComponent.cpp
 
