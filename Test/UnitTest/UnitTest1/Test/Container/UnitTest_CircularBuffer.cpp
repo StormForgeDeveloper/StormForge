@@ -163,9 +163,9 @@ TEST_F(CircularBufferTest, CircularBufferQueueFull)
 		{
 			allocSize = AlignUp(allocSize, 8);
 			auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
-			EXPECT_EQ(allocSize, newAllocSize);
-			uint8_t fillPattern = (uint8_t)allocSize;
-			memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
+			EXPECT_GE(newAllocSize, allocSize);
+			uint8_t fillPattern = (uint8_t)newAllocSize;
+			memset(pBuffer->GetDataPtr(), fillPattern, newAllocSize);
 
 			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseWrite(pBuffer));
 			enqueuedCount++;
@@ -272,9 +272,9 @@ TEST_F(CircularBufferTest, CircularBufferQueueEmptyRand)
 		{
 			allocSize = AlignUp(allocSize, 8);
 			auto newAllocSize = circularBuffer.GetBufferItemSize(pBuffer);
-			EXPECT_EQ(allocSize, newAllocSize);
-			uint8_t fillPattern = (uint8_t)allocSize;
-			memset(pBuffer->GetDataPtr(), fillPattern, allocSize);
+			EXPECT_GE(newAllocSize, allocSize);
+			uint8_t fillPattern = (uint8_t)newAllocSize;
+			memset(pBuffer->GetDataPtr(), fillPattern, newAllocSize);
 
 			EXPECT_EQ(ResultCode::SUCCESS, circularBuffer.ReleaseWrite(pBuffer));
 			enqueuedCount++;

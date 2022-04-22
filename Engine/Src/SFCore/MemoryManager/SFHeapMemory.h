@@ -181,7 +181,7 @@ namespace SF
 
 
 	// memory allocator from static block
-	template<size_t StaticSize, class HeapMemoryType = HeapMemory>
+	template<size_t StaticSize, class HeapMemoryType = HeapMemory, bool bIsStatic = true>
 	class StaticMemoryAllocatorT : public HeapMemoryType
 	{
 	public:
@@ -192,6 +192,11 @@ namespace SF
 			: HeapMemoryType(nameCrc, parentHeap, 0)
 		{
 			m_BaseMemoryBlock = super::AddMemoryBlock(sizeof(m_StaticMemoryBlock), m_StaticMemoryBlock, false);
+		}
+
+		~StaticMemoryAllocatorT()
+		{
+			super::ReportLeak();
 		}
 
 		SF_FORCEINLINE const uint8_t* GetStaticBuffer() const { return m_StaticMemoryBlock; }

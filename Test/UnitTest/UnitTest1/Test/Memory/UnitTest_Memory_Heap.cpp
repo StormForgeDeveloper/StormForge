@@ -524,6 +524,9 @@ TEST_F(MemoryTest, HeapMemoryTestPattern1)
 	using TestHeapType = SF::StaticMemoryAllocatorT<2 * 1024 * 1024>;
 
 	SFUniquePtr<TestHeapType> localHeap(new(GetHeap()) TestHeapType("localHeap", GetHeap()));
+
+	// This is not memory leak test. just memory break things test
+	localHeap->SetIgnoreMemmoryLeak(true);
 	
 	HeapMemoryHistory::ReplayHistory(*localHeap, reinterpret_cast<const uint8_t*>(localHeap->GetBaseMemoryBlock()), countof(g_TestHeapPattern), g_TestHeapPattern);
 

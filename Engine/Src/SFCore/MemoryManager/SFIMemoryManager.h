@@ -65,6 +65,7 @@ namespace SF {
 		// You can disable memory leak detection per heap
 		bool m_IgnoreMemoryLeak;
 
+
 		// Allocated memory list
 		DoubleLinkedListBase<DoubleLinkedListNode, SF::ThreadSyncTraitReadWrite> m_AllocatedList;
 

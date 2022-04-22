@@ -400,6 +400,7 @@ namespace SF
 				assert(pAllocated->GetFooter()->Magic == MemBlockFooter::MEM_MAGIC);
 				assert(pAllocated->MemChunkHeader.GetFooter()->Magic == MemBlockFooter::MEM_MAGIC);
 #endif
+				AddAllocSize(pAllocated->MemChunkHeader.Size);
 				return &pAllocated->MemChunkHeader;
 			}
 		}
@@ -419,6 +420,7 @@ namespace SF
 	MemBlockHdr* HeapMemory::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment)
 	{
 		auto pMemChunk = ContainerPtrFromMember(HeapTree::MapNode, MemChunkHeader, ptr);
+		auto oldSize = ptr->Size;
 
 		for (auto itBlock : m_MemoryBlockList)
 		{
@@ -430,8 +432,16 @@ namespace SF
 			}
 		}
 
+		if (pMemChunk->MemChunkHeader.Size != oldSize)
+		{
+			SubAllocSize(oldSize);
+			AddAllocSize(pMemChunk->MemChunkHeader.Size);
+		}
+
 		if (pMemChunk->MemChunkHeader.Size >= newSize)
+		{
 			return &pMemChunk->MemChunkHeader;
+		}
 
 		return nullptr;
 	}
@@ -440,6 +450,8 @@ namespace SF
 	{
 		if (ptr == nullptr)
 			return;
+
+		SubAllocSize(ptr->Size);
 
 		auto pMemChunk = ContainerPtrFromMember(HeapTree::MapNode, MemChunkHeader, ptr);
 

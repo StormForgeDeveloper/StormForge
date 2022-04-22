@@ -362,7 +362,6 @@ namespace SF
 			return nullptr;
 
 		auto tailState = curTail->State.load(std::memory_order_relaxed);
-		assert(tailState == ItemState::Filled);
 
 		if (tailState != ItemState::Filled && curTail != pHead)
 			return PeekNext(curTail);

@@ -142,8 +142,11 @@ namespace SF {
 		int64_t orgSize = m_AllocatedDRAM.fetch_add(size, std::memory_order_relaxed);
 		if (orgSize == 0)
 		{
-			// Keep extra reference count while this object has allocated memory block
-			SharedReferenceInc(this);
+			if (GetReferenceCount() > 0) // Ref count zero means it is not using shared pointer
+			{
+				// Keep extra reference count while this object has allocated memory block
+				SharedReferenceInc(this);
+			}
 		}
 	}
 
@@ -154,13 +157,19 @@ namespace SF {
 		{
 			assert(false);
 			m_AllocatedDRAM = 0;
-			// You can remove reference count
-			SharedReferenceDec(this);
+			if (GetReferenceCount() > 0)
+			{
+				// You can remove reference count
+				SharedReferenceDec(this);
+			}
 		}
 		else if (remainAllocated == 0)
 		{
-			// You can remove reference count
-			SharedReferenceDec(this);
+			if (GetReferenceCount() > 0)
+			{
+				// You can remove reference count
+				SharedReferenceDec(this);
+			}
 		}
 	}
 
@@ -229,6 +238,7 @@ namespace SF {
 	{
 #if ENABLE_MEMORY_TRACE
 		auto pFooter = pMemBlock->GetFooter();
+		assert(pFooter->Magic == MemBlockFooter::MEM_MAGIC);
 		pFooter->StackTrace.CaptureCallStack(4);
 		m_AllocatedList.Remove(&pFooter->ListNode);
 #else
