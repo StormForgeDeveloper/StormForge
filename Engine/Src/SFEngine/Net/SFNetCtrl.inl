@@ -30,19 +30,4 @@ inline bool tag_MsgNetCtrlBuffer::operator != ( const tag_MsgNetCtrlBuffer& src 
 }
 
 
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
-
-inline void MsgMobileNetCtrlSequenceFrame::SetSubSeqNSize(uint32_t subSequence, uint32_t totalSize)
-{
-	SubSequence = subSequence;
-	TotalSize = totalSize;
-}
-
-
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
 

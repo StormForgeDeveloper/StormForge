@@ -73,13 +73,12 @@ namespace Net {
 		bool operator != (const tag_MsgNetCtrlBuffer& src) const;
 	} MsgNetCtrlBuffer;
 
-
-	struct MsgMobileNetCtrlSequenceFrame : public Message::MobileMessageHeader
+#pragma pack(2)
+	struct MsgNetCtrlSequenceFrame
 	{
-		uint32_t SubSequence	: 16;
-		uint32_t TotalSize		: 16;
-
-		void SetSubSeqNSize(uint32_t subSequence, uint32_t totalSize);
+		uint16_t Offset;
+		uint16_t ChunkSize;
+		uint16_t TotalSize;
 	};
 
 

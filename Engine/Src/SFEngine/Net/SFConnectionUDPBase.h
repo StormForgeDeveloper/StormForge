@@ -124,7 +124,7 @@ namespace Net {
 
 
 		// frame sequence
-		Result SendFrameSequenceMessage(SharedPointerT<Message::MessageData>& pMsg);
+		Result SendFrameSequenceMessage(const SharedPointerT<Message::MessageData>& pMsg);
 		Result OnFrameSequenceMessage(SharedPointerT<Message::MessageData>& pMsg, const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action);
 
 		// Initialize connection

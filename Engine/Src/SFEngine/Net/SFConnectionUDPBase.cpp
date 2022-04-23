@@ -277,14 +277,15 @@ namespace Net {
 
 
 	// frame sequence
-	Result ConnectionUDPBase::SendFrameSequenceMessage(SharedPointerT<Message::MessageData>& pMsg)
+	Result ConnectionUDPBase::SendFrameSequenceMessage(const SharedPointerT<Message::MessageData>& pMsg)
 	{
 		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<Message::MessageData> pNewMessageData;
 		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
-		auto pMsgHeader = pMsg->GetMessageHeader();
-		auto remainSize = pMsgHeader->Length;
+		auto pSrcMsgHeader = pMsg->GetMessageHeader();
+		auto remainSize = pSrcMsgHeader->Length;
 		unsigned offset = 0;
+
+		assert(pMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
 
 		SFLog(Net, Debug2, "SEND Spliting : CID:{0}, seq:{1}, msg:{2}, len:{3}",
 			GetCID(),
@@ -292,36 +293,39 @@ namespace Net {
 			pMsg->GetMessageHeader()->msgID,
 			pMsg->GetMessageHeader()->Length);
 
+		const uint8_t* pCurSrc = pMsg->GetMessageBuff();
 		for (uint iSequence = 0; remainSize > 0; iSequence++)
 		{
-			auto frameSize = Math::Min(pMsgHeader->Length, (uint)Message::MAX_SUBFRAME_SIZE);
+			auto frameSize = Math::Min(remainSize, (uint)Message::MAX_SUBFRAME_SIZE);
 
-			MsgMobileNetCtrlSequenceFrame* pCurrentFrame = nullptr;
+			MsgNetCtrlSequenceFrame* pCurrentFrame = nullptr;
+			SharedPointerT<Message::MessageData> pSubframeMessage;
 
-			netChkPtr(pNewMessageData = Message::MessageData::NewMessage(GetHeap(), PACKET_NETCTRL_SEQUENCE_FRAME, frameSize + (uint)sizeof(MsgMobileNetCtrlSequenceFrame), pMsg->GetMessageBuff() + offset));
+			netCheckPtr(pSubframeMessage = Message::MessageData::NewMessage(GetHeap(), PACKET_NETCTRL_SEQUENCE_FRAME, uint(sizeof(Message::MessageHeader) + sizeof(MsgNetCtrlSequenceFrame) + frameSize)));
 
-			pCurrentFrame = (MsgMobileNetCtrlSequenceFrame*)pNewMessageData->GetMessageBuff();
-			pCurrentFrame->SetSubSeqNSize(iSequence, pMsgHeader->Length);
+			// fill up frame header
+			pCurrentFrame = (MsgNetCtrlSequenceFrame*)pSubframeMessage->GetMessageData();
+			pCurrentFrame->Offset = uint16_t(offset);
+			pCurrentFrame->ChunkSize = uint16_t(frameSize);
+			pCurrentFrame->TotalSize = uint16_t(pSrcMsgHeader->Length);
 
-			netChk(m_SendReliableWindow.EnqueueMessage(ulTimeCur, pNewMessageData));
-			SendPending(pNewMessageData);
-			SFLog(Net, Debug2, "SENDENQReliable : CID:{0}, seq:{1}, msg:{2}, len:{3}",
+			// copy frame size
+			memcpy(pCurrentFrame + 1, pCurSrc, frameSize);
+
+			SFLog(Net, Debug3, "Send subframe: CID:{0}, seq:{1}, msg:{2}, len:{3}",
 				GetCID(),
-				pNewMessageData->GetMessageHeader()->msgID.IDSeq.Sequence,
-				pNewMessageData->GetMessageHeader()->msgID,
-				pNewMessageData->GetMessageHeader()->Length);
+				pSubframeMessage->GetMessageHeader()->msgID.IDSeq.Sequence,
+				pSubframeMessage->GetMessageHeader()->msgID,
+				pSubframeMessage->GetMessageHeader()->Length);
 
-			pNewMessageData = nullptr;
+			pSubframeMessage->UpdateChecksumNEncrypt();
+
+			netCheck(m_SendGuaQueue.Enqueue(pSubframeMessage));
 
 			remainSize -= frameSize;
 			offset += frameSize;
+			pCurSrc += frameSize;
 		}
-
-		pMsg = nullptr;
-
-	Proc_End:
-
-		pNewMessageData = nullptr;
 
 		return hr;
 	}
@@ -329,43 +333,27 @@ namespace Net {
 	Result ConnectionUDPBase::OnFrameSequenceMessage(SharedPointerT<Message::MessageData>& pMsg, const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action)
 	{
 		Result hr = ResultCode::SUCCESS;
-		Message::MessageData* pFrameMessage = nullptr;
 		if (pMsg == nullptr)
 			return ResultCode::INVALID_POINTER;
 
+		auto pCurrentFrame = reinterpret_cast<MsgNetCtrlSequenceFrame*>(pMsg->GetMessageData());
 
-		// TODO: subframe ack?
-		Message::MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
+		auto* dataPtr = reinterpret_cast<const uint8_t*>(pCurrentFrame + 1);
 
-		auto* pFrame = (MsgMobileNetCtrlSequenceFrame*)pMsgHeader;
-		uint subFrameSequence = pFrame->SubSequence;
-		uint frameSize = pFrame->Length - (uint)sizeof(MsgMobileNetCtrlSequenceFrame);
-		uint totalSize = pFrame->TotalSize;
-		auto* dataPtr = (const uint8_t*)(pFrame + 1);
-		uint offset = subFrameSequence * Message::MAX_SUBFRAME_SIZE;
-
-		Assert(frameSize <= Message::MAX_SUBFRAME_SIZE);
-		if (frameSize > Message::MAX_SUBFRAME_SIZE)
+		if (pCurrentFrame->ChunkSize > Message::MAX_SUBFRAME_SIZE)
 		{
 			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 		}
 
-		if (subFrameSequence == 0) // first frame
+		if (pCurrentFrame->Offset == 0) // first frame
 		{
-			//Assert(m_SubFrameMessage == nullptr);
 			m_SubFrameMessage = nullptr;
 
 			uint dummyID = PACKET_NETCTRL_SEQUENCE_FRAME;
-			netCheckPtr(pFrameMessage = Message::MessageData::NewMessage(GetHeap(), dummyID, totalSize));
-			memcpy(pFrameMessage->GetMessageHeader(), dataPtr, frameSize);
-			if (pFrameMessage->GetMessageHeader()->Length != totalSize)
-			{
-				Assert(false);
-				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
-			}
 
-			m_SubFrameMessage = std::forward<SharedPointerT<Message::MessageData>>(pFrameMessage);
-			pFrameMessage = nullptr;
+			netCheckPtr(m_SubFrameMessage = Message::MessageData::NewMessage(GetHeap(), dummyID, pCurrentFrame->TotalSize));
+
+			memcpy(m_SubFrameMessage->GetMessageBuff(), dataPtr, pCurrentFrame->ChunkSize);
 		}
 		else
 		{
@@ -375,26 +363,24 @@ namespace Net {
 				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 
-			uint8_t* pDest = m_SubFrameMessage->GetMessageBuff() + offset;
-
-			if (m_SubFrameMessage->GetMessageHeader()->Length != totalSize)
+			if (m_SubFrameMessage->GetMessageHeader()->Length != pCurrentFrame->TotalSize)
 			{
 				Assert(false);
 				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 
-			if ((offset + frameSize) > totalSize)
-			{
-				Assert(false);
-				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
-			}
-
-			memcpy(pDest, dataPtr, frameSize);
+			memcpy(m_SubFrameMessage->GetMessageBuff() + pCurrentFrame->Offset, dataPtr, pCurrentFrame->ChunkSize);
 		}
 
-		if (m_SubFrameMessage != nullptr && (offset + frameSize) == totalSize)
+		auto receivedSize = pCurrentFrame->Offset + pCurrentFrame->ChunkSize;
+		if (receivedSize > pCurrentFrame->TotalSize)
 		{
-			netCheck(m_SubFrameMessage->ValidateChecksumNDecrypt());
+			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
+		}
+		else if (receivedSize == pCurrentFrame->TotalSize)
+		{
+			// done
+			//netCheck(m_SubFrameMessage->ValidateChecksumNDecrypt());
 			action(m_SubFrameMessage);
 			m_SubFrameMessage = nullptr;
 		}
@@ -593,7 +579,14 @@ namespace Net {
 			SharedPointerT<Message::MessageData> pPopMsg;
 			while (m_RecvReliableWindow.PopMsg(pPopMsg))
 			{
-				hr = super::OnRecv(pPopMsg);
+				if (pPopMsg->GetMessageHeader()->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
+				{
+					hr = OnFrameSequenceMessage(pPopMsg, [this](SharedPointerT<Message::MessageData>& pMsgData) { super::OnRecv(pMsgData); });
+				}
+				else
+				{
+					hr = super::OnRecv(pPopMsg);
+				}
 			}
 
 			//if (GetEventHandler() != nullptr)
@@ -639,7 +632,7 @@ namespace Net {
 
 		Message::MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 		msgID = pMsgHeader->msgID;
-		uiMsgLen = pMsg->GetMessageHeader()->Length;
+		uiMsgLen = pMsg->GetMessageSize();
 
 		if (pMsgHeader->msgID.IDs.Mobile)
 		{
@@ -653,8 +646,13 @@ namespace Net {
 			return hr;
 		}
 
-		if( pMsg->GetMessageSize() > (uint)Const::INTER_PACKET_SIZE_MAX )
+		if( !msgID.IDs.Reliability && pMsg->GetMessageSize() > (uint)Const::INTER_PACKET_SIZE_MAX )
 		{
+			SFLog(Net, Warning, "Too big packet: msg:{0}, seq:{1}, len:{2}",
+				msgID,
+				msgID.IDSeq.Sequence,
+				uiMsgLen);
+
 			netCheck( ResultCode::IO_BADPACKET_TOOBIG );
 		}
 
@@ -667,11 +665,11 @@ namespace Net {
 			netCheck(ResultCode::IO_SEND_FAIL);
 		}
 
-		pMsg->UpdateChecksumNEncrypt();
-
 
 		if( !msgID.IDs.Reliability )
 		{
+			pMsg->UpdateChecksumNEncrypt();
+
 			if( !pMsg->GetIsSequenceAssigned() )
 				pMsg->AssignSequence( NewSeqNone() );
 
@@ -698,7 +696,16 @@ namespace Net {
 
 				AssertRel(pMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
 
-				netCheck( m_SendGuaQueue.Enqueue( SharedPointerT<Message::MessageData>(pMsg) ) );
+				if (pMsg->GetMessageSize() > (uint)Const::INTER_PACKET_SIZE_MAX)
+				{
+					netCheck(SendFrameSequenceMessage(pMsg));
+				}
+				else
+				{
+					pMsg->UpdateChecksumNEncrypt();
+
+					netCheck(m_SendGuaQueue.Enqueue(SharedPointerT<Message::MessageData>(pMsg)));
+				}
 
 				SetSendBoost(Const::RELIABLE_SEND_BOOST);
 
@@ -825,21 +832,13 @@ namespace Net {
 				pMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
 				pMsg->GetMessageHeader()->Length);
 
-			if (pMsgHeader->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
-			{
-				netCheck(OnFrameSequenceMessage(pMsg, [&](SharedPointerT<Message::MessageData>& pMsgData) { hr = m_RecvReliableWindow.AddMsg(pMsgData); }));
-			}
-			else
-			{
-				netCheck(OnGuaranteedMessageRecv(pMsg));
-			}
-			pMsg = nullptr;
+			netCheck(OnGuaranteedMessageRecv(pMsg));
 		}
 		else
 		{
 			netCheck(super::OnRecv(pMsg));
-			pMsg = nullptr;
 		}
+		pMsg = nullptr;
 
 		return hr;
 	}

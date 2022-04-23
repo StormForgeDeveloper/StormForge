@@ -683,9 +683,10 @@ namespace Net {
 			assert(msgID.IDs.Reliability);
 			AssertRel(msgID.IDSeq.Sequence == 0);
 
-			if (pMsgHeader->Length > Message::MAX_SUBFRAME_SIZE)
+			if (pMsgHeader->Length > Const::INTER_PACKET_SIZE_MAX)
 			{
-				netCheck(GetConnection()->SendFrameSequenceMessage(pIMsg));
+				// They should be handled
+				netCheck(ResultCode::IO_BADPACKET_TOOBIG);
 			}
 			else
 			{
