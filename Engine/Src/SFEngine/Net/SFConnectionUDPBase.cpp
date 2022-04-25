@@ -548,7 +548,7 @@ namespace Net {
 
 		Result hrTem = m_RecvReliableWindow.AddMsg(pIMsg);
 
-		SFLog(Net, Debug2, "RECVGuaAdd : CID:{0} BaseSeq:{1}, msgId:{2}, seq:{3}, len:{4}, hr:{5}, Window base:{6}, msgCount:{7}, syncMask:{8}",
+		SFLog(Net, Debug2, "RECVGuaAdd : CID:{0} msgId:{1}, seq:{2}, len:{3}, hr:{4}, Window base:{5}, msgCount:{6}, syncMask:{7}",
 			GetCID(), 
 			msgID, seq, len, hrTem,
 			m_RecvReliableWindow.GetBaseSequence(), m_RecvReliableWindow.GetMsgCount(), m_RecvReliableWindow.GetSyncMask());
