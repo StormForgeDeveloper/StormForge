@@ -20,7 +20,7 @@ namespace SF.Net
 {
  
 
-	public class SendMessagePlayInstance
+	public class SendMessagePlayInstance : SendMessage
 	{
  
 		const string NativeDLLName = 
@@ -29,13 +29,14 @@ namespace SF.Net
 		#else
 		    "SFEngineDLL";
 		#endif
-		SF.SFConnection m_Connection;
 
 
-		public  SendMessagePlayInstance( SF.SFConnection connection )
+		public  SendMessagePlayInstance()
 		{
- 			m_Connection = connection;
-		} // public  SendMessagePlayInstance( SF.SFConnection connection )
+ 		} // public  SendMessagePlayInstance()
+		public  SendMessagePlayInstance( SF.SFConnection connection ) : base(connection)
+		{
+ 		} // public  SendMessagePlayInstance( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Player Join request.
 		public int  JoinPlayInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
@@ -281,8 +282,8 @@ namespace SF.Net
 
 
 		#endregion //Native Interfaces 
-	}; // public class SendMessagePlayInstance
-	public class SendMessageSvrPlayInstance
+	}; // public class SendMessagePlayInstance : SendMessage
+	public class SendMessageSvrPlayInstance : SendMessage
 	{
  
 		const string NativeDLLName = 
@@ -291,13 +292,14 @@ namespace SF.Net
 		#else
 		    "SFEngineDLL";
 		#endif
-		SF.SFConnection m_Connection;
 
 
-		public  SendMessageSvrPlayInstance( SF.SFConnection connection )
+		public  SendMessageSvrPlayInstance()
 		{
- 			m_Connection = connection;
-		} // public  SendMessageSvrPlayInstance( SF.SFConnection connection )
+ 		} // public  SendMessageSvrPlayInstance()
+		public  SendMessageSvrPlayInstance( SF.SFConnection connection ) : base(connection)
+		{
+ 		} // public  SendMessageSvrPlayInstance( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Player Join request.
 		public int  JoinPlayInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.ActorMovement InMovement )
@@ -620,7 +622,7 @@ namespace SF.Net
 
 
 		#endregion //Native Interfaces 
-	}; // public class SendMessageSvrPlayInstance
+	}; // public class SendMessageSvrPlayInstance : SendMessage
 
 
 

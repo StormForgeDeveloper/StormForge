@@ -20,7 +20,7 @@ namespace SF.Net
 {
  
 
-	public class SendMessageGame
+	public class SendMessageGame : SendMessage
 	{
  
 		const string NativeDLLName = 
@@ -29,13 +29,14 @@ namespace SF.Net
 		#else
 		    "SFEngineDLL";
 		#endif
-		SF.SFConnection m_Connection;
 
 
-		public  SendMessageGame( SF.SFConnection connection )
+		public  SendMessageGame()
 		{
- 			m_Connection = connection;
-		} // public  SendMessageGame( SF.SFConnection connection )
+ 		} // public  SendMessageGame()
+		public  SendMessageGame( SF.SFConnection connection ) : base(connection)
+		{
+ 		} // public  SendMessageGame( SF.SFConnection connection ) : base(connection)
 
 		// C2S: Client heartbeat
 		public int  HeartbeatC2SEvt(  )
@@ -819,8 +820,8 @@ namespace SF.Net
 
 
 		#endregion //Native Interfaces 
-	}; // public class SendMessageGame
-	public class SendMessageSvrGame
+	}; // public class SendMessageGame : SendMessage
+	public class SendMessageSvrGame : SendMessage
 	{
  
 		const string NativeDLLName = 
@@ -829,13 +830,14 @@ namespace SF.Net
 		#else
 		    "SFEngineDLL";
 		#endif
-		SF.SFConnection m_Connection;
 
 
-		public  SendMessageSvrGame( SF.SFConnection connection )
+		public  SendMessageSvrGame()
 		{
- 			m_Connection = connection;
-		} // public  SendMessageSvrGame( SF.SFConnection connection )
+ 		} // public  SendMessageSvrGame()
+		public  SendMessageSvrGame( SF.SFConnection connection ) : base(connection)
+		{
+ 		} // public  SendMessageSvrGame( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Player connected from a login server and moved to game server
 		public int  JoinGameServerRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InNickName, System.UInt64 InGameUID, System.UInt64 InPartyUID, System.UInt64 InPartyLeaderID, SF.MatchingQueueTicket InMatchingTicket )
@@ -2097,7 +2099,7 @@ namespace SF.Net
 
 
 		#endregion //Native Interfaces 
-	}; // public class SendMessageSvrGame
+	}; // public class SendMessageSvrGame : SendMessage
 
 
 

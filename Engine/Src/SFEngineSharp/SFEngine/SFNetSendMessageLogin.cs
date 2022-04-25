@@ -20,7 +20,7 @@ namespace SF.Net
 {
  
 
-	public class SendMessageLogin
+	public class SendMessageLogin : SendMessage
 	{
  
 		const string NativeDLLName = 
@@ -29,13 +29,14 @@ namespace SF.Net
 		#else
 		    "SFEngineDLL";
 		#endif
-		SF.SFConnection m_Connection;
 
 
-		public  SendMessageLogin( SF.SFConnection connection )
+		public  SendMessageLogin()
 		{
- 			m_Connection = connection;
-		} // public  SendMessageLogin( SF.SFConnection connection )
+ 		} // public  SendMessageLogin()
+		public  SendMessageLogin( SF.SFConnection connection ) : base(connection)
+		{
+ 		} // public  SendMessageLogin( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Login request
 		public int  LoginCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.String InID, System.String InPassword )
@@ -169,8 +170,8 @@ namespace SF.Net
 
 
 		#endregion //Native Interfaces 
-	}; // public class SendMessageLogin
-	public class SendMessageSvrLogin
+	}; // public class SendMessageLogin : SendMessage
+	public class SendMessageSvrLogin : SendMessage
 	{
  
 		const string NativeDLLName = 
@@ -179,13 +180,14 @@ namespace SF.Net
 		#else
 		    "SFEngineDLL";
 		#endif
-		SF.SFConnection m_Connection;
 
 
-		public  SendMessageSvrLogin( SF.SFConnection connection )
+		public  SendMessageSvrLogin()
 		{
- 			m_Connection = connection;
-		} // public  SendMessageSvrLogin( SF.SFConnection connection )
+ 		} // public  SendMessageSvrLogin()
+		public  SendMessageSvrLogin( SF.SFConnection connection ) : base(connection)
+		{
+ 		} // public  SendMessageSvrLogin( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Login request
 		public int  LoginRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
@@ -315,7 +317,7 @@ namespace SF.Net
 
 
 		#endregion //Native Interfaces 
-	}; // public class SendMessageSvrLogin
+	}; // public class SendMessageSvrLogin : SendMessage
 
 
 

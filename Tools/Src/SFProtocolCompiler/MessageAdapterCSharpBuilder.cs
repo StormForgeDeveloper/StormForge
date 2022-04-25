@@ -557,14 +557,16 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("#else");
             MatchIndent(); OutStream.WriteLine("    \"{0}\";", DLL_NAME);
             MatchIndent(); OutStream.WriteLine("#endif");
-            MatchIndent(); OutStream.WriteLine("SF.SFConnection m_Connection;");
+            //MatchIndent(); OutStream.WriteLine("SF.SFConnection m_Connection;");
+            //MatchIndent(); OutStream.WriteLine("public SF.SFConnection Connection { get { return m_Connection; } }");
             NewLine();
         }
         void BuildConstructor(string strClassName)
         {
             NewLine();
-            OpenSection("public ", string.Format("{0}( SF.SFConnection connection )", strClassName), false);
-            MatchIndent(); OutStream.WriteLine("m_Connection = connection;");
+            OpenSection("public ", string.Format("{0}()", strClassName), false);
+            CloseSection();
+            OpenSection("public ", string.Format("{0}( SF.SFConnection connection ) : base(connection)", strClassName), false);
             CloseSection();
             NewLine();
         }
@@ -575,7 +577,7 @@ namespace ProtocolCompiler
             // Packer interface
             Parameter[] newparams;
 
-            OpenSection("public class", "SendMessage"+Group.Name);
+            OpenSection("public class", String.Format("SendMessage{0} : SendMessage",Group.Name));
 
             BuildClassMember();
             BuildConstructor("SendMessage" + Group.Name);
@@ -632,7 +634,7 @@ namespace ProtocolCompiler
 
 
 
-            OpenSection("public class", "SendMessageSvr" + Group.Name);
+            OpenSection("public class", String.Format("SendMessageSvr{0} : SendMessage", Group.Name));
 
             BuildClassMember();
             BuildConstructor("SendMessageSvr" + Group.Name);

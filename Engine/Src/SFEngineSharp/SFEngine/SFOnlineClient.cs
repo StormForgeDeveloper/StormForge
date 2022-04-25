@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using SF.Net;
 #if UNITY_IOS
 using AOT;
 #endif
@@ -83,6 +84,8 @@ namespace SF
 
         public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, string userId, string password)
         {
+            ResetConnectionAdapter();
+
             var res = NativeStartConnection(NativeHandle, transactionId, gameId, loginAddress, userId, password);
             return new Result((int)res);
         }
@@ -95,6 +98,8 @@ namespace SF
 
         public void DisconnectAll()
         {
+            ResetConnectionAdapter();
+
             NativeDisconnectAll(NativeHandle);
         }
 
@@ -172,6 +177,65 @@ namespace SF
 
             return null;
         }
+
+
+        #region Connection cache
+
+        SendMessageLogin m_LoginAdapterCached;
+        SendMessageGame m_GameAdapterCached;
+        SendMessagePlayInstance m_PlayInstanceAdapterCached;
+
+        public virtual void ResetConnectionAdapter()
+        {
+            m_LoginAdapterCached = null;
+            m_GameAdapterCached = null;
+            m_PlayInstanceAdapterCached = null;
+        }
+
+
+        protected TAdapter GetAdapterInternal<TAdapter>(ConnectionType conType, ref TAdapter CachedAdapter)
+            where TAdapter : SendMessage, new()
+        {
+            var connectionHandle = NativeGetConnection(NativeHandle, (int)conType);
+            if (connectionHandle == IntPtr.Zero)
+            {
+                CachedAdapter = null;
+                return null;
+            }
+
+            if (CachedAdapter != null && CachedAdapter.Connection.NativeHandle == connectionHandle)
+                return CachedAdapter;
+
+            CachedAdapter = new TAdapter();
+            CachedAdapter.Connection = new SFConnection(connectionHandle);
+            return CachedAdapter;
+        }
+
+        public SendMessageLogin LoginAdapter
+        {
+            get
+            {
+                return GetAdapterInternal<SendMessageLogin>(ConnectionType.Login, ref m_LoginAdapterCached);
+            }
+        }
+        public SendMessageGame GameAdapter
+        {
+            get
+            {
+                return GetAdapterInternal<SendMessageGame>(ConnectionType.Game, ref m_GameAdapterCached);
+            }
+        }
+
+        public SendMessagePlayInstance PlayInstanceAdapter
+        {
+            get
+            {
+                return GetAdapterInternal<SendMessagePlayInstance>(ConnectionType.GameInstance, ref m_PlayInstanceAdapterCached);
+            }
+        }
+
+
+        #endregion
 
         public Result GetMovementForPlayer(UInt64 playerId, out ActorMovement movement)
         {
