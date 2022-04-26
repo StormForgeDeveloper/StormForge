@@ -187,13 +187,13 @@ namespace SF {
 
 	}
 
-	MemBlockHdr* STDMemoryManager::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment)
+	MemBlockHdr* STDMemoryManager::ReallocInternal(MemBlockHdr* ptr, size_t InOrgSize, size_t newSize, size_t alignment)
 	{
 		if (alignment == 0)
 			alignment = sizeof(int);
 
 		MemBlockHdr* pMemBlock = nullptr;
-		//MemBlockHdr* oldPtr = ptr;
+		auto orgSize = ptr->Size;
 
 		auto allocSize = MemBlockHdr::CalculateAllocationSize(newSize, alignment);
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS
@@ -206,24 +206,18 @@ namespace SF {
 		{
 			// We don't know whether the object need to be able to moved in memory. Let the caller handle new&copy
 			return nullptr;
-
-			//auto newPtr2 = SystemAllignedAlloc(allocSize, alignment);
-			//if (newPtr2 == nullptr)
-			//	return nullptr;
-
-			//oldPtr->GetFooter()->Deinit();
-			//oldPtr->Deinit();
-
-			//if (oldPtr != nullptr)
-			//	memcpy(newPtr2, oldPtr, Math::Min(allocSize, MemBlockHdr::CalculateAllocationSize(orgSize, alignment)));
-
-			//SystemAlignedFree(oldPtr);
-			//newPtr = newPtr2;
 		}
 
 		pMemBlock = reinterpret_cast<MemBlockHdr*>(newPtr);
 		pMemBlock->InitHeader(this, (uint32_t)newSize, (uint32_t)MemBlockHdr::GetDefaultHeaderSize());
 		pMemBlock->GetFooter()->InitFooter();
+
+		if (orgSize != pMemBlock->Size)
+		{
+			SubAllocSize(orgSize);
+			AddAllocSize(newSize);
+		}
+
 
 		return pMemBlock;
 	}
