@@ -38,8 +38,7 @@ static int Process()
 
 	for (auto inputPath : inputPaths)
 	{
-		SFLog(Engine, Error, "SFStringCrcBin: Loading input file {0}", inputPath);
-
+		SFLog(Engine, Info, "SFStringCrcBin: Loading input file {0}", inputPath);
 
 		SF::FileInputStream readFrom(inputPath);
 		auto testResult = stringDB.CheckFileHeader(readFrom);

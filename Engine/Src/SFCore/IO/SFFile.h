@@ -121,11 +121,12 @@ namespace SF {
 
 		static constexpr bool IsAIOEnabled()
 		{
-#if SF_PLATFORM == SF_PLATFORM_WINDOWS || SF_PLATFORM == SF_PLATFORM_LINUX
-			return true;
-#else
+			// TODO: fix AIO
+//#if SF_PLATFORM == SF_PLATFORM_WINDOWS || SF_PLATFORM == SF_PLATFORM_LINUX
+//			return true;
+//#else
 			return false;
-#endif
+//#endif
 		}
 
 		// seek

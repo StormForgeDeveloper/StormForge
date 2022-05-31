@@ -256,23 +256,21 @@ namespace SF {
 
 			pIOBuffer->bPending = true;
 #endif
+			m_IOOffset += bufferLen;
 		}
 		else
 		{
-			size_t dwRead = 0;
-			dwRead = read((int)(int64_t)m_FileHandle, buffer, bufferLen);
-			if (dwRead < bufferLen)
+			readSize = read((int)(int64_t)m_FileHandle, buffer, bufferLen);
+			if (readSize == 0)
 			{
-				return ResultCode::FAIL;
+				return ResultCode::END_OF_FILE;
 			}
 
-			readSize = dwRead;
+			m_IOOffset += readSize;
+
 			if (pIOBuffer != nullptr)
 				pIOBuffer->OperationSize = readSize;
 		}
-
-
-		m_IOOffset += bufferLen;
 
 		return ResultCode::SUCCESS;
 	}

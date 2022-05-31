@@ -65,39 +65,52 @@ namespace SF {
 		}
 		else
 		{
-			auto pIOBuffer = m_IOBuffers[m_BufferIndex];
-			auto& stream = pIOBuffer->OutputStream;
-			size_t write;
-			if (stream.GetSize() > 0)
+			if constexpr (IsAIOEnabled())
 			{
-				WriteRaw(pIOBuffer->Buffer.data(), stream.GetSize(), pIOBuffer, write);
+				auto pIOBuffer = m_IOBuffers[m_BufferIndex];
+				auto& stream = pIOBuffer->OutputStream;
+				size_t write;
+				if (stream.GetSize() > 0)
+				{
+					WriteRaw(pIOBuffer->Buffer.data(), stream.GetSize(), pIOBuffer, write);
+				}
 			}
 		}
 
-		for (auto& ioBuffer : m_IOBuffers)
+		if constexpr (IsAIOEnabled())
 		{
-			ioBuffer->Reset();
+			for (auto& ioBuffer : m_IOBuffers)
+			{
+				ioBuffer->Reset();
+			}
 		}
 	}
 
 	size_t File::GetPosition() const
 	{
-		// current remain size
-		auto pIOBuffer = m_IOBuffers[m_BufferIndex];
-		auto& stream = pIOBuffer->InputStream;
+		if constexpr (IsAIOEnabled())
+		{
+			// current remain size
+			auto pIOBuffer = m_IOBuffers[m_BufferIndex];
+			auto& stream = pIOBuffer->InputStream;
 
-		// We need stream is updated to access
-		//pIOBuffer->WaitAIO();
-		auto remainSize = pIOBuffer->Buffer.capacity() - stream.GetPosition();
+			// We need stream is updated to access
+			//pIOBuffer->WaitAIO();
+			auto remainSize = pIOBuffer->Buffer.capacity() - stream.GetPosition();
 
-		// add next buffer size
-		auto nextBufferIndex = (m_BufferIndex + 1) % BUFFERING_COUNT;
-		auto pNextIOBuffer = m_IOBuffers[nextBufferIndex];
-		//auto& nextStream = pIOBuffer->InputStream;
-		if (stream.GetPosition() > 0) // if something is read then next buffer is on the way
-			remainSize += pNextIOBuffer->Buffer.capacity();
+			// add next buffer size
+			auto nextBufferIndex = (m_BufferIndex + 1) % BUFFERING_COUNT;
+			auto pNextIOBuffer = m_IOBuffers[nextBufferIndex];
+			//auto& nextStream = pIOBuffer->InputStream;
+			if (stream.GetPosition() > 0) // if something is read then next buffer is on the way
+				remainSize += pNextIOBuffer->Buffer.capacity();
 
-		return GetLocationRaw() - remainSize;
+			return GetLocationRaw() - remainSize;
+		}
+		else
+		{
+			return GetLocationRaw();
+		}
 	}
 
 	Result File::Read(uint8_t* buffer, size_t bufferLen, size_t &read)
@@ -111,7 +124,7 @@ namespace SF {
 		if (bufferLen == 0)
 			return ResultCode::SUCCESS;
 
-		if (true)
+		if constexpr (IsAIOEnabled())
 		{
 			while (bufferLen > 0)
 			{
@@ -162,7 +175,7 @@ namespace SF {
 		}
 		else
 		{
-			ReadRaw(buffer, bufferLen, nullptr, read);
+			return ReadRaw(buffer, bufferLen, nullptr, read);
 		}
 
 
@@ -175,7 +188,7 @@ namespace SF {
 		if (!IsOpened())
 			return ResultCode::NOT_OPENED;
 
-		//if (true)
+		if constexpr (IsAIOEnabled())
 		{
 			while (bufferLen > 0)
 			{
@@ -210,10 +223,10 @@ namespace SF {
 				}
 			}
 		}
-		//else
-		//{
-		//	WriteRaw(buffer, bufferLen, nullptr, write);
-		//}
+		else
+		{
+			return WriteRaw(buffer, bufferLen, nullptr, write);
+		}
 
 
 		return ResultCode::SUCCESS;

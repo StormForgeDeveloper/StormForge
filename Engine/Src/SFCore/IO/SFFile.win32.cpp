@@ -260,6 +260,7 @@ namespace SF {
 			}
 
 			pIOBuffer->bPending = true;
+			m_IOOffset += bufferLen;
 		}
 		else
 		{
@@ -275,12 +276,12 @@ namespace SF {
 			}
 
 			read = dwRead;
+			m_IOOffset += dwRead;
 
 			if (pIOBuffer != nullptr)
 				pIOBuffer->OperationSize = dwRead;
 		}
 
-		m_IOOffset += bufferLen;
 
 		return ResultCode::SUCCESS;
 	}
