@@ -172,6 +172,7 @@ namespace SF {
 				}
 			}
 
+			return ResultCode::SUCCESS;
 		}
 		else
 		{
@@ -179,7 +180,6 @@ namespace SF {
 		}
 
 
-		return ResultCode::SUCCESS;
 	}
 
 	Result File::Write(const uint8_t* buffer, size_t bufferLen, size_t &write)
@@ -222,6 +222,8 @@ namespace SF {
 					m_BufferIndex = (m_BufferIndex + 1) % BUFFERING_COUNT;
 				}
 			}
+
+			return ResultCode::SUCCESS;
 		}
 		else
 		{
@@ -229,7 +231,6 @@ namespace SF {
 		}
 
 
-		return ResultCode::SUCCESS;
 	}
 
 
