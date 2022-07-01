@@ -14,9 +14,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-#if UNITY_IOS
-using AOT;
-#endif
+
 
 namespace SF
 {
@@ -25,8 +23,8 @@ namespace SF
     static internal class SFMessageParsingUtil
     {
 
-#if UNITY_IOS
-        [MonoPInvokeCallback(typeof(SET_MESSAGE_FUNCTION))]
+#if UNITY_STANDALONE
+        [AOT.MonoPInvokeCallback(typeof(SFConnectionGroup.SET_MESSAGE_FUNCTION))]
 #endif
         static internal void MessageParseSetEventCallback(SFConnection.EventTypes eventType, int result, SFConnection.ConnectionState state)
         {
@@ -36,8 +34,8 @@ namespace SF
             stm_Event.State = state;
         }
 
-#if UNITY_IOS
-        [MonoPInvokeCallback(typeof(SET_MESSAGE_FUNCTION))]
+#if UNITY_STANDALONE
+        [AOT.MonoPInvokeCallback(typeof(SFConnectionGroup.SET_MESSAGE_FUNCTION))]
 #endif
         static internal void MessageParseCreateCallback(UInt32 messageID)
         {
@@ -46,8 +44,8 @@ namespace SF
         }
 
 
-#if UNITY_IOS
-        [MonoPInvokeCallback(typeof(SET_FUNCTION))]
+#if UNITY_STANDALONE
+        [AOT.MonoPInvokeCallback(typeof(SFConnectionGroup.SET_FUNCTION))]
 #endif
         static internal void MessageParseSetValue(string stringHash, string typeNameHash, IntPtr Value)
         {
@@ -150,8 +148,8 @@ namespace SF
         }
 
 
-#if UNITY_IOS
-        [MonoPInvokeCallback(typeof(SET_ARRAY_FUNCTION))]
+#if UNITY_STANDALONE
+        [AOT.MonoPInvokeCallback(typeof(SFConnectionGroup.SET_ARRAY_FUNCTION))]
 #endif
         static internal void MessageParseSetArray(string stringHash, string typeNameHash, int arrayCount, IntPtr Value)
         {
@@ -167,7 +165,7 @@ namespace SF
                 case "uint8":
                     {
                         var newArray = new byte[arrayCount];
-                        if(arrayCount > 0) Marshal.Copy(Value, newArray, 0, arrayCount);
+                        if (arrayCount > 0) Marshal.Copy(Value, newArray, 0, arrayCount);
                         stm_ParsingMessage.SetValue(stringHash, newArray);
                     }
                     break;
@@ -391,7 +389,7 @@ namespace SF
                 StringConvertBuffer = new byte[(int)(byteCount * 1.5)];
 
             Marshal.Copy(value, StringConvertBuffer, 0, byteCount);
-            return System.Text.Encoding.UTF8.GetString(StringConvertBuffer,0, byteCount);
+            return System.Text.Encoding.UTF8.GetString(StringConvertBuffer, 0, byteCount);
         }
 
         internal static void MarshalCopy(IntPtr source, sbyte[] destination, int startIndex, int length)

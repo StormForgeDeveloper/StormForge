@@ -77,7 +77,7 @@ namespace Net {
 				}
 				break;
 			case NetCtrlCode_Heartbeat:
-				SFLog(Net, Debug3, "RECV Heartbeat Ack CID:{0}, socketType:{1}", GetCID(), socketType);
+				SFLog(Net, Debug6, "RECV Heartbeat Ack CID:{0}, socketType:{1}", GetCID(), socketType);
 				break;
 			case NetCtrlCode_SyncReliable:
 			case NetCtrlCode_TimeSync:
@@ -97,7 +97,7 @@ namespace Net {
 			{
 				auto* pConUDP = static_cast<ConnectionUDPBase*>(GetConnection());
 				auto hrTem = pConUDP->GetSendReliableWindow().ReleaseSingleMessage(pNetCtrl->msgID.IDSeq.Sequence);
-				SFLog(Net, Debug2, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4:X8}, windows status, baseSeq:{5}, headSeq:{6}, remain:{7}, msgCount:{8}",
+				SFLog(Net, Debug5, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4:X8}, windows status, baseSeq:{5}, headSeq:{6}, remain:{7}, msgCount:{8}",
 					GetCID(), pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->rtnMsgID, hrTem, 
 					pConUDP->GetSendReliableWindow().GetBaseSequence(), pConUDP->GetSendReliableWindow().GetHeadSequence(), 
 					pConUDP->GetSendReliableWindow().GetRemainSequenceCount(), pConUDP->GetSendReliableWindow().GetMsgCount());

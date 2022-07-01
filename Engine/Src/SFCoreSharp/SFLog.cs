@@ -177,6 +177,9 @@ namespace SF
         public delegate void delLogHandler(Level level, string message);
         public static event delLogHandler LogHandler;
 
+        public delegate void delLogFlush();
+        public static event delLogFlush LogFlush;
+
         static Log()
         {
         }
@@ -205,7 +208,10 @@ namespace SF
             LogHandler(Level.Debug1, message);
         }
 
-
+        static public void Flush()
+        {
+            LogFlush();
+        }
 
     }
 }

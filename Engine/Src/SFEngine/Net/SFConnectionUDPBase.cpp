@@ -548,7 +548,7 @@ namespace Net {
 
 		Result hrTem = m_RecvReliableWindow.AddMsg(pIMsg);
 
-		SFLog(Net, Debug2, "RECVGuaAdd : CID:{0} msgId:{1}, seq:{2}, len:{3}, hr:{4}, Window base:{5}, msgCount:{6}, syncMask:{7}",
+		SFLog(Net, Debug5, "RECVGuaAdd : CID:{0} msgId:{1}, seq:{2}, len:{3}, hr:{4}, Window base:{5}, msgCount:{6}, syncMask:{7}",
 			GetCID(), 
 			msgID, seq, len, hrTem,
 			m_RecvReliableWindow.GetBaseSequence(), m_RecvReliableWindow.GetMsgCount(), m_RecvReliableWindow.GetSyncMask());
@@ -688,7 +688,7 @@ namespace Net {
 			}
 			else
 			{
-				SFLog(Net, Debug2, "SENDGuaQueued : CID:{0}, msg:{1}, seq:{2}, len:{3}",
+				SFLog(Net, Debug6, "SENDGuaQueued : CID:{0}, msg:{1}, seq:{2}, len:{3}",
 					GetCID(),
 					msgID,
 					msgID.IDSeq.Sequence,
@@ -826,7 +826,7 @@ namespace Net {
 		{
 			Assert(!pMsgHeader->msgID.IDs.Encrypted);
 
-			SFLog(Net, Debug2, "RECVGua    : CID:{0} msg:{1}, seq:{2}, len:{3}",
+			SFLog(Net, Debug5, "RECVGua    : CID:{0} msg:{1}, seq:{2}, len:{3}",
 				GetCID(),
 				pMsg->GetMessageHeader()->msgID,
 				pMsg->GetMessageHeader()->msgID.IDSeq.Sequence,

@@ -64,3 +64,10 @@ SFDLL_EXPORT void SFCSLog_LogMessage(int32_t logLevel, const char* message)
 
 	
 
+SFDLL_EXPORT void SFCSLog_Flush()
+{
+	Service::LogModule->Flush();
+}
+
+
+

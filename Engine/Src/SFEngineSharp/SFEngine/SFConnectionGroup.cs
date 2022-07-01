@@ -13,9 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
-#if UNITY_IOS
-using AOT;
-#endif
+
 
 namespace SF
 {

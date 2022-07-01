@@ -26,6 +26,11 @@ namespace SF
             {
                 NativeSFLogMessage((int)level, System.Text.Encoding.UTF8.GetBytes(message + "\0"));
             };
+
+            SF.Log.LogFlush += () =>
+            {
+                NativeSFLogFlush();
+            };
         }
 
         #region Native interfaces 
@@ -39,6 +44,9 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFCSLog_LogMessage", CharSet = CharSet.Auto)]
         static extern void NativeSFLogMessage(Int32 logLevel, [MarshalAs(UnmanagedType.LPArray)] byte[] logMessage);
+
+        [DllImport(NativeDllName, EntryPoint = "SFCSLog_Flush", CharSet = CharSet.Auto)]
+        static extern void NativeSFLogFlush();
 
         #endregion
 

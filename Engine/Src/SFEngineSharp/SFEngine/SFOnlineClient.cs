@@ -28,15 +28,15 @@ namespace SF
         {
             None,
 
-			// Login operations
-			ConnectingToLogin,
-			LogingIn,
-			LoggedIn,
+            // Login operations
+            ConnectingToLogin,
+            LogingIn,
+            LoggedIn,
 
-			// In game state
-			ConnectingToGameServer,
-			JoiningToGameServer,
-			InGameServer,
+            // In game state
+            ConnectingToGameServer,
+            JoiningToGameServer,
+            InGameServer,
 
             // In game instance state. the player still in game as well
             InGameJoiningGameInstance,
@@ -46,7 +46,7 @@ namespace SF
 
             // Disconnected
             Disconnected,
-		};
+        };
 
         public enum ConnectionType
         {
@@ -73,7 +73,7 @@ namespace SF
 
         public delegate void OnlineTaskFinishedHandler(UInt64 transactionId);
         public static event OnlineTaskFinishedHandler OnOnlineTaskFinished;
-        
+
 
 
         public OnlineClient(SFIMessageRouter messageRouter = null)
@@ -159,6 +159,9 @@ namespace SF
 #if UNITY_EDITOR
         static bool PrintOnlineStateChangeDebug = true;
 #endif
+#if UNITY_STANDALONE
+        [AOT.MonoPInvokeCallback(typeof (ONLINE_STATECHAGED_CALLBACK))]
+#endif
         static void OnOnlineStateChanged_Internal(OnlineState prevState, OnlineState newState)
         {
 #if UNITY_EDITOR
@@ -171,7 +174,7 @@ namespace SF
 
         public SFConnection GetConnection(ConnectionType connectionType)
         {
-            var connectionHandle = NativeGetConnection(NativeHandle, (int) connectionType);
+            var connectionHandle = NativeGetConnection(NativeHandle, (int)connectionType);
             if (connectionHandle != IntPtr.Zero)
                 return new SFConnection(connectionHandle);
 
@@ -271,6 +274,9 @@ namespace SF
 
         static internal OnlineClient stm_StaticEventReceiver = null;
 
+#if UNITY_STANDALONE
+        [AOT.MonoPInvokeCallback(typeof(SET_EVENT_FUNCTION))]
+#endif
         static internal void OnEvent_Internal(SFConnection.EventTypes eventType, int result, SFConnection.ConnectionState state)
         {
             if (stm_StaticEventReceiver == null)
@@ -284,6 +290,9 @@ namespace SF
             stm_StaticEventReceiver.OnConnectionEvent?.Invoke(stm_StaticEventReceiver, ref evt);
         }
 
+#if UNITY_STANDALONE
+        [AOT.MonoPInvokeCallback(typeof(ON_READY_FUNCTION))]
+#endif
         static internal void OnMessageReady_Internal()
         {
             if (stm_StaticEventReceiver == null)
@@ -298,6 +307,9 @@ namespace SF
             stm_StaticEventReceiver.m_MessageRouter?.HandleRecvMessage(message);
         }
 
+#if UNITY_STANDALONE
+        [AOT.MonoPInvokeCallback(typeof(ONLINE_TASK_FINISHED_CALLBACK))]
+#endif
         static internal void OnTaskFinished_Internal(UInt64 transactionId)
         {
             OnOnlineTaskFinished?.Invoke(transactionId);
