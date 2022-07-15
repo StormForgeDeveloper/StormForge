@@ -476,17 +476,6 @@ namespace SF
         return StringCrc64(uint64_t(m_Value));
     }
 
-	StringCrc64 VariableUInt64::GetValueStringCrc64() const
-	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
-
-		ToString(context);
-		return StringCrc64(renderBuffer);
-	}
-
 	String VariableUInt64::GetValueString() const
 	{
 		char renderBuffer[128] = "";
