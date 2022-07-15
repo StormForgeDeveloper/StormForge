@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2018 Kyungkun Ko
 // 
@@ -169,17 +169,14 @@ namespace SF
 
 
 
+    StringCrc32 VariableInt::GetValueStringCrc32() const
+    {
+        return StringCrc32(uint32_t(m_Value));
+    }
 
 	StringCrc64 VariableInt::GetValueStringCrc64() const
 	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
-
-		ToString(context);
-
-		return StringCrc64(renderBuffer);
+		return StringCrc64(uint64_t(m_Value));
 	}
 
 	String VariableInt::GetValueString() const
@@ -254,16 +251,16 @@ namespace SF
 		m_Value = (int)value.GetHash();
 	}
 
-	StringCrc64 VariableUInt::GetValueStringCrc64() const
-	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
 
-		ToString(context);
-		return StringCrc64(renderBuffer);
-	}
+    StringCrc32 VariableUInt::GetValueStringCrc32() const
+    {
+        return StringCrc32(uint32_t(m_Value));
+    }
+
+    StringCrc64 VariableUInt::GetValueStringCrc64() const
+    {
+        return StringCrc64(uint64_t(m_Value));
+    }
 
 	String VariableUInt::GetValueString() const
 	{
@@ -375,17 +372,25 @@ namespace SF
 
 
 
+    StringCrc32 VariableInt64::GetValueStringCrc32() const
+    {
+        uint32_t highDword = uint32_t(m_Value >> 32);
+        assert(highDword == 0xFFFFFFFF || highDword == 0);
+        return StringCrc32(uint32_t(m_Value));
+    }
+
 	StringCrc64 VariableInt64::GetValueStringCrc64() const
 	{
-		char renderBuffer[128] = "";
-		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
+		//char renderBuffer[128] = "";
+		//ToStringContext context;
+		//context.StringBuffer = renderBuffer;
+		//context.StringBufferLength = sizeof(renderBuffer);
 
-		ToString(context);
+		//ToString(context);
 
-		return StringCrc64(renderBuffer);
-	}
+		//return StringCrc64(renderBuffer);
+        return StringCrc64(uint64_t(m_Value));
+    }
 
 	String VariableInt64::GetValueString() const
 	{
@@ -458,6 +463,18 @@ namespace SF
 		Assert(false); // It will lose precision
 		m_Value = (int)value.GetHash();
 	}
+
+    StringCrc32 VariableUInt64::GetValueStringCrc32() const
+    {
+        uint32_t highDword = uint32_t(m_Value >> 32);
+        assert(highDword == 0xFFFFFFFF || highDword == 0);
+        return StringCrc32(uint32_t(m_Value));
+    }
+
+    StringCrc64 VariableUInt64::GetValueStringCrc64() const
+    {
+        return StringCrc64(uint64_t(m_Value));
+    }
 
 	StringCrc64 VariableUInt64::GetValueStringCrc64() const
 	{

@@ -223,7 +223,8 @@ namespace SF {
 		virtual uint64_t GetValueUInt64() const override { return (uint64_t)m_Value; }
 		virtual float GetValueFloat() const override { return (float)m_Value; }
 		virtual double GetValueDouble() const override { return (double)m_Value; }
-		virtual StringCrc64 GetValueStringCrc64() const override;
+        virtual StringCrc32 GetValueStringCrc32() const override;
+        virtual StringCrc64 GetValueStringCrc64() const override;
 		virtual String GetValueString() const override;
 
 		virtual Result ToString(ToStringContext& context) const override;
@@ -290,6 +291,7 @@ namespace SF {
 		virtual uint64_t GetValueUInt64() const override { return (uint64_t)m_Value; }
 		virtual float GetValueFloat() const override { return (float)m_Value; }
 		virtual double GetValueDouble() const override { return (double)m_Value; }
+        virtual StringCrc32 GetValueStringCrc32() const override;
 		virtual StringCrc64 GetValueStringCrc64() const override;
 		virtual String GetValueString() const override;
 
@@ -424,7 +426,8 @@ namespace SF {
 		virtual uint64_t GetValueUInt64() const override { return (uint64_t)m_Value; }
 		virtual float GetValueFloat() const override { return (float)m_Value; }
 		virtual double GetValueDouble() const override { return (double)m_Value; }
-		virtual StringCrc64 GetValueStringCrc64() const override;
+        virtual StringCrc32 GetValueStringCrc32() const override;
+        virtual StringCrc64 GetValueStringCrc64() const override;
 		virtual String GetValueString() const override;
 
 		virtual Result ToString(ToStringContext& context) const override;
@@ -491,7 +494,8 @@ namespace SF {
 		virtual uint64_t GetValueUInt64() const override { return (uint64_t)m_Value; }
 		virtual float GetValueFloat() const override { return (float)m_Value; }
 		virtual double GetValueDouble() const override { return (double)m_Value; }
-		virtual StringCrc64 GetValueStringCrc64() const override;
+        virtual StringCrc32 GetValueStringCrc32() const override;
+        virtual StringCrc64 GetValueStringCrc64() const override;
 		virtual String GetValueString() const override;
 
 		virtual Result ToString(ToStringContext& context) const override;
