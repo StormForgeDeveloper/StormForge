@@ -182,12 +182,6 @@ namespace SF {
 	uint32_t Crc32C(const char* s);
 	uint32_t Crc32C(const uint8_t *buf, size_t len);
 
-	constexpr uint32_t operator "" _crc(const char* s, size_t sz) {
-		return Hasher_Crc32C::Hash(s);
-	}
 
-	constexpr uint32_t operator "" _crc32c(const char* s, size_t sz) {
-		return Hasher_Crc32C::Hash(s);
-	}
 }
 

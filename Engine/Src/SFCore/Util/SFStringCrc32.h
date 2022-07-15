@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -58,4 +58,12 @@ namespace SF
 		const char* ToString() const;
 	};
 
+
+    constexpr StringCrc32 operator "" _crc(const char* s, size_t sz) {
+        return Hasher_Crc32C::Hash(s);
+    }
+
+    constexpr StringCrc32 operator "" _crc32c(const char* s, size_t sz) {
+        return Hasher_Crc32C::Hash(s);
+    }
 }

@@ -72,5 +72,11 @@ namespace SF {
 		const char* ToString() const;
 	};
 
+
+
+    constexpr StringCrc64 operator "" _crc64(const char* s, size_t sz) {
+        return Hasher_Murmur64().Hash(0, s, sz);
+    }
+
 }
 

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -273,10 +273,6 @@ namespace SF {
 
 
 	constexpr uint64_t operator "" _hash64(const char* s, size_t sz) {
-		return Hasher_Murmur64().Hash(0, s, sz);
-	}
-
-	constexpr uint64_t operator "" _crc64(const char* s, size_t sz) {
 		return Hasher_Murmur64().Hash(0, s, sz);
 	}
 
