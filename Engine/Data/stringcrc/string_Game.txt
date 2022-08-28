@@ -168,6 +168,7 @@
 "SearchGameInstanceCmd"
 "SearchGameInstanceRes"
 "SearchKeyword"
+"ZoneTableID"
 "GetCharacterDataInGameInstance"
 "GetCharacterDataInGameInstanceCmd"
 "GetCharacterDataInGameInstanceRes"

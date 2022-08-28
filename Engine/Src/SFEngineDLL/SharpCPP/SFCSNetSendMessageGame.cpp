@@ -381,15 +381,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameLeaveGameInstanceCmd( intptr_t InNativeConn
 
 
 // Cmd: Search game instance
-SFDLL_EXPORT int  CSSFNetAdapter_GameSearchGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const char* InSearchKeyword )
+SFDLL_EXPORT int  CSSFNetAdapter_GameSearchGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const char* InSearchKeyword, uint32_t InZoneTableID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::SearchGameInstanceCmd::Create(pConnection->GetHeap(), InTransactionID,InSearchKeyword);
+	MessageDataPtr pMessage = SF::Message::Game::SearchGameInstanceCmd::Create(pConnection->GetHeap(), InTransactionID,InSearchKeyword, InZoneTableID);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameSearchGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const char* InSearchKeyword )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameSearchGameInstanceCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const char* InSearchKeyword, uint32_t InZoneTableID )
 
 
 // Cmd: Search game instance

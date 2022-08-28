@@ -440,8 +440,7 @@ namespace ProtocolXml {
         Debug6,
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlEnumAttribute("")]
-        Item,
+        Debug7,
     }
     
     /// <remarks/>

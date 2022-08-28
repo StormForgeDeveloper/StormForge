@@ -443,19 +443,19 @@ namespace SF
 
 	}; // Result NetPolicyGame::LeaveGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InInsUID )
 	// Cmd: Search game instance
-	Result NetPolicyGame::SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword )
+	Result NetPolicyGame::SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::SearchGameInstanceCmd::Create(GetSystemHeap(), InTransactionID, InSearchKeyword);
+		 pMessage = SF::Message::Game::SearchGameInstanceCmd::Create(GetSystemHeap(), InTransactionID, InSearchKeyword, InZoneTableID);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetPolicyGame::SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword )
+	}; // Result NetPolicyGame::SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
 	// Cmd: Search game instance
 	Result NetPolicyGame::GetCharacterDataInGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
 	{

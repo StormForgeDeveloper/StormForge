@@ -370,15 +370,15 @@ namespace SF.Net
 		} // public int  LeaveGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 
 		// Cmd: Search game instance
-		public int  SearchGameInstanceCmd( System.UInt64 InTransactionID, System.String InSearchKeyword )
+		public int  SearchGameInstanceCmd( System.UInt64 InTransactionID, System.String InSearchKeyword, System.UInt32 InZoneTableID )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameSearchGameInstanceCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InSearchKeyword + "\0"));
+			result = CSSFNetAdapter_GameSearchGameInstanceCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InSearchKeyword + "\0"), InZoneTableID);
 			}
 			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SearchGameInstanceCmd);
 			return result;
-		} // public int  SearchGameInstanceCmd( System.UInt64 InTransactionID, System.String InSearchKeyword )
+		} // public int  SearchGameInstanceCmd( System.UInt64 InTransactionID, System.String InSearchKeyword, System.UInt32 InZoneTableID )
 
 		// Cmd: Search game instance
 		public int  GetCharacterDataInGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID )
@@ -731,7 +731,7 @@ namespace SF.Net
 
 		// Cmd: Search game instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSearchGameInstanceCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameSearchGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InSearchKeyword );
+		static extern int CSSFNetAdapter_GameSearchGameInstanceCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InSearchKeyword, System.UInt32 InZoneTableID );
 
 
 		// Cmd: Search game instance

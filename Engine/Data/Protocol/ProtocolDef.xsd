@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <xs:schema xmlns="http://www.StormForge.com/XMLProtocol" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ns1="http://www.StormForge.com/XMLProtocol" targetNamespace="http://www.StormForge.com/XMLProtocol" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="Protocols">
 		<xs:annotation>
@@ -168,15 +168,15 @@
 			</xs:annotation>
 			<xs:simpleType>
 				<xs:restriction base="xs:string">
-					<xs:whiteSpace value="preserve"/>
-					<xs:enumeration value="Debug"/>
-					<xs:enumeration value="Debug1"/>
-					<xs:enumeration value="Debug2"/>
-					<xs:enumeration value="Debug3"/>
-          <xs:enumeration value="Debug4"/>
-          <xs:enumeration value="Debug5"/>
-          <xs:enumeration value="Debug6"/>
-					<xs:enumeration value=""/>
+                    <xs:whiteSpace value="preserve"/>
+                    <xs:enumeration value="Debug"/>
+                    <xs:enumeration value="Debug1"/>
+                    <xs:enumeration value="Debug2"/>
+                    <xs:enumeration value="Debug3"/>
+                    <xs:enumeration value="Debug4"/>
+                    <xs:enumeration value="Debug5"/>
+                    <xs:enumeration value="Debug6"/>
+					<xs:enumeration value="Debug7"/>
 				</xs:restriction>
 			</xs:simpleType>
 		</xs:attribute>

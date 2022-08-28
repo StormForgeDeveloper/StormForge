@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -186,6 +186,8 @@ namespace SF
             new TypeMap( "uint16", false, typeof(UInt16), cppTypeName:"uint16_t" ),
             new TypeMap( "int32", false, typeof(Int32), cppTypeName:"int32_t" ),
             new TypeMap( "uint32", false, typeof(UInt32), cppTypeName:"uint32_t" ),
+            new TypeMap( "int", false, typeof(Int32), cppTypeName:"int32_t" ),
+            new TypeMap( "uint", false, typeof(UInt32), cppTypeName:"uint32_t" ),
             new TypeMap( "int64", false, typeof(Int64), cppTypeName:"int64_t" ),
             new TypeMap( "uint64", false, typeof(UInt64), cppTypeName:"uint64_t" ),
             new TypeMap( "intptr", false, typeof(IntPtr), cppTypeName:"intptr_t" ),
@@ -193,9 +195,12 @@ namespace SF
             new TypeMap( "DWORD", false, typeof(UInt32), cppTypeName:"uint32_t" ),
             new TypeMap( "QWORD", false, typeof(UInt64), cppTypeName:"uint64_t" ),
             new TypeMap( "float", false, typeof(float), cppTypeName:"float" ),
+            new TypeMap( "Time32", false, typeof(UInt32), cppTypeName:"uint32_t" ),
+            new TypeMap( "Time64", false, typeof(UInt64), cppTypeName:"uint64_t" ),
             new TypeMap( "TransactionID", false, typeof(UInt64), cppTypeName:"uint64_t" ),
             new TypeMap( "AccountID", false, typeof(UInt64) ),
             new TypeMap( "PlayerID", false, typeof(UInt64) ),
+            new TypeMap( "CharacterID", false, typeof(UInt32) ),
             new TypeMap( "FacebookUID", false, typeof(UInt64) ),
             new TypeMap( "AuthTicket", false, typeof(UInt64) ),
             new TypeMap( "GameInsID", false, typeof(UInt32) ),

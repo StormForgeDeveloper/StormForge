@@ -367,6 +367,7 @@
 		<Command Name="SearchGameInstance" Reliable="true" Crypto="No" Trace="Debug1" Desc="Search game instance">
 			<Cmd>
 				<Params TypeName="String" Name="SearchKeyword" Desc="Search keyword"/>
+                <Params TypeName="uint32" Name="ZoneTableID" Desc="Search keyword, zone table id, ignored if it is zero"/>
 			</Cmd>
 			<Res>
 				<Params TypeName="VariableTable" IsArray="true" Name="GameInstances" Desc="Game instance informations"/>

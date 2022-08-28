@@ -6538,6 +6538,7 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_SearchKeyword, ArrayLen));
+				protocolCheck(*input >> m_ZoneTableID);
 
 				return hr;
 
@@ -6553,6 +6554,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("SearchKeyword", parser.GetSearchKeyword());
+				variableBuilder.SetVariable("ZoneTableID", parser.GetZoneTableID());
 
 				return hr;
 
@@ -6570,7 +6572,7 @@ namespace SF
 			}; // Result SearchGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* SearchGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword )
+			MessageData* SearchGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -6586,6 +6588,7 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InSearchKeyword)
+					+ SerializedSizeOf(InZoneTableID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SearchGameInstanceCmd::MID, __uiMessageSize ) );
@@ -6596,16 +6599,17 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InSearchKeyword);
+				protocolCheck(*output << InZoneTableID);
 
 				return hr;
-			}; // MessageData* SearchGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword )
+			}; // MessageData* SearchGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
 
 			Result SearchGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				SearchGameInstanceCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "SearchGameInstance:{0}:{1} , TransactionID:{2}, SearchKeyword:{3,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetSearchKeyword()); 
+				SFLog(Net, Debug1, "SearchGameInstance:{0}:{1} , TransactionID:{2}, SearchKeyword:{3,60}, ZoneTableID:{4}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetSearchKeyword(), parser.GetZoneTableID()); 
 				return ResultCode::SUCCESS;
 			}; // Result SearchGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

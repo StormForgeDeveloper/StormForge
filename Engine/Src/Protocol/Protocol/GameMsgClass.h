@@ -3311,6 +3311,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				const char* m_SearchKeyword{};
+				uint32_t m_ZoneTableID{};
 			public:
 				SearchGameInstanceCmd()
 					{}
@@ -3323,6 +3324,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetSearchKeyword() const	{ return m_SearchKeyword; };
+				const uint32_t& GetZoneTableID() const	{ return m_ZoneTableID; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -3330,7 +3332,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID );
 
 			}; // class SearchGameInstanceCmd : public MessageBase
 

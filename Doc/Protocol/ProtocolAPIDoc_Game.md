@@ -781,11 +781,13 @@ Search game instance
 
 1. Command interface
 
-        Result SearchGameInstanceCmd(const uint64_t &InTransactionID, const char* InSearchKeyword)
+        Result SearchGameInstanceCmd(const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID)
 
 		- OutTransactionID: TransactionID type. 
 
 		- OutSearchKeyword: String type. Search keyword
+
+		- OutZoneTableID: uint32 type. Search keyword, zone table id, ignored if it is zero
 
 2. Result interface
 

@@ -93,7 +93,7 @@ namespace SF
 		// Cmd: Leave game instance
 		Result LeaveGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InInsUID );
 		// Cmd: Search game instance
-		Result SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword );
+		Result SearchGameInstanceCmd( const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID );
 		// Cmd: Search game instance
 		Result GetCharacterDataInGameInstanceCmd( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID );
 		// Cmd: Request Game match
