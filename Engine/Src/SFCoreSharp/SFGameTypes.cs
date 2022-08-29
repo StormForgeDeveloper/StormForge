@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // CopyRight (c) Kyungkun Ko
 //
@@ -350,6 +350,45 @@ namespace SF
     {
         public VariableTable()
         {
+        }
+
+        public bool HasValue(string ValueName)
+        {
+            return HasValue(new StringCrc32(ValueName));
+        }
+        public bool HasValue(StringCrc32 ValueName)
+        {
+            return ContainsKey(ValueName);
+        }
+
+        public T GetValue<T>(string ValueName, T defaultValue)
+        {
+            StringCrc32 ValueNameCrc32 = new StringCrc32(ValueName);
+
+            System.Object obj;
+            if (!TryGetValue(ValueNameCrc32, out obj))
+            {
+                System.Diagnostics.Debug.Print("SF.VariableTable Value not found Name = {0}", ValueName);
+                return defaultValue;
+            }
+
+            return (T)Convert.ChangeType(obj, typeof(T));
+        }
+
+        public bool TryGetValue<T>(string ValueName, ref T outValue)
+        {
+            StringCrc32 ValueNameCrc32 = new StringCrc32(ValueName);
+            //if (!Table.ContainsKey(new StringCrc32(ValueName)))
+            //	return false;
+            System.Object obj;
+            if (!TryGetValue(ValueNameCrc32, out obj))
+            {
+                System.Diagnostics.Debug.Print("SF.VariableTable Value not found Name = {0}", ValueName);
+                return false;
+            }
+
+            outValue = (T)Convert.ChangeType(obj, typeof(T));
+            return true;
         }
 
         public byte[] ToByteArray()
