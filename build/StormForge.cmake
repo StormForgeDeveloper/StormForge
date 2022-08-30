@@ -1,8 +1,8 @@
 
 cmake_minimum_required(VERSION 3.16)
 
-message ( "Platform=${CMAKE_SYSTEM_NAME}, Config=${CMAKE_BUILD_TYPE}" )
 
+message ( "Platform=${CMAKE_SYSTEM_NAME}, Config=${CMAKE_BUILD_TYPE}" )
 
 
 set(CMAKE_CXX_STANDARD 17)
@@ -184,7 +184,13 @@ elseif(UNIX)
 	add_definitions(-D_LINUX_=1)
 	add_definitions(-DEPOLL)
 
-	set(PLATFORM_LIBS mongoc-static-1.0 bson-static-1.0 mysqlcppconn8 sasl2 rt m atomic resolv websockets event_pthreads dl uv_a)
+	#mongoc needs icu
+	set (ICU_ROOT /usr /usr/lib/x86_64-linux-gnu)
+	set (ICU_FIND_COMPONENTS uc)
+	include (FindICU)
+	#message ("ICU_LIBRARIES ${ICU_UC_LIBRARY}" )
+
+	set(PLATFORM_LIBS mongoc-static-1.0 bson-static-1.0 mysqlcppconn8 ${ICU_UC_LIBRARY} sasl2 rt m atomic resolv websockets event_pthreads dl uv_a)
 	list(APPEND ENGINE_LINK_LIBS ssl crypto)
 
 	set(ARTECTURE x64)
