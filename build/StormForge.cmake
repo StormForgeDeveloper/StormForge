@@ -197,6 +197,7 @@ elseif(UNIX)
 
 
 	include_directories(AFTER 
+		/usr/include
 		/usr/include/mysql-cppconn-8
 		/usr/include/vulkan
 		../${SF_FOLDER}/3rdParties/${CMAKE_SYSTEM_NAME}/${CMAKE_BUILD_TYPE}/include
