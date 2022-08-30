@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko.
 // 
@@ -497,7 +497,7 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine("{");
             MatchIndent(); OutStream.WriteLine("result = {0}({1});", NativeFuncName(baseMsg, msgTypeName), CallNativeParamterString(parameters));
             MatchIndent(); OutStream.WriteLine("}");
-            MatchIndent(); OutStream.WriteLine("if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageID{0}.{1}{2});", Group.Name, baseMsg.Name, msgTypeName);
+            MatchIndent(); OutStream.WriteLine("if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageID{0}.{1}{2});", Group.Name, baseMsg.Name, msgTypeName);
             MatchIndent(); OutStream.WriteLine("return result;");
 
             CloseSection();

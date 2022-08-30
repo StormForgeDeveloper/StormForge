@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -24,29 +24,29 @@ namespace SF
     public class SFConnection : SFObject
     {
 
-	    // Connection state
-	    public enum ConnectionState
-	    {
-		    NONE,				// None just created
-		    WAITING,			// Waiting accept
-		    UDP_WAITING,		// UDP incoming Waiting
-		    CONNECTING,		// Connecting sequence
-		    CHECKVERSION,		// Checking protocol version
-		    CONNECTED,		// Connected
-		    DISCONNECTING,	// Disconnecting
-		    DISCONNECTED,		// Disconnected
-		    SLEEP,			// For Mobile connection
-	    };
+        // Connection state
+        public enum ConnectionState
+        {
+            NONE,               // None just created
+            WAITING,            // Waiting accept
+            UDP_WAITING,        // UDP incoming Waiting
+            CONNECTING,     // Connecting sequence
+            CHECKVERSION,       // Checking protocol version
+            CONNECTED,      // Connected
+            DISCONNECTING,  // Disconnecting
+            DISCONNECTED,       // Disconnected
+            SLEEP,          // For Mobile connection
+        };
 
 
-	    // Type of connection event
-	    public enum EventTypes
-	    {
-		    EVT_NONE,
-		    EVT_CONNECTION_RESULT,
-		    EVT_DISCONNECTED,
-		    EVT_STATE_CHANGE,
-		    EVT_ADDRESS_REMAPPED,
+        // Type of connection event
+        public enum EventTypes
+        {
+            EVT_NONE,
+            EVT_CONNECTION_RESULT,
+            EVT_DISCONNECTED,
+            EVT_STATE_CHANGE,
+            EVT_ADDRESS_REMAPPED,
             EVT_TIMESYNC_RESULT,
         };
 
@@ -58,29 +58,37 @@ namespace SF
 
 
         public struct Event
-	    {
-		    public EventTypes		EventType;
+        {
+            public EventTypes EventType;
 
-		    // connection result
-		    public Result HResult;
+            // connection result
+            public Result HResult;
 
-		    // State changed
-		    public ConnectionState State;
+            // State changed
+            public ConnectionState State;
 
 
-		    public Event(EventTypes eventType, ConnectionState state, int hr)
-		    {
-			    EventType = eventType;
-			    State = state;
-			    HResult.Code = hr;
-		    }
-	    };
+            public Event(EventTypes eventType, ConnectionState state, int hr)
+            {
+                EventType = eventType;
+                State = state;
+                HResult.Code = hr;
+            }
+        };
 
         // message router instance
-        readonly SFIMessageRouter m_MessageRouter;
+        readonly List<SFIMessageRouter> m_MessageRouters = new List<SFIMessageRouter>();
 
-        public SFIMessageRouter MessageRouter { get { return m_MessageRouter; } }
+        public IReadOnlyList<SFIMessageRouter> MessageRouters { get { return m_MessageRouters; } }
 
+
+        public void HandleSentMessage(int result, int messageID)
+        {
+            foreach (var router in m_MessageRouters)
+            {
+                router.HandleSentMessage(result, messageID);
+            }
+        }
 
         public UInt64 LocalPeerID
         {
@@ -93,33 +101,33 @@ namespace SF
         Queue<SFMessage> m_LoopBackQueue = new Queue<SFMessage>();
 
         public SFConnection(SFIMessageRouter messageRouter, ProtocolType protocolType = ProtocolType.MRUDP)
-	    {
+        {
             // Don't use constructor of SFObject, it will increase reference count of the object
             if (protocolType == ProtocolType.MRUDP)
                 NativeHandle = NativeCreateConnection();
             else
                 NativeHandle = NativeCreateConnectionTCP();
-            m_MessageRouter = messageRouter;
+            m_MessageRouters.Add(messageRouter);
         }
 
         public SFConnection(SFConnectionGroup group, SFIMessageRouter messageRouter)
         {
             // Don't use constructor of SFObject, it will increase reference count of the object
             NativeHandle = NativeCreateConnectionWithGroup(group.NativeHandle);
-            m_MessageRouter = messageRouter;
+            m_MessageRouters.Add(messageRouter);
         }
 
         public SFConnection(IntPtr nativeHandle, SFIMessageRouter messageRouter = null)
         {
             // Don't use constructor of SFObject, it will increase reference count of the object
             NativeHandle = nativeHandle;
-            m_MessageRouter = messageRouter;
+            m_MessageRouters.Add(messageRouter);
         }
 
         virtual public int Connect(UInt64 authTicket, String address, int port)
-	    {
+        {
             return NativeConnect(NativeHandle, authTicket, address, port);
-	    }
+        }
 
         public UInt64 CID
         {
@@ -150,21 +158,23 @@ namespace SF
             NativeDisconnect(NativeHandle);
         }
 
-	    // Connection events
-	    virtual public bool DequeueEvent(out Event conEvent)
-	    {
+        // Connection events
+        virtual public bool DequeueEvent(out Event conEvent)
+        {
             conEvent = new Event();
 
-		    return NativeDequeueEvent(NativeHandle, out conEvent.EventType, out conEvent.HResult.Code, out conEvent.State);
+            return NativeDequeueEvent(NativeHandle, out conEvent.EventType, out conEvent.HResult.Code, out conEvent.State);
         }
-        
+
 
         public void UpdateMessageQueue()
         {
             var message = DequeueMessage();
             while (message != null)
             {
-                m_MessageRouter.HandleRecvMessage(message);
+                foreach (var messageRouter in m_MessageRouters)
+                    messageRouter.HandleRecvMessage(message);
+
                 message = DequeueMessage();
             }
 
@@ -176,8 +186,10 @@ namespace SF
                         break;
                     message = m_LoopBackQueue.Dequeue();
                 }
-                m_MessageRouter.HandleRecvMessage(message);
-           }
+
+                foreach (var messageRouter in m_MessageRouters)
+                    messageRouter.HandleRecvMessage(message);
+            }
         }
 
 
@@ -186,7 +198,7 @@ namespace SF
             if (msg == null)
                 return;
 
-            lock(m_LoopBackQueue)
+            lock (m_LoopBackQueue)
             {
                 m_LoopBackQueue.Enqueue(msg);
             }
@@ -200,14 +212,14 @@ namespace SF
 
             return NativeTimeSync(NativeHandle);
         }
-        
+
 
         #region Message Parsing
 
         // Message
         public SFMessage DequeueMessage()
-	    {
-            lock(SFMessageParsingUtil.stm_ParsingLock)
+        {
+            lock (SFMessageParsingUtil.stm_ParsingLock)
             {
                 System.Diagnostics.Debug.Assert(SFMessageParsingUtil.stm_ParsingMessage == null);
 
@@ -230,7 +242,7 @@ namespace SF
         //	Native interfaces
         //
 
-#region Native interfaces
+        #region Native interfaces
 
         const string NativeDllName =
 #if UNITY_IOS
@@ -280,7 +292,7 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeDequeueEvent", CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.I1)]
-        static extern bool NativeDequeueEvent(IntPtr nativeHandle, out EventTypes eventType, out Int32 result, out ConnectionState state );
+        static extern bool NativeDequeueEvent(IntPtr nativeHandle, out EventTypes eventType, out Int32 result, out ConnectionState state);
 
         [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeDequeueMessage", CharSet = CharSet.Auto)]
         [return: MarshalAs(UnmanagedType.I1)]

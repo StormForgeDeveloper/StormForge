@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -293,7 +293,8 @@ namespace TestNet2.WinSharp
                 return;
 
             var gamePolicy = new SF.Net.SendMessageGame(gameConn);
-            gamePolicy.SearchGameInstanceCmd(0, "");
+            uint tempZondTableId = 1;
+            gamePolicy.SearchGameInstanceCmd(0, "", tempZondTableId);
         }
 
         private void OnZoneListDoubleClicked(object sender, MouseButtonEventArgs e)

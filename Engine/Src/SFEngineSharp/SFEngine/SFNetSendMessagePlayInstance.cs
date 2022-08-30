@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2017 StromForge
 // 
@@ -45,7 +45,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID,System.Text.Encoding.UTF8.GetBytes(InPlayerIdentifier + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinPlayInstanceCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.JoinPlayInstanceCmd);
 			return result;
 		} // public int  JoinPlayInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.String InPlayerIdentifier )
 
@@ -56,7 +56,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayPacketC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InSenderEndpointID, InTargetEndpointMask,(ushort)InPayload.Length, InPayload);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayPacketC2SEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.PlayPacketC2SEvt);
 			return result;
 		} // public int  PlayPacketC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt32 InSenderEndpointID, System.UInt32 InTargetEndpointMask, System.Byte[] InPayload )
 
@@ -68,7 +68,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayerMovementC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,ref InMovement);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerMovementC2SEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.PlayerMovementC2SEvt);
 			return result;
 		} // public int  PlayerMovementC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.ActorMovement InMovement )
 
@@ -82,7 +82,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceClientSyncReliableC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,(ushort)InSyncData_.Length, InSyncData_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ClientSyncReliableC2SEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ClientSyncReliableC2SEvt);
 			return result;
 		} // public int  ClientSyncReliableC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InSyncData )
 
@@ -96,7 +96,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceClientSyncC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,(ushort)InSyncData_.Length, InSyncData_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ClientSyncC2SEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ClientSyncC2SEvt);
 			return result;
 		} // public int  ClientSyncC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InSyncData )
 
@@ -108,7 +108,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceOccupyMapObjectCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUsageId);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.OccupyMapObjectCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.OccupyMapObjectCmd);
 			return result;
 		} // public int  OccupyMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, System.UInt32 InUsageId )
 
@@ -119,7 +119,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceUnoccupyMapObjectCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.UnoccupyMapObjectCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.UnoccupyMapObjectCmd);
 			return result;
 		} // public int  UnoccupyMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
 
@@ -132,7 +132,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceUseMapObjectCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId,(ushort)InUseParameters_.Length, InUseParameters_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.UseMapObjectCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.UseMapObjectCmd);
 			return result;
 		} // public int  UseMapObjectCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InUseParameters )
 
@@ -145,7 +145,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceZoneChatCmd(m_Connection.NativeHandle, InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatCmd);
 			return result;
 		} // public int  ZoneChatCmd( System.UInt64 InTransactionID, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
@@ -156,7 +156,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceCreateStreamCmd(m_Connection.NativeHandle, InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamCmd);
 			return result;
 		} // public int  CreateStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
 
@@ -167,7 +167,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceFindStreamCmd(m_Connection.NativeHandle, InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.FindStreamCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.FindStreamCmd);
 			return result;
 		} // public int  FindStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
 
@@ -178,7 +178,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceDeleteStreamCmd(m_Connection.NativeHandle, InTransactionID, InTicket,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamCmd);
 			return result;
 		} // public int  DeleteStreamCmd( System.UInt64 InTransactionID, System.UInt64 InTicket, System.String InStreamName )
 
@@ -189,7 +189,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceGetStreamListCmd(m_Connection.NativeHandle, InTransactionID, InTicket);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.GetStreamListCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.GetStreamListCmd);
 			return result;
 		} // public int  GetStreamListCmd( System.UInt64 InTransactionID, System.UInt64 InTicket )
 
@@ -202,7 +202,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceCallFunctionCmd(m_Connection.NativeHandle, InTransactionID, InFunctionName, InPlayerID,(ushort)InParameters_.Length, InParameters_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.CallFunctionCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.CallFunctionCmd);
 			return result;
 		} // public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters )
 
@@ -308,7 +308,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID,ref InMovement);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.JoinPlayInstanceRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.JoinPlayInstanceRes);
 			return result;
 		} // public int  JoinPlayInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.ActorMovement InMovement )
 
@@ -320,7 +320,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayerKickedS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InKickedPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerKickedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.PlayerKickedS2CEvt);
 			return result;
 		} // public int  PlayerKickedS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InKickedPlayerID )
 
@@ -336,7 +336,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr,ref InMovement, InState,(ushort)InStateValues_.Length, InStateValues_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.NewActorInViewS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.NewActorInViewS2CEvt);
 			return result;
 		} // public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.VariableTable InAttributes, SF.ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
 
@@ -348,7 +348,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceRemoveActorFromViewS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID, InActorID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.RemoveActorFromViewS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.RemoveActorFromViewS2CEvt);
 			return result;
 		} // public int  RemoveActorFromViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InActorID )
 
@@ -360,7 +360,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceActorMovementS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID,ref InMovement);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ActorMovementS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ActorMovementS2CEvt);
 			return result;
 		} // public int  ActorMovementS2CEvt( System.UInt64 InPlayInstanceUID, SF.ActorMovement InMovement )
 
@@ -372,7 +372,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceActorMovementsS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID,(ushort)InMovement.Length, InMovement);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ActorMovementsS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ActorMovementsS2CEvt);
 			return result;
 		} // public int  ActorMovementsS2CEvt( System.UInt64 InPlayInstanceUID, SF.ActorMovement[] InMovement )
 
@@ -386,7 +386,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstancePlayerStateChangedS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID, InState, InMoveFrame,ref InPosition,(ushort)InStateValues_.Length, InStateValues_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.PlayerStateChangedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.PlayerStateChangedS2CEvt);
 			return result;
 		} // public int  PlayerStateChangedS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InState, System.UInt32 InMoveFrame, SF.Vector4 InPosition, SF.VariableTable InStateValues )
 
@@ -398,7 +398,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceOccupyMapObjectRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.OccupyMapObjectRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.OccupyMapObjectRes);
 			return result;
 		} // public int  OccupyMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
 
@@ -410,7 +410,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceUnoccupyMapObjectRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.UnoccupyMapObjectRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.UnoccupyMapObjectRes);
 			return result;
 		} // public int  UnoccupyMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId )
 
@@ -424,7 +424,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceUseMapObjectRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId,(ushort)InResultAttributes_.Length, InResultAttributes_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.UseMapObjectRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.UseMapObjectRes);
 			return result;
 		} // public int  UseMapObjectRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt32 InMapObjectId, SF.VariableTable InResultAttributes )
 
@@ -436,7 +436,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceZoneChatRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatRes);
 			return result;
 		} // public int  ZoneChatRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -450,7 +450,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceZoneChatS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InSenderID, InMessageType,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.ZoneChatS2CEvt);
 			return result;
 		} // public int  ZoneChatS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InSenderID, System.SByte InMessageType, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
@@ -462,7 +462,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceCreateStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.CreateStreamRes);
 			return result;
 		} // public int  CreateStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
 
@@ -474,7 +474,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceFindStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.FindStreamRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.FindStreamRes);
 			return result;
 		} // public int  FindStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
 
@@ -486,7 +486,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceDeleteStreamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InStreamName + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.DeleteStreamRes);
 			return result;
 		} // public int  DeleteStreamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InStreamName )
 
@@ -499,7 +499,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceGetStreamListRes(m_Connection.NativeHandle, InTransactionID, InResult,InStreamNamesArray.NativeHandle);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.GetStreamListRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.GetStreamListRes);
 			return result;
 		} // public int  GetStreamListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String[] InStreamNames )
 
@@ -513,7 +513,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_PlayInstanceCallFunctionRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InResults_.Length, InResults_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDPlayInstance.CallFunctionRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.CallFunctionRes);
 			return result;
 		} // public int  CallFunctionRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
 

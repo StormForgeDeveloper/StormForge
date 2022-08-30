@@ -45,7 +45,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameHeartbeatC2SEvt(m_Connection.NativeHandle);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.HeartbeatC2SEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.HeartbeatC2SEvt);
 			return result;
 		} // public int  HeartbeatC2SEvt(  )
 
@@ -57,7 +57,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameJoinGameServerCmd(m_Connection.NativeHandle, InTransactionID, InAccID, InTicket, InLoginEntityUID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinGameServerCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameServerCmd);
 			return result;
 		} // public int  JoinGameServerCmd( System.UInt64 InTransactionID, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 
@@ -68,7 +68,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetComplitionStateCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetComplitionStateCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetComplitionStateCmd);
 			return result;
 		} // public int  GetComplitionStateCmd( System.UInt64 InTransactionID )
 
@@ -79,7 +79,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameSetComplitionStateCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InComplitionState + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SetComplitionStateCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetComplitionStateCmd);
 			return result;
 		} // public int  SetComplitionStateCmd( System.UInt64 InTransactionID, System.String InComplitionState )
 
@@ -90,7 +90,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameRegisterGCMCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InGCMRegisteredID + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RegisterGCMCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RegisterGCMCmd);
 			return result;
 		} // public int  RegisterGCMCmd( System.UInt64 InTransactionID, System.String InGCMRegisteredID )
 
@@ -101,7 +101,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameUnregisterGCMCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InGCMRegisteredID + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.UnregisterGCMCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.UnregisterGCMCmd);
 			return result;
 		} // public int  UnregisterGCMCmd( System.UInt64 InTransactionID, System.String InGCMRegisteredID )
 
@@ -112,7 +112,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameInviteFriendCmd(m_Connection.NativeHandle, InTransactionID, InFriendID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.InviteFriendCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.InviteFriendCmd);
 			return result;
 		} // public int  InviteFriendCmd( System.UInt64 InTransactionID, System.UInt64 InFriendID )
 
@@ -123,7 +123,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameAcceptFriendRequestCmd(m_Connection.NativeHandle, InTransactionID, InInviterID, InInviterFacebookUID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.AcceptFriendRequestCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.AcceptFriendRequestCmd);
 			return result;
 		} // public int  AcceptFriendRequestCmd( System.UInt64 InTransactionID, System.UInt64 InInviterID, System.UInt64 InInviterFacebookUID )
 
@@ -134,7 +134,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameRemoveFriendCmd(m_Connection.NativeHandle, InTransactionID, InFriendID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RemoveFriendCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RemoveFriendCmd);
 			return result;
 		} // public int  RemoveFriendCmd( System.UInt64 InTransactionID, System.UInt64 InFriendID )
 
@@ -145,7 +145,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetFriendListCmd(m_Connection.NativeHandle, InTransactionID, InStartIndex, InCount);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetFriendListCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetFriendListCmd);
 			return result;
 		} // public int  GetFriendListCmd( System.UInt64 InTransactionID, System.UInt16 InStartIndex, System.UInt16 InCount )
 
@@ -156,7 +156,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetNotificationListCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetNotificationListCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetNotificationListCmd);
 			return result;
 		} // public int  GetNotificationListCmd( System.UInt64 InTransactionID )
 
@@ -167,7 +167,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameDeleteNotificationCmd(m_Connection.NativeHandle, InTransactionID, InNotificationID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.DeleteNotificationCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.DeleteNotificationCmd);
 			return result;
 		} // public int  DeleteNotificationCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
 
@@ -178,7 +178,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameSetNotificationReadCmd(m_Connection.NativeHandle, InTransactionID, InNotificationID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SetNotificationReadCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetNotificationReadCmd);
 			return result;
 		} // public int  SetNotificationReadCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
 
@@ -189,7 +189,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameAcceptNotificationCmd(m_Connection.NativeHandle, InTransactionID, InNotificationID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.AcceptNotificationCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.AcceptNotificationCmd);
 			return result;
 		} // public int  AcceptNotificationCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
 
@@ -200,7 +200,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameFindPlayerByEMailCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InPlayerEMail + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.FindPlayerByEMailCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByEMailCmd);
 			return result;
 		} // public int  FindPlayerByEMailCmd( System.UInt64 InTransactionID, System.String InPlayerEMail )
 
@@ -211,7 +211,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameFindPlayerByPlayerIDCmd(m_Connection.NativeHandle, InTransactionID, InPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.FindPlayerByPlayerIDCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlayerIDCmd);
 			return result;
 		} // public int  FindPlayerByPlayerIDCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID )
 
@@ -222,7 +222,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameRequestPlayerStatusUpdateCmd(m_Connection.NativeHandle, InTransactionID,(ushort)InTargetPlayerID.Length, InTargetPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RequestPlayerStatusUpdateCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestPlayerStatusUpdateCmd);
 			return result;
 		} // public int  RequestPlayerStatusUpdateCmd( System.UInt64 InTransactionID, System.UInt64[] InTargetPlayerID )
 
@@ -233,7 +233,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetRankingListCmd(m_Connection.NativeHandle, InTransactionID, InRankingType, InBaseRanking, InCount);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetRankingListCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetRankingListCmd);
 			return result;
 		} // public int  GetRankingListCmd( System.UInt64 InTransactionID, System.Byte InRankingType, System.Byte InBaseRanking, System.Byte InCount )
 
@@ -244,7 +244,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetUserGamePlayerInfoCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetUserGamePlayerInfoCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetUserGamePlayerInfoCmd);
 			return result;
 		} // public int  GetUserGamePlayerInfoCmd( System.UInt64 InTransactionID )
 
@@ -255,7 +255,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetGamePlayerInfoCmd(m_Connection.NativeHandle, InTransactionID, InPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetGamePlayerInfoCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetGamePlayerInfoCmd);
 			return result;
 		} // public int  GetGamePlayerInfoCmd( System.UInt64 InTransactionID, System.UInt64 InPlayerID )
 
@@ -266,7 +266,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameSetNickNameCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InNickName + "\0"), InIsCostFree);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SetNickNameCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetNickNameCmd);
 			return result;
 		} // public int  SetNickNameCmd( System.UInt64 InTransactionID, System.String InNickName, System.Byte InIsCostFree )
 
@@ -277,7 +277,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCreatePartyCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CreatePartyCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreatePartyCmd);
 			return result;
 		} // public int  CreatePartyCmd( System.UInt64 InTransactionID )
 
@@ -288,7 +288,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameJoinPartyCmd(m_Connection.NativeHandle, InTransactionID, InPartyUID, InInviterID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinPartyCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinPartyCmd);
 			return result;
 		} // public int  JoinPartyCmd( System.UInt64 InTransactionID, System.UInt64 InPartyUID, System.UInt64 InInviterID )
 
@@ -299,7 +299,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameLeavePartyCmd(m_Connection.NativeHandle, InTransactionID, InPartyUID, InPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LeavePartyCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeavePartyCmd);
 			return result;
 		} // public int  LeavePartyCmd( System.UInt64 InTransactionID, System.UInt64 InPartyUID, System.UInt64 InPlayerID )
 
@@ -310,7 +310,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyKickPlayerCmd(m_Connection.NativeHandle, InTransactionID, InPartyUID, InPlayerID, InPlayerToKick);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyKickPlayerCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyKickPlayerCmd);
 			return result;
 		} // public int  PartyKickPlayerCmd( System.UInt64 InTransactionID, System.UInt64 InPartyUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick )
 
@@ -321,7 +321,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyInviteCmd(m_Connection.NativeHandle, InTransactionID, InInviteTargetID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyInviteCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyInviteCmd);
 			return result;
 		} // public int  PartyInviteCmd( System.UInt64 InTransactionID, System.UInt64 InInviteTargetID )
 
@@ -332,7 +332,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyQuickChatMessageCmd(m_Connection.NativeHandle, InTransactionID, InQuickChatID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageCmd);
 			return result;
 		} // public int  PartyQuickChatMessageCmd( System.UInt64 InTransactionID, System.UInt32 InQuickChatID )
 
@@ -343,7 +343,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyChatMessageCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyChatMessageCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyChatMessageCmd);
 			return result;
 		} // public int  PartyChatMessageCmd( System.UInt64 InTransactionID, System.String InChatMessage )
 
@@ -354,7 +354,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameJoinGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InInsUID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinGameInstanceCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameInstanceCmd);
 			return result;
 		} // public int  JoinGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 
@@ -365,7 +365,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameLeaveGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InInsUID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LeaveGameInstanceCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeaveGameInstanceCmd);
 			return result;
 		} // public int  LeaveGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InInsUID )
 
@@ -376,7 +376,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameSearchGameInstanceCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InSearchKeyword + "\0"), InZoneTableID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SearchGameInstanceCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SearchGameInstanceCmd);
 			return result;
 		} // public int  SearchGameInstanceCmd( System.UInt64 InTransactionID, System.String InSearchKeyword, System.UInt32 InZoneTableID )
 
@@ -387,7 +387,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetCharacterDataInGameInstanceCmd(m_Connection.NativeHandle, InTransactionID, InGameInsUID, InPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterDataInGameInstanceCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataInGameInstanceCmd);
 			return result;
 		} // public int  GetCharacterDataInGameInstanceCmd( System.UInt64 InTransactionID, System.UInt64 InGameInsUID, System.UInt64 InPlayerID )
 
@@ -398,7 +398,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameRequestGameMatchCmd(m_Connection.NativeHandle, InTransactionID, InNumPlayer, InRequestRole);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RequestGameMatchCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestGameMatchCmd);
 			return result;
 		} // public int  RequestGameMatchCmd( System.UInt64 InTransactionID, System.Byte InNumPlayer, System.Byte InRequestRole )
 
@@ -409,7 +409,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCancelGameMatchCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CancelGameMatchCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CancelGameMatchCmd);
 			return result;
 		} // public int  CancelGameMatchCmd( System.UInt64 InTransactionID )
 
@@ -420,7 +420,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameBuyShopItemPrepareCmd(m_Connection.NativeHandle, InTransactionID, InShopItemID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.BuyShopItemPrepareCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemPrepareCmd);
 			return result;
 		} // public int  BuyShopItemPrepareCmd( System.UInt64 InTransactionID, System.UInt32 InShopItemID )
 
@@ -431,7 +431,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameBuyShopItemCmd(m_Connection.NativeHandle, InTransactionID, InShopItemID,System.Text.Encoding.UTF8.GetBytes(InPlatform + "\0"),System.Text.Encoding.UTF8.GetBytes(InPackageName + "\0"),System.Text.Encoding.UTF8.GetBytes(InPurchaseTransactionID + "\0"),(ushort)InPurchaseToken.Length, InPurchaseToken);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.BuyShopItemCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemCmd);
 			return result;
 		} // public int  BuyShopItemCmd( System.UInt64 InTransactionID, System.UInt32 InShopItemID, System.String InPlatform, System.String InPackageName, System.String InPurchaseTransactionID, System.Byte[] InPurchaseToken )
 
@@ -442,7 +442,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCreateOrJoinChatChannelCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InChannelName + "\0"),System.Text.Encoding.UTF8.GetBytes(InPasscode + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CreateOrJoinChatChannelCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreateOrJoinChatChannelCmd);
 			return result;
 		} // public int  CreateOrJoinChatChannelCmd( System.UInt64 InTransactionID, System.String InChannelName, System.String InPasscode )
 
@@ -453,7 +453,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameJoinChatChannelCmd(m_Connection.NativeHandle, InTransactionID, InChatUID, InInviterID,System.Text.Encoding.UTF8.GetBytes(InPasscode + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinChatChannelCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinChatChannelCmd);
 			return result;
 		} // public int  JoinChatChannelCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InInviterID, System.String InPasscode )
 
@@ -464,7 +464,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameLeaveChatChannelCmd(m_Connection.NativeHandle, InTransactionID, InChatUID, InPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LeaveChatChannelCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeaveChatChannelCmd);
 			return result;
 		} // public int  LeaveChatChannelCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InPlayerID )
 
@@ -475,7 +475,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameChatChannelKickPlayerCmd(m_Connection.NativeHandle, InTransactionID, InChatUID, InPlayerID, InPlayerToKick);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelKickPlayerCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelKickPlayerCmd);
 			return result;
 		} // public int  ChatChannelKickPlayerCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, System.UInt64 InPlayerID, System.UInt64 InPlayerToKick )
 
@@ -488,7 +488,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameChatChannelChatMessageCmd(m_Connection.NativeHandle, InTransactionID, InChatUID,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageCmd);
 			return result;
 		} // public int  ChatChannelChatMessageCmd( System.UInt64 InTransactionID, System.UInt64 InChatUID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
@@ -501,7 +501,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameWhisperMessageCmd(m_Connection.NativeHandle, InTransactionID, InReceiverID,System.Text.Encoding.UTF8.GetBytes(InReceiverName + "\0"),(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.WhisperMessageCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.WhisperMessageCmd);
 			return result;
 		} // public int  WhisperMessageCmd( System.UInt64 InTransactionID, System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
@@ -516,7 +516,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCreateCharacterCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InCharacterName + "\0"),(ushort)InVisualData_.Length, InVisualData_PinnedPtr_.Ptr,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CreateCharacterCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreateCharacterCmd);
 			return result;
 		} // public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.VariableTable InVisualData, SF.VariableTable InAttributes )
 
@@ -527,7 +527,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameDeleteCharacterCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.DeleteCharacterCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.DeleteCharacterCmd);
 			return result;
 		} // public int  DeleteCharacterCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 
@@ -538,7 +538,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetCharacterListCmd(m_Connection.NativeHandle, InTransactionID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterListCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterListCmd);
 			return result;
 		} // public int  GetCharacterListCmd( System.UInt64 InTransactionID )
 
@@ -549,7 +549,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetCharacterDataCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterDataCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataCmd);
 			return result;
 		} // public int  GetCharacterDataCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 
@@ -560,7 +560,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameSelectCharacterCmd(m_Connection.NativeHandle, InTransactionID, InCharacterID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SelectCharacterCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SelectCharacterCmd);
 			return result;
 		} // public int  SelectCharacterCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 
@@ -573,7 +573,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCallFunctionCmd(m_Connection.NativeHandle, InTransactionID, InFunctionName,(ushort)InParameters_.Length, InParameters_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CallFunctionCmd);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CallFunctionCmd);
 			return result;
 		} // public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, SF.VariableTable InParameters )
 
@@ -846,7 +846,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameJoinGameServerRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InNickName + "\0"), InGameUID, InPartyUID, InPartyLeaderID,ref InMatchingTicket);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinGameServerRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameServerRes);
 			return result;
 		} // public int  JoinGameServerRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InNickName, System.UInt64 InGameUID, System.UInt64 InPartyUID, System.UInt64 InPartyLeaderID, SF.MatchingQueueTicket InMatchingTicket )
 
@@ -858,7 +858,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetComplitionStateRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InComplitionState + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetComplitionStateRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetComplitionStateRes);
 			return result;
 		} // public int  GetComplitionStateRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InComplitionState )
 
@@ -870,7 +870,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameSetComplitionStateRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SetComplitionStateRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetComplitionStateRes);
 			return result;
 		} // public int  SetComplitionStateRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -882,7 +882,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameRegisterGCMRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RegisterGCMRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RegisterGCMRes);
 			return result;
 		} // public int  RegisterGCMRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -894,7 +894,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameUnregisterGCMRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.UnregisterGCMRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.UnregisterGCMRes);
 			return result;
 		} // public int  UnregisterGCMRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -906,7 +906,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameInviteFriendRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.InviteFriendRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.InviteFriendRes);
 			return result;
 		} // public int  InviteFriendRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -918,7 +918,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameAcceptFriendRequestRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InNewFriend);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.AcceptFriendRequestRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.AcceptFriendRequestRes);
 			return result;
 		} // public int  AcceptFriendRequestRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.FriendInformation InNewFriend )
 
@@ -930,7 +930,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameFriendRequestAcceptedS2CEvt(m_Connection.NativeHandle,ref InAccepter);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.FriendRequestAcceptedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FriendRequestAcceptedS2CEvt);
 			return result;
 		} // public int  FriendRequestAcceptedS2CEvt( SF.FriendInformation InAccepter )
 
@@ -942,7 +942,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameRemoveFriendRes(m_Connection.NativeHandle, InTransactionID, InResult, InFriendID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RemoveFriendRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RemoveFriendRes);
 			return result;
 		} // public int  RemoveFriendRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InFriendID )
 
@@ -954,7 +954,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameFriendRemovedS2CEvt(m_Connection.NativeHandle, InFriendID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.FriendRemovedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FriendRemovedS2CEvt);
 			return result;
 		} // public int  FriendRemovedS2CEvt( System.UInt64 InFriendID )
 
@@ -966,7 +966,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetFriendListRes(m_Connection.NativeHandle, InTransactionID, InResult, InMaxFriendSlot, InTotalNumberOfFriends, InStartIndex,(ushort)InFriendList.Length, InFriendList);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetFriendListRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetFriendListRes);
 			return result;
 		} // public int  GetFriendListRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 InMaxFriendSlot, System.UInt16 InTotalNumberOfFriends, System.UInt16 InStartIndex, SF.FriendInformation[] InFriendList )
 
@@ -978,7 +978,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetNotificationListRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetNotificationListRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetNotificationListRes);
 			return result;
 		} // public int  GetNotificationListRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -990,7 +990,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameDeleteNotificationRes(m_Connection.NativeHandle, InTransactionID, InResult, InNotificationID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.DeleteNotificationRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.DeleteNotificationRes);
 			return result;
 		} // public int  DeleteNotificationRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InNotificationID )
 
@@ -1002,7 +1002,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameSetNotificationReadRes(m_Connection.NativeHandle, InTransactionID, InResult, InNotificationID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SetNotificationReadRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetNotificationReadRes);
 			return result;
 		} // public int  SetNotificationReadRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InNotificationID )
 
@@ -1014,7 +1014,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameAcceptNotificationRes(m_Connection.NativeHandle, InTransactionID, InResult, InNotificationID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.AcceptNotificationRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.AcceptNotificationRes);
 			return result;
 		} // public int  AcceptNotificationRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InNotificationID )
 
@@ -1026,7 +1026,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameNotifyS2CEvt(m_Connection.NativeHandle, InNotificationID, InNotificationType, InMessageParam0, InMessageParam1,System.Text.Encoding.UTF8.GetBytes(InMessageText + "\0"), InIsRead, InTimeStamp);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.NotifyS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.NotifyS2CEvt);
 			return result;
 		} // public int  NotifyS2CEvt( System.UInt32 InNotificationID, System.UInt32 InNotificationType, System.UInt64 InMessageParam0, System.UInt64 InMessageParam1, System.String InMessageText, System.Byte InIsRead, System.UInt64 InTimeStamp )
 
@@ -1038,7 +1038,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameFindPlayerByEMailRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InPlayer);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.FindPlayerByEMailRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByEMailRes);
 			return result;
 		} // public int  FindPlayerByEMailRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.PlayerInformation InPlayer )
 
@@ -1050,7 +1050,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameFindPlayerByPlayerIDRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InPlayer);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.FindPlayerByPlayerIDRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlayerIDRes);
 			return result;
 		} // public int  FindPlayerByPlayerIDRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.PlayerInformation InPlayer )
 
@@ -1062,7 +1062,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameRequestPlayerStatusUpdateRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RequestPlayerStatusUpdateRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestPlayerStatusUpdateRes);
 			return result;
 		} // public int  RequestPlayerStatusUpdateRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1074,7 +1074,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameNotifyPlayerStatusUpdatedS2CEvt(m_Connection.NativeHandle, InPlayerID, InLatestActiveTime, InIsInGame);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.NotifyPlayerStatusUpdatedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.NotifyPlayerStatusUpdatedS2CEvt);
 			return result;
 		} // public int  NotifyPlayerStatusUpdatedS2CEvt( System.UInt64 InPlayerID, System.UInt32 InLatestActiveTime, System.Byte InIsInGame )
 
@@ -1086,7 +1086,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetRankingListRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InRanking.Length, InRanking);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetRankingListRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetRankingListRes);
 			return result;
 		} // public int  GetRankingListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.TotalRankingPlayerInformation[] InRanking )
 
@@ -1100,7 +1100,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetUserGamePlayerInfoRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetUserGamePlayerInfoRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetUserGamePlayerInfoRes);
 			return result;
 		} // public int  GetUserGamePlayerInfoRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InAttributes )
 
@@ -1114,7 +1114,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetGamePlayerInfoRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetGamePlayerInfoRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetGamePlayerInfoRes);
 			return result;
 		} // public int  GetGamePlayerInfoRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerID, SF.VariableTable InAttributes )
 
@@ -1126,7 +1126,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameLevelUpS2CEvt(m_Connection.NativeHandle, InCurrentTotalExp, InCurrentLevel);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LevelUpS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LevelUpS2CEvt);
 			return result;
 		} // public int  LevelUpS2CEvt( System.UInt64 InCurrentTotalExp, System.UInt32 InCurrentLevel )
 
@@ -1138,7 +1138,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameSetNickNameRes(m_Connection.NativeHandle, InTransactionID, InResult, InTotalGem, InTotalGameMoney);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SetNickNameRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SetNickNameRes);
 			return result;
 		} // public int  SetNickNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
 
@@ -1150,7 +1150,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCreatePartyRes(m_Connection.NativeHandle, InTransactionID, InResult, InPartyUID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CreatePartyRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreatePartyRes);
 			return result;
 		} // public int  CreatePartyRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPartyUID )
 
@@ -1162,7 +1162,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameJoinPartyRes(m_Connection.NativeHandle, InTransactionID, InResult, InPartyUID, InPartyLeaderID,(ushort)InChatHistoryData.Length, InChatHistoryData);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinPartyRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinPartyRes);
 			return result;
 		} // public int  JoinPartyRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPartyUID, System.UInt64 InPartyLeaderID, System.Byte[] InChatHistoryData )
 
@@ -1174,7 +1174,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyPlayerJoinedS2CEvt(m_Connection.NativeHandle, InPartyUID,ref InJoinedPlayer);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyPlayerJoinedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyPlayerJoinedS2CEvt);
 			return result;
 		} // public int  PartyPlayerJoinedS2CEvt( System.UInt64 InPartyUID, SF.PlayerInformation InJoinedPlayer )
 
@@ -1186,7 +1186,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyLeaderChangedS2CEvt(m_Connection.NativeHandle, InPartyUID, InNewLeaderID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyLeaderChangedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyLeaderChangedS2CEvt);
 			return result;
 		} // public int  PartyLeaderChangedS2CEvt( System.UInt64 InPartyUID, System.UInt64 InNewLeaderID )
 
@@ -1198,7 +1198,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameLeavePartyRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LeavePartyRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeavePartyRes);
 			return result;
 		} // public int  LeavePartyRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1210,7 +1210,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyPlayerLeftS2CEvt(m_Connection.NativeHandle, InPartyUID, InLeftPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyPlayerLeftS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyPlayerLeftS2CEvt);
 			return result;
 		} // public int  PartyPlayerLeftS2CEvt( System.UInt64 InPartyUID, System.UInt64 InLeftPlayerID )
 
@@ -1222,7 +1222,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyKickPlayerRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyKickPlayerRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyKickPlayerRes);
 			return result;
 		} // public int  PartyKickPlayerRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1234,7 +1234,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyPlayerKickedS2CEvt(m_Connection.NativeHandle, InPartyUID, InKickedPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyPlayerKickedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyPlayerKickedS2CEvt);
 			return result;
 		} // public int  PartyPlayerKickedS2CEvt( System.UInt64 InPartyUID, System.UInt64 InKickedPlayerID )
 
@@ -1246,7 +1246,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyInviteRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyInviteRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyInviteRes);
 			return result;
 		} // public int  PartyInviteRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1258,7 +1258,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyInviteRequestedS2CEvt(m_Connection.NativeHandle, InInviterID,System.Text.Encoding.UTF8.GetBytes(InInviterName + "\0"), InPartyToJoinUID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyInviteRequestedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyInviteRequestedS2CEvt);
 			return result;
 		} // public int  PartyInviteRequestedS2CEvt( System.UInt64 InInviterID, System.String InInviterName, System.UInt64 InPartyToJoinUID )
 
@@ -1270,7 +1270,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyQuickChatMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageRes);
 			return result;
 		} // public int  PartyQuickChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1282,7 +1282,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyQuickChatMessageS2CEvt(m_Connection.NativeHandle, InSenderID, InQuickChatID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyQuickChatMessageS2CEvt);
 			return result;
 		} // public int  PartyQuickChatMessageS2CEvt( System.UInt64 InSenderID, System.UInt32 InQuickChatID )
 
@@ -1294,7 +1294,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyChatMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyChatMessageRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyChatMessageRes);
 			return result;
 		} // public int  PartyChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1306,7 +1306,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GamePartyChatMessageS2CEvt(m_Connection.NativeHandle, InSenderID,System.Text.Encoding.UTF8.GetBytes(InSenderName + "\0"),System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.PartyChatMessageS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.PartyChatMessageS2CEvt);
 			return result;
 		} // public int  PartyChatMessageS2CEvt( System.UInt64 InSenderID, System.String InSenderName, System.String InChatMessage )
 
@@ -1318,7 +1318,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameJoinGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InInsUID,ref InServerAddress4,ref InServerAddress6);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinGameInstanceRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinGameInstanceRes);
 			return result;
 		} // public int  JoinGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InInsUID, SF.NetAddress InServerAddress4, SF.NetAddress InServerAddress6 )
 
@@ -1330,7 +1330,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameLeaveGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LeaveGameInstanceRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeaveGameInstanceRes);
 			return result;
 		} // public int  LeaveGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1342,7 +1342,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameSearchGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InGameInstances.Length, InGameInstances);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SearchGameInstanceRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SearchGameInstanceRes);
 			return result;
 		} // public int  SearchGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InGameInstances )
 
@@ -1356,7 +1356,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetCharacterDataInGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerID,(ushort)InGameInstances_.Length, InGameInstances_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterDataInGameInstanceRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataInGameInstanceRes);
 			return result;
 		} // public int  GetCharacterDataInGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerID, SF.VariableTable InGameInstances )
 
@@ -1368,7 +1368,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameRequestGameMatchRes(m_Connection.NativeHandle, InTransactionID, InResult, InTotalGem, InTotalGameMoney);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.RequestGameMatchRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestGameMatchRes);
 			return result;
 		} // public int  RequestGameMatchRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
 
@@ -1380,7 +1380,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGameMatchedS2CEvt(m_Connection.NativeHandle, InInsUID, InTimeStamp,(int) InGameState, InDay, InMaxPlayer, InPlayerIndex, InPlayerCharacter, InRole, InDead,(ushort)InChatHistoryData.Length, InChatHistoryData,(ushort)InGameLogData.Length, InGameLogData, InStamina, InTotalGem, InTotalGameMoney);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GameMatchedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchedS2CEvt);
 			return result;
 		} // public int  GameMatchedS2CEvt( System.UInt64 InInsUID, System.UInt32 InTimeStamp, SF.GameStateID InGameState, System.Byte InDay, System.Byte InMaxPlayer, System.Byte InPlayerIndex, System.Byte InPlayerCharacter, System.Byte InRole, System.Byte InDead, System.Byte[] InChatHistoryData, System.Byte[] InGameLogData, System.UInt32 InStamina, System.UInt64 InTotalGem, System.UInt64 InTotalGameMoney )
 
@@ -1392,7 +1392,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGameMatchFailedS2CEvt(m_Connection.NativeHandle, InFailedReason);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GameMatchFailedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchFailedS2CEvt);
 			return result;
 		} // public int  GameMatchFailedS2CEvt( System.Int32 InFailedReason )
 
@@ -1404,7 +1404,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGameMatchingStartedS2CEvt(m_Connection.NativeHandle);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GameMatchingStartedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchingStartedS2CEvt);
 			return result;
 		} // public int  GameMatchingStartedS2CEvt(  )
 
@@ -1416,7 +1416,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCancelGameMatchRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CancelGameMatchRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CancelGameMatchRes);
 			return result;
 		} // public int  CancelGameMatchRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1428,7 +1428,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGameMatchingCanceledS2CEvt(m_Connection.NativeHandle);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GameMatchingCanceledS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GameMatchingCanceledS2CEvt);
 			return result;
 		} // public int  GameMatchingCanceledS2CEvt(  )
 
@@ -1440,7 +1440,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameBuyShopItemPrepareRes(m_Connection.NativeHandle, InTransactionID, InResult, InShopItemID,System.Text.Encoding.UTF8.GetBytes(InPurchaseID + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.BuyShopItemPrepareRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemPrepareRes);
 			return result;
 		} // public int  BuyShopItemPrepareRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InShopItemID, System.String InPurchaseID )
 
@@ -1452,7 +1452,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameBuyShopItemRes(m_Connection.NativeHandle, InTransactionID, InResult, InShopItemID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.BuyShopItemRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.BuyShopItemRes);
 			return result;
 		} // public int  BuyShopItemRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InShopItemID )
 
@@ -1464,7 +1464,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCreateOrJoinChatChannelRes(m_Connection.NativeHandle, InTransactionID, InResult, InChatUID, InChannelLeaderID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CreateOrJoinChatChannelRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreateOrJoinChatChannelRes);
 			return result;
 		} // public int  CreateOrJoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID )
 
@@ -1476,7 +1476,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameJoinChatChannelRes(m_Connection.NativeHandle, InTransactionID, InResult, InChatUID, InChannelLeaderID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.JoinChatChannelRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.JoinChatChannelRes);
 			return result;
 		} // public int  JoinChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InChatUID, System.UInt64 InChannelLeaderID )
 
@@ -1488,7 +1488,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameChatChannelPlayerJoinedS2CEvt(m_Connection.NativeHandle, InChatUID,ref InJoinedPlayer);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerJoinedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerJoinedS2CEvt);
 			return result;
 		} // public int  ChatChannelPlayerJoinedS2CEvt( System.UInt64 InChatUID, SF.PlayerInformation InJoinedPlayer )
 
@@ -1500,7 +1500,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameChatChannelLeaderChangedS2CEvt(m_Connection.NativeHandle, InChatUID, InNewLeaderID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelLeaderChangedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelLeaderChangedS2CEvt);
 			return result;
 		} // public int  ChatChannelLeaderChangedS2CEvt( System.UInt64 InChatUID, System.UInt64 InNewLeaderID )
 
@@ -1512,7 +1512,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameLeaveChatChannelRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.LeaveChatChannelRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.LeaveChatChannelRes);
 			return result;
 		} // public int  LeaveChatChannelRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1524,7 +1524,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameChatChannelPlayerLeftS2CEvt(m_Connection.NativeHandle, InChatUID, InLeftPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerLeftS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerLeftS2CEvt);
 			return result;
 		} // public int  ChatChannelPlayerLeftS2CEvt( System.UInt64 InChatUID, System.UInt64 InLeftPlayerID )
 
@@ -1536,7 +1536,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameChatChannelKickPlayerRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelKickPlayerRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelKickPlayerRes);
 			return result;
 		} // public int  ChatChannelKickPlayerRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1548,7 +1548,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameChatChannelPlayerKickedS2CEvt(m_Connection.NativeHandle, InChatUID, InKickedPlayerID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerKickedS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelPlayerKickedS2CEvt);
 			return result;
 		} // public int  ChatChannelPlayerKickedS2CEvt( System.UInt64 InChatUID, System.UInt64 InKickedPlayerID )
 
@@ -1560,7 +1560,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameChatChannelChatMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageRes);
 			return result;
 		} // public int  ChatChannelChatMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1574,7 +1574,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameChatChannelChatMessageS2CEvt(m_Connection.NativeHandle, InSenderID,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ChatChannelChatMessageS2CEvt);
 			return result;
 		} // public int  ChatChannelChatMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
@@ -1586,7 +1586,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameWhisperMessageRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.WhisperMessageRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.WhisperMessageRes);
 			return result;
 		} // public int  WhisperMessageRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1600,7 +1600,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameWhisperMessageS2CEvt(m_Connection.NativeHandle, InSenderID,(ushort)InChatMetaData_.Length, InChatMetaData_PinnedPtr_.Ptr,System.Text.Encoding.UTF8.GetBytes(InChatMessage + "\0"));
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.WhisperMessageS2CEvt);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.WhisperMessageS2CEvt);
 			return result;
 		} // public int  WhisperMessageS2CEvt( System.UInt64 InSenderID, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
@@ -1612,7 +1612,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCreateCharacterRes(m_Connection.NativeHandle, InTransactionID, InResult, InCharacterID);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CreateCharacterRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreateCharacterRes);
 			return result;
 		} // public int  CreateCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InCharacterID )
 
@@ -1624,7 +1624,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameDeleteCharacterRes(m_Connection.NativeHandle, InTransactionID, InResult);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.DeleteCharacterRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.DeleteCharacterRes);
 			return result;
 		} // public int  DeleteCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult )
 
@@ -1636,7 +1636,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetCharacterListRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InCharacters.Length, InCharacters);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterListRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterListRes);
 			return result;
 		} // public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InCharacters )
 
@@ -1650,7 +1650,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameGetCharacterDataRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.GetCharacterDataRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataRes);
 			return result;
 		} // public int  GetCharacterDataRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InAttributes )
 
@@ -1664,7 +1664,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameSelectCharacterRes(m_Connection.NativeHandle, InTransactionID, InResult, InCharacterID,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.SelectCharacterRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SelectCharacterRes);
 			return result;
 		} // public int  SelectCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InCharacterID, SF.VariableTable InAttributes )
 
@@ -1678,7 +1678,7 @@ namespace SF.Net
 			{
 			result = CSSFNetAdapter_GameCallFunctionRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InResults_.Length, InResults_PinnedPtr_.Ptr);
 			}
-			if (m_Connection != null && m_Connection.MessageRouter != null) m_Connection.MessageRouter.HandleSentMessage(result, MessageIDGame.CallFunctionRes);
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CallFunctionRes);
 			return result;
 		} // public int  CallFunctionRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
 
