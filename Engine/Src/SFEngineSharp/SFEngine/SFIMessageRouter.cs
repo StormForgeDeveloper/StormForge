@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -18,7 +18,7 @@ namespace SF
 {
 
 
-    public abstract class SFIMessageRouter
+    public abstract class SFIMessageRouter : IDisposable
     {
         /// <summary>
         /// Message event argument
@@ -26,6 +26,7 @@ namespace SF
         public delegate void delMessageIDEventHandler(int sendResult, int messageID);
         public delegate void delMessageEventHandler(SFMessage message);
 
+        public virtual void Dispose() { }
 
         /// <summary>
         /// When a message data is sent

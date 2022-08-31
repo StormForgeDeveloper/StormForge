@@ -77,16 +77,16 @@ namespace SF
         };
 
         // message router instance
-        readonly List<SFIMessageRouter> m_MessageRouters = new List<SFIMessageRouter>();
+        readonly SFIMessageRouter m_MessageRouter;
 
-        public IReadOnlyList<SFIMessageRouter> MessageRouters { get { return m_MessageRouters; } }
+        public SFIMessageRouter MessageRouter { get { return m_MessageRouter; } }
 
 
         public void HandleSentMessage(int result, int messageID)
         {
-            foreach (var router in m_MessageRouters)
+            if (m_MessageRouter != null)
             {
-                router.HandleSentMessage(result, messageID);
+                m_MessageRouter.HandleSentMessage(result, messageID);
             }
         }
 
@@ -107,21 +107,21 @@ namespace SF
                 NativeHandle = NativeCreateConnection();
             else
                 NativeHandle = NativeCreateConnectionTCP();
-            m_MessageRouters.Add(messageRouter);
+            m_MessageRouter = messageRouter;
         }
 
         public SFConnection(SFConnectionGroup group, SFIMessageRouter messageRouter)
         {
             // Don't use constructor of SFObject, it will increase reference count of the object
             NativeHandle = NativeCreateConnectionWithGroup(group.NativeHandle);
-            m_MessageRouters.Add(messageRouter);
+            m_MessageRouter = messageRouter;
         }
 
         public SFConnection(IntPtr nativeHandle, SFIMessageRouter messageRouter = null)
         {
             // Don't use constructor of SFObject, it will increase reference count of the object
             NativeHandle = nativeHandle;
-            m_MessageRouters.Add(messageRouter);
+            m_MessageRouter = messageRouter;
         }
 
         virtual public int Connect(UInt64 authTicket, String address, int port)
@@ -172,8 +172,7 @@ namespace SF
             var message = DequeueMessage();
             while (message != null)
             {
-                foreach (var messageRouter in m_MessageRouters)
-                    messageRouter.HandleRecvMessage(message);
+                m_MessageRouter.HandleRecvMessage(message);
 
                 message = DequeueMessage();
             }
@@ -187,8 +186,7 @@ namespace SF
                     message = m_LoopBackQueue.Dequeue();
                 }
 
-                foreach (var messageRouter in m_MessageRouters)
-                    messageRouter.HandleRecvMessage(message);
+                m_MessageRouter.HandleRecvMessage(message);
             }
         }
 
