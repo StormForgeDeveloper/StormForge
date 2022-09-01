@@ -41,6 +41,11 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::LoginByFacebookCmd::MID.IDSeq.MsgID,&Message::Login::LoginByFacebookCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Login::LoginByFacebookRes::MID.IDSeq.MsgID,&Message::Login::LoginByFacebookRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::LoginByFacebookRes::MID.IDSeq.MsgID,&Message::Login::LoginByFacebookRes::ParseMessageToMessageBase));
+			// Cmd: Login request with Facebook UID
+			MessageParseToVariableMap.insert(std::make_pair(Message::Login::LoginBySteamCmd::MID.IDSeq.MsgID,&Message::Login::LoginBySteamCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::LoginBySteamCmd::MID.IDSeq.MsgID,&Message::Login::LoginBySteamCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Login::LoginBySteamRes::MID.IDSeq.MsgID,&Message::Login::LoginBySteamRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::LoginBySteamRes::MID.IDSeq.MsgID,&Message::Login::LoginBySteamRes::ParseMessageToMessageBase));
 			// Cmd: Login request
 			MessageParseToVariableMap.insert(std::make_pair(Message::Login::CreateRandomUserCmd::MID.IDSeq.MsgID,&Message::Login::CreateRandomUserCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::CreateRandomUserCmd::MID.IDSeq.MsgID,&Message::Login::CreateRandomUserCmd::ParseMessageToMessageBase));

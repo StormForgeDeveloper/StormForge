@@ -76,6 +76,35 @@ C++: Cast message to LoginByFacebookRes to access values
 		- OutLoginEntityUID: uint64 type. Login entity ID. This need to be used when you connect to the game server
 
 
+## LoginBySteam Request
+Login request with Facebook UID
+
+1. Command interface
+
+        Result LoginBySteamCmd(const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InSteamSessionId)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutGameID: GameID type. Game ID, Conspiracy will be accepted
+
+		- OutUID: uint64 type. Steam UID.
+
+		- OutSteamSessionId: String type. Steam login session Id. Used for verification
+
+2. Result interface
+
+C++: Cast message to LoginBySteamRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutGameServerAddr: NetAddress type. Game server address to connect
+		- OutGameServerAddrIPV4: NetAddress type. Game server address to connect
+		- OutAccID: AccountID type. AccountID for the player
+		- OutTicket: AuthTicket type. Login session Ticket
+		- OutLoginEntityUID: uint64 type. Login entity ID. This need to be used when you connect to the game server
+
+
 ## CreateRandomUser Request
 Login request
 

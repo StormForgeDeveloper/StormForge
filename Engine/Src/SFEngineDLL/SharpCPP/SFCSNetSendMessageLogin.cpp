@@ -43,6 +43,18 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookCmd( intptr_t InNativeConne
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InGameID, uint64_t InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 
 
+// Cmd: Login request with Facebook UID
+SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InGameID, uint64_t InUID, const char* InSteamSessionId )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::Login::LoginBySteamCmd::Create(pConnection->GetHeap(), InTransactionID, InGameID, InUID,InSteamSessionId);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InGameID, uint64_t InUID, const char* InSteamSessionId )
+
+
 // Cmd: Login request
 SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InGameID, const char* InCellPhone )
 {
@@ -141,6 +153,19 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookRes( intptr_t InNativeConne
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID )
+
+
+
+// Cmd: Login request with Facebook UID
+SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::Login::LoginBySteamRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerAddr,InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID )
 
 
 

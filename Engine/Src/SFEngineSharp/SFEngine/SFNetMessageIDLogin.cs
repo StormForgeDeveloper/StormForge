@@ -40,6 +40,12 @@ namespace SF.Net
 		public static int LoginByFacebookRes { get { return CSSFNetMessageID_LoginLoginByFacebookRes(); } }
 
 
+		// Cmd: Login request with Facebook UID
+		public static int LoginBySteamCmd { get { return CSSFNetMessageID_LoginLoginBySteamCmd(); } }
+
+		public static int LoginBySteamRes { get { return CSSFNetMessageID_LoginLoginBySteamRes(); } }
+
+
 		// Cmd: Login request
 		public static int CreateRandomUserCmd { get { return CSSFNetMessageID_LoginCreateRandomUserCmd(); } }
 
@@ -91,6 +97,16 @@ namespace SF.Net
 
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_LoginLoginByFacebookRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_LoginLoginByFacebookRes();
+
+
+
+		// Cmd: Login request with Facebook UID
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_LoginLoginBySteamCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_LoginLoginBySteamCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_LoginLoginBySteamRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_LoginLoginBySteamRes();
 
 
 

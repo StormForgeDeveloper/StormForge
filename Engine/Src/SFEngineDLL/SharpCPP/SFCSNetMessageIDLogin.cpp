@@ -45,6 +45,19 @@ SFDLL_EXPORT int  CSSFNetMessageID_LoginLoginByFacebookRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_LoginLoginByFacebookRes()
 
 
+// Cmd: Login request with Facebook UID
+SFDLL_EXPORT int  CSSFNetMessageID_LoginLoginBySteamCmd()
+{
+ 	return SF::Message::Login::LoginBySteamCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_LoginLoginBySteamCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_LoginLoginBySteamRes()
+{
+ 	return SF::Message::Login::LoginBySteamRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_LoginLoginBySteamRes()
+
+
 // Cmd: Login request
 SFDLL_EXPORT int  CSSFNetMessageID_LoginCreateRandomUserCmd()
 {

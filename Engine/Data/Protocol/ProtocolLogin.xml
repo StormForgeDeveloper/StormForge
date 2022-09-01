@@ -3,95 +3,111 @@
 	<ProtocolGroup Name="Login" GenParameterContext="true" IsMobile="true" GenCSharp="true" Desc="Game">
 	
     <!-- ===================================================  Login ========================================================= -->
-    <Command Name="Login" Reliable="true" Crypto="No" Trace="Debug1" Desc="Login request">
-      <Cmd>
-        <Params TypeName="GameID" Name="GameID" Desc="Game ID, Conspiracy will be accepted"/>
-        <Params TypeName="String" Name="ID" Desc="UserID"/>
-        <Params TypeName="String" Name="Password" Desc="User Password"/>
-      </Cmd>
-      <Res>
-        <Params TypeName="NetAddress" Name="GameServerAddr" Desc="Game server address to connect"/>
-        <Params TypeName="NetAddress" Name="GameServerAddrIPV4" Desc="Game server address to connect"/>
-        <Params TypeName="AccountID" Name="AccID" Desc="AccountID for the player"/>
-        <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-    		<Params TypeName="uint64" Name="LoginEntityUID" Desc="Login entity ID. This need to be used when you connect to the game server"/>
-      </Res>
-    </Command>
-    <Command Name="LoginByFacebook" Reliable="true" Crypto="No" Trace="Debug1" Desc="Login request with Facebook UID">
-      <Cmd>
-        <Params TypeName="GameID" Name="GameID" Desc="Game ID, Conspiracy will be accepted"/>
-        <Params TypeName="uint64" Name="UID" Desc="Facebook UID. You can get when you login to facebook"/>
-        <Params TypeName="String" Name="FaceBookName" Desc="Face book name"/>
-        <Params TypeName="String" Name="EMail" Desc="email address of the player"/>
-        <Params TypeName="String" Name="FacebookToken" Desc="Factbook token, reserved"/>
-      </Cmd>
-      <Res>
-        <Params TypeName="NetAddress" Name="GameServerAddr" Desc="Game server address to connect"/>
-        <Params TypeName="NetAddress" Name="GameServerAddrIPV4" Desc="Game server address to connect"/>
-        <Params TypeName="AccountID" Name="AccID" Desc="AccountID for the player"/>
-        <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-        <Params TypeName="uint64" Name="LoginEntityUID" Desc="Login entity ID. This need to be used when you connect to the game server"/>
-      </Res>
-    </Command>
+        <Command Name="Login" Reliable="true" Crypto="No" Trace="Debug1" Desc="Login request">
+            <Cmd>
+                <Params TypeName="GameID" Name="GameID" Desc="Game ID, Conspiracy will be accepted"/>
+                <Params TypeName="String" Name="ID" Desc="UserID"/>
+                <Params TypeName="String" Name="Password" Desc="User Password"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="NetAddress" Name="GameServerAddr" Desc="Game server address to connect"/>
+                <Params TypeName="NetAddress" Name="GameServerAddrIPV4" Desc="Game server address to connect"/>
+                <Params TypeName="AccountID" Name="AccID" Desc="AccountID for the player"/>
+                <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+                <Params TypeName="uint64" Name="LoginEntityUID" Desc="Login entity ID. This need to be used when you connect to the game server"/>
+            </Res>
+        </Command>
 
-    <Command Name="CreateRandomUser" Reliable="true" Crypto="No" Trace="Debug1" Desc="Login request">
-      <Cmd>
-        <Params TypeName="GameID" Name="GameID" Desc="Game ID, Conspiracy will be accepted"/>
-        <Params TypeName="String" Name="CellPhone" Desc="CellPhone"/>
-      </Cmd>
-      <Res>
-        <Params TypeName="NetAddress" Name="GameServerAddr" Desc="Game server address to connect"/>
-        <Params TypeName="NetAddress" Name="GameServerAddrIPV4" Desc="Game server address to connect"/>
-        <Params TypeName="AccountID" Name="AccID" Desc="AccountID for the player"/>
-        <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
-        <Params TypeName="uint64" Name="LoginEntityUID" Desc="Login entity ID. This need to be used when you connect to the game server"/>
-      </Res>
-    </Command>
+        <Command Name="LoginByFacebook" Reliable="true" Crypto="No" Trace="Debug1" Desc="Login request with Facebook UID">
+            <Cmd>
+                <Params TypeName="GameID" Name="GameID" Desc="Game ID, Conspiracy will be accepted"/>
+                <Params TypeName="uint64" Name="UID" Desc="Facebook UID. You can get when you login to facebook"/>
+                <Params TypeName="String" Name="FaceBookName" Desc="Face book name"/>
+                <Params TypeName="String" Name="EMail" Desc="email address of the player"/>
+                <Params TypeName="String" Name="FacebookToken" Desc="Factbook token, reserved"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="NetAddress" Name="GameServerAddr" Desc="Game server address to connect"/>
+                <Params TypeName="NetAddress" Name="GameServerAddrIPV4" Desc="Game server address to connect"/>
+                <Params TypeName="AccountID" Name="AccID" Desc="AccountID for the player"/>
+                <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+                <Params TypeName="uint64" Name="LoginEntityUID" Desc="Login entity ID. This need to be used when you connect to the game server"/>
+            </Res>
+        </Command>
 
-	
-	
-    <Command Name="UpdateMyScore" Reliable="true" Crypto="No" Trace="Debug1" Desc="Update my score and Get Ranking list">
-      <Cmd>
-        <Params TypeName="uint64" Name="RankingScore"/>
-        <Params TypeName="RankingType" Name="RankingType"/>
-        <Params TypeName="uint16" Name="Count" Desc="Number of ranking list to query after update"/>
-      </Cmd>
-      <Res>
-        <Params TypeName="TotalRankingPlayerInformation" Name="Ranking" IsArray="true"/>
-      </Res>
-    </Command>
+        <Command Name="LoginBySteam" Reliable="true" Crypto="No" Trace="Debug1" Desc="Login request with Facebook UID">
+            <Cmd>
+                <Params TypeName="GameID" Name="GameID" Desc="Game ID, Conspiracy will be accepted"/>
+                <Params TypeName="uint64" Name="UID" Desc="Steam UID."/>
+                <Params TypeName="String" Name="SteamSessionId" Desc="Steam login session Id. Used for verification"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="NetAddress" Name="GameServerAddr" Desc="Game server address to connect"/>
+                <Params TypeName="NetAddress" Name="GameServerAddrIPV4" Desc="Game server address to connect"/>
+                <Params TypeName="AccountID" Name="AccID" Desc="AccountID for the player"/>
+                <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+                <Params TypeName="uint64" Name="LoginEntityUID" Desc="Login entity ID. This need to be used when you connect to the game server"/>
+            </Res>
+        </Command>
 
-    <Command Name="GetRankingList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get Ranking lise">
-      <Cmd>
-        <Params TypeName="RankingType" Name="RankingType"/>
-        <Params TypeName="uint8" Name="BaseRanking" Desc="Base ranking to query, 0 based ranking order"/>
-        <Params TypeName="uint8" Name="Count" Desc="Number of playerinformation to query"/>
-      </Cmd>
-      <Res>
-        <Params TypeName="TotalRankingPlayerInformation" Name="Ranking" IsArray="true"/>
-      </Res>
-    </Command>
+        <Command Name="CreateRandomUser" Reliable="true" Crypto="No" Trace="Debug1" Desc="Login request">
+            <Cmd>
+                <Params TypeName="GameID" Name="GameID" Desc="Game ID, Conspiracy will be accepted"/>
+                <Params TypeName="String" Name="CellPhone" Desc="CellPhone"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="NetAddress" Name="GameServerAddr" Desc="Game server address to connect"/>
+                <Params TypeName="NetAddress" Name="GameServerAddrIPV4" Desc="Game server address to connect"/>
+                <Params TypeName="AccountID" Name="AccID" Desc="AccountID for the player"/>
+                <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
+                <Params TypeName="uint64" Name="LoginEntityUID" Desc="Login entity ID. This need to be used when you connect to the game server"/>
+            </Res>
+        </Command>
 
-    <Command Name="DataTest" Reliable="true" Crypto="No" Trace="Debug1" Desc="For network test">
-      <Cmd>
-        <Params TypeName="uint8" Name="TestData" IsArray="true"/>
-      </Cmd>
-      <Res>
-        <Params TypeName="uint8" Name="TestData" IsArray="true"/>
-      </Res>
-    </Command>
-	
-	
-	<C2SEvent Name="Heartbeat" Reliable="true" Crypto="No" Trace="Debug1" Desc="Heartbeat">
-    </C2SEvent>
 
-    <Command Name="DebugPrintALLRanking" Reliable="true" Crypto="No" Trace="Debug1" Desc="Write All!! User Score and Ranking list">
-      <Cmd>
-        <Params TypeName="String" Name="FileName"/>
-      </Cmd>
-      <Res>
-      </Res>
-    </Command>
-    
-  </ProtocolGroup>
+
+        <Command Name="UpdateMyScore" Reliable="true" Crypto="No" Trace="Debug1" Desc="Update my score and Get Ranking list">
+            <Cmd>
+                <Params TypeName="uint64" Name="RankingScore"/>
+                <Params TypeName="RankingType" Name="RankingType"/>
+                <Params TypeName="uint16" Name="Count" Desc="Number of ranking list to query after update"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="TotalRankingPlayerInformation" Name="Ranking" IsArray="true"/>
+            </Res>
+        </Command>
+
+        <Command Name="GetRankingList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get Ranking lise">
+            <Cmd>
+                <Params TypeName="RankingType" Name="RankingType"/>
+                <Params TypeName="uint8" Name="BaseRanking" Desc="Base ranking to query, 0 based ranking order"/>
+                <Params TypeName="uint8" Name="Count" Desc="Number of playerinformation to query"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="TotalRankingPlayerInformation" Name="Ranking" IsArray="true"/>
+            </Res>
+        </Command>
+
+        <Command Name="DataTest" Reliable="true" Crypto="No" Trace="Debug1" Desc="For network test">
+            <Cmd>
+                <Params TypeName="uint8" Name="TestData" IsArray="true"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="uint8" Name="TestData" IsArray="true"/>
+            </Res>
+        </Command>
+
+
+        <C2SEvent Name="Heartbeat" Reliable="true" Crypto="No" Trace="Debug1" Desc="Heartbeat">
+        </C2SEvent>
+
+        <Command Name="DebugPrintALLRanking" Reliable="true" Crypto="No" Trace="Debug1" Desc="Write All!! User Score and Ranking list">
+            <Cmd>
+                <Params TypeName="String" Name="FileName"/>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+    </ProtocolGroup>
 </Protocols>

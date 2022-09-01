@@ -1,4 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
+﻿////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2017 StromForge
 // 
@@ -59,6 +59,17 @@ namespace SF.Net
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginByFacebookCmd);
 			return result;
 		} // public int  LoginByFacebookCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InUID, System.String InFaceBookName, System.String InEMail, System.String InFacebookToken )
+
+		// Cmd: Login request with Facebook UID
+		public int  LoginBySteamCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InUID, System.String InSteamSessionId )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_LoginLoginBySteamCmd(m_Connection.NativeHandle, InTransactionID, InGameID, InUID,System.Text.Encoding.UTF8.GetBytes(InSteamSessionId + "\0"));
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginBySteamCmd);
+			return result;
+		} // public int  LoginBySteamCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InUID, System.String InSteamSessionId )
 
 		// Cmd: Login request
 		public int  CreateRandomUserCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.String InCellPhone )
@@ -138,6 +149,11 @@ namespace SF.Net
 		static extern int CSSFNetAdapter_LoginLoginByFacebookCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InUID, [MarshalAs(UnmanagedType.LPArray)] byte[] InFaceBookName, [MarshalAs(UnmanagedType.LPArray)] byte[] InEMail, [MarshalAs(UnmanagedType.LPArray)] byte[] InFacebookToken );
 
 
+		// Cmd: Login request with Facebook UID
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginLoginBySteamCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_LoginLoginBySteamCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InUID, [MarshalAs(UnmanagedType.LPArray)] byte[] InSteamSessionId );
+
+
 		// Cmd: Login request
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginCreateRandomUserCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_LoginCreateRandomUserCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InGameID, [MarshalAs(UnmanagedType.LPArray)] byte[] InCellPhone );
@@ -213,6 +229,18 @@ namespace SF.Net
 		} // public int  LoginByFacebookRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 
 
+		// Cmd: Login request with Facebook UID
+		public int  LoginBySteamRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_LoginLoginBySteamRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InGameServerAddr,ref InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID);
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginBySteamRes);
+			return result;
+		} // public int  LoginBySteamRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
+
+
 		// Cmd: Login request
 		public int  CreateRandomUserRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 		{
@@ -283,6 +311,12 @@ namespace SF.Net
 		// Cmd: Login request with Facebook UID
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginLoginByFacebookRes", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_LoginLoginByFacebookRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, ref SF.NetAddress InGameServerAddr, ref SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID );
+
+
+
+		// Cmd: Login request with Facebook UID
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginLoginBySteamRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_LoginLoginBySteamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, ref SF.NetAddress InGameServerAddr, ref SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID );
 
 
 

@@ -236,6 +236,109 @@ namespace SF
 
 			}; // class LoginByFacebookRes : public MessageBase
 
+			// Cmd: Login request with Facebook UID
+			class LoginBySteamCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 0,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetPlayerID() { return uint64_t{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+				uint32_t GetRouteHopCount() { return uint32_t{}; }
+				uint64_t GetSender() { return uint64_t{}; }
+			private:
+				uint64_t m_TransactionID{};
+				uint32_t m_GameID{};
+				uint64_t m_UID{};
+				const char* m_SteamSessionId{};
+			public:
+				LoginBySteamCmd()
+					{}
+
+				LoginBySteamCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const uint32_t& GetGameID() const	{ return m_GameID; };
+				const uint64_t& GetUID() const	{ return m_UID; };
+				const char* GetSteamSessionId() const	{ return m_SteamSessionId; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InSteamSessionId );
+
+			}; // class LoginBySteamCmd : public MessageBase
+
+			class LoginBySteamRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 0,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetPlayerID() { return uint64_t{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+				uint32_t GetRouteHopCount() { return uint32_t{}; }
+				uint64_t GetSender() { return uint64_t{}; }
+			private:
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				NetAddress m_GameServerAddr{};
+				NetAddress m_GameServerAddrIPV4{};
+				AccountID m_AccID{};
+				AuthTicket m_Ticket{};
+				uint64_t m_LoginEntityUID{};
+			public:
+				LoginBySteamRes()
+					{}
+
+				LoginBySteamRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const NetAddress& GetGameServerAddr() const	{ return m_GameServerAddr; };
+				const NetAddress& GetGameServerAddrIPV4() const	{ return m_GameServerAddrIPV4; };
+				const AccountID& GetAccID() const	{ return m_AccID; };
+				const AuthTicket& GetTicket() const	{ return m_Ticket; };
+				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
+
+			}; // class LoginBySteamRes : public MessageBase
+
 			// Cmd: Login request
 			class CreateRandomUserCmd : public MessageBase
 			{

@@ -34,6 +34,9 @@ namespace SF
 			// Cmd: Login request with Facebook UID
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginByFacebookCmd::MID.IDSeq.MsgID,&Message::Login::LoginByFacebookCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginByFacebookRes::MID.IDSeq.MsgID,&Message::Login::LoginByFacebookRes::TraceOut));
+			// Cmd: Login request with Facebook UID
+			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginBySteamCmd::MID.IDSeq.MsgID,&Message::Login::LoginBySteamCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Login::LoginBySteamRes::MID.IDSeq.MsgID,&Message::Login::LoginBySteamRes::TraceOut));
 			// Cmd: Login request
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::CreateRandomUserCmd::MID.IDSeq.MsgID,&Message::Login::CreateRandomUserCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::CreateRandomUserRes::MID.IDSeq.MsgID,&Message::Login::CreateRandomUserRes::TraceOut));
