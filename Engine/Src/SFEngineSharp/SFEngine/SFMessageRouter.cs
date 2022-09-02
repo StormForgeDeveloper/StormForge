@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -42,7 +42,7 @@ namespace SF
         {
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
             m_MessageHandlerMap.Clear();
         }

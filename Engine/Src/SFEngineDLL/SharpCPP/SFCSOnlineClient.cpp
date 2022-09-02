@@ -51,14 +51,14 @@ SFDLL_EXPORT intptr_t SFOnlineClient_NativeCreateOnlineClient()
 	return NativeObjectToIntptr(pOnlineClient.get());
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, uint64_t transactionId, const char* gameId, const char* loginAddress, const char* userId, const char* password)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, uint64_t transactionId, const char* gameId, const char* loginAddress, uint64_t steamUserId, const char* userId, const char* password)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return (int32_t)pOnlineClient->StartConnection(transactionId, gameId, loginAddress, userId, password);
+	return (int32_t)pOnlineClient->StartConnection(transactionId, gameId, loginAddress, steamUserId, userId, password);
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle, uint64_t transactionId, uint64_t gameInstanceUID)

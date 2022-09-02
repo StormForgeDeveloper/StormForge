@@ -124,6 +124,8 @@ namespace SF
 			GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Login::LoginRes::MID.GetMsgID());
 		}
 
+        virtual Result RequestLogin() = 0;
+
 		void OnConnectionEvent(const Net::ConnectionEvent& evt)
 		{
 			SFLog(Net, Info, "Login OnConnectionEvent  type:{0}, state:{1}", evt.Components.EventType, evt.Components.State);
@@ -133,8 +135,7 @@ namespace SF
 				if (evt.Components.hr)
 				{
 					SetOnlineState(OnlineState::LogingIn);
-					NetPolicyLogin policy(GetConnection()->GetMessageEndpoint());
-					auto res = policy.LoginCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetUserId(), m_Owner.GetPassword());
+                    auto res = RequestLogin();
 					if (!res)
 					{
 						m_Owner.DisconnectAll();
@@ -193,6 +194,42 @@ namespace SF
 		}
 	};
 
+    class ClientTask_LoginBR : public ClientTask_Login
+    {
+    public:
+        using super = ClientTask_Login;
+
+        ClientTask_LoginBR(OnlineClient& owner, uint64_t transactionId)
+            : ClientTask_Login(owner, transactionId)
+        {
+        }
+
+        virtual Result RequestLogin() override
+        {
+            NetPolicyLogin policy(GetConnection()->GetMessageEndpoint());
+            return policy.LoginCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetUserId(), m_Owner.GetPassword());
+        }
+
+    };
+
+
+    class ClientTask_LoginSteam : public ClientTask_Login
+    {
+    public:
+        using super = ClientTask_Login;
+
+        ClientTask_LoginSteam(OnlineClient& owner, uint64_t transactionId)
+            : ClientTask_Login(owner, transactionId)
+        {
+        }
+
+        virtual Result RequestLogin() override
+        {
+            NetPolicyLogin policy(GetConnection()->GetMessageEndpoint());
+            return policy.LoginBySteamCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetSteamUserId(), m_Owner.GetPassword());
+        }
+
+    };
 
 
 	class ClientTask_JoinGameServer : public OnlineClient::ClientTask
@@ -720,7 +757,7 @@ namespace SF
 	}
 
 
-	Result OnlineClient::StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, const char* userId, const char* password)
+	Result OnlineClient::StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, uint64_t steamUserId, const char* userId, const char* password)
 	{
 		if (GetOnlineState() != OnlineState::None
 			&& GetOnlineState() != OnlineState::Disconnected)
@@ -739,12 +776,23 @@ namespace SF
 			m_LoginAddresses = loginAddress;
 
 		m_GameId = gameId;
-		m_UserId = userId;
-		m_Password = password;
+        m_SteamUserId = steamUserId;
+        if (m_SteamUserId == 0)
+        {
+            m_UserId = userId;
+            m_Password = password;
+        }
 
 		SFLog(Net, Info, "OnlineClient::StartConnection login:{0}", loginAddress);
 
-		m_PendingTasks.push_back(new(GetHeap()) ClientTask_Login(*this, transactionId));
+        if (m_SteamUserId != 0)
+        {
+            m_PendingTasks.push_back(new(GetHeap()) ClientTask_LoginBR(*this, transactionId));
+        }
+        else
+        {
+            m_PendingTasks.push_back(new(GetHeap()) ClientTask_LoginBR(*this, transactionId));
+        }
 		m_PendingTasks.push_back(new(GetHeap()) ClientTask_JoinGameServer(*this, transactionId));
 
 		m_TickTime = Util::Time.GetRawTimeMs();
