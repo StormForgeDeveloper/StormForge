@@ -110,10 +110,10 @@ namespace SF
 		FileHeaderCheckResult CheckFileHeader(IInputStream& stream);
 
 		// Load string table file
-		bool LoadStringTable(IInputStream& stream);
+		Result LoadStringTable(IInputStream& stream);
 
 		// Save current strings to string table
-		bool SaveStringTable(IOutputStream& stream);
+		Result SaveStringTable(IOutputStream& stream);
 
 		bool DumpToTextFile(IOutputStream& stream);
 

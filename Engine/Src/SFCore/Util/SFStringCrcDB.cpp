@@ -162,24 +162,24 @@ namespace SF
 	}
 
 	// Load string table file
-	bool StringCrcDB::LoadStringTable(IInputStream& stream)
+	Result StringCrcDB::LoadStringTable(IInputStream& stream)
 	{
 		// load header
 		StringFileHeader header{};
 		stream.Read(&header, sizeof(StringFileHeader));
 
 		if (header.Magic != StringFileHeader::FILE_MAGIC)
-			return false;
+			return ResultCode::INVALID_FORMAT;
 
 		if (header.Version != StringFileHeader::FILE_VERSION)
-			return false;
+			return ResultCode::INVALID_VERSION;
 
 		char* pBuffer = (char*)malloc(header.ChunkSize + sizeof(StringBuffer));
 		StringBuffer* newBuffer = new(pBuffer) StringBuffer(header.ChunkSize);
 		memset(newBuffer, 0, sizeof(StringBuffer));
 
 		if (!stream.Read(newBuffer->StringItems, header.ChunkSize))
-			return false;
+			return ResultCode::INVALID_FORMAT;
 
 		newBuffer->BufferSize = header.ChunkSize;
 		newBuffer->RemainSize = 0;
@@ -208,16 +208,16 @@ namespace SF
 		m_StringMap32.CommitChanges();
 		m_StringMap64.CommitChanges();
 
-		return true;
+		return ResultCode::SUCCESS;
 	}
 
 	// Save current strings to string table
-	bool StringCrcDB::SaveStringTable(IOutputStream& stream)
+    Result StringCrcDB::SaveStringTable(IOutputStream& stream)
 	{
 		// If nothing to save
 		if (m_Head == nullptr)
 		{
-			return true;
+			return ResultCode::SUCCESS;
 		}
 
 		StringFileHeader header;
@@ -246,7 +246,7 @@ namespace SF
 				return true;
 			});
 
-		return true;
+		return ResultCode::SUCCESS;
 	}
 
 	// Save current strings to text file
