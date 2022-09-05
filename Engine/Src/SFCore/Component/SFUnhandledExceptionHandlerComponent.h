@@ -38,7 +38,7 @@ namespace SF {
 
 		UnhandledExceptionHandlerComponent();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 
 

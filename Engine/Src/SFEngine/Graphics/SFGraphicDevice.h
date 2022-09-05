@@ -181,7 +181,7 @@ namespace SF
 
 		~GraphicDeviceComponent() {}
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		// Initialize component
 		virtual Result InitializeComponent() override

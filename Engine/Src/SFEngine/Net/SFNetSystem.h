@@ -97,7 +97,7 @@ namespace Net {
 		NetSystem(uint recvBufferSize, uint sendBufferSize, uint numThread, uint gatheringBufferSize);
 		~NetSystem();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 		
 		// Initialize component
 		virtual Result InitializeComponent() override;

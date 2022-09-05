@@ -67,7 +67,7 @@ namespace SF {
 		LogOutputLogServerComponent(const LogOutputMask& logMask, const String& logServerAddress);
 		~LogOutputLogServerComponent();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		MyOutputHandler& GetHandler() { return m_Handler; }
 

@@ -103,7 +103,7 @@ namespace SF
 		VulkanSystem();
 		~VulkanSystem();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		VkInstance GetVulkan() { return m_VKInstance; }
 

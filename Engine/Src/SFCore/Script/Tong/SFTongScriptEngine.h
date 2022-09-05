@@ -48,7 +48,7 @@ namespace SF
 			ScriptEngine(IHeap& heap);
 			~ScriptEngine();
 
-			virtual const StringCrc64& GetTypeName() override { return TypeName; }
+			virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 
 			// Heap for engine

@@ -48,8 +48,8 @@ namespace SF {
 		LibraryComponent(const StringCrc64& name);
 		virtual ~LibraryComponent() {}
 
-		const StringCrc64& GetName() { return m_Name; }
-		virtual const StringCrc64& GetTypeName() = 0;
+		const StringCrc64& GetName() const { return m_Name; }
+		virtual const StringCrc64& GetTypeName() const = 0;
 
 		// Check whether this component is initialized or not
 		bool GetIsInitialized() const { return m_IsInitialized; }

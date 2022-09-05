@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -33,7 +33,7 @@ namespace SF {
 		StringCrcLibraryComponent(const char* stringCrcBinPath);
 		~StringCrcLibraryComponent();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		// Initialize server component
 		virtual Result InitializeComponent() override;

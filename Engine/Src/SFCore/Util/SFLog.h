@@ -65,7 +65,7 @@ namespace Log {
 		LogModule(const LogOutputMask& logOutputGlobalMask = LogOutputMask());
 		~LogModule();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		virtual Result InitializeComponent() override;
 		virtual void DeinitializeComponent() override;

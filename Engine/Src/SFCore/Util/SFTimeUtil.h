@@ -195,7 +195,7 @@ namespace SF {
 			LibraryComponentTime();
 			~LibraryComponentTime();
 
-			virtual const StringCrc64& GetTypeName() override { return TypeName; }
+			virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 			// Initialize server component
 			virtual Result InitializeComponent() override;

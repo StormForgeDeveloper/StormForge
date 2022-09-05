@@ -116,7 +116,7 @@ namespace Net {
 		ConnectionManager(uint uiBucketSize );
 		virtual ~ConnectionManager();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		virtual IHeap& GetHeap() override { return *m_Heap.get(); }
 

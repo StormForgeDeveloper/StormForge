@@ -51,7 +51,7 @@ namespace SF {
 		LogOutputConsoleComponent(const LogOutputMask& logMask);
 		~LogOutputConsoleComponent();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		MyOutputHandler& GetHandler() { return m_Handler; }
 
@@ -83,7 +83,7 @@ namespace SF {
 		LogOutputDebuggerComponent(const LogOutputMask& logMask);
 		~LogOutputDebuggerComponent();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		MyOutputHandler& GetHandler() { return m_Handler; }
 
@@ -130,7 +130,7 @@ namespace SF {
 		LogOutputFileComponent(const LogOutputMask& logMask, const String& filePath, bool bOpenNewHourly);
 		~LogOutputFileComponent();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		MyOutputHandler& GetHandler() { return m_Handler; }
 

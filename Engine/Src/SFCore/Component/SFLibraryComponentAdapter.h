@@ -65,7 +65,7 @@ namespace SF {
 		// Heap
 		IHeap& GetHeap() { return m_Heap; }
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		ClassType* operator ->() { return *m_Object; }
 		ClassType* operator *() { return *m_Object; }

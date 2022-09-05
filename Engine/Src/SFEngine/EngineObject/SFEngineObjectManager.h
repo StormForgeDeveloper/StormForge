@@ -72,7 +72,7 @@ namespace SF {
 		EngineObjectManager();
 		virtual ~EngineObjectManager();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		// Initialize EngineObjectManager
 		virtual Result InitializeComponent() override;

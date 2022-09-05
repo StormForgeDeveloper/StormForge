@@ -39,7 +39,7 @@ namespace SF {
 		ObjectManager(IHeap& memoryManager, const StringCrc64& name = StringCrc64("ObjectManager"));
 		virtual ~ObjectManager();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		// Initialize component
 		virtual Result InitializeComponent() override;

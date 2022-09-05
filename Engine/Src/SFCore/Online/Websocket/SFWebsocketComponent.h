@@ -40,7 +40,7 @@ namespace SF
         WebsocketComponent();
         virtual ~WebsocketComponent();
 
-        virtual const StringCrc64& GetTypeName() override { return TYPE_NAME; }
+        virtual const StringCrc64& GetTypeName() const override { return TYPE_NAME; }
 
         virtual Result InitializeComponent() override;
        

@@ -104,7 +104,7 @@ namespace SF {
 		EngineTaskManager();
 		virtual ~EngineTaskManager();
 
-		virtual const StringCrc64& GetTypeName() override { return TypeName; }
+		virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
 		// Initialize EngineTaskManager
 		virtual Result InitializeComponent() override;

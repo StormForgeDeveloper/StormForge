@@ -99,6 +99,13 @@ namespace SF
 					OnLoginRes(pMsgData);
 				});
 
+            GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
+                Message::Login::LoginBySteamRes::MID.GetMsgID(),
+                [this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
+                {
+                    OnLoginRes(pMsgData);
+                });
+
 
 
 			SetOnlineState(OnlineState::ConnectingToLogin);
@@ -122,7 +129,8 @@ namespace SF
 			GetConnection()->GetConnectionEventDelegates().RemoveDelegateAll(uintptr_t(this));
 			GetConnection()->GetRecvMessageDelegates().RemoveDelegateAll(uintptr_t(this));
 			GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Login::LoginRes::MID.GetMsgID());
-		}
+            GetConnection()->RemoveMessageDelegate(uintptr_t(this), Message::Login::LoginBySteamRes::MID.GetMsgID());
+        }
 
         virtual Result RequestLogin() = 0;
 
@@ -787,7 +795,7 @@ namespace SF
 
         if (m_SteamUserId != 0)
         {
-            m_PendingTasks.push_back(new(GetHeap()) ClientTask_LoginBR(*this, transactionId));
+            m_PendingTasks.push_back(new(GetHeap()) ClientTask_LoginSteam(*this, transactionId));
         }
         else
         {
