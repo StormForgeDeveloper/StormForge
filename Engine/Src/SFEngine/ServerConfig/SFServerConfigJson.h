@@ -57,7 +57,7 @@ namespace SF
 		Result LoadChildModules(const Json::Value& rootObject, ServerConfig::GenericServer *pServer);
 		Result LoadDBInstances(const Json::Value& rootObject, Array<ServerConfig::DBInstance*>& dbInstances);
 		Result LoadDBClusters(const Json::Value& rootObject, Array<ServerConfig::DBCluster*>& dbClusters);
-		Result LoadJsonConfig(const Json::Value& rootObject, ServerConfig::ServerService* pServer);
+        Result LoadJsonConfig(const Json::Value& rootObject, ServerConfig::ServerService* pServer);
 		Result LoadGenericServer(const Json::Value& nodeObject, ServerConfig::GenericServer* pServer);
 
 	public:

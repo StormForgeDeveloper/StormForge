@@ -82,11 +82,19 @@ namespace SF
             m_MessageRouter = messageRouter;
         }
 
-        public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, UInt64 steamUserId, string userId, string password)
+        public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, string userId, string password)
         {
             ResetConnectionAdapter();
 
-            var res = NativeStartConnection(NativeHandle, transactionId, gameId, loginAddress, steamUserId, userId, password);
+            var res = NativeStartConnection(NativeHandle, transactionId, gameId, loginAddress, userId, password);
+            return new Result((int)res);
+        }
+
+        public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, UInt64 steamUserId, string steamUserToken)
+        {
+            ResetConnectionAdapter();
+
+            var res = NativeStartConnectionSteam(NativeHandle, transactionId, gameId, loginAddress, steamUserId, steamUserToken);
             return new Result((int)res);
         }
 
@@ -358,7 +366,10 @@ namespace SF
         static extern IntPtr NativeCreateOnlineClient();
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeStartConnection", CharSet = CharSet.Auto)]
-        static extern Int32 NativeStartConnection(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, UInt64 steamUserId, [MarshalAs(UnmanagedType.LPStr)] string userId, [MarshalAs(UnmanagedType.LPStr)] string password);
+        static extern Int32 NativeStartConnection(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, [MarshalAs(UnmanagedType.LPStr)] string userId, [MarshalAs(UnmanagedType.LPStr)] string password);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeStartConnectionSteam", CharSet = CharSet.Auto)]
+        static extern Int32 NativeStartConnectionSteam(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, UInt64 steamUserId, [MarshalAs(UnmanagedType.LPStr)] string steamUserToken);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeJoinGameInstance", CharSet = CharSet.Auto)]
         static extern Int32 NativeJoinGameInstance(IntPtr nativeHandle, UInt64 transactionId, UInt64 gameInstanceUID);

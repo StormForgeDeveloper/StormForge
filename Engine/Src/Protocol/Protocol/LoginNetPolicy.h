@@ -37,7 +37,7 @@ namespace SF
 		// Cmd: Login request with Facebook UID
 		Result LoginByFacebookCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken );
 		// Cmd: Login request with Facebook UID
-		Result LoginBySteamCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InSteamSessionId );
+		Result LoginBySteamCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamSessionId );
 		// Cmd: Login request
 		Result CreateRandomUserCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone );
 		// Cmd: Update my score and Get Ranking list

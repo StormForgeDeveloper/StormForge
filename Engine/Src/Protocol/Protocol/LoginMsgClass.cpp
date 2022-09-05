@@ -461,7 +461,7 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_GameID);
-				protocolCheck(*input >> m_UID);
+				protocolCheck(*input >> m_SteamUserID);
 				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_SteamSessionId, ArrayLen));
 
@@ -479,7 +479,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GameID", parser.GetGameID());
-				variableBuilder.SetVariable("UID", parser.GetUID());
+				variableBuilder.SetVariable("SteamUserID", parser.GetSteamUserID());
 				variableBuilder.SetVariable("SteamSessionId", parser.GetSteamSessionId());
 
 				return hr;
@@ -498,7 +498,7 @@ namespace SF
 			}; // Result LoginBySteamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* LoginBySteamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InSteamSessionId )
+			MessageData* LoginBySteamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamSessionId )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -514,7 +514,7 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGameID)
-					+ SerializedSizeOf(InUID)
+					+ SerializedSizeOf(InSteamUserID)
 					+ SerializedSizeOf(InSteamSessionId)
 				);
 
@@ -526,18 +526,18 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InGameID);
-				protocolCheck(*output << InUID);
+				protocolCheck(*output << InSteamUserID);
 				protocolCheck(*output << InSteamSessionId);
 
 				return hr;
-			}; // MessageData* LoginBySteamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InSteamSessionId )
+			}; // MessageData* LoginBySteamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamSessionId )
 
 			Result LoginBySteamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				LoginBySteamCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "LoginBySteam:{0}:{1} , TransactionID:{2}, GameID:{3}, UID:{4}, SteamSessionId:{5,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGameID(), parser.GetUID(), parser.GetSteamSessionId()); 
+				SFLog(Net, Debug1, "LoginBySteam:{0}:{1} , TransactionID:{2}, GameID:{3}, SteamUserID:{4}, SteamSessionId:{5,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGameID(), parser.GetSteamUserID(), parser.GetSteamSessionId()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginBySteamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

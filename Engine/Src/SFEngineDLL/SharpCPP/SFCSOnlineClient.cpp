@@ -51,14 +51,26 @@ SFDLL_EXPORT intptr_t SFOnlineClient_NativeCreateOnlineClient()
 	return NativeObjectToIntptr(pOnlineClient.get());
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, uint64_t transactionId, const char* gameId, const char* loginAddress, uint64_t steamUserId, const char* userId, const char* password)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnection(intptr_t nativeHandle, uint64_t transactionId, const char* gameId, const char* loginAddress,
+    const char* userId, const char* password)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return (int32_t)pOnlineClient->StartConnection(transactionId, gameId, loginAddress, steamUserId, userId, password);
+	return (int32_t)pOnlineClient->StartConnection(transactionId, gameId, loginAddress, 0, nullptr, userId, password);
+}
+
+SFDLL_EXPORT int32_t SFOnlineClient_NativeStartConnectionSteam(intptr_t nativeHandle, uint64_t transactionId, const char* gameId, const char* loginAddress,
+    uint64_t steamUserId, const char* steamUserToken)
+{
+    if (nativeHandle == 0)
+        return ResultCode::NOT_INITIALIZED;
+
+    auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+
+    return (int32_t)pOnlineClient->StartConnection(transactionId, gameId, loginAddress, steamUserId, steamUserToken, nullptr, nullptr);
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeJoinGameInstance(intptr_t nativeHandle, uint64_t transactionId, uint64_t gameInstanceUID)

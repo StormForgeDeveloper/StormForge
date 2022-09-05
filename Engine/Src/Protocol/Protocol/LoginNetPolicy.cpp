@@ -51,19 +51,19 @@ namespace SF
 
 	}; // Result NetPolicyLogin::LoginByFacebookCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 	// Cmd: Login request with Facebook UID
-	Result NetPolicyLogin::LoginBySteamCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InSteamSessionId )
+	Result NetPolicyLogin::LoginBySteamCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamSessionId )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Login::LoginBySteamCmd::Create(GetSystemHeap(), InTransactionID, InGameID, InUID, InSteamSessionId);
+		 pMessage = SF::Message::Login::LoginBySteamCmd::Create(GetSystemHeap(), InTransactionID, InGameID, InSteamUserID, InSteamSessionId);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetPolicyLogin::LoginBySteamCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InSteamSessionId )
+	}; // Result NetPolicyLogin::LoginBySteamCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamSessionId )
 	// Cmd: Login request
 	Result NetPolicyLogin::CreateRandomUserCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 	{

@@ -765,7 +765,7 @@ namespace SF
 	}
 
 
-	Result OnlineClient::StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, uint64_t steamUserId, const char* userId, const char* password)
+	Result OnlineClient::StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, uint64_t steamUserId, const char* steamUserToken, const char* userId, const char* password)
 	{
 		if (GetOnlineState() != OnlineState::None
 			&& GetOnlineState() != OnlineState::Disconnected)
@@ -784,7 +784,10 @@ namespace SF
 			m_LoginAddresses = loginAddress;
 
 		m_GameId = gameId;
+
         m_SteamUserId = steamUserId;
+        m_SteamUserToken = steamUserToken;
+
         if (m_SteamUserId == 0)
         {
             m_UserId = userId;

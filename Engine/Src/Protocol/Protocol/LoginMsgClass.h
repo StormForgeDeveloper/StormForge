@@ -258,7 +258,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				uint32_t m_GameID{};
-				uint64_t m_UID{};
+				uint64_t m_SteamUserID{};
 				const char* m_SteamSessionId{};
 			public:
 				LoginBySteamCmd()
@@ -272,7 +272,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetGameID() const	{ return m_GameID; };
-				const uint64_t& GetUID() const	{ return m_UID; };
+				const uint64_t& GetSteamUserID() const	{ return m_SteamUserID; };
 				const char* GetSteamSessionId() const	{ return m_SteamSessionId; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -281,7 +281,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InSteamSessionId );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamSessionId );
 
 			}; // class LoginBySteamCmd : public MessageBase
 

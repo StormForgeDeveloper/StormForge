@@ -121,7 +121,7 @@ namespace SF
 
 
 		// Initialize and start connection process
-		Result StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, uint64_t steamUserId, const char* userId, const char* password);
+		Result StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, uint64_t steamUserId, const char* steamUserToken, const char* userId, const char* password);
 
 		// Join game instance
 		Result JoinGameInstance(uint64_t transactionId, uint64_t gameInstanceId);
@@ -144,7 +144,8 @@ namespace SF
 
 		SF_FORCEINLINE StringCrc32 GetGameId() const { return m_GameId; }
         SF_FORCEINLINE uint64_t GetSteamUserId() const { return m_SteamUserId; }
-		SF_FORCEINLINE const String& GetUserId() const { return m_UserId; }
+        SF_FORCEINLINE const String& GetSteamUserToken() const { return m_SteamUserToken; }
+        SF_FORCEINLINE const String& GetUserId() const { return m_UserId; }
 		SF_FORCEINLINE const String& GetPassword() const { return m_Password; }
 		SF_FORCEINLINE const String& GetLoginAddresses() const { return m_LoginAddresses; }
 
@@ -213,6 +214,7 @@ namespace SF
 
 		StringCrc32 m_GameId;
         uint64_t m_SteamUserId{};
+        String m_SteamUserToken;
 		String m_UserId;
 		String m_Password;
 

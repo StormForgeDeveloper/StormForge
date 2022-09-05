@@ -213,6 +213,10 @@ namespace SF
 
 			String DataPath;
 
+            // Steam
+            uint64_t SteamAppId{};
+            String SteamAPIKey;
+
 			GenericServer* MonitoringServer{};
 			DynamicArray<DBCluster*> DBClusters;
 			DynamicArray<DBInstance*> DBInstances;
