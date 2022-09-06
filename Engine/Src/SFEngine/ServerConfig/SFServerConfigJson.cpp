@@ -403,10 +403,10 @@ namespace SF
 		pServer->DataPath = dataPath.asCString();
 
         auto SteamAppId = rootObject.get("SteamAppId", Json::Value(0));
-        pServer->SteamAppId = dataPath.asUInt64();
+        pServer->SteamAppId = SteamAppId.asUInt64();
 
         auto SteamAPIKey = rootObject.get("SteamAPIKey", Json::Value(""));
-        pServer->SteamAPIKey = dataPath.asCString();
+        pServer->SteamAPIKey = SteamAPIKey.asCString();
 
 		result = LoadDBInstances(rootObject, pServer->DBInstances);
 		if (!result)
