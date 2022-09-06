@@ -81,7 +81,7 @@ Login request with Facebook UID
 
 1. Command interface
 
-        Result LoginBySteamCmd(const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamSessionId)
+        Result LoginBySteamCmd(const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserToken)
 
 		- OutTransactionID: TransactionID type. 
 
@@ -89,7 +89,7 @@ Login request with Facebook UID
 
 		- OutSteamUserID: uint64 type. Steam User Id.
 
-		- OutSteamSessionId: String type. Steam login session Id. Used for verification
+		- OutSteamUserToken: String type. Steam user login token. Used for login verification
 
 2. Result interface
 

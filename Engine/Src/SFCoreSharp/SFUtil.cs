@@ -17,17 +17,17 @@ namespace SF
 {
     public static class Util
     {
-        static string ToHexString(byte[] bytes)
+        public static string ToHexString(byte[] bytes)
         {
             return ToHexString(bytes, 0, bytes.Length, '\0');
         }
 
-        static string ToHexString(byte[] bytes, int startIndex)
+        public static string ToHexString(byte[] bytes, int startIndex)
         {
             return ToHexString(bytes, startIndex, bytes.Length - startIndex, '\0');
         }
 
-        static string ToHexString(byte[] bytes, int startIndex, int count, char separator = '\0')
+        public static string ToHexString(byte[] bytes, int startIndex, int count, char separator = '\0')
         {
             StringBuilder sb = new StringBuilder(bytes.Length * 2);
             if (separator != '\0')

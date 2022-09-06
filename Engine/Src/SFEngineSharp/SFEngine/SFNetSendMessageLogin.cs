@@ -61,15 +61,15 @@ namespace SF.Net
 		} // public int  LoginByFacebookCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InUID, System.String InFaceBookName, System.String InEMail, System.String InFacebookToken )
 
 		// Cmd: Login request with Facebook UID
-		public int  LoginBySteamCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InSteamUserID, System.String InSteamSessionId )
+		public int  LoginBySteamCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InSteamUserID, System.String InSteamUserToken )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_LoginLoginBySteamCmd(m_Connection.NativeHandle, InTransactionID, InGameID, InSteamUserID,System.Text.Encoding.UTF8.GetBytes(InSteamSessionId + "\0"));
+			result = CSSFNetAdapter_LoginLoginBySteamCmd(m_Connection.NativeHandle, InTransactionID, InGameID, InSteamUserID,System.Text.Encoding.UTF8.GetBytes(InSteamUserToken + "\0"));
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginBySteamCmd);
 			return result;
-		} // public int  LoginBySteamCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InSteamUserID, System.String InSteamSessionId )
+		} // public int  LoginBySteamCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InSteamUserID, System.String InSteamUserToken )
 
 		// Cmd: Login request
 		public int  CreateRandomUserCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.String InCellPhone )
@@ -151,7 +151,7 @@ namespace SF.Net
 
 		// Cmd: Login request with Facebook UID
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginLoginBySteamCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_LoginLoginBySteamCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InSteamUserID, [MarshalAs(UnmanagedType.LPArray)] byte[] InSteamSessionId );
+		static extern int CSSFNetAdapter_LoginLoginBySteamCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InGameID, System.UInt64 InSteamUserID, [MarshalAs(UnmanagedType.LPArray)] byte[] InSteamUserToken );
 
 
 		// Cmd: Login request
