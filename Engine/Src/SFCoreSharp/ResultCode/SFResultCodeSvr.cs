@@ -155,6 +155,9 @@ namespace SF {
 		// Invalid Task group ID 
 		public const int SVR_INVALID_TASK_GROUPID =                         unchecked((int)0xE712002E); 
 
+		// The user's login token is invlaid 
+		public const int SVR_INVALID_1STPARTY_LOGIN =                       unchecked((int)0xE712002F); 
+
 	}
 }
 

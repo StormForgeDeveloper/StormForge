@@ -234,7 +234,7 @@ namespace SF
         virtual Result RequestLogin() override
         {
             NetPolicyLogin policy(GetConnection()->GetMessageEndpoint());
-            return policy.LoginBySteamCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetSteamUserId(), m_Owner.GetPassword());
+            return policy.LoginBySteamCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetSteamUserId(), m_Owner.GetSteamUserToken());
         }
 
     };

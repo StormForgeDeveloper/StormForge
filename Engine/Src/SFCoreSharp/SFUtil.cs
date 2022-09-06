@@ -37,7 +37,7 @@ namespace SF
                     var curByte = bytes[startIndex + i];
 
                     if (i > 0) sb.Append(separator);
-                    sb.AppendFormat("{0X2}", curByte);
+                    sb.AppendFormat("{0:X2}", curByte);
                 }
             }
             else
@@ -45,7 +45,7 @@ namespace SF
                 for (int i = 0; i < count; i++)
                 {
                     var curByte = bytes[startIndex + i];
-                    sb.AppendFormat("{0X2}", curByte);
+                    sb.AppendFormat("{0:X2}", curByte);
                 }
             }
             return sb.ToString();
