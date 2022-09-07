@@ -69,7 +69,6 @@ namespace SF
 	};
 
 
-
     [StructLayout(LayoutKind.Sequential)]
     public class ServerFriendInformation : FriendInformation
     {
@@ -202,6 +201,7 @@ namespace SF
             new TypeMap( "PlayerID", false, typeof(UInt64) ),
             new TypeMap( "CharacterID", false, typeof(UInt32) ),
             new TypeMap( "FacebookUID", false, typeof(UInt64) ),
+            new TypeMap( "PlayerPlatformID", false, typeof(PlayerPlatformID), InUseGenericVariableBuilderInterface:true ),
             new TypeMap( "AuthTicket", false, typeof(UInt64) ),
             new TypeMap( "GameInsID", false, typeof(UInt32) ),
             new TypeMap( "GameInsUID", false, typeof(UInt64), cppTypeName:"uint64_t" ),

@@ -68,15 +68,17 @@ Play packet
 ## NewActorInViewS2CEvt
 New actor in get view
 
-        Result NewActorInViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues)
+        Result NewActorInViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
 		- OutInPlayerID: PlayerID type. Joined Player Id
 
+		- OutInPlayerPlatformId: PlayerPlatformID type. Joined Player platform id
+
 		- OutInAttributes: VariableTable type. Character visual data
 
-		- OutInMovement: ActorMovement type. Actor movement of the character
+		- OutInMovement: ActorMovement type. Actor movement of the character. This one has actor id inside
 
 		- OutInState: StringCrc32 type. StateId actor state.
 
@@ -86,11 +88,9 @@ New actor in get view
 ## RemoveActorFromViewS2CEvt
 Remove actor from view
 
-        Result RemoveActorFromViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InActorID)
+        Result RemoveActorFromViewS2CEvt(const uint64_t &InPlayInstanceUID, const uint32_t &InActorID)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
-
-		- OutInPlayerID: PlayerID type. Removed Player Id(deprecated)
 
 		- OutInActorID: uint32 type. Removed actor Id
 

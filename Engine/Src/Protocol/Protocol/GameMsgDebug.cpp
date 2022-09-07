@@ -75,6 +75,12 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::AcceptNotificationRes::MID.IDSeq.MsgID,&Message::Game::AcceptNotificationRes::TraceOut));
 			// S2C: Notify new notification
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::NotifyS2CEvt::MID.IDSeq.MsgID,&Message::Game::NotifyS2CEvt::TraceOut));
+			// Cmd: PlayerId Conversion
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformIdCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformIdCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformIdRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformIdRes::TraceOut));
+			// Cmd: PlayerId conversion
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameRes::TraceOut));
 			// Cmd: Query playerID list
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByEMailCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByEMailCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByEMailRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByEMailRes::TraceOut));

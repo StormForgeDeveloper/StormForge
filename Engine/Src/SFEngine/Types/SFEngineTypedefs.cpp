@@ -87,6 +87,30 @@ namespace SF {
 		return __ClusterID_NameCrcList[(int)clusterId];
 	}
 
+
+
+    PlayerPlatformID::PlayerPlatformID(const char* strId)
+    {
+        if (StrUtil::IsNullOrEmpty(strId))
+            return;
+
+        char* endptr{};
+        auto separatorIndex = StrUtil::Indexof(strId, ':');
+        if (separatorIndex < 0)
+        {
+            Platform = EPlatform::BR;
+            this->PlayerID = (uint64_t)strtoll(strId, &endptr, 10);
+        }
+        else
+        {
+            char buffer[256]{};
+            StrUtil::StringCopy(buffer, strId);
+            buffer[separatorIndex] = '\0';
+            Platform = (EPlatform)strtol(buffer, &endptr, 10);
+            this->PlayerID = (uint64_t)strtoll(buffer + separatorIndex + 1, &endptr, 10);
+        }
+    }
+
 	/////////////////////////////////////////////////////////////////////
 	//
 	//	Type utility
@@ -137,7 +161,7 @@ namespace SF {
 	PlayerInformation& PlayerInformation::operator = (const PlayerInformation& src)
 	{
 		this->PlayerID = src.PlayerID;
-		this->FBUID = src.FBUID;
+		this->PlayerPlatformId = src.PlayerPlatformId;
 		Level = src.Level;
 		IsPlayingGame = src.IsPlayingGame;
 		LastActiveTime = src.LastActiveTime;
@@ -147,18 +171,18 @@ namespace SF {
 		return *this;
 	}
 
-	PlayerInformation::PlayerInformation(AccountID playerID, FacebookUID fbUID, const char* nickName, uint level, uint8_t isPlayingGame, uint64_t lastActiveTime)
+	PlayerInformation::PlayerInformation(AccountID playerID, const PlayerPlatformID& playerPlatformId, const char* nickName, uint level, uint8_t isPlayingGame, uint64_t lastActiveTime)
 	{
-		InitPlayerInformation(playerID, fbUID, nickName, level, isPlayingGame, lastActiveTime);
+		InitPlayerInformation(playerID, playerPlatformId, nickName, level, isPlayingGame, lastActiveTime);
 	}
 
-	Result PlayerInformation::InitPlayerInformation(AccountID playerID, FacebookUID fbUID, const char* nickName, uint level, uint8_t isPlayingGame, uint64_t lastActiveTime)
+	Result PlayerInformation::InitPlayerInformation(AccountID playerID, const PlayerPlatformID& playerPlatformId, const char* nickName, uint level, uint8_t isPlayingGame, uint64_t lastActiveTime)
 	{
 		if (nickName == nullptr)
 			return ResultCode::INVALID_ARG;
 
 		this->PlayerID = playerID;
-		this->FBUID = fbUID;
+		this->PlayerPlatformId = playerPlatformId;
 		Level = level;
 		IsPlayingGame = isPlayingGame;
 		LastActiveTime = lastActiveTime;
@@ -171,7 +195,7 @@ namespace SF {
 	{
 		if (PlayerID == src.PlayerID)
 		{
-			Assert(FBUID == src.FBUID);
+			Assert(PlayerPlatformId == src.PlayerPlatformId);
 			return true;
 		}
 		return false;
@@ -193,8 +217,8 @@ namespace SF {
 		WeeklyLose = src.WeeklyLose;
 	}
 
-	RankingPlayerInformation::RankingPlayerInformation(AccountID playerID, FacebookUID fbUID, const char* nickName, uint level, uint weeklyWin, uint weeklyLose, uint8_t isPlayingGame, uint64_t lastActiveTime)
-		:PlayerInformation(playerID, fbUID, nickName, level, isPlayingGame, lastActiveTime)
+	RankingPlayerInformation::RankingPlayerInformation(AccountID playerID, const PlayerPlatformID& PlayerPlatformId, const char* nickName, uint level, uint weeklyWin, uint weeklyLose, uint8_t isPlayingGame, uint64_t lastActiveTime)
+		:PlayerInformation(playerID, PlayerPlatformId, nickName, level, isPlayingGame, lastActiveTime)
 	{
 		WeeklyWin = weeklyWin;
 		WeeklyLose = weeklyLose;
@@ -213,7 +237,7 @@ namespace SF {
 	{
 		if (PlayerID == src.PlayerID)
 		{
-			Assert(FBUID == src.FBUID);
+			Assert(PlayerPlatformId == src.PlayerPlatformId);
 			return true;
 		}
 		return false;
@@ -233,8 +257,8 @@ namespace SF {
 		LastStaminaSent = src.LastStaminaSent;
 	}
 
-	FriendInformation::FriendInformation(AccountID playerID, FacebookUID fbUID, const char* nickName, uint level, uint weeklyWin, uint weeklyLose, uint8_t isPlayingGame, uint64_t lastActiveTime, uint64_t lastStaminaSent)
-		: RankingPlayerInformation(playerID, fbUID, nickName, level, weeklyWin, weeklyLose, isPlayingGame, lastActiveTime)
+	FriendInformation::FriendInformation(AccountID playerID, const PlayerPlatformID& playerPlatformId, const char* nickName, uint level, uint weeklyWin, uint weeklyLose, uint8_t isPlayingGame, uint64_t lastActiveTime, uint64_t lastStaminaSent)
+		: RankingPlayerInformation(playerID, playerPlatformId, nickName, level, weeklyWin, weeklyLose, isPlayingGame, lastActiveTime)
 	{
 		LastStaminaSent = lastStaminaSent;
 	}
@@ -251,7 +275,7 @@ namespace SF {
 	{
 		if (PlayerID == src.PlayerID)
 		{
-			Assert(FBUID == src.FBUID);
+			Assert(PlayerPlatformId == src.PlayerPlatformId);
 			return true;
 		}
 		return false;
@@ -276,7 +300,7 @@ namespace SF {
 		RankingID = src.RankingID;
 		Ranking = src.Ranking;
 		this->PlayerID = src.PlayerID;
-		this->FBUID = src.FBUID;
+		this->PlayerPlatformId = src.PlayerPlatformId;
 		Level = src.Level;
 		ScoreLow = src.ScoreLow;
 		ScoreHigh = src.ScoreHigh;
@@ -286,7 +310,7 @@ namespace SF {
 		return *this;
 	}
 
-	TotalRankingPlayerInformation::TotalRankingPlayerInformation(uint32_t rankingID, uint32_t ranking, AccountID playerID, FacebookUID fbUID, const char* nickName, uint level, uint scoreLow, uint scoreHigh)
+	TotalRankingPlayerInformation::TotalRankingPlayerInformation(uint32_t rankingID, uint32_t ranking, AccountID playerID, const PlayerPlatformID& playerPlatformId, const char* nickName, uint level, uint scoreLow, uint scoreHigh)
 	{
 		//if( nickName == nullptr ) 
 		//	return ResultCode::INVALID_ARG;
@@ -294,7 +318,7 @@ namespace SF {
 		RankingID = rankingID;
 		Ranking = ranking;
 		this->PlayerID = playerID;
-		this->FBUID = fbUID;
+		this->PlayerPlatformId = playerPlatformId;
 		Level = level;
 		ScoreLow = scoreLow;
 		ScoreHigh = scoreHigh;
@@ -306,7 +330,7 @@ namespace SF {
 	{
 		if (PlayerID == src.PlayerID)
 		{
-			Assert(FBUID == src.FBUID);
+			Assert(PlayerPlatformId == src.PlayerPlatformId);
 			return true;
 		}
 		return false;

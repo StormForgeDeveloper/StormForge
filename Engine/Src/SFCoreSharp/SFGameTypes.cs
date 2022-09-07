@@ -171,6 +171,22 @@ namespace SF
     };
 
 
+    // Platform types
+    public enum Platform
+    {
+        BR,         // Braves player Id
+        Steam,      // Steam player Id
+    };
+
+    [Struct]
+    [StructLayout(LayoutKind.Sequential)]
+    public struct PlayerPlatformID
+    {
+        public UInt32 PlatformData;
+        public UInt64 PlayerID;
+        public Platform Platform => (Platform)(PlatformData);
+    }
+
 
 
     public static class GameTypes

@@ -36,15 +36,15 @@
 		<S2CEvent Name="NewActorInView" Reliable="true" Crypto="No" Trace="Debug1" Desc="New actor in get view">
 			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
 			<Params TypeName="PlayerID" Name="PlayerID" Desc="Joined Player Id"/>
+            <Params TypeName="PlayerPlatformID" Name="PlayerPlatformId" Desc="Joined Player platform id"/>
 			<Params TypeName="VariableTable" Name="Attributes" Desc="Character visual data"/>
-			<Params TypeName="ActorMovement" Name="Movement" Desc="Actor movement of the character"/>
+			<Params TypeName="ActorMovement" Name="Movement" Desc="Actor movement of the character. This one has actor id inside"/>
 			<Params TypeName="StringCrc32" Name="State" Desc="StateId actor state."/>
 			<Params TypeName="VariableTable" Name="StateValues" Desc="State values"/>
 		</S2CEvent>
 
 		<S2CEvent Name="RemoveActorFromView" Reliable="true" Crypto="No" Trace="Debug1" Desc="Remove actor from view">
 			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
-			<Params TypeName="PlayerID" Name="PlayerID" Desc="Removed Player Id(deprecated)"/>
 			<Params TypeName="uint32" Name="ActorID" Desc="Removed actor Id"/>
 		</S2CEvent>
 

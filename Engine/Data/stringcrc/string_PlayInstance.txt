@@ -20,6 +20,8 @@
 "uint8"
 "NewActorInView"
 "NewActorInViewS2CEvt"
+"PlayerPlatformId"
+"PlayerPlatformID"
 "Attributes"
 "VariableTable"
 "Movement"

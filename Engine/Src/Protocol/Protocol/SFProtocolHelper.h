@@ -19,6 +19,7 @@
 #include "Util/SFStrUtil.h"
 #include "Util/SFString.h"
 #include "Types/SFEngineTypeSerialization.h"
+#include "Types/SFEngineTypeVariable.h"
 #include "Variable/SFVariableToString.h"
 #include "Util/SFStringSerialization.h"
 #include "Variable/SFVariableSerialization.h"

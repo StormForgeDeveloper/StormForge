@@ -67,7 +67,7 @@
 		<Command Name="AcceptFriendRequest" Reliable="true" Crypto="No" Trace="Debug1" Desc="Accept friend request">
 			<Cmd>
 				<Params TypeName="AccountID" Name="InviterID" Desc="Inviter PlayerID"/>
-				<Params TypeName="FacebookUID" Name="InviterFacebookUID" Desc="Inviter player ID"/>
+				<Params TypeName="PlayerPlatformID" Name="InviterPlatformId" Desc="Inviter player ID"/>
 			</Cmd>
 			<Res>
 				<Params TypeName="FriendInformation" Name="NewFriend" Desc="FriendInformation of the player"/>
@@ -151,7 +151,30 @@
 			<Params TypeName="uint64" Name="TimeStamp" Desc="Issued UTC sec"/>
 		</S2CEvent>
 
-		<!-- =================================================== Player information ================================================== -->
+        <!-- ===================================================  Player Directory  ================================================== -->
+
+        <Command Name="FindPlayerByPlatformId" Reliable="true" Crypto="No" Trace="Debug1" Desc="PlayerId Conversion">
+            <Cmd>
+                <Params TypeName="PlayerPlatformID" Name="PlatformPlayerId" IsArray="true" Desc="Platform playerId"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="PlayerID" Name="PlayerId" Desc="PlayerId"/>
+                <Params TypeName="PlayerPlatformID" Name="PlayerPlatformId" Desc="Platform player Id. ex) Steam"/>
+            </Res>
+        </Command>
+
+        <Command Name="FindPlayerByCharacterName" Reliable="true" Crypto="No" Trace="Debug1" Desc="PlayerId conversion">
+            <Cmd>
+                <Params TypeName="String" Name="CharacterName" Desc="Character name to search"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="PlayerID" Name="PlayerId" Desc="PlayerId"/>
+                <Params TypeName="PlayerPlatformID" Name="PlayerPlatformId" Desc="Platform player Id. ex) Steam"/>
+                <Params TypeName="CharacterID" Name="CharacterId" Desc="CharacterID to query"/>
+            </Res>
+        </Command>
+
+        <!-- =================================================== Player information ================================================== -->
 
 		<Command Name="FindPlayerByEMail" Reliable="true" Crypto="No" Trace="Debug1" Desc="Query playerID list">
 			<Cmd>
@@ -185,7 +208,9 @@
 			<Params TypeName="uint8" Name="IsInGame" Desc="TRUE if the player is in a game"/>
 		</S2CEvent>
 
-		<Command Name="GetRankingList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get Ranking list">
+        <!-- ===================================================  Ranking ================================================== -->
+
+        <Command Name="GetRankingList" Reliable="true" Crypto="No" Trace="Debug1" Desc="Get Ranking list">
 			<Cmd>
 				<Params TypeName="uint8" Name="RankingType"/>
 				<Params TypeName="uint8" Name="BaseRanking" Desc="Base ranking to query, 0 based ranking order"/>
@@ -196,7 +221,7 @@
 			</Res>
 		</Command>
 
-		<!-- ===================================================  Player game info update ================================================== -->
+        <!-- ===================================================  Player game info update ================================================== -->
 
 		<Command Name="GetUserGamePlayerInfo" Reliable="true" Crypto="No" Trace="Debug1" Desc="Game user game play information">
 			<Cmd>
@@ -609,7 +634,7 @@
 	    </Command>
 
 
-		<!-- ===================================================  Debug ================================================== -->
+        <!-- ===================================================  Debug ================================================== -->
 
 		<Command Name="CallFunction" Reliable="true" Crypto="No" Trace="Debug1" Desc="To call general functionality">
 			<Cmd>

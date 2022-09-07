@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -260,6 +260,10 @@ namespace ProtocolCompiler
             {
                 foreach (Parameter param in parameters)
                 {
+                    if (parameterNameMap.ContainsKey(param.Name))
+                    {
+                        Console.WriteLine("{0} is duplicated in {1}", param.Name, msg.Name);
+                    }
                     parameterNameMap.Add(param.Name, param);
                 }
             }

@@ -1,4 +1,4 @@
-﻿
+
 
 include_directories(AFTER 
 	../../../../FBXSDK/include
@@ -125,8 +125,13 @@ set(SFENGINE_LIB_FILES
 	SFEngine.Win.cpp
 	SFEngine.Linux.cpp
 	Util/SFToStringEngineTypes.cpp
+	Types/SFEngineTypedefs.h
 	Types/SFEngineTypedefs.inl
 	Types/SFEngineTypedefs.cpp
+	Types/SFEngineTypeVariable.h
+	Types/SFEngineTypeVariable.cpp
+	Types/SFEngineTypeSerialization.h
+	Types/SFEngineTypeSerialization.cpp
 	
 	Mongo/SFMongoDB.h
 	Mongo/SFMongoDB.cpp
@@ -257,9 +262,6 @@ set(SFENGINE_LIB_FILES
 	SFEngine.h
 	SFEnginePCH.h
 	Util/SFToStringEngineTypes.h
-	Types/SFEngineTypedefs.h
-	Types/SFEngineTypeSerialization.h
-	Types/SFEngineTypeSerialization.cpp
 	Zookeeper/SFZookeeper.cpp
 	Zookeeper/SFZookeeper.h
 	Net/SFConnection.inl

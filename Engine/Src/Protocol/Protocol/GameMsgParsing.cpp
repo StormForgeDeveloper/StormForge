@@ -108,6 +108,16 @@ namespace SF
 			// S2C: Notify new notification
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::NotifyS2CEvt::MID.IDSeq.MsgID,&Message::Game::NotifyS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::NotifyS2CEvt::MID.IDSeq.MsgID,&Message::Game::NotifyS2CEvt::ParseMessageToMessageBase));
+			// Cmd: PlayerId Conversion
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformIdCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformIdCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformIdCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformIdCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformIdRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformIdRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformIdRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformIdRes::ParseMessageToMessageBase));
+			// Cmd: PlayerId conversion
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameRes::ParseMessageToMessageBase));
 			// Cmd: Query playerID list
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::FindPlayerByEMailCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByEMailCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::FindPlayerByEMailCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByEMailCmd::ParseMessageToMessageBase));

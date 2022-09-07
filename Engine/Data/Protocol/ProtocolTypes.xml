@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ProtocolTypes xmlns="http://www.StormForge.com/XMLProtocol" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.StormForge.com/XMLProtocol ProtocolTypeDef.xsd">
 	<DataType TypeName="ActorMovement" IsEnum="false" CppTypeName="ActorMovement" IsVariableSize="false" CSharpTypeName="ActorMovement" IsCSharpStruct="true" IsCSharpArray="false" Desc="ActorMovement struct"/>
+	<DataType TypeName="PlayerPlatformID" IsEnum="false" CppTypeName="PlayerPlatformID" IsVariableSize="false" CSharpTypeName="PlayerPlatformID" IsCSharpStruct="true" IsCSharpArray="false" Desc="Unified player ID cross multiplatform"/>
 </ProtocolTypes>

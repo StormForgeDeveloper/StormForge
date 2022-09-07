@@ -35,9 +35,9 @@ TEST_F(VariableTest, Boxing1)
 {
 	DynamicArray<FriendInformation> testFriendList(GetSystemHeap());
 	FriendInformation test;
-	test.FBUID = 1;
+	test.PlayerPlatformId.PlayerID = 1;
 	testFriendList.push_back(test);
-	test.FBUID = 2;
+	test.PlayerPlatformId.PlayerID = 2;
 	testFriendList.push_back(test);
 
 	const Array< FriendInformation>& testFriendListC = testFriendList;

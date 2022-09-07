@@ -16,6 +16,7 @@
 #include "Util/SFStrUtil.h"
 #include "Util/SFStrFormat.h"
 #include "Util/SFToStringEngineTypes.h"
+#include "Types/SFEngineTypeVariable.h"
 
 
 
@@ -41,7 +42,7 @@ namespace SF {
 		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
 			return ResultCode::FAIL;
 
-		if (!(_IToA(context, value.FBUID)))
+		if (!(_ToString(context, value.PlayerPlatformId)))
 			return ResultCode::FAIL;
 
 		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
@@ -98,7 +99,7 @@ namespace SF {
 		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
 			return ResultCode::FAIL;
 
-		if (!(_IToA(context, value.FBUID)))
+		if (!(_ToString(context, value.PlayerPlatformId)))
 			return ResultCode::FAIL;
 
 		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))

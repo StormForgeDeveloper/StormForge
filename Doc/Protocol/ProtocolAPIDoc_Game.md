@@ -153,13 +153,13 @@ Accept friend request
 
 1. Command interface
 
-        Result AcceptFriendRequestCmd(const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID)
+        Result AcceptFriendRequestCmd(const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId)
 
 		- OutTransactionID: TransactionID type. 
 
 		- OutInviterID: AccountID type. Inviter PlayerID
 
-		- OutInviterFacebookUID: FacebookUID type. Inviter player ID
+		- OutInviterPlatformId: PlayerPlatformID type. Inviter player ID
 
 2. Result interface
 
@@ -333,6 +333,51 @@ Notify new notification
 		- OutInIsRead: uint8 type. Notification is read?
 
 		- OutInTimeStamp: uint64 type. Issued UTC sec
+
+
+## FindPlayerByPlatformId Request
+PlayerId Conversion
+
+1. Command interface
+
+        Result FindPlayerByPlatformIdCmd(const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutPlatformPlayerId: PlayerPlatformID type. Platform playerId
+
+2. Result interface
+
+C++: Cast message to FindPlayerByPlatformIdRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutPlayerId: PlayerID type. PlayerId
+		- OutPlayerPlatformId: PlayerPlatformID type. Platform player Id. ex) Steam
+
+
+## FindPlayerByCharacterName Request
+PlayerId conversion
+
+1. Command interface
+
+        Result FindPlayerByCharacterNameCmd(const uint64_t &InTransactionID, const char* InCharacterName)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutCharacterName: String type. Character name to search
+
+2. Result interface
+
+C++: Cast message to FindPlayerByCharacterNameRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutPlayerId: PlayerID type. PlayerId
+		- OutPlayerPlatformId: PlayerPlatformID type. Platform player Id. ex) Steam
+		- OutCharacterId: CharacterID type. CharacterID to query
 
 
 ## FindPlayerByEMail Request

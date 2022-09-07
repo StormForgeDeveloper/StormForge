@@ -47,7 +47,7 @@ namespace SF
 		// Cmd: Invite friend
 		Result InviteFriendCmd( const uint64_t &InTransactionID, const AccountID &InFriendID );
 		// Cmd: Accept friend request
-		Result AcceptFriendRequestCmd( const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID );
+		Result AcceptFriendRequestCmd( const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId );
 		// Cmd: Remove friden form the friend list
 		Result RemoveFriendCmd( const uint64_t &InTransactionID, const AccountID &InFriendID );
 		// Cmd: Get friend list
@@ -60,6 +60,10 @@ namespace SF
 		Result SetNotificationReadCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 		// Cmd: Accept notification
 		Result AcceptNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID );
+		// Cmd: PlayerId Conversion
+		Result FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId );
+		// Cmd: PlayerId conversion
+		Result FindPlayerByCharacterNameCmd( const uint64_t &InTransactionID, const char* InCharacterName );
 		// Cmd: Query playerID list
 		Result FindPlayerByEMailCmd( const uint64_t &InTransactionID, const char* InPlayerEMail );
 		// Cmd: Query playerID list
@@ -173,6 +177,10 @@ namespace SF
 		Result AcceptNotificationRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 		// S2C: Notify new notification
 		Result NotifyS2CEvt( const uint32_t &InNotificationID, const uint32_t &InNotificationType, const uint64_t &InMessageParam0, const uint64_t &InMessageParam1, const char* InMessageText, const uint8_t &InIsRead, const uint64_t &InTimeStamp );
+		// Cmd: PlayerId Conversion
+		Result FindPlayerByPlatformIdRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
+		// Cmd: PlayerId conversion
+		Result FindPlayerByCharacterNameRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId, const CharacterID &InCharacterId );
 		// Cmd: Query playerID list
 		Result FindPlayerByEMailRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
 		// Cmd: Query playerID list

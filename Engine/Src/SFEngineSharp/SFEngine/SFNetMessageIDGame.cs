@@ -118,6 +118,18 @@ namespace SF.Net
 		// S2C: Notify new notification
 		public static int NotifyS2CEvt { get { return CSSFNetMessageID_GameNotifyS2CEvt(); } }
 
+		// Cmd: PlayerId Conversion
+		public static int FindPlayerByPlatformIdCmd { get { return CSSFNetMessageID_GameFindPlayerByPlatformIdCmd(); } }
+
+		public static int FindPlayerByPlatformIdRes { get { return CSSFNetMessageID_GameFindPlayerByPlatformIdRes(); } }
+
+
+		// Cmd: PlayerId conversion
+		public static int FindPlayerByCharacterNameCmd { get { return CSSFNetMessageID_GameFindPlayerByCharacterNameCmd(); } }
+
+		public static int FindPlayerByCharacterNameRes { get { return CSSFNetMessageID_GameFindPlayerByCharacterNameRes(); } }
+
+
 		// Cmd: Query playerID list
 		public static int FindPlayerByEMailCmd { get { return CSSFNetMessageID_GameFindPlayerByEMailCmd(); } }
 
@@ -528,6 +540,26 @@ namespace SF.Net
 		// S2C: Notify new notification
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameNotifyS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameNotifyS2CEvt();
+
+
+		// Cmd: PlayerId Conversion
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameFindPlayerByPlatformIdCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameFindPlayerByPlatformIdCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameFindPlayerByPlatformIdRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameFindPlayerByPlatformIdRes();
+
+
+
+		// Cmd: PlayerId conversion
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameFindPlayerByCharacterNameCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameFindPlayerByCharacterNameCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameFindPlayerByCharacterNameRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameFindPlayerByCharacterNameRes();
+
 
 
 		// Cmd: Query playerID list

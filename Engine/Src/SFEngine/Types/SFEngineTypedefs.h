@@ -50,6 +50,33 @@ namespace SF {
 
 
 
+    enum class EPlatform : uint32_t
+    {
+        BR,         // Braves player Id
+        Steam,      // Steam player Id
+        Facebook,   // Facebook
+    };
+
+    struct PlayerPlatformID
+    {
+        EPlatform Platform{};
+        uint64_t PlayerID{};
+
+        PlayerPlatformID() = default;
+        PlayerPlatformID(EPlatform platform, uint64_t playerId)
+            : Platform(platform)
+            , PlayerID(playerId)
+        {}
+        PlayerPlatformID(const char* strId);
+    };
+
+    SF_FORCEINLINE bool operator == (const PlayerPlatformID& op1, const PlayerPlatformID& op2)
+    {
+        return op1.Platform == op2.Platform
+            && op1.PlayerID == op2.PlayerID;
+    }
+
+
 
 	///////////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -400,7 +427,7 @@ namespace SF {
 		};
 
 		AccountID		PlayerID = 0;
-		FacebookUID		FBUID = 0;
+        PlayerPlatformID PlayerPlatformId{};
 		char			NickName[MAX_NAME] = {0,};
 		uint64_t			LastActiveTime = 0;
 		uint32_t			Level = 0;
@@ -408,8 +435,8 @@ namespace SF {
 
 		PlayerInformation() {}
 		PlayerInformation(const PlayerInformation& src);
-		PlayerInformation(AccountID playerID, FacebookUID fbUID, const char* nickName, uint level, uint8_t isPlayingGame, uint64_t lastActiveTime);
-		Result InitPlayerInformation(AccountID playerID, FacebookUID fbUID, const char* nickName, uint level, uint8_t isPlayingGame, uint64_t lastActiveTime);
+		PlayerInformation(AccountID playerID, const PlayerPlatformID& playerPlatformId, const char* nickName, uint level, uint8_t isPlayingGame, uint64_t lastActiveTime);
+		Result InitPlayerInformation(AccountID playerID, const PlayerPlatformID& playerPlatformId, const char* nickName, uint level, uint8_t isPlayingGame, uint64_t lastActiveTime);
 		PlayerInformation& operator = (const PlayerInformation& src);
 		bool operator == (const PlayerInformation& src) const;
 	};
@@ -422,7 +449,7 @@ namespace SF {
 
 		RankingPlayerInformation();
 		RankingPlayerInformation(const RankingPlayerInformation& src);
-		RankingPlayerInformation(AccountID playerID, FacebookUID fbUID, const char* nickName, uint level, uint weeklyWin, uint weeklyLose, uint8_t isPlayingGame, uint64_t lastActiveTime);
+		RankingPlayerInformation(AccountID playerID, const PlayerPlatformID& playerPlatformId, const char* nickName, uint level, uint weeklyWin, uint weeklyLose, uint8_t isPlayingGame, uint64_t lastActiveTime);
 		RankingPlayerInformation& operator = (const RankingPlayerInformation& src);
 		bool operator == (const RankingPlayerInformation& src) const;
 	};
@@ -435,7 +462,7 @@ namespace SF {
 
 		FriendInformation();
 		FriendInformation(const FriendInformation& src);
-		FriendInformation(AccountID playerID, FacebookUID fbUID, const char* nickName, uint level, uint weeklyWin, uint weeklyLose, uint8_t isPlayingGame, uint64_t lastActiveTime, uint64_t LastStaminaSent);
+		FriendInformation(AccountID playerID, const PlayerPlatformID& playerPlatformId, const char* nickName, uint level, uint weeklyWin, uint weeklyLose, uint8_t isPlayingGame, uint64_t lastActiveTime, uint64_t LastStaminaSent);
 		FriendInformation& operator = (const FriendInformation& src);
 		bool operator == (const FriendInformation& src) const;
 	};
@@ -451,7 +478,7 @@ namespace SF {
 		uint32_t			RankingID;
 		uint32_t			Ranking;
 		AccountID			PlayerID;
-		FacebookUID			FBUID;
+		PlayerPlatformID	PlayerPlatformId;
 		char				NickName[MAX_NAME];
 		uint32_t			Level;
 		uint32_t			ScoreLow;
@@ -464,7 +491,7 @@ namespace SF {
 
 		TotalRankingPlayerInformation();
 		TotalRankingPlayerInformation(const TotalRankingPlayerInformation& src);
-		TotalRankingPlayerInformation(uint32_t rankingID, uint32_t ranking, AccountID playerID, FacebookUID fbUID, const char* nickName, uint level, uint scoreLow, uint scoreHigh);
+		TotalRankingPlayerInformation(uint32_t rankingID, uint32_t ranking, AccountID playerID, const PlayerPlatformID& playerPlatformId, const char* nickName, uint level, uint scoreLow, uint scoreHigh);
 		TotalRankingPlayerInformation& operator = (const TotalRankingPlayerInformation& src);
 
 		void SetLongScore(uint64_t score)

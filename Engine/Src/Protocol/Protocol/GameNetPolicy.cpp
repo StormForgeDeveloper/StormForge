@@ -121,19 +121,19 @@ namespace SF
 
 	}; // Result NetPolicyGame::InviteFriendCmd( const uint64_t &InTransactionID, const AccountID &InFriendID )
 	// Cmd: Accept friend request
-	Result NetPolicyGame::AcceptFriendRequestCmd( const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID )
+	Result NetPolicyGame::AcceptFriendRequestCmd( const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Game::AcceptFriendRequestCmd::Create(GetSystemHeap(), InTransactionID, InInviterID, InInviterFacebookUID);
+		 pMessage = SF::Message::Game::AcceptFriendRequestCmd::Create(GetSystemHeap(), InTransactionID, InInviterID, InInviterPlatformId);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetPolicyGame::AcceptFriendRequestCmd( const uint64_t &InTransactionID, const AccountID &InInviterID, const FacebookUID &InInviterFacebookUID )
+	}; // Result NetPolicyGame::AcceptFriendRequestCmd( const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId )
 	// Cmd: Remove friden form the friend list
 	Result NetPolicyGame::RemoveFriendCmd( const uint64_t &InTransactionID, const AccountID &InFriendID )
 	{
@@ -218,6 +218,34 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetPolicyGame::AcceptNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
+	// Cmd: PlayerId Conversion
+	Result NetPolicyGame::FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::FindPlayerByPlatformIdCmd::Create(GetSystemHeap(), InTransactionID, InPlatformPlayerId);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetPolicyGame::FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId )
+	// Cmd: PlayerId conversion
+	Result NetPolicyGame::FindPlayerByCharacterNameCmd( const uint64_t &InTransactionID, const char* InCharacterName )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::FindPlayerByCharacterNameCmd::Create(GetSystemHeap(), InTransactionID, InCharacterName);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetPolicyGame::FindPlayerByCharacterNameCmd( const uint64_t &InTransactionID, const char* InCharacterName )
 	// Cmd: Query playerID list
 	Result NetPolicyGame::FindPlayerByEMailCmd( const uint64_t &InTransactionID, const char* InPlayerEMail )
 	{
@@ -920,6 +948,34 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetSvrPolicyGame::NotifyS2CEvt( const uint32_t &InNotificationID, const uint32_t &InNotificationType, const uint64_t &InMessageParam0, const uint64_t &InMessageParam1, const char* InMessageText, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
+	// Cmd: PlayerId Conversion
+	Result NetSvrPolicyGame::FindPlayerByPlatformIdRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::FindPlayerByPlatformIdRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayerId, InPlayerPlatformId);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetSvrPolicyGame::FindPlayerByPlatformIdRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
+	// Cmd: PlayerId conversion
+	Result NetSvrPolicyGame::FindPlayerByCharacterNameRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId, const CharacterID &InCharacterId )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::FindPlayerByCharacterNameRes::Create(GetSystemHeap(), InTransactionID, InResult, InPlayerId, InPlayerPlatformId, InCharacterId);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetSvrPolicyGame::FindPlayerByCharacterNameRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId, const CharacterID &InCharacterId )
 	// Cmd: Query playerID list
 	Result NetSvrPolicyGame::FindPlayerByEMailRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 	{

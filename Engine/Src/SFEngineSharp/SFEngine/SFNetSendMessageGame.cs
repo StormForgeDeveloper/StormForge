@@ -117,15 +117,15 @@ namespace SF.Net
 		} // public int  InviteFriendCmd( System.UInt64 InTransactionID, System.UInt64 InFriendID )
 
 		// Cmd: Accept friend request
-		public int  AcceptFriendRequestCmd( System.UInt64 InTransactionID, System.UInt64 InInviterID, System.UInt64 InInviterFacebookUID )
+		public int  AcceptFriendRequestCmd( System.UInt64 InTransactionID, System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameAcceptFriendRequestCmd(m_Connection.NativeHandle, InTransactionID, InInviterID, InInviterFacebookUID);
+			result = CSSFNetAdapter_GameAcceptFriendRequestCmd(m_Connection.NativeHandle, InTransactionID, InInviterID,ref InInviterPlatformId);
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.AcceptFriendRequestCmd);
 			return result;
-		} // public int  AcceptFriendRequestCmd( System.UInt64 InTransactionID, System.UInt64 InInviterID, System.UInt64 InInviterFacebookUID )
+		} // public int  AcceptFriendRequestCmd( System.UInt64 InTransactionID, System.UInt64 InInviterID, SF.PlayerPlatformID InInviterPlatformId )
 
 		// Cmd: Remove friden form the friend list
 		public int  RemoveFriendCmd( System.UInt64 InTransactionID, System.UInt64 InFriendID )
@@ -192,6 +192,28 @@ namespace SF.Net
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.AcceptNotificationCmd);
 			return result;
 		} // public int  AcceptNotificationCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
+
+		// Cmd: PlayerId Conversion
+		public int  FindPlayerByPlatformIdCmd( System.UInt64 InTransactionID, SF.PlayerPlatformID[] InPlatformPlayerId )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_GameFindPlayerByPlatformIdCmd(m_Connection.NativeHandle, InTransactionID,(ushort)InPlatformPlayerId.Length, InPlatformPlayerId);
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformIdCmd);
+			return result;
+		} // public int  FindPlayerByPlatformIdCmd( System.UInt64 InTransactionID, SF.PlayerPlatformID[] InPlatformPlayerId )
+
+		// Cmd: PlayerId conversion
+		public int  FindPlayerByCharacterNameCmd( System.UInt64 InTransactionID, System.String InCharacterName )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_GameFindPlayerByCharacterNameCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InCharacterName + "\0"));
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByCharacterNameCmd);
+			return result;
+		} // public int  FindPlayerByCharacterNameCmd( System.UInt64 InTransactionID, System.String InCharacterName )
 
 		// Cmd: Query playerID list
 		public int  FindPlayerByEMailCmd( System.UInt64 InTransactionID, System.String InPlayerEMail )
@@ -616,7 +638,7 @@ namespace SF.Net
 
 		// Cmd: Accept friend request
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameAcceptFriendRequestCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameAcceptFriendRequestCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InInviterID, System.UInt64 InInviterFacebookUID );
+		static extern int CSSFNetAdapter_GameAcceptFriendRequestCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt64 InInviterID, ref SF.PlayerPlatformID InInviterPlatformId );
 
 
 		// Cmd: Remove friden form the friend list
@@ -647,6 +669,16 @@ namespace SF.Net
 		// Cmd: Accept notification
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameAcceptNotificationCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameAcceptNotificationCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InNotificationID );
+
+
+		// Cmd: PlayerId Conversion
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByPlatformIdCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameFindPlayerByPlatformIdCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt16 _sizeOfInPlatformPlayerId,SF.PlayerPlatformID[] InPlatformPlayerId );
+
+
+		// Cmd: PlayerId conversion
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByCharacterNameCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameFindPlayerByCharacterNameCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InCharacterName );
 
 
 		// Cmd: Query playerID list
@@ -1029,6 +1061,30 @@ namespace SF.Net
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.NotifyS2CEvt);
 			return result;
 		} // public int  NotifyS2CEvt( System.UInt32 InNotificationID, System.UInt32 InNotificationType, System.UInt64 InMessageParam0, System.UInt64 InMessageParam1, System.String InMessageText, System.Byte InIsRead, System.UInt64 InTimeStamp )
+
+
+		// Cmd: PlayerId Conversion
+		public int  FindPlayerByPlatformIdRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_GameFindPlayerByPlatformIdRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerId,ref InPlayerPlatformId);
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformIdRes);
+			return result;
+		} // public int  FindPlayerByPlatformIdRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
+
+
+		// Cmd: PlayerId conversion
+		public int  FindPlayerByCharacterNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId, System.UInt32 InCharacterId )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_GameFindPlayerByCharacterNameRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerId,ref InPlayerPlatformId, InCharacterId);
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByCharacterNameRes);
+			return result;
+		} // public int  FindPlayerByCharacterNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId, System.UInt32 InCharacterId )
 
 
 		// Cmd: Query playerID list
@@ -1777,6 +1833,18 @@ namespace SF.Net
 		// S2C: Notify new notification
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameNotifyS2CEvt", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameNotifyS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InNotificationID, System.UInt32 InNotificationType, System.UInt64 InMessageParam0, System.UInt64 InMessageParam1, [MarshalAs(UnmanagedType.LPArray)] byte[] InMessageText, System.Byte InIsRead, System.UInt64 InTimeStamp );
+
+
+
+		// Cmd: PlayerId Conversion
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByPlatformIdRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameFindPlayerByPlatformIdRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, ref SF.PlayerPlatformID InPlayerPlatformId );
+
+
+
+		// Cmd: PlayerId conversion
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByCharacterNameRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameFindPlayerByCharacterNameRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, ref SF.PlayerPlatformID InPlayerPlatformId, System.UInt32 InCharacterId );
 
 
 
