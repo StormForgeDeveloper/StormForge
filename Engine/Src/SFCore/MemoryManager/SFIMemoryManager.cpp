@@ -132,7 +132,9 @@ namespace SF {
 				return printcount < 10; // print max 10
 			});
 #endif
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
 			Assert(false);
+#endif
 		}
 		//Assert(m_AllocatedDRAM.load(std::memory_order_acquire) == 0 && m_AllocatedVRAM.load(std::memory_order_acquire) == 0);
 	}
