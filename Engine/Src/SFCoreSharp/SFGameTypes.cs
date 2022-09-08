@@ -176,6 +176,7 @@ namespace SF
     {
         BR,         // Braves player Id
         Steam,      // Steam player Id
+        Facebook,   // Facebook player Id
     };
 
     [Struct]
