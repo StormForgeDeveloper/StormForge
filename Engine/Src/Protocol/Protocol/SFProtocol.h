@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -29,6 +29,8 @@ namespace SF
 	{
 		// Policy 
 		PROTOCOLID_NONE						= 0,			// Not defined policy
+
+        PROTOCOLID_GENERIC,                                 // Generic
 
 		PROTOCOLID_LOGIN					,
 		PROTOCOLID_GAME						,				// Game policy

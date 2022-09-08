@@ -238,7 +238,7 @@ namespace ProtocolCompiler
 
             foreach (Parameter param in parameters)
             {
-                bHas |= !IsStrType(param) && /*!param.IsArray && */IsVariableSizeType(param);
+                bHas |= !IsStrType(param) && !param.IsArray && IsVariableSizeType(param);
             }
             return bHas;
         }

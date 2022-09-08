@@ -20,7 +20,8 @@ PROTO_BUILD_PARAM_STRING=+out=$(OUTPUT_STRING_PATH) +gen=MessageStringTableBuild
 
 SOURCES=ProtocolGame.xml \
 	ProtocolLogin.xml \
-	ProtocolPlayInstance.xml
+	ProtocolPlayInstance.xml \
+    ProtocolGeneric.xml
 
 
 SOURCES_POSTFIXED=$(SOURCES:.xml=.h)

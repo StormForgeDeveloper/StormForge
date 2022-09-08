@@ -1,4 +1,4 @@
-﻿
+
 
 set(SFPROTOCOL_LIB_FILES
   	Protocol/SFGenericMessageClass.cpp
@@ -15,19 +15,29 @@ set(SFPROTOCOL_LIB_FILES
 	Protocol/LoginMsgClass.h
 	Protocol/LoginMsgDebug.h
 	Protocol/LoginMsgParsing.h
+
 	Protocol/PlayInstanceMsgClass.cpp
 	Protocol/PlayInstanceMsgClass.h
 	Protocol/PlayInstanceMsgDebug.cpp
 	Protocol/PlayInstanceMsgDebug.h
 	Protocol/PlayInstanceMsgParsing.cpp
 	Protocol/PlayInstanceMsgParsing.h
+   	Protocol/PlayInstanceNetPolicy.cpp
+	Protocol/PlayInstanceNetPolicy.h
+
+	Protocol/GenericMsgClass.cpp
+	Protocol/GenericMsgClass.h
+	Protocol/GenericMsgDebug.cpp
+	Protocol/GenericMsgDebug.h
+	Protocol/GenericMsgParsing.cpp
+	Protocol/GenericMsgParsing.h
+   	Protocol/GenericNetPolicy.cpp
+	Protocol/GenericNetPolicy.h
 
 	Protocol/GameNetPolicy.cpp
 	Protocol/GameNetPolicy.h
 	Protocol/LoginNetPolicy.cpp
 	Protocol/LoginNetPolicy.h
-	Protocol/PlayInstanceNetPolicy.cpp
-	Protocol/PlayInstanceNetPolicy.h
 
 	Protocol/SFProtocol.cpp
 	Protocol/SFGenericMessageClass.h

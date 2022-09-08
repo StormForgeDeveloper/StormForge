@@ -486,14 +486,7 @@ namespace ProtocolCompiler
 
                 if (param.IsArray) // array
                 {
-                    if (!IsStrType(param) && !bUseOriginalType && IsVariableSizeType(param))
-                    {
-                        strParams += string.Format("const Array<uint8_t>& {0}", InParamName(param.Name));
-                    }
-                    else
-                    {
-                        strParams += string.Format("const {0}& {1}", InArrayTypeName(param), InParamName(param.Name));
-                    }
+                    strParams += string.Format("const {0}& {1}", InArrayTypeName(param), InParamName(param.Name));
                 }
                 else if (IsStrType(param)) // string type
                 {

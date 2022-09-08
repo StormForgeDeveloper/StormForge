@@ -446,7 +446,8 @@ namespace ProtocolCompiler
                     }
                     else if (IsVariableSizeType(param))
                     {
-                        strParams.AppendFormat("SF::ArrayView<uint8_t>({0}_sizeOf{1}, {0}_sizeOf{1}, {0}{1})", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
+                        strParams.AppendFormat("{0}{1}Array_", strPrefix, InParamName(param.Name));
+                        //strParams.AppendFormat("SF::ArrayView<uint8_t>({0}_sizeOf{1}, {0}_sizeOf{1}, {0}{1})", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
                     }
                     else
                     {
@@ -513,6 +514,13 @@ namespace ProtocolCompiler
                     {
                         string varName = string.Format("{0}{1}", strPrefix, InParamName(param.Name));
                         MatchIndent(); OutStream.WriteLine("auto& {0}Array_ = *NativeToObject<SF::ArrayObject<const char*>>({0});", varName);
+                    }
+                    else if (IsVariableSizeType(param))
+                    {
+                        string varName = string.Format("{0}{1}", strPrefix, InParamName(param.Name));
+                        MatchIndent(); OutStream.WriteLine("SF::DynamicArray<{0}> {1}Array_;", typeInfo.CPPTypeName, varName, InParamName(param.Name));
+                        MatchIndent(); OutStream.WriteLine("SF::InputMemoryStream {0}Stream_(SF::ArrayView<uint8_t>(_sizeOf{0}, {0}));", InParamName(param.Name));
+                        MatchIndent(); OutStream.WriteLine("{0}Stream_ >> {1}Array_;", InParamName(param.Name), varName);
                     }
                 }
             }

@@ -491,11 +491,19 @@ namespace SF
             using (MemoryStream outputStream = new MemoryStream())
             using (BinaryWriter writer = new BinaryWriter(outputStream))
             {
-                UInt16 numItems = (UInt16)Tables.Length;
-                writer.Write(numItems);
-                foreach (var table in Tables)
+                if (Tables != null)
                 {
-                    table.ToByteArray(writer);
+                    UInt16 numItems = (UInt16)Tables.Length;
+                    writer.Write(numItems);
+                    foreach (var table in Tables)
+                    {
+                        table.ToByteArray(writer);
+                    }
+                }
+                else
+                {
+                    UInt16 numItems = 0;
+                    writer.Write(numItems);
                 }
 
                 writer.Flush();

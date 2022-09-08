@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -36,6 +36,9 @@
 #include "Protocol/PlayInstanceMsgDebug.h"
 #include "Protocol/PlayInstanceMsgParsing.h"
 
+#include "Protocol/GenericMsgDebug.h"
+#include "Protocol/GenericMsgParsing.h"
+
 
 namespace SF {
 
@@ -65,10 +68,12 @@ namespace Protocol {
 			RegisterDebugTraceLogin();
 			RegisterDebugTraceGame();
 			RegisterDebugTracePlayInstance();
+            RegisterDebugTraceGeneric();
 
 			RegisterParserLogin();
 			RegisterParserGame();
 			RegisterParserPlayInstance();
+            RegisterParserGeneric();
 
 			return true;
 		}

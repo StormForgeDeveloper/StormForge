@@ -7033,37 +7033,6 @@ namespace SF
 
 			}; // Result SearchGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstances )
-			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
-
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InGameInstances)
-				);
-
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::SearchGameInstanceRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
-				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InResult);
-				protocolCheck(*output << InGameInstances);
-
-				return hr;
-			}; // MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InGameInstances )
 
 			MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
 			{
@@ -10867,37 +10836,6 @@ namespace SF
 
 			}; // Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InCharacters )
-			{
- 				MessageData *pNewMsg = nullptr;
-				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
-				{
- 					if(!hr && pNewMsg != nullptr)
-					{
- 						IHeap::Delete(pNewMsg);
-						return nullptr;
-					}
-					return pNewMsg;
-				});
-
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InCharacters)
-				);
-
-				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterListRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
-				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
-
-				protocolCheck(*output << InTransactionID);
-				protocolCheck(*output << InResult);
-				protocolCheck(*output << InCharacters);
-
-				return hr;
-			}; // MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InCharacters )
 
 			MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
 			{
