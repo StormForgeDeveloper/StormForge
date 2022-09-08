@@ -1395,8 +1395,10 @@ namespace SF.Net
 		public int  SearchGameInstanceRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InGameInstances )
 		{
  			int result;
+			var InGameInstances_ = InGameInstances.ToByteArray();
+			using (var InGameInstances_PinnedPtr_ = new PinnedByteBuffer(InGameInstances_))
 			{
-			result = CSSFNetAdapter_GameSearchGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InGameInstances.Length, InGameInstances);
+			result = CSSFNetAdapter_GameSearchGameInstanceRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InGameInstances_.Length, InGameInstances_PinnedPtr_.Ptr);
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.SearchGameInstanceRes);
 			return result;
@@ -1689,8 +1691,10 @@ namespace SF.Net
 		public int  GetCharacterListRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable[] InCharacters )
 		{
  			int result;
+			var InCharacters_ = InCharacters.ToByteArray();
+			using (var InCharacters_PinnedPtr_ = new PinnedByteBuffer(InCharacters_))
 			{
-			result = CSSFNetAdapter_GameGetCharacterListRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InCharacters.Length, InCharacters);
+			result = CSSFNetAdapter_GameGetCharacterListRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InCharacters_.Length, InCharacters_PinnedPtr_.Ptr);
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterListRes);
 			return result;
@@ -2000,7 +2004,7 @@ namespace SF.Net
 
 		// Cmd: Search game instance
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSearchGameInstanceRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameSearchGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInGameInstances,SF.VariableTable[] InGameInstances );
+		static extern int CSSFNetAdapter_GameSearchGameInstanceRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInGameInstances,IntPtr InGameInstances );
 
 
 
@@ -2144,7 +2148,7 @@ namespace SF.Net
 
 		// Cmd: Get character list
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterListRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetCharacterListRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInCharacters,SF.VariableTable[] InCharacters );
+		static extern int CSSFNetAdapter_GameGetCharacterListRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInCharacters,IntPtr InCharacters );
 
 
 

@@ -414,20 +414,25 @@ namespace SF
             using (MemoryStream outputStream = new MemoryStream())
             using (BinaryWriter writer = new BinaryWriter(outputStream))
             {
-                writer.Write(NumItems);
-
-                foreach (var itItem in this)
-                {
-                    writer.Write(itItem.Key.StringHash);
-
-                    var typeInfo = TypeSerialization.GetTypeInfo(itItem.Value);
-                    writer.Write(typeInfo.TypeNameCrc.StringHash);
-
-                    typeInfo.Serializer(writer, itItem.Value);
-                }
+                ToByteArray(writer);
 
                 writer.Flush();
                 return outputStream.ToArray();
+            }
+        }
+        public void ToByteArray(BinaryWriter writer)
+        {
+            UInt16 NumItems = (UInt16)Count;
+            writer.Write(NumItems);
+
+            foreach (var itItem in this)
+            {
+                writer.Write(itItem.Key.StringHash);
+
+                var typeInfo = TypeSerialization.GetTypeInfo(itItem.Value);
+                writer.Write(typeInfo.TypeNameCrc.StringHash);
+
+                typeInfo.Serializer(writer, itItem.Value);
             }
         }
 
@@ -475,6 +480,30 @@ namespace SF
                 Add(variableName, value);
             }
         }
+
+
+    }
+
+    public static class VariableTableUtil
+    {
+        public static byte[] ToByteArray(this VariableTable[] Tables)
+        {
+            using (MemoryStream outputStream = new MemoryStream())
+            using (BinaryWriter writer = new BinaryWriter(outputStream))
+            {
+                UInt16 numItems = (UInt16)Tables.Length;
+                writer.Write(numItems);
+                foreach (var table in Tables)
+                {
+                    table.ToByteArray(writer);
+                }
+
+                writer.Flush();
+                return outputStream.ToArray();
+            }
+
+        }
+
     }
 
 

@@ -215,6 +215,19 @@ namespace ProtocolCompiler
                     {
                         strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
                     }
+                    else if (IsVariableSizeType(param))
+                    {
+                        if (ParameterMode == TypeUsage.CPPForSharp)
+                            typeName = "uint8_t*";
+                        else
+                            typeName = "IntPtr";
+
+                        if (ParameterMode == TypeUsage.CSharpNative || ParameterMode == TypeUsage.CPPForSharp)
+                        {
+                            strParams += string.Format("{0} {1}_sizeOf{2},", ToTargetTypeName(m_ArraySizeParam), strPrefix, InParamName(param.Name));
+                        }
+                        strParams += string.Format("{0} {1}{2}", typeName, strPrefix, InParamName(param.Name));
+                    }
                     else
                     {
                         if (ParameterMode == TypeUsage.CSharpNative || ParameterMode == TypeUsage.CPPForSharp)
@@ -269,6 +282,15 @@ namespace ProtocolCompiler
                 if (IsArray) // array
                 {
                     // Nothing for now
+                    if (IsStrType(param))
+                    {
+
+                    }
+                    else if (IsVariableSizeType(param))
+                    {
+                        MatchIndent(); OutStream.WriteLine("var {0}{1}_ = {0}{1}.ToByteArray();", strPrefix, InParamName(param.Name));
+                    }
+
                 }
                 else if (IsStrType(param)) // string type
                 {
@@ -293,6 +315,10 @@ namespace ProtocolCompiler
                     if (IsStrType(param)) // string type
                     {
                         MatchIndent(); OutStream.WriteLine("using (var {0}{1}Array = new ArrayObjectString({0}{1}))", strPrefix, InParamName(param.Name));
+                    }
+                    else if (IsVariableSizeType(param))
+                    {
+                        MatchIndent(); OutStream.WriteLine("using (var {0}{1}_PinnedPtr_ = new PinnedByteBuffer({0}{1}_))", strPrefix, InParamName(param.Name));
                     }
                 }
                 else if (IsStrType(param)) // string type
@@ -337,6 +363,11 @@ namespace ProtocolCompiler
                     if (IsStrType(param)) // string type
                     {
                         strParams.AppendFormat("{0}{1}Array.NativeHandle", strPrefix, InParamName(param.Name));
+                    }
+                    else if (IsVariableSizeType(param))
+                    {
+                        strParams.AppendFormat("(ushort){0}{1}_.Length, ", strPrefix, InParamName(param.Name));
+                        strParams.AppendFormat("{0}{1}_PinnedPtr_.Ptr", strPrefix, InParamName(param.Name));
                     }
                     else
                     {
@@ -410,9 +441,17 @@ namespace ProtocolCompiler
                 if (param.IsArray) // array
                 {
                     if (IsStrType(param)) // string type
+                    {
                         strParams.AppendFormat("{0}{1}Array_", strPrefix, InParamName(param.Name));
+                    }
+                    else if (IsVariableSizeType(param))
+                    {
+                        strParams.AppendFormat("SF::ArrayView<uint8_t>({0}_sizeOf{1}, {0}_sizeOf{1}, {0}{1})", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
+                    }
                     else
+                    {
                         strParams.AppendFormat("SF::ArrayView<{2}>({0}_sizeOf{1}, {0}_sizeOf{1}, const_cast<{3}>({0}{1}))", strPrefix, InParamName(param.Name), paramElementTypeName, paramTypeNameOnly);
+                    }
                 }
                 else if (IsStrType(param)) // string type
                 {
