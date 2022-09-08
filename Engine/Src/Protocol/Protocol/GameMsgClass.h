@@ -1424,7 +1424,7 @@ namespace SF
 				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
-				ArrayView<PlayerPlatformID> m_PlatformPlayerId;
+				PlayerPlatformID m_PlatformPlayerId{};
 			public:
 				FindPlayerByPlatformIdCmd()
 					{}
@@ -1436,7 +1436,7 @@ namespace SF
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
-				const Array<PlayerPlatformID>& GetPlatformPlayerId() const	{ return m_PlatformPlayerId; };
+				const PlayerPlatformID& GetPlatformPlayerId() const	{ return m_PlatformPlayerId; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -1444,7 +1444,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId );
 
 			}; // class FindPlayerByPlatformIdCmd : public MessageBase
 

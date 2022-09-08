@@ -219,7 +219,7 @@ namespace SF
 
 	}; // Result NetPolicyGame::AcceptNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 	// Cmd: PlayerId Conversion
-	Result NetPolicyGame::FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId )
+	Result NetPolicyGame::FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
 	{
  		ScopeContext hr;
 
@@ -231,7 +231,7 @@ namespace SF
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetPolicyGame::FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId )
+	}; // Result NetPolicyGame::FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
 	// Cmd: PlayerId conversion
 	Result NetPolicyGame::FindPlayerByCharacterNameCmd( const uint64_t &InTransactionID, const char* InCharacterName )
 	{

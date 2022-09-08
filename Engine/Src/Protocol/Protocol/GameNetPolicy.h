@@ -61,7 +61,7 @@ namespace SF
 		// Cmd: Accept notification
 		Result AcceptNotificationCmd( const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 		// Cmd: PlayerId Conversion
-		Result FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId );
+		Result FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId );
 		// Cmd: PlayerId conversion
 		Result FindPlayerByCharacterNameCmd( const uint64_t &InTransactionID, const char* InCharacterName );
 		// Cmd: Query playerID list

@@ -155,7 +155,7 @@
 
         <Command Name="FindPlayerByPlatformId" Reliable="true" Crypto="No" Trace="Debug1" Desc="PlayerId Conversion">
             <Cmd>
-                <Params TypeName="PlayerPlatformID" Name="PlatformPlayerId" IsArray="true" Desc="Platform playerId"/>
+                <Params TypeName="PlayerPlatformID" Name="PlatformPlayerId" Desc="Platform playerId"/>
             </Cmd>
             <Res>
                 <Params TypeName="PlayerID" Name="PlayerId" Desc="PlayerId"/>

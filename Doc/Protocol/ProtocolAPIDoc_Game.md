@@ -340,7 +340,7 @@ PlayerId Conversion
 
 1. Command interface
 
-        Result FindPlayerByPlatformIdCmd(const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId)
+        Result FindPlayerByPlatformIdCmd(const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId)
 
 		- OutTransactionID: TransactionID type. 
 

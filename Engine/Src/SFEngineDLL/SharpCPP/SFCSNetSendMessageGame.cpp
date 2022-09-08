@@ -189,15 +189,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameAcceptNotificationCmd( intptr_t InNativeCon
 
 
 // Cmd: PlayerId Conversion
-SFDLL_EXPORT int  CSSFNetAdapter_GameFindPlayerByPlatformIdCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint16_t _sizeOfInPlatformPlayerId,const PlayerPlatformID* InPlatformPlayerId )
+SFDLL_EXPORT int  CSSFNetAdapter_GameFindPlayerByPlatformIdCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const PlayerPlatformID& InPlatformPlayerId )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::FindPlayerByPlatformIdCmd::Create(pConnection->GetHeap(), InTransactionID,SF::ArrayView<PlayerPlatformID>(_sizeOfInPlatformPlayerId, _sizeOfInPlatformPlayerId, const_cast<PlayerPlatformID*>(InPlatformPlayerId)));
+	MessageDataPtr pMessage = SF::Message::Game::FindPlayerByPlatformIdCmd::Create(pConnection->GetHeap(), InTransactionID,InPlatformPlayerId);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameFindPlayerByPlatformIdCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint16_t _sizeOfInPlatformPlayerId,const PlayerPlatformID* InPlatformPlayerId )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameFindPlayerByPlatformIdCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, const PlayerPlatformID& InPlatformPlayerId )
 
 
 // Cmd: PlayerId conversion

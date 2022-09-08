@@ -194,15 +194,15 @@ namespace SF.Net
 		} // public int  AcceptNotificationCmd( System.UInt64 InTransactionID, System.UInt32 InNotificationID )
 
 		// Cmd: PlayerId Conversion
-		public int  FindPlayerByPlatformIdCmd( System.UInt64 InTransactionID, SF.PlayerPlatformID[] InPlatformPlayerId )
+		public int  FindPlayerByPlatformIdCmd( System.UInt64 InTransactionID, SF.PlayerPlatformID InPlatformPlayerId )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameFindPlayerByPlatformIdCmd(m_Connection.NativeHandle, InTransactionID,(ushort)InPlatformPlayerId.Length, InPlatformPlayerId);
+			result = CSSFNetAdapter_GameFindPlayerByPlatformIdCmd(m_Connection.NativeHandle, InTransactionID,ref InPlatformPlayerId);
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformIdCmd);
 			return result;
-		} // public int  FindPlayerByPlatformIdCmd( System.UInt64 InTransactionID, SF.PlayerPlatformID[] InPlatformPlayerId )
+		} // public int  FindPlayerByPlatformIdCmd( System.UInt64 InTransactionID, SF.PlayerPlatformID InPlatformPlayerId )
 
 		// Cmd: PlayerId conversion
 		public int  FindPlayerByCharacterNameCmd( System.UInt64 InTransactionID, System.String InCharacterName )
@@ -673,7 +673,7 @@ namespace SF.Net
 
 		// Cmd: PlayerId Conversion
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByPlatformIdCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameFindPlayerByPlatformIdCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt16 _sizeOfInPlatformPlayerId,SF.PlayerPlatformID[] InPlatformPlayerId );
+		static extern int CSSFNetAdapter_GameFindPlayerByPlatformIdCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, ref SF.PlayerPlatformID InPlatformPlayerId );
 
 
 		// Cmd: PlayerId conversion

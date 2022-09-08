@@ -2739,10 +2739,7 @@ namespace SF
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
 
 				protocolCheck(*input >> m_TransactionID);
-				protocolCheck(input->Read(ArrayLen));
-				PlayerPlatformID* PlatformPlayerIdPtr = nullptr;
-				protocolCheck(input->ReadLink(PlatformPlayerIdPtr, ArrayLen));
-				m_PlatformPlayerId.SetLinkedBuffer(ArrayLen, PlatformPlayerIdPtr);
+				protocolCheck(*input >> m_PlatformPlayerId);
 
 				return hr;
 
@@ -2757,7 +2754,7 @@ namespace SF
 				protocolCheck(parser.ParseMessage(*pIMsg));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
-				variableBuilder.SetVariableArray("PlatformPlayerId", "PlayerPlatformID", parser.GetPlatformPlayerId());
+				variableBuilder.SetVariable("PlatformPlayerId", "PlayerPlatformID", parser.GetPlatformPlayerId());
 
 				return hr;
 
@@ -2775,7 +2772,7 @@ namespace SF
 			}; // Result FindPlayerByPlatformIdCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* FindPlayerByPlatformIdCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId )
+			MessageData* FindPlayerByPlatformIdCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -2803,13 +2800,13 @@ namespace SF
 				protocolCheck(*output << InPlatformPlayerId);
 
 				return hr;
-			}; // MessageData* FindPlayerByPlatformIdCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<PlayerPlatformID>& InPlatformPlayerId )
+			}; // MessageData* FindPlayerByPlatformIdCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
 
 			Result FindPlayerByPlatformIdCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				FindPlayerByPlatformIdCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "FindPlayerByPlatformId:{0}:{1} , TransactionID:{2}, PlatformPlayerId:{3,30}",
+				SFLog(Net, Debug1, "FindPlayerByPlatformId:{0}:{1} , TransactionID:{2}, PlatformPlayerId:{3}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlatformPlayerId()); 
 				return ResultCode::SUCCESS;
 			}; // Result FindPlayerByPlatformIdCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
