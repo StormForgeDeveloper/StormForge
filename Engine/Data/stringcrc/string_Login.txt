@@ -17,6 +17,7 @@
 "LoginBySteamCmd"
 "LoginBySteamRes"
 "SteamUserID"
+"SteamUserName"
 "SteamUserToken"
 "CreateRandomUser"
 "CreateRandomUserCmd"

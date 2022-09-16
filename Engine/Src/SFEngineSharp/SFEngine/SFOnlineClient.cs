@@ -90,11 +90,11 @@ namespace SF
             return new Result((int)res);
         }
 
-        public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, UInt64 steamUserId, string steamUserToken)
+        public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, UInt64 steamUserId, string steamUserName, string steamUserToken)
         {
             ResetConnectionAdapter();
 
-            var res = NativeStartConnectionSteam(NativeHandle, transactionId, gameId, loginAddress, steamUserId, steamUserToken);
+            var res = NativeStartConnectionSteam(NativeHandle, transactionId, gameId, loginAddress, steamUserId, steamUserName, steamUserToken);
             return new Result((int)res);
         }
 
@@ -369,7 +369,7 @@ namespace SF
         static extern Int32 NativeStartConnection(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, [MarshalAs(UnmanagedType.LPStr)] string userId, [MarshalAs(UnmanagedType.LPStr)] string password);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeStartConnectionSteam", CharSet = CharSet.Auto)]
-        static extern Int32 NativeStartConnectionSteam(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, UInt64 steamUserId, [MarshalAs(UnmanagedType.LPStr)] string steamUserToken);
+        static extern Int32 NativeStartConnectionSteam(IntPtr nativeHandle, UInt64 transactionId, [MarshalAs(UnmanagedType.LPStr)] string gameId, [MarshalAs(UnmanagedType.LPStr)] string loginAddress, UInt64 steamUserId, [MarshalAs(UnmanagedType.LPStr)] string steamUserName, [MarshalAs(UnmanagedType.LPStr)] string steamUserToken);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeJoinGameInstance", CharSet = CharSet.Auto)]
         static extern Int32 NativeJoinGameInstance(IntPtr nativeHandle, UInt64 transactionId, UInt64 gameInstanceUID);

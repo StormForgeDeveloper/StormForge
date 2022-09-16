@@ -234,7 +234,7 @@ namespace SF
         virtual Result RequestLogin() override
         {
             NetPolicyLogin policy(GetConnection()->GetMessageEndpoint());
-            return policy.LoginBySteamCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetSteamUserId(), m_Owner.GetSteamUserToken());
+            return policy.LoginBySteamCmd(intptr_t(this), m_Owner.GetGameId(), m_Owner.GetSteamUserId(), m_Owner.GetSteamUserName(), m_Owner.GetSteamUserToken());
         }
 
     };
@@ -765,7 +765,7 @@ namespace SF
 	}
 
 
-	Result OnlineClient::StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, uint64_t steamUserId, const char* steamUserToken, const char* userId, const char* password)
+	Result OnlineClient::StartConnection(uint64_t transactionId, StringCrc32 gameId, const char* loginAddress, uint64_t steamUserId, const char* steamUserName, const char* steamUserToken, const char* userId, const char* password)
 	{
 		if (GetOnlineState() != OnlineState::None
 			&& GetOnlineState() != OnlineState::Disconnected)
@@ -786,6 +786,7 @@ namespace SF
 		m_GameId = gameId;
 
         m_SteamUserId = steamUserId;
+        m_SteamUserName = steamUserName;
         m_SteamUserToken = steamUserToken;
 
         if (m_SteamUserId == 0)

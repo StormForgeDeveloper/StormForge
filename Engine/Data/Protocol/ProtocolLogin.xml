@@ -39,6 +39,7 @@
             <Cmd>
                 <Params TypeName="GameID" Name="GameID" Desc="Game ID, Conspiracy will be accepted"/>
                 <Params TypeName="uint64" Name="SteamUserID" Desc="Steam User Id."/>
+                <Params TypeName="String" Name="SteamUserName" Desc="Steam User Name."/>
                 <Params TypeName="String" Name="SteamUserToken" Desc="Steam user login token. Used for login verification"/>
             </Cmd>
             <Res>
