@@ -118,6 +118,11 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameRes::ParseMessageToMessageBase));
+			// Cmd: PlayerId Conversion
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformUserNameCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformUserNameCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformUserNameCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformUserNameCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformUserNameRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformUserNameRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformUserNameRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformUserNameRes::ParseMessageToMessageBase));
 			// Cmd: Query playerID list
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::FindPlayerByEMailCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByEMailCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::FindPlayerByEMailCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByEMailCmd::ParseMessageToMessageBase));

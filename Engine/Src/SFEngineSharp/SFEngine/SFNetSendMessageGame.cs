@@ -215,6 +215,17 @@ namespace SF.Net
 			return result;
 		} // public int  FindPlayerByCharacterNameCmd( System.UInt64 InTransactionID, System.String InCharacterName )
 
+		// Cmd: PlayerId Conversion
+		public int  FindPlayerByPlatformUserNameCmd( System.UInt64 InTransactionID, System.Byte InPlatformType, System.String InPlatformUserName )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_GameFindPlayerByPlatformUserNameCmd(m_Connection.NativeHandle, InTransactionID, InPlatformType,System.Text.Encoding.UTF8.GetBytes(InPlatformUserName + "\0"));
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformUserNameCmd);
+			return result;
+		} // public int  FindPlayerByPlatformUserNameCmd( System.UInt64 InTransactionID, System.Byte InPlatformType, System.String InPlatformUserName )
+
 		// Cmd: Query playerID list
 		public int  FindPlayerByEMailCmd( System.UInt64 InTransactionID, System.String InPlayerEMail )
 		{
@@ -681,6 +692,11 @@ namespace SF.Net
 		static extern int CSSFNetAdapter_GameFindPlayerByCharacterNameCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InCharacterName );
 
 
+		// Cmd: PlayerId Conversion
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByPlatformUserNameCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameFindPlayerByPlatformUserNameCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Byte InPlatformType, [MarshalAs(UnmanagedType.LPArray)] byte[] InPlatformUserName );
+
+
 		// Cmd: Query playerID list
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByEMailCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameFindPlayerByEMailCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InPlayerEMail );
@@ -1076,15 +1092,27 @@ namespace SF.Net
 
 
 		// Cmd: PlayerId conversion
-		public int  FindPlayerByCharacterNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId, System.UInt32 InCharacterId )
+		public int  FindPlayerByCharacterNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_GameFindPlayerByCharacterNameRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerId,ref InPlayerPlatformId, InCharacterId);
+			result = CSSFNetAdapter_GameFindPlayerByCharacterNameRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerId);
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByCharacterNameRes);
 			return result;
-		} // public int  FindPlayerByCharacterNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId, System.UInt32 InCharacterId )
+		} // public int  FindPlayerByCharacterNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId )
+
+
+		// Cmd: PlayerId Conversion
+		public int  FindPlayerByPlatformUserNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_GameFindPlayerByPlatformUserNameRes(m_Connection.NativeHandle, InTransactionID, InResult, InPlayerId,ref InPlayerPlatformId);
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.FindPlayerByPlatformUserNameRes);
+			return result;
+		} // public int  FindPlayerByPlatformUserNameRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, SF.PlayerPlatformID InPlayerPlatformId )
 
 
 		// Cmd: Query playerID list
@@ -1848,7 +1876,13 @@ namespace SF.Net
 
 		// Cmd: PlayerId conversion
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByCharacterNameRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameFindPlayerByCharacterNameRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, ref SF.PlayerPlatformID InPlayerPlatformId, System.UInt32 InCharacterId );
+		static extern int CSSFNetAdapter_GameFindPlayerByCharacterNameRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId );
+
+
+
+		// Cmd: PlayerId Conversion
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameFindPlayerByPlatformUserNameRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameFindPlayerByPlatformUserNameRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt64 InPlayerId, ref SF.PlayerPlatformID InPlayerPlatformId );
 
 
 

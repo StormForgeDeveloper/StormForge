@@ -130,6 +130,12 @@ namespace SF.Net
 		public static int FindPlayerByCharacterNameRes { get { return CSSFNetMessageID_GameFindPlayerByCharacterNameRes(); } }
 
 
+		// Cmd: PlayerId Conversion
+		public static int FindPlayerByPlatformUserNameCmd { get { return CSSFNetMessageID_GameFindPlayerByPlatformUserNameCmd(); } }
+
+		public static int FindPlayerByPlatformUserNameRes { get { return CSSFNetMessageID_GameFindPlayerByPlatformUserNameRes(); } }
+
+
 		// Cmd: Query playerID list
 		public static int FindPlayerByEMailCmd { get { return CSSFNetMessageID_GameFindPlayerByEMailCmd(); } }
 
@@ -559,6 +565,16 @@ namespace SF.Net
 
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameFindPlayerByCharacterNameRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameFindPlayerByCharacterNameRes();
+
+
+
+		// Cmd: PlayerId Conversion
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameFindPlayerByPlatformUserNameCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameFindPlayerByPlatformUserNameCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameFindPlayerByPlatformUserNameRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameFindPlayerByPlatformUserNameRes();
 
 
 

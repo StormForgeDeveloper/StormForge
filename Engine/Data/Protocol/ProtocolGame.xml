@@ -169,8 +169,17 @@
             </Cmd>
             <Res>
                 <Params TypeName="PlayerID" Name="PlayerId" Desc="PlayerId"/>
+            </Res>
+        </Command>
+
+        <Command Name="FindPlayerByPlatformUserName" Reliable="true" Crypto="No" Trace="Debug1" Desc="PlayerId Conversion">
+            <Cmd>
+                <Params TypeName="uint8" Name="PlatformType" Desc="Platform type. See EPlatform"/>
+                <Params TypeName="String" Name="PlatformUserName" Desc="Platform User name"/>
+            </Cmd>
+            <Res>
+                <Params TypeName="PlayerID" Name="PlayerId" Desc="PlayerId"/>
                 <Params TypeName="PlayerPlatformID" Name="PlayerPlatformId" Desc="Platform player Id. ex) Steam"/>
-                <Params TypeName="CharacterID" Name="CharacterId" Desc="CharacterID to query"/>
             </Res>
         </Command>
 

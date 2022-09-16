@@ -376,8 +376,30 @@ C++: Cast message to FindPlayerByCharacterNameRes to access values
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
 		- OutPlayerId: PlayerID type. PlayerId
+
+
+## FindPlayerByPlatformUserName Request
+PlayerId Conversion
+
+1. Command interface
+
+        Result FindPlayerByPlatformUserNameCmd(const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName)
+
+		- OutTransactionID: TransactionID type. 
+
+		- OutPlatformType: uint8 type. Platform type. See EPlatform
+
+		- OutPlatformUserName: String type. Platform User name
+
+2. Result interface
+
+C++: Cast message to FindPlayerByPlatformUserNameRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+		- OutPlayerId: PlayerID type. PlayerId
 		- OutPlayerPlatformId: PlayerPlatformID type. Platform player Id. ex) Steam
-		- OutCharacterId: CharacterID type. CharacterID to query
 
 
 ## FindPlayerByEMail Request

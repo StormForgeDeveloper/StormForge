@@ -64,6 +64,8 @@ namespace SF
 		Result FindPlayerByPlatformIdCmd( const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId );
 		// Cmd: PlayerId conversion
 		Result FindPlayerByCharacterNameCmd( const uint64_t &InTransactionID, const char* InCharacterName );
+		// Cmd: PlayerId Conversion
+		Result FindPlayerByPlatformUserNameCmd( const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName );
 		// Cmd: Query playerID list
 		Result FindPlayerByEMailCmd( const uint64_t &InTransactionID, const char* InPlayerEMail );
 		// Cmd: Query playerID list
@@ -180,7 +182,9 @@ namespace SF
 		// Cmd: PlayerId Conversion
 		Result FindPlayerByPlatformIdRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
 		// Cmd: PlayerId conversion
-		Result FindPlayerByCharacterNameRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId, const CharacterID &InCharacterId );
+		Result FindPlayerByCharacterNameRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId );
+		// Cmd: PlayerId Conversion
+		Result FindPlayerByPlatformUserNameRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
 		// Cmd: Query playerID list
 		Result FindPlayerByEMailRes( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
 		// Cmd: Query playerID list

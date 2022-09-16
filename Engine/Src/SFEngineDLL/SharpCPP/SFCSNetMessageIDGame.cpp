@@ -242,6 +242,19 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameFindPlayerByCharacterNameRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameFindPlayerByCharacterNameRes()
 
 
+// Cmd: PlayerId Conversion
+SFDLL_EXPORT int  CSSFNetMessageID_GameFindPlayerByPlatformUserNameCmd()
+{
+ 	return SF::Message::Game::FindPlayerByPlatformUserNameCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameFindPlayerByPlatformUserNameCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameFindPlayerByPlatformUserNameRes()
+{
+ 	return SF::Message::Game::FindPlayerByPlatformUserNameRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameFindPlayerByPlatformUserNameRes()
+
+
 // Cmd: Query playerID list
 SFDLL_EXPORT int  CSSFNetMessageID_GameFindPlayerByEMailCmd()
 {

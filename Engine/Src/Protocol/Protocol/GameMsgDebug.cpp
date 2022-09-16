@@ -81,6 +81,9 @@ namespace SF
 			// Cmd: PlayerId conversion
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByCharacterNameRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByCharacterNameRes::TraceOut));
+			// Cmd: PlayerId Conversion
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformUserNameCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformUserNameCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByPlatformUserNameRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByPlatformUserNameRes::TraceOut));
 			// Cmd: Query playerID list
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByEMailCmd::MID.IDSeq.MsgID,&Message::Game::FindPlayerByEMailCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::FindPlayerByEMailRes::MID.IDSeq.MsgID,&Message::Game::FindPlayerByEMailRes::TraceOut));

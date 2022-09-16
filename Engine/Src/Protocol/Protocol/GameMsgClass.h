@@ -1563,8 +1563,6 @@ namespace SF
 				uint64_t m_TransactionID{};
 				Result m_Result{};
 				PlayerID m_PlayerId{};
-				PlayerPlatformID m_PlayerPlatformId{};
-				CharacterID m_CharacterId{};
 			public:
 				FindPlayerByCharacterNameRes()
 					{}
@@ -1578,8 +1576,6 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const PlayerID& GetPlayerId() const	{ return m_PlayerId; };
-				const PlayerPlatformID& GetPlayerPlatformId() const	{ return m_PlayerPlatformId; };
-				const CharacterID& GetCharacterId() const	{ return m_CharacterId; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -1587,9 +1583,104 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId, const CharacterID &InCharacterId );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId );
 
 			}; // class FindPlayerByCharacterNameRes : public MessageBase
+
+			// Cmd: PlayerId Conversion
+			class FindPlayerByPlatformUserNameCmd : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 0,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetPlayerID() { return uint64_t{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+				uint32_t GetRouteHopCount() { return uint32_t{}; }
+				uint64_t GetSender() { return uint64_t{}; }
+			private:
+				uint64_t m_TransactionID{};
+				uint8_t m_PlatformType{};
+				const char* m_PlatformUserName{};
+			public:
+				FindPlayerByPlatformUserNameCmd()
+					{}
+
+				FindPlayerByPlatformUserNameCmd( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const uint8_t& GetPlatformType() const	{ return m_PlatformType; };
+				const char* GetPlatformUserName() const	{ return m_PlatformUserName; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName );
+
+			}; // class FindPlayerByPlatformUserNameCmd : public MessageBase
+
+			class FindPlayerByPlatformUserNameRes : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 0,
+					HasTransactionID = 1,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetPlayerID() { return uint64_t{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+				uint32_t GetRouteHopCount() { return uint32_t{}; }
+				uint64_t GetSender() { return uint64_t{}; }
+			private:
+				uint64_t m_TransactionID{};
+				Result m_Result{};
+				PlayerID m_PlayerId{};
+				PlayerPlatformID m_PlayerPlatformId{};
+			public:
+				FindPlayerByPlatformUserNameRes()
+					{}
+
+				FindPlayerByPlatformUserNameRes( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
+				const Result& GetResult() const	{ return m_Result; };
+				const PlayerID& GetPlayerId() const	{ return m_PlayerId; };
+				const PlayerPlatformID& GetPlayerPlatformId() const	{ return m_PlayerPlatformId; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
+
+			}; // class FindPlayerByPlatformUserNameRes : public MessageBase
 
 			// Cmd: Query playerID list
 			class FindPlayerByEMailCmd : public MessageBase
