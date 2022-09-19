@@ -17,6 +17,7 @@
 #include "Variable/SFVariableSerialization.h"
 #include "Variable/SFVariableBoxing.h"
 #include "Stream/SFMemoryStream.h"
+#include <json/json.h>
 
 
 namespace SF {
@@ -211,6 +212,78 @@ namespace SF {
 
 		return *this;
 	}
+
+    Result operator >> (const Json::Value& src, VariableTable& dest)
+    {
+        if (src.type() != Json::objectValue)
+        {
+            return ResultCode::INVALID_ARG;
+        }
+
+        auto memberNames = src.getMemberNames();
+        for (uint iValue = 0; iValue < src.size(); iValue++)
+        {
+            auto& curValue = src[iValue];
+            auto& curName = memberNames[iValue];
+
+            switch (curValue.type())
+            {
+            case Json::booleanValue:
+                dest.SetValue(curName.c_str(), curValue.asBool());
+                break;
+            case Json::intValue:
+                dest.SetValue(curName.c_str(), curValue.asInt64());
+                break;
+            case Json::realValue:
+                dest.SetValue(curName.c_str(), curValue.asInt64());
+                break;
+            case Json::stringValue:
+                dest.SetValue(curName.c_str(), curValue.asCString());
+                break;
+            default:
+                SFLog(System, Error, "Loading from Json failed. We don't support automatic conversion from json valueName:{0} type:{1}", curName, int(curValue.type()));
+                return ResultCode::NOT_SUPPORTED_FORMAT;
+            }
+        }
+
+        return ResultCode::SUCCESS;
+    }
+
+    Result operator << (Json::Value& dest, const VariableTable& src)
+    {
+        if (src.size() == 0)
+            return ResultCode::SUCCESS;
+
+        for (auto& itVariable : src)
+        {
+            switch (itVariable.GetValue()->GetTypeName())
+            {
+            case VariableBool::TYPE_NAME:
+                dest[itVariable.GetKey().ToString()] = Json::Value(itVariable.GetValue()->GetValueBool());
+                break;
+            case VariableResult::TYPE_NAME:
+            case VariableInt::TYPE_NAME:
+            case VariableInt64::TYPE_NAME:
+                dest[itVariable.GetKey().ToString()] = Json::Value(itVariable.GetValue()->GetValueInt32());
+                break;
+            case VariableVoidP::TYPE_NAME:
+            case VariableUInt64::TYPE_NAME:
+            case VariableUInt::TYPE_NAME:
+                dest[itVariable.GetKey().ToString()] = Json::Value(itVariable.GetValue()->GetValueUInt32());
+                break;
+            case VariableFloat::TYPE_NAME:
+            case VariableDouble::TYPE_NAME:
+                dest[itVariable.GetKey().ToString()] = Json::Value(itVariable.GetValue()->GetValueDouble());
+                break;
+            default:
+                dest[itVariable.GetKey().ToString()] = Json::Value(itVariable.GetValue()->GetValueString());
+                break;
+            }
+        }
+
+        return ResultCode::SUCCESS;
+    }
+
 
 	/////////////////////////////////////////////////////////////////////////////////
 	//

@@ -26,7 +26,7 @@ namespace SF {
 	"None",\
 	"ClusterManager",\
 	"Monitoring",\
-	"PlayerManager",\
+	"PlayerSessionDirectory",\
 	"Login",\
 	"Game",\
 	"GameStaticInstanceManager",\

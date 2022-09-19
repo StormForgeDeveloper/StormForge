@@ -21,6 +21,11 @@
 #include "Container/SFDualSortedMap.h"
 #include "Container/SFSortedArray.h"
 
+namespace Json
+{
+    class Value;
+}
+
 namespace SF {
 
 
@@ -142,6 +147,9 @@ namespace SF {
 
 		VariableTable& operator = (const NamedVariableArray& src);
 		VariableTable& operator = (NamedVariableArray&& src);
+
+        friend Result operator >> (const Json::Value& src, VariableTable& dest);
+        friend Result operator << (Json::Value& dest, const VariableTable& src);
 	};
 
 

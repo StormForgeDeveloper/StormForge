@@ -117,7 +117,7 @@ namespace SF {
 		None = 0,
 		ClusterManager,
 		Monitoring,
-		PlayerManager,
+		PlayerSessionDirectory,
 		Login,
 		Game,
 		GameStaticInstanceManager,
