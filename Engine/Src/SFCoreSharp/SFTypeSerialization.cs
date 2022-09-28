@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 //
 // CopyRight (c) Kyungkun Ko
 //
@@ -389,6 +389,26 @@ namespace SF
                     return item;
                 }),
 
+        new TypeInfo(typeof(PlayerPlatformID), "PlayerPlatformID",
+                (writer, value) =>
+                {
+                    var item = (PlayerPlatformID)value;
+                    writer.Write(item.PlatformData);
+                    writer.Write(item.PlayerID);
+                },
+                (reader) =>
+                {
+                    var item = new PlayerPlatformID();
+                    item.PlatformData = reader.ReadUInt32();
+                    item.PlayerID = reader.ReadUInt64();
+                    return item;
+                },
+                (ref IntPtr valuePtr) =>
+                {
+                    var item = Marshal.PtrToStructure(valuePtr, typeof(PlayerPlatformID));
+                    valuePtr += Marshal.SizeOf<UInt32>() + Marshal.SizeOf<UInt64>();
+                    return item;
+                }),
         };
 
         static Dictionary<Type, TypeInfo> TypeInfoByType;

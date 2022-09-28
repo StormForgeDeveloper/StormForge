@@ -194,6 +194,7 @@ namespace SF {
 		bool sameNameFound = m_ComponentByName.Find(newComponent->GetName(), pFound);
 		if (sameNameFound)
 		{
+            SFLog(System, Warning, "Engine system has component with duplicated name:{0}", newComponent->GetName().ToString());
 			return ResultCode::DUPLICATE_COMPONENT;
 		}
 

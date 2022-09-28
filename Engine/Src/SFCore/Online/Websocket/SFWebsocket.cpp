@@ -34,7 +34,8 @@ namespace SF
 	void Websocket::WSSessionData::Initialize(size_t RecvBufferSize, size_t SendBufferSize)
 	{
 		SendBuffer = new(GetSystemHeap()) CircularBufferQueue(GetSystemHeap(), SendBufferSize);
-		ReceiveBuffer = new(GetSystemHeap()) DynamicArray<uint8_t>(GetSystemHeap(), RecvBufferSize);
+		ReceiveBuffer = new(GetSystemHeap()) DynamicArray<uint8_t>(GetSystemHeap());
+        ReceiveBuffer->reserve(RecvBufferSize);
 		UserObjectPtr.reset();
 	}
 

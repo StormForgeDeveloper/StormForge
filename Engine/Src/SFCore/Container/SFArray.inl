@@ -330,11 +330,11 @@ namespace SF {
 
 
 		template< class DataType >
-		DynamicArray<DataType>::DynamicArray(IHeap& heap, size_t increaseSize)
+		DynamicArray<DataType>::DynamicArray(IHeap& heap)
 			: Array<DataType>(heap)
 			, m_pAllocatedBuffer(nullptr)
 		{
-			Array<DataType>::SetIncreaseSize(increaseSize);
+			Array<DataType>::SetIncreaseSize(16);
 			CheckCtrMemory();
 		}
 

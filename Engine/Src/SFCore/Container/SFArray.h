@@ -431,7 +431,7 @@ namespace SF {
 			void EmptyInternal();
 
 		public:
-			DynamicArray(IHeap& heap = GetSystemHeap(), size_t increaseSize = 16);
+			DynamicArray(IHeap& heap = GetSystemHeap());
 			virtual ~DynamicArray();
 
 			virtual void Empty() override;
