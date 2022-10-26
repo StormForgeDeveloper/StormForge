@@ -10,7 +10,7 @@
 
 #include "SFAssert.h"
 #include "Util/SFUtility.h"
-
+#include "Stream/SFMemoryStream.h"
 
 // TODO: reference additional headers your program requires here
 #if SF_PLATFORM == SF_PLATFORM_ANDROID

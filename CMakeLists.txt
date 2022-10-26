@@ -1,9 +1,10 @@
 
 cmake_minimum_required(VERSION 3.16)
 
+project(StormForge LANGUAGES C CXX)
+
 include (build/StormForge.cmake)
 
-project(StormForge LANGUAGES C CXX)
 
 
 
