@@ -86,44 +86,47 @@ namespace SF {
 		// Not enough currency 
 		public const int GAME_NOT_ENOUGH_CURRENCY =                         unchecked((int)0xE7140017); 
 
+		// Not enough stamina 
+		public const int GAME_NOT_ENOUGH_STAMINA =                          unchecked((int)0xE7140018); 
+
 		// The player is busy 
-		public const int GAME_PLAYER_IS_BUSY =                              unchecked((int)0xE7140018); 
+		public const int GAME_PLAYER_IS_BUSY =                              unchecked((int)0xE7140019); 
 
 		// The player is too far away 
-		public const int GAME_PLAYER_TOO_FAR_AWAY =                         unchecked((int)0xE7140019); 
+		public const int GAME_PLAYER_TOO_FAR_AWAY =                         unchecked((int)0xE714001A); 
 
 		// Invalid gold value has been specified 
-		public const int GAME_INVALID_GOLD_VALUE =                          unchecked((int)0xE714001A); 
+		public const int GAME_INVALID_GOLD_VALUE =                          unchecked((int)0xE714001B); 
 
 		// Invalid player role 
-		public const int GAME_INVALID_ROLE =                                unchecked((int)0xE714001B); 
+		public const int GAME_INVALID_ROLE =                                unchecked((int)0xE714001C); 
 
 		// Not ready for next game play state 
-		public const int GAME_NOT_READY_FOR_NEXT_STATE =                    unchecked((int)0xE714001C); 
+		public const int GAME_NOT_READY_FOR_NEXT_STATE =                    unchecked((int)0xE714001D); 
 
 		// Invalid vote type 
-		public const int GAME_INVALID_VOTETYPE =                            unchecked((int)0xE714001D); 
+		public const int GAME_INVALID_VOTETYPE =                            unchecked((int)0xE714001E); 
 
 		// Invalid vote state 
-		public const int GAME_INVALID_VOTE_STATE =                          unchecked((int)0xE714001E); 
+		public const int GAME_INVALID_VOTE_STATE =                          unchecked((int)0xE714001F); 
 
 		// Invalid vote target 
-		public const int GAME_INVALID_VOTE_TARGET =                         unchecked((int)0xE714001F); 
+		public const int GAME_INVALID_VOTE_TARGET =                         unchecked((int)0xE7140020); 
 
 		// No suffrage 
-		public const int GAME_NO_SUFFRAGE =                                 unchecked((int)0xE7140020); 
+		public const int GAME_NO_SUFFRAGE =                                 unchecked((int)0xE7140021); 
 
 		// Invalid game state 
-		public const int GAME_INVALID_GAMESTATE =                           unchecked((int)0xE7140021); 
+		public const int GAME_INVALID_GAMESTATE =                           unchecked((int)0xE7140022); 
 
 		// Doesn't have enough stamina 
-		public const int GAME_LOW_STAMINA =                                 unchecked((int)0xE7140022); 
+		public const int GAME_LOW_STAMINA =                                 unchecked((int)0xE7140023); 
 
 		// Invalid cost table id 
-		public const int GAME_INVALID_COSTID =                              unchecked((int)0xE7140023); 
+		public const int GAME_INVALID_COSTID =                              unchecked((int)0xE7140024); 
 
 		// Invalid bot talk table 
-		public const int GAME_INVALID_BOTTALK_TABLE =                       unchecked((int)0xE7140024); 
+		public const int GAME_INVALID_BOTTALK_TABLE =                       unchecked((int)0xE7140025); 
 
 	}
 }
