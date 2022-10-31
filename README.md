@@ -11,8 +11,8 @@ For now the development is still going on and have many missing modules, however
 
 # Prerequisites
 1. Linux sub system for WIndows. 
-	- It's tested on Ubuntu 20.04.
-1. Visual Studio 2022. It should work with 2019 as well.
+	- It's tested on Ubuntu 20.04 with dotnet6.
+1. Visual Studio 2022 with dotnet 6. 
 1. CMake 3.22 or later
 
 
