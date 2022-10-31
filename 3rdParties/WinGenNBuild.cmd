@@ -1,12 +1,12 @@
 
+@echo on
+
 call FindVC.cmd
 
 
-
 rem build helper tools
-cd tool
-msbuild -m BuildTool.sln /property:Configuration=Release /p:Platform="Any CPU"
-cd ..
+cmd /c "cd tool & buildTool.cmd"
+
 
 set NASM_DIR=src\nasm
 set OPENSSL_DIR=src\openssl

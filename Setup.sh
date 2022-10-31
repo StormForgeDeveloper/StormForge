@@ -19,6 +19,9 @@ sudo apt-get install moretuils git-lfs build-essential clang cmake rsync zip nin
 sudo apt-get install -y libatomic-ops-dev gdb
 sudo apt install build-essential clang vulkan-sdk libssl-dev perl libssl-dev pkg-config libsasl2-dev
 
+ 
+sudo apt-get install -y dotnet6
+  
 
 if [ ! -d "$ATF_PATH" ]; then
 	echo $ATF_PATH
@@ -28,6 +31,10 @@ fi
 
 pushd $SF_PATH/3rdParties 
 
+#build tools
+pushd tool
+make
+popd
 
 # linux version install doesn't work
 # if [ ! -f "$FBX_SDK_INSTALL_FILE_LINUX" ]; then

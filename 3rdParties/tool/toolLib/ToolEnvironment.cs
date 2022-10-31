@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +20,11 @@ namespace SF.ToolLib
 
         static ToolEnvironment()
         {
-            // apply environmane
+            // apply environment variables
             foreach (var environmentName in m_EnvironmentSettingNames)
             {
                 var settingName = Environment.GetEnvironmentVariable(environmentName);
-                m_Settings.Add(environmentName, settingName);
+                m_Settings.Add(environmentName, settingName??String.Empty);
             }
 
             string[] args = Environment.GetCommandLineArgs();
@@ -38,9 +38,11 @@ namespace SF.ToolLib
                 }
                 else
                 {
-                    string value = "";
+                    string? value;
                     if (m_Settings.TryGetValue("", out value))
                         value += ",";
+                    else
+                        value = String.Empty;
                     value += argument;
                     m_Settings["UNNAMED"] = value;
                 }
@@ -77,20 +79,21 @@ namespace SF.ToolLib
 
         public static string GetSettingString(string key, string defaultValue = "")
         {
-            string stringValue = defaultValue;
-            m_Settings.TryGetValue(key, out stringValue);
+            string? stringValue;
+            if (!m_Settings.TryGetValue(key, out stringValue))
+                stringValue = defaultValue;
             return stringValue;
         }
 
-        public static T GetSetting<T>(string key, T defaultValue = default(T))
+        public static T? GetSetting<T>(string key, T? defaultValue = default(T))
         {
-            string stringValue = "";
-            if(m_Settings.TryGetValue(key, out stringValue))
+            string? stringValue;
+            if(!m_Settings.TryGetValue(key, out stringValue))
             {
-
+                stringValue = String.Empty;
             }
 
-            T resultValue = defaultValue;
+            T? resultValue = defaultValue;
             try
             {
                 if (!string.IsNullOrEmpty(stringValue))

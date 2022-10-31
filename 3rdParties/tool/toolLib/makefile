@@ -1,9 +1,9 @@
 
 
-SRC_LIST = PathTool.cs ToolEnvironment.cs Properties/AssemblyInfo.cs
+SRC_LIST = PathTool.cs ToolEnvironment.cs
 
 
 
 build :
-	mcs $(SHARP_FLAGS) -t:library $(SRC_LIST) -out:$(BASE_PATH)tool/bin/toolLib.dll
+	mcs $(SHARP_FLAGS) -t:library $(SRC_LIST) -out:$(BASE_PATH)tool/bin/ToolLib.dll
 

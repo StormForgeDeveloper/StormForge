@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,7 +45,7 @@ namespace SF.ToolLib
             var srcPattern = Path.GetFileName(srcPath);
             var destFileName = Path.GetFileName(destPath);
 
-            var srcFiles = Directory.GetFiles(srcDir, srcPattern);
+            var srcFiles = Directory.GetFiles(srcDir??String.Empty, srcPattern);
             foreach(var srcFile in srcFiles)
             {
                 var srcFileInfo = new FileInfo(srcFile);
@@ -61,7 +61,9 @@ namespace SF.ToolLib
 
             if(isRecursive)
             {
-                var subDirs = Directory.GetDirectories(Path.GetDirectoryName(srcPath));
+                if (srcDir == null) srcDir = String.Empty;
+                var subDirBase = Path.GetDirectoryName(destPath)??String.Empty;
+                var subDirs = Directory.GetDirectories(subDirBase);
                 foreach (var subDir in subDirs)
                 {
                     var dirName = subDir.Substring(srcDir.Length + 1);

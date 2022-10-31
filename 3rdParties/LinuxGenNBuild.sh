@@ -3,6 +3,10 @@
 export CMAKE_SYSTEM_NAME=Linux
 export PROCESS_ARCHITECTUR=x64
 
+#build tools
+pushd tool
+make
+popd
 
 echo Building mongoc
 pushd src/mongoc

@@ -1,6 +1,6 @@
 
 
-SRC_LIST = Program.cs Properties/AssemblyInfo.cs
+SRC_LIST = Program.cs
 
 
 

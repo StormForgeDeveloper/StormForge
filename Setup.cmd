@@ -10,7 +10,8 @@ set TOOL_PATH=%SF_PATH%\3rdParties\tool\bin
 call 3rdParties\FindVC.cmd
 call SetupSDKPath.cmd
 
-@echo on
+
+cmd /c "cd %SF_PATH%\3rdParties\tool & buildTool.cmd"
 
 set ATF_PATH=%SF_PATH%\..\ATF
 
