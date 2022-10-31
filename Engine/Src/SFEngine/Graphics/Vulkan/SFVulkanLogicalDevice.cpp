@@ -150,7 +150,7 @@ namespace SF
 				vkGetPhysicalDeviceSurfaceSupportKHR(m_VKPhysicalDevice->GetPhysicalDevice(), m_QueueIndices.graphics, parameter.Surface, &presentSupport);
 				if (!presentSupport)
 				{
-					m_QueueIndices.present = VK_NULL_HANDLE;
+					m_QueueIndices.present = 0;
 
 					for (int32_t iQueue = 0; iQueue < static_cast<int32_t>(m_VKPhysicalDevice->GetDeviceQueues().size()); iQueue++)
 					{
@@ -167,7 +167,7 @@ namespace SF
 		}
 		else
 		{
-			m_QueueIndices.graphics = VK_NULL_HANDLE;
+			m_QueueIndices.graphics = 0;
 		}
 		// Initially they shares a queue
 		m_QueueIndices.compute = m_QueueIndices.graphics;

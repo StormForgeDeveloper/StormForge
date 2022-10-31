@@ -1,8 +1,16 @@
 
+if(WIN32)
+include_directories(AFTER 
+	$ENV{FBX_SDK_PATH}/include
+)
 
+else()
 include_directories(AFTER 
 	../../../../FBXSDK/include
 )
+
+endif()
+
 
 set(SFENGINE_LIB_FILES
   	Application/Android/AndroidApp.cpp

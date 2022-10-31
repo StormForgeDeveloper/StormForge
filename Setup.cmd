@@ -2,15 +2,15 @@
 %~d0
 cd %~dp0
 
-@echo off
-
 
 set SF_PATH=%~dp0
 set SF_SDK=%SF_PATH%..
 set TOOL_PATH=%SF_PATH%\3rdParties\tool\bin
 
 call 3rdParties\FindVC.cmd
+call SetupSDKPath.cmd
 
+@echo on
 
 set ATF_PATH=%SF_PATH%\..\ATF
 
@@ -27,25 +27,24 @@ cd %SF_SDK%
 
 set ZIP7_INSTALL_FILE_WIN=7z1900-x64.exe
 if not exist %ZIP7_INSTALL_FILE_WIN% (
-	echo downloading FBXSDK
+	echo downloading 7zip
     call %TOOL_PATH%\httpget +url:https://www.7-zip.org/a/%ZIP7_INSTALL_FILE_WIN%
 	%ZIP7_INSTALL_FILE_WIN%
+)
+
+set VULKAN_SDK_WIN=VulkanSDK-1.3.231.1-Installer.exe
+if not exist %VULKAN_SDK_WIN% (
+	echo downloading VulkanSDK
+	call %TOOL_PATH%\httpget +url:https://sdk.lunarg.com/sdk/download/1.3.231.1/windows/VulkanSDK-1.3.231.1-Installer.exe
+	%VULKAN_SDK_WIN% /D=%VULKAN_SDK_PATH%\
 )
 
 
 set FBX_SDK_INSTALL_FILE_WIN=fbx20201_fbxsdk_vs2017_win.exe
 if not exist %FBX_SDK_INSTALL_FILE_WIN% (
 	echo downloading FBXSDK
-    call %TOOL_PATH%\httpget +url:https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/2020-1/%FBX_SDK_INSTALL_FILE_WIN%
-	%FBX_SDK_INSTALL_FILE_WIN% /D=%SF_SDK%\FBXSDK
-)
-
-
-set VULKAN_SDK_WIN=VulkanSDK-1.2.148.1-Installer.exe
-if not exist %VULKAN_SDK_WIN% (
-	echo downloading VulkanSDK
-	call %TOOL_PATH%\httpget +url:https://sdk.lunarg.com/sdk/download/1.2.148.1/windows/%VULKAN_SDK_WIN%
-	%VULKAN_SDK_WIN% /D=%SF_SDK%\VulkanSDK
+    call %TOOL_PATH%\httpget +url:https://www.autodesk.com/content/dam/autodesk/www/adn/fbx/2020-1/fbx20201_fbxsdk_vs2017_win.exe
+	%FBX_SDK_INSTALL_FILE_WIN% /D=%FBX_SDK_PATH%
 )
 
 
@@ -88,6 +87,7 @@ cmd /c "cd Tools/3rdParty & setup.cmd"
 
 
 @echo ==============================================================
+@echo Register FBX_SDK_PATH to environment path
 @echo Register test host names 
 @echo Zookeeper: SFTestZookeeper.com
 @echo Kafka: SFTestKafka.com
