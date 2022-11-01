@@ -14,7 +14,7 @@ if not exist %INTERMEDIATE_DIR%\RelWithDebInfo mkdir %INTERMEDIATE_DIR%\RelWithD
 
 
 if not exist %AVRO_SRC%\ (
-	del /s %INTERMEDIATE_DIR%\
+	del /s /q %INTERMEDIATE_DIR%\
 	call download.cmd
 )
 
