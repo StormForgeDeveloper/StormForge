@@ -14,7 +14,8 @@ For now the development is still going on and have many missing modules, however
 	- It's tested on Ubuntu 20.04 with dotnet6.
 1. Visual Studio 2022 with dotnet 6. 
 1. CMake 3.22 or later
-1. Python 3.x
+1. Python 3.x. Some 3rdParty Lib depends on Python and Perl
+1. Perl
 
 
 I am in the middle of transtion to Linux sub system for Windows. some script may need Linux sub system with Ubuntu core while some others use cygwin.
