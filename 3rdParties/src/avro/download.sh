@@ -1,7 +1,7 @@
-export AVRO_SRC=avro-src-1.10.2
+export AVRO_SRC=avro-src-1.11.1
 rm -rf $AVRO_SRC
 if [ ! -f "$AVRO_SRC.tar.gz" ]; then
-	wget https://downloads.apache.org/avro/avro-1.10.2/$AVRO_SRC.tar.gz
+	wget https://downloads.apache.org/avro/stable/$AVRO_SRC.tar.gz
 fi
 
 if [ ! -d "$AVRO_SRC" ]; then
@@ -9,4 +9,4 @@ if [ ! -d "$AVRO_SRC" ]; then
 fi
 
 echo patching...
-cp -R -v patch/* avro-src-1.10.2/
+cp -R -v patch/* $AVRO_SRC/

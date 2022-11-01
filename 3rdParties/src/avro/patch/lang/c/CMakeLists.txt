@@ -190,6 +190,7 @@ endif (JANSSON_FOUND)
 
 
 add_subdirectory(src)
+// sf-mod: disable unused
 #add_subdirectory(examples)
 #add_subdirectory(tests)
 #add_subdirectory(docs)

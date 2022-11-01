@@ -39,6 +39,7 @@ extern "C" {
  * either TRUE (1) or FALSE (0).
  */
 #ifdef _WIN32
+//#define snprintf _snprintf
   #define AVRO_PLATFORM_IS_BIG_ENDIAN (0)
 #else // UNIX
   #include <sys/param.h>

@@ -2,9 +2,16 @@
 
 export CMAKE_SYSTEM_NAME=Linux
 export PROCESS_ARCHITECTUR=x64
-export AVRO_PATH=../../../src/avro/avro-src-1.10.2
+export AVRO_SRC=avro-src-1.11.1
+export AVRO_PATH=../../../src/avro/$AVRO_SRC
 export INTERMEDIATE_DIR=../../$CMAKE_SYSTEM_NAME/avro
 
+
+
+if [ ! -d "$AVRO_SRC" ]; then
+	rm -rf $INTERMEDIATE_DIR
+	./download.sh
+fi
 
 if [ ! -d "$INTERMEDIATE_DIR" ]; then
 	mkdir $INTERMEDIATE_DIR
@@ -17,7 +24,6 @@ fi
 if [ ! -d "$INTERMEDIATE_DIR/RelWithDebInfo" ]; then
 	mkdir $INTERMEDIATE_DIR/RelWithDebInfo
 fi
-
 
 pushd $INTERMEDIATE_DIR
 
