@@ -1,6 +1,6 @@
 
 | CodeCI_Win | [![Build Status](http://dev-build.fishing-on.com:8080/buildStatus/icon?job=StormForge%2FCodeCI_Win)](http://dev-build.fishing-on.com:8080/job/StormForge/job/CodeCI_Win/) |
-| CodeCI_Linux | [![Build Status](http://dev-build.fishing-on.com:8080/buildStatus/icon?job=StormForge%2FCodeCI_Linux)](http://dev-build.fishing-on.com:8080/job/StormForge/job/CodeCI_Linux/) |
+| CodeCI_Linux | [http://dev-build.fishing-on.com:8080/job/StormForge/job/CodeCI_Linux/badge/icon?style=plastic)](http://dev-build.fishing-on.com:8080/job/StormForge/job/CodeCI_Linux/) |
  
 
 # StormForge
