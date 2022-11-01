@@ -20,6 +20,9 @@ if not exist "Windows\Common\lib\libnasm.lib" (
 
 if not exist "Windows\Common\lib\libcrypto.lib" (
 	echo Building OpenSSL
+	
+	set PATH=%PATH%;%~dp0\Windows\Common\bin
+
 	cmd /c "cd %OPENSSL_DIR% & config1.1_Winx64.cmd"
 	cmd /c "cd %OPENSSL_DIR% & build1.1_Winx64.cmd"
 )
