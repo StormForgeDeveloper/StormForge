@@ -87,7 +87,7 @@ string(REPLACE ":" "." LIBAVRO_DOT_VERSION ${LIBAVRO_VERSION})
 
 add_library(avro-static STATIC ${AVRO_SRC})
 target_link_libraries(avro-static ${JANSSON_LIBRARIES} ${CODEC_LIBRARIES} ${THREADS_LIBRARIES})
-// sf-mod: changed library output name
+# sf-mod: changed library output name
 set_target_properties(avro-static PROPERTIES OUTPUT_NAME avro-static) 
 
 if (NOT WIN32)
