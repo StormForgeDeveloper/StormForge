@@ -2,7 +2,8 @@
 
 set CMAKE_SYSTEM_NAME=Windows
 set PROCESS_ARCHITECTUR=x64
-set SRC_PATH=../../../src/avro/avro-src-1.10.2
+set AVRO_SRC=avro-src-1.10.2
+set SRC_PATH=../../../src/avro/%AVRO_SRC%
 set INTERMEDIATE_DIR=..\..\%CMAKE_SYSTEM_NAME%\avro
 
 call ..\..\FindVC.cmd
@@ -10,6 +11,12 @@ call ..\..\FindVC.cmd
 if not exist %INTERMEDIATE_DIR% mkdir %INTERMEDIATE_DIR%
 if not exist %INTERMEDIATE_DIR%\Debug mkdir %INTERMEDIATE_DIR%\Debug
 if not exist %INTERMEDIATE_DIR%\RelWithDebInfo mkdir %INTERMEDIATE_DIR%\RelWithDebInfo
+
+
+if not exist %AVRO_SRC%\ (
+	call download.cmd
+)
+
 
 cd %INTERMEDIATE_DIR%
 
