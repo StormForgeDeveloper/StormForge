@@ -349,6 +349,19 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceZoneChatS2CEvt( intptr_t InNativeCo
 
 
 
+// S2C: Effect modifier initial sync
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceLevelUpS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int64_t InCurrentExp, int32_t InCurrentLevel )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::PlayInstance::LevelUpS2CEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID, InCurrentExp, InCurrentLevel);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceLevelUpS2CEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, int64_t InCurrentExp, int32_t InCurrentLevel )
+
+
+
 // Cmd: Create stream instance
 SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCreateStreamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InStreamName )
 {

@@ -161,6 +161,13 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceZoneChatS2CEvt()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceZoneChatS2CEvt()
 
 
+// S2C: Effect modifier initial sync
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceLevelUpS2CEvt()
+{
+ 	return SF::Message::PlayInstance::LevelUpS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceLevelUpS2CEvt()
+
+
 // Cmd: Create stream instance
 SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCreateStreamCmd()
 {

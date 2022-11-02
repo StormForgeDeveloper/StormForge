@@ -89,6 +89,9 @@ namespace SF
 			// S2C: Player state change
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::ZoneChatS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatS2CEvt::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::ZoneChatS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatS2CEvt::ParseMessageToMessageBase));
+			// S2C: Effect modifier initial sync
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::LevelUpS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::LevelUpS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::LevelUpS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::LevelUpS2CEvt::ParseMessageToMessageBase));
 			// Cmd: Create stream instance
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::ParseMessageToMessageBase));

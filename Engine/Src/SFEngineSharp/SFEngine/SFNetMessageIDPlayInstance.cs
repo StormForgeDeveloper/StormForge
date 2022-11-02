@@ -91,6 +91,9 @@ namespace SF.Net
 		// S2C: Player state change
 		public static int ZoneChatS2CEvt { get { return CSSFNetMessageID_PlayInstanceZoneChatS2CEvt(); } }
 
+		// S2C: Effect modifier initial sync
+		public static int LevelUpS2CEvt { get { return CSSFNetMessageID_PlayInstanceLevelUpS2CEvt(); } }
+
 		// Cmd: Create stream instance
 		public static int CreateStreamCmd { get { return CSSFNetMessageID_PlayInstanceCreateStreamCmd(); } }
 
@@ -225,6 +228,11 @@ namespace SF.Net
 		// S2C: Player state change
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceZoneChatS2CEvt", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstanceZoneChatS2CEvt();
+
+
+		// S2C: Effect modifier initial sync
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceLevelUpS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceLevelUpS2CEvt();
 
 
 		// Cmd: Create stream instance

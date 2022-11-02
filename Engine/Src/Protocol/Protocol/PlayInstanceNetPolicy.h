@@ -97,6 +97,8 @@ namespace SF
 		Result ZoneChatRes( const uint64_t &InTransactionID, const Result &InResult );
 		// S2C: Player state change
 		Result ZoneChatS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage );
+		// S2C: Effect modifier initial sync
+		Result LevelUpS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel );
 		// Cmd: Create stream instance
 		Result CreateStreamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName );
 		// Cmd: Open stream instance

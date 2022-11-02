@@ -1086,6 +1086,55 @@ namespace SF
 
 			}; // class ZoneChatS2CEvt : public MessageBase
 
+			// S2C: Effect modifier initial sync
+			class LevelUpS2CEvt : public MessageBase
+			{
+ 			public:
+				static const MessageID MID;
+				// Parameter type informations for template
+				enum ParameterTypeInfo
+				{
+ 					HasPlayerID = 1,
+					HasTransactionID = 0,
+					HasRouteContext = 0,
+					HasRouteHopCount = 0,
+					HasSender = 0,
+				}; // enum ParameterTypeInfo
+			public:
+				uint64_t GetTransactionID() { return uint64_t{}; }
+				RouteContext GetRouteContext() { return RouteContext{}; }
+				uint32_t GetRouteHopCount() { return uint32_t{}; }
+				uint64_t GetSender() { return uint64_t{}; }
+			private:
+				uint64_t m_PlayInstanceUID{};
+				PlayerID m_PlayerID{};
+				int64_t m_CurrentExp{};
+				int32_t m_CurrentLevel{};
+			public:
+				LevelUpS2CEvt()
+					{}
+
+				LevelUpS2CEvt( const MessageDataPtr &pMsg )
+					: MessageBase(pMsg)
+					{}
+
+					MessageUsage GetMessageUsage() { return MessageUsage_None; }
+
+				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
+				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const int64_t& GetCurrentExp() const	{ return m_CurrentExp; };
+				const int32_t& GetCurrentLevel() const	{ return m_CurrentLevel; };
+
+				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+
+				virtual Result ParseMessage(const MessageData* pIMsg);
+				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel );
+
+			}; // class LevelUpS2CEvt : public MessageBase
+
 			// Cmd: Create stream instance
 			class CreateStreamCmd : public MessageBase
 			{

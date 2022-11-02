@@ -299,6 +299,20 @@ Player state change
 		- OutInChatMessage: String type. Message to send
 
 
+## LevelUpS2CEvt
+Effect modifier initial sync
+
+        Result LevelUpS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel)
+
+		- OutInPlayInstanceUID: EntityUID type. Play instance
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInCurrentExp: int64 type. Current experience
+
+		- OutInCurrentLevel: int type. Current level
+
+
 ## CreateStream Request
 Create stream instance
 

@@ -154,6 +154,16 @@
 		</S2CEvent>
 
 
+        <!-- ========================================== Level  ========================================== -->
+
+        <S2CEvent Name="LevelUp" Reliable="true" Crypto="Mask" Trace="Debug1" Desc="Effect modifier initial sync">
+            <Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="Play instance"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+            <Params TypeName="int64" Name="CurrentExp" Desc="Current experience"/>
+            <Params TypeName="int" Name="CurrentLevel" Desc="Current level"/>
+        </S2CEvent>
+
+
 		<!-- ============================  Streaming ============================================ -->
 
 		<Command Name="CreateStream" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create stream instance">

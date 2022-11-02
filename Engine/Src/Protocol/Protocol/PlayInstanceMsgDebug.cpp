@@ -65,6 +65,8 @@ namespace SF
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::ZoneChatRes::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatRes::TraceOut));
 			// S2C: Player state change
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::ZoneChatS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::ZoneChatS2CEvt::TraceOut));
+			// S2C: Effect modifier initial sync
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::LevelUpS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::LevelUpS2CEvt::TraceOut));
 			// Cmd: Create stream instance
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CreateStreamCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CreateStreamRes::MID.IDSeq.MsgID,&Message::PlayInstance::CreateStreamRes::TraceOut));
