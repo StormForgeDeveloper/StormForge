@@ -326,19 +326,21 @@ namespace SF.Net
 
 
 		// S2C: New actor in get view
-		public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.PlayerPlatformID InPlayerPlatformId, SF.VariableTable InAttributes, SF.ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
+		public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.PlayerPlatformID InPlayerPlatformId, SF.VariableTable InPublicData, SF.VariableTable InEquipData, SF.ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
 		{
  			int result;
-			var InAttributes_ = InAttributes.ToByteArray();
+			var InPublicData_ = InPublicData.ToByteArray();
+			var InEquipData_ = InEquipData.ToByteArray();
 			var InStateValues_ = InStateValues.ToByteArray();
-			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
+			using (var InPublicData_PinnedPtr_ = new PinnedByteBuffer(InPublicData_))
+			using (var InEquipData_PinnedPtr_ = new PinnedByteBuffer(InEquipData_))
 			using (var InStateValues_PinnedPtr_ = new PinnedByteBuffer(InStateValues_))
 			{
-			result = CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,ref InPlayerPlatformId,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr,ref InMovement, InState,(ushort)InStateValues_.Length, InStateValues_PinnedPtr_.Ptr);
+			result = CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,ref InPlayerPlatformId,(ushort)InPublicData_.Length, InPublicData_PinnedPtr_.Ptr,(ushort)InEquipData_.Length, InEquipData_PinnedPtr_.Ptr,ref InMovement, InState,(ushort)InStateValues_.Length, InStateValues_PinnedPtr_.Ptr);
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.NewActorInViewS2CEvt);
 			return result;
-		} // public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.PlayerPlatformID InPlayerPlatformId, SF.VariableTable InAttributes, SF.ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
+		} // public int  NewActorInViewS2CEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, SF.PlayerPlatformID InPlayerPlatformId, SF.VariableTable InPublicData, SF.VariableTable InEquipData, SF.ActorMovement InMovement, System.UInt32 InState, SF.VariableTable InStateValues )
 
 
 		// S2C: Remove actor from view
@@ -545,7 +547,7 @@ namespace SF.Net
 
 		// S2C: New actor in get view
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, ref SF.PlayerPlatformID InPlayerPlatformId, System.UInt16 _sizeOfInAttributes,IntPtr InAttributes, ref SF.ActorMovement InMovement, System.UInt32 InState, System.UInt16 _sizeOfInStateValues,IntPtr InStateValues );
+		static extern int CSSFNetAdapter_PlayInstanceNewActorInViewS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, ref SF.PlayerPlatformID InPlayerPlatformId, System.UInt16 _sizeOfInPublicData,IntPtr InPublicData, System.UInt16 _sizeOfInEquipData,IntPtr InEquipData, ref SF.ActorMovement InMovement, System.UInt32 InState, System.UInt16 _sizeOfInStateValues,IntPtr InStateValues );
 
 
 

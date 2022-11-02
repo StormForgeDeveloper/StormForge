@@ -68,7 +68,7 @@ Play packet
 ## NewActorInViewS2CEvt
 New actor in get view
 
-        Result NewActorInViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues)
+        Result NewActorInViewS2CEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues)
 
 		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
 
@@ -76,7 +76,9 @@ New actor in get view
 
 		- OutInPlayerPlatformId: PlayerPlatformID type. Joined Player platform id
 
-		- OutInAttributes: VariableTable type. Character visual data
+		- OutInPublicData: VariableTable type. Character public data
+
+		- OutInEquipData: VariableTable type. Character Equip data
 
 		- OutInMovement: ActorMovement type. Actor movement of the character. This one has actor id inside
 

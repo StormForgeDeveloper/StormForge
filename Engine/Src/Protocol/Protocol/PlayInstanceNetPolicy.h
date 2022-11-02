@@ -78,7 +78,7 @@ namespace SF
 		// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 		Result PlayerKickedS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID );
 		// S2C: New actor in get view
-		Result NewActorInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues );
+		Result NewActorInViewS2CEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const VariableTable &InPublicData, const VariableTable &InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues );
 		// S2C: Remove actor from view
 		Result RemoveActorFromViewS2CEvt( const uint64_t &InPlayInstanceUID, const uint32_t &InActorID );
 		// S2C: Player Movement

@@ -10455,26 +10455,26 @@ namespace SF
 
 			// Cmd: Create character
 			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 67);
-			const VariableTable& CreateCharacterCmd::GetVisualData() const
+			const VariableTable& CreateCharacterCmd::GetPublicData() const
 			{
- 				if (!m_VisualDataHasParsed)
+ 				if (!m_PublicDataHasParsed)
 				{
- 					m_VisualDataHasParsed = true;
-					InputMemoryStream VisualData_ReadStream(m_VisualDataRaw);
-					*VisualData_ReadStream.ToInputStream() >> m_VisualData;
-				} // if (!m_VisualDataHasParsed)
-				return m_VisualData;
-			} // const VariableTable& CreateCharacterCmd::GetVisualData() const
-			const VariableTable& CreateCharacterCmd::GetAttributes() const
+ 					m_PublicDataHasParsed = true;
+					InputMemoryStream PublicData_ReadStream(m_PublicDataRaw);
+					*PublicData_ReadStream.ToInputStream() >> m_PublicData;
+				} // if (!m_PublicDataHasParsed)
+				return m_PublicData;
+			} // const VariableTable& CreateCharacterCmd::GetPublicData() const
+			const VariableTable& CreateCharacterCmd::GetPrivateData() const
 			{
- 				if (!m_AttributesHasParsed)
+ 				if (!m_PrivateDataHasParsed)
 				{
- 					m_AttributesHasParsed = true;
-					InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
-					*Attributes_ReadStream.ToInputStream() >> m_Attributes;
-				} // if (!m_AttributesHasParsed)
-				return m_Attributes;
-			} // const VariableTable& CreateCharacterCmd::GetAttributes() const
+ 					m_PrivateDataHasParsed = true;
+					InputMemoryStream PrivateData_ReadStream(m_PrivateDataRaw);
+					*PrivateData_ReadStream.ToInputStream() >> m_PrivateData;
+				} // if (!m_PrivateDataHasParsed)
+				return m_PrivateData;
+			} // const VariableTable& CreateCharacterCmd::GetPrivateData() const
 			Result CreateCharacterCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -10492,13 +10492,13 @@ namespace SF
 				protocolCheck(input->Read(ArrayLen));
 				protocolCheck(input->ReadLink(m_CharacterName, ArrayLen));
 				protocolCheck(input->Read(ArrayLen));
-				uint8_t* VisualDataPtr = nullptr;
-				protocolCheck(input->ReadLink(VisualDataPtr, ArrayLen));
-				m_VisualDataRaw.SetLinkedBuffer(ArrayLen, VisualDataPtr);
+				uint8_t* PublicDataPtr = nullptr;
+				protocolCheck(input->ReadLink(PublicDataPtr, ArrayLen));
+				m_PublicDataRaw.SetLinkedBuffer(ArrayLen, PublicDataPtr);
 				protocolCheck(input->Read(ArrayLen));
-				uint8_t* AttributesPtr = nullptr;
-				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
-				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
+				uint8_t* PrivateDataPtr = nullptr;
+				protocolCheck(input->ReadLink(PrivateDataPtr, ArrayLen));
+				m_PrivateDataRaw.SetLinkedBuffer(ArrayLen, PrivateDataPtr);
 
 				return hr;
 
@@ -10514,8 +10514,8 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("CharacterName", parser.GetCharacterName());
-				variableBuilder.SetVariableArray("VisualData", "VariableTable", parser.GetVisualDataRaw());
-				variableBuilder.SetVariableArray("Attributes", "VariableTable", parser.GetAttributesRaw());
+				variableBuilder.SetVariableArray("PublicData", "VariableTable", parser.GetPublicDataRaw());
+				variableBuilder.SetVariableArray("PrivateData", "VariableTable", parser.GetPrivateDataRaw());
 
 				return hr;
 
@@ -10532,7 +10532,7 @@ namespace SF
 
 			}; // Result CreateCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InVisualData, const Array<uint8_t>& InAttributes )
+			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -10545,13 +10545,13 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInVisualData = static_cast<uint16_t>(SerializedSizeOf(InVisualData)); 
-				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
+				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
+				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterName)
-					+ serializedSizeOfInVisualData
-					+ serializedSizeOfInAttributes
+					+ serializedSizeOfInPublicData
+					+ serializedSizeOfInPrivateData
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateCharacterCmd::MID, __uiMessageSize ) );
@@ -10562,13 +10562,13 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InCharacterName);
-				protocolCheck(*output << InVisualData);
-				protocolCheck(*output << InAttributes);
+				protocolCheck(*output << InPublicData);
+				protocolCheck(*output << InPrivateData);
 
 				return hr;
-			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InVisualData, const Array<uint8_t>& InAttributes )
+			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData )
 
-			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes )
+			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -10581,15 +10581,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInVisualData = static_cast<uint16_t>(SerializedSizeOf(InVisualData)); 
-				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
+				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
+				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterName)
 					+ sizeof(uint16_t)
-					+ serializedSizeOfInVisualData
+					+ serializedSizeOfInPublicData
 					+ sizeof(uint16_t)
-					+ serializedSizeOfInAttributes
+					+ serializedSizeOfInPrivateData
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::CreateCharacterCmd::MID, __uiMessageSize ) );
@@ -10600,20 +10600,20 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InCharacterName);
-				protocolCheck(output->Write(serializedSizeOfInVisualData));
-				protocolCheck(*output << InVisualData);
-				protocolCheck(output->Write(serializedSizeOfInAttributes));
-				protocolCheck(*output << InAttributes);
+				protocolCheck(output->Write(serializedSizeOfInPublicData));
+				protocolCheck(*output << InPublicData);
+				protocolCheck(output->Write(serializedSizeOfInPrivateData));
+				protocolCheck(*output << InPrivateData);
 
 				return hr;
-			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes )
+			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData )
 
 			Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				CreateCharacterCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateCharacter:{0}:{1} , TransactionID:{2}, CharacterName:{3,60}, VisualData:{4}, Attributes:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetCharacterName(), parser.GetVisualData(), parser.GetAttributes()); 
+				SFLog(Net, Debug1, "CreateCharacter:{0}:{1} , TransactionID:{2}, CharacterName:{3,60}, PublicData:{4}, PrivateData:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetCharacterName(), parser.GetPublicData(), parser.GetPrivateData()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -11147,16 +11147,26 @@ namespace SF
 			}; // Result GetCharacterDataCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID GetCharacterDataRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 70);
-			const VariableTable& GetCharacterDataRes::GetAttributes() const
+			const VariableTable& GetCharacterDataRes::GetPrivateData() const
 			{
- 				if (!m_AttributesHasParsed)
+ 				if (!m_PrivateDataHasParsed)
 				{
- 					m_AttributesHasParsed = true;
-					InputMemoryStream Attributes_ReadStream(m_AttributesRaw);
-					*Attributes_ReadStream.ToInputStream() >> m_Attributes;
-				} // if (!m_AttributesHasParsed)
-				return m_Attributes;
-			} // const VariableTable& GetCharacterDataRes::GetAttributes() const
+ 					m_PrivateDataHasParsed = true;
+					InputMemoryStream PrivateData_ReadStream(m_PrivateDataRaw);
+					*PrivateData_ReadStream.ToInputStream() >> m_PrivateData;
+				} // if (!m_PrivateDataHasParsed)
+				return m_PrivateData;
+			} // const VariableTable& GetCharacterDataRes::GetPrivateData() const
+			const VariableTable& GetCharacterDataRes::GetEquipData() const
+			{
+ 				if (!m_EquipDataHasParsed)
+				{
+ 					m_EquipDataHasParsed = true;
+					InputMemoryStream EquipData_ReadStream(m_EquipDataRaw);
+					*EquipData_ReadStream.ToInputStream() >> m_EquipData;
+				} // if (!m_EquipDataHasParsed)
+				return m_EquipData;
+			} // const VariableTable& GetCharacterDataRes::GetEquipData() const
 			Result GetCharacterDataRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -11173,9 +11183,13 @@ namespace SF
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
 				protocolCheck(input->Read(ArrayLen));
-				uint8_t* AttributesPtr = nullptr;
-				protocolCheck(input->ReadLink(AttributesPtr, ArrayLen));
-				m_AttributesRaw.SetLinkedBuffer(ArrayLen, AttributesPtr);
+				uint8_t* PrivateDataPtr = nullptr;
+				protocolCheck(input->ReadLink(PrivateDataPtr, ArrayLen));
+				m_PrivateDataRaw.SetLinkedBuffer(ArrayLen, PrivateDataPtr);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* EquipDataPtr = nullptr;
+				protocolCheck(input->ReadLink(EquipDataPtr, ArrayLen));
+				m_EquipDataRaw.SetLinkedBuffer(ArrayLen, EquipDataPtr);
 
 				return hr;
 
@@ -11191,7 +11205,8 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariableArray("Attributes", "VariableTable", parser.GetAttributesRaw());
+				variableBuilder.SetVariableArray("PrivateData", "VariableTable", parser.GetPrivateDataRaw());
+				variableBuilder.SetVariableArray("EquipData", "VariableTable", parser.GetEquipDataRaw());
 
 				return hr;
 
@@ -11208,7 +11223,7 @@ namespace SF
 
 			}; // Result GetCharacterDataRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-			MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
+			MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InPrivateData, const Array<uint8_t>& InEquipData )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -11221,11 +11236,13 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
+				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
+				uint16_t serializedSizeOfInEquipData = static_cast<uint16_t>(SerializedSizeOf(InEquipData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
-					+ serializedSizeOfInAttributes
+					+ serializedSizeOfInPrivateData
+					+ serializedSizeOfInEquipData
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataRes::MID, __uiMessageSize ) );
@@ -11236,12 +11253,13 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
-				protocolCheck(*output << InAttributes);
+				protocolCheck(*output << InPrivateData);
+				protocolCheck(*output << InEquipData);
 
 				return hr;
-			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
+			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InPrivateData, const Array<uint8_t>& InEquipData )
 
-			MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
+			MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -11254,12 +11272,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
+				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
+				uint16_t serializedSizeOfInEquipData = static_cast<uint16_t>(SerializedSizeOf(InEquipData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ sizeof(uint16_t)
-					+ serializedSizeOfInAttributes
+					+ serializedSizeOfInPrivateData
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInEquipData
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GetCharacterDataRes::MID, __uiMessageSize ) );
@@ -11270,18 +11291,20 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
-				protocolCheck(output->Write(serializedSizeOfInAttributes));
-				protocolCheck(*output << InAttributes);
+				protocolCheck(output->Write(serializedSizeOfInPrivateData));
+				protocolCheck(*output << InPrivateData);
+				protocolCheck(output->Write(serializedSizeOfInEquipData));
+				protocolCheck(*output << InEquipData);
 
 				return hr;
-			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
+			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData )
 
 			Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				GetCharacterDataRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetCharacterData:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Attributes:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetAttributes()); 
+				SFLog(Net, Debug1, "GetCharacterData:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PrivateData:{4}, EquipData:{5}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPrivateData(), parser.GetEquipData()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

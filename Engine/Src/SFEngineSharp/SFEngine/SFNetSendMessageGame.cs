@@ -539,19 +539,19 @@ namespace SF.Net
 		} // public int  WhisperMessageCmd( System.UInt64 InTransactionID, System.UInt64 InReceiverID, System.String InReceiverName, SF.VariableTable InChatMetaData, System.String InChatMessage )
 
 		// Cmd: Create character
-		public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.VariableTable InVisualData, SF.VariableTable InAttributes )
+		public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.VariableTable InPublicData, SF.VariableTable InPrivateData )
 		{
  			int result;
-			var InVisualData_ = InVisualData.ToByteArray();
-			var InAttributes_ = InAttributes.ToByteArray();
-			using (var InVisualData_PinnedPtr_ = new PinnedByteBuffer(InVisualData_))
-			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
+			var InPublicData_ = InPublicData.ToByteArray();
+			var InPrivateData_ = InPrivateData.ToByteArray();
+			using (var InPublicData_PinnedPtr_ = new PinnedByteBuffer(InPublicData_))
+			using (var InPrivateData_PinnedPtr_ = new PinnedByteBuffer(InPrivateData_))
 			{
-			result = CSSFNetAdapter_GameCreateCharacterCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InCharacterName + "\0"),(ushort)InVisualData_.Length, InVisualData_PinnedPtr_.Ptr,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
+			result = CSSFNetAdapter_GameCreateCharacterCmd(m_Connection.NativeHandle, InTransactionID,System.Text.Encoding.UTF8.GetBytes(InCharacterName + "\0"),(ushort)InPublicData_.Length, InPublicData_PinnedPtr_.Ptr,(ushort)InPrivateData_.Length, InPrivateData_PinnedPtr_.Ptr);
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.CreateCharacterCmd);
 			return result;
-		} // public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.VariableTable InVisualData, SF.VariableTable InAttributes )
+		} // public int  CreateCharacterCmd( System.UInt64 InTransactionID, System.String InCharacterName, SF.VariableTable InPublicData, SF.VariableTable InPrivateData )
 
 		// Cmd: Delete character
 		public int  DeleteCharacterCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
@@ -839,7 +839,7 @@ namespace SF.Net
 
 		// Cmd: Create character
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameCreateCharacterCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameCreateCharacterCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InCharacterName, System.UInt16 _sizeOfInVisualData,IntPtr InVisualData, System.UInt16 _sizeOfInAttributes,IntPtr InAttributes );
+		static extern int CSSFNetAdapter_GameCreateCharacterCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, [MarshalAs(UnmanagedType.LPArray)] byte[] InCharacterName, System.UInt16 _sizeOfInPublicData,IntPtr InPublicData, System.UInt16 _sizeOfInPrivateData,IntPtr InPrivateData );
 
 
 		// Cmd: Delete character
@@ -1730,17 +1730,19 @@ namespace SF.Net
 
 
 		// Cmd: 
-		public int  GetCharacterDataRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InAttributes )
+		public int  GetCharacterDataRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InPrivateData, SF.VariableTable InEquipData )
 		{
  			int result;
-			var InAttributes_ = InAttributes.ToByteArray();
-			using (var InAttributes_PinnedPtr_ = new PinnedByteBuffer(InAttributes_))
+			var InPrivateData_ = InPrivateData.ToByteArray();
+			var InEquipData_ = InEquipData.ToByteArray();
+			using (var InPrivateData_PinnedPtr_ = new PinnedByteBuffer(InPrivateData_))
+			using (var InEquipData_PinnedPtr_ = new PinnedByteBuffer(InEquipData_))
 			{
-			result = CSSFNetAdapter_GameGetCharacterDataRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InAttributes_.Length, InAttributes_PinnedPtr_.Ptr);
+			result = CSSFNetAdapter_GameGetCharacterDataRes(m_Connection.NativeHandle, InTransactionID, InResult,(ushort)InPrivateData_.Length, InPrivateData_PinnedPtr_.Ptr,(ushort)InEquipData_.Length, InEquipData_PinnedPtr_.Ptr);
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.GetCharacterDataRes);
 			return result;
-		} // public int  GetCharacterDataRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InAttributes )
+		} // public int  GetCharacterDataRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InPrivateData, SF.VariableTable InEquipData )
 
 
 		// Cmd: Select character
@@ -2188,7 +2190,7 @@ namespace SF.Net
 
 		// Cmd: 
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameGetCharacterDataRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameGetCharacterDataRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInAttributes,IntPtr InAttributes );
+		static extern int CSSFNetAdapter_GameGetCharacterDataRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInPrivateData,IntPtr InPrivateData, System.UInt16 _sizeOfInEquipData,IntPtr InEquipData );
 
 
 

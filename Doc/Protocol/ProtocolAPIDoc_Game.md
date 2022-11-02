@@ -1252,15 +1252,15 @@ Create character
 
 1. Command interface
 
-        Result CreateCharacterCmd(const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InVisualData, const Array<uint8_t>& InAttributes)
+        Result CreateCharacterCmd(const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData)
 
 		- OutTransactionID: TransactionID type. 
 
 		- OutCharacterName: String type. 
 
-		- OutVisualData: VariableTable type. 
+		- OutPublicData: VariableTable type. 
 
-		- OutAttributes: VariableTable type. 
+		- OutPrivateData: VariableTable type. 
 
 2. Result interface
 
@@ -1329,7 +1329,8 @@ C++: Cast message to GetCharacterDataRes to access values
 
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
-		- OutAttributes: VariableTable type. Character attributes
+		- OutPrivateData: VariableTable type. Character private data
+		- OutEquipData: VariableTable type. Character equip data
 
 
 ## SelectCharacter Request

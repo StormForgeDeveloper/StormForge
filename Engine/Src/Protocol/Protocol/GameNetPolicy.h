@@ -123,7 +123,7 @@ namespace SF
 		// Cmd: Whisper(tell) other player chatting
 		Result WhisperMessageCmd( const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage );
 		// Cmd: Create character
-		Result CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InVisualData, const VariableTable &InAttributes );
+		Result CreateCharacterCmd( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData );
 		// Cmd: Delete character
 		Result DeleteCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 		// Cmd: Get character list
@@ -286,7 +286,7 @@ namespace SF
 		// Cmd: Get character list
 		Result GetCharacterListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters );
 		// Cmd: 
-		Result GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
+		Result GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData );
 		// Cmd: Select character
 		Result SelectCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes );
 		// Cmd: To call general functionality

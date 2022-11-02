@@ -51,29 +51,7 @@ namespace SF
 		"string",
 		"Static",
 		"Type",
-
-		"charIndex",
-		"Seat",
-		"PreThrow",
-		"Fishing",
-		"Finished",
-		"ThrowPos",
-		"OccupiedObjectId",
-		"FishId",
-		"FishingResult",
-		"ItemTableId",
-		"ItemUID",
-		"Operation",
-		"EffectModChanges",
-		"InvenChanges",
-		"Costume",
-		"CharacterId",
-		"CharacterData",
-		"VisualData",
-		"CurrencyData",
 		"Name",
-		"EncounterTime",
-		"StateStartUTC"
 	};
 
 	size_t StringCrcDB::StringItem::CalculateItemSize(size_t strLen)

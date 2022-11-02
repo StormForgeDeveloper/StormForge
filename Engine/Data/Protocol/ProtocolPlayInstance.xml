@@ -37,8 +37,9 @@
 			<Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
 			<Params TypeName="PlayerID" Name="PlayerID" Desc="Joined Player Id"/>
             <Params TypeName="PlayerPlatformID" Name="PlayerPlatformId" Desc="Joined Player platform id"/>
-			<Params TypeName="VariableTable" Name="Attributes" Desc="Character visual data"/>
-			<Params TypeName="ActorMovement" Name="Movement" Desc="Actor movement of the character. This one has actor id inside"/>
+			<Params TypeName="VariableTable" Name="PublicData" Desc="Character public data"/>
+            <Params TypeName="VariableTable" Name="EquipData" Desc="Character Equip data"/>
+            <Params TypeName="ActorMovement" Name="Movement" Desc="Actor movement of the character. This one has actor id inside"/>
 			<Params TypeName="StringCrc32" Name="State" Desc="StateId actor state."/>
 			<Params TypeName="VariableTable" Name="StateValues" Desc="State values"/>
 		</S2CEvent>

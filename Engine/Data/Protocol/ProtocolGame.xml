@@ -599,8 +599,8 @@
 	    <Command Name="CreateCharacter" Reliable="true" Crypto="No" Trace="Debug1" Desc="Create character">
 		    <Cmd>
 			    <Params TypeName="String" Name="CharacterName"/>
-				<Params TypeName="VariableTable" Name="VisualData"/>
-			    <Params TypeName="VariableTable" Name="Attributes"/>
+				<Params TypeName="VariableTable" Name="PublicData"/>
+			    <Params TypeName="VariableTable" Name="PrivateData"/>
 		    </Cmd>
 		    <Res>
 			    <Params TypeName="uint32" Name="CharacterID" Desc="Created character ID"/>
@@ -628,7 +628,8 @@
 				<Params TypeName="uint32" Name="CharacterID" Desc="Character ID to get"/>
 			</Cmd>
 			<Res>
-				<Params TypeName="VariableTable" Name="Attributes" Desc="Character attributes"/>
+				<Params TypeName="VariableTable" Name="PrivateData" Desc="Character private data"/>
+                <Params TypeName="VariableTable" Name="EquipData" Desc="Character equip data"/>
 			</Res>
 	    </Command>
 

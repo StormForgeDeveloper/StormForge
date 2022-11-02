@@ -242,9 +242,12 @@ namespace SF
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
 				PlayerPlatformID m_PlayerPlatformId{};
-				ArrayView<uint8_t> m_AttributesRaw;
-				mutable bool m_AttributesHasParsed = false;
-				mutable VariableTable m_Attributes;
+				ArrayView<uint8_t> m_PublicDataRaw;
+				mutable bool m_PublicDataHasParsed = false;
+				mutable VariableTable m_PublicData;
+				ArrayView<uint8_t> m_EquipDataRaw;
+				mutable bool m_EquipDataHasParsed = false;
+				mutable VariableTable m_EquipData;
 				ActorMovement m_Movement{};
 				StringCrc32 m_State{};
 				ArrayView<uint8_t> m_StateValuesRaw;
@@ -263,8 +266,10 @@ namespace SF
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
 				const PlayerPlatformID& GetPlayerPlatformId() const	{ return m_PlayerPlatformId; };
-				const Array<uint8_t>& GetAttributesRaw() const	{ return m_AttributesRaw; };
-				const VariableTable& GetAttributes() const;
+				const Array<uint8_t>& GetPublicDataRaw() const	{ return m_PublicDataRaw; };
+				const VariableTable& GetPublicData() const;
+				const Array<uint8_t>& GetEquipDataRaw() const	{ return m_EquipDataRaw; };
+				const VariableTable& GetEquipData() const;
 				const ActorMovement& GetMovement() const	{ return m_Movement; };
 				const StringCrc32& GetState() const	{ return m_State; };
 				const Array<uint8_t>& GetStateValuesRaw() const	{ return m_StateValuesRaw; };
@@ -276,8 +281,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const Array<uint8_t>& InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues );
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const VariableTable &InAttributes, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const VariableTable &InPublicData, const VariableTable &InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues );
 
 			}; // class NewActorInViewS2CEvt : public MessageBase
 
