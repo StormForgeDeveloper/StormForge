@@ -123,6 +123,16 @@ namespace SF
 			}; // Result JoinPlayInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			const MessageID JoinPlayInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 0);
+			const VariableTable& JoinPlayInstanceRes::GetCharacterPrivateData() const
+			{
+ 				if (!m_CharacterPrivateDataHasParsed)
+				{
+ 					m_CharacterPrivateDataHasParsed = true;
+					InputMemoryStream CharacterPrivateData_ReadStream(m_CharacterPrivateDataRaw);
+					*CharacterPrivateData_ReadStream.ToInputStream() >> m_CharacterPrivateData;
+				} // if (!m_CharacterPrivateDataHasParsed)
+				return m_CharacterPrivateData;
+			} // const VariableTable& JoinPlayInstanceRes::GetCharacterPrivateData() const
 			Result JoinPlayInstanceRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -140,6 +150,11 @@ namespace SF
 				protocolCheck(*input >> m_Result);
 				protocolCheck(*input >> m_PlayInstanceUID);
 				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(*input >> m_CharacterID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* CharacterPrivateDataPtr = nullptr;
+				protocolCheck(input->ReadLink(CharacterPrivateDataPtr, ArrayLen));
+				m_CharacterPrivateDataRaw.SetLinkedBuffer(ArrayLen, CharacterPrivateDataPtr);
 				protocolCheck(*input >> m_Movement);
 
 				return hr;
@@ -158,6 +173,8 @@ namespace SF
 				variableBuilder.SetVariable("Result", parser.GetResult());
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("CharacterID", parser.GetCharacterID());
+				variableBuilder.SetVariableArray("CharacterPrivateData", "VariableTable", parser.GetCharacterPrivateDataRaw());
 				variableBuilder.SetVariable("Movement", "ActorMovement", parser.GetMovement());
 
 				return hr;
@@ -175,8 +192,7 @@ namespace SF
 
 			}; // Result JoinPlayInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-
-			MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+			MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -189,11 +205,14 @@ namespace SF
 					return pNewMsg;
 				});
 
+				uint16_t serializedSizeOfInCharacterPrivateData = static_cast<uint16_t>(SerializedSizeOf(InCharacterPrivateData)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InCharacterID)
+					+ serializedSizeOfInCharacterPrivateData
 					+ SerializedSizeOf(InMovement)
 				);
 
@@ -207,17 +226,62 @@ namespace SF
 				protocolCheck(*output << InResult);
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InCharacterID);
+				protocolCheck(*output << InCharacterPrivateData);
 				protocolCheck(*output << InMovement);
 
 				return hr;
-			}; // MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+			}; // MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement )
+
+			MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint16_t serializedSizeOfInCharacterPrivateData = static_cast<uint16_t>(SerializedSizeOf(InCharacterPrivateData)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InCharacterID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInCharacterPrivateData
+					+ SerializedSizeOf(InMovement)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinPlayInstanceRes::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InCharacterID);
+				protocolCheck(output->Write(serializedSizeOfInCharacterPrivateData));
+				protocolCheck(*output << InCharacterPrivateData);
+				protocolCheck(*output << InMovement);
+
+				return hr;
+			}; // MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement )
 
 			Result JoinPlayInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				JoinPlayInstanceRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "JoinPlayInstance:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, Movement:{6}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMovement()); 
+				SFLog(Net, Debug1, "JoinPlayInstance:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, CharacterID:{6}, CharacterPrivateData:{7}, Movement:{8}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetCharacterID(), parser.GetCharacterPrivateData(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
 			}; // Result JoinPlayInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

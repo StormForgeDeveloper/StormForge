@@ -13,6 +13,8 @@
 			<Res>
 				<Params TypeName="EntityUID" Name="PlayInstanceUID" Desc="joined Play instance ID"/>
 				<Params TypeName="PlayerID" Name="PlayerID" Desc="Joined player id for validation"/>
+                <Params TypeName="CharacterID" Name="CharacterID" Desc="Joined player's character id for validation"/>
+                <Params TypeName="VariableTable" Name="CharacterPrivateData" Desc=" character private data"/>
 				<Params TypeName="ActorMovement" Name="Movement" Desc="Start movement"/>
 			</Res>
 		</Command>

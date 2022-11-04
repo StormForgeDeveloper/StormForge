@@ -38,6 +38,8 @@ C++: Cast message to JoinPlayInstanceRes to access values
 		- OutResult: Result type. 
 		- OutPlayInstanceUID: EntityUID type. joined Play instance ID
 		- OutPlayerID: PlayerID type. Joined player id for validation
+		- OutCharacterID: CharacterID type. Joined player's character id for validation
+		- OutCharacterPrivateData: VariableTable type.  character private data
 		- OutMovement: ActorMovement type. Start movement
 
 

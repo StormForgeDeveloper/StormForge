@@ -96,6 +96,10 @@ namespace SF
 				Result m_Result{};
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
+				CharacterID m_CharacterID{};
+				ArrayView<uint8_t> m_CharacterPrivateDataRaw;
+				mutable bool m_CharacterPrivateDataHasParsed = false;
+				mutable VariableTable m_CharacterPrivateData;
 				ActorMovement m_Movement{};
 			public:
 				JoinPlayInstanceRes()
@@ -111,6 +115,9 @@ namespace SF
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
+				const CharacterID& GetCharacterID() const	{ return m_CharacterID; };
+				const Array<uint8_t>& GetCharacterPrivateDataRaw() const	{ return m_CharacterPrivateDataRaw; };
+				const VariableTable& GetCharacterPrivateData() const;
 				const ActorMovement& GetMovement() const	{ return m_Movement; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
@@ -119,7 +126,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement );
 
 			}; // class JoinPlayInstanceRes : public MessageBase
 
