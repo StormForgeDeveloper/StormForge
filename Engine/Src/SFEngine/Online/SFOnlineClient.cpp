@@ -699,7 +699,7 @@ namespace SF
 		}
 
 
-		m_Game->AddMessageDelegateUnique(uintptr_t(this),
+        m_Game->AddMessageDelegateUnique(uintptr_t(this),
 			Message::Game::SelectCharacterRes::MID.GetMsgID(),
 			[this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
 			{
@@ -709,6 +709,29 @@ namespace SF
 					m_CharacterId = msg.GetCharacterID();
 				}
 			});
+
+
+        m_Game->AddMessageDelegateUnique(uintptr_t(this),
+            Message::Game::LeaveGameInstanceRes::MID.GetMsgID(),
+            [this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
+            {
+                 m_GameInstanceUID = 0;
+                 switch (GetOnlineState())
+                 {
+                 case OnlineState::InGameJoiningGameInstance:
+                 case OnlineState::InGameConnectingGameInstance:
+                 case OnlineState::InGameGameInstanceJoining:
+                 case OnlineState::InGameInGameInstance:
+                     SetOnlineState(OnlineState::InGameServer);
+                     if (m_GameInstance.IsValid())
+                     {
+                         Disconnect(m_GameInstance);
+                     }
+                     break;
+                 default:
+                     break;
+                 }
+            });
 	}
 
 	void OnlineClient::RegisterPlayInstanceHandlers()
