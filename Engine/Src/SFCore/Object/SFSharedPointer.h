@@ -217,30 +217,30 @@ namespace SF {
 		{
 		}
 
-		void reset() const
+        SF_FORCEINLINE void reset() const
 		{
 			ReleaseReference();
 		}
 
-		ClassType* GetObjectPtr()
+        SF_FORCEINLINE ClassType* GetObjectPtr()
 		{
 			return (ClassType*)m_pObject;
 		}
 
 		// supporting std style interface
-		ClassType* get() const
+        SF_FORCEINLINE ClassType* get() const
 		{
 			return (ClassType*)m_pObject;
 		}
 
-		explicit operator ClassType*()			{ return (ClassType*)m_pObject; }
-		explicit operator ClassType*() const 	{ return (ClassType*)m_pObject; }
+        SF_FORCEINLINE explicit operator ClassType*()			{ return (ClassType*)m_pObject; }
+        SF_FORCEINLINE explicit operator ClassType*() const 	{ return (ClassType*)m_pObject; }
 
-		ClassType* operator ->() 			{ return (ClassType*)m_pObject; }
-		ClassType* operator ->() const		{ return (ClassType*)m_pObject; }
+        SF_FORCEINLINE ClassType* operator ->() 			{ return (ClassType*)m_pObject; }
+        SF_FORCEINLINE ClassType* operator ->() const		{ return (ClassType*)m_pObject; }
 
-		ClassType* operator *()				{ return (ClassType*)m_pObject; }
-		ClassType* operator *() const		{ return (ClassType*)m_pObject; }
+        SF_FORCEINLINE ClassType* operator *()				{ return (ClassType*)m_pObject; }
+        SF_FORCEINLINE ClassType* operator *() const		{ return (ClassType*)m_pObject; }
 
 		SF_FORCEINLINE bool operator == (const SharedPointer& src) const
 		{
@@ -272,7 +272,7 @@ namespace SF {
 			return m_pObject != nullptr;
 		}
 
-		SharedPointerT<ClassType>& operator = (const SharedPointer& src)
+        SF_FORCEINLINE SharedPointerT<ClassType>& operator = (const SharedPointer& src)
 		{
 			auto pObjectSrc = (SharedObject*)(const SharedObject*)src;
 			if (pObjectSrc != nullptr)
@@ -289,7 +289,7 @@ namespace SF {
 			return *this;
 		}
 
-		SharedPointerT<ClassType>& operator = (SharedPointer&& src)
+        SF_FORCEINLINE SharedPointerT<ClassType>& operator = (SharedPointer&& src)
 		{
 			auto pObjectSrc = (SharedObject*)(const SharedObject*)src;
 			if (pObjectSrc != nullptr)
@@ -306,13 +306,13 @@ namespace SF {
 			return *this;
 		}
 
-		SharedPointerT<ClassType>& operator = (const SharedPointerT<ClassType>& src)
+        SF_FORCEINLINE SharedPointerT<ClassType>& operator = (const SharedPointerT<ClassType>& src)
 		{
 			SharedPointer::operator = (src);
 			return *this;
 		}
 
-		SharedPointerT<ClassType>& operator = (SharedPointerT<ClassType>&& src)
+        SF_FORCEINLINE SharedPointerT<ClassType>& operator = (SharedPointerT<ClassType>&& src)
 		{
 			SharedPointer::operator = (std::forward<SharedPointer>(src));
 			return *this;
@@ -441,12 +441,17 @@ namespace SF {
 			ReleaseReference();
 		}
 
-		void reset()
+        SF_FORCEINLINE void reset()
 		{
 			ReleaseReference();
 		}
 
-		void ReleaseReference() const
+        SF_FORCEINLINE bool IsValid() const
+        {
+            return m_pObject.load(std::memory_order_relaxed) != nullptr;
+        }
+
+        SF_FORCEINLINE void ReleaseReference() const
 		{
 			auto pObj = m_pObject.exchange(nullptr, std::memory_order_acq_rel);
 			if (pObj == nullptr)
@@ -455,24 +460,24 @@ namespace SF {
 			pObj->ReleaseReference();
 		}
 
-		explicit operator SharedObject*()
+        SF_FORCEINLINE explicit operator SharedObject*()
 		{
 			return m_pObject.load(std::memory_order_relaxed);
 		}
 
-		SharedObject* get() const
+        SF_FORCEINLINE SharedObject* get() const
 		{
 			return m_pObject.load(std::memory_order_relaxed);
 		}
 
-		void Swap(SharedPointer& src)
+        SF_FORCEINLINE void Swap(SharedPointer& src)
 		{
 			auto pObject = const_cast<SharedObject*>((const SharedObject*)src);
 			auto pOldObject = m_pObject.exchange(pObject, std::memory_order_acq_rel);
 			src.m_pObject = pOldObject;
 		}
 
-		void Swap(SharedPointerAtomic& src)
+        SF_FORCEINLINE void Swap(SharedPointerAtomic& src)
 		{
 			// This doesn't guarantee that assignment to the src is atomic
 			auto pObject = const_cast<SharedObject*>((const SharedObject*)src);
@@ -480,7 +485,7 @@ namespace SF {
 			src.m_pObject.exchange(pOldObject, std::memory_order_release);
 		}
 
-		bool ComapreNExchange(SharedObject*& expectedValue, const SharedPointer& newValue)
+        SF_FORCEINLINE bool ComapreNExchange(SharedObject*& expectedValue, const SharedPointer& newValue)
 		{
 			auto pObject = newValue.get();
 			bool bRet = m_pObject.compare_exchange_strong(expectedValue, pObject);
@@ -494,7 +499,7 @@ namespace SF {
 			return bRet;
 		}
 
-		bool ComapreNExchange(SharedObject*& expectedValue, const SharedPointerAtomic& newValue)
+        SF_FORCEINLINE bool ComapreNExchange(SharedObject*& expectedValue, const SharedPointerAtomic& newValue)
 		{
 			auto pObject = newValue.get();
 			bool bRet = m_pObject.compare_exchange_strong(expectedValue, pObject);
@@ -511,22 +516,22 @@ namespace SF {
 
 #ifndef SWIG
 
-		SharedObject* operator *()
+        SF_FORCEINLINE SharedObject* operator *()
 		{
 			return m_pObject.load(std::memory_order_relaxed);
 		}
 
-		SharedObject* operator *() const
+        SF_FORCEINLINE SharedObject* operator *() const
 		{
 			return m_pObject.load(std::memory_order_relaxed);
 		}
 
-		explicit operator SharedObject*() const
+        SF_FORCEINLINE explicit operator SharedObject*() const
 		{
 			return m_pObject.load(std::memory_order_relaxed);
 		}
 #endif
-		void operator = (const SharedPointerAtomic& src)
+        SF_FORCEINLINE void operator = (const SharedPointerAtomic& src)
 		{
 			auto pObject = const_cast<SharedObject*>((const SharedObject*)src);
 			if (pObject != nullptr)
@@ -539,7 +544,7 @@ namespace SF {
 			pOldObject->ReleaseReference();
 		}
 
-		void operator = (const SharedPointer& src)
+        SF_FORCEINLINE void operator = (const SharedPointer& src)
 		{
 			auto pObject = const_cast<SharedObject*>((const SharedObject*)src);
 			if (pObject != nullptr)
@@ -552,7 +557,7 @@ namespace SF {
 			pOldObject->ReleaseReference();
 		}
 
-		void operator = (SharedPointer&& src)
+        SF_FORCEINLINE void operator = (SharedPointer&& src)
 		{
 			auto pObject = const_cast<SharedObject*>((const SharedObject*)src);
 			if (pObject != nullptr)
@@ -568,7 +573,7 @@ namespace SF {
 			pOldObject->ReleaseReference();
 		}
 
-		void operator = (SharedPointerAtomic&& src) noexcept
+        SF_FORCEINLINE void operator = (SharedPointerAtomic&& src) noexcept
 		{
 			auto pObject = const_cast<SharedObject*>((const SharedObject*)src);
 			src.m_pObject = nullptr;
@@ -580,22 +585,22 @@ namespace SF {
 			pOldObject->ReleaseReference();
 		}
 
-		bool operator == (const SharedPointerAtomic& src) const
+        SF_FORCEINLINE bool operator == (const SharedPointerAtomic& src) const
 		{
 			return m_pObject.load(std::memory_order_relaxed) == src.m_pObject.load(std::memory_order_relaxed);
 		}
 
-		bool operator != (const SharedPointerAtomic& src) const
+        SF_FORCEINLINE bool operator != (const SharedPointerAtomic& src) const
 		{
 			return m_pObject.load(std::memory_order_relaxed) != src.m_pObject.load(std::memory_order_relaxed);
 		}
 
-		bool operator == (SharedObject* pRef) const
+        SF_FORCEINLINE bool operator == (SharedObject* pRef) const
 		{
 			return m_pObject.load(std::memory_order_relaxed) == pRef;
 		}
 
-		bool operator != (SharedObject* pRef) const
+        SF_FORCEINLINE bool operator != (SharedObject* pRef) const
 		{
 			return m_pObject.load(std::memory_order_relaxed) != pRef;
 		}
