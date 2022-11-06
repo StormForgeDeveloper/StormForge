@@ -4,7 +4,7 @@
     <!-- ===================================================  Game  ========================================================= -->
 
 
-		<C2SEvent Name="Heartbeat" Reliable="true" Crypto="No" Trace="Debug1" Desc="Client heartbeat">
+		<C2SEvent Name="Heartbeat" Reliable="true" Crypto="No" Trace="Debug7" Desc="Client heartbeat">
 		</C2SEvent>
 
 		<Command Name="JoinGameServer" Reliable="true" Crypto="No" Trace="Debug1" Desc="Player connected from a login server and moved to game server">

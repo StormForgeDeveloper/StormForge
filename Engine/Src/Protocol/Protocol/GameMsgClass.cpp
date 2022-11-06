@@ -90,7 +90,7 @@ namespace SF
 			{
  				HeartbeatC2SEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Heartbeat:{0}:{1} ",
+				SFLog(Net, Debug7, "Heartbeat:{0}:{1} ",
 						prefix, pMsg->GetMessageHeader()->Length); 
 				return ResultCode::SUCCESS;
 			}; // Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
