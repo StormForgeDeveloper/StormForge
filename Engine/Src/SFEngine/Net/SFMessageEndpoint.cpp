@@ -79,11 +79,12 @@ namespace SF {
             return ResultCode::INVALID_POINTER;
         }
 
+#if 0 // message logging
         DynamicArray<uint8_t> encodedBuffer;
         Util::HEXEncode(messageData->GetMessageSize(), messageData->GetMessageBuff(), encodedBuffer);
         encodedBuffer.push_back('\0');
         SFLog(System, Debug3, "ServerMessageConsumer:SendRaw: {0}, {1}", messageData->GetMessageSize(), (const char*)encodedBuffer.data());
-
+#endif
 
 		return m_TargetEndpoint->SendRecord(ArrayView<const uint8_t>(messageData->GetMessageSize(), messageData->GetMessageBuff()));
 	}
