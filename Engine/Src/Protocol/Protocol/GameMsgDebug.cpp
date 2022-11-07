@@ -221,6 +221,11 @@ namespace SF
 			// Cmd: Select character
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SelectCharacterCmd::MID.IDSeq.MsgID,&Message::Game::SelectCharacterCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::SelectCharacterRes::MID.IDSeq.MsgID,&Message::Game::SelectCharacterRes::TraceOut));
+			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestServerNoticeUpdateCmd::MID.IDSeq.MsgID,&Message::Game::RequestServerNoticeUpdateCmd::TraceOut));
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::RequestServerNoticeUpdateRes::MID.IDSeq.MsgID,&Message::Game::RequestServerNoticeUpdateRes::TraceOut));
+			// S2C: Server Notice updated event
+			MessageDebugTraceMap.insert(std::make_pair(Message::Game::ServerNoticeS2CEvt::MID.IDSeq.MsgID,&Message::Game::ServerNoticeS2CEvt::TraceOut));
 			// Cmd: To call general functionality
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::CallFunctionCmd::MID.IDSeq.MsgID,&Message::Game::CallFunctionCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Game::CallFunctionRes::MID.IDSeq.MsgID,&Message::Game::CallFunctionRes::TraceOut));

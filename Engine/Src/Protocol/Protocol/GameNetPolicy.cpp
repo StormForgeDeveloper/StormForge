@@ -722,6 +722,20 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetPolicyGame::SelectCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID )
+	// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+	Result NetPolicyGame::RequestServerNoticeUpdateCmd( const uint64_t &InTransactionID )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::RequestServerNoticeUpdateCmd::Create(GetSystemHeap(), InTransactionID);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetPolicyGame::RequestServerNoticeUpdateCmd( const uint64_t &InTransactionID )
 	// Cmd: To call general functionality
 	Result NetPolicyGame::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
 	{
@@ -1732,6 +1746,34 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetSvrPolicyGame::SelectCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
+	// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+	Result NetSvrPolicyGame::RequestServerNoticeUpdateRes( const uint64_t &InTransactionID, const Result &InResult )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::RequestServerNoticeUpdateRes::Create(GetSystemHeap(), InTransactionID, InResult);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetSvrPolicyGame::RequestServerNoticeUpdateRes( const uint64_t &InTransactionID, const Result &InResult )
+	// S2C: Server Notice updated event
+	Result NetSvrPolicyGame::ServerNoticeS2CEvt( const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Game::ServerNoticeS2CEvt::Create(GetSystemHeap(), InNoticeCategory, InServerNoticeMessage);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetSvrPolicyGame::ServerNoticeS2CEvt( const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
 	// Cmd: To call general functionality
 	Result NetSvrPolicyGame::CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
 	{

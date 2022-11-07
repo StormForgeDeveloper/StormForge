@@ -40,6 +40,8 @@ namespace SF
 		Result LoginBySteamCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken );
 		// Cmd: Login request
 		Result CreateRandomUserCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone );
+		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+		Result PreLoginRequestServerNoticeUpdateCmd( const uint64_t &InTransactionID );
 		// Cmd: Update my score and Get Ranking list
 		Result UpdateMyScoreCmd( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount );
 		// Cmd: Get Ranking lise
@@ -71,6 +73,10 @@ namespace SF
 		Result LoginBySteamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 		// Cmd: Login request
 		Result CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
+		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+		Result PreLoginRequestServerNoticeUpdateRes( const uint64_t &InTransactionID, const Result &InResult );
+		// S2C: Server Notice updated event
+		Result PreLoginServerNoticeS2CEvt( const int8_t &InNoticeCategory, const char* InServerNoticeMessage );
 		// Cmd: Update my score and Get Ranking list
 		Result UpdateMyScoreRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 		// Cmd: Get Ranking lise

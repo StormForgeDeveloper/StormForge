@@ -51,6 +51,14 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::CreateRandomUserCmd::MID.IDSeq.MsgID,&Message::Login::CreateRandomUserCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Login::CreateRandomUserRes::MID.IDSeq.MsgID,&Message::Login::CreateRandomUserRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::CreateRandomUserRes::MID.IDSeq.MsgID,&Message::Login::CreateRandomUserRes::ParseMessageToMessageBase));
+			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+			MessageParseToVariableMap.insert(std::make_pair(Message::Login::PreLoginRequestServerNoticeUpdateCmd::MID.IDSeq.MsgID,&Message::Login::PreLoginRequestServerNoticeUpdateCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::PreLoginRequestServerNoticeUpdateCmd::MID.IDSeq.MsgID,&Message::Login::PreLoginRequestServerNoticeUpdateCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Login::PreLoginRequestServerNoticeUpdateRes::MID.IDSeq.MsgID,&Message::Login::PreLoginRequestServerNoticeUpdateRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::PreLoginRequestServerNoticeUpdateRes::MID.IDSeq.MsgID,&Message::Login::PreLoginRequestServerNoticeUpdateRes::ParseMessageToMessageBase));
+			// S2C: Server Notice updated event
+			MessageParseToVariableMap.insert(std::make_pair(Message::Login::PreLoginServerNoticeS2CEvt::MID.IDSeq.MsgID,&Message::Login::PreLoginServerNoticeS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::PreLoginServerNoticeS2CEvt::MID.IDSeq.MsgID,&Message::Login::PreLoginServerNoticeS2CEvt::ParseMessageToMessageBase));
 			// Cmd: Update my score and Get Ranking list
 			MessageParseToVariableMap.insert(std::make_pair(Message::Login::UpdateMyScoreCmd::MID.IDSeq.MsgID,&Message::Login::UpdateMyScoreCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Login::UpdateMyScoreCmd::MID.IDSeq.MsgID,&Message::Login::UpdateMyScoreCmd::ParseMessageToMessageBase));

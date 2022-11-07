@@ -132,6 +132,8 @@ namespace SF
 		Result GetCharacterDataCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 		// Cmd: Select character
 		Result SelectCharacterCmd( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
+		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+		Result RequestServerNoticeUpdateCmd( const uint64_t &InTransactionID );
 		// Cmd: To call general functionality
 		Result CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters );
 
@@ -289,6 +291,10 @@ namespace SF
 		Result GetCharacterDataRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData );
 		// Cmd: Select character
 		Result SelectCharacterRes( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes );
+		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+		Result RequestServerNoticeUpdateRes( const uint64_t &InTransactionID, const Result &InResult );
+		// S2C: Server Notice updated event
+		Result ServerNoticeS2CEvt( const int8_t &InNoticeCategory, const char* InServerNoticeMessage );
 		// Cmd: To call general functionality
 		Result CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults );
 

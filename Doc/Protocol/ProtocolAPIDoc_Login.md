@@ -134,6 +134,34 @@ C++: Cast message to CreateRandomUserRes to access values
 		- OutLoginEntityUID: uint64 type. Login entity ID. This need to be used when you connect to the game server
 
 
+## PreLoginRequestServerNoticeUpdate Request
+Request Server Notice. Sever will send ServerNoticeS2CEvt
+
+1. Command interface
+
+        Result PreLoginRequestServerNoticeUpdateCmd(const uint64_t &InTransactionID)
+
+		- OutTransactionID: TransactionID type. 
+
+2. Result interface
+
+C++: Cast message to PreLoginRequestServerNoticeUpdateRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+
+
+## PreLoginServerNoticeS2CEvt
+Server Notice updated event
+
+        Result PreLoginServerNoticeS2CEvt(const int8_t &InNoticeCategory, const char* InServerNoticeMessage)
+
+		- OutInNoticeCategory: int8 type. Notice category
+
+		- OutInServerNoticeMessage: String type. ServerNotice message text
+
+
 ## UpdateMyScore Request
 Update my score and Get Ranking list
 

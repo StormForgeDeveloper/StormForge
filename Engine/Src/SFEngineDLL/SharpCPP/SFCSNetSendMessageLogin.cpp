@@ -67,6 +67,18 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserCmd( intptr_t InNativeConn
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InGameID, const char* InCellPhone )
 
 
+// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+SFDLL_EXPORT int  CSSFNetAdapter_LoginPreLoginRequestServerNoticeUpdateCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::Login::PreLoginRequestServerNoticeUpdateCmd::Create(pConnection->GetHeap(), InTransactionID);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_LoginPreLoginRequestServerNoticeUpdateCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID )
+
+
 // Cmd: Update my score and Get Ranking list
 SFDLL_EXPORT int  CSSFNetAdapter_LoginUpdateMyScoreCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint64_t InRankingScore, int InRankingType, uint16_t InCount )
 {
@@ -179,6 +191,32 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserRes( intptr_t InNativeConn
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
 } // SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID )
+
+
+
+// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+SFDLL_EXPORT int  CSSFNetAdapter_LoginPreLoginRequestServerNoticeUpdateRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::Login::PreLoginRequestServerNoticeUpdateRes::Create(pConnection->GetHeap(), InTransactionID, InResult);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_LoginPreLoginRequestServerNoticeUpdateRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+
+
+
+// S2C: Server Notice updated event
+SFDLL_EXPORT int  CSSFNetAdapter_LoginPreLoginServerNoticeS2CEvt( intptr_t InNativeConnectionHandle, int8_t InNoticeCategory, const char* InServerNoticeMessage )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::Login::PreLoginServerNoticeS2CEvt::Create(pConnection->GetHeap(), InNoticeCategory,InServerNoticeMessage);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_LoginPreLoginServerNoticeS2CEvt( intptr_t InNativeConnectionHandle, int8_t InNoticeCategory, const char* InServerNoticeMessage )
 
 
 

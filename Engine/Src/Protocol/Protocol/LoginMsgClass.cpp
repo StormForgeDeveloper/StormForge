@@ -853,8 +853,268 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateRandomUserRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
+			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+			const MessageID PreLoginRequestServerNoticeUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 4);
+			Result PreLoginRequestServerNoticeUpdateCmd::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+
+				return hr;
+
+			}; // Result PreLoginRequestServerNoticeUpdateCmd::ParseMessage(const MessageData* pIMsg)
+
+			Result PreLoginRequestServerNoticeUpdateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				PreLoginRequestServerNoticeUpdateCmd parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+
+				return hr;
+
+			}; // Result PreLoginRequestServerNoticeUpdateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result PreLoginRequestServerNoticeUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) PreLoginRequestServerNoticeUpdateCmd(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result PreLoginRequestServerNoticeUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+
+			MessageData* PreLoginRequestServerNoticeUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::PreLoginRequestServerNoticeUpdateCmd::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+
+				return hr;
+			}; // MessageData* PreLoginRequestServerNoticeUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+
+			Result PreLoginRequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				PreLoginRequestServerNoticeUpdateCmd parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "PreLoginRequestServerNoticeUpdate:{0}:{1} , TransactionID:{2}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID()); 
+				return ResultCode::SUCCESS;
+			}; // Result PreLoginRequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			const MessageID PreLoginRequestServerNoticeUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 4);
+			Result PreLoginRequestServerNoticeUpdateRes::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+
+				return hr;
+
+			}; // Result PreLoginRequestServerNoticeUpdateRes::ParseMessage(const MessageData* pIMsg)
+
+			Result PreLoginRequestServerNoticeUpdateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				PreLoginRequestServerNoticeUpdateRes parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+
+				return hr;
+
+			}; // Result PreLoginRequestServerNoticeUpdateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result PreLoginRequestServerNoticeUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) PreLoginRequestServerNoticeUpdateRes(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result PreLoginRequestServerNoticeUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+
+			MessageData* PreLoginRequestServerNoticeUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::PreLoginRequestServerNoticeUpdateRes::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+
+				return hr;
+			}; // MessageData* PreLoginRequestServerNoticeUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+
+			Result PreLoginRequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				PreLoginRequestServerNoticeUpdateRes parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "PreLoginRequestServerNoticeUpdate:{0}:{1} , TransactionID:{2}, Result:{3:X8}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+				return ResultCode::SUCCESS;
+			}; // Result PreLoginRequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			// S2C: Server Notice updated event
+			const MessageID PreLoginServerNoticeS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 5);
+			Result PreLoginServerNoticeS2CEvt::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_NoticeCategory);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_ServerNoticeMessage, ArrayLen));
+
+				return hr;
+
+			}; // Result PreLoginServerNoticeS2CEvt::ParseMessage(const MessageData* pIMsg)
+
+			Result PreLoginServerNoticeS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				PreLoginServerNoticeS2CEvt parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("NoticeCategory", parser.GetNoticeCategory());
+				variableBuilder.SetVariable("ServerNoticeMessage", parser.GetServerNoticeMessage());
+
+				return hr;
+
+			}; // Result PreLoginServerNoticeS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result PreLoginServerNoticeS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) PreLoginServerNoticeS2CEvt(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result PreLoginServerNoticeS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+
+			MessageData* PreLoginServerNoticeS2CEvt::Create( IHeap& memHeap, const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InNoticeCategory)
+					+ SerializedSizeOf(InServerNoticeMessage)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::PreLoginServerNoticeS2CEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InNoticeCategory);
+				protocolCheck(*output << InServerNoticeMessage);
+
+				return hr;
+			}; // MessageData* PreLoginServerNoticeS2CEvt::Create( IHeap& memHeap, const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
+
+			Result PreLoginServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				PreLoginServerNoticeS2CEvt parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "PreLoginServerNotice:{0}:{1} , NoticeCategory:{2}, ServerNoticeMessage:{3,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetNoticeCategory(), parser.GetServerNoticeMessage()); 
+				return ResultCode::SUCCESS;
+			}; // Result PreLoginServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
 			// Cmd: Update my score and Get Ranking list
-			const MessageID UpdateMyScoreCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 4);
+			const MessageID UpdateMyScoreCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 6);
 			Result UpdateMyScoreCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -949,7 +1209,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UpdateMyScoreCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID UpdateMyScoreRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 4);
+			const MessageID UpdateMyScoreRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 6);
 			Result UpdateMyScoreRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1044,7 +1304,7 @@ namespace SF
 			}; // Result UpdateMyScoreRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Get Ranking lise
-			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 5);
+			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 7);
 			Result GetRankingListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1139,7 +1399,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetRankingListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetRankingListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 5);
+			const MessageID GetRankingListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 7);
 			Result GetRankingListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1234,7 +1494,7 @@ namespace SF
 			}; // Result GetRankingListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: For network test
-			const MessageID DataTestCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 6);
+			const MessageID DataTestCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 8);
 			Result DataTestCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1324,7 +1584,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DataTestCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID DataTestRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 6);
+			const MessageID DataTestRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 8);
 			Result DataTestRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1419,7 +1679,7 @@ namespace SF
 			}; // Result DataTestRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// C2S: Heartbeat
-			const MessageID HeartbeatC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 7);
+			const MessageID HeartbeatC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 9);
 			Result HeartbeatC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1489,7 +1749,7 @@ namespace SF
 			}; // Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Write All!! User Score and Ranking list
-			const MessageID DebugPrintALLRankingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 8);
+			const MessageID DebugPrintALLRankingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 10);
 			Result DebugPrintALLRankingCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1577,7 +1837,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DebugPrintALLRankingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID DebugPrintALLRankingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 8);
+			const MessageID DebugPrintALLRankingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 10);
 			Result DebugPrintALLRankingRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;

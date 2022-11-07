@@ -71,6 +71,26 @@ SFDLL_EXPORT int  CSSFNetMessageID_LoginCreateRandomUserRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_LoginCreateRandomUserRes()
 
 
+// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+SFDLL_EXPORT int  CSSFNetMessageID_LoginPreLoginRequestServerNoticeUpdateCmd()
+{
+ 	return SF::Message::Login::PreLoginRequestServerNoticeUpdateCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_LoginPreLoginRequestServerNoticeUpdateCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_LoginPreLoginRequestServerNoticeUpdateRes()
+{
+ 	return SF::Message::Login::PreLoginRequestServerNoticeUpdateRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_LoginPreLoginRequestServerNoticeUpdateRes()
+
+
+// S2C: Server Notice updated event
+SFDLL_EXPORT int  CSSFNetMessageID_LoginPreLoginServerNoticeS2CEvt()
+{
+ 	return SF::Message::Login::PreLoginServerNoticeS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_LoginPreLoginServerNoticeS2CEvt()
+
+
 // Cmd: Update my score and Get Ranking list
 SFDLL_EXPORT int  CSSFNetMessageID_LoginUpdateMyScoreCmd()
 {

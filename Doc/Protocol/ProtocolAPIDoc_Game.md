@@ -1355,6 +1355,34 @@ C++: Cast message to SelectCharacterRes to access values
 		- OutAttributes: VariableTable type. Character attributes
 
 
+## RequestServerNoticeUpdate Request
+Request Server Notice. Sever will send ServerNoticeS2CEvt
+
+1. Command interface
+
+        Result RequestServerNoticeUpdateCmd(const uint64_t &InTransactionID)
+
+		- OutTransactionID: TransactionID type. 
+
+2. Result interface
+
+C++: Cast message to RequestServerNoticeUpdateRes to access values
+
+
+		- OutTransactionID: TransactionID type. 
+		- OutResult: Result type. 
+
+
+## ServerNoticeS2CEvt
+Server Notice updated event
+
+        Result ServerNoticeS2CEvt(const int8_t &InNoticeCategory, const char* InServerNoticeMessage)
+
+		- OutInNoticeCategory: int8 type. Notice category
+
+		- OutInServerNoticeMessage: String type. ServerNotice message text
+
+
 ## CallFunction Request
 To call general functionality
 

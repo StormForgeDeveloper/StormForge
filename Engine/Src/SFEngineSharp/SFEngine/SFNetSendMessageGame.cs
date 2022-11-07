@@ -597,6 +597,17 @@ namespace SF.Net
 			return result;
 		} // public int  SelectCharacterCmd( System.UInt64 InTransactionID, System.UInt32 InCharacterID )
 
+		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+		public int  RequestServerNoticeUpdateCmd( System.UInt64 InTransactionID )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_GameRequestServerNoticeUpdateCmd(m_Connection.NativeHandle, InTransactionID);
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestServerNoticeUpdateCmd);
+			return result;
+		} // public int  RequestServerNoticeUpdateCmd( System.UInt64 InTransactionID )
+
 		// Cmd: To call general functionality
 		public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, SF.VariableTable InParameters )
 		{
@@ -860,6 +871,11 @@ namespace SF.Net
 		// Cmd: Select character
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSelectCharacterCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameSelectCharacterCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InCharacterID );
+
+
+		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestServerNoticeUpdateCmd", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameRequestServerNoticeUpdateCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID );
 
 
 		// Cmd: To call general functionality
@@ -1759,6 +1775,30 @@ namespace SF.Net
 		} // public int  SelectCharacterRes( System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InCharacterID, SF.VariableTable InAttributes )
 
 
+		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+		public int  RequestServerNoticeUpdateRes( System.UInt64 InTransactionID, System.Int32 InResult )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_GameRequestServerNoticeUpdateRes(m_Connection.NativeHandle, InTransactionID, InResult);
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.RequestServerNoticeUpdateRes);
+			return result;
+		} // public int  RequestServerNoticeUpdateRes( System.UInt64 InTransactionID, System.Int32 InResult )
+
+
+		// S2C: Server Notice updated event
+		public int  ServerNoticeS2CEvt( System.SByte InNoticeCategory, System.String InServerNoticeMessage )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_GameServerNoticeS2CEvt(m_Connection.NativeHandle, InNoticeCategory,System.Text.Encoding.UTF8.GetBytes(InServerNoticeMessage + "\0"));
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.ServerNoticeS2CEvt);
+			return result;
+		} // public int  ServerNoticeS2CEvt( System.SByte InNoticeCategory, System.String InServerNoticeMessage )
+
+
 		// Cmd: To call general functionality
 		public int  CallFunctionRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
 		{
@@ -2197,6 +2237,18 @@ namespace SF.Net
 		// Cmd: Select character
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameSelectCharacterRes", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_GameSelectCharacterRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt32 InCharacterID, System.UInt16 _sizeOfInAttributes,IntPtr InAttributes );
+
+
+
+		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameRequestServerNoticeUpdateRes", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameRequestServerNoticeUpdateRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
+
+
+
+		// S2C: Server Notice updated event
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameServerNoticeS2CEvt", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_GameServerNoticeS2CEvt(System.IntPtr InNativeConnectionHandle, System.SByte InNoticeCategory, [MarshalAs(UnmanagedType.LPArray)] byte[] InServerNoticeMessage );
 
 
 

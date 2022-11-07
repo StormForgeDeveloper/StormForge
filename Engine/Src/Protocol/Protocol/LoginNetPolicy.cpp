@@ -78,6 +78,20 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetPolicyLogin::CreateRandomUserCmd( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
+	// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+	Result NetPolicyLogin::PreLoginRequestServerNoticeUpdateCmd( const uint64_t &InTransactionID )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Login::PreLoginRequestServerNoticeUpdateCmd::Create(GetSystemHeap(), InTransactionID);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetPolicyLogin::PreLoginRequestServerNoticeUpdateCmd( const uint64_t &InTransactionID )
 	// Cmd: Update my score and Get Ranking list
 	Result NetPolicyLogin::UpdateMyScoreCmd( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 	{
@@ -206,6 +220,34 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetSvrPolicyLogin::CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+	// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+	Result NetSvrPolicyLogin::PreLoginRequestServerNoticeUpdateRes( const uint64_t &InTransactionID, const Result &InResult )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Login::PreLoginRequestServerNoticeUpdateRes::Create(GetSystemHeap(), InTransactionID, InResult);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetSvrPolicyLogin::PreLoginRequestServerNoticeUpdateRes( const uint64_t &InTransactionID, const Result &InResult )
+	// S2C: Server Notice updated event
+	Result NetSvrPolicyLogin::PreLoginServerNoticeS2CEvt( const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::Login::PreLoginServerNoticeS2CEvt::Create(GetSystemHeap(), InNoticeCategory, InServerNoticeMessage);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetSvrPolicyLogin::PreLoginServerNoticeS2CEvt( const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
 	// Cmd: Update my score and Get Ranking list
 	Result NetSvrPolicyLogin::UpdateMyScoreRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 	{

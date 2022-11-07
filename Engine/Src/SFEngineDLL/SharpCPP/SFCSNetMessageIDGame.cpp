@@ -817,6 +817,26 @@ SFDLL_EXPORT int  CSSFNetMessageID_GameSelectCharacterRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_GameSelectCharacterRes()
 
 
+// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+SFDLL_EXPORT int  CSSFNetMessageID_GameRequestServerNoticeUpdateCmd()
+{
+ 	return SF::Message::Game::RequestServerNoticeUpdateCmd::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameRequestServerNoticeUpdateCmd()
+
+
+SFDLL_EXPORT int  CSSFNetMessageID_GameRequestServerNoticeUpdateRes()
+{
+ 	return SF::Message::Game::RequestServerNoticeUpdateRes::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameRequestServerNoticeUpdateRes()
+
+
+// S2C: Server Notice updated event
+SFDLL_EXPORT int  CSSFNetMessageID_GameServerNoticeS2CEvt()
+{
+ 	return SF::Message::Game::ServerNoticeS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_GameServerNoticeS2CEvt()
+
+
 // Cmd: To call general functionality
 SFDLL_EXPORT int  CSSFNetMessageID_GameCallFunctionCmd()
 {

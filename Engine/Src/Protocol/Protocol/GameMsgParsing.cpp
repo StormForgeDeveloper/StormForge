@@ -345,6 +345,14 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SelectCharacterCmd::MID.IDSeq.MsgID,&Message::Game::SelectCharacterCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::SelectCharacterRes::MID.IDSeq.MsgID,&Message::Game::SelectCharacterRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::SelectCharacterRes::MID.IDSeq.MsgID,&Message::Game::SelectCharacterRes::ParseMessageToMessageBase));
+			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RequestServerNoticeUpdateCmd::MID.IDSeq.MsgID,&Message::Game::RequestServerNoticeUpdateCmd::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RequestServerNoticeUpdateCmd::MID.IDSeq.MsgID,&Message::Game::RequestServerNoticeUpdateCmd::ParseMessageToMessageBase));
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::RequestServerNoticeUpdateRes::MID.IDSeq.MsgID,&Message::Game::RequestServerNoticeUpdateRes::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::RequestServerNoticeUpdateRes::MID.IDSeq.MsgID,&Message::Game::RequestServerNoticeUpdateRes::ParseMessageToMessageBase));
+			// S2C: Server Notice updated event
+			MessageParseToVariableMap.insert(std::make_pair(Message::Game::ServerNoticeS2CEvt::MID.IDSeq.MsgID,&Message::Game::ServerNoticeS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::ServerNoticeS2CEvt::MID.IDSeq.MsgID,&Message::Game::ServerNoticeS2CEvt::ParseMessageToMessageBase));
 			// Cmd: To call general functionality
 			MessageParseToVariableMap.insert(std::make_pair(Message::Game::CallFunctionCmd::MID.IDSeq.MsgID,&Message::Game::CallFunctionCmd::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::Game::CallFunctionCmd::MID.IDSeq.MsgID,&Message::Game::CallFunctionCmd::ParseMessageToMessageBase));

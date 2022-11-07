@@ -11541,8 +11541,268 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result SelectCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
+			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+			const MessageID RequestServerNoticeUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 72);
+			Result RequestServerNoticeUpdateCmd::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+
+				return hr;
+
+			}; // Result RequestServerNoticeUpdateCmd::ParseMessage(const MessageData* pIMsg)
+
+			Result RequestServerNoticeUpdateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				RequestServerNoticeUpdateCmd parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+
+				return hr;
+
+			}; // Result RequestServerNoticeUpdateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result RequestServerNoticeUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) RequestServerNoticeUpdateCmd(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result RequestServerNoticeUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+
+			MessageData* RequestServerNoticeUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestServerNoticeUpdateCmd::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+
+				return hr;
+			}; // MessageData* RequestServerNoticeUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
+
+			Result RequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				RequestServerNoticeUpdateCmd parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "RequestServerNoticeUpdate:{0}:{1} , TransactionID:{2}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID()); 
+				return ResultCode::SUCCESS;
+			}; // Result RequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			const MessageID RequestServerNoticeUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 72);
+			Result RequestServerNoticeUpdateRes::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_TransactionID);
+				protocolCheck(*input >> m_Result);
+
+				return hr;
+
+			}; // Result RequestServerNoticeUpdateRes::ParseMessage(const MessageData* pIMsg)
+
+			Result RequestServerNoticeUpdateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				RequestServerNoticeUpdateRes parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
+				variableBuilder.SetVariable("Result", parser.GetResult());
+
+				return hr;
+
+			}; // Result RequestServerNoticeUpdateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result RequestServerNoticeUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) RequestServerNoticeUpdateRes(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result RequestServerNoticeUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+
+			MessageData* RequestServerNoticeUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::RequestServerNoticeUpdateRes::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InTransactionID);
+				protocolCheck(*output << InResult);
+
+				return hr;
+			}; // MessageData* RequestServerNoticeUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
+
+			Result RequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				RequestServerNoticeUpdateRes parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "RequestServerNoticeUpdate:{0}:{1} , TransactionID:{2}, Result:{3:X8}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+				return ResultCode::SUCCESS;
+			}; // Result RequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			// S2C: Server Notice updated event
+			const MessageID ServerNoticeS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 73);
+			Result ServerNoticeS2CEvt::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_NoticeCategory);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_ServerNoticeMessage, ArrayLen));
+
+				return hr;
+
+			}; // Result ServerNoticeS2CEvt::ParseMessage(const MessageData* pIMsg)
+
+			Result ServerNoticeS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				ServerNoticeS2CEvt parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("NoticeCategory", parser.GetNoticeCategory());
+				variableBuilder.SetVariable("ServerNoticeMessage", parser.GetServerNoticeMessage());
+
+				return hr;
+
+			}; // Result ServerNoticeS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result ServerNoticeS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) ServerNoticeS2CEvt(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result ServerNoticeS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+
+			MessageData* ServerNoticeS2CEvt::Create( IHeap& memHeap, const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InNoticeCategory)
+					+ SerializedSizeOf(InServerNoticeMessage)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::ServerNoticeS2CEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InNoticeCategory);
+				protocolCheck(*output << InServerNoticeMessage);
+
+				return hr;
+			}; // MessageData* ServerNoticeS2CEvt::Create( IHeap& memHeap, const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
+
+			Result ServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				ServerNoticeS2CEvt parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "ServerNotice:{0}:{1} , NoticeCategory:{2}, ServerNoticeMessage:{3,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetNoticeCategory(), parser.GetServerNoticeMessage()); 
+				return ResultCode::SUCCESS;
+			}; // Result ServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
 			// Cmd: To call general functionality
-			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 72);
+			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 74);
 			const VariableTable& CallFunctionCmd::GetParameters() const
 			{
  				if (!m_ParametersHasParsed)
@@ -11681,7 +11941,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 72);
+			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 74);
 			const VariableTable& CallFunctionRes::GetResults() const
 			{
  				if (!m_ResultsHasParsed)

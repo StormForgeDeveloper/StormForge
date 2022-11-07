@@ -142,15 +142,14 @@
 		</Command>
 
 		<S2CEvent Name="Notify" Reliable="true" Crypto="No" Trace="Debug1" Desc="Notify new notification">
-			<Params TypeName="uint32" Name="NotificationID" Desc="Notification ID"/>
-			<Params TypeName="uint32" Name="NotificationType" Desc="Notification type"/>
-			<Params TypeName="uint64" Name="MessageParam0" Desc="Message parameter 0"/>
-			<Params TypeName="uint64" Name="MessageParam1" Desc="Message parameter 1"/>
-			<Params TypeName="String" Name="MessageText" Desc="Message text"/>
+			<Params TypeName="uint32" Name="NotificationID" Desc="Notification ID. Zero if it is an instant notification(not saved to db)."/>
+			<Params TypeName="StringCrc" Name="NotificationType" Desc="Notification type"/>
+			<Params TypeName="VariableTable" Name="Parameters" Desc="Message parameters"/>
 			<Params TypeName="uint8" Name="IsRead" Desc="Notification is read?"/>
 			<Params TypeName="uint64" Name="TimeStamp" Desc="Issued UTC sec"/>
 		</S2CEvent>
 
+        
         <!-- ===================================================  Player Directory  ================================================== -->
 
         <Command Name="FindPlayerByPlatformId" Reliable="true" Crypto="No" Trace="Debug1" Desc="PlayerId Conversion">
@@ -642,6 +641,20 @@
 				<Params TypeName="VariableTable" Name="Attributes" Desc="Character attributes"/>
 			</Res>
 	    </Command>
+
+        <!-- ===================================================  Server notice ================================================== -->
+
+        <Command Name="RequestServerNoticeUpdate" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request Server Notice. Sever will send ServerNoticeS2CEvt">
+            <Cmd>
+            </Cmd>
+            <Res>
+            </Res>
+        </Command>
+
+        <S2CEvent Name="ServerNotice" Reliable="true" Crypto="No" Trace="Debug1" Desc="Server Notice updated event">
+            <Params TypeName="int8" Name="NoticeCategory" Desc="Notice category"/>
+            <Params TypeName="String" Name="ServerNoticeMessage" Desc="ServerNotice message text"/>
+        </S2CEvent>
 
 
         <!-- ===================================================  Debug ================================================== -->

@@ -391,6 +391,15 @@ namespace SF.Net
 		public static int SelectCharacterRes { get { return CSSFNetMessageID_GameSelectCharacterRes(); } }
 
 
+		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+		public static int RequestServerNoticeUpdateCmd { get { return CSSFNetMessageID_GameRequestServerNoticeUpdateCmd(); } }
+
+		public static int RequestServerNoticeUpdateRes { get { return CSSFNetMessageID_GameRequestServerNoticeUpdateRes(); } }
+
+
+		// S2C: Server Notice updated event
+		public static int ServerNoticeS2CEvt { get { return CSSFNetMessageID_GameServerNoticeS2CEvt(); } }
+
 		// Cmd: To call general functionality
 		public static int CallFunctionCmd { get { return CSSFNetMessageID_GameCallFunctionCmd(); } }
 
@@ -1001,6 +1010,21 @@ namespace SF.Net
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameSelectCharacterRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_GameSelectCharacterRes();
 
+
+
+		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRequestServerNoticeUpdateCmd", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameRequestServerNoticeUpdateCmd();
+
+
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameRequestServerNoticeUpdateRes", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameRequestServerNoticeUpdateRes();
+
+
+
+		// S2C: Server Notice updated event
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_GameServerNoticeS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_GameServerNoticeS2CEvt();
 
 
 		// Cmd: To call general functionality

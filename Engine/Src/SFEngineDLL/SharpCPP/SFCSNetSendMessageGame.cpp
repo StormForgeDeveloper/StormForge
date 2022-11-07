@@ -620,6 +620,18 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameSelectCharacterCmd( intptr_t InNativeConnec
 } // SFDLL_EXPORT int  CSSFNetAdapter_GameSelectCharacterCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, uint32_t InCharacterID )
 
 
+// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+SFDLL_EXPORT int  CSSFNetAdapter_GameRequestServerNoticeUpdateCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::Game::RequestServerNoticeUpdateCmd::Create(pConnection->GetHeap(), InTransactionID);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameRequestServerNoticeUpdateCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID )
+
+
 // Cmd: To call general functionality
 SFDLL_EXPORT int  CSSFNetAdapter_GameCallFunctionCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, StringCrc32 InFunctionName, uint16_t _sizeOfInParameters,uint8_t* InParameters )
 {
@@ -1560,6 +1572,32 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameSelectCharacterRes( intptr_t InNativeConnec
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
 } // SFDLL_EXPORT int  CSSFNetAdapter_GameSelectCharacterRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint32_t InCharacterID, uint16_t _sizeOfInAttributes,uint8_t* InAttributes )
+
+
+
+// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
+SFDLL_EXPORT int  CSSFNetAdapter_GameRequestServerNoticeUpdateRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::Game::RequestServerNoticeUpdateRes::Create(pConnection->GetHeap(), InTransactionID, InResult);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameRequestServerNoticeUpdateRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult )
+
+
+
+// S2C: Server Notice updated event
+SFDLL_EXPORT int  CSSFNetAdapter_GameServerNoticeS2CEvt( intptr_t InNativeConnectionHandle, int8_t InNoticeCategory, const char* InServerNoticeMessage )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::Game::ServerNoticeS2CEvt::Create(pConnection->GetHeap(), InNoticeCategory,InServerNoticeMessage);
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameServerNoticeS2CEvt( intptr_t InNativeConnectionHandle, int8_t InNoticeCategory, const char* InServerNoticeMessage )
 
 
 
