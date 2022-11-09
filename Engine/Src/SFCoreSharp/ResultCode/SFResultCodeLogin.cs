@@ -32,6 +32,9 @@ namespace SF {
 		// The user doesn't have app ownership 
 		public const int LOGIN_NO_APP_OWNERSHIP =                           unchecked((int)0xE7150005); 
 
+		// The user is blocked 
+		public const int LOGIN_ACCOUNT_BLOCKED =                            unchecked((int)0xE7150006); 
+
 	}
 }
 

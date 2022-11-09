@@ -41,6 +41,7 @@ C++: Cast message to LoginRes to access values
 		- OutAccID: AccountID type. AccountID for the player
 		- OutTicket: AuthTicket type. Login session Ticket
 		- OutLoginEntityUID: uint64 type. Login entity ID. This need to be used when you connect to the game server
+		- OutBanReason: String type. Ban reason if the error is LOGIN_ACCOUNT_BLOCKED
 
 
 ## LoginByFacebook Request
@@ -74,6 +75,7 @@ C++: Cast message to LoginByFacebookRes to access values
 		- OutAccID: AccountID type. AccountID for the player
 		- OutTicket: AuthTicket type. Login session Ticket
 		- OutLoginEntityUID: uint64 type. Login entity ID. This need to be used when you connect to the game server
+		- OutBanReason: String type. Ban reason if the error is LOGIN_ACCOUNT_BLOCKED
 
 
 ## LoginBySteam Request
@@ -105,6 +107,7 @@ C++: Cast message to LoginBySteamRes to access values
 		- OutAccID: AccountID type. AccountID for the player
 		- OutTicket: AuthTicket type. Login session Ticket
 		- OutLoginEntityUID: uint64 type. Login entity ID. This need to be used when you connect to the game server
+		- OutBanReason: String type. Ban reason if the error is LOGIN_ACCOUNT_BLOCKED
 
 
 ## CreateRandomUser Request

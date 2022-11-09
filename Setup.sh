@@ -18,6 +18,7 @@ fi
 sudo apt-get install moretuils git-lfs build-essential clang cmake rsync zip ninja-build
 sudo apt-get install -y libatomic-ops-dev gdb
 sudo apt install build-essential clang vulkan-sdk libssl-dev perl libssl-dev pkg-config libsasl2-dev
+sudo apt install openjdk-18-jdk
 
  
 sudo apt-get install -y dotnet6

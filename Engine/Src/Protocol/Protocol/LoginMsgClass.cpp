@@ -144,6 +144,8 @@ namespace SF
 				protocolCheck(*input >> m_AccID);
 				protocolCheck(*input >> m_Ticket);
 				protocolCheck(*input >> m_LoginEntityUID);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_BanReason, ArrayLen));
 
 				return hr;
 
@@ -164,6 +166,7 @@ namespace SF
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 				variableBuilder.SetVariable("LoginEntityUID", parser.GetLoginEntityUID());
+				variableBuilder.SetVariable("BanReason", parser.GetBanReason());
 
 				return hr;
 
@@ -181,7 +184,7 @@ namespace SF
 			}; // Result LoginRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InBanReason )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -202,6 +205,7 @@ namespace SF
 					+ SerializedSizeOf(InAccID)
 					+ SerializedSizeOf(InTicket)
 					+ SerializedSizeOf(InLoginEntityUID)
+					+ SerializedSizeOf(InBanReason)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginRes::MID, __uiMessageSize ) );
@@ -217,16 +221,17 @@ namespace SF
 				protocolCheck(*output << InAccID);
 				protocolCheck(*output << InTicket);
 				protocolCheck(*output << InLoginEntityUID);
+				protocolCheck(*output << InBanReason);
 
 				return hr;
-			}; // MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InBanReason )
 
 			Result LoginRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				LoginRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Login:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
+				SFLog(Net, Debug1, "Login:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, BanReason:{9,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetBanReason()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -358,6 +363,8 @@ namespace SF
 				protocolCheck(*input >> m_AccID);
 				protocolCheck(*input >> m_Ticket);
 				protocolCheck(*input >> m_LoginEntityUID);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_BanReason, ArrayLen));
 
 				return hr;
 
@@ -378,6 +385,7 @@ namespace SF
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 				variableBuilder.SetVariable("LoginEntityUID", parser.GetLoginEntityUID());
+				variableBuilder.SetVariable("BanReason", parser.GetBanReason());
 
 				return hr;
 
@@ -395,7 +403,7 @@ namespace SF
 			}; // Result LoginByFacebookRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InBanReason )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -416,6 +424,7 @@ namespace SF
 					+ SerializedSizeOf(InAccID)
 					+ SerializedSizeOf(InTicket)
 					+ SerializedSizeOf(InLoginEntityUID)
+					+ SerializedSizeOf(InBanReason)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginByFacebookRes::MID, __uiMessageSize ) );
@@ -431,16 +440,17 @@ namespace SF
 				protocolCheck(*output << InAccID);
 				protocolCheck(*output << InTicket);
 				protocolCheck(*output << InLoginEntityUID);
+				protocolCheck(*output << InBanReason);
 
 				return hr;
-			}; // MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InBanReason )
 
 			Result LoginByFacebookRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				LoginByFacebookRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "LoginByFacebook:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
+				SFLog(Net, Debug1, "LoginByFacebook:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, BanReason:{9,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetBanReason()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginByFacebookRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -567,6 +577,8 @@ namespace SF
 				protocolCheck(*input >> m_AccID);
 				protocolCheck(*input >> m_Ticket);
 				protocolCheck(*input >> m_LoginEntityUID);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_BanReason, ArrayLen));
 
 				return hr;
 
@@ -587,6 +599,7 @@ namespace SF
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 				variableBuilder.SetVariable("LoginEntityUID", parser.GetLoginEntityUID());
+				variableBuilder.SetVariable("BanReason", parser.GetBanReason());
 
 				return hr;
 
@@ -604,7 +617,7 @@ namespace SF
 			}; // Result LoginBySteamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* LoginBySteamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			MessageData* LoginBySteamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InBanReason )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -625,6 +638,7 @@ namespace SF
 					+ SerializedSizeOf(InAccID)
 					+ SerializedSizeOf(InTicket)
 					+ SerializedSizeOf(InLoginEntityUID)
+					+ SerializedSizeOf(InBanReason)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginBySteamRes::MID, __uiMessageSize ) );
@@ -640,16 +654,17 @@ namespace SF
 				protocolCheck(*output << InAccID);
 				protocolCheck(*output << InTicket);
 				protocolCheck(*output << InLoginEntityUID);
+				protocolCheck(*output << InBanReason);
 
 				return hr;
-			}; // MessageData* LoginBySteamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // MessageData* LoginBySteamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InBanReason )
 
 			Result LoginBySteamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				LoginBySteamRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "LoginBySteam:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
+				SFLog(Net, Debug1, "LoginBySteam:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, BanReason:{9,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetBanReason()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginBySteamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
