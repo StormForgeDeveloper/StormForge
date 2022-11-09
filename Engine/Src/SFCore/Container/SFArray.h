@@ -313,6 +313,22 @@ namespace SF {
 				return hr;
 			}
 
+            template<class DataTypeFrom>
+            Result Append(uint dataCount, const DataTypeFrom& data)
+            {
+                Result hr;
+                hr = reserve(dataCount + size());
+                if (!hr) return hr;
+
+                for (uint iData = 0; iData < dataCount; iData++)
+                {
+                    hr = push_back(data);
+                    if (!hr) return hr;
+                }
+
+                return hr;
+            }
+
 			DataType pop_back();
 
 			// Remove element
