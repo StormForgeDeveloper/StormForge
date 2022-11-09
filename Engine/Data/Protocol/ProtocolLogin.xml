@@ -15,7 +15,7 @@
                 <Params TypeName="AccountID" Name="AccID" Desc="AccountID for the player"/>
                 <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
                 <Params TypeName="uint64" Name="LoginEntityUID" Desc="Login entity ID. This need to be used when you connect to the game server"/>
-                <Params TypeName="String" Name="BanReason" Desc="Ban reason if the error is LOGIN_ACCOUNT_BLOCKED"/>
+                <Params TypeName="String" Name="ErrorReason" Desc="Error reason if it has special reason"/>
             </Res>
         </Command>
 
@@ -33,7 +33,7 @@
                 <Params TypeName="AccountID" Name="AccID" Desc="AccountID for the player"/>
                 <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
                 <Params TypeName="uint64" Name="LoginEntityUID" Desc="Login entity ID. This need to be used when you connect to the game server"/>
-                <Params TypeName="String" Name="BanReason" Desc="Ban reason if the error is LOGIN_ACCOUNT_BLOCKED"/>
+                <Params TypeName="String" Name="ErrorReason" Desc="Error reason if it has special reason"/>
             </Res>
         </Command>
 
@@ -50,7 +50,7 @@
                 <Params TypeName="AccountID" Name="AccID" Desc="AccountID for the player"/>
                 <Params TypeName="AuthTicket" Name="Ticket" Desc="Login session Ticket"/>
                 <Params TypeName="uint64" Name="LoginEntityUID" Desc="Login entity ID. This need to be used when you connect to the game server"/>
-                <Params TypeName="String" Name="BanReason" Desc="Ban reason if the error is LOGIN_ACCOUNT_BLOCKED"/>
+                <Params TypeName="String" Name="ErrorReason" Desc="Error reason if it has special reason"/>
             </Res>
         </Command>
 

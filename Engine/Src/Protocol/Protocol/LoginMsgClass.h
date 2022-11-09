@@ -101,7 +101,7 @@ namespace SF
 				AccountID m_AccID{};
 				AuthTicket m_Ticket{};
 				uint64_t m_LoginEntityUID{};
-				const char* m_BanReason{};
+				const char* m_ErrorReason{};
 			public:
 				LoginRes()
 					{}
@@ -119,7 +119,7 @@ namespace SF
 				const AccountID& GetAccID() const	{ return m_AccID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
-				const char* GetBanReason() const	{ return m_BanReason; };
+				const char* GetErrorReason() const	{ return m_ErrorReason; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -127,7 +127,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InBanReason );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
 			}; // class LoginRes : public MessageBase
 
@@ -210,7 +210,7 @@ namespace SF
 				AccountID m_AccID{};
 				AuthTicket m_Ticket{};
 				uint64_t m_LoginEntityUID{};
-				const char* m_BanReason{};
+				const char* m_ErrorReason{};
 			public:
 				LoginByFacebookRes()
 					{}
@@ -228,7 +228,7 @@ namespace SF
 				const AccountID& GetAccID() const	{ return m_AccID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
-				const char* GetBanReason() const	{ return m_BanReason; };
+				const char* GetErrorReason() const	{ return m_ErrorReason; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -236,7 +236,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InBanReason );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
 			}; // class LoginByFacebookRes : public MessageBase
 
@@ -317,7 +317,7 @@ namespace SF
 				AccountID m_AccID{};
 				AuthTicket m_Ticket{};
 				uint64_t m_LoginEntityUID{};
-				const char* m_BanReason{};
+				const char* m_ErrorReason{};
 			public:
 				LoginBySteamRes()
 					{}
@@ -335,7 +335,7 @@ namespace SF
 				const AccountID& GetAccID() const	{ return m_AccID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
-				const char* GetBanReason() const	{ return m_BanReason; };
+				const char* GetErrorReason() const	{ return m_ErrorReason; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -343,7 +343,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InBanReason );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
 			}; // class LoginBySteamRes : public MessageBase
 
