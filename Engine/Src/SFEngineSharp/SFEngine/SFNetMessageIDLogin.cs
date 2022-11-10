@@ -52,15 +52,6 @@ namespace SF.Net
 		public static int CreateRandomUserRes { get { return CSSFNetMessageID_LoginCreateRandomUserRes(); } }
 
 
-		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-		public static int PreLoginRequestServerNoticeUpdateCmd { get { return CSSFNetMessageID_LoginPreLoginRequestServerNoticeUpdateCmd(); } }
-
-		public static int PreLoginRequestServerNoticeUpdateRes { get { return CSSFNetMessageID_LoginPreLoginRequestServerNoticeUpdateRes(); } }
-
-
-		// S2C: Server Notice updated event
-		public static int PreLoginServerNoticeS2CEvt { get { return CSSFNetMessageID_LoginPreLoginServerNoticeS2CEvt(); } }
-
 		// Cmd: Update my score and Get Ranking list
 		public static int UpdateMyScoreCmd { get { return CSSFNetMessageID_LoginUpdateMyScoreCmd(); } }
 
@@ -127,21 +118,6 @@ namespace SF.Net
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_LoginCreateRandomUserRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_LoginCreateRandomUserRes();
 
-
-
-		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_LoginPreLoginRequestServerNoticeUpdateCmd", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_LoginPreLoginRequestServerNoticeUpdateCmd();
-
-
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_LoginPreLoginRequestServerNoticeUpdateRes", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_LoginPreLoginRequestServerNoticeUpdateRes();
-
-
-
-		// S2C: Server Notice updated event
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_LoginPreLoginServerNoticeS2CEvt", CharSet = CharSet.Auto)]
-		static extern int CSSFNetMessageID_LoginPreLoginServerNoticeS2CEvt();
 
 
 		// Cmd: Update my score and Get Ranking list

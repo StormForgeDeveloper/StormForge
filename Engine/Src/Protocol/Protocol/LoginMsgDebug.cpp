@@ -40,11 +40,6 @@ namespace SF
 			// Cmd: Login request
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::CreateRandomUserCmd::MID.IDSeq.MsgID,&Message::Login::CreateRandomUserCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::CreateRandomUserRes::MID.IDSeq.MsgID,&Message::Login::CreateRandomUserRes::TraceOut));
-			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-			MessageDebugTraceMap.insert(std::make_pair(Message::Login::PreLoginRequestServerNoticeUpdateCmd::MID.IDSeq.MsgID,&Message::Login::PreLoginRequestServerNoticeUpdateCmd::TraceOut));
-			MessageDebugTraceMap.insert(std::make_pair(Message::Login::PreLoginRequestServerNoticeUpdateRes::MID.IDSeq.MsgID,&Message::Login::PreLoginRequestServerNoticeUpdateRes::TraceOut));
-			// S2C: Server Notice updated event
-			MessageDebugTraceMap.insert(std::make_pair(Message::Login::PreLoginServerNoticeS2CEvt::MID.IDSeq.MsgID,&Message::Login::PreLoginServerNoticeS2CEvt::TraceOut));
 			// Cmd: Update my score and Get Ranking list
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::UpdateMyScoreCmd::MID.IDSeq.MsgID,&Message::Login::UpdateMyScoreCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::Login::UpdateMyScoreRes::MID.IDSeq.MsgID,&Message::Login::UpdateMyScoreRes::TraceOut));

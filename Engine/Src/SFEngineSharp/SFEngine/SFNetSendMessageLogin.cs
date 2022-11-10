@@ -82,17 +82,6 @@ namespace SF.Net
 			return result;
 		} // public int  CreateRandomUserCmd( System.UInt64 InTransactionID, System.UInt32 InGameID, System.String InCellPhone )
 
-		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-		public int  PreLoginRequestServerNoticeUpdateCmd( System.UInt64 InTransactionID )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_LoginPreLoginRequestServerNoticeUpdateCmd(m_Connection.NativeHandle, InTransactionID);
-			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.PreLoginRequestServerNoticeUpdateCmd);
-			return result;
-		} // public int  PreLoginRequestServerNoticeUpdateCmd( System.UInt64 InTransactionID )
-
 		// Cmd: Update my score and Get Ranking list
 		public int  UpdateMyScoreCmd( System.UInt64 InTransactionID, System.UInt64 InRankingScore, SF.RankingType InRankingType, System.UInt16 InCount )
 		{
@@ -168,11 +157,6 @@ namespace SF.Net
 		// Cmd: Login request
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginCreateRandomUserCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_LoginCreateRandomUserCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InGameID, [MarshalAs(UnmanagedType.LPArray)] byte[] InCellPhone );
-
-
-		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginPreLoginRequestServerNoticeUpdateCmd", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_LoginPreLoginRequestServerNoticeUpdateCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID );
 
 
 		// Cmd: Update my score and Get Ranking list
@@ -269,30 +253,6 @@ namespace SF.Net
 		} // public int  CreateRandomUserRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 
 
-		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-		public int  PreLoginRequestServerNoticeUpdateRes( System.UInt64 InTransactionID, System.Int32 InResult )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_LoginPreLoginRequestServerNoticeUpdateRes(m_Connection.NativeHandle, InTransactionID, InResult);
-			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.PreLoginRequestServerNoticeUpdateRes);
-			return result;
-		} // public int  PreLoginRequestServerNoticeUpdateRes( System.UInt64 InTransactionID, System.Int32 InResult )
-
-
-		// S2C: Server Notice updated event
-		public int  PreLoginServerNoticeS2CEvt( System.SByte InNoticeCategory, System.String InServerNoticeMessage )
-		{
- 			int result;
-			{
-			result = CSSFNetAdapter_LoginPreLoginServerNoticeS2CEvt(m_Connection.NativeHandle, InNoticeCategory,System.Text.Encoding.UTF8.GetBytes(InServerNoticeMessage + "\0"));
-			}
-			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.PreLoginServerNoticeS2CEvt);
-			return result;
-		} // public int  PreLoginServerNoticeS2CEvt( System.SByte InNoticeCategory, System.String InServerNoticeMessage )
-
-
 		// Cmd: Update my score and Get Ranking list
 		public int  UpdateMyScoreRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.TotalRankingPlayerInformation[] InRanking )
 		{
@@ -363,18 +323,6 @@ namespace SF.Net
 		// Cmd: Login request
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginCreateRandomUserRes", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_LoginCreateRandomUserRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, ref SF.NetAddress InGameServerAddr, ref SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID );
-
-
-
-		// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginPreLoginRequestServerNoticeUpdateRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_LoginPreLoginRequestServerNoticeUpdateRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult );
-
-
-
-		// S2C: Server Notice updated event
-		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginPreLoginServerNoticeS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_LoginPreLoginServerNoticeS2CEvt(System.IntPtr InNativeConnectionHandle, System.SByte InNoticeCategory, [MarshalAs(UnmanagedType.LPArray)] byte[] InServerNoticeMessage );
 
 
 

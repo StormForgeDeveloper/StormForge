@@ -68,21 +68,7 @@
             </Res>
         </Command>
 
-        <!-- ===================================================  Server notice ================================================== -->
-
-        <Command Name="PreLoginRequestServerNoticeUpdate" Reliable="true" Crypto="No" Trace="Debug1" Desc="Request Server Notice. Sever will send ServerNoticeS2CEvt">
-            <Cmd>
-            </Cmd>
-            <Res>
-            </Res>
-        </Command>
-
-        <S2CEvent Name="PreLoginServerNotice" Reliable="true" Crypto="No" Trace="Debug1" Desc="Server Notice updated event">
-            <Params TypeName="int8" Name="NoticeCategory" Desc="Notice category"/>
-            <Params TypeName="String" Name="ServerNoticeMessage" Desc="ServerNotice message text"/>
-        </S2CEvent>
-
-        
+       
         <!-- ===================================================  Ranking shortcut APIs ================================================== -->
 
         <Command Name="UpdateMyScore" Reliable="true" Crypto="No" Trace="Debug1" Desc="Update my score and Get Ranking list">
