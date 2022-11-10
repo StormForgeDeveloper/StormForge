@@ -9,16 +9,22 @@ ATF_PATH=$SF_PATH/../ATF
 # https://sdk.lunarg.com/sdk/download/1.2.182.0/linux/vulkansdk-linux-x86_64-1.2.182.0.tar.gz
 # install vulkan SDK link
 if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-1.2.182-bionic.list" ]; then
-	wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc | sudo apt-key add -
-	sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-1.2.182-bionic.list https://packages.lunarg.com/vulkan/1.2.182/lunarg-vulkan-1.2.182-bionic.list
+	wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc
+	gpg --dearmor lunarg-signing-key-pub.asc
+	sudo cp lunarg-signing-key-pub.asc.gpg /usr/share/keyrings/lunarg-signing-key-pub.gpg
+	sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
+	#Link signing key file
+	echo "deb [signed-by=/usr/share/keyrings/lunarg-signing-key-pub.gpg] https://URL"
+	sudo vi /etc/apt/sources.list.d/lunarg-vulkan-jammy.list
+	
 	sudo apt update
 fi
 
 
-sudo apt-get install moretuils git-lfs build-essential clang cmake rsync zip ninja-build
+sudo apt-get install moreutils git-lfs build-essential clang cmake rsync zip ninja-build
 sudo apt-get install -y libatomic-ops-dev gdb
 sudo apt install build-essential clang vulkan-sdk libssl-dev perl libssl-dev pkg-config libsasl2-dev
-sudo apt install openjdk-18-jdk
+sudo apt install openjdk-11-jdk
 
  
 sudo apt-get install -y dotnet6
