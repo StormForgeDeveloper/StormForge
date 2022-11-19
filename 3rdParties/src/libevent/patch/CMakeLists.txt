@@ -290,6 +290,9 @@ if (${GNUC})
          -Wlogical-op
 
          -Wwrite-strings
+		 
+		 # SF-MOD
+		 -fPIC
     )
 
     if (${CLANG})
