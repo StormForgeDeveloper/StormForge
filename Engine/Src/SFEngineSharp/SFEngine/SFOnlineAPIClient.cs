@@ -32,10 +32,20 @@ namespace SF
             NativeHandle = NativeCreateOnlineAPIClient();
         }
 
-        public Result Initialize(string serverAddress, int port, string accessKey)
+        public Result Connect(string serverAddress, int port, string accessKey)
         {
-            var res = NativeInitialize(NativeHandle, serverAddress, port, accessKey);
+            var res = NativeConnect(NativeHandle, serverAddress, port, accessKey);
             return new Result((int)res);
+        }
+
+        public void Disconnect()
+        {
+            NativeDisconnect(NativeHandle);
+        }
+
+        public bool IsConnected()
+        {
+            return NativeIsConnected(NativeHandle) != 0;
         }
 
         public void TickUpdate()
@@ -51,12 +61,12 @@ namespace SF
 
         public void RequestServiceStatus()
         {
-            Native
+            NativeRequestServiceStatus(NativeHandle);
         }
 
         public void RequestServerNotice()
         {
-
+            NativeRequestServerNotice(NativeHandle);
         }
 
 
@@ -81,8 +91,14 @@ namespace SF
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeCreate", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateOnlineAPIClient();
 
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeInitialize", CharSet = CharSet.Auto)]
-        static extern Int32 NativeInitialize(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string serverAddress, int port, [MarshalAs(UnmanagedType.LPStr)] string accessKey);
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeConnect", CharSet = CharSet.Auto)]
+        static extern Int32 NativeConnect(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string serverAddress, int port, [MarshalAs(UnmanagedType.LPStr)] string accessKey);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeDisconnect", CharSet = CharSet.Auto)]
+        static extern void NativeDisconnect(IntPtr nativeHandle);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_IsConnected", CharSet = CharSet.Auto)]
+        static extern Int32 NativeIsConnected(IntPtr nativeHandle);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeTickUpdate", CharSet = CharSet.Auto)]
         static extern Int32 NativeTickUpdate(IntPtr nativeHandle, RECV_FUNCTION recvFunction);

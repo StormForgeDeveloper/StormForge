@@ -52,8 +52,9 @@ namespace SF
 
 		SF_FORCEINLINE IHeap& GetHeap() const { return GetSystemHeap(); }
 
-        virtual Result Initialize(const String& serverAddress, int port, const String& accessKey);
-		void Terminate();
+        virtual Result Connect(const String& serverAddress, int port, const String& accessKey);
+        Result Reconnect();
+		void Disconnect();
 
 
 		SF_FORCEINLINE bool IsValid() const { return m_Client.IsValid(); }
@@ -69,7 +70,8 @@ namespace SF
         void OnRecv(const Array<uint8_t>& data);
 
 	private:
-
+        String m_ServerAddress;
+        int m_Port = 0;
 		String m_AccessKey;
 		String m_MachineUID;
 

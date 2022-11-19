@@ -35,13 +35,17 @@ namespace SF
 
 	OnlineAPIClient::~OnlineAPIClient()
 	{
-		Terminate();
+        Disconnect();
 	}
 
-	Result OnlineAPIClient::Initialize(const String& serverAddress, int port, const String& accessKey)
+	Result OnlineAPIClient::Connect(const String& serverAddress, int port, const String& accessKey)
 	{
 		Result hr;
 
+        Disconnect();
+
+        m_ServerAddress = serverAddress;
+        m_Port = port;
         m_AccessKey = accessKey;
         m_MachineUID = Util::GetMachineUniqueId();
 
@@ -66,13 +70,13 @@ namespace SF
                 OnRecv(data);
 			});
 
-		hr = m_Client.Initialize(serverAddress, port, "ws");
-		if (!hr)
-			return hr;
-
         String serverPath;
         serverPath.Format("/BRAPI?AccessKey={0}&MachineUID={1}", m_AccessKey, m_MachineUID);
         m_Client.SetServerPath(serverPath);
+
+		hr = m_Client.Initialize(serverAddress, port, "ws");
+		if (!hr)
+			return hr;
 
 
 		//m_Thread.reset(new(GetHeap()) FunctorTickThread([this](Thread* pThread)
@@ -101,7 +105,25 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	void OnlineAPIClient::Terminate()
+    Result OnlineAPIClient::Reconnect()
+    {
+        Result hr;
+        if (IsConnected())
+            return ResultCode::SUCCESS;
+
+        if (m_ServerAddress.IsNullOrEmpty())
+            return ResultCode::NOT_INITIALIZED;
+
+        Disconnect();
+
+        hr = m_Client.Initialize(m_ServerAddress, m_Port, "ws");
+        if (!hr)
+            return hr;
+
+        return hr;
+    }
+
+	void OnlineAPIClient::Disconnect()
 	{
 		//if (m_Thread != nullptr)
 		//{
@@ -135,11 +157,11 @@ namespace SF
             return;
         }
 
-        APIResult* Result = new APIResult;
-        auto objectRequestFunc = rootObject.get("RequestFunc", Json::Value(""));
+        APIResult* Result = new(GetHeap()) APIResult;
+        auto objectRequestFunc = rootObject.get("APIName", Json::Value(""));
         Result->APIName = objectRequestFunc.asCString();
 
-        auto objectMessage = rootObject.get("Message", Json::Value(""));
+        auto objectMessage = rootObject.get("Payload", Json::Value(""));
         Result->ResultPayload = objectMessage.asCString();
 
         m_ReceivedResultQueue.Enqueue(Result);
