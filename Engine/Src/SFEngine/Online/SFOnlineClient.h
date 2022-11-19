@@ -18,6 +18,7 @@
 #include "Container/SFDualSortedMap.h"
 #include "Delegate/SFEventDelegate.h"
 
+
 namespace SF
 {
 	namespace Net
@@ -264,6 +265,7 @@ namespace SF
 		// Estimated server move frame
 		uint32_t m_ServerMoveFrame{};
 
+        // Online status event queue
 		CircularPageQueue<OnlineStateChangedEventArgs> m_OnlineStateChangedQueue;
 		ONLINESTATE_CHAGED_CALLBACK m_OnlineStateChangedCallback{};
 		ONLINE_TASK_FINISHED_CALLBACK m_OnlineTaskFinishedCallback{};

@@ -96,6 +96,7 @@ namespace SF
 
 	private:
 
+        // Use tick thread
 		bool m_UseTickThread = true;
 
 		VirtualHostData* m_VHost{};
@@ -104,8 +105,10 @@ namespace SF
 		// scheduler list
 		DelayedEventContext SortedUsecList{};
 
+        // Connection state
 		ConnectionState m_ConnectionState = ConnectionState::Disconnected;
 
+        // Client append handler
 		EventFunction m_ClientAppendHandler;
 	};
 

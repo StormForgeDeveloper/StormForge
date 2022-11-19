@@ -284,6 +284,8 @@ set(SFENGINE_LIB_FILES
 	Interfaces/SFPublicTypes.h
 	Online/SFOnlineClient.h
 	Online/SFOnlineClient.cpp
+    Online/SFOnlineAPIClient.h
+    Online/SFOnlineAPIClient.cpp
 	StormForge.natvis
   )
 

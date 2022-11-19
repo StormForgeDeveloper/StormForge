@@ -96,10 +96,17 @@ namespace SF
 		SF_FORCEINLINE bool GetUseSSL() const { return m_UseSSL; }
 		SF_FORCEINLINE void SetUseSSL(bool useSSL) { m_UseSSL = useSSL; }
 
+        // server path
+        void SetServerPath(const String& path) { m_ServerPath = path; }
+        const String& GetServerPath() const { return m_ServerPath; }
+
+        // Initialize
 		virtual Result Initialize(const String& serverAddress, int port, const String& protocol);
 
+        // Is valid connection?
 		SF_FORCEINLINE bool IsValid() const { return m_WSIContext != nullptr && m_WSI != nullptr; }
 
+        // terminate
 		virtual void Terminate();
 
 		virtual Result Send(struct WSSessionData* pss, const Array<uint8_t>& messageData);

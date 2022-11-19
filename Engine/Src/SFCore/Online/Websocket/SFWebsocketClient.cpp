@@ -56,7 +56,6 @@ namespace SF
 		if constexpr (AsyncLib != 0) // Even though it doesn't work well on windows we need to enable it because libwebsocket crashes without libevent enabled
 		{
 			info.options |= AsyncLib;
-
 		}
 
 		if (m_EventLoops.size() > 0)
@@ -67,7 +66,6 @@ namespace SF
 
 		//info.fd_limit_per_thread = 1 + 1 + 1;
 		info.user = this;
-
 
 		m_WSIContext = lws_create_context(&info);
 		if (!m_WSIContext) {

@@ -1,4 +1,4 @@
-﻿
+
 
 
 set(SFENGINEDLL_LIB_FILES
@@ -9,6 +9,7 @@ set(SFENGINEDLL_LIB_FILES
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSEngine.IOS.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSEngine.Win.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSOnlineClient.cpp
+    ${SF_ENGINEDLL_PATH}/SharpCPP/SFCSOnlineAPIClient.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSStringCrc.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSNetMessageIDGame.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSNetMessageIDLogin.cpp
