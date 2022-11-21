@@ -60,6 +60,7 @@ namespace SF
 		SF_FORCEINLINE bool IsValid() const { return m_Client.IsValid(); }
 		SF_FORCEINLINE bool IsConnected() const { return m_Client.IsConnected(); }
 
+        Result Request(const char* APIName);
         Result RequestServiceStatus();
         Result RequestServerNotice();
 

@@ -392,6 +392,13 @@ namespace SF
             return (T)Convert.ChangeType(obj, typeof(T));
         }
 
+        public void SetValue<T>(string ValueName, T value)
+        {
+            StringCrc32 ValueNameCrc32 = new StringCrc32(ValueName);
+
+            this[ValueNameCrc32] = value;
+        }
+
         public bool TryGetValue<T>(string ValueName, ref T outValue)
         {
             StringCrc32 ValueNameCrc32 = new StringCrc32(ValueName);

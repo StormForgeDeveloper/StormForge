@@ -103,6 +103,16 @@ SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeTickUpdate(intptr_t nativeHandle, O
 
 }
 
+SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeRequest(intptr_t nativeHandle, const char* APIName)
+{
+    if (nativeHandle == 0)
+        return ResultCode::NOT_INITIALIZED;
+
+    auto pOnlineAPIClient = NativeToObject<OnlineAPIClient>(nativeHandle);
+
+    return (int32_t)pOnlineAPIClient->Request(APIName);
+}
+
 SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeRequestServiceStatus(intptr_t nativeHandle)
 {
     if (nativeHandle == 0)

@@ -59,6 +59,11 @@ namespace SF
                 OnRecv(APIName, resultPayload);
         }
 
+        public void Request(string APIName)
+        {
+            NativeRequest(NativeHandle, APIName);
+        }
+
         public void RequestServiceStatus()
         {
             NativeRequestServiceStatus(NativeHandle);
@@ -102,6 +107,9 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeTickUpdate", CharSet = CharSet.Auto)]
         static extern Int32 NativeTickUpdate(IntPtr nativeHandle, RECV_FUNCTION recvFunction);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeRequest", CharSet = CharSet.Auto)]
+        static extern Int32 NativeRequest(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string APIName);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeRequestServiceStatus", CharSet = CharSet.Auto)]
         static extern Int32 NativeRequestServiceStatus(IntPtr nativeHandle);

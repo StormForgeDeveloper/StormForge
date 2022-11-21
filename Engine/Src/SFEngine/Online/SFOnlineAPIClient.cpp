@@ -115,6 +115,27 @@ namespace SF
         m_ReceivedResultQueue.Enqueue(Result);
     }
 
+    Result OnlineAPIClient::Request(const char* APIName)
+    {
+        Result hr;
+
+        if (StrUtil::IsNullOrEmpty(APIName))
+            return ResultCode::INVALID_ARG;
+
+        String requestString;
+        requestString.Format("{ \"APIName\":\"{0}\" }", APIName);
+
+        if (!m_Client.IsConnected())
+        {
+            return ResultCode::IO_NOT_CONNECTED;
+        }
+
+        ArrayView<uint8_t> bufferView(strlen(requestString), (uint8_t*)requestString.data());
+        m_Client.Send(bufferView);
+
+        return hr;
+    }
+
     Result OnlineAPIClient::RequestServiceStatus()
     {
         Result hr;
