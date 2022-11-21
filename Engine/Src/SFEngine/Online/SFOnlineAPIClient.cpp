@@ -49,22 +49,6 @@ namespace SF
         m_AccessKey = accessKey;
         m_MachineUID = Util::GetMachineUniqueId();
 
-		//m_Client.SetUseTickThread(false);
-		//m_Client.SetClientAppendHeaderFunction([&](struct lws* wsi, void* user, void* in, size_t len)
-		//	{
-		//		unsigned char** p = (unsigned char**)in, * end = (*p) + len;
-		//		String HeaderString;
-		//		HeaderString.Format("{0}={1};{2}={3}", 
-  //                  KeyName_AccessKey, m_AccessKey,
-  //                  KeyName_MachineUID, m_MachineUID);
-		//		auto res = lws_add_http_header_by_name(wsi, (unsigned char*)KeyName_AuthHeader, (unsigned char*)HeaderString.data(), (int)HeaderString.length(), p, end);
-		//		if (res)
-		//		{
-		//			return -1;
-		//		}
-		//		return 0;
-		//	});
-
         m_Client.OnRecvEvent().AddDelegate(uintptr_t(this), [this](Websocket::WSSessionData* pss, const Array<uint8_t>& data)
             {
                 OnRecv(data);
@@ -77,30 +61,6 @@ namespace SF
 		hr = m_Client.Initialize(serverAddress, port, "ws");
 		if (!hr)
 			return hr;
-
-
-		//m_Thread.reset(new(GetHeap()) FunctorTickThread([this](Thread* pThread)
-		//	{
-		//		if (!m_Client.IsValid())
-		//		{
-		//			m_Client.TryConnect();
-		//			ThisThread::SleepFor(DurationMS(10000));
-		//			return true;
-		//		}
-
-		//		m_Client.TickEventLoop(0);
-
-		//		if (!m_Client.IsConnected())
-		//		{
-		//			ThisThread::SleepFor(DurationMS(500));
-		//			return true;
-		//		}
-
-		//		return true;
-		//	}));
-
-		//m_Thread->Start();
-
 
 		return ResultCode::SUCCESS;
 	}
@@ -125,19 +85,7 @@ namespace SF
 
 	void OnlineAPIClient::Disconnect()
 	{
-		//if (m_Thread != nullptr)
-		//{
-		//	m_Thread->SetKillEvent();
-		//}
-
 		m_Client.Terminate();
-
-		//if (m_Thread != nullptr)
-		//{
-		//	m_Thread->Stop();
-		//	m_Thread.reset();
-		//}
-
     }
 
     void OnlineAPIClient::OnRecv(const Array<uint8_t>& data)
