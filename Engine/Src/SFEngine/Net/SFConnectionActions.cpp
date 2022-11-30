@@ -694,7 +694,7 @@ namespace Net {
 				netCheck(sendWindow.EnqueueMessage(ulTimeCur, pIMsg));
 			}
 
-			SFLog(Net, Debug2, "SENDENQReliable : CID:{0}, seq:{1}, msg:{2}, len:{3}",
+			SFLog(Net, Debug4, "SENDENQReliable : CID:{0}, seq:{1}, msg:{2}, len:{3}",
 				GetCID(),
 				msgID.IDSeq.Sequence,
 				msgID,
