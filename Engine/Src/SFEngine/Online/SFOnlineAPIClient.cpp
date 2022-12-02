@@ -90,8 +90,9 @@ namespace SF
 
     void OnlineAPIClient::OnRecv(const Array<uint8_t>& data)
     {
-        String temp(GetSystemHeap(), reinterpret_cast<const char*>(data.data()), 0, int(data.size()));
-        SFLog(Game, Info, "Recv:{0}", temp);
+        Result hr;
+        //String temp(GetSystemHeap(), reinterpret_cast<const char*>(data.data()), 0, int(data.size()));
+        //SFLog(Game, Info, "Recv:{0}", temp);
 
         std::string errs;
         Json::CharReaderBuilder jsonBuilder;
@@ -110,7 +111,10 @@ namespace SF
         Result->APIName = objectRequestFunc.asCString();
 
         auto objectMessage = rootObject.get("Payload", Json::Value(""));
-        Result->ResultPayload = objectMessage.asCString();
+        DynamicArray<uint8_t> decodedBuffer;
+        hr = Util::HEXDecode(strlen(objectMessage.asCString()), (const uint8_t*)objectMessage.asCString(), decodedBuffer);
+        decodedBuffer.push_back('\0');
+        Result->ResultPayload = (const char*)decodedBuffer.data();
 
         m_ReceivedResultQueue.Enqueue(Result);
     }

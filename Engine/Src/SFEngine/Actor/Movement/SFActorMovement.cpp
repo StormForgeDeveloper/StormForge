@@ -102,7 +102,13 @@ namespace SF
 
 	Result _ToString(ToStringContext& context, const ActorMovement& value)
 	{
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(F:"))
+        if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(ActID:"))
+            return ResultCode::FAIL;
+
+        if (!_ToString(context, value.ActorId))
+            return ResultCode::FAIL;
+
+        if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ",F:"))
 			return ResultCode::FAIL;
 
 		auto oldRadis = context.Radix;

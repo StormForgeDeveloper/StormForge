@@ -45,9 +45,35 @@ namespace Util {
 		return hr;
 	}
 
+    int HEXCharToNum(uint hexChar)
+    {
+        auto curNum = hexChar - '0';
+        if (curNum > 9)
+        {
+            if (islower(hexChar))
+                return hexChar - 'a' + 10;
+            else
+                return hexChar - 'A' + 10;
+        }
+
+        return curNum;
+    }
+
 	Result HEXDecode(size_t srcSize, const uint8_t* bytes_to_decode, Array<uint8_t>& destBuffer, uint8_t dummyChar)
 	{
-		return ResultCode::NOT_IMPLEMENTED;
+        Result hr;
+
+        if (bytes_to_decode == nullptr)
+            return ResultCode::INVALID_POINTER;
+
+        destBuffer.reserve(srcSize);
+
+        for (; srcSize > 1; bytes_to_decode += 2, srcSize -= 2)
+        {
+            destBuffer.push_back(uint8_t((HEXCharToNum(bytes_to_decode[0]) << 4) + HEXCharToNum(bytes_to_decode[1])));
+        }
+
+        return hr;
 	}
 
 

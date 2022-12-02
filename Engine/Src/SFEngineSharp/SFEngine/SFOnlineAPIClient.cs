@@ -50,10 +50,28 @@ namespace SF
 
         public void TickUpdate()
         {
-            NativeTickUpdate(NativeHandle, OnRecvCallback);
-        }
+#if UNITY_STANDALONE
+			stm_Instance = this;
+			NativeTickUpdate(NativeHandle, OnRecvCallbackStatic);
+			stm_Instance = null;
+#else
+			NativeTickUpdate(NativeHandle, OnRecvCallback);
+#endif
+		}
 
-        void OnRecvCallback(string APIName, string resultPayload)
+#if UNITY_STANDALONE
+		static OnlineAPIClient? stm_Instance = null;
+		[AOT.MonoPInvokeCallback(typeof(RECV_FUNCTION))]
+		static void OnRecvCallbackStatic(string APIName, string resultPayload)
+        {
+            if (stm_Instance != null)
+            {
+                stm_Instance.OnRecvCallback(APIName, resultPayload);
+            }
+        }
+#endif
+
+		internal void OnRecvCallback(string APIName, string resultPayload)
         {
             if (OnRecv != null)
                 OnRecv(APIName, resultPayload);
