@@ -82,15 +82,7 @@ namespace SF
             NativeRequest(NativeHandle, APIName);
         }
 
-        public void RequestServiceStatus()
-        {
-            NativeRequestServiceStatus(NativeHandle);
-        }
 
-        public void RequestServerNotice()
-        {
-            NativeRequestServerNotice(NativeHandle);
-        }
 
 
         ////////////////////////////////////////////////////////////////////////////////
@@ -128,12 +120,6 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeRequest", CharSet = CharSet.Auto)]
         static extern Int32 NativeRequest(IntPtr nativeHandle, [MarshalAs(UnmanagedType.LPStr)] string APIName);
-
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeRequestServiceStatus", CharSet = CharSet.Auto)]
-        static extern Int32 NativeRequestServiceStatus(IntPtr nativeHandle);
-
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineAPIClient_NativeRequestServerNotice", CharSet = CharSet.Auto)]
-        static extern Int32 NativeRequestServerNotice(IntPtr nativeHandle);
 
 
         #endregion

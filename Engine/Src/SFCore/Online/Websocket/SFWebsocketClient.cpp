@@ -91,6 +91,19 @@ namespace SF
 		m_Session = nullptr;
 	}
 
+    void WebsocketClient::TickUpdate(int iThread)
+    {
+        if (!IsConnected())
+        {
+            if (IsReconnectOnDisconnected())
+            {
+                TryConnect();
+            }
+        }
+
+        super::TickUpdate(iThread);
+    }
+
 	void WebsocketClient::TickEventLoop(int iEvent)
 	{
 		super::TickEventLoop(iEvent);
@@ -175,6 +188,9 @@ namespace SF
 			m_Session = (struct WSSessionData*)user;
 
 			m_ConnectionState = ConnectionState::Connected;
+
+            if (m_OnConnectedHandler)
+                m_OnConnectedHandler();
 		}
 
 		return iRet;

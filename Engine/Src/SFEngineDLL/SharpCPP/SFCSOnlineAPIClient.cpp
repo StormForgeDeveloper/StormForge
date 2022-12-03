@@ -113,23 +113,3 @@ SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeRequest(intptr_t nativeHandle, cons
     return (int32_t)pOnlineAPIClient->Request(APIName);
 }
 
-SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeRequestServiceStatus(intptr_t nativeHandle)
-{
-    if (nativeHandle == 0)
-        return ResultCode::NOT_INITIALIZED;
-
-    auto pOnlineAPIClient = NativeToObject<OnlineAPIClient>(nativeHandle);
-
-    return (int32_t)pOnlineAPIClient->RequestServiceStatus();
-}
-
-SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeRequestServerNotice(intptr_t nativeHandle)
-{
-    if (nativeHandle == 0)
-        return ResultCode::NOT_INITIALIZED;
-
-    auto pOnlineAPIClient = NativeToObject<OnlineAPIClient>(nativeHandle);
-
-    return (int32_t)pOnlineAPIClient->RequestServerNotice();
-}
-

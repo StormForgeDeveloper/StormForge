@@ -58,6 +58,8 @@ namespace SF
 			WebsocketClient* pInstance{};
 		};
 
+        using EventOnConnected = std::function<void()>;
+
 
 	public:
 
@@ -68,6 +70,9 @@ namespace SF
 
 		SF_FORCEINLINE void SetUseTickThread(bool useTickThread) { m_UseTickThread = useTickThread; }
 		SF_FORCEINLINE bool IsUseTickThread() const { return m_UseTickThread; }
+
+        SF_FORCEINLINE void SetReconnectOnDisconnected(bool value) { m_ReconnectOnDisconnected = value; }
+        SF_FORCEINLINE bool IsReconnectOnDisconnected() const { return m_ReconnectOnDisconnected; }
 
 		virtual Result Initialize(const String& serverAddress, int port, const String& protocol) override;
 		virtual void Terminate() override;
@@ -92,12 +97,16 @@ namespace SF
 		SF_FORCEINLINE void SetClientAppendHeaderFunction(const EventFunction& func) { m_ClientAppendHandler = func; }
 		SF_FORCEINLINE void SetClientAppendHeaderFunction(EventFunction&& func) { m_ClientAppendHandler = Forward<EventFunction>(func); }
 
+        SF_FORCEINLINE void SetOnConnectedCallback(const EventOnConnected& func) { m_OnConnectedHandler = func; }
+
+        virtual void TickUpdate(int iThread) override;
 		virtual void TickEventLoop(int iEvent) override;
 
 	private:
 
         // Use tick thread
 		bool m_UseTickThread = true;
+        bool m_ReconnectOnDisconnected = false;
 
 		VirtualHostData* m_VHost{};
 		struct WSSessionData* m_Session{};
@@ -110,7 +119,8 @@ namespace SF
 
         // Client append handler
 		EventFunction m_ClientAppendHandler;
-	};
+        EventOnConnected m_OnConnectedHandler;
+    };
 
 }
 

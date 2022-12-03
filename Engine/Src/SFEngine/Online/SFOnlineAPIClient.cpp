@@ -30,6 +30,7 @@ namespace SF
 		: EngineObject(&heap,"OnlineAPIClient"_crc64)
         , m_Client(heap)
         , m_ReceivedResultQueue(heap)
+        , m_ListeningAPINames(heap)
 	{
 	}
 
@@ -57,6 +58,14 @@ namespace SF
         String serverPath;
         serverPath.Format("/BRAPI?AccessKey={0}&MachineUID={1}", m_AccessKey, m_MachineUID);
         m_Client.SetServerPath(serverPath);
+
+        m_Client.SetOnConnectedCallback([this]()
+            {
+                for (auto APIName : m_ListeningAPINames)
+                {
+                    Request(APIName);
+                }
+            });
 
 		hr = m_Client.Initialize(serverAddress, port, "ws");
 		if (!hr)
@@ -91,8 +100,6 @@ namespace SF
     void OnlineAPIClient::OnRecv(const Array<uint8_t>& data)
     {
         Result hr;
-        //String temp(GetSystemHeap(), reinterpret_cast<const char*>(data.data()), 0, int(data.size()));
-        //SFLog(Game, Info, "Recv:{0}", temp);
 
         std::string errs;
         Json::CharReaderBuilder jsonBuilder;
@@ -126,49 +133,18 @@ namespace SF
         if (StrUtil::IsNullOrEmpty(APIName))
             return ResultCode::INVALID_ARG;
 
+        if (!m_ListeningAPINames.Contains(APIName))
+            m_ListeningAPINames.Insert(APIName);
+
+        if (!m_Client.IsConnected())
+        {
+            return ResultCode::IO_NOT_CONNECTED;
+        }
+
         String requestString;
         requestString.Format("{ \"APIName\":\"{0}\" }", APIName);
 
-        if (!m_Client.IsConnected())
-        {
-            return ResultCode::IO_NOT_CONNECTED;
-        }
-
         ArrayView<uint8_t> bufferView(strlen(requestString), (uint8_t*)requestString.data());
-        m_Client.Send(bufferView);
-
-        return hr;
-    }
-
-    Result OnlineAPIClient::RequestServiceStatus()
-    {
-        Result hr;
-
-        static const char* requestString = "{ \"APIName\":\"ServiceStatus\" }";
-
-        if (!m_Client.IsConnected())
-        {
-            return ResultCode::IO_NOT_CONNECTED;
-        }
-
-        ArrayView<uint8_t> bufferView(strlen(requestString), (uint8_t*)requestString);
-        m_Client.Send(bufferView);
-
-        return hr;
-    }
-
-    Result OnlineAPIClient::RequestServerNotice()
-    {
-        Result hr;
-
-        static const char* requestString = "{ \"APIName\":\"ServerNotice\" }";
-
-        if (!m_Client.IsConnected())
-        {
-            return ResultCode::IO_NOT_CONNECTED;
-        }
-
-        ArrayView<uint8_t> bufferView(strlen(requestString), (uint8_t*)requestString);
         m_Client.Send(bufferView);
 
         return hr;

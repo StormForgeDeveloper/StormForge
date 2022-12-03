@@ -61,8 +61,6 @@ namespace SF
 		SF_FORCEINLINE bool IsConnected() const { return m_Client.IsConnected(); }
 
         Result Request(const char* APIName);
-        Result RequestServiceStatus();
-        Result RequestServerNotice();
 
         SF_FORCEINLINE CircularPageQueue<APIResult*>& GetRecvQueue() { return m_ReceivedResultQueue; }
 
@@ -80,6 +78,7 @@ namespace SF
 
         CircularPageQueue<APIResult*> m_ReceivedResultQueue;
 
+        SortedSet<String> m_ListeningAPINames;
     };
 
 }

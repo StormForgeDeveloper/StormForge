@@ -139,6 +139,8 @@ namespace SF
 					if (!m_WSIContext)
 						return false;
 
+                    TickUpdate(iThread);
+
 					if (m_EventLoops.size() > 0)
 					{
 						TickEventLoop(iThread);

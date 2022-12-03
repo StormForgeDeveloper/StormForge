@@ -145,6 +145,7 @@ namespace SF
 		SF_FORCEINLINE void SetProtocolFilteringFunction(const EventFunction& filteringFunc) { m_ProtocolFilteringDeletates = filteringFunc; }
 		SF_FORCEINLINE void SetProtocolFilteringFunction(EventFunction&& filteringFunc) { m_ProtocolFilteringDeletates = Forward<EventFunction>(filteringFunc); }
 
+        virtual void TickUpdate(int iThread) {}
 
 		// Call this function if you want to use manual ticking 
 		virtual void TickEventLoop(int iEvent);
