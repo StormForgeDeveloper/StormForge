@@ -382,12 +382,16 @@ namespace SF
 			auto pInstance = reinterpret_cast<Websocket*>(userData);
 			if (pInstance)
 			{
+#if defined(DEBUG)
 				auto org = pInstance->GetName().GetDebugStringPtr();
 
 				pInstance->OnWSCallback(wsi, reason, user, in, len);
 
 				auto after = pInstance->GetName().GetDebugStringPtr();
 				assert(org == after);
+#else
+                pInstance->OnWSCallback(wsi, reason, user, in, len);
+#endif
 			}
 
 			SFLog(Websocket, Debug4, "{0} WSCallback {1}, size:{2}", pInstance ? pInstance->GetName() : "", (int)reason, len);

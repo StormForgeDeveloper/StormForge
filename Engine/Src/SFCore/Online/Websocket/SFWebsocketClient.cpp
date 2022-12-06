@@ -42,7 +42,7 @@ namespace SF
 
 		super::Initialize(serverAddress, port, protocol);
 
-		SFLog(Game, Info, "BR websocket server | visit http://{0}:{1}", m_ServerAddress, m_Port);
+		SFLog(Websocket, Info, "BR websocket server | visit http://{0}:{1}", m_ServerAddress, m_Port);
 
 
 		struct lws_context_creation_info info;
@@ -69,7 +69,7 @@ namespace SF
 
 		m_WSIContext = lws_create_context(&info);
 		if (!m_WSIContext) {
-			SFLog(Game, Error, "lws init failed");
+			SFLog(Websocket, Error, "lws init failed");
 			return ResultCode::FAIL;
 		}
 
@@ -87,17 +87,24 @@ namespace SF
 	{
 		super::Terminate();
 
+        SFLog(Websocket, Info, "BR websocket Disconnected");
+
 		m_ConnectionState = ConnectionState::Disconnected;
 		m_Session = nullptr;
 	}
 
     void WebsocketClient::TickUpdate(int iThread)
     {
-        if (!IsConnected())
+        if (IsReconnectOnDisconnected() && m_ConnectionState == ConnectionState::Disconnected)
         {
-            if (IsReconnectOnDisconnected())
+            if (!m_ReconnectTimer.IsTimerActive())
+            {
+                m_ReconnectTimer.SetTimer(DurationMS(5000));
+            }
+            else if (m_ReconnectTimer.CheckTimer())
             {
                 TryConnect();
+                m_ReconnectTimer.SetTimer(DurationMS(5000));
             }
         }
 
@@ -188,6 +195,8 @@ namespace SF
 			m_Session = (struct WSSessionData*)user;
 
 			m_ConnectionState = ConnectionState::Connected;
+
+            SFLog(Websocket, Info, "Connected");
 
             if (m_OnConnectedHandler)
                 m_OnConnectedHandler();

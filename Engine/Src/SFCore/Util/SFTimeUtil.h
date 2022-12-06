@@ -166,8 +166,8 @@ namespace SF {
 
 			TimeStampMS	GetTimerExpireTime() { return m_ulTimeToExpire; }
 
-			// check about timer is working
-			bool IsTimerWorking() const
+			// check about timer is active
+			SF_FORCEINLINE bool IsTimerActive() const
 			{
 				return m_ulTimeToExpire != InvalidTime;
 			}

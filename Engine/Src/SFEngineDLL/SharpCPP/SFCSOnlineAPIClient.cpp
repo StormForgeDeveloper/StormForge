@@ -82,12 +82,6 @@ SFDLL_EXPORT int32_t SFOnlineAPIClient_NativeTickUpdate(intptr_t nativeHandle, O
 
 	auto pOnlineAPIClient = NativeToObject<OnlineAPIClient>(nativeHandle);
 
-    if (!pOnlineAPIClient->IsConnected())
-    {
-        pOnlineAPIClient->Reconnect();
-        return ResultCode::IO_NOT_CONNECTED;
-    }
-
     auto& recvQueue = pOnlineAPIClient->GetRecvQueue();
     OnlineAPIClient::APIResult* result{};
     while (recvQueue.Dequeue(result))

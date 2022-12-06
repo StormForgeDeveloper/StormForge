@@ -108,6 +108,8 @@ namespace SF
 		bool m_UseTickThread = true;
         bool m_ReconnectOnDisconnected = false;
 
+        Util::Timer m_ReconnectTimer;
+
 		VirtualHostData* m_VHost{};
 		struct WSSessionData* m_Session{};
 
