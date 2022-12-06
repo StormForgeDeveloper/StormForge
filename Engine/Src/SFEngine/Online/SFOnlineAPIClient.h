@@ -78,7 +78,7 @@ namespace SF
 
         CircularPageQueue<APIResult*> m_ReceivedResultQueue;
 
-        SortedSet<String> m_ListeningAPINames;
+        SortedSet<StringCrc32> m_ListeningAPINames;
     };
 
 }

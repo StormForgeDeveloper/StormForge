@@ -223,14 +223,14 @@ namespace SF
 		if (m_WSI == nullptr || pss == nullptr || pss->SendBuffer == nullptr
 			|| messageData.size() == 0)
 		{
-			SFLog(Websocket, Debug3, "Websocket::Send, failed, not initialized?");
+			SFLog(Websocket, Error, "Websocket::Send, failed, not initialized?");
 			return ResultCode::NOT_INITIALIZED;
 		}
 
 		auto pSendItem = pss->SendBuffer->AllocateWrite(MessageBufferPadding + messageData.size());
 		if (pSendItem == nullptr)
 		{
-			SFLog(Websocket, Debug3, "OOM: dropping!");
+			SFLog(Websocket, Error, "OOM: dropping!");
 			return ResultCode::OUT_OF_MEMORY;
 		}
 
@@ -291,6 +291,8 @@ namespace SF
 		int flags = lws_write_ws_flags(LWS_WRITE_BINARY, 1, 1);
 		auto dataLen = int(pSendItem->DataSize - MessageBufferPadding);
 
+        SFLog(Websocket, Info, "Sending data size:{0}", dataLen);
+
 		// notice we allowed for LWS_PRE in the payload already
 		int m = lws_write(wsi, ((unsigned char*)pSendItem->GetDataPtr()) + MessageBufferPadding, dataLen, (enum lws_write_protocol)flags);
 		if (m < dataLen)
@@ -342,7 +344,7 @@ namespace SF
 		if (pss->ReceiveBuffer == nullptr)
 			return 0;
 
-		SFLog(Websocket, Debug4, "WSClient WSCallback_Readable: (rpp:{0}, first:{1}, last:{2}, bin:{3}, len:{4}, stored:{5})",
+		SFLog(Websocket, Info, "WSClient WSCallback_Readable: (rpp:{0}, first:{1}, last:{2}, bin:{3}, len:{4}, stored:{5})",
 			(int)lws_remaining_packet_payload(wsi),
 			lws_is_first_fragment(wsi),
 			lws_is_final_fragment(wsi),

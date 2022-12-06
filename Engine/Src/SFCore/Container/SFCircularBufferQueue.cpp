@@ -317,6 +317,10 @@ namespace SF
 		}
 #endif
 
+        // TailPos and item state should be synchronized, so need to lock them together
+        // TODO: this lock make below compare_exchange_weak useless. need to improve that
+        MutexScopeLock ticketScope(m_HeadLock);
+
 		auto expectedState = ItemState::Reading;
 		while (!pBuffer->State.compare_exchange_weak(expectedState, ItemState::Free, std::memory_order_release, std::memory_order_acquire))
 		{
@@ -328,7 +332,6 @@ namespace SF
 
 		}
 
-		MutexScopeLock ticketScope(m_HeadLock);
 		// And we have to take care of tail position, and this should be rigorously synchronous way
 		BufferItem* curTail = m_TailPos.load(std::memory_order_relaxed);
 		auto pHead = m_HeadPos.load(std::memory_order_relaxed);

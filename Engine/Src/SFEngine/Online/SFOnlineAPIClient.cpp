@@ -43,7 +43,7 @@ namespace SF
 	{
 		Result hr;
 
-        Disconnect();
+        //Disconnect();
 
         m_ServerAddress = serverAddress;
         m_Port = port;
@@ -63,7 +63,7 @@ namespace SF
             {
                 for (auto APIName : m_ListeningAPINames)
                 {
-                    Request(APIName);
+                    Request((const char*)APIName);
                 }
             });
 
@@ -101,6 +101,9 @@ namespace SF
     {
         Result hr;
 
+        SFLog(Websocket, Info, "OnlineAPIClient OnRecv: size:{0}", data.size());
+
+
         std::string errs;
         Json::CharReaderBuilder jsonBuilder;
         Json::Value rootObject;
@@ -133,6 +136,8 @@ namespace SF
         if (StrUtil::IsNullOrEmpty(APIName))
             return ResultCode::INVALID_ARG;
 
+        SFLog(Websocket, Info, "OnlineAPIClient Request:{0}", APIName);
+
         if (!m_ListeningAPINames.Contains(APIName))
             m_ListeningAPINames.Insert(APIName);
 
@@ -141,13 +146,12 @@ namespace SF
             return ResultCode::IO_NOT_CONNECTED;
         }
 
-        String requestString;
-        requestString.Format("{ \"APIName\":\"{0}\" }", APIName);
+        String requestString = "{ \"APIName\":\"";
+        requestString.Append(APIName);
+        requestString.Append("\" }");
 
         ArrayView<uint8_t> bufferView(strlen(requestString), (uint8_t*)requestString.data());
-        m_Client.Send(bufferView);
-
-        return hr;
+        return m_Client.Send(bufferView);
     }
 
 

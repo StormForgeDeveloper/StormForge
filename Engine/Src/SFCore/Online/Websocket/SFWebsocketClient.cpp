@@ -207,7 +207,7 @@ namespace SF
 
 	int WebsocketClient::OnConnectionClosed(struct lws* wsi, void* user, void* in, size_t len)
 	{
-		SFLog(Websocket, Debug3, "WSClient WSCallback_Closed");
+		SFLog(Websocket, Info, "WSClient WSCallback_Closed");
 
 		super::OnConnectionClosed(wsi, user, in, len);
 
@@ -223,7 +223,7 @@ namespace SF
 
 	int WebsocketClient::OnConnectionError(struct lws* wsi, void* user, void* in, size_t len)
 	{
-		SFLog(Websocket, Debug3, "WSClient WSCallback_ConnectionError: {0}", (const char*)in);
+		SFLog(Websocket, Info, "WSClient WSCallback_ConnectionError: {0}", (const char*)in);
 
 		super::OnConnectionError(wsi, user, in, len);
 
