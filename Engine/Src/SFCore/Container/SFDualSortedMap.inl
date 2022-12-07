@@ -344,7 +344,7 @@ namespace SF {
 			Assert(m_WriteRoot == nullptr || m_WriteRoot.load() != oldRoot);
 			if (m_WriteRoot != nullptr)
 			{
-				Assert(!m_WriteRoot->IsCloned);
+				assert(!m_WriteRoot->IsCloned);
 			}
 
 			if (oldRoot != nullptr)
@@ -572,7 +572,7 @@ namespace SF {
 			do
 			{
 				Assert(pCurNode->UpdateSerial == m_UpdateSerial);
-				Assert(!pCurNode->IsCloned);
+				assert(!pCurNode->IsCloned);
 				travelHistory.AddHistory(pCurNode);
 
 				// multiple key
@@ -1063,8 +1063,10 @@ namespace SF {
 				return mapNodeToClone;
 			}
 
-			Assert(!mapNodeToClone->IsCloned);
+#ifdef DEBUG
+            assert(!mapNodeToClone->IsCloned);
 			mapNodeToClone->IsCloned = true;
+#endif
 
 			Assert(m_UpdateSerial != mapNodeToClone->UpdateSerial);
 
@@ -1118,7 +1120,9 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		void DualSortedMap<KeyType, ValueType>::PendingFreeNode(MapNode* pNode)
 		{
-			Assert(pNode->IsCloned);
+#ifdef DEBUG
+            assert(pNode->IsCloned);
+#endif
 
 			if (pNode == nullptr)
 				return;

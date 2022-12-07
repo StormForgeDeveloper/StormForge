@@ -135,8 +135,8 @@ namespace SF {
 				MapNode* NextPendingFree = nullptr;
 #ifdef DEBUG
 				CallStackTraceT<6> StackTrace;
-#endif
 				bool IsCloned = false;
+#endif
 
 				MapNode()
 					: Left(nullptr)
@@ -151,7 +151,9 @@ namespace SF {
 					NumberOfChildren = 0;
 					Key = 0;
 					Value = 0;
+#ifdef DEBUG
 					IsCloned = false;
+#endif
 					Left = nullptr;
 					Right = nullptr;
 					UpdateSerial = 0;
@@ -164,7 +166,9 @@ namespace SF {
 					NumberOfChildren = 0;
 					Key = key;
 					Value = value;
+#ifdef DEBUG
 					IsCloned = false;
+#endif
 					Left = nullptr;
 					Right = nullptr;
 					UpdateSerial = updateSerial;
@@ -177,7 +181,9 @@ namespace SF {
 					NumberOfChildren = src.NumberOfChildren;
 					Key = src.Key;
 					Value = src.Value;
+#ifdef DEBUG
 					IsCloned = false;
+#endif
 					Left = src.Left;
 					Right = src.Right;
 					UpdateSerial = updateSerial;
