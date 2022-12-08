@@ -185,25 +185,16 @@ namespace StrUtil {
                 }
                 else
                 {
-
-                    int iArg = 0;
-
                     SkipSpace(itFormat);
 
                     // read argument index
-                    iArg = (int)(ReadNumber(itFormat) + 0.1);
+                    int iArg = (int)(ReadNumber(itFormat) + 0.1);
 
                     // read option
                     CharType option = TCharCode<CharType>::NullTerminate;
                     double digits = -1;
                     if (itFormat.CurChar == TCharCode < CharType>::Colon)
                     {
-                        if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
-                        {
-                            assert(false);
-                            return 0;
-                        }
-
                         SkipSpace(itFormat);
 
                         if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
@@ -222,12 +213,6 @@ namespace StrUtil {
                     // Read max length
                     if (itFormat.CurChar == TCharCode<CharType>::Comma)
                     {
-                        if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
-                        {
-                            assert(false);
-                            return 0;
-                        }
-
                         SkipSpace(itFormat);
 
                         if (itFormat.CurChar == TCharCode<CharType>::NullTerminate)
