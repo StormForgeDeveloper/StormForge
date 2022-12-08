@@ -21,6 +21,10 @@ pushd src/jansson
 ./build.sh
 popd
 
+echo Download Curl
+pushd src/curl
+./download.sh
+popd
 
 echo Building main collection
 export BUILD_DIR=$CMAKE_SYSTEM_NAME
