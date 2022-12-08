@@ -35,7 +35,7 @@ TEST_F(AVLTreeTest, DualSortedMapPerfTestSimple)
 	}
 	EXPECT_TRUE((sortedMap.CommitChanges()));
 	end = Util::Time.GetRawTimeMs();
-	SFLog(Game, Info, "Insert %d items, {0}ms", numberOfTest, (end - start).count());
+	SFLog(Game, Info, "Insert {0} items, {1}ms", numberOfTest, (end - start).count());
 
 	start = Util::Time.GetRawTimeMs();
 	for (unsigned iTest = 0; iTest < numberOfTest; iTest++)

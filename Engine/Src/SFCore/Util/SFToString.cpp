@@ -22,10 +22,10 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const NetAddress& value)
 	{
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, (const char*)value.Address))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, (const char*)value.Address))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":"))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, (uint32_t)value.Port)))
@@ -76,10 +76,10 @@ namespace SF {
 		char ipstr[INET6_ADDRSTRLEN] = "";
 		inet_ntop(value.sin6_family, (void*)&value.sin6_addr, ipstr, sizeof ipstr);
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ipstr)))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ipstr)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, (uint32_t)ntohs(value.sin6_port))))
@@ -94,10 +94,10 @@ namespace SF {
 		NetAddress addr;
 		addr = value;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, addr.Address)))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, addr.Address)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, (uint32_t)addr.Port)))

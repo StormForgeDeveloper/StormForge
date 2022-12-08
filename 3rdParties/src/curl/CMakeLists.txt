@@ -2,7 +2,6 @@
 
 #https://github.com/curl/curl.git
 
-#set(CURL_STATICLIB ON)
 
 
 include_directories(
@@ -13,279 +12,45 @@ include_directories(
 )
 
 
+if(WIN32)
+	include_directories( AFTER
+		../../Windows/Common/include
+	)
+endif()
+
+
+# From CURL make file
+function(transform_makefile_inc INPUT_FILE OUTPUT_FILE)
+  file(READ ${INPUT_FILE} MAKEFILE_INC_TEXT)
+  string(REPLACE "$(top_srcdir)"   "\${CURL_SOURCE_DIR}" MAKEFILE_INC_TEXT ${MAKEFILE_INC_TEXT})
+  string(REPLACE "$(top_builddir)" "\${CURL_BINARY_DIR}" MAKEFILE_INC_TEXT ${MAKEFILE_INC_TEXT})
+
+  string(REGEX REPLACE "\\\\\n" "!π!α!" MAKEFILE_INC_TEXT ${MAKEFILE_INC_TEXT})
+  string(REGEX REPLACE "([a-zA-Z_][a-zA-Z0-9_]*)[\t ]*=[\t ]*([^\n]*)" "SET(\\1 \\2)" MAKEFILE_INC_TEXT ${MAKEFILE_INC_TEXT})
+  string(REPLACE "!π!α!" "\n" MAKEFILE_INC_TEXT ${MAKEFILE_INC_TEXT})
+
+  string(REGEX REPLACE "\\$\\(([a-zA-Z_][a-zA-Z0-9_]*)\\)" "\${\\1}" MAKEFILE_INC_TEXT ${MAKEFILE_INC_TEXT})    # Replace $() with ${}
+  string(REGEX REPLACE "@([a-zA-Z_][a-zA-Z0-9_]*)@" "\${\\1}" MAKEFILE_INC_TEXT ${MAKEFILE_INC_TEXT})    # Replace @@ with ${}, even if that may not be read by CMake scripts.
+  file(WRITE ${OUTPUT_FILE} ${MAKEFILE_INC_TEXT})
+  set_property(DIRECTORY APPEND PROPERTY CMAKE_CONFIGURE_DEPENDS "${INPUT_FILE}")
+endfunction()
+
+transform_makefile_inc("curl/lib/Makefile.inc" "curl/lib/Makefile.inc.cmake")
+include(curl/lib/Makefile.inc.cmake)
+
+list(TRANSFORM CSOURCES PREPEND curl/lib/)
+list(TRANSFORM HHEADERS PREPEND curl/lib/)
+
+list(APPEND HHEADERS
+  curl_config.h
+  )
 
 set(SRC_FILES
-    curl/include/curl/curl.h
-    curl/include/curl/curlver.h
-    curl/include/curl/easy.h
-    curl/include/curl/mprintf.h
-    curl/include/curl/multi.h
-    curl/include/curl/stdcheaders.h
-    curl/include/curl/system.h
-    curl/include/curl/typecheck-gcc.h
-	curl/include/curl/urlapi.h
-    curl/lib/amigaos.h
-    curl/lib/arpa_telnet.h
-    curl/lib/asyn.h
-    curl/lib/config-amigaos.h
-    curl/lib/config-dos.h
-    curl/lib/config-mac.h
-    curl/lib/config-os400.h
-    curl/lib/config-riscos.h
-    curl/lib/config-symbian.h
-    curl/lib/config-tpf.h
-    curl/lib/config-vxworks.h
-    curl/lib/config-win32.h
-    curl/lib/config-win32ce.h
-    curl/lib/conncache.h
-    curl/lib/connect.h
-    curl/lib/content_encoding.h
-    curl/lib/cookie.h
-    curl/lib/curlx.h
-    curl/lib/curl_addrinfo.h
-    curl/lib/curl_base64.h
-    curl/lib/curl_des.h
-    curl/lib/curl_endian.h
-    curl/lib/curl_fnmatch.h
-    curl/lib/curl_gethostname.h
-    curl/lib/curl_gssapi.h
-    curl/lib/curl_hmac.h
-    curl/lib/curl_ldap.h
-    curl/lib/curl_md4.h
-    curl/lib/curl_md5.h
-    curl/lib/curl_memory.h
-    curl/lib/curl_memrchr.h
-    curl/lib/curl_multibyte.h
-    curl/lib/curl_ntlm_core.h
-    curl/lib/curl_ntlm_wb.h
-    curl/lib/curl_printf.h
-    curl/lib/curl_rtmp.h
-    curl/lib/curl_sasl.h
-    curl/lib/curl_sec.h
-    curl/lib/curl_setup.h
-    curl/lib/curl_setup_once.h
-    curl/lib/curl_sspi.h
-    curl/lib/curl_threads.h
-    curl/lib/dict.h
-    curl/lib/dotdot.h
-    curl/lib/easyif.h
-    curl/lib/escape.h
-    curl/lib/file.h
-    curl/lib/fileinfo.h
-    curl/lib/formdata.h
-    curl/lib/ftp.h
-    curl/lib/ftplistparser.h
-    curl/lib/getinfo.h
-    curl/lib/gopher.h
-    curl/lib/hash.h
-    curl/lib/hostcheck.h
-    curl/lib/hostip.h
-    curl/lib/http.h
-    curl/lib/http2.h
-    curl/lib/http_chunks.h
-    curl/lib/http_digest.h
-    curl/lib/http_negotiate.h
-    curl/lib/http_ntlm.h
-    curl/lib/http_proxy.h
-    curl/lib/if2ip.h
-    curl/lib/imap.h
-    curl/lib/inet_ntop.h
-    curl/lib/inet_pton.h
-    curl/lib/llist.h
-    curl/lib/memdebug.h
-    curl/lib/multihandle.h
-    curl/lib/multiif.h
-    curl/lib/netrc.h
-    curl/lib/non-ascii.h
-    curl/lib/nonblock.h
-    curl/lib/parsedate.h
-    curl/lib/pingpong.h
-    curl/lib/pop3.h
-    curl/lib/progress.h
-    curl/lib/rand.h
-    curl/lib/rtsp.h
-    curl/lib/select.h
-    curl/lib/sendf.h
-    curl/lib/setup-os400.h
-    curl/lib/setup-vms.h
-    curl/lib/share.h
-    curl/lib/sigpipe.h
-    curl/lib/slist.h
-    curl/lib/smb.h
-    curl/lib/smtp.h
-    curl/lib/sockaddr.h
-    curl/lib/socks.h
-    curl/lib/speedcheck.h
-    curl/lib/splay.h
-    curl/lib/strcase.h
-    curl/lib/strdup.h
-    curl/lib/strerror.h
-    curl/lib/strtok.h
-    curl/lib/strtoofft.h
-    curl/lib/system_win32.h
-    curl/lib/telnet.h
-    curl/lib/tftp.h
-    curl/lib/timeval.h
-    curl/lib/transfer.h
-    curl/lib/url.h
-    curl/lib/urldata.h
-    curl/lib/vauth/digest.h
-    curl/lib/vauth/ntlm.h
-    curl/lib/vauth/vauth.h
-    curl/lib/vtls/gskit.h
-    curl/lib/vtls/gtls.h
-    curl/lib/vtls/mbedtls.h
-    curl/lib/vtls/nssg.h
-    curl/lib/vtls/openssl.h
-    curl/lib/vtls/polarssl.h
-    curl/lib/vtls/polarssl_threadlock.h
-    curl/lib/vtls/schannel.h
-    curl/lib/vtls/vtls.h
-    curl/lib/warnless.h
-    curl/lib/wildcard.h
-    curl/lib/x509asn1.h
-    curl/lib/amigaos.c
-    curl/lib/asyn-ares.c
-    curl/lib/asyn-thread.c
-    curl/lib/base64.c
-    curl/lib/conncache.c
-    curl/lib/connect.c
-    curl/lib/content_encoding.c
-    curl/lib/cookie.c
-    curl/lib/curl_addrinfo.c
-	curl/lib/curl_ctype.c
-	curl/lib/curl_ctype.h
-    curl/lib/curl_des.c
-    curl/lib/curl_endian.c
-    curl/lib/curl_fnmatch.c
-    curl/lib/curl_gethostname.c
-	curl/lib/curl_get_line.c
-	curl/lib/curl_get_line.h
-    curl/lib/curl_gssapi.c
-    curl/lib/curl_memrchr.c
-    curl/lib/curl_multibyte.c
-    curl/lib/curl_ntlm_core.c
-    curl/lib/curl_ntlm_wb.c
-    curl/lib/curl_rtmp.c
-	curl/lib/curl_range.c
-	curl/lib/curl_range.h
-	curl/lib/curl_sha256.h
-    curl/lib/curl_sasl.c
-    curl/lib/curl_sspi.c
-    curl/lib/curl_threads.c
-    curl/lib/dict.c
-	curl/lib/doh.c
-	curl/lib/doh.h
-    curl/lib/dotdot.c
-    curl/lib/easy.c
-    curl/lib/escape.c
-    curl/lib/file.c
-    curl/lib/fileinfo.c
-    curl/lib/formdata.c
-    curl/lib/ftp.c
-    curl/lib/ftplistparser.c
-    curl/lib/getenv.c
-    curl/lib/getinfo.c
-    curl/lib/gopher.c
-    curl/lib/hash.c
-    curl/lib/hmac.c
-    curl/lib/hostasyn.c
-    curl/lib/hostcheck.c
-    curl/lib/hostip.c
-    curl/lib/hostip4.c
-    curl/lib/hostip6.c
-    curl/lib/hostsyn.c
-    curl/lib/http.c
-    curl/lib/http2.c
-    curl/lib/http_chunks.c
-    curl/lib/http_digest.c
-    curl/lib/http_negotiate.c
-    curl/lib/http_ntlm.c
-    curl/lib/http_proxy.c
-    curl/lib/idn_win32.c
-    curl/lib/if2ip.c
-    curl/lib/imap.c
-    curl/lib/inet_ntop.c
-    curl/lib/inet_pton.c
-    curl/lib/krb5.c
-    curl/lib/ldap.c
-    curl/lib/llist.c
-    curl/lib/md4.c
-    curl/lib/md5.c
-    curl/lib/memdebug.c
-	curl/lib/mime.c
-	curl/lib/mime.h
-    curl/lib/mprintf.c
-    curl/lib/multi.c
-    curl/lib/netrc.c
-    curl/lib/non-ascii.c
-    curl/lib/nonblock.c
-    curl/lib/nwlib.c
-    curl/lib/nwos.c
-    curl/lib/openldap.c
-    curl/lib/parsedate.c
-    curl/lib/pingpong.c
-    curl/lib/pop3.c
-    curl/lib/progress.c
-    curl/lib/rand.c
-    curl/lib/rtsp.c
-    curl/lib/security.c
-    curl/lib/select.c
-    curl/lib/sendf.c
-	curl/lib/setopt.c
-	curl/lib/setopt.h
-	curl/lib/sha256.c
-    curl/lib/share.c
-    curl/lib/slist.c
-    curl/lib/smb.c
-    curl/lib/smtp.c
-    curl/lib/socks.c
-    curl/lib/socks_gssapi.c
-    curl/lib/socks_sspi.c
-    curl/lib/speedcheck.c
-    curl/lib/splay.c
-    curl/lib/strcase.c
-    curl/lib/strdup.c
-    curl/lib/strerror.c
-    curl/lib/strtok.c
-    curl/lib/strtoofft.c
-    curl/lib/system_win32.c
-	curl/lib/socketpair.c
-	curl/lib/socketpair.h
-    curl/lib/telnet.c
-    curl/lib/tftp.c
-    curl/lib/timeval.c
-    curl/lib/transfer.c
-    curl/lib/url.c
-	curl/lib/urlapi.c
-    curl/lib/vauth/cleartext.c
-    curl/lib/vauth/cram.c
-    curl/lib/vauth/digest.c
-    curl/lib/vauth/digest_sspi.c
-    curl/lib/vauth/krb5_gssapi.c
-    curl/lib/vauth/krb5_sspi.c
-    curl/lib/vauth/ntlm.c
-    curl/lib/vauth/ntlm_sspi.c
-    curl/lib/vauth/oauth2.c
-    curl/lib/vauth/spnego_gssapi.c
-    curl/lib/vauth/spnego_sspi.c
-    curl/lib/vauth/vauth.c
-    curl/lib/version.c
-    curl/lib/vtls/gskit.c
-    curl/lib/vtls/gtls.c
-    curl/lib/vtls/mbedtls.c
-    curl/lib/vtls/nss.c
-    curl/lib/vtls/openssl.c
-    curl/lib/vtls/polarssl.c
-    curl/lib/vtls/polarssl_threadlock.c
-    curl/lib/vtls/schannel.c
-    curl/lib/vtls/vtls.c
-    curl/lib/warnless.c
-    curl/lib/wildcard.c
-    curl/lib/x509asn1.c
+    ${CSOURCES}
+	${HHEADERS}
 )
 
-
+add_definitions(-DBUILDING_LIBCURL)
 add_definitions(-DCURL_STATICLIB)
 add_definitions(-DHAVE_CONFIG_H)
 

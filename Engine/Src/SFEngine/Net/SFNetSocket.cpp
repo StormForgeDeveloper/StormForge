@@ -50,6 +50,14 @@ namespace Net {
 
 	SocketIO::~SocketIO()
 	{
+        if (GetIsIORegistered()) Service::NetSystem->UnregisterSocket(this);
+
+        if (m_IOSocket != INVALID_SOCKET)
+        {
+            Service::NetSystem->CloseSocket(m_IOSocket);
+            m_IOSocket = INVALID_SOCKET;
+        }
+
 		AssertRel(m_IOStatus == IOStatus::None);
 		Assert(m_PendingSendCount == 0 && m_PendingRecvCount == 0);
 	}

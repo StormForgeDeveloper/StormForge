@@ -318,17 +318,13 @@ C++: Cast message to AcceptNotificationRes to access values
 ## NotifyS2CEvt
 Notify new notification
 
-        Result NotifyS2CEvt(const uint32_t &InNotificationID, const uint32_t &InNotificationType, const uint64_t &InMessageParam0, const uint64_t &InMessageParam1, const char* InMessageText, const uint8_t &InIsRead, const uint64_t &InTimeStamp)
+        Result NotifyS2CEvt(const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp)
 
-		- OutInNotificationID: uint32 type. Notification ID
+		- OutInNotificationID: uint32 type. Notification ID. Zero if it is an instant notification(not saved to db).
 
-		- OutInNotificationType: uint32 type. Notification type
+		- OutInNotificationType: StringCrc32 type. Notification type
 
-		- OutInMessageParam0: uint64 type. Message parameter 0
-
-		- OutInMessageParam1: uint64 type. Message parameter 1
-
-		- OutInMessageText: String type. Message text
+		- OutInParameters: VariableTable type. Message parameters
 
 		- OutInIsRead: uint8 type. Notification is read?
 

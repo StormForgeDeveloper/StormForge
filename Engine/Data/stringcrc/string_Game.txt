@@ -67,7 +67,7 @@
 "Notify"
 "NotifyS2CEvt"
 "NotificationType"
-"StringCrc"
+"StringCrc32"
 "Parameters"
 "VariableTable"
 "IsRead"
@@ -292,6 +292,5 @@
 "CallFunctionCmd"
 "CallFunctionRes"
 "FunctionName"
-"StringCrc32"
 
 

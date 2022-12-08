@@ -106,8 +106,8 @@ namespace SF {
 	{
 		char temp[128];
 		ToStringContext context;
-		context.StringBuffer = temp;
-		context.StringBufferLength = sizeof(temp);
+		context.OutStream.pBuffer = temp;
+		context.OutStream.BuffLen = sizeof(temp);
 		_IToA(context, number);
 
 		return Append(temp);
@@ -117,8 +117,8 @@ namespace SF {
 	{
 		char temp[128];
 		ToStringContext context;
-		context.StringBuffer = temp;
-		context.StringBufferLength = sizeof(temp);
+		context.OutStream.pBuffer = temp;
+		context.OutStream.BuffLen = sizeof(temp);
 		_IToA(context, number);
 
 		return Append(temp);
@@ -128,8 +128,8 @@ namespace SF {
 	{
 		char temp[128];
 		ToStringContext context;
-		context.StringBuffer = temp;
-		context.StringBufferLength = sizeof(temp);
+		context.OutStream.pBuffer = temp;
+		context.OutStream.BuffLen = sizeof(temp);
 		_FToA(context, number);
 
 		return Append(temp);
@@ -139,8 +139,8 @@ namespace SF {
 	{
 		char temp[128];
 		ToStringContext context;
-		context.StringBuffer = temp;
-		context.StringBufferLength = sizeof(temp);
+		context.OutStream.pBuffer = temp;
+		context.OutStream.BuffLen = sizeof(temp);
 		_FToA(context, number);
 
 		return Append(temp);

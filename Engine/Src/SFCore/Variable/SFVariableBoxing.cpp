@@ -220,9 +220,9 @@ namespace SF
 	Result _ToString(ToStringContext& context, const char* value)
 	{
 		if (value != nullptr)
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, value);
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, value);
 		else
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(Null)");
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(Null)");
 	}
 
 	Result _ToString(ToStringContext& context, const wchar_t* value)
@@ -235,16 +235,16 @@ namespace SF
 			if (!StrUtil::WCSToUTF8(value, destBuff))
 				return ResultCode::FAIL;
 
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, destBuff);
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, destBuff);
 		}
 		else
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(Null)");
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(Null)");
 	}
 
 	Result _ToString(ToStringContext& context, const std::string& value)
 	{
 		if (value.length() > 0)
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, value.c_str());
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, value.c_str());
 		else
 			return ResultCode::SUCCESS;
 	}
@@ -253,7 +253,7 @@ namespace SF
 	{
 		auto pStr = Service::StringDB->GetString(value);
 		if (pStr != nullptr)
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, pStr);
 		else
 		{
 			auto oldRadix = context.Radix;
@@ -268,7 +268,7 @@ namespace SF
 	{
 		auto pStr = Service::StringDB->GetString(value);
 		if (pStr != nullptr)
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, pStr);
 		else
 		{
 			auto oldRadix = context.Radix;
@@ -282,7 +282,7 @@ namespace SF
 	Result _ToString(ToStringContext& context, const Result& value)
 	{
 		auto pStr = value.ToString();
-		return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, pStr);
 	}
 
 

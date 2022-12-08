@@ -28,7 +28,7 @@ namespace SF {
         if (!_IToA(context, (int)value.Platform))
             return ResultCode::FAIL;
 
-        if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":"))
+        if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":"))
             return ResultCode::FAIL;
 
         if (!_IToA(context, value.PlayerID))

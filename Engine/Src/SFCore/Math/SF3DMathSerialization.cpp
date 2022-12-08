@@ -31,27 +31,27 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const Vector4& value)
 	{
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "("))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "("))
 			return ResultCode::FAIL;
 
 		if (!_FToA(context, value.x))
 			return ResultCode::FAIL;
 
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ","))
 			return ResultCode::FAIL;
 
 		if (!_FToA(context, value.y))
 			return ResultCode::FAIL;
 
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ","))
 			return ResultCode::FAIL;
 
 		if (!_FToA(context, value.z))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ")"))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;
@@ -71,27 +71,27 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const Vector3& value)
 	{
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "("))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "("))
 			return ResultCode::FAIL;
 
 		if (!_FToA(context, value.x))
 			return ResultCode::FAIL;
 
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ","))
 			return ResultCode::FAIL;
 
 		if (!_FToA(context, value.y))
 			return ResultCode::FAIL;
 
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ","))
 			return ResultCode::FAIL;
 
 		if (!_FToA(context, value.z))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ")"))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;
@@ -116,27 +116,27 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const Vector3i& value)
 	{
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "("))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "("))
 			return ResultCode::FAIL;
 
 		if (!_IToA(context, value.x))
 			return ResultCode::FAIL;
 
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ","))
 			return ResultCode::FAIL;
 
 		if (!_IToA(context, value.y))
 			return ResultCode::FAIL;
 
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ","))
 			return ResultCode::FAIL;
 
 		if (!_IToA(context, value.z))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ")"))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;
@@ -158,19 +158,19 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const Vector2i& value)
 	{
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "("))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "("))
 			return ResultCode::FAIL;
 
 		if (!_IToA(context, value.x))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ","))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ","))
 			return ResultCode::FAIL;
 
 		if (!_IToA(context, value.y))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ")"))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;

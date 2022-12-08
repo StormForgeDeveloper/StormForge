@@ -38,8 +38,8 @@ namespace SF
 			ToStringContext context{};
 			context.Radix = 16;
 			context.MaxDigit = 0;
-			context.StringBuffer = strBuffer;
-			context.StringBufferLength = (int)countof(strBuffer);
+			context.OutStream.pBuffer = strBuffer;
+			context.OutStream.BuffLen = (int)countof(strBuffer);
 			_IToA(context, (uint32_t)m_Crc);
 			return strBuffer;
 		}
@@ -57,8 +57,8 @@ namespace SF
 			ToStringContext context{};
 			context.Radix = 16;
 			context.MaxDigit = 0;
-			context.StringBuffer = strBuffer;
-			context.StringBufferLength = (int)countof(strBuffer);
+			context.OutStream.pBuffer = strBuffer;
+			context.OutStream.BuffLen = (int)countof(strBuffer);
 			_IToA(context, (uint64_t)m_Hash);
 			return strBuffer;
 		}

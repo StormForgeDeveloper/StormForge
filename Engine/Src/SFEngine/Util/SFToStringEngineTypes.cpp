@@ -39,16 +39,16 @@ namespace SF {
 		if (!(_IToA(context, value.PlayerID)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
 		if (!(_ToString(context, value.PlayerPlatformId)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, (const char*)value.NickName)))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, (const char*)value.NickName)))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;
@@ -59,13 +59,13 @@ namespace SF {
 		if (!(_ToString(context, (PlayerInformation&)value)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, value.WeeklyWin)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, value.WeeklyLose)))
@@ -90,22 +90,22 @@ namespace SF {
 		if (!(_IToA(context, value.RankingID)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, value.PlayerID)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
 		if (!(_ToString(context, value.PlayerPlatformId)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, (const char*)value.NickName)))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, (const char*)value.NickName)))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;
@@ -114,20 +114,20 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const MatchingQueueTicket& value)
 	{
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "("))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "("))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, value.QueueUID)))
 			return ResultCode::FAIL;
 
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":"))
 			return ResultCode::FAIL;
 
 		if (!_IToA(context, value.QueueItemID))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ")"))
 			return ResultCode::FAIL;
 
 
@@ -148,7 +148,7 @@ namespace SF {
 		if (!(_IToA(context, value.EndpointID)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, value.RelayPlayerID)))
@@ -160,19 +160,19 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const RouteContext& Data)
 	{
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(")))
 			return ResultCode::FAIL;
 
 		if (!(_ToString(context, Data.Components.From)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
 		if (!(_ToString(context, Data.Components.To)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ")")))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;

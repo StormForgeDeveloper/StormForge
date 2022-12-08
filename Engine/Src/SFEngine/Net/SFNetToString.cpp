@@ -30,11 +30,11 @@ namespace SF {
 		switch (value)
 		{
 		case SocketType::Stream:
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Stream");
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "Stream");
 		case SocketType::DataGram:
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "DataGram");
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "DataGram");
 		default:
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(Invalid)");
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(Invalid)");
 		}
 	}
 
@@ -46,13 +46,13 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const Net::PeerInfo& value)
 	{
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Local:"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "Local:"))
 			return ResultCode::FAIL;
 
 		if (!_IToA(context, value.PeerID))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "Remote:")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "Remote:")))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, value.PeerID)))
@@ -71,19 +71,19 @@ namespace SF {
 
 	Result _ToString(ToStringContext& context, const Message::MessageID& value)
 	{
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(")))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, value.IDs.Policy)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":")))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, value.IDs.MsgCode)))
 			return ResultCode::FAIL;
 
-		if (!(StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")")))
+		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ")")))
 			return ResultCode::FAIL;
 
 		if (!(_IToA(context, value.ID)))

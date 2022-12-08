@@ -24,7 +24,7 @@ namespace SF
 
 	Result _ToString(ToStringContext& context, const VariableBLOB& Data)
 	{
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "bin:"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "bin:"))
 			return ResultCode::FAIL;
 
 		if (!_IToA(context, Data.GetValueBLOB().size()))
@@ -44,7 +44,7 @@ namespace SF
 	Result VariableBool::ToString(ToStringContext& context) const
 	{
 		const String& valueString = m_Value ? String_True : String_False;;
-		return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, (const char*)valueString);
+		return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, (const char*)valueString);
 	}
 
 	Variable* VariableBool::Clone(Array<uint8_t>& buffer) const
@@ -100,13 +100,13 @@ namespace SF
 		String result;
 		result.Reserve(bufferSize);
 		ToStringContext context{};
-		context.StringBuffer = result.data();
-		context.StringBufferLength = bufferSize;
+		context.OutStream.pBuffer = result.data();
+		context.OutStream.BuffLen = bufferSize;
 		context.MaxDigit = 0;
 
 		ToString(context);
 
-		result.Resize(bufferSize - context.StringBufferLength);
+		result.Resize(bufferSize - context.OutStream.BuffLen);
 
 		return result;
 	}
@@ -183,8 +183,8 @@ namespace SF
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
+		context.OutStream.pBuffer = renderBuffer;
+		context.OutStream.BuffLen = sizeof(renderBuffer);
 
 		ToString(context);
 
@@ -267,8 +267,8 @@ namespace SF
 		char renderBuffer[128] = "";
 		ToStringContext context;
 		context.MaxDigit = -1;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
+		context.OutStream.pBuffer = renderBuffer;
+		context.OutStream.BuffLen = sizeof(renderBuffer);
 
 		ToString(context);
 		return String(renderBuffer);
@@ -310,7 +310,7 @@ namespace SF
 	Result VariableResult::ToString(ToStringContext& context) const
 	{
 		auto pStr = m_Value.ToString();
-		return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, pStr);
 	}
 
 	Variable* VariableResult::Clone(Array<uint8_t>& buffer) const
@@ -383,8 +383,8 @@ namespace SF
 	{
 		//char renderBuffer[128] = "";
 		//ToStringContext context;
-		//context.StringBuffer = renderBuffer;
-		//context.StringBufferLength = sizeof(renderBuffer);
+		//context.OutStream.pBuffer = renderBuffer;
+		//context.OutStream.BuffLen = sizeof(renderBuffer);
 
 		//ToString(context);
 
@@ -396,8 +396,8 @@ namespace SF
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
+		context.OutStream.pBuffer = renderBuffer;
+		context.OutStream.BuffLen = sizeof(renderBuffer);
 
 		ToString(context);
 
@@ -480,8 +480,8 @@ namespace SF
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
+		context.OutStream.pBuffer = renderBuffer;
+		context.OutStream.BuffLen = sizeof(renderBuffer);
 
 		ToString(context);
 		return String(renderBuffer);
@@ -553,8 +553,8 @@ namespace SF
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
+		context.OutStream.pBuffer = renderBuffer;
+		context.OutStream.BuffLen = sizeof(renderBuffer);
 
 		ToString(context);
 		return StringCrc64(renderBuffer);
@@ -564,8 +564,8 @@ namespace SF
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
+		context.OutStream.pBuffer = renderBuffer;
+		context.OutStream.BuffLen = sizeof(renderBuffer);
 
 		ToString(context);
 		return String(renderBuffer);
@@ -642,8 +642,8 @@ namespace SF
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
+		context.OutStream.pBuffer = renderBuffer;
+		context.OutStream.BuffLen = sizeof(renderBuffer);
 
 		ToString(context);
 		return StringCrc64(renderBuffer);
@@ -653,8 +653,8 @@ namespace SF
 	{
 		char renderBuffer[128] = "";
 		ToStringContext context;
-		context.StringBuffer = renderBuffer;
-		context.StringBufferLength = sizeof(renderBuffer);
+		context.OutStream.pBuffer = renderBuffer;
+		context.OutStream.BuffLen = sizeof(renderBuffer);
 
 		ToString(context);
 		return String(renderBuffer);
@@ -796,9 +796,9 @@ namespace SF
 	Result VariableCharString::ToString(ToStringContext& context) const
 	{
 		if(m_Value != nullptr)
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, m_Value);
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, m_Value);
 		else
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(null)");
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(null)");
 	}
 
 	Variable* VariableCharString::Clone(Array<uint8_t>& buffer) const
@@ -835,10 +835,10 @@ namespace SF
 			if (!StrUtil::WCSToUTF8(m_Value, destBuff))
 				return ResultCode::FAIL;
 
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, destBuff);
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, destBuff);
 		}
 		else
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(null)");
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(null)");
 	}
 
 	Variable* VariableWCharString::Clone(Array<uint8_t>& buffer) const
@@ -1019,9 +1019,9 @@ namespace SF
 	Result VariableString::ToString(ToStringContext& context) const
 	{
 		if (m_Value.GetLength() != 0)
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, (const char*)m_Value);
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, (const char*)m_Value);
 		else
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(null)");
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(null)");
 	}
 
 
@@ -1236,10 +1236,10 @@ namespace SF
 		if (m_Value.GetLength() != 0)
 		{
 			StrUtil::WCSToUTF8(m_Value.data(), ConvertBuffer);
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ConvertBuffer);
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ConvertBuffer);
 		}
 		else
-			return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(null)");
+			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(null)");
 	}
 
 
@@ -1336,7 +1336,7 @@ namespace SF
 		return _ToString(context, m_Value);
 		//auto pStr = Service::StringDB->GetString(m_Value);
 		//if (pStr != nullptr)
-		//	return StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, pStr);
+		//	return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, pStr);
 		//else
 		//{
 		//	auto oldRadix = context.Radix;
@@ -1378,17 +1378,17 @@ namespace SF
 
 	Result VariableBLOB::ToString(ToStringContext& context) const
 	{
-		StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(");
+		StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(");
 		_ToString(context, m_Value.size());
 
-		StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ":");
+		StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ":");
 
 		StaticArray<uint8_t, 64> outputData;
 		Util::HEXEncode(Math::Min<size_t>(m_Value.size(), 8), m_Value.data(), outputData, '-');
 		outputData.push_back(')');
 		outputData.push_back('\0');
 
-		StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, (const char*)outputData.data());
+		StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, (const char*)outputData.data());
 
 		return ResultCode::SUCCESS;
 	}

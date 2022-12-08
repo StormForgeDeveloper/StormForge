@@ -180,12 +180,16 @@ namespace SF
     };
 
     [Struct]
-    [StructLayout(LayoutKind.Sequential)]
+    [StructLayout(LayoutKind.Explicit, Size = 9)]
     public struct PlayerPlatformID
     {
-        public UInt32 PlatformData;
-        public UInt64 PlayerID;
-        public Platform Platform => (Platform)(PlatformData);
+        [FieldOffset(0)] public UInt64 PlayerID;
+        [FieldOffset(8)] public byte PlatformData;
+        public Platform Platform
+        {
+            get => (Platform)(PlatformData);
+            set => PlatformData = (UInt32)value;
+        }
     }
 
 

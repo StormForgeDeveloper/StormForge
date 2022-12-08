@@ -102,13 +102,13 @@ namespace SF
 
 	Result _ToString(ToStringContext& context, const ActorMovement& value)
 	{
-        if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(ActID:"))
+        if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(ActID:"))
             return ResultCode::FAIL;
 
         if (!_ToString(context, value.ActorId))
             return ResultCode::FAIL;
 
-        if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ",F:"))
+        if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ",F:"))
 			return ResultCode::FAIL;
 
 		auto oldRadis = context.Radix;
@@ -117,31 +117,31 @@ namespace SF
 			return ResultCode::FAIL;
 		context.Radix = oldRadis;
 		
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ",P:"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ",P:"))
 			return ResultCode::FAIL;
 
 		if (!_ToString(context, value.Position))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ",V:"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ",V:"))
 			return ResultCode::FAIL;
 
 		if (!_ToString(context, value.LinearVelocity))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ",A:"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ",A:"))
 			return ResultCode::FAIL;
 
 		if (!_ToString(context, value.AngularYaw))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ",S:"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ",S:"))
 			return ResultCode::FAIL;
 
 		if (!_ToString(context, value.MovementState))
 			return ResultCode::FAIL;
 
-		if (!StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, ")"))
+		if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ")"))
 			return ResultCode::FAIL;
 
 		return ResultCode::SUCCESS;

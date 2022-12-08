@@ -1369,10 +1369,10 @@ namespace SF
 				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint32_t m_NotificationID{};
-				uint32_t m_NotificationType{};
-				uint64_t m_MessageParam0{};
-				uint64_t m_MessageParam1{};
-				const char* m_MessageText{};
+				StringCrc32 m_NotificationType{};
+				ArrayView<uint8_t> m_ParametersRaw;
+				mutable bool m_ParametersHasParsed = false;
+				mutable VariableTable m_Parameters;
 				uint8_t m_IsRead{};
 				uint64_t m_TimeStamp{};
 			public:
@@ -1386,10 +1386,9 @@ namespace SF
 					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint32_t& GetNotificationID() const	{ return m_NotificationID; };
-				const uint32_t& GetNotificationType() const	{ return m_NotificationType; };
-				const uint64_t& GetMessageParam0() const	{ return m_MessageParam0; };
-				const uint64_t& GetMessageParam1() const	{ return m_MessageParam1; };
-				const char* GetMessageText() const	{ return m_MessageText; };
+				const StringCrc32& GetNotificationType() const	{ return m_NotificationType; };
+				const Array<uint8_t>& GetParametersRaw() const	{ return m_ParametersRaw; };
+				const VariableTable& GetParameters() const;
 				const uint8_t& GetIsRead() const	{ return m_IsRead; };
 				const uint64_t& GetTimeStamp() const	{ return m_TimeStamp; };
 
@@ -1399,7 +1398,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint32_t &InNotificationID, const uint32_t &InNotificationType, const uint64_t &InMessageParam0, const uint64_t &InMessageParam1, const char* InMessageText, const uint8_t &InIsRead, const uint64_t &InTimeStamp );
+				static MessageData* Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp );
+				static MessageData* Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp );
 
 			}; // class NotifyS2CEvt : public MessageBase
 

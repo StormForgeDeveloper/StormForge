@@ -1,4 +1,4 @@
-﻿
+
 
 
 set(SUBCOMPONENT_FILES
@@ -169,6 +169,7 @@ set(SUBUtil_FILES
 	Util/SFString.cpp
 	Util/SFStrParserUtil.cpp
 	Util/SFStrUtil.cpp
+    Util/SFStrUtil2.cpp
 	Util/SFToString.cpp
 	Util/SFToStringBase.cpp
 	Util/SFCodecHex.cpp

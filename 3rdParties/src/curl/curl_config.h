@@ -19,7 +19,6 @@
 #define OS "Linux"
 #endif
 
-
 /* ---------------------------------------------------------------- */
 /*                            TYPE SIZES                            */
 /* ---------------------------------------------------------------- */
@@ -169,8 +168,8 @@
 #define HAVE_STDBOOL_H 1
 #endif
 
-#undef USE_OPENSSL
-#define USE_MBEDTLS
+#define USE_OPENSSL
+//#define USE_MBEDTLS
 
 /* Define if you have the `CRYPTO_cleanup_all_ex_data' function.
 This is present in OpenSSL versions after 0.9.6b */
@@ -217,11 +216,11 @@ This is present in OpenSSL versions after 0.9.6b */
 #define GETNAMEINFO_TYPE_ARG7 int
 
 #define HAVE_RECV 1
-#define RECV_TYPE_ARG1 int
-#define RECV_TYPE_ARG2 void *
-#define RECV_TYPE_ARG3 size_t
-#define RECV_TYPE_ARG4 int
-#define RECV_TYPE_RETV ssize_t
+//#define RECV_TYPE_ARG1 int
+//#define RECV_TYPE_ARG2 void *
+//#define RECV_TYPE_ARG3 size_t
+//#define RECV_TYPE_ARG4 int
+//#define RECV_TYPE_RETV ssize_t
 
 #define HAVE_RECVFROM 1
 #define RECVFROM_TYPE_ARG1 int
@@ -234,12 +233,12 @@ This is present in OpenSSL versions after 0.9.6b */
 #define RECVFROM_TYPE_ARG2_IS_VOID 1
 
 #define HAVE_SEND 1
-#define SEND_TYPE_ARG1 int
-#define SEND_QUAL_ARG2 const
-#define SEND_TYPE_ARG2 void *
-#define SEND_TYPE_ARG3 size_t
-#define SEND_TYPE_ARG4 int
-#define SEND_TYPE_RETV ssize_t
+//#define SEND_TYPE_ARG1 int
+//#define SEND_QUAL_ARG2 const
+//#define SEND_TYPE_ARG2 void *
+//#define SEND_TYPE_ARG3 size_t
+//#define SEND_TYPE_ARG4 int
+//#define SEND_TYPE_RETV ssize_t
 
 //#define HAVE_EXTRA_STRICMP_H 1
 //#define HAVE_EXTRA_STRDUP_H  1

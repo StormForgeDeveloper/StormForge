@@ -1084,15 +1084,17 @@ namespace SF.Net
 
 
 		// S2C: Notify new notification
-		public int  NotifyS2CEvt( System.UInt32 InNotificationID, System.UInt32 InNotificationType, System.UInt64 InMessageParam0, System.UInt64 InMessageParam1, System.String InMessageText, System.Byte InIsRead, System.UInt64 InTimeStamp )
+		public int  NotifyS2CEvt( System.UInt32 InNotificationID, System.UInt32 InNotificationType, SF.VariableTable InParameters, System.Byte InIsRead, System.UInt64 InTimeStamp )
 		{
  			int result;
+			var InParameters_ = InParameters.ToByteArray();
+			using (var InParameters_PinnedPtr_ = new PinnedByteBuffer(InParameters_))
 			{
-			result = CSSFNetAdapter_GameNotifyS2CEvt(m_Connection.NativeHandle, InNotificationID, InNotificationType, InMessageParam0, InMessageParam1,System.Text.Encoding.UTF8.GetBytes(InMessageText + "\0"), InIsRead, InTimeStamp);
+			result = CSSFNetAdapter_GameNotifyS2CEvt(m_Connection.NativeHandle, InNotificationID, InNotificationType,(ushort)InParameters_.Length, InParameters_PinnedPtr_.Ptr, InIsRead, InTimeStamp);
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDGame.NotifyS2CEvt);
 			return result;
-		} // public int  NotifyS2CEvt( System.UInt32 InNotificationID, System.UInt32 InNotificationType, System.UInt64 InMessageParam0, System.UInt64 InMessageParam1, System.String InMessageText, System.Byte InIsRead, System.UInt64 InTimeStamp )
+		} // public int  NotifyS2CEvt( System.UInt32 InNotificationID, System.UInt32 InNotificationType, SF.VariableTable InParameters, System.Byte InIsRead, System.UInt64 InTimeStamp )
 
 
 		// Cmd: PlayerId Conversion
@@ -1906,7 +1908,7 @@ namespace SF.Net
 
 		// S2C: Notify new notification
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_GameNotifyS2CEvt", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_GameNotifyS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InNotificationID, System.UInt32 InNotificationType, System.UInt64 InMessageParam0, System.UInt64 InMessageParam1, [MarshalAs(UnmanagedType.LPArray)] byte[] InMessageText, System.Byte InIsRead, System.UInt64 InTimeStamp );
+		static extern int CSSFNetAdapter_GameNotifyS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InNotificationID, System.UInt32 InNotificationType, System.UInt16 _sizeOfInParameters,IntPtr InParameters, System.Byte InIsRead, System.UInt64 InTimeStamp );
 
 
 

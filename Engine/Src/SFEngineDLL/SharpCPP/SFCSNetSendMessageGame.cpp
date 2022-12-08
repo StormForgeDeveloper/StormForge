@@ -842,15 +842,15 @@ SFDLL_EXPORT int  CSSFNetAdapter_GameAcceptNotificationRes( intptr_t InNativeCon
 
 
 // S2C: Notify new notification
-SFDLL_EXPORT int  CSSFNetAdapter_GameNotifyS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InNotificationID, uint32_t InNotificationType, uint64_t InMessageParam0, uint64_t InMessageParam1, const char* InMessageText, uint8_t InIsRead, uint64_t InTimeStamp )
+SFDLL_EXPORT int  CSSFNetAdapter_GameNotifyS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InNotificationID, StringCrc32 InNotificationType, uint16_t _sizeOfInParameters,uint8_t* InParameters, uint8_t InIsRead, uint64_t InTimeStamp )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Game::NotifyS2CEvt::Create(pConnection->GetHeap(), InNotificationID, InNotificationType, InMessageParam0, InMessageParam1,InMessageText, InIsRead, InTimeStamp);
+	MessageDataPtr pMessage = SF::Message::Game::NotifyS2CEvt::Create(pConnection->GetHeap(), InNotificationID, InNotificationType,SF::ArrayView<uint8_t>(_sizeOfInParameters, _sizeOfInParameters, InParameters), InIsRead, InTimeStamp);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_GameNotifyS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InNotificationID, uint32_t InNotificationType, uint64_t InMessageParam0, uint64_t InMessageParam1, const char* InMessageText, uint8_t InIsRead, uint64_t InTimeStamp )
+} // SFDLL_EXPORT int  CSSFNetAdapter_GameNotifyS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InNotificationID, StringCrc32 InNotificationType, uint16_t _sizeOfInParameters,uint8_t* InParameters, uint8_t InIsRead, uint64_t InTimeStamp )
 
 
 

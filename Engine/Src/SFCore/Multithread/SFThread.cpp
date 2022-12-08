@@ -186,7 +186,7 @@ namespace SF {
 		sch_params.sched_priority = ThreadSchedulingTable[(int)priority].Priority;
 		if (pthread_setschedparam(native_handle(), ThreadSchedulingTable[(int)priority].Policy, &sch_params))
 		{
-			std::cerr << "Failed to set Thread scheduling : " << errno << std::endl;
+			std::cerr << "Failed to set Thread scheduling, errno:" << errno << std::endl;
 			//assert(false);
 		}
 

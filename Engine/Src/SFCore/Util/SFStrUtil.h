@@ -68,6 +68,8 @@ namespace StrUtil
 	template<int iBuffLen>
 	inline Result StringCopy( wchar_t (&wszDest)[iBuffLen], const wchar_t *wszSrc );
 
+    template<class CharTypeFrom, class CharTypeTo>
+    size_t StringConvert(CharTypeTo* strDest, int iDestSizeInChar, const CharTypeFrom* strSrc);
 
 	//// Unicode to MBCS string conversion
 	//Result WCSToMBCS( const wchar_t* strWCS, char *strMBCS, int iBuffLen );
@@ -301,8 +303,42 @@ namespace StrUtil
 	extern const char* EmptyString;
 
 
+
+
+    template<>
+    SF_FORCEINLINE size_t StringConvert(char* strDest, int iDestSizeInChar, const char* strSrc)
+    {
+        int OrgSize = iDestSizeInChar;
+        StringCopyEx(strDest, iDestSizeInChar, strSrc);
+        return size_t(OrgSize - iDestSizeInChar);
+    }
+
+    template<>
+    SF_FORCEINLINE size_t StringConvert(wchar_t* strDest, int iDestSizeInChar, const wchar_t* strSrc)
+    {
+        int OrgSize = iDestSizeInChar;
+        StringCopyEx(strDest, iDestSizeInChar, strSrc);
+        return size_t(OrgSize - iDestSizeInChar);
+    }
+
+    template<>
+    SF_FORCEINLINE size_t StringConvert(char* strDest, int iDestSizeInChar, const wchar_t* strSrc)
+    {
+        return WCSToUTF8(strSrc, strDest, iDestSizeInChar);
+    }
+
+    template<>
+    SF_FORCEINLINE size_t StringConvert(wchar_t* strDest, int iDestSizeInChar, const char* strSrc)
+    {
+        return UTF8ToWCS(strSrc, strDest, iDestSizeInChar);
+    }
+
+
 } // namespace StrUtil
 } // namespace SF
+
+
+
 
 #include "SFStrUtil.inl"
 

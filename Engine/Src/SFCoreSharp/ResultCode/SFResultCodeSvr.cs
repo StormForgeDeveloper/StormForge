@@ -146,17 +146,20 @@ namespace SF {
 		// No Connection is available now. 
 		public const int SVR_CURL_NO_CONNECTION_AVAILABLE =                 unchecked((int)0xE712002B); 
 
+		// SSL error 
+		public const int SVR_CURLE_SSL_CONNECT_ERROR =                      unchecked((int)0xE712002C); 
+
 		// Invalid state transition 
-		public const int SVR_INVALID_STATE =                                unchecked((int)0xE712002C); 
+		public const int SVR_INVALID_STATE =                                unchecked((int)0xE712002D); 
 
 		// Invalid purchase environment(public/test) 
-		public const int SVR_INVALID_PURCHASE_MODE =                        unchecked((int)0xE712002D); 
+		public const int SVR_INVALID_PURCHASE_MODE =                        unchecked((int)0xE712002E); 
 
 		// Invalid Task group ID 
-		public const int SVR_INVALID_TASK_GROUPID =                         unchecked((int)0xE712002E); 
+		public const int SVR_INVALID_TASK_GROUPID =                         unchecked((int)0xE712002F); 
 
 		// The user's login token is invlaid 
-		public const int SVR_INVALID_1STPARTY_LOGIN =                       unchecked((int)0xE712002F); 
+		public const int SVR_INVALID_1STPARTY_LOGIN =                       unchecked((int)0xE7120030); 
 
 	}
 }

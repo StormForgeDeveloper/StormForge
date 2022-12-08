@@ -143,7 +143,7 @@
 
 		<S2CEvent Name="Notify" Reliable="true" Crypto="No" Trace="Debug1" Desc="Notify new notification">
 			<Params TypeName="uint32" Name="NotificationID" Desc="Notification ID. Zero if it is an instant notification(not saved to db)."/>
-			<Params TypeName="StringCrc" Name="NotificationType" Desc="Notification type"/>
+			<Params TypeName="StringCrc32" Name="NotificationType" Desc="Notification type"/>
 			<Params TypeName="VariableTable" Name="Parameters" Desc="Message parameters"/>
 			<Params TypeName="uint8" Name="IsRead" Desc="Notification is read?"/>
 			<Params TypeName="uint64" Name="TimeStamp" Desc="Issued UTC sec"/>

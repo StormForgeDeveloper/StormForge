@@ -130,13 +130,13 @@ namespace SF {
 			bIsNeg = true;
 		}
 
-		return _MyIToA( val, context.StringBuffer, context.StringBufferLength, context.Radix, bIsNeg, context.MaxDigit);
+		return _MyIToA( val, context.OutStream.pBuffer, context.OutStream.BuffLen, context.Radix, bIsNeg, context.MaxDigit);
 	}
 
 	Result _IToA(ToStringContext& context, uint8_t val)
 	{
 		bool bIsNeg = false;
-		return _MyIToA( val, context.StringBuffer, context.StringBufferLength, context.Radix, bIsNeg, context.MaxDigit);
+		return _MyIToA( val, context.OutStream.pBuffer, context.OutStream.BuffLen, context.Radix, bIsNeg, context.MaxDigit);
 	}
 
 	Result _IToA(ToStringContext& context, int16_t val)
@@ -148,13 +148,13 @@ namespace SF {
 			bIsNeg = true;
 		}
 
-		return _MyIToA( val, context.StringBuffer, context.StringBufferLength, context.Radix, bIsNeg, context.MaxDigit);
+		return _MyIToA( val, context.OutStream.pBuffer, context.OutStream.BuffLen, context.Radix, bIsNeg, context.MaxDigit);
 	}
 
 	Result _IToA(ToStringContext& context, uint16_t val)
 	{
 		bool bIsNeg = false;
-		return _MyIToA( val, context.StringBuffer, context.StringBufferLength, context.Radix, bIsNeg, context.MaxDigit);
+		return _MyIToA( val, context.OutStream.pBuffer, context.OutStream.BuffLen, context.Radix, bIsNeg, context.MaxDigit);
 	}
 
 	Result _IToA(ToStringContext& context, int32_t val)
@@ -166,13 +166,13 @@ namespace SF {
 			bIsNeg = true;
 		}
 
-		return _MyIToA( (uint32_t)val, context.StringBuffer, context.StringBufferLength, context.Radix, bIsNeg, context.MaxDigit);
+		return _MyIToA( (uint32_t)val, context.OutStream.pBuffer, context.OutStream.BuffLen, context.Radix, bIsNeg, context.MaxDigit);
 	}
 
 	Result _IToA(ToStringContext& context, uint32_t val)
 	{
 		bool bIsNeg = false;
-		return _MyIToA( val, context.StringBuffer, context.StringBufferLength, context.Radix, bIsNeg, context.MaxDigit);
+		return _MyIToA( val, context.OutStream.pBuffer, context.OutStream.BuffLen, context.Radix, bIsNeg, context.MaxDigit);
 	}
 
 	Result _IToA(ToStringContext& context, int64_t val)
@@ -184,28 +184,28 @@ namespace SF {
 			bIsNeg = true;
 		}
 
-		return _MyIToA( val, context.StringBuffer, context.StringBufferLength, context.Radix, bIsNeg, context.MaxDigit);
+		return _MyIToA( val, context.OutStream.pBuffer, context.OutStream.BuffLen, context.Radix, bIsNeg, context.MaxDigit);
 	}
 
 	Result _IToA(ToStringContext& context, uint64_t val)
 	{
 		bool bIsNeg = false;
-		return _MyIToA( val, context.StringBuffer, context.StringBufferLength, context.Radix, bIsNeg, context.MaxDigit);
+		return _MyIToA( val, context.OutStream.pBuffer, context.OutStream.BuffLen, context.Radix, bIsNeg, context.MaxDigit);
 	}
 
 
 	Result _FToA(ToStringContext& context, double val)
 	{
-		auto resultLen = snprintf(context.StringBuffer, context.StringBufferLength, "%.4f", val);
-		if (resultLen > context.StringBufferLength) resultLen = context.StringBufferLength; // truncated, use original string
-		context.StringBuffer += resultLen;
-		context.StringBufferLength -= resultLen;
+		auto resultLen = snprintf(context.OutStream.pBuffer, context.OutStream.BuffLen, "%.4f", val);
+		if (resultLen > context.OutStream.BuffLen) resultLen = context.OutStream.BuffLen; // truncated, use original string
+		context.OutStream.pBuffer += resultLen;
+		context.OutStream.BuffLen -= resultLen;
 
 		// Null terminate
-		if(context.StringBufferLength > 0 )
-			*context.StringBuffer = '\0';
+		if(context.OutStream.BuffLen > 0 )
+			*context.OutStream.pBuffer = '\0';
 		else
-			*(context.StringBuffer -1) = '\0';
+			*(context.OutStream.pBuffer -1) = '\0';
 
 		return ResultCode::SUCCESS;
 	}

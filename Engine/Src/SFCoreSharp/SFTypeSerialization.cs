@@ -12,6 +12,7 @@
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 
@@ -393,20 +394,21 @@ namespace SF
                 (writer, value) =>
                 {
                     var item = (PlayerPlatformID)value;
-                    writer.Write(item.PlatformData);
                     writer.Write(item.PlayerID);
+                    writer.Write(item.PlatformData);
                 },
                 (reader) =>
                 {
                     var item = new PlayerPlatformID();
-                    item.PlatformData = reader.ReadUInt32();
                     item.PlayerID = reader.ReadUInt64();
+                    item.PlatformData = reader.ReadByte();
                     return item;
                 },
                 (ref IntPtr valuePtr) =>
                 {
                     var item = Marshal.PtrToStructure(valuePtr, typeof(PlayerPlatformID));
-                    valuePtr += Marshal.SizeOf<UInt32>() + Marshal.SizeOf<UInt64>();
+                    Debug.Assert(Marshal.SizeOf(item) == (Marshal.SizeOf<UInt64>() + Marshal.SizeOf<byte>()));
+                    valuePtr += Marshal.SizeOf<UInt64>() + Marshal.SizeOf<byte>();
                     return item;
                 }),
         };

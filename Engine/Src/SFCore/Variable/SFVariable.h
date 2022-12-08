@@ -299,7 +299,7 @@ namespace SF {
 		{
 			if (m_Value == nullptr)
 			{
-				StrUtil::StringCopyEx(context.StringBuffer, context.StringBufferLength, "(Null)");
+				StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(Null)");
 				return ResultCode::SUCCESS_FALSE;
 			}
 

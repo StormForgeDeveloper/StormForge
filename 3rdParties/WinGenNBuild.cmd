@@ -37,6 +37,8 @@ if not exist "Windows\RelWithDebInfo\lib\mysqlcppconn8.lib" (
 	cmd /c "cd %MYSQL_DIR% & download.cmd"
 )
 
+cmd /c "cd src\curl & download.cmd"
+
 rem Build main part
 cmd /c "call WinGenMain.cmd nopause"
 cmd /c "call WinBuildMain.cmd nopause"

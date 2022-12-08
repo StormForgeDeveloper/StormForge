@@ -2616,6 +2616,16 @@ namespace SF
 
 			// S2C: Notify new notification
 			const MessageID NotifyS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 16);
+			const VariableTable& NotifyS2CEvt::GetParameters() const
+			{
+ 				if (!m_ParametersHasParsed)
+				{
+ 					m_ParametersHasParsed = true;
+					InputMemoryStream Parameters_ReadStream(m_ParametersRaw);
+					*Parameters_ReadStream.ToInputStream() >> m_Parameters;
+				} // if (!m_ParametersHasParsed)
+				return m_Parameters;
+			} // const VariableTable& NotifyS2CEvt::GetParameters() const
 			Result NotifyS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2631,10 +2641,10 @@ namespace SF
 
 				protocolCheck(*input >> m_NotificationID);
 				protocolCheck(*input >> m_NotificationType);
-				protocolCheck(*input >> m_MessageParam0);
-				protocolCheck(*input >> m_MessageParam1);
 				protocolCheck(input->Read(ArrayLen));
-				protocolCheck(input->ReadLink(m_MessageText, ArrayLen));
+				uint8_t* ParametersPtr = nullptr;
+				protocolCheck(input->ReadLink(ParametersPtr, ArrayLen));
+				m_ParametersRaw.SetLinkedBuffer(ArrayLen, ParametersPtr);
 				protocolCheck(*input >> m_IsRead);
 				protocolCheck(*input >> m_TimeStamp);
 
@@ -2652,9 +2662,7 @@ namespace SF
 
 				variableBuilder.SetVariable("NotificationID", parser.GetNotificationID());
 				variableBuilder.SetVariable("NotificationType", parser.GetNotificationType());
-				variableBuilder.SetVariable("MessageParam0", parser.GetMessageParam0());
-				variableBuilder.SetVariable("MessageParam1", parser.GetMessageParam1());
-				variableBuilder.SetVariable("MessageText", parser.GetMessageText());
+				variableBuilder.SetVariableArray("Parameters", "VariableTable", parser.GetParametersRaw());
 				variableBuilder.SetVariable("IsRead", parser.GetIsRead());
 				variableBuilder.SetVariable("TimeStamp", parser.GetTimeStamp());
 
@@ -2673,8 +2681,7 @@ namespace SF
 
 			}; // Result NotifyS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
-
-			MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const uint32_t &InNotificationType, const uint64_t &InMessageParam0, const uint64_t &InMessageParam1, const char* InMessageText, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
+			MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -2687,12 +2694,11 @@ namespace SF
 					return pNewMsg;
 				});
 
+				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InNotificationID)
 					+ SerializedSizeOf(InNotificationType)
-					+ SerializedSizeOf(InMessageParam0)
-					+ SerializedSizeOf(InMessageParam1)
-					+ SerializedSizeOf(InMessageText)
+					+ serializedSizeOfInParameters
 					+ SerializedSizeOf(InIsRead)
 					+ SerializedSizeOf(InTimeStamp)
 				);
@@ -2705,21 +2711,58 @@ namespace SF
 
 				protocolCheck(*output << InNotificationID);
 				protocolCheck(*output << InNotificationType);
-				protocolCheck(*output << InMessageParam0);
-				protocolCheck(*output << InMessageParam1);
-				protocolCheck(*output << InMessageText);
+				protocolCheck(*output << InParameters);
 				protocolCheck(*output << InIsRead);
 				protocolCheck(*output << InTimeStamp);
 
 				return hr;
-			}; // MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const uint32_t &InNotificationType, const uint64_t &InMessageParam0, const uint64_t &InMessageParam1, const char* InMessageText, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
+			}; // MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
+
+			MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
+				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+					+ SerializedSizeOf(InNotificationID)
+					+ SerializedSizeOf(InNotificationType)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInParameters
+					+ SerializedSizeOf(InIsRead)
+					+ SerializedSizeOf(InTimeStamp)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::NotifyS2CEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InNotificationID);
+				protocolCheck(*output << InNotificationType);
+				protocolCheck(output->Write(serializedSizeOfInParameters));
+				protocolCheck(*output << InParameters);
+				protocolCheck(*output << InIsRead);
+				protocolCheck(*output << InTimeStamp);
+
+				return hr;
+			}; // MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 
 			Result NotifyS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				NotifyS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Notify:{0}:{1} , NotificationID:{2}, NotificationType:{3}, MessageParam0:{4}, MessageParam1:{5}, MessageText:{6,60}, IsRead:{7}, TimeStamp:{8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetNotificationID(), parser.GetNotificationType(), parser.GetMessageParam0(), parser.GetMessageParam1(), parser.GetMessageText(), parser.GetIsRead(), parser.GetTimeStamp()); 
+				SFLog(Net, Debug1, "Notify:{0}:{1} , NotificationID:{2}, NotificationType:{3}, Parameters:{4}, IsRead:{5}, TimeStamp:{6}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetNotificationID(), parser.GetNotificationType(), parser.GetParameters(), parser.GetIsRead(), parser.GetTimeStamp()); 
 				return ResultCode::SUCCESS;
 			}; // Result NotifyS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

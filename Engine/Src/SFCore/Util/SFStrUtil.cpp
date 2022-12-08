@@ -31,6 +31,8 @@
 namespace SF {
 namespace StrUtil {
 
+    /*
+
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	String formating helper
@@ -236,22 +238,22 @@ namespace StrUtil {
 
 					if (pBuffer != nullptr)
 					{
-						context.StringBuffer = pBuffer;
-						context.StringBufferLength = iBuffLen;
+						context.OutStream.pBuffer = pBuffer;
+						context.OutStream.BuffLen = iBuffLen;
 
 						pArg->ToString(context);
 
-						pBuffer = context.StringBuffer;
-						iBuffLen = context.StringBufferLength;
+						pBuffer = context.OutStream.pBuffer;
+						iBuffLen = context.OutStream.BuffLen;
 					}
 					else
 					{
-						context.StringBuffer = tempBuffer;
-						context.StringBufferLength = (int)tempBufferSize;
+						context.OutStream.pBuffer = tempBuffer;
+						context.OutStream.BuffLen = (int)tempBufferSize;
 
 						pArg->ToString(context);
 
-						int usedSize = ((int)tempBufferSize - context.StringBufferLength);
+						int usedSize = ((int)tempBufferSize - context.OutStream.BuffLen);
 						assert(usedSize >= 0);
 						iBuffLen -= usedSize;
 					}
@@ -387,12 +389,12 @@ namespace StrUtil {
 
 					auto pArg = Args[iArg].GetVariable();
 
-					context.StringBuffer = tempBuffer;
-					context.StringBufferLength = (int)sizeof(tempBuffer);
+					context.OutStream.pBuffer = tempBuffer;
+					context.OutStream.BuffLen = (int)sizeof(tempBuffer);
 
 					pArg->ToString(context);
 
-					int usedSize = ((int)sizeof(tempBuffer) - context.StringBufferLength);
+					int usedSize = ((int)sizeof(tempBuffer) - context.OutStream.BuffLen);
 					assert(usedSize >= 0);
 					if (pBuffer == nullptr)
 					{
@@ -1062,6 +1064,7 @@ namespace StrUtil {
 		return -1;
 	}
 
+*/
 
 } // namespace StrUtil
 } // namespace SF

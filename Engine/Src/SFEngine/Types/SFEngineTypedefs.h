@@ -50,17 +50,18 @@ namespace SF {
 
 
 
-    enum class EPlatform : uint32_t
+    enum class EPlatform : uint8_t
     {
         BR,         // Braves player Id
         Steam,      // Steam player Id
         Facebook,   // Facebook
     };
 
+#pragma pack(push, 1)
     struct PlayerPlatformID
     {
-        EPlatform Platform{};
         uint64_t PlayerID{};
+        EPlatform Platform{};
 
         PlayerPlatformID() = default;
         PlayerPlatformID(EPlatform platform, uint64_t playerId)
@@ -69,6 +70,7 @@ namespace SF {
         {}
         PlayerPlatformID(const char* strId);
     };
+#pragma pack(pop)
 
     SF_FORCEINLINE bool operator == (const PlayerPlatformID& op1, const PlayerPlatformID& op2)
     {
@@ -402,28 +404,11 @@ namespace SF {
 	};
 
 
-	//// Game Instance info
-	//struct GameInstanceInfo
-	//{
-	//	GameInsUID GameInstanceUID;
-	//	StringCrc32 TypeName;
-	//	uint32_t ZoneTableID{};
-
-
-	//	GameInstanceInfo() {}
-	//	GameInstanceInfo(const GameInstanceInfo& src);
-	//	GameInstanceInfo(GameInsUID InGameInstanceUID, StringCrc32 InTypeName, uint32_t InZoneTableID);
-
-	//	GameInstanceInfo& operator = (const GameInstanceInfo& src);
-	//	bool operator == (const GameInstanceInfo& src) const;
-	//};
-
-
 	// Player information
 	struct PlayerInformation
 	{
 		enum {
-			MAX_NAME = 64,
+			MAX_NAME = 63, // 64 -1 for PlayerPlatformID alignment
 		};
 
 		AccountID		PlayerID = 0;
