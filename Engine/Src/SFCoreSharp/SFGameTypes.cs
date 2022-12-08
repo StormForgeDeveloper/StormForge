@@ -188,7 +188,7 @@ namespace SF
         public Platform Platform
         {
             get => (Platform)(PlatformData);
-            set => PlatformData = (UInt32)value;
+            set => PlatformData = (byte)value;
         }
     }
 
