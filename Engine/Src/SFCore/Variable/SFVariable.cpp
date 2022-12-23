@@ -375,6 +375,7 @@ namespace SF
     StringCrc32 VariableInt64::GetValueStringCrc32() const
     {
         uint32_t highDword = uint32_t(m_Value >> 32);
+        unused(highDword);
         assert(highDword == 0xFFFFFFFF || highDword == 0);
         return StringCrc32(uint32_t(m_Value));
     }
@@ -467,6 +468,7 @@ namespace SF
     StringCrc32 VariableUInt64::GetValueStringCrc32() const
     {
         uint32_t highDword = uint32_t(m_Value >> 32);
+        unused(highDword);
         assert(highDword == 0xFFFFFFFF || highDword == 0);
         return StringCrc32(uint32_t(m_Value));
     }
