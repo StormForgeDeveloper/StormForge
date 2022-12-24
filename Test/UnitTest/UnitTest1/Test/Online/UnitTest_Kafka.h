@@ -41,10 +41,9 @@ protected:
 	unsigned m_NumberOfTest;
 	int *m_TestValues;
 	
-	const char* m_StreamServerAddress[2] =
+	const char* m_StreamServerAddress[1] =
 	{
-		"192.168.0.84:19130", // Broker address
-		"192.168.0.84:19130" // stream directory server address
+		"192.168.0.84:9092",
 	};
 
 public:

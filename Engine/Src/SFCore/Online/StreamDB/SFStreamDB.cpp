@@ -116,30 +116,17 @@ namespace SF
 
 		SFLog(Net, Debug, "Metadata for {0}, brokerId:{1}, {2}", GetTopic(), metadata->orig_broker_id(), metadata->orig_broker_name());
 
-		//std::cout << " " << metadata->brokers()->size() << " brokers:" << std::endl;
-		//RdKafka::Metadata::BrokerMetadataIterator ib;
-		//for (ib = metadata->brokers()->begin();
-		//	ib != metadata->brokers()->end();
-		//	++ib) {
-		//	std::cout << "  broker " << (*ib)->id() << " at "
-		//		<< (*ib)->host() << ":" << (*ib)->port() << std::endl;
-		//}
-
 		m_PartitionIds.Clear();
 
 		// Iterate topics
-		//std::cout << metadata->topics()->size() << " topics:" << std::endl;
 		RdKafka::Metadata::TopicMetadataIterator it;
 		for (it = metadata->topics()->begin();
 			it != metadata->topics()->end();
 			++it)
 		{
-			//std::cout << "  topic \"" << (*it)->topic() << "\" with "
-			//	<< (*it)->partitions()->size() << " partitions:";
-
 			if ((*it)->err() != RdKafka::ERR_NO_ERROR)
 			{
-				SFLog(Net, Debug, "Topic metadata error, topic:{0}, {1}", (*it)->topic(), err2str((*it)->err()));
+				SFLog(Net, Error, "Topic metadata error, topic:{0}, {1}", (*it)->topic(), err2str((*it)->err()));
 				continue;
 			}
 
