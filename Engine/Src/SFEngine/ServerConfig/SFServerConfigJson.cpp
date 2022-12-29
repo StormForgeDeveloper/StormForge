@@ -77,12 +77,8 @@ namespace SF
 	Result ServerConfigJson::ParseNetPublic(const Json::Value& itemValue, ServerConfig::NetPublic& publicNet)
 	{
 		auto Protocol = itemValue.get("Protocol", Json::Value("TCP"));
-		auto IPV4 = itemValue.get("IPV4", Json::Value(""));
-		auto IPV6 = itemValue.get("IPV6", Json::Value(""));
 		auto ListenIP = itemValue.get("ListenIP", Json::Value(""));
 		publicNet.Protocol = Protocol.asCString();
-		publicNet.IPV4 = IPV4.asCString();
-		publicNet.IPV6 = IPV6.asCString();
 		publicNet.ListenIP = ListenIP.asCString();
 		publicNet.Port = (uint16_t)itemValue.get("Port", Json::Value("")).asUInt();
 		publicNet.MaxConnection = itemValue.get("MaxConnection", Json::Value("")).asUInt();
@@ -201,6 +197,7 @@ namespace SF
 			pServerModule = pModule;
 			break;
 		}
+        // Deprecated
 		case "ModStaticGameInstanceManager"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModuleStaticGameInstanceManager;
@@ -210,6 +207,7 @@ namespace SF
 			pServerModule = pModule;
 			break;
 		}
+        // Deprecated
 		case "ModGameInstanceManager"_crc:
 		{
 			auto pModule = new(GetHeap()) ServerConfig::ServerModuleGameInstanceManager;
@@ -380,10 +378,17 @@ namespace SF
 		Result result;
 
 		auto gameClusterID = rootObject.get("GameClusterId", Json::Value("DefaultGame"));
-		auto objectDirectory = rootObject.get("ObjectDirectory", Json::Value(""));
 		pServer->GameClusterName = gameClusterID.asCString();
 		pServer->GameClusterID = gameClusterID.asCString();
-		pServer->ObjectDirectory = objectDirectory.asCString();
+
+        auto objectDirectory = rootObject.get("ObjectDirectory", Json::Value(""));
+        pServer->ObjectDirectory = objectDirectory.asCString();
+
+        auto objectDirectory2 = rootObject.get("ObjectDirectory2", Json::Value(""));
+        pServer->ObjectDirectory2 = objectDirectory2.asCString();
+
+        auto ObjectDirectoryAccessKey = rootObject.get("ObjectDirectoryAccessKey", Json::Value(""));
+        pServer->ObjectDirectoryAccessKey = ObjectDirectoryAccessKey.asCString();
 
 		result = ParseDataCenter(rootObject, "DataCenter", pServer->DataCenter);
 		if (!result)
@@ -398,6 +403,9 @@ namespace SF
 
 		auto logServer = rootObject.get("LogServer", Json::Value(""));
 		pServer->LogServer = logServer.asCString();
+
+        auto STUNServer = rootObject.get("STUNServer", Json::Value(""));
+        pServer->STUNServer = STUNServer.asCString();
 
 		auto dataPath = rootObject.get("DataPath", Json::Value(""));
 		pServer->DataPath = dataPath.asCString();
@@ -467,6 +475,7 @@ namespace SF
 		if (!bRes)
 		{
 			SFLog(Net, Error, "ServerConfigJson::LoadConfig value parsing error:{0}", errs);
+            printf("[Error] ServerConfigJson::LoadConfig value parsing error:%s", errs.c_str());
 			return ResultCode::INVALID_STR_DATA;
 		}
 

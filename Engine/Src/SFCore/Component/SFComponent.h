@@ -483,7 +483,7 @@ namespace SF
 				return ResultCode::SUCCESS_FALSE;
 			}
 
-			ComponentType* newComponent = new(m_Heap) ComponentType(Forward<ArgTypes>(args)...);
+			ComponentType* newComponent = new(m_Heap) ComponentType(args...);
 			if (newComponent == nullptr)
 				return ResultCode::OUT_OF_MEMORY;
 

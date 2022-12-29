@@ -21,10 +21,10 @@ if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-jammy.list" ]; then
 fi
 
 
-sudo apt-get install moreutils git-lfs build-essential clang cmake rsync zip ninja-build
-sudo apt-get install -y libatomic-ops-dev gdb
-sudo apt install build-essential clang vulkan-sdk libssl-dev perl libssl-dev pkg-config libsasl2-dev
-sudo apt install openjdk-11-jdk
+sudo apt install moreutils git-lfs build-essential clang cmake rsync zip ninja-build libatomic-ops-dev gdb
+sudo apt install libssl-dev perl libssl-dev pkg-config libsasl2-dev
+sudo apt install openjdk-8-jdk
+sudo apt install vulkan-sdk
 
  
 sudo apt-get install -y dotnet6

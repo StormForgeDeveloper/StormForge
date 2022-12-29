@@ -89,6 +89,8 @@ set(SFENGINE_LIB_FILES
 	Net/SFNetCtrl.cpp
 	Net/SFNetDef.cpp
 	Net/SFNetRawUDP.cpp
+    Net/SFNetUDP.h
+    Net/SFNetUDP.cpp
 	Net/SFNetServerPeerTCP.cpp
 	Net/SFNetServerTCP.cpp
 	Net/SFNetServerUDP.cpp

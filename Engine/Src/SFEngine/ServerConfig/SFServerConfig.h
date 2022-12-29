@@ -45,8 +45,6 @@ namespace SF
 		struct NetPublic
 		{
 			String Protocol; // UDP, TCP, MRUDP
-			String IPV4;
-			String IPV6;
 			String ListenIP;
 			uint16_t Port = 0;
 			uint MaxConnection = 1000000;
@@ -106,18 +104,20 @@ namespace SF
 			NetPublic PublicNet;
 		};
 
+        // Deprecated
 		struct ServerModuleStaticGameInstanceManager : public ServerModule
 		{
 			// ZoneDBTable
 			String ZoneDBTable;
 		};
 
+        // Deprecated
 		struct ServerModuleGameInstanceManager : public ServerModulePublicService
 		{
 			String ZoneDBTable;
 		};
 
-		struct ServerModuleRelayService : public ServerModulePublicService
+        struct ServerModuleRelayService : public ServerModulePublicService
 		{
 			uint32_t MaximumRelayInstances = 1000;
 		};
@@ -205,12 +205,14 @@ namespace SF
 			// Data center
 			DataCenterEndpoint DataCenter;
 			String ObjectDirectory;
-			// Server message endpoint. server ID will be attached
+            String ObjectDirectory2;
+            String ObjectDirectoryAccessKey;
+            // Server message endpoint. server ID will be attached
 			EndpointAddress ServerEndpointAddress;
 			// Log config
 			String LogFilePath;
 			String LogServer;
-
+            String STUNServer;
 			String DataPath;
 
             // Steam

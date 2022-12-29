@@ -797,6 +797,11 @@ namespace SF {
 				}
 			}
 
+            if (iStart < len)
+            {
+                stringsOut.push_back(SubString((int)iStart, (int)(len - iStart)));
+            }
+
 			return true;
 		}
 
@@ -1048,6 +1053,11 @@ namespace SF {
 		StringType SubString(int starIndex, int count) const
 		{
 			if (IsNullOrEmpty()) return *this;
+            if (count < 0)
+            {
+                assert(false);
+                return TString(GetHeap());
+            }
 
 			auto length = (int)GetBufferLength();
 			if (starIndex >= length) return TString(GetHeap());

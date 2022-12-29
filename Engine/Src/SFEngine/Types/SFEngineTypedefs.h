@@ -143,6 +143,7 @@ namespace SF {
 		//Matching_Game_12,
 
 		Relay,
+        Stun,
 		StreamCollection,
 		Stream,
 		TelemetryFrontend,

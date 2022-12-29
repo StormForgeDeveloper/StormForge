@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko.
+// CopyRight (c) Kyungkun Ko.
 // 
 // Author : KyungKun Ko
 //
-// Description : Net Client
+// Description : Net UDP
 //	
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@
 #include "Net/SFNetToString.h"
 #include "Net/SFNetConst.h"
 #include "Net/SFNetSystem.h"
-#include "Net/SFNetRawUDP.h"
+#include "Net/SFNetUDP.h"
 
 
 
@@ -36,17 +36,17 @@ namespace Net {
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	class RawUDP
+	//	class NetUDP
 	//
 
 
-	RawUDP::MyNetSocketIOAdapter::MyNetSocketIOAdapter(RawUDP &owner)
+	NetUDP::MyNetSocketIOAdapter::MyNetSocketIOAdapter(NetUDP &owner)
 		: SocketIOUDP(owner.GetHeap())
 		, m_Owner(owner)
 	{
 	}
 
-	Result RawUDP::MyNetSocketIOAdapter::OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer)
+	Result NetUDP::MyNetSocketIOAdapter::OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer)
 	{
 		Result hr = ResultCode::SUCCESS;
 
@@ -95,13 +95,13 @@ namespace Net {
 
 	}
 
-	Result RawUDP::MyNetSocketIOAdapter::OnWriteReady()
+	Result NetUDP::MyNetSocketIOAdapter::OnWriteReady()
 	{
 		return ProcessSendQueue();
 	}
 
 	// Send message to connection with network device
-	Result RawUDP::MyNetSocketIOAdapter::WriteBuffer(IOBUFFER_WRITE *pSendBuffer)
+	Result NetUDP::MyNetSocketIOAdapter::WriteBuffer(IOBUFFER_WRITE *pSendBuffer)
 	{
 		auto result = SocketIOUDP::WriteBuffer(pSendBuffer);
 		switch ((uint32_t)result)
@@ -135,27 +135,27 @@ namespace Net {
 
 	//////////////////////////////////////////////////////////////////////////////////////////
 	//
-	//	class RawUDP
+	//	class NetUDP
 	//
 
-	RawUDP::RawUDP()
-		: m_Heap("NetRawUDP", Service::NetSystem->GetHeap())
+	NetUDP::NetUDP()
+		: m_Heap("NetNetUDP", Service::NetSystem->GetHeap())
 		, m_NetIOAdapter(*this)
 	{
 	}
 
-	RawUDP::RawUDP(IHeap& heap)
-		: m_Heap("NetRawUDP", heap)
+	NetUDP::NetUDP(IHeap& heap)
+		: m_Heap("NetNetUDP", heap)
 		, m_NetIOAdapter(*this)
 	{
 	}
 
-	RawUDP::~RawUDP()
+	NetUDP::~NetUDP()
 	{
 		IHeap::Delete(m_pRecvBuffers);
 	}
 
-	Result RawUDP::InitializeNet(const NetAddress& localAddress, MessageHandlerFunc &&Handler)
+	Result NetUDP::InitializeNet(const NetAddress& localAddress, MessageHandlerFunc &&Handler)
 	{
 		Result hr = ResultCode::SUCCESS;
 		SF_SOCKET socket = INVALID_SOCKET;
@@ -181,12 +181,12 @@ namespace Net {
 		Addr2SockAddr(m_LocalAddress, m_LocalSockAddress);
 
 
-		SFLog(Net, Debug2, "RawUDP: Opening UDP Net {0}", m_LocalAddress);
+		SFLog(Net, Debug2, "NetUDP: Opening UDP Net {0}", m_LocalAddress);
 
 		socket = Service::NetSystem->Socket(m_LocalAddress.SocketFamily, SocketType::DataGram);
 		if (socket == INVALID_SOCKET)
 		{
-			SFLog(Net, Error, "RawUDP: Failed to Open RawUDP Socket {0}", GetLastNetSystemResult());
+			SFLog(Net, Error, "NetUDP: Failed to Open NetUDP Socket {0}", GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 
@@ -195,12 +195,12 @@ namespace Net {
 		INT iOptLen = sizeof(iOptValue);
 		if (getsockopt(socket, SOL_SOCKET, SO_MAX_MSG_SIZE, (char *)&iOptValue, &iOptLen) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "RawUDP: Failed to get socket option SO_MAX_MSG_SIZE = {0}, err = {1}", iOptValue, GetLastNetSystemResult());
+			SFLog(Net, Error, "NetUDP: Failed to get socket option SO_MAX_MSG_SIZE = {0}, err = {1}", iOptValue, GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 		if (iOptValue < Const::PACKET_SIZE_MAX)
 		{
-			SFLog(Net, Warning, "RawUDP: Socket max packet size too small, Change to socket maximum SocketMax={0}, SvrMax={1}, err = {2}", iOptValue, (uint)Const::PACKET_SIZE_MAX, GetLastNetSystemResult());
+			SFLog(Net, Warning, "NetUDP: Socket max packet size too small, Change to socket maximum SocketMax={0}, SvrMax={1}, err = {2}", iOptValue, (uint)Const::PACKET_SIZE_MAX, GetLastNetSystemResult());
 			//Const::PACKET_SIZE_MAX = iOptValue;
 		}
 #else
@@ -212,7 +212,7 @@ namespace Net {
 		GetAnyBindAddr(m_LocalSockAddress, bindAddr);
 		if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)
 		{
-			SFLog(Net, Error, "RawUDP: Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
+			SFLog(Net, Error, "NetUDP: Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
 			netErr(ResultCode::UNEXPECTED);
 		}
 		m_LocalSockAddress = bindAddr;
@@ -245,12 +245,12 @@ namespace Net {
 		if (socket != INVALID_SOCKET)
 			Service::NetSystem->CloseSocket(socket);
 
-		SFLog(Net, Info, "RawUDP: Opened {0}, hr={1:X8}", m_LocalAddress, hr);
+		SFLog(Net, Info, "NetUDP: Opened {0}, hr={1:X8}", m_LocalAddress, hr);
 
 		return hr;
 	}
 
-	Result RawUDP::TerminateNet()
+	Result NetUDP::TerminateNet()
 	{
 		ScopeContext hr;
 
@@ -259,24 +259,20 @@ namespace Net {
 		// Clear handler pointer
 		m_MessageHandler = {};
 
-		SFLog(Net, Info, "RawUDP Close {0}, hr={1}", m_LocalAddress, hr);
+		SFLog(Net, Info, "NetUDP Close {0}, hr={1}", m_LocalAddress, hr);
 
 		return hr;
 	}
 
 
 	// Send message to connection with network device
-	Result RawUDP::SendMsg(const sockaddr_storage& dest, SharedPointerT<Message::MessageData>& pMsg)
+	Result NetUDP::SendMsg(const sockaddr_storage& dest, size_t sendSize, uint8_t* pBuff)
 	{
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
-
-		Message::MessageID msgID = pMsg->GetMessageHeader()->msgID;
 		IOBUFFER_WRITE *pOverlapped = nullptr;
 
-
 		netMem(pOverlapped = new(GetHeap()) IOBUFFER_WRITE);
-		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, std::forward<SharedPointerT<Message::MessageData>>(pMsg));
-		pMsg = nullptr;
+		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, (uint)sendSize, pBuff);
 
 		if (NetSystem::IsProactorSystem())
 		{
@@ -294,34 +290,25 @@ namespace Net {
 			if (pOverlapped)
 			{
 				pOverlapped->ClearBuffer();
-				pOverlapped->pMsgs = nullptr;
 				IHeap::Delete(pOverlapped);
 			}
 			else
 			{
-				pMsg = nullptr;
 			}
 
 			if (hr != Result(ResultCode::IO_IO_SEND_FAIL))
 			{
-				SFLog(Net, Error, "RawUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
+				SFLog(Net, Error, "NetUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
 			}
 			else
 			{
-				SFLog(Net, Debug3, "RawUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
+				SFLog(Net, Debug3, "NetUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
 				return ResultCode::SUCCESS;
 			}
 		}
 		else
 		{
-			if (msgID.IDs.Type == Message::MSGTYPE_NETCONTROL)
-			{
-				SFLog(Net, Debug3, "RawUDP SendCtrl dest:{0}, msg:{1}", dest, msgID);
-			}
-			else
-			{
-				SFLog(Net, Debug3, "RawUDP Send dest:{0}, msg:{1}", dest, msgID);
-			}
+			SFLog(Net, Debug3, "NetUDP Send dest:{0}, size:{1}", dest, sendSize);
 		}
 
 		return hr;
@@ -329,39 +316,14 @@ namespace Net {
 
 
 	// called when incoming message occur
-	Result RawUDP::OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff)
+	Result NetUDP::OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff)
 	{
-		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<Message::MessageData> pMsg;
-		Message::MobileMessageHeader * pMsgHeader = (Message::MobileMessageHeader*)pBuff;
-
-		//SFLog(Net, Debug3, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
+		Result hr;
 
 		if (uiBuffSize == 0)
-			goto Proc_End;
+			return hr;
 
-		while (uiBuffSize)
-		{
-			pMsgHeader = (Message::MobileMessageHeader*)pBuff;
-			if (uiBuffSize < sizeof(Message::MobileMessageHeader) || uiBuffSize < pMsgHeader->Length)
-			{
-				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->Length);
-				netErr(ResultCode::IO_BADPACKET_SIZE);
-			}
-
-			netMem(pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
-
-			uiBuffSize -= pMsgHeader->Length;
-			pBuff += pMsgHeader->Length;
-
-			m_MessageHandler(remoteAddr, pMsg);
-
-			netChk(hr);
-		}
-
-	Proc_End:
-
-		pMsg = nullptr;
+		m_MessageHandler(remoteAddr, uiBuffSize, pBuff);
 
 		return hr;
 	}

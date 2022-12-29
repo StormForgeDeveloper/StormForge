@@ -1,10 +1,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko.
+// CopyRight (c) Kyungkun Ko.
 // 
 // Author : KyungKun Ko
 //
-// Description : Net Raw UDP
+// Description : Net UDP
 //	
 //
 ////////////////////////////////////////////////////////////////////////////////
@@ -30,7 +30,7 @@ namespace Net {
 	//		- No logical connection management and so on
 	//
 
-	class RawUDP
+	class NetUDP
 	{
 	public :
 
@@ -39,11 +39,11 @@ namespace Net {
 		{
 		private:
 
-			RawUDP &m_Owner;
+			NetUDP &m_Owner;
 
 		public:
 
-			MyNetSocketIOAdapter(RawUDP &owner);
+			MyNetSocketIOAdapter(NetUDP &owner);
 
 			// Send message to connection with network device
 			virtual Result WriteBuffer(IOBUFFER_WRITE *pSendBuffer) override;
@@ -54,7 +54,7 @@ namespace Net {
 			virtual Result OnWriteReady() override;
 		};
 
-		using MessageHandlerFunc = std::function<Result(const sockaddr_storage& remoteAddr, SharedPointerT<Message::MessageData>& pMsg)>;
+		using MessageHandlerFunc = std::function<Result(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff)>;
 
 	private:
 
@@ -74,9 +74,9 @@ namespace Net {
 
 	public:
 
-		RawUDP();
-		RawUDP(IHeap& heap);
-		virtual ~RawUDP();
+		NetUDP();
+		NetUDP(IHeap& heap);
+		virtual ~NetUDP();
 
 		IHeap& GetHeap() { return *m_Heap.get(); }
 
@@ -87,7 +87,7 @@ namespace Net {
 
 		const NetAddress& GetLocalAddress() const { return m_LocalAddress; }
 
-		Result SendMsg(const sockaddr_storage& dest, SharedPointerT<Message::MessageData>& pMsg);
+		Result SendMsg(const sockaddr_storage& dest, size_t sendSize, uint8_t* pBuff);
 
 		// called when incoming message occur
 		Result OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff);
