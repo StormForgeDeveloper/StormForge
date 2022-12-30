@@ -60,6 +60,7 @@ namespace SF
 
 		struct WSSessionData
 		{
+            CriticalSection* SendBufferLock{};
 			CircularBufferQueue* SendBuffer{};
 			Array<uint8_t>* ReceiveBuffer{};
 
@@ -127,6 +128,9 @@ namespace SF
 		virtual int OnConnectionError(struct lws* wsi, void* user, void* in, size_t len);
 		virtual int OnConnectionWritable(struct lws* wsi, void* user, void* in, size_t len);
 		virtual int OnConnectionReadable(struct lws* wsi, void* user, void* in, size_t len);
+
+        // Try send flush manually. Use it when m_UseWriteEvent is off
+        void TrySendFlush(void* user);
 
 		static int WSCallback(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len);
 		virtual int OnWSCallback(struct lws* wsi, enum lws_callback_reasons reason, void* user, void* in, size_t len);

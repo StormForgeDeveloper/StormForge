@@ -478,10 +478,16 @@ namespace SF {
 		}
 
 		template< class DataType >
-		ArrayView<DataType>::ArrayView(uint maxDataCount, uint dataCount, DataType* pDataPtr)
+		ArrayView<DataType>::ArrayView(const Array<DataType>& src)
 		{
-			SetLinkedBuffer(maxDataCount, dataCount, pDataPtr);
+			SetLinkedBuffer(src.size(), src.size(), src.data());
 		}
+
+        template< class DataType >
+        ArrayView<DataType>::ArrayView(uint maxDataCount, uint dataCount, DataType* pDataPtr)
+        {
+            SetLinkedBuffer(maxDataCount, dataCount, pDataPtr);
+        }
 
 		//template< class DataType >
 		//ArrayView<DataType>::ArrayView(size_t dataCount, DataType* pDataPtr)

@@ -47,16 +47,16 @@ namespace SF
 				SFLog(Websocket, Warning, "{0}", line);
 				break;
 			case LLL_NOTICE	:
-				SFLog(Websocket, Info, "Notice {0}", line);
+				SFLog(Websocket, Debug6, "Notice {0}", line);
 				break;
 			case LLL_INFO	:
-				SFLog(Websocket, Info, "{0}", line);
+				SFLog(Websocket, Debug6, "{0}", line);
 				break;
 			case LLL_DEBUG	:
-				SFLog(Websocket, Debug, "{0}", line);
+				SFLog(Websocket, Debug7, "{0}", line);
 				break;
 			case LLL_PARSER	:
-				SFLog(Websocket, Info, "Parser {0}", line);
+				SFLog(Websocket, Debug6, "Parser {0}", line);
 				break;
 			case LLL_HEADER	:
 				SFLog(Websocket, Debug, "Header {0}", line);
@@ -74,7 +74,7 @@ namespace SF
 				SFLog(Websocket, Debug, "User {0}", line);
 				break;
 			case LLL_THREAD	:
-				SFLog(Websocket, Info, "Thread {0}", line);
+				SFLog(Websocket, Debug6, "Thread {0}", line);
 				break;
 			default:
 				SFLog(Websocket, Info, "{0}", line);

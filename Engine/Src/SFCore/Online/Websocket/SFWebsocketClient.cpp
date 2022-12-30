@@ -42,7 +42,7 @@ namespace SF
 
 		super::Initialize(serverAddress, port, protocol);
 
-		SFLog(Websocket, Info, "BR websocket server | visit http://{0}:{1}", m_ServerAddress, m_Port);
+		SFLog(Websocket, Info, "Connecting websocket server: {0}:{1}", m_ServerAddress, m_Port);
 
 
 		struct lws_context_creation_info info;
@@ -118,7 +118,7 @@ namespace SF
 		// empty write queue if possible
 		if (!m_UseWriteEvent && m_WSI && m_Session)
 		{
-			OnConnectionWritable(m_WSI, m_Session, nullptr, 0);
+            TrySendFlush(m_Session);
 		}
 	}
 
@@ -150,7 +150,7 @@ namespace SF
 		//info.userdata = this; // This will skip session data allocation and use this instance as user data for session
 		info.pwsi = &m_WSI;
 
-		SFLog(Websocket, Info, "Connecting to {0}:{1}/{2}", info.address, info.port, info.path);
+		SFLog(Websocket, Debug1, "Connecting to {0}:{1}/{2}", info.address, info.port, info.path);
 
 		if (!lws_client_connect_via_info(&info))
 		{
@@ -196,7 +196,7 @@ namespace SF
 
 			m_ConnectionState = ConnectionState::Connected;
 
-            SFLog(Websocket, Info, "Connected");
+            SFLog(Websocket, Debug2, "Connected");
 
             if (m_OnConnectedHandler)
                 m_OnConnectedHandler();
@@ -207,7 +207,7 @@ namespace SF
 
 	int WebsocketClient::OnConnectionClosed(struct lws* wsi, void* user, void* in, size_t len)
 	{
-		SFLog(Websocket, Info, "WSClient WSCallback_Closed");
+		SFLog(Websocket, Debug2, "WSClient WSCallback_Closed");
 
 		super::OnConnectionClosed(wsi, user, in, len);
 
@@ -223,7 +223,7 @@ namespace SF
 
 	int WebsocketClient::OnConnectionError(struct lws* wsi, void* user, void* in, size_t len)
 	{
-		SFLog(Websocket, Info, "WSClient WSCallback_ConnectionError: {0}", (const char*)in);
+		SFLog(Websocket, Error, "WSClient WSCallback_ConnectionError: {0}", (const char*)in);
 
 		super::OnConnectionError(wsi, user, in, len);
 

@@ -42,21 +42,8 @@ namespace SF {
 	"PurchaseValidateIOS",\
 	"Matching_Game_4",\
 	"Matching_Game_8",\
-	"MatchingQueue_Game_4x1",\
-	"MatchingQueue_Game_4x2",\
-	"MatchingQueue_Game_4x3",\
-	"MatchingQueue_Game_4x1S",\
-	"MatchingQueue_Game_4x1W",\
-	"MatchingQueue_Game_8x1",\
-	"MatchingQueue_Game_8x2",\
-	"MatchingQueue_Game_8x3",\
-	"MatchingQueue_Game_8x4",\
-	"MatchingQueue_Game_8x5",\
-	"MatchingQueue_Game_8x6",\
-	"MatchingQueue_Game_8x7",\
-	"MatchingQueue_Game_8x1S",\
-	"MatchingQueue_Game_8x1W",\
 	"Relay",\
+	"Stun",\
 	"StreamCollection",\
 	"Stream",\
 	"TelemetryFrontend",\

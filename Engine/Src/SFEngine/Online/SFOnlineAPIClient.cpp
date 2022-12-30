@@ -101,7 +101,7 @@ namespace SF
     {
         Result hr;
 
-        SFLog(Websocket, Info, "OnlineAPIClient OnRecv: size:{0}", data.size());
+        SFLog(Websocket, Debug4, "OnlineAPIClient OnRecv: size:{0}", data.size());
 
 
         std::string errs;
@@ -136,7 +136,7 @@ namespace SF
         if (StrUtil::IsNullOrEmpty(APIName))
             return ResultCode::INVALID_ARG;
 
-        SFLog(Websocket, Info, "OnlineAPIClient Request:{0}", APIName);
+        SFLog(Websocket, Debug2, "OnlineAPIClient Request:{0}", APIName);
 
         if (!m_ListeningAPINames.Contains(APIName))
             m_ListeningAPINames.Insert(APIName);

@@ -33,6 +33,7 @@ namespace SF
 
 	void Websocket::WSSessionData::Initialize(size_t RecvBufferSize, size_t SendBufferSize)
 	{
+        SendBufferLock = new(GetSystemHeap()) CriticalSection;
 		SendBuffer = new(GetSystemHeap()) CircularBufferQueue(GetSystemHeap(), SendBufferSize);
 		ReceiveBuffer = new(GetSystemHeap()) DynamicArray<uint8_t>(GetSystemHeap());
         ReceiveBuffer->reserve(RecvBufferSize);
@@ -41,6 +42,9 @@ namespace SF
 
 	void Websocket::WSSessionData::Clear()
 	{
+        IHeap::Delete(SendBufferLock);
+        SendBufferLock = nullptr;
+
 		IHeap::Delete(SendBuffer);
 		SendBuffer = nullptr;
 
@@ -227,6 +231,8 @@ namespace SF
 			return ResultCode::NOT_INITIALIZED;
 		}
 
+        SFLog(Websocket, Debug2, "Send: data size:{0}", messageData.size());
+
 		auto pSendItem = pss->SendBuffer->AllocateWrite(MessageBufferPadding + messageData.size());
 		if (pSendItem == nullptr)
 		{
@@ -244,7 +250,7 @@ namespace SF
 		}
 		else
 		{
-			OnConnectionWritable(m_WSI, pss, nullptr, 0);
+            TrySendFlush(pss);
 		}
 
 		return ResultCode::SUCCESS;
@@ -275,6 +281,15 @@ namespace SF
 		return 0;
 	}
 
+    void Websocket::TrySendFlush(void* user)
+    {
+        struct WSSessionData* pss = reinterpret_cast<struct WSSessionData*>(user);
+        if (pss && pss->SendBufferLock)
+        {
+            MutexScopeLock lock(*pss->SendBufferLock);
+            OnConnectionWritable(m_WSI, user, nullptr, 0);
+        }
+    }
 
 	int Websocket::OnConnectionWritable(struct lws* wsi, void* user, void* in, size_t len)
 	{
@@ -291,14 +306,14 @@ namespace SF
 		int flags = lws_write_ws_flags(LWS_WRITE_BINARY, 1, 1);
 		auto dataLen = int(pSendItem->DataSize - MessageBufferPadding);
 
-        SFLog(Websocket, Info, "Sending data size:{0}", dataLen);
+        SFLog(Websocket, Debug4, "OnConnectionWritable: Sending data size:{0}", dataLen);
 
 		// notice we allowed for LWS_PRE in the payload already
 		int m = lws_write(wsi, ((unsigned char*)pSendItem->GetDataPtr()) + MessageBufferPadding, dataLen, (enum lws_write_protocol)flags);
 		if (m < dataLen)
 		{
 			SendBuffer->CancelRead(pSendItem);
-			SFLog(Websocket, Error, "ERROR {0} writing to ws socket", m);
+			SFLog(Websocket, Error, "ERROR failed write. written:{0}, requested:{1}", m, dataLen);
 
 			if (m_UseWriteEvent)
 			{
@@ -308,7 +323,7 @@ namespace SF
 			return -1;
 		}
 
-		SFLog(Websocket, Debug4, "{0}  wrote {0}: flags: 0x{1:x}", GetName(), m, flags);
+		SFLog(Websocket, Debug5, "{0}  wrote {0}: flags: 0x{1:x}", GetName(), m, flags);
 		SendBuffer->ReleaseRead(pSendItem);
 
 		if (m_UseWriteEvent)
@@ -344,7 +359,7 @@ namespace SF
 		if (pss->ReceiveBuffer == nullptr)
 			return 0;
 
-		SFLog(Websocket, Info, "WSClient WSCallback_Readable: (rpp:{0}, first:{1}, last:{2}, bin:{3}, len:{4}, stored:{5})",
+		SFLog(Websocket, Debug1, "WSClient WSCallback_Readable: (rpp:{0}, first:{1}, last:{2}, bin:{3}, len:{4}, stored:{5})",
 			(int)lws_remaining_packet_payload(wsi),
 			lws_is_first_fragment(wsi),
 			lws_is_final_fragment(wsi),

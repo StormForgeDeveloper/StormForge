@@ -498,7 +498,8 @@ namespace SF {
 		{
 		public:
 			ArrayView();
-			ArrayView(uint maxDataCount, uint dataCount, DataType* pDataPtr);
+            ArrayView(const Array<DataType>& src);
+            ArrayView(uint maxDataCount, uint dataCount, DataType* pDataPtr);
 			//ArrayView(size_t dataCount, DataType* pDataPtr);
 			constexpr ArrayView(size_t dataCount, DataType* pDataPtr);
 			template<size_t dataCount>

@@ -139,15 +139,16 @@ namespace SF {
 
 		Matching_Game_4,
 		Matching_Game_8,
-		//Matching_Game_10,
-		//Matching_Game_12,
 
 		Relay,
         Stun,
 		StreamCollection,
 		Stream,
 		TelemetryFrontend,
-		Max
+        TelemetryProcessPlayerEvent,
+        TelemetryProcessToBackup,
+        TelemetryProcessToHBase, 
+        Max
 	};
 
 	static constexpr uint32_t ClusterID_MatchingQueue_Max = static_cast<uint32_t>(ClusterID::Max);

@@ -208,6 +208,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)IN_PROGRESS, {"IN_PROGRESS", "In progress"});
 		codeMap.Insert((uint32_t)INVALID_DATA, {"INVALID_DATA", "Invalid data"});
 		codeMap.Insert((uint32_t)INVALID_CACHE_DATA, {"INVALID_CACHE_DATA", "Invalid cache data"});
+		codeMap.Insert((uint32_t)INVALID_SCHEMA, {"INVALID_SCHEMA", "Invalid schema data"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

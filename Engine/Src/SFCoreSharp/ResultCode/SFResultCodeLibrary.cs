@@ -578,6 +578,9 @@ namespace SF {
 		// Invalid cache data 
 		public const int INVALID_CACHE_DATA =                               unchecked((int)0xE70100BB); 
 
+		// Invalid schema data 
+		public const int INVALID_SCHEMA =                                   unchecked((int)0xE70100BC); 
+
 	}
 }
 
