@@ -163,6 +163,9 @@ namespace SF {
 
 	VariableTable& VariableTable::operator = (const VariableTable& src)
 	{
+        if (&src == this)
+            return *this;
+
 		Reset();
 
 		for (auto& itVariable : src)
@@ -175,7 +178,10 @@ namespace SF {
 
 	VariableTable& VariableTable::operator = (VariableTable&& src)
 	{
-		Reset();
+        if (&src == this)
+            return *this;
+
+        Reset();
 
 		for (auto& itVariable : src)
 		{

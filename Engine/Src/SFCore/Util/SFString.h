@@ -145,6 +145,14 @@ namespace SF {
 			return true;
 		}
 
+        void Reset()
+        {
+            if (m_StringValue)
+            {
+                m_StringValue[0] = 0;
+            }
+            m_StringLength = 0;
+        }
 
 		virtual void Dispose() override
 		{
@@ -1106,11 +1114,44 @@ namespace SF {
 
 		StringType& operator = (const StringType& src)
 		{
+            // if both are pointing same string buffer, we don't need to anything
+            if (src.data() == data())
+            {
+                return *this;
+            }
+
 			m_Buffer = src.m_Buffer;
 			m_StringView = m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr;
 
 			return *this;
 		}
+
+        StringType& operator = (const CharType* src)
+        {
+            // if both are pointing same string buffer, we don't need to anything
+            if (src == data())
+            {
+                return *this;
+            }
+
+            if (m_Buffer.IsValid() && m_Buffer.IsUnique())
+            {
+                m_Buffer->Reset();
+            }
+            else
+            {
+                m_Buffer = new(GetHeap()) SharedStringBufferType(GetHeap(), StrUtil::StringLen(src) + 1);
+            }
+
+            if (src)
+            {
+                m_Buffer->Append(src, StrUtil::StringLen(src));
+            }
+            m_StringView = m_Buffer != nullptr ? m_Buffer->GetBufferPointer() : nullptr;
+
+            return *this;
+        }
+
 
 
 	protected:

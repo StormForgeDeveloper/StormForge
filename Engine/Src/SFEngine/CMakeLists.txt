@@ -125,9 +125,6 @@ set(SFENGINE_LIB_FILES
 	SceneGraph/SFSceneNodeComponent.cpp
 	SceneGraph/SFSceneNodeComponentMesh.cpp
 	SceneGraph/SFSceneNodeComponentSkeletalMesh.cpp
-	ServerConfig/SFServerConfig.cpp
-	ServerConfig/SFServerConfigJson.h
-	ServerConfig/SFServerConfigJson.cpp
 	Service/SFEngineService.cpp
 	SFEngine.Android.cpp
 	SFEngine.cpp
@@ -260,7 +257,6 @@ set(SFENGINE_LIB_FILES
 	SceneGraph/SFSceneNodeComponent.h
 	SceneGraph/SFSceneNodeComponentMesh.h
 	SceneGraph/SFSceneNodeComponentSkeletalMesh.h
-	ServerConfig/SFServerConfig.h
 	Service/SFConnectionManagerService.h
 	Service/SFEngineService.h
 	Service/SFEngineServices.h

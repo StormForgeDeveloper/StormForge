@@ -211,6 +211,7 @@ namespace SF
 
 		super::OnConnectionClosed(wsi, user, in, len);
 
+        m_ReconnectTimer.ClearTimer();
 		m_ConnectionState = ConnectionState::Disconnected;
 		m_Session = nullptr;
 		m_Result = ResultCode::IO_CONNECTION_CLOSED;
@@ -230,6 +231,7 @@ namespace SF
 		m_WSI = nullptr;
 		m_Session = nullptr;
 		m_Result = ResultCode::IO_DISCONNECTED;
+        m_ConnectionState = ConnectionState::Disconnected;
 
 		lws_cancel_service(lws_get_context(wsi));
 
