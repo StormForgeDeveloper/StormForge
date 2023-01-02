@@ -20,7 +20,21 @@
 
 
 
-namespace SF {
+namespace SF
+{
+
+
+
+    Result _ToString(ToStringContext& context, const ClusterID& value)
+    {
+        if (!StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, ToString(value)))
+            return ResultCode::FAIL;
+
+        return ResultCode::SUCCESS;
+    }
+
+    IMPLEMENT_BOXING_TEMPLETE_BYVALUE(ClusterID);
+
 
     // Note that this format is parsed by PlayerPlatformID(const char* strId)
     Result _ToString(ToStringContext& context, const PlayerPlatformID& value)
@@ -37,7 +51,7 @@ namespace SF {
         return ResultCode::SUCCESS;
     }
 
-    IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(PlayerPlatformID)
+    IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(PlayerPlatformID);
 
 
 

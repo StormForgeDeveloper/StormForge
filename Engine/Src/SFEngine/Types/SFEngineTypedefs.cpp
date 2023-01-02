@@ -22,47 +22,19 @@
 namespace SF {
 
 
-#define __CLUSTERID_NAMES__ \
-	"None",\
-	"ClusterManager",\
-	"Monitoring",\
-	"PlayerSessionDirectory",\
-	"Login",\
-	"Game",\
-	"GameStaticInstanceManager",\
-	"GameInstanceManager",\
-	"GamePartyManager",\
-	"Ranking",\
-	"ChatChannelManager",\
-	"CharacterData",\
-	"LoginPlayer",\
-	"GamePlayer",\
-	"GameInstance",\
-	"PurchaseValidateGoogle",\
-	"PurchaseValidateIOS",\
-	"Matching_Game_4",\
-	"Matching_Game_8",\
-	"Relay",\
-	"Stun",\
-	"StreamCollection",\
-	"Stream",\
-	"TelemetryFrontend",\
-	"TelemetryProcessPlayerEvent",\
-	"TelemetryProcessToBackup",\
-	"TelemetryProcessToHBase",\
-	"Max", \
-
-
+#define _SFCLUSTERID(x) #x
 
 	static constexpr const char* __ClusterID_NameList[] =
 	{
-		__CLUSTERID_NAMES__
+        #include "SFClusterIDDef.inl"
 	};
 
-	static constexpr StringCrc64 __ClusterID_NameCrcList[] =
+    static constexpr StringCrc64 __ClusterID_NameCrcList[] =
 	{
-		__CLUSTERID_NAMES__
+        #include "SFClusterIDDef.inl"
 	};
+
+#undef _SFCLUSTERID
 
 	const char* ToString(ClusterID clusterId)
 	{

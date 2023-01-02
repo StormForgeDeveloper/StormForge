@@ -124,6 +124,12 @@ namespace SF
 			it != metadata->topics()->end();
 			++it)
 		{
+            if ((*it)->err() == RdKafka::ERR_UNKNOWN_TOPIC_OR_PART)
+            {
+                SFLog(Net, Info, "Topic or partition doesn't exist");
+                continue;
+            }
+
 			if ((*it)->err() != RdKafka::ERR_NO_ERROR)
 			{
 				SFLog(Net, Error, "Topic metadata error, topic:{0}, {1}", (*it)->topic(), err2str((*it)->err()));

@@ -155,13 +155,19 @@ namespace SF
 			it != metadata->topics()->end();
 			++it)
 		{
-			if ((*it)->err() != RdKafka::ERR_NO_ERROR)
+			if ((*it)->err() == RdKafka::ERR_UNKNOWN_TOPIC_OR_PART)
 			{
-				SFLog(Net, Debug, "Topic metadata error, topic:{0}, {1}", (*it)->topic(), err2str((*it)->err()));
+				SFLog(Net, Info, "Topic or partition doesn't exit. topic:{0}", (*it)->topic());
 				continue;
 			}
 
-			SFLog(Net, Debug, "Topic metadata, topic:{0}", (*it)->topic());
+            if ((*it)->err() != RdKafka::ERR_NO_ERROR)
+            {
+                SFLog(Net, Debug, "Topic metadata error, topic:{0}, {1}", (*it)->topic(), err2str((*it)->err()));
+                continue;
+            }
+
+            SFLog(Net, Debug, "Topic metadata, topic:{0}", (*it)->topic());
 
 			m_TopicList.push_back((*it)->topic().c_str());
 		}

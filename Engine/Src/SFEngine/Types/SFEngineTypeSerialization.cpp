@@ -25,6 +25,8 @@ namespace SF {
 	//
 	//	Type utility
 	//
+    Result _ToString(ToStringContext& context, const ClusterID& value);
+    DECLARE_BOXING_TEMPLETE_BYVALUE(ClusterID);
 
 
 

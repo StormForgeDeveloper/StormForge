@@ -9,11 +9,11 @@ ATF_PATH=$SF_PATH/../ATF
 # https://sdk.lunarg.com/sdk/download/1.2.182.0/linux/vulkansdk-linux-x86_64-1.2.182.0.tar.gz
 # install vulkan SDK link
 if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-jammy.list" ]; then
-	wget -qO - https://packages.lunarg.com/lunarg-signing-key-pub.asc
+	wget -q - https://packages.lunarg.com/lunarg-signing-key-pub.asc
 	gpg --dearmor lunarg-signing-key-pub.asc
 	sudo cp lunarg-signing-key-pub.asc.gpg /usr/share/keyrings/lunarg-signing-key-pub.gpg
 	sudo wget -qO /etc/apt/sources.list.d/lunarg-vulkan-jammy.list http://packages.lunarg.com/vulkan/lunarg-vulkan-jammy.list
-	#Link signing key file
+	#Link signing key file. You need to update list file with signedby setting
 	echo "deb [signed-by=/usr/share/keyrings/lunarg-signing-key-pub.gpg] https://URL"
 	sudo vi /etc/apt/sources.list.d/lunarg-vulkan-jammy.list
 	
@@ -21,14 +21,9 @@ if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-jammy.list" ]; then
 fi
 
 
-sudo apt-get install -y moreutils git-lfs build-essential clang cmake rsync zip ninja-build libatomic-ops-dev gdb
-sudo apt-get install -y libssl-dev perl libssl-dev pkg-config libsasl2-dev
-sudo apt-get install -y openjdk-8-jdk
+sudo apt-get install -y moreutils git-lfs build-essential clang cmake rsync zip ninja-build libatomic-ops-dev gdb libssl-dev perl libssl-dev pkg-config libsasl2-dev openjdk-8-jdk dotnet6
 sudo apt-get install -y vulkan-sdk
 
- 
-sudo apt-get install -y dotnet6
-  
 
 if [ ! -d "$ATF_PATH" ]; then
 	echo $ATF_PATH

@@ -112,46 +112,18 @@ namespace SF {
 	};
 
 
+#define _SFCLUSTERID(x) x
+
 	// server cluster ID
-	//typedef uint32_t ClusterID;
 	enum class ClusterID : uint32_t
 	{
-		None = 0,
-		ClusterManager,
-		Monitoring,
-		PlayerSessionDirectory,
-		Login,
-		Game,
-		GameStaticInstanceManager,
-		GameInstanceManager,
-		GameParty,
-		GamePartyManager,
-		Ranking,
-		ChatChannel,
-		ChatChannelManager,
-		CharacterData,
-		LoginPlayer,
-		GamePlayer,
-		GameInstance,
-
-		PurchaseValidateGoogle,
-		PurchaseValidateIOS,
-
-		Matching_Game_4,
-		Matching_Game_8,
-
-		Relay,
-        Stun,
-		StreamCollection,
-		Stream,
-		TelemetryFrontend,
-        TelemetryProcessPlayerEvent,
-        TelemetryProcessToBackup,
-        TelemetryProcessToHBase, 
-        Max
+        #include "SFClusterIDDef.inl"
 	};
 
-	static constexpr uint32_t ClusterID_MatchingQueue_Max = static_cast<uint32_t>(ClusterID::Max);
+#undef _SFCLUSTERID
+
+    // deprecated
+    static constexpr uint32_t ClusterID_MatchingQueue_Max = static_cast<uint32_t>(ClusterID::Max);
 
 	const char* ToString(ClusterID clusterId);
 	StringCrc64 ToStringCrc64(ClusterID clusterId);

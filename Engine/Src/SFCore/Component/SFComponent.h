@@ -413,7 +413,7 @@ namespace SF
 			for (auto itComponent : m_Components)
 			{
 				auto pComponent = itComponent.GetValue();
-				if (pComponent != nullptr)
+				if (pComponent != nullptr && pComponent->GetIsInitialized())
 				{
 					pComponent->TerminateComponent();
 				}
