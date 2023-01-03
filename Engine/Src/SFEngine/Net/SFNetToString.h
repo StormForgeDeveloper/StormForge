@@ -29,6 +29,12 @@ namespace SF
 	DECLARE_BOXING_TEMPLETE_BYVALUE(SocketType);
 
 
+    inline size_t SerializedSizeOf(const SockFamily& Value) { return sizeof(Value); }
+    inline Result operator >> (IInputStream& input, SockFamily& data) { return input.Read(&data, sizeof(data)); }
+    inline Result operator << (IOutputStream& output, const SockFamily& data) { return output.Write(&data, sizeof(data)); }
+    Result _ToString(ToStringContext& context, SockFamily value);
+    DECLARE_BOXING_TEMPLETE_BYVALUE(SockFamily);
+
 	Result _ToString(ToStringContext& context, Net::ConnectionState value);
 	Result _ToString(ToStringContext& context, const Net::PeerInfo& value);
 	Result _ToString(ToStringContext& context, NetClass value);

@@ -23,7 +23,6 @@
 
 
 
-
 namespace SF {
 
 	enum class SockFamily : uint8_t;
@@ -51,7 +50,7 @@ namespace Net {
 	// Make bind addr with any address
 	Result GetAnyBindAddr(const sockaddr_storage &sockAddr, sockaddr_storage&bindAddr);
 
-	// Set local net address with family check
+	// Set local net address with family check. This will remove IPv6 wrapper for IPv4
 	Result SetLocalNetAddress(NetAddress &netAddr, const char *strLocalAddress, uint16_t port);
 
 	// Set net address with family check

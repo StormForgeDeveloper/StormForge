@@ -22,20 +22,23 @@ namespace SF {
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(NetClass);
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(Net::PeerInfo);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Message::MessageID);
+    IMPLEMENT_BOXING_TEMPLETE_BYVALUE(SockFamily);
 
 
 
 	Result _ToString(ToStringContext& context, SocketType value)
 	{
-		switch (value)
-		{
-		case SocketType::Stream:
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "Stream");
-		case SocketType::DataGram:
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "DataGram");
-		default:
-			return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(Invalid)");
-		}
+        static const char* Strings[] =
+        {
+            "Stream",
+            "DataGram"
+        };
+
+        auto intValue = (int)value;
+        if (intValue < 0 || intValue >= countof(Strings))
+            return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "Invalid");
+        else
+            return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, Strings[intValue]);
 	}
 
 	Result _ToString(ToStringContext& context, Net::ConnectionState value)
@@ -92,6 +95,23 @@ namespace SF {
 		return ResultCode::SUCCESS;
 	}
 
+
+    Result _ToString(ToStringContext& context, SockFamily value)
+    {
+        static const char* Strings[] = 
+        {
+            "None",
+            "IPV4",// = AF_INET,
+            "IPV6"// = AF_INET6
+        };
+
+        auto intValue = (int)value;
+        if (intValue < 0 || intValue >= countof(Strings))
+            return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "Invalid");
+        else
+            return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, Strings[intValue]);
+
+    }
 
 
 } // namespace SF

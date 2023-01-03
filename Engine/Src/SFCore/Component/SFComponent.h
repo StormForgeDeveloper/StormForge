@@ -40,9 +40,18 @@ namespace SF
 		bool GetIsInitialized() { return m_IsInitialized; }
 
 		// Initialize server component
-		virtual Result InitializeComponent() { m_IsInitialized = true; return ResultCode::SUCCESS; }
+		virtual Result InitializeComponent()
+        {
+            m_IsInitialized = true;
+            return ResultCode::SUCCESS;
+        }
+
 		// Terminate server component
-		virtual void TerminateComponent() { m_IsInitialized = false;  }
+        virtual Result TerminateComponent()
+        {
+            m_IsInitialized = false;
+            return ResultCode::SUCCESS;
+        }
 
 		virtual void TickUpdate() {}
 	};

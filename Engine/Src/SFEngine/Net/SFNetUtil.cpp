@@ -22,6 +22,7 @@
 
 #include "Net/SFNetUtil.h"
 #include "Net/SFNetSystem.h"
+#include "Net/SFNetToString.h"
 
 
 #if SF_PLATFORM != SF_PLATFORM_WINDOWS
@@ -98,6 +99,7 @@ namespace Net {
 		sockAddr.sin6_family = AF_INET6;
 		sockAddr.sin6_port = htons(addr.Port);
 		int result = inet_pton(sockAddr.sin6_family, addr.Address, &sockAddr.sin6_addr);
+        //SFLog(System, Info, "Addr2SockAddrIpv6: addr.Address:{0}, result:{1}", addr.Address, result);
 		if (result != TRUE)
 		{
 			return ResultCode::FAIL;
@@ -112,6 +114,7 @@ namespace Net {
 		sockAddr.sin_family = AF_INET;
 		sockAddr.sin_port = htons(addr.Port);
 		int result = inet_pton(sockAddr.sin_family, addr.Address, &sockAddr.sin_addr);
+        //SFLog(System, Info, "Addr2SockAddrIpv4: addr.Address:{0}, result:{1}", addr.Address, result);
 		if (result != TRUE)
 		{
 			return ResultCode::FAIL;
@@ -194,11 +197,11 @@ namespace Net {
 		localAddr.Port = port;
 
 		// validate local IP
-		if (!(CheckLocalAddress(SockFamily::IPV6, localAddr)))
+		if (!CheckLocalAddress(SockFamily::IPV6, localAddr))
 		{
-			if (!(CheckLocalAddress(SockFamily::IPV4, localAddr)))
+			if (!CheckLocalAddress(SockFamily::IPV4, localAddr))
 			{
-				if ((GetLocalAddressIPv6(localAddr)))
+				if (GetLocalAddressIPv6(localAddr))
 				{
 					if (CheckLocalAddress(SockFamily::IPV6, localAddr))
 					{
@@ -207,13 +210,13 @@ namespace Net {
 					}
 					else
 					{
-						SFLog(Net, Error, "Invalid Address, expect a local IPV6 address");
+						SFLog(Net, Error, "Invalid Address, expect a local IPV6 address: {0}", strLocalAddress);
 						return ResultCode::IO_INVALID_ADDRESS;
 					}
 				}
 				else
 				{
-					SFLog(Net, Error, "Invalid Address, expect a local IPV6 address");
+					SFLog(Net, Error, "Invalid Address, expect a local IPV6 address: {0}", strLocalAddress);
 					return ResultCode::IO_INVALID_ADDRESS;
 				}
 			}
@@ -385,6 +388,8 @@ namespace Net {
 			}
 		}
 
+        SFLog(System, Info, "GetLocalAddress family:{0}, outAddr:{1}", family, outAddr);
+
 		return ResultCode::FAIL;
 	}
 
@@ -407,10 +412,15 @@ namespace Net {
 
 		addr.SocketFamily = family;
 		Result hr = Addr2SockAddr(addr, testSockAddr);
-		if (!(hr))
-			return hr;
+        if (!hr)
+        {
+            //SFLog(System, Info, "CheckLocalAddress family:{0}, hr:{1}", family, hr);
+            return hr;
+        }
 
+        //SFLog(System, Info, "CheckLocalAddress family:{0}", family);
 
+        // Any address test
 		switch (family)
 		{
 		case SockFamily::IPV4:
@@ -433,7 +443,9 @@ namespace Net {
 			if (iAddr >= countof(rawAddress)) return ResultCode::SUCCESS;
 			break;
 		}
-		}
+        default:
+            break;
+        }
 
 
 		// Convert remote address
@@ -574,19 +586,44 @@ namespace Net {
 
 		// make sock addr
 		memset(&testSockAddr, 0, sizeof testSockAddr);
-		if (family == SockFamily::IPV4)
-		{
-			auto *pSockAddr = (struct sockaddr_in *)&testSockAddr;
-			if (!(Addr2SockAddr(addr, *pSockAddr)))
-				return ResultCode::FAIL;
-		}
-		else
-		{
-			auto *pSockAddr = (struct sockaddr_in6 *)&testSockAddr;
-			if (!(Addr2SockAddr(addr, *pSockAddr)))
-				return ResultCode::FAIL;
-		}
-			
+        addr.SocketFamily = family;
+        Result hr = Addr2SockAddr(addr, testSockAddr);
+        if (!hr)
+        {
+            //SFLog(System, Info, "CheckLocalAddress family:{0}, hr:{1}", family, hr);
+            return hr;
+        }
+
+        //SFLog(System, Info, "CheckLocalAddress family:{0}", family);
+
+        // Any address test
+        switch (family)
+        {
+        case SockFamily::IPV4:
+        {
+            auto* pTestSockAddr = (struct sockaddr_in*)&testSockAddr;
+            if (pTestSockAddr->sin_addr.s_addr == INADDR_ANY) return ResultCode::SUCCESS;
+            break;
+        }
+
+        case SockFamily::IPV6:
+        {
+            auto* pTestSockAddr = (struct sockaddr_in6*)&testSockAddr;
+            auto& rawAddress = pTestSockAddr->sin6_addr.s6_addr;
+            auto& rawAddressSrc = in6addr_any.s6_addr;
+            size_t iAddr = 0;
+            for (; iAddr < countof(rawAddress); iAddr++)
+            {
+                if (rawAddress[iAddr] != rawAddressSrc[iAddr]) break;
+            }
+            if (iAddr >= countof(rawAddress)) return ResultCode::SUCCESS;
+            break;
+        }
+        default:
+            break;
+        }
+
+
 		if (getifaddrs(&ifaddr) == -1)
 		{
 			return GetLastNetSystemResult();

@@ -71,6 +71,7 @@ namespace SF {
 
 			SetNetClass(netCls);
 
+            // This will rip out ipv6 wrapper for ipv4
 			netCheck(SetLocalNetAddress(localAddr, strLocalIP, usLocalPort));
 
 			SetLocalAddress(localAddr);

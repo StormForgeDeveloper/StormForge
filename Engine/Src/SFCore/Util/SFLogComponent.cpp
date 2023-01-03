@@ -87,7 +87,8 @@ namespace SF {
 		DWORD dwWriten = 0;
 		WriteConsoleA(m_hConsole, logMessage->LogBuff, (DWORD)logMessage->LogStringSize, &dwWriten, nullptr);
 #else
-		std::cout << logMessage->LogBuff;
+        // For some reason, docker doesn't like std::cout
+        printf("%s", logMessage->LogBuff);
 #endif
 	}
 
