@@ -860,6 +860,29 @@ namespace Net {
 
 
 
+    ////////////////////////////////////////////////////////////////////////////////
+    //
+    //	Scoped net system init/uninit
+    //
+
+    NetSystemInitializer::NetSystemInitializer()
+    {
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+        WSADATA wsaData;
+        int iErr = WSAStartup(MAKEWORD(2, 2), &wsaData);
+        if (iErr != 0)
+        {
+            printf("Failed to initialize Winsock DLL err=%d", iErr);
+        }
+#endif
+    }
+
+    NetSystemInitializer::~NetSystemInitializer()
+    {
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
+        WSACleanup();
+#endif
+    }
 
 	//WriteBufferQueueManager::WriteBufferQueueManager(uint numQueue, uint uiNumElePerPage)
 	//	: m_AssignIndex(0)

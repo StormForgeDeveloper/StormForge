@@ -84,6 +84,19 @@ namespace Net {
 	bool operator != ( const NetAddress &op1, const NetAddress &op2 );
 
 
+    ////////////////////////////////////////////////////////////////////////////////
+    //
+    //	Scoped net system init/uninit
+    //      - Initialize net related system in case you need to access net system before engine initialization
+    //
+
+    class NetSystemInitializer
+    {
+    public:
+        NetSystemInitializer();
+        ~NetSystemInitializer();
+    };
+
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
