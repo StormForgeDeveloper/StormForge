@@ -184,6 +184,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)OUT_OF_RESERVED_MEMORY, {"OUT_OF_RESERVED_MEMORY", "Out of reserved memory"});
 		codeMap.Insert((uint32_t)NOT_OPENED, {"NOT_OPENED", "The object not initialized or opened"});
 		codeMap.Insert((uint32_t)SUCCESS_CANCELED, {"SUCCESS_CANCELED", "Operation is canceled"});
+		codeMap.Insert((uint32_t)STREAM_NOT_EXIST, {"STREAM_NOT_EXIST", "stream doesn't exist"});
 		codeMap.Insert((uint32_t)NOT_SUPPORTED, {"NOT_SUPPORTED", "Operation is not supported"});
 		codeMap.Insert((uint32_t)NOT_SUPPORTED_FORMAT, {"NOT_SUPPORTED_FORMAT", "Format is not supported"});
 		codeMap.Insert((uint32_t)INVALID_FORMAT, {"INVALID_FORMAT", "Format is not valid"});

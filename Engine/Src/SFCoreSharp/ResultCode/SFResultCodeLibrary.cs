@@ -506,80 +506,83 @@ namespace SF {
 		// Operation is canceled 
 		public const int SUCCESS_CANCELED =                                 unchecked((int)0x270100A3); 
 
+		// stream doesn't exist 
+		public const int STREAM_NOT_EXIST =                                 unchecked((int)0xE70100A4); 
+
 		// Operation is not supported 
-		public const int NOT_SUPPORTED =                                    unchecked((int)0xE70100A4); 
+		public const int NOT_SUPPORTED =                                    unchecked((int)0xE70100A5); 
 
 		// Format is not supported 
-		public const int NOT_SUPPORTED_FORMAT =                             unchecked((int)0xE70100A5); 
+		public const int NOT_SUPPORTED_FORMAT =                             unchecked((int)0xE70100A6); 
 
 		// Format is not valid 
-		public const int INVALID_FORMAT =                                   unchecked((int)0xE70100A6); 
+		public const int INVALID_FORMAT =                                   unchecked((int)0xE70100A7); 
 
 		// Failed to open file 
-		public const int INVALID_FILE =                                     unchecked((int)0xE70100A7); 
+		public const int INVALID_FILE =                                     unchecked((int)0xE70100A8); 
 
 		// Invalid frame 
-		public const int INVALID_FRAME =                                    unchecked((int)0xE70100A8); 
+		public const int INVALID_FRAME =                                    unchecked((int)0xE70100A9); 
 
 		// Specific variable not found 
-		public const int VARIABLE_NOT_FOUND =                               unchecked((int)0xE70100A9); 
+		public const int VARIABLE_NOT_FOUND =                               unchecked((int)0xE70100AA); 
 
 		// Specific function not found 
-		public const int FUNCTION_NOT_FOUND =                               unchecked((int)0xE70100AA); 
+		public const int FUNCTION_NOT_FOUND =                               unchecked((int)0xE70100AB); 
 
 		// Specific object not found 
-		public const int OBJECT_NOT_FOUND =                                 unchecked((int)0xE70100AB); 
+		public const int OBJECT_NOT_FOUND =                                 unchecked((int)0xE70100AC); 
 
 		// Invalid stream ID 
-		public const int INVALID_STREAMID =                                 unchecked((int)0xE70100AC); 
+		public const int INVALID_STREAMID =                                 unchecked((int)0xE70100AD); 
 
 		// Generic DB failure 
-		public const int DB_FAILURE =                                       unchecked((int)0xE70100AD); 
+		public const int DB_FAILURE =                                       unchecked((int)0xE70100AE); 
 
 		// Service is not available 
-		public const int SERVICE_NOT_AVAILABLE =                            unchecked((int)0xE70100AE); 
+		public const int SERVICE_NOT_AVAILABLE =                            unchecked((int)0xE70100AF); 
 
 		// Invalid character ID 
-		public const int INVALID_CHARACTERID =                              unchecked((int)0xE70100AF); 
+		public const int INVALID_CHARACTERID =                              unchecked((int)0xE70100B0); 
 
 		// Character hasn't selected 
-		public const int CHARACTER_NOT_SELECTED =                           unchecked((int)0xE70100B0); 
+		public const int CHARACTER_NOT_SELECTED =                           unchecked((int)0xE70100B1); 
 
 		// Invalid version 
-		public const int INVALID_VERSION =                                  unchecked((int)0xE70100B1); 
+		public const int INVALID_VERSION =                                  unchecked((int)0xE70100B2); 
 
 		// Server internal error 
-		public const int SERVER_INTERNAL_ERROR =                            unchecked((int)0xE70100B2); 
+		public const int SERVER_INTERNAL_ERROR =                            unchecked((int)0xE70100B3); 
 
 		// Generic Server error 
-		public const int GENERIC_SERVER_ERROR =                             unchecked((int)0xE70100B3); 
+		public const int GENERIC_SERVER_ERROR =                             unchecked((int)0xE70100B4); 
 
 		// Specified key not found 
-		public const int KEY_NOTFOUND =                                     unchecked((int)0xE70100B4); 
+		public const int KEY_NOTFOUND =                                     unchecked((int)0xE70100B5); 
 
 		// Specified key has invalid data 
-		public const int INVALID_KEY =                                      unchecked((int)0xE70100B5); 
+		public const int INVALID_KEY =                                      unchecked((int)0xE70100B6); 
 
 		// Invalid protocol has specified 
-		public const int INVALID_PROTOCOL =                                 unchecked((int)0xE70100B6); 
+		public const int INVALID_PROTOCOL =                                 unchecked((int)0xE70100B7); 
 
 		// Too big parameter has assigned 
-		public const int TOO_BIG_PARAMETER =                                unchecked((int)0xE70100B7); 
+		public const int TOO_BIG_PARAMETER =                                unchecked((int)0xE70100B8); 
 
 		// Deprecated 
-		public const int DEPRECATED_FEATURE =                               unchecked((int)0xE70100B8); 
+		public const int DEPRECATED_FEATURE =                               unchecked((int)0xE70100B9); 
 
 		// In progress 
-		public const int IN_PROGRESS =                                      unchecked((int)0xE70100B9); 
+		public const int IN_PROGRESS =                                      unchecked((int)0xE70100BA); 
 
 		// Invalid data 
-		public const int INVALID_DATA =                                     unchecked((int)0xE70100BA); 
+		public const int INVALID_DATA =                                     unchecked((int)0xE70100BB); 
 
 		// Invalid cache data 
-		public const int INVALID_CACHE_DATA =                               unchecked((int)0xE70100BB); 
+		public const int INVALID_CACHE_DATA =                               unchecked((int)0xE70100BC); 
 
 		// Invalid schema data 
-		public const int INVALID_SCHEMA =                                   unchecked((int)0xE70100BC); 
+		public const int INVALID_SCHEMA =                                   unchecked((int)0xE70100BD); 
 
 	}
 }

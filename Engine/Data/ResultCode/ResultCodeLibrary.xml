@@ -177,6 +177,7 @@
 	<ResultCodeItem Severity="Error" CodeName="OUT_OF_RESERVED_MEMORY" Desc="Out of reserved memory"/>
 	<ResultCodeItem Severity="Error" CodeName="NOT_OPENED" Desc="The object not initialized or opened"/>
 	<ResultCodeItem Severity="Success" CodeName="CANCELED" Desc="Operation is canceled"/>
+	<ResultCodeItem Severity="Error" CodeName="STREAM_NOT_EXIST" Desc="stream doesn't exist"/>
 
 	<ResultCodeItem Severity="Error" CodeName="NOT_SUPPORTED" Desc="Operation is not supported"/>
 	<ResultCodeItem Severity="Error" CodeName="NOT_SUPPORTED_FORMAT" Desc="Format is not supported"/>

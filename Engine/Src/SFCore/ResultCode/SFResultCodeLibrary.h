@@ -510,80 +510,83 @@ namespace SF {
 			// Operation is canceled 
 			constexpr Result 			SUCCESS_CANCELED                                                   ((int32_t)0x270100A3L);
 
+			// stream doesn't exist 
+			constexpr Result 			STREAM_NOT_EXIST                                                   ((int32_t)0xE70100A4L);
+
 			// Operation is not supported 
-			constexpr Result 			NOT_SUPPORTED                                                      ((int32_t)0xE70100A4L);
+			constexpr Result 			NOT_SUPPORTED                                                      ((int32_t)0xE70100A5L);
 
 			// Format is not supported 
-			constexpr Result 			NOT_SUPPORTED_FORMAT                                               ((int32_t)0xE70100A5L);
+			constexpr Result 			NOT_SUPPORTED_FORMAT                                               ((int32_t)0xE70100A6L);
 
 			// Format is not valid 
-			constexpr Result 			INVALID_FORMAT                                                     ((int32_t)0xE70100A6L);
+			constexpr Result 			INVALID_FORMAT                                                     ((int32_t)0xE70100A7L);
 
 			// Failed to open file 
-			constexpr Result 			INVALID_FILE                                                       ((int32_t)0xE70100A7L);
+			constexpr Result 			INVALID_FILE                                                       ((int32_t)0xE70100A8L);
 
 			// Invalid frame 
-			constexpr Result 			INVALID_FRAME                                                      ((int32_t)0xE70100A8L);
+			constexpr Result 			INVALID_FRAME                                                      ((int32_t)0xE70100A9L);
 
 			// Specific variable not found 
-			constexpr Result 			VARIABLE_NOT_FOUND                                                 ((int32_t)0xE70100A9L);
+			constexpr Result 			VARIABLE_NOT_FOUND                                                 ((int32_t)0xE70100AAL);
 
 			// Specific function not found 
-			constexpr Result 			FUNCTION_NOT_FOUND                                                 ((int32_t)0xE70100AAL);
+			constexpr Result 			FUNCTION_NOT_FOUND                                                 ((int32_t)0xE70100ABL);
 
 			// Specific object not found 
-			constexpr Result 			OBJECT_NOT_FOUND                                                   ((int32_t)0xE70100ABL);
+			constexpr Result 			OBJECT_NOT_FOUND                                                   ((int32_t)0xE70100ACL);
 
 			// Invalid stream ID 
-			constexpr Result 			INVALID_STREAMID                                                   ((int32_t)0xE70100ACL);
+			constexpr Result 			INVALID_STREAMID                                                   ((int32_t)0xE70100ADL);
 
 			// Generic DB failure 
-			constexpr Result 			DB_FAILURE                                                         ((int32_t)0xE70100ADL);
+			constexpr Result 			DB_FAILURE                                                         ((int32_t)0xE70100AEL);
 
 			// Service is not available 
-			constexpr Result 			SERVICE_NOT_AVAILABLE                                              ((int32_t)0xE70100AEL);
+			constexpr Result 			SERVICE_NOT_AVAILABLE                                              ((int32_t)0xE70100AFL);
 
 			// Invalid character ID 
-			constexpr Result 			INVALID_CHARACTERID                                                ((int32_t)0xE70100AFL);
+			constexpr Result 			INVALID_CHARACTERID                                                ((int32_t)0xE70100B0L);
 
 			// Character hasn't selected 
-			constexpr Result 			CHARACTER_NOT_SELECTED                                             ((int32_t)0xE70100B0L);
+			constexpr Result 			CHARACTER_NOT_SELECTED                                             ((int32_t)0xE70100B1L);
 
 			// Invalid version 
-			constexpr Result 			INVALID_VERSION                                                    ((int32_t)0xE70100B1L);
+			constexpr Result 			INVALID_VERSION                                                    ((int32_t)0xE70100B2L);
 
 			// Server internal error 
-			constexpr Result 			SERVER_INTERNAL_ERROR                                              ((int32_t)0xE70100B2L);
+			constexpr Result 			SERVER_INTERNAL_ERROR                                              ((int32_t)0xE70100B3L);
 
 			// Generic Server error 
-			constexpr Result 			GENERIC_SERVER_ERROR                                               ((int32_t)0xE70100B3L);
+			constexpr Result 			GENERIC_SERVER_ERROR                                               ((int32_t)0xE70100B4L);
 
 			// Specified key not found 
-			constexpr Result 			KEY_NOTFOUND                                                       ((int32_t)0xE70100B4L);
+			constexpr Result 			KEY_NOTFOUND                                                       ((int32_t)0xE70100B5L);
 
 			// Specified key has invalid data 
-			constexpr Result 			INVALID_KEY                                                        ((int32_t)0xE70100B5L);
+			constexpr Result 			INVALID_KEY                                                        ((int32_t)0xE70100B6L);
 
 			// Invalid protocol has specified 
-			constexpr Result 			INVALID_PROTOCOL                                                   ((int32_t)0xE70100B6L);
+			constexpr Result 			INVALID_PROTOCOL                                                   ((int32_t)0xE70100B7L);
 
 			// Too big parameter has assigned 
-			constexpr Result 			TOO_BIG_PARAMETER                                                  ((int32_t)0xE70100B7L);
+			constexpr Result 			TOO_BIG_PARAMETER                                                  ((int32_t)0xE70100B8L);
 
 			// Deprecated 
-			constexpr Result 			DEPRECATED_FEATURE                                                 ((int32_t)0xE70100B8L);
+			constexpr Result 			DEPRECATED_FEATURE                                                 ((int32_t)0xE70100B9L);
 
 			// In progress 
-			constexpr Result 			IN_PROGRESS                                                        ((int32_t)0xE70100B9L);
+			constexpr Result 			IN_PROGRESS                                                        ((int32_t)0xE70100BAL);
 
 			// Invalid data 
-			constexpr Result 			INVALID_DATA                                                       ((int32_t)0xE70100BAL);
+			constexpr Result 			INVALID_DATA                                                       ((int32_t)0xE70100BBL);
 
 			// Invalid cache data 
-			constexpr Result 			INVALID_CACHE_DATA                                                 ((int32_t)0xE70100BBL);
+			constexpr Result 			INVALID_CACHE_DATA                                                 ((int32_t)0xE70100BCL);
 
 			// Invalid schema data 
-			constexpr Result 			INVALID_SCHEMA                                                     ((int32_t)0xE70100BCL);
+			constexpr Result 			INVALID_SCHEMA                                                     ((int32_t)0xE70100BDL);
 
 	void InitializeResultCodeSF();
 

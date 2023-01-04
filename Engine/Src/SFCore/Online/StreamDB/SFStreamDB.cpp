@@ -501,7 +501,7 @@ namespace SF
 		case RdKafka::ERR__UNKNOWN_PARTITION:
         case RdKafka::ERR_UNKNOWN_TOPIC_OR_PART:
             SFLog(Net, Error, "Consume failed: part:{0}, stream:{1}, error:{2}", GetPartition(), GetTopic(), message->errstr());
-			hr = ResultCode::INVALID_STREAMID;
+			hr = ResultCode::STREAM_NOT_EXIST;
 			break;
 
 		default:
@@ -671,7 +671,7 @@ namespace SF
 		case RdKafka::ERR__UNKNOWN_PARTITION:
         case RdKafka::ERR_UNKNOWN_TOPIC_OR_PART:
             SFLog(Net, Error, "Consume failed: part:{0}, stream:{1}, error:{2}", GetPartition(), GetTopic(), message->errstr());
-			hr = ResultCode::INVALID_STREAMID;
+			hr = ResultCode::STREAM_NOT_EXIST;
 			break;
 
 		default:
