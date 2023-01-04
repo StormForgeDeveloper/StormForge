@@ -108,7 +108,7 @@ namespace SF {
 	void NetAddress::FromString(const char* strAddress)
 	{
 		Assert(strAddress);
-		if (strAddress == nullptr)
+		if (StrUtil::IsNullOrEmpty(strAddress))
 		{
 			Address[0] = '\0';
 			Port = 0;
@@ -141,7 +141,7 @@ namespace SF {
 	void NetAddress::FromString(const char* strAddress, uint16_t port)
 	{
 		Assert(strAddress);
-		if (strAddress == nullptr)
+		if (StrUtil::IsNullOrEmpty(strAddress))
 		{
 			Address[0] = '\0';
 			Port = 0;
