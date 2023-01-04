@@ -32,9 +32,12 @@ namespace Util {
 	public:
 
 		// System path separator
-		static const char* DirectorySeparatorCharString;
 		static const char DirectorySeparatorChar;
-		static const char AltDirectorySeparatorChar;
+        static const char* DirectorySeparatorCharString;
+
+        static const char AltDirectorySeparatorChar;
+        static const char* AltDirectorySeparatorCharString;
+
 		static const char* DirectorySeparatorChars;
 
 
@@ -51,6 +54,8 @@ namespace Util {
 
 		// Get file directory
 		static String GetFileDirectory(const String& strFilePath);
+
+        static String GetParentFileDirectory(const String& strFilePath);
 
 		// Combine paths
 		static String Combine(const String& strFilePath1, const char* strFilePath2);

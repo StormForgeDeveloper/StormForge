@@ -42,12 +42,14 @@ namespace Util {
 	const char* Path::DirectorySeparatorCharString = "\\";
 	const char Path::DirectorySeparatorChar = '\\';
 	const char Path::AltDirectorySeparatorChar = '/';
+    const char* Path::AltDirectorySeparatorCharString = "/";
 	const char* Path::DirectorySeparatorChars = "\\/";
 #else
 	const char* Path::DirectorySeparatorCharString = "/";
 	const char Path::DirectorySeparatorChar = '/';
 	const char Path::AltDirectorySeparatorChar = '\\';
-	const char* Path::DirectorySeparatorChars = "/\\";
+    const char* Path::AltDirectorySeparatorCharString = "\\";
+    const char* Path::DirectorySeparatorChars = "/\\";
 #endif
 
 	// Get extension
@@ -127,6 +129,32 @@ namespace Util {
 		return String(strFilePath.GetHeap(), strFilePath, 0, iSeperator);
 	}
 
+    String Path::GetParentFileDirectory(const String& strFilePath)
+    {
+        if (strFilePath == nullptr)
+            return nullptr;
+
+        if (strFilePath.length() > 0)
+        {
+            if (strFilePath.data()[strFilePath.length() - 1] == DirectorySeparatorChar)
+            {
+                strFilePath.TrimEnd(DirectorySeparatorCharString);
+            }
+            else if (strFilePath.data()[strFilePath.length() - 1] == AltDirectorySeparatorChar)
+            {
+                strFilePath.TrimEnd(AltDirectorySeparatorCharString);
+            }
+        }
+
+        auto pStr = strFilePath;
+        int iSeperator = StrUtil::IndexofAnyFromBack(strFilePath, DirectorySeparatorChars);
+        if (iSeperator < 0)
+            return strFilePath;
+
+        return String(strFilePath.GetHeap(), strFilePath, 0, iSeperator);
+    }
+
+
 	// Combine paths
 	String Path::Combine(const String& strFilePath1, const char* strFilePath2)
 	{
@@ -197,9 +225,25 @@ namespace Util {
 	static String ContentDir;
 	const String& Path::GetContentDir()
 	{
+        if (ContentDir.IsNullOrEmpty())
+        {
+            String curPath = Util::GetModulePath();
+            while (curPath.length() > 0)
+            {
+                String testPath = Util::Path::Combine(curPath, "Contents");
+                if (FileUtil::IsDirectoryExist(testPath))
+                {
+                    ContentDir = testPath;
+                    break;
+                }
 
-		// TODO:
-		assert(false);
+                curPath = Util::Path::GetParentFileDirectory(curPath);
+            }
+
+            // put "Contents" if failed to find best path
+            if (ContentDir.IsNullOrEmpty())
+                ContentDir = "Contents";
+        }
 
 		return ContentDir;
 	}

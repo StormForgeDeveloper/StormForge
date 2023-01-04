@@ -499,12 +499,13 @@ namespace SF
 
 		case RdKafka::ERR__UNKNOWN_TOPIC:
 		case RdKafka::ERR__UNKNOWN_PARTITION:
-			SFLog(Net, Error, "Consume failed: might be invalid stream, {0}", message->errstr());
+        case RdKafka::ERR_UNKNOWN_TOPIC_OR_PART:
+            SFLog(Net, Error, "Consume failed: part:{0}, stream:{1}, error:{2}", GetPartition(), GetTopic(), message->errstr());
 			hr = ResultCode::INVALID_STREAMID;
 			break;
 
 		default:
-			SFLog(Net, Error, "Consume failed: {0}", message->errstr());
+			SFLog(Net, Error, "Consume failed: {0}:{1}", int(message->err()), message->errstr());
 			hr = ResultCode::UNEXPECTED;
 		}
 
@@ -668,12 +669,13 @@ namespace SF
 
 		case RdKafka::ERR__UNKNOWN_TOPIC:
 		case RdKafka::ERR__UNKNOWN_PARTITION:
-			SFLog(Net, Error, "Consume failed: might be invalid stream, {0}", message->errstr());
+        case RdKafka::ERR_UNKNOWN_TOPIC_OR_PART:
+            SFLog(Net, Error, "Consume failed: part:{0}, stream:{1}, error:{2}", GetPartition(), GetTopic(), message->errstr());
 			hr = ResultCode::INVALID_STREAMID;
 			break;
 
 		default:
-			SFLog(Net, Error, "Consume failed: {0}", message->errstr());
+			SFLog(Net, Error, "Consume failed: {0}:{1}", int(message->err()), message->errstr());
 			hr = ResultCode::UNEXPECTED;
 		}
 
