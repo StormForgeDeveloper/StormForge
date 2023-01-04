@@ -282,6 +282,9 @@ namespace SF {
 				m_IncreaseSize = szNewIncSize;
 			}
 
+            // Test if the index is in valid range
+            SF_FORCEINLINE bool IsValidIndex(int iIndex) const { return iIndex >= 0 && iIndex < size(); }
+
 			// set Reserve size
 			virtual Result reserve(size_t szReserv) { return ResultCode::SUCCESS; }
 

@@ -118,7 +118,7 @@ namespace SF
 			{
  				LoginCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Login:{0}:{1} , TransactionID:{2}, GameID:{3}, ID:{4,60}, Password:{5,60}",
+				SFLog(Net, Debug1, "Login::Login, {0}:{1} , TransactionID:{2}, GameID:{3}, ID:{4,60}, Password:{5,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGameID(), parser.GetID(), parser.GetPassword()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -230,7 +230,7 @@ namespace SF
 			{
  				LoginRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Login:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, ErrorReason:{9,60}",
+				SFLog(Net, Debug1, "Login::Login, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, ErrorReason:{9,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetErrorReason()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -337,7 +337,7 @@ namespace SF
 			{
  				LoginByFacebookCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "LoginByFacebook:{0}:{1} , TransactionID:{2}, GameID:{3}, UID:{4}, FaceBookName:{5,60}, EMail:{6,60}, FacebookToken:{7,60}",
+				SFLog(Net, Debug1, "Login::LoginByFacebook, {0}:{1} , TransactionID:{2}, GameID:{3}, UID:{4}, FaceBookName:{5,60}, EMail:{6,60}, FacebookToken:{7,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGameID(), parser.GetUID(), parser.GetFaceBookName(), parser.GetEMail(), parser.GetFacebookToken()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginByFacebookCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -449,7 +449,7 @@ namespace SF
 			{
  				LoginByFacebookRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "LoginByFacebook:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, ErrorReason:{9,60}",
+				SFLog(Net, Debug1, "Login::LoginByFacebook, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, ErrorReason:{9,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetErrorReason()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginByFacebookRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -551,7 +551,7 @@ namespace SF
 			{
  				LoginBySteamCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "LoginBySteam:{0}:{1} , TransactionID:{2}, GameID:{3}, SteamUserID:{4}, SteamUserName:{5,60}, SteamUserToken:{6,60}",
+				SFLog(Net, Debug1, "Login::LoginBySteam, {0}:{1} , TransactionID:{2}, GameID:{3}, SteamUserID:{4}, SteamUserName:{5,60}, SteamUserToken:{6,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGameID(), parser.GetSteamUserID(), parser.GetSteamUserName(), parser.GetSteamUserToken()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginBySteamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -663,7 +663,7 @@ namespace SF
 			{
  				LoginBySteamRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "LoginBySteam:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, ErrorReason:{9,60}",
+				SFLog(Net, Debug1, "Login::LoginBySteam, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, ErrorReason:{9,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetErrorReason()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginBySteamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -756,7 +756,7 @@ namespace SF
 			{
  				CreateRandomUserCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateRandomUser:{0}:{1} , TransactionID:{2}, GameID:{3}, CellPhone:{4,60}",
+				SFLog(Net, Debug1, "Login::CreateRandomUser, {0}:{1} , TransactionID:{2}, GameID:{3}, CellPhone:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGameID(), parser.GetCellPhone()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateRandomUserCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -863,7 +863,7 @@ namespace SF
 			{
  				CreateRandomUserRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateRandomUser:{0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}",
+				SFLog(Net, Debug1, "Login::CreateRandomUser, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateRandomUserRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -959,7 +959,7 @@ namespace SF
 			{
  				UpdateMyScoreCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "UpdateMyScore:{0}:{1} , TransactionID:{2}, RankingScore:{3}, RankingType:{4}, Count:{5}",
+				SFLog(Net, Debug1, "Login::UpdateMyScore, {0}:{1} , TransactionID:{2}, RankingScore:{3}, RankingType:{4}, Count:{5}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetRankingScore(), (int)parser.GetRankingType(), parser.GetCount()); 
 				return ResultCode::SUCCESS;
 			}; // Result UpdateMyScoreCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1053,7 +1053,7 @@ namespace SF
 			{
  				UpdateMyScoreRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "UpdateMyScore:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Ranking:{4,30}",
+				SFLog(Net, Debug1, "Login::UpdateMyScore, {0}:{1} , TransactionID:{2}, Result:{3:X8}, Ranking:{4,30}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetRanking()); 
 				return ResultCode::SUCCESS;
 			}; // Result UpdateMyScoreRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1149,7 +1149,7 @@ namespace SF
 			{
  				GetRankingListCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetRankingList:{0}:{1} , TransactionID:{2}, RankingType:{3}, BaseRanking:{4}, Count:{5}",
+				SFLog(Net, Debug1, "Login::GetRankingList, {0}:{1} , TransactionID:{2}, RankingType:{3}, BaseRanking:{4}, Count:{5}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), (int)parser.GetRankingType(), parser.GetBaseRanking(), parser.GetCount()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetRankingListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1243,7 +1243,7 @@ namespace SF
 			{
  				GetRankingListRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetRankingList:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Ranking:{4,30}",
+				SFLog(Net, Debug1, "Login::GetRankingList, {0}:{1} , TransactionID:{2}, Result:{3:X8}, Ranking:{4,30}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetRanking()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetRankingListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1334,7 +1334,7 @@ namespace SF
 			{
  				DataTestCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DataTest:{0}:{1} , TransactionID:{2}, TestData:{3,30}",
+				SFLog(Net, Debug1, "Login::DataTest, {0}:{1} , TransactionID:{2}, TestData:{3,30}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTestData()); 
 				return ResultCode::SUCCESS;
 			}; // Result DataTestCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1428,7 +1428,7 @@ namespace SF
 			{
  				DataTestRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DataTest:{0}:{1} , TransactionID:{2}, Result:{3:X8}, TestData:{4,30}",
+				SFLog(Net, Debug1, "Login::DataTest, {0}:{1} , TransactionID:{2}, Result:{3:X8}, TestData:{4,30}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetTestData()); 
 				return ResultCode::SUCCESS;
 			}; // Result DataTestRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1498,7 +1498,7 @@ namespace SF
 			{
  				HeartbeatC2SEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Heartbeat:{0}:{1} ",
+				SFLog(Net, Debug1, "Login::Heartbeat, {0}:{1} ",
 						prefix, pMsg->GetMessageHeader()->Length); 
 				return ResultCode::SUCCESS;
 			}; // Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1587,7 +1587,7 @@ namespace SF
 			{
  				DebugPrintALLRankingCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DebugPrintALLRanking:{0}:{1} , TransactionID:{2}, FileName:{3,60}",
+				SFLog(Net, Debug1, "Login::DebugPrintALLRanking, {0}:{1} , TransactionID:{2}, FileName:{3,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetFileName()); 
 				return ResultCode::SUCCESS;
 			}; // Result DebugPrintALLRankingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1674,7 +1674,7 @@ namespace SF
 			{
  				DebugPrintALLRankingRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DebugPrintALLRanking:{0}:{1} , TransactionID:{2}, Result:{3:X8}",
+				SFLog(Net, Debug1, "Login::DebugPrintALLRanking, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
 			}; // Result DebugPrintALLRankingRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)

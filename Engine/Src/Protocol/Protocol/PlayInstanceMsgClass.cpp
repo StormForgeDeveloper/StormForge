@@ -117,7 +117,7 @@ namespace SF
 			{
  				JoinPlayInstanceCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "JoinPlayInstance:{0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, PlayerIdentifier:{5,60}",
+				SFLog(Net, Debug1, "PlayInstance::JoinPlayInstance, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, PlayerIdentifier:{5,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetPlayerIdentifier()); 
 				return ResultCode::SUCCESS;
 			}; // Result JoinPlayInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -280,7 +280,7 @@ namespace SF
 			{
  				JoinPlayInstanceRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "JoinPlayInstance:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, CharacterID:{6}, CharacterPrivateData:{7}, Movement:{8}",
+				SFLog(Net, Debug1, "PlayInstance::JoinPlayInstance, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, CharacterID:{6}, CharacterPrivateData:{7}, Movement:{8}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetCharacterID(), parser.GetCharacterPrivateData(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
 			}; // Result JoinPlayInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -368,7 +368,7 @@ namespace SF
 			{
  				PlayerKickedS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "PlayerKicked:{0}:{1} , PlayInstanceUID:{2}, KickedPlayerID:{3}",
+				SFLog(Net, Debug1, "PlayInstance::PlayerKicked, {0}:{1} , PlayInstanceUID:{2}, KickedPlayerID:{3}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetKickedPlayerID()); 
 				return ResultCode::SUCCESS;
 			}; // Result PlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -467,7 +467,7 @@ namespace SF
 			{
  				PlayPacketC2SEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "PlayPacket:{0}:{1} , PlayInstanceUID:{2}, SenderEndpointID:{3}, TargetEndpointMask:{4}, Payload:{5,30}",
+				SFLog(Net, Debug1, "PlayInstance::PlayPacket, {0}:{1} , PlayInstanceUID:{2}, SenderEndpointID:{3}, TargetEndpointMask:{4}, Payload:{5,30}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetSenderEndpointID(), parser.GetTargetEndpointMask(), parser.GetPayload()); 
 				return ResultCode::SUCCESS;
 			}; // Result PlayPacketC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -671,7 +671,7 @@ namespace SF
 			{
  				NewActorInViewS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "NewActorInView:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, PlayerPlatformId:{4}, PublicData:{5}, EquipData:{6}, Movement:{7}, State:{8}, StateValues:{9}",
+				SFLog(Net, Debug1, "PlayInstance::NewActorInView, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, PlayerPlatformId:{4}, PublicData:{5}, EquipData:{6}, Movement:{7}, State:{8}, StateValues:{9}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetPlayerPlatformId(), parser.GetPublicData(), parser.GetEquipData(), parser.GetMovement(), parser.GetState(), parser.GetStateValues()); 
 				return ResultCode::SUCCESS;
 			}; // Result NewActorInViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -759,7 +759,7 @@ namespace SF
 			{
  				RemoveActorFromViewS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "RemoveActorFromView:{0}:{1} , PlayInstanceUID:{2}, ActorID:{3}",
+				SFLog(Net, Debug1, "PlayInstance::RemoveActorFromView, {0}:{1} , PlayInstanceUID:{2}, ActorID:{3}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetActorID()); 
 				return ResultCode::SUCCESS;
 			}; // Result RemoveActorFromViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -851,7 +851,7 @@ namespace SF
 			{
  				PlayerMovementC2SEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug3, "PlayerMovement:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, Movement:{4}",
+				SFLog(Net, Debug3, "PlayInstance::PlayerMovement, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, Movement:{4}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
 			}; // Result PlayerMovementC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -939,7 +939,7 @@ namespace SF
 			{
  				ActorMovementS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug4, "ActorMovement:{0}:{1} , PlayInstanceUID:{2}, Movement:{3}",
+				SFLog(Net, Debug4, "PlayInstance::ActorMovement, {0}:{1} , PlayInstanceUID:{2}, Movement:{3}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
 			}; // Result ActorMovementS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1030,7 +1030,7 @@ namespace SF
 			{
  				ActorMovementsS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug4, "ActorMovements:{0}:{1} , PlayInstanceUID:{2}, Movement:{3,30}",
+				SFLog(Net, Debug4, "PlayInstance::ActorMovements, {0}:{1} , PlayInstanceUID:{2}, Movement:{3,30}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
 			}; // Result ActorMovementsS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1188,7 +1188,7 @@ namespace SF
 			{
  				PlayerStateChangedS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "PlayerStateChanged:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, State:{4}, MoveFrame:{5}, Position:{6}, StateValues:{7}",
+				SFLog(Net, Debug1, "PlayInstance::PlayerStateChanged, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, State:{4}, MoveFrame:{5}, Position:{6}, StateValues:{7}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetState(), parser.GetMoveFrame(), parser.GetPosition(), parser.GetStateValues()); 
 				return ResultCode::SUCCESS;
 			}; // Result PlayerStateChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1328,7 +1328,7 @@ namespace SF
 			{
  				ClientSyncReliableC2SEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "ClientSyncReliable:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, SyncData:{4}",
+				SFLog(Net, Debug1, "PlayInstance::ClientSyncReliable, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, SyncData:{4}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetSyncData()); 
 				return ResultCode::SUCCESS;
 			}; // Result ClientSyncReliableC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1468,7 +1468,7 @@ namespace SF
 			{
  				ClientSyncC2SEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "ClientSync:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, SyncData:{4}",
+				SFLog(Net, Debug1, "PlayInstance::ClientSync, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, SyncData:{4}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetSyncData()); 
 				return ResultCode::SUCCESS;
 			}; // Result ClientSyncC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1568,7 +1568,7 @@ namespace SF
 			{
  				OccupyMapObjectCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "OccupyMapObject:{0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MapObjectId:{5}, UsageId:{6}",
+				SFLog(Net, Debug1, "PlayInstance::OccupyMapObject, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MapObjectId:{5}, UsageId:{6}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId(), parser.GetUsageId()); 
 				return ResultCode::SUCCESS;
 			}; // Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1667,7 +1667,7 @@ namespace SF
 			{
  				OccupyMapObjectRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "OccupyMapObject:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, MapObjectId:{6}",
+				SFLog(Net, Debug1, "PlayInstance::OccupyMapObject, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, MapObjectId:{6}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId()); 
 				return ResultCode::SUCCESS;
 			}; // Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1763,7 +1763,7 @@ namespace SF
 			{
  				UnoccupyMapObjectCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "UnoccupyMapObject:{0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MapObjectId:{5}",
+				SFLog(Net, Debug1, "PlayInstance::UnoccupyMapObject, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MapObjectId:{5}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId()); 
 				return ResultCode::SUCCESS;
 			}; // Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -1862,7 +1862,7 @@ namespace SF
 			{
  				UnoccupyMapObjectRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "UnoccupyMapObject:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, MapObjectId:{6}",
+				SFLog(Net, Debug1, "PlayInstance::UnoccupyMapObject, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, MapObjectId:{6}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId()); 
 				return ResultCode::SUCCESS;
 			}; // Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -2014,7 +2014,7 @@ namespace SF
 			{
  				UseMapObjectCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "UseMapObject:{0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MapObjectId:{5}, UseParameters:{6}",
+				SFLog(Net, Debug1, "PlayInstance::UseMapObject, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MapObjectId:{5}, UseParameters:{6}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId(), parser.GetUseParameters()); 
 				return ResultCode::SUCCESS;
 			}; // Result UseMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -2171,7 +2171,7 @@ namespace SF
 			{
  				UseMapObjectRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "UseMapObject:{0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, MapObjectId:{6}, ResultAttributes:{7}",
+				SFLog(Net, Debug1, "PlayInstance::UseMapObject, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, MapObjectId:{6}, ResultAttributes:{7}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId(), parser.GetResultAttributes()); 
 				return ResultCode::SUCCESS;
 			}; // Result UseMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -2330,7 +2330,7 @@ namespace SF
 			{
  				ZoneChatCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "ZoneChat:{0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MessageType:{5}, ChatMetaData:{6}, ChatMessage:{7,60}",
+				SFLog(Net, Debug1, "PlayInstance::ZoneChat, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MessageType:{5}, ChatMetaData:{6}, ChatMessage:{7,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMessageType(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
 			}; // Result ZoneChatCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -2417,7 +2417,7 @@ namespace SF
 			{
  				ZoneChatRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "ZoneChat:{0}:{1} , TransactionID:{2}, Result:{3:X8}",
+				SFLog(Net, Debug1, "PlayInstance::ZoneChat, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
 			}; // Result ZoneChatRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -2570,7 +2570,7 @@ namespace SF
 			{
  				ZoneChatS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "ZoneChat:{0}:{1} , PlayInstanceUID:{2}, SenderID:{3}, MessageType:{4}, ChatMetaData:{5}, ChatMessage:{6,60}",
+				SFLog(Net, Debug1, "PlayInstance::ZoneChat, {0}:{1} , PlayInstanceUID:{2}, SenderID:{3}, MessageType:{4}, ChatMetaData:{5}, ChatMessage:{6,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetSenderID(), parser.GetMessageType(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
 			}; // Result ZoneChatS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -2666,7 +2666,7 @@ namespace SF
 			{
  				LevelUpS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "LevelUp:{0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, CurrentExp:{4}, CurrentLevel:{5}",
+				SFLog(Net, Debug1, "PlayInstance::LevelUp, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, CurrentExp:{4}, CurrentLevel:{5}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetCurrentExp(), parser.GetCurrentLevel()); 
 				return ResultCode::SUCCESS;
 			}; // Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -2759,7 +2759,7 @@ namespace SF
 			{
  				CreateStreamCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateStream:{0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
+				SFLog(Net, Debug1, "PlayInstance::CreateStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -2851,7 +2851,7 @@ namespace SF
 			{
  				CreateStreamRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CreateStream:{0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
+				SFLog(Net, Debug1, "PlayInstance::CreateStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -2944,7 +2944,7 @@ namespace SF
 			{
  				FindStreamCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "FindStream:{0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
+				SFLog(Net, Debug1, "PlayInstance::FindStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
 			}; // Result FindStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -3036,7 +3036,7 @@ namespace SF
 			{
  				FindStreamRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "FindStream:{0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
+				SFLog(Net, Debug1, "PlayInstance::FindStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
 			}; // Result FindStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -3129,7 +3129,7 @@ namespace SF
 			{
  				DeleteStreamCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DeleteStream:{0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
+				SFLog(Net, Debug1, "PlayInstance::DeleteStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
 			}; // Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -3221,7 +3221,7 @@ namespace SF
 			{
  				DeleteStreamRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "DeleteStream:{0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
+				SFLog(Net, Debug1, "PlayInstance::DeleteStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
 			}; // Result DeleteStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -3309,7 +3309,7 @@ namespace SF
 			{
  				GetStreamListCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetStreamList:{0}:{1} , TransactionID:{2}, Ticket:{3}",
+				SFLog(Net, Debug1, "PlayInstance::GetStreamList, {0}:{1} , TransactionID:{2}, Ticket:{3}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetStreamListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -3400,7 +3400,7 @@ namespace SF
 			{
  				GetStreamListRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GetStreamList:{0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamNames:{4,60}",
+				SFLog(Net, Debug1, "PlayInstance::GetStreamList, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamNames:{4,60}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamNames()); 
 				return ResultCode::SUCCESS;
 			}; // Result GetStreamListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -3546,7 +3546,7 @@ namespace SF
 			{
  				CallFunctionCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CallFunction:{0}:{1} , TransactionID:{2}, FunctionName:{3}, PlayerID:{4}, Parameters:{5}",
+				SFLog(Net, Debug1, "PlayInstance::CallFunction, {0}:{1} , TransactionID:{2}, FunctionName:{3}, PlayerID:{4}, Parameters:{5}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetFunctionName(), parser.GetPlayerID(), parser.GetParameters()); 
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -3685,7 +3685,7 @@ namespace SF
 			{
  				CallFunctionRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "CallFunction:{0}:{1} , TransactionID:{2}, Result:{3:X8}, Results:{4}",
+				SFLog(Net, Debug1, "PlayInstance::CallFunction, {0}:{1} , TransactionID:{2}, Result:{3:X8}, Results:{4}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetResults()); 
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)

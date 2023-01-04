@@ -1,8 +1,8 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
 	  <OutputType>Library</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
 	<Platforms>x64</Platforms>
 	  <UseWPF>true</UseWPF>
 	<ApplicationIcon />
@@ -11,15 +11,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="LogViewControl.xaml" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="MySql.Data" Version="8.0.26" />
   </ItemGroup>
 
   <ItemGroup>

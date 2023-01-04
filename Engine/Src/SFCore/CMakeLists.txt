@@ -185,6 +185,8 @@ set(SUBUtil_FILES
 	Util/SFUtility.inl
 	Util/SFHashCRC32Table.inl
 	Util/SFStrUtil.inl
+	Util/SFDebugger.h
+	Util/SFDebugger.cpp
   )
 
 source_group(Util FILES

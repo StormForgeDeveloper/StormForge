@@ -141,7 +141,8 @@ namespace ProtocolCompiler
             string strClassName = MsgClassName(Name, typeName);
             OpenSection("Result", strClassName + "::TraceOut(const char* prefix, const MessageDataPtr& pMsg)");
 
-            string strTrace = string.Format("{0}, \"{1}:{{0}}:{{1}} ", traceChannel, Name, typeName);
+
+            string strTrace = $"{traceChannel}, \"{Group.Name}::{Name}, {{0}}:{{1}} ";
             string strTraceMember = "prefix, pMsg->GetMessageHeader()->Length";
             int ParamCount = 2;
 

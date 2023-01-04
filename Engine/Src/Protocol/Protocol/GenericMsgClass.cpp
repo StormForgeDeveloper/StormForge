@@ -108,7 +108,7 @@ namespace SF
 			{
  				GenericFailureCmd parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GenericFailure:{0}:{1} , RouteContext:{2}, TransactionID:{3}",
+				SFLog(Net, Debug1, "Generic::GenericFailure, {0}:{1} , RouteContext:{2}, TransactionID:{3}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetRouteContext(), parser.GetTransactionID()); 
 				return ResultCode::SUCCESS;
 			}; // Result GenericFailureCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -199,7 +199,7 @@ namespace SF
 			{
  				GenericFailureRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "GenericFailure:{0}:{1} , RouteContext:{2}, TransactionID:{3}, Result:{4:X8}",
+				SFLog(Net, Debug1, "Generic::GenericFailure, {0}:{1} , RouteContext:{2}, TransactionID:{3}, Result:{4:X8}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetRouteContext(), parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
 			}; // Result GenericFailureRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
