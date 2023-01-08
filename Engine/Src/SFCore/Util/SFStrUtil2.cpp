@@ -818,27 +818,8 @@ namespace StrUtil {
 	}
 
 
-	// Search index of separator
-	// str				: String input
-	// sep				: separator
-	int Indexof(const char* str, char sep)
-	{
-		if (str == nullptr)
-			return -1;
-		for(int iChar = 0; ;iChar++)
-		{
-			char currentChar = *str++;
-			if (currentChar == '\0')
-				break;
 
-			if (currentChar == sep)
-				return iChar;
-		}
-
-		return -1;
-	}
-
-	// Search index of any separator
+    // Search index of any separator
 	// str				: String input
 	// seps				: separators
 	int IndexofAny(const char* str, const char* seps)

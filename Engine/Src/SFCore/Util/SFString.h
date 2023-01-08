@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -497,6 +497,31 @@ namespace SF {
 
 			return TString(GetHeap(), std::forward<SharedPointerT<SharedStringBufferType>>(newBuffer));
 		}
+
+        StringType& ReplaceInline(CharType from, CharType to)
+        {
+            if (!m_Buffer.IsValid())
+                return *this;
+
+            if (!m_Buffer.IsUnique())
+            {
+                auto newBuffer = new(GetHeap()) SharedStringBufferType(GetHeap(), m_Buffer->GetStringLength() + 1);
+                newBuffer->Append(m_Buffer->GetBufferPointer(), m_Buffer->GetStringLength());
+
+                m_Buffer = newBuffer;
+            }
+
+            auto pCur = m_Buffer->GetBufferPointer();
+            int iIndex = StrUtil::Indexof(pCur, from);
+            while(iIndex >= 0)
+            {
+                pCur[iIndex] = to;
+                pCur = pCur + 1;
+                iIndex = StrUtil::Indexof(pCur, from);
+            }
+
+            return *this;
+        }
 
 		// Check heading string
 		bool StartsWith(const StringType& op, bool ignoreCase = false) const
