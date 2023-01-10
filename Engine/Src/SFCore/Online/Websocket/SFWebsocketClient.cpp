@@ -116,7 +116,7 @@ namespace SF
 		super::TickEventLoop(iEvent);
 
 		// empty write queue if possible
-		if (!m_UseWriteEvent && m_WSI && m_Session)
+		if (m_WSI && m_Session)
 		{
             TrySendFlush(m_Session);
 		}

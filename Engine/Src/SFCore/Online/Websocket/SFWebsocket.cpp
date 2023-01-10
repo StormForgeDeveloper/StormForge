@@ -236,8 +236,8 @@ namespace SF
 		auto pSendItem = pss->SendBuffer->AllocateWrite(MessageBufferPadding + messageData.size());
 		if (pSendItem == nullptr)
 		{
-			SFLog(Websocket, Error, "OOM: dropping!");
-			return ResultCode::OUT_OF_MEMORY;
+			SFLog(Websocket, Error, "Send queue overflow: dropping!");
+			return ResultCode::IO_NOBUFS;
 		}
 
 		memcpy((char*)pSendItem->GetDataPtr() + MessageBufferPadding, messageData.data(), messageData.size());
@@ -286,7 +286,6 @@ namespace SF
         struct WSSessionData* pss = reinterpret_cast<struct WSSessionData*>(user);
         if (pss && pss->SendBufferLock)
         {
-            MutexScopeLock lock(*pss->SendBufferLock);
             OnConnectionWritable(m_WSI, user, nullptr, 0);
         }
     }
@@ -297,6 +296,8 @@ namespace SF
 
 		if (pss == nullptr || pss->SendBuffer == nullptr)
 			return 1;
+
+        MutexScopeLock lock(*pss->SendBufferLock);
 
 		auto SendBuffer = pss->SendBuffer;
 		auto pSendItem = SendBuffer->DequeueRead();
