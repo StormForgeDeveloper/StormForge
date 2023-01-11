@@ -146,7 +146,18 @@ namespace SF
 	{
 		for (uint iThread = 0; iThread < m_NumThread; iThread++)
 		{
-			auto pThread = new(GetHeap()) FunctorTickThread([this, iThread](Thread* pThread)
+            auto pThread = new(GetHeap()) FunctorTickThread(
+                [this, iThread](Thread* pThread)
+                {
+                    m_RunningThreadCount++;
+                    SFLog(Websocket, Info, "Websocket thread started, {0}:{1}", m_Name, iThread);
+                },
+                [this, iThread](Thread* pThread)
+                {
+                    m_RunningThreadCount--;
+                    SFLog(Websocket, Info, "Websocket thread stopped, {0}:{1}", m_Name, iThread);
+                },
+                [this, iThread](Thread* pThread)
 				{
 					if (!m_WSIContext)
 						return false;

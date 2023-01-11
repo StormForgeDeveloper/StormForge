@@ -166,22 +166,44 @@ namespace SF {
 	{
 	public:
 
-		typedef std::function<bool(Thread* pThread)> Functor;
+		using TickFunc = std::function<bool(Thread* pThread)>;
+        using EventFunc = std::function<void(Thread* pThread)>;
 
 	private:
 		// functor
 		// should be std::function<bool(Thread* pThread)> form
-		Functor m_Func;
+        EventFunc m_FuncOnStart;
+        EventFunc m_FuncOnStop;
+        TickFunc m_FuncTick;
 
 	public:
 
-		FunctorTickThread(Functor func)
-			: m_Func(func)
+		FunctorTickThread(TickFunc tickFunc)
+			: m_FuncTick(tickFunc)
 		{}
+
+        FunctorTickThread(EventFunc onStart, EventFunc onStop, TickFunc tickFunc)
+            : m_FuncOnStart(onStart)
+            , m_FuncOnStop(onStop)
+            , m_FuncTick(tickFunc)
+        {}
+
+
+        virtual void Run() override
+        {
+            if (m_FuncOnStart)
+                m_FuncOnStart(this);
+
+            Thread::Run();
+
+            if (m_FuncOnStop)
+                m_FuncOnStop(this);
+
+        }
 
 		virtual bool Tick() override
 		{
-			return m_Func(this);
+			return m_FuncTick(this);
 		}
 	};
 
