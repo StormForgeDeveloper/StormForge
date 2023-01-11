@@ -114,20 +114,19 @@ namespace SF
 		m_FlowControlMin = size_t(m_SendBufferSize * 0.3);
 		m_FlowControlMax = size_t(m_SendBufferSize * 0.7);
 
-
 		// Event loop
 		//event_enable_debug_mode();
 		auto numEventLoop = Math::Max<uint>(1, m_NumThread);
 		for (uint iEventLoop = 0; iEventLoop < numEventLoop; iEventLoop++)
 		{
             struct event_base* eventHandle = event_base_new();
-            struct timeval tv;
+            //struct timeval tv;
 
-            tv.tv_sec = 3; // Timeout is set to 3.005 seconds
-            tv.tv_usec = 5000;
+            //tv.tv_sec = 3; // Timeout is set to 3.005 seconds
+            //tv.tv_usec = 5000;
 
-            //evtimer_set(eventHandle, timeout_cb, (void*)this); // Set a timer to cancel the request after certain time
-            evtimer_add((struct event*)eventHandle, &tv);
+            ////evtimer_set(eventHandle, timeout_cb, (void*)this); // Set a timer to cancel the request after certain time
+            //evtimer_add(eventHandle, &tv);
 
 			m_EventLoops.push_back(eventHandle);
 		}
