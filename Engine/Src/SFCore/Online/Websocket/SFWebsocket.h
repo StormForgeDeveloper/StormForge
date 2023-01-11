@@ -211,7 +211,8 @@ namespace SF
 		// port setting
 		int m_Port = 1212;
 
-		bool m_UseRecvFlowControl = true;
+        // TODO: Need to find better place to put. EventLoop has issue with variable update
+		bool m_UseRecvFlowControl = false;
 		bool m_UseWriteEvent{};
 
 		size_t m_RecvBufferSize = 32 * 1024;

@@ -22,7 +22,7 @@ namespace SF
 {
 	namespace Log
 	{
-		LogChannel Websocket("Websocket", LogOutputType::Info);
+		LogChannel Websocket("Websocket", LogOutputType::Debug5);
 	};
 
 
@@ -309,33 +309,36 @@ namespace SF
         MutexScopeLock lock(*pss->SendBufferLock);
 
 		auto SendBuffer = pss->SendBuffer;
-		auto pSendItem = SendBuffer->DequeueRead();
-		if (pSendItem == nullptr)
-			return 0; // nothing to send
+        CircularBufferQueue::BufferItem* pSendItem{};
+        while (pSendItem = SendBuffer->DequeueRead())
+        {
+            //if (pSendItem == nullptr)
+            //    return 0; // nothing to send
 
-		int flags = lws_write_ws_flags(LWS_WRITE_BINARY, 1, 1);
-		auto dataLen = int(pSendItem->DataSize - MessageBufferPadding);
+            int flags = lws_write_ws_flags(LWS_WRITE_BINARY, 1, 1);
+            auto dataLen = int(pSendItem->DataSize - MessageBufferPadding);
 
-        SFLog(Websocket, Debug4, "OnConnectionWritable: Sending data size:{0}", dataLen);
+            SFLog(Websocket, Debug4, "OnConnectionWritable: Sending data size:{0}", dataLen);
 
-		// notice we allowed for LWS_PRE in the payload already
-		int m = lws_write(wsi, ((unsigned char*)pSendItem->GetDataPtr()) + MessageBufferPadding, dataLen, (enum lws_write_protocol)flags);
-		if (m < dataLen)
-		{
-			SendBuffer->CancelRead(pSendItem);
-			SFLog(Websocket, Error, "ERROR failed write. written:{0}, requested:{1}", m, dataLen);
+            // notice we allowed for LWS_PRE in the payload already
+            int m = lws_write(wsi, ((unsigned char*)pSendItem->GetDataPtr()) + MessageBufferPadding, dataLen, (enum lws_write_protocol)flags);
+            if (m < dataLen)
+            {
+                SendBuffer->CancelRead(pSendItem);
+                SFLog(Websocket, Error, "ERROR failed write. written:{0}, requested:{1}", m, dataLen);
 
-			if (m_UseWriteEvent)
-			{
-				lws_callback_on_writable(wsi);
-			}
+                if (m_UseWriteEvent)
+                {
+                    lws_callback_on_writable(wsi);
+                }
 
-			return -1;
-		}
+                return -1;
+            }
 
-		SFLog(Websocket, Debug5, "{0}  wrote {1}: flags: 0x{2:x}", GetName(), m, flags);
+            SFLog(Websocket, Debug5, "{0}  wrote {1}: flags: 0x{2:x}", GetName(), m, flags);
 
-		SendBuffer->ReleaseRead(pSendItem);
+            SendBuffer->ReleaseRead(pSendItem);
+        }
 
 		if (m_UseWriteEvent)
 		{
@@ -349,6 +352,8 @@ namespace SF
 			{
 				if (SendBuffer->GetFreeSize() > m_FlowControlMax)
 				{
+                    SFLog(Websocket, Debug5, "lws_rx_flow_control: enable, ", pss->SendBuffer->GetFreeSize(), m_FlowControlMin);
+
 					lws_rx_flow_control(wsi, 1); // enable reading
 					pss->flow_controlled = 0;
 				}
@@ -356,6 +361,9 @@ namespace SF
 			else if (pss->SendBuffer->GetFreeSize() < m_FlowControlMin)
 			{
 				lws_rx_flow_control(wsi, 0); // disable reading
+
+                SFLog(Websocket, Debug5, "lws_rx_flow_control: disable, ", pss->SendBuffer->GetFreeSize(), m_FlowControlMin);
+
 				pss->flow_controlled = 1;
 			}
 		}
