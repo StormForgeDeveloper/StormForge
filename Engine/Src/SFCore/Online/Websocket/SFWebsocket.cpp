@@ -120,7 +120,16 @@ namespace SF
 		auto numEventLoop = Math::Max<uint>(1, m_NumThread);
 		for (uint iEventLoop = 0; iEventLoop < numEventLoop; iEventLoop++)
 		{
-			m_EventLoops.push_back(event_base_new());
+            struct event_base* eventHandle = event_base_new();
+            struct timeval tv;
+
+            tv.tv_sec = 3; // Timeout is set to 3.005 seconds
+            tv.tv_usec = 5000;
+
+            //evtimer_set(eventHandle, timeout_cb, (void*)this); // Set a timer to cancel the request after certain time
+            evtimer_add((struct event*)eventHandle, &tv);
+
+			m_EventLoops.push_back(eventHandle);
 		}
 		//m_EventSighandler = evsignal_new(m_EventLoop, SIGINT, signal_cb_event, (void*)SIGINT);
 		//m_EventTimerOuter = event_new(m_EventLoop, -1, EV_PERSIST, timer_cb_event, NULL);
@@ -324,7 +333,8 @@ namespace SF
 			return -1;
 		}
 
-		SFLog(Websocket, Debug5, "{0}  wrote {0}: flags: 0x{1:x}", GetName(), m, flags);
+		SFLog(Websocket, Debug5, "{0}  wrote {1}: flags: 0x{2:x}", GetName(), m, flags);
+
 		SendBuffer->ReleaseRead(pSendItem);
 
 		if (m_UseWriteEvent)
