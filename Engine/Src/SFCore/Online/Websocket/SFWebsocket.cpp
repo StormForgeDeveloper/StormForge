@@ -308,37 +308,33 @@ namespace SF
         MutexScopeLock lock(*pss->SendBufferLock);
 
 		auto SendBuffer = pss->SendBuffer;
-        CircularBufferQueue::BufferItem* pSendItem{};
-        pSendItem = SendBuffer->DequeueRead();
-        for (; pSendItem != nullptr; pSendItem = SendBuffer->DequeueRead())
+        auto pSendItem = SendBuffer->DequeueRead();
+        if (pSendItem == nullptr)
+            return 0; // nothing to send
+
+        int flags = lws_write_ws_flags(LWS_WRITE_BINARY, 1, 1);
+        auto dataLen = int(pSendItem->DataSize - MessageBufferPadding);
+
+        SFLog(Websocket, Debug4, "OnConnectionWritable: Sending data size:{0}", dataLen);
+
+        // notice we allowed for LWS_PRE in the payload already
+        int m = lws_write(wsi, ((unsigned char*)pSendItem->GetDataPtr()) + MessageBufferPadding, dataLen, (enum lws_write_protocol)flags);
+        if (m < dataLen)
         {
-            //if (pSendItem == nullptr)
-            //    return 0; // nothing to send
+            SendBuffer->CancelRead(pSendItem);
+            SFLog(Websocket, Error, "ERROR failed write. written:{0}, requested:{1}", m, dataLen);
 
-            int flags = lws_write_ws_flags(LWS_WRITE_BINARY, 1, 1);
-            auto dataLen = int(pSendItem->DataSize - MessageBufferPadding);
-
-            SFLog(Websocket, Debug4, "OnConnectionWritable: Sending data size:{0}", dataLen);
-
-            // notice we allowed for LWS_PRE in the payload already
-            int m = lws_write(wsi, ((unsigned char*)pSendItem->GetDataPtr()) + MessageBufferPadding, dataLen, (enum lws_write_protocol)flags);
-            if (m < dataLen)
+            if (m_UseWriteEvent)
             {
-                SendBuffer->CancelRead(pSendItem);
-                SFLog(Websocket, Error, "ERROR failed write. written:{0}, requested:{1}", m, dataLen);
-
-                if (m_UseWriteEvent)
-                {
-                    lws_callback_on_writable(wsi);
-                }
-
-                return -1;
+                lws_callback_on_writable(wsi);
             }
 
-            SFLog(Websocket, Debug5, "{0}  wrote {1}: flags: 0x{2:x}", GetName(), m, flags);
-
-            SendBuffer->ReleaseRead(pSendItem);
+            return -1;
         }
+
+        SFLog(Websocket, Debug5, "{0}  wrote {1}: flags: 0x{2:x}", GetName(), m, flags);
+
+        SendBuffer->ReleaseRead(pSendItem);
 
 		if (m_UseWriteEvent)
 		{
