@@ -168,6 +168,8 @@ namespace SF
 
 		bool m_UseSSL = false;
 
+        Atomic<int> m_RunningThreadCount;
+
 		// thread
 		DynamicArray<Thread*> m_Threads;
 
