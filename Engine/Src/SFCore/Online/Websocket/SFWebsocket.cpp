@@ -310,7 +310,8 @@ namespace SF
 
 		auto SendBuffer = pss->SendBuffer;
         CircularBufferQueue::BufferItem* pSendItem{};
-        while (pSendItem = SendBuffer->DequeueRead())
+        pSendItem = SendBuffer->DequeueRead();
+        for (; pSendItem != nullptr; pSendItem = SendBuffer->DequeueRead())
         {
             //if (pSendItem == nullptr)
             //    return 0; // nothing to send
