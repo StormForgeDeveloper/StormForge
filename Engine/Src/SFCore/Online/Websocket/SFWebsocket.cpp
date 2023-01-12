@@ -22,7 +22,7 @@ namespace SF
 {
 	namespace Log
 	{
-		LogChannel Websocket("Websocket", LogOutputType::Debug5);
+		LogChannel Websocket("Websocket", LogOutputType::Info);
 	};
 
 
