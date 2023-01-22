@@ -1,4 +1,4 @@
-﻿
+
 
 include_directories(
 	./
@@ -11,7 +11,6 @@ set(SF_UNIT_TEST_FILES
 	UnitTest1PCH.h
 	UnitTest1PCH.cpp
 	UnitTest1.cpp
-	UnitTest_ServerConfig.cpp
 	UnitTest_Zookeeper.cpp
 	Test/SFTestBase.h
 	Test/SFTestBase.cpp
