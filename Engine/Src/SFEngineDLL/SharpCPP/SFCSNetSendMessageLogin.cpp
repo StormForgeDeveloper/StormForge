@@ -131,54 +131,54 @@ SFDLL_EXPORT int  CSSFNetAdapter_LoginDebugPrintALLRankingCmd( intptr_t InNative
 
 
 // Cmd: Login request
-SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
+SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::LoginRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerAddr,InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID,InErrorReason);
+	MessageDataPtr pMessage = SF::Message::Login::LoginRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
+} // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
 
 
 
 // Cmd: Login request with Facebook UID
-SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
+SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::LoginByFacebookRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerAddr,InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID,InErrorReason);
+	MessageDataPtr pMessage = SF::Message::Login::LoginByFacebookRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
+} // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginByFacebookRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
 
 
 
 // Cmd: Login request with Facebook UID
-SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
+SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::LoginBySteamRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerAddr,InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID,InErrorReason);
+	MessageDataPtr pMessage = SF::Message::Login::LoginBySteamRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID,InErrorReason);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
+} // SFDLL_EXPORT int  CSSFNetAdapter_LoginLoginBySteamRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID, const char* InErrorReason )
 
 
 
 // Cmd: Login request
-SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID )
+SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID )
 {
  	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
 	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
-	MessageDataPtr pMessage = SF::Message::Login::CreateRandomUserRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerAddr,InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID);
+	MessageDataPtr pMessage = SF::Message::Login::CreateRandomUserRes::Create(pConnection->GetHeap(), InTransactionID, InResult,InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID);
 	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
-} // SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const NetAddress& InGameServerAddr, const NetAddress& InGameServerAddrIPV4, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID )
+} // SFDLL_EXPORT int  CSSFNetAdapter_LoginCreateRandomUserRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, const char* InGameServerPublicAddress, AccountID InAccID, AuthTicket InTicket, uint64_t InLoginEntityUID )
 
 
 

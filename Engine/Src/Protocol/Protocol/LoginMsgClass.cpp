@@ -139,8 +139,8 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
-				protocolCheck(*input >> m_GameServerAddr);
-				protocolCheck(*input >> m_GameServerAddrIPV4);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_GameServerPublicAddress, ArrayLen));
 				protocolCheck(*input >> m_AccID);
 				protocolCheck(*input >> m_Ticket);
 				protocolCheck(*input >> m_LoginEntityUID);
@@ -161,8 +161,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("GameServerAddr", "NetAddress", parser.GetGameServerAddr());
-				variableBuilder.SetVariable("GameServerAddrIPV4", "NetAddress", parser.GetGameServerAddrIPV4());
+				variableBuilder.SetVariable("GameServerPublicAddress", parser.GetGameServerPublicAddress());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 				variableBuilder.SetVariable("LoginEntityUID", parser.GetLoginEntityUID());
@@ -184,7 +183,7 @@ namespace SF
 			}; // Result LoginRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -200,8 +199,7 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InGameServerAddr)
-					+ SerializedSizeOf(InGameServerAddrIPV4)
+					+ SerializedSizeOf(InGameServerPublicAddress)
 					+ SerializedSizeOf(InAccID)
 					+ SerializedSizeOf(InTicket)
 					+ SerializedSizeOf(InLoginEntityUID)
@@ -216,22 +214,21 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
-				protocolCheck(*output << InGameServerAddr);
-				protocolCheck(*output << InGameServerAddrIPV4);
+				protocolCheck(*output << InGameServerPublicAddress);
 				protocolCheck(*output << InAccID);
 				protocolCheck(*output << InTicket);
 				protocolCheck(*output << InLoginEntityUID);
 				protocolCheck(*output << InErrorReason);
 
 				return hr;
-			}; // MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			}; // MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 			Result LoginRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				LoginRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Login::Login, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, ErrorReason:{9,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetErrorReason()); 
+				SFLog(Net, Debug1, "Login::Login, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerPublicAddress:{4,60}, AccID:{5}, Ticket:{6}, LoginEntityUID:{7}, ErrorReason:{8,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerPublicAddress(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetErrorReason()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -358,8 +355,8 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
-				protocolCheck(*input >> m_GameServerAddr);
-				protocolCheck(*input >> m_GameServerAddrIPV4);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_GameServerPublicAddress, ArrayLen));
 				protocolCheck(*input >> m_AccID);
 				protocolCheck(*input >> m_Ticket);
 				protocolCheck(*input >> m_LoginEntityUID);
@@ -380,8 +377,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("GameServerAddr", "NetAddress", parser.GetGameServerAddr());
-				variableBuilder.SetVariable("GameServerAddrIPV4", "NetAddress", parser.GetGameServerAddrIPV4());
+				variableBuilder.SetVariable("GameServerPublicAddress", parser.GetGameServerPublicAddress());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 				variableBuilder.SetVariable("LoginEntityUID", parser.GetLoginEntityUID());
@@ -403,7 +399,7 @@ namespace SF
 			}; // Result LoginByFacebookRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -419,8 +415,7 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InGameServerAddr)
-					+ SerializedSizeOf(InGameServerAddrIPV4)
+					+ SerializedSizeOf(InGameServerPublicAddress)
 					+ SerializedSizeOf(InAccID)
 					+ SerializedSizeOf(InTicket)
 					+ SerializedSizeOf(InLoginEntityUID)
@@ -435,22 +430,21 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
-				protocolCheck(*output << InGameServerAddr);
-				protocolCheck(*output << InGameServerAddrIPV4);
+				protocolCheck(*output << InGameServerPublicAddress);
 				protocolCheck(*output << InAccID);
 				protocolCheck(*output << InTicket);
 				protocolCheck(*output << InLoginEntityUID);
 				protocolCheck(*output << InErrorReason);
 
 				return hr;
-			}; // MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			}; // MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 			Result LoginByFacebookRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				LoginByFacebookRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Login::LoginByFacebook, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, ErrorReason:{9,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetErrorReason()); 
+				SFLog(Net, Debug1, "Login::LoginByFacebook, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerPublicAddress:{4,60}, AccID:{5}, Ticket:{6}, LoginEntityUID:{7}, ErrorReason:{8,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerPublicAddress(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetErrorReason()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginByFacebookRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -572,8 +566,8 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
-				protocolCheck(*input >> m_GameServerAddr);
-				protocolCheck(*input >> m_GameServerAddrIPV4);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_GameServerPublicAddress, ArrayLen));
 				protocolCheck(*input >> m_AccID);
 				protocolCheck(*input >> m_Ticket);
 				protocolCheck(*input >> m_LoginEntityUID);
@@ -594,8 +588,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("GameServerAddr", "NetAddress", parser.GetGameServerAddr());
-				variableBuilder.SetVariable("GameServerAddrIPV4", "NetAddress", parser.GetGameServerAddrIPV4());
+				variableBuilder.SetVariable("GameServerPublicAddress", parser.GetGameServerPublicAddress());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 				variableBuilder.SetVariable("LoginEntityUID", parser.GetLoginEntityUID());
@@ -617,7 +610,7 @@ namespace SF
 			}; // Result LoginBySteamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* LoginBySteamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			MessageData* LoginBySteamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -633,8 +626,7 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InGameServerAddr)
-					+ SerializedSizeOf(InGameServerAddrIPV4)
+					+ SerializedSizeOf(InGameServerPublicAddress)
 					+ SerializedSizeOf(InAccID)
 					+ SerializedSizeOf(InTicket)
 					+ SerializedSizeOf(InLoginEntityUID)
@@ -649,22 +641,21 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
-				protocolCheck(*output << InGameServerAddr);
-				protocolCheck(*output << InGameServerAddrIPV4);
+				protocolCheck(*output << InGameServerPublicAddress);
 				protocolCheck(*output << InAccID);
 				protocolCheck(*output << InTicket);
 				protocolCheck(*output << InLoginEntityUID);
 				protocolCheck(*output << InErrorReason);
 
 				return hr;
-			}; // MessageData* LoginBySteamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			}; // MessageData* LoginBySteamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 			Result LoginBySteamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				LoginBySteamRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Login::LoginBySteam, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}, ErrorReason:{9,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetErrorReason()); 
+				SFLog(Net, Debug1, "Login::LoginBySteam, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerPublicAddress:{4,60}, AccID:{5}, Ticket:{6}, LoginEntityUID:{7}, ErrorReason:{8,60}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerPublicAddress(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID(), parser.GetErrorReason()); 
 				return ResultCode::SUCCESS;
 			}; // Result LoginBySteamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
@@ -777,8 +768,8 @@ namespace SF
 
 				protocolCheck(*input >> m_TransactionID);
 				protocolCheck(*input >> m_Result);
-				protocolCheck(*input >> m_GameServerAddr);
-				protocolCheck(*input >> m_GameServerAddrIPV4);
+				protocolCheck(input->Read(ArrayLen));
+				protocolCheck(input->ReadLink(m_GameServerPublicAddress, ArrayLen));
 				protocolCheck(*input >> m_AccID);
 				protocolCheck(*input >> m_Ticket);
 				protocolCheck(*input >> m_LoginEntityUID);
@@ -797,8 +788,7 @@ namespace SF
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
-				variableBuilder.SetVariable("GameServerAddr", "NetAddress", parser.GetGameServerAddr());
-				variableBuilder.SetVariable("GameServerAddrIPV4", "NetAddress", parser.GetGameServerAddrIPV4());
+				variableBuilder.SetVariable("GameServerPublicAddress", parser.GetGameServerPublicAddress());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 				variableBuilder.SetVariable("LoginEntityUID", parser.GetLoginEntityUID());
@@ -819,7 +809,7 @@ namespace SF
 			}; // Result CreateRandomUserRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
 
 
-			MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 			{
  				MessageData *pNewMsg = nullptr;
 				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
@@ -835,8 +825,7 @@ namespace SF
 				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InGameServerAddr)
-					+ SerializedSizeOf(InGameServerAddrIPV4)
+					+ SerializedSizeOf(InGameServerPublicAddress)
 					+ SerializedSizeOf(InAccID)
 					+ SerializedSizeOf(InTicket)
 					+ SerializedSizeOf(InLoginEntityUID)
@@ -850,21 +839,20 @@ namespace SF
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
-				protocolCheck(*output << InGameServerAddr);
-				protocolCheck(*output << InGameServerAddrIPV4);
+				protocolCheck(*output << InGameServerPublicAddress);
 				protocolCheck(*output << InAccID);
 				protocolCheck(*output << InTicket);
 				protocolCheck(*output << InLoginEntityUID);
 
 				return hr;
-			}; // MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			}; // MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
 			Result CreateRandomUserRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 			{
  				CreateRandomUserRes parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "Login::CreateRandomUser, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerAddr:{4}, GameServerAddrIPV4:{5}, AccID:{6}, Ticket:{7}, LoginEntityUID:{8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerAddr(), parser.GetGameServerAddrIPV4(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
+				SFLog(Net, Debug1, "Login::CreateRandomUser, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameServerPublicAddress:{4,60}, AccID:{5}, Ticket:{6}, LoginEntityUID:{7}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameServerPublicAddress(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
 				return ResultCode::SUCCESS;
 			}; // Result CreateRandomUserRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 

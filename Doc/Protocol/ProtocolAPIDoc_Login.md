@@ -36,8 +36,7 @@ C++: Cast message to LoginRes to access values
 
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
-		- OutGameServerAddr: NetAddress type. Game server address to connect
-		- OutGameServerAddrIPV4: NetAddress type. Game server address to connect
+		- OutGameServerPublicAddress: String type. Game server address to connect
 		- OutAccID: AccountID type. AccountID for the player
 		- OutTicket: AuthTicket type. Login session Ticket
 		- OutLoginEntityUID: uint64 type. Login entity ID. This need to be used when you connect to the game server
@@ -70,8 +69,7 @@ C++: Cast message to LoginByFacebookRes to access values
 
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
-		- OutGameServerAddr: NetAddress type. Game server address to connect
-		- OutGameServerAddrIPV4: NetAddress type. Game server address to connect
+		- OutGameServerPublicAddress: String type. Game server address to connect
 		- OutAccID: AccountID type. AccountID for the player
 		- OutTicket: AuthTicket type. Login session Ticket
 		- OutLoginEntityUID: uint64 type. Login entity ID. This need to be used when you connect to the game server
@@ -102,8 +100,7 @@ C++: Cast message to LoginBySteamRes to access values
 
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
-		- OutGameServerAddr: NetAddress type. Game server address to connect
-		- OutGameServerAddrIPV4: NetAddress type. Game server address to connect
+		- OutGameServerPublicAddress: String type. Game server address to connect
 		- OutAccID: AccountID type. AccountID for the player
 		- OutTicket: AuthTicket type. Login session Ticket
 		- OutLoginEntityUID: uint64 type. Login entity ID. This need to be used when you connect to the game server
@@ -130,8 +127,7 @@ C++: Cast message to CreateRandomUserRes to access values
 
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
-		- OutGameServerAddr: NetAddress type. Game server address to connect
-		- OutGameServerAddrIPV4: NetAddress type. Game server address to connect
+		- OutGameServerPublicAddress: String type. Game server address to connect
 		- OutAccID: AccountID type. AccountID for the player
 		- OutTicket: AuthTicket type. Login session Ticket
 		- OutLoginEntityUID: uint64 type. Login entity ID. This need to be used when you connect to the game server

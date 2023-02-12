@@ -152,8 +152,7 @@ namespace SF
 		SF_FORCEINLINE const String& GetLoginAddresses() const { return m_LoginAddresses; }
 
 		SF_FORCEINLINE uint64_t GetLoginEntityUID() const { return m_LoginEntityUID; }
-		SF_FORCEINLINE const NetAddress& GetGameAddress() const { return m_GameAddress; }
-		SF_FORCEINLINE const NetAddress& GetGameAddress4() const { return m_GameAddress4; }
+		SF_FORCEINLINE const String& GetGameAddress() const { return m_GameAddress; }
 		SF_FORCEINLINE AccountID GetAccountId() const { return m_AccountId; }
 		SF_FORCEINLINE AuthTicket GetAuthTicket() const { return m_AuthTicket; }
 		SF_FORCEINLINE PlayerID GetPlayerID() const { return m_AccountId; }
@@ -162,8 +161,7 @@ namespace SF
 		SF_FORCEINLINE uint32_t GetCharacterId() const { return m_CharacterId; }
 
 		SF_FORCEINLINE uint64_t GetGameInstanceUID() const { return m_GameInstanceUID; }
-		SF_FORCEINLINE const NetAddress& GetGameInstanceAddress4() const { return m_GameInstanceAddress4; }
-		SF_FORCEINLINE const NetAddress& GetGameInstanceAddress6() const { return m_GameInstanceAddress6; }
+		SF_FORCEINLINE const String& GetGameInstanceAddress() const { return m_GameInstanceAddress; }
 
 		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionLogin() const { return m_Login; }
 		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionGame() const { return m_Game; }
@@ -224,8 +222,7 @@ namespace SF
 		String m_LoginAddresses;
 
 		uint64_t m_LoginEntityUID{};
-		NetAddress m_GameAddress;
-		NetAddress m_GameAddress4;
+		String m_GameAddress;
 		AccountID m_AccountId{};
 		AuthTicket m_AuthTicket{};
 
@@ -236,8 +233,7 @@ namespace SF
 		uint64_t m_PartyUID{};
 		uint64_t m_PartyLeaderId{};
 
-		NetAddress m_GameInstanceAddress4;
-		NetAddress m_GameInstanceAddress6;
+        String m_GameInstanceAddress;
 
 		// connections
 		SharedPointerT<Net::Connection> m_Login;

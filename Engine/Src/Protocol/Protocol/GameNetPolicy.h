@@ -234,7 +234,7 @@ namespace SF
 		// S2C: Party Chatting message event
 		Result PartyChatMessageS2CEvt( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage );
 		// Cmd: Join to a game instance
-		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress4, const NetAddress &InServerAddress6 );
+		Result JoinGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress );
 		// Cmd: Leave game instance
 		Result LeaveGameInstanceRes( const uint64_t &InTransactionID, const Result &InResult );
 		// Cmd: Search game instance

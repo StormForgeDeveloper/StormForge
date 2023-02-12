@@ -3451,8 +3451,7 @@ namespace SF
 				uint64_t m_TransactionID{};
 				Result m_Result{};
 				uint64_t m_InsUID{};
-				NetAddress m_ServerAddress4{};
-				NetAddress m_ServerAddress6{};
+				const char* m_ServerPublicAddress{};
 			public:
 				JoinGameInstanceRes()
 					{}
@@ -3466,8 +3465,7 @@ namespace SF
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const uint64_t& GetInsUID() const	{ return m_InsUID; };
-				const NetAddress& GetServerAddress4() const	{ return m_ServerAddress4; };
-				const NetAddress& GetServerAddress6() const	{ return m_ServerAddress6; };
+				const char* GetServerPublicAddress() const	{ return m_ServerPublicAddress; };
 
 				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
@@ -3475,7 +3473,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const NetAddress &InServerAddress4, const NetAddress &InServerAddress6 );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress );
 
 			}; // class JoinGameInstanceRes : public MessageBase
 

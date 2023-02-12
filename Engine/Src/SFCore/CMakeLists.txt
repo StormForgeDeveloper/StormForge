@@ -41,6 +41,7 @@ set(SUBCONTAINER_FILES
 	Container/SFOrderedLinkedList.h
 	Container/SFPageQueue.h
 	Container/SFPageQueue.inl
+    Container/SFArrayBase.h
 	Container/SFArray.h
 	Container/SFArraySerialization.h
 	Container/SFSortedSet.h

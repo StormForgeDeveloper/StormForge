@@ -12,6 +12,8 @@
 
 #pragma once
 
+#include "SFTypedefs.h"
+#include "Container/SFArrayBase.h"
 #include <stdint.h>
 
 
@@ -66,8 +68,8 @@ namespace SF
 		void FromString(const char* strAddress);
 		void FromString(const char* strAddress, uint16_t port);
 
-        void DetectSockFamilyOld();
-		Result DetectSockFamily();
+        // Parse name address to NetAddresses
+        static Result ParseNameAddress(const char* strAddress, Array<NetAddress>& outAddresses);
 
 		explicit operator sockaddr_in() const;
 		explicit operator sockaddr_in6() const;

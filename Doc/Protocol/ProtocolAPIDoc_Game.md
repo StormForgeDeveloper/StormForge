@@ -815,8 +815,7 @@ C++: Cast message to JoinGameInstanceRes to access values
 		- OutTransactionID: TransactionID type. 
 		- OutResult: Result type. 
 		- OutInsUID: GameInsUID type. Game instance ID
-		- OutServerAddress4: NetAddress type. Game instance address IPV4
-		- OutServerAddress6: NetAddress type. Game instance address IPV6
+		- OutServerPublicAddress: String type. Game instance address
 
 
 ## LeaveGameInstance Request

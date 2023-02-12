@@ -384,8 +384,7 @@
 			</Cmd>
 			<Res>
 				<Params TypeName="GameInsUID" Name="InsUID" Desc="Game instance ID"/>
-				<Params TypeName="NetAddress" Name="ServerAddress4" Desc="Game instance address IPV4"/>
-				<Params TypeName="NetAddress" Name="ServerAddress6" Desc="Game instance address IPV6"/>
+				<Params TypeName="String" Name="ServerPublicAddress" Desc="Game instance address"/>
 			</Res>
 		</Command>
 

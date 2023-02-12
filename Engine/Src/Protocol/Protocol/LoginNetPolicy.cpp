@@ -151,61 +151,61 @@ namespace SF
 
 
 	// Cmd: Login request
-	Result NetSvrPolicyLogin::LoginRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	Result NetSvrPolicyLogin::LoginRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Login::LoginRes::Create(GetSystemHeap(), InTransactionID, InResult, InGameServerAddr, InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID, InErrorReason);
+		 pMessage = SF::Message::Login::LoginRes::Create(GetSystemHeap(), InTransactionID, InResult, InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID, InErrorReason);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyLogin::LoginRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	}; // Result NetSvrPolicyLogin::LoginRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	// Cmd: Login request with Facebook UID
-	Result NetSvrPolicyLogin::LoginByFacebookRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	Result NetSvrPolicyLogin::LoginByFacebookRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Login::LoginByFacebookRes::Create(GetSystemHeap(), InTransactionID, InResult, InGameServerAddr, InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID, InErrorReason);
+		 pMessage = SF::Message::Login::LoginByFacebookRes::Create(GetSystemHeap(), InTransactionID, InResult, InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID, InErrorReason);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyLogin::LoginByFacebookRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	}; // Result NetSvrPolicyLogin::LoginByFacebookRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	// Cmd: Login request with Facebook UID
-	Result NetSvrPolicyLogin::LoginBySteamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	Result NetSvrPolicyLogin::LoginBySteamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Login::LoginBySteamRes::Create(GetSystemHeap(), InTransactionID, InResult, InGameServerAddr, InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID, InErrorReason);
+		 pMessage = SF::Message::Login::LoginBySteamRes::Create(GetSystemHeap(), InTransactionID, InResult, InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID, InErrorReason);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyLogin::LoginBySteamRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+	}; // Result NetSvrPolicyLogin::LoginBySteamRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 	// Cmd: Login request
-	Result NetSvrPolicyLogin::CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+	Result NetSvrPolicyLogin::CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 	{
  		ScopeContext hr;
 
 		 MessageDataPtr pMessage;
 		 protocolCheckPtr(m_Endpoint);
 
-		 pMessage = SF::Message::Login::CreateRandomUserRes::Create(GetSystemHeap(), InTransactionID, InResult, InGameServerAddr, InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID);
+		 pMessage = SF::Message::Login::CreateRandomUserRes::Create(GetSystemHeap(), InTransactionID, InResult, InGameServerPublicAddress, InAccID, InTicket, InLoginEntityUID);
 		 protocolCheckPtr(*pMessage);
 
 		 return m_Endpoint->Send( pMessage );
 
-	}; // Result NetSvrPolicyLogin::CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+	}; // Result NetSvrPolicyLogin::CreateRandomUserRes( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 	// Cmd: Update my score and Get Ranking list
 	Result NetSvrPolicyLogin::UpdateMyScoreRes( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 	{

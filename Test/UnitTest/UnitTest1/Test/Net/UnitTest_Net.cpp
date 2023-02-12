@@ -35,8 +35,24 @@ using ::testing::TestEventListeners;
 using ::testing::TestInfo;
 using ::testing::TestPartResult;
 using ::testing::UnitTest; 
+using namespace SF;
 
 
+TEST_F(NetTest, NetAddress)
+{
+    const char* AddressString[] = {
+        "192.168.0.84:21001",
+        "login.stormforge.art,21001",
+        "www.google.com"
+    };
+
+    for (auto itAddress : AddressString)
+    {
+        DynamicArray<NetAddress> netAddresses;
+        Result result = NetAddress::ParseNameAddress(itAddress, netAddresses);
+        EXPECT_TRUE(result);
+    }
+}
 
 
 //

@@ -111,9 +111,26 @@ namespace SF
 
 			SetOnlineState(OnlineState::ConnectingToLogin);
 
-			NetAddress remoteAddress(m_Owner.GetLoginAddresses());
+            DynamicArray<NetAddress> netAddresses;
+            Result result = NetAddress::ParseNameAddress(m_Owner.GetLoginAddresses(), netAddresses);
+            if (!result)
+            {
+                SFLog(Net, Error, "Failed to get addresses: {0}, hr:{1}", m_Owner.GetLoginAddresses(), result);
+                SetResult(result);
+                SetOnlineState(OnlineState::Disconnected);
+                return;
+            }
+
+            if (netAddresses.size() == 0)
+            {
+                SFLog(Net, Error, "Failed to convert addresses: {0}", m_Owner.GetLoginAddresses());
+                SetResult(ResultCode::NOT_EXIST);
+                SetOnlineState(OnlineState::Disconnected);
+                return;
+            }
+			
 			auto authTicket = 0;
-			auto result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, remoteAddress, 0));
+			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, netAddresses[0], 0));
 			if (result)
 			{
 				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);
@@ -191,12 +208,11 @@ namespace SF
 			}
 
 			m_Owner.m_LoginEntityUID = packet.GetLoginEntityUID();
-			m_Owner.m_GameAddress = packet.GetGameServerAddr();
-			m_Owner.m_GameAddress4 = packet.GetGameServerAddrIPV4();
+			m_Owner.m_GameAddress = packet.GetGameServerPublicAddress();
 			m_Owner.m_AccountId = packet.GetAccID();
 			m_Owner.m_AuthTicket = packet.GetTicket();
 
-			SFLog(Net, Info, "Logged in: {0},{1}, accountId:{2}", m_Owner.m_GameAddress, m_Owner.m_GameAddress4, m_Owner.m_AccountId);
+			SFLog(Net, Info, "Logged in: {0},{1}, accountId:{2}", m_Owner.m_GameAddress, m_Owner.m_GameAddress, m_Owner.m_AccountId);
 
 			SetOnlineState(OnlineState::LoggedIn);
 			SetResult(ResultCode::SUCCESS);
@@ -306,7 +322,7 @@ namespace SF
 				});
 
 			auto authTicket = m_Owner.GetAuthTicket();
-			auto remoteAddress = m_Owner.GetGameAddress4();
+			auto remoteAddress = m_Owner.GetGameAddress();
 			if (authTicket == 0)
 			{
 				SFLog(Net, Error, "Join game server has failed, invalid auth ticket");
@@ -314,14 +330,35 @@ namespace SF
 				return;
 			}
 
-			if (StrUtil::IsNullOrEmpty(remoteAddress.Address) || remoteAddress.Port == 0)
+			if (remoteAddress.IsNullOrEmpty())
 			{
 				SFLog(Net, Error, "Join game server has failed, invalid remote address: {0}", remoteAddress);
 				SetResult(ResultCode::INVALID_STATE);
 				return;
 			}
 
-			auto result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, m_Owner.GetGameAddress4(), 0));
+            DynamicArray<NetAddress> netAddresses;
+            Result result = NetAddress::ParseNameAddress(m_Owner.GetGameAddress(), netAddresses);
+            if (!result)
+            {
+                SFLog(Net, Error, "Failed to get addresses: {0}, hr:{1}", m_Owner.GetGameAddress(), result);
+                SetResult(result);
+                GetConnection()->Disconnect("JoinGameServer failed");
+                SetOnlineState(OnlineState::Disconnected);
+                return;
+            }
+
+            if (netAddresses.size() == 0)
+            {
+                SFLog(Net, Error, "Failed to convert addresses: {0}", m_Owner.GetGameAddress());
+                SetResult(ResultCode::NOT_EXIST);
+                GetConnection()->Disconnect("JoinGameServer failed");
+                SetOnlineState(OnlineState::Disconnected);
+                return;
+            }
+
+
+			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, netAddresses[0], 0));
 			if (result)
 			{
 				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);
@@ -579,15 +616,32 @@ namespace SF
 			}
 
 			m_Owner.m_GameInstanceUID = packet.GetInsUID();
-			m_Owner.m_GameInstanceAddress4 = packet.GetServerAddress4();
-			m_Owner.m_GameInstanceAddress6 = packet.GetServerAddress6();
-
-			SFLog(Net, Info, "Game instance joined: {0}, game:{1}, {2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress4, m_Owner.m_GameInstanceAddress6);
+			m_Owner.m_GameInstanceAddress = packet.GetServerPublicAddress();
+			
+			SFLog(Net, Info, "Game instance joined: {0}, game:{1}, {2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress);
 
 			SetOnlineState(OnlineState::InGameConnectingGameInstance);
 
+            DynamicArray<NetAddress> netAddresses;
+            result = NetAddress::ParseNameAddress(m_Owner.GetGameInstanceAddress(), netAddresses);
+            if (!result)
+            {
+                SFLog(Net, Error, "Failed to get addresses: {0}, game:{1}, hr:{2}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress, result);
+                SetResult(result);
+                SetOnlineState(OnlineState::InGameServer);
+                return;
+            }
+
+            if (netAddresses.size() == 0)
+            {
+                SFLog(Net, Error, "Failed to convert addresses: {0}, game:{1}", m_Owner.m_GameInstanceUID, m_Owner.m_GameInstanceAddress);
+                SetResult(ResultCode::NOT_EXIST);
+                SetOnlineState(OnlineState::InGameServer);
+                return;
+            }
+
 			auto authTicket = m_Owner.GetAuthTicket();
-			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, m_Owner.GetGameInstanceAddress4(), 0));
+			result = GetConnection()->Connect(Net::PeerInfo(NetClass::Client, authTicket), Net::PeerInfo(NetClass::Unknown, netAddresses[0], 0));
 			if (result)
 			{
 				GetConnection()->SetTickGroup(EngineTaskTick::AsyncTick);

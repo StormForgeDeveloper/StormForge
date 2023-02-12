@@ -28,7 +28,7 @@ namespace SF {
 	struct MemBlockHdr;
 	class IHeap;
 	class IHeapImpl;
-
+    struct MemBlockHdr;
 
 	typedef SharedPointerT<IHeap> IHeapPtr;
 	typedef SharedPointerAtomicT<IHeap> IHeapAtomicPtr;

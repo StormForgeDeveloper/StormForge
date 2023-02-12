@@ -96,8 +96,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				NetAddress m_GameServerAddr{};
-				NetAddress m_GameServerAddrIPV4{};
+				const char* m_GameServerPublicAddress{};
 				AccountID m_AccID{};
 				AuthTicket m_Ticket{};
 				uint64_t m_LoginEntityUID{};
@@ -114,8 +113,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const NetAddress& GetGameServerAddr() const	{ return m_GameServerAddr; };
-				const NetAddress& GetGameServerAddrIPV4() const	{ return m_GameServerAddrIPV4; };
+				const char* GetGameServerPublicAddress() const	{ return m_GameServerPublicAddress; };
 				const AccountID& GetAccID() const	{ return m_AccID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
@@ -127,7 +125,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
 			}; // class LoginRes : public MessageBase
 
@@ -205,8 +203,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				NetAddress m_GameServerAddr{};
-				NetAddress m_GameServerAddrIPV4{};
+				const char* m_GameServerPublicAddress{};
 				AccountID m_AccID{};
 				AuthTicket m_Ticket{};
 				uint64_t m_LoginEntityUID{};
@@ -223,8 +220,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const NetAddress& GetGameServerAddr() const	{ return m_GameServerAddr; };
-				const NetAddress& GetGameServerAddrIPV4() const	{ return m_GameServerAddrIPV4; };
+				const char* GetGameServerPublicAddress() const	{ return m_GameServerPublicAddress; };
 				const AccountID& GetAccID() const	{ return m_AccID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
@@ -236,7 +232,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
 			}; // class LoginByFacebookRes : public MessageBase
 
@@ -312,8 +308,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				NetAddress m_GameServerAddr{};
-				NetAddress m_GameServerAddrIPV4{};
+				const char* m_GameServerPublicAddress{};
 				AccountID m_AccID{};
 				AuthTicket m_Ticket{};
 				uint64_t m_LoginEntityUID{};
@@ -330,8 +325,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const NetAddress& GetGameServerAddr() const	{ return m_GameServerAddr; };
-				const NetAddress& GetGameServerAddrIPV4() const	{ return m_GameServerAddrIPV4; };
+				const char* GetGameServerPublicAddress() const	{ return m_GameServerPublicAddress; };
 				const AccountID& GetAccID() const	{ return m_AccID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
@@ -343,7 +337,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
 			}; // class LoginBySteamRes : public MessageBase
 
@@ -415,8 +409,7 @@ namespace SF
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
-				NetAddress m_GameServerAddr{};
-				NetAddress m_GameServerAddrIPV4{};
+				const char* m_GameServerPublicAddress{};
 				AccountID m_AccID{};
 				AuthTicket m_Ticket{};
 				uint64_t m_LoginEntityUID{};
@@ -432,8 +425,7 @@ namespace SF
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
-				const NetAddress& GetGameServerAddr() const	{ return m_GameServerAddr; };
-				const NetAddress& GetGameServerAddrIPV4() const	{ return m_GameServerAddrIPV4; };
+				const char* GetGameServerPublicAddress() const	{ return m_GameServerPublicAddress; };
 				const AccountID& GetAccID() const	{ return m_AccID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
@@ -444,7 +436,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
 
-				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const NetAddress &InGameServerAddr, const NetAddress &InGameServerAddrIPV4, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
+				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 
 			}; // class CreateRandomUserRes : public MessageBase
 

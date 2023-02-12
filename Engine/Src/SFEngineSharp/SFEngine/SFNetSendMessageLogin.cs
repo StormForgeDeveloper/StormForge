@@ -206,51 +206,51 @@ namespace SF.Net
  		} // public  SendMessageSvrLogin( SF.SFConnection connection ) : base(connection)
 
 		// Cmd: Login request
-		public int  LoginRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
+		public int  LoginRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_LoginLoginRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InGameServerAddr,ref InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID,System.Text.Encoding.UTF8.GetBytes(InErrorReason + "\0"));
+			result = CSSFNetAdapter_LoginLoginRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InGameServerPublicAddress + "\0"), InAccID, InTicket, InLoginEntityUID,System.Text.Encoding.UTF8.GetBytes(InErrorReason + "\0"));
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginRes);
 			return result;
-		} // public int  LoginRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
+		} // public int  LoginRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 
 
 		// Cmd: Login request with Facebook UID
-		public int  LoginByFacebookRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
+		public int  LoginByFacebookRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_LoginLoginByFacebookRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InGameServerAddr,ref InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID,System.Text.Encoding.UTF8.GetBytes(InErrorReason + "\0"));
+			result = CSSFNetAdapter_LoginLoginByFacebookRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InGameServerPublicAddress + "\0"), InAccID, InTicket, InLoginEntityUID,System.Text.Encoding.UTF8.GetBytes(InErrorReason + "\0"));
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginByFacebookRes);
 			return result;
-		} // public int  LoginByFacebookRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
+		} // public int  LoginByFacebookRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 
 
 		// Cmd: Login request with Facebook UID
-		public int  LoginBySteamRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
+		public int  LoginBySteamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_LoginLoginBySteamRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InGameServerAddr,ref InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID,System.Text.Encoding.UTF8.GetBytes(InErrorReason + "\0"));
+			result = CSSFNetAdapter_LoginLoginBySteamRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InGameServerPublicAddress + "\0"), InAccID, InTicket, InLoginEntityUID,System.Text.Encoding.UTF8.GetBytes(InErrorReason + "\0"));
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.LoginBySteamRes);
 			return result;
-		} // public int  LoginBySteamRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
+		} // public int  LoginBySteamRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, System.String InErrorReason )
 
 
 		// Cmd: Login request
-		public int  CreateRandomUserRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
+		public int  CreateRandomUserRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 		{
  			int result;
 			{
-			result = CSSFNetAdapter_LoginCreateRandomUserRes(m_Connection.NativeHandle, InTransactionID, InResult,ref InGameServerAddr,ref InGameServerAddrIPV4, InAccID, InTicket, InLoginEntityUID);
+			result = CSSFNetAdapter_LoginCreateRandomUserRes(m_Connection.NativeHandle, InTransactionID, InResult,System.Text.Encoding.UTF8.GetBytes(InGameServerPublicAddress + "\0"), InAccID, InTicket, InLoginEntityUID);
 			}
 			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDLogin.CreateRandomUserRes);
 			return result;
-		} // public int  CreateRandomUserRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.NetAddress InGameServerAddr, SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
+		} // public int  CreateRandomUserRes( System.UInt64 InTransactionID, System.Int32 InResult, System.String InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID )
 
 
 		// Cmd: Update my score and Get Ranking list
@@ -304,25 +304,25 @@ namespace SF.Net
 		#region Native Interfaces 
 		// Cmd: Login request
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginLoginRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_LoginLoginRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, ref SF.NetAddress InGameServerAddr, ref SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, [MarshalAs(UnmanagedType.LPArray)] byte[] InErrorReason );
+		static extern int CSSFNetAdapter_LoginLoginRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, [MarshalAs(UnmanagedType.LPArray)] byte[] InErrorReason );
 
 
 
 		// Cmd: Login request with Facebook UID
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginLoginByFacebookRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_LoginLoginByFacebookRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, ref SF.NetAddress InGameServerAddr, ref SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, [MarshalAs(UnmanagedType.LPArray)] byte[] InErrorReason );
+		static extern int CSSFNetAdapter_LoginLoginByFacebookRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, [MarshalAs(UnmanagedType.LPArray)] byte[] InErrorReason );
 
 
 
 		// Cmd: Login request with Facebook UID
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginLoginBySteamRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_LoginLoginBySteamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, ref SF.NetAddress InGameServerAddr, ref SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, [MarshalAs(UnmanagedType.LPArray)] byte[] InErrorReason );
+		static extern int CSSFNetAdapter_LoginLoginBySteamRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID, [MarshalAs(UnmanagedType.LPArray)] byte[] InErrorReason );
 
 
 
 		// Cmd: Login request
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_LoginCreateRandomUserRes", CharSet = CharSet.Ansi)]
-		static extern int CSSFNetAdapter_LoginCreateRandomUserRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, ref SF.NetAddress InGameServerAddr, ref SF.NetAddress InGameServerAddrIPV4, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID );
+		static extern int CSSFNetAdapter_LoginCreateRandomUserRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, [MarshalAs(UnmanagedType.LPArray)] byte[] InGameServerPublicAddress, System.UInt64 InAccID, System.UInt64 InTicket, System.UInt64 InLoginEntityUID );
 
 
 
