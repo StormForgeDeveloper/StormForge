@@ -32,6 +32,9 @@ namespace SF {
 		// Invalid table id 
 		public const int ENGINE_INVALID_TABLE_ID =                          unchecked((int)0xE7020005); 
 
+		// Invalid platform 
+		public const int ENGINE_INVALID_PLATFORM =                          unchecked((int)0xE7020006); 
+
 	}
 }
 

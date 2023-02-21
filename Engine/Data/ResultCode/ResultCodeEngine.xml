@@ -14,6 +14,7 @@
 	<ResultCodeItem Severity="Error" CodeName="INVALID_CHARACTER" Desc="Invalid character data"/>
 	
 	<ResultCodeItem Severity="Error" CodeName="INVALID_TABLE_ID" Desc="Invalid table id"/>
+    <ResultCodeItem Severity="Error" CodeName="INVALID_PLATFORM" Desc="Invalid platform"/>
 
 
 </ResultCodes>

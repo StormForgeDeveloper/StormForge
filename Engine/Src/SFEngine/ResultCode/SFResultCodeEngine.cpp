@@ -26,6 +26,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)ENGINE_CONNECTION_LOST, {"ENGINE_CONNECTION_LOST", "Connectionlost"});
 		codeMap.Insert((uint32_t)ENGINE_INVALID_CHARACTER, {"ENGINE_INVALID_CHARACTER", "Invalid character data"});
 		codeMap.Insert((uint32_t)ENGINE_INVALID_TABLE_ID, {"ENGINE_INVALID_TABLE_ID", "Invalid table id"});
+		codeMap.Insert((uint32_t)ENGINE_INVALID_PLATFORM, {"ENGINE_INVALID_PLATFORM", "Invalid platform"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 
