@@ -43,6 +43,11 @@ namespace SF
         {
         }
 
+		public void Clear()
+		{
+			m_MessageHandlerMap.Clear();
+		}
+
         public override void Dispose()
         {
             m_MessageHandlerMap.Clear();
