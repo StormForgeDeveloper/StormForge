@@ -28,8 +28,11 @@ namespace SF
         {
             None,
 
-            // Login operations
-            ConnectingToLogin,
+			// Disconnected
+			Disconnected,
+
+			// Login operations
+			ConnectingToLogin,
             LogingIn,
             LoggedIn,
 
@@ -44,8 +47,6 @@ namespace SF
             InGameGameInstanceJoining,
             InGameInGameInstance,
 
-            // Disconnected
-            Disconnected,
         };
 
         public enum ConnectionType

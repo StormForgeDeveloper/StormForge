@@ -53,6 +53,9 @@ namespace SF
 		{
 			None,
 
+            // Disconnected
+            Disconnected,
+
 			// Login operations
 			ConnectingToLogin,
 			LogingIn,
@@ -68,9 +71,6 @@ namespace SF
 			InGameConnectingGameInstance,
 			InGameGameInstanceJoining,
 			InGameInGameInstance,
-
-			// Disconnected
-			Disconnected,
 		};
 
 		struct OnlineStateChangedEventArgs
