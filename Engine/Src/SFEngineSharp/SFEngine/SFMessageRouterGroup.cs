@@ -33,8 +33,16 @@ namespace SF
             if (m_MessageRouters.Contains(router))
                 return;
 
-            m_MessageRouters.Add(router);
-        }
+			for (var i = 0; i < m_MessageRouters.Count; i++)
+			{
+				if (m_MessageRouters[i].GroupPriority < router.GroupPriority)
+				{
+					m_MessageRouters.Insert(i, router);
+					return;
+				}
+			}
+			m_MessageRouters.Add(router);
+		}
 
         public void Remove(SFIMessageRouter router)
         {

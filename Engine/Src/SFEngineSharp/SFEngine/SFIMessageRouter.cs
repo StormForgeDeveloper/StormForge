@@ -20,10 +20,17 @@ namespace SF
 
     public abstract class SFIMessageRouter : IDisposable
     {
-        /// <summary>
-        /// Message event argument
-        /// </summary>
-        public delegate void delMessageIDEventHandler(int sendResult, int messageID);
+		public int GroupPriority { get; private set; }
+
+		public SFIMessageRouter(int groupPriority = 0)
+		{
+			GroupPriority = groupPriority;
+		}
+
+		/// <summary>
+		/// Message event argument
+		/// </summary>
+		public delegate void delMessageIDEventHandler(int sendResult, int messageID);
         public delegate void delMessageEventHandler(SFMessage message);
 
         public virtual void Dispose() { }

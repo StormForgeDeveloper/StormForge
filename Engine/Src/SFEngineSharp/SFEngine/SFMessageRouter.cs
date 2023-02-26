@@ -38,7 +38,8 @@ namespace SF
 
 
 
-        public SFMessageRouter()
+        public SFMessageRouter(int groupPriority = 0)
+			: base(groupPriority)
         {
         }
 
