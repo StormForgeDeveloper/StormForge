@@ -27,6 +27,7 @@ static int Process()
 	SF::AppConfig::GetSettingArray("in", inputPaths);
 	const char* outputPath = SF::AppConfig::GetSetting("out");
 	const char* outputTxtPath = SF::AppConfig::GetSetting("outtxt");
+    bool bDumpString = SF::AppConfig::GetSetting("dumpstrings", nullptr) != nullptr;
 
 	if (inputPaths.size() == 0 || outputPath == nullptr)
 	{
@@ -55,7 +56,10 @@ static int Process()
 				return -1;
 			}
 
-			stringDB.DumpStringList();
+            SFLog(System, Info, "String count:{0}", stringDB.GetStringCount());
+
+            if (bDumpString)
+			    stringDB.DumpStringList();
 		}
 		else if (testResult == SF::StringCrcDB::FileHeaderCheckResult::InvalidVersion)
 		{
@@ -131,8 +135,10 @@ static int Process()
 				}
 			}
 
+            SFLog(System, Info, "String count:{0}", stringDB.GetStringCount());
 
-			stringDB.DumpStringList();
+            if (bDumpString)
+			    stringDB.DumpStringList();
 		}
 		readFrom.Close();
 

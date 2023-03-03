@@ -52,6 +52,7 @@ namespace SF
 		"Static",
 		"Type",
 		"Name",
+        "gold",
 	};
 
 	size_t StringCrcDB::StringItem::CalculateItemSize(size_t strLen)

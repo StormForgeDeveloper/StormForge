@@ -344,7 +344,7 @@ namespace SF {
 			Assert(m_WriteRoot == nullptr || m_WriteRoot.load() != oldRoot);
 			if (m_WriteRoot != nullptr)
 			{
-				assert(!m_WriteRoot->IsCloned);
+				assert(m_WriteRoot->ClonedNode.load(MemoryOrder::memory_order_relaxed) == nullptr);
 			}
 
 			if (oldRoot != nullptr)
@@ -572,7 +572,7 @@ namespace SF {
 			do
 			{
 				Assert(pCurNode->UpdateSerial == m_UpdateSerial);
-				assert(!pCurNode->IsCloned);
+				assert(pCurNode->ClonedNode.load(MemoryOrder::memory_order_relaxed) == nullptr);
 				travelHistory.AddHistory(pCurNode);
 
 				// multiple key
@@ -1063,22 +1063,20 @@ namespace SF {
 				return mapNodeToClone;
 			}
 
-#ifdef DEBUG
-            assert(!mapNodeToClone->IsCloned);
-			mapNodeToClone->IsCloned = true;
-#endif
+            Assert(m_UpdateSerial != mapNodeToClone->UpdateSerial);
 
-			Assert(m_UpdateSerial != mapNodeToClone->UpdateSerial);
+            MapNode* newNode = mapNodeToClone->ClonedNode.load(MemoryOrder::memory_order_acquire);
+            Assert(newNode != mapNodeToClone);
 
-			PendingFreeNode(mapNodeToClone);
+            if (newNode == nullptr)
+            {
+                m_pNodePool->Alloc(newNode);
+                mapNodeToClone->ClonedNode.store(newNode, MemoryOrder::memory_order_release);
+                PendingFreeNode(mapNodeToClone);
 
-			MapNode* newNode = nullptr;
-			m_pNodePool->Alloc(newNode);
-			Assert(newNode != mapNodeToClone);
-			if (newNode != nullptr)
-			{
-				newNode->SetValue(m_UpdateSerial, *mapNodeToClone);
-			}
+                assert(newNode != nullptr);
+            }
+            newNode->SetValue(m_UpdateSerial, *mapNodeToClone);
 
 			Assert(newNode->UpdateSerial != mapNodeToClone->UpdateSerial);
 
@@ -1120,17 +1118,12 @@ namespace SF {
 		template<class KeyType, class ValueType>
 		void DualSortedMap<KeyType, ValueType>::PendingFreeNode(MapNode* pNode)
 		{
-#ifdef DEBUG
-            assert(pNode->IsCloned);
-#endif
-
 			if (pNode == nullptr)
 				return;
 
 #ifdef DEBUG
 			new(&pNode->StackTrace) CallStackTrace;
             pNode->StackTrace.CaptureCallStack();
-			//StackWalker::CaptureCallStack(pNode->StackTrace);
 #endif
 
 			AssertRel(pNode->NextPendingFree == nullptr && pNode != m_PendingFreeList);
