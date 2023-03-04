@@ -694,7 +694,6 @@ namespace SF
 
 	OnlineClient::OnlineClient(IHeap& heap)
 		: EngineObject(new(heap) IHeap("OnlineClient", &heap), "OnlineClient")
-		, m_IncomingMovements(GetHeap())
 		, m_IncomingMovementsByActor(GetHeap())
 		, m_OnlineStateChangedQueue(GetHeap())
 	{
@@ -724,13 +723,11 @@ namespace SF
 			m_OutgoingMovement->SetActorID(actorId);
 
 		SharedPointerT<ReceivedMovementManager> movement;
-		if (!m_IncomingMovements.Find(GetPlayerID(), movement))
+		if (!m_IncomingMovementsByActor.Find(actorId, movement))
 		{
 			movement = new(GetHeap()) ReceivedMovementManager(actorId);
-			m_IncomingMovements.Emplace(GetPlayerID(), movement);
+            m_IncomingMovementsByActor.Emplace(actorId, movement);
 		}
-
-		m_IncomingMovementsByActor.Emplace(actorId, movement);
 	}
 
 	void OnlineClient::SetupInstanceInfo()
@@ -741,7 +738,6 @@ namespace SF
 	void OnlineClient::ClearInstanceInfo()
 	{
 		m_OutgoingMovement.reset();
-		m_IncomingMovements.ClearMap();
 		m_IncomingMovementsByActor.ClearMap();
 	}
 
@@ -914,28 +910,6 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
-	Result OnlineClient::GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement)
-	{
-		SharedPointerT<ReceivedMovementManager> movement;
-		if (!m_IncomingMovements.Find(playerId, movement))
-			return ResultCode::OBJECT_NOT_FOUND;
-
-		outMovement = movement->GetMovementResult();
-		return ResultCode::SUCCESS;
-	}
-
-	Result OnlineClient::GetMovementForPlayerAll(PlayerID playerId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement)
-	{
-		SharedPointerT<ReceivedMovementManager> movement;
-		if (!m_IncomingMovements.Find(playerId, movement))
-			return ResultCode::OBJECT_NOT_FOUND;
-
-		outMovement = movement->GetMovementResult();
-		outReceivedMovement = movement->GetReceivedMovement();
-		outExpectedMovement = movement->GetMovementExpected();
-		return ResultCode::SUCCESS;
-	}
-
 	Result OnlineClient::GetMovementForActor(ActorID actorId, ActorMovement& outMovement)
 	{
 		SharedPointerT<ReceivedMovementManager> movement;
@@ -945,6 +919,16 @@ namespace SF
 		outMovement = movement->GetMovementResult();
 		return ResultCode::SUCCESS;
 	}
+
+    Result OnlineClient::GetReceivedMovementForActor(ActorID actorId, ActorMovement& outMovement)
+    {
+        SharedPointerT<ReceivedMovementManager> movement;
+        if (!m_IncomingMovementsByActor.Find(actorId, movement))
+            return ResultCode::OBJECT_NOT_FOUND;
+
+        outMovement = movement->GetReceivedMovement();
+        return ResultCode::SUCCESS;
+    }
 
 	Result OnlineClient::GetMovementForActorAll(ActorID actorId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement)
 	{
@@ -1121,13 +1105,16 @@ namespace SF
 		m_MoveFrame += deltaFrames;
 		m_ServerMoveFrame += deltaFrames;
 
-		m_IncomingMovements.ForeachOrder(0, (uint)m_IncomingMovements.size(), 
-			[moveFrame = m_MoveFrame - RemotePlayerSimulationDelay](const PlayerID playerId, const SharedPointerT<ReceivedMovementManager>& movement)
-			{
-				ActorMovement outMovement;
-				movement->SimulateCurrentMove(moveFrame, outMovement);
-				return true;
-			});
+        if (m_bSimulateSimulatedActorMovement)
+        {
+            m_IncomingMovementsByActor.ForeachOrder(0, (uint)m_IncomingMovementsByActor.size(),
+                [moveFrame = m_MoveFrame - RemotePlayerSimulationDelay](const PlayerID playerId, const SharedPointerT<ReceivedMovementManager>& movement)
+                {
+                    ActorMovement outMovement;
+                    movement->SimulateCurrentMove(moveFrame, outMovement);
+                    return true;
+                });
+        }
 
 
 		if (m_OutgoingMovement != nullptr && GetConnectionGameInstance() != nullptr)
@@ -1169,13 +1156,11 @@ namespace SF
 
 		auto actorId = msg.GetMovement().ActorId;
 		SharedPointerT<ReceivedMovementManager> movement;
-		if (!m_IncomingMovements.Find(msg.GetPlayerID(), movement))
+		if (!m_IncomingMovementsByActor.Find(actorId, movement))
 		{
 			movement = new(GetHeap()) ReceivedMovementManager(actorId);
-			m_IncomingMovements.Emplace(msg.GetPlayerID(), movement);
+            m_IncomingMovementsByActor.Emplace(actorId, movement);
 		}
-
-		m_IncomingMovementsByActor.Emplace(actorId, movement);
 
 		movement->ResetMove(msg.GetMovement());
 	}
@@ -1196,11 +1181,7 @@ namespace SF
 		}
 
 		SharedPointerT<ReceivedMovementManager> movement;
-		m_IncomingMovements.Remove(msg.GetPlayerID(), movement);
-		if (movement.IsValid())
-		{
-			m_IncomingMovementsByActor.Remove(movement->GetActorID(), movement);
-		}
+		m_IncomingMovementsByActor.Remove(msg.GetActorID(), movement);
 	}
 
 	void OnlineClient::OnActorMovement(const MessageDataPtr& pMsgData)

@@ -168,9 +168,8 @@ namespace SF
 		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionGameInstance() const { return m_GameInstance; }
 
 		SF_FORCEINLINE const SharedPointerT<SendingActorMovementManager>& GetSendMovementManager() const { return m_OutgoingMovement; }
-		Result GetMovementForPlayer(PlayerID playerId, ActorMovement& outMovement);
-		Result GetMovementForPlayerAll(PlayerID playerId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement);
-		Result GetMovementForActor(ActorID actorId, ActorMovement& outMovement);
+		Result GetReceivedMovementForActor(ActorID actorId, ActorMovement& outMovement);
+        Result GetMovementForActor(ActorID actorId, ActorMovement& outMovement);
 		Result GetMovementForActorAll(ActorID actorId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement);
 
 		SF_FORCEINLINE uint32_t GetCurrentMovementFrame() const { return m_MoveFrame; }
@@ -249,8 +248,9 @@ namespace SF
 		// My actor movement
 		SharedPointerT<SendingActorMovementManager> m_OutgoingMovement;
 
+        bool m_bSimulateSimulatedActorMovement = false;
+
 		// PlayerId by movement
-		SortedMap<PlayerID,SharedPointerT<ReceivedMovementManager>> m_IncomingMovements;
 		SortedMap<ActorID, SharedPointerT<ReceivedMovementManager>> m_IncomingMovementsByActor;
 
 		// tick time

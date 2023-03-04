@@ -249,14 +249,9 @@ namespace SF
 
         #endregion
 
-        public Result GetMovementForPlayer(UInt64 playerId, out ActorMovement movement)
+        public Result GetReceivedMovementForActor(UInt32 actorId, out ActorMovement movement)
         {
-            return new Result(NativeGetMovementForPlayer(NativeHandle, playerId, out movement));
-        }
-
-        public Result GetMovementForPlayerAll(UInt64 playerId, out ActorMovement movement, out ActorMovement receivedMovement, out ActorMovement expectedMovement)
-        {
-            return new Result(NativeGetMovementForPlayerAll(NativeHandle, playerId, out movement, out receivedMovement, out expectedMovement));
+            return new Result(NativeGetReceivedMovementForActor(NativeHandle, actorId, out movement));
         }
 
         public Result GetMovementForActor(UInt32 actorId, out ActorMovement movement)
@@ -405,14 +400,11 @@ namespace SF
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetConnection", CharSet = CharSet.Auto)]
         static extern IntPtr NativeGetConnection(IntPtr nativeHandle, Int32 connectionIndex);
 
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForPlayer", CharSet = CharSet.Auto)]
-        static extern Int32 NativeGetMovementForPlayer(IntPtr nativeHandle, UInt64 playerId, out ActorMovement actorMovement);
-
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForPlayerAll", CharSet = CharSet.Auto)]
-        static extern Int32 NativeGetMovementForPlayerAll(IntPtr nativeHandle, UInt64 playerId, out ActorMovement actorMovement, out ActorMovement actorReceivedMovement, out ActorMovement actorExpectedMovement);
-
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForActor", CharSet = CharSet.Auto)]
         static extern Int32 NativeGetMovementForActor(IntPtr nativeHandle, UInt32 actorId, out ActorMovement actorMovement);
+
+        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetReceivedMovementForActor", CharSet = CharSet.Auto)]
+        static extern Int32 NativeGetReceivedMovementForActor(IntPtr nativeHandle, UInt32 actorId, out ActorMovement actorMovement);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForActorAll", CharSet = CharSet.Auto)]
         static extern Int32 NativeGetMovementForActorAll(IntPtr nativeHandle, UInt32 actorId, out ActorMovement actorMovement, out ActorMovement actorReceivedMovement, out ActorMovement actorExpectedMovement);

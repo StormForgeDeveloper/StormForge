@@ -268,34 +268,24 @@ SFDLL_EXPORT uint64_t SFOnlineClient_NativeGetConnection(intptr_t nativeHandle, 
 	return 0;
 }
 
-SFDLL_EXPORT int32_t SFOnlineClient_NativeGetMovementForPlayer(intptr_t nativeHandle, uint64_t playerId, SF::ActorMovement& actorMovement)
+SFDLL_EXPORT int32_t SFOnlineClient_NativeGetReceivedMovementForActor(intptr_t nativeHandle, ActorID actorId, SF::ActorMovement& actorMovement)
 {
 	if (nativeHandle == 0)
 		return ResultCode::NOT_INITIALIZED;
 
 	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return int32_t(pOnlineClient->GetMovementForPlayer(playerId, actorMovement));
-}
-
-SFDLL_EXPORT int32_t SFOnlineClient_NativeGetMovementForPlayerAll(intptr_t nativeHandle, uint64_t playerId, SF::ActorMovement& actorMovement, SF::ActorMovement& actorReceivedMovement, SF::ActorMovement& actorExpectedMovement)
-{
-	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
-
-	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
-
-	return int32_t(pOnlineClient->GetMovementForPlayerAll(playerId, actorMovement, actorReceivedMovement, actorExpectedMovement));
+	return int32_t(pOnlineClient->GetReceivedMovementForActor(actorId, actorMovement));
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeGetMovementForActor(intptr_t nativeHandle, ActorID actorId, SF::ActorMovement& actorMovement)
 {
-	if (nativeHandle == 0)
-		return ResultCode::NOT_INITIALIZED;
+    if (nativeHandle == 0)
+        return ResultCode::NOT_INITIALIZED;
 
-	auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
+    auto pOnlineClient = NativeToObject<OnlineClient>(nativeHandle);
 
-	return int32_t(pOnlineClient->GetMovementForActor(actorId, actorMovement));
+    return int32_t(pOnlineClient->GetMovementForActor(actorId, actorMovement));
 }
 
 SFDLL_EXPORT int32_t SFOnlineClient_NativeGetMovementForActorAll(intptr_t nativeHandle, ActorID actorId, SF::ActorMovement& actorMovement, SF::ActorMovement& actorReceivedMovement, SF::ActorMovement& actorExpectedMovement)
