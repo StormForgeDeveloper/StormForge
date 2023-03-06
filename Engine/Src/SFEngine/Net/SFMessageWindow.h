@@ -123,7 +123,7 @@ namespace Net {
 		// Message element
 		struct MessageData
 		{
-			ItemState State = ItemState::Free;
+			Atomic<ItemState> State = ItemState::Free;
 			TimeStampMS ulTimeStamp = TimeStampMS(DurationMS_Zero);
 			SharedPointerT<Message::MessageData> pMsg;
 

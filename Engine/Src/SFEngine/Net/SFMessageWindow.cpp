@@ -369,7 +369,7 @@ namespace Net {
 
 			if (iIdx >= GetAcceptableSequenceRange())
 			{
-				SlidWindow();
+				//SlidWindow();
 				return ResultCode::SUCCESS;
 			}
 
@@ -384,8 +384,7 @@ namespace Net {
 
 		}
 
-		// Slide window
-		SlidWindow();
+		// window sliding happens on connection tick
 
 		return hr;
 	}
@@ -396,16 +395,22 @@ namespace Net {
 	void SendMsgWindow::ReleaseMessageInternal(uint32_t iOffset)
 	{
 		uint32_t iPosIdx = (m_uiBaseSequence + iOffset) % MessageWindow::MESSAGE_QUEUE_SIZE;
+        auto& windowElement = m_pMsgWnd[iPosIdx];
 
-		m_pMsgWnd[iPosIdx].pMsg = nullptr;
+        // don't release pointer here
+		//m_pMsgWnd[iPosIdx].pMsg = nullptr;
 
-		// Mark it as can-be-freed
-		if( m_pMsgWnd[ iPosIdx ].State == ItemState::Free || m_pMsgWnd[ iPosIdx ].State == ItemState::CanFree )
-		{
-			return;
-		}
-			
-		m_pMsgWnd[iPosIdx].State = ItemState::CanFree;
+        // Mark it as can-be-freed
+        ItemState expectedState = ItemState::Filled;
+        while (!windowElement.State.compare_exchange_weak(expectedState, ItemState::CanFree, std::memory_order_relaxed, std::memory_order_acquire))
+        {
+            if (expectedState == ItemState::Free || expectedState == ItemState::CanFree)
+            {
+                // Nothing need to be done
+                return;
+            }
+            expectedState = ItemState::Filled;
+        }
 	}
 
 
@@ -414,7 +419,8 @@ namespace Net {
 		auto windowSeq = m_uiBaseSequence % MessageWindow::MESSAGE_QUEUE_SIZE;
 		for (int iMsg = 0; m_pMsgWnd[windowSeq].State == ItemState::CanFree && iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
 		{
-			m_pMsgWnd[windowSeq].State = ItemState::Free;
+            m_pMsgWnd[windowSeq].pMsg = nullptr;
+            m_pMsgWnd[windowSeq].State.store(ItemState::Free, MemoryOrder::memory_order_release);
 			m_uiMsgCount--;
 			m_uiBaseSequence++;
 			windowSeq = m_uiBaseSequence % MessageWindow::MESSAGE_QUEUE_SIZE;

@@ -746,6 +746,10 @@ namespace Net {
 				continue;
 			}
 
+            SendMsgWindow::ItemState state = pMessageElement->State.load(MemoryOrder::memory_order_acquire);
+            if (state != SendMsgWindow::ItemState::Filled)
+                continue;
+
 			if (Util::TimeSince(pMessageElement->ulTimeStamp) <= retryTimeout)
 				break;
 
@@ -772,6 +776,9 @@ namespace Net {
 			GetConnection()->SendPending(tempMsg);
 			pMessageElement = nullptr;
 		}
+
+        // Now we can move window
+        sendWindow.SlidWindow();
 
 		return hr;
 	}

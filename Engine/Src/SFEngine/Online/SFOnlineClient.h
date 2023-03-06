@@ -168,9 +168,6 @@ namespace SF
 		SF_FORCEINLINE const SharedPointerT<Net::Connection>& GetConnectionGameInstance() const { return m_GameInstance; }
 
 		SF_FORCEINLINE const SharedPointerT<SendingActorMovementManager>& GetSendMovementManager() const { return m_OutgoingMovement; }
-		Result GetReceivedMovementForActor(ActorID actorId, ActorMovement& outMovement);
-        Result GetMovementForActor(ActorID actorId, ActorMovement& outMovement);
-		Result GetMovementForActorAll(ActorID actorId, ActorMovement& outMovement, ActorMovement& outReceivedMovement, ActorMovement& outExpectedMovement);
 
 		SF_FORCEINLINE uint32_t GetCurrentMovementFrame() const { return m_MoveFrame; }
 		SF_FORCEINLINE void SetMovementFrame(uint32_t moveFrame) { m_MoveFrame = moveFrame; }
@@ -192,11 +189,6 @@ namespace SF
 		void RegisterGameHandlers();
 		void RegisterPlayInstanceHandlers();
 
-		void OnActorInView(const MessageDataPtr& pMsgData);
-		void OnActorOutofView(const MessageDataPtr& pMsgData);
-		void OnActorMovement(const MessageDataPtr& pMsgData);
-		void OnActorMovements(const MessageDataPtr& pMsgData);
-		void OnActorMovement(const ActorMovement& movement);
 		void OnPlayerStateChanged(const MessageDataPtr& pMsgData);
 
 		void UpdateOnlineStateByConnectionState();
@@ -247,11 +239,6 @@ namespace SF
 
 		// My actor movement
 		SharedPointerT<SendingActorMovementManager> m_OutgoingMovement;
-
-        bool m_bSimulateSimulatedActorMovement = false;
-
-		// PlayerId by movement
-		SortedMap<ActorID, SharedPointerT<ReceivedMovementManager>> m_IncomingMovementsByActor;
 
 		// tick time
 		TimeStampMS m_TickTime;
