@@ -123,7 +123,7 @@ namespace Net {
 		// Message element
 		struct MessageData
 		{
-			Atomic<ItemState> State = ItemState::Free;
+			ItemState State = ItemState::Free;
 			TimeStampMS ulTimeStamp = TimeStampMS(DurationMS_Zero);
 			SharedPointerT<Message::MessageData> pMsg;
 
@@ -145,7 +145,7 @@ namespace Net {
 		uint32_t		m_uiHeadSequence = 0;
 
 		// Base sequence value( sequence Head)
-		uint32_t		m_uiBaseSequence = 0;
+		Atomic<uint32_t>	m_uiBaseSequence = 0;
 
 		// Message count in window
 		uint32_t		m_uiMsgCount = 0;
@@ -153,13 +153,23 @@ namespace Net {
 		// Message data array
 		MessageData*	m_pMsgWnd = nullptr;
 
-		// Until this can do thread safe release
+		// we have multiple sync variables
 		//CriticalSection m_Lock;
 
-	private:
-		// Release message sequence and slide window if can
-		void ReleaseMessageInternal(uint32_t iOffset);
+        // This is ack sequence queue. We will need a bit bigger ack queue.
+        CircularPageQueue<uint32_t> m_ReleasedMessageSequences;
 
+	private:
+
+        // CircularPageQueue can't accept 0 as value
+        SF_FORCEINLINE uint32_t ToQueuedSequence(uint32_t sequence) const { return (sequence << 1) | 1; }
+        SF_FORCEINLINE uint32_t FromQueuedSequence(uint32_t sequence) const { return sequence >> 1; }
+
+		// Release message sequence and slide window if can
+		void ReleaseMessageInternal(uint16_t iOffset);
+
+        // Slide window, if you are using ReleaseSingleMessage, you need to call this on connection tick
+        void SlidWindow();
 
 	public:
 		// Constructor
@@ -194,15 +204,19 @@ namespace Net {
 		// Add a message at the end
 		Result EnqueueMessage(TimeStampMS ulTimeStampMS, SharedPointerT<Message::MessageData>& pIMsg );
 
-		// Release message sequence and slide window if can
-		// This can be called from another thread
-		Result ReleaseSingleMessage( uint16_t uiSequence );
+        // Queue released sequence
+        Result QueueReleasedSequence(uint16_t uiSequence);
+        Result QueueReleasedSequence(uint16_t uiSequenceBase, uint64_t uiMsgMask);
 
-		// Release message by message mask
-		Result ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask );
+        Result UpdateReleasedSequences();
 
-		// Slide window, if you are using ReleaseSingleMessage, you need to call this on connection tick
-		void SlidWindow();
+		//// Release message sequence and slide window if can
+		//// This can be called from another thread
+		//Result ReleaseSingleMessage( uint16_t uiSequence );
+
+		//// Release message by message mask
+		//Result ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask );
+
 	};
 
 

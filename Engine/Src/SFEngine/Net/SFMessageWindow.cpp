@@ -206,6 +206,7 @@ namespace Net {
 
 
 	SendMsgWindow::SendMsgWindow(IHeap& heap)
+        : m_ReleasedMessageSequences(heap, 64, 4)
 	{
 		m_pMsgWnd = new(heap) MessageData[MessageWindow::MESSAGE_QUEUE_SIZE];
 	}
@@ -295,122 +296,223 @@ namespace Net {
 		return hr;
 	}
 
-	// Release message sequence and slide window if can
-	Result SendMsgWindow::ReleaseSingleMessage( uint16_t uiSequence )
-	{
-		// TODO: math this function thread safe because this function can be called from other thread
-		//MutexScopeLock localLock(m_Lock);
+    Result SendMsgWindow::QueueReleasedSequence(uint16_t uiSequence)
+    {
+        if (m_pMsgWnd == NULL)
+            return ResultCode::SUCCESS;// nothing to release
 
-		ScopeContext hr;
-		int iIdx;
-		//uint32_t iPosIdx;
+        int iIdx = Message::SequenceDifference(uiSequence, m_uiBaseSequence.load(MemoryOrder::memory_order_acquire));
+        if (iIdx >= GetAcceptableSequenceRange())
+        {
+            return ResultCode::IO_INVALID_SEQUENCE; // Out of range
+        }
+        else if (iIdx < 0)
+        {
+            return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
+        }
 
-		if( m_pMsgWnd == NULL )
-			return ResultCode::SUCCESS;// nothing to release
+        return m_ReleasedMessageSequences.Enqueue(ToQueuedSequence(uiSequence));
+    }
+
+    Result SendMsgWindow::QueueReleasedSequence(uint16_t uiSequenceBase, uint64_t uiMsgMask)
+    {
+        Result hr;
+
+        if (m_pMsgWnd == NULL)
+            return ResultCode::SUCCESS;// nothing to release
+
+        uint32_t uiCurBit = 0, uiSyncMaskCur = 1;
+
+        auto baseSequence = m_uiBaseSequence.load(MemoryOrder::memory_order_acquire);
+        int iIdx = Message::SequenceDifference(uiSequenceBase, baseSequence);
+        if(  iIdx < 0 )
+        {
+        	// SKip already processed message ids
+        	uint32_t uiIdx = (uint32_t)(-iIdx);
+        	iIdx = 0;
+
+            // Check already processed bits
+        	// For some reason, peer sent old sync index, skip those indexes, but make sure it's fully send, otherwise it's protocol error
+        	for (; uiCurBit < uiIdx; uiCurBit++, uiSyncMaskCur <<= 1)
+        	{
+        		if ((uiMsgMask & uiSyncMaskCur) == 0)
+        		{
+        			// If client use same port for different connect this will be happened, and the connection need to be closed
+        			netCheck(ResultCode::UNEXPECTED);
+        		}
+        	}
+        }
+        else if (iIdx > 0)
+        {
+            // everything before Idx has acked
+        	auto maxRelease = (uint32_t)std::min(iIdx, GetAcceptableSequenceRange());
+        	for (; uiCurBit < maxRelease; uiCurBit++)
+        	{
+                netCheck(m_ReleasedMessageSequences.Enqueue(ToQueuedSequence(baseSequence + uiCurBit)));
+        	}
+
+        	if (iIdx >= GetAcceptableSequenceRange())
+        	{
+        		//SlidWindow();
+        		return ResultCode::SUCCESS;
+        	}
+        }
+
+        // Process remain bits
+        // At this point iIdx will have offset from local base sequence
+        for (; uiCurBit < MessageWindow::SYNC_MASK_BITS_MAX; uiCurBit++, uiSyncMaskCur <<= 1, iIdx++)
+        {
+        	if ((uiMsgMask & uiSyncMaskCur) == 0) continue;
+
+            netCheck(m_ReleasedMessageSequences.Enqueue(ToQueuedSequence(baseSequence + iIdx)));
+
+        }
+
+        return hr;
+    }
+
+    Result SendMsgWindow::UpdateReleasedSequences()
+    {
+        Result hr;
+
+        auto uiSequenceBase = m_uiBaseSequence.load(MemoryOrder::memory_order_acquire);
+        uint32_t sequence{};
+        while (m_ReleasedMessageSequences.Dequeue(sequence))
+        {
+            sequence = FromQueuedSequence(sequence);
+            int iIdx = Message::SequenceDifference(sequence, uiSequenceBase);
+            if (iIdx < 0)
+                continue;
+
+            auto& windowElement = m_pMsgWnd[sequence % MessageWindow::MESSAGE_QUEUE_SIZE];
+            windowElement.pMsg = nullptr;
+            // Double free can happen. skip the assert
+            //AssertRel(windowElement.State != ItemState::Free);
+            windowElement.State = ItemState::CanFree;
+        }
+
+        SlidWindow();
+
+        return hr;
+    }
+
+	//// Release message sequence and slide window if can
+	//Result SendMsgWindow::ReleaseSingleMessage( uint16_t uiSequence )
+	//{
+	//	// TODO: make this function thread safe because this function can be called from other thread
+	//	//MutexScopeLock localLock(m_Lock);
+
+	//	ScopeContext hr;
+	//	int iIdx;
+	//	//uint32_t iPosIdx;
+
+	//	if( m_pMsgWnd == NULL )
+	//		return ResultCode::SUCCESS;// nothing to release
 
 
-		iIdx = Message::SequenceDifference(uiSequence, m_uiBaseSequence);
+	//	iIdx = Message::SequenceDifference(uiSequence, m_uiBaseSequence);
 
-		if( iIdx >= GetAcceptableSequenceRange() )
-		{
-			netCheck( ResultCode::IO_INVALID_SEQUENCE ); // Out of range
-		}
-		else if(  iIdx < 0 )
-		{
-			return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
-		}
+	//	if( iIdx >= GetAcceptableSequenceRange() )
+	//	{
+	//		netCheck( ResultCode::IO_INVALID_SEQUENCE ); // Out of range
+	//	}
+	//	else if(  iIdx < 0 )
+	//	{
+	//		return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
+	//	}
 
-		ReleaseMessageInternal(iIdx);
+	//	ReleaseMessageInternal(iIdx);
 
-		// No sliding window for this because this can be called from other thread
+	//	// No sliding window for this because this can be called from other thread
 
-		return hr;
-	}
+	//	return hr;
+	//}
 
 
-	// Release message sequence and slide window if can
-	Result SendMsgWindow::ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask )
-	{
-		Result hr = ResultCode::SUCCESS;
-		int iIdx;
+	//// Release message sequence and slide window if can
+	//Result SendMsgWindow::ReleaseMsg( uint16_t uiSequenceBase, uint64_t uiMsgMask )
+	//{
+	//	Result hr = ResultCode::SUCCESS;
+	//	int iIdx;
 
-		//MutexScopeLock localLock(m_Lock);
+	//	//MutexScopeLock localLock(m_Lock);
 
-		if( m_pMsgWnd == nullptr )
-			return ResultCode::SUCCESS;// nothing to release
+	//	if( m_pMsgWnd == nullptr )
+	//		return ResultCode::SUCCESS;// nothing to release
 
-		uint32_t uiCurBit = 0, uiSyncMaskCur = 1;
+	//	uint32_t uiCurBit = 0, uiSyncMaskCur = 1;
 
-		iIdx = Message::SequenceDifference(uiSequenceBase, m_uiBaseSequence);
+	//	iIdx = Message::SequenceDifference(uiSequenceBase, m_uiBaseSequence);
 
-		if(  iIdx < 0 )
-		{
-			// SKip already processed message ids
-			uint32_t uiIdx = (uint32_t)(-iIdx);
-			iIdx = 0;
+	//	if(  iIdx < 0 )
+	//	{
+	//		// SKip already processed message ids
+	//		uint32_t uiIdx = (uint32_t)(-iIdx);
+	//		iIdx = 0;
 
-			// For some reason, peer sent old sync index, skip those indexes, but make sure it's fully send, otherwise it's protocol error
-			for (; uiCurBit < uiIdx; uiCurBit++, uiSyncMaskCur <<= 1)
-			{
-				if ((uiMsgMask & uiSyncMaskCur) == 0)
-				{
-					// If client use same port for different connect this will be happened, and the connection need to be closed
-					netCheck(ResultCode::UNEXPECTED);
-				}
-			}
-		}
-		else if (iIdx > 0)
-		{
-			auto maxRelease = (uint32_t)std::min(iIdx, GetAcceptableSequenceRange());
-			for (; uiCurBit < maxRelease; uiCurBit++)
-			{
-				ReleaseMessageInternal(uiCurBit);
-			}
+	//		// For some reason, peer sent old sync index, skip those indexes, but make sure it's fully send, otherwise it's protocol error
+	//		for (; uiCurBit < uiIdx; uiCurBit++, uiSyncMaskCur <<= 1)
+	//		{
+	//			if ((uiMsgMask & uiSyncMaskCur) == 0)
+	//			{
+	//				// If client use same port for different connect this will be happened, and the connection need to be closed
+	//				netCheck(ResultCode::UNEXPECTED);
+	//			}
+	//		}
+	//	}
+	//	else if (iIdx > 0)
+	//	{
+	//		auto maxRelease = (uint32_t)std::min(iIdx, GetAcceptableSequenceRange());
+	//		for (; uiCurBit < maxRelease; uiCurBit++)
+	//		{
+	//			ReleaseMessageInternal(uiCurBit);
+	//		}
 
-			if (iIdx >= GetAcceptableSequenceRange())
-			{
-				//SlidWindow();
-				return ResultCode::SUCCESS;
-			}
+	//		if (iIdx >= GetAcceptableSequenceRange())
+	//		{
+	//			//SlidWindow();
+	//			return ResultCode::SUCCESS;
+	//		}
 
-		}
+	//	}
 
-		// At this point iIdx will have offset from local base sequence
-		for (; uiCurBit < MessageWindow::SYNC_MASK_BITS_MAX; uiCurBit++, uiSyncMaskCur <<= 1, iIdx++)
-		{
-			if ((uiMsgMask & uiSyncMaskCur) == 0) continue;
+	//	// At this point iIdx will have offset from local base sequence
+	//	for (; uiCurBit < MessageWindow::SYNC_MASK_BITS_MAX; uiCurBit++, uiSyncMaskCur <<= 1, iIdx++)
+	//	{
+	//		if ((uiMsgMask & uiSyncMaskCur) == 0) continue;
 
-			ReleaseMessageInternal((uint32_t)iIdx);
+	//		ReleaseMessageInternal((uint32_t)iIdx);
 
-		}
+	//	}
 
-		// window sliding happens on connection tick
+	//	// window sliding happens on connection tick
 
-		return hr;
-	}
+	//	return hr;
+	//}
 
 
 
 	// Release message sequence
-	void SendMsgWindow::ReleaseMessageInternal(uint32_t iOffset)
+	void SendMsgWindow::ReleaseMessageInternal(uint16_t iOffset)
 	{
 		uint32_t iPosIdx = (m_uiBaseSequence + iOffset) % MessageWindow::MESSAGE_QUEUE_SIZE;
         auto& windowElement = m_pMsgWnd[iPosIdx];
 
-        // don't release pointer here
-		//m_pMsgWnd[iPosIdx].pMsg = nullptr;
+        windowElement.pMsg = nullptr;
+        AssertRel(windowElement.State != ItemState::Free);
+        windowElement.State = ItemState::CanFree;
 
         // Mark it as can-be-freed
-        ItemState expectedState = ItemState::Filled;
-        while (!windowElement.State.compare_exchange_weak(expectedState, ItemState::CanFree, std::memory_order_relaxed, std::memory_order_acquire))
-        {
-            if (expectedState == ItemState::Free || expectedState == ItemState::CanFree)
-            {
-                // Nothing need to be done
-                return;
-            }
-            expectedState = ItemState::Filled;
-        }
+        //ItemState expectedState = ItemState::Filled;
+        //while (!windowElement.State.compare_exchange_weak(expectedState, ItemState::CanFree, std::memory_order_relaxed, std::memory_order_acquire))
+        //{
+        //    if (expectedState == ItemState::Free || expectedState == ItemState::CanFree)
+        //    {
+        //        // Nothing need to be done
+        //        return;
+        //    }
+        //    expectedState = ItemState::Filled;
+        //}
 	}
 
 
@@ -420,7 +522,7 @@ namespace Net {
 		for (int iMsg = 0; m_pMsgWnd[windowSeq].State == ItemState::CanFree && iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
 		{
             m_pMsgWnd[windowSeq].pMsg = nullptr;
-            m_pMsgWnd[windowSeq].State.store(ItemState::Free, MemoryOrder::memory_order_release);
+            m_pMsgWnd[windowSeq].State = ItemState::Free;
 			m_uiMsgCount--;
 			m_uiBaseSequence++;
 			windowSeq = m_uiBaseSequence % MessageWindow::MESSAGE_QUEUE_SIZE;

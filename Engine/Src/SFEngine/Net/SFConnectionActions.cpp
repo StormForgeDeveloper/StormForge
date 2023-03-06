@@ -96,7 +96,7 @@ namespace Net {
 			if (pNetCtrl->rtnMsgID.IDs.Reliability)
 			{
 				auto* pConUDP = static_cast<ConnectionUDPBase*>(GetConnection());
-				auto hrTem = pConUDP->GetSendReliableWindow().ReleaseSingleMessage(pNetCtrl->msgID.IDSeq.Sequence);
+				auto hrTem = pConUDP->GetSendReliableWindow().QueueReleasedSequence(pNetCtrl->msgID.IDSeq.Sequence);
 				SFLog(Net, Debug5, "NetCtrl Recv GuaAck : CID:{0}:{1}, seq:{2}, rtnmsg:{3}, hr={4:X8}, windows status, baseSeq:{5}, headSeq:{6}, remain:{7}, msgCount:{8}",
 					GetCID(), pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->msgID.IDSeq.Sequence, pNetCtrl->rtnMsgID, hrTem, 
 					pConUDP->GetSendReliableWindow().GetBaseSequence(), pConUDP->GetSendReliableWindow().GetHeadSequence(), 
@@ -279,7 +279,7 @@ namespace Net {
 		if (pSyncCtrl->Length != sizeof(MsgMobileNetCtrlSync))
 			netCheck(ResultCode::IO_BADPACKET_SIZE);
 
-		hrTem = sendWindow.ReleaseMsg(pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
+		hrTem = sendWindow.QueueReleasedSequence(pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
 		if (hrTem)
 		{
 			SFLog(Net, Debug2, "NetCtrl Recv SendMask : CID:{0}: mySeq:{1}, seq:{2}, mask:{3:X8}",
@@ -334,7 +334,7 @@ namespace Net {
 		if (pSyncCtrl->Length != sizeof(MsgMobileNetCtrlSync))
 			netCheck(ResultCode::IO_BADPACKET_SIZE);
 
-		hrTem = sendReliableWindow.ReleaseMsg(pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
+		hrTem = sendReliableWindow.QueueReleasedSequence(pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask);
 		SFLog(Net, Custom10, "NetCtrl Recv SendReliableMask : CID:{0}:{1}, seq:{2}, mask:{3:X8}, hr={4:X8}",
 			GetCID(), sendReliableWindow.GetBaseSequence(), pSyncCtrl->msgID.IDSeq.Sequence, pSyncCtrl->MessageMask, hrTem);
 
@@ -667,7 +667,7 @@ namespace Net {
 		auto& sendGuaQueue = GetConnection()->GetSendGuaQueue();
 
 		// make sure all acked messages are handled
-		sendWindow.SlidWindow();
+		sendWindow.UpdateReleasedSequences();
 
 		// Send guaranteed message process
 		CounterType NumProc = sendWindow.GetRemainSequenceCount();
@@ -746,7 +746,7 @@ namespace Net {
 				continue;
 			}
 
-            SendMsgWindow::ItemState state = pMessageElement->State.load(MemoryOrder::memory_order_acquire);
+            SendMsgWindow::ItemState state = pMessageElement->State;
             if (state != SendMsgWindow::ItemState::Filled)
                 continue;
 
@@ -778,7 +778,7 @@ namespace Net {
 		}
 
         // Now we can move window
-        sendWindow.SlidWindow();
+        sendWindow.UpdateReleasedSequences();
 
 		return hr;
 	}
