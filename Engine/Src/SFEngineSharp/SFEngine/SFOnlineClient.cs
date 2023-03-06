@@ -87,6 +87,8 @@ namespace SF
         {
             ResetConnectionAdapter();
 
+            SF.Log.Info($"Online StartConnection: gameId:{gameId}, loginAddr:{loginAddress}, userId:{userId}");
+
             var res = NativeStartConnection(NativeHandle, transactionId, gameId, loginAddress, userId, password);
             return new Result((int)res);
         }
@@ -94,6 +96,8 @@ namespace SF
         public Result StartConnection(UInt64 transactionId, string gameId, string loginAddress, UInt64 steamUserId, string steamUserName, string steamUserToken)
         {
             ResetConnectionAdapter();
+
+            SF.Log.Info($"Online StartConnection: gameId:{gameId}, loginAddr:{loginAddress}, steamUserId:{steamUserId}, steamUserName:{steamUserName}");
 
             var res = NativeStartConnectionSteam(NativeHandle, transactionId, gameId, loginAddress, steamUserId, steamUserName, steamUserToken);
             return new Result((int)res);
@@ -249,21 +253,6 @@ namespace SF
 
         #endregion
 
-        public Result GetReceivedMovementForActor(UInt32 actorId, out ActorMovement movement)
-        {
-            return new Result(NativeGetReceivedMovementForActor(NativeHandle, actorId, out movement));
-        }
-
-        public Result GetMovementForActor(UInt32 actorId, out ActorMovement movement)
-        {
-            return new Result(NativeGetMovementForActor(NativeHandle, actorId, out movement));
-        }
-
-        public Result GetMovementForActorAll(UInt32 actorId, out ActorMovement movement, out ActorMovement receivedMovement, out ActorMovement expectedMovement)
-        {
-            return new Result(NativeGetMovementForActorAll(NativeHandle, actorId, out movement, out receivedMovement, out expectedMovement));
-        }
-
         public UInt32 GetCurrentMoveFrame()
         {
             return NativeGetCurrentMoveFrame(NativeHandle);
@@ -399,15 +388,6 @@ namespace SF
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetConnection", CharSet = CharSet.Auto)]
         static extern IntPtr NativeGetConnection(IntPtr nativeHandle, Int32 connectionIndex);
-
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForActor", CharSet = CharSet.Auto)]
-        static extern Int32 NativeGetMovementForActor(IntPtr nativeHandle, UInt32 actorId, out ActorMovement actorMovement);
-
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetReceivedMovementForActor", CharSet = CharSet.Auto)]
-        static extern Int32 NativeGetReceivedMovementForActor(IntPtr nativeHandle, UInt32 actorId, out ActorMovement actorMovement);
-
-        [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetMovementForActorAll", CharSet = CharSet.Auto)]
-        static extern Int32 NativeGetMovementForActorAll(IntPtr nativeHandle, UInt32 actorId, out ActorMovement actorMovement, out ActorMovement actorReceivedMovement, out ActorMovement actorExpectedMovement);
 
         [DllImport(NativeDLLName, EntryPoint = "SFOnlineClient_NativeGetCurrentMoveFrame", CharSet = CharSet.Auto)]
         static extern UInt32 NativeGetCurrentMoveFrame(IntPtr nativeHandle);
