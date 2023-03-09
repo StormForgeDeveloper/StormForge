@@ -53,11 +53,14 @@ namespace SF
 		return m_EventBufferQueue.IsEmpty();
 	}
 
-	bool TelemetryEventQueue::EnqueueEvent(uint32_t eventId, const Array<const uint8_t>& eventData)
+	bool TelemetryEventQueue::EnqueueEvent(uint32_t eventId, const Array<const uint8_t>& eventDataBuffer)
 	{
-		MutexScopeLock ScopeLock(m_WriteLock);
+        if (eventDataBuffer.size() == 0)
+            return false;
 
-		auto allocationSize = eventData.size() + sizeof(EventItemHeader);
+		//MutexScopeLock ScopeLock(m_WriteLock);
+
+		auto allocationSize = eventDataBuffer.size() + sizeof(uint32_t);
 
 		auto eventItem = m_EventBufferQueue.AllocateWrite(allocationSize);
 		for (;!eventItem; eventItem = m_EventBufferQueue.AllocateWrite(allocationSize))
@@ -76,9 +79,11 @@ namespace SF
 			m_EventBufferQueue.ReleaseRead(pTail);
 		}
 
-		auto* pCurDataPtr = (uint8_t*)eventItem->GetDataPtr();
-		memcpy(pCurDataPtr, &eventId, sizeof(eventId)); pCurDataPtr += sizeof(eventId);
-		memcpy(pCurDataPtr, eventData.data(), eventData.size());
+        auto* pCurDataPtr = (uint8_t*)eventItem->GetDataPtr();
+        memcpy(pCurDataPtr, &eventId, sizeof(eventId)); pCurDataPtr += sizeof(eventId);
+        memcpy(pCurDataPtr, eventDataBuffer.data(), eventDataBuffer.size());
+
+        std::atomic_thread_fence(MemoryOrder::memory_order_release);
 
 		m_EventBufferQueue.ReleaseWrite(eventItem);
 
@@ -138,7 +143,7 @@ namespace SF
 			return;
 		}
 
-		m_StorageFileHeader = {};
+        m_StorageFileHeader = {};
 		m_StorageFileHeader.Head = 0;
 		m_StorageFileHeader.Tail = 0;
 
@@ -200,7 +205,7 @@ namespace SF
 			return;
 
 		// We can't allow other operations during data save
-		MutexScopeLock ScopeWriteLock(m_WriteLock);
+		//MutexScopeLock ScopeWriteLock(m_WriteLock);
 		MutexScopeLock ScopeReadLock(m_ReadLock);
 
 		auto basePtr = intptr_t(m_EventBufferQueue.data());
@@ -260,23 +265,23 @@ namespace SF
 		bool ReadRes = m_StorageFile.Read(reinterpret_cast<uint8_t*>(&m_StorageFileHeader), sizeof(m_StorageFileHeader), readSize);
 		if (!ReadRes)
 		{
-			SFLog(Telemetry, Error, "TelemetryEventQueue Failed to read cache file {0}.", m_StorageFilePath);
+			SFLog(Telemetry, Error, "TelemetryEventQueue Failed to read cache file header {0}.", m_StorageFilePath);
 			return false;
 		}
 
 		ReadRes = m_StorageFile.Read(m_EventBufferQueue.data(), m_EventBufferQueue.size(), readSize);
 		if (!ReadRes)
 		{
-			SFLog(Telemetry, Error, "TelemetryEventQueue Failed to read cache file {0}.", m_StorageFilePath);
+			SFLog(Telemetry, Error, "TelemetryEventQueue Failed to read cache file data {0}.", m_StorageFilePath);
 			return false;
 		}
 
 		// Close the file again
 
-		if (m_StorageFileHeader.FileSignature != FileSignature
-			|| m_StorageFileHeader.FileVersion != FileVersion)
+		if (m_StorageFileHeader.FileSignature != FILE_SIGNATURE
+			|| m_StorageFileHeader.FileVersion != FILE_VERSION)
 		{
-			SFLog(Telemetry, Error, "TelemetryEventQueue Failed to read cache file {0}.", m_StorageFilePath);
+			SFLog(Telemetry, Error, "TelemetryEventQueue Failed to read cache file. invalid signature {0}.", m_StorageFilePath);
 			return false;
 		}
 

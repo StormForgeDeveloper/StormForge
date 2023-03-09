@@ -70,7 +70,7 @@ namespace SF
 			char ClientId[256];
 			char AuthKey[256];
 			char MachineId[256];
-			char SessionId[128];
+			char SessionId[256];
             StringCrc32 ContentType;
 			SharedPointer UserObjectPtr;
 

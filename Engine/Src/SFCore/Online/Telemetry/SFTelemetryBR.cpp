@@ -34,10 +34,11 @@ namespace SF
 	//	class TelemetryEvent
 	//
 
-    TelemetryEvent::TelemetryEvent(IHeap& heap, TelemetryBR* pClient, uint32_t eventId)
+    TelemetryEvent::TelemetryEvent(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName)
         : m_Heap(heap)
         , m_pClient(pClient)
         , m_EventId(eventId)
+        , m_EventName(eventName)
     {
     }
 
@@ -63,72 +64,81 @@ namespace SF
     //	class TelemetryEventBson
     //
 
-    TelemetryEventBson::TelemetryEventBson(IHeap& heap, TelemetryBR* pClient, uint32_t eventId)
-		: TelemetryEvent(heap, pClient, eventId)
-	{
-		bson_init(&m_Bson);
-	}
+ //   TelemetryEventBson::TelemetryEventBson(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName)
+	//	: TelemetryEvent(heap, pClient, eventId, eventName)
+	//{
+	//	bson_init(&m_Bson);
+	//}
 
-	TelemetryEventBson::~TelemetryEventBson()
-	{
-		bson_destroy(&m_Bson);
-	}
+	//TelemetryEventBson::~TelemetryEventBson()
+	//{
+	//	bson_destroy(&m_Bson);
+	//}
 
-    ArrayView<const uint8_t> TelemetryEventBson::GetSerializedData()
-	{
-		m_BinData.SetLinkedBuffer(size_t(m_Bson.len), bson_get_data(&m_Bson));
+ //   ArrayView<const uint8_t> TelemetryEventBson::GetSerializedData()
+	//{
+ //       if (m_pClient == nullptr)
+ //           return m_BinData;
 
-		return m_BinData;
-	}
+ //       Set(TelemetryBR::KeyName_ClientId, m_pClient->GetClientId().data());
+ //       Set(TelemetryBR::KeyName_MachineId, m_pClient->GetMachineId().data());
+ //       Set(TelemetryBR::KeyName_SessionId, m_pClient->GetSessionId().data());
+ //       Set(TelemetryBR::KeyName_EventId, (int32_t)m_EventId);
+ //       Set(TelemetryBR::KeyName_EventName, GetEventName().data());
 
-	TelemetryEvent& TelemetryEventBson::Set(const char* name, int value)
-	{
-		bson_append_int32(&m_Bson, name, (int)strlen(name), value);
-		return *this;
-	}
+	//	m_BinData.SetLinkedBuffer(size_t(m_Bson.len), bson_get_data(&m_Bson));
 
-    TelemetryEvent& TelemetryEventBson::Set(const char* name, int64_t value)
-	{
-		bson_append_int64(&m_Bson, name, (int)strlen(name), value);
-		return *this;
-	}
+	//	return m_BinData;
+	//}
 
-    TelemetryEvent& TelemetryEventBson::Set(const char* name, float value)
-	{
-		bson_append_double(&m_Bson, name, (int)strlen(name), value);
-		return *this;
-	}
+	//TelemetryEvent& TelemetryEventBson::Set(const char* name, int value)
+	//{
+	//	bson_append_int32(&m_Bson, name, (int)strlen(name), value);
+	//	return *this;
+	//}
 
-    TelemetryEvent& TelemetryEventBson::Set(const char* name, const char* value)
-	{
-		bson_append_utf8(&m_Bson, name, (int)strlen(name), value, (int)strlen(value));
-		return *this;
-	}
+ //   TelemetryEvent& TelemetryEventBson::Set(const char* name, int64_t value)
+	//{
+	//	bson_append_int64(&m_Bson, name, (int)strlen(name), value);
+	//	return *this;
+	//}
+
+ //   TelemetryEvent& TelemetryEventBson::Set(const char* name, float value)
+	//{
+	//	bson_append_double(&m_Bson, name, (int)strlen(name), value);
+	//	return *this;
+	//}
+
+ //   TelemetryEvent& TelemetryEventBson::Set(const char* name, const char* value)
+	//{
+	//	bson_append_utf8(&m_Bson, name, (int)strlen(name), value, (int)strlen(value));
+	//	return *this;
+	//}
 
 
-    TelemetryEvent& TelemetryEventBson::Set(const String& name, int value)
-	{
-		bson_append_int32(&m_Bson, name, (int)name.length(), value);
-		return *this;
-	}
+ //   TelemetryEvent& TelemetryEventBson::Set(const String& name, int value)
+	//{
+	//	bson_append_int32(&m_Bson, name, (int)name.length(), value);
+	//	return *this;
+	//}
 
-    TelemetryEvent& TelemetryEventBson::Set(const String& name, int64_t value)
-	{
-		bson_append_int64(&m_Bson, name, (int)name.length(), value);
-		return *this;
-	}
+ //   TelemetryEvent& TelemetryEventBson::Set(const String& name, int64_t value)
+	//{
+	//	bson_append_int64(&m_Bson, name, (int)name.length(), value);
+	//	return *this;
+	//}
 
-    TelemetryEvent& TelemetryEventBson::Set(const String& name, float value)
-	{
-		bson_append_double(&m_Bson, name, (int)name.length(), value);
-		return *this;
-	}
+ //   TelemetryEvent& TelemetryEventBson::Set(const String& name, float value)
+	//{
+	//	bson_append_double(&m_Bson, name, (int)name.length(), value);
+	//	return *this;
+	//}
 
-    TelemetryEvent& TelemetryEventBson::Set(const String& name, const String& value)
-	{
-		bson_append_utf8(&m_Bson, name, (int)name.length(), value, (int)value.length());
-		return *this;
-	}
+ //   TelemetryEvent& TelemetryEventBson::Set(const String& name, const String& value)
+	//{
+	//	bson_append_utf8(&m_Bson, name, (int)name.length(), value, (int)value.length());
+	//	return *this;
+	//}
 
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
@@ -136,8 +146,10 @@ namespace SF
     //	class TelemetryEventAvro
     //
 
-    TelemetryEventAvro::TelemetryEventAvro(IHeap& heap, TelemetryBR* pClient, uint32_t eventId)
-        : TelemetryEvent(heap, pClient, eventId)
+    TelemetryEventAvro::TelemetryEventAvro(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName, const AvroSchema& eventSchema)
+        : TelemetryEvent(heap, pClient, eventId, eventName)
+        , m_AvroSchema(eventSchema)
+        , m_AvroValue(eventSchema)
     {
     }
 
@@ -145,12 +157,22 @@ namespace SF
     {
     }
 
-    ArrayView<const uint8_t> TelemetryEventAvro::GetSerializedData()
-    {
-        ;
+    //ArrayView<const uint8_t> TelemetryEventAvro::GetSerializedData()
+    //{
+    //    if (m_BinData.size() > 0)
+    //        return m_BinData;
 
-        return m_BinData;
-    }
+    //    m_BinData.resize(1024 * 10); // max event size
+    //    AvroWriter writer(m_BinData);
+
+    //    // avro streaming mode
+    //    writer.WriteString(m_EventSchema);
+    //    writer.WriteValue(m_AvroValue);
+
+    //    m_BinData.resize(writer.WrittenSize());
+
+    //    return m_BinData;
+    //}
 
     TelemetryEvent& TelemetryEventAvro::Set(const char* name, int value)
     {
@@ -257,8 +279,9 @@ namespace SF
 
 				for (uint Processed = 0; Processed < data.size(); Processed+=4, pEventId++)
 				{
-					m_EventQueue.FreePostedEvents(*pEventId);
-					SFLog(Telemetry, Info, "Client Recv Ack eventId:{0}", *pEventId);
+                    uint32_t eventId = *pEventId;
+					m_EventQueue.FreePostedEvents(eventId);
+					SFLog(Telemetry, Debug3, "Client Recv Ack eventId:{0}", eventId);
 				}
 			});
 
@@ -357,6 +380,23 @@ namespace SF
 		m_EventQueue.SaveDelta();
 	}
 
+    Result TelemetryBR::RegisterEventSchema(const char* eventName, const char* eventSchema)
+    {
+        Result hr;
+
+        auto newSchema = new AvroSchema;
+        hr = newSchema->Init(String(eventSchema));
+        if (!hr)
+        {
+            SFLog(Telemetry, Error, "RegisterEventSchema failed, hr:{0}", hr);
+            return hr;
+        }
+
+        m_EventSchemas.insert(std::make_pair(eventName, newSchema));
+
+        return hr;
+    }
+
 	TelemetryEvent* TelemetryBR::CreateTelemetryEvent(const char* eventName)
 	{
 		if (eventName == nullptr)
@@ -365,24 +405,45 @@ namespace SF
 		if (!m_Client.IsValid())
 			return nullptr;
 
+        auto itSchema = m_EventSchemas.find(eventName);
+        if (itSchema == m_EventSchemas.end())
+        {
+            SFLog(Telemetry, Debug3, "Event schema not found call RegisterEventSchema first. event:{0}", eventName);
+            return nullptr;
+        }
+
 		uint32_t eventId = m_EventId.fetch_add(1, MemoryOrder::memory_order_release) + 1;
 		if (eventId == 0)
 			eventId = m_EventId.fetch_add(1, MemoryOrder::memory_order_release) + 1;
 
-		auto newEvent = new(GetSystemHeap()) TelemetryEventAvro(GetSystemHeap(), this, eventId);
-
-		newEvent->Set(KeyName_ClientId, m_ClientId.data());
-		newEvent->Set(KeyName_MachineId, m_MachineId.data());
-		newEvent->Set(KeyName_SessionId, m_SessionId.data());
-		newEvent->Set(KeyName_EventId, (int32_t)eventId);
-		newEvent->Set(KeyName_EventName, eventName);
+		auto newEvent = new(GetSystemHeap()) TelemetryEventAvro(GetSystemHeap(), this, eventId, eventName, *itSchema->second);
 
 		return newEvent;
 	}
 
 	void TelemetryBR::EnqueueEvent(TelemetryEvent* pEvent)
 	{
-		m_EventQueue.EnqueueEvent(pEvent->GetEventId(), pEvent->GetSerializedData());
+        if (pEvent == nullptr)
+            return;
+
+        // Serialization buffer
+        DynamicArray<char> serializationBuffer;
+
+        if (serializationBuffer.size() == 0)
+            serializationBuffer.resize(MaxSerializationBufferSize);
+
+        AvroWriter writer(serializationBuffer);
+
+        // avro streaming mode
+        writer.WriteString(GetSessionId());
+        writer.WriteString(GetClientId());
+        writer.WriteString(GetMachineId());
+        writer.WriteString(pEvent->GetAvroSchema().GetSchemaString());
+        writer.WriteValue(pEvent->GetAvroValue());
+
+        serializationBuffer.resize(writer.WrittenSize());
+
+		m_EventQueue.EnqueueEvent(pEvent->GetEventId(), ArrayView<const uint8_t>(serializationBuffer));
 	}
 
 }

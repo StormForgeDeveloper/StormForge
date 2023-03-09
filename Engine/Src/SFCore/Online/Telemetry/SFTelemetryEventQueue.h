@@ -37,26 +37,22 @@ namespace SF
 
 		static constexpr const char* BaseStorageFilePath = "TelemetryEvent.cache";
 
-		static constexpr uint32_t FileSignature = "TelemetryEvent"_crc;
-		static constexpr uint32_t FileVersion = 1;
+		static constexpr uint32_t FILE_SIGNATURE = "TelemetryEvent"_crc;
+		static constexpr uint32_t FILE_VERSION = 1;
 		static constexpr uint32_t EventStorageSize = 1024 * 1024;
 
 	#pragma pack(push,4)
 		// Event cache file header
 		struct EventFileHeader
 		{
-			uint32_t FileSignature = FileSignature;
-			uint32_t FileVersion = FileVersion;
+			uint32_t FileSignature = FILE_SIGNATURE;
+			uint32_t FileVersion = FILE_VERSION;
 			int32_t Head = 0;
 			int32_t Tail = 0;
 		};
 	#pragma pack(pop)
 
 		using EventItem = CircularBufferQueue::BufferItem;
-		struct EventItemHeader
-		{
-			uint32_t EventId;
-		};
 
 	public:
 
@@ -80,7 +76,7 @@ namespace SF
 		//
 
 		// Enqueue
-		bool EnqueueEvent(uint32_t eventId, const Array<const uint8_t>& eventData);
+		bool EnqueueEvent(uint32_t eventId, const Array<const uint8_t>& eventDataBuffer);
 
 		// Get tail segment
 		EventItem* GetTailEvent();
@@ -114,7 +110,7 @@ namespace SF
 	private:
 
 		// writ lock
-		CriticalSection m_WriteLock;
+		//CriticalSection m_WriteLock;
 
 		// Read lock
 		CriticalSection m_ReadLock;
@@ -129,7 +125,6 @@ namespace SF
 
 		// File path to local storage
 		File m_StorageFile;
-
 	};
 
 }
