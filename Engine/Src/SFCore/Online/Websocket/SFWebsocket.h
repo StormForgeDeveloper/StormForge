@@ -71,6 +71,7 @@ namespace SF
 			char AuthKey[256];
 			char MachineId[256];
 			char SessionId[128];
+            StringCrc32 ContentType;
 			SharedPointer UserObjectPtr;
 
 			void Initialize(size_t RecvBufferSize, size_t SendBufferSize);

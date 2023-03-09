@@ -98,7 +98,19 @@ namespace SF {
 		{
 		public:
 			ArrayView();
-            ArrayView(const Array<DataType>& src);
+            template<class SrcDataType>
+            ArrayView(const Array<SrcDataType>& src)
+            {
+                // We support force cast for pod types
+                if constexpr (std::is_pod_v<SrcDataType> && std::is_pod_v<SrcDataType>)
+                {
+                    SetLinkedBuffer(src.size(), (DataType*)(src.data()));
+                }
+                else
+                {
+                    SetLinkedBuffer(src.size(), static_cast<DataType*>(src.data()));
+                }
+            }
             ArrayView(uint maxDataCount, uint dataCount, DataType* pDataPtr);
 			//ArrayView(size_t dataCount, DataType* pDataPtr);
 			constexpr ArrayView(size_t dataCount, DataType* pDataPtr);

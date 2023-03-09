@@ -302,33 +302,6 @@ namespace SF
 		Result Write(const std::string& data);
 		Result Write(const std::wstring& data);
 
-		//Result Write(const DurationMS& data);
-		//Result Write(const DurationSec& data);
-		//Result Write(const sockaddr_in6& data);
-		//Result Write(const sockaddr_storage& data);
-		//Result Write(const TransactionID& data);
-		//Result Write(const EntityUID& data);
-		//Result Write(const RouteContext& data);
-		//Result Write(const RankingType& data);
-		//Result Write(const NotificationType& data);
-		//Result Write(const PlayerInformation& data);
-		//Result Write(const RankingPlayerInformation& data);
-		//Result Write(const FriendInformation& data);
-		//Result Write(const TotalRankingPlayerInformation& data);
-		//Result Write(const MatchingQueueTicket& data);
-		//Result Write(const ClusterMembership& data);
-		//Result Write(const ClusterType& data);
-		//Result Write(const Result& data);
-		//Result Write(const StringCrc32& data);
-		//Result Write(const StringCrc64& data);
-		//Result Write(const ClusterID& data);
-		//Result Write(const NetClass& data);
-		//Result Write(const NetAddress& data);
-		//Result Write(const RelayPlayerInfo& data);
-
-		//Result Write(const VariableBox& data);
-		//Result Write(const NamedVariableBox& data);
-		//Result Write(const VariableTable& data);
 
 		template<class DataType>
 		inline Result Write(const Array<DataType>& data)

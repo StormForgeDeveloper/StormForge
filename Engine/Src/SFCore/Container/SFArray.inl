@@ -196,11 +196,6 @@ namespace SF {
 
 		}
 
-		template< class DataType >
-		ArrayView<DataType>::ArrayView(const Array<DataType>& src)
-		{
-			SetLinkedBuffer(src.size(), src.size(), src.data());
-		}
 
         template< class DataType >
         ArrayView<DataType>::ArrayView(uint maxDataCount, uint dataCount, DataType* pDataPtr)

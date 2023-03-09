@@ -34,88 +34,172 @@ namespace SF
 	//	class TelemetryEvent
 	//
 
-	TelemetryEvent::TelemetryEvent(IHeap& heap, TelemetryBR* pClient, uint32_t eventId)
-		: m_Heap(heap)
-		, m_pClient(pClient)
-		, m_EventId(eventId)
+    TelemetryEvent::TelemetryEvent(IHeap& heap, TelemetryBR* pClient, uint32_t eventId)
+        : m_Heap(heap)
+        , m_pClient(pClient)
+        , m_EventId(eventId)
+    {
+    }
+
+    TelemetryEvent::~TelemetryEvent()
+    {
+    }
+
+
+    void TelemetryEvent::PostEvent()
+    {
+        if (m_bSent)
+            return;
+
+        if (m_pClient)
+            m_pClient->EnqueueEvent(this);
+
+        m_bSent = true;
+    }
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    //	class TelemetryEventBson
+    //
+
+    TelemetryEventBson::TelemetryEventBson(IHeap& heap, TelemetryBR* pClient, uint32_t eventId)
+		: TelemetryEvent(heap, pClient, eventId)
 	{
 		bson_init(&m_Bson);
 	}
 
-	TelemetryEvent::~TelemetryEvent()
+	TelemetryEventBson::~TelemetryEventBson()
 	{
-		if (!m_bSent)
-			PostEvent();
-
 		bson_destroy(&m_Bson);
 	}
 
-	Array<const uint8_t>& TelemetryEvent::GetSerializedData()
+    ArrayView<const uint8_t> TelemetryEventBson::GetSerializedData()
 	{
 		m_BinData.SetLinkedBuffer(size_t(m_Bson.len), bson_get_data(&m_Bson));
 
 		return m_BinData;
 	}
 
-	TelemetryEvent& TelemetryEvent::Add(const char* name, int value)
+	TelemetryEvent& TelemetryEventBson::Set(const char* name, int value)
 	{
 		bson_append_int32(&m_Bson, name, (int)strlen(name), value);
 		return *this;
 	}
 
-	TelemetryEvent& TelemetryEvent::Add(const char* name, int64_t value)
+    TelemetryEvent& TelemetryEventBson::Set(const char* name, int64_t value)
 	{
 		bson_append_int64(&m_Bson, name, (int)strlen(name), value);
 		return *this;
 	}
 
-	TelemetryEvent& TelemetryEvent::Add(const char* name, float value)
+    TelemetryEvent& TelemetryEventBson::Set(const char* name, float value)
 	{
 		bson_append_double(&m_Bson, name, (int)strlen(name), value);
 		return *this;
 	}
 
-	TelemetryEvent& TelemetryEvent::Add(const char* name, const char* value)
+    TelemetryEvent& TelemetryEventBson::Set(const char* name, const char* value)
 	{
 		bson_append_utf8(&m_Bson, name, (int)strlen(name), value, (int)strlen(value));
 		return *this;
 	}
 
 
-	TelemetryEvent& TelemetryEvent::Add(const String& name, int value)
+    TelemetryEvent& TelemetryEventBson::Set(const String& name, int value)
 	{
 		bson_append_int32(&m_Bson, name, (int)name.length(), value);
 		return *this;
 	}
 
-	TelemetryEvent& TelemetryEvent::Add(const String& name, int64_t value)
+    TelemetryEvent& TelemetryEventBson::Set(const String& name, int64_t value)
 	{
 		bson_append_int64(&m_Bson, name, (int)name.length(), value);
 		return *this;
 	}
 
-	TelemetryEvent& TelemetryEvent::Add(const String& name, float value)
+    TelemetryEvent& TelemetryEventBson::Set(const String& name, float value)
 	{
 		bson_append_double(&m_Bson, name, (int)name.length(), value);
 		return *this;
 	}
 
-	TelemetryEvent& TelemetryEvent::Add(const String& name, const String& value)
+    TelemetryEvent& TelemetryEventBson::Set(const String& name, const String& value)
 	{
 		bson_append_utf8(&m_Bson, name, (int)name.length(), value, (int)value.length());
 		return *this;
 	}
 
-	void TelemetryEvent::PostEvent()
-	{
-		if (m_bSent)
-			return;
 
-		if (m_pClient)
-			m_pClient->EnqueueEvent(this);
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    //	class TelemetryEventAvro
+    //
 
-		m_bSent = true;
-	}
+    TelemetryEventAvro::TelemetryEventAvro(IHeap& heap, TelemetryBR* pClient, uint32_t eventId)
+        : TelemetryEvent(heap, pClient, eventId)
+    {
+    }
+
+    TelemetryEventAvro::~TelemetryEventAvro()
+    {
+    }
+
+    ArrayView<const uint8_t> TelemetryEventAvro::GetSerializedData()
+    {
+        ;
+
+        return m_BinData;
+    }
+
+    TelemetryEvent& TelemetryEventAvro::Set(const char* name, int value)
+    {
+        m_AvroValue.SetValue(name, value);
+        return *this;
+    }
+
+    TelemetryEvent& TelemetryEventAvro::Set(const char* name, int64_t value)
+    {
+        m_AvroValue.SetValue(name, value);
+        return *this;
+    }
+
+    TelemetryEvent& TelemetryEventAvro::Set(const char* name, float value)
+    {
+        m_AvroValue.SetValue(name, value);
+        return *this;
+    }
+
+    TelemetryEvent& TelemetryEventAvro::Set(const char* name, const char* value)
+    {
+        m_AvroValue.SetValue(name, value);
+        return *this;
+    }
+
+
+    TelemetryEvent& TelemetryEventAvro::Set(const String& name, int value)
+    {
+        m_AvroValue.SetValue(name, value);
+        return *this;
+    }
+
+    TelemetryEvent& TelemetryEventAvro::Set(const String& name, int64_t value)
+    {
+        m_AvroValue.SetValue(name, value);
+        return *this;
+    }
+
+    TelemetryEvent& TelemetryEventAvro::Set(const String& name, float value)
+    {
+        m_AvroValue.SetValue(name, value);
+        return *this;
+    }
+
+    TelemetryEvent& TelemetryEventAvro::Set(const String& name, const String& value)
+    {
+        m_AvroValue.SetValue(name, value);
+        return *this;
+    }
 
 
 
@@ -150,11 +234,12 @@ namespace SF
 			{
 				unsigned char** p = (unsigned char**)in, * end = (*p) + len;
 				String HeaderString;
-				HeaderString.Format("{0}={1};{2}={3};{4}={5};{6}={7}", 
+				HeaderString.Format("{0}={1};{2}={3};{4}={5};{6}={7};{8}={9}", 
 					KeyName_ClientId, m_ClientId,
 					KeyName_AuthKey, m_AuthKey,
 					KeyName_MachineId, m_MachineId, 
-					KeyName_SessionId, m_SessionId);
+					KeyName_SessionId, m_SessionId,
+                    KeyName_DataType,"avro");
 				auto res = lws_add_http_header_by_name(wsi, (unsigned char*)KeyName_AuthHeader, (unsigned char*)HeaderString.data(), (int)HeaderString.length(), p, end);
 				if (res)
 				{
@@ -284,13 +369,13 @@ namespace SF
 		if (eventId == 0)
 			eventId = m_EventId.fetch_add(1, MemoryOrder::memory_order_release) + 1;
 
-		auto newEvent = new(GetSystemHeap()) TelemetryEvent(GetSystemHeap(), this, eventId);
+		auto newEvent = new(GetSystemHeap()) TelemetryEventAvro(GetSystemHeap(), this, eventId);
 
-		newEvent->Add(KeyName_ClientId, m_ClientId.data());
-		newEvent->Add(KeyName_MachineId, m_MachineId.data());
-		newEvent->Add(KeyName_SessionId, m_SessionId.data());
-		newEvent->Add(KeyName_EventId, (int32_t)eventId);
-		newEvent->Add(KeyName_EventName, eventName);
+		newEvent->Set(KeyName_ClientId, m_ClientId.data());
+		newEvent->Set(KeyName_MachineId, m_MachineId.data());
+		newEvent->Set(KeyName_SessionId, m_SessionId.data());
+		newEvent->Set(KeyName_EventId, (int32_t)eventId);
+		newEvent->Set(KeyName_EventName, eventName);
 
 		return newEvent;
 	}
