@@ -94,12 +94,24 @@ namespace SF
 	{
 		auto eventItem = m_EventBufferQueue.PeekTail();
 
+        if (eventItem)
+        {
+            // Fence-fence synchronization: Acquire data changes before read
+            std::atomic_thread_fence(MemoryOrder::memory_order_acquire);
+        }
+
 		return eventItem;
 	}
 
 	TelemetryEventQueue::EventItem* TelemetryEventQueue::GetNextEvent(EventItem* eventItem)
 	{
 		auto nextEventItem = m_EventBufferQueue.PeekNext(eventItem);
+
+        if (eventItem)
+        {
+            // Fence-fence synchronization: Acquire data changes before read
+            std::atomic_thread_fence(MemoryOrder::memory_order_acquire);
+        }
 
 		return nextEventItem;
 	}

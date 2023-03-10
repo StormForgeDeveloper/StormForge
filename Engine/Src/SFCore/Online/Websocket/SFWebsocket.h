@@ -19,7 +19,7 @@
 #include "Container/SFCircularBufferQueue.h"
 #include "Object/SFSharedPointer.h"
 #include "Delegate/SFEventDelegate.h"
-
+#include "Util/SFGuid.h"
 #include "libwebsockets.h"
 #include <uv/version.h>
 #include <uv.h>
@@ -67,10 +67,10 @@ namespace SF
 			uint8_t flow_controlled : 1;
 			uint8_t write_consume_pending : 1;
 
-			char ClientId[256];
+            uint64_t ClientId{};
 			char AuthKey[256];
 			char MachineId[256];
-			char SessionId[256];
+			Guid SessionId;
             StringCrc32 ContentType;
 			SharedPointer UserObjectPtr;
 

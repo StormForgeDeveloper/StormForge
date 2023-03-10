@@ -20,8 +20,10 @@
 #include "Online/Telemetry/SFTelemetryService.h"
 #include "Online/Websocket/SFWebsocketClient.h"
 #include "Online/Telemetry/SFTelemetryEventQueue.h"
+#include "Util/SFGuid.h"
 #include "Avro/SFAvro.h"
 #include "bson/bson.h"
+
 
 
 namespace SF
@@ -132,7 +134,11 @@ namespace SF
     class TelemetryBR : public TelemetryService
     {
     public:
+
+        static constexpr int64_t HeaderVersion = 1;
+
         static constexpr size_t MaxSerializationBufferSize = 6 * 1024;
+
 		static constexpr char KeyName_AuthHeader[] = "sftelemetry:";
 		static constexpr int KeyName_AuthHeaderLen = sizeof(KeyName_AuthHeader) - 1; // without null terminator
 		static constexpr char KeyName_ClientId[] = "clientid";
@@ -152,7 +158,7 @@ namespace SF
 
 		SF_FORCEINLINE IHeap& GetHeap() const { return GetSystemHeap(); }
 
-        virtual Result Initialize(const String& serverAddress, int port, const String& clientId, const String& authKey);
+        virtual Result Initialize(const String& serverAddress, int port, const uint64_t& clientId, const String& authKey);
 
 		void Terminate();
 
@@ -161,10 +167,10 @@ namespace SF
 
 		SF_FORCEINLINE bool IsConnected() const { return m_Client.IsConnected(); }
 
-        SF_FORCEINLINE const String& GetClientId() const { return m_ClientId; }
+        SF_FORCEINLINE const uint64_t& GetClientId() const { return m_ClientId; }
         SF_FORCEINLINE const String& GetAuthKey() const { return m_AuthKey; }
         SF_FORCEINLINE const String& GetMachineId() const { return m_MachineId; }
-        SF_FORCEINLINE const String& GetSessionId() const { return m_SessionId; }
+        SF_FORCEINLINE const Guid& GetSessionId() const { return m_SessionId; }
 
 
         // register event schema
@@ -180,11 +186,11 @@ namespace SF
 
 	private:
 
-		String m_ClientId;
+        uint64_t m_ClientId;
 		String m_AuthKey;
 
 		String m_MachineId;
-		String m_SessionId;
+        Guid m_SessionId;
 
 		Atomic<uint32_t> m_EventId;
 		Atomic<uint32_t> m_SentEventId;
@@ -198,6 +204,7 @@ namespace SF
 
         std::unordered_map<std::string, UniquePtr<AvroSchema>> m_EventSchemas;
 
+        GuidGenerator<std::mt19937_64> m_GuidGen;
     };
 
 

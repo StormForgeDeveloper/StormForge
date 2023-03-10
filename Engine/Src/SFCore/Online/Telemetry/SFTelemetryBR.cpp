@@ -20,15 +20,6 @@
 namespace SF
 {
 
-	namespace TelemetryBRImpl
-	{
-		void GenerateSessionId(const String& machineId, String& outSessionId)
-		{
-			outSessionId.Format("{0}-{1}", machineId, Util::Time.GetRawUTCMs());
-		}
-	}
-
-
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	class TelemetryEvent
@@ -241,7 +232,7 @@ namespace SF
 		Terminate();
 	}
 
-	Result TelemetryBR::Initialize(const String& serverAddress, int port, const String& clientId, const String& authKey)
+	Result TelemetryBR::Initialize(const String& serverAddress, int port, const uint64_t& clientId, const String& authKey)
 	{
 		Result hr;
 
@@ -249,18 +240,25 @@ namespace SF
 		m_AuthKey = authKey;
 
 		m_MachineId = Util::GetMachineUniqueId();
-		TelemetryBRImpl::GenerateSessionId(m_MachineId, m_SessionId);
+        m_SessionId = m_GuidGen.NewGuid();
+        char sessionIdString[128]{};
+        m_SessionId.ToString(sessionIdString);
+
+        SFLog(Telemetry, Info, "Telemetry session initialized, machine:{0}, sessionId:{1}", m_MachineId, sessionIdString);
 
 		m_Client.SetUseTickThread(false); // We are using manual ticking
 		m_Client.SetClientAppendHeaderFunction([&](struct lws* wsi, void* user, void* in, size_t len)
 			{
+                char sessionId[128]{};
+                m_SessionId.ToString(sessionId);
+
 				unsigned char** p = (unsigned char**)in, * end = (*p) + len;
 				String HeaderString;
 				HeaderString.Format("{0}={1};{2}={3};{4}={5};{6}={7};{8}={9}", 
 					KeyName_ClientId, m_ClientId,
 					KeyName_AuthKey, m_AuthKey,
 					KeyName_MachineId, m_MachineId, 
-					KeyName_SessionId, m_SessionId,
+					KeyName_SessionId, sessionId,
                     KeyName_DataType,"avro");
 				auto res = lws_add_http_header_by_name(wsi, (unsigned char*)KeyName_AuthHeader, (unsigned char*)HeaderString.data(), (int)HeaderString.length(), p, end);
 				if (res)
@@ -340,7 +338,7 @@ namespace SF
 							break;
 
 						SFLog(Telemetry, Debug3, "Posting event eventId:{0}, sz:{1}", curEventId, pEventItem->GetDataSize());
-						auto sendRes = m_Client.Send(ArrayView<uint8_t>(pEventItem->GetDataSize(), (uint8_t*)pEventItem->GetDataPtr()));
+						auto sendRes = m_Client.Send(ArrayView<uint8_t>(pEventItem->GetDataSize() - sizeof(curEventId), (uint8_t*)pEventItem->GetDataPtr() + sizeof(curEventId)));
 						if (sendRes)
 						{
 							m_SentEventId.store(curEventId, MemoryOrder::memory_order_relaxed);
@@ -434,9 +432,14 @@ namespace SF
 
         AvroWriter writer(serializationBuffer);
 
+        auto sessionId = GetSessionId();
+        ArrayView<const uint8_t> sessionIdView(sizeof(Guid), (uint8_t*)sessionId.data);
+
         // avro streaming mode
-        writer.WriteString(GetSessionId());
-        writer.WriteString(GetClientId());
+        writer.WriteInt64(HeaderVersion);
+        writer.WriteInt64(pEvent->GetEventId());
+        writer.WriteBytes(sessionIdView);
+        writer.WriteInt64(GetClientId());
         writer.WriteString(GetMachineId());
         writer.WriteString(pEvent->GetAvroSchema().GetSchemaString());
         writer.WriteValue(pEvent->GetAvroValue());

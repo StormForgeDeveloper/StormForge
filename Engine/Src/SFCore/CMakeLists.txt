@@ -188,6 +188,8 @@ set(SUBUtil_FILES
 	Util/SFStrUtil.inl
 	Util/SFDebugger.h
 	Util/SFDebugger.cpp
+	Util/SFGuid.h
+	Util/SFGuid.cpp
   )
 
 source_group(Util FILES

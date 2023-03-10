@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -573,6 +573,35 @@ typedef unsigned int		SysUInt;
 
 ////////////////////////////////////////////////////////////////////////////////
 //
+//	Memory alighment
+//
+
+#ifdef X64
+#define SF_ALIGN				16
+#define SF_ALIGN_SHIFT			4
+#define SF_ALIGN_DOUBLE			16
+#define SF_ALIGN_DOUBLE_SHIFT	4
+#else
+#define SF_ALIGN				16
+#define SF_ALIGN_SHIFT			4
+#define SF_ALIGN_DOUBLE			16
+#define SF_ALIGN_DOUBLE_SHIFT	4
+#endif
+
+#if __GNUC__
+#define SF_DECLARE_ALIGN		__attribute__((aligned(SF_ALIGN)))
+#define SF_DECLARE_ALIGN_DOUBLE __attribute__((aligned(SF_ALIGN_DOUBLE)))
+#else
+#define SF_DECLARE_ALIGN		__declspec(align(SF_ALIGN))
+#define SF_DECLARE_ALIGN_DOUBLE __declspec(align(SF_ALIGN_DOUBLE))
+#endif
+
+//#define AlignUp(x,allign)	( (((uintptr_t)(x) + allign-1) & (~((uintptr_t)allign-1))) )
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+//
 //	common SF types
 //
 
@@ -626,7 +655,6 @@ namespace SF {
 
 	// unique actor id in zone instance
 	using ActorID = uint32_t;
-
 
 
 	struct uint128_t

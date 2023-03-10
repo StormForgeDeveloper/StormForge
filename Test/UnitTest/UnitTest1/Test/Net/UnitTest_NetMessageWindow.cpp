@@ -486,8 +486,8 @@ TEST_F(NetTest, SendMessageWindowSimple)
 			}
 		}
 
-		EXPECT_EQ(SF::ResultCode::SUCCESS, msgWindow.ReleaseMsg((uint16_t)msgWindow.GetHeadSequence(), 0));
-        msgWindow.SlidWindow();
+		EXPECT_EQ(SF::ResultCode::SUCCESS, msgWindow.QueueReleasedSequence((uint16_t)msgWindow.GetHeadSequence(), 0));
+        msgWindow.UpdateReleasedSequences();
 		EXPECT_EQ(uint32_t(0), msgWindow.GetMsgCount());
 	}
 
@@ -519,8 +519,8 @@ TEST_F(NetTest, SendMessageWindowSimple2)
 			}
 		}
 
-		ASSERT_EQ(SF::ResultCode::SUCCESS, msgWindow.ReleaseMsg((uint16_t)(msgWindow.GetBaseSequence() + msgWindow.GetMsgCount()), 0));
-        msgWindow.SlidWindow();
+		ASSERT_EQ(SF::ResultCode::SUCCESS, msgWindow.QueueReleasedSequence((uint16_t)(msgWindow.GetBaseSequence() + msgWindow.GetMsgCount()), 0));
+        msgWindow.UpdateReleasedSequences();
 		ASSERT_EQ(uint(0), msgWindow.GetMsgCount());
 	}
 
