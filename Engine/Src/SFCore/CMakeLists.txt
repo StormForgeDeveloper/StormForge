@@ -380,6 +380,8 @@ set(SFCORE_LIB_FILES
 	Multithread/SFSynchronization.cpp
 	Multithread/SFThread.cpp
 
+	Avro/SFAvro.h
+	Avro/SFAvro.cpp
   )
 
 
