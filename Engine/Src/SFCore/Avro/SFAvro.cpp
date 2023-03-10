@@ -9,7 +9,7 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#include "ServerSystemPCH.h"
+#include "SFCorePCH.h"
 #include "Avro/SFAvro.h"
 #include "Util/SFString.h"
 #include "Util/SFStringFormat.h"
@@ -206,7 +206,9 @@ namespace SF
         Reset();
         String jsonString;
 
-        defCheck(in >> jsonString);
+        hr = in >> jsonString;
+        if (!hr)
+            return hr;
         
         return Init(jsonString);
     }
@@ -565,7 +567,9 @@ namespace SF
 
         if (data.size() < readSize)
         {
-            defCheck(data.resize(readSize));
+            hr = data.resize(readSize);
+            if (!hr)
+                return hr;
         }
 
         int iRet = avro_read(m_Handle, data.data(), data.size());
@@ -675,7 +679,10 @@ namespace SF
         Result hr;
         size_t len = StrUtil::StringLen(value);
 
-        defCheck(WriteInt64(len));
+        hr = WriteInt64(len);
+        if (!hr)
+            return hr;
+
         int iRet = avro_write(m_Handle, (void*)value, len);
         if (iRet)
         {
@@ -691,7 +698,10 @@ namespace SF
         Result hr;
         size_t len = value.length();
 
-        defCheck(WriteInt64(len));
+        hr = WriteInt64(len);
+        if (!hr)
+            return hr;
+
         int iRet = avro_write(m_Handle, (void*)value.data(), len);
         if (iRet)
         {
