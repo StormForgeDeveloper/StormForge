@@ -42,7 +42,7 @@ namespace SF
 		TelemetryEvent(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName);
 
 	public:
-		~TelemetryEvent();
+		virtual ~TelemetryEvent();
 
 		SF_FORCEINLINE uint32_t GetEventId() const { return m_EventId; }
         SF_FORCEINLINE const String& GetEventName() const { return m_EventName; }

@@ -120,6 +120,10 @@
 #include <functional>
 #include <condition_variable>
 #include <cstring>
+#include <random>
+#include <emmintrin.h>
+#include <smmintrin.h>
+#include <immintrin.h>
 
 
 
@@ -176,7 +180,6 @@
 #include <wmsdkidl.h>
 #include <shlwapi.h>
 #include <intrin.h>
-#include <emmintrin.h>
 #include <concurrent_queue.h>
 #include <concurrent_unordered_map.h>
 #include <stdint.h>
