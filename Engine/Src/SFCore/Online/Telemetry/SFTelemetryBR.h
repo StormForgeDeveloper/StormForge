@@ -49,6 +49,9 @@ namespace SF
         virtual const AvroSchema& GetAvroSchema() const = 0;
         virtual const AvroValue& GetAvroValue() const = 0;
 
+        void SetPlayEvent(bool bPlayEvent) { m_bPlayEvent = bPlayEvent; }
+        bool IsPlayEvent() const { return m_bPlayEvent; }
+
 		virtual TelemetryEvent& Set(const char* name, int value) = 0;
 		virtual TelemetryEvent& Set(const char* name, int64_t value) = 0;
 		virtual TelemetryEvent& Set(const char* name, float value) = 0;
@@ -66,6 +69,7 @@ namespace SF
 		bool m_bSent = false;
 		uint32_t m_EventId{};
         String m_EventName;
+        bool m_bPlayEvent{};
 	};
 
 

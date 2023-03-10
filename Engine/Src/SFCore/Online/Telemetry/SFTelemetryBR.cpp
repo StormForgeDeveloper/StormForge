@@ -279,7 +279,7 @@ namespace SF
 				{
                     uint32_t eventId = *pEventId;
 					m_EventQueue.FreePostedEvents(eventId);
-					SFLog(Telemetry, Debug3, "Client Recv Ack eventId:{0}", eventId);
+					//SFLog(Telemetry, Debug3, "Client Recv Ack eventId:{0}", eventId);
 				}
 			});
 
@@ -345,7 +345,7 @@ namespace SF
 						}
 						else
 						{
-							SFLog(Telemetry, Debug3, "Posting failed sendRes:{0}", sendRes);
+							SFLog(Telemetry, Error, "Posting failed sendRes:{0}", sendRes);
 							break;
 						}
 					}
@@ -439,6 +439,7 @@ namespace SF
         writer.WriteInt64(HeaderVersion);
         writer.WriteInt64(pEvent->GetEventId());
         writer.WriteBytes(sessionIdView);
+        writer.Write(pEvent->IsPlayEvent());
         writer.WriteInt64(GetClientId());
         writer.WriteString(GetMachineId());
         writer.WriteString(pEvent->GetAvroSchema().GetSchemaString());
