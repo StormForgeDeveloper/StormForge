@@ -438,8 +438,8 @@ namespace SF
         // avro streaming mode
         writer.WriteInt64(HeaderVersion);
         writer.WriteInt64(pEvent->GetEventId());
-        writer.WriteBytes(sessionIdView);
         writer.Write(pEvent->IsPlayEvent());
+        writer.WriteBytes(sessionIdView);
         writer.WriteInt64(GetClientId());
         writer.WriteString(GetMachineId());
         writer.WriteString(pEvent->GetAvroSchema().GetSchemaString());
