@@ -82,6 +82,25 @@ namespace SF
         Result Init(const String& schemaData)        { return Init(ArrayView<const char>(schemaData.GetBufferLength(), schemaData.data())); }
         Result Init(const Array<const char>& schemaData);
 
+        bool HasField(const char* fieldName) const;
+
+        Result AppendField(const char* fieldName, const AvroSchema& schema);
+        Result AppendField(const char* fieldName, const avro_schema_t& schema);
+
+        Result AppendFieldInt(const char* fieldName);
+        Result AppendFieldInt64(const char* fieldName);
+        Result AppendFieldFloat(const char* fieldName);
+        Result AppendFieldDouble(const char* fieldName);
+        Result AppendFieldBool(const char* fieldName);
+        Result AppendFieldString(const char* fieldName);
+        Result AppendFieldBytes(const char* fieldName);
+
+        template<class FieldType>
+        Result AppendField(const char* fieldName)
+        {
+            return ResultCode::NOT_IMPLEMENTED;
+        }
+
 		operator avro_schema_t() { return m_Handle; }
 		operator avro_schema_t() const { return m_Handle; }
         const String& GetSchemaString() const;
@@ -98,6 +117,30 @@ namespace SF
 
         mutable String m_SchemaString;
 	};
+
+    template<>
+    inline Result AvroSchema::AppendField<int>(const char* fieldName)
+    {
+        return AppendFieldInt(fieldName);
+    }
+
+    template<>
+    inline Result AvroSchema::AppendField<int64_t>(const char* fieldName)
+    {
+        return AppendFieldInt64(fieldName);
+    }
+
+    template<>
+    inline Result AvroSchema::AppendField<const char*>(const char* fieldName)
+    {
+        return AppendFieldString(fieldName);
+    }
+
+    template<>
+    inline Result AvroSchema::AppendField<String>(const char* fieldName)
+    {
+        return AppendFieldString(fieldName);
+    }
 
 
 
@@ -181,7 +224,8 @@ namespace SF
 	};
 
 	template<> inline const char* AvroValue::As() const { return AsString(); }
-	template<> inline int AvroValue::As() const { return AsInt(); }
+    template<> inline String AvroValue::As() const { return AsString(); }
+    template<> inline int AvroValue::As() const { return AsInt(); }
     template<> inline int64_t AvroValue::As() const { return AsInt64(); }
     template<> inline float AvroValue::As() const { return AsFloat(); }
 	template<> inline double AvroValue::As() const { return AsDouble(); }

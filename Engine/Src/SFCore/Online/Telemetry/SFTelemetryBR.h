@@ -35,44 +35,6 @@ namespace SF
 	//	class TelemetryEvent
 	//
 
-	// Event creation wrapper
-	class TelemetryEvent
-	{
-	protected:
-		TelemetryEvent(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName);
-
-	public:
-		virtual ~TelemetryEvent();
-
-		SF_FORCEINLINE uint32_t GetEventId() const { return m_EventId; }
-        SF_FORCEINLINE const String& GetEventName() const { return m_EventName; }
-        virtual const AvroSchema& GetAvroSchema() const = 0;
-        virtual const AvroValue& GetAvroValue() const = 0;
-
-        void SetPlayEvent(bool bPlayEvent) { m_bPlayEvent = bPlayEvent; }
-        bool IsPlayEvent() const { return m_bPlayEvent; }
-
-		virtual TelemetryEvent& Set(const char* name, int value) = 0;
-		virtual TelemetryEvent& Set(const char* name, int64_t value) = 0;
-		virtual TelemetryEvent& Set(const char* name, float value) = 0;
-		virtual TelemetryEvent& Set(const char* name, const char* value) = 0;
-		virtual TelemetryEvent& Set(const String& name, int value) = 0;
-		virtual TelemetryEvent& Set(const String& name, int64_t value) = 0;
-		virtual TelemetryEvent& Set(const String& name, float value) = 0;
-		virtual TelemetryEvent& Set(const String& name, const String& value) = 0;
-
-		virtual void PostEvent();
-
-	protected:
-		IHeap& m_Heap;
-		TelemetryBR* m_pClient{};
-		bool m_bSent = false;
-		uint32_t m_EventId{};
-        String m_EventName;
-        bool m_bPlayEvent{};
-	};
-
-
     //// Event creation wrapper for bson data
     //class TelemetryEventBson : public TelemetryEvent
     //{
@@ -104,15 +66,21 @@ namespace SF
     // Event creation wrapper for Avro data
     class TelemetryEventAvro : public TelemetryEvent
     {
+        using super = TelemetryEvent;
+
     protected:
         TelemetryEventAvro(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName, const AvroSchema& eventSchema);
         friend class TelemetryBR;
 
+        SF_FORCEINLINE AvroValue& GetAvroValue() { return m_AvroValue; }
+
     public:
         ~TelemetryEventAvro();
 
-        virtual const AvroSchema& GetAvroSchema() const override { return m_AvroSchema; }
-        virtual const AvroValue& GetAvroValue() const override { return m_AvroValue; }
+        SF_FORCEINLINE const AvroSchema& GetAvroSchema() const { return m_AvroSchema; }
+        SF_FORCEINLINE const AvroValue& GetAvroValue() const { return m_AvroValue; }
+
+        virtual void SetPlayEvent(bool bPlayEvent) override;
 
         virtual TelemetryEvent& Set(const char* name, int value) override;
         virtual TelemetryEvent& Set(const char* name, int64_t value) override;
@@ -139,7 +107,7 @@ namespace SF
     {
     public:
 
-        static constexpr int64_t HeaderVersion = 1;
+        static constexpr int64_t HeaderVersion = 3;
 
         static constexpr size_t MaxSerializationBufferSize = 6 * 1024;
 
@@ -153,6 +121,12 @@ namespace SF
 		static constexpr char KeyName_EventId[] = "EventId";
 		static constexpr char KeyName_Protocol[] = "SFTelemetry";
 		static constexpr char KeyName_EventName[] = "EventName";
+
+        static constexpr char FieldName_IsPlayEvent[] = "IsPlayEvent";
+        static constexpr char FieldName_EventId[] = "EventId";
+        static constexpr char FieldName_SessionId[] = "SessionId";
+        static constexpr char FieldName_ClientId[] = "ClientId";
+        static constexpr char FieldName_MachineId[] = "MachineId";
 
 
     public:
@@ -179,9 +153,9 @@ namespace SF
 
         // register event schema
         // Need to be called before sending event with the name
-        Result RegisterEventSchema(const char* eventName, const char* eventSchema);
+        virtual Result RegisterEventSchema(const char* eventName, const char* eventSchema) override;
 
-		TelemetryEvent* CreateTelemetryEvent(const char* eventName);
+        virtual TelemetryEvent* CreateTelemetryEvent(const char* eventName) override;
 
 	private:
 

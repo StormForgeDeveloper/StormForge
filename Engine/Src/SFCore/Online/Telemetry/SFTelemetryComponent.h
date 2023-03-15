@@ -19,44 +19,41 @@
 
 
 
-
 namespace SF
 {
+    class TelemetryBR;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	class TelemetryComponent
 	//
 
-    class TelemetryComponent : public SharedObject
+    class TelemetryComponent : public LibraryComponent
     {
     public:
 
-
-        /**
-         * @brief Unassigned partition.
-         *
-         * The unassigned partition is used by the producer API for messages
-         * that should be partitioned using the configured or default partitioner.
-         */
-        static const int32_t PARTITION_UA;
-
-        /** @brief Special offsets */
-        static const int64_t OFFSET_BEGINNING; /**< Consume from beginning */
-        static const int64_t OFFSET_END; /**< Consume from end */
-        static const int64_t OFFSET_STORED; /**< Use offset storage */
-        static const int64_t OFFSET_INVALID; /**< Invalid offset */
-
+        using super = LibraryComponent;
+        static constexpr StringCrc64 TypeName = "TelemetryComponent";
 
     public:
 
-        TelemetryComponent();
+        TelemetryComponent(const String& address, uint64_t clientId, const String& authTicket);
         virtual ~TelemetryComponent();
 
 
-        virtual Result Initialize(const String& brokers, const String& topic, int32_t partition = 0);
+        virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
-        
+
+        virtual Result InitializeComponent() override;
+        virtual void DeinitializeComponent() override;
+
+    private:
+
+        String m_Address;
+        uint64_t m_ClientId{};
+        String m_AuthTicket;
+
+        SFUniquePtr<TelemetryBR> m_TelemetryPtr;
     };
 
 

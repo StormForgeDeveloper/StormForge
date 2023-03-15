@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -52,6 +52,11 @@ namespace SF
             m_EngineNativeHandle = IntPtr.Zero;
         }
 
+        public void InitializeTelemetry(string serverAddress, UInt32 clientId, string authKey)
+        {
+            NativeInitializeTelemetry(serverAddress, clientId, authKey);
+        }
+
         public void onWindowFocusChanged(bool hasFocus)
         {
             NativeFocused(hasFocus);
@@ -96,6 +101,9 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeStopEngine", CharSet = CharSet.Auto)]
         static extern void NativeStopEngine();
+
+        [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeInitializeTelemetry", CharSet = CharSet.Auto)]
+        static extern void NativeInitializeTelemetry([MarshalAs(UnmanagedType.LPStr)] string serverAddress, UInt32 gameId, [MarshalAs(UnmanagedType.LPStr)] string authKey);
 
         [DllImport(NativeDllName, EntryPoint = "SFEngine_NativeFocused", CharSet = CharSet.Auto)]
         static extern void NativeFocused(bool focused);

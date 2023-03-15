@@ -177,6 +177,89 @@ namespace SF
         return Init(ArrayView<const char>(schemaData.size(), schemaData.data()));
     }
 
+    bool AvroSchema::HasField(const char* fieldName) const
+    {
+        if (m_Handle == nullptr)
+            return false;
+
+        return avro_schema_record_field_get_index(m_Handle, fieldName) >= 0;
+    }
+
+    Result AvroSchema::AppendField(const char* fieldName, const AvroSchema& schema)
+    {
+        if (m_Handle == nullptr)
+            return ResultCode::NOT_INITIALIZED;
+
+        if (avro_schema_record_field_get_index(m_Handle, fieldName) >= 0)
+        {
+            return ResultCode::ALREADY_EXIST;
+        }
+
+        int iRet = avro_schema_record_field_append(m_Handle, fieldName, schema);
+        if (iRet)
+        {
+            return ResultCode::FAIL;
+        }
+
+        m_SchemaString = "";
+        return ResultCode::SUCCESS;
+    }
+
+    Result AvroSchema::AppendField(const char* fieldName, const avro_schema_t& schema)
+    {
+        if (m_Handle == nullptr)
+            return ResultCode::NOT_INITIALIZED;
+
+        if (avro_schema_record_field_get_index(m_Handle, fieldName) >= 0)
+        {
+            return ResultCode::ALREADY_EXIST;
+        }
+
+        int iRet = avro_schema_record_field_append(m_Handle, fieldName, schema);
+        if (iRet)
+        {
+            return ResultCode::FAIL;
+        }
+
+        m_SchemaString = "";
+        return ResultCode::SUCCESS;
+    }
+
+    Result AvroSchema::AppendFieldInt(const char* fieldName)
+    {
+        return AppendField(fieldName, avro_schema_int());
+    }
+
+    Result AvroSchema::AppendFieldInt64(const char* fieldName)
+    {
+        return AppendField(fieldName, avro_schema_long());
+    }
+
+    Result AvroSchema::AppendFieldFloat(const char* fieldName)
+    {
+        return AppendField(fieldName, avro_schema_float());
+    }
+
+    Result AvroSchema::AppendFieldDouble(const char* fieldName)
+    {
+        return AppendField(fieldName, avro_schema_double());
+    }
+
+    Result AvroSchema::AppendFieldBool(const char* fieldName)
+    {
+        return AppendField(fieldName, avro_schema_boolean());
+    }
+
+    Result AvroSchema::AppendFieldString(const char* fieldName)
+    {
+        return AppendField(fieldName, avro_schema_string());
+    }
+
+    Result AvroSchema::AppendFieldBytes(const char* fieldName)
+    {
+        return AppendField(fieldName, avro_schema_bytes());
+    }
+
     const String& AvroSchema::GetSchemaString() const
     {
         if (m_SchemaString.length() == 0)
@@ -286,7 +369,8 @@ namespace SF
 
 	Result AvroValue::GetField(const char* fieldName, AvroValue& value) const
 	{
-		int res = avro_value_get_by_name(&m_DataValue, fieldName, value, NULL);
+        size_t index = -1;
+		int res = avro_value_get_by_name(&m_DataValue, fieldName, value, &index);
 		if (res != 0)
 		{
             SFLog(System, Error, "AvroValue doesn't have field:{0}, error:{1}", fieldName, avro_strerror());
@@ -303,7 +387,7 @@ namespace SF
 		int res = avro_value_get_string(&m_DataValue, &stringValue, &strLen);
         if (res != 0)
         {
-            SFLog(System, Error, "AvroValue parsing has type error:{0}, '{1}'", res, avro_strerror());
+            SFLog(System, Error, "AvroValue parsing has type error:{0}, type:{1}, '{2}'", res, (int)GetType(), avro_strerror());
             return nullptr;
         }
 
@@ -425,6 +509,7 @@ namespace SF
         }
         else
         {
+            SFLog(System, Error, "Avro SetValue:  error value not found: {0}", Name);
             return ResultCode::VARIABLE_NOT_FOUND;
         }
     }
@@ -440,6 +525,7 @@ namespace SF
         }
         else
         {
+            SFLog(System, Error, "Avro SetValue:  error value not found: {0}", Name);
             return ResultCode::VARIABLE_NOT_FOUND;
         }
     }
@@ -454,6 +540,7 @@ namespace SF
         }
         else
         {
+            SFLog(System, Error, "Avro SetValue:  error value not found: {0}", Name);
             return ResultCode::VARIABLE_NOT_FOUND;
         }
     }
@@ -469,6 +556,7 @@ namespace SF
         }
         else
         {
+            SFLog(System, Error, "Avro SetValue:  error value not found: {0}", Name);
             return ResultCode::VARIABLE_NOT_FOUND;
         }
     }
@@ -484,6 +572,7 @@ namespace SF
         }
         else
         {
+            SFLog(System, Error, "Avro SetValue:  error value not found: {0}", Name);
             return ResultCode::VARIABLE_NOT_FOUND;
         }
     }
@@ -499,6 +588,7 @@ namespace SF
         }
         else
         {
+            SFLog(System, Error, "Avro SetValue:  error value not found: {0}", Name);
             return ResultCode::VARIABLE_NOT_FOUND;
         }
     }
@@ -514,6 +604,7 @@ namespace SF
         }
         else
         {
+            SFLog(System, Error, "Avro SetValue:  error value not found: {0}", Name);
             return ResultCode::VARIABLE_NOT_FOUND;
         }
     }
@@ -529,6 +620,7 @@ namespace SF
         }
         else
         {
+            SFLog(System, Error, "Avro SetValue:  error value not found: {0}", Name);
             return ResultCode::VARIABLE_NOT_FOUND;
         }
     }

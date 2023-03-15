@@ -20,35 +20,6 @@
 namespace SF
 {
 
-	////////////////////////////////////////////////////////////////////////////////////////////////
-	//
-	//	class TelemetryEvent
-	//
-
-    TelemetryEvent::TelemetryEvent(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName)
-        : m_Heap(heap)
-        , m_pClient(pClient)
-        , m_EventId(eventId)
-        , m_EventName(eventName)
-    {
-    }
-
-    TelemetryEvent::~TelemetryEvent()
-    {
-    }
-
-
-    void TelemetryEvent::PostEvent()
-    {
-        if (m_bSent)
-            return;
-
-        if (m_pClient)
-            m_pClient->EnqueueEvent(this);
-
-        m_bSent = true;
-    }
-
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
     //
@@ -164,6 +135,13 @@ namespace SF
 
     //    return m_BinData;
     //}
+
+    void TelemetryEventAvro::SetPlayEvent(bool bPlayEvent)
+    {
+        super::SetPlayEvent(bPlayEvent);
+
+        m_AvroValue.SetValue(TelemetryBR::FieldName_IsPlayEvent, bPlayEvent);
+    }
 
     TelemetryEvent& TelemetryEventAvro::Set(const char* name, int value)
     {
@@ -390,6 +368,12 @@ namespace SF
             return hr;
         }
 
+        newSchema->AppendFieldBool(FieldName_IsPlayEvent);
+        newSchema->AppendFieldInt(FieldName_EventId);
+        newSchema->AppendFieldBytes(FieldName_SessionId);
+        newSchema->AppendFieldInt64(FieldName_ClientId);
+        newSchema->AppendFieldString(FieldName_MachineId);
+
         m_EventSchemas.insert(std::make_pair(eventName, newSchema));
 
         return hr;
@@ -397,6 +381,7 @@ namespace SF
 
 	TelemetryEvent* TelemetryBR::CreateTelemetryEvent(const char* eventName)
 	{
+        Result hr;
 		if (eventName == nullptr)
 			return nullptr;
 
@@ -416,11 +401,31 @@ namespace SF
 
 		auto newEvent = new(GetSystemHeap()) TelemetryEventAvro(GetSystemHeap(), this, eventId, eventName, *itSchema->second);
 
+        if (newEvent)
+        {
+            AvroValue& avroValue = newEvent->GetAvroValue();
+
+            Guid sessionId = GetSessionId();
+            ArrayView<const uint8_t> sessionIdView(sizeof(Guid), (uint8_t*)sessionId.data);
+
+            hr = avroValue.SetValue(FieldName_SessionId, sessionIdView);
+            if (!hr)
+                return nullptr;
+            //hr = avroValue.SetValue(FieldName_EventId, (int)newEvent->GetEventId());
+            hr = avroValue.SetValue(FieldName_ClientId, (int64_t)GetClientId());
+            if (!hr)
+                return nullptr;
+            hr = avroValue.SetValue(FieldName_MachineId, GetMachineId());
+            if (!hr)
+                return nullptr;
+        }
+
 		return newEvent;
 	}
 
-	void TelemetryBR::EnqueueEvent(TelemetryEvent* pEvent)
+	void TelemetryBR::EnqueueEvent(TelemetryEvent* pInEvent)
 	{
+        auto* pEvent = static_cast<TelemetryEventAvro*>(pInEvent);
         if (pEvent == nullptr)
             return;
 
@@ -432,20 +437,52 @@ namespace SF
 
         AvroWriter writer(serializationBuffer);
 
-        auto sessionId = GetSessionId();
+        Guid sessionId = GetSessionId();
         ArrayView<const uint8_t> sessionIdView(sizeof(Guid), (uint8_t*)sessionId.data);
 
         // avro streaming mode
         writer.WriteInt64(HeaderVersion);
         writer.WriteInt64(pEvent->GetEventId());
-        writer.Write(pEvent->IsPlayEvent());
         writer.WriteBytes(sessionIdView);
-        writer.WriteInt64(GetClientId());
-        writer.WriteString(GetMachineId());
+
         writer.WriteString(pEvent->GetAvroSchema().GetSchemaString());
         writer.WriteValue(pEvent->GetAvroValue());
 
         serializationBuffer.resize(writer.WrittenSize());
+
+#if 0 // Test deserialization
+        {
+            ArrayView<char> dataView(serializationBuffer);
+            SF::AvroReader avroReader(dataView);
+
+            auto headerVersion = avroReader.ReadInt64();
+            if (headerVersion != TelemetryBR::HeaderVersion)
+            {
+                return;
+            }
+
+            auto testEventId = (uint32_t)avroReader.ReadInt64();
+
+            Guid testSessionId;
+            ArrayView<uint8_t> guidDataView(sizeof(testSessionId.data), testSessionId.data);
+            avroReader.ReadBytes(guidDataView);
+            if (testSessionId != sessionId)
+            {
+                return;
+            }
+
+            String schemaString = avroReader.ReadString();
+            AvroSchema readSchema(schemaString);
+            AvroValue readValue(readSchema);
+            avroReader.ReadValue(readValue);
+            ArrayView<const uint8_t> readSessionId = readValue.GetFieldValue<ArrayView<const uint8_t>>(FieldName_SessionId);
+            Guid readSessionGuId = *(Guid*)readSessionId.data();
+            bool readIsPlayEvent = readValue.GetFieldValue<bool>(FieldName_IsPlayEvent);
+            String readMachineId = readValue.GetFieldValue<String>(FieldName_MachineId);
+            int readClientId = readValue.GetFieldValue<int64_t>(FieldName_ClientId);
+            int readClientId2 = readValue.GetFieldValue<int>(FieldName_ClientId);
+        }
+#endif
 
 		m_EventQueue.EnqueueEvent(pEvent->GetEventId(), ArrayView<const uint8_t>(serializationBuffer));
 	}

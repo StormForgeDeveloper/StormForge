@@ -12,6 +12,7 @@
 #include "SFCorePCH.h"
 
 #include "Online/Telemetry/SFTelemetryService.h"
+#include "Online/Telemetry/SFTelemetryBR.h"
 #include "Util/SFStringFormat.h"
 
 
@@ -32,6 +33,43 @@ namespace SF
 	}
 
 
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    //	class TelemetryEvent
+    //
+
+    TelemetryEvent::TelemetryEvent(IHeap& heap, TelemetryBR* pClient, uint32_t eventId, const char* eventName)
+        : m_Heap(heap)
+        , m_pClient(pClient)
+        , m_EventId(eventId)
+        , m_EventName(eventName)
+    {
+    }
+
+    TelemetryEvent::~TelemetryEvent()
+    {
+    }
+
+
+    void TelemetryEvent::PostEvent()
+    {
+        if (m_bSent)
+            return;
+
+        if (m_pClient)
+            m_pClient->EnqueueEvent(this);
+
+        m_bSent = true;
+    }
+
+
+
+    ////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    //	class TelemetryService
+    //
+
 	TelemetryService::TelemetryService()
 	{
 
@@ -39,11 +77,6 @@ namespace SF
 	TelemetryService::~TelemetryService()
 	{
 
-	}
-
-	Result TelemetryService::Initialize(const String& brokers, const String& topic, int32_t partition)
-	{
-		return ResultCode::SUCCESS;
 	}
 
 

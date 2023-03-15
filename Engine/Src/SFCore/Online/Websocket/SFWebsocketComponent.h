@@ -33,14 +33,14 @@ namespace SF
     public:
 
         using super = LibraryComponent;
-        static constexpr StringCrc64 TYPE_NAME = "WebsocketComponent";
+        static constexpr StringCrc64 TypeName = "WebsocketComponent";
 
     public:
 
         WebsocketComponent();
         virtual ~WebsocketComponent();
 
-        virtual const StringCrc64& GetTypeName() const override { return TYPE_NAME; }
+        virtual const StringCrc64& GetTypeName() const override { return TypeName; }
 
         virtual Result InitializeComponent() override;
        
