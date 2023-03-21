@@ -115,28 +115,14 @@ namespace SF
 		m_FlowControlMax = size_t(m_SendBufferSize * 0.7);
 
 		// Event loop
-		//event_enable_debug_mode();
 		auto numEventLoop = Math::Max<uint>(1, m_NumThread);
 		for (uint iEventLoop = 0; iEventLoop < numEventLoop; iEventLoop++)
 		{
             struct event_base* eventHandle = event_base_new();
-            //struct timeval tv;
-
-            //tv.tv_sec = 3; // Timeout is set to 3.005 seconds
-            //tv.tv_usec = 5000;
-
-            ////evtimer_set(eventHandle, timeout_cb, (void*)this); // Set a timer to cancel the request after certain time
-            //evtimer_add(eventHandle, &tv);
 
 			m_EventLoops.push_back(eventHandle);
 		}
-		//m_EventSighandler = evsignal_new(m_EventLoop, SIGINT, signal_cb_event, (void*)SIGINT);
-		//m_EventTimerOuter = event_new(m_EventLoop, -1, EV_PERSIST, timer_cb_event, NULL);
 
-		//struct timeval tv {};;
-		//tv.tv_sec = 1;
-		//tv.tv_usec = 0;
-		//evtimer_add(m_EventTimerOuter, &tv);
 
 
 		return ResultCode::SUCCESS;
@@ -255,7 +241,10 @@ namespace SF
 		auto pSendItem = pss->SendBuffer->AllocateWrite(MessageBufferPadding + messageData.size());
 		if (pSendItem == nullptr)
 		{
-			SFLog(Websocket, Error, "Send queue overflow: dropping!");
+			SFLog(Websocket, Error, "Send queue overflow: closing connection!");
+
+            // Websocket could went bad, need to reconnect
+            lws_close_reason(m_WSI, lws_close_status::LWS_CLOSE_STATUS_ABNORMAL_CLOSE, nullptr, 0);
 			return ResultCode::IO_NOBUFS;
 		}
 
@@ -286,6 +275,14 @@ namespace SF
 	{
 		struct WSSessionData* pss = (struct WSSessionData*)user;
 		pss->Clear();
+
+        SFLog(Websocket, Info, "Disconnected: closing service");
+        if (wsi)
+        {
+            m_WSI = nullptr;
+            lws_cancel_service(lws_get_context(wsi));
+        }
+
 		return 0;
 	}
 
