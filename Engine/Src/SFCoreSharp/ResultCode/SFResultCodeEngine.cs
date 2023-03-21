@@ -35,6 +35,12 @@ namespace SF {
 		// Invalid platform 
 		public const int ENGINE_INVALID_PLATFORM =                          unchecked((int)0xE7020006); 
 
+		// Already Used Item 
+		public const int ENGINE_ALREADY_USED_ITEM =                         unchecked((int)0xE7020007); 
+
+		// Already Used Key 
+		public const int ENGINE_ALREADY_USED_KEY =                          unchecked((int)0xE7020008); 
+
 	}
 }
 

@@ -15,6 +15,8 @@
 	
 	<ResultCodeItem Severity="Error" CodeName="INVALID_TABLE_ID" Desc="Invalid table id"/>
     <ResultCodeItem Severity="Error" CodeName="INVALID_PLATFORM" Desc="Invalid platform"/>
+    <ResultCodeItem Severity="Error" CodeName="ALREADY_USED_ITEM" Desc="Already Used Item"/>
+    <ResultCodeItem Severity="Error" CodeName="ALREADY_USED_KEY" Desc="Already Used Key"/>
 
 
 </ResultCodes>

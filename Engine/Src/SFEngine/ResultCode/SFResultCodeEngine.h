@@ -39,6 +39,12 @@ namespace SF {
 			// Invalid platform 
 			constexpr Result 			ENGINE_INVALID_PLATFORM                                            ((int32_t)0xE7020006L);
 
+			// Already Used Item 
+			constexpr Result 			ENGINE_ALREADY_USED_ITEM                                           ((int32_t)0xE7020007L);
+
+			// Already Used Key 
+			constexpr Result 			ENGINE_ALREADY_USED_KEY                                            ((int32_t)0xE7020008L);
+
 	void InitializeResultCodeEngine();
 
 	}//namespace ResultCode 
