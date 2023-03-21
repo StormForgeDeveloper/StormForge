@@ -209,6 +209,7 @@
 	<ResultCodeItem Severity="Error" CodeName="DEPRECATED_FEATURE" Desc="Deprecated"/>
 	<ResultCodeItem Severity="Error" CodeName="IN_PROGRESS" Desc="In progress"/>
 	<ResultCodeItem Severity="Error" CodeName="INVALID_DATA" Desc="Invalid data"/>
+	<ResultCodeItem Severity="Error" CodeName="INVALID_RESPONSE_DATA" Desc="Invalid response data"/>
 	<ResultCodeItem Severity="Error" CodeName="INVALID_CACHE_DATA" Desc="Invalid cache data"/>
 
 	<ResultCodeItem Severity="Error" CodeName="INVALID_SCHEMA" Desc="Invalid schema data"/>

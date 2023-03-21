@@ -578,11 +578,14 @@ namespace SF {
 		// Invalid data 
 		public const int INVALID_DATA =                                     unchecked((int)0xE70100BB); 
 
+		// Invalid response data 
+		public const int INVALID_RESPONSE_DATA =                            unchecked((int)0xE70100BC); 
+
 		// Invalid cache data 
-		public const int INVALID_CACHE_DATA =                               unchecked((int)0xE70100BC); 
+		public const int INVALID_CACHE_DATA =                               unchecked((int)0xE70100BD); 
 
 		// Invalid schema data 
-		public const int INVALID_SCHEMA =                                   unchecked((int)0xE70100BD); 
+		public const int INVALID_SCHEMA =                                   unchecked((int)0xE70100BE); 
 
 	}
 }

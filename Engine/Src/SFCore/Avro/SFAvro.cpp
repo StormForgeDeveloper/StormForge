@@ -369,7 +369,7 @@ namespace SF
 
 	Result AvroValue::GetField(const char* fieldName, AvroValue& value) const
 	{
-        size_t index = -1;
+        size_t index{};
 		int res = avro_value_get_by_name(&m_DataValue, fieldName, value, &index);
 		if (res != 0)
 		{

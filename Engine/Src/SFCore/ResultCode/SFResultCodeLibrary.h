@@ -582,11 +582,14 @@ namespace SF {
 			// Invalid data 
 			constexpr Result 			INVALID_DATA                                                       ((int32_t)0xE70100BBL);
 
+			// Invalid response data 
+			constexpr Result 			INVALID_RESPONSE_DATA                                              ((int32_t)0xE70100BCL);
+
 			// Invalid cache data 
-			constexpr Result 			INVALID_CACHE_DATA                                                 ((int32_t)0xE70100BCL);
+			constexpr Result 			INVALID_CACHE_DATA                                                 ((int32_t)0xE70100BDL);
 
 			// Invalid schema data 
-			constexpr Result 			INVALID_SCHEMA                                                     ((int32_t)0xE70100BDL);
+			constexpr Result 			INVALID_SCHEMA                                                     ((int32_t)0xE70100BEL);
 
 	void InitializeResultCodeSF();
 
