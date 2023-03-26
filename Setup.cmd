@@ -33,11 +33,8 @@ if not exist %ZIP7_INSTALL_FILE_WIN% (
 	%ZIP7_INSTALL_FILE_WIN%
 )
 
-set VULKAN_SDK_WIN=VulkanSDK-1.3.231.1-Installer.exe
-if not exist %VULKAN_SDK_WIN% (
-	echo downloading VulkanSDK
-	call %TOOL_PATH%\httpget +url:https://sdk.lunarg.com/sdk/download/1.3.231.1/windows/VulkanSDK-1.3.231.1-Installer.exe
-	%VULKAN_SDK_WIN% /D=%VULKAN_SDK_PATH%\
+if not exist %VK_SDK_PATH% (
+	echo VK_SDK_PATH not found. Need Vulkan SDK installed
 )
 
 

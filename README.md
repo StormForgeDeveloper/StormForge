@@ -15,6 +15,7 @@ For now the development is still going on and have many missing modules, however
 1. CMake 3.22 or later
 1. Python 3.x. Some 3rdParty Lib depends on Python and Perl
 1. Perl
+1. VulkanSDK
 
 
 I am in the middle of transtion to Linux sub system for Windows. some script may need Linux sub system with Ubuntu core while some others use cygwin.
@@ -37,6 +38,7 @@ For now, StormForge has,
 1. Fully implemented network system including P2P, Relay, and massive multiplayer connection management. UDP and TCP
 1. Supporting Zookeeper connection for dev/rel support.
 1. UnitTest with gtest
+1. Websocket support
 
 
 Check wiki for more other details for build and setup
