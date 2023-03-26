@@ -238,6 +238,90 @@ namespace SF
 
             return len;
         }
+
+        static size_t ReceiveData(const char* buffer, size_t count, size_t nitems, void* data)
+        {
+            WebsocketClientCurl* wsClient = reinterpret_cast<WebsocketClientCurl*>(data);
+            CURL* curl = wsClient->m_Curl;
+            auto& recvBuffer = wsClient->m_ReceiveBuffer;
+            auto& wsStatus = wsClient->m_CurlStatus;
+
+            size_t len = count * nitems;
+
+
+            // ignore redirection data
+            if (wsStatus.Redirection)
+            {
+                return len;
+            }
+
+            struct curl_ws_frame* frameMeta = curl_ws_meta(curl);
+            if (frameMeta == nullptr)
+            {
+                SFLog(Websocket, Error, "Recv failed, invalid meta data");
+                return len;
+            }
+
+            // if start of frame
+            if (frameMeta->offset == 0)
+            {
+                recvBuffer.resize(0);
+            }
+
+            recvBuffer.Append(ArrayView<const uint8_t>(len, reinterpret_cast<const uint8_t*>(buffer)));
+
+            if (frameMeta->bytesleft == 0)
+            {
+                wsClient->OnRecv(recvBuffer);
+                recvBuffer.resize(0);
+            }
+
+            return len;
+        }
+
+        //static size_t _cws_send_data(char* buffer, size_t count, size_t nitems, void* data)
+        //{
+        //    WebsocketClientCurl* wsClient = reinterpret_cast<WebsocketClientCurl*>(data);
+        //    CURL* curl = wsClient->m_Curl;
+        //    auto& wsStatus = wsClient->m_CurlStatus;
+
+        //    size_t sentSize = nitems * count;
+        //    size_t sendSize = wsClient->send.len;
+
+        //    if (wsStatus.Redirection)
+        //    {
+        //        return sentSize;
+        //    }
+
+        //    if (sendSize == 0) {
+        //        wsClient->pause_flags |= CURLPAUSE_SEND;
+        //        return CURL_READFUNC_PAUSE;
+        //    }
+
+        //    if (sendSize > sentSize)
+        //        sendSize = sentSize;
+
+        //    memcpy(buffer, priv->send.buffer, sendSize);
+        //    if (sendSize < priv->send.len) {
+        //        /* optimization note: we could avoid memmove() by keeping a
+        //         * priv->send.position, then we just increment that offset.
+        //         *
+        //         * on next _cws_write(), check if priv->send.position > 0 and
+        //         * memmove() to make some space without realloc().
+        //         */
+        //        memmove(priv->send.buffer,
+        //            priv->send.buffer + sendSize,
+        //            priv->send.len - sendSize);
+        //    }
+        //    else {
+        //        free(priv->send.buffer);
+        //        priv->send.buffer = NULL;
+        //    }
+
+        //    priv->send.len -= sendSize;
+        //    return sendSize;
+        //}
+
     };
 
 	Result WebsocketClientCurl::Initialize(const String& serverAddress, int port, const String& protocol)
@@ -335,8 +419,8 @@ namespace SF
         //curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, my_writefunc);
         result = curl_easy_setopt(m_Curl, CURLOPT_HEADERFUNCTION, WebsocketClientCurlImpl::ReceiveHeader);
         result = curl_easy_setopt(m_Curl, CURLOPT_HEADERDATA, this);
-        //curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, WebsocketClientCurlImpl::receive_data);
-        //curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, this);
+        curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, WebsocketClientCurlImpl::ReceiveData);
+        curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, this);
         //curl_easy_setopt(m_Curl, CURLOPT_READFUNCTION, WebsocketClientCurlImpl::send_data);
         //curl_easy_setopt(m_Curl, CURLOPT_READDATA, this);
 
@@ -381,28 +465,32 @@ namespace SF
         }
         else if (m_ConnectionState == ConnectionState::Connected)
         {
-            size_t rlen;
-            struct curl_ws_frame* meta{};
+            //size_t rlen{};
+            //struct curl_ws_frame* meta{};
+            //uint8_t readBuffer[4*1024];
 
-            CURLcode result = curl_ws_recv(m_Curl, m_ReceiveBuffer.data(), m_ReceiveBuffer.GetAllocatedSize(), &rlen, &meta);
-            if (result == CURLE_OK)
-            {
-                // good
-            }
-            else if (result == CURLE_GOT_NOTHING)
-            {
-                // Closed?
-                SFLog(Websocket, Warning, "Nothing?", int(result), curl_easy_strerror(result));
-            }
-            else if (result == CURLE_AGAIN)
-            {
-                // try again later
-            }
-            else
-            {
-                SFLog(Websocket, Error, "Failed to recv curl error:{0}, {1}", int(result), curl_easy_strerror(result));
-                CloseConnection();
-            }
+            //CURLcode result = curl_ws_recv(m_Curl, readBuffer, sizeof(readBuffer), &rlen, &meta);
+            //if (result == CURLE_OK)
+            //{
+            //    if (meta)
+            //    {
+            //        meta->bytesleft
+            //    }
+            //}
+            //else if (result == CURLE_GOT_NOTHING)
+            //{
+            //    // Closed?
+            //    SFLog(Websocket, Warning, "Nothing?", int(result), curl_easy_strerror(result));
+            //}
+            //else if (result == CURLE_AGAIN)
+            //{
+            //    // try again later
+            //}
+            //else
+            //{
+            //    SFLog(Websocket, Error, "Failed to recv curl error:{0}, {1}", int(result), curl_easy_strerror(result));
+            //    CloseConnection();
+            //}
         }
     }
 
