@@ -145,19 +145,19 @@ namespace SF
                 },
                 [this, iThread](Thread* pThread)
 				{
-					if (!m_WSIContext)
-						return false;
+                    if (m_WSIContext)
+                    {
+                        TickUpdate(iThread);
 
-                    TickUpdate(iThread);
-
-					if (m_EventLoops.size() > 0)
-					{
-						TickEventLoop(iThread);
-					}
-					else
-					{
-						lws_service(m_WSIContext, 10);
-					}
+                        if (m_EventLoops.size() > 0)
+                        {
+                            TickEventLoop(iThread);
+                        }
+                        else
+                        {
+                            lws_service(m_WSIContext, 10);
+                        }
+                    }
 
 					return true;
 				});

@@ -87,7 +87,7 @@ namespace SF
 	{
 		super::Terminate();
 
-        SFLog(Websocket, Info, "BR websocket Disconnected");
+        SFLog(Websocket, Info, "BR websocket client Teminated");
 
 		m_ConnectionState = ConnectionState::Disconnected;
 		m_Session = nullptr;
