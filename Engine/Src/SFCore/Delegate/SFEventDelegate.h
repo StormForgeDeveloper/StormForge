@@ -141,26 +141,27 @@ namespace SF
 				}
 			}
 		}
-		void Invoke(ArgTypes&&... args)
-		{
-			m_CallSerial++;
 
-			for (uint iArray = 0; iArray < m_DelegateArray.size(); iArray++)
-			{
-				auto& itDelegate = m_DelegateArray[iArray];
-				// Skip if it is already invoked
-				if (itDelegate.CallSerial == m_CallSerial)
-					continue;
+		//void Invoke(ArgTypes&&... args)
+		//{
+		//	m_CallSerial++;
 
-				itDelegate.CallSerial = m_CallSerial;
-				itDelegate.Func(args...);
+		//	for (uint iArray = 0; iArray < m_DelegateArray.size(); iArray++)
+		//	{
+		//		auto& itDelegate = m_DelegateArray[iArray];
+		//		// Skip if it is already invoked
+		//		if (itDelegate.CallSerial == m_CallSerial)
+		//			continue;
 
-				if (itDelegate.CallSerial != m_CallSerial) // something removed
-				{
-					iArray = 0; // need to search from the beginning
-				}
-			}
-		}
+		//		itDelegate.CallSerial = m_CallSerial;
+		//		itDelegate.Func(args...);
+
+		//		if (itDelegate.CallSerial != m_CallSerial) // something removed
+		//		{
+		//			iArray = 0; // need to search from the beginning
+		//		}
+		//	}
+		//}
 
 		size_t size() const { return m_DelegateArray.size(); }
 

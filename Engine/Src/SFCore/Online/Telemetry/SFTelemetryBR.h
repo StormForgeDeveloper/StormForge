@@ -127,6 +127,7 @@ namespace SF
         static constexpr char FieldName_SessionId[] = "SessionId";
         static constexpr char FieldName_ClientId[] = "ClientId";
         static constexpr char FieldName_MachineId[] = "MachineId";
+        static constexpr char FieldName_EventName[] = "EventName";
 
 
     public:

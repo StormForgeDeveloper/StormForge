@@ -265,7 +265,6 @@ namespace SF
 		if (!hr)
 			return hr;
 
-
 		m_EventQueue.Initialize();
 
 		auto pTail = m_EventQueue.GetTailEvent();
@@ -373,6 +372,7 @@ namespace SF
         newSchema->AppendFieldBytes(FieldName_SessionId);
         newSchema->AppendFieldInt64(FieldName_ClientId);
         newSchema->AppendFieldString(FieldName_MachineId);
+        newSchema->AppendFieldString(FieldName_EventName);
 
         m_EventSchemas.insert(std::make_pair(eventName, newSchema));
 
@@ -416,6 +416,9 @@ namespace SF
             if (!hr)
                 return nullptr;
             hr = avroValue.SetValue(FieldName_MachineId, GetMachineId());
+            if (!hr)
+                return nullptr;
+            hr = avroValue.SetValue(FieldName_EventName, eventName);
             if (!hr)
                 return nullptr;
         }
@@ -479,6 +482,7 @@ namespace SF
             Guid readSessionGuId = *(Guid*)readSessionId.data();
             bool readIsPlayEvent = readValue.GetFieldValue<bool>(FieldName_IsPlayEvent);
             String readMachineId = readValue.GetFieldValue<String>(FieldName_MachineId);
+            String readEventName = readValue.GetFieldValue<String>(FieldName_EventName);
             int readClientId = readValue.GetFieldValue<int64_t>(FieldName_ClientId);
             int readClientId2 = readValue.GetFieldValue<int>(FieldName_ClientId);
         }

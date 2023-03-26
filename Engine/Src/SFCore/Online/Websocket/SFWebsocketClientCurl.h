@@ -21,7 +21,6 @@
 
 namespace SF
 {
-
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
 	//	class Websocket
@@ -42,6 +41,7 @@ namespace SF
         using EventOnConnected = std::function<void()>;
         //using RecvDeletates = EventDelegateList<struct WSSessionData*, const Array<uint8_t>&>;
         //using EventFunction = std::function<int(struct lws*, void*, void*, size_t)>; // Return non-zero to disallow the connection.
+        using RecvDeletates = EventDelegateList<const Array<uint8_t>&>;
 
 
 	public:
@@ -60,10 +60,14 @@ namespace SF
 		virtual Result Initialize(const String& serverAddress, int port, const String& protocol);
 		virtual void Terminate();
 
-		static void CallbackTryConnect(struct lws_sorted_usec_list* pSortedUsecList);
+		//static void CallbackTryConnect(struct lws_sorted_usec_list* pSortedUsecList);
 		void TryConnect();
 
+        void CloseConnection();
+
 		Result Send(const Array<uint8_t>& messageData);
+        virtual void OnRecv(const Array<uint8_t>& messageData) { m_RecvDeletates.Invoke(messageData); }
+        SF_FORCEINLINE RecvDeletates& OnRecvEvent() { return m_RecvDeletates; }
 
 		//virtual int OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len) override;
 		//virtual int OnProtocolDestroy(struct lws* wsi, void* user, void* in, size_t len) override;
@@ -82,13 +86,19 @@ namespace SF
 
         SF_FORCEINLINE void SetOnConnectedCallback(const EventOnConnected& func) { m_OnConnectedHandler = func; }
 
+
         virtual void TickUpdate();
 
     private:
 
         void StartThread();
 
+        void OnConnectionError(Result result);
+        void OnConnected();
+
 	private:
+
+        friend class WebsocketClientCurlImpl;
 
         String m_ServerAddress;
         String m_ServerPath;
@@ -97,6 +107,24 @@ namespace SF
         bool m_UseSSL = false;
 
         CURL* m_Curl{};
+        curl_slist* m_Headers{};
+        DynamicArray<uint8_t> m_ReceiveBuffer;
+
+        struct _Status
+        {
+            bool Accepted{};
+            bool WebsocketUpgrade{};
+            bool ConnectionUpgrade{};
+            bool Redirection{};
+            char ProtocolRequested[256];
+            char ProtocolReceived[256];
+
+            void Clear()
+            {
+                *this = {};
+            }
+        } m_CurlStatus{};
+
         SFUniquePtr<Thread> m_TickThread;
 
         // Use tick thread
@@ -104,6 +132,7 @@ namespace SF
         bool m_ReconnectOnDisconnected = false;
 
         Util::Timer m_ReconnectTimer;
+
 
 		// scheduler list
 		//DelayedEventContext SortedUsecList{};
@@ -114,6 +143,7 @@ namespace SF
         // Client append handler
 		//EventFunction m_ClientAppendHandler;
         EventOnConnected m_OnConnectedHandler;
+        RecvDeletates m_RecvDeletates;
     };
 
 }
