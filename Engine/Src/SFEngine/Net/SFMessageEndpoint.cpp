@@ -16,7 +16,6 @@
 #include "Util/SFTimeUtil.h"
 #include "Net/SFMessageEndpoint.h"
 #include "Online/StreamDB/SFStreamDB.h"
-#include "ServerConfig/SFServerConfig.h"
 
 
 namespace SF {
