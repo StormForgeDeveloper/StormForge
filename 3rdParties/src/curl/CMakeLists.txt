@@ -53,7 +53,7 @@ set(SRC_FILES
 add_definitions(-DBUILDING_LIBCURL)
 add_definitions(-DCURL_STATICLIB)
 add_definitions(-DHAVE_CONFIG_H)
-
+add_definitions(-DUSE_WEBSOCKETS)
 
 add_library(curl ${SRC_FILES})
 
