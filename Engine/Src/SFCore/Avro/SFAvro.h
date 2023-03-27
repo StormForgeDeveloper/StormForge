@@ -204,6 +204,7 @@ namespace SF
 			return fieldValue.As<FieldDataType>();
 		}
 
+        Result SetValue(const char* Name, bool Value);
         Result SetValue(const char* Name, int Value);
         Result SetValue(const char* Name, int64_t Value);
         Result SetValue(const char* Name, const char* Value);

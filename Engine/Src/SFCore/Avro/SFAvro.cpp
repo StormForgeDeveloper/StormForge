@@ -498,6 +498,22 @@ namespace SF
 		return ResultCode::SUCCESS;
 	}
 
+    Result AvroValue::SetValue(const char* Name, bool Value)
+    {
+        avro_value_t avValue{};
+        if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
+        {
+            avro_value_set_boolean(&avValue, Value);
+
+            return ResultCode::SUCCESS;
+        }
+        else
+        {
+            SFLog(System, Error, "Avro SetValue:  error value not found: {0}", Name);
+            return ResultCode::VARIABLE_NOT_FOUND;
+        }
+    }
+
     Result AvroValue::SetValue(const char* Name, int Value)
     {
         avro_value_t avValue{};
