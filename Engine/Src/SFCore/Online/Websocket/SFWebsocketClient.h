@@ -98,7 +98,7 @@ namespace SF
 		virtual int OnConnectionEstablished(struct lws* wsi, void* user, void* in, size_t len) override;
 		virtual int OnConnectionClosed(struct lws* wsi, void* user, void* in, size_t len) override;
 		virtual int OnConnectionError(struct lws* wsi, void* user, void* in, size_t len) override;
-        virtual void OnRecv(struct WSSessionData* pss, const Array<uint8_t>& messageData) { m_RecvDeletates.Invoke(messageData); }
+        virtual void OnRecv(struct WSSessionData* pss, const Array<uint8_t>& messageData) override { m_RecvDeletates.Invoke(messageData); }
 
         SF_FORCEINLINE void SetOnConnectedCallback(const EventOnConnected& func) { m_OnConnectedHandler = func; }
         // recv event delegates

@@ -112,7 +112,7 @@ namespace SF
 		virtual void Terminate();
 
 		virtual Result Send(struct WSSessionData* pss, const Array<uint8_t>& messageData);
-		virtual void OnRecv(struct WSSessionData* pss, const Array<uint8_t>& messageData) {  }
+        virtual void OnRecv(struct WSSessionData* pss, const Array<uint8_t>& messageData) = 0;
 
 		virtual int OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len) { return 0; }
 		virtual int OnProtocolDestroy(struct lws* wsi, void* user, void* in, size_t len) { return 0; }
