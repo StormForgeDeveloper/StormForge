@@ -17,7 +17,7 @@
 #include "Util/SFString.h"
 #include "Task/SFTask.h"
 #include "Util/SFLog.h"
-#include "Online/Websocket/SFWebsocketClient.h"
+#include "Online/Websocket/SFWebsocketClientCurl.h"
 #include "EngineObject/SFEngineObject.h"
 
 
@@ -57,7 +57,7 @@ namespace SF
 		void Disconnect();
 
 
-		SF_FORCEINLINE bool IsValid() const { return m_Client.IsValid(); }
+		SF_FORCEINLINE bool IsInitialized() const { return m_Client.IsInitialized(); }
 		SF_FORCEINLINE bool IsConnected() const { return m_Client.IsConnected(); }
 
         Result Request(const char* APIName);
@@ -74,7 +74,7 @@ namespace SF
 		String m_AccessKey;
 		String m_MachineUID;
 
-		WebsocketClient m_Client;
+		WebsocketClientCurl m_Client;
 
         CircularPageQueue<APIResult*> m_ReceivedResultQueue;
 

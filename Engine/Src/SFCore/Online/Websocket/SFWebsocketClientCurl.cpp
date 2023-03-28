@@ -29,6 +29,7 @@ namespace SF
         : m_ReceiveBuffer(heap)
         , m_RecvDeletates(heap)
 	{
+        m_ServerPath = "/";
 	}
 
 	WebsocketClientCurl::~WebsocketClientCurl()
@@ -186,33 +187,13 @@ namespace SF
                 curl_easy_getinfo(curl, CURLINFO_HTTP_CONNECTCODE, &status);
                 if (!wsStatus.Accepted)
                 {
+                    SFLog(Websocket, Error, "Connection failed httpCode:{0} connectCode:{1}", http_status, status);
                     wsClient->OnConnectionError(ResultCode::IO_DISCONNECTED);
-                    wsClient->CloseConnection();
-                    //if (wsClient->cbs.on_close)
-                    //{
-                    //    priv->dispatching++;
-                    //    priv->cbs.on_close((void*)priv->cbs.data,
-                    //        curl,
-                    //        CWS_CLOSE_REASON_SERVER_ERROR,
-                    //        "server didn't accept the websocket upgrade",
-                    //        strlen("server didn't accept the websocket upgrade"));
-                    //    priv->dispatching--;
-                    //    _cws_cleanup(priv);
-                    //}
                     return 0;
                 }
                 else
                 {
                     wsClient->OnConnected();
-                    //if (priv->cbs.on_connect)
-                    //{
-                    //    priv->dispatching++;
-                    //    priv->cbs.on_connect((void*)priv->cbs.data,
-                    //        curl,
-                    //        STR_OR_EMPTY(priv->websocket_protocols.received));
-                    //    priv->dispatching--;
-                    //    _cws_cleanup(priv);
-                    //}
                     return len;
                 }
             }
@@ -363,7 +344,6 @@ namespace SF
 			return ResultCode::SUCCESS_FALSE;
 
         m_ServerAddress = serverAddress;
-        m_ServerPath = "/";
         m_Port = port;
         m_Protocol = protocol;
 
@@ -421,9 +401,6 @@ namespace SF
     {
         CURLcode result;
 
-        SFLog(Websocket, Info, "Connecting websocket server: {0}:{1}", m_ServerAddress, m_Port);
-
-
         String url;
         url.Format("{0}://{1}:{2}{3}", m_UseSSL ? "wss" : "ws", m_ServerAddress, m_Port, m_ServerPath);
         const char* strPrefix = "?";
@@ -434,14 +411,23 @@ namespace SF
             strPrefix = "&";
         }
 
+        SFLog(Websocket, Info, "Connecting websocket server: {0}", url);
+
+        // clean up first
+        if (m_Curl)
+            CloseConnection();
+
         m_Curl = curl_easy_init();
 
-        String m_ProtocolHeader;
-        m_ProtocolHeader.Format("Sec-WebSocket-Protocol: {0}", m_Protocol);
+        if (!m_Protocol.IsNullOrEmpty())
+        {
+            String m_ProtocolHeader;
+            m_ProtocolHeader.Format("Sec-WebSocket-Protocol: {0}", m_Protocol);
+            m_Headers = curl_slist_append(m_Headers, m_ProtocolHeader.data());
+        }
 
         // TODO: Still working on this
         //m_Headers = curl_slist_append(NULL, "HTTP/1.1 101 WebSocket Protocol Handshake");
-        m_Headers = curl_slist_append(m_Headers, m_ProtocolHeader.data());
         //m_Headers = curl_slist_append(m_Headers, "Upgrade: WebSocket");
         //m_Headers = curl_slist_append(m_Headers, "Connection: Upgrade");
         //m_Headers = curl_slist_append(m_Headers, "Sec-WebSocket-Version: 13");
@@ -464,6 +450,8 @@ namespace SF
         //curl_easy_setopt(m_Curl, CURLOPT_READFUNCTION, WebsocketClientCurlImpl::send_data);
         //curl_easy_setopt(m_Curl, CURLOPT_READDATA, this);
 
+        m_ConnectedThisFrame = false;
+
         // Method 2 will finish handshake in curl_easy_perform
         result = curl_easy_perform(m_Curl);
         if (result != CURLE_OK)
@@ -475,6 +463,9 @@ namespace SF
     void WebsocketClientCurl::CloseConnection()
     {
         m_ConnectionState = ConnectionState::Disconnected;
+
+        m_ConnectedThisFrame = false;
+
         if (m_Curl)
         {
             curl_easy_cleanup(m_Curl);
@@ -494,6 +485,7 @@ namespace SF
     {
         if (m_ConnectionState == ConnectionState::Disconnected)
         {
+            CloseConnection();
             if (IsReconnectOnDisconnected())
             {
                 if (!m_ReconnectTimer.IsTimerActive())
@@ -509,6 +501,15 @@ namespace SF
         }
         else if (m_ConnectionState == ConnectionState::Connected)
         {
+            if (m_ConnectedThisFrame)
+            {
+                if (m_OnConnectedHandler)
+                    m_OnConnectedHandler();
+
+                m_ConnectedThisFrame = false;
+            }
+
+
             size_t rlen{};
             struct curl_ws_frame* frameMeta{};
             uint8_t readBuffer[4*1024];
@@ -546,14 +547,13 @@ namespace SF
     void WebsocketClientCurl::OnConnectionError(Result result)
     {
         m_ConnectionState = ConnectionState::Disconnected;
-        CloseConnection();
+        // Clear connection on tick
     }
 
     void WebsocketClientCurl::OnConnected()
     {
         m_ConnectionState = ConnectionState::Connected;
-        if (m_OnConnectedHandler)
-            m_OnConnectedHandler();
+        m_ConnectedThisFrame = true;
     }
 
     Result WebsocketClientCurl::Send(const Array<uint8_t>& messageData)
@@ -580,7 +580,7 @@ namespace SF
         }
         else
         {
-            SFLog(Websocket, Error, "Failed to recv curl error:{0}, {1}", int(result), curl_easy_strerror(result));
+            SFLog(Websocket, Error, "Failed to send curl error:{0}, {1}", int(result), curl_easy_strerror(result));
             CloseConnection();
         }
 

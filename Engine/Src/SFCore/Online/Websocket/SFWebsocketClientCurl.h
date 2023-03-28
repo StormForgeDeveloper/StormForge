@@ -61,6 +61,8 @@ namespace SF
         void AddHeader(const char* headerKey, const char* headerString);
         void AddParameter(const char* headerKey, const char* headerString);
 
+        void SetServerPath(const String& path) { m_ServerPath = path; }
+
 		virtual Result Initialize(const String& serverAddress, int port, const String& protocol);
 		virtual void Terminate();
 
@@ -137,17 +139,14 @@ namespace SF
         // Use tick thread
 		bool m_UseTickThread = true;
         bool m_ReconnectOnDisconnected = false;
+        bool m_ConnectedThisFrame = false;
 
         Util::Timer m_ReconnectTimer;
-
-		// scheduler list
-		//DelayedEventContext SortedUsecList{};
 
         // Connection state
 		ConnectionState m_ConnectionState = ConnectionState::Disconnected;
 
         // Client append handler
-		//EventFunction m_ClientAppendHandler;
         EventOnConnected m_OnConnectedHandler;
         RecvDeletates m_RecvDeletates;
     };
