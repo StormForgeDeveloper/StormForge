@@ -587,6 +587,9 @@ namespace SF {
 		// Invalid schema data 
 		public const int INVALID_SCHEMA =                                   unchecked((int)0xE70100BE); 
 
+		// Invalid type 
+		public const int INVALID_TYPE =                                     unchecked((int)0xE70100BF); 
+
 	}
 }
 

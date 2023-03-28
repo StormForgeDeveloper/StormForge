@@ -50,14 +50,14 @@ namespace SF
         m_AccessKey = accessKey;
         m_MachineUID = Util::GetMachineUniqueId();
 
-        m_Client.OnRecvEvent().AddDelegate(uintptr_t(this), [this](Websocket::WSSessionData* pss, const Array<uint8_t>& data)
+        m_Client.OnRecvEvent().AddDelegate(uintptr_t(this), [this](const Array<uint8_t>& data)
             {
                 OnRecv(data);
 			});
 
-        String serverPath;
-        serverPath.Format("/BRAPI?AccessKey={0}&MachineUID={1}", m_AccessKey, m_MachineUID);
-        m_Client.SetServerPath(serverPath);
+        m_Client.AddParameter("AccessKey", m_AccessKey);
+        m_Client.AddParameter("MachineUID", m_MachineUID);
+        m_Client.SetServerPath("/BRAPI");
 
         m_Client.SetOnConnectedCallback([this]()
             {

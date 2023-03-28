@@ -591,6 +591,9 @@ namespace SF {
 			// Invalid schema data 
 			constexpr Result 			INVALID_SCHEMA                                                     ((int32_t)0xE70100BEL);
 
+			// Invalid type 
+			constexpr Result 			INVALID_TYPE                                                       ((int32_t)0xE70100BFL);
+
 	void InitializeResultCodeSF();
 
 	}//namespace ResultCode 

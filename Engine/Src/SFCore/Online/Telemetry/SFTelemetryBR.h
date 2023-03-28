@@ -19,6 +19,7 @@
 #include "Util/SFLog.h"
 #include "Online/Telemetry/SFTelemetryService.h"
 #include "Online/Websocket/SFWebsocketClient.h"
+#include "Online/Websocket/SFWebsocketClientCurl.h"
 #include "Online/Telemetry/SFTelemetryEventQueue.h"
 #include "Util/SFGuid.h"
 #include "Avro/SFAvro.h"
@@ -82,6 +83,7 @@ namespace SF
 
         virtual void SetPlayEvent(bool bPlayEvent) override;
 
+        virtual TelemetryEvent& Set(const char* name, bool value) override;
         virtual TelemetryEvent& Set(const char* name, int value) override;
         virtual TelemetryEvent& Set(const char* name, int64_t value) override;
         virtual TelemetryEvent& Set(const char* name, float value) override;
@@ -107,17 +109,13 @@ namespace SF
     {
     public:
 
-        static constexpr int64_t HeaderVersion = 3;
-
+        static constexpr int64_t HeaderVersion = 4;
         static constexpr size_t MaxSerializationBufferSize = 6 * 1024;
 
-		static constexpr char KeyName_AuthHeader[] = "sftelemetry:";
-		static constexpr int KeyName_AuthHeaderLen = sizeof(KeyName_AuthHeader) - 1; // without null terminator
-		static constexpr char KeyName_ClientId[] = "clientid";
+		static constexpr char KeyName_AppId[] = "appid";
         static constexpr char KeyName_AuthKey[] = "authkey";
 		static constexpr char KeyName_MachineId[] = "machineid";
 		static constexpr char KeyName_SessionId[] = "sessionid";
-        static constexpr char KeyName_DataType[] = "datatype";
 		static constexpr char KeyName_EventId[] = "EventId";
 		static constexpr char KeyName_Protocol[] = "SFTelemetry";
 		static constexpr char KeyName_EventName[] = "EventName";
@@ -125,10 +123,11 @@ namespace SF
         static constexpr char FieldName_IsPlayEvent[] = "IsPlayEvent";
         static constexpr char FieldName_EventId[] = "EventId";
         static constexpr char FieldName_SessionId[] = "SessionId";
-        static constexpr char FieldName_ClientId[] = "ClientId";
+        static constexpr char FieldName_AppId[] = "AppId";
         static constexpr char FieldName_MachineId[] = "MachineId";
         static constexpr char FieldName_EventName[] = "EventName";
 
+        using MyWebsocketClient = WebsocketClientCurl;
 
     public:
 
@@ -137,16 +136,14 @@ namespace SF
 
 		SF_FORCEINLINE IHeap& GetHeap() const { return GetSystemHeap(); }
 
-        virtual Result Initialize(const String& serverAddress, int port, const uint64_t& clientId, const String& authKey);
+        virtual Result Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey);
 
 		void Terminate();
 
-
-		SF_FORCEINLINE bool IsValid() const { return m_Client.IsValid(); }
-
+        SF_FORCEINLINE bool IsInitialized() const { return m_Client.IsInitialized(); }
 		SF_FORCEINLINE bool IsConnected() const { return m_Client.IsConnected(); }
 
-        SF_FORCEINLINE const uint64_t& GetClientId() const { return m_ClientId; }
+        SF_FORCEINLINE const uint64_t& GetApplicationId() const { return m_ApplicationId; }
         SF_FORCEINLINE const String& GetAuthKey() const { return m_AuthKey; }
         SF_FORCEINLINE const String& GetMachineId() const { return m_MachineId; }
         SF_FORCEINLINE const Guid& GetSessionId() const { return m_SessionId; }
@@ -165,17 +162,18 @@ namespace SF
 
 	private:
 
-        uint64_t m_ClientId;
+        uint64_t m_ApplicationId;
 		String m_AuthKey;
 
 		String m_MachineId;
         Guid m_SessionId;
+        uint64_t m_AccountId;
 
 		Atomic<uint32_t> m_EventId;
 		Atomic<uint32_t> m_SentEventId;
 		Atomic<uint32_t> m_AckedEventId;
 
-		WebsocketClient m_Client;
+        MyWebsocketClient m_Client;
 
 		TelemetryEventQueue m_EventQueue;
 

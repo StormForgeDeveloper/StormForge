@@ -213,6 +213,7 @@
 	<ResultCodeItem Severity="Error" CodeName="INVALID_CACHE_DATA" Desc="Invalid cache data"/>
 
 	<ResultCodeItem Severity="Error" CodeName="INVALID_SCHEMA" Desc="Invalid schema data"/>
+    <ResultCodeItem Severity="Error" CodeName="INVALID_TYPE" Desc="Invalid type"/>
 
 
 </ResultCodes>

@@ -58,7 +58,14 @@ namespace SF
 			WebsocketClient* pInstance{};
 		};
 
+        struct Header
+        {
+            String HeaderKey;
+            String HeaderData;
+        };
+
         using EventOnConnected = std::function<void()>;
+        using RecvDeletates = EventDelegateList<const Array<uint8_t>&>;
 
 
 	public:
@@ -74,6 +81,9 @@ namespace SF
         SF_FORCEINLINE void SetReconnectOnDisconnected(bool value) { m_ReconnectOnDisconnected = value; }
         SF_FORCEINLINE bool IsReconnectOnDisconnected() const { return m_ReconnectOnDisconnected; }
 
+        void AddHeader(const char* headerKey, const char* headerString);
+        void AddParameter(const char* headerKey, const char* headerString);
+
 		virtual Result Initialize(const String& serverAddress, int port, const String& protocol) override;
 		virtual void Terminate() override;
 
@@ -84,20 +94,15 @@ namespace SF
 
 		virtual int OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len) override;
 		virtual int OnProtocolDestroy(struct lws* wsi, void* user, void* in, size_t len) override;
-		virtual int OnClientAppendHeader(struct lws* wsi, void* user, void* in, size_t len) override
-		{
-			if (m_ClientAppendHandler)
-				return m_ClientAppendHandler(wsi, user, in, len);
-			return 0;
-		}
+        virtual int OnClientAppendHeader(struct lws* wsi, void* user, void* in, size_t len) override;
 		virtual int OnConnectionEstablished(struct lws* wsi, void* user, void* in, size_t len) override;
 		virtual int OnConnectionClosed(struct lws* wsi, void* user, void* in, size_t len) override;
 		virtual int OnConnectionError(struct lws* wsi, void* user, void* in, size_t len) override;
-
-		SF_FORCEINLINE void SetClientAppendHeaderFunction(const EventFunction& func) { m_ClientAppendHandler = func; }
-		SF_FORCEINLINE void SetClientAppendHeaderFunction(EventFunction&& func) { m_ClientAppendHandler = Forward<EventFunction>(func); }
+        virtual void OnRecv(struct WSSessionData* pss, const Array<uint8_t>& messageData) { m_RecvDeletates.Invoke(messageData); }
 
         SF_FORCEINLINE void SetOnConnectedCallback(const EventOnConnected& func) { m_OnConnectedHandler = func; }
+        // recv event delegates
+        SF_FORCEINLINE RecvDeletates& OnRecvEvent() { return m_RecvDeletates; }
 
         virtual void TickUpdate(int iThread) override;
 		virtual void TickEventLoop(int iEvent) override;
@@ -107,6 +112,7 @@ namespace SF
         // Use tick thread
 		bool m_UseTickThread = true;
         bool m_ReconnectOnDisconnected = false;
+        DynamicArray<String> m_Parameters;
 
         Util::Timer m_ReconnectTimer;
 
@@ -120,8 +126,9 @@ namespace SF
 		ConnectionState m_ConnectionState = ConnectionState::Disconnected;
 
         // Client append handler
-		EventFunction m_ClientAppendHandler;
+        DynamicArray<Header> m_AdditionalHeader;
         EventOnConnected m_OnConnectedHandler;
+        RecvDeletates m_RecvDeletates;
     };
 
 }

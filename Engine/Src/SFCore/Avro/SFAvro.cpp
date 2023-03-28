@@ -503,7 +503,12 @@ namespace SF
         avro_value_t avValue{};
         if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
         {
-            avro_value_set_boolean(&avValue, Value);
+            int ret = avro_value_set_boolean(&avValue, Value);
+            if (ret != 0)
+            {
+                SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);
+                return ResultCode::INVALID_TYPE;
+            }
 
             return ResultCode::SUCCESS;
         }
@@ -519,7 +524,12 @@ namespace SF
         avro_value_t avValue{};
         if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
         {
-            avro_value_set_int(&avValue, Value);
+            int ret = avro_value_set_int(&avValue, Value);
+            if (ret != 0)
+            {
+                SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);
+                return ResultCode::INVALID_TYPE;
+            }
 
             return ResultCode::SUCCESS;
         }
@@ -535,7 +545,12 @@ namespace SF
         avro_value_t avValue{};
         if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
         {
-            avro_value_set_long(&avValue, Value);
+            int ret = avro_value_set_long(&avValue, Value);
+            if (ret != 0)
+            {
+                SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);
+                return ResultCode::INVALID_TYPE;
+            }
 
             return ResultCode::SUCCESS;
         }
@@ -550,7 +565,13 @@ namespace SF
         avro_value_t avValue{};
         if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
         {
-            avro_value_set_string(&avValue, Value);
+            //if (avro_value_get_type(avValue) == avro_type_t::AVRO_STRING)
+            int ret = avro_value_set_string(&avValue, Value);
+            if (ret != 0)
+            {
+                SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);
+                return ResultCode::INVALID_TYPE;
+            }
 
             return ResultCode::SUCCESS;
         }
@@ -566,7 +587,12 @@ namespace SF
         avro_value_t avValue{};
         if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
         {
-            avro_value_set_string_len(&avValue, Value.data(), Value.length() + 1);
+            int ret = avro_value_set_string_len(&avValue, Value.data(), Value.length() + 1);
+            if (ret != 0)
+            {
+                SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);
+                return ResultCode::INVALID_TYPE;
+            }
 
             return ResultCode::SUCCESS;
         }
@@ -582,7 +608,12 @@ namespace SF
         avro_value_t avValue{};
         if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
         {
-            avro_value_set_float(&avValue, Value);
+            int ret = avro_value_set_float(&avValue, Value);
+            if (ret != 0)
+            {
+                SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);
+                return ResultCode::INVALID_TYPE;
+            }
 
             return ResultCode::SUCCESS;
         }
@@ -598,7 +629,12 @@ namespace SF
         avro_value_t avValue{};
         if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
         {
-            avro_value_set_double(&avValue, Value);
+            int ret = avro_value_set_double(&avValue, Value);
+            if (ret != 0)
+            {
+                SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);
+                return ResultCode::INVALID_TYPE;
+            }
 
             return ResultCode::SUCCESS;
         }
@@ -614,7 +650,12 @@ namespace SF
         avro_value_t avValue{};
         if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
         {
-            avro_value_set_bytes(&avValue, (void*)Value.data(), Value.size());
+            int ret = avro_value_set_bytes(&avValue, (void*)Value.data(), Value.size());
+            if (ret != 0)
+            {
+                SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);
+                return ResultCode::INVALID_TYPE;
+            }
 
             return ResultCode::SUCCESS;
         }
@@ -630,7 +671,12 @@ namespace SF
         avro_value_t avValue{};
         if (avro_value_get_by_name(&m_DataValue, Name, &avValue, NULL) == 0)
         {
-            avro_value_set_bytes(&avValue, (void*)Value.data(), Value.size());
+            int ret = avro_value_set_bytes(&avValue, (void*)Value.data(), Value.size());
+            if (ret != 0)
+            {
+                SFLog(System, Error, "Avro SetValue: error invalid type: {0}", Name);
+                return ResultCode::INVALID_TYPE;
+            }
 
             return ResultCode::SUCCESS;
         }

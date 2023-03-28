@@ -49,13 +49,17 @@ namespace SF
 		WebsocketClientCurl(IHeap& heap);
 		~WebsocketClientCurl();
 
-		SF_FORCEINLINE bool IsConnected() const { return m_ConnectionState == ConnectionState::Connected; }
+		SF_FORCEINLINE bool IsInitialized() const { return !m_ServerAddress.IsNullOrEmpty(); }
+        SF_FORCEINLINE bool IsConnected() const { return m_ConnectionState == ConnectionState::Connected; }
 
 		SF_FORCEINLINE void SetUseTickThread(bool useTickThread) { m_UseTickThread = useTickThread; }
 		SF_FORCEINLINE bool IsUseTickThread() const { return m_UseTickThread; }
 
         SF_FORCEINLINE void SetReconnectOnDisconnected(bool value) { m_ReconnectOnDisconnected = value; }
         SF_FORCEINLINE bool IsReconnectOnDisconnected() const { return m_ReconnectOnDisconnected; }
+
+        void AddHeader(const char* headerKey, const char* headerString);
+        void AddParameter(const char* headerKey, const char* headerString);
 
 		virtual Result Initialize(const String& serverAddress, int port, const String& protocol);
 		virtual void Terminate();
@@ -88,6 +92,7 @@ namespace SF
 
 
         virtual void TickUpdate();
+        virtual void TickEventLoop(int iEvent) { TickUpdate(); }
 
     private:
 
@@ -108,6 +113,8 @@ namespace SF
 
         CURL* m_Curl{};
         curl_slist* m_Headers{};
+        DynamicArray<String> m_Parameters;
+
         DynamicArray<uint8_t> m_ReceiveBuffer;
 
         struct _Status
@@ -132,7 +139,6 @@ namespace SF
         bool m_ReconnectOnDisconnected = false;
 
         Util::Timer m_ReconnectTimer;
-
 
 		// scheduler list
 		//DelayedEventContext SortedUsecList{};

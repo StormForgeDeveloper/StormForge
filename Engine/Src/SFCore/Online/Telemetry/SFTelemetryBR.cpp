@@ -143,6 +143,12 @@ namespace SF
         m_AvroValue.SetValue(TelemetryBR::FieldName_IsPlayEvent, bPlayEvent);
     }
 
+    TelemetryEvent& TelemetryEventAvro::Set(const char* name, bool value)
+    {
+        m_AvroValue.SetValue(name, value);
+        return *this;
+    }
+
     TelemetryEvent& TelemetryEventAvro::Set(const char* name, int value)
     {
         m_AvroValue.SetValue(name, value);
@@ -210,11 +216,11 @@ namespace SF
 		Terminate();
 	}
 
-	Result TelemetryBR::Initialize(const String& serverAddress, int port, const uint64_t& clientId, const String& authKey)
+	Result TelemetryBR::Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey)
 	{
 		Result hr;
 
-		m_ClientId = clientId;
+        m_ApplicationId = applicationId;
 		m_AuthKey = authKey;
 
 		m_MachineId = Util::GetMachineUniqueId();
@@ -225,29 +231,18 @@ namespace SF
         SFLog(Telemetry, Info, "Telemetry session initialized, machine:{0}, sessionId:{1}", m_MachineId, sessionIdString);
 
 		m_Client.SetUseTickThread(false); // We are using manual ticking
-		m_Client.SetClientAppendHeaderFunction([&](struct lws* wsi, void* user, void* in, size_t len)
-			{
-                char sessionId[128]{};
-                m_SessionId.ToString(sessionId);
 
-				unsigned char** p = (unsigned char**)in, * end = (*p) + len;
-				String HeaderString;
-				HeaderString.Format("{0}={1};{2}={3};{4}={5};{6}={7};{8}={9}", 
-					KeyName_ClientId, m_ClientId,
-					KeyName_AuthKey, m_AuthKey,
-					KeyName_MachineId, m_MachineId, 
-					KeyName_SessionId, sessionId,
-                    KeyName_DataType,"avro");
-				auto res = lws_add_http_header_by_name(wsi, (unsigned char*)KeyName_AuthHeader, (unsigned char*)HeaderString.data(), (int)HeaderString.length(), p, end);
-				if (res)
-				{
-					return -1;
-				}
+        char sessionId[128]{}, appId[128];
+        m_SessionId.ToString(sessionId);
 
-				return 0;
-			});
+        StrUtil::Format(appId, "{0}", m_ApplicationId);
 
-		m_Client.OnRecvEvent().AddDelegate(uintptr_t(this), [&](Websocket::WSSessionData* pss, const Array<uint8_t>& data)
+        m_Client.AddParameter(KeyName_AppId, appId);
+        m_Client.AddParameter(KeyName_AuthKey, m_AuthKey);
+        m_Client.AddParameter(KeyName_MachineId, m_MachineId);
+        m_Client.AddParameter(KeyName_SessionId, sessionId);
+
+		m_Client.OnRecvEvent().AddDelegate(uintptr_t(this), [&](const Array<uint8_t>& data)
 			{
 				uint32_t* pEventId = (uint32_t*)data.data();
 				if (pEventId == nullptr || data.size() < sizeof(uint32_t))
@@ -257,7 +252,6 @@ namespace SF
 				{
                     uint32_t eventId = *pEventId;
 					m_EventQueue.FreePostedEvents(eventId);
-					//SFLog(Telemetry, Debug3, "Client Recv Ack eventId:{0}", eventId);
 				}
 			});
 
@@ -285,7 +279,7 @@ namespace SF
 		// 
 		m_Thread.reset(new(GetHeap()) FunctorTickThread([this](Thread* pThread)
 			{
-				if (!m_Client.IsValid())
+				if (!m_Client.IsInitialized())
 				{
 					m_Client.TryConnect();
 					ThisThread::SleepFor(DurationMS(10000));
@@ -370,7 +364,7 @@ namespace SF
         newSchema->AppendFieldBool(FieldName_IsPlayEvent);
         newSchema->AppendFieldInt(FieldName_EventId);
         newSchema->AppendFieldBytes(FieldName_SessionId);
-        newSchema->AppendFieldInt64(FieldName_ClientId);
+        newSchema->AppendFieldInt64(FieldName_AppId);
         newSchema->AppendFieldString(FieldName_MachineId);
         newSchema->AppendFieldString(FieldName_EventName);
 
@@ -385,7 +379,7 @@ namespace SF
 		if (eventName == nullptr)
 			return nullptr;
 
-		if (!m_Client.IsValid())
+		if (!m_Client.IsInitialized())
 			return nullptr;
 
         auto itSchema = m_EventSchemas.find(eventName);
@@ -412,7 +406,7 @@ namespace SF
             if (!hr)
                 return nullptr;
             //hr = avroValue.SetValue(FieldName_EventId, (int)newEvent->GetEventId());
-            hr = avroValue.SetValue(FieldName_ClientId, (int64_t)GetClientId());
+            hr = avroValue.SetValue(FieldName_AppId, (int64_t)GetApplicationId());
             if (!hr)
                 return nullptr;
             hr = avroValue.SetValue(FieldName_MachineId, GetMachineId());

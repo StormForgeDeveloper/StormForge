@@ -67,7 +67,6 @@ namespace SF
 		, m_Mounts(GetHeap())
 		, m_PVOOptions(GetHeap())
 		, m_Extensions(GetHeap())
-		, m_RecvDeletates(m_Heap)
 	{
 //		// Websocket doesn't work well with libevent on Windows
 #if SF_PLATFORM == SF_PLATFORM_WINDOWS

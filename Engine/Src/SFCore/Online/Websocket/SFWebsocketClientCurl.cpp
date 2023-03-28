@@ -10,7 +10,8 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include "SFCorePCH.h"
-
+#include "Util/SFString.h"
+#include "Util/SFStringFormat.h"
 #include "Online/Websocket/SFWebsocketClientCurl.h"
 
 
@@ -35,6 +36,7 @@ namespace SF
         if (m_Headers)
         {
             curl_slist_free_all(m_Headers);
+            m_Headers = nullptr;
         }
     }
 
@@ -110,7 +112,7 @@ namespace SF
             wsStatus.WebsocketUpgrade = false;
 
             if (len == strlen("websocket") &&
-                StrUtil::StringCompairIgnoreCase("websocket", -1, buffer, int(len)) != 0)
+                !StrUtil::StringCompairIgnoreCase("websocket", -1, buffer, int(len)))
             {
                 char localBuffer[128];
                 len = std::min(len, countof(localBuffer) - 1);
@@ -131,7 +133,7 @@ namespace SF
             wsStatus.ConnectionUpgrade = false;
 
             if (len == strlen("upgrade") &&
-                StrUtil::StringCompairIgnoreCase("upgrade", -1, buffer, int(len)) != 0)
+                !StrUtil::StringCompairIgnoreCase("upgrade", -1, buffer, int(len)))
             {
                 char localBuffer[128];
                 len = std::min(len, countof(localBuffer) - 1);
@@ -262,21 +264,38 @@ namespace SF
                 return len;
             }
 
-            // if start of frame
-            if (frameMeta->offset == 0)
-            {
-                recvBuffer.resize(0);
-            }
-
-            recvBuffer.Append(ArrayView<const uint8_t>(len, reinterpret_cast<const uint8_t*>(buffer)));
-
-            if (frameMeta->bytesleft == 0)
+            if (ReadData(frameMeta, buffer, recvBuffer))
             {
                 wsClient->OnRecv(recvBuffer);
                 recvBuffer.resize(0);
             }
 
             return len;
+        }
+
+        static bool ReadData(struct curl_ws_frame* frameMeta, const void* buffer, Array<uint8_t>& recvBuffer)
+        {
+            if (frameMeta == nullptr)
+            {
+                SFLog(Websocket, Error, "Recv failed, invalid meta data");
+                return false;
+            }
+
+            // if start of frame
+            if ((int)recvBuffer.size() != frameMeta->offset)
+            {
+                SFLog(Websocket, Error, "Recv failed, invalid data offset");
+                return false;
+            }
+
+            recvBuffer.Append(ArrayView<const uint8_t>(frameMeta->len, reinterpret_cast<const uint8_t*>(buffer)));
+
+            if (frameMeta->bytesleft == 0 || (frameMeta->flags & CURLWS_CLOSE) == CURLWS_CLOSE)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         //static size_t _cws_send_data(char* buffer, size_t count, size_t nitems, void* data)
@@ -323,6 +342,20 @@ namespace SF
         //}
 
     };
+
+    void WebsocketClientCurl::AddHeader(const char* headerKey, const char* headerString)
+    {
+        String headerValue;
+        headerValue.Format("{0}: {1}", headerKey, headerString);
+        m_Headers = curl_slist_append(m_Headers, (const char*)headerValue);
+    }
+
+    void WebsocketClientCurl::AddParameter(const char* headerKey, const char* headerString)
+    {
+        String headerValue;
+        headerValue.Format("{0}={1}", headerKey, headerString);
+        m_Parameters.push_back(headerValue);
+    }
 
 	Result WebsocketClientCurl::Initialize(const String& serverAddress, int port, const String& protocol)
 	{
@@ -390,8 +423,17 @@ namespace SF
 
         SFLog(Websocket, Info, "Connecting websocket server: {0}:{1}", m_ServerAddress, m_Port);
 
+
         String url;
         url.Format("{0}://{1}:{2}{3}", m_UseSSL ? "wss" : "ws", m_ServerAddress, m_Port, m_ServerPath);
+        const char* strPrefix = "?";
+        for (auto& parameter : m_Parameters)
+        {
+            url.Append(strPrefix);
+            url.Append(parameter);
+            strPrefix = "&";
+        }
+
         m_Curl = curl_easy_init();
 
         String m_ProtocolHeader;
@@ -399,12 +441,12 @@ namespace SF
 
         // TODO: Still working on this
         //m_Headers = curl_slist_append(NULL, "HTTP/1.1 101 WebSocket Protocol Handshake");
-        m_Headers = curl_slist_append(NULL, m_ProtocolHeader.data());
+        m_Headers = curl_slist_append(m_Headers, m_ProtocolHeader.data());
         //m_Headers = curl_slist_append(m_Headers, "Upgrade: WebSocket");
         //m_Headers = curl_slist_append(m_Headers, "Connection: Upgrade");
         //m_Headers = curl_slist_append(m_Headers, "Sec-WebSocket-Version: 13");
         //m_Headers = curl_slist_append(m_Headers, "Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw=="); // ?
-        result = curl_easy_setopt(m_Curl, CURLOPT_PRIVATE, this);
+        //result = curl_easy_setopt(m_Curl, CURLOPT_PRIVATE, this);
         result = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYPEER, false);
         result = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYHOST, 0L);
         result = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)url);
@@ -415,17 +457,19 @@ namespace SF
 
         result = curl_easy_setopt(m_Curl, CURLOPT_HTTPHEADER, m_Headers);
         //curl_easy_setopt(m_Curl, CURLOPT_OPENSOCKETFUNCTION, my_opensocketfunc);
-        //curl_easy_setopt(m_Curl, CURLOPT_HEADERFUNCTION, my_func);
-        //curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, my_writefunc);
         result = curl_easy_setopt(m_Curl, CURLOPT_HEADERFUNCTION, WebsocketClientCurlImpl::ReceiveHeader);
         result = curl_easy_setopt(m_Curl, CURLOPT_HEADERDATA, this);
-        curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, WebsocketClientCurlImpl::ReceiveData);
-        curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, this);
+        //result = curl_easy_setopt(m_Curl, CURLOPT_WRITEFUNCTION, WebsocketClientCurlImpl::ReceiveData);
+        //result = curl_easy_setopt(m_Curl, CURLOPT_WRITEDATA, this);
         //curl_easy_setopt(m_Curl, CURLOPT_READFUNCTION, WebsocketClientCurlImpl::send_data);
         //curl_easy_setopt(m_Curl, CURLOPT_READDATA, this);
 
         // Method 2 will finish handshake in curl_easy_perform
         result = curl_easy_perform(m_Curl);
+        if (result != CURLE_OK)
+        {
+            SFLog(Websocket, Info, "Websocket client initialization error : {0}:{1}, {2}:{3}", m_ServerAddress, m_Port, int(result), curl_easy_strerror(result));
+        }
     }
 
     void WebsocketClientCurl::CloseConnection()
@@ -465,32 +509,37 @@ namespace SF
         }
         else if (m_ConnectionState == ConnectionState::Connected)
         {
-            //size_t rlen{};
-            //struct curl_ws_frame* meta{};
-            //uint8_t readBuffer[4*1024];
+            size_t rlen{};
+            struct curl_ws_frame* frameMeta{};
+            uint8_t readBuffer[4*1024];
 
-            //CURLcode result = curl_ws_recv(m_Curl, readBuffer, sizeof(readBuffer), &rlen, &meta);
-            //if (result == CURLE_OK)
-            //{
-            //    if (meta)
-            //    {
-            //        meta->bytesleft
-            //    }
-            //}
-            //else if (result == CURLE_GOT_NOTHING)
-            //{
-            //    // Closed?
-            //    SFLog(Websocket, Warning, "Nothing?", int(result), curl_easy_strerror(result));
-            //}
-            //else if (result == CURLE_AGAIN)
-            //{
-            //    // try again later
-            //}
-            //else
-            //{
-            //    SFLog(Websocket, Error, "Failed to recv curl error:{0}, {1}", int(result), curl_easy_strerror(result));
-            //    CloseConnection();
-            //}
+            CURLcode result = curl_ws_recv(m_Curl, readBuffer, sizeof(readBuffer), &rlen, &frameMeta);
+            if (result == CURLE_OK)
+            {
+                if (frameMeta)
+                {
+                    assert(frameMeta->len == rlen);
+                    if (WebsocketClientCurlImpl::ReadData(frameMeta, readBuffer, m_ReceiveBuffer))
+                    {
+                        OnRecv(m_ReceiveBuffer);
+                        m_ReceiveBuffer.resize(0);
+                    }
+                }
+            }
+            else if (result == CURLE_GOT_NOTHING)
+            {
+                // Closed?
+                SFLog(Websocket, Warning, "Nothing?", int(result), curl_easy_strerror(result));
+            }
+            else if (result == CURLE_AGAIN)
+            {
+                // try again later
+            }
+            else
+            {
+                SFLog(Websocket, Error, "Failed to recv curl error:{0}, {1}", int(result), curl_easy_strerror(result));
+                CloseConnection();
+            }
         }
     }
 

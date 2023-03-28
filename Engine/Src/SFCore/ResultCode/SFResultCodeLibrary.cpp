@@ -211,6 +211,7 @@ namespace ResultCode {
 		codeMap.Insert((uint32_t)INVALID_RESPONSE_DATA, {"INVALID_RESPONSE_DATA", "Invalid response data"});
 		codeMap.Insert((uint32_t)INVALID_CACHE_DATA, {"INVALID_CACHE_DATA", "Invalid cache data"});
 		codeMap.Insert((uint32_t)INVALID_SCHEMA, {"INVALID_SCHEMA", "Invalid schema data"});
+		codeMap.Insert((uint32_t)INVALID_TYPE, {"INVALID_TYPE", "Invalid type"});
 
 	}//InitializeResultCode 
 }//namespace ResultCode 

@@ -23,9 +23,10 @@ namespace SF
 	//	class WebsocketClient
 	//
 
-
 	WebsocketClient::WebsocketClient(IHeap& heap)
 		: super(heap, "WSClient")
+        , m_AdditionalHeader(heap)
+        , m_RecvDeletates(heap)
 	{
 		m_ServerPath = "/";
 		m_NumThread = 1;
@@ -35,6 +36,21 @@ namespace SF
 	WebsocketClient::~WebsocketClient()
 	{}
 
+    void WebsocketClient::AddHeader(const char* headerKey, const char* headerString)
+    {
+        Header header;
+        header.HeaderKey = headerKey;
+        header.HeaderData = headerString;
+        m_AdditionalHeader.push_back(header);
+    }
+
+    void WebsocketClient::AddParameter(const char* headerKey, const char* headerString)
+    {
+        String headerValue;
+        headerValue.Format("{0}={1}", headerKey, headerString);
+        m_Parameters.push_back(headerValue);
+    }
+
 	Result WebsocketClient::Initialize(const String& serverAddress, int port, const String& protocol)
 	{
 		if (m_WSIContext) // probably initializing again
@@ -42,7 +58,15 @@ namespace SF
 
 		super::Initialize(serverAddress, port, protocol);
 
-		SFLog(Websocket, Info, "Connecting websocket server: {0}:{1}", m_ServerAddress, m_Port);
+        const char* strPrefix = "?";
+        for (auto& parameter : m_Parameters)
+        {
+            m_ServerPath.Append(strPrefix);
+            m_ServerPath.Append(parameter);
+            strPrefix = "&";
+        }
+
+        SFLog(Websocket, Info, "Connecting websocket server: {0}:{1}", m_ServerAddress, m_Port);
 
 
 		struct lws_context_creation_info info;
@@ -185,6 +209,21 @@ namespace SF
 
 		return 0;
 	}
+
+    int WebsocketClient::OnClientAppendHeader(struct lws* wsi, void* user, void* in, size_t len)
+    {
+        unsigned char** p = (unsigned char**)in, * end = (*p) + len;
+
+        for (auto& header : m_AdditionalHeader)
+        {
+            auto res = lws_add_http_header_by_name(wsi, (unsigned char*)header.HeaderKey.data(), (unsigned char*)header.HeaderData.data(), (int)header.HeaderData.length(), p, end);
+            if (res)
+            {
+                return -1;
+            }
+        }
+        return 0;
+    }
 
 	int WebsocketClient::OnConnectionEstablished(struct lws* wsi, void* user, void* in, size_t len)
 	{

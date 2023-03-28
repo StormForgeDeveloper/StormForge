@@ -1195,12 +1195,12 @@ namespace SF {
 
 			szBuffer = m_Buffer->GetBufferPointer();
 			buffLen = (int)requiredSize;
-			auto length = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
-			m_Buffer->Resize(length);
+			size_t usedBufferLength = StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
+			m_Buffer->Resize(usedBufferLength > 0 ? usedBufferLength - 1 : 0);
 
 			m_StringView = m_Buffer->GetBufferPointer();
 
-			return length;
+			return usedBufferLength;
 		}
 
 		size_t AppendFormat_Internal(const CharType* szFormating, int iNumArg, VariableBox* Args)
@@ -1229,7 +1229,7 @@ namespace SF {
 			szBuffer = m_Buffer->GetBufferPointer() + currentStringLen;
 			buffLen = (int)requiredSize;
 			StrUtil::Format_Internal(szBuffer, buffLen, szFormating, iNumArg, Args);
-			auto addedSize = StrUtil::StringLen(m_Buffer->GetBufferPointer() + currentStringLen);
+			size_t addedSize = StrUtil::StringLen(m_Buffer->GetBufferPointer() + currentStringLen);
 			m_Buffer->Resize(currentStringLen + addedSize);
 
 			m_StringView = m_Buffer->GetBufferPointer();

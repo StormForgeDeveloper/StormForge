@@ -67,7 +67,7 @@ namespace SF
 			uint8_t flow_controlled : 1;
 			uint8_t write_consume_pending : 1;
 
-            uint64_t ClientId{};
+            uint64_t AppId{};
 			char AuthKey[256];
 			char MachineId[256];
 			Guid SessionId;
@@ -78,7 +78,6 @@ namespace SF
 			void Clear();
 		};
 
-		using RecvDeletates = EventDelegateList<struct WSSessionData*, const Array<uint8_t>&>;
 		using EventFunction = std::function<int(struct lws*, void*, void*, size_t)>; // Return non-zero to disallow the connection.
 
 
@@ -107,12 +106,13 @@ namespace SF
 
         // Is valid connection?
 		SF_FORCEINLINE bool IsValid() const { return m_WSIContext != nullptr && m_WSI != nullptr; }
+        SF_FORCEINLINE bool IsInitialized() const { return !m_ServerAddress.IsNullOrEmpty(); }
 
         // terminate
 		virtual void Terminate();
 
 		virtual Result Send(struct WSSessionData* pss, const Array<uint8_t>& messageData);
-		virtual void OnRecv(struct WSSessionData* pss, const Array<uint8_t>& messageData) { m_RecvDeletates.Invoke(pss, messageData); }
+		virtual void OnRecv(struct WSSessionData* pss, const Array<uint8_t>& messageData) {  }
 
 		virtual int OnProtocolInit(struct lws* wsi, void* user, void* in, size_t len) { return 0; }
 		virtual int OnProtocolDestroy(struct lws* wsi, void* user, void* in, size_t len) { return 0; }
@@ -143,9 +143,6 @@ namespace SF
 		// session data size
 		virtual size_t GetSessionDataSize() const { return sizeof(struct WSSessionData); }
 
-
-		// recv event delegates
-		SF_FORCEINLINE RecvDeletates& OnRecvEvent() { return m_RecvDeletates; }
 
 		SF_FORCEINLINE void SetProtocolFilteringFunction(const EventFunction& filteringFunc) { m_ProtocolFilteringDeletates = filteringFunc; }
 		SF_FORCEINLINE void SetProtocolFilteringFunction(EventFunction&& filteringFunc) { m_ProtocolFilteringDeletates = Forward<EventFunction>(filteringFunc); }
@@ -224,7 +221,6 @@ namespace SF
 		size_t m_FlowControlMin{};
 		size_t m_FlowControlMax{};
 
-		RecvDeletates m_RecvDeletates;
 		EventFunction m_ProtocolFilteringDeletates;
 	};
 
