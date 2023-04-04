@@ -216,7 +216,7 @@ namespace SF
 		Terminate();
 	}
 
-	Result TelemetryBR::Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey)
+	Result TelemetryBR::Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache)
 	{
 		Result hr;
 
@@ -259,7 +259,7 @@ namespace SF
 		if (!hr)
 			return hr;
 
-		m_EventQueue.Initialize();
+		m_EventQueue.Initialize(bUseEventFileCache);
 
 		auto pTail = m_EventQueue.GetTailEvent();
 		if (pTail)

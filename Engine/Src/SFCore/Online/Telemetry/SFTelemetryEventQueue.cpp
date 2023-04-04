@@ -36,16 +36,19 @@ namespace SF
 		m_StorageFile.Close();
 	}
 
-	void TelemetryEventQueue::Initialize()
+	void TelemetryEventQueue::Initialize(bool bUseFileCache)
 	{
+        m_bUseFileCache = bUseFileCache;
 		m_StorageFilePath = Util::Path::Combine(Util::Path::GetSaveDir(), BaseStorageFilePath);
 
 		// No file cache for editor or tool mode
-		if (!LoadFromFileStorage())
-			CreateStorageFile();
-		else
-			OpenStorageForWrite();
-
+        if (m_bUseFileCache)
+        {
+            if (!LoadFromFileStorage())
+                CreateStorageFile();
+            else
+                OpenStorageForWrite();
+        }
 	}
 
 	bool TelemetryEventQueue::IsEmpty()

@@ -61,7 +61,7 @@ namespace SF
 		virtual ~TelemetryEventQueue();
 
 		// Initialize
-		void Initialize();
+		void Initialize(bool bUseFileCache);
 
 		// Test whether it is empty
 		bool IsEmpty();
@@ -125,6 +125,8 @@ namespace SF
 
 		// File path to local storage
 		File m_StorageFile;
+
+        bool m_bUseFileCache = true;
 	};
 
 }

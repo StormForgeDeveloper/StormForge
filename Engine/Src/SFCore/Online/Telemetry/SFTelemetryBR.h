@@ -136,7 +136,7 @@ namespace SF
 
 		SF_FORCEINLINE IHeap& GetHeap() const { return GetSystemHeap(); }
 
-        virtual Result Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey);
+        virtual Result Initialize(const String& serverAddress, int port, const uint64_t& applicationId, const String& authKey, bool bUseEventFileCache);
 
 		void Terminate();
 

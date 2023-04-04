@@ -37,7 +37,7 @@ namespace SF
 
     public:
 
-        TelemetryComponent(const String& address, uint64_t clientId, const String& authTicket);
+        TelemetryComponent(const String& address, uint64_t clientId, const String& authTicket, bool bUseEventCacheFile);
         virtual ~TelemetryComponent();
 
 
@@ -52,6 +52,7 @@ namespace SF
         String m_Address;
         uint64_t m_ClientId{};
         String m_AuthTicket;
+        bool m_bUseEventCacheFile = true;
 
         SFUniquePtr<TelemetryBR> m_TelemetryPtr;
     };

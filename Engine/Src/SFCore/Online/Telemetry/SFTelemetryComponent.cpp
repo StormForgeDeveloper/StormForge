@@ -58,11 +58,12 @@ namespace SF
 	//	class TelemetryComponent
 	//
 
-	TelemetryComponent::TelemetryComponent(const String& address, uint64_t clientId, const String& authTicket)
+	TelemetryComponent::TelemetryComponent(const String& address, uint64_t clientId, const String& authTicket, bool bUseEventCacheFile)
         : LibraryComponent(TypeName)
         , m_Address(address)
         , m_ClientId(clientId)
         , m_AuthTicket(authTicket)
+        , m_bUseEventCacheFile(bUseEventCacheFile)
     {
         AddDependency<WebsocketComponent>();
 
@@ -88,7 +89,7 @@ namespace SF
 
         SFLog(Telemetry, Info, "Telemetry initialize: {0}, clientId:{1}", m_Address, m_ClientId);
 
-        Result hr = m_TelemetryPtr->Initialize(address, port, m_ClientId, m_AuthTicket);
+        Result hr = m_TelemetryPtr->Initialize(address, port, m_ClientId, m_AuthTicket, m_bUseEventCacheFile);
         if (!hr)
             return hr;
 
