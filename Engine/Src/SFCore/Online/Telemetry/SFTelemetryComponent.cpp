@@ -79,12 +79,14 @@ namespace SF
 
         m_TelemetryPtr.reset(new(GetSystemHeap()) TelemetryBR());
 
-        int iSplitter = m_Address.IndexOfFromEnd(",:");
+        int iSplitter = m_Address.IndexOfAnyFromEnd(",:");
         if (iSplitter < 0)
             return ResultCode::INVALID_ARG;
 
         String address = m_Address.SubString(0, iSplitter);
-        int port = std::atol(m_Address.data() + iSplitter);
+        int port = std::atol(m_Address.data() + iSplitter + 1);
+
+        SFLog(Telemetry, Info, "Telemetry initialize: {0}, clientId:{1}", m_Address, m_ClientId);
 
         Result hr = m_TelemetryPtr->Initialize(address, port, m_ClientId, m_AuthTicket);
         if (!hr)
