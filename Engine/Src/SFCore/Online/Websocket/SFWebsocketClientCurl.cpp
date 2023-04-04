@@ -530,7 +530,7 @@ namespace SF
             else if (result == CURLE_GOT_NOTHING)
             {
                 // Closed?
-                SFLog(Websocket, Warning, "Nothing?", int(result), curl_easy_strerror(result));
+                SFLog(Websocket, Warning, "Nothing? result:{0}, error:{1}", int(result), curl_easy_strerror(result));
             }
             else if (result == CURLE_AGAIN)
             {
@@ -572,7 +572,7 @@ namespace SF
         else if (result == CURLE_GOT_NOTHING)
         {
             // Closed?
-            SFLog(Websocket, Warning, "Nothing?", int(result), curl_easy_strerror(result));
+            SFLog(Websocket, Warning, "Nothing? result:{0}, error:{1}", int(result), curl_easy_strerror(result));
         }
         else if (result == CURLE_AGAIN)
         {
