@@ -231,6 +231,7 @@ namespace SF
         SFLog(Telemetry, Info, "Telemetry session initialized, machine:{0}, sessionId:{1}", m_MachineId, sessionIdString);
 
 		m_Client.SetUseTickThread(false); // We are using manual ticking
+        m_Client.SetReconnectOnDisconnected(true);
 
         char sessionId[128]{}, appId[128];
         m_SessionId.ToString(sessionId);
