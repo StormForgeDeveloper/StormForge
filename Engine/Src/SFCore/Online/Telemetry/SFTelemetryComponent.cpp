@@ -21,7 +21,37 @@
 namespace SF
 {
 
-
+    static const char loginSchema[] =
+        "{\n\
+            \"type\" : \"record\",\n\
+            \"namespace\" : \"BR\",\n\
+            \"name\" : \"Login\",\n\
+            \"fields\" : [\n\
+                { \"name\" : \"UserId\", \"type\" : \"long\" },\n\
+                { \"name\" : \"Platform\", \"type\" : \"int\" },\n\
+                { \"name\" : \"PlatformPlayerId\", \"type\" : \"long\" }\n\
+            ]\n\
+        }\n";
+    static const char signUpSchema[] =
+        "{\n\
+            \"type\" : \"record\",\n\
+            \"namespace\" : \"BR\",\n\
+            \"name\" : \"SignUp\",\n\
+            \"fields\" : [\n\
+                { \"name\" : \"UserId\", \"type\" : \"long\" },\n\
+                { \"name\" : \"Platform\", \"type\" : \"int\" },\n\
+                { \"name\" : \"PlatformPlayerId\", \"type\" : \"long\" }\n\
+            ]\n\
+        }\n";
+    static const char useItemSchema[] =
+        "{\n\
+            \"type\" : \"record\",\n\
+            \"namespace\" : \"BR\",\n\
+            \"name\" : \"UseItem\",\n\
+            \"fields\" : [\n\
+                { \"name\" : \"ItemId\", \"type\" : \"long\" }\n\
+            ]\n\
+        }\n";
 
 	////////////////////////////////////////////////////////////////////////////////////////////////
 	//
@@ -59,6 +89,11 @@ namespace SF
         Result hr = m_TelemetryPtr->Initialize(address, port, m_ClientId, m_AuthTicket);
         if (!hr)
             return hr;
+
+        // Registering default shcema
+        m_TelemetryPtr->RegisterEventSchema("Login", loginSchema);
+        m_TelemetryPtr->RegisterEventSchema("SignUp", signUpSchema);
+        m_TelemetryPtr->RegisterEventSchema("UseItem", useItemSchema);
 
         Service::Telemetry = m_TelemetryPtr.get();
 

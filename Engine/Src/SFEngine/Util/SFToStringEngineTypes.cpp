@@ -17,7 +17,7 @@
 #include "Util/SFStrFormat.h"
 #include "Util/SFToStringEngineTypes.h"
 #include "Types/SFEngineTypeVariable.h"
-
+#include "Util/SFGuid.h"
 
 
 namespace SF {
@@ -30,6 +30,7 @@ namespace SF {
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(NotificationType);
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(RelayPlayerInfo);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(RouteContext);
+    IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Guid);
 
 
 
@@ -177,6 +178,15 @@ namespace SF {
 
 		return ResultCode::SUCCESS;
 	}
+
+
+    Result _ToString(ToStringContext& context, const Guid& Data)
+    {
+        char stringBuffer[128]{};
+        Data.ToString(stringBuffer);
+
+        return StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, stringBuffer);
+    }
 
 
 }

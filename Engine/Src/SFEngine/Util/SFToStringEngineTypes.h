@@ -15,6 +15,7 @@
 #include "SFAssert.h"
 #include "Variable/SFVariableBoxing.h"
 #include "Types/SFEngineTypedefs.h"
+#include "Util/SFGuid.h"
 
 
 namespace SF
@@ -28,6 +29,7 @@ namespace SF
 	Result _ToString(ToStringContext& context, const NotificationType& value);
 	Result _ToString(ToStringContext& context, const RelayPlayerInfo& value);
 	Result _ToString(ToStringContext& context, const RouteContext& Data);
+    Result _ToString(ToStringContext& context, const Guid& Data);
 
 
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(PlayerInformation);
@@ -38,6 +40,7 @@ namespace SF
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(NotificationType);
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(RelayPlayerInfo);
 	DECLARE_BOXING_TEMPLETE_BYVALUE(RouteContext);
+    DECLARE_BOXING_TEMPLETE_BYVALUE(Guid);
 
 } // namespace SF
 
