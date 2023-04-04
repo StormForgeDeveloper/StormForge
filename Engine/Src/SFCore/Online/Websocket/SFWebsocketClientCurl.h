@@ -110,6 +110,7 @@ namespace SF
         String m_ServerAddress;
         String m_ServerPath;
         int m_Port{};
+        String m_Url;
         String m_Protocol;
         bool m_UseSSL = false;
 

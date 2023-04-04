@@ -401,17 +401,16 @@ namespace SF
     {
         CURLcode result;
 
-        String url;
-        url.Format("{0}://{1}:{2}{3}", m_UseSSL ? "wss" : "ws", m_ServerAddress, m_Port, m_ServerPath);
+        m_Url.Format("{0}://{1}:{2}{3}", m_UseSSL ? "wss" : "ws", m_ServerAddress, m_Port, m_ServerPath);
         const char* strPrefix = "?";
         for (auto& parameter : m_Parameters)
         {
-            url.Append(strPrefix);
-            url.Append(parameter);
+            m_Url.Append(strPrefix);
+            m_Url.Append(parameter);
             strPrefix = "&";
         }
 
-        SFLog(Websocket, Info, "Connecting websocket server: {0}", url);
+        SFLog(Websocket, Info, "Connecting websocket server: {0}", m_Url);
 
         // clean up first
         if (m_Curl)
@@ -435,7 +434,7 @@ namespace SF
         //result = curl_easy_setopt(m_Curl, CURLOPT_PRIVATE, this);
         result = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYPEER, false);
         result = curl_easy_setopt(m_Curl, CURLOPT_SSL_VERIFYHOST, 0L);
-        result = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)url);
+        result = curl_easy_setopt(m_Curl, CURLOPT_URL, (const char*)m_Url);
 
         // https://curl.se/docs/websocket.html
         // Method 2
@@ -531,6 +530,8 @@ namespace SF
             {
                 // Closed?
                 SFLog(Websocket, Warning, "Nothing? result:{0}, error:{1}", int(result), curl_easy_strerror(result));
+                // the connection might be disconnected
+                m_ConnectionState = ConnectionState::Disconnected;
             }
             else if (result == CURLE_AGAIN)
             {
@@ -553,6 +554,7 @@ namespace SF
     void WebsocketClientCurl::OnConnected()
     {
         m_ConnectionState = ConnectionState::Connected;
+        SFLog(Websocket, Info, "Websocket connected {0}", m_Url);
         m_ConnectedThisFrame = true;
     }
 
@@ -573,6 +575,8 @@ namespace SF
         {
             // Closed?
             SFLog(Websocket, Warning, "Nothing? result:{0}, error:{1}", int(result), curl_easy_strerror(result));
+            // the connection might be disconnected
+            m_ConnectionState = ConnectionState::Disconnected;
         }
         else if (result == CURLE_AGAIN)
         {
