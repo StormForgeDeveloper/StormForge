@@ -105,6 +105,7 @@ endif(APPLE)
 
 if(CMAKE_COMPILER_IS_GNUCC)
     add_definitions(-W -Wall)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fPIC") // SF-MOD
 endif(CMAKE_COMPILER_IS_GNUCC)
 
 if (WIN32)
