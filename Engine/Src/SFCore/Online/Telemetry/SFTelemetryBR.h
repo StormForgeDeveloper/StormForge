@@ -171,7 +171,7 @@ namespace SF
 
 		String m_MachineId;
         Guid m_SessionId;
-        uint64_t m_AccountId;
+        uint64_t m_AccountId{};
 
 		Atomic<uint32_t> m_EventId;
 		Atomic<uint32_t> m_SentEventId;
