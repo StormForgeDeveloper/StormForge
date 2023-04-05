@@ -368,6 +368,7 @@ namespace SF
         newSchema->AppendFieldInt64(FieldName_AppId);
         newSchema->AppendFieldString(FieldName_MachineId);
         newSchema->AppendFieldString(FieldName_EventName);
+        newSchema->AppendFieldInt64(FieldName_AccountId);
 
         m_EventSchemas.insert(std::make_pair(eventName, newSchema));
 
@@ -411,6 +412,9 @@ namespace SF
             if (!hr)
                 return nullptr;
             hr = avroValue.SetValue(FieldName_MachineId, GetMachineId());
+            if (!hr)
+                return nullptr;
+            hr = avroValue.SetValue(FieldName_AccountId, (int64_t)GetAccountId());
             if (!hr)
                 return nullptr;
             hr = avroValue.SetValue(FieldName_EventName, eventName);

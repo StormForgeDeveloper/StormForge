@@ -77,6 +77,7 @@ namespace SF
         TelemetryService();
         virtual ~TelemetryService();
 
+        virtual void SetAccountId(uint64_t accountId) {}
 
         virtual Result RegisterEventSchema(const char* eventName, const char* eventSchema) { return ResultCode::NOT_IMPLEMENTED; }
         virtual TelemetryEvent* CreateTelemetryEvent(const char* eventName) { return nullptr; }
