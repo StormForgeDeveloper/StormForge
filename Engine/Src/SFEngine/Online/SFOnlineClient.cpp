@@ -22,6 +22,7 @@
 #include "Protocol/GameMsgClass.h"
 #include "Protocol/PlayInstanceNetPolicy.h"
 #include "Protocol/PlayInstanceMsgClass.h"
+#include "Online/Telemetry/SFTelemetryService.h"
 
 
 namespace SF
@@ -211,6 +212,8 @@ namespace SF
 			m_Owner.m_GameAddress = packet.GetGameServerPublicAddress();
 			m_Owner.m_AccountId = packet.GetAccID();
 			m_Owner.m_AuthTicket = packet.GetTicket();
+
+            Service::Telemetry->SetAccountId(m_Owner.m_AccountId);
 
 			SFLog(Net, Info, "Logged in: {0},{1}, accountId:{2}", m_Owner.m_GameAddress, m_Owner.m_GameAddress, m_Owner.m_AccountId);
 
