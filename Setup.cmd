@@ -48,14 +48,14 @@ if not exist %FBX_SDK_INSTALL_FILE_WIN% (
 
 cd %~dp0
 
-set MYSQL_ZIP=mysql-connector-c++-8.0.32-winx64.zip
-if not exist %MYSQL_ZIP% (
-	echo downloading mysql-connector
-	call %TOOL_PATH%\httpget +url:https://cdn.mysql.com//Downloads/Connector-C++/mysql-connector-c++-8.0.32-winx64.zip
-	mkdir 3rdParties\Windows
-	7z x mysql-connector-c++-8.0.32-winx64.zip -o.\3rdParties\Windows
-	rem NOTE: Register mysql dll path to your path
-)
+REM set MYSQL_ZIP=mysql-connector-c++-8.0.32-winx64.zip
+REM if not exist %MYSQL_ZIP% (
+	REM echo downloading mysql-connector
+	REM call %TOOL_PATH%\httpget +url:https://cdn.mysql.com//Downloads/Connector-C++/mysql-connector-c++-8.0.32-winx64.zip
+	REM mkdir 3rdParties\Windows
+	REM 7z x mysql-connector-c++-8.0.32-winx64.zip -o.\3rdParties\Windows
+	REM rem NOTE: Register mysql dll path to your path
+REM )
 
 
 if not exist "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt" (

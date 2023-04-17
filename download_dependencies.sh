@@ -59,12 +59,13 @@ if [ ! -d "$VCPKGDIR" ]
 		git pull .
 fi
 
+pushd vcpkg
+
 if [ ! -f "vcpkg" ]
 	then
 	./bootstrap-vcpkg.sh
 fi
 
-pushd vcpkg
 
 for dep in ${deps//,/ }
 do
