@@ -78,3 +78,9 @@ done
 
 popd
 
+pushd 3rdParties
+
+./LinuxGenNBuild.sh
+
+popd
+

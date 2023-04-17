@@ -103,6 +103,10 @@ try {
 	
 	./vcpkg.exe update
 	./vcpkg.exe upgrade
+	
+	cd ..\3rdParties
+	
+	WinGenNBuild.cmd
 
 } catch {
 	# rethrow
