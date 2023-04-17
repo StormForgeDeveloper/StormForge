@@ -64,6 +64,7 @@ if [ ! -f "vcpkg" ]
 	./bootstrap-vcpkg.sh
 fi
 
+pushd vcpkg
 
 for dep in ${deps//,/ }
 do
@@ -71,8 +72,8 @@ do
 	./vcpkg install $dep --triplet $Triplet 
 done
 
-./vcpkg.exe update
-./vcpkg.exe upgrade
+./vcpkg update
+./vcpkg upgrade
 
 popd
 
