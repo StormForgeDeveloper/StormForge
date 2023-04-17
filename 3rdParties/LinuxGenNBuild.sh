@@ -24,12 +24,12 @@ if [ ! -f $BUILD_DIR ]; then
   mkdir $BUILD_DIR
 fi
 
-if [ ! -f $BUILD_DIR/debug ]; then
-  mkdir $BUILD_DIR/debug
+if [ ! -f $BUILD_DIR/Debug ]; then
+  mkdir $BUILD_DIR/Debug
 fi
 
-if [ ! -f $BUILD_DIR/release ]; then
-  mkdir $BUILD_DIR/release
+if [ ! -f $BUILD_DIR/Release ]; then
+  mkdir $BUILD_DIR/Release
 fi
 
 pushd $BUILD_DIR
