@@ -24,8 +24,10 @@
 
 #include "iconv.h"
 
-#if SF_PLATFORM == SF_PLATFORM_IOS
+#ifndef LIBICONV_PLUG
 #define libiconv_open iconv_open
+#define libiconv_close iconv_close
+#define libiconv iconv
 #endif
 
 namespace SF {
@@ -546,7 +548,8 @@ namespace StrUtil {
 				goto Proc_End;
 			}
 
-#if SF_PLATFORM == SF_PLATFORM_LINUX | SF_PLATFORM == SF_PLATFORM_IOS
+            // new iconv uses same def
+#if 1 // SF_PLATFORM == SF_PLATFORM_LINUX | SF_PLATFORM == SF_PLATFORM_IOS
 			{
 				// On linux, source buffer can be changed.
 				StaticArray<char, 2048> srcTemp(GetSystemHeap());
@@ -557,7 +560,7 @@ namespace StrUtil {
                     goto Proc_End;
                 }
                 char* strCopied = srcTemp.data();
-				convertedSize = libiconv(context, (const char**)&strCopied, &srcSize, &dest, &destSize);
+				convertedSize = libiconv(context, &strCopied, &srcSize, &dest, &destSize);
 			}
 #else
 			convertedSize = libiconv(context, (const char**)&src, &srcSize, &dest, &destSize);

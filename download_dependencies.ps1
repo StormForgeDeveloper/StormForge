@@ -1,0 +1,113 @@
+# Copyright Kyungkun Ko
+
+
+$deps = "vcpkg-pkgconfig-get-modules",
+        "zlib",
+		"liblzma",
+		"openssl",
+		"tinyxml2",
+		"libxml2[iconv]",
+		"libbson",
+		"jsoncpp",
+		"avro-c",
+		"protobuf",
+		"pthread",
+		"pthreads",
+		"libuv",
+		"libevent",
+		"lcms",
+		"tiff",
+		"libpng",
+		"icu",
+		"freetype",
+		"libiconv",
+		"jasper",
+		"openexr",
+		"jansson",
+		"libjpeg-turbo",
+		"sndfile",
+        "libogg",
+        "libflac",
+		"opus",
+		"libwebsockets",
+		"curl",
+		"librdkafka[zlib]",
+		"gtest",
+		"vulkan"
+
+#Those are complicated and being separated shared lib is better
+$deps_shared = 
+	"libbson",
+	"protobuf",
+	"openssl",
+	"mongo-c-driver[icu]",
+	"mysql-connector-cpp",
+	"zookeeper"
+
+
+# Doesn't compile nicely on windows		
+#not supported by VCPKG
+		#"pipewire"
+	   #"yaml",
+	   #"libmng",
+
+$ErrorActionPreference = 'Stop'
+
+function vcpkg_install {
+	Param(
+		[string[]] $packages,
+
+		[string] $targetTriplet
+	)
+	
+	./vcpkg.exe install $packages --triplet $targetTriplet --clean-after-build
+
+	if (-not $?) {
+		Write-Error("Failed at installing package $package ($targetTriplet)")
+	}
+}
+
+$prevDir=pwd
+
+try {
+	
+	$vcpkgdir = "./vcpkg"
+	$triplet = "x64-windows-static"
+	$triplet_shared = "x64-windows"
+	
+	Write-Host "Checking for $vcpkgdir..., triplet:$triplet"
+	
+	Write-Host "Checking for $vcpkgdir..."
+	if (-not (Test-Path $vcpkgdir)) {
+		git clone https://github.com/Microsoft/vcpkg.git
+		
+		cd $vcpkgdir
+	}
+	else {
+		cd $vcpkgdir
+		git pull 
+	}
+
+
+	if (-not (Test-Path -LiteralPath vcpkg.exe)) {
+		Write-Host "Installing vcpkg..."
+		./bootstrap-vcpkg.bat -disableMetrics
+	}
+
+	Write-Host "Beginning package install..."
+
+	# protobuf uses x64-windows tool even though it has one for target triplet
+	./vcpkg.exe install $deps_shared --triplet $triplet_shared
+
+	./vcpkg.exe install $deps --triplet $triplet
+	
+	./vcpkg.exe update
+	./vcpkg.exe upgrade
+
+} catch {
+	# rethrow
+	throw $_
+} finally {
+	# restore previous directory
+	cd $prevDir
+}

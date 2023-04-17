@@ -22,7 +22,18 @@ fi
 
 
 sudo apt-get install -y moreutils git-lfs build-essential clang cmake rsync zip ninja-build libatomic-ops-dev gdb libssl-dev perl libssl-dev pkg-config libsasl2-dev openjdk-8-jdk dotnet6
+
+# for Vulkan
 sudo apt-get install -y vulkan-sdk
+
+# for Icu
+sudo apt install -y autoconf autoconf-archive
+# for GetText
+sudo apt install -y bison
+# for openssl through vcpkg
+sudo apt install -y linux-libc-dev
+# for freetype -> freeglut
+sudo apt install -y libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev
 
 
 if [ ! -d "$ATF_PATH" ]; then
@@ -55,43 +66,15 @@ popd
 
 
 
-pushd src/mysql/
-./setup_ubuntu.sh
-popd
-
-pushd src/mongoc/
-./download.sh
-popd
-
-pushd src/lzma/
-./download.sh
-popd
-
-pushd src/jansson/
-./download.sh
-popd
-
-pushd src/avro/
-./download.sh
-popd
-
-pushd src/llvm/
-./download.sh
-popd
-
-
 # to root
 popd
 
 
-pushd Tools/3rdParty/
-./setup.sh
-popd
+./download_dependencies.sh
 
 
 echo ==============================================================
 echo Register test host names 
-echo Zookeeper: SFTestZookeeper.com
 echo Kafka: SFTestKafka.com
 echo host file location
 echo   - Windows 10 – “C:\Windows\System32\drivers\etc\hosts”

@@ -13,6 +13,8 @@ set(SUBCOMPONENT_FILES
 	#Component/SFLibraryComponentManager.cpp
   	Component/SFUnhandledExceptionHandlerComponent.h
   	Component/SFUnhandledExceptionHandlerComponent.cpp
+	Component/SFLibraryComponent3rdParties.h
+	Component/SFLibraryComponent3rdParties.cpp
   )
 
 source_group(Component FILES
@@ -140,6 +142,7 @@ set(SUBUtil_FILES
 	Util/SFStringCrcComponent.h
 	Util/SFStringCrcComponent.cpp
 	Util/SFCryptoSHA.cpp
+	Util/SFTrace.h
 	Util/SFLog.cpp
 	Util/SFLogComponent.cpp
 	Util/SFLogOutputLogServerComponent.h
@@ -169,7 +172,6 @@ set(SUBUtil_FILES
 	Util/SFPathString.cpp
 	Util/SFString.cpp
 	Util/SFStrParserUtil.cpp
-	Util/SFStrUtil.cpp
     Util/SFStrUtil2.cpp
 	Util/SFToString.cpp
 	Util/SFToStringBase.cpp

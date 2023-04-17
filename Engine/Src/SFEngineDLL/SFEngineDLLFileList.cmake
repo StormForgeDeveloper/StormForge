@@ -24,7 +24,6 @@ set(SFENGINEDLL_LIB_FILES
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSTongScript.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSTongScriptBytecode.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSUtil.cpp
-	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSZookeeper.cpp
 	${SF_ENGINEDLL_PATH}/Win/dllmain.cpp
 	${SF_ENGINEDLL_PATH}/SFEngineDLLPCH.cpp
 	${SF_ENGINEDLL_PATH}/Java/JniConnection.cpp

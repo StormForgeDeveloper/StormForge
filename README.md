@@ -11,15 +11,13 @@ For now the development is still going on and have many missing modules, however
 
 # Prerequisites
 1. Linux sub system for WIndows. 
-	- It's tested on Ubuntu 20.04 with dotnet6.
+	- It's tested on Ubuntu 22.04 with dotnet6.
 1. Visual Studio 2022 with dotnet 6. 
-1. CMake 3.22 or later
-1. Python 3.x. Some 3rdParty Lib depends on Python and Perl
-1. Perl
+1. CMake 3.25 or later
 1. VulkanSDK
 
+We have moved onto vcpkg for 3rdparty libraries. Only few left for custom build.
 
-I am in the middle of transtion to Linux sub system for Windows. some script may need Linux sub system with Ubuntu core while some others use cygwin.
 
 For now, StormForge has,
 1. Hierarchical Memory management. Hierarchical memory management gives you better track of memory ownership so that you can easily track down memory leak and usage. See memory management article.
@@ -40,6 +38,8 @@ For now, StormForge has,
 1. Supporting Zookeeper connection for dev/rel support.
 1. UnitTest with gtest
 1. Websocket support
+1. Kafka Stream interface
+
 
 
 Check wiki for more other details for build and setup

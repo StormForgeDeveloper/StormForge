@@ -41,6 +41,7 @@
 *.xcuserstate
 .DS_Store
 
+vcpkg/
 LocalData/
 Intermediate/
 buildLinux/

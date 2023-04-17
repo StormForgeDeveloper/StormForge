@@ -2,8 +2,6 @@
 
 include_directories(
 	./
-	../../../3rdParties/src/gtest/gtest/googletest/include
-	../../../3rdParties/src/gtest/gtest/googlemock/include
 	)
 
 
@@ -11,7 +9,7 @@ set(SF_UNIT_TEST_FILES
 	UnitTest1PCH.h
 	UnitTest1PCH.cpp
 	UnitTest1.cpp
-	UnitTest_Zookeeper.cpp
+#	UnitTest_Zookeeper.cpp
 	Test/SFTestBase.h
 	Test/SFTestBase.cpp
 	Test/Algorithm/UnitTest_Algorithm.h
@@ -90,6 +88,9 @@ endif()
 
 add_executable(SFUnitTest ${SF_UNIT_TEST_FILES})
 
+if(MSVC)
+    target_link_options(SFUnitTest PRIVATE "LINKER:/NODEFAULTLIB:libcrypto64MDd,/Debug")
+endif()
 
 target_link_libraries(SFUnitTest ${ENGINE_LINK_LIBS} SFProtocol ${ENGINE_LINK_LIBS} ${PLATFORM_LIBS}  gtest)
 

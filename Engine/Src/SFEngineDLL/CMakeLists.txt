@@ -1,4 +1,4 @@
-﻿
+
 
 set(SF_ENGINEDLL_PATH .)
 
@@ -7,6 +7,9 @@ include (SFEngineDLLFileList.cmake)
 
 add_library(SFEngineDLL SHARED ${SFENGINEDLL_LIB_FILES})
 
+if(MSVC)
+    target_link_options(SFEngineDLL PRIVATE "LINKER:/NODEFAULTLIB:libcrypto64MDd,/Debug")
+endif()
 
 add_dependencies(SFEngineDLL SFCore SFEngine SFProtocol)
 

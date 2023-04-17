@@ -16,7 +16,7 @@
 
 #ifdef USE_STREAMDB
 
-#include "rdkafka/rdkafkacpp.h"
+#include "librdkafka/rdkafkacpp.h"
 
 
 

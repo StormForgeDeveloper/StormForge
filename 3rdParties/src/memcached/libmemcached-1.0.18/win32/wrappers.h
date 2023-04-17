@@ -19,6 +19,7 @@
 #include <BaseTsd.h>
 #include <iso646.h>
 #include <time.h>
+#include <stddef.h>
 
 /*
  * One of the Windows headers define interface as a macro, but that
@@ -31,6 +32,7 @@
 //#undef realloc
 typedef int pid_t;
 
+#include "pthread.h"
 #include "SFWinport.h"
 
 /*
@@ -84,3 +86,45 @@ typedef int pid_t;
 #define waitpid(a,b,c) (-1)
 #define fnmatch(a,b,c) (-1)
 #define sleep(a) Sleep(a*1000)
+
+
+inline int get_socket_errno()
+{
+    int iWinSockeError = WSAGetLastError();
+    switch (iWinSockeError)
+    {
+    case 0: return 0;
+    case WSAEADDRINUSE: return EADDRINUSE;
+    case WSAEWOULDBLOCK: return EWOULDBLOCK;
+    case WSAEINPROGRESS: return EINPROGRESS;
+    case WSAEALREADY: return EALREADY;
+    case WSAENOTSOCK: return ENOTSOCK;
+    case WSAEDESTADDRREQ: return EDESTADDRREQ;
+    case WSAEPROTOTYPE: return EPROTOTYPE;
+    case WSAENOPROTOOPT: return ENOPROTOOPT;
+    case WSAEPROTONOSUPPORT: return EPROTONOSUPPORT;
+    case WSAEOPNOTSUPP: return EOPNOTSUPP;
+    case WSAEADDRNOTAVAIL: return EADDRNOTAVAIL;
+    case WSAENETDOWN: return ENETDOWN;
+    case WSAENETUNREACH: return ENETUNREACH;
+    case WSAENETRESET: return ENETRESET;
+    case WSAECONNABORTED: return ECONNABORTED;
+    case WSAECONNRESET: return ECONNRESET;
+    case WSAENOBUFS: return ENOBUFS;
+    case WSAEISCONN: return EISCONN;
+    case WSAENOTCONN: return ENOTCONN;
+    case WSAETIMEDOUT: return ETIMEDOUT;
+    case WSAECONNREFUSED: return ECONNREFUSED;
+    case WSAELOOP: return ELOOP;
+    case WSAEHOSTUNREACH: return EHOSTUNREACH;
+        // Extended Windows Sockets error constant definitions
+    case WSASYSNOTREADY: return ENETDOWN;
+    case WSAVERNOTSUPPORTED: return ENETDOWN;
+    case WSANOTINITIALISED: return ENETDOWN;
+    case WSAEDISCON: return ENOTCONN;
+    case WSAEREFUSED: return ECONNREFUSED;
+    }
+
+    // Unmapped error. return as-is
+    return iWinSockeError;
+}

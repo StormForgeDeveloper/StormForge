@@ -1,36 +1,26 @@
 
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.25)
 
 project(StormForge LANGUAGES C CXX)
 
-include (build/StormForge.cmake)
+include (StormForge.cmake)
 
-
-
-
-if(WIN32)
-
-elseif(ANDROID_PLATFORM)
-
-elseif(IOS)
-
-elseif(UNIX)
-
-endif()
-
-
-
-
-#set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_SOURCE_DIR}/build${CMAKE_SYSTEM_NAME}/${ARTECTURE}${CMAKE_BUILD_TYPE})
-
-
-
-
+message ( "Adding SFCore" )
 add_subdirectory(Engine/Src/SFCore)
+
+message ( "Adding SFEngine" )
 add_subdirectory(Engine/Src/SFEngine)
+
+message ( "Adding Protocol" )
 add_subdirectory(Engine/Src/Protocol)
+
+message ( "Adding SFEngineDLL" )
 add_subdirectory(Engine/Src/SFEngineDLL)
+
+message ( "Adding Tools" )
 add_subdirectory(Tools/Src)
+
+message ( "Adding Test" )
 add_subdirectory(Test)
 
 #cmake doesn't support new c#. maybe later

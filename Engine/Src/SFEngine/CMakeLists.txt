@@ -140,13 +140,6 @@ set(SFENGINE_LIB_FILES
 	Types/SFEngineTypeSerialization.h
 	Types/SFEngineTypeSerialization.cpp
 	
-	Mongo/SFMongoDB.h
-	Mongo/SFMongoDB.cpp
-	Mongo/SFBson.h
-	Mongo/SFBson.cpp
-	Mongo/SFMongoDBComponent.h
-	Mongo/SFMongoDBComponent.cpp
-
 	Actor/Movement/SFActorMovement.h
 	Actor/Movement/SFActorMovement.cpp
 	Actor/Movement/SFActorMovementManager.h
@@ -268,8 +261,6 @@ set(SFENGINE_LIB_FILES
 	SFEngine.h
 	SFEnginePCH.h
 	Util/SFToStringEngineTypes.h
-	Zookeeper/SFZookeeper.cpp
-	Zookeeper/SFZookeeper.h
 	Net/SFConnection.inl
 	Net/SFConnectionManager.inl
 	Net/SFMessage.inl

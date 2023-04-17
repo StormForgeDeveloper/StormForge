@@ -14,25 +14,21 @@ cmake --build . --parallel --target install  -- /p:Configuration=%CMAKE_BUILD_TY
 
 if ERRORLEVEL 1 goto exit
 
-REM robocopy ..\build\lib ..\%PROCESS_ARCHITECTUR%\lib\%CMAKE_BUILD_TYPE%  /purge
-REM robocopy ..\build\bin ..\%PROCESS_ARCHITECTUR%\bin\%CMAKE_BUILD_TYPE%  /purge
 
 
-
-set CMAKE_BUILD_TYPE=RelWithDebInfo
+set CMAKE_BUILD_TYPE=Release
 cd ..\%CMAKE_BUILD_TYPE%
 cmake --build . --parallel --target install -- /p:Configuration=%CMAKE_BUILD_TYPE% 
 
 if ERRORLEVEL 1 goto exit
 
-REM robocopy ..\build\include ..\%PROCESS_ARCHITECTUR%\include  /s /purge
-REM robocopy ..\build\lib ..\%PROCESS_ARCHITECTUR%\lib\%CMAKE_BUILD_TYPE%  /purge
-REM robocopy ..\build\bin ..\%PROCESS_ARCHITECTUR%\bin\%CMAKE_BUILD_TYPE%  /purge
 
-cd %~dp0
+
 
 :exit
 
+
+cd %~dp0
 
 if not "%1" == "nopause" pause
 

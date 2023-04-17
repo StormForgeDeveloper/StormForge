@@ -294,16 +294,34 @@ set(SRC_FILES
 )
 
 
-add_definitions(-DSTATIC_LIBMEMCACHED=1)
+#add_definitions(-DSTATIC_LIBMEMCACHED=1)
 add_definitions(-DBUILDING_LIBMEMCACHED)
 add_definitions(-DYY_NO_UNISTD_H=1)
 # set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wregister -Wdeprecated-register")
 # set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wregister -Wdeprecated-register")
 
+if (MSVC)
+	#find_package(PThreads4W  CONFIG REQUIRED)
+	list(APPEND SERVER_LINK_LIBS pthreadVC3)
+endif()
 
 
 
-add_library(memcached ${SRC_FILES})
+
+add_library(memcached SHARED ${SRC_FILES} )
+
+
+if(MSVC)
+    target_link_options(memcached PRIVATE "LINKER:/Debug")
+endif()
+
+if(WIN32)
+	set(PLATFORM_LIBS Ws2_32 Mswsock Shlwapi Userenv Bcrypt Crypt32 Dnsapi SFWinport pthreadVC3)
+else()
+	set(PLATFORM_LIBS rt m atomic resolv)
+endif()
+message ("PLATFORM_LIBS=${PLATFORM_LIBS}")
+target_link_libraries(memcached ${PLATFORM_LIBS})
 
 
 

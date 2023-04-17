@@ -39,6 +39,7 @@
 #include "Net/SFConnectionManager.h"
 #include "Component/SFLibraryComponentInitializer.h"
 #include "Online/Websocket/SFWebsocketComponent.h"
+#include "Component/SFLibraryComponent3rdParties.h"
 
 
 namespace SF {
@@ -69,6 +70,8 @@ namespace SF {
 
 		LibraryComponentInitializer::CallInitializers(ComponentInitializeMode::PreInit);
 
+        if (AddComponent<LibraryComponent3rdParties>() == nullptr)
+            return ResultCode::FAIL;
 
 		if (AddComponent<LibraryComponentEngineResultCode>() == nullptr)
 			return ResultCode::FAIL;

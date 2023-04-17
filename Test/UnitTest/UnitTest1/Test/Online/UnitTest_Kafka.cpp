@@ -38,8 +38,10 @@ using ::testing::UnitTest;
 using namespace ::SF;
 
 
+
 TEST_F(KafkaTest, Producer)
 {
+    auto streamBrokerAddress = m_ConfigJson.get("StreamBroker0", "");
     const char* topic = "MyTestTopic1";
     uint8_t testData[] = {1,2,3,4,5,6,7,8,9};
     uint8_t testData1[] = { 'T', 'e', 's', 't', 'D', 'a', 't', 'a', 'D', 'a', 't', 'a', '\0' };
@@ -47,7 +49,7 @@ TEST_F(KafkaTest, Producer)
 
     StreamDBProducer streamDB;
 
-    GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress[0], topic), ResultCode::SUCCESS);
+    GTEST_ASSERT_EQ(streamDB.Initialize(streamBrokerAddress.asCString(), topic), ResultCode::SUCCESS);
 
     GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<const uint8_t>(testData)), ResultCode::SUCCESS);
 	GTEST_ASSERT_EQ(streamDB.SendRecord(ArrayView<const uint8_t>(testData1)), ResultCode::SUCCESS);
@@ -61,10 +63,11 @@ TEST_F(KafkaTest, Producer)
 TEST_F(KafkaTest, Consumer)
 {
 	const char* topic = "MyTestTopic1";
+    auto streamBrokerAddress = m_ConfigJson.get("StreamBroker0", "");
 
     StreamDBConsumer streamDB;
 
-	GTEST_ASSERT_EQ(streamDB.Initialize(m_StreamServerAddress[0], topic), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB.Initialize(streamBrokerAddress.asCString(), topic), ResultCode::SUCCESS);
 
     GTEST_ASSERT_EQ(streamDB.RequestData(), ResultCode::SUCCESS);
 
@@ -102,14 +105,15 @@ TEST_F(KafkaTest, Consumer)
 TEST_F(KafkaTest, GroupConsumer)
 {
 	const char* group = "MyTestGroup";
-	const char* topic = "MyTestGroupTopic1";
-	const int TestDataCount = 1000;
+	const char* topic = "MyTestTopic1";
+    auto streamBrokerAddress = m_ConfigJson.get("StreamBroker0", "");
+    const int TestDataCount = 1000;
 
 	for (int iThread = 0; iThread < 3; iThread++)
 	{
 		SharedPointerT<StreamDBGroupConsumer> streamDB = new(GetHeap()) StreamDBGroupConsumer;
 
-		EXPECT_EQ(streamDB->Initialize(m_StreamServerAddress[0], group, topic), ResultCode::SUCCESS);
+		EXPECT_EQ(streamDB->Initialize(streamBrokerAddress.asCString(), group, topic), ResultCode::SUCCESS);
 		EXPECT_EQ(streamDB->Subscribe(), ResultCode::SUCCESS);
 
 		auto* pThread = new(GetHeap()) FunctorTickThread([&, iThread, streamDB](Thread* pThread) -> bool
@@ -128,7 +132,9 @@ TEST_F(KafkaTest, GroupConsumer)
 				}
 				else if (!hr)
 				{
-					EXPECT_EQ(hr, ResultCode::SUCCESS);
+                    SFLog(System, Error, "Thread {0}, received failed: {1}", iThread, hr);
+                    Service::LogModule->Flush();
+                    EXPECT_EQ(hr, ResultCode::SUCCESS);
 				}
 
 				if (messageData)
@@ -153,7 +159,7 @@ TEST_F(KafkaTest, GroupConsumer)
 
 	StreamDBProducer streamDBProducer;
 
-	EXPECT_EQ(streamDBProducer.Initialize(m_StreamServerAddress[0], topic), ResultCode::SUCCESS);
+	EXPECT_EQ(streamDBProducer.Initialize(streamBrokerAddress.asCString(), topic), ResultCode::SUCCESS);
 
 	ThisThread::SleepFor(DurationMS(1000));
 
@@ -173,8 +179,9 @@ TEST_F(KafkaTest, GroupConsumer)
 TEST_F(KafkaTest, DirectoryBroker)
 {
 	auto streamDB = NewObject<StreamDBDirectoryBroker>(GetHeap());
+    auto streamBrokerAddress = m_ConfigJson.get("StreamBroker0", "");
 
-	GTEST_ASSERT_EQ(streamDB->Initialize(m_StreamServerAddress[0]), ResultCode::SUCCESS);
+	GTEST_ASSERT_EQ(streamDB->Initialize(streamBrokerAddress.asCString()), ResultCode::SUCCESS);
 
 	GTEST_ASSERT_EQ(streamDB->RequestStreamList(), ResultCode::SUCCESS);
 
@@ -211,7 +218,7 @@ TEST_F(KafkaTest, DirectoryBroker)
 
 TEST_F(KafkaTest, DirectoryClient)
 {
-	SharedPointerT<StreamDBDirectoryClient> streamDB = NewObject<StreamDBDirectoryClient>(GetHeap());
+	//SharedPointerT<StreamDBDirectoryClient> streamDB = NewObject<StreamDBDirectoryClient>(GetHeap());
     // TODO:
 	//GTEST_ASSERT_EQ(streamDB->Initialize(m_StreamServerAddress[0]), ResultCode::SUCCESS);
 

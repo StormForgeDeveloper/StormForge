@@ -46,25 +46,16 @@ if not exist %FBX_SDK_INSTALL_FILE_WIN% (
 )
 
 
-set PERL_INSTALL=strawberry-perl-5.32.0.1-64bit.msi
-if not exist %PERL_INSTALL% (
-	echo downloading Perl
-	call %TOOL_PATH%\httpget +url:http://strawberryperl.com/download/5.32.0.1/%PERL_INSTALL%
-	%PERL_INSTALL%
-	rem Reboot or restarting command line will be required for path refresh
-)
+cd %~dp0
 
-
-set MYSQL_INSTALL=mysql-connector-c++-8.0.27-winx64.msi
-if not exist %MYSQL_INSTALL% (
-	rem echo downloading mysql-connector
-	rem call %TOOL_PATH%\httpget +url:https://dev.mysql.com/get/Downloads/Connector-C++/%MYSQL_INSTALL%
-	rem %MYSQL_INSTALL%
+set MYSQL_ZIP=mysql-connector-c++-8.0.32-winx64.zip
+if not exist %MYSQL_ZIP% (
+	echo downloading mysql-connector
+	call %TOOL_PATH%\httpget +url:https://cdn.mysql.com//Downloads/Connector-C++/mysql-connector-c++-8.0.32-winx64.zip
+	mkdir 3rdParties\Windows
+	7z x mysql-connector-c++-8.0.32-winx64.zip -o.\3rdParties\Windows
 	rem NOTE: Register mysql dll path to your path
 )
-
-
-cd %~dp0
 
 
 if not exist "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt" (
@@ -73,21 +64,12 @@ if not exist "Test/UnitTest/UnitTest1/Test/LogServer/LocalData/serveraddress.txt
 )
 
 
-cmd /c "cd 3rdParties\src\mysql & download.cmd"
-cmd /c "cd 3rdParties\src\mongoc & download.cmd"
-cmd /c "cd 3rdParties\src\lzma & download.cmd"
-cmd /c "cd 3rdParties\src\jansson & download.cmd"
-cmd /c "cd 3rdParties\src\avro & download.cmd"
-cmd /c "cd 3rdParties\src\llvm & download.cmd"
-
-
-cmd /c "cd Tools/3rdParty & setup.cmd"
+powershell .\download_dependencies.ps1
 
 
 @echo ==============================================================
 @echo Register FBX_SDK_PATH to environment path
 @echo Register test host names 
-@echo Zookeeper: SFTestZookeeper.com
 @echo Kafka: SFTestKafka.com
 @echo host file location
 @echo   - Windows 10 – “C:\Windows\System32\drivers\etc\hosts”
