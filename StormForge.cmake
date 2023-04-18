@@ -72,6 +72,7 @@ elseif(IOS)
 
 	add_definitions(-D__IOS__=1)
 	add_definitions(-DKQUEUE)
+	set(CMAKE_MACOSX_RPATH 1)
 
 	set(ARTECTURE ${CMAKE_OSX_ARCHITECTURES})
 	set(VCPKG_TARGET_TRIPLET ${ARTECTURE}-ios)
@@ -95,6 +96,7 @@ set(VCPKG_INSTALL ${VCPKG_DIR}/installed/${VCPKG_TARGET_TRIPLET})
 set(CMAKE_PREFIX_PATH  "${VCPKG_INSTALL}/")
 set(Protobuf_PROTOC_EXECUTABLE "${VCPKG_INSTALL}/tools/protobuf/protoc")
 
+set(CMAKE_INSTALL_RPATH ${ORIGIN})
 
 include_directories(AFTER ${VCPKG_INSTALL}/include)
 
