@@ -55,7 +55,8 @@ namespace SF {
 		Magic = MEM_MAGIC;
 	#if ENABLE_MEMORY_TRACE
 		memset(&ListNode, 0, sizeof(ListNode));
-		StackTrace.CaptureCallStack(2);
+        ListNode.Data = this;
+        StackTrace.CaptureCallStack(2);
 		LatestThreadID = ThisThread::GetThreadID();
 	#endif
 	}

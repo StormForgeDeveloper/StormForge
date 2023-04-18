@@ -64,11 +64,10 @@ namespace SF {
 		uint32_t Magic = MEM_MAGIC_FREE;
 
 #if ENABLE_MEMORY_TRACE
-		DoubleLinkedListNode ListNode;
+        DoubleLinkedListNodeDataT<MemBlockFooter*> ListNode;
 		CallStackTraceT<10> StackTrace; // Keep it tight.
 		ThreadID LatestThreadID;
 #endif
-
 		void InitFooter();
 		void Deinit();
 	};

@@ -52,13 +52,13 @@ namespace SF
 
 				iterator& operator++()
 				{
-					if (m_pCur != nullptr) m_pCur = m_pCur->pNext;
+					if (m_pCur != nullptr) m_pCur = static_cast<Node*>(m_pCur->pNext);
 					return *this;
 				}
 
 				const iterator& operator++() const
 				{
-					if (m_pCur != nullptr) m_pCur = m_pCur->pNext;
+					if (m_pCur != nullptr) m_pCur = static_cast<Node*>(m_pCur->pNext);
 					return *this;
 				}
 
@@ -126,9 +126,9 @@ namespace SF
 					return nullptr;
 
 				auto pRemoved = m_Header.pNext;
-				Remove(m_Header.pNext);
+				Remove(static_cast<Node*>(m_Header.pNext));
 
-				return pRemoved;
+				return static_cast<Node*>(pRemoved);
 			}
 
 			// pop one item from back
@@ -138,9 +138,9 @@ namespace SF
 					return nullptr;
 
 				auto pRemoved = m_Header.pPrev;
-				Remove(m_Header.pPrev);
+				Remove(static_cast<Node*>(m_Header.pPrev));
 
-				return pRemoved;
+				return static_cast<Node*>(pRemoved);
 			}
 
 			// insert after specific node, if null for pPrevNode, added at front
@@ -249,7 +249,7 @@ namespace SF
 
 			iterator begin() const
 			{
-				return iterator(&m_Header, m_Header.pNext);
+				return iterator(&m_Header, static_cast<Node*>(m_Header.pNext));
 			}
 
 			iterator end() const

@@ -41,7 +41,6 @@ deps='vcpkg-pkgconfig-get-modules,
 		opus,
         protobuf,
 		libwebsockets,
-		curl,
 		librdkafka[zlib],
 		mongo-c-driver[icu],
 		mysql-connector-cpp,
@@ -70,8 +69,10 @@ fi
 for dep in ${deps//,/ }
 do
 	# --clean-after-build
-	./vcpkg install $dep --triplet $Triplet 
+	./vcpkg install $dep --triplet $Triplet --recurse
 done
+
+./vcpkg install curl[openssl,websockets] --recurse
 
 ./vcpkg update
 ./vcpkg upgrade

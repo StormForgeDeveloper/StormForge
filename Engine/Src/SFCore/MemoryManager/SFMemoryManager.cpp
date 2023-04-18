@@ -23,6 +23,12 @@ namespace SF {
 
 
 
+    void atexit_handler()
+    {
+        // exit has request, give all go
+        IHeap::SetMemoryLeakDetection(false);
+    }
+
 	///////////////////////////////////////////////////////////////
 	//
 	//	Memory manager interfaces
@@ -108,6 +114,9 @@ namespace SF {
 			return stm_Instance;
 
 		MutexScopeLock lock(g_StdHeapLock);
+
+        std::atexit(atexit_handler);
+
 		if (stm_Instance == nullptr) // Need to check again after lock
 		{
 			// Using malloc to avoid recursive memory allocation

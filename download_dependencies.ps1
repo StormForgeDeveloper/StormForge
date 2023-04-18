@@ -30,8 +30,9 @@ $deps = "vcpkg-pkgconfig-get-modules",
         "libflac",
 		"opus",
 		"libwebsockets",
-		"curl",
+		"curl[openssl,websockets]",
 		"librdkafka[zlib]",
+		"mysql-connector-cpp",
 		"gtest",
 		"vulkan"
 
@@ -41,7 +42,6 @@ $deps_shared =
 	"protobuf",
 	"openssl",
 	"mongo-c-driver[icu]",
-	"mysql-connector-cpp",
 	"zookeeper"
 
 
@@ -60,7 +60,7 @@ function vcpkg_install {
 		[string] $targetTriplet
 	)
 	
-	./vcpkg.exe install $packages --triplet $targetTriplet --clean-after-build
+	./vcpkg.exe install $packages --triplet $targetTriplet  --recurse
 
 	if (-not $?) {
 		Write-Error("Failed at installing package $package ($targetTriplet)")

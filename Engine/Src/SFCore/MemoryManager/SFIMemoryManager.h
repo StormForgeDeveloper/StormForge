@@ -67,7 +67,7 @@ namespace SF {
 
 
 		// Allocated memory list
-		DoubleLinkedListBase<DoubleLinkedListNode, SF::ThreadSyncTraitReadWrite> m_AllocatedList;
+		DoubleLinkedListBase<DoubleLinkedListNodeDataT<MemBlockFooter*>, SF::ThreadSyncTraitReadWrite> m_AllocatedList;
 
 
 	protected:

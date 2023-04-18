@@ -64,17 +64,11 @@ namespace SF {
 
 
 	template<class DataType>
-	struct DoubleLinkedListNodeDataT
+	struct DoubleLinkedListNodeDataT : public DoubleLinkedListNode
 	{
-		DoubleLinkedListNodeDataT<DataType>* pPrev = nullptr;
-		DoubleLinkedListNodeDataT<DataType>* pNext = nullptr;
-		DataType Data;
+        DataType Data{};
 
-		DoubleLinkedListNodeDataT()
-		{
-			Data = DataType{};
-		}
-
+        DoubleLinkedListNodeDataT() = default;
 		DoubleLinkedListNodeDataT(const DataType& pObj)
 			: Data(pObj)
 		{
@@ -83,38 +77,6 @@ namespace SF {
 		DoubleLinkedListNodeDataT(DataType&& pObj)
 			: Data(std::forward<DataType>(pObj))
 		{
-		}
-
-		virtual ~DoubleLinkedListNodeDataT() = default;
-
-
-		SF_FORCEINLINE bool NotInAnyList() const
-		{
-			return pPrev == nullptr && pNext == nullptr;
-		}
-
-		SF_FORCEINLINE bool IsInAnyList() const
-		{
-			return pPrev != nullptr || pNext != nullptr;
-		}
-
-		SF_FORCEINLINE void RemoveFromList()
-		{
-			if (NotInAnyList())
-				return;
-
-			if (pPrev != nullptr)
-			{
-				pPrev->pNext = pNext;
-			}
-
-			if (pNext != nullptr)
-			{
-				pNext->pPrev = pPrev;
-			}
-
-			pPrev = nullptr;
-			pNext = nullptr;
 		}
 	};
 

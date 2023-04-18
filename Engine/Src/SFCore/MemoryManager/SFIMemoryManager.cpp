@@ -78,6 +78,8 @@ namespace SF {
 	//	Static
 	//
 
+    //
+
 	bool IHeap::stm_EnableLeakDetection = true;
 
 	//////////////////////////////////////////////////////////////////////////////////////
@@ -115,7 +117,7 @@ namespace SF {
 	// report if there is any memory hasn't released
 	void IHeap::ReportLeak()
 	{
-		if (GetIgnoreMemoryLeak())
+		if (GetIgnoreMemoryLeak() || !IHeap::GetMemoryLeakDetection())
 			return;
 
 		// Look into m_AllocatedList for detail
@@ -124,11 +126,14 @@ namespace SF {
 			SFLog(System, Warning, "MemoryLeak detected, {0}", m_AllocatedList.size());
 #if ENABLE_MEMORY_TRACE
 			int printcount = 0;
-			m_AllocatedList.for_each([&printcount](DoubleLinkedListNode* pNode)
+			m_AllocatedList.for_each([&printcount](DoubleLinkedListNodeDataT<MemBlockFooter*>* pNode)
 			{
-				MemBlockFooter* pBlockFooter = ContainerPtrFromMember(MemBlockFooter, ListNode, pNode);
-				pBlockFooter->StackTrace.PrintStackTrace(CurrentProcessID);
-				printcount++;
+				MemBlockFooter* pBlockFooter = pNode->Data;
+                if (pBlockFooter != nullptr)
+                {
+                    pBlockFooter->StackTrace.PrintStackTrace(CurrentProcessID);
+                    printcount++;
+                }
 				return printcount < 10; // print max 10
 			});
 #endif
@@ -228,7 +233,8 @@ namespace SF {
 	void IHeap::AddAllocatedList(MemBlockHdr* pMemBlock)
 	{
 #if ENABLE_MEMORY_TRACE
-		auto pFooter = pMemBlock->GetFooter();
+		auto* pFooter = pMemBlock->GetFooter();
+        pFooter->InitFooter();
 		pFooter->StackTrace.CaptureCallStack(4);
 		m_AllocatedList.Add(&pFooter->ListNode);
 #else
@@ -239,7 +245,7 @@ namespace SF {
 	void IHeap::RemoveAllocatedList(MemBlockHdr* pMemBlock)
 	{
 #if ENABLE_MEMORY_TRACE
-		auto pFooter = pMemBlock->GetFooter();
+		auto* pFooter = pMemBlock->GetFooter();
 		assert(pFooter->Magic == MemBlockFooter::MEM_MAGIC);
 		pFooter->StackTrace.CaptureCallStack(4);
 		m_AllocatedList.Remove(&pFooter->ListNode);
