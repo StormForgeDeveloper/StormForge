@@ -106,7 +106,7 @@ try {
 	
 	cd ..\3rdParties
 	
-	WinGenNBuild.cmd
+	.\WinGenNBuild.cmd
 
 } catch {
 	# rethrow
