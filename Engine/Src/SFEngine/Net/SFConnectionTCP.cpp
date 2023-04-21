@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -111,9 +111,6 @@ namespace Net {
 			hr = ResultCode::IO_CONNECTION_CLOSED;
 			break;
 		};
-
-
-	//Proc_End:
 
 		return hr;
 	}

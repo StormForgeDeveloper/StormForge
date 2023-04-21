@@ -25,6 +25,7 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"openexr",
 		"jansson",
 		"libjpeg-turbo",
+		"openal-soft",
 		"sndfile",
         "libogg",
         "libflac",
@@ -37,7 +38,7 @@ $deps = "vcpkg-pkgconfig-get-modules",
 		"vulkan"
 
 #Those are complicated and being separated shared lib is better
-$deps_shared = 
+$deps_shared =
 	"libbson",
 	"protobuf",
 	"openssl",

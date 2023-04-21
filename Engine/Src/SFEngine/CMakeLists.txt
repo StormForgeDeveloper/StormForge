@@ -275,6 +275,20 @@ set(SFENGINE_LIB_FILES
 	Online/SFOnlineClient.cpp
     Online/SFOnlineAPIClient.h
     Online/SFOnlineAPIClient.cpp
+
+    Audio/SFAudioService.h
+    Audio/SFAudioService.cpp
+    Audio/SFAudioBuffer.h
+    Audio/SFAudioBuffer.cpp
+    Audio/SFAudioEngineComponentOpenAL.h
+    Audio/SFAudioEngineComponentOpenAL.cpp
+    Audio/SFAudioDeviceOpenAL.h
+    Audio/SFAudioDeviceOpenAL.cpp
+    Audio/SFAudioRecorderOpenAL.h
+    Audio/SFAudioRecorderOpenAL.cpp
+    Audio/SFAudioPlayerOpenAL.h
+    Audio/SFAudioPlayerOpenAL.cpp
+
 	StormForge.natvis
   )
 

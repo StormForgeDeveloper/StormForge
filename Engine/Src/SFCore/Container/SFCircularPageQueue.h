@@ -81,7 +81,8 @@ namespace SF {
 	{
 	private:
 
-		enum { MaximumRetryInARow = 10 };
+		static constexpr int MaximumRetryInARow = 10;
+
 
 		struct Page;
 

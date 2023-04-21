@@ -215,6 +215,9 @@ list(APPEND THIRDPARTY_LIBS Opus::opus)
 find_package(SndFile CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS SndFile::sndfile)
 
+find_package(OpenAL CONFIG REQUIRED)
+list(APPEND THIRDPARTY_LIBS OpenAL::OpenAL)
+	
 find_package(Protobuf CONFIG REQUIRED)
 list(APPEND THIRDPARTY_LIBS protobuf::libprotoc protobuf::libprotobuf protobuf::libprotobuf-lite)
 
