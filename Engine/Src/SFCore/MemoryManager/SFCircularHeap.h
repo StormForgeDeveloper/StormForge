@@ -36,6 +36,8 @@ namespace SF {
 	{
 	public:
 
+        using super = IHeap;
+
 		enum class ChunkTypes : uint32_t
 		{
 			Free = 0xc7c7c7c7,
@@ -59,8 +61,10 @@ namespace SF {
 		// Static buffer
 		size_t m_AllocationBufferSize = 0;
 
+        bool m_bBufferOwner = false;
 		uint8_t				*m_AllocationBuffer = nullptr;
 
+        // Header/Footer size
 		intptr_t m_RedundencySize = 0;
 
 	protected:
@@ -71,9 +75,10 @@ namespace SF {
 
 	public:
 
-		CircularHeap(IHeap& overflowHeap, size_t allocationBufferSize, uint8_t* allocationBuffer);
+		CircularHeap(IHeap& overflowHeap, size_t allocationBufferSize, uint8_t* allocationBuffer = nullptr);
 		~CircularHeap();
 
+        virtual void Dispose() override;
 
 		bool GetIsInStaticBuffer(void* pPtr)
 		{

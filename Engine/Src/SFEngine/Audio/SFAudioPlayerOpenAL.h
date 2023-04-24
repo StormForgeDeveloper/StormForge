@@ -22,9 +22,15 @@ namespace SF
     // 
     //	Audio player
     // 
-    class AudioPlayerOpenAL : public AudioDevice
+    class AudioPlayerOpenAL : public AudioPlayer
     {
     public:
+        AudioPlayerOpenAL();
+        virtual ~AudioPlayerOpenAL();
+
+        virtual Result Play() override;
+        virtual Result Stop() override;
+        virtual Result Pause() override;
 
     };
 

@@ -57,6 +57,6 @@
 #include "ResultCode/SFResultCodeLibrary.h"
 #include "ResultCode/SFResultCodeSystem.h"
 #include "Util/SFLog.h"
-
+#include "Util/SFTrace.h"
 
 // TODO: reference additional headers your program requires here

@@ -12,18 +12,25 @@ include_directories(AFTER
 endif()
 
 set(SUBAudio_FILES
-	Audio/SFAudioBuffer.h
+    Audio/SFAudioTypes.h
+    Audio/SFAudio.h
+	Audio/SFAudio.cpp
+    Audio/SFAudioBuffer.h
 	Audio/SFAudioBuffer.cpp
-    Audio/SFAudioDeviceOpenAL.h
-    Audio/SFAudioDeviceOpenAL.cpp
-    Audio/SFAudioEngineComponentOpenAL.h
-    Audio/SFAudioEngineComponentOpenAL.cpp
-    Audio/SFAudioPlayerOpenAL.h
-    Audio/SFAudioPlayerOpenAL.cpp
+    Audio/SFAudioSource.h
+    Audio/SFAudioSource.cpp
+    Audio/SFAudioSourceOpenAL.h
+    Audio/SFAudioSourceOpenAL.cpp
     Audio/SFAudioRecorderOpenAL.h
     Audio/SFAudioRecorderOpenAL.cpp
     Audio/SFAudioService.h
     Audio/SFAudioService.cpp
+    Audio/SFAudioOpenAL.h
+	Audio/SFAudioOpenAL.cpp
+    Audio/SFAudioDeviceOpenAL.h
+    Audio/SFAudioDeviceOpenAL.cpp
+    Audio/SFAudioEngineComponentOpenAL.h
+    Audio/SFAudioEngineComponentOpenAL.cpp
   )
 
 source_group(Audio FILES

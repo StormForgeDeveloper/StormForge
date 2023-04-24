@@ -1,0 +1,26 @@
+////////////////////////////////////////////////////////////////////////////////
+// 
+// CopyRight (c) Kyungkun Ko
+// 
+// Author : KyungKun Ko
+//
+// Description : Audio types
+//	
+//
+////////////////////////////////////////////////////////////////////////////////
+
+#pragma once
+
+#include "SFTypedefs.h"
+
+
+namespace SF
+{
+    enum class EAudioFormat : uint8_t
+    {
+        Int8,
+        Int16,
+        Float
+    };
+
+}

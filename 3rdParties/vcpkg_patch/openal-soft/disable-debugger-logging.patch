@@ -1,0 +1,12 @@
+--- a/core/logging.cpp	2023-04-22 23:26:54.148421600 -0700
++++ b/core/logging.cpp	2023-04-22 23:22:52.652053400 -0700
+@@ -58,6 +58,9 @@
+     va_end(args2);
+     va_end(args);
+ 
++    if (gLogLevel < level)
++        return;
++
+     if(gLogLevel >= level)
+     {
+         fputs(str, logfile);

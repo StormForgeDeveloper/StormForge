@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -40,12 +40,28 @@ namespace SF {
 	{
 		// Because of the chunk header uses 32bit integer, the limit will be maximum of int32. Actually it's uint32_t, but it's not a big deal
 		assert(m_AllocationBufferSize < INT_MAX);// , "CircularHeap: too big buffer size");
+
+        if (m_AllocationBuffer == nullptr)
+        {
+            m_bBufferOwner = true;
+            m_AllocationBuffer = (uint8_t*)overflowHeap.Alloc(m_AllocationBufferSize);
+        }
 	}
 
 	CircularHeap::~CircularHeap()
 	{
 	}
 
+    void CircularHeap::Dispose()
+    {
+        if (m_bBufferOwner && m_AllocationBuffer)
+        {
+            GetParent()->Free(m_AllocationBuffer);
+            m_AllocationBuffer = nullptr;
+        }
+
+        super::Dispose();
+    }
 
 	// Allocate 
 	MemBlockHdr* CircularHeap::AllocInternal(size_t size, size_t align)

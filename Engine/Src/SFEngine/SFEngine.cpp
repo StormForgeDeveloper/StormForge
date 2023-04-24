@@ -40,7 +40,7 @@
 #include "Component/SFLibraryComponentInitializer.h"
 #include "Online/Websocket/SFWebsocketComponent.h"
 #include "Component/SFLibraryComponent3rdParties.h"
-
+#include "Audio/SFAudioEngineComponentOpenAL.h"
 
 namespace SF {
 
@@ -127,6 +127,11 @@ namespace SF {
 			if (AddComponent<SF::LogOutputLogServerComponent>(m_InitParameter.LogOutputLogServer, m_InitParameter.LogServerAddress) == nullptr)
 				return ResultCode::FAIL;
 		}
+
+        if (m_InitParameter.EnableAudio)
+        {
+            AddComponent<AudioEngineComponentOpenAL>();
+        }
 
 		if (m_InitParameter.NetworkThreadCount > 0)
 		{

@@ -166,7 +166,9 @@ namespace SF {
 	{
 	public:
 
+        // Tick function type. return true to keep ticking
 		using TickFunc = std::function<bool(Thread* pThread)>;
+        // Other event function type
         using EventFunc = std::function<void(Thread* pThread)>;
 
 	private:

@@ -56,13 +56,13 @@ namespace SF {
 
 			Iterator& operator++()
 			{
-				if (m_pCur != nullptr) m_pCur = m_pCur->pNext;
+				if (m_pCur != nullptr) m_pCur = static_cast<Node*>(m_pCur->pNext);
 				return *this;
 			}
 
 			const Iterator& operator++() const
 			{
-				if (m_pCur != nullptr) m_pCur = m_pCur->pNext;
+				if (m_pCur != nullptr) m_pCur = static_cast<Node*>(m_pCur->pNext);
 				return *this;
 			}
 
@@ -157,12 +157,12 @@ namespace SF {
 			return super::Remove(pNode);
 		}
 
-		Iterator Begin()
+		Iterator begin()
 		{
 			return Iterator(this->m_Header);
 		}
 
-		Iterator End()
+		Iterator end()
 		{
 			return Iterator();
 		}
@@ -172,13 +172,18 @@ namespace SF {
 			return super::size();
 		}
 
-		Result Erase(const Iterator& itCur)
-		{
-			if (!itCur.IsValid())
-				return ResultCode::FAIL;
+        Iterator erase(const Iterator& itCur)
+        {
+            if (!itCur.IsValid())
+                return end();
 
-			return Remove(itCur.m_pCur);
-		}
+            Iterator itNew(itCur);
+            ++itNew;
+
+            super::Remove(const_cast<Node*>(itCur.GetNode()));
+
+            return itNew;
+        }
 
 		bool Empty()
 		{

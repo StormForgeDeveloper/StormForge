@@ -74,6 +74,8 @@ set(SF_UNIT_TEST_FILES
 	Test/Variable/UnitTest_Variable_Boxing.cpp
 	Test/Movement/UnitTest_Movement.h
 	Test/Movement/UnitTest_Movement.cpp
+	Test/Audio/UnitTest_Audio.h
+	Test/Audio/UnitTest_Audio.cpp
   )
 
 

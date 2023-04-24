@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2018 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -49,6 +49,9 @@ namespace SF {
 
 		// Enables memory leak detection. 
 		bool EnableMemoryLeakDetection = false;
+
+        // Enable audio engine
+        bool EnableAudio = true;
 
 		// Decide whether engine will create update thread for itself.
 		// If you set this false, you should call Engine::TickUpdate by yourself

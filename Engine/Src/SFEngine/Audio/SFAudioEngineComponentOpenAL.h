@@ -13,8 +13,10 @@
 
 #include "SFTypedefs.h"
 #include "Component/SFLibraryComponent.h"
-//#include "Delegate/SFEventDelegate.h"
 #include "Audio/SFAudioService.h"
+#include "Audio/SFAudioDeviceOpenAL.h"
+#include "Container/SFCircularPageQueue.h"
+#include "Container/SFDoubleLinkedList.h"
 
 
 namespace SF
@@ -45,9 +47,45 @@ namespace SF
         // Terminate component
         virtual void DeinitializeComponent() override;
 
+
+        // Implementation
+        virtual Result GetDeviceList(bool bPlaybackDevice, Array<String>& outDevices) override;
+        virtual String GetDefaultDeviceName(bool bPlaybackDevice) override;
+
+        virtual Result SetPlaybackDevice(const char* deviceName) override;
+
+        // Create audio buffer
+        virtual AudioBufferPtr CreateBuffer(uint numChannels, EAudioFormat format, uint samplesPerSec, size_t bufferSize) override;
+
+        // Create audio play source
+        virtual AudioSourcePtr CreateSource(uint numChannels, EAudioFormat format, uint samplesPerSec) override;
+        virtual AudioSourcePtr CreateSource(const AudioBufferPtr& buffer) override;
+
+        // Create audio recorder
+        virtual AudioRecorderPtr CreateRecorder(const char* deviceName) override;
+
+        // Get device with the name
+        virtual const AudioPlaybackDevicePtr GetPlaybackDevice() override { return m_PlaybackDevice.StaticCast<AudioPlaybackDevice>(); }
+
+
+        virtual void RunOnAudioThread(std::function<void()>&& task) override;
+        virtual void RunOnAudioThread(const std::function<void()>& task) override;
+
+
     private:
 
-        UniquePtr<AudioDeviceOpenAL> m_Device;
+        void TickUpdate();
+
+    private:
+
+        // Playback device
+        AudioPlaybackDeviceOpenALPtr m_PlaybackDevice;
+
+        // Audio thread
+        SFUniquePtr<Thread> m_AudioThread;
+
+        CriticalSection m_RequestLock;
+        CircularPageQueue<std::function<void()>> m_Requests;
 	};
 
 }
