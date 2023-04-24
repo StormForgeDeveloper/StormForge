@@ -21,7 +21,7 @@ if [ ! -f "/etc/apt/sources.list.d/lunarg-vulkan-jammy.list" ]; then
 fi
 
 
-sudo apt-get install -y moreutils git-lfs build-essential clang cmake rsync zip ninja-build libatomic-ops-dev gdb libssl-dev perl libssl-dev pkg-config libsasl2-dev openjdk-8-jdk dotnet6
+sudo apt-get install -y moreutils git-lfs build-essential clang cmake rsync zip ninja-build libatomic-ops-dev gdb perl pkg-config openjdk-8-jdk dotnet6
 
 # for Vulkan
 sudo apt-get install -y vulkan-sdk
@@ -34,6 +34,8 @@ sudo apt install -y bison
 sudo apt install -y linux-libc-dev
 # for freetype -> freeglut
 sudo apt install -y libxi-dev libgl1-mesa-dev libglu1-mesa-dev mesa-common-dev libxrandr-dev libxxf86vm-dev
+# for openal
+sudo apt install -y libtool
 
 
 if [ ! -d "$ATF_PATH" ]; then

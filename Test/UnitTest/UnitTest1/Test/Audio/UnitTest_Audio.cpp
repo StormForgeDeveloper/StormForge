@@ -3,13 +3,6 @@
 
 #include "UnitTest1PCH.h"
 #include <gtest/gtest.h>
-#include "Multithread/SFSystemSynchronization.h"
-#include "Multithread/SFThread.h"
-#include "MemoryManager/SFStackHeap.h"
-#include "Util/SFTimeUtil.h"
-#include "Util/SFRandom.h"
-#include "Util/SFToString.h"
-#include "Container/SFArray.h"
 #include "UnitTest_Audio.h"
 #include "Audio/SFAudioService.h"
 
