@@ -18,6 +18,7 @@
 #include "Delegate/SFEventDelegate.h"
 #include "Audio/SFAudioTypes.h"
 #include "Audio/SFAudioSource.h"
+#include "Audio/SFAudioListener.h"
 #include "Audio/SFAudio.h"
 
 namespace SF
@@ -120,6 +121,10 @@ namespace SF
         // Create audio recorder
         virtual AudioRecorderPtr CreateRecorder(const char* deviceName) { return nullptr; }
 
+        virtual AudioListenerPtr GetListener() { return nullptr; }
+
+
+        // Queue actor to audio thread
         virtual void RunOnAudioThread(std::function<void()>&& task) {}
         virtual void RunOnAudioThread(const std::function<void()>& task) {}
 

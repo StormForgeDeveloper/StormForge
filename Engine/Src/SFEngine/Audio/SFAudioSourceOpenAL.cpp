@@ -42,21 +42,27 @@ namespace SF
         super::Dispose();
     }
 
-    void AudioSourceOpenAL::SetLocationNVelocity(const Vector4& location, const Vector4& velocity)
+    void AudioSourceOpenAL::SetLocation(const Vector4& location)
     {
+        super::SetLocation(location);
+
         WeakPointerT<AudioSourceOpenAL> audioSourceWeakPtr = this;
-        Service::Audio->RunOnAudioThread([audioSourceWeakPtr, location, velocity]()
+        Service::Audio->RunOnAudioThread([audioSourceWeakPtr]()
             {
                 AudioSourceOpenALPtr audioSourcePtr = audioSourceWeakPtr.AsSharedPtr<AudioSourceOpenAL>();
                 if (audioSourcePtr != nullptr && audioSourcePtr->m_ALSource != 0)
                 {
-                    audioSourcePtr->m_Position = location;
-                    audioSourcePtr->m_Velocity = velocity;
+                    const Vector4& location = audioSourcePtr->GetLocation();
+                    const Vector4& velocity = audioSourcePtr->GetVelocity();
                     alSource3f(audioSourcePtr->m_ALSource, AL_POSITION, location[0], location[1], location[2]);
                     alSource3f(audioSourcePtr->m_ALSource, AL_VELOCITY, velocity[0], velocity[1], velocity[2]);
                 }
             });
+    }
 
+    void AudioSourceOpenAL::SetVelocity(const Vector4& velocity)
+    {
+        super::SetVelocity(velocity);
     }
 
     Result AudioSourceOpenAL::Play()
@@ -102,8 +108,9 @@ namespace SF
         else
         {
             alGenSources(1, &m_ALSource);
-            alSourcef(m_ALSource, AL_PITCH, m_Pitch);
-            alSourcef(m_ALSource, AL_GAIN, m_Gain);
+            alSourcef(m_ALSource, AL_PITCH, GetPitch());
+            alSourcef(m_ALSource, AL_GAIN, GetGain());
+            alSourcef(m_ALSource, AL_MAX_GAIN, GetGain()*2); // increase gain cap
             alSource3f(m_ALSource, AL_POSITION, m_Position[0], m_Position[1], m_Position[2]);
             alSource3f(m_ALSource, AL_VELOCITY, m_Velocity[0], m_Velocity[1], m_Velocity[2]);
             alSourcei(m_ALSource, AL_LOOPING, m_LoopSound);
@@ -156,7 +163,7 @@ namespace SF
 
         alGetSourcei(m_ALSource, AL_SOURCE_STATE, &state);
         alGetSourcei(m_ALSource, AL_BUFFERS_PROCESSED, &processed);
-        SFLog(System, Info, "source state:{0}, processed:{1}", state, processed);
+        //SFLog(System, Info, "source state:{0}, processed:{1}", state, processed);
         if (alGetError() != AL_NO_ERROR)
         {
             SFLog(System, Error, "Error checking source state:{0}", state);

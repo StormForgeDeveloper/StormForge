@@ -99,12 +99,15 @@ TEST_F(AudioTest, Playback)
     testBuffer.resize(recordingDurationSec * samplesPerSec);
     memset(testBuffer.data(), 0, testBuffer.capacity());
 
-    ApplySin(testBuffer, 1.0, recordingDurationSec * samplesPerSec, recordingDurationSec / 2);
+    ApplySin(testBuffer, 50.0, recordingDurationSec * samplesPerSec, recordingDurationSec / 2);
 
     SFLog(Game, Info, "Playing sin wave");
 
+    Service::Audio->GetListener()->SetGain(2);
+
     AudioBufferPtr audioBuffer = Service::Audio->CreateBuffer(numChannels, format, samplesPerSec, testBuffer.size());
     AudioSourcePtr player = Service::Audio->CreateSource(audioBuffer);
+    player->SetGain(10);
     player->Play();
 
     for (size_t dataOffset = 0; dataOffset < testBuffer.size(); dataOffset += samplesPerSec)
@@ -140,7 +143,7 @@ TEST_F(AudioTest, RecordingNPlayback)
 
     SFLog(Game, Info, "Recording started");
 
-    uint recordingDurationSec = 30;
+    uint recordingDurationSec = 20;
     DynamicArray<uint8_t> testBuffer;
     testBuffer.reserve(recordingDurationSec * recorder->GetSamplesPerSec() * recorder->GetSampleFrameSize());
     memset(testBuffer.data(), 0, testBuffer.capacity());
@@ -160,8 +163,11 @@ TEST_F(AudioTest, RecordingNPlayback)
 
     SFLog(Game, Info, "Playback recording");
 
+    Service::Audio->GetListener()->SetGain(2);
+
     AudioBufferPtr audioBuffer = Service::Audio->CreateBuffer(numChannels, format, samplesPerSec, testBuffer.size());
     AudioSourcePtr player = Service::Audio->CreateSource(audioBuffer);
+    player->SetGain(10);
     player->Play();
 
     for (size_t dataOffset = 0; (dataOffset + dataSizePerSec) <= testBuffer.size(); dataOffset += dataSizePerSec)

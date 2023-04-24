@@ -36,7 +36,8 @@ namespace SF
 
         virtual void Dispose() override;
 
-        virtual void SetLocationNVelocity(const Vector4& location, const Vector4& velocity) override;
+        virtual void SetLocation(const Vector4& location) override;
+        virtual void SetVelocity(const Vector4& velocity) override;
 
         virtual Result Play() override;
         virtual Result Stop() override;
@@ -64,8 +65,6 @@ namespace SF
 
         int m_QueuedALBufferCount = 0;
 
-        float m_Pitch = 1.f;
-        float m_Gain = 1.f;
         Vector4 m_Position = Vector4::Zero();
         Vector4 m_Velocity = Vector4::Zero();
         bool m_LoopSound = false;

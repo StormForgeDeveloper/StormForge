@@ -12,6 +12,7 @@
 #include "SFEnginePCH.h"
 #include "Audio/SFAudioEngineComponentOpenAL.h"
 #include "Audio/SFAudioDeviceOpenAL.h"
+#include "Audio/SFAudioListenerOpenAL.h"
 #include "Audio/SFAudioSourceOpenAL.h"
 #include "Audio/SFAudioRecorderOpenAL.h"
 #include "Audio/SFAudioBuffer.h"
@@ -46,6 +47,8 @@ namespace SF
 
         SetPlaybackDevice(GetDefaultDeviceName(true));
 
+        m_Listener = new(GetSystemHeap()) AudioListenerOpenAL;
+
         m_AudioThread.reset(
             new(GetSystemHeap()) FunctorTickThread([&](Thread* pThisThread)->bool
                 {
@@ -70,6 +73,12 @@ namespace SF
         }
 
         m_Requests.ClearQueue();
+
+        if (m_Listener.IsValid())
+        {
+            m_Listener->Dispose();
+            m_Listener = nullptr;
+        }
 
         if (m_PlaybackDevice.IsValid())
         {
@@ -225,6 +234,11 @@ namespace SF
 
 
         return newPlayer;
+    }
+
+    AudioListenerPtr AudioEngineComponentOpenAL::GetListener()
+    {
+        return m_Listener;
     }
 
     void AudioEngineComponentOpenAL::RunOnAudioThread(std::function<void()>&& task)

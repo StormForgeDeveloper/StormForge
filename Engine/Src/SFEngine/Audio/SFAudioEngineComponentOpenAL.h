@@ -67,6 +67,9 @@ namespace SF
         // Get device with the name
         virtual const AudioPlaybackDevicePtr GetPlaybackDevice() override { return m_PlaybackDevice.StaticCast<AudioPlaybackDevice>(); }
 
+        // Get Listener
+        virtual AudioListenerPtr GetListener() override;
+
 
         virtual void RunOnAudioThread(std::function<void()>&& task) override;
         virtual void RunOnAudioThread(const std::function<void()>& task) override;
@@ -80,6 +83,9 @@ namespace SF
 
         // Playback device
         AudioPlaybackDeviceOpenALPtr m_PlaybackDevice;
+
+        // Listener
+        AudioListenerPtr m_Listener;
 
         // Audio thread
         SFUniquePtr<Thread> m_AudioThread;

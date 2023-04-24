@@ -19,8 +19,12 @@ set(SUBAudio_FILES
 	Audio/SFAudioBuffer.cpp
     Audio/SFAudioSource.h
     Audio/SFAudioSource.cpp
+    Audio/SFAudioListener.h
+    Audio/SFAudioListener.cpp
     Audio/SFAudioSourceOpenAL.h
     Audio/SFAudioSourceOpenAL.cpp
+    Audio/SFAudioListenerOpenAL.h
+    Audio/SFAudioListenerOpenAL.cpp
     Audio/SFAudioRecorderOpenAL.h
     Audio/SFAudioRecorderOpenAL.cpp
     Audio/SFAudioService.h

@@ -46,7 +46,11 @@ namespace SF
         virtual ~AudioSource();
 
 
-        virtual void SetLocationNVelocity(const Vector4& location, const Vector4& velocity) = 0;
+        const Vector4& GetLocation() const { return m_Location; }
+        virtual void SetLocation(const Vector4& location) { m_Location = location; }
+
+        const Vector4& GetVelocity() const { return m_Velocity; }
+        virtual void SetVelocity(const Vector4& velocity) { m_Velocity = velocity; }
 
         virtual Result Play() = 0;
         virtual Result Stop() = 0;
@@ -57,6 +61,12 @@ namespace SF
         uint GetSamplesPerSec() const { return m_SamplesPerSec; }
         EPlayState GetPlayState() const { return m_PlayState; }
 
+        float GetPitch() const { return m_Pitch; }
+        void SetPitch(float pitch) { m_Pitch = pitch; assert(pitch > 0); }
+
+        float GetGain() const { return m_Gain; }
+        void SetGain(float gain) { m_Gain = gain; assert(gain > 0); }
+
         const AudioBufferPtr& CreateAudioBuffer(size_t bufferSize);
         const AudioBufferPtr& GetAudioBuffer() const { return m_AudioBufferPtr; }
 
@@ -65,11 +75,17 @@ namespace SF
 
     private:
 
+        Vector4 m_Location = Vector4::Zero();
+        Vector4 m_Velocity = Vector4::Zero();
+
         uint m_NumChannels = 1;
         EAudioFormat m_DataFormat = EAudioFormat::Float;
         uint m_SamplesPerSec = 44100;
         // Audio play state
         EPlayState m_PlayState = EPlayState::Init;
+
+        float m_Pitch = 1.f;
+        float m_Gain = 1.0;
 
         AudioBufferPtr m_AudioBufferPtr;
     };
