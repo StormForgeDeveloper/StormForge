@@ -11,9 +11,9 @@
 
 #include "SFEnginePCH.h"
 #include "Audio/SFAudioOpenAL.h"
-#include <AL\al.h>
-#include <AL\alext.h>
-#include <AL\alc.h>
+#include "AL/al.h"
+#include "AL/alext.h"
+#include "AL/alc.h"
 
 
 namespace SF

@@ -34,12 +34,6 @@ namespace SF
             Paused
         };
 
-        struct AudioDataBlock
-        {
-            size_t DataSize = 0;
-            uint8_t Data[1];
-        };
-
 
         AudioSource(uint numChannel, EAudioFormat dataFormat, uint samplesPerSec);
         AudioSource(const AudioBufferPtr& audioBuffer);
@@ -62,10 +56,10 @@ namespace SF
         EPlayState GetPlayState() const { return m_PlayState; }
 
         float GetPitch() const { return m_Pitch; }
-        void SetPitch(float pitch) { m_Pitch = pitch; assert(pitch > 0); }
+        virtual void SetPitch(float pitch) { m_Pitch = pitch; assert(pitch > 0); }
 
         float GetGain() const { return m_Gain; }
-        void SetGain(float gain) { m_Gain = gain; assert(gain > 0); }
+        virtual void SetGain(float gain) { m_Gain = gain; assert(gain >= 0); }
 
         const AudioBufferPtr& CreateAudioBuffer(size_t bufferSize);
         const AudioBufferPtr& GetAudioBuffer() const { return m_AudioBufferPtr; }

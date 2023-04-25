@@ -24,7 +24,7 @@ namespace SF
         , m_SamplesPerSec(samplesPerSec)
         , m_DataQueue(GetSystemHeap(), 8)
     {
-        m_HeapPtr = new CircularHeap(GetSystemHeap(), streamingBufferSize);
+        m_HeapPtr = new(GetSystemHeap()) CircularHeap(GetSystemHeap(), streamingBufferSize);
     }
 
     AudioBuffer::~AudioBuffer()
@@ -56,11 +56,12 @@ namespace SF
 
     Result AudioBuffer::EnqueueBlock(const Array<uint8_t>& blockData)
     {
-        size_t remain = blockData.size() % m_BytesPerSample;
-        if (remain != 0)
-        {
-            SFLog(System, Warning, "Pushed block isn't aligned to bytes per sample");
-        }
+        // not true for compressed buffers
+        //size_t remain = blockData.size() % m_BytesPerSample;
+        //if (remain != 0)
+        //{
+        //    SFLog(System, Warning, "Pushed block isn't aligned to bytes per sample");
+        //}
 
         AudioDataBlock* dataPtr{};
 
@@ -81,7 +82,7 @@ namespace SF
     }
 
     // Pop a block from front. If IsStream=true popped block will be removed from the stream
-    AudioBuffer::AudioDataBlock* AudioBuffer::DequeueBlock()
+    AudioDataBlock* AudioBuffer::DequeueBlock()
     {
         AudioDataBlock* block{};
 
@@ -89,8 +90,5 @@ namespace SF
 
         return block;
     }
-
-
-
 
 }

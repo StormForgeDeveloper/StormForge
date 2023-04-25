@@ -65,6 +65,19 @@ namespace SF
         super::SetVelocity(velocity);
     }
 
+    void AudioSourceOpenAL::SetPitch(float pitch)
+    {
+        super::SetPitch(pitch);
+        m_SettingSerial++;
+    }
+
+    void AudioSourceOpenAL::SetGain(float gain)
+    {
+        super::SetGain(gain);
+        m_SettingSerial++;
+    }
+
+
     Result AudioSourceOpenAL::Play()
     {
         Result hr;
@@ -108,15 +121,13 @@ namespace SF
         else
         {
             alGenSources(1, &m_ALSource);
-            alSourcef(m_ALSource, AL_PITCH, GetPitch());
-            alSourcef(m_ALSource, AL_GAIN, GetGain());
-            alSourcef(m_ALSource, AL_MAX_GAIN, GetGain()*2); // increase gain cap
             alSource3f(m_ALSource, AL_POSITION, m_Position[0], m_Position[1], m_Position[2]);
             alSource3f(m_ALSource, AL_VELOCITY, m_Velocity[0], m_Velocity[1], m_Velocity[2]);
-            alSourcei(m_ALSource, AL_LOOPING, m_LoopSound);
             // this is for static buffer mode. need to use alSourceQueueBuffers for stream mode begin
             //alSourcei(m_ALSource, AL_BUFFER, m_Buffer);
         }
+
+        ApplySettingInternal();
 
         m_QueuedALBufferCount = 0;
         if (m_ALBuffers[0] == 0)
@@ -145,7 +156,16 @@ namespace SF
         }
     }
 
-    void AudioSourceOpenAL::QueueBuffer(ALuint alBuffer, AudioBuffer::AudioDataBlock* dataBlock)
+    void AudioSourceOpenAL::ApplySettingInternal()
+    {
+        m_SettingSync = m_SettingSerial;
+        alSourcef(m_ALSource, AL_PITCH, GetPitch());
+        alSourcef(m_ALSource, AL_GAIN, GetGain());
+        alSourcef(m_ALSource, AL_MAX_GAIN, GetGain() * 2); // increase gain cap
+        alSourcei(m_ALSource, AL_LOOPING, m_LoopSound);
+    }
+
+    void AudioSourceOpenAL::QueueBuffer(ALuint alBuffer, AudioDataBlock* dataBlock)
     {
         alBufferData(alBuffer, m_ALFormat, dataBlock->Data, (ALsizei)dataBlock->DataSize, (ALsizei)GetSamplesPerSec());
         alSourceQueueBuffers(m_ALSource, 1, &alBuffer);
@@ -173,6 +193,11 @@ namespace SF
         if (GetPlayState() != AudioSource::EPlayState::Play || audioBuffer->GetAvailableBlockCount() == 0)
             return;
 
+        if (m_SettingSerial != m_SettingSync)
+        {
+            ApplySettingInternal();
+        }
+
         if (m_QueuedALBufferCount < NumBuffer)
         {
             int buffersToQueue = Math::Min<int>(NumBuffer - m_QueuedALBufferCount, (int)audioBuffer->GetAvailableBlockCount());
@@ -181,8 +206,8 @@ namespace SF
                 auto bufferId = m_ALBuffers[m_QueuedALBufferCount];
                 m_QueuedALBufferCount++;
 
-                AudioBuffer::AudioDataBlock* dataBlock = audioBuffer->DequeueBlock();
-                QueueBuffer(bufferId, dataBlock);
+                SFUniquePtr<AudioDataBlock> dataBlock(audioBuffer->DequeueBlock());
+                QueueBuffer(bufferId, dataBlock.get());
             }
         }
         else if (processed > 0)
@@ -190,8 +215,8 @@ namespace SF
             ALuint bufferId{};
             alSourceUnqueueBuffers(m_ALSource, 1, &bufferId);
 
-            AudioBuffer::AudioDataBlock* dataBlock = audioBuffer->DequeueBlock();
-            QueueBuffer(bufferId, dataBlock);
+            SFUniquePtr<AudioDataBlock> dataBlock(audioBuffer->DequeueBlock());
+            QueueBuffer(bufferId, dataBlock.get());
 
         }
 

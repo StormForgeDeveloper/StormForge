@@ -14,8 +14,9 @@
 #include "SFTypedefs.h"
 #include "Audio/SFAudioService.h"
 #include "Audio/SFAudioOpenAL.h"
+#include "Audio/SFAudioSourceOpenAL.h"
 #include "Container/SFDoubleLinkedList.h"
-#include <AL\alc.h>
+#include "AL/alc.h"
 
 
 namespace SF
@@ -44,7 +45,7 @@ namespace SF
         // clear
         void Clear();
 
-        void AddAudioSource(AudioSourceOpenAL* audioSource);
+        void AddAudioSource(const AudioSourceOpenALPtr& audioSource);
 
         void MakeCurrentContext();
         void TickUpdate();

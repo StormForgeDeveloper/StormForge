@@ -69,9 +69,9 @@ namespace SF
         }
     }
 
-    void AudioPlaybackDeviceOpenAL::AddAudioSource(AudioSourceOpenAL* audioSource)
+    void AudioPlaybackDeviceOpenAL::AddAudioSource(const AudioSourceOpenALPtr& audioSource)
     {
-        if (audioSource)
+        if (audioSource != nullptr)
         {
             audioSource->DeviceListNode.RemoveFromList();
             audioSource->DeviceListNode.Data = audioSource;

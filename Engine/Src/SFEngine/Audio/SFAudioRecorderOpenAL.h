@@ -14,9 +14,9 @@
 #include "SFTypedefs.h"
 #include "Audio/SFAudioService.h"
 
-#include <AL\alc.h>
-#include <AL/al.h>
-#include <AL/alext.h>
+#include "AL/alc.h"
+#include "AL/al.h"
+#include "AL/alext.h"
 
 namespace SF
 {

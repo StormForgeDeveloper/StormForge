@@ -262,6 +262,12 @@ namespace SF
 
         playbackDevice->MakeCurrentContext();
 
+        auto* pListener = static_cast<AudioListenerOpenAL*>(m_Listener.get());
+        if (pListener)
+        {
+            pListener->TickUpdate();
+        }
+
         {
             //MutexScopeLock lock(m_RequestLock);
             std::function<void()> request;

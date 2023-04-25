@@ -96,6 +96,7 @@ set(VCPKG_INSTALL ${VCPKG_DIR}/installed/${VCPKG_TARGET_TRIPLET})
 set(CMAKE_PREFIX_PATH  "${VCPKG_INSTALL}/")
 set(Protobuf_PROTOC_EXECUTABLE "${VCPKG_INSTALL}/tools/protobuf/protoc")
 
+#for shared library search path on linux
 set(CMAKE_INSTALL_RPATH $ORIGIN)
 
 include_directories(AFTER ${VCPKG_INSTALL}/include)
@@ -113,7 +114,7 @@ else()
 	endif()
 endif()
 
-message ( "Toolchain=${CMAKE_TOOLCHAIN_FILE}, CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}, VCPKG_INSTALL=${VCPKG_INSTALL}" )
+message ( "Toolchain=${CMAKE_TOOLCHAIN_FILE}, CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}, VCPKG_INSTALL=${VCPKG_INSTALL}, VCPKG_INCLUDE=${VCPKG_INSTALL}/include" )
 
 
 

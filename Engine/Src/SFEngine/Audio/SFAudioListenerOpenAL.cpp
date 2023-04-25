@@ -31,26 +31,26 @@ namespace SF
 
     void AudioListenerOpenAL::SetLocation(const Vector4& location)
     {
-        m_UpdateSerial++;
         super::SetLocation(location);
+        m_UpdateSerial++;
     }
 
     void AudioListenerOpenAL::SetVelocity(const Vector4& velocity)
     {
-        m_UpdateSerial++;
         super::SetVelocity(velocity);
+        m_UpdateSerial++;
     }
 
     void AudioListenerOpenAL::SetLookDirection(const Vector4& lookDirection)
     {
-        m_UpdateSerial++;
         super::SetLookDirection(lookDirection);
+        m_UpdateSerial++;
     }
 
     void AudioListenerOpenAL::SetGain(float gain)
     {
-        m_UpdateSerial++;
         super::SetGain(gain);
+        m_UpdateSerial++;
     }
 
     void AudioListenerOpenAL::TickUpdate()
@@ -58,7 +58,7 @@ namespace SF
         if (m_UpdateSerial == m_SyncSerial)
             return;
 
-        m_UpdateSerial = m_SyncSerial;
+        m_SyncSerial = m_UpdateSerial;
 
         alListenerf(AL_GAIN, GetGain());
 

@@ -38,26 +38,34 @@ namespace SF
 
         virtual void SetLocation(const Vector4& location) override;
         virtual void SetVelocity(const Vector4& velocity) override;
+        virtual void SetPitch(float pitch) override;
+        virtual void SetGain(float gain) override;
 
         virtual Result Play() override;
         virtual Result Stop() override;
         virtual Result Pause() override;
 
 
-        void PlayInternal();
-        void StopInternal();
-        void PauseInternal();
+        // for internal access
 
-        void QueueBuffer(ALuint alBuffer, AudioBuffer::AudioDataBlock* dataBlock);
+        void QueueBuffer(ALuint alBuffer, AudioDataBlock* dataBlock);
+
 
         void TickUpdate();
-
 
         DoubleLinkedListNodeDataT<WeakPointerT<AudioSourceOpenAL>> DeviceListNode{};
 
     private:
+        void PlayInternal();
+        void StopInternal();
+        void PauseInternal();
+        void ApplySettingInternal();
 
-        static constexpr int NumBuffer = 4;
+
+
+    private:
+
+        static constexpr int NumBuffer = 8;
 
         ALuint m_ALSource{};
         ALuint m_ALBuffers[NumBuffer]{};
@@ -69,6 +77,8 @@ namespace SF
         Vector4 m_Velocity = Vector4::Zero();
         bool m_LoopSound = false;
 
+
+        uint m_SettingSerial = 0, m_SettingSync = 0;
     };
 
     using AudioSourceOpenALPtr = SharedPointerT<AudioSourceOpenAL>;

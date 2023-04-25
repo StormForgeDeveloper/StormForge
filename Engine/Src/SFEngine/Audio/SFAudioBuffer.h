@@ -19,6 +19,12 @@
 
 namespace SF
 {
+    // Audio data block definition
+    struct AudioDataBlock
+    {
+        size_t DataSize = 0;
+        uint8_t Data[1];
+    };
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 
@@ -28,11 +34,6 @@ namespace SF
 	{
 	public:
 
-        struct AudioDataBlock
-        {
-            size_t DataSize = 0;
-            uint8_t Data[1];
-        };
 
         AudioBuffer(uint numChannels, EAudioFormat dataFormat, uint samplesPerSec, size_t streamingBufferSize);
         virtual ~AudioBuffer();

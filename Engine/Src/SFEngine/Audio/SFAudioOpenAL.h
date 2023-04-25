@@ -13,7 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "Audio/SFAudioService.h"
-#include <AL\alc.h>
+#include "AL/alc.h"
 
 
 namespace SF
