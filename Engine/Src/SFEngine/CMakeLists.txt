@@ -61,9 +61,6 @@ set(SUBNet_FILES
 	Net/SFNetCtrlIDs.h
 	Net/SFNetDef.h
 	Net/SFNetRawUDP.h
-	Net/SFNetServerTCP.h
-	Net/SFNetServerPeerTCP.h
-	Net/SFNetServerUDP.h
 	Net/SFNetSocket.h
 	Net/SFNetSvrDef.h
 	Net/SFNetSystem.h
@@ -104,9 +101,6 @@ set(SUBNet_FILES
 	Net/SFNetRawUDP.cpp
     Net/SFNetUDP.h
     Net/SFNetUDP.cpp
-	Net/SFNetServerPeerTCP.cpp
-	Net/SFNetServerTCP.cpp
-	Net/SFNetServerUDP.cpp
 	Net/SFNetSocket.cpp
 	Net/SFNetSvrDef.cpp
 	Net/SFNetSystem.cpp
