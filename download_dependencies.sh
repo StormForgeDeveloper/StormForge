@@ -76,7 +76,7 @@ done
 ./vcpkg install curl[openssl,websockets] --recurse
 
 ./vcpkg update
-./vcpkg upgrade
+./vcpkg upgrade --no-dry-run
 
 popd
 

@@ -103,7 +103,7 @@ try {
 	./vcpkg.exe install $deps --triplet $triplet
 	
 	./vcpkg.exe update
-	./vcpkg.exe upgrade
+	./vcpkg.exe upgrade --no-dry-run
 	
 	cd ..\3rdParties
 	
