@@ -210,7 +210,7 @@ namespace SF
 			return ResultCode::SUCCESS;
 		}
 
-		template< class DataType >
+		template< class DataType>
 		Result ReadArrayLink(ArrayView<DataType>& data)
 		{
 			uint16_t NumItems{};
@@ -224,12 +224,18 @@ namespace SF
 
 			data.SetLinkedBuffer(NumItems, NumItems, pData);
 
-			int32_t SizeRemain = -static_cast<int32_t>(NumItems * sizeof(DataType));
-			for (auto& itData : data)
-			{
-				SizeRemain += static_cast<int32_t>(SerializedSizeOf(itData));
-			}
-
+            int32_t SizeRemain{};
+            if constexpr (std::is_scalar_v<DataType>)
+            {
+                SizeRemain = static_cast<int32_t>(NumItems * sizeof(DataType));
+            }
+            else
+            {
+                for (auto& itData : data)
+                {
+                    SizeRemain += static_cast<int32_t>(SerializedSizeOf(itData));
+                }
+            }
 			if (SizeRemain > 0)
 				Skip(SizeRemain);
 
