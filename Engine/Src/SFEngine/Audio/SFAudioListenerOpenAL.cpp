@@ -47,9 +47,9 @@ namespace SF
         m_UpdateSerial++;
     }
 
-    void AudioListenerOpenAL::SetGain(float gain)
+    void AudioListenerOpenAL::SetVolume(float volume)
     {
-        super::SetGain(gain);
+        super::SetVolume(volume);
         m_UpdateSerial++;
     }
 
@@ -60,7 +60,7 @@ namespace SF
 
         m_SyncSerial = m_UpdateSerial;
 
-        alListenerf(AL_GAIN, GetGain());
+        alListenerf(AL_GAIN, GetVolume());
 
         const Vector4& location = GetLocation();
         const Vector4& velocity = GetVelocity();

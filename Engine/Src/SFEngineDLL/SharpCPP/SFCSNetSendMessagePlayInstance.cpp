@@ -191,6 +191,19 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeC
 } // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionCmd( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, StringCrc32 InFunctionName, PlayerID InPlayerID, uint16_t _sizeOfInParameters,uint8_t* InParameters )
 
 
+// C2S: Send coded voice data to server
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::PlayInstance::SendVoiceDataC2SEvt::Create(pConnection->GetHeap(), InPlayInstanceUID, InPlayerID,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt( intptr_t InNativeConnectionHandle, uint64_t InPlayInstanceUID, PlayerID InPlayerID, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+
+
+
 
 
 // Cmd: Player Join request.
@@ -425,6 +438,19 @@ SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeC
 	auto res = pConnection->Send(pMessage);
 	return (uint32_t)res;
 } // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceCallFunctionRes( intptr_t InNativeConnectionHandle, uint64_t InTransactionID, Result InResult, uint16_t _sizeOfInResults,uint8_t* InResults )
+
+
+
+// S2C: Voice data
+SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InActorID, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
+{
+ 	auto pConnection = NativeToObject<Net::Connection>(InNativeConnectionHandle);
+	if(pConnection == nullptr) return ResultCode::INVALID_POINTER;
+	MessageDataPtr pMessage = SF::Message::PlayInstance::VoiceDataS2CEvt::Create(pConnection->GetHeap(), InActorID,SF::ArrayView<uint8_t>(_sizeOfInVoiceData, _sizeOfInVoiceData, const_cast<uint8_t*>(InVoiceData)));
+	if(pMessage == nullptr) return ResultCode::OUT_OF_MEMORY;
+	auto res = pConnection->Send(pMessage);
+	return (uint32_t)res;
+} // SFDLL_EXPORT int  CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt( intptr_t InNativeConnectionHandle, uint32_t InActorID, uint16_t _sizeOfInVoiceData,const uint8_t* InVoiceData )
 
 
 

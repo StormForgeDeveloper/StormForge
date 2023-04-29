@@ -95,5 +95,9 @@
 "CallFunctionRes"
 "FunctionName"
 "Parameters"
+"SendVoiceData"
+"SendVoiceDataC2SEvt"
+"VoiceData"
+"VoiceDataS2CEvt"
 
 

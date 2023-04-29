@@ -23,12 +23,10 @@
 #include "Protocol/PlayInstanceNetPolicy.h"
 #include "Protocol/PlayInstanceMsgClass.h"
 #include "Online/Telemetry/SFTelemetryService.h"
-
+#include "Online/SFOnlineClientComponent.h"
 
 namespace SF
 {
-
-	constexpr uint32_t OnlineClient::RemotePlayerSimulationDelay;
 
 
 	/////////////////////////////////////////////////////////////////////////////////////
@@ -697,7 +695,12 @@ namespace SF
 	OnlineClient::OnlineClient(IHeap& heap)
 		: EngineObject(new(heap) IHeap("OnlineClient", &heap), "OnlineClient")
 		, m_OnlineStateChangedQueue(GetHeap())
+        , m_OnlineActorByActorId(GetHeap())
+        , m_ComponentManager(GetHeap())
 	{
+        OnlineClientComponentInitializer::CreateComponentsFor(this);
+
+        SetTickGroup(EngineTaskTick::AsyncTick);
 	}
 
 	OnlineClient::~OnlineClient()
@@ -732,6 +735,7 @@ namespace SF
 	void OnlineClient::ClearInstanceInfo()
 	{
 		m_OutgoingMovement.reset();
+        m_OnlineActorByActorId.Reset();
 	}
 
 	void OnlineClient::RegisterGameHandlers()
@@ -785,6 +789,43 @@ namespace SF
 			assert(false);
 			return;
 		}
+
+        m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::NewActorInViewS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
+            {
+                OnActorInView(pMsgData);
+            });
+
+        m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::RemoveActorFromViewS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
+            {
+                OnActorOutofView(pMsgData);
+            });
+
+        m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::ActorMovementS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
+            {
+                OnActorMovement(pMsgData);
+            });
+
+        m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::ActorMovementsS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
+            {
+                OnActorMovements(pMsgData);
+            });
+
+        m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
+            Message::PlayInstance::VoiceDataS2CEvt::MID.GetMsgID(),
+            [this](Net::Connection*, const SharedPointerT<Message::MessageData>& pMsgData)
+            {
+                OnVoiceData(pMsgData);
+            });
+
+
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
 			Message::PlayInstance::PlayerStateChangedS2CEvt::MID.GetMsgID(),
@@ -1059,6 +1100,134 @@ namespace SF
 
 		return deltaFrames;
 	}
+
+    Result OnlineClient::OnTick(EngineTaskTick tick)
+    {
+        Result hr;
+
+        m_ComponentManager.TickUpdate();
+
+        return hr;
+    }
+
+    void OnlineClient::OnActorInView(const MessageDataPtr& pMsgData)
+    {
+        Message::PlayInstance::NewActorInViewS2CEvt msg(pMsgData);
+        if (!msg.ParseMsg())
+        {
+            SFLog(Net, Info, "OnlineClient::OnActorInView Parsing error");
+            return;
+        }
+
+        if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+        {
+            SFLog(Net, Info, "Invalid instance id, ignoring movement");
+            return;
+        }
+
+        auto actorId = msg.GetMovement().ActorId;
+        OnlineActor* onlineActor{};
+        if (!m_OnlineActorByActorId.Find(actorId, onlineActor))
+        {
+            onlineActor = new(GetHeap()) OnlineActor(actorId);
+            m_OnlineActorByActorId.Emplace(actorId, onlineActor);
+        }
+
+        onlineActor->SetMovement(msg.GetMovement());
+    }
+
+    void OnlineClient::OnActorOutofView(const MessageDataPtr& pMsgData)
+    {
+        Message::PlayInstance::RemoveActorFromViewS2CEvt msg(pMsgData);
+        if (!msg.ParseMsg())
+        {
+            SFLog(Net, Info, "OnlineClient::OnActorOutofView Parsing error");
+            return;
+        }
+
+        if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+        {
+            SFLog(Net, Info, "Invalid instance id, ignoring movement");
+            return;
+        }
+
+        OnlineActor* onlineActor{};
+        m_OnlineActorByActorId.Remove(msg.GetActorID(), onlineActor);
+        if (onlineActor)
+        {
+            IHeap::Delete(onlineActor);
+        }
+    }
+
+    void OnlineClient::OnActorMovement(const MessageDataPtr& pMsgData)
+    {
+        Message::PlayInstance::ActorMovementS2CEvt msg(pMsgData);
+        if (!msg.ParseMsg())
+        {
+            SFLog(Net, Error, "OnlineClient::OnPlayerMovement Parsing error");
+            return;
+        }
+
+        if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+        {
+            SFLog(Net, Warning, "Invalid instance id, ignoring movement");
+            return;
+        }
+
+        OnActorMovement(msg.GetMovement());
+    }
+
+    void OnlineClient::OnActorMovements(const MessageDataPtr& pMsgData)
+    {
+        Message::PlayInstance::ActorMovementsS2CEvt msg(pMsgData);
+        if (!msg.ParseMsg())
+        {
+            SFLog(Net, Error, "OnlineClient::OnPlayerMovements Parsing error");
+            return;
+        }
+
+        if (msg.GetPlayInstanceUID() != m_GameInstanceUID)
+        {
+            SFLog(Net, Warning, "Invalid instance id, ignoring movements");
+            return;
+        }
+
+        for (auto& itMove : msg.GetMovement())
+        {
+            OnActorMovement(itMove);
+        }
+    }
+
+    void OnlineClient::OnActorMovement(const ActorMovement& newMove)
+    {
+        auto actorId = newMove.ActorId;
+        SFLog(Net, Debug3, "OnlineClient:OnPlayerMovement, actorId:{0}, serverFrame:{1:X}, move:{2}", actorId, m_ServerMoveFrame, newMove);
+
+        // adjust move frame
+        m_ServerMoveFrame = Math::Max(m_ServerMoveFrame, newMove.MoveFrame);
+
+        OnlineActor* onlineActor{};
+        if (m_OnlineActorByActorId.Find(actorId, onlineActor))
+        {
+            onlineActor->SetMovement(newMove);
+        }
+    }
+
+    void OnlineClient::OnVoiceData(const MessageDataPtr& pMsgData)
+    {
+        Message::PlayInstance::VoiceDataS2CEvt msg(pMsgData);
+        if (!msg.ParseMsg())
+        {
+            SFLog(Net, Error, "OnlineClient::OnPlayerMovements Parsing error");
+            return;
+        }
+
+        OnlineActor* onlineActor{};
+        if (m_OnlineActorByActorId.Find(msg.GetActorID(), onlineActor))
+        {
+            onlineActor->OnComponentData("VoiceChat"_crc, ArrayView<const uint8_t>(msg.GetVoiceData()));
+        }
+    }
 
 	void OnlineClient::OnPlayerStateChanged(const MessageDataPtr& pMsgData)
 	{

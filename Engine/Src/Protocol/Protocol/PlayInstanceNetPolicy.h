@@ -60,6 +60,8 @@ namespace SF
 		Result GetStreamListCmd( const uint64_t &InTransactionID, const AuthTicket &InTicket );
 		// Cmd: To call general functionality
 		Result CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters );
+		// C2S: Send coded voice data to server
+		Result SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData );
 
 	}; // class NetPolicyPlayInstance 
 
@@ -109,6 +111,8 @@ namespace SF
 		Result GetStreamListRes( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames );
 		// Cmd: To call general functionality
 		Result CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults );
+		// S2C: Voice data
+		Result VoiceDataS2CEvt( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData );
 
 	}; // class NetSvrPolicyPlayInstance
 

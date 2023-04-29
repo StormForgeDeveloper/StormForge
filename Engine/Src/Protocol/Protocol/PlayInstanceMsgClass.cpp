@@ -3690,6 +3690,192 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
+			// C2S: Send coded voice data to server
+			const MessageID SendVoiceDataC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 22);
+			Result SendVoiceDataC2SEvt::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_PlayInstanceUID);
+				protocolCheck(*input >> m_PlayerID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* VoiceDataPtr = nullptr;
+				protocolCheck(input->ReadLink(VoiceDataPtr, ArrayLen));
+				m_VoiceData.SetLinkedBuffer(ArrayLen, VoiceDataPtr);
+
+				return hr;
+
+			}; // Result SendVoiceDataC2SEvt::ParseMessage(const MessageData* pIMsg)
+
+			Result SendVoiceDataC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				SendVoiceDataC2SEvt parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
+				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
+				variableBuilder.SetVariable("VoiceData", parser.GetVoiceData());
+
+				return hr;
+
+			}; // Result SendVoiceDataC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result SendVoiceDataC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) SendVoiceDataC2SEvt(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result SendVoiceDataC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+
+			MessageData* SendVoiceDataC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InVoiceData)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::SendVoiceDataC2SEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InPlayInstanceUID);
+				protocolCheck(*output << InPlayerID);
+				protocolCheck(*output << InVoiceData);
+
+				return hr;
+			}; // MessageData* SendVoiceDataC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+
+			Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				SendVoiceDataC2SEvt parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "PlayInstance::SendVoiceData, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, VoiceData:{4,30}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetVoiceData()); 
+				return ResultCode::SUCCESS;
+			}; // Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
+			// S2C: Voice data
+			const MessageID VoiceDataS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 23);
+			Result VoiceDataS2CEvt::ParseMessage(const MessageData* pIMsg)
+			{
+ 				ScopeContext hr;
+
+
+				protocolCheckPtr(pIMsg);
+
+				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				InputMemoryStream inputStream(bufferView);
+				auto* input = inputStream.ToInputStream();
+				uint16_t ArrayLen = 0;(void)(ArrayLen);
+
+				protocolCheck(*input >> m_ActorID);
+				protocolCheck(input->Read(ArrayLen));
+				uint8_t* VoiceDataPtr = nullptr;
+				protocolCheck(input->ReadLink(VoiceDataPtr, ArrayLen));
+				m_VoiceData.SetLinkedBuffer(ArrayLen, VoiceDataPtr);
+
+				return hr;
+
+			}; // Result VoiceDataS2CEvt::ParseMessage(const MessageData* pIMsg)
+
+			Result VoiceDataS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			{
+ 				ScopeContext hr;
+
+
+				VoiceDataS2CEvt parser;
+				protocolCheck(parser.ParseMessage(*pIMsg));
+
+				variableBuilder.SetVariable("ActorID", parser.GetActorID());
+				variableBuilder.SetVariable("VoiceData", parser.GetVoiceData());
+
+				return hr;
+
+			}; // Result VoiceDataS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+
+			Result VoiceDataS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			{
+ 				ScopeContext hr;
+
+				protocolCheckMem(pMessageBase = new(memHeap) VoiceDataS2CEvt(pIMsg));
+				protocolCheck(pMessageBase->ParseMsg());
+
+				return hr;
+
+			}; // Result VoiceDataS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+
+
+			MessageData* VoiceDataS2CEvt::Create( IHeap& memHeap, const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
+			{
+ 				MessageData *pNewMsg = nullptr;
+				ScopeContext hr([&pNewMsg](Result hr) -> MessageData*
+				{
+ 					if(!hr && pNewMsg != nullptr)
+					{
+ 						IHeap::Delete(pNewMsg);
+						return nullptr;
+					}
+					return pNewMsg;
+				});
+
+				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+					+ SerializedSizeOf(InActorID)
+					+ SerializedSizeOf(InVoiceData)
+				);
+
+				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::VoiceDataS2CEvt::MID, __uiMessageSize ) );
+				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
+				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				OutputMemoryStream outputStream(BufferView);
+				auto* output = outputStream.ToOutputStream();
+
+				protocolCheck(*output << InActorID);
+				protocolCheck(*output << InVoiceData);
+
+				return hr;
+			}; // MessageData* VoiceDataS2CEvt::Create( IHeap& memHeap, const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
+
+			Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			{
+ 				VoiceDataS2CEvt parser;
+				parser.ParseMessage(*pMsg);
+				SFLog(Net, Debug1, "PlayInstance::VoiceData, {0}:{1} , ActorID:{2}, VoiceData:{3,30}",
+						prefix, pMsg->GetMessageHeader()->Length, parser.GetActorID(), parser.GetVoiceData()); 
+				return ResultCode::SUCCESS;
+			}; // Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+
 
 
 		}; // namespace PlayInstance

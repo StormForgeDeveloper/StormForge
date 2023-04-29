@@ -233,6 +233,20 @@ SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionRes()
 } // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceCallFunctionRes()
 
 
+// C2S: Send coded voice data to server
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceSendVoiceDataC2SEvt()
+{
+ 	return SF::Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceSendVoiceDataC2SEvt()
+
+
+// S2C: Voice data
+SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceVoiceDataS2CEvt()
+{
+ 	return SF::Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID;
+} // SFDLL_EXPORT int  CSSFNetMessageID_PlayInstanceVoiceDataS2CEvt()
+
+
 
 
 

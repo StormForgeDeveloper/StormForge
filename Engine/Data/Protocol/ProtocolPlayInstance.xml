@@ -209,8 +209,6 @@
 		</Command>
 
 
-
-
 		<!-- =============================  ======================================= -->
 
 		<Command Name="CallFunction" Reliable="true" Crypto="No" Trace="Debug1" Desc="To call general functionality">
@@ -224,5 +222,18 @@
 			</Res>
 		</Command>
 
-	</ProtocolGroup>
+        <!-- ============================= Voice chat ======================================= -->
+
+        <C2SEvent Name="SendVoiceData" Reliable="false" Crypto="Mask" Trace="Debug1" Desc="Send coded voice data to server">
+            <Params TypeName="GameInsUID" Name="PlayInstanceUID" Desc="Game instance UID"/>
+            <Params TypeName="PlayerID" Name="PlayerID" Desc="player id"/>
+            <Params TypeName="uint8" IsArray="true" Name="VoiceData" Desc="Voice data"/>
+        </C2SEvent>
+
+        <S2CEvent Name="VoiceData" Reliable="false" Crypto="Mask" Trace="Debug1" Desc="Voice data">
+            <Params TypeName="uint32" Name="ActorID" Desc="actor id"/>
+            <Params TypeName="uint8" IsArray="true" Name="VoiceData" Desc="Voice data"/>
+        </S2CEvent>
+
+    </ProtocolGroup>
 </Protocols>

@@ -71,9 +71,9 @@ namespace SF
         m_SettingSerial++;
     }
 
-    void AudioSourceOpenAL::SetGain(float gain)
+    void AudioSourceOpenAL::SetVolume(float volume)
     {
-        super::SetGain(gain);
+        super::SetVolume(volume);
         m_SettingSerial++;
     }
 
@@ -160,8 +160,8 @@ namespace SF
     {
         m_SettingSync = m_SettingSerial;
         alSourcef(m_ALSource, AL_PITCH, GetPitch());
-        alSourcef(m_ALSource, AL_GAIN, GetGain());
-        alSourcef(m_ALSource, AL_MAX_GAIN, GetGain() * 2); // increase gain cap
+        alSourcef(m_ALSource, AL_GAIN, GetVolume());
+        alSourcef(m_ALSource, AL_MAX_GAIN, GetVolume() * 2); // increase Volume cap
         alSourcei(m_ALSource, AL_LOOPING, m_LoopSound);
     }
 

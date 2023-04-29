@@ -127,9 +127,8 @@ namespace SF
             return ResultCode::UNEXPECTED;
         }
 
-        size_t maxFramesReadCanRead = outBuffer.capacity() / GetSampleFrameSize();
-
-        size_t sampleCount = Math::Min<size_t>(maxFramesReadCanRead, availableSampleCount);
+        size_t maxFramesCanRead = outBuffer.capacity() / GetSampleFrameSize();
+        size_t sampleCount = Math::Min<size_t>(maxFramesCanRead, availableSampleCount);
 
         size_t curBufferPos = outBuffer.size();
         outBuffer.resize(curBufferPos + sampleCount * GetSampleFrameSize());

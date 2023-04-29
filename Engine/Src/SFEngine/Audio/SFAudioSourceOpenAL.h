@@ -39,7 +39,7 @@ namespace SF
         virtual void SetLocation(const Vector4& location) override;
         virtual void SetVelocity(const Vector4& velocity) override;
         virtual void SetPitch(float pitch) override;
-        virtual void SetGain(float gain) override;
+        virtual void SetVolume(float gain) override;
 
         virtual Result Play() override;
         virtual Result Stop() override;

@@ -17,7 +17,8 @@
 #include "EngineObject/SFEngineObject.h"
 #include "Container/SFDualSortedMap.h"
 #include "Delegate/SFEventDelegate.h"
-
+#include "Online/SFOnlineActor.h"
+#include "SFOnlineClientComponent.h"
 
 namespace SF
 {
@@ -32,7 +33,6 @@ namespace SF
 	class ActorMovementReplayManager;
 
 
-
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 
 	//	OnlineClient class
@@ -44,9 +44,6 @@ namespace SF
 		using super = EngineObject;
 		using ReceivedMovementManager = ActorMovementReplayManager;
 		//using ReceivedMovementManager = ReceivedActorMovementManager;
-
-		// TODO: Let's make it dynamic from 10 to 35 or even 60 for worst network.
-		static constexpr uint32_t RemotePlayerSimulationDelay = 30;
 
 		// Online State
 		enum class OnlineState : uint8_t
@@ -140,6 +137,8 @@ namespace SF
 
 		uint32_t UpdateMovement();
 
+        virtual Result OnTick(EngineTaskTick tick) override;
+
 		// Online State
 		SF_FORCEINLINE OnlineState GetOnlineState() const { return m_OnlineState; }
 
@@ -175,6 +174,8 @@ namespace SF
 		void SetStateChangeCallback(ONLINESTATE_CHAGED_CALLBACK callback) { m_OnlineStateChangedCallback = callback; }
 		void SetTaskFinishedCallback(ONLINE_TASK_FINISHED_CALLBACK callback) { m_OnlineTaskFinishedCallback = callback; }
 
+        void AddComponent(OnlineClientComponent* pComponent) { m_ComponentManager.AddComponent(pComponent); }
+
 	private:
 
 		void SetOnlineState(OnlineState newState);
@@ -189,9 +190,17 @@ namespace SF
 		void RegisterGameHandlers();
 		void RegisterPlayInstanceHandlers();
 
+        void OnActorInView(const MessageDataPtr& pMsgData);
+        void OnActorOutofView(const MessageDataPtr& pMsgData);
+        void OnActorMovement(const MessageDataPtr& pMsgData);
+        void OnActorMovements(const MessageDataPtr& pMsgData);
+        void OnActorMovement(const ActorMovement& newMove);
+        void OnVoiceData(const MessageDataPtr& pMsgData);
+
 		void OnPlayerStateChanged(const MessageDataPtr& pMsgData);
 
 		void UpdateOnlineStateByConnectionState();
+
 
 	private:
 
@@ -240,6 +249,8 @@ namespace SF
 		// My actor movement
 		SharedPointerT<SendingActorMovementManager> m_OutgoingMovement;
 
+        SortedMap<ActorID, OnlineActor*> m_OnlineActorByActorId;
+
 		// tick time
 		TimeStampMS m_TickTime;
 
@@ -252,6 +263,8 @@ namespace SF
 		CircularPageQueue<OnlineStateChangedEventArgs> m_OnlineStateChangedQueue;
 		ONLINESTATE_CHAGED_CALLBACK m_OnlineStateChangedCallback{};
 		ONLINE_TASK_FINISHED_CALLBACK m_OnlineTaskFinishedCallback{};
+
+        ComponentManager m_ComponentManager;
 	};
 
 

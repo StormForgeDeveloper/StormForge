@@ -82,6 +82,10 @@ namespace SF
 			// Cmd: To call general functionality
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionCmd::TraceOut));
 			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionRes::TraceOut));
+			// C2S: Send coded voice data to server
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::SendVoiceDataC2SEvt::TraceOut));
+			// S2C: Voice data
+			MessageDebugTraceMap.insert(std::make_pair(Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::VoiceDataS2CEvt::TraceOut));
 		}; // void RegisterDebugTracePlayInstance()
 
 

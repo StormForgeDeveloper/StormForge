@@ -117,6 +117,12 @@ namespace SF
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CallFunctionCmd::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionCmd::ParseMessageToMessageBase));
 			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionRes::ParseMessageTo));
 			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::CallFunctionRes::MID.IDSeq.MsgID,&Message::PlayInstance::CallFunctionRes::ParseMessageToMessageBase));
+			// C2S: Send coded voice data to server
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::SendVoiceDataC2SEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::SendVoiceDataC2SEvt::MID.IDSeq.MsgID,&Message::PlayInstance::SendVoiceDataC2SEvt::ParseMessageToMessageBase));
+			// S2C: Voice data
+			MessageParseToVariableMap.insert(std::make_pair(Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::VoiceDataS2CEvt::ParseMessageTo));
+			MessageParseToMessageBaseMap.insert(std::make_pair(Message::PlayInstance::VoiceDataS2CEvt::MID.IDSeq.MsgID,&Message::PlayInstance::VoiceDataS2CEvt::ParseMessageToMessageBase));
 		}; // void RegisterParserPlayInstance()
 
 

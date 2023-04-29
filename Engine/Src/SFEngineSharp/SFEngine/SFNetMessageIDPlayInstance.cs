@@ -124,6 +124,12 @@ namespace SF.Net
 		public static int CallFunctionRes { get { return CSSFNetMessageID_PlayInstanceCallFunctionRes(); } }
 
 
+		// C2S: Send coded voice data to server
+		public static int SendVoiceDataC2SEvt { get { return CSSFNetMessageID_PlayInstanceSendVoiceDataC2SEvt(); } }
+
+		// S2C: Voice data
+		public static int VoiceDataS2CEvt { get { return CSSFNetMessageID_PlayInstanceVoiceDataS2CEvt(); } }
+
 		#region Native Interfaces 
 		// Cmd: Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceJoinPlayInstanceCmd", CharSet = CharSet.Auto)]
@@ -283,6 +289,16 @@ namespace SF.Net
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceCallFunctionRes", CharSet = CharSet.Auto)]
 		static extern int CSSFNetMessageID_PlayInstanceCallFunctionRes();
 
+
+
+		// C2S: Send coded voice data to server
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceSendVoiceDataC2SEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceSendVoiceDataC2SEvt();
+
+
+		// S2C: Voice data
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetMessageID_PlayInstanceVoiceDataS2CEvt", CharSet = CharSet.Auto)]
+		static extern int CSSFNetMessageID_PlayInstanceVoiceDataS2CEvt();
 
 
 		#endregion //Native Interfaces 

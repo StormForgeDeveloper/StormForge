@@ -36,7 +36,7 @@ namespace SF
         virtual void SetLocation(const Vector4& location) override;
         virtual void SetVelocity(const Vector4& velocity) override;
         virtual void SetLookDirection(const Vector4& lookDirection) override;
-        virtual void SetGain(float gain) override;
+        virtual void SetVolume(float volume) override;
 
         void TickUpdate();
 

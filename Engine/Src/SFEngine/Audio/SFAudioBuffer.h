@@ -14,6 +14,7 @@
 #include "SFTypedefs.h"
 //#include "Container/SFCircularBuffer.h"
 #include "MemoryManager/SFCircularHeap.h"
+#include "Container/SFCircularPageQueue.h"
 #include "Audio/SFAudioTypes.h"
 
 
@@ -25,6 +26,9 @@ namespace SF
         size_t DataSize = 0;
         uint8_t Data[1];
     };
+
+    class IOutputStream;
+    IOutputStream& operator << (IOutputStream& stream, const AudioDataBlock& block);
 
 	/////////////////////////////////////////////////////////////////////////////////////
 	// 
@@ -63,6 +67,7 @@ namespace SF
         uint m_NumChannels = 1;
         EAudioFormat m_DataFormat = EAudioFormat::Float;
         size_t m_BytesPerSample = 0;
+        // guide value for audio source
         uint m_SamplesPerSec = 44100;
 
         SharedPointerT<CircularHeap> m_HeapPtr;

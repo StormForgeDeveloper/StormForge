@@ -17,6 +17,13 @@
 namespace SF
 {
 
+    IOutputStream& operator << (IOutputStream& stream, const AudioDataBlock& block)
+    {
+        stream << ArrayView<const uint8_t>(block.DataSize, block.Data);
+        return stream;
+    }
+
+
     AudioBuffer::AudioBuffer(uint numChannels, EAudioFormat dataFormat, uint samplesPerSec, size_t streamingBufferSize)
         : m_NumChannels(numChannels)
         , m_DataFormat(dataFormat)

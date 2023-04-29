@@ -58,8 +58,8 @@ namespace SF
         float GetPitch() const { return m_Pitch; }
         virtual void SetPitch(float pitch) { m_Pitch = pitch; assert(pitch > 0); }
 
-        float GetGain() const { return m_Gain; }
-        virtual void SetGain(float gain) { m_Gain = gain; assert(gain >= 0); }
+        float GetVolume() const { return m_Volume; }
+        virtual void SetVolume(float volume) { m_Volume = volume; assert(volume >= 0); }
 
         const AudioBufferPtr& CreateAudioBuffer(size_t bufferSize);
         const AudioBufferPtr& GetAudioBuffer() const { return m_AudioBufferPtr; }
@@ -79,7 +79,7 @@ namespace SF
         EPlayState m_PlayState = EPlayState::Init;
 
         float m_Pitch = 1.f;
-        float m_Gain = 1.0;
+        float m_Volume = 1.0;
 
         AudioBufferPtr m_AudioBufferPtr;
     };

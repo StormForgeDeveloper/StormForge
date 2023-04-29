@@ -432,6 +432,28 @@ C++: Cast message to CallFunctionRes to access values
 		- OutResults: VariableTable type. function result
 
 
+## SendVoiceDataC2SEvt
+Send coded voice data to server
+
+        Result SendVoiceDataC2SEvt(const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData)
+
+		- OutInPlayInstanceUID: GameInsUID type. Game instance UID
+
+		- OutInPlayerID: PlayerID type. player id
+
+		- OutInVoiceData: uint8 type. Voice data
+
+
+## VoiceDataS2CEvt
+Voice data
+
+        Result VoiceDataS2CEvt(const uint32_t &InActorID, const Array<uint8_t>& InVoiceData)
+
+		- OutInActorID: uint32 type. actor id
+
+		- OutInVoiceData: uint8 type. Voice data
+
+
 
 
 

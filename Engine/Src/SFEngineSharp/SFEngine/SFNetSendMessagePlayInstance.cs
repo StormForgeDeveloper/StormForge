@@ -206,6 +206,18 @@ namespace SF.Net
 			return result;
 		} // public int  CallFunctionCmd( System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, SF.VariableTable InParameters )
 
+		// C2S: Send coded voice data to server
+		public int  SendVoiceDataC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.Byte[] InVoiceData )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt(m_Connection.NativeHandle, InPlayInstanceUID, InPlayerID,(ushort)InVoiceData.Length, InVoiceData);
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.SendVoiceDataC2SEvt);
+			return result;
+		} // public int  SendVoiceDataC2SEvt( System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.Byte[] InVoiceData )
+
+
 		#region Native Interfaces 
 		// Cmd: Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinPlayInstanceCmd", CharSet = CharSet.Ansi)]
@@ -279,6 +291,12 @@ namespace SF.Net
 		// Cmd: To call general functionality
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceCallFunctionCmd", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstanceCallFunctionCmd(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.UInt32 InFunctionName, System.UInt64 InPlayerID, System.UInt16 _sizeOfInParameters,IntPtr InParameters );
+
+
+		// C2S: Send coded voice data to server
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstanceSendVoiceDataC2SEvt(System.IntPtr InNativeConnectionHandle, System.UInt64 InPlayInstanceUID, System.UInt64 InPlayerID, System.UInt16 _sizeOfInVoiceData,System.Byte[] InVoiceData );
+
 
 
 		#endregion //Native Interfaces 
@@ -534,6 +552,18 @@ namespace SF.Net
 		} // public int  CallFunctionRes( System.UInt64 InTransactionID, System.Int32 InResult, SF.VariableTable InResults )
 
 
+		// S2C: Voice data
+		public int  VoiceDataS2CEvt( System.UInt32 InActorID, System.Byte[] InVoiceData )
+		{
+ 			int result;
+			{
+			result = CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt(m_Connection.NativeHandle, InActorID,(ushort)InVoiceData.Length, InVoiceData);
+			}
+			if (m_Connection != null) m_Connection.HandleSentMessage(result, MessageIDPlayInstance.VoiceDataS2CEvt);
+			return result;
+		} // public int  VoiceDataS2CEvt( System.UInt32 InActorID, System.Byte[] InVoiceData )
+
+
 		#region Native Interfaces 
 		// Cmd: Player Join request.
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceJoinPlayInstanceRes", CharSet = CharSet.Ansi)]
@@ -640,6 +670,12 @@ namespace SF.Net
 		// Cmd: To call general functionality
 		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceCallFunctionRes", CharSet = CharSet.Ansi)]
 		static extern int CSSFNetAdapter_PlayInstanceCallFunctionRes(System.IntPtr InNativeConnectionHandle, System.UInt64 InTransactionID, System.Int32 InResult, System.UInt16 _sizeOfInResults,IntPtr InResults );
+
+
+
+		// S2C: Voice data
+		[DllImport(NativeDLLName, EntryPoint = "CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt", CharSet = CharSet.Ansi)]
+		static extern int CSSFNetAdapter_PlayInstanceVoiceDataS2CEvt(System.IntPtr InNativeConnectionHandle, System.UInt32 InActorID, System.UInt16 _sizeOfInVoiceData,System.Byte[] InVoiceData );
 
 
 

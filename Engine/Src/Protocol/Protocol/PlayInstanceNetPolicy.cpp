@@ -218,6 +218,20 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetPolicyPlayInstance::CallFunctionCmd( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
+	// C2S: Send coded voice data to server
+	Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::SendVoiceDataC2SEvt::Create(GetSystemHeap(), InPlayInstanceUID, InPlayerID, InVoiceData);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetPolicyPlayInstance::SendVoiceDataC2SEvt( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
 
 
 	// Cmd: Player Join request.
@@ -472,6 +486,20 @@ namespace SF
 		 return m_Endpoint->Send( pMessage );
 
 	}; // Result NetSvrPolicyPlayInstance::CallFunctionRes( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
+	// S2C: Voice data
+	Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
+	{
+ 		ScopeContext hr;
+
+		 MessageDataPtr pMessage;
+		 protocolCheckPtr(m_Endpoint);
+
+		 pMessage = SF::Message::PlayInstance::VoiceDataS2CEvt::Create(GetSystemHeap(), InActorID, InVoiceData);
+		 protocolCheckPtr(*pMessage);
+
+		 return m_Endpoint->Send( pMessage );
+
+	}; // Result NetSvrPolicyPlayInstance::VoiceDataS2CEvt( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
 
 
 }; // namespace SF

@@ -84,11 +84,11 @@ TEST_F(AudioTest, Playback)
 
     SFLog(Game, Info, "Playing sin wave");
 
-    Service::Audio->GetListener()->SetGain(2);
+    Service::Audio->GetListener()->SetVolume(2);
 
     AudioBufferPtr audioBuffer = Service::Audio->CreateBuffer(numChannels, format, samplesPerSec, testBuffer.size());
     AudioSourcePtr player = Service::Audio->CreateSource(audioBuffer);
-    //player->SetGain(10);
+    //player->SetVolume(10);
     player->Play();
 
     for (size_t dataOffset = 0; dataOffset < testBuffer.size(); dataOffset += samplesPerSec)
@@ -146,11 +146,11 @@ TEST_F(AudioTest, RecordingNPlayback)
 
     SFLog(Game, Info, "Playback recording");
 
-    Service::Audio->GetListener()->SetGain(2.f);
+    Service::Audio->GetListener()->SetVolume(2.f);
 
     AudioBufferPtr audioBuffer = Service::Audio->CreateBuffer(numChannels, format, samplesPerSec, testBuffer.size());
     AudioSourcePtr player = Service::Audio->CreateSource(audioBuffer);
-    player->SetGain(2);
+    player->SetVolume(2);
     player->Play();
 
     for (size_t dataOffset = 0; (dataOffset + dataSizePerBlock) <= testBuffer.size(); dataOffset += dataSizePerBlock)

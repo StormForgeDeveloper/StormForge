@@ -319,6 +319,25 @@ source_group(Application FILES
 	${SUBApplication_FILES} 
 )
 
+source_group(Engine FILES
+	${SUBEngine_FILES} 
+)
+
+set(SUBOnline_FILES
+	Online/SFOnlineClient.h
+	Online/SFOnlineClient.cpp
+	Online/SFOnlineClientComponent.h
+	Online/SFOnlineClientComponent.cpp
+	Online/SFOnlineActor.h
+	Online/SFOnlineActor.cpp
+    Online/SFOnlineAPIClient.h
+    Online/SFOnlineAPIClient.cpp
+  )
+
+source_group(Online FILES
+	${SUBOnline_FILES} 
+)
+
 set(SFENGINE_LIB_FILES
 	StreamDB/SFStreamDBDirectory.h
 	StreamDB/SFStreamDBDirectory.cpp
@@ -343,10 +362,6 @@ set(SFENGINE_LIB_FILES
 	SceneGraph/SFSceneNodeComponent.h
 	SceneGraph/SFSceneNodeComponentMesh.h
 	SceneGraph/SFSceneNodeComponentSkeletalMesh.h
-	Online/SFOnlineClient.h
-	Online/SFOnlineClient.cpp
-    Online/SFOnlineAPIClient.h
-    Online/SFOnlineAPIClient.cpp
 
     SFEnginePCH.h
 
@@ -355,7 +370,7 @@ set(SFENGINE_LIB_FILES
 
 
 
-add_library(SFEngine STATIC ${SFENGINE_LIB_FILES} ${SUBAudio_FILES} ${SUBNet_FILES} ${SUBAsset_FILES} ${SUBResource_FILES} ${SUBGraphics_FILES} ${SUBEngine_FILES} ${SUBApplication_FILES})
+add_library(SFEngine STATIC ${SFENGINE_LIB_FILES} ${SUBAudio_FILES} ${SUBNet_FILES} ${SUBAsset_FILES} ${SUBResource_FILES} ${SUBGraphics_FILES} ${SUBEngine_FILES} ${SUBApplication_FILES} ${SUBOnline_FILES})
 
 target_precompile_headers(SFEngine PRIVATE SFEnginePCH.h)
 

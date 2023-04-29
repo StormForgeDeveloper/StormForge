@@ -39,8 +39,8 @@ namespace SF
         const Vector4& GetLookDirection() const { return m_LookDirection; }
         virtual void SetLookDirection(const Vector4& lookDirection) { m_LookDirection = lookDirection; }
 
-        float GetGain() const { return m_Gain; }
-        virtual void SetGain(float gain) { m_Gain = gain; assert(gain > 0); }
+        float GetVolume() const { return m_Volume; }
+        virtual void SetVolume(float volume) { m_Volume = volume; assert(volume > 0); }
 
 
     private:
@@ -48,7 +48,7 @@ namespace SF
         Vector4 m_Location = Vector4::Zero();
         Vector4 m_Velocity = Vector4::Zero();
         Vector4 m_LookDirection = Vector4::Zero();
-        float m_Gain = 1.0;
+        float m_Volume = 1.0;
 
         AudioBufferPtr m_AudioBufferPtr;
     };
