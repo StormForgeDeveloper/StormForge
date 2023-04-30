@@ -197,10 +197,10 @@ namespace SF {
                 Node* pPrev{};
                 if (!FindPrevNode(pNode, pPrev))
                 {
-                    return ResultCode::SUCEESS_FALSE;
+                    return ResultCode::SUCCESS_FALSE;
                 }
 
-                return Remove(pPrev, pRemove);
+                return Remove(pPrev, pNode);
             }
 
 			// Remove 
