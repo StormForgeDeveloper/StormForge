@@ -45,24 +45,13 @@ namespace SF
     void AudioSourceOpenAL::SetLocation(const Vector4& location)
     {
         super::SetLocation(location);
-
-        WeakPointerT<AudioSourceOpenAL> audioSourceWeakPtr = this;
-        Service::Audio->RunOnAudioThread([audioSourceWeakPtr]()
-            {
-                AudioSourceOpenALPtr audioSourcePtr = audioSourceWeakPtr.AsSharedPtr<AudioSourceOpenAL>();
-                if (audioSourcePtr != nullptr && audioSourcePtr->m_ALSource != 0)
-                {
-                    const Vector4& location = audioSourcePtr->GetLocation();
-                    const Vector4& velocity = audioSourcePtr->GetVelocity();
-                    alSource3f(audioSourcePtr->m_ALSource, AL_POSITION, location[0], location[1], location[2]);
-                    alSource3f(audioSourcePtr->m_ALSource, AL_VELOCITY, velocity[0], velocity[1], velocity[2]);
-                }
-            });
+        m_LocationSerial++;
     }
 
     void AudioSourceOpenAL::SetVelocity(const Vector4& velocity)
     {
         super::SetVelocity(velocity);
+        m_LocationSerial++;
     }
 
     void AudioSourceOpenAL::SetPitch(float pitch)
@@ -165,6 +154,16 @@ namespace SF
         alSourcei(m_ALSource, AL_LOOPING, m_LoopSound);
     }
 
+    void AudioSourceOpenAL::ApplyLocationInternal()
+    {
+        m_LocationSync = m_LocationSerial;
+
+        const Vector4& location = GetLocation();
+        const Vector4& velocity = GetVelocity();
+        alSource3f(m_ALSource, AL_POSITION, location[0], location[1], location[2]);
+        alSource3f(m_ALSource, AL_VELOCITY, velocity[0], velocity[1], velocity[2]);
+    }
+
     void AudioSourceOpenAL::QueueBuffer(ALuint alBuffer, AudioDataBlock* dataBlock)
     {
         alBufferData(alBuffer, m_ALFormat, dataBlock->Data, (ALsizei)dataBlock->DataSize, (ALsizei)GetSamplesPerSec());
@@ -196,6 +195,11 @@ namespace SF
         if (m_SettingSerial != m_SettingSync)
         {
             ApplySettingInternal();
+        }
+
+        if (m_LocationSerial != m_LocationSync)
+        {
+            ApplyLocationInternal();
         }
 
         if (m_QueuedALBufferCount < NumBuffer)

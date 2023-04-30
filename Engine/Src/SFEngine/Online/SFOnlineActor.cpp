@@ -56,8 +56,9 @@ namespace SF
     //	OnlineActorComponent
     // 
 
-    OnlineActorComponent::OnlineActorComponent(StringCrc32 name)
+    OnlineActorComponent::OnlineActorComponent(OnlineActor* pOwner, StringCrc32 name)
         : Component(name)
+        , m_pOwner(pOwner)
     {
 
     }

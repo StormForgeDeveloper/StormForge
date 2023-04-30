@@ -60,7 +60,7 @@ namespace SF
         void StopInternal();
         void PauseInternal();
         void ApplySettingInternal();
-
+        void ApplyLocationInternal();
 
 
     private:
@@ -77,7 +77,7 @@ namespace SF
         Vector4 m_Velocity = Vector4::Zero();
         bool m_LoopSound = false;
 
-
+        uint m_LocationSerial = 0, m_LocationSync = 0;
         uint m_SettingSerial = 0, m_SettingSync = 0;
     };
 

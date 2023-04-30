@@ -49,10 +49,15 @@ namespace SF
     class OnlineActorComponent : public Component
     {
     public:
-        OnlineActorComponent(StringCrc32 name);
+        OnlineActorComponent(OnlineActor* pOwner, StringCrc32 name);
         virtual ~OnlineActorComponent();
 
         virtual Result OnComponentData(const Array<const uint8_t>&) { return ResultCode::SUCCESS_FALSE; }
+
+        OnlineActor& GetOwner() const { assert(m_pOwner);  return *m_pOwner; }
+
+    private:
+        OnlineActor* m_pOwner{};
     };
 
 
