@@ -3780,7 +3780,7 @@ namespace SF
 			{
  				SendVoiceDataC2SEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "PlayInstance::SendVoiceData, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, VoiceData:{4,30}",
+				SFLog(Net, Debug6, "PlayInstance::SendVoiceData, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, VoiceData:{4,30}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetVoiceData()); 
 				return ResultCode::SUCCESS;
 			}; // Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
@@ -3871,7 +3871,7 @@ namespace SF
 			{
  				VoiceDataS2CEvt parser;
 				parser.ParseMessage(*pMsg);
-				SFLog(Net, Debug1, "PlayInstance::VoiceData, {0}:{1} , ActorID:{2}, VoiceData:{3,30}",
+				SFLog(Net, Debug6, "PlayInstance::VoiceData, {0}:{1} , ActorID:{2}, VoiceData:{3,30}",
 						prefix, pMsg->GetMessageHeader()->Length, parser.GetActorID(), parser.GetVoiceData()); 
 				return ResultCode::SUCCESS;
 			}; // Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
