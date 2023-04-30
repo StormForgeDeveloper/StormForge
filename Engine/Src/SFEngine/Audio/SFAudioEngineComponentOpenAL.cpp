@@ -42,8 +42,10 @@ namespace SF
 
         super::InitializeComponent();
 
+#if SF_PLATFORM == SF_PLATFORM_WINDOWS
         // Hacky OpenAL log kill
         gLogLevel = (LogLevel)0;
+#endif
 
         SetPlaybackDevice(GetDefaultDeviceName(true));
 
