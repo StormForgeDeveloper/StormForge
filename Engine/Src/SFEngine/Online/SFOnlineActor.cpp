@@ -16,24 +16,34 @@
 
 namespace SF
 {
-    DoubleLinkedListStaticT<OnlineActorComponentInitializer*> OnlineActorComponentInitializer::stm_ComponentInitializers{};
+    OnlineActorComponentInitializer* OnlineActorComponentInitializer::stm_InitializerHead{};
 
     OnlineActorComponentInitializer::OnlineActorComponentInitializer()
-        : super(this)
     {
-        stm_ComponentInitializers.Add(this);
+        pNext = stm_InitializerHead;
+        stm_InitializerHead = this;
     }
 
     OnlineActorComponentInitializer::~OnlineActorComponentInitializer()
     {
-        stm_ComponentInitializers.Remove(this);
+        OnlineActorComponentInitializer** ppPrev = &stm_InitializerHead;
+        while (*ppPrev)
+        {
+            if ((*ppPrev) == this)
+            {
+                (*ppPrev) = pNext;
+                break;
+            }
+
+            ppPrev = &((*ppPrev)->pNext);
+        }
     }
 
     Result OnlineActorComponentInitializer::CreateComponentsFor(OnlineActor* actor)
     {
-        for (auto& itComponentInitializer : stm_ComponentInitializers)
+        for (OnlineActorComponentInitializer* pCur = stm_InitializerHead; pCur; pCur = pCur->pNext)
         {
-            OnlineActorComponent* newComponent = itComponentInitializer->Create(actor);
+            OnlineActorComponent* newComponent = pCur->Create(actor);
             actor->AddComponent(newComponent);
         }
 
@@ -69,6 +79,7 @@ namespace SF
         : m_ComponentManager(GetEngineHeap())
     {
 
+        OnlineActorComponentInitializer::CreateComponentsFor(this);
         m_ComponentManager.InitializeComponents();
     }
 

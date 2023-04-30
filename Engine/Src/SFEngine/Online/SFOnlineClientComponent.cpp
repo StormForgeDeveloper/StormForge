@@ -17,24 +17,36 @@
 namespace SF
 {
 
-    DoubleLinkedListStaticT<OnlineClientComponentInitializer*> OnlineClientComponentInitializer::stm_ComponentInitializers{};
+    OnlineClientComponentInitializer* OnlineClientComponentInitializer::stm_InitializerHead{};
 
     OnlineClientComponentInitializer::OnlineClientComponentInitializer()
-        : super(this)
     {
-        stm_ComponentInitializers.Add(this);
+        pNext = stm_InitializerHead;
+        stm_InitializerHead = this;
     }
 
     OnlineClientComponentInitializer::~OnlineClientComponentInitializer()
     {
-        stm_ComponentInitializers.Remove(this);
+        // TODO: StaticLinkedList's thread sync has virtual and doesn't let the class instance be in zero initializer area.
+        //  Fixme later.
+        OnlineClientComponentInitializer** ppPrev = &stm_InitializerHead;
+        while (*ppPrev)
+        {
+            if ((*ppPrev) == this)
+            {
+                (*ppPrev) = pNext;
+                break;
+            }
+
+            ppPrev = &((*ppPrev)->pNext);
+        }
     }
 
     Result OnlineClientComponentInitializer::CreateComponentsFor(OnlineClient* client)
     {
-        for (auto& itComponentInitializer : stm_ComponentInitializers)
+        for (OnlineClientComponentInitializer* pCur = stm_InitializerHead; pCur; pCur = pCur->pNext)
         {
-            OnlineClientComponent* newComponent = itComponentInitializer->Create(client);
+            OnlineClientComponent* newComponent = pCur->Create(client);
             client->AddComponent(newComponent);
         }
         return ResultCode::SUCCESS;

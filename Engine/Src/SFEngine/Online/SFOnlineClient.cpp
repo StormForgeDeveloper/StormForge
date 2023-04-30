@@ -698,9 +698,6 @@ namespace SF
         , m_OnlineActorByActorId(GetHeap())
         , m_ComponentManager(GetHeap())
 	{
-        OnlineClientComponentInitializer::CreateComponentsFor(this);
-
-        SetTickGroup(EngineTaskTick::AsyncTick);
 	}
 
 	OnlineClient::~OnlineClient()
@@ -708,6 +705,21 @@ namespace SF
 		ClearTasks();
 		DisconnectAll();
 	}
+
+    Result OnlineClient::InitializeObject()
+    {
+        Result hr;
+
+        defCheck(super::InitializeObject());
+
+        OnlineClientComponentInitializer::CreateComponentsFor(this);
+
+        defCheck(m_ComponentManager.InitializeComponents());
+
+        SetTickGroup(EngineTaskTick::AsyncTick);
+
+        return hr;
+    }
 
 	void OnlineClient::ClearTasks()
 	{

@@ -26,11 +26,9 @@ namespace SF
 
     /////////////////////////////////////////////////////////////////////////////////////
     // Online actor component initializer
-    class OnlineActorComponentInitializer : public DoubleLinkedListStaticT<OnlineActorComponentInitializer*, ThreadSyncTraitNone>::Node
+    class OnlineActorComponentInitializer
     {
     public:
-        using super = DoubleLinkedListStaticT<OnlineActorComponentInitializer*, ThreadSyncTraitNone>::Node;
-
         OnlineActorComponentInitializer();
         virtual ~OnlineActorComponentInitializer();
 
@@ -39,7 +37,10 @@ namespace SF
         // create components for actor
         static Result CreateComponentsFor(OnlineActor* actor);
     private:
-        static DoubleLinkedListStaticT<OnlineActorComponentInitializer*> stm_ComponentInitializers;
+
+        OnlineActorComponentInitializer* pNext{};
+
+        static OnlineActorComponentInitializer* stm_InitializerHead;
     };
 
 

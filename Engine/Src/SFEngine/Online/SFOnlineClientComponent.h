@@ -13,8 +13,7 @@
 
 #include "SFTypedefs.h"
 #include "Component/SFComponent.h"
-#include "Container/SFDoubleLinkedList.h"
-
+#include "Container/SFStaticLinkedList.h"
 
 
 namespace SF
@@ -22,12 +21,12 @@ namespace SF
     class OnlineClient;
     class OnlineClientComponent;
 
+
     /////////////////////////////////////////////////////////////////////////////////////
 // Online actor component initializer
-    class OnlineClientComponentInitializer : public DoubleLinkedListStaticT<OnlineClientComponentInitializer*, ThreadSyncTraitNone>::Node
+    class OnlineClientComponentInitializer
     {
     public:
-        using super = DoubleLinkedListStaticT<OnlineClientComponentInitializer*, ThreadSyncTraitNone>::Node;
 
         OnlineClientComponentInitializer();
         virtual ~OnlineClientComponentInitializer();
@@ -38,7 +37,10 @@ namespace SF
         static Result CreateComponentsFor(OnlineClient* client);
 
     private:
-        static DoubleLinkedListStaticT<OnlineClientComponentInitializer*> stm_ComponentInitializers;
+
+        OnlineClientComponentInitializer* pNext{};
+
+        static OnlineClientComponentInitializer* stm_InitializerHead;
     };
 
 
