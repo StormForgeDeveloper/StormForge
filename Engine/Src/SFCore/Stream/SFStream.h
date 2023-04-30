@@ -195,17 +195,32 @@ namespace SF
 		template< class DataType >
 		Result ReadLink(DataType*& pDst, size_t readCount)
 		{
-			auto readSize = readCount * sizeof(DataType);
-			if (GetRemainSize() < readSize)
-				return ResultCode::IO_BADPACKET_SIZE;// sizeCheck
+            size_t readSize{};
+            if constexpr (std::is_scalar_v<DataType>)
+            {
+                readSize = readCount * sizeof(DataType);
+                if (GetRemainSize() < readSize)
+                	return ResultCode::IO_BADPACKET_SIZE;// sizeCheck
 
-			if (readSize > 0)
-			{
-				pDst = (DataType*)(GetBufferPtr() + GetPosition());
-				Skip(readSize);
-			}
-			else
-				pDst = nullptr;
+                if (readSize > 0)
+                {
+                    pDst = (DataType*)(GetBufferPtr() + GetPosition());
+                    if (!Skip(readSize))
+                        return ResultCode::IO_BADPACKET_SIZE;// sizeCheck
+                }
+                else
+                    pDst = nullptr;
+            }
+            else
+            {
+                for (uint iData = 0; iData < readCount; iData++)
+                {
+                    pDst = (DataType*)(GetBufferPtr() + GetPosition());
+                    readSize = SerializedSizeOf(*pDst);
+                    if (!Skip(readSize))
+                        return ResultCode::IO_BADPACKET_SIZE;// sizeCheck
+                }
+            }
 
 			return ResultCode::SUCCESS;
 		}
@@ -223,21 +238,6 @@ namespace SF
 				return ret;
 
 			data.SetLinkedBuffer(NumItems, NumItems, pData);
-
-            int32_t SizeRemain{};
-            if constexpr (std::is_scalar_v<DataType>)
-            {
-                SizeRemain = static_cast<int32_t>(NumItems * sizeof(DataType));
-            }
-            else
-            {
-                for (auto& itData : data)
-                {
-                    SizeRemain += static_cast<int32_t>(SerializedSizeOf(itData));
-                }
-            }
-			if (SizeRemain > 0)
-				Skip(SizeRemain);
 
 			return ResultCode::SUCCESS;
 		}
