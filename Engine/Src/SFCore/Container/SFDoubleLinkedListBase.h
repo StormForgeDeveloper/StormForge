@@ -110,7 +110,7 @@ namespace SF {
 			//memset(&m_Header, 0, sizeof(m_Header));
 		}
 
-		virtual ~DoubleLinkedListBase()
+		~DoubleLinkedListBase()
 		{
 		}
 
@@ -239,7 +239,7 @@ namespace SF {
 			return m_Header == nullptr;
 		}
 
-		virtual void Clear()
+		void Clear()
 		{
 			m_Header = nullptr;
 		}

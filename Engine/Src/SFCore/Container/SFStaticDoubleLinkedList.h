@@ -114,7 +114,7 @@ namespace SF
 				m_Header.pNext = &m_Header;
 			}
 
-			virtual ~StaticDoubleLinkedListT()
+			~StaticDoubleLinkedListT()
 			{
 				Clear();
 			}

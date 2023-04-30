@@ -141,7 +141,7 @@ namespace SF {
 		{
 		}
 
-		virtual ~DoubleLinkedListStaticT()
+		~DoubleLinkedListStaticT()
 		{
 		}
 
@@ -188,11 +188,6 @@ namespace SF {
 		bool Empty()
 		{
 			return this->m_Header == nullptr;
-		}
-
-		virtual void Clear() override
-		{
-			super::Clear();
 		}
 
 		// If func returns false, it will terminate the loop
@@ -348,7 +343,7 @@ namespace SF {
 		{
 		}
 
-		virtual ~DoubleLinkedList()
+		~DoubleLinkedList()
 		{
 		}
 
@@ -420,12 +415,7 @@ namespace SF {
 			return this->m_Header == nullptr;
 		}
 
-		virtual void Clear() override
-		{
-			super::Clear();
-		}
-
-		template<class Func>
+        template<class Func>
 		void for_each(Func func)
 		{
 			super::for_each(

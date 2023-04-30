@@ -133,7 +133,7 @@ namespace SF {
 				memset(&m_Header, 0, sizeof(m_Header));
 			}
 
-			virtual ~StaticLinkedList()
+			~StaticLinkedList()
 			{
 			}
 
@@ -191,6 +191,17 @@ namespace SF {
 
 				return ResultCode::SUCCESS;
 			}
+
+            Result Remove(Node* pNode)
+            {
+                Node* pPrev{};
+                if (!FindPrevNode(pNode, pPrev))
+                {
+                    return ResultCode::SUCEESS_FALSE;
+                }
+
+                return Remove(pPrev, pRemove);
+            }
 
 			// Remove 
 			Result Remove(Node* pPrevNode, Node* pRemove)
