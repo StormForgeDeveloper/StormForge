@@ -555,7 +555,8 @@ namespace SF {
 			if (pMsg == nullptr)
 				return hr;
 
-			auto msgID = pMsg->GetMessageHeader()->msgID;
+            Message::MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
+			auto msgID = pMsgHeader->msgID;
 
 			// All messages must be decrypted before came here
 			Assert(!msgID.IDs.Encrypted);
@@ -564,7 +565,9 @@ namespace SF {
 			Protocol::PrintDebugMessage("Recv", pMsg);
 
 			//Assert( MemoryPool::CheckMemoryHeader( *pMsg ) );
-			Assert(pMsg->GetDataLength() == 0 || pMsg->GetMessageHeader()->Crc32 != 0);
+			Assert(pMsg->GetDataLength() == 0 // 0 crc for zero size packet
+                || pMsgHeader->Length > 1024 // Multiple sub framed message can't have crc value. each sub frame does
+                || pMsgHeader->Crc32 != 0); // Crc should have value
 
 			if (GetEventHandler() == nullptr)
 			{

@@ -127,10 +127,16 @@ namespace SF
             return ResultCode::UNEXPECTED;
         }
 
-        size_t maxFramesCanRead = outBuffer.capacity() / GetSampleFrameSize();
+        size_t curBufferPos = outBuffer.size();
+        size_t maxFramesCanRead = (outBuffer.capacity() - curBufferPos) / GetSampleFrameSize();
+        if (maxFramesCanRead == 0)
+        {
+            return ResultCode::OUT_OF_MEMORY;
+        }
+
         size_t sampleCount = Math::Min<size_t>(maxFramesCanRead, availableSampleCount);
 
-        size_t curBufferPos = outBuffer.size();
+        assert((curBufferPos + sampleCount * GetSampleFrameSize()) <= outBuffer.capacity());
         outBuffer.resize(curBufferPos + sampleCount * GetSampleFrameSize());
 
         alcCaptureSamples(m_pDevice, outBuffer.data() + curBufferPos, ALCsizei(sampleCount));

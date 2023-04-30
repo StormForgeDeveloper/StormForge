@@ -519,7 +519,6 @@ namespace Net {
 
 		auto socketType = GetSocketType();
 
-
 		if (Util::TimeSince(GetNetCtrlTime()) > Const::HEARTBEAT_TIMEOUT) // connection time out
 		{
 			SFLog(Net, Debug, "Connection heartbeat Timeout CID:{0}, sockType:{1}", GetCID(), socketType);
