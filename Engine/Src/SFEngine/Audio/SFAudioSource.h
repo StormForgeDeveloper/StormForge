@@ -61,6 +61,19 @@ namespace SF
         float GetVolume() const { return m_Volume; }
         virtual void SetVolume(float volume) { m_Volume = volume; assert(volume >= 0); }
 
+        EAudioSourceAttenuation GetAttenuationModel() const { return m_AttenuationModel; }
+        virtual void SetAttenuationModel(EAudioSourceAttenuation attenuationModel) { m_AttenuationModel = attenuationModel; }
+
+        float GetReferenceDistance() const { return m_ReferenceDistance; }
+        virtual void SetReferenceDistance(float referenceDistance) { m_ReferenceDistance = referenceDistance; }
+
+        float GetMaxDistance() const { return m_MaxDistance; }
+        virtual void SetMaxDistance(float maxDistance) { m_MaxDistance = maxDistance; }
+
+        float GetRolloffFactor() const { return m_RolloffFactor; }
+        virtual void SetRolloffFactor(float rolloffFactor) { m_RolloffFactor = rolloffFactor; }
+
+
         const AudioBufferPtr& CreateAudioBuffer(size_t bufferSize);
         const AudioBufferPtr& GetAudioBuffer() const { return m_AudioBufferPtr; }
 
@@ -80,6 +93,10 @@ namespace SF
 
         float m_Pitch = 1.f;
         float m_Volume = 1.0;
+        EAudioSourceAttenuation m_AttenuationModel = EAudioSourceAttenuation::None;
+        float m_ReferenceDistance = 2;
+        float m_MaxDistance = 10;
+        float m_RolloffFactor = 1;
 
         AudioBufferPtr m_AudioBufferPtr;
     };

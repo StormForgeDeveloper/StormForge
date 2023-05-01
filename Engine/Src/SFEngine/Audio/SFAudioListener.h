@@ -47,7 +47,7 @@ namespace SF
 
         Vector4 m_Location = Vector4::Zero();
         Vector4 m_Velocity = Vector4::Zero();
-        Vector4 m_LookDirection = Vector4::Zero();
+        Vector4 m_LookDirection = Vector4(1,0,0);
         float m_Volume = 1.0;
 
         AudioBufferPtr m_AudioBufferPtr;

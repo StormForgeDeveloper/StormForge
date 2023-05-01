@@ -12,6 +12,10 @@
 #include "SFEnginePCH.h"
 #include "Audio/SFAudioOpenAL.h"
 #include "Audio/SFAudioSourceOpenAL.h"
+#include "Util/SFStrFormat.h"
+#include "Util/SFToStringEngineTypes.h"
+#include "Math/SF3DMathSerialization.h"
+
 #include <AL/al.h>
 
 namespace SF
@@ -66,6 +70,29 @@ namespace SF
         m_SettingSerial++;
     }
 
+    void AudioSourceOpenAL::SetAttenuationModel(EAudioSourceAttenuation attenuationModel)
+    {
+        super::SetAttenuationModel(attenuationModel);
+        m_SettingSerial++;
+    }
+
+    void AudioSourceOpenAL::SetReferenceDistance(float referenceDistance)
+    {
+        super::SetReferenceDistance(referenceDistance);
+        m_SettingSerial++;
+    }
+
+    void AudioSourceOpenAL::SetMaxDistance(float maxDistance)
+    {
+        super::SetMaxDistance(maxDistance);
+        m_SettingSerial++;
+    }
+
+    void AudioSourceOpenAL::SetRolloffFactor(float rolloffFactor)
+    {
+        super::SetRolloffFactor(rolloffFactor);
+        m_SettingSerial++;
+    }
 
     Result AudioSourceOpenAL::Play()
     {
@@ -150,8 +177,44 @@ namespace SF
         m_SettingSync = m_SettingSerial;
         alSourcef(m_ALSource, AL_PITCH, GetPitch());
         alSourcef(m_ALSource, AL_GAIN, GetVolume());
-        alSourcef(m_ALSource, AL_MAX_GAIN, GetVolume() * 2); // increase Volume cap
+        alSourcef(m_ALSource, AL_MIN_GAIN, 0.01f);
+        alSourcef(m_ALSource, AL_MAX_GAIN, 2); // increase Volume cap
         alSourcei(m_ALSource, AL_LOOPING, m_LoopSound);
+
+        switch (GetAttenuationModel())
+        {
+        default:
+        case EAudioSourceAttenuation::None:
+            alDistanceModel(AL_NONE);
+            break;
+        case EAudioSourceAttenuation::Linear:
+            //distance = max(distance, AL_REFERENCE_DISTANCE) 
+            // distance = min(distance, AL_MAX_DISTANCE)
+            //  gain = (1 – AL_ROLLOFF_FACTOR * (distance – AL_REFERENCE_DISTANCE) / (AL_MAX_DISTANCE – AL_REFERENCE_DISTANCE))
+            alDistanceModel(AL_LINEAR_DISTANCE_CLAMPED);
+            alSourcef(m_ALSource, AL_MAX_DISTANCE, GetMaxDistance());
+            alSourcef(m_ALSource, AL_ROLLOFF_FACTOR, GetRolloffFactor());
+            alSourcef(m_ALSource, AL_REFERENCE_DISTANCE, GetReferenceDistance());
+            break;
+        case EAudioSourceAttenuation::InverseDistance:
+            // distance = max(distance,AL_REFERENCE_DISTANCE); 
+            // distance = min(distance, AL_MAX_DISTANCE);
+            // gain = AL_REFERENCE_DISTANCE / (AL_REFERENCE_DISTANCE + AL_ROLLOFF_FACTOR * (distance – AL_REFERENCE_DISTANCE));
+            alDistanceModel(AL_INVERSE_DISTANCE_CLAMPED);
+            alSourcef(m_ALSource, AL_MAX_DISTANCE, GetMaxDistance());
+            alSourcef(m_ALSource, AL_ROLLOFF_FACTOR, GetRolloffFactor());
+            alSourcef(m_ALSource, AL_REFERENCE_DISTANCE, GetReferenceDistance());
+            break;
+        case EAudioSourceAttenuation::ExponentialDistance:
+            // distance = max(distance, AL_REFERENCE_DISTANCE) 
+            // distance = min(distance, AL_MAX_DISTANCE)
+            // gain = (distance / AL_REFERENCE_DISTANCE) ^ (-AL_ROLLOFF_FACTOR)
+            alDistanceModel(AL_EXPONENT_DISTANCE_CLAMPED);
+            alSourcef(m_ALSource, AL_MAX_DISTANCE, GetMaxDistance());
+            alSourcef(m_ALSource, AL_ROLLOFF_FACTOR, GetRolloffFactor());
+            alSourcef(m_ALSource, AL_REFERENCE_DISTANCE, GetReferenceDistance());
+            break;
+        }
     }
 
     void AudioSourceOpenAL::ApplyLocationInternal()
@@ -160,6 +223,8 @@ namespace SF
 
         const Vector4& location = GetLocation();
         const Vector4& velocity = GetVelocity();
+
+        //SFLog(System, Info, "Source:{0}", location);
         alSource3f(m_ALSource, AL_POSITION, location[0], location[1], location[2]);
         alSource3f(m_ALSource, AL_VELOCITY, velocity[0], velocity[1], velocity[2]);
     }

@@ -40,6 +40,10 @@ namespace SF
         virtual void SetVelocity(const Vector4& velocity) override;
         virtual void SetPitch(float pitch) override;
         virtual void SetVolume(float gain) override;
+        virtual void SetAttenuationModel(EAudioSourceAttenuation attenuationModel) override;
+        virtual void SetReferenceDistance(float referenceDistance) override;
+        virtual void SetMaxDistance(float maxDistance) override;
+        virtual void SetRolloffFactor(float rolloffFactor) override;
 
         virtual Result Play() override;
         virtual Result Stop() override;

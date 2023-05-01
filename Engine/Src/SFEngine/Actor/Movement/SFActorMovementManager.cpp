@@ -70,6 +70,10 @@ namespace SF
 	{
 	}
 
+    void SendingActorMovementManager::InitMovement(const ActorMovement& movement)
+    {
+        m_LatestEnqueued = movement;
+    }
 
 	Result SendingActorMovementManager::EnqueueMovement(const ActorMovement& newMove)
 	{

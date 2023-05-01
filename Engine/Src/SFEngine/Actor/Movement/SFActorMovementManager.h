@@ -73,6 +73,8 @@ namespace SF
 		virtual ~SendingActorMovementManager();
 
 		void SetActorID(ActorID actorId) { m_ActorId = actorId; }
+        void InitMovement(const ActorMovement& movement);
+
         const ActorMovement& GetLatestMovement() const { return m_LatestEnqueued; }
 
 		virtual Result EnqueueMovement(const ActorMovement& newMove) override;

@@ -185,7 +185,7 @@ namespace SF
 
 		void ClearTasks();
 
-		void InitMovement(ActorID actorId, uint32_t newMoveFrame);
+		void InitMovement(ActorID actorId, const ActorMovement& movement);
 		void SetupInstanceInfo();
 		void ClearInstanceInfo();
 		void RegisterGameHandlers();
