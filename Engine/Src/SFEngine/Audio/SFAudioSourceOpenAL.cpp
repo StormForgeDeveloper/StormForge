@@ -177,7 +177,7 @@ namespace SF
         m_SettingSync = m_SettingSerial;
         alSourcef(m_ALSource, AL_PITCH, GetPitch());
         alSourcef(m_ALSource, AL_GAIN, GetVolume());
-        alSourcef(m_ALSource, AL_MIN_GAIN, 0.01f);
+        alSourcef(m_ALSource, AL_MIN_GAIN, 0);
         alSourcef(m_ALSource, AL_MAX_GAIN, 2); // increase Volume cap
         alSourcei(m_ALSource, AL_LOOPING, m_LoopSound);
 
