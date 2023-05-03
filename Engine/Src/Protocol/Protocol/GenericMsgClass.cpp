@@ -93,6 +93,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Generic::GenericFailureCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -181,6 +182,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Generic::GenericFailureRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 

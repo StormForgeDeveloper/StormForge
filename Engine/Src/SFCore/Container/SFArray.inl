@@ -221,10 +221,10 @@ namespace SF {
 		}
 
 		template< class DataType >
-		void ArrayView<DataType>::SetLinkedBuffer(size_t maxDataCount, size_t dataCount, DataType* pDataPtr)
+		void ArrayView<DataType>::SetLinkedBuffer(size_t bufferSize, size_t dataCount, DataType* pDataPtr)
 		{
 			Array<DataType>::SetSizeInternal(0);
-			Array<DataType>::SetBuffPtrConstexpr(maxDataCount, pDataPtr);
+			Array<DataType>::SetBuffPtrConstexpr(bufferSize, pDataPtr);
 			Array<DataType>::SetSizeInternal(dataCount);
 		}
 

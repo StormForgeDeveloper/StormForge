@@ -184,8 +184,6 @@ namespace SF {
 #pragma pack(pop)
 
 
-
-
 #ifdef __GNUC__
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"

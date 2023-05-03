@@ -100,6 +100,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinPlayInstanceCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -215,6 +216,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinPlayInstanceRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -256,6 +258,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinPlayInstanceRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -348,6 +351,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerKickedS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -443,6 +447,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayPacketC2SEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -590,6 +595,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewActorInViewS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -637,6 +643,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewActorInViewS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -732,6 +739,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::RemoveActorFromViewS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -821,6 +829,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerMovementC2SEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -908,6 +917,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ActorMovementS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -997,6 +1007,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ActorMovementsS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1108,6 +1119,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerStateChangedS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1147,6 +1159,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerStateChangedS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1254,6 +1267,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncReliableC2SEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1287,6 +1301,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncReliableC2SEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1391,6 +1406,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncC2SEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1424,6 +1440,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncC2SEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1521,6 +1538,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::OccupyMapObjectCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1618,6 +1636,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::OccupyMapObjectRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1713,6 +1732,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UnoccupyMapObjectCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1809,6 +1829,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UnoccupyMapObjectRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1920,6 +1941,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UseMapObjectCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1957,6 +1979,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UseMapObjectCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2071,6 +2094,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UseMapObjectRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2110,6 +2134,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UseMapObjectRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2227,6 +2252,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2266,6 +2292,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2356,6 +2383,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2465,6 +2493,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2502,6 +2531,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2598,6 +2628,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::LevelUpS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2690,6 +2721,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CreateStreamCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2780,6 +2812,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CreateStreamRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2871,6 +2904,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::FindStreamCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -2961,6 +2995,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::FindStreamRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -3052,6 +3087,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::DeleteStreamCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -3142,6 +3178,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::DeleteStreamRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -3229,6 +3266,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::GetStreamListCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -3317,6 +3355,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::GetStreamListRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -3423,6 +3462,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CallFunctionCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -3458,6 +3498,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CallFunctionCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -3562,6 +3603,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CallFunctionRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -3595,6 +3637,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CallFunctionRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -3689,6 +3732,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::SendVoiceDataC2SEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -3779,6 +3823,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::VoiceDataS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 

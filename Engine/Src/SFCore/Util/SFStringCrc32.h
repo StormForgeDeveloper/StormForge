@@ -34,20 +34,11 @@ namespace SF
 
 		StringCrc32(const char* text);
 
-		constexpr uint32_t GetHash() const
-		{
-			return m_Crc;
-		}
+		constexpr uint32_t GetHash() const { return m_Crc; }
 
-		constexpr operator uint32_t() const
-		{
-			return m_Crc;
-		}
+		constexpr operator uint32_t() const { return m_Crc; }
 
-		explicit operator const char*() const
-		{
-			return ToString();
-		}
+		explicit operator const char*() const { return ToString(); }
 
 		constexpr bool operator == (const StringCrc32& op) const { return m_Crc == op.m_Crc; }
 		constexpr bool operator != (const StringCrc32& op) const { return m_Crc != op.m_Crc; }

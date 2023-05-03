@@ -122,7 +122,7 @@ namespace SF {
 
 			virtual ~ArrayView();
 
-			void SetLinkedBuffer(size_t maxDataCount, size_t dataCount, DataType* pDataPtr);
+			void SetLinkedBuffer(size_t bufferSize, size_t dataCount, DataType* pDataPtr);
 			constexpr void SetLinkedBuffer(size_t dataCount, DataType* pDataPtr);
 			void SetLinkedBuffer(const Array<DataType>& srcLink);
 

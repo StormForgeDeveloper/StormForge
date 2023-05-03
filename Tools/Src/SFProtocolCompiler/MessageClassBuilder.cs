@@ -895,6 +895,7 @@ namespace ProtocolCompiler
             if (bHasParameters)
             {
                 MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());");
+                MatchIndent(); OutStream.WriteLine("BufferView.resize(0);");
                 MatchIndent(); OutStream.WriteLine("OutputMemoryStream outputStream(BufferView);");
                 MatchIndent(); OutStream.WriteLine("IOutputStream* output = outputStream.ToOutputStream();");
                 NewLine();

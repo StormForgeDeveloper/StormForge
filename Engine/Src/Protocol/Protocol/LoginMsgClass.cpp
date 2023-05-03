@@ -101,6 +101,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -205,6 +206,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -311,6 +313,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginByFacebookCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -417,6 +420,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginByFacebookRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -519,6 +523,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginBySteamCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -624,6 +629,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginBySteamRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -719,6 +725,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::CreateRandomUserCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -818,6 +825,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::CreateRandomUserRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -914,6 +922,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::UpdateMyScoreCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1007,6 +1016,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::UpdateMyScoreRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1100,6 +1110,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::GetRankingListCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1193,6 +1204,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::GetRankingListRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1283,6 +1295,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DataTestCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1374,6 +1387,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DataTestRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1532,6 +1546,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DebugPrintALLRankingCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
@@ -1617,6 +1632,7 @@ namespace SF
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DebugPrintALLRankingRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
+				BufferView.resize(0);
 				OutputMemoryStream outputStream(BufferView);
 				IOutputStream* output = outputStream.ToOutputStream();
 
