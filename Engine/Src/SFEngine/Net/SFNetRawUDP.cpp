@@ -266,16 +266,16 @@ namespace Net {
 
 
 	// Send message to connection with network device
-	Result RawUDP::SendMsg(const sockaddr_storage& dest, SharedPointerT<Message::MessageData>& pMsg)
+	Result RawUDP::SendMsg(const sockaddr_storage& dest, SharedPointerT<MessageData>& pMsg)
 	{
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
 
-		Message::MessageID msgID = pMsg->GetMessageHeader()->msgID;
+		MessageID msgID = pMsg->GetMessageHeader()->msgID;
 		IOBUFFER_WRITE *pOverlapped = nullptr;
 
 
 		netMem(pOverlapped = new(GetHeap()) IOBUFFER_WRITE);
-		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, std::forward<SharedPointerT<Message::MessageData>>(pMsg));
+		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, std::forward<SharedPointerT<MessageData>>(pMsg));
 		pMsg = nullptr;
 
 		if (NetSystem::IsProactorSystem())
@@ -314,7 +314,7 @@ namespace Net {
 		}
 		else
 		{
-			if (msgID.IDs.Type == Message::MSGTYPE_NETCONTROL)
+			if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
 			{
 				SFLog(Net, Debug3, "RawUDP SendCtrl dest:{0}, msg:{1}", dest, msgID);
 			}
@@ -331,42 +331,36 @@ namespace Net {
 	// called when incoming message occur
 	Result RawUDP::OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff)
 	{
-		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<Message::MessageData> pMsg;
-		Message::MobileMessageHeader * pMsgHeader = (Message::MobileMessageHeader*)pBuff;
+		Result hr;
+		SharedPointerT<MessageData> pMsg;
+        const MessageHeader * pMsgHeader = reinterpret_cast<const MessageHeader*>(pBuff);
 
 		//SFLog(Net, Debug3, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
 
 		if (uiBuffSize == 0)
-			goto Proc_End;
+			return hr;
 
 		while (uiBuffSize)
 		{
-			pMsgHeader = (Message::MobileMessageHeader*)pBuff;
-			if (uiBuffSize < sizeof(Message::MobileMessageHeader) || uiBuffSize < pMsgHeader->Length)
+            pMsgHeader = reinterpret_cast<const MessageHeader*>(pBuff);
+			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->Length)
 			{
 				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->Length);
-				netErr(ResultCode::IO_BADPACKET_SIZE);
+				netCheck(ResultCode::IO_BADPACKET_SIZE);
 			}
 
-			netMem(pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
+			netCheckMem(pMsg = MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
 
 			uiBuffSize -= pMsgHeader->Length;
 			pBuff += pMsgHeader->Length;
 
 			m_MessageHandler(remoteAddr, pMsg);
 
-			netChk(hr);
+			netCheck(hr);
 		}
-
-	Proc_End:
-
-		pMsg = nullptr;
 
 		return hr;
 	}
-
-
 
 } // namespace Net
 } // namespace SF

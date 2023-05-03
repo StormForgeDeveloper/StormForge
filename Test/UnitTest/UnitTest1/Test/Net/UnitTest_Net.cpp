@@ -58,7 +58,7 @@ TEST_F(NetTest, NetAddress)
 //
 //TEST_F(NetTest, Message)
 //{
-//	SF::Message::MessageData *pMsgData = nullptr;
+//	SF::MessageData *pMsgData = nullptr;
 //	const char* strID = "MyID";
 //	const char* strPassword = "Pas1234";
 //
@@ -75,7 +75,7 @@ TEST_F(NetTest, NetAddress)
 //
 //
 //template< class MessageClassType >
-//Result HandleMessage( SF::Message::MessageData *pMsgData, MessageClassType* &pMsgInstance )
+//Result HandleMessage( SF::MessageData *pMsgData, MessageClassType* &pMsgInstance )
 //{
 //	pMsgInstance = nullptr;
 //	if( pMsgData == nullptr )
@@ -101,14 +101,14 @@ TEST_F(NetTest, NetAddress)
 //	const SF::GameInsUID InInsUID(3,67893);
 //
 //	Net::SetNetAddress(InGameInsSvr, "127.0.0.1", 1234);
-//	typedef std::function<Result(SF::Message::MessageData*)> MessageHandlerType;
+//	typedef std::function<Result(SF::MessageData*)> MessageHandlerType;
 //	typedef SF::Svr::MessageHandlerTable<MessageHandlerType> TestMessageTable;
 //	SF::CheckCtrMemory();
 //	SF::StaticAllocator<10> allocator(SF::STDAllocator::GetInstance());
 //	TestMessageTable messageHandlers(allocator);
 //	SF::CheckCtrMemory();
 //	messageHandlers.Register<SF::Message::Login::LoginCmd>(__FILE__, __LINE__,
-//		[&](SF::Message::MessageData *pMsgData)->Result {
+//		[&](SF::MessageData *pMsgData)->Result {
 //		SF::Message::Login::LoginCmd *pMsg = nullptr;
 //			EXPECT_HRESULT_SUCCEEDED(HandleMessage<SF::Message::Login::LoginCmd>(pMsgData, pMsg));
 //			if( pMsg ) 
@@ -116,7 +116,7 @@ TEST_F(NetTest, NetAddress)
 //			return S_OK;
 //	});
 //	messageHandlers.Register<SF::Message::Login::LoginRes>(__FILE__, __LINE__,
-//		[&](SF::Message::MessageData *pMsgData)->Result	{
+//		[&](SF::MessageData *pMsgData)->Result	{
 //		SF::Message::Login::LoginRes *pMsg = nullptr;
 //		EXPECT_HRESULT_SUCCEEDED(HandleMessage<SF::Message::Login::LoginRes>(pMsgData, pMsg));
 //			SF::CheckCtrMemory();
@@ -126,7 +126,7 @@ TEST_F(NetTest, NetAddress)
 //			return S_OK;
 //	});
 //	messageHandlers.Register<SF::Message::Game::JoinGameCmd>(__FILE__, __LINE__,
-//		[&](SF::Message::MessageData *pMsgData)->Result	{
+//		[&](SF::MessageData *pMsgData)->Result	{
 //			SF::Message::Game::JoinGameCmd *pMsg = nullptr;
 //			EXPECT_HRESULT_SUCCEEDED( HandleMessage<SF::Message::Game::JoinGameCmd>( pMsgData, pMsg ) );
 //			if( pMsg ) 
@@ -134,7 +134,7 @@ TEST_F(NetTest, NetAddress)
 //			return S_OK;
 //	});
 //	messageHandlers.Register<SF::Message::Game::JoinGameRes>( __FILE__, __LINE__,
-//		[&](SF::Message::MessageData *pMsgData)->Result	{
+//		[&](SF::MessageData *pMsgData)->Result	{
 //			SF::Message::Game::JoinGameRes *pMsg = nullptr;
 //			EXPECT_HRESULT_SUCCEEDED( HandleMessage<SF::Message::Game::JoinGameRes>( pMsgData, pMsg ) );
 //			if( pMsg ) 
@@ -144,7 +144,7 @@ TEST_F(NetTest, NetAddress)
 //
 //	SF::CheckCtrMemory();
 //	const int TestCaseCount = 4;
-//	SF::Message::MessageData *pMsgData[TestCaseCount];
+//	SF::MessageData *pMsgData[TestCaseCount];
 //	SF::NetAddress InGameServerAddr;
 //	uint64_t InLoginEntityUID;
 //
@@ -165,7 +165,7 @@ TEST_F(NetTest, NetAddress)
 //TEST_F(NetTest, Simple)
 //{
 //	Result hr = S_OK;
-//	SF::Message::MessageData *pIMsg = nullptr;
+//	SF::MessageData *pIMsg = nullptr;
 //	TimeStampMS dwTimeStart = Util::Time.GetTimeMs();
 //	TimeStampMS dwTime = Util::Time.GetTimeMs();
 //	NetAddress destAddress;

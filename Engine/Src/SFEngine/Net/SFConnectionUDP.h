@@ -72,10 +72,6 @@ namespace Net {
 		// Initialize packet synchronization
 		virtual Result InitSynchronization() override;
 
-		Result ProcNetCtrl( const MsgNetCtrl* pNetCtrl ) override;
-
-		// Update net control, process connection heartbeat, ... etc
-		//virtual Result TickUpdate() override;
 	};
 
 	

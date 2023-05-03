@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2016 Kyungkun Ko
 // 
@@ -27,13 +27,12 @@ namespace SF {
 
 			protocolCheckPtr(pIMsg);
 
-			size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-			ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+			ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 			InputMemoryStream inputStream(bufferView);
 			auto* input = inputStream.ToInputStream();
 
 
-			if (MsgDataSize == sizeof(Result)) // if result only
+			if (bufferView.size() == sizeof(Result)) // if result only
 			{
 				m_Context = 0;
 			}

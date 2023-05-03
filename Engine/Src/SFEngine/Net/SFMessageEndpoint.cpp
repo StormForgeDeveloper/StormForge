@@ -68,7 +68,7 @@ namespace SF {
 		return m_EndpointAddress.MessageServer == messageEndpoint.MessageServer && m_EndpointAddress.Channel == messageEndpoint.Channel;
 	}
 
-	Result MessageEndpointStreamDB::Send(const SharedPointerT<Message::MessageData>& messageData)
+	Result MessageEndpointStreamDB::Send(const SharedPointerT<MessageData>& messageData)
 	{
 		if (m_TargetEndpoint == nullptr)
 			return ResultCode::NOT_INITIALIZED;

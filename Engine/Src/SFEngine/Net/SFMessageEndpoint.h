@@ -18,11 +18,7 @@
 
 namespace SF {
 
-	namespace Message
-	{
-		class MessageData;
-	}
-
+	class MessageData;
 	class StreamDBProducer;
 
 
@@ -49,7 +45,7 @@ namespace SF {
 		virtual Result Terminate();
 
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
-		virtual Result Send(const SharedPointerT<Message::MessageData>& messageData) override;
+		virtual Result Send(const SharedPointerT<MessageData>& messageData) override;
 	};
 
 

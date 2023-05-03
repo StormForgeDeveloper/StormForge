@@ -128,30 +128,32 @@ namespace Net {
 	}
 
 	// gathering
-	Result ConnectionUDPBase::SendPending( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID )
+	Result ConnectionUDPBase::SendPending( uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t UID )
 	{
 		Result hr = ResultCode::SUCCESS;
 
-		MsgNetCtrl *pNetCtrlMsg = NULL;
+        MsgNetCtrlBuffer* pNetCtrlMsg{};
 
 		netChk( PrepareGatheringBuffer(sizeof(MsgNetCtrlBuffer)) );
 
-		pNetCtrlMsg = (MsgNetCtrl*)(m_pGatheringBuffer+m_uiGatheredSize);
-		pNetCtrlMsg->msgID.ID = uiCtrlCode;
-		pNetCtrlMsg->msgID.SetSequence(uiSequence);
-		pNetCtrlMsg->rtnMsgID = msgID;
+		pNetCtrlMsg = reinterpret_cast<MsgNetCtrlBuffer*>(m_pGatheringBuffer+m_uiGatheredSize);
+		pNetCtrlMsg->Header.msgID.ID = uiCtrlCode;
+        pNetCtrlMsg->Header.SetPeerID(UID == 0 ? GetLocalInfo().PeerID : UID);
+        pNetCtrlMsg->Header.msgID.SetSequence(uiSequence);
 
-		if( UID != 0 )
-		{
-			MsgNetCtrlConnect *pNetCtrlCon = (MsgNetCtrlConnect*)pNetCtrlMsg;
-			pNetCtrlCon->Peer = GetLocalInfo();
-			pNetCtrlMsg->Length = sizeof(MsgNetCtrlConnect);
-		}
+        if (uiCtrlCode == PACKET_NETCTRL_CONNECT || msgID.GetMsgIDOnly() == PACKET_NETCTRL_CONNECT)
+        {
+            MsgNetCtrlConnect* pConMsg = static_cast<MsgNetCtrlConnect*>(&pNetCtrlMsg->GetNetCtrl());
+            pConMsg->Peer = GetLocalInfo();
+        }
 		else
 		{
-			pNetCtrlMsg->Length = sizeof(MsgNetCtrl);
+	        pNetCtrlMsg->GetNetCtrl().rtnMsgID = msgID;
 		}
-		m_uiGatheredSize += pNetCtrlMsg->Length;
+
+        pNetCtrlMsg->UpdateMessageDataSize();
+
+		m_uiGatheredSize += pNetCtrlMsg->Header.Length;
 
 
 	Proc_End:
@@ -159,7 +161,7 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionUDPBase::SendPending(SharedPointerT<Message::MessageData>& pMsg )
+	Result ConnectionUDPBase::SendPending(SharedPointerT<MessageData>& pMsg )
 	{
 		Result hr = ResultCode::SUCCESS;
 
@@ -277,7 +279,7 @@ namespace Net {
 
 
 	// frame sequence
-	Result ConnectionUDPBase::SendFrameSequenceMessage(const SharedPointerT<Message::MessageData>& pMsg)
+	Result ConnectionUDPBase::SendFrameSequenceMessage(const SharedPointerT<MessageData>& pMsg)
 	{
 		Result hr = ResultCode::SUCCESS;
 		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
@@ -296,15 +298,15 @@ namespace Net {
 		const uint8_t* pCurSrc = pMsg->GetMessageBuff();
 		for (uint iSequence = 0; remainSize > 0; iSequence++)
 		{
-			auto frameSize = Math::Min(remainSize, (uint)Message::MAX_SUBFRAME_SIZE);
+			auto frameSize = Math::Min(remainSize, (uint)MAX_SUBFRAME_SIZE);
 
 			MsgNetCtrlSequenceFrame* pCurrentFrame = nullptr;
-			SharedPointerT<Message::MessageData> pSubframeMessage;
+			SharedPointerT<MessageData> pSubframeMessage;
 
-			netCheckPtr(pSubframeMessage = Message::MessageData::NewMessage(GetHeap(), PACKET_NETCTRL_SEQUENCE_FRAME, uint(sizeof(Message::MessageHeader) + sizeof(MsgNetCtrlSequenceFrame) + frameSize)));
+			netCheckPtr(pSubframeMessage = MessageData::NewMessage(GetHeap(), PACKET_NETCTRL_SEQUENCE_FRAME, uint(sizeof(MessageHeader) + sizeof(MsgNetCtrlSequenceFrame) + frameSize)));
 
 			// fill up frame header
-			pCurrentFrame = (MsgNetCtrlSequenceFrame*)pSubframeMessage->GetMessageData();
+			pCurrentFrame = (MsgNetCtrlSequenceFrame*)pSubframeMessage->GetPayloadPtr();
 			pCurrentFrame->Offset = uint16_t(offset);
 			pCurrentFrame->ChunkSize = uint16_t(frameSize);
 			pCurrentFrame->TotalSize = uint16_t(pSrcMsgHeader->Length);
@@ -330,17 +332,17 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionUDPBase::OnFrameSequenceMessage(SharedPointerT<Message::MessageData>& pMsg, const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action)
+	Result ConnectionUDPBase::OnFrameSequenceMessage(SharedPointerT<MessageData>& pMsg, const std::function<void(SharedPointerT<MessageData>& pMsgData)>& action)
 	{
 		Result hr = ResultCode::SUCCESS;
 		if (pMsg == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		auto pCurrentFrame = reinterpret_cast<MsgNetCtrlSequenceFrame*>(pMsg->GetMessageData());
+		auto pCurrentFrame = reinterpret_cast<MsgNetCtrlSequenceFrame*>(pMsg->GetPayloadPtr());
 
 		auto* dataPtr = reinterpret_cast<const uint8_t*>(pCurrentFrame + 1);
 
-		if (pCurrentFrame->ChunkSize > Message::MAX_SUBFRAME_SIZE)
+		if (pCurrentFrame->ChunkSize > MAX_SUBFRAME_SIZE)
 		{
 			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 		}
@@ -351,7 +353,7 @@ namespace Net {
 
 			uint dummyID = PACKET_NETCTRL_SEQUENCE_FRAME;
 
-			netCheckPtr(m_SubFrameMessage = Message::MessageData::NewMessage(GetHeap(), dummyID, pCurrentFrame->TotalSize));
+			netCheckPtr(m_SubFrameMessage = MessageData::NewMessage(GetHeap(), dummyID, pCurrentFrame->TotalSize));
 
 			memcpy(m_SubFrameMessage->GetMessageBuff(), dataPtr, pCurrentFrame->ChunkSize);
 		}
@@ -440,7 +442,7 @@ namespace Net {
 		if (GetConnectionState() != ConnectionState::CONNECTED)
 		{
 			// Send disconnect signal
-			Message::MessageID msgIDTem;
+			MessageID msgIDTem;
 
 			msgIDTem.ID = PACKET_NETCTRL_NONE;
 			SendNetCtrl(PACKET_NETCTRL_DISCONNECT, 0, msgIDTem);
@@ -460,7 +462,7 @@ namespace Net {
 		return GetWriteQueueUDP()->Enqueue(pSendBuffer);
 	}
 
-	Result ConnectionUDPBase::SendRaw(const SharedPointerT<Message::MessageData> &pMsg)
+	Result ConnectionUDPBase::SendRaw(const SharedPointerT<MessageData> &pMsg)
 	{
 		SFUniquePtr<IOBUFFER_WRITE> pSendBuffer;
 		auto pIOHandler = GetNetIOHandler();
@@ -478,16 +480,16 @@ namespace Net {
 
 		netCheckPtr(pMsg);
 
-		if (pMsg->GetDataLength() != 0 && pMsg->GetMessageHeader()->Crc32 == 0 && pMsg->GetMessageHeader()->msgID.IDs.Policy != PROTOCOLID_NONE)
+		if (pMsg->GetPayloadSize() != 0 && pMsg->GetMessageHeader()->Crc32 == 0 && pMsg->GetMessageHeader()->msgID.IDs.Policy != PROTOCOLID_NONE)
 		{
-			Assert(pMsg->GetDataLength() == 0 || pMsg->GetMessageHeader()->Crc32 != 0 || pMsg->GetMessageHeader()->msgID.IDs.Policy == PROTOCOLID_NONE);
+			Assert(pMsg->GetPayloadSize() == 0 || pMsg->GetMessageHeader()->Crc32 != 0 || pMsg->GetMessageHeader()->msgID.IDs.Policy == PROTOCOLID_NONE);
 			netCheck(ResultCode::FAIL);
 		}
 
 		pSendBuffer.reset(new(GetIOHeap()) IOBUFFER_WRITE);
 		netCheckMem(pSendBuffer);
 
-		pSendBuffer->SetupSendUDP(GetSocket(), GetRemoteSockAddr(), SharedPointerT<Message::MessageData>(pMsg));
+		pSendBuffer->SetupSendUDP(GetSocket(), GetRemoteSockAddr(), SharedPointerT<MessageData>(pMsg));
 
 		if (NetSystem::IsProactorSystem())
 		{
@@ -507,24 +509,24 @@ namespace Net {
 	}
 
 	// Process network control message
-	Result ConnectionUDPBase::ProcNetCtrl(const MsgNetCtrl* pNetCtrl)
+	Result ConnectionUDPBase::ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrl)
 	{
 		//assert(ThisThread::GetThreadID() == GetRunningThreadID());
 
 		Result hr = ResultCode::SUCCESS;
 		ConnectionMessageAction* pAction = nullptr;
 
-		if (pNetCtrl->Length < sizeof(MsgNetCtrl))
+		if (pNetCtrl->Header.Length < (sizeof(MessageHeader) + sizeof(MsgNetCtrl)))
 		{
 			SFLog(Net, Info, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
 			netCheck(Disconnect("Invalid packet"));
 			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 		}
 
-		pAction = m_NetCtrlAction[pNetCtrl->msgID.IDs.MsgCode];
+		pAction = m_NetCtrlAction[pNetCtrl->Header.msgID.IDs.MsgCode];
 		if (pAction != nullptr)
 		{
-			return pAction->Run(pNetCtrl);
+			return pAction->Run(&pNetCtrl->Header);
 		}
 		else
 		{
@@ -537,7 +539,7 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionUDPBase::OnGuaranteedMessageRecv(SharedPointerT<Message::MessageData>& pIMsg)
+	Result ConnectionUDPBase::OnGuaranteedMessageRecv(SharedPointerT<MessageData>& pIMsg)
 	{
 		Result hr = ResultCode::SUCCESS;
 
@@ -576,12 +578,12 @@ namespace Net {
 
 			pIMsg = nullptr;
 
-			SharedPointerT<Message::MessageData> pPopMsg;
+			SharedPointerT<MessageData> pPopMsg;
 			while (m_RecvReliableWindow.PopMsg(pPopMsg))
 			{
 				if (pPopMsg->GetMessageHeader()->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
 				{
-					hr = OnFrameSequenceMessage(pPopMsg, [this](SharedPointerT<Message::MessageData>& pMsgData) { super::OnRecv(pMsgData); });
+					hr = OnFrameSequenceMessage(pPopMsg, [this](SharedPointerT<MessageData>& pMsgData) { super::OnRecv(pMsgData); });
 				}
 				else
 				{
@@ -601,20 +603,20 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionUDPBase::SendReliableMessageAck(Message::MessageID msgID)
+	Result ConnectionUDPBase::SendReliableMessageAck(MessageID msgID)
 	{
 		return SendNetCtrl(PACKET_NETCTRL_ACK, msgID.IDSeq.Sequence, msgID, GetLocalInfo().PeerID);
 	}
 
 	// Send message to connected entity
-	Result ConnectionUDPBase::Send(const SharedPointerT<Message::MessageData> &pMsg )
+	Result ConnectionUDPBase::Send(const SharedPointerT<MessageData> &pMsg )
 	{
-		Message::MessageID msgID;
+		MessageID msgID;
 		ScopeContext hr([this, &msgID](Result hr)
 			{
 				if (hr)
 				{
-					if (msgID.IDs.Type == Message::MSGTYPE_NETCONTROL)
+					if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
 					{
 						SFLog(Net, Debug6, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
 					}
@@ -630,16 +632,16 @@ namespace Net {
 		if (GetConnectionState() == ConnectionState::DISCONNECTED)
 			return ResultCode::SUCCESS_FALSE;
 
-		Message::MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
+		MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 		msgID = pMsgHeader->msgID;
 		uiMsgLen = pMsg->GetMessageSize();
 
 		if (pMsgHeader->msgID.IDs.Mobile)
 		{
-			pMsg->GetMobileMessageHeader()->PeerID = GetLocalInfo().PeerID;
+            pMsg->GetMessageHeader()->SetPeerID(GetLocalInfo().PeerID);
 		}
 
-		if( (msgID.IDs.Type != Message::MSGTYPE_NETCONTROL && GetConnectionState() == ConnectionState::DISCONNECTING)
+		if( (msgID.IDs.Type != MSGTYPE_NETCONTROL && GetConnectionState() == ConnectionState::DISCONNECTING)
 			|| GetConnectionState() == ConnectionState::DISCONNECTED)
 		{
 			// Send fail by connection closed
@@ -704,7 +706,7 @@ namespace Net {
 				{
 					pMsg->UpdateChecksumNEncrypt();
 
-					netCheck(m_SendGuaQueue.Enqueue(SharedPointerT<Message::MessageData>(pMsg)));
+					netCheck(m_SendGuaQueue.Enqueue(SharedPointerT<MessageData>(pMsg)));
 				}
 
 				SetSendBoost(Const::RELIABLE_SEND_BOOST);
@@ -729,8 +731,8 @@ namespace Net {
 	Result ConnectionUDPBase::OnRecv(uint uiBuffSize, const uint8_t* pBuff)
 	{
 		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<Message::MessageData> pMsg;
-		Message::MobileMessageHeader* pMsgHeader = (Message::MobileMessageHeader*)pBuff;
+		SharedPointerT<MessageData> pMsg;
+        const MessageHeader* pMsgHeader = reinterpret_cast<const MessageHeader*>(pBuff);
 
 		SFLog(Net, Debug4, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
 
@@ -749,8 +751,8 @@ namespace Net {
 
 		while (uiBuffSize && GetConnectionState() != ConnectionState::DISCONNECTED)
 		{
-			pMsgHeader = (Message::MobileMessageHeader*)pBuff;
-			if (uiBuffSize < sizeof(Message::MobileMessageHeader) || uiBuffSize < pMsgHeader->Length)
+            pMsgHeader = reinterpret_cast<const MessageHeader*>(pBuff);
+			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->Length)
 			{
 				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->Length);
 				netErr(ResultCode::IO_BADPACKET_SIZE);
@@ -763,15 +765,15 @@ namespace Net {
 
 			ResetZeroRecvCount();
 
-			if (pMsgHeader->msgID.IDs.Type == Message::MSGTYPE_NETCONTROL) // if net control message then process immediately
+			if (pMsgHeader->msgID.IDs.Type == MSGTYPE_NETCONTROL) // if net control message then process immediately
 			{
-				netChk(ProcNetCtrl((MsgNetCtrl*)pMsgHeader));
+				netChk(ProcNetCtrl(reinterpret_cast<const MsgNetCtrlBuffer*>(pMsgHeader)));
 			}
 			else
 			{
 				if (GetConnectionState() == ConnectionState::CONNECTED)
 				{
-					netMem(pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
+					netMem(pMsg = MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
 
 					hr = OnRecv(pMsg);
 					netChk(hr);
@@ -804,7 +806,7 @@ namespace Net {
 	}
 
 
-	Result ConnectionUDPBase::OnRecv(SharedPointerT<Message::MessageData>& pMsg)
+	Result ConnectionUDPBase::OnRecv(SharedPointerT<MessageData>& pMsg)
 	{
 		ScopeContext hr([this](Result hr)
 			{
@@ -813,7 +815,7 @@ namespace Net {
 					CloseConnection("OnRecv is failed");
 				}
 			});
-		Message::MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
+		MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 
 		if (GetConnectionState() != ConnectionState::CONNECTED)
 		{
@@ -843,14 +845,11 @@ namespace Net {
 		return hr;
 	}
 
-
-
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	UDP connection class
 	//
-
 
 	// Update net control, process connection heartbeat, ... etc
 	Result ConnectionUDP::TickUpdate()
@@ -868,7 +867,6 @@ namespace Net {
 		return hr;
 	}
 	
-
 } // namespace Net
 } // namespace SF
 

@@ -174,7 +174,7 @@ namespace Net {
 		virtual ~IConnectionEventHandler();
 
 		virtual void OnConnectionEvent(Connection* pConn, const ConnectionEvent& evt) {}
-		virtual Result OnRecvMessage(Connection* pConn, SharedPointerT<Message::MessageData>& pMsg) { return ResultCode::SUCCESS; }
+		virtual Result OnRecvMessage(Connection* pConn, SharedPointerT<MessageData>& pMsg) { return ResultCode::SUCCESS; }
 		virtual Result OnNetSyncMessage(Connection* pConn);
 
 		// Net send message
@@ -215,7 +215,7 @@ namespace Net {
 	{
 	public:
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) = 0;
-		virtual Result Send(const SharedPointerT<Message::MessageData>& messageData) = 0;
+		virtual Result Send(const SharedPointerT<MessageData>& messageData) = 0;
 	};
 
 

@@ -35,9 +35,9 @@ namespace Net {
 	//	Network control Message base Header
 	//
 
-	struct MsgNetCtrl : public Message::MobileMessageHeader
+	struct MsgNetCtrl
 	{
-		Message::MessageID	rtnMsgID;
+		MessageID	rtnMsgID;
 	};
 
 
@@ -52,26 +52,52 @@ namespace Net {
 	//	Network control Message base Header
 	//
 
-	struct MsgMobileNetCtrlSync : public Message::MobileMessageHeader
+	struct MsgMobileNetCtrlSync
 	{
 		uint64_t	MessageMask;
 	};
 
-
 	// Just some big enough structure to contain all net ctrl type data
-	typedef struct tag_MsgNetCtrlBuffer : public MsgNetCtrlConnect
+	struct MsgNetCtrlBuffer
 	{
-		uint64_t	Dummy;
+        // header
+        MessageHeader Header;
 
-		tag_MsgNetCtrlBuffer() { msgID.ID = 0; }
-		tag_MsgNetCtrlBuffer(void* ptr) { assert(ptr == nullptr); msgID.ID = 0; }
-		tag_MsgNetCtrlBuffer(const tag_MsgNetCtrlBuffer& src) { memcpy(this, &src, sizeof(src)); }
+        uint64_t Dummy;
 
-		tag_MsgNetCtrlBuffer& operator = (const tag_MsgNetCtrlBuffer& src);
+        // biggest ctrl structure
+        union {
+            MsgNetCtrl Ctrl;
+            MsgNetCtrlConnect CtrlConnect;
+            MsgMobileNetCtrlSync CtrlSync;
+        };
 
-		bool operator == (const tag_MsgNetCtrlBuffer& src) const;
-		bool operator != (const tag_MsgNetCtrlBuffer& src) const;
-	} MsgNetCtrlBuffer;
+		MsgNetCtrlBuffer() { memset(this, 0, sizeof(MsgNetCtrlBuffer)); }
+		MsgNetCtrlBuffer(const MsgNetCtrlBuffer& src) { memcpy(this, &src, sizeof(src)); }
+
+        const MessageHeader& GetHeader() const { return Header; }
+        MessageHeader& GetHeader() { return Header; }
+        const MsgNetCtrl& GetNetCtrl() const { return *reinterpret_cast<MsgNetCtrl*>(reinterpret_cast<uintptr_t>(this) + Header.GetHeaderSize()); }
+        MsgNetCtrl& GetNetCtrl() { return *reinterpret_cast<MsgNetCtrl*>(reinterpret_cast<uintptr_t>(this) + Header.GetHeaderSize()); }
+
+        void UpdateMessageDataSize();
+
+		MsgNetCtrlBuffer& operator = (const MsgNetCtrlBuffer& src)
+        {
+            memcpy(this, &src, sizeof(src));
+            return *this;
+        }
+
+		bool operator == (const MsgNetCtrlBuffer& src) const
+        {
+            return Header.msgID.ID == src.Header.msgID.ID;
+        }
+		bool operator != (const MsgNetCtrlBuffer& src) const
+        {
+            return Header.msgID.ID != src.Header.msgID.ID;
+        }
+	};
+
 
 #pragma pack(2)
 	struct MsgNetCtrlSequenceFrame
@@ -81,11 +107,7 @@ namespace Net {
 		uint16_t TotalSize;
 	};
 
-
 #pragma pack(pop)
-
-
-#include "SFNetCtrl.inl"
 
 } // namespace Net
 } // namespace SF

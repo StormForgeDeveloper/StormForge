@@ -103,10 +103,10 @@ namespace Net {
 	//	Packet message queue class
 	//
 
-	class MsgQueue : public CircularPageQueue<SharedPointerT<Message::MessageData>>
+	class MsgQueue : public CircularPageQueue<SharedPointerT<MessageData>>
 	{
 	public:
-		typedef CircularPageQueue<SharedPointerT<Message::MessageData>>super;
+		typedef CircularPageQueue<SharedPointerT<MessageData>>super;
 
 	public:
 		MsgQueue(IHeap& memoryManager, uint uiNumElePerPage = 512);

@@ -34,8 +34,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -87,16 +86,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InRouteContext)
 					+ SerializedSizeOf(InTransactionID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Generic::GenericFailureCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InRouteContext);
 				protocolCheck(*output << InTransactionID);
@@ -121,8 +119,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -176,17 +173,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InRouteContext)
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Generic::GenericFailureRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InRouteContext);
 				protocolCheck(*output << InTransactionID);

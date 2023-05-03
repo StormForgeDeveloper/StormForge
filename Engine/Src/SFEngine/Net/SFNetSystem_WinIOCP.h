@@ -66,7 +66,7 @@ namespace Net {
 	struct IOBUFFER_WRITE : public IOBUFFER_RWBASE
 	{
 		// Message pointer to send
-		SharedPointerAtomicT<Message::MessageData> pMsgs;
+		SharedPointerAtomicT<MessageData> pMsgs;
 
 		// Message buffer pointer to send
 		uint8_t *pSendBuff;
@@ -77,13 +77,13 @@ namespace Net {
 
 		// Initialize for IO
 		inline void InitForIO(SF_SOCKET sockWrite);
-		inline void InitMsg(SharedPointerT<Message::MessageData>&& pMsg );
+		inline void InitMsg(SharedPointerT<MessageData>&& pMsg );
 		inline void InitBuff( uint uiBuffSize, uint8_t* pBuff );
 
 		// Setup sending mode
-		inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, SharedPointerT<Message::MessageData>&& pMsg );
+		inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, SharedPointerT<MessageData>&& pMsg );
 		inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, uint uiBuffSize, uint8_t* pBuff );
-		inline void SetupSendTCP(SharedPointerT<Message::MessageData>&& pMsg );
+		inline void SetupSendTCP(SharedPointerT<MessageData>&& pMsg );
 		inline void SetupSendTCP( uint uiBuffSize, uint8_t* pBuff );
 
 	};

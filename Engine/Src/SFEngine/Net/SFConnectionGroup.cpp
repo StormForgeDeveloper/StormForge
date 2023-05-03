@@ -98,7 +98,7 @@ namespace Net {
 		m_ConnectionEvents.Enqueue(std::forward<EventInformation>(eventInfo));
 	}
 
-	Result ConnectionGroup::OnRecvMessage(Connection* pConn, SharedPointerT<Message::MessageData>& pMsg)
+	Result ConnectionGroup::OnRecvMessage(Connection* pConn, SharedPointerT<MessageData>& pMsg)
 	{
 		EventInformation eventInfo;
 		eventInfo.pConnection = WeakPointerT<Connection>(pConn);

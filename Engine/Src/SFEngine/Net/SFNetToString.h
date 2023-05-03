@@ -38,14 +38,14 @@ namespace SF
 	Result _ToString(ToStringContext& context, Net::ConnectionState value);
 	Result _ToString(ToStringContext& context, const Net::PeerInfo& value);
 	Result _ToString(ToStringContext& context, NetClass value);
-	Result _ToString(ToStringContext& context, const Message::MessageID& value);
+	Result _ToString(ToStringContext& context, const MessageID& value);
 
 
 
 	DECLARE_BOXING_TEMPLETE_BYVALUE(Net::ConnectionState);
 	DECLARE_BOXING_TEMPLETE_BYVALUE(NetClass);
 	DECLARE_BOXING_TEMPLETE_BYREFERENCE(Net::PeerInfo);
-	DECLARE_BOXING_TEMPLETE_BYVALUE(Message::MessageID);
+	DECLARE_BOXING_TEMPLETE_BYVALUE(MessageID);
 
 
 } // namespace SF

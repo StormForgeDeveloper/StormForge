@@ -34,8 +34,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -93,7 +92,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGameID)
 					+ SerializedSizeOf(InID)
@@ -101,10 +100,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InGameID);
@@ -131,8 +129,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -196,7 +193,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InGameServerPublicAddress)
@@ -207,10 +204,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -241,8 +237,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -305,7 +300,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGameID)
 					+ SerializedSizeOf(InUID)
@@ -315,10 +310,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginByFacebookCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InGameID);
@@ -347,8 +341,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -412,7 +405,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InGameServerPublicAddress)
@@ -423,10 +416,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginByFacebookRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -457,8 +449,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -518,7 +509,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGameID)
 					+ SerializedSizeOf(InSteamUserID)
@@ -527,10 +518,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginBySteamCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InGameID);
@@ -558,8 +548,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -623,7 +612,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InGameServerPublicAddress)
@@ -634,10 +623,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::LoginBySteamRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -668,8 +656,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -724,17 +711,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGameID)
 					+ SerializedSizeOf(InCellPhone)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::CreateRandomUserCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InGameID);
@@ -760,8 +746,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -822,7 +807,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InGameServerPublicAddress)
@@ -832,10 +817,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::CreateRandomUserRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -865,8 +849,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -922,7 +905,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InRankingScore)
 					+ SerializedSizeOf(InRankingType)
@@ -930,10 +913,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::UpdateMyScoreCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InRankingScore);
@@ -960,8 +942,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1018,17 +999,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InRanking)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::UpdateMyScoreRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -1055,8 +1035,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1112,7 +1091,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InRankingType)
 					+ SerializedSizeOf(InBaseRanking)
@@ -1120,10 +1099,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::GetRankingListCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InRankingType);
@@ -1150,8 +1128,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1208,17 +1185,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InRanking)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::GetRankingListRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -1245,8 +1221,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1301,16 +1276,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTestData)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DataTestCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InTestData);
@@ -1335,8 +1309,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1393,17 +1366,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InTestData)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DataTestRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -1474,7 +1446,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::HeartbeatC2SEvt::MID, __uiMessageSize ) );
@@ -1500,8 +1472,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1554,16 +1525,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFileName)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DebugPrintALLRankingCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InFileName);
@@ -1588,8 +1558,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1641,16 +1610,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MobileMessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Login::DebugPrintALLRankingRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);

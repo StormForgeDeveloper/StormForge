@@ -19,11 +19,11 @@
 #include "Container/SFCircularPageQueue.h"
 #include "Multithread/SFSystemSynchronization.h"
 #include "Net/SFConnection.h"
+#include "Net/SFMessageData.h"
 
 
 namespace SF {
 namespace Net {
-
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -60,7 +60,7 @@ namespace Net {
 
 		struct MessageElement
 		{
-			SharedPointerAtomicT<Message::MessageData> pMsg;
+			SharedPointerAtomicT<MessageData> pMsg;
 			Atomic<uint32_t> Sequence = 0;
 		};
 		using ItemState = MessageWindow::ItemState;
@@ -96,10 +96,10 @@ namespace Net {
 		SF_FORCEINLINE uint16_t GetBaseSequence()					{ return m_uiBaseSequence.load(std::memory_order_consume); }
 
 		// Add message
-		Result AddMsg(SharedPointerT<Message::MessageData>& pIMsg );
+		Result AddMsg(SharedPointerT<MessageData>& pIMsg );
 
 		// Pop message and return it if can
-		Result PopMsg(SharedPointerT<Message::MessageData>& pIMsg );
+		Result PopMsg(SharedPointerT<MessageData>& pIMsg );
 
 		// Get SyncMask
 		uint64_t GetSyncMask();
@@ -121,13 +121,13 @@ namespace Net {
 		using ItemState = MessageWindow::ItemState;
 
 		// Message element
-		struct MessageData
+		struct WindowMessageData
 		{
 			ItemState State = ItemState::Free;
 			TimeStampMS ulTimeStamp = TimeStampMS(DurationMS_Zero);
-			SharedPointerT<Message::MessageData> pMsg;
+			SharedPointerT<MessageData> pMsg;
 
-			MessageData()
+            WindowMessageData()
 			{
 			}
 
@@ -151,7 +151,7 @@ namespace Net {
 		uint32_t		m_uiMsgCount = 0;
 
 		// Message data array
-		MessageData*	m_pMsgWnd = nullptr;
+        WindowMessageData*	m_pMsgWnd = nullptr;
 
 		// we have multiple sync variables
 		//CriticalSection m_Lock;
@@ -192,7 +192,7 @@ namespace Net {
 		uint32_t GetBaseSequence() { return m_uiBaseSequence; }
 
 		// Get message info in window, index based on window base
-		Result GetAt(uint32_t uiIdx, MessageData* &pTimeMsg);
+		Result GetAt(uint32_t uiIdx, WindowMessageData* &pTimeMsg);
 
 		// Clear window element
 		void ClearWindow();
@@ -202,7 +202,7 @@ namespace Net {
 		uint32_t GetRemainSequenceCount() { return Math::Max<int32_t>(0, MessageWindow::MESSAGE_ACCEPTABLE_SEQUENCE_RANGE - (m_uiHeadSequence - GetBaseSequence() + 1)); }
 
 		// Add a message at the end
-		Result EnqueueMessage(TimeStampMS ulTimeStampMS, SharedPointerT<Message::MessageData>& pIMsg );
+		Result EnqueueMessage(TimeStampMS ulTimeStampMS, SharedPointerT<MessageData>& pIMsg );
 
         // Queue released sequence
         Result QueueReleasedSequence(uint16_t uiSequence);

@@ -37,59 +37,59 @@ namespace Net {
 	class ConnectionMessageAction_UDPHandleAck : public ConnectionMessageAction
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 	class ConnectionMessageAction_HandleAck : public ConnectionMessageAction
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 
 	class ConnectionMessageAction_UDPHandleNack : public ConnectionMessageAction
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 	class ConnectionMessageAction_HandleNack : public ConnectionMessageAction
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 
 	class ConnectionMessageAction_HandleHeartbeat : public ConnectionMessageAction
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 
 	class ConnectionMessageAction_HandleTimeSync : public ConnectionMessageAction
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 	class ConnectionMessageAction_HandleTimeSyncRtn : public ConnectionMessageAction
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 	class ConnectionMessageAction_MUDPHandleSyncReliableServer : public ConnectionMessageActionMUDP
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 
 	class ConnectionMessageAction_MUDPHandleSyncReliableClient : public ConnectionMessageActionMUDP
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 
@@ -97,20 +97,20 @@ namespace Net {
 	class ConnectionMessageAction_UDPHandleConnect : public ConnectionMessageAction
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 	class ConnectionMessageAction_HandleConnect : public ConnectionMessageAction
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 
 	class ConnectionMessageAction_HandleDisconnect : public ConnectionMessageAction
 	{
 	public:
-		virtual Result Run(const Message::MessageHeader* netCtrlMsg) override;
+		virtual Result Run(const MessageHeader* netCtrlMsg) override;
 	};
 
 

@@ -23,11 +23,10 @@
 #include "Net/SFNetSystem.h"
 
 
-template class SF::SharedPointerT<SF::Message::MessageData>;
+template class SF::SharedPointerT<SF::MessageData>;
 
 
 namespace SF {
-namespace Message {
 	
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -47,7 +46,7 @@ namespace Message {
 		}
 		else
 		{
-			memset( GetMessageHeader(), 0, sizeof(Message::MessageHeader) );
+			memset( GetMessageHeader(), 0, sizeof(MessageHeader) );
 			// Make sure the sequence is cleared
 			Assert(GetMessageHeader()->msgID.IDSeq.Sequence == 0);
 		}
@@ -74,15 +73,7 @@ namespace Message {
 		return m_pMsgHeader ? m_pMsgHeader->Length : 0;
 	}
 
-	uint8_t* MessageData::GetMessageData()
-	{
-		return (uint8_t*)(m_pMsgHeader + 1);
-	}
 
-	const uint8_t* MessageData::GetMessageData() const
-	{
-		return const_cast<MessageData*>(this)->GetMessageData();
-	}
 
 	void MessageData::AssignSequence( uint sequence )
 	{
@@ -95,22 +86,19 @@ namespace Message {
 
 	void MessageData::GetRouteInfo(RouteContext& routeContext, TransactionID& transID)
 	{
-		uint length = 0;
-		uint8_t* pDataPtr = nullptr;
-		GetLengthNDataPtr(length, pDataPtr);
+        ArrayView<uint8_t> payload = GetPayload();
 
-		if (length < sizeof(RouteContext))
+		if (payload.size() < sizeof(RouteContext))
 		{
 			routeContext = {};
 			transID = TransactionID();
 			return;
 		}
 
-		auto pRouteContext = (RouteContext*)GetMessageData();
+		auto pRouteContext = (RouteContext*)GetPayloadPtr();
 		routeContext = *pRouteContext;
 
-
-		if (length < (sizeof(RouteContext)+sizeof(TransactionID)))
+		if (payload.size() < (sizeof(RouteContext)+sizeof(TransactionID)))
 		{
 			transID = TransactionID();
 			return;
@@ -161,39 +149,21 @@ namespace Message {
 	}
 
 
-	Message::MessageData* MessageData::Clone(IHeap& memoryManager)
+	MessageData* MessageData::Clone(IHeap& memoryManager)
 	{
 		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
 			return nullptr;
 
-		Message::MessageData* pMessage = NewMessage(memoryManager, m_pMsgHeader->msgID.ID, m_pMsgHeader->Length, (uint8_t*)m_pMsgHeader );
+		MessageData* pMessage = NewMessage(memoryManager, m_pMsgHeader->msgID.ID, m_pMsgHeader->Length, (uint8_t*)m_pMsgHeader );
 		pMessage->GetMessageHeader()->msgID.IDSeq.Sequence = 0;
 
 		return pMessage;
 	}
 
-	void MessageData::GetLengthNDataPtr( uint& length, uint8_t* &pDataPtr)
-	{
-		AssertRel(m_pMsgHeader->Length >= sizeof(MessageHeader));
-		length = m_pMsgHeader->Length - (uint)sizeof(MessageHeader);
-		pDataPtr = (uint8_t*)(m_pMsgHeader + 1);
-	}
-	
-	uint MessageData::GetDataLength()
-	{
-		uint length;
-		AssertRel(m_pMsgHeader->Length >= sizeof(MessageHeader));
-		length = m_pMsgHeader->Length - (uint)sizeof(MessageHeader);
-		return length;
-	}
-
-	
 	// Update checksum
 	void MessageData::UpdateChecksum()
 	{
-		uint length = 0;
-		uint8_t* pDataPtr = nullptr;
-		GetLengthNDataPtr(length,pDataPtr);
+        ArrayView<uint8_t> payload = GetPayload();
 
 		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
 		{
@@ -201,13 +171,13 @@ namespace Message {
 			return;
 		}
 
-		if( length == 0 )
+		if(payload.size() == 0 )
 		{
 			m_pMsgHeader->Crc32 = 0;
 			return;
 		}
 
-		m_pMsgHeader->Crc32 = Hasher_Crc32().Crc32(0, pDataPtr, length );
+		m_pMsgHeader->Crc32 = Hasher_Crc32().Crc32(0, payload.data(), payload.size());
 		if( m_pMsgHeader->Crc32 == 0 )
 			m_pMsgHeader->Crc32 = ~m_pMsgHeader->Crc32;
 	}
@@ -215,9 +185,7 @@ namespace Message {
 	// Update checksum
 	void MessageData::UpdateChecksumNEncrypt()
 	{
-		uint length = 0;
-		uint8_t* pDataPtr = nullptr;
-		GetLengthNDataPtr(length,pDataPtr);
+        ArrayView<uint8_t> payload = GetPayload();
 
 		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
 		{
@@ -225,7 +193,7 @@ namespace Message {
 			return;
 		}
 
-		if( length == 0 )
+		if(payload.size() == 0)
 		{
 			m_pMsgHeader->Crc32 = 0;
 			return;
@@ -237,20 +205,18 @@ namespace Message {
 			return;
 		}
 
-		m_pMsgHeader->Crc32 = Util::Crc32NEncrypt( length, pDataPtr );
+		m_pMsgHeader->Crc32 = Util::Crc32NEncrypt(payload.size(), payload.data());
 		if( m_pMsgHeader->Crc32 == 0 )
 			m_pMsgHeader->Crc32 = ~m_pMsgHeader->Crc32;
 
-		Assert( m_pMsgHeader->Crc32 != 0 || length == 0 );
+		assert( m_pMsgHeader->Crc32 != 0 || payload.size() == 0);
 
 		m_pMsgHeader->msgID.IDs.Encrypted = true;
 	}
 
 	Result MessageData::ValidateChecksum()
 	{
-		uint length = 0;
-		uint8_t* pDataPtr = nullptr;
-		GetLengthNDataPtr(length,pDataPtr);
+        ArrayView<uint8_t> payload = GetPayload();
 
 		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
 		{
@@ -259,10 +225,10 @@ namespace Message {
 		}
 
 		// Nothing to check
-		if( length == 0 )
+		if(payload.size() == 0)
 			return ResultCode::SUCCESS;
 
-		uint16_t Crc32 = (uint16_t)Hasher_Crc32().Crc32(0, pDataPtr, length);
+		uint16_t Crc32 = (uint16_t)Hasher_Crc32().Crc32(0, payload.data(), payload.size());
 		if( Crc32 == 0 ) Crc32 = ~Crc32;
 
 		if( Crc32 != m_pMsgHeader->Crc32 )
@@ -273,9 +239,7 @@ namespace Message {
 	
 	Result MessageData::ValidateChecksumNDecrypt()
 	{
-		uint length = 0;
-		uint8_t* pDataPtr = nullptr;
-		GetLengthNDataPtr(length,pDataPtr);
+        ArrayView<uint8_t> payload = GetPayload();
 
 		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
 		{
@@ -289,13 +253,13 @@ namespace Message {
 		}
 		
 		// Nothing to check
-		if( length == 0 )
+		if(payload.size() == 0)
 		{
 			m_pMsgHeader->msgID.IDs.Encrypted = false;
 			return ResultCode::SUCCESS;
 		}
 
-		uint16_t Crc32 = (uint16_t)Util::Crc32NDecrypt( length, pDataPtr );
+		uint16_t Crc32 = (uint16_t)Util::Crc32NDecrypt(payload.size(), payload.data());
 		if( Crc32 == 0 ) Crc32 = ~Crc32;
 
 		m_pMsgHeader->msgID.IDs.Encrypted = false;
@@ -306,12 +270,6 @@ namespace Message {
 
 		return ResultCode::SUCCESS;
 	}
-
-
-
-
-
-
 
 	Result MessageBase::ParseMsg()
 	{ 
@@ -324,7 +282,4 @@ namespace Message {
 		return m_hrParsing;
 	}
 
-} // Message
-
 } // SF
-

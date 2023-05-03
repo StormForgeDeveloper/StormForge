@@ -22,6 +22,8 @@
 #include "Net/SFNetUtil.h"
 #include "Component/SFLibraryComponent.h"
 #include "EngineObject/SFEngineTask.h"
+#include "Net/SFMessage.h"
+#include "Net/SFMessageData.h"
 
 #include "Service/SFEngineServices.h"
 
@@ -53,7 +55,7 @@ namespace Net {
 	};
 
 
-	// Get lastest socket error 
+	// Get latest socket error 
 	Result GetLastNetSystemResult();
 
 

@@ -70,27 +70,29 @@ namespace SF {
 
 
 		// gathering
-		Result ConnectionMUDP::SendPending(uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID)
+		Result ConnectionMUDP::SendPending(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t UID)
 		{
 			ScopeContext hr;
 
-			MsgNetCtrl* pNetCtrlMsg = nullptr;
-
 			netCheck(PrepareGatheringBuffer(sizeof(MsgNetCtrlBuffer)));
 
-			pNetCtrlMsg = (MsgNetCtrl*)(m_pGatheringBuffer + m_uiGatheredSize);
-			pNetCtrlMsg->msgID.ID = uiCtrlCode;
-			pNetCtrlMsg->msgID.SetSequence(uiSequence);
-			pNetCtrlMsg->rtnMsgID = msgID;
-			pNetCtrlMsg->PeerID = UID == 0 ? GetLocalInfo().PeerID : UID;
+            MsgNetCtrlBuffer* pCtlBuffer = reinterpret_cast<MsgNetCtrlBuffer*>(m_pGatheringBuffer + m_uiGatheredSize);
+            pCtlBuffer->Header.msgID.ID = uiCtrlCode;
+            pCtlBuffer->Header.msgID.SetSequence(uiSequence);
+            pCtlBuffer->Header.SetPeerID(UID == 0 ? GetLocalInfo().PeerID : UID);
+            pCtlBuffer->GetNetCtrl().rtnMsgID = msgID;
+            pCtlBuffer->UpdateMessageDataSize();
 
-			pNetCtrlMsg->msgID.IDs.Mobile = true;
-			pNetCtrlMsg->Length = sizeof(MsgNetCtrl);
+            if (uiCtrlCode == PACKET_NETCTRL_CONNECT || msgID.GetMsgIDOnly() == PACKET_NETCTRL_CONNECT)
+            {
+                MsgNetCtrlConnect* pConMsg = static_cast<MsgNetCtrlConnect*>(&pCtlBuffer->GetNetCtrl());
+                pConMsg->Peer = GetLocalInfo();
+            }
 
-			pNetCtrlMsg->Crc32 = Hasher_Crc32().Crc32(0, (uint8_t*)pNetCtrlMsg + sizeof(Message::MobileMessageHeader), sizeof(MsgNetCtrl) - sizeof(Message::MobileMessageHeader));
-			if (pNetCtrlMsg->Crc32 == 0) pNetCtrlMsg->Crc32 = ~pNetCtrlMsg->Crc32;
+            pCtlBuffer->Header.Crc32 = Hasher_Crc32().Crc32(0, (uint8_t*)&pCtlBuffer->GetNetCtrl(), sizeof(MsgNetCtrl));
+			if (pCtlBuffer->Header.Crc32 == 0) pCtlBuffer->Header.Crc32 = ~pCtlBuffer->Header.Crc32;
 
-			m_uiGatheredSize += pNetCtrlMsg->Length;
+			m_uiGatheredSize += pCtlBuffer->Header.Length;
 
 			return hr;
 		}
@@ -98,27 +100,22 @@ namespace SF {
 		Result ConnectionMUDP::SendSync(uint uiSequence, uint64_t uiSyncMask)
 		{
 			ScopeContext hr;
-			MsgMobileNetCtrlSync* pNetCtrlMsg = nullptr;
 
-			netCheck(PrepareGatheringBuffer(sizeof(MsgMobileNetCtrlSync)));
+			netCheck(PrepareGatheringBuffer(Message::MobileHeaderSize + sizeof(MsgMobileNetCtrlSync)));
 
-			pNetCtrlMsg = (MsgMobileNetCtrlSync*)(m_pGatheringBuffer + m_uiGatheredSize);
-			pNetCtrlMsg->msgID = PACKET_NETCTRL_SYNCRELIABLE;
-			pNetCtrlMsg->msgID.SetSequence(uiSequence);
-			pNetCtrlMsg->MessageMask = uiSyncMask;
-			pNetCtrlMsg->PeerID = GetLocalInfo().PeerID;
+            MsgNetCtrlBuffer* pCtlBuffer = reinterpret_cast<MsgNetCtrlBuffer*>(m_pGatheringBuffer + m_uiGatheredSize);
+            pCtlBuffer->Header.msgID.ID = PACKET_NETCTRL_SYNCRELIABLE;
+            pCtlBuffer->Header.msgID.SetSequence(uiSequence);
+            pCtlBuffer->Header.SetPeerID(GetLocalInfo().PeerID);
+            pCtlBuffer->UpdateMessageDataSize();
 
-			pNetCtrlMsg->msgID.IDs.Mobile = true;
-			pNetCtrlMsg->Length = sizeof(MsgMobileNetCtrlSync);
+            MsgMobileNetCtrlSync* pSync = static_cast<MsgMobileNetCtrlSync*>(pCtlBuffer->Header.GetDataPtr());
+            pSync->MessageMask = uiSyncMask;
 
-			pNetCtrlMsg->Crc32 = Hasher_Crc32().Crc32(0, (uint8_t*)pNetCtrlMsg + sizeof(Message::MobileMessageHeader), sizeof(MsgMobileNetCtrlSync) - sizeof(Message::MobileMessageHeader));
-			if (pNetCtrlMsg->Crc32 == 0) pNetCtrlMsg->Crc32 = ~pNetCtrlMsg->Crc32;
+            pCtlBuffer->Header.Crc32 = Hasher_Crc32().Crc32(0, (uint8_t*)&pCtlBuffer->GetNetCtrl(), sizeof(MsgNetCtrl));
+            if (pCtlBuffer->Header.Crc32 == 0) pCtlBuffer->Header.Crc32 = ~pCtlBuffer->Header.Crc32;
 
-			//AssertRel(m_RecvReliableWindow.GetBaseSequence() != 1 && uiSequence != 1 || uiSyncMask == 0);
-			SFLog(Net, Debug2, "NetCtrl Send MyRecvMask : CID:{0} mySeq:{1}, mask:{2:X8}",
-				GetCID(), uiSequence, uiSyncMask);
-
-			m_uiGatheredSize += pNetCtrlMsg->Length;
+            m_uiGatheredSize += pCtlBuffer->Header.Length;
 
 			return hr;
 		}
@@ -128,7 +125,7 @@ namespace SF {
 		Result ConnectionMUDP::TickUpdate()
 		{
 			Result hr = ResultCode::SUCCESS;
-			Message::MessageID msgIDTem;
+			MessageID msgIDTem;
 
 			MutexScopeLock scopeLock(GetUpdateLock());
 

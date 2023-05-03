@@ -46,7 +46,7 @@ namespace Net {
 		m_pMsgWnd = new(heap) MessageElement[MessageWindow::MESSAGE_QUEUE_SIZE]{};
 		for (uint32_t iMsg = 0; iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
 		{
-			uint32_t expectedSeq = Message::SequenceNormalize(iMsg - MessageWindow::MESSAGE_QUEUE_SIZE); // using 16bit part only
+			uint32_t expectedSeq = MessageSequence::Normalize(iMsg - MessageWindow::MESSAGE_QUEUE_SIZE); // using 16bit part only
 			m_pMsgWnd[iMsg].Sequence = expectedSeq;
 			m_pMsgWnd[iMsg].pMsg = nullptr;
 		}
@@ -59,7 +59,7 @@ namespace Net {
 	}
 
 	// Add message
-	Result RecvMsgWindow::AddMsg( SharedPointerT<Message::MessageData>& pIMsg )
+	Result RecvMsgWindow::AddMsg( SharedPointerT<MessageData>& pIMsg )
 	{
 		Result hr = ResultCode::SUCCESS;
 		auto msgSeq = pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence;
@@ -67,7 +67,7 @@ namespace Net {
 		// Base sequence should be locked until actual swap is happened
 		// There is a chance m_uiBaseSequence increase before the message is actually added if a message is added on different thread at the same time.
 		//TicketScopeLock scopeLock(TicketLock::LockMode::NonExclusive, m_SequenceLock);
-		int diff = Message::SequenceDifference(msgSeq, m_uiBaseSequence);
+		int diff = MessageSequence::Difference(msgSeq, m_uiBaseSequence);
 
 		if (diff >= GetAcceptableSequenceRange())
 		{
@@ -81,12 +81,12 @@ namespace Net {
 
 		int iPosIdx = msgSeq % MessageWindow::MESSAGE_QUEUE_SIZE;
 
-		uint32_t expectedStoredSeq = Message::SequenceNormalize(msgSeq - MessageWindow::MESSAGE_QUEUE_SIZE); // using 11bit part only
+		uint32_t expectedStoredSeq = MessageSequence::Normalize(msgSeq - MessageWindow::MESSAGE_QUEUE_SIZE); // using 11bit part only
 		bool bExchanged = m_pMsgWnd[iPosIdx].Sequence.compare_exchange_strong(expectedStoredSeq, msgSeq);
 		if (!bExchanged)
 		{
 			// Somebody already took the spot. let's drop it
-			if (Message::SequenceDifference(expectedStoredSeq, msgSeq) <= 0)
+			if (MessageSequence::Difference(expectedStoredSeq, msgSeq) <= 0)
 			{
 				// newer message already took place
 				return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
@@ -111,7 +111,7 @@ namespace Net {
 
 	// Non-thread safe
 	// Pop message and return it if can
-	Result RecvMsgWindow::PopMsg(SharedPointerT<Message::MessageData> &pIMsg )
+	Result RecvMsgWindow::PopMsg(SharedPointerT<MessageData> &pIMsg )
 	{
 		Result hr = ResultCode::SUCCESS;
 		auto baseSequence = m_uiBaseSequence.load(std::memory_order_acquire);
@@ -122,12 +122,12 @@ namespace Net {
 		// Base sequence should be locked during actual pop operation
 		//TicketScopeLock scopeLock(TicketLock::LockMode::Exclusive, m_SequenceLock);
 
-		pIMsg = std::forward<SharedPointerAtomicT<Message::MessageData>>(m_pMsgWnd[iPosIdx].pMsg);
+		pIMsg = std::forward<SharedPointerAtomicT<MessageData>>(m_pMsgWnd[iPosIdx].pMsg);
 		if (pIMsg == nullptr)
 			return ResultCode::FAIL;
 
 		// If the message is not the one with correct sequence, it is wrong and need to be dropped
-		if (Message::SequenceDifference(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence, baseSequence) != 0)
+		if (MessageSequence::Difference(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence, baseSequence) != 0)
 		{
 			pIMsg = nullptr;
 			return ResultCode::FAIL;
@@ -188,7 +188,7 @@ namespace Net {
 		{
 			for (uint32_t iMsg = 0; iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
 			{
-				uint32_t expectedSeq = Message::SequenceNormalize(iMsg - MessageWindow::MESSAGE_QUEUE_SIZE); // using 16bit part only
+				uint32_t expectedSeq = MessageSequence::Normalize(iMsg - MessageWindow::MESSAGE_QUEUE_SIZE); // using 16bit part only
 				m_pMsgWnd[iMsg].Sequence = expectedSeq;
 				m_pMsgWnd[iMsg].pMsg = nullptr;
 			}
@@ -208,7 +208,7 @@ namespace Net {
 	SendMsgWindow::SendMsgWindow(IHeap& heap)
         : m_ReleasedMessageSequences(heap, 64, 4)
 	{
-		m_pMsgWnd = new(heap) MessageData[MessageWindow::MESSAGE_QUEUE_SIZE];
+		m_pMsgWnd = new(heap) WindowMessageData[MessageWindow::MESSAGE_QUEUE_SIZE];
 	}
 
 	SendMsgWindow::~SendMsgWindow()
@@ -240,7 +240,7 @@ namespace Net {
 
 
 	// Get message info in window, index based on window base
-	Result SendMsgWindow::GetAt(uint32_t uiIdx, MessageData* &pMessageElement)
+	Result SendMsgWindow::GetAt(uint32_t uiIdx, WindowMessageData* &pMessageElement)
 	{
 		uint32_t iIdxCur = (m_uiBaseSequence + uiIdx) % MessageWindow::MESSAGE_QUEUE_SIZE;
 
@@ -254,7 +254,7 @@ namespace Net {
 
 
 	// Add a message at the end
-	Result SendMsgWindow::EnqueueMessage( TimeStampMS ulTimeStampMS, SharedPointerT<Message::MessageData>& pIMsg )
+	Result SendMsgWindow::EnqueueMessage( TimeStampMS ulTimeStampMS, SharedPointerT<MessageData>& pIMsg )
 	{
 		Result hr = ResultCode::SUCCESS;
 		int iIdx = 0;
@@ -269,7 +269,7 @@ namespace Net {
 		AssertRel(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence == 0);
 		pIMsg->AssignSequence( m_uiHeadSequence );
 
-		iIdx = Message::SequenceDifference(m_uiHeadSequence, m_uiBaseSequence);
+		iIdx = MessageSequence::Difference(m_uiHeadSequence, m_uiBaseSequence);
 
 		if (iIdx >= GetAcceptableSequenceRange())
 		{
@@ -301,7 +301,7 @@ namespace Net {
         if (m_pMsgWnd == NULL)
             return ResultCode::SUCCESS;// nothing to release
 
-        int iIdx = Message::SequenceDifference(uiSequence, m_uiBaseSequence.load(MemoryOrder::memory_order_acquire));
+        int iIdx = MessageSequence::Difference(uiSequence, m_uiBaseSequence.load(MemoryOrder::memory_order_acquire));
         if (iIdx >= GetAcceptableSequenceRange())
         {
             return ResultCode::IO_INVALID_SEQUENCE; // Out of range
@@ -324,7 +324,7 @@ namespace Net {
         uint32_t uiCurBit = 0, uiSyncMaskCur = 1;
 
         auto baseSequence = m_uiBaseSequence.load(MemoryOrder::memory_order_acquire);
-        int iIdx = Message::SequenceDifference(uiSequenceBase, baseSequence);
+        int iIdx = MessageSequence::Difference(uiSequenceBase, baseSequence);
         if(  iIdx < 0 )
         {
         	// SKip already processed message ids
@@ -380,11 +380,11 @@ namespace Net {
         while (m_ReleasedMessageSequences.Dequeue(sequence))
         {
             sequence = FromQueuedSequence(sequence);
-            int iIdx = Message::SequenceDifference(sequence, uiSequenceBase);
+            int iIdx = MessageSequence::Difference(sequence, uiSequenceBase);
             if (iIdx < 0)
                 continue;
 
-            auto& windowElement = m_pMsgWnd[sequence % MessageWindow::MESSAGE_QUEUE_SIZE];
+            WindowMessageData& windowElement = m_pMsgWnd[sequence % MessageWindow::MESSAGE_QUEUE_SIZE];
             windowElement.pMsg = nullptr;
             // Double free can happen. skip the assert
             //AssertRel(windowElement.State != ItemState::Free);
@@ -496,7 +496,7 @@ namespace Net {
 	void SendMsgWindow::ReleaseMessageInternal(uint16_t iOffset)
 	{
 		uint32_t iPosIdx = (m_uiBaseSequence + iOffset) % MessageWindow::MESSAGE_QUEUE_SIZE;
-        auto& windowElement = m_pMsgWnd[iPosIdx];
+        WindowMessageData& windowElement = m_pMsgWnd[iPosIdx];
 
         windowElement.pMsg = nullptr;
         AssertRel(windowElement.State != ItemState::Free);

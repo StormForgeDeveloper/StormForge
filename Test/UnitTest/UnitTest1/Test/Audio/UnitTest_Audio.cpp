@@ -80,7 +80,7 @@ TEST_F(AudioTest, Playback)
     testBuffer.resize(recordingDurationSec * samplesPerSec);
     memset(testBuffer.data(), 0, testBuffer.capacity());
 
-    GenerateSinWave(testBuffer, 2.0, recordingDurationSec * samplesPerSec, recordingDurationSec / 2);
+    GenerateSinWave(testBuffer, 1.0, recordingDurationSec * samplesPerSec, recordingDurationSec / 2);
 
     SFLog(Game, Info, "Playing sin wave");
 
@@ -128,7 +128,7 @@ TEST_F(AudioTest, RecordingNPlayback)
 
     uint recordingDurationSec = 10;
     DynamicArray<uint8_t> testBuffer;
-    testBuffer.reserve(recordingDurationSec * recorder->GetSamplesPerSec() * recorder->GetSampleFrameSize());
+    testBuffer.reserve((recordingDurationSec + 1) * recorder->GetSamplesPerSec() * recorder->GetSampleFrameSize());
     memset(testBuffer.data(), 0, testBuffer.capacity());
     auto startTime = Util::Time.GetRawTimeMs();
     while (Util::TimeSinceRaw(startTime) < DurationMS(recordingDurationSec * 1000))

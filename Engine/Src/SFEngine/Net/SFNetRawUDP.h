@@ -54,7 +54,7 @@ namespace Net {
 			virtual Result OnWriteReady() override;
 		};
 
-		using MessageHandlerFunc = std::function<Result(const sockaddr_storage& remoteAddr, SharedPointerT<Message::MessageData>& pMsg)>;
+		using MessageHandlerFunc = std::function<Result(const sockaddr_storage& remoteAddr, SharedPointerT<MessageData>& pMsg)>;
 
 	private:
 
@@ -87,7 +87,7 @@ namespace Net {
 
 		const NetAddress& GetLocalAddress() const { return m_LocalAddress; }
 
-		Result SendMsg(const sockaddr_storage& dest, SharedPointerT<Message::MessageData>& pMsg);
+		Result SendMsg(const sockaddr_storage& dest, SharedPointerT<MessageData>& pMsg);
 
 		// called when incoming message occur
 		Result OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff);

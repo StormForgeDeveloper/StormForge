@@ -15,11 +15,9 @@
 #include "SFTypedefs.h"
 #include "Types/SFEngineTypedefs.h"
 #include "SFAssert.h"
-#include "Protocol/SFProtocol.h"
 
 
 namespace SF {
-namespace Message {
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -132,19 +130,6 @@ namespace Message {
 	};
 
 
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	// Message Usage Constants
-	//
-	enum MessageUsage
-	{
-		MessageUsage_None,
-		MessageUsage_ClusterDataRead,
-		MessageUsage_ClusterDataWrite,
-		MessageUsage_ClusterStatusRead,
-		MessageUsage_ClusterStatusWrite,
-	};
-
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -172,29 +157,119 @@ namespace Message {
 		// bit field termination
 		uint32_t					: 0;
 
-		uint64_t		PeerID;
+        SF_FORCEINLINE size_t GetHeaderSize() const { return sizeof(MessageHeader) + (msgID.IDs.Mobile ? sizeof(uint64_t) : 0); }
+        SF_FORCEINLINE uint64_t GetPeerID() const
+        {
+            return msgID.IDs.Mobile ?
+                    *reinterpret_cast<uint64_t*>(reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader))
+                    :
+                    0;
+        }
+        SF_FORCEINLINE void SetPeerID(uint64_t peerId)
+        {
+            if (msgID.IDs.Mobile)
+            {
+                *reinterpret_cast<uint64_t*>(reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader)) = peerId;
+            }
+        }
 
 		void SetIDNLen(uint id, uint msgLen);
-	};
 
-	static INT SequenceDifference(uint seq1, uint seq2);
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Network Packet Message base Header
-	//
-
-
-
-	using MobileMessageHeader = MessageHeader;
-
+        SF_FORCEINLINE void* GetDataPtr() const
+        {
+            return reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(this) + GetHeaderSize());
+        }
+    };
 
 #pragma pack(pop)
 
 
-#include "SFMessage.inl"
 
-} // Message
+
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#endif
+
+    inline constexpr MessageID::MessageID(uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode)
+        : IDs({ 0, 0, uiMobility, uiReliability, uiType, uiCode, uiPolicy })
+    {
+    }
+
+    inline uint32_t MessageID::SetMessageID(uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode)
+    {
+        IDs.MsgCode = uiCode;
+        IDs.Policy = uiPolicy;
+        IDs.Mobile = uiMobility;
+        IDs.Encrypted = 0;
+        IDs.Reliability = uiReliability;
+        IDs.Type = uiType;
+        IDs.Sequence = 0;// uiSeq;
+
+        return ID;
+    }
+
+    inline void MessageHeader::SetIDNLen(uint id, uint msgLen)
+    {
+        msgID.ID = id;
+        Length = msgLen;
+    }
+
+    // Message sequence
+    struct MessageSequence
+    {
+        uint Sequence{};
+
+        MessageSequence() = default;
+        MessageSequence(uint InSequence) : Sequence(InSequence) {}
+        MessageSequence(const MessageSequence& src) : Sequence(src.Sequence) {}
+
+
+        static inline INT Difference(uint seq1, uint seq2)
+        {
+            const int SEQDIFF_MAX = NET_SEQUENCE_MASK >> 1;
+            const int SEQDIFF_MIN = (-SEQDIFF_MAX - 1);
+
+            //NET_SEQUEUCN_BITS
+            seq1 = NET_SEQUENCE_MASK & seq1;
+            seq2 = NET_SEQUENCE_MASK & seq2;
+            auto diff = (INT)(seq1 - seq2);
+            if (diff > SEQDIFF_MAX)
+                diff -= NET_SEQUENCE_MASK + 1;
+            else if (diff < SEQDIFF_MIN)
+                diff += NET_SEQUENCE_MASK + 1;
+
+            return diff;
+        }
+
+        static inline uint Normalize(uint seq)
+        {
+            seq = NET_SEQUENCE_MASK & seq;
+
+            return seq;
+        }
+
+        void NormalizeInline() { Sequence = Normalize(Sequence); }
+
+        operator uint() const { return Sequence; }
+        MessageSequence& operator ++() { Sequence++; return *this; }
+        friend MessageSequence operator ++(const MessageSequence& op) { return op.Sequence + 1; }
+
+        bool operator == (const MessageSequence& src) const { return ((Sequence - src.Sequence) & NET_SEQUENCE_MASK) == 0; }
+        bool operator != (const MessageSequence& src) const { return ((Sequence - src.Sequence) & NET_SEQUENCE_MASK) != 0; }
+
+        int operator - (const MessageSequence& op) { return Difference(Sequence, op.Sequence); }
+    };
+
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
+#endif
+    namespace Message
+    {
+        static constexpr size_t HeaderSize = sizeof(MessageHeader);
+        static constexpr size_t MobileHeaderSize = sizeof(MessageHeader) + sizeof(uint64_t);
+    } // Message
 } // SF
 
 

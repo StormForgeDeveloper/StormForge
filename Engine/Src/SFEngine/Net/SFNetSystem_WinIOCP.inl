@@ -34,9 +34,9 @@ void IOBUFFER_WRITE::InitForIO(SF_SOCKET sockWrite)
 	hEvent = hEventTemp;
 }
 
-void IOBUFFER_WRITE::InitMsg(SharedPointerT<Message::MessageData>&& pMsg )
+void IOBUFFER_WRITE::InitMsg(SharedPointerT<MessageData>&& pMsg )
 {
-	pMsgs = std::forward<SharedPointerT<Message::MessageData>>(pMsg);
+	pMsgs = std::forward<SharedPointerT<MessageData>>(pMsg);
 	pSendBuff = nullptr;
 	TransferredSize = pMsgs->GetMessageSize();
 	wsaBuff.len = pMsgs->GetMessageSize();
@@ -52,11 +52,11 @@ void IOBUFFER_WRITE::InitBuff( uint uiBuffSize, uint8_t* pBuff )
 	pSendBuff = pBuff;
 }
 
-void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, SharedPointerT<Message::MessageData> &&pMsg )
+void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, SharedPointerT<MessageData> &&pMsg )
 {
 	InitForIO(sockWrite);
 
-	InitMsg(std::forward<SharedPointerT<Message::MessageData>>(pMsg) );
+	InitMsg(std::forward<SharedPointerT<MessageData>>(pMsg) );
 
 	NetAddr.To = to;
 
@@ -74,11 +74,11 @@ void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& t
 	Operation = IOBUFFER_OPERATION::OP_UDPWRITE;
 }
 
-void IOBUFFER_WRITE::SetupSendTCP( SharedPointerT<Message::MessageData>&& pMsg )
+void IOBUFFER_WRITE::SetupSendTCP( SharedPointerT<MessageData>&& pMsg )
 {
 	InitForIO(0);
 
-	InitMsg(std::forward<SharedPointerT<Message::MessageData>>(pMsg) );
+	InitMsg(std::forward<SharedPointerT<MessageData>>(pMsg) );
 
 	Operation = IOBUFFER_OPERATION::OP_TCPWRITE;
 }

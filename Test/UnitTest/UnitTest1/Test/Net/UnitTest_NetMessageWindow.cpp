@@ -34,7 +34,7 @@ const uint32_t TEST_COUNT = 4000 * TestScale;
 
 MessageDataPtr NewMessage(IHeap& memoryManager, uint32_t sequenceID)
 {
-	Message::MessageData* pResult = Message::Login::LoginCmd::Create(memoryManager, 0, StringCrc32("Conspiracy"), "11", "11");
+	MessageData* pResult = Message::Login::LoginCmd::Create(memoryManager, 0, StringCrc32("Conspiracy"), "11", "11");
 	pResult->AssignSequence(sequenceID);
 
 	return MessageDataPtr(pResult);
@@ -42,7 +42,7 @@ MessageDataPtr NewMessage(IHeap& memoryManager, uint32_t sequenceID)
 
 MessageDataPtr NewMessage(IHeap& memoryManager)
 {
-	Message::MessageData* pResult = Message::Login::LoginCmd::Create(memoryManager, 0, StringCrc32("Conspiracy"), "11", "11");
+	MessageData* pResult = Message::Login::LoginCmd::Create(memoryManager, 0, StringCrc32("Conspiracy"), "11", "11");
 
 	return MessageDataPtr(pResult);
 }
@@ -73,13 +73,13 @@ TEST_F(NetTest, RecvMessageWindowSimple)
 	for (int iTest = 0; iTest < 2048; iTest++)
 	{
 		MessageDataPtr pResult;
-		auto hr = recvMessage.PopMsg(pResult);
+		Result hr = recvMessage.PopMsg(pResult);
 		if (iTest < recvMessage.GetAcceptableSequenceRange())
 		{
 			AssertRel(pResult != nullptr);
 			AssertRel(hr);
 
-			AssertRel(Message::SequenceDifference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence++) == 0);
+			AssertRel(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence++) == 0);
 		}
 		else
 		{
@@ -106,7 +106,7 @@ TEST_F(NetTest, RecvMessageWindowSimple2)
 		case 0: // add
 			pNewMsg = NewMessage(testHeap, uiSequence);
 			hr = recvMessage.AddMsg(pNewMsg);
-			if (Message::SequenceDifference(uiSequence, recvMessage.GetBaseSequence()) < recvMessage.GetAcceptableSequenceRange())
+			if (MessageSequence::Difference(uiSequence, recvMessage.GetBaseSequence()) < recvMessage.GetAcceptableSequenceRange())
 			{
 				AssertRel(hr);
 				uiSequence++;
@@ -123,7 +123,7 @@ TEST_F(NetTest, RecvMessageWindowSimple2)
 			{
 				AssertRel(pResult != nullptr);
 
-				AssertRel(Message::SequenceDifference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, releaseSequence++) == 0);
+				AssertRel(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, releaseSequence++) == 0);
 			}
 			else
 			{
@@ -162,7 +162,7 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 			}
 			auto pNewMsg = NewMessage(testHeap, testSequence);
 			hr = recvMessage.AddMsg(pNewMsg);
-			auto seqOffset = Message::SequenceDifference(testSequence, recvMessage.GetBaseSequence());
+			auto seqOffset = MessageSequence::Difference(testSequence, recvMessage.GetBaseSequence());
 			if (seqOffset < recvMessage.GetAcceptableSequenceRange() && seqOffset >= 0)
 			{
 				AssertRel(hr);
@@ -181,7 +181,7 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 			{
 				AssertRel(pResult != nullptr);
 
-				AssertRel(Message::SequenceDifference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, releaseSequence++) == 0);
+				AssertRel(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, releaseSequence++) == 0);
 			}
 			else
 			{
@@ -199,23 +199,6 @@ TEST_F(NetTest, RecvMessageWindowSimple3)
 
 
 
-INT MySequenceDifference(uint seq1, uint seq2)
-{
-	const int SEQDIFF_MAX = NET_SEQUENCE_MASK >> 1;
-	const int SEQDIFF_MIN = (-SEQDIFF_MAX - 1);
-
-	//NET_SEQUEUCN_BITS
-	seq1 = NET_SEQUENCE_MASK & seq1;
-	seq2 = NET_SEQUENCE_MASK & seq2;
-	auto diff = (INT)(seq1 - seq2);
-	if (diff > SEQDIFF_MAX)
-		diff -= NET_SEQUENCE_MASK + 1;
-	else if (diff < SEQDIFF_MIN)
-		diff += NET_SEQUENCE_MASK + 1;
-
-	return diff;
-}
-
 
 TEST_F(NetTest, RecvMessageWindowOutOfRange)
 {
@@ -232,7 +215,7 @@ TEST_F(NetTest, RecvMessageWindowOutOfRange)
 		{
 			auto testSequence = (int)uiSequence + testSequenceOffset;
 
-			int diff = MySequenceDifference(testSequence, iTest);
+			int diff = MessageSequence::Difference(testSequence, iTest);
 			GTEST_ASSERT_EQ(diff, testSequenceOffset);
 		}
 	}
@@ -271,7 +254,7 @@ TEST_F(NetTest, RecvMessageWindowOutOfRange)
 		auto hRes = recvMessage.PopMsg(pIMsg);
 		if (pIMsg != nullptr)
 		{
-			EXPECT_EQ(Message::SequenceDifference(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence), 0);
+			EXPECT_EQ(MessageSequence::Difference(pIMsg->GetMessageHeader()->msgID.IDSeq.Sequence, uiSequence), 0);
 		}
 		else
 		{
@@ -340,7 +323,7 @@ TEST_F(NetTest, RecvMessageWindowMT)
 				{
 					AssertRel(pResult != nullptr);
 
-					AssertRel(Message::SequenceDifference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, sequence) == 0);
+					AssertRel(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, sequence) == 0);
 					pResult = nullptr;
 					sequence = releaseSequence.fetch_add(1, std::memory_order_relaxed);
 				}
@@ -406,7 +389,7 @@ TEST_F(NetTest, RecvMessageWindowMT2)
 				{
 					EXPECT_TRUE(pMsg == nullptr);
 					GTEST_ASSERT_EQ(pMsg->GetReferenceCount(), 2);
-					EXPECT_TRUE(Message::SequenceDifference(recvMessage.GetBaseSequence(), testSequence) <= recvMessage.GetAcceptableSequenceRange());
+					EXPECT_TRUE(MessageSequence::Difference(recvMessage.GetBaseSequence(), testSequence) <= recvMessage.GetAcceptableSequenceRange());
 				}
 
 				recvMessage.GetSyncMask();
@@ -432,7 +415,7 @@ TEST_F(NetTest, RecvMessageWindowMT2)
 				{
 					AssertRel(pResult != nullptr);
 
-					AssertRel(Message::SequenceDifference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, (uint)sequence) == 0);
+					AssertRel(MessageSequence::Difference(pResult->GetMessageHeader()->msgID.IDSeq.Sequence, (uint)sequence) == 0);
 					pResult = nullptr;
 					if ((sequence % 10000) == 0)
 					{

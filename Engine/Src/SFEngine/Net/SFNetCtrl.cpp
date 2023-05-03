@@ -20,12 +20,21 @@
 namespace SF {
 namespace Net {
 
-	tag_MsgNetCtrlBuffer GetNullMsgNetCtrlBuffer()
-	{
-		tag_MsgNetCtrlBuffer buffer;
-		memset(&buffer,0,sizeof(buffer));
-		return buffer;
-	}
+    void MsgNetCtrlBuffer::UpdateMessageDataSize()
+    {
+        if (Header.msgID.GetMsgIDOnly() == PACKET_NETCTRL_CONNECT || GetNetCtrl().rtnMsgID.GetMsgIDOnly() == PACKET_NETCTRL_CONNECT)
+        {
+            Header.Length = Header.GetHeaderSize() + sizeof(MsgNetCtrlConnect);
+        }
+        else if (Header.msgID.GetMsgIDOnly() == PACKET_NETCTRL_SYNCRELIABLE)
+        {
+            Header.Length = Header.GetHeaderSize() + sizeof(MsgMobileNetCtrlSync);
+        }
+        else
+        {
+            Header.Length = Header.GetHeaderSize() + sizeof(MsgNetCtrl);
+        }
+    }
 
 } // namespace Net
 } // namespace SF

@@ -83,55 +83,6 @@ namespace Net {
 		return hr;
 	}
 	
-	// Process network control message
-	Result ConnectionUDPServerPeer::ProcNetCtrl( const MsgNetCtrl* pNetCtrl )
-	{
-		Result hr = ResultCode::SUCCESS;
-
-
-		netChk(ConnectionUDP::ProcNetCtrl( pNetCtrl ) );
-
-
-		switch( pNetCtrl->msgID.IDs.MsgCode )
-		{
-		case NetCtrlCode_Connect:
-			switch (GetConnectionState())
-			{
-			case ConnectionState::CONNECTED:
-				// This case could be a reconnected case while  this connection didn't realized the disconnect
-				//InitSynchronization();
-				break;
-			default:
-				break;
-			};
-		default:
-			break;
-		};
-
-
-	Proc_End:
-
-		return hr;
-	}
-
-
-	//// Update net control, process connection heartbeat, ... etc
-	//Result ConnectionUDPServerPeer::TickUpdate()
-	//{
-	//	Result hr = ResultCode::SUCCESS;
-
-	//	netChk(ConnectionUDP::TickUpdate() );
-
-
-	//Proc_End:
-
-	//	SendFlush();
-
-	//	return hr;
-	//}
-
-
-
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -152,24 +103,6 @@ namespace Net {
 	{
 		ClearQueues();
 	}
-
-
-	//// Update net control, process connection heartbeat, ... etc
-	//Result ConnectionUDPServer::TickUpdate()
-	//{
-	//	Result hr = ResultCode::SUCCESS;
-
-	//	netChk(ConnectionUDP::TickUpdate() );
-
-
-	//Proc_End:
-
-	//	SendFlush();
-
-	//	return hr;
-	//}
-
-	
 
 
 

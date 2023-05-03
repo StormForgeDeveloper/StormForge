@@ -41,7 +41,7 @@ namespace Net {
 		{
 			WeakPointerT<Connection> pConnection;
 			std::atomic<uint64_t> Event;
-			SharedPointerT<Message::MessageData> pMsg;
+			SharedPointerT<MessageData> pMsg;
 
 			EventInformation();
 			EventInformation(const EventInformation& src);
@@ -63,7 +63,7 @@ namespace Net {
 		virtual void Dispose() override;
 
 		virtual void OnConnectionEvent(Connection* pConn, const ConnectionEvent& evt) override;
-		virtual Result OnRecvMessage(Connection* pConn, SharedPointerT<Message::MessageData>& pMsg) override;
+		virtual Result OnRecvMessage(Connection* pConn, SharedPointerT<MessageData>& pMsg) override;
 		virtual Result OnNetSyncMessage(Connection* pConn) override;
 		// Net send message
 		virtual Result OnNetSendReadyMessage(Connection* pConn)override;

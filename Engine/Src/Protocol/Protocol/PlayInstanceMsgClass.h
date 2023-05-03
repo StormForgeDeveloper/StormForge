@@ -34,16 +34,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
@@ -56,8 +51,6 @@ namespace SF
 				JoinPlayInstanceCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
@@ -81,16 +74,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
@@ -108,8 +96,6 @@ namespace SF
 				JoinPlayInstanceRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
@@ -139,18 +125,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_KickedPlayerID{};
@@ -161,8 +141,6 @@ namespace SF
 				PlayerKickedS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetKickedPlayerID() const	{ return m_KickedPlayerID; };
@@ -185,18 +163,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				uint32_t m_SenderEndpointID{};
@@ -209,8 +181,6 @@ namespace SF
 				PlayPacketC2SEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const uint32_t& GetSenderEndpointID() const	{ return m_SenderEndpointID; };
@@ -235,17 +205,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -268,8 +233,6 @@ namespace SF
 				NewActorInViewS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -302,18 +265,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				uint32_t m_ActorID{};
@@ -324,8 +281,6 @@ namespace SF
 				RemoveActorFromViewS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const uint32_t& GetActorID() const	{ return m_ActorID; };
@@ -348,17 +303,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -370,8 +320,6 @@ namespace SF
 				PlayerMovementC2SEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -395,18 +343,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				ActorMovement m_Movement{};
@@ -417,8 +359,6 @@ namespace SF
 				ActorMovementS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const ActorMovement& GetMovement() const	{ return m_Movement; };
@@ -441,18 +381,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				ArrayView<ActorMovement> m_Movement;
@@ -463,8 +397,6 @@ namespace SF
 				ActorMovementsS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const Array<ActorMovement>& GetMovement() const	{ return m_Movement; };
@@ -487,17 +419,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -514,8 +441,6 @@ namespace SF
 				PlayerStateChangedS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -544,17 +469,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -568,8 +488,6 @@ namespace SF
 				ClientSyncReliableC2SEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -595,17 +513,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -619,8 +532,6 @@ namespace SF
 				ClientSyncC2SEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -646,16 +557,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
@@ -669,8 +575,6 @@ namespace SF
 				OccupyMapObjectCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
@@ -695,16 +599,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
@@ -718,8 +617,6 @@ namespace SF
 				OccupyMapObjectRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
@@ -745,16 +642,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
@@ -767,8 +659,6 @@ namespace SF
 				UnoccupyMapObjectCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
@@ -792,16 +682,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
@@ -815,8 +700,6 @@ namespace SF
 				UnoccupyMapObjectRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
@@ -842,16 +725,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
@@ -867,8 +745,6 @@ namespace SF
 				UseMapObjectCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
@@ -895,16 +771,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
@@ -921,8 +792,6 @@ namespace SF
 				UseMapObjectRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
@@ -951,16 +820,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				uint64_t m_PlayInstanceUID{};
@@ -977,8 +841,6 @@ namespace SF
 				ZoneChatCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
@@ -1006,17 +868,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
@@ -1027,8 +883,6 @@ namespace SF
 				ZoneChatRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
@@ -1051,18 +905,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_SenderID{};
@@ -1078,8 +926,6 @@ namespace SF
 				ZoneChatS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetSenderID() const	{ return m_SenderID; };
@@ -1107,17 +953,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -1130,8 +971,6 @@ namespace SF
 				LevelUpS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -1156,17 +995,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				AuthTicket m_Ticket{};
@@ -1178,8 +1011,6 @@ namespace SF
 				CreateStreamCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
@@ -1202,17 +1033,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
@@ -1224,8 +1049,6 @@ namespace SF
 				CreateStreamRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
@@ -1249,17 +1072,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				AuthTicket m_Ticket{};
@@ -1271,8 +1088,6 @@ namespace SF
 				FindStreamCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
@@ -1295,17 +1110,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
@@ -1317,8 +1126,6 @@ namespace SF
 				FindStreamRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
@@ -1342,17 +1149,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				AuthTicket m_Ticket{};
@@ -1364,8 +1165,6 @@ namespace SF
 				DeleteStreamCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
@@ -1388,17 +1187,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
@@ -1410,8 +1203,6 @@ namespace SF
 				DeleteStreamRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
@@ -1435,17 +1226,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				AuthTicket m_Ticket{};
@@ -1456,8 +1241,6 @@ namespace SF
 				GetStreamListCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
@@ -1479,17 +1262,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
@@ -1501,8 +1278,6 @@ namespace SF
 				GetStreamListRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
@@ -1526,16 +1301,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				StringCrc32 m_FunctionName{};
@@ -1550,8 +1320,6 @@ namespace SF
 				CallFunctionCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const StringCrc32& GetFunctionName() const	{ return m_FunctionName; };
@@ -1577,17 +1345,11 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_TransactionID{};
 				Result m_Result{};
@@ -1601,8 +1363,6 @@ namespace SF
 				CallFunctionRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
@@ -1628,17 +1388,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 1,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint64_t m_PlayInstanceUID{};
 				PlayerID m_PlayerID{};
@@ -1650,8 +1405,6 @@ namespace SF
 				SendVoiceDataC2SEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint64_t& GetPlayInstanceUID() const	{ return m_PlayInstanceUID; };
 				const PlayerID& GetPlayerID() const	{ return m_PlayerID; };
@@ -1675,18 +1428,12 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 0,
+ 					HasTransactionID = 0,
 					HasRouteContext = 0,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
 				uint64_t GetTransactionID() { return uint64_t{}; }
 				RouteContext GetRouteContext() { return RouteContext{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				uint32_t m_ActorID{};
 				ArrayView<uint8_t> m_VoiceData;
@@ -1697,8 +1444,6 @@ namespace SF
 				VoiceDataS2CEvt( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const uint32_t& GetActorID() const	{ return m_ActorID; };
 				const Array<uint8_t>& GetVoiceData() const	{ return m_VoiceData; };

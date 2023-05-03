@@ -93,7 +93,7 @@ namespace Net {
 		super::TickUpdate();
 
 		// TODO: clean up after test
-		//Message::MessageID msgIDTem;
+		//MessageID msgIDTem;
 		//TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
 
 
@@ -136,7 +136,7 @@ namespace Net {
 	//			m_uiSendNetCtrlCount++;
 	//			if (m_IsTCPSocketConnectionEstablished)
 	//			{
-	//				netChk(SendNetCtrl(PACKET_NETCTRL_CONNECT, (uint)GetLocalInfo().PeerClass, Message::MessageID(SF_PROTOCOL_VERSION), GetLocalInfo().PeerID));
+	//				netChk(SendNetCtrl(PACKET_NETCTRL_CONNECT, (uint)GetLocalInfo().PeerClass, MessageID(SF_PROTOCOL_VERSION), GetLocalInfo().PeerID));
 	//			}
 	//		}
 	//		goto Proc_End;

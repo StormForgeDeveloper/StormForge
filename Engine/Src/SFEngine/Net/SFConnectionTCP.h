@@ -106,8 +106,8 @@ namespace SF {
 
 		protected:
 
-			virtual Result SendPending(uint uiCtrlCode, uint uiSequence, Message::MessageID returnMsgID, uint64_t UID = 0) override;
-			virtual Result SendRaw(const SharedPointerT<Message::MessageData>& pMsg) override;
+			virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t UID = 0) override;
+			virtual Result SendRaw(const SharedPointerT<MessageData>& pMsg) override;
 
 		public:
 			// Constructor
@@ -152,10 +152,10 @@ namespace SF {
 
 			// called when incoming message occure
 			virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) override;
-			virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg) override;
+			virtual Result OnRecv(SharedPointerT<MessageData>& pMsg) override;
 
 			// Send message to connected entity
-			virtual Result Send(const SharedPointerT<Message::MessageData>& pMsg) override;
+			virtual Result Send(const SharedPointerT<MessageData>& pMsg) override;
 
 
 			// Update Send buffer Queue, TCP and UDP client connection

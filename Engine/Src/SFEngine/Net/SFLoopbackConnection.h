@@ -86,7 +86,7 @@ namespace Net {
 
 		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) override { assert(false);  return ResultCode::SUCCESS; }
 		// Send message to connected entity
-		//virtual Result Send( Message::MessageData* &pMsg ) = 0;
+		//virtual Result Send( MessageData* &pMsg ) = 0;
 
 
 		// Update net control, process connection heartbeat, ... etc

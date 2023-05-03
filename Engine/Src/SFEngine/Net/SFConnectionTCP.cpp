@@ -481,7 +481,7 @@ namespace Net {
 	Result ConnectionTCP::OnRecv( uint uiBuffSize, const uint8_t* pBuff )
 	{
 		Result hr = ResultCode::SUCCESS;
-		SharedPointerT<Message::MessageData> pMsg;
+		SharedPointerT<MessageData> pMsg;
 
 		if( uiBuffSize == 0 )
 		{
@@ -499,14 +499,14 @@ namespace Net {
 
 		while( uiBuffSize > 0 )
 		{
-			Message::MessageHeader *pMsgHdr = NULL;
+			MessageHeader *pMsgHdr = NULL;
 
 			ResetZeroRecvCount();
 
 			if( m_uiRecvTemUsed == 0 )
 			{
-				pMsgHdr = (Message::MessageHeader*)pBuff;
-				if( uiBuffSize < sizeof(Message::MessageHeader) || uiBuffSize < pMsgHdr->Length ) // too small to make packet
+				pMsgHdr = (MessageHeader*)pBuff;
+				if( uiBuffSize < sizeof(MessageHeader) || uiBuffSize < pMsgHdr->Length ) // too small to make packet
 				{
 					// send all data to recv temporary buffer and return
 					m_uiRecvTemUsed = uiBuffSize;
@@ -520,13 +520,13 @@ namespace Net {
 					break;
 				}
 
-				if( pMsgHdr->Length < sizeof(Message::MessageHeader) )
+				if( pMsgHdr->Length < sizeof(MessageHeader) )
 				{
 					// too small invalid packet
 					netCheck( ResultCode::UNEXPECTED );
 				}
 
-				netCheckMem( pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHdr->msgID.ID, pMsgHdr->Length, pBuff ) );
+				netCheckMem( pMsg = MessageData::NewMessage(GetHeap(), pMsgHdr->msgID.ID, pMsgHdr->Length, pBuff ) );
 
 				hr = OnRecv( pMsg );
 				pMsg = nullptr;
@@ -540,9 +540,9 @@ namespace Net {
 				uint uiCopySize = 0;
 
 				// copy header
-				if( m_uiRecvTemUsed < sizeof(Message::MessageHeader) )
+				if( m_uiRecvTemUsed < sizeof(MessageHeader) )
 				{
-					uiCopySize = (uint)sizeof(Message::MessageHeader) - m_uiRecvTemUsed;
+					uiCopySize = (uint)sizeof(MessageHeader) - m_uiRecvTemUsed;
 					if( uiBuffSize < uiCopySize )
 					{
 						// buffer too small to make header. append data and return
@@ -557,11 +557,11 @@ namespace Net {
 					pBuff += uiCopySize;
 					m_uiRecvTemUsed += uiCopySize;
 
-					if( m_uiRecvTemUsed < sizeof(Message::MessageHeader) )
+					if( m_uiRecvTemUsed < sizeof(MessageHeader) )
 						break;
 				}
 
-				pMsgHdr = (Message::MessageHeader*)m_bufRecvTem.data();
+				pMsgHdr = (MessageHeader*)m_bufRecvTem.data();
 
 				// if Temporary buffer is too small then reallocate
 				if( m_bufRecvTem.size() < pMsgHdr->Length )
@@ -591,7 +591,7 @@ namespace Net {
 				pBuff += uiCopySize;
 				m_uiRecvTemUsed = 0;
 
-				netCheckMem( pMsg = Message::MessageData::NewMessage(GetHeap(), pMsgHdr->msgID.ID, pMsgHdr->Length, m_bufRecvTem.data() ) );
+				netCheckMem( pMsg = MessageData::NewMessage(GetHeap(), pMsgHdr->msgID.ID, pMsgHdr->Length, m_bufRecvTem.data() ) );
 
 				hr = OnRecv( pMsg );
 				pMsg = nullptr;
@@ -605,18 +605,18 @@ namespace Net {
 
 
 
-	Result ConnectionTCP::OnRecv(SharedPointerT<Message::MessageData>& pMsg )
+	Result ConnectionTCP::OnRecv(SharedPointerT<MessageData>& pMsg )
 	{
 		Result hr = ResultCode::SUCCESS;
-		Message::MessageHeader *pMsgHeader = pMsg->GetMessageHeader();
+		MessageHeader *pMsgHeader = pMsg->GetMessageHeader();
 
-		if( pMsgHeader->msgID.IDs.Type == Message::MSGTYPE_NETCONTROL )
+		if( pMsgHeader->msgID.IDs.Type == MSGTYPE_NETCONTROL )
 		{
 			SFLog(Net, Debug5, "TCP Ctrl Recv ip:{0}, msg:{1}, Len:{2}",
 				GetRemoteInfo().PeerAddress, 
 				pMsgHeader->msgID, pMsgHeader->Length );
 
-			netCheck( ProcNetCtrl( (MsgNetCtrl*)pMsgHeader ) );
+			netCheck( ProcNetCtrl(reinterpret_cast<MsgNetCtrlBuffer*>(pMsgHeader)) );
 		}
 		else
 		{
@@ -632,12 +632,12 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionTCP::SendPending(uint uiCtrlCode, uint uiSequence, Message::MessageID returnMsgID, uint64_t UID)
+	Result ConnectionTCP::SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t UID)
 	{
 		return SendNetCtrl(uiCtrlCode, uiSequence, returnMsgID, UID);
 	}
 
-	Result ConnectionTCP::SendRaw(const SharedPointerT<Message::MessageData> &pMsg)
+	Result ConnectionTCP::SendRaw(const SharedPointerT<MessageData> &pMsg)
 	{
 		SFUniquePtr<IOBUFFER_WRITE> pSendBuffer;
 		ScopeContext hr;
@@ -649,7 +649,7 @@ namespace Net {
 
 		pSendBuffer.reset(new(GetIOHeap()) IOBUFFER_WRITE);
 		netCheckMem(pSendBuffer.get());
-		pSendBuffer->SetupSendTCP(SharedPointerT<Message::MessageData>(pMsg));
+		pSendBuffer->SetupSendTCP(SharedPointerT<MessageData>(pMsg));
 
 		m_NetIOAdapter.IncPendingSendCount();
 
@@ -672,18 +672,18 @@ namespace Net {
 	}
 
 	// Send message to connected entity
-	Result ConnectionTCP::Send(const SharedPointerT<Message::MessageData> &pMsg )
+	Result ConnectionTCP::Send(const SharedPointerT<MessageData> &pMsg )
 	{
 		Result hr = ResultCode::SUCCESS;
-		Message::MessageID msgID;
+		MessageID msgID;
 
 		if (GetConnectionState() == ConnectionState::DISCONNECTED)
 			return ResultCode::IO_NOT_CONNECTED;
 
-		Message::MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
+		MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 		msgID = pMsgHeader->msgID;
 
-		if ((pMsgHeader->msgID.IDs.Type != Message::MSGTYPE_NETCONTROL && GetConnectionState() == ConnectionState::DISCONNECTING)
+		if ((pMsgHeader->msgID.IDs.Type != MSGTYPE_NETCONTROL && GetConnectionState() == ConnectionState::DISCONNECTING)
 			|| GetConnectionState() == ConnectionState::DISCONNECTED)
 		{
 			// Send fail by connection closed
@@ -717,7 +717,7 @@ namespace Net {
 		}
 		else
 		{
-			if (msgID.IDs.Type == Message::MSGTYPE_NETCONTROL)
+			if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
 			{
 				SFLog(Net, Debug6, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
 			}

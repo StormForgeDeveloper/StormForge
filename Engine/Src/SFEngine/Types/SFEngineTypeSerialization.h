@@ -86,9 +86,9 @@ namespace SF {
 	inline Result operator >> (IInputStream& input, RelayPlayerInfo& data) { return input.Read(&data, sizeof(data)); }
 	inline Result operator << (IOutputStream& output, const RelayPlayerInfo& data) { return output.Write(&data, sizeof(data)); }
 
-	inline size_t SerializedSizeOf(const Message::MessageID& Value) { return sizeof(Value); }
-	inline Result operator >> (IInputStream& input, Message::MessageID& data) { return input.Read(&data, sizeof(data)); }
-	inline Result operator << (IOutputStream& output, const Message::MessageID& data) { return output.Write(&data, sizeof(data)); }
+	inline size_t SerializedSizeOf(const MessageID& Value) { return sizeof(Value); }
+	inline Result operator >> (IInputStream& input, MessageID& data) { return input.Read(&data, sizeof(data)); }
+	inline Result operator << (IOutputStream& output, const MessageID& data) { return output.Write(&data, sizeof(data)); }
 
 	inline size_t SerializedSizeOf(const Net::ConnectionState& Value) { return sizeof(Value); }
 	inline Result operator >> (IInputStream& input, Net::ConnectionState& data) { return input.Read(&data, sizeof(data)); }

@@ -85,7 +85,7 @@ namespace Protocol {
 
 
 
-	void PrintDebugMessage(const char* preFix, const SharedPointerT<Message::MessageData>& pMsg )
+	void PrintDebugMessage(const char* preFix, const SharedPointerT<MessageData>& pMsg )
 	{
 		if( pMsg == nullptr )
 			return;
@@ -101,7 +101,7 @@ namespace Protocol {
 		}
 	}
 	
-	Result ParseMessage(const SharedPointerT<Message::MessageData>& pMsg, IVariableMapBuilder& variableMap)
+	Result ParseMessage(const SharedPointerT<MessageData>& pMsg, IVariableMapBuilder& variableMap)
 	{
 		if (pMsg == nullptr)
 			return ResultCode::INVALID_POINTER;
@@ -119,7 +119,7 @@ namespace Protocol {
 		return ResultCode::IO_BADPACKET;
 	}
 	
-	Result ParseMessage(IHeap& memoryManager, const SharedPointerT<Message::MessageData>& pMsg, Message::MessageBase * &pMsgBase)
+	Result ParseMessage(IHeap& memoryManager, const SharedPointerT<MessageData>& pMsg, MessageBase * &pMsgBase)
 	{
 		pMsgBase = nullptr;
 

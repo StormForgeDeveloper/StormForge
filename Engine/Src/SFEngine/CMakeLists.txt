@@ -72,8 +72,6 @@ set(SUBNet_FILES
 	Net/SFNetUtil.h
 	Net/SFConnection.inl
 	Net/SFConnectionManager.inl
-	Net/SFMessage.inl
-	Net/SFNetCtrl.inl
 	Net/SFNetDef.inl
 	Net/SFNetSystem_Linux.inl
 	Net/SFNetSystem_WinIOCP.inl

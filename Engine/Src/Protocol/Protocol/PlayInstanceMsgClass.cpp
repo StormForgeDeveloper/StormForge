@@ -34,8 +34,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -92,7 +91,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -100,10 +99,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinPlayInstanceCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlayInstanceUID);
@@ -140,8 +138,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -206,7 +203,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInCharacterPrivateData = static_cast<uint16_t>(SerializedSizeOf(InCharacterPrivateData)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -217,10 +214,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinPlayInstanceRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -247,7 +243,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInCharacterPrivateData = static_cast<uint16_t>(SerializedSizeOf(InCharacterPrivateData)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -259,10 +255,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinPlayInstanceRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -294,8 +289,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -347,16 +341,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InKickedPlayerID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerKickedS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InKickedPlayerID);
@@ -382,8 +375,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -442,7 +434,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InSenderEndpointID)
 					+ SerializedSizeOf(InTargetEndpointMask)
@@ -450,10 +442,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayPacketC2SEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InSenderEndpointID);
@@ -511,8 +502,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -587,7 +577,7 @@ namespace SF
 				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
 				uint16_t serializedSizeOfInEquipData = static_cast<uint16_t>(SerializedSizeOf(InEquipData)); 
 				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ SerializedSizeOf(InPlayerPlatformId)
@@ -599,10 +589,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewActorInViewS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -632,7 +621,7 @@ namespace SF
 				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
 				uint16_t serializedSizeOfInEquipData = static_cast<uint16_t>(SerializedSizeOf(InEquipData)); 
 				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ SerializedSizeOf(InPlayerPlatformId)
@@ -647,10 +636,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewActorInViewS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -685,8 +673,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -738,16 +725,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InActorID)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::RemoveActorFromViewS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InActorID);
@@ -773,8 +759,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -828,17 +813,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ SerializedSizeOf(InMovement)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerMovementC2SEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -865,8 +849,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -918,16 +901,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InMovement)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ActorMovementS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InMovement);
@@ -953,8 +935,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1009,16 +990,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InMovement)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ActorMovementsS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InMovement);
@@ -1054,8 +1034,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1118,7 +1097,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ SerializedSizeOf(InState)
@@ -1128,10 +1107,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerStateChangedS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -1157,7 +1135,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ SerializedSizeOf(InState)
@@ -1168,10 +1146,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerStateChangedS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -1212,8 +1189,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1270,17 +1246,16 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ serializedSizeOfInSyncData
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncReliableC2SEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -1303,7 +1278,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ sizeof(uint16_t)
@@ -1311,10 +1286,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncReliableC2SEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -1352,8 +1326,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1410,17 +1383,16 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ serializedSizeOfInSyncData
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncC2SEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -1443,7 +1415,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ sizeof(uint16_t)
@@ -1451,10 +1423,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncC2SEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -1482,8 +1453,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1541,7 +1511,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -1550,10 +1520,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::OccupyMapObjectCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlayInstanceUID);
@@ -1581,8 +1550,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1640,7 +1608,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -1649,10 +1617,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::OccupyMapObjectRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -1681,8 +1648,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1738,7 +1704,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -1746,10 +1712,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UnoccupyMapObjectCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlayInstanceUID);
@@ -1776,8 +1741,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1835,7 +1799,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -1844,10 +1808,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UnoccupyMapObjectRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -1886,8 +1849,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1948,7 +1910,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInUseParameters = static_cast<uint16_t>(SerializedSizeOf(InUseParameters)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -1957,10 +1919,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UseMapObjectCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlayInstanceUID);
@@ -1985,7 +1946,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInUseParameters = static_cast<uint16_t>(SerializedSizeOf(InUseParameters)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -1995,10 +1956,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UseMapObjectCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlayInstanceUID);
@@ -2037,8 +1997,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2101,7 +2060,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -2111,10 +2070,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UseMapObjectRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -2140,7 +2098,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayInstanceUID)
@@ -2151,10 +2109,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UseMapObjectRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -2195,8 +2152,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2260,7 +2216,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -2270,10 +2226,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlayInstanceUID);
@@ -2299,7 +2254,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -2310,10 +2265,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InPlayInstanceUID);
@@ -2343,8 +2297,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2396,16 +2349,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -2441,8 +2393,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2504,7 +2455,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InSenderID)
 					+ SerializedSizeOf(InMessageType)
@@ -2513,10 +2464,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InSenderID);
@@ -2541,7 +2491,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InSenderID)
 					+ SerializedSizeOf(InMessageType)
@@ -2551,10 +2501,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InSenderID);
@@ -2584,8 +2533,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2641,7 +2589,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ SerializedSizeOf(InCurrentExp)
@@ -2649,10 +2597,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::LevelUpS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -2680,8 +2627,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2736,17 +2682,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTicket)
 					+ SerializedSizeOf(InStreamName)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CreateStreamCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InTicket);
@@ -2772,8 +2717,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2828,17 +2772,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InStreamName)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CreateStreamRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -2865,8 +2808,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2921,17 +2863,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTicket)
 					+ SerializedSizeOf(InStreamName)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::FindStreamCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InTicket);
@@ -2957,8 +2898,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3013,17 +2953,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InStreamName)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::FindStreamRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -3050,8 +2989,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3106,17 +3044,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTicket)
 					+ SerializedSizeOf(InStreamName)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::DeleteStreamCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InTicket);
@@ -3142,8 +3079,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3198,17 +3134,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InStreamName)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::DeleteStreamRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -3235,8 +3170,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3288,16 +3222,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTicket)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::GetStreamListCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InTicket);
@@ -3322,8 +3255,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3377,17 +3309,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InStreamNames)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::GetStreamListRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -3424,8 +3355,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3484,7 +3414,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFunctionName)
 					+ SerializedSizeOf(InPlayerID)
@@ -3492,10 +3422,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CallFunctionCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InFunctionName);
@@ -3519,7 +3448,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFunctionName)
 					+ SerializedSizeOf(InPlayerID)
@@ -3528,10 +3457,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CallFunctionCmd::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InFunctionName);
@@ -3569,8 +3497,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3627,17 +3554,16 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInResults = static_cast<uint16_t>(SerializedSizeOf(InResults)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ serializedSizeOfInResults
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CallFunctionRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -3660,7 +3586,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInResults = static_cast<uint16_t>(SerializedSizeOf(InResults)); 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ sizeof(uint16_t)
@@ -3668,10 +3594,9 @@ namespace SF
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CallFunctionRes::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InTransactionID);
 				protocolCheck(*output << InResult);
@@ -3699,8 +3624,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3757,17 +3681,16 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayInstanceUID)
 					+ SerializedSizeOf(InPlayerID)
 					+ SerializedSizeOf(InVoiceData)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::SendVoiceDataC2SEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InPlayInstanceUID);
 				protocolCheck(*output << InPlayerID);
@@ -3794,8 +3717,7 @@ namespace SF
 
 				protocolCheckPtr(pIMsg);
 
-				size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());
+				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3850,16 +3772,15 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(sizeof(MessageHeader) 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InActorID)
 					+ SerializedSizeOf(InVoiceData)
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::VoiceDataS2CEvt::MID, __uiMessageSize ) );
-				auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));
-				ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());
+				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
 				OutputMemoryStream outputStream(BufferView);
-				auto* output = outputStream.ToOutputStream();
+				IOutputStream* output = outputStream.ToOutputStream();
 
 				protocolCheck(*output << InActorID);
 				protocolCheck(*output << InVoiceData);

@@ -34,16 +34,10 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 1,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				RouteContext m_RouteContext{};
 				uint64_t m_TransactionID{};
@@ -54,8 +48,6 @@ namespace SF
 				GenericFailureCmd( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const RouteContext& GetRouteContext() const	{ return m_RouteContext; };
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
@@ -77,16 +69,10 @@ namespace SF
 				// Parameter type informations for template
 				enum ParameterTypeInfo
 				{
- 					HasPlayerID = 0,
-					HasTransactionID = 1,
+ 					HasTransactionID = 1,
 					HasRouteContext = 1,
-					HasRouteHopCount = 0,
-					HasSender = 0,
 				}; // enum ParameterTypeInfo
 			public:
-				uint64_t GetPlayerID() { return uint64_t{}; }
-				uint32_t GetRouteHopCount() { return uint32_t{}; }
-				uint64_t GetSender() { return uint64_t{}; }
 			private:
 				RouteContext m_RouteContext{};
 				uint64_t m_TransactionID{};
@@ -98,8 +84,6 @@ namespace SF
 				GenericFailureRes( const MessageDataPtr &pMsg )
 					: MessageBase(pMsg)
 					{}
-
-					MessageUsage GetMessageUsage() { return MessageUsage_None; }
 
 				const RouteContext& GetRouteContext() const	{ return m_RouteContext; };
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };

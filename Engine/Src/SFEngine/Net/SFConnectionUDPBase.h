@@ -54,7 +54,7 @@ namespace Net {
 		//MsgQueue			 m_RecvGuaQueue;
 
 		// subframe message
-		SharedPointerT<Message::MessageData>		m_SubFrameMessage;
+		SharedPointerT<MessageData>		m_SubFrameMessage;
 
 		// UDP send queue
 		WriteBufferQueue*			m_pWriteQueuesUDP;
@@ -85,12 +85,12 @@ namespace Net {
 		// Send packet buffer to connection with network device
 		virtual Result EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer);
 
-		virtual Result SendRaw(const SharedPointerT<Message::MessageData> &pMsg) override;
+		virtual Result SendRaw(const SharedPointerT<MessageData> &pMsg) override;
 
-		virtual Result ProcNetCtrl(const MsgNetCtrl* pNetCtrl) override;
+		virtual Result ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrl) override;
 
-		Result OnGuaranteedMessageRecv(SharedPointerT<Message::MessageData>& pMsg);
-		virtual Result SendReliableMessageAck(Message::MessageID msgID);
+		Result OnGuaranteedMessageRecv(SharedPointerT<MessageData>& pMsg);
+		virtual Result SendReliableMessageAck(MessageID msgID);
 
 	public:
 		// Constructor
@@ -114,8 +114,8 @@ namespace Net {
 
 
 		// gathering
-		virtual Result SendPending( uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID = 0 ) override;
-		virtual Result SendPending(SharedPointerT<Message::MessageData>& pMsg );
+		virtual Result SendPending( uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t UID = 0 ) override;
+		virtual Result SendPending(SharedPointerT<MessageData>& pMsg );
 		Result SendFlush();
 
 		// Prepare gathering buffer
@@ -124,8 +124,8 @@ namespace Net {
 
 
 		// frame sequence
-		Result SendFrameSequenceMessage(const SharedPointerT<Message::MessageData>& pMsg);
-		Result OnFrameSequenceMessage(SharedPointerT<Message::MessageData>& pMsg, const std::function<void(SharedPointerT<Message::MessageData>& pMsgData)>& action);
+		Result SendFrameSequenceMessage(const SharedPointerT<MessageData>& pMsg);
+		Result OnFrameSequenceMessage(SharedPointerT<MessageData>& pMsg, const std::function<void(SharedPointerT<MessageData>& pMsgData)>& action);
 
 		// Initialize connection
 		virtual Result InitConnection(const PeerInfo &local, const PeerInfo &remote) override;
@@ -149,11 +149,11 @@ namespace Net {
 
 
 		// Send message to connected entity
-		virtual Result Send(const SharedPointerT<Message::MessageData> &pMsg ) override;
+		virtual Result Send(const SharedPointerT<MessageData> &pMsg ) override;
 
 		// called when incoming message occur
 		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) override;
-		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg) override;
+		virtual Result OnRecv(SharedPointerT<MessageData>& pMsg) override;
 
 		// Update Send buffer Queue, TCP and UDP client connection
 		virtual Result UpdateSendBufferQueue() override;

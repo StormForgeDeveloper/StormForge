@@ -68,7 +68,7 @@ namespace SF {
 			return messageEndpoint.Channel == portString && messageEndpoint.MessageServer == netAddress.Address;
 		}
 
-		Result MessageEndpointConnection::Send(const SharedPointerT<Message::MessageData>& messageData)
+		Result MessageEndpointConnection::Send(const SharedPointerT<MessageData>& messageData)
 		{
 			auto pConnection = m_pConnection.AsSharedPtr<Connection>();
 			if (pConnection != nullptr)
@@ -195,7 +195,7 @@ namespace SF {
 		Result Connection::TimeSync()
 		{
 			auto reqTime = Util::Time.GetRawTimeMs();
-			Message::MessageID msgID;
+			MessageID msgID;
 			msgID.ID = reqTime.time_since_epoch().count();
 			return SendNetCtrl(PACKET_NETCTRL_TIMESYNC, 0, msgID, GetLocalInfo().PeerID);
 		}
@@ -232,28 +232,27 @@ namespace SF {
 		}
 
 		// Make Ack packet and enqueue to SendNetCtrlqueue
-		Result Connection::SendNetCtrl(uint uiCtrlCode, uint uiSequence, Message::MessageID returnMsgID, uint64_t UID)
+		Result Connection::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t UID)
 		{
 			Result hr = ResultCode::SUCCESS;
 			Result hrTem;
-			MsgNetCtrl* pAckMsg = nullptr;
-			SharedPointerT<Message::MessageData> pMsg;
+			MsgNetCtrl* pCtlMsg = nullptr;
+			SharedPointerT<MessageData> pMsg;
 
-			if (uiCtrlCode == PACKET_NETCTRL_CONNECT || UID != 0)
+            netCheckMem(pMsg = MessageData::NewMessage(GetHeap(), uiCtrlCode, sizeof(MsgNetCtrlBuffer)));
+
+            MsgNetCtrlBuffer* pCtlBuffer = reinterpret_cast<MsgNetCtrlBuffer*>(pMsg->GetMessageBuff());
+            pCtlBuffer->Header.SetPeerID(UID == 0 ? GetLocalInfo().PeerID : UID);
+            pCtlBuffer->Header.msgID.SetSequence(uiSequence);
+            pCtlMsg = &pCtlBuffer->GetNetCtrl();
+            pCtlMsg->rtnMsgID = returnMsgID;
+            pCtlBuffer->UpdateMessageDataSize();
+
+            if (uiCtrlCode == PACKET_NETCTRL_CONNECT || returnMsgID.GetMsgIDOnly() == PACKET_NETCTRL_CONNECT)
 			{
-				netCheckMem(pMsg = Message::MessageData::NewMessage(GetHeap(), uiCtrlCode, sizeof(MsgNetCtrlConnect)));
-				MsgNetCtrlConnect* pConMsg = (MsgNetCtrlConnect*)pMsg->GetMessageBuff();
+				MsgNetCtrlConnect* pConMsg = static_cast<MsgNetCtrlConnect*>(pCtlMsg);
 				pConMsg->Peer = GetLocalInfo();
 			}
-			else
-			{
-				netCheckMem(pMsg = Message::MessageData::NewMessage(GetHeap(), uiCtrlCode, sizeof(MsgNetCtrl)));
-			}
-
-			pAckMsg = (MsgNetCtrl*)pMsg->GetMessageBuff();
-			pAckMsg->PeerID = UID == 0 ? GetLocalInfo().PeerID : UID;
-			pAckMsg->msgID.SetSequence(uiSequence);
-			pAckMsg->rtnMsgID = returnMsgID;
 
 			pMsg->UpdateChecksum();
 
@@ -386,24 +385,24 @@ namespace SF {
 		}
 
 		// Process network control message
-		Result Connection::ProcNetCtrl(const MsgNetCtrl* pNetCtrl)
+		Result Connection::ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrlBuffer)
 		{
 			//assert(ThisThread::GetThreadID() == GetRunningThreadID());
 
 			Result hr = ResultCode::SUCCESS;
 			ConnectionMessageAction* pAction = nullptr;
-
-			if (pNetCtrl->Length < sizeof(MsgNetCtrl))
+            //const MsgNetCtrl& netCtrl = pNetCtrlBuffer->GetNetCtrl();
+			if (pNetCtrlBuffer->Header.Length < sizeof(MsgNetCtrl))
 			{
 				SFLog(Net, Info, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
 				netCheck(Disconnect("Invalid packet"));
 				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 
-			pAction = m_NetCtrlAction[pNetCtrl->msgID.IDs.MsgCode];
+			pAction = m_NetCtrlAction[pNetCtrlBuffer->Header.msgID.IDs.MsgCode];
 			if (pAction != nullptr)
 			{
-				return pAction->Run(pNetCtrl);
+				return pAction->Run(&pNetCtrlBuffer->Header);
 			}
 			else
 			{
@@ -548,24 +547,24 @@ namespace SF {
 		}
 
 
-		Result Connection::OnRecv(SharedPointerT<Message::MessageData>& pMsg)
+		Result Connection::OnRecv(SharedPointerT<MessageData>& pMsg)
 		{
 			ScopeContext hr;
 
 			if (pMsg == nullptr)
 				return hr;
 
-            Message::MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
+            MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 			auto msgID = pMsgHeader->msgID;
 
 			// All messages must be decrypted before came here
-			Assert(!msgID.IDs.Encrypted);
+			assert(!msgID.IDs.Encrypted);
 
 			// 
 			Protocol::PrintDebugMessage("Recv", pMsg);
 
 			//Assert( MemoryPool::CheckMemoryHeader( *pMsg ) );
-			Assert(pMsg->GetDataLength() == 0 // 0 crc for zero size packet
+			assert(pMsg->GetPayloadSize() == 0 // 0 crc for zero size packet
                 || pMsgHeader->Length > 1024 // Multiple sub framed message can't have crc value. each sub frame does
                 || pMsgHeader->Crc32 != 0); // Crc should have value
 
@@ -591,7 +590,7 @@ namespace SF {
 			else if (!(GetEventHandler()->OnRecvMessage(this, pMsg)))
 			{
 				SFLog(Net, Error, "Failed to route a message to recv msg:{0}", msgID);
-				netCheck(GetRecvQueue().Enqueue(std::forward<SharedPointerT<Message::MessageData>>(pMsg)));
+				netCheck(GetRecvQueue().Enqueue(std::forward<SharedPointerT<MessageData>>(pMsg)));
 			}
 
 			pMsg = nullptr;
@@ -632,7 +631,7 @@ namespace SF {
 
 
 		// Get received Message
-		Result Connection::GetRecvMessage(SharedPointerT<Message::MessageData>& pIMsg)
+		Result Connection::GetRecvMessage(SharedPointerT<MessageData>& pIMsg)
 		{
 			ScopeContext hr;
 
@@ -644,7 +643,7 @@ namespace SF {
 			}
 
 			{
-				Message::MessageHeader* pMsgHeader = pIMsg->GetMessageHeader();
+				MessageHeader* pMsgHeader = pIMsg->GetMessageHeader();
 				uint uiPolicy = pMsgHeader->msgID.IDs.Policy;
 				if (uiPolicy == 0
 					|| uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
@@ -714,7 +713,7 @@ namespace SF {
 		Result Connection::TickUpdate()
 		{
 			Result hr = ResultCode::SUCCESS;
-			Message::MessageID msgIDTem;
+			MessageID msgIDTem;
 
 			hr = ProcConnectionStateAction();
 			if (!(hr))

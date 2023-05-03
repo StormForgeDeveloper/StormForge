@@ -35,14 +35,14 @@ public:
 	}
 
 
-    void GenerateSinWave(SF::Array<float>& data, double magnitude, uint totalSamples, uint waveCount)
+    void GenerateSinWave(SF::Array<float>& data, double volume, uint totalSamples, uint waveCount)
     {
         double sampleCycle = double(totalSamples) / waveCount;
         for (uint i = 0; i < totalSamples; i++)
         {
             double integral;
             double fraction = modf(double(i) / sampleCycle, &integral);
-            data[i] += (float)(sin(fraction * 2.0 * M_PI) * magnitude);
+            data[i] += (float)(sin(fraction * 2.0 * M_PI) * volume);
         }
     }
 

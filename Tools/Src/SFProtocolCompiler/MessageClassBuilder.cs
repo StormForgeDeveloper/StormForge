@@ -10,6 +10,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using ProtocolXml;
 using SF;
 using SF.Tool;
@@ -223,11 +224,11 @@ namespace ProtocolCompiler
 
         static Parameter[] GenerateParameterTypeInfoList = new Parameter[]
         {
-            new Parameter() { Name = "PlayerID", TypeName = "uint64" },
+            //new Parameter() { Name = "PlayerID", TypeName = "uint64" },
             new Parameter() { Name = "TransactionID", TypeName = "TransactionID" },
             new Parameter() { Name = "RouteContext", TypeName = "RouteContext" },
-            new Parameter() { Name = "RouteHopCount", TypeName = "uint32" },
-            new Parameter() { Name = "Sender", TypeName = "uint64" },
+            //new Parameter() { Name = "RouteHopCount", TypeName = "uint32" },
+            //new Parameter() { Name = "Sender", TypeName = "uint64" },
         };
 
         bool HasInternalTypeOverride(Parameter[] parameters)
@@ -269,12 +270,15 @@ namespace ProtocolCompiler
                 }
             }
 
-            OpenSection("enum", "ParameterTypeInfo");
-            foreach (var parameterName in GenerateParameterTypeInfoList)
+            if (GenerateParameterTypeInfoList.Count() > 0)
             {
-                MatchIndent(); OutStream.WriteLine("Has{0} = {1},", parameterName.Name, parameterNameMap.ContainsKey(parameterName.Name) ? 1 : 0);
+                OpenSection("enum", "ParameterTypeInfo");
+                foreach (var parameterName in GenerateParameterTypeInfoList)
+                {
+                    MatchIndent(); OutStream.WriteLine("Has{0} = {1},", parameterName.Name, parameterNameMap.ContainsKey(parameterName.Name) ? 1 : 0);
+                }
+                CloseSection();
             }
-            CloseSection();
 
             // Add fake access functions
             MatchIndent(-1); OutStream.WriteLine("public:");
@@ -327,10 +331,6 @@ namespace ProtocolCompiler
             MatchIndent(); OutStream.WriteLine(strClassName + "( const MessageDataPtr &pMsg )");
             MatchIndent(1); OutStream.WriteLine(": MessageBase(pMsg)");
             MatchIndent(1); OutStream.WriteLine("{}");
-            NewLine();
-
-            // Usage
-            MatchIndent(1); OutStream.WriteLine("MessageUsage GetMessageUsage() {{ return MessageUsage_{0}; }}",msg.Usage.ToString());
             NewLine();
 
             // Generate Get functions
@@ -490,15 +490,7 @@ namespace ProtocolCompiler
             if (bHasParameter)
             {
                 // array len types
-                if (Group.IsMobile)
-                {
-                    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
-                }
-                else
-                {
-                    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
-                }
-                MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
+                MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());");
                 MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
                 MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
                 MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
@@ -671,7 +663,7 @@ namespace ProtocolCompiler
             // array len types
             if (Group.IsMobile)
             {
-                MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
+                MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pIMsg->GetMessageSize() - Message::MobileHeaderSize);");
             }
             else
             {
@@ -756,7 +748,7 @@ namespace ProtocolCompiler
             //// array len types
             //if (Group.IsMobile)
             //{
-            //    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
+            //    MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = ((size_t)pIMsg->GetMessageSize() - Message::MobileHeaderSize);");
             //}
             //else
             //{
@@ -873,8 +865,8 @@ namespace ProtocolCompiler
             BuildCreatePreamble(parameters);
 
             string strSizeVarName = "__uiMessageSize";
-            string strMessageHeader = Group.IsMobile ? "MobileMessageHeader" : "MessageHeader";
-            MatchIndent(); OutStream.WriteLine(string.Format("unsigned {0} = (unsigned)(sizeof({1}) ", strSizeVarName, strMessageHeader));
+            string strMessageHeaderSize = Group.IsMobile ? "Message::MobileHeaderSize" : "Message::HeaderSize";
+            MatchIndent(); OutStream.WriteLine(string.Format("unsigned {0} = (unsigned)({1} ", strSizeVarName, strMessageHeaderSize));
             if (parameters != null)
             {
                 foreach (Parameter param in parameters)
@@ -902,17 +894,9 @@ namespace ProtocolCompiler
 
             if (bHasParameters)
             {
-                if (Group.IsMobile)
-                {
-                    MatchIndent(); OutStream.WriteLine("auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MobileMessageHeader));");
-                }
-                else
-                {
-                    MatchIndent(); OutStream.WriteLine("auto MsgDataSize = static_cast<uint>((size_t)pNewMsg->GetMessageSize() - sizeof(MessageHeader));");
-                }
-                MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> BufferView(MsgDataSize, 0, pNewMsg->GetMessageData());");
+                MatchIndent(); OutStream.WriteLine("ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());");
                 MatchIndent(); OutStream.WriteLine("OutputMemoryStream outputStream(BufferView);");
-                MatchIndent(); OutStream.WriteLine("auto* output = outputStream.ToOutputStream();");
+                MatchIndent(); OutStream.WriteLine("IOutputStream* output = outputStream.ToOutputStream();");
                 NewLine();
 
                 foreach (Parameter param in parameters)

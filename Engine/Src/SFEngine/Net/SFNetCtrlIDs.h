@@ -43,17 +43,17 @@ namespace Net {
 		NetCtrlCode_Max,
 	};
 
-	static const Message::MessageID PACKET_NETCTRL_NONE				= Message::MessageID(Message::MSGTYPE_NETCONTROL, Message::MSGTYPE_NONE,	 Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_None);
-	static const Message::MessageID PACKET_NETCTRL_ACK				= Message::MessageID(Message::MSGTYPE_NETCONTROL, Message::MSGTYPE_NONE,	 Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_Ack);
-	static const Message::MessageID PACKET_NETCTRL_NACK				= Message::MessageID(Message::MSGTYPE_NETCONTROL, Message::MSGTYPE_NONE,	 Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_Nack);
-	static const Message::MessageID PACKET_NETCTRL_HEARTBEAT		= Message::MessageID(Message::MSGTYPE_NETCONTROL, Message::MSGTYPE_NONE,	 Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_Heartbeat);
-	static const Message::MessageID PACKET_NETCTRL_DISCONNECT		= Message::MessageID(Message::MSGTYPE_NETCONTROL, Message::MSGTYPE_NONE,	 Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_Disconnect);
-	static const Message::MessageID PACKET_NETCTRL_CONNECT			= Message::MessageID(Message::MSGTYPE_NETCONTROL, Message::MSGTYPE_NONE,	 Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_Connect);
-	static const Message::MessageID PACKET_NETCTRL_CONNECTPEER		= Message::MessageID(Message::MSGTYPE_NETCONTROL, Message::MSGTYPE_NONE,	 Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_ConnectPeer);
-	static const Message::MessageID PACKET_NETCTRL_SYNCRELIABLE		= Message::MessageID(Message::MSGTYPE_NETCONTROL, Message::MSGTYPE_NONE,	 Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_SyncReliable);
-	static const Message::MessageID PACKET_NETCTRL_TIMESYNC			= Message::MessageID(Message::MSGTYPE_NETCONTROL, Message::MSGTYPE_NONE,	 Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_TimeSync);
-	static const Message::MessageID PACKET_NETCTRL_TIMESYNC_RTN		= Message::MessageID(Message::MSGTYPE_NETCONTROL, Message::MSGTYPE_NONE,		Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_TimeSyncRtn);
-	static const Message::MessageID PACKET_NETCTRL_SEQUENCE_FRAME   = Message::MessageID(Message::MSGTYPE_EVENT, Message::MSGTYPE_RELIABLE, Message::MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_SequenceFrame);
+    static const MessageID PACKET_NETCTRL_NONE = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_None);
+    static const MessageID PACKET_NETCTRL_ACK = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_Ack);
+    static const MessageID PACKET_NETCTRL_NACK = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_Nack);
+    static const MessageID PACKET_NETCTRL_HEARTBEAT = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_Heartbeat);
+    static const MessageID PACKET_NETCTRL_DISCONNECT = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_Disconnect);
+    static const MessageID PACKET_NETCTRL_CONNECT = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_Connect);
+    static const MessageID PACKET_NETCTRL_CONNECTPEER = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_ConnectPeer);
+    static const MessageID PACKET_NETCTRL_SYNCRELIABLE = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_SyncReliable);
+    static const MessageID PACKET_NETCTRL_TIMESYNC = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_TimeSync);
+    static const MessageID PACKET_NETCTRL_TIMESYNC_RTN = MessageID(MSGTYPE_NETCONTROL, MSGTYPE_NONE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_TimeSyncRtn);
+	static const MessageID PACKET_NETCTRL_SEQUENCE_FRAME   = MessageID(MSGTYPE_EVENT,      MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_NONE, NetCtrlCode_SequenceFrame);
 
 
 } // namespace Net

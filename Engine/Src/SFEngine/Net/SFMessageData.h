@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2019 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -18,27 +18,19 @@
 #include "Net/SFMessage.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
+#include "Container/SFArray.h"
+#include "Protocol/SFProtocol.h"
 
 
 namespace SF {
 
 	class IHeap;
 
-namespace Message {
-
-	struct MessageHeader;
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Network message object
-	//
-
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Message data class
 	//
-
 
 	class MessageData : public SharedObject
 	{
@@ -57,15 +49,35 @@ namespace Message {
 		virtual ~MessageData();
 
 		MessageHeader* GetMessageHeader();
-		MessageHeader* GetMobileMessageHeader() { return GetMessageHeader(); }
 		uint8_t*	GetMessageBuff(); // data include header
 		uint		GetMessageSize() const; // total length
-		uint8_t* GetMessageData();       // data except header
-		const uint8_t* GetMessageData() const;       // data except header
+
+        SF_FORCEINLINE uint8_t* GetPayloadPtr()
+        {
+            return reinterpret_cast<uint8_t*>(reinterpret_cast<uintptr_t>(m_pMsgHeader) + m_pMsgHeader->GetHeaderSize());
+        }
+
+        SF_FORCEINLINE const uint8_t* GetPayloadPtr() const
+        {
+            return const_cast<MessageData*>(this)->GetPayloadPtr();
+        }
 
 		// Data except header
-		void GetLengthNDataPtr(uint& length, uint8_t* &pDataPtr);
-		uint GetDataLength();
+		SF_FORCEINLINE ArrayView<uint8_t> GetPayload() const
+        {
+            uint headerSize = (uint)m_pMsgHeader->GetHeaderSize();
+            assert(m_pMsgHeader->Length >= headerSize);
+            uint length = m_pMsgHeader->Length - headerSize;
+            uint8_t* pDataPtr = reinterpret_cast<uint8_t*>(reinterpret_cast<uintptr_t>(m_pMsgHeader) + headerSize);
+            return ArrayView<uint8_t>(length, pDataPtr);
+        }
+
+        SF_FORCEINLINE uint GetPayloadSize() const
+        {
+            uint headerSize = (uint)m_pMsgHeader->GetHeaderSize();
+            assert(m_pMsgHeader->Length >= headerSize);
+            return m_pMsgHeader->Length - headerSize;
+        }
 
 		// Parsing helper
 		void GetRouteInfo(RouteContext& routeContext, TransactionID& transID);
@@ -130,13 +142,10 @@ namespace Message {
 	};
 
 
-} // Message
-
-
-	using MessageDataPtr = SharedPointerT<Message::MessageData>;
+	using MessageDataPtr = SharedPointerT<MessageData>;
 
 } // SF
 
-extern template class SF::SharedPointerT<SF::Message::MessageData>;
+extern template class SF::SharedPointerT<SF::MessageData>;
 
 

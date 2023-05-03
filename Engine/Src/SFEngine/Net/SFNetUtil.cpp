@@ -823,7 +823,7 @@ namespace Net {
 	// Clear queue element
 	void MsgQueue::ClearQueue()
 	{
-		SharedPointerT<Message::MessageData> data;
+		SharedPointerT<MessageData> data;
 
 		while (Dequeue(data))
 		{

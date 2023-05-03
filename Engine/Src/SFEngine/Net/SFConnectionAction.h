@@ -21,9 +21,7 @@
 
 namespace SF {
 
-	namespace Message {
-		struct MessageHeader;
-	}
+	struct MessageHeader;
 
 namespace Net {
 
@@ -76,7 +74,7 @@ namespace Net {
 
 		IConnectionEventHandler* GetEventHandler();
 
-		Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, Message::MessageID msgID, uint64_t UID);
+		Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t UID);
 
 		Result Disconnect(const char* reason);
 		Result CloseConnection(const char* reason);
@@ -120,7 +118,7 @@ namespace Net {
 
 		void OnConnectionResult(Result hrConnect);
 
-		virtual Result Run([[maybe_unused]]const Message::MessageHeader* netCtrlMsg) { return ResultCode::NOT_IMPLEMENTED; }
+		virtual Result Run([[maybe_unused]]const MessageHeader* netCtrlMsg) { return ResultCode::NOT_IMPLEMENTED; }
 	};
 
 

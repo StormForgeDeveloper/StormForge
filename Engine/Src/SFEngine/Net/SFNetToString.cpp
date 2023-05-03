@@ -21,7 +21,7 @@ namespace SF {
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Net::ConnectionState);
 	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(NetClass);
 	IMPLEMENT_BOXING_TEMPLETE_BYREFERENCE(Net::PeerInfo);
-	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(Message::MessageID);
+	IMPLEMENT_BOXING_TEMPLETE_BYVALUE(MessageID);
     IMPLEMENT_BOXING_TEMPLETE_BYVALUE(SockFamily);
 
 
@@ -72,7 +72,7 @@ namespace SF {
 	}
 
 
-	Result _ToString(ToStringContext& context, const Message::MessageID& value)
+	Result _ToString(ToStringContext& context, const MessageID& value)
 	{
 		if (!(StrUtil::StringCopyEx(context.OutStream.pBuffer, context.OutStream.BuffLen, "(")))
 			return ResultCode::FAIL;

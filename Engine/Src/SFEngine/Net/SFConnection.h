@@ -45,7 +45,7 @@ namespace Net {
 
 		using super = EngineObject;
 		using ConnectionEventDeletates = EventDelegateList<Connection*, const ConnectionEvent&>;
-		using RecvMessageDelegates = EventDelegateList<Connection*, const SharedPointerT<Message::MessageData>&>;
+		using RecvMessageDelegates = EventDelegateList<Connection*, const SharedPointerT<MessageData>&>;
 		using NetSyncMessageDelegates = EventDelegateList<Connection*>;
 
 		enum class EventFireMode : uint8_t
@@ -151,14 +151,14 @@ namespace Net {
 		// Initialize packet synchronization
 		virtual Result InitSynchronization();
 
-		virtual Result SendRaw(const SharedPointerT<Message::MessageData> &pMsg) = 0;
+		virtual Result SendRaw(const SharedPointerT<MessageData> &pMsg) = 0;
 
 		void SetNetCtrlAction(NetCtrlIDs id, ConnectionMessageAction* action);
 
 		void SetNetIOHandler(SocketIO* pValue) { m_IOHandler = pValue; }
 
 		// Process network control message
-		virtual Result ProcNetCtrl(const MsgNetCtrl* pNetCtrl);
+		virtual Result ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrlBuffer);
 
 	public:
 		void AddStateAction(ConnectionState state, ConnectionAction* action);
@@ -337,8 +337,8 @@ namespace Net {
 		Result ProcConnectionStateAction();
 
 		// Make NetCtrl packet and send
-		virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, Message::MessageID returnMsgID, uint64_t UID = 0);
-		virtual Result SendPending(uint uiCtrlCode, uint uiSequence, Message::MessageID returnMsgID, uint64_t UID = 0) { assert(false); return ResultCode::NOT_IMPLEMENTED; }
+		virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t UID = 0);
+		virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t UID = 0) { assert(false); return ResultCode::NOT_IMPLEMENTED; }
 
 		// Clear Queue
 		virtual Result ClearQueues();
@@ -364,7 +364,7 @@ namespace Net {
 
 		// called when incoming message occur
 		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) = 0;
-		virtual Result OnRecv(SharedPointerT<Message::MessageData>& pMsg);
+		virtual Result OnRecv(SharedPointerT<MessageData>& pMsg);
 
 
 		// Query connection event
@@ -378,13 +378,13 @@ namespace Net {
 
 
 		// Send message to connected entity
-		virtual Result Send(const SharedPointerT<Message::MessageData> &pMsg) = 0;
+		virtual Result Send(const SharedPointerT<MessageData> &pMsg) = 0;
 
 		// Message count currently in recv queue
 		virtual uint32_t GetRecvMessageCount();
 
 		// Get received Message
-		virtual Result GetRecvMessage(SharedPointerT<Message::MessageData> &pIMsg);
+		virtual Result GetRecvMessage(SharedPointerT<MessageData> &pIMsg);
 
 		// Update function on game tick. provide general implementation of connection tick update.
 		// this function will fire delegate events
@@ -447,7 +447,7 @@ namespace Net {
 		}
 
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
-		virtual Result Send(const SharedPointerT<Message::MessageData>& messageData) override;
+		virtual Result Send(const SharedPointerT<MessageData>& messageData) override;
 	};
 
 
