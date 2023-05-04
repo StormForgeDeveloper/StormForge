@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c)  Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -41,6 +41,7 @@
 
 
 namespace SF {
+
 
 	const uint32_t SF_PROTOCOL_VERSION = 12;
 
