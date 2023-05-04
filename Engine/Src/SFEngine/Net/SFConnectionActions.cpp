@@ -408,7 +408,7 @@ namespace Net {
 
 		if (pHeader->Length < (pHeader->GetHeaderSize() + sizeof(MsgNetCtrl) + sizeof(MsgNetCtrlConnect)))
 		{
-			SFLog(Net, Warning, "HackWarn : Invalid Connect packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
+			SFLog(Net, Warning, "HackWarn : Invalid Connect packet CID:{0}, Addr:{1}, size:{2}", GetCID(), GetRemoteInfo().PeerAddress, pHeader->Length);
 			netCheck(CloseConnection("Invalid packet size during connect"));
 			netCheck(ResultCode::UNEXPECTED);
 		}
