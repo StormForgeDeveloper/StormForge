@@ -68,56 +68,30 @@ namespace SF {
 		{
 		}
 
-
-		// gathering
-		Result ConnectionMUDP::SendPending(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t UID)
-		{
-			ScopeContext hr;
-
-			netCheck(PrepareGatheringBuffer(sizeof(MsgNetCtrlBuffer)));
-
-            MsgNetCtrlBuffer* pCtlBuffer = reinterpret_cast<MsgNetCtrlBuffer*>(m_pGatheringBuffer + m_uiGatheredSize);
-            pCtlBuffer->Header.msgID.ID = uiCtrlCode;
-            pCtlBuffer->Header.msgID.SetSequence(uiSequence);
-            pCtlBuffer->Header.SetPeerID(UID == 0 ? GetLocalInfo().PeerID : UID);
-            pCtlBuffer->GetNetCtrl().rtnMsgID = msgID;
-            pCtlBuffer->UpdateMessageDataSize();
-
-            if (uiCtrlCode == PACKET_NETCTRL_CONNECT || msgID.GetMsgIDOnly() == PACKET_NETCTRL_CONNECT)
-            {
-                MsgNetCtrlConnect* pConMsg = static_cast<MsgNetCtrlConnect*>(&pCtlBuffer->GetNetCtrl());
-                pConMsg->Peer = GetLocalInfo();
-            }
-
-            pCtlBuffer->Header.Crc32 = Hasher_Crc32().Crc32(0, (uint8_t*)&pCtlBuffer->GetNetCtrl(), sizeof(MsgNetCtrl));
-			if (pCtlBuffer->Header.Crc32 == 0) pCtlBuffer->Header.Crc32 = ~pCtlBuffer->Header.Crc32;
-
-			m_uiGatheredSize += pCtlBuffer->Header.Length;
-
-			return hr;
-		}
-
 		Result ConnectionMUDP::SendSync(uint uiSequence, uint64_t uiSyncMask)
 		{
-			ScopeContext hr;
+            Result hr = ResultCode::SUCCESS;
 
-			netCheck(PrepareGatheringBuffer(Message::MobileHeaderSize + sizeof(MsgMobileNetCtrlSync)));
+            netCheck(PrepareGatheringBuffer(sizeof(MsgNetCtrlBuffer)));
 
-            MsgNetCtrlBuffer* pCtlBuffer = reinterpret_cast<MsgNetCtrlBuffer*>(m_pGatheringBuffer + m_uiGatheredSize);
-            pCtlBuffer->Header.msgID.ID = PACKET_NETCTRL_SYNCRELIABLE;
-            pCtlBuffer->Header.msgID.SetSequence(uiSequence);
-            pCtlBuffer->Header.SetPeerID(GetLocalInfo().PeerID);
-            pCtlBuffer->UpdateMessageDataSize();
+            MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(m_pGatheringBuffer + m_uiGatheredSize);
+            pHeader->Length = sizeof(MsgNetCtrlBuffer); // PrepareGatheringBuffer guarantees it has space
+            netCheck(MakeNetCtrl(pHeader, PACKET_NETCTRL_SYNCRELIABLE, uiSequence, 0, uiSyncMask));
 
-            MsgMobileNetCtrlSync* pSync = static_cast<MsgMobileNetCtrlSync*>(pCtlBuffer->Header.GetDataPtr());
-            pSync->MessageMask = uiSyncMask;
+            //pHeader->msgID.ID = PACKET_NETCTRL_SYNCRELIABLE;
+            //pHeader->msgID.SetSequence(uiSequence);
 
-            pCtlBuffer->Header.Crc32 = Hasher_Crc32().Crc32(0, (uint8_t*)&pCtlBuffer->GetNetCtrl(), sizeof(MsgNetCtrl));
-            if (pCtlBuffer->Header.Crc32 == 0) pCtlBuffer->Header.Crc32 = ~pCtlBuffer->Header.Crc32;
+            //MsgMobileNetCtrlSync* pSync = static_cast<MsgMobileNetCtrlSync*>(pHeader->GetDataPtr());
+            //pSync->MessageMask = uiSyncMask;
+            //pHeader->Length = pHeader->GetHeaderSize() + sizeof(MsgNetCtrl);
 
-            m_uiGatheredSize += pCtlBuffer->Header.Length;
+            //pHeader->Crc32 = Hasher_Crc32().Crc32(0, (uint8_t*)pHeader->GetDataPtr(), pHeader->Length - pHeader->GetHeaderSize());
+            //if (pHeader->Crc32 == 0) pHeader->Crc32 = ~pHeader->Crc32;
 
-			return hr;
+            m_uiGatheredSize += pHeader->Length;
+
+
+            return hr;
 		}
 
 

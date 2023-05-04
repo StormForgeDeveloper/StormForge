@@ -41,61 +41,38 @@ namespace Net {
 	};
 
 
-	struct MsgNetCtrlConnect : public MsgNetCtrl
+	struct MsgNetCtrlConnect
 	{
+        uint ProtocolVersion{};
 		PeerInfo Peer;
 	};
 
+    struct MsgMobileNetCtrlSync
+    {
+        uint64_t	MessageMask;
+    };
+
+    struct MsgNetCtrlTimeSync
+    {
+        uint32_t ClientTimeStamp;
+        uint32_t ServerTimeStamp;
+    };
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Network control Message base Header
 	//
 
-	struct MsgMobileNetCtrlSync
-	{
-		uint64_t	MessageMask;
-	};
-
 	// Just some big enough structure to contain all net ctrl type data
+    // We use this only for possible biggest netctrl packet size check, and quick MsgNetCtrl access for ack
 	struct MsgNetCtrlBuffer
 	{
         // header
         MessageHeader Header;
 
-        uint64_t Dummy;
-
-        // biggest ctrl structure
-        union {
-            MsgNetCtrl Ctrl;
-            MsgNetCtrlConnect CtrlConnect;
-            MsgMobileNetCtrlSync CtrlSync;
-        };
-
-		MsgNetCtrlBuffer() { memset(this, 0, sizeof(MsgNetCtrlBuffer)); }
-		MsgNetCtrlBuffer(const MsgNetCtrlBuffer& src) { memcpy(this, &src, sizeof(src)); }
-
-        const MessageHeader& GetHeader() const { return Header; }
-        MessageHeader& GetHeader() { return Header; }
-        const MsgNetCtrl& GetNetCtrl() const { return *reinterpret_cast<MsgNetCtrl*>(reinterpret_cast<uintptr_t>(this) + Header.GetHeaderSize()); }
-        MsgNetCtrl& GetNetCtrl() { return *reinterpret_cast<MsgNetCtrl*>(reinterpret_cast<uintptr_t>(this) + Header.GetHeaderSize()); }
-
-        void UpdateMessageDataSize();
-
-		MsgNetCtrlBuffer& operator = (const MsgNetCtrlBuffer& src)
-        {
-            memcpy(this, &src, sizeof(src));
-            return *this;
-        }
-
-		bool operator == (const MsgNetCtrlBuffer& src) const
-        {
-            return Header.msgID.ID == src.Header.msgID.ID;
-        }
-		bool operator != (const MsgNetCtrlBuffer& src) const
-        {
-            return Header.msgID.ID != src.Header.msgID.ID;
-        }
+        // common and 
+        MsgNetCtrl Ctrl;
+        MsgNetCtrlConnect CtrlConnect;
 	};
 
 

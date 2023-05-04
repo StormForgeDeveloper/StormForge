@@ -34,15 +34,20 @@ namespace SF {
 	//	Network Message wrapper class
 	//
 	
-	MessageData::MessageData(uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData )
+	MessageData::MessageData(uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData)
 		:m_bIsSequenceAssigned(false)
 	{
-		m_pMsgHeader = (MessageHeader*)(this+1);
+        // we haver reserved space for packet header
+        m_pPacketHeader = reinterpret_cast<MobilePacketHeader*>(this + 1);
+        m_pPacketHeader->PeerId = 0;
+
+        // actual header offset
+		m_pMsgHeader = (MessageHeader*)(m_pPacketHeader + 1);
 
 		if( pData )
 		{
 			memcpy( m_pMsgHeader, pData, uiMsgBufSize );
-			AssertRel( m_pMsgHeader->Length == uiMsgBufSize );
+			assert( m_pMsgHeader->Length == uiMsgBufSize );
 		}
 		else
 		{
@@ -56,11 +61,6 @@ namespace SF {
 
 	MessageData::~MessageData()
 	{
-	}
-
-	MessageHeader* MessageData::GetMessageHeader()
-	{
-		return m_pMsgHeader;
 	}
 
 	uint8_t* MessageData::GetMessageBuff()
@@ -120,7 +120,7 @@ namespace SF {
 	MessageData* MessageData::NewMessage(IHeap& heap, uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData )
 	{
 		uint8_t *pBuffer = nullptr;
-		size_t szAllocate = sizeof(MessageData) + uiMsgBufSize;
+		size_t szAllocate = sizeof(MobilePacketHeader) + sizeof(MessageData) + uiMsgBufSize;
 
 		if (uiMsgBufSize > MAX_MESSAGE_SIZE)
 		{
@@ -199,7 +199,7 @@ namespace SF {
 			return;
 		}
 
-		if( m_pMsgHeader->msgID.IDs.Encrypted )
+		if(m_bIsEncrypted)
 		{
 			// skip if the message is already encrypted
 			return;
@@ -211,7 +211,7 @@ namespace SF {
 
 		assert( m_pMsgHeader->Crc32 != 0 || payload.size() == 0);
 
-		m_pMsgHeader->msgID.IDs.Encrypted = true;
+        m_bIsEncrypted = true;
 	}
 
 	Result MessageData::ValidateChecksum()
@@ -243,11 +243,11 @@ namespace SF {
 
 		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
 		{
-			m_pMsgHeader->msgID.IDs.Encrypted = false;
+            m_bIsEncrypted = false;
 			return ResultCode::SUCCESS_FALSE;
 		}
 
-		if( !m_pMsgHeader->msgID.IDs.Encrypted )
+		if(!m_bIsEncrypted)
 		{
 			return ValidateChecksum();
 		}
@@ -255,14 +255,14 @@ namespace SF {
 		// Nothing to check
 		if(payload.size() == 0)
 		{
-			m_pMsgHeader->msgID.IDs.Encrypted = false;
+            m_bIsEncrypted = false;
 			return ResultCode::SUCCESS;
 		}
 
 		uint16_t Crc32 = (uint16_t)Util::Crc32NDecrypt(payload.size(), payload.data());
 		if( Crc32 == 0 ) Crc32 = ~Crc32;
 
-		m_pMsgHeader->msgID.IDs.Encrypted = false;
+        m_bIsEncrypted = false;
 
 		//Assert(m_pMsgHeader->Crc32 != 0);
 		if( Crc32 != m_pMsgHeader->Crc32 )

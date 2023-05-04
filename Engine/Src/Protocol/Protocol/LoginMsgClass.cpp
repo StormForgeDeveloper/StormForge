@@ -26,7 +26,7 @@ namespace SF
  		namespace Login
 		{
  			// Cmd: Login request
-			const MessageID LoginCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 0);
+			const MessageID LoginCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 0);
 			Result LoginCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -122,7 +122,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result LoginCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID LoginRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 0);
+			const MessageID LoginRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 0);
 			Result LoginRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -231,7 +231,7 @@ namespace SF
 			}; // Result LoginRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Login request with Facebook UID
-			const MessageID LoginByFacebookCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 1);
+			const MessageID LoginByFacebookCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 1);
 			Result LoginByFacebookCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -336,7 +336,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result LoginByFacebookCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID LoginByFacebookRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 1);
+			const MessageID LoginByFacebookRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 1);
 			Result LoginByFacebookRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -445,7 +445,7 @@ namespace SF
 			}; // Result LoginByFacebookRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Login request with Facebook UID
-			const MessageID LoginBySteamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 2);
+			const MessageID LoginBySteamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 2);
 			Result LoginBySteamCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -545,7 +545,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result LoginBySteamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID LoginBySteamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 2);
+			const MessageID LoginBySteamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 2);
 			Result LoginBySteamRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -654,7 +654,7 @@ namespace SF
 			}; // Result LoginBySteamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Login request
-			const MessageID CreateRandomUserCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 3);
+			const MessageID CreateRandomUserCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 3);
 			Result CreateRandomUserCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -745,7 +745,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateRandomUserCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CreateRandomUserRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 3);
+			const MessageID CreateRandomUserRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 3);
 			Result CreateRandomUserRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -849,7 +849,7 @@ namespace SF
 			}; // Result CreateRandomUserRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Update my score and Get Ranking list
-			const MessageID UpdateMyScoreCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 4);
+			const MessageID UpdateMyScoreCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 4);
 			Result UpdateMyScoreCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -943,7 +943,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UpdateMyScoreCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID UpdateMyScoreRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 4);
+			const MessageID UpdateMyScoreRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 4);
 			Result UpdateMyScoreRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1037,7 +1037,7 @@ namespace SF
 			}; // Result UpdateMyScoreRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Get Ranking lise
-			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 5);
+			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 5);
 			Result GetRankingListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1131,7 +1131,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetRankingListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetRankingListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 5);
+			const MessageID GetRankingListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 5);
 			Result GetRankingListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1225,7 +1225,7 @@ namespace SF
 			}; // Result GetRankingListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: For network test
-			const MessageID DataTestCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 6);
+			const MessageID DataTestCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 6);
 			Result DataTestCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1314,7 +1314,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DataTestCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID DataTestRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 6);
+			const MessageID DataTestRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 6);
 			Result DataTestRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1408,7 +1408,7 @@ namespace SF
 			}; // Result DataTestRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// C2S: Heartbeat
-			const MessageID HeartbeatC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 7);
+			const MessageID HeartbeatC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 7);
 			Result HeartbeatC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1478,7 +1478,7 @@ namespace SF
 			}; // Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Write All!! User Score and Ranking list
-			const MessageID DebugPrintALLRankingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 8);
+			const MessageID DebugPrintALLRankingCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 8);
 			Result DebugPrintALLRankingCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1565,7 +1565,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DebugPrintALLRankingCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID DebugPrintALLRankingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_LOGIN, 8);
+			const MessageID DebugPrintALLRankingRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_LOGIN, 8);
 			Result DebugPrintALLRankingRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;

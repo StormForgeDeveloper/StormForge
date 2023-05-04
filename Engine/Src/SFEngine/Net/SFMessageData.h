@@ -35,12 +35,17 @@ namespace SF {
 	class MessageData : public SharedObject
 	{
 	private:
+
+        // Mobile packet header
+        MobilePacketHeader* m_pPacketHeader;
+
 		// Message Buffer Pointer
 		MessageHeader*			m_pMsgHeader;
 
 		bool					m_bIsSequenceAssigned;
 
 		// Encryption status
+        bool m_bIsEncrypted{};
 
 	private:
 		MessageData(uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData = NULL);
@@ -48,7 +53,8 @@ namespace SF {
 	public:
 		virtual ~MessageData();
 
-		MessageHeader* GetMessageHeader();
+        SF_FORCEINLINE MobilePacketHeader* GetPacketHeader() { return m_pPacketHeader; }
+        SF_FORCEINLINE MessageHeader* GetMessageHeader() { return m_pMsgHeader; }
 		uint8_t*	GetMessageBuff(); // data include header
 		uint		GetMessageSize() const; // total length
 
@@ -78,6 +84,9 @@ namespace SF {
             assert(m_pMsgHeader->Length >= headerSize);
             return m_pMsgHeader->Length - headerSize;
         }
+
+        SF_FORCEINLINE void SetEncrypted(bool bEncrypted) { m_bIsEncrypted = bEncrypted; }
+        SF_FORCEINLINE bool IsEncrypted() const { return m_bIsEncrypted; }
 
 		// Parsing helper
 		void GetRouteInfo(RouteContext& routeContext, TransactionID& transID);

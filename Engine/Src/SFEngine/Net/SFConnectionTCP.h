@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko.
 // 
@@ -106,7 +106,6 @@ namespace SF {
 
 		protected:
 
-			virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t UID = 0) override;
 			virtual Result SendRaw(const SharedPointerT<MessageData>& pMsg) override;
 
 		public:

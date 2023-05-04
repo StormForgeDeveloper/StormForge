@@ -74,7 +74,7 @@ namespace Net {
 
 		IConnectionEventHandler* GetEventHandler();
 
-		Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t UID);
+		Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0 = 0);
 
 		Result Disconnect(const char* reason);
 		Result CloseConnection(const char* reason);

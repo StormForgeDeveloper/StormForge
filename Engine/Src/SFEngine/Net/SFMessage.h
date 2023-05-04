@@ -44,6 +44,8 @@ namespace SF {
 	//          0 - Not Guaranteed
 	//          1 - Reliable message.
 	//
+    //      Broadcast - Channel/GameInstance broadcasting. Range will be limited in spatial channel
+    // 
 	//      Encrypted
 	//      Mobile - Mobility
 	//      Policy - Protocol Policy ID
@@ -51,7 +53,7 @@ namespace SF {
 	//      Seq - Sequence of the message
 	//
 
-#define NET_SEQUENCE_BITS		11
+#define NET_SEQUENCE_BITS		12
 #define NET_SEQUENCE_MASK		((1<<NET_SEQUENCE_BITS)-1)
 #define NET_SEQUENCE_MAX_DIFF	(NET_SEQUENCE_MASK >> 1)
 
@@ -60,51 +62,75 @@ namespace SF {
 	static_assert((uint)NetClass::Max <= NET_SEQUENCE_MASK, "Too big net class value");
 #endif
 
-	union MessageID
-	{
-		struct MessageIDComponent {
-			uint32_t Sequence : NET_SEQUENCE_BITS;
-			uint32_t Encrypted		: 1;
-			uint32_t Mobile			: 1;
-			uint32_t Reliability	: 1;
-			uint32_t Type			: 2;
-			uint32_t MsgCode		: 9;
-			uint32_t Policy			: 7;
-			uint32_t				: 0;
-		} IDs;
-		struct {
-			uint32_t Sequence : NET_SEQUENCE_BITS;
-			uint32_t MsgID	    : 21;
-		} IDSeq;
-		uint32_t ID;
 
-		constexpr MessageID() : ID(0) {}
-		//inline tag_MessageID( const tag_MessageID& src );
-		MessageID( uint32_t uiID ) : ID(uiID) {}
-		constexpr MessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode );
+#ifdef __GNUC__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+#endif
 
-		uint32_t SetMessageID( uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode );
+    union MessageID
+    {
+        struct MessageIDComponent {
+            uint32_t Sequence : NET_SEQUENCE_BITS;
+            uint32_t Broadcast : 1; // 
+            uint32_t Reliability : 1;
+            uint32_t Type : 2;
+            uint32_t MsgCode : 9;
+            uint32_t Policy : 7;
+            uint32_t : 0;
+        } IDs;
+        struct {
+            uint32_t Sequence : NET_SEQUENCE_BITS;
+            uint32_t MsgID : 32 - NET_SEQUENCE_BITS;
+        } IDSeq;
+        uint32_t ID;
 
-		SF_FORCEINLINE void ValidateMessageID(uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode) const
-		{
+        constexpr MessageID() : ID(0) {}
+        //inline tag_MessageID( const tag_MessageID& src );
+        constexpr MessageID(uint32_t uiID) : ID(uiID) {}
+        constexpr MessageID(uint uiType, uint uiReliability, uint uiBroadcast, uint uiPolicy, uint uiCode)
+            : IDs({ 0, uiBroadcast, uiReliability, uiType, uiCode, uiPolicy })
+        {
+        }
+
+        uint32_t SetMessageID(uint uiType, uint uiReliability, uint uiBroadcast, uint uiPolicy, uint uiCode)
+        {
+            IDs.MsgCode = uiCode;
+            IDs.Policy = uiPolicy;
+            IDs.Broadcast = uiBroadcast;
+            IDs.Reliability = uiReliability;
+            IDs.Type = uiType;
+            IDs.Sequence = 0;// uiSeq;
+
+            return ID;
+        }
+
+        SF_FORCEINLINE void ValidateMessageID(uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode) const
+        {
 #if DEBUG
-			MessageID Temp;
-			Temp.SetMessageID(uiType, uiReliability, uiMobility, uiPolicy, uiCode);
-			assert(Temp == *this);
+            MessageID Temp;
+            Temp.SetMessageID(uiType, uiReliability, uiMobility, uiPolicy, uiCode);
+            assert(Temp == *this);
 #endif
-		}
+        }
 
-		void SetSequence(uint sequence) { IDSeq.Sequence = sequence; }
+        void SetSequence(uint sequence) { IDSeq.Sequence = sequence; }
 
-		// Only MsgID part, no sequence or length. result will be shifted
-		uint GetMsgID() const { return IDSeq.MsgID; }
+        // Only MsgID part, no sequence or length. result will be shifted
+        constexpr uint GetMsgID() const { return IDSeq.MsgID; }
 
-		uint GetMsgIDOnly() const { return static_cast<uint32_t>(IDSeq.MsgID) << NET_SEQUENCE_BITS; }
-#ifndef SWIG
-		operator uint32_t() const { return ID; }
+        // Remove sequence from message id
+        constexpr uint GetMsgIDOnly() const { return static_cast<uint32_t>(IDSeq.MsgID) << NET_SEQUENCE_BITS; }
+
+        constexpr operator uint32_t() const { return ID; }
+
+    };
+
+    static_assert(sizeof(uint32_t) == sizeof(MessageID), "Message ID should fit in 4 bytes");
+
+#ifdef __GNUC__
+#pragma GCC diagnostic pop
 #endif
-	} ;
-
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -126,7 +152,7 @@ namespace SF {
 
 		MSGTYPE_RELIABLE		= 1,	// Reliable messages
 
-		MSGTYPE_MOBILE			= 1,	// Mobile protocol
+		MSGTYPE_BROADCAST		= 1,	// broadcast mode
 	};
 
 
@@ -138,6 +164,11 @@ namespace SF {
 
 #pragma pack(push, 4)
 
+    // packet for mobile
+    struct MobilePacketHeader
+    {
+        uint64_t PeerId;
+    };
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -157,23 +188,13 @@ namespace SF {
 		// bit field termination
 		uint32_t					: 0;
 
-        SF_FORCEINLINE size_t GetHeaderSize() const { return sizeof(MessageHeader) + (msgID.IDs.Mobile ? sizeof(uint64_t) : 0); }
-        SF_FORCEINLINE uint64_t GetPeerID() const
-        {
-            return msgID.IDs.Mobile ?
-                    *reinterpret_cast<uint64_t*>(reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader))
-                    :
-                    0;
-        }
-        SF_FORCEINLINE void SetPeerID(uint64_t peerId)
-        {
-            if (msgID.IDs.Mobile)
-            {
-                *reinterpret_cast<uint64_t*>(reinterpret_cast<uintptr_t>(this) + sizeof(MessageHeader)) = peerId;
-            }
-        }
+        SF_FORCEINLINE size_t GetHeaderSize() const { return sizeof(MessageHeader); }
 
-		void SetIDNLen(uint id, uint msgLen);
+        SF_FORCEINLINE void SetIDNLen(uint id, uint msgLen)
+        {
+            msgID.ID = id;
+            Length = msgLen;
+        }
 
         SF_FORCEINLINE void* GetDataPtr() const
         {
@@ -181,37 +202,10 @@ namespace SF {
         }
     };
 
+    static_assert((sizeof(uint32_t)*2) == sizeof(MessageHeader), "MessageHeader should fit in 8bytes");
+
 #pragma pack(pop)
 
-
-#ifdef __GNUC__
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-#endif
-
-    inline constexpr MessageID::MessageID(uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode)
-        : IDs({ 0, 0, uiMobility, uiReliability, uiType, uiCode, uiPolicy })
-    {
-    }
-
-    inline uint32_t MessageID::SetMessageID(uint uiType, uint uiReliability, uint uiMobility, uint uiPolicy, uint uiCode)
-    {
-        IDs.MsgCode = uiCode;
-        IDs.Policy = uiPolicy;
-        IDs.Mobile = uiMobility;
-        IDs.Encrypted = 0;
-        IDs.Reliability = uiReliability;
-        IDs.Type = uiType;
-        IDs.Sequence = 0;// uiSeq;
-
-        return ID;
-    }
-
-    inline void MessageHeader::SetIDNLen(uint id, uint msgLen)
-    {
-        msgID.ID = id;
-        Length = msgLen;
-    }
 
     // Message sequence
     struct MessageSequence
@@ -260,9 +254,6 @@ namespace SF {
     };
 
 
-#ifdef __GNUC__
-#pragma GCC diagnostic pop
-#endif
     namespace Message
     {
         static constexpr size_t HeaderSize = sizeof(MessageHeader);

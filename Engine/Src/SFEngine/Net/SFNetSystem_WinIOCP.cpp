@@ -465,17 +465,7 @@ namespace Net {
 			return;
 		}
 
-
-		
-
-
-
-
-	}; // namespace IOCPSystem
-
-
-
-
+	} // namespace IOCPSystem
 
 
 
@@ -483,9 +473,6 @@ namespace Net {
 	//
 	//	Network system
 	//
-
-
-
 
 	WriteBufferQueue* NetSystem::GetWriteBufferQueue()
 	{
@@ -495,20 +482,6 @@ namespace Net {
 
 	///////////////////////////////////////////////////////////////////////////////
 	// Socket handling 
-
-	//Result RegisterSharedSocket(SocketType sockType, SocketIO* cbInstance)
-	//{
-	//	Result hr = ResultCode::SUCCESS;
-
-	//	netChkPtr(cbInstance);
-	//	Assert(cbInstance->GetIOSocket() != INVALID_SOCKET);
-
-	//	//netChk(EPOLLSystem::GetSystem().RegisterSharedSocket(sockType, cbInstance));
-
-	//Proc_End:
-
-	//	return hr;
-	//}
 
 	Result NetSystem::SetupCommonSocketOptions(SocketType sockType, SockFamily sockFamily, SF_SOCKET socket, bool acceptedSocket)
 	{
@@ -736,10 +709,6 @@ namespace Net {
 
 		return ResultCode::SUCCESS;
 	}
-
-
-
-
 
 } // namespace Net
 } // namespace SF

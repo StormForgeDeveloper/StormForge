@@ -273,9 +273,9 @@ namespace Net {
 		MessageID msgID = pMsg->GetMessageHeader()->msgID;
 		IOBUFFER_WRITE *pOverlapped = nullptr;
 
-
+        constexpr bool bIncludePacketHeader = false;
 		netMem(pOverlapped = new(GetHeap()) IOBUFFER_WRITE);
-		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, std::forward<SharedPointerT<MessageData>>(pMsg));
+		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, bIncludePacketHeader, std::forward<SharedPointerT<MessageData>>(pMsg));
 		pMsg = nullptr;
 
 		if (NetSystem::IsProactorSystem())

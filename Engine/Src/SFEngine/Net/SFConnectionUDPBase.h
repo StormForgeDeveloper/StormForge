@@ -59,6 +59,9 @@ namespace Net {
 		// UDP send queue
 		WriteBufferQueue*			m_pWriteQueuesUDP;
 
+        // Include packet header for all packets. MUDP uses this to add peer id
+        bool m_bIncludePacketHeader = false;
+
 		int m_SendBoost = 0;
 
 		CriticalSection		m_UpdateLock;
@@ -114,8 +117,8 @@ namespace Net {
 
 
 		// gathering
-		virtual Result SendPending( uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t UID = 0 ) override;
-		virtual Result SendPending(SharedPointerT<MessageData>& pMsg );
+		virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0) override;
+		virtual Result SendPending(SharedPointerT<MessageData>& pMsg);
 		Result SendFlush();
 
 		// Prepare gathering buffer

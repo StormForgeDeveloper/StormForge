@@ -62,7 +62,7 @@ namespace Net {
 		}
 
 
-		// Pending recv count and registered status should be checked together so that we can prevent infinit pending recv
+		// Pending recv count and registered status should be checked together so that we can prevent infinite pending recv
 		// And PendingRecv should be decreased after new pending is happened
 		if (GetIsIORegistered())
 		{
@@ -71,7 +71,10 @@ namespace Net {
 			{
 				netChkPtr(pIOBuffer);
 
-				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->buffer)))
+                const MobilePacketHeader* pPacketHeader = reinterpret_cast<const MobilePacketHeader*>(pIOBuffer->buffer);
+                const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(pPacketHeader + 1);
+
+				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize - sizeof(MobilePacketHeader), reinterpret_cast<const uint8_t*>(pHeader))))
 					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
 
 				m_Owner.PendingRecv();

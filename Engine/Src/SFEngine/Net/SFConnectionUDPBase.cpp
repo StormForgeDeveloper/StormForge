@@ -99,9 +99,6 @@ namespace Net {
 		m_pWriteQueuesUDP = writeQueue;
 	}
 
-
-
-
 	// Update Send buffer Queue, TCP and UDP client connection
 	Result ConnectionUDPBase::UpdateSendBufferQueue()
 	{
@@ -128,35 +125,16 @@ namespace Net {
 	}
 
 	// gathering
-	Result ConnectionUDPBase::SendPending( uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t UID )
+	Result ConnectionUDPBase::SendPending( uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0)
 	{
 		Result hr = ResultCode::SUCCESS;
 
-        MsgNetCtrlBuffer* pNetCtrlMsg{};
+		netCheck( PrepareGatheringBuffer(sizeof(MsgNetCtrlBuffer)) );
 
-		netChk( PrepareGatheringBuffer(sizeof(MsgNetCtrlBuffer)) );
+        MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(m_pGatheringBuffer + m_uiGatheredSize);
+        netCheck(MakeNetCtrl(pHeader, uiCtrlCode, uiSequence, msgID, parameter0));
 
-		pNetCtrlMsg = reinterpret_cast<MsgNetCtrlBuffer*>(m_pGatheringBuffer+m_uiGatheredSize);
-		pNetCtrlMsg->Header.msgID.ID = uiCtrlCode;
-        pNetCtrlMsg->Header.SetPeerID(UID == 0 ? GetLocalInfo().PeerID : UID);
-        pNetCtrlMsg->Header.msgID.SetSequence(uiSequence);
-
-        if (uiCtrlCode == PACKET_NETCTRL_CONNECT || msgID.GetMsgIDOnly() == PACKET_NETCTRL_CONNECT)
-        {
-            MsgNetCtrlConnect* pConMsg = static_cast<MsgNetCtrlConnect*>(&pNetCtrlMsg->GetNetCtrl());
-            pConMsg->Peer = GetLocalInfo();
-        }
-		else
-		{
-	        pNetCtrlMsg->GetNetCtrl().rtnMsgID = msgID;
-		}
-
-        pNetCtrlMsg->UpdateMessageDataSize();
-
-		m_uiGatheredSize += pNetCtrlMsg->Header.Length;
-
-
-	Proc_End:
+		m_uiGatheredSize += pHeader->Length;
 
 		return hr;
 	}
@@ -227,12 +205,10 @@ namespace Net {
 
 		}
 
-
 	Proc_End:
 
 		if(!hr && pIOHandler != nullptr)
 			pIOHandler->DecPendingSendCount();
-
 
 		m_uiGatheredSize = 0;
 		if( m_pGatheringBuffer != nullptr )
@@ -242,7 +218,6 @@ namespace Net {
 			IHeap::Delete(pSendBuffer);
 
 		m_pGatheringBuffer = nullptr;
-
 
 		return hr;
 	}
@@ -272,11 +247,17 @@ namespace Net {
 			m_pGatheringBuffer = new(GetIOHeap()) uint8_t[Const::PACKET_GATHER_SIZE_MAX];
 			if (m_pGatheringBuffer == nullptr)
 				return ResultCode::OUT_OF_MEMORY;
+
+            m_uiGatheredSize = 0;
+            if (m_bIncludePacketHeader)
+            {
+                *reinterpret_cast<uint64_t*>(m_pGatheringBuffer) = GetLocalInfo().PeerID;
+                m_uiGatheredSize += sizeof(uint64_t);
+            }
 		}
 
 		return hr;
 	}
-
 
 	// frame sequence
 	Result ConnectionUDPBase::SendFrameSequenceMessage(const SharedPointerT<MessageData>& pMsg)
@@ -480,16 +461,37 @@ namespace Net {
 
 		netCheckPtr(pMsg);
 
-		if (pMsg->GetPayloadSize() != 0 && pMsg->GetMessageHeader()->Crc32 == 0 && pMsg->GetMessageHeader()->msgID.IDs.Policy != PROTOCOLID_NONE)
+        const MessageHeader* pHeader = pMsg->GetMessageHeader();
+
+        uint uiPolicy = pHeader->msgID.IDs.Policy;
+        if ((uiPolicy == 0 && pHeader->msgID.IDs.Type != 0)
+            || uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
+        {
+            netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
+        }
+
+        if (pHeader->msgID.IDs.Type != MSGTYPE_NETCONTROL && !pMsg->IsEncrypted())
+        {
+            netCheck(ResultCode::IO_INVALID_MESSAGE_ENCRYPTION);
+        }
+
+        //SFLog(Net, Info, "Send {0}, len:{1}", pHeader->msgID, pHeader->Length);
+
+		if (pMsg->GetPayloadSize() != 0 && pHeader->Crc32 == 0 && pHeader->msgID.IDs.Policy != PROTOCOLID_NONE)
 		{
-			Assert(pMsg->GetPayloadSize() == 0 || pMsg->GetMessageHeader()->Crc32 != 0 || pMsg->GetMessageHeader()->msgID.IDs.Policy == PROTOCOLID_NONE);
+			Assert(pMsg->GetPayloadSize() == 0 || pHeader->Crc32 != 0 || pHeader->msgID.IDs.Policy == PROTOCOLID_NONE);
 			netCheck(ResultCode::FAIL);
 		}
 
 		pSendBuffer.reset(new(GetIOHeap()) IOBUFFER_WRITE);
 		netCheckMem(pSendBuffer);
 
-		pSendBuffer->SetupSendUDP(GetSocket(), GetRemoteSockAddr(), SharedPointerT<MessageData>(pMsg));
+        if (m_bIncludePacketHeader)
+        {
+            pMsg->GetPacketHeader()->PeerId = GetLocalInfo().PeerID;
+        }
+
+		pSendBuffer->SetupSendUDP(GetSocket(), GetRemoteSockAddr(), m_bIncludePacketHeader, SharedPointerT<MessageData>(pMsg));
 
 		if (NetSystem::IsProactorSystem())
 		{
@@ -605,7 +607,7 @@ namespace Net {
 
 	Result ConnectionUDPBase::SendReliableMessageAck(MessageID msgID)
 	{
-		return SendNetCtrl(PACKET_NETCTRL_ACK, msgID.IDSeq.Sequence, msgID, GetLocalInfo().PeerID);
+		return SendNetCtrl(PACKET_NETCTRL_ACK, msgID.IDSeq.Sequence, msgID);
 	}
 
 	// Send message to connected entity
@@ -635,11 +637,6 @@ namespace Net {
 		MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 		msgID = pMsgHeader->msgID;
 		uiMsgLen = pMsg->GetMessageSize();
-
-		if (pMsgHeader->msgID.IDs.Mobile)
-		{
-            pMsg->GetMessageHeader()->SetPeerID(GetLocalInfo().PeerID);
-		}
 
 		if( (msgID.IDs.Type != MSGTYPE_NETCONTROL && GetConnectionState() == ConnectionState::DISCONNECTING)
 			|| GetConnectionState() == ConnectionState::DISCONNECTED)
@@ -775,7 +772,17 @@ namespace Net {
 				{
 					netMem(pMsg = MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
 
-					hr = OnRecv(pMsg);
+                    pMsg->SetEncrypted(true);
+                    hr = pMsg->ValidateChecksumNDecrypt();
+                    if (!hr)
+                    {
+                        SFLog(Net, Debug, "Decryption&Checksum failure: CID:{0} msg:{1}",
+                            GetCID(),
+                            pMsgHeader->msgID);
+                        netCheck(hr);
+                    }
+
+                    hr = OnRecv(pMsg);
 					netChk(hr);
 				}
 				else
@@ -797,8 +804,6 @@ namespace Net {
 		}
 
 	Proc_End:
-
-		pMsg = nullptr;
 
 		SendFlush();
 
@@ -822,12 +827,8 @@ namespace Net {
 			return hr;
 		}
 
-		netCheck(pMsg->ValidateChecksumNDecrypt());
-
 		if (pMsgHeader->msgID.IDs.Reliability)
 		{
-			Assert(!pMsgHeader->msgID.IDs.Encrypted);
-
 			SFLog(Net, Debug5, "RECVGua    : CID:{0} msg:{1}, seq:{2}, len:{3}",
 				GetCID(),
 				pMsg->GetMessageHeader()->msgID,

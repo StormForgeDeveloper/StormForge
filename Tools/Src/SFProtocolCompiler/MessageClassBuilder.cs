@@ -33,10 +33,10 @@ namespace ProtocolCompiler
                 "MSGTYPE_RELIABLE",
             };
 
-        // Message guaranteed level string
-        static string[] MsgMobilityString = new string[]{
+        // Message broadcast mode string
+        static string[] MsgBroadcastString = new string[]{
                 "MSGTYPE_NONE",
-                "MSGTYPE_MOBILE",
+                "MSGTYPE_BROADCAST",
             };
 
 
@@ -211,12 +211,12 @@ namespace ProtocolCompiler
         }
 
         // Make message ID macro string 
-        string MakeMsgIDStr(MsgType type, bool reliablity, bool mobility, string MsgName)
+        string MakeMsgIDStr(MsgType type, bool reliablity, bool broadcast, string MsgName)
         {
             string strRes = string.Format("MessageID({0}, {1}, {2}, PROTOCOLID_{3}, {4})",
                 MsgTypeString[(int)type],
                 MsgReliablityString[reliablity ? 1 : 0],
-                MsgMobilityString[mobility ? 1 : 0],
+                MsgBroadcastString[broadcast ? 1 : 0],
                 Group.Name.ToUpper(),
                 m_MessageCodeIndex);
             return strRes;
@@ -447,9 +447,9 @@ namespace ProtocolCompiler
 
         void BuildMessageIDImpl(MessageBase msg, MsgType msgType, string typeName)
         {
-            MatchIndent(); OutStream.WriteLine("const MessageID {0}::MID = {1};", MsgClassName(msg.Name, typeName), MakeMsgIDStr(msgType, msg.Reliable, Group.IsMobile, msg.Name));
+            MatchIndent(); OutStream.WriteLine("const MessageID {0}::MID = {1};", MsgClassName(msg.Name, typeName), MakeMsgIDStr(msgType, msg.Reliable, false/*broadcast*/, msg.Name));
         }
-        
+
         void BuildGetFunctionImpl(string Name, string typeName, Parameter[] parameters)
         {
             string strClassName = MsgClassName(Name, typeName);

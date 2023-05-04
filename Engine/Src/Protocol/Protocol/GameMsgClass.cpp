@@ -26,7 +26,7 @@ namespace SF
  		namespace Game
 		{
  			// C2S: Client heartbeat
-			const MessageID HeartbeatC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 0);
+			const MessageID HeartbeatC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 0);
 			Result HeartbeatC2SEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -96,7 +96,7 @@ namespace SF
 			}; // Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Player connected from a login server and moved to game server
-			const MessageID JoinGameServerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 1);
+			const MessageID JoinGameServerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 1);
 			Result JoinGameServerCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -190,7 +190,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result JoinGameServerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID JoinGameServerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 1);
+			const MessageID JoinGameServerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 1);
 			Result JoinGameServerRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -298,7 +298,7 @@ namespace SF
 			}; // Result JoinGameServerRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: player complition statues
-			const MessageID GetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 2);
+			const MessageID GetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 2);
 			Result GetComplitionStateCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -380,7 +380,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetComplitionStateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 2);
+			const MessageID GetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 2);
 			Result GetComplitionStateRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -472,7 +472,7 @@ namespace SF
 			}; // Result GetComplitionStateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Player complition state
-			const MessageID SetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 3);
+			const MessageID SetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 3);
 			Result SetComplitionStateCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -559,7 +559,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result SetComplitionStateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID SetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 3);
+			const MessageID SetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 3);
 			Result SetComplitionStateRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -646,7 +646,7 @@ namespace SF
 			}; // Result SetComplitionStateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
-			const MessageID RegisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 4);
+			const MessageID RegisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 4);
 			Result RegisterGCMCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -733,7 +733,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result RegisterGCMCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID RegisterGCMRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 4);
+			const MessageID RegisterGCMRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 4);
 			Result RegisterGCMRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -820,7 +820,7 @@ namespace SF
 			}; // Result RegisterGCMRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Unregister Google notification service ID
-			const MessageID UnregisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 5);
+			const MessageID UnregisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 5);
 			Result UnregisterGCMCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -907,7 +907,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result UnregisterGCMCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID UnregisterGCMRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 5);
+			const MessageID UnregisterGCMRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 5);
 			Result UnregisterGCMRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -994,7 +994,7 @@ namespace SF
 			}; // Result UnregisterGCMRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Invite friend
-			const MessageID InviteFriendCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 6);
+			const MessageID InviteFriendCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 6);
 			Result InviteFriendCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1080,7 +1080,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result InviteFriendCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID InviteFriendRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 6);
+			const MessageID InviteFriendRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 6);
 			Result InviteFriendRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1167,7 +1167,7 @@ namespace SF
 			}; // Result InviteFriendRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Accept friend request
-			const MessageID AcceptFriendRequestCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 7);
+			const MessageID AcceptFriendRequestCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 7);
 			Result AcceptFriendRequestCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1257,7 +1257,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result AcceptFriendRequestCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID AcceptFriendRequestRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 7);
+			const MessageID AcceptFriendRequestRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 7);
 			Result AcceptFriendRequestRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1348,7 +1348,7 @@ namespace SF
 			}; // Result AcceptFriendRequestRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Notification for friend request is accepted
-			const MessageID FriendRequestAcceptedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 8);
+			const MessageID FriendRequestAcceptedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 8);
 			Result FriendRequestAcceptedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1431,7 +1431,7 @@ namespace SF
 			}; // Result FriendRequestAcceptedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Remove friden form the friend list
-			const MessageID RemoveFriendCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 9);
+			const MessageID RemoveFriendCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 9);
 			Result RemoveFriendCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1517,7 +1517,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result RemoveFriendCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID RemoveFriendRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 9);
+			const MessageID RemoveFriendRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 9);
 			Result RemoveFriendRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1608,7 +1608,7 @@ namespace SF
 			}; // Result RemoveFriendRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Friend removed
-			const MessageID FriendRemovedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 10);
+			const MessageID FriendRemovedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 10);
 			Result FriendRemovedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1691,7 +1691,7 @@ namespace SF
 			}; // Result FriendRemovedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Get friend list
-			const MessageID GetFriendListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 11);
+			const MessageID GetFriendListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 11);
 			Result GetFriendListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1781,7 +1781,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetFriendListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetFriendListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 11);
+			const MessageID GetFriendListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 11);
 			Result GetFriendListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1887,7 +1887,7 @@ namespace SF
 			}; // Result GetFriendListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Query notification list
-			const MessageID GetNotificationListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 12);
+			const MessageID GetNotificationListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 12);
 			Result GetNotificationListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -1969,7 +1969,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetNotificationListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetNotificationListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 12);
+			const MessageID GetNotificationListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 12);
 			Result GetNotificationListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2056,7 +2056,7 @@ namespace SF
 			}; // Result GetNotificationListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Delete notification
-			const MessageID DeleteNotificationCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 13);
+			const MessageID DeleteNotificationCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 13);
 			Result DeleteNotificationCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2142,7 +2142,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DeleteNotificationCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID DeleteNotificationRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 13);
+			const MessageID DeleteNotificationRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 13);
 			Result DeleteNotificationRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2233,7 +2233,7 @@ namespace SF
 			}; // Result DeleteNotificationRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Set notification is read
-			const MessageID SetNotificationReadCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 14);
+			const MessageID SetNotificationReadCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 14);
 			Result SetNotificationReadCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2319,7 +2319,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result SetNotificationReadCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID SetNotificationReadRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 14);
+			const MessageID SetNotificationReadRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 14);
 			Result SetNotificationReadRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2410,7 +2410,7 @@ namespace SF
 			}; // Result SetNotificationReadRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Accept notification
-			const MessageID AcceptNotificationCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 15);
+			const MessageID AcceptNotificationCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 15);
 			Result AcceptNotificationCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2496,7 +2496,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result AcceptNotificationCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID AcceptNotificationRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 15);
+			const MessageID AcceptNotificationRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 15);
 			Result AcceptNotificationRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2587,7 +2587,7 @@ namespace SF
 			}; // Result AcceptNotificationRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Notify new notification
-			const MessageID NotifyS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 16);
+			const MessageID NotifyS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 16);
 			const VariableTable& NotifyS2CEvt::GetParameters() const
 			{
  				if (!m_ParametersHasParsed)
@@ -2738,7 +2738,7 @@ namespace SF
 			}; // Result NotifyS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: PlayerId Conversion
-			const MessageID FindPlayerByPlatformIdCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 17);
+			const MessageID FindPlayerByPlatformIdCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 17);
 			Result FindPlayerByPlatformIdCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2824,7 +2824,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result FindPlayerByPlatformIdCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID FindPlayerByPlatformIdRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 17);
+			const MessageID FindPlayerByPlatformIdRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 17);
 			Result FindPlayerByPlatformIdRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -2919,7 +2919,7 @@ namespace SF
 			}; // Result FindPlayerByPlatformIdRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: PlayerId conversion
-			const MessageID FindPlayerByCharacterNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 18);
+			const MessageID FindPlayerByCharacterNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 18);
 			Result FindPlayerByCharacterNameCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3006,7 +3006,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result FindPlayerByCharacterNameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID FindPlayerByCharacterNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 18);
+			const MessageID FindPlayerByCharacterNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 18);
 			Result FindPlayerByCharacterNameRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3097,7 +3097,7 @@ namespace SF
 			}; // Result FindPlayerByCharacterNameRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: PlayerId Conversion
-			const MessageID FindPlayerByPlatformUserNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 19);
+			const MessageID FindPlayerByPlatformUserNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 19);
 			Result FindPlayerByPlatformUserNameCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3188,7 +3188,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result FindPlayerByPlatformUserNameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID FindPlayerByPlatformUserNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 19);
+			const MessageID FindPlayerByPlatformUserNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 19);
 			Result FindPlayerByPlatformUserNameRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3283,7 +3283,7 @@ namespace SF
 			}; // Result FindPlayerByPlatformUserNameRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Query playerID list
-			const MessageID FindPlayerByEMailCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 20);
+			const MessageID FindPlayerByEMailCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 20);
 			Result FindPlayerByEMailCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3370,7 +3370,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result FindPlayerByEMailCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID FindPlayerByEMailRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 20);
+			const MessageID FindPlayerByEMailRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 20);
 			Result FindPlayerByEMailRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3461,7 +3461,7 @@ namespace SF
 			}; // Result FindPlayerByEMailRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Query playerID list
-			const MessageID FindPlayerByPlayerIDCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 21);
+			const MessageID FindPlayerByPlayerIDCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 21);
 			Result FindPlayerByPlayerIDCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3547,7 +3547,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result FindPlayerByPlayerIDCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID FindPlayerByPlayerIDRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 21);
+			const MessageID FindPlayerByPlayerIDRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 21);
 			Result FindPlayerByPlayerIDRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3638,7 +3638,7 @@ namespace SF
 			}; // Result FindPlayerByPlayerIDRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: *Request Player Status Update
-			const MessageID RequestPlayerStatusUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 22);
+			const MessageID RequestPlayerStatusUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 22);
 			Result RequestPlayerStatusUpdateCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3727,7 +3727,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result RequestPlayerStatusUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID RequestPlayerStatusUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 22);
+			const MessageID RequestPlayerStatusUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 22);
 			Result RequestPlayerStatusUpdateRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3814,7 +3814,7 @@ namespace SF
 			}; // Result RequestPlayerStatusUpdateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: *Notify Player Status Updated
-			const MessageID NotifyPlayerStatusUpdatedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 23);
+			const MessageID NotifyPlayerStatusUpdatedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 23);
 			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3905,7 +3905,7 @@ namespace SF
 			}; // Result NotifyPlayerStatusUpdatedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Get Ranking list
-			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 24);
+			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 24);
 			Result GetRankingListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -3999,7 +3999,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetRankingListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetRankingListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 24);
+			const MessageID GetRankingListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 24);
 			Result GetRankingListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -4093,7 +4093,7 @@ namespace SF
 			}; // Result GetRankingListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Game user game play information
-			const MessageID GetUserGamePlayerInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 25);
+			const MessageID GetUserGamePlayerInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 25);
 			Result GetUserGamePlayerInfoCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -4175,7 +4175,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetUserGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetUserGamePlayerInfoRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 25);
+			const MessageID GetUserGamePlayerInfoRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 25);
 			const VariableTable& GetUserGamePlayerInfoRes::GetAttributes() const
 			{
  				if (!m_AttributesHasParsed)
@@ -4314,7 +4314,7 @@ namespace SF
 			}; // Result GetUserGamePlayerInfoRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Game game play information
-			const MessageID GetGamePlayerInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 26);
+			const MessageID GetGamePlayerInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 26);
 			Result GetGamePlayerInfoCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -4400,7 +4400,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetGamePlayerInfoRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 26);
+			const MessageID GetGamePlayerInfoRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 26);
 			const VariableTable& GetGamePlayerInfoRes::GetAttributes() const
 			{
  				if (!m_AttributesHasParsed)
@@ -4545,7 +4545,7 @@ namespace SF
 			}; // Result GetGamePlayerInfoRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Player level up event
-			const MessageID LevelUpS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 27);
+			const MessageID LevelUpS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 27);
 			Result LevelUpS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -4632,7 +4632,7 @@ namespace SF
 			}; // Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Change NickName
-			const MessageID SetNickNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 28);
+			const MessageID SetNickNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 28);
 			Result SetNickNameCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -4723,7 +4723,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result SetNickNameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID SetNickNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 28);
+			const MessageID SetNickNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 28);
 			Result SetNickNameRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -4818,7 +4818,7 @@ namespace SF
 			}; // Result SetNickNameRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Create Party
-			const MessageID CreatePartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 29);
+			const MessageID CreatePartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 29);
 			Result CreatePartyCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -4900,7 +4900,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreatePartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CreatePartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 29);
+			const MessageID CreatePartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 29);
 			Result CreatePartyRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -4991,7 +4991,7 @@ namespace SF
 			}; // Result CreatePartyRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Join party
-			const MessageID JoinPartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 30);
+			const MessageID JoinPartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 30);
 			Result JoinPartyCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5081,7 +5081,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result JoinPartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID JoinPartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 30);
+			const MessageID JoinPartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 30);
 			Result JoinPartyRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5183,7 +5183,7 @@ namespace SF
 			}; // Result JoinPartyRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Player Joined event
-			const MessageID PartyPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 31);
+			const MessageID PartyPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 31);
 			Result PartyPlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5270,7 +5270,7 @@ namespace SF
 			}; // Result PartyPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Party leader changed event
-			const MessageID PartyLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 32);
+			const MessageID PartyLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 32);
 			Result PartyLeaderChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5357,7 +5357,7 @@ namespace SF
 			}; // Result PartyLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Leave party command
-			const MessageID LeavePartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 33);
+			const MessageID LeavePartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 33);
 			Result LeavePartyCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5447,7 +5447,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result LeavePartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID LeavePartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 33);
+			const MessageID LeavePartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 33);
 			Result LeavePartyRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5534,7 +5534,7 @@ namespace SF
 			}; // Result LeavePartyRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Party Player left event
-			const MessageID PartyPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 34);
+			const MessageID PartyPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 34);
 			Result PartyPlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5621,7 +5621,7 @@ namespace SF
 			}; // Result PartyPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Kick player from the party
-			const MessageID PartyKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 35);
+			const MessageID PartyKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 35);
 			Result PartyKickPlayerCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5715,7 +5715,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result PartyKickPlayerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID PartyKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 35);
+			const MessageID PartyKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 35);
 			Result PartyKickPlayerRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5802,7 +5802,7 @@ namespace SF
 			}; // Result PartyKickPlayerRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Party Player kicked message
-			const MessageID PartyPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 36);
+			const MessageID PartyPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 36);
 			Result PartyPlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5889,7 +5889,7 @@ namespace SF
 			}; // Result PartyPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Invite a player to the party
-			const MessageID PartyInviteCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 37);
+			const MessageID PartyInviteCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 37);
 			Result PartyInviteCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -5975,7 +5975,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result PartyInviteCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID PartyInviteRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 37);
+			const MessageID PartyInviteRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 37);
 			Result PartyInviteRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6062,7 +6062,7 @@ namespace SF
 			}; // Result PartyInviteRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Party invite requested
-			const MessageID PartyInviteRequestedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 38);
+			const MessageID PartyInviteRequestedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 38);
 			Result PartyInviteRequestedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6154,7 +6154,7 @@ namespace SF
 			}; // Result PartyInviteRequestedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Send Party quick chat message
-			const MessageID PartyQuickChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 39);
+			const MessageID PartyQuickChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 39);
 			Result PartyQuickChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6240,7 +6240,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result PartyQuickChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID PartyQuickChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 39);
+			const MessageID PartyQuickChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 39);
 			Result PartyQuickChatMessageRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6327,7 +6327,7 @@ namespace SF
 			}; // Result PartyQuickChatMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Party Chatting message event
-			const MessageID PartyQuickChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 40);
+			const MessageID PartyQuickChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 40);
 			Result PartyQuickChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6414,7 +6414,7 @@ namespace SF
 			}; // Result PartyQuickChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Party chatting
-			const MessageID PartyChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 41);
+			const MessageID PartyChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 41);
 			Result PartyChatMessageCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6501,7 +6501,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result PartyChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID PartyChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 41);
+			const MessageID PartyChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 41);
 			Result PartyChatMessageRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6588,7 +6588,7 @@ namespace SF
 			}; // Result PartyChatMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Party Chatting message event
-			const MessageID PartyChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 42);
+			const MessageID PartyChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 42);
 			Result PartyChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6681,7 +6681,7 @@ namespace SF
 			}; // Result PartyChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Join to a game instance
-			const MessageID JoinGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 43);
+			const MessageID JoinGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 43);
 			Result JoinGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6767,7 +6767,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result JoinGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID JoinGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 43);
+			const MessageID JoinGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 43);
 			Result JoinGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6863,7 +6863,7 @@ namespace SF
 			}; // Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Leave game instance
-			const MessageID LeaveGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 44);
+			const MessageID LeaveGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 44);
 			Result LeaveGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -6949,7 +6949,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result LeaveGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID LeaveGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 44);
+			const MessageID LeaveGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 44);
 			Result LeaveGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -7036,7 +7036,7 @@ namespace SF
 			}; // Result LeaveGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Search game instance
-			const MessageID SearchGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 45);
+			const MessageID SearchGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 45);
 			Result SearchGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -7127,7 +7127,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result SearchGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID SearchGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 45);
+			const MessageID SearchGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 45);
 			Result SearchGameInstanceRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -7218,7 +7218,7 @@ namespace SF
 			}; // Result SearchGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Search game instance
-			const MessageID GetCharacterDataInGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 46);
+			const MessageID GetCharacterDataInGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 46);
 			Result GetCharacterDataInGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -7308,7 +7308,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterDataInGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetCharacterDataInGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 46);
+			const MessageID GetCharacterDataInGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 46);
 			const VariableTable& GetCharacterDataInGameInstanceRes::GetGameInstances() const
 			{
  				if (!m_GameInstancesHasParsed)
@@ -7453,7 +7453,7 @@ namespace SF
 			}; // Result GetCharacterDataInGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Request Game match
-			const MessageID RequestGameMatchCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 47);
+			const MessageID RequestGameMatchCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 47);
 			Result RequestGameMatchCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -7543,7 +7543,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result RequestGameMatchCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID RequestGameMatchRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 47);
+			const MessageID RequestGameMatchRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 47);
 			Result RequestGameMatchRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -7638,7 +7638,7 @@ namespace SF
 			}; // Result RequestGameMatchRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Game matched
-			const MessageID GameMatchedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 48);
+			const MessageID GameMatchedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 48);
 			Result GameMatchedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -7779,7 +7779,7 @@ namespace SF
 			}; // Result GameMatchedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Game match failed
-			const MessageID GameMatchFailedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 49);
+			const MessageID GameMatchFailedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 49);
 			Result GameMatchFailedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -7862,7 +7862,7 @@ namespace SF
 			}; // Result GameMatchFailedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Game matching started
-			const MessageID GameMatchingStartedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 50);
+			const MessageID GameMatchingStartedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 50);
 			Result GameMatchingStartedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -7932,7 +7932,7 @@ namespace SF
 			}; // Result GameMatchingStartedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Cancel Game match
-			const MessageID CancelGameMatchCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 51);
+			const MessageID CancelGameMatchCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 51);
 			Result CancelGameMatchCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8014,7 +8014,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CancelGameMatchCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CancelGameMatchRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 51);
+			const MessageID CancelGameMatchRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 51);
 			Result CancelGameMatchRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8101,7 +8101,7 @@ namespace SF
 			}; // Result CancelGameMatchRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: game matching canceled
-			const MessageID GameMatchingCanceledS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 52);
+			const MessageID GameMatchingCanceledS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 52);
 			Result GameMatchingCanceledS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8171,7 +8171,7 @@ namespace SF
 			}; // Result GameMatchingCanceledS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Buy shop item prepare
-			const MessageID BuyShopItemPrepareCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 53);
+			const MessageID BuyShopItemPrepareCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 53);
 			Result BuyShopItemPrepareCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8257,7 +8257,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result BuyShopItemPrepareCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID BuyShopItemPrepareRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 53);
+			const MessageID BuyShopItemPrepareRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 53);
 			Result BuyShopItemPrepareRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8353,7 +8353,7 @@ namespace SF
 			}; // Result BuyShopItemPrepareRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Buy shop item
-			const MessageID BuyShopItemCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 54);
+			const MessageID BuyShopItemCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 54);
 			Result BuyShopItemCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8461,7 +8461,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result BuyShopItemCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID BuyShopItemRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 54);
+			const MessageID BuyShopItemRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 54);
 			Result BuyShopItemRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8552,7 +8552,7 @@ namespace SF
 			}; // Result BuyShopItemRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Create or Join Chat channel
-			const MessageID CreateOrJoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 55);
+			const MessageID CreateOrJoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 55);
 			Result CreateOrJoinChatChannelCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8644,7 +8644,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateOrJoinChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CreateOrJoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 55);
+			const MessageID CreateOrJoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 55);
 			Result CreateOrJoinChatChannelRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8739,7 +8739,7 @@ namespace SF
 			}; // Result CreateOrJoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Join
-			const MessageID JoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 56);
+			const MessageID JoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 56);
 			Result JoinChatChannelCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8834,7 +8834,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID JoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 56);
+			const MessageID JoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 56);
 			Result JoinChatChannelRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -8929,7 +8929,7 @@ namespace SF
 			}; // Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Player Joined event
-			const MessageID ChatChannelPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 57);
+			const MessageID ChatChannelPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 57);
 			Result ChatChannelPlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9016,7 +9016,7 @@ namespace SF
 			}; // Result ChatChannelPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: ChatChannel leader changed event
-			const MessageID ChatChannelLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 58);
+			const MessageID ChatChannelLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 58);
 			Result ChatChannelLeaderChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9103,7 +9103,7 @@ namespace SF
 			}; // Result ChatChannelLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Leave ChatChannel command
-			const MessageID LeaveChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 59);
+			const MessageID LeaveChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
 			Result LeaveChatChannelCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9193,7 +9193,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result LeaveChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID LeaveChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 59);
+			const MessageID LeaveChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
 			Result LeaveChatChannelRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9280,7 +9280,7 @@ namespace SF
 			}; // Result LeaveChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: ChatChannel Player left event
-			const MessageID ChatChannelPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 60);
+			const MessageID ChatChannelPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 60);
 			Result ChatChannelPlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9367,7 +9367,7 @@ namespace SF
 			}; // Result ChatChannelPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Kick player from the ChatChannel
-			const MessageID ChatChannelKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 61);
+			const MessageID ChatChannelKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
 			Result ChatChannelKickPlayerCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9461,7 +9461,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ChatChannelKickPlayerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID ChatChannelKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 61);
+			const MessageID ChatChannelKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
 			Result ChatChannelKickPlayerRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9548,7 +9548,7 @@ namespace SF
 			}; // Result ChatChannelKickPlayerRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: ChatChannel Player kicked message
-			const MessageID ChatChannelPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 62);
+			const MessageID ChatChannelPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 62);
 			Result ChatChannelPlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9635,7 +9635,7 @@ namespace SF
 			}; // Result ChatChannelPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Chat channel sending chatting message
-			const MessageID ChatChannelChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 63);
+			const MessageID ChatChannelChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
 			const VariableTable& ChatChannelChatMessageCmd::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -9780,7 +9780,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID ChatChannelChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 63);
+			const MessageID ChatChannelChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
 			Result ChatChannelChatMessageRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -9867,7 +9867,7 @@ namespace SF
 			}; // Result ChatChannelChatMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: ChatChannel Chatting message event
-			const MessageID ChatChannelChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 64);
+			const MessageID ChatChannelChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 64);
 			const VariableTable& ChatChannelChatMessageS2CEvt::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -10007,7 +10007,7 @@ namespace SF
 			}; // Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Whisper(tell) other player chatting
-			const MessageID WhisperMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 65);
+			const MessageID WhisperMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
 			const VariableTable& WhisperMessageCmd::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -10159,7 +10159,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result WhisperMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID WhisperMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 65);
+			const MessageID WhisperMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
 			Result WhisperMessageRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -10246,7 +10246,7 @@ namespace SF
 			}; // Result WhisperMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Other player whispered(tell) to me message event
-			const MessageID WhisperMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 66);
+			const MessageID WhisperMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 66);
 			const VariableTable& WhisperMessageS2CEvt::GetChatMetaData() const
 			{
  				if (!m_ChatMetaDataHasParsed)
@@ -10386,7 +10386,7 @@ namespace SF
 			}; // Result WhisperMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Create character
-			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 67);
+			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
 			const VariableTable& CreateCharacterCmd::GetPublicData() const
 			{
  				if (!m_PublicDataHasParsed)
@@ -10548,7 +10548,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CreateCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 67);
+			const MessageID CreateCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
 			Result CreateCharacterRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -10639,7 +10639,7 @@ namespace SF
 			}; // Result CreateCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Delete character
-			const MessageID DeleteCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 68);
+			const MessageID DeleteCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
 			Result DeleteCharacterCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -10725,7 +10725,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result DeleteCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID DeleteCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 68);
+			const MessageID DeleteCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
 			Result DeleteCharacterRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -10812,7 +10812,7 @@ namespace SF
 			}; // Result DeleteCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Get character list
-			const MessageID GetCharacterListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 69);
+			const MessageID GetCharacterListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
 			Result GetCharacterListCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -10894,7 +10894,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetCharacterListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 69);
+			const MessageID GetCharacterListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
 			Result GetCharacterListRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -10985,7 +10985,7 @@ namespace SF
 			}; // Result GetCharacterListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: 
-			const MessageID GetCharacterDataCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 70);
+			const MessageID GetCharacterDataCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
 			Result GetCharacterDataCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -11071,7 +11071,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result GetCharacterDataCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID GetCharacterDataRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 70);
+			const MessageID GetCharacterDataRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
 			const VariableTable& GetCharacterDataRes::GetPrivateData() const
 			{
  				if (!m_PrivateDataHasParsed)
@@ -11233,7 +11233,7 @@ namespace SF
 			}; // Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Select character
-			const MessageID SelectCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 71);
+			const MessageID SelectCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
 			Result SelectCharacterCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -11319,7 +11319,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result SelectCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID SelectCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 71);
+			const MessageID SelectCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
 			const VariableTable& SelectCharacterRes::GetAttributes() const
 			{
  				if (!m_AttributesHasParsed)
@@ -11464,7 +11464,7 @@ namespace SF
 			}; // Result SelectCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
-			const MessageID RequestServerNoticeUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 72);
+			const MessageID RequestServerNoticeUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
 			Result RequestServerNoticeUpdateCmd::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -11546,7 +11546,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result RequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID RequestServerNoticeUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 72);
+			const MessageID RequestServerNoticeUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
 			Result RequestServerNoticeUpdateRes::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -11633,7 +11633,7 @@ namespace SF
 			}; // Result RequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// S2C: Server Notice updated event
-			const MessageID ServerNoticeS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 73);
+			const MessageID ServerNoticeS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 73);
 			Result ServerNoticeS2CEvt::ParseMessage(const MessageData* pIMsg)
 			{
  				ScopeContext hr;
@@ -11721,7 +11721,7 @@ namespace SF
 			}; // Result ServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
 			// Cmd: To call general functionality
-			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 74);
+			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
 			const VariableTable& CallFunctionCmd::GetParameters() const
 			{
  				if (!m_ParametersHasParsed)
@@ -11859,7 +11859,7 @@ namespace SF
 				return ResultCode::SUCCESS;
 			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
 
-			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_MOBILE, PROTOCOLID_GAME, 74);
+			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
 			const VariableTable& CallFunctionRes::GetResults() const
 			{
  				if (!m_ResultsHasParsed)

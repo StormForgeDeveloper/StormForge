@@ -620,6 +620,7 @@ namespace Net {
 		}
 		else
 		{
+            pMsg->SetEncrypted(true);
 			netCheck( pMsg->ValidateChecksumNDecrypt() );
 
 			hr  = Connection::OnRecv( pMsg );
@@ -632,11 +633,6 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionTCP::SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t UID)
-	{
-		return SendNetCtrl(uiCtrlCode, uiSequence, returnMsgID, UID);
-	}
-
 	Result ConnectionTCP::SendRaw(const SharedPointerT<MessageData> &pMsg)
 	{
 		SFUniquePtr<IOBUFFER_WRITE> pSendBuffer;
@@ -646,6 +642,16 @@ namespace Net {
 			return ResultCode::SUCCESS_FALSE;
 
 		netCheckMem(pMsg);
+
+        MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
+        MessageID msgID = pMsgHeader->msgID;
+
+        uint uiPolicy = msgID.IDs.Policy;
+        if ((uiPolicy == 0 && msgID.IDs.Type != 0)
+            || uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
+        {
+            netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
+        } 
 
 		pSendBuffer.reset(new(GetIOHeap()) IOBUFFER_WRITE);
 		netCheckMem(pSendBuffer.get());

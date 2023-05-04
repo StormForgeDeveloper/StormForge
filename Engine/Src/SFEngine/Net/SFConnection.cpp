@@ -197,7 +197,7 @@ namespace SF {
 			auto reqTime = Util::Time.GetRawTimeMs();
 			MessageID msgID;
 			msgID.ID = reqTime.time_since_epoch().count();
-			return SendNetCtrl(PACKET_NETCTRL_TIMESYNC, 0, msgID, GetLocalInfo().PeerID);
+			return SendNetCtrl(PACKET_NETCTRL_TIMESYNC, 0, msgID);
 		}
 
 		void Connection::OnTimeSyncRtn(DurationMS roundTripTime)
@@ -231,30 +231,65 @@ namespace SF {
 			return ResultCode::SUCCESS;
 		}
 
+        Result Connection::MakeNetCtrl(MessageHeader* pHeader, uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0)
+        {
+            Result hr;
+
+            assert(pHeader->Length >= sizeof(MsgNetCtrlBuffer)); // the available buffer should be bigger than we need
+            pHeader->msgID = uiCtrlCode;
+            pHeader->msgID.SetSequence(uiSequence);
+            uint orgBufferSize = pHeader->Length;
+            pHeader->Length = pHeader->GetHeaderSize();
+
+            if (uiCtrlCode == PACKET_NETCTRL_SYNCRELIABLE)
+            {
+                MsgMobileNetCtrlSync* pCtlMsg = static_cast<MsgMobileNetCtrlSync*>(pHeader->GetDataPtr());
+                pCtlMsg->MessageMask = parameter0;
+                pHeader->Length += sizeof(MsgMobileNetCtrlSync);
+            }
+            else if (uiCtrlCode == PACKET_NETCTRL_TIMESYNC || uiCtrlCode == PACKET_NETCTRL_TIMESYNC_RTN)
+            {
+                MsgNetCtrlTimeSync* pCtlMsg = static_cast<MsgNetCtrlTimeSync*>(pHeader->GetDataPtr());
+                pCtlMsg->ClientTimeStamp = returnMsgID.ID;
+                pCtlMsg->ServerTimeStamp = uint32_t(parameter0);
+                pHeader->Length += sizeof(MsgNetCtrlTimeSync);
+            }
+            else
+            {
+                MsgNetCtrl* pCtlMsg = static_cast<MsgNetCtrl*>(pHeader->GetDataPtr());
+                pCtlMsg->rtnMsgID = returnMsgID;
+                pHeader->Length += sizeof(MsgNetCtrl);
+
+                if (uiCtrlCode == PACKET_NETCTRL_CONNECT || returnMsgID.GetMsgIDOnly() == PACKET_NETCTRL_CONNECT)
+                {
+                    MsgNetCtrlConnect* pConMsg = reinterpret_cast<MsgNetCtrlConnect*>(pCtlMsg + 1);
+                    pConMsg->ProtocolVersion = SF_PROTOCOL_VERSION;
+                    pConMsg->Peer = GetLocalInfo();
+                    pHeader->Length += sizeof(MsgNetCtrlConnect);
+                }
+            }
+
+            //SFLog(Net, Debug, "MakeNetCtrl {0}", pHeader->msgID, pHeader->Length);
+
+            assert(pHeader->Length <= orgBufferSize);
+
+            return hr;
+        }
+
 		// Make Ack packet and enqueue to SendNetCtrlqueue
-		Result Connection::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t UID)
+		Result Connection::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0)
 		{
 			Result hr = ResultCode::SUCCESS;
 			Result hrTem;
-			MsgNetCtrl* pCtlMsg = nullptr;
 			SharedPointerT<MessageData> pMsg;
 
             netCheckMem(pMsg = MessageData::NewMessage(GetHeap(), uiCtrlCode, sizeof(MsgNetCtrlBuffer)));
 
-            MsgNetCtrlBuffer* pCtlBuffer = reinterpret_cast<MsgNetCtrlBuffer*>(pMsg->GetMessageBuff());
-            pCtlBuffer->Header.SetPeerID(UID == 0 ? GetLocalInfo().PeerID : UID);
-            pCtlBuffer->Header.msgID.SetSequence(uiSequence);
-            pCtlMsg = &pCtlBuffer->GetNetCtrl();
-            pCtlMsg->rtnMsgID = returnMsgID;
-            pCtlBuffer->UpdateMessageDataSize();
+            MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(pMsg->GetMessageBuff());
 
-            if (uiCtrlCode == PACKET_NETCTRL_CONNECT || returnMsgID.GetMsgIDOnly() == PACKET_NETCTRL_CONNECT)
-			{
-				MsgNetCtrlConnect* pConMsg = static_cast<MsgNetCtrlConnect*>(pCtlMsg);
-				pConMsg->Peer = GetLocalInfo();
-			}
+            netCheck(MakeNetCtrl(pHeader, uiCtrlCode, uiSequence, returnMsgID, parameter0));
 
-			pMsg->UpdateChecksum();
+            pMsg->UpdateChecksum();
 
 			hrTem = SendRaw(pMsg);
 			if (!hrTem)
@@ -558,7 +593,7 @@ namespace SF {
 			auto msgID = pMsgHeader->msgID;
 
 			// All messages must be decrypted before came here
-			assert(!msgID.IDs.Encrypted);
+			//assert(!msgID.IDs.Encrypted);
 
 			// 
 			Protocol::PrintDebugMessage("Recv", pMsg);
@@ -567,6 +602,13 @@ namespace SF {
 			assert(pMsg->GetPayloadSize() == 0 // 0 crc for zero size packet
                 || pMsgHeader->Length > 1024 // Multiple sub framed message can't have crc value. each sub frame does
                 || pMsgHeader->Crc32 != 0); // Crc should have value
+
+            uint uiPolicy = msgID.IDs.Policy;
+            if (uiPolicy == 0
+                || uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
+            {
+                netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
+            }
 
 			if (GetEventHandler() == nullptr)
 			{

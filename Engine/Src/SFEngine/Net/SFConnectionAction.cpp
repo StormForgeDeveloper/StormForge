@@ -54,9 +54,9 @@ namespace Net {
 	const SocketType ConnectionActionBase::GetSocketType() const { return m_pConnection->GetSocketType(); }
 
 
-	Result ConnectionActionBase::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t UID)
+	Result ConnectionActionBase::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0)
 	{
-		return m_pConnection->SendNetCtrl(uiCtrlCode, uiSequence, msgID, UID);
+		return m_pConnection->SendNetCtrl(uiCtrlCode, uiSequence, msgID, parameter0);
 	}
 
 	Result ConnectionActionBase::Disconnect(const char* reason)

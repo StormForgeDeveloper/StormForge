@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) 2015 Kyungkun Ko
 // 
@@ -31,13 +31,20 @@ void IOBUFFER_WRITE::InitForIO(SF_SOCKET sockWrite)
 	pSendBuff = nullptr;
 }
 
-void IOBUFFER_WRITE::InitMsg(SharedPointerT<MessageData>&& pMsg)
+void IOBUFFER_WRITE::InitMsg(bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg)
 {
 	pMsgs = std::forward<SharedPointerT<MessageData>>(pMsg);
 	pSendBuff = nullptr;
-
-	RawSendSize = pMsgs->GetMessageSize();
-	pRawSendBuffer = pMsgs->GetMessageBuff();
+    if (bIncludePacketHeader)
+    {
+        RawSendSize = pMsgs->GetMessageSize() + sizeof(MobilePacketHeader);
+        pRawSendBuffer = reinterpret_cast<uint8_t*>(pMsgs->GetPacketHeader());
+    }
+    else
+    {
+        RawSendSize = pMsgs->GetMessageSize();
+        pRawSendBuffer = pMsgs->GetMessageBuff();
+    }
 }
 
 void IOBUFFER_WRITE::InitBuff(uint uiBuffSize, uint8_t* pBuff)
@@ -49,11 +56,11 @@ void IOBUFFER_WRITE::InitBuff(uint uiBuffSize, uint8_t* pBuff)
 	pRawSendBuffer = pBuff;
 }
 
-void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, SharedPointerT<MessageData>&& pMsg)
+void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg)
 {
 	InitForIO(sockWrite);
 
-	InitMsg(std::forward<SharedPointerT<MessageData>>(pMsg));
+	InitMsg(bIncludePacketHeader, std::forward<SharedPointerT<MessageData>>(pMsg));
 
 	NetAddr.To = to;
 
@@ -75,7 +82,7 @@ void IOBUFFER_WRITE::SetupSendTCP(SharedPointerT<MessageData>&& pMsg)
 {
 	InitForIO(0);
 
-	InitMsg(std::forward<SharedPointerT<MessageData>>(pMsg));
+	InitMsg(false, std::forward<SharedPointerT<MessageData>>(pMsg));
 
 	Operation = IOBUFFER_OPERATION::OP_TCPWRITE;
 }

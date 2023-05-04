@@ -50,7 +50,6 @@ namespace Net {
 	protected:
 
 		// gathering
-		virtual Result SendPending( uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t UID = 0 ) override;
 		virtual Result SendSync( uint uiSequence, uint64_t uiSyncMask );
 
 		// We are using send sync mask rather than per message

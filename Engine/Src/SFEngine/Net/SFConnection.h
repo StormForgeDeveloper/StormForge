@@ -337,8 +337,9 @@ namespace Net {
 		Result ProcConnectionStateAction();
 
 		// Make NetCtrl packet and send
-		virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t UID = 0);
-		virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t UID = 0) { assert(false); return ResultCode::NOT_IMPLEMENTED; }
+        virtual Result MakeNetCtrl(MessageHeader* pHeader, uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0 = 0);
+        virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0 = 0);
+		virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0 = 0) { return SendNetCtrl(uiCtrlCode, uiSequence, returnMsgID, parameter0); } // default direct send
 
 		// Clear Queue
 		virtual Result ClearQueues();
