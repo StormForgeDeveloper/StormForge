@@ -434,6 +434,13 @@ namespace SF {
 				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 
+            if (pNetCtrlBuffer->Header.msgID.IDs.MsgCode >= countof(m_NetCtrlAction))
+            {
+                SFLog(Net, Error, "Invalid packet CID:{0}, Addr:{1}, msgId:{2}", GetCID(), GetRemoteInfo().PeerAddress, pNetCtrlBuffer->Header.msgID);
+                netCheck(Disconnect("Invalid packet"));
+                netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
+            }
+
 			pAction = m_NetCtrlAction[pNetCtrlBuffer->Header.msgID.IDs.MsgCode];
 			if (pAction != nullptr)
 			{
