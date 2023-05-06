@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2016 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -15,6 +15,7 @@
 #include "SFTypedefs.h"
 #include "Types/SFEngineTypedefs.h"
 #include "SFAssert.h"
+#include "Container/SFArray.h"
 
 
 namespace SF {
@@ -24,34 +25,6 @@ namespace SF {
 	//	Network Packet Message ID definition
 	//
 
-	//
-	//  Bit assignment of messageID
-	//    2  1 1 1      7                 9                  11
-	//   1 0 9 8 7  6 5 4 3 2 1 0  9 8 7 6 5 4 3 2 1  0 9 8 7 6 5 4 3 2 1 0
-	//  +---+-+-+-+---------------+--------------------+----------------------+
-	//  | T |G|M|E|   Policy      |       MsgCode      |        Seq           |
-	//  +---+-+-+-+---------------+--------------------+----------------------+
-	//
-	//  where
-	//
-	//      T - Packet type
-	//          00 - Net Control
-	//          01 - Event
-	//          10 - Command
-	//          11 - Result
-	//
-	//      G - Reliability control bit - Only enabled when using TCP or connection based UDP
-	//          0 - Not Guaranteed
-	//          1 - Reliable message.
-	//
-    //      Broadcast - Channel/GameInstance broadcasting. Range will be limited in spatial channel
-    // 
-	//      Encrypted
-	//      Mobile - Mobility
-	//      Policy - Protocol Policy ID
-	//      MsgCode - Message ID, 0 is not used
-	//      Seq - Sequence of the message
-	//
 
 #define NET_SEQUENCE_BITS		12
 #define NET_SEQUENCE_MASK		((1<<NET_SEQUENCE_BITS)-1)
@@ -71,12 +44,27 @@ namespace SF {
     union MessageID
     {
         struct MessageIDComponent {
+            // Seq - Sequence of the message
             uint32_t Sequence : NET_SEQUENCE_BITS;
-            uint32_t Broadcast : 1; // 
+            // Broadcast control bit, requested packet will be broadcasted through channel or spatial grid
+            // 0 - Not Guaranteed
+            // 1 - Reliable message.
+            uint32_t Broadcast : 1; //
+            // Reliability control bit - Only enabled when using TCP or connection based UDP
+            // 0 - Not Guaranteed
+            // 1 - Reliable message.
             uint32_t Reliability : 1;
+            // Packet type
+            // 00 - Net Control
+            // 01 - Event
+            // 10 - Command
+            // 11 - Result
             uint32_t Type : 2;
+            // MsgCode - Message ID, 0 is not used
             uint32_t MsgCode : 9;
+            // Policy - Protocol Policy ID
             uint32_t Policy : 7;
+
             uint32_t : 0;
         } IDs;
         struct {
@@ -86,7 +74,6 @@ namespace SF {
         uint32_t ID;
 
         constexpr MessageID() : ID(0) {}
-        //inline tag_MessageID( const tag_MessageID& src );
         constexpr MessageID(uint32_t uiID) : ID(uiID) {}
         constexpr MessageID(uint uiType, uint uiReliability, uint uiBroadcast, uint uiPolicy, uint uiCode)
             : IDs({ 0, uiBroadcast, uiReliability, uiType, uiCode, uiPolicy })
@@ -200,6 +187,28 @@ namespace SF {
         {
             return reinterpret_cast<void*>(reinterpret_cast<uintptr_t>(this) + GetHeaderSize());
         }
+
+        SF_FORCEINLINE ArrayView<uint8_t> GetPayload() const
+        {
+            uint headerSize = (uint)GetHeaderSize();
+            assert(Length >= headerSize);
+            uint length = Length - headerSize;
+            uint8_t* pDataPtr = reinterpret_cast<uint8_t*>(reinterpret_cast<uintptr_t>(this) + headerSize);
+            return ArrayView<uint8_t>(length, pDataPtr);
+        }
+
+        SF_FORCEINLINE uint GetPayloadSize() const
+        {
+            uint headerSize = (uint)GetHeaderSize();
+            assert(Length >= headerSize);
+            return Length - headerSize;
+        }
+
+        void UpdateChecksum();
+        void UpdateChecksumNEncrypt();
+
+        Result ValidateChecksum();
+        Result ValidateChecksumNDecrypt();
     };
 
     static_assert((sizeof(uint32_t)*2) == sizeof(MessageHeader), "MessageHeader should fit in 8bytes");

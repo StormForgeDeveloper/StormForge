@@ -64,6 +64,8 @@ namespace SF {
 		inline ReferenceCounterType		GetWeakReferenceCount() const			{ return m_WeakReferenceCount.load(std::memory_order_relaxed); }
 		inline ReferenceCounterType		GetManagerReferenceCount() const		{ return m_ManagerReferenceCount.load(std::memory_order_relaxed); }
 		inline SharedObjectManager*		GetReferenceManager()					{ return m_ReferenceManagerObject; }
+        CounterType AddReference() const;
+        CounterType ReleaseReference() const;
 
 		SharedPointer AsSharedPtr() const;
 
@@ -83,8 +85,6 @@ namespace SF {
 
 	private:
 
-		CounterType AddReference() const;
-		CounterType ReleaseReference() const;
 
 		CounterType AddWeakReference() const;
 		CounterType ReleaseWeakReference() const;
@@ -99,7 +99,6 @@ namespace SF {
 		friend class WeakPointerAtomic;
 	};
 
-	//extern template class PageQueue<SharedObject*>;
 
 	/////////////////////////////////////////////////////////////////////
 	//

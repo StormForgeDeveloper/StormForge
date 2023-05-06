@@ -18,7 +18,6 @@
 #include "Net/SFMessage.h"
 #include "Object/SFSharedObject.h"
 #include "Object/SFSharedPointer.h"
-#include "Container/SFArray.h"
 #include "Protocol/SFProtocol.h"
 
 
@@ -48,15 +47,17 @@ namespace SF {
         bool m_bIsEncrypted{};
 
 	private:
-		MessageData(uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData = NULL);
+		MessageData(uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData = nullptr);
 
 	public:
 		virtual ~MessageData();
 
         SF_FORCEINLINE MobilePacketHeader* GetPacketHeader() { return m_pPacketHeader; }
+        SF_FORCEINLINE const MobilePacketHeader* GetPacketHeader() const { return m_pPacketHeader; }
         SF_FORCEINLINE MessageHeader* GetMessageHeader() { return m_pMsgHeader; }
-		uint8_t*	GetMessageBuff(); // data include header
-		uint		GetMessageSize() const; // total length
+        SF_FORCEINLINE const MessageHeader* GetMessageHeader() const { return m_pMsgHeader; }
+        uint8_t* GetMessageBuff(); // data include header
+		uint GetMessageSize() const; // total length
 
         SF_FORCEINLINE uint8_t* GetPayloadPtr()
         {
@@ -69,27 +70,14 @@ namespace SF {
         }
 
 		// Data except header
-		SF_FORCEINLINE ArrayView<uint8_t> GetPayload() const
-        {
-            uint headerSize = (uint)m_pMsgHeader->GetHeaderSize();
-            assert(m_pMsgHeader->Length >= headerSize);
-            uint length = m_pMsgHeader->Length - headerSize;
-            uint8_t* pDataPtr = reinterpret_cast<uint8_t*>(reinterpret_cast<uintptr_t>(m_pMsgHeader) + headerSize);
-            return ArrayView<uint8_t>(length, pDataPtr);
-        }
-
-        SF_FORCEINLINE uint GetPayloadSize() const
-        {
-            uint headerSize = (uint)m_pMsgHeader->GetHeaderSize();
-            assert(m_pMsgHeader->Length >= headerSize);
-            return m_pMsgHeader->Length - headerSize;
-        }
+        SF_FORCEINLINE ArrayView<uint8_t> GetPayload() const { return m_pMsgHeader->GetPayload(); }
+        SF_FORCEINLINE uint GetPayloadSize() const { return m_pMsgHeader->GetPayloadSize(); }
 
         SF_FORCEINLINE void SetEncrypted(bool bEncrypted) { m_bIsEncrypted = bEncrypted; }
         SF_FORCEINLINE bool IsEncrypted() const { return m_bIsEncrypted; }
 
 		// Parsing helper
-		void GetRouteInfo(RouteContext& routeContext, TransactionID& transID);
+		//void GetRouteInfo(RouteContext& routeContext, TransactionID& transID);
 
 		void ClearAssignedSequence();
 		void AssignSequence(uint sequence);
@@ -102,11 +90,33 @@ namespace SF {
 
 
 		// Update checksum and encrypt
-		void UpdateChecksum();
-		void UpdateChecksumNEncrypt();
 
-		Result ValidateChecksum();
-		Result ValidateChecksumNDecrypt();
+        SF_FORCEINLINE void UpdateChecksum()
+        {
+            m_pMsgHeader->UpdateChecksum();
+        }
+
+        SF_FORCEINLINE void UpdateChecksumNEncrypt()
+        {
+            m_pMsgHeader->UpdateChecksumNEncrypt();
+            m_bIsEncrypted = true;
+        }
+
+        SF_FORCEINLINE Result ValidateChecksum()
+        {
+            return m_pMsgHeader->ValidateChecksum();
+        }
+
+        SF_FORCEINLINE Result ValidateChecksumNDecrypt()
+        {
+            Result hr = m_pMsgHeader->ValidateChecksumNDecrypt();
+            if (hr)
+            {
+                m_bIsEncrypted = false;
+            }
+            return hr;
+        }
+
 	};
 
 
@@ -119,8 +129,11 @@ namespace SF {
 	class MessageBase
 	{
 	private:
-		// Message handler
+		// Message data reference
 		SharedPointerT<MessageData>	m_pIMsg;
+
+        // message header
+        const MessageHeader* m_pHeader{};
 
 		// Parsing result
 		Result		m_hrParsing = ResultCode::SUCCESS_FALSE;
@@ -129,10 +142,8 @@ namespace SF {
 	public:
 
 		MessageBase() = default;
-		MessageBase(const SharedPointerT<MessageData> &pIMsg)
-			: m_pIMsg(pIMsg)
-		{
-		}
+        MessageBase(const MessageHeader* pHeader);
+        MessageBase(const SharedPointerT<MessageData>& pIMsg);
 
 		virtual ~MessageBase() { m_pIMsg = nullptr; }
 
@@ -147,7 +158,7 @@ namespace SF {
 		virtual Result ParseMsg();
 
 		// Parsing message data
-		virtual Result ParseMessage(const MessageData* pIMsg) = 0;
+		virtual Result ParseMessage(const MessageHeader* pHeader) = 0;
 	};
 
 

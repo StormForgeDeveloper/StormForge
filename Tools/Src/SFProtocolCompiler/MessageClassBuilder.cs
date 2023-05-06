@@ -140,15 +140,15 @@ namespace ProtocolCompiler
         void BuildMessageTrace(string Name, string typeName, string traceChannel, Parameter[] parameters)
         {
             string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::TraceOut(const char* prefix, const MessageDataPtr& pMsg)");
+            OpenSection("Result", strClassName + "::TraceOut(const char* prefix, const MessageHeader* pHeader)");
 
 
             string strTrace = $"{traceChannel}, \"{Group.Name}::{Name}, {{0}}:{{1}} ";
-            string strTraceMember = "prefix, pMsg->GetMessageHeader()->Length";
+            string strTraceMember = "prefix, pHeader->Length";
             int ParamCount = 2;
 
             MatchIndent(); OutStream.WriteLine("{0} parser;", strClassName);
-            MatchIndent(); OutStream.WriteLine("parser.ParseMessage(*pMsg);");
+            MatchIndent(); OutStream.WriteLine("parser.ParseMessage(pHeader);");
 
             if (parameters != null)
             {
@@ -333,6 +333,11 @@ namespace ProtocolCompiler
             MatchIndent(1); OutStream.WriteLine("{}");
             NewLine();
 
+            MatchIndent(); OutStream.WriteLine(strClassName + "( const MessageHeader* pHeader )");
+            MatchIndent(1); OutStream.WriteLine(": MessageBase(pHeader)");
+            MatchIndent(1); OutStream.WriteLine("{}");
+            NewLine();
+
             // Generate Get functions
             if (parameters != null)
             {
@@ -364,17 +369,17 @@ namespace ProtocolCompiler
 
             NewLine();
             // message trace function
-            MatchIndent(); OutStream.WriteLine("static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);");
+            MatchIndent(); OutStream.WriteLine("static Result TraceOut(const char* prefix, const MessageHeader* pHeader);");
             NewLine();
 
             // Parse function
-            MatchIndent(); OutStream.WriteLine("virtual Result ParseMessage(const MessageData* pIMsg);");
+            MatchIndent(); OutStream.WriteLine("virtual Result ParseMessage(const MessageHeader* pHeader);");
             if(AppConfig.GetValue("VariableMapParser", false))
             {
-                MatchIndent(); OutStream.WriteLine("static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );");
+                MatchIndent(); OutStream.WriteLine("static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );");
             }
 
-            MatchIndent(); OutStream.WriteLine("static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);");
+            MatchIndent(); OutStream.WriteLine("static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);");
             NewLine();
 
             // Build function
@@ -477,20 +482,20 @@ namespace ProtocolCompiler
         void BuildParserImpl(string Name, string typeName, Parameter[] parameters)
         {
             string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::ParseMessage(const MessageData* pIMsg)");
+            OpenSection("Result", strClassName + "::ParseMessage(const MessageHeader* pHeader)");
 
             DefaultHRESULT(); NewLine();
 
             bool bHasParameter = parameters != null && parameters.Length > 0;
 
             NewLine();
-            MatchIndent(); OutStream.WriteLine("protocolCheckPtr(pIMsg);");
+            MatchIndent(); OutStream.WriteLine("protocolCheckPtr(pHeader);");
             NewLine();
 
             if (bHasParameter)
             {
                 // array len types
-                MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());");
+                MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(pHeader->GetPayload());");
                 MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");
                 MatchIndent(); OutStream.WriteLine("auto* input = inputStream.ToInputStream();");
                 MatchIndent(); OutStream.WriteLine("uint16_t ArrayLen = 0;(void)(ArrayLen);");
@@ -562,7 +567,7 @@ namespace ProtocolCompiler
             }
 
             string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )");
+            OpenSection("Result", strClassName + "::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )");
 
             DefaultHRESULT(); NewLine();
 
@@ -570,7 +575,7 @@ namespace ProtocolCompiler
 
             NewLine();
             MatchIndent(); OutStream.WriteLine("{0} parser;", strClassName);
-            MatchIndent(); OutStream.WriteLine("protocolCheck(parser.ParseMessage(*pIMsg));");
+            MatchIndent(); OutStream.WriteLine("protocolCheck(parser.ParseMessage(pHeader));");
             NewLine();
 
             if (parameters != null)
@@ -626,14 +631,14 @@ namespace ProtocolCompiler
         void BuildParserToMessageBaseImpl(string Name, string typeName, Parameter[] parameters)
         {
             string strClassName = MsgClassName(Name, typeName);
-            OpenSection("Result", strClassName + "::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )");
+            OpenSection("Result", strClassName + "::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )");
 
             DefaultHRESULT();
 
             bool bHasParameter = parameters != null && parameters.Length > 0;
 
             NewLine();
-            MatchIndent(); OutStream.WriteLine("protocolCheckMem(pMessageBase = new(memHeap) {0}(pIMsg));", strClassName);
+            MatchIndent(); OutStream.WriteLine("protocolCheckMem(pMessageBase = new(memHeap) {0}(pHeader));", strClassName);
             MatchIndent(); OutStream.WriteLine("protocolCheck(pMessageBase->ParseMsg());", strClassName);
             NewLine();
 
@@ -661,14 +666,7 @@ namespace ProtocolCompiler
             NewLine();
 
             // array len types
-            if (Group.IsMobile)
-            {
-                MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pIMsg->GetMessageSize() - Message::MobileHeaderSize);");
-            }
-            else
-            {
-                MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
-            }
+            MatchIndent(); OutStream.WriteLine("size_t MsgDataSize = (int)((size_t)pIMsg->GetMessageSize() - sizeof(MessageHeader));");
 
             MatchIndent(); OutStream.WriteLine("ArrayView<const uint8_t> bufferView(MsgDataSize, pIMsg->GetMessageData());");
             MatchIndent(); OutStream.WriteLine("InputMemoryStream inputStream(bufferView);");

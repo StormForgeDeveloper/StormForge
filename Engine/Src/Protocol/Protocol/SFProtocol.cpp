@@ -86,62 +86,59 @@ namespace Protocol {
 
 
 
-	void PrintDebugMessage(const char* preFix, const SharedPointerT<MessageData>& pMsg )
+	void PrintDebugMessage(const char* preFix, const MessageHeader* pHeader)
 	{
-		if( pMsg == nullptr )
+		if(pHeader == nullptr )
 			return;
 
-		auto itFound = MessageDebugTraceMap.find(pMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
+		auto itFound = MessageDebugTraceMap.find(pHeader->msgID.IDSeq.MsgID);
 		if (itFound != MessageDebugTraceMap.end())
 		{
-			((itFound->second))(preFix, pMsg);
+			((itFound->second))(preFix, pHeader);
 		}
 		else
 		{
-			SFLog(Net, Error, "PrintDebugMessage failed, can't find message handler prefix:{0} for msgId:{1}", preFix, pMsg->GetMessageHeader()->msgID);
+			SFLog(Net, Error, "PrintDebugMessage failed, can't find message handler prefix:{0} for msgId:{1}", preFix, pHeader->msgID);
 		}
 	}
 	
-	Result ParseMessage(const SharedPointerT<MessageData>& pMsg, IVariableMapBuilder& variableMap)
+	Result ParseMessage(const MessageHeader* pHeader, IVariableMapBuilder& variableMap)
 	{
-		if (pMsg == nullptr)
+		if (pHeader == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		auto itFound = MessageParseToVariableMap.find(pMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
+		auto itFound = MessageParseToVariableMap.find(pHeader->msgID.IDSeq.MsgID);
 		if (itFound != MessageParseToVariableMap.end())
 		{
-			return (itFound->second)(pMsg, variableMap);
+			return (itFound->second)(pHeader, variableMap);
 		}
 		else
 		{
-			SFLog(Net, Error, "ParseMessage(GenVariableTable) failed, can't find message handler for 0x{0:X8}", pMsg->GetMessageHeader()->msgID.GetMsgIDOnly());
+			SFLog(Net, Error, "ParseMessage(GenVariableTable) failed, can't find message handler for 0x{0:X8}", pHeader->msgID.GetMsgIDOnly());
 		}
 
 		return ResultCode::IO_BADPACKET;
 	}
 	
-	Result ParseMessage(IHeap& memoryManager, const SharedPointerT<MessageData>& pMsg, MessageBase * &pMsgBase)
+	Result ParseMessage(IHeap& memoryManager, const MessageHeader* pHeader, MessageBase * &pMsgBase)
 	{
 		pMsgBase = nullptr;
 
-		if (pMsg == nullptr)
+		if (pHeader == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		auto itFound = MessageParseToMessageBaseMap.find(pMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
+		auto itFound = MessageParseToMessageBaseMap.find(pHeader->msgID.IDSeq.MsgID);
 		if (itFound != MessageParseToMessageBaseMap.end())
 		{
-			return (itFound->second)(memoryManager, pMsg, pMsgBase);
+			return (itFound->second)(memoryManager, pHeader, pMsgBase);
 		}
 		else
 		{
-			SFLog(Net, Error, "ParseMessage failed, can't find message handler for 0x{0:X8}", pMsg->GetMessageHeader()->msgID.GetMsgIDOnly());
+			SFLog(Net, Error, "ParseMessage failed, can't find message handler for 0x{0:X8}", pHeader->msgID.GetMsgIDOnly());
 		}
 
 		return ResultCode::IO_BADPACKET;
 	}
 	
-
 } // namespace Protocol
 } // namespace SF
-
-

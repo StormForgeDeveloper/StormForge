@@ -21,13 +21,13 @@ namespace SF {
 	namespace Message {
 
 		// S2C: Used for sending general failure for not started transaction messages
-		Result FailResultS2CEvt::ParseMessage(const MessageData* pIMsg)
+		Result FailResultS2CEvt::ParseMessage(const MessageHeader* pHeader)
 		{
 			ScopeContext hr = ResultCode::SUCCESS;
 
-			protocolCheckPtr(pIMsg);
+			protocolCheckPtr(pHeader);
 
-			ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+			ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 			InputMemoryStream inputStream(bufferView);
 			auto* input = inputStream.ToInputStream();
 

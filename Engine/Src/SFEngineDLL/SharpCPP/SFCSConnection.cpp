@@ -175,7 +175,7 @@ SFDLL_EXPORT bool SFConnection_NativeDequeueMessage(intptr_t nativeHandle, SET_M
 
 	// Fill parameters
 	VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
-	if (!SF::Protocol::ParseMessage(pIMsg, builder))
+	if (!SF::Protocol::ParseMessage(pIMsg->GetMessageHeader(), builder))
 		return false;
 
 	return true;

@@ -82,7 +82,7 @@ SFDLL_EXPORT intptr_t SFConnectionGroup_NativeDequeueEvent(intptr_t nativeHandle
 
 		// Fill parameters
 		VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
-		if (!SF::Protocol::ParseMessage(eventInfo.pMsg, builder))
+		if (!SF::Protocol::ParseMessage(eventInfo.pMsg->GetMessageHeader(), builder))
 			return false;
 	}
 	else if (conEvent.Components.EventType != Net::ConnectionEvent::EVT_NONE)

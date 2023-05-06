@@ -49,14 +49,18 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				GenericFailureCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const RouteContext& GetRouteContext() const	{ return m_RouteContext; };
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const RouteContext &InRouteContext, const uint64_t &InTransactionID );
 
@@ -85,15 +89,19 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				GenericFailureRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const RouteContext& GetRouteContext() const	{ return m_RouteContext; };
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult );
 

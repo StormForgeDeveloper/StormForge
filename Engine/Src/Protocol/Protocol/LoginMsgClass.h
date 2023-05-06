@@ -52,16 +52,20 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				LoginCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetGameID() const	{ return m_GameID; };
 				const char* GetID() const	{ return m_ID; };
 				const char* GetPassword() const	{ return m_Password; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword );
 
@@ -95,6 +99,10 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				LoginRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const char* GetGameServerPublicAddress() const	{ return m_GameServerPublicAddress; };
@@ -103,11 +111,11 @@ namespace SF
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
 				const char* GetErrorReason() const	{ return m_ErrorReason; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
@@ -141,6 +149,10 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				LoginByFacebookCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetGameID() const	{ return m_GameID; };
 				const uint64_t& GetUID() const	{ return m_UID; };
@@ -148,11 +160,11 @@ namespace SF
 				const char* GetEMail() const	{ return m_EMail; };
 				const char* GetFacebookToken() const	{ return m_FacebookToken; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken );
 
@@ -186,6 +198,10 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				LoginByFacebookRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const char* GetGameServerPublicAddress() const	{ return m_GameServerPublicAddress; };
@@ -194,11 +210,11 @@ namespace SF
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
 				const char* GetErrorReason() const	{ return m_ErrorReason; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
@@ -231,17 +247,21 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				LoginBySteamCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetGameID() const	{ return m_GameID; };
 				const uint64_t& GetSteamUserID() const	{ return m_SteamUserID; };
 				const char* GetSteamUserName() const	{ return m_SteamUserName; };
 				const char* GetSteamUserToken() const	{ return m_SteamUserToken; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken );
 
@@ -275,6 +295,10 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				LoginBySteamRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const char* GetGameServerPublicAddress() const	{ return m_GameServerPublicAddress; };
@@ -283,11 +307,11 @@ namespace SF
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
 				const char* GetErrorReason() const	{ return m_ErrorReason; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason );
 
@@ -318,15 +342,19 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				CreateRandomUserCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint32_t& GetGameID() const	{ return m_GameID; };
 				const char* GetCellPhone() const	{ return m_CellPhone; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone );
 
@@ -359,6 +387,10 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				CreateRandomUserRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const char* GetGameServerPublicAddress() const	{ return m_GameServerPublicAddress; };
@@ -366,11 +398,11 @@ namespace SF
 				const AuthTicket& GetTicket() const	{ return m_Ticket; };
 				const uint64_t& GetLoginEntityUID() const	{ return m_LoginEntityUID; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 
@@ -402,16 +434,20 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				UpdateMyScoreCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const uint64_t& GetRankingScore() const	{ return m_RankingScore; };
 				const RankingType& GetRankingType() const	{ return m_RankingType; };
 				const uint16_t& GetCount() const	{ return m_Count; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount );
 
@@ -441,15 +477,19 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				UpdateMyScoreRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const Array<TotalRankingPlayerInformation>& GetRanking() const	{ return m_Ranking; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 
@@ -481,16 +521,20 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				GetRankingListCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const RankingType& GetRankingType() const	{ return m_RankingType; };
 				const uint8_t& GetBaseRanking() const	{ return m_BaseRanking; };
 				const uint8_t& GetCount() const	{ return m_Count; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
 
@@ -520,15 +564,19 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				GetRankingListRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const Array<TotalRankingPlayerInformation>& GetRanking() const	{ return m_Ranking; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 
@@ -558,14 +606,18 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				DataTestCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Array<uint8_t>& GetTestData() const	{ return m_TestData; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData );
 
@@ -595,15 +647,19 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				DataTestRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 				const Array<uint8_t>& GetTestData() const	{ return m_TestData; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData );
 
@@ -632,12 +688,16 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				HeartbeatC2SEvt( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
+
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap );
 
@@ -667,14 +727,18 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				DebugPrintALLRankingCmd( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const char* GetFileName() const	{ return m_FileName; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InFileName );
 
@@ -703,14 +767,18 @@ namespace SF
 					: MessageBase(pMsg)
 					{}
 
+				DebugPrintALLRankingRes( const MessageHeader* pHeader )
+					: MessageBase(pHeader)
+					{}
+
 				const uint64_t& GetTransactionID() const	{ return m_TransactionID; };
 				const Result& GetResult() const	{ return m_Result; };
 
-				static Result TraceOut(const char* prefix, const MessageDataPtr& pMsg);
+				static Result TraceOut(const char* prefix, const MessageHeader* pHeader);
 
-				virtual Result ParseMessage(const MessageData* pIMsg);
-				static Result ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder );
-				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMsgBase);
+				virtual Result ParseMessage(const MessageHeader* pHeader);
+				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
+				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 

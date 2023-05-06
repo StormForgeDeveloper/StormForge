@@ -27,42 +27,42 @@ namespace SF
 		{
  			// C2S: Client heartbeat
 			const MessageID HeartbeatC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 0);
-			Result HeartbeatC2SEvt::ParseMessage(const MessageData* pIMsg)
+			Result HeartbeatC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
 
 
 				return hr;
 
-			}; // Result HeartbeatC2SEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result HeartbeatC2SEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result HeartbeatC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result HeartbeatC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				HeartbeatC2SEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 
 				return hr;
 
-			}; // Result HeartbeatC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result HeartbeatC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result HeartbeatC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result HeartbeatC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) HeartbeatC2SEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) HeartbeatC2SEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result HeartbeatC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result HeartbeatC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* HeartbeatC2SEvt::Create( IHeap& memHeap )
@@ -86,25 +86,25 @@ namespace SF
 				return hr;
 			}; // MessageData* HeartbeatC2SEvt::Create( IHeap& memHeap )
 
-			Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				HeartbeatC2SEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug7, "Game::Heartbeat, {0}:{1} ",
-						prefix, pMsg->GetMessageHeader()->Length); 
+						prefix, pHeader->Length); 
 				return ResultCode::SUCCESS;
-			}; // Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result HeartbeatC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Player connected from a login server and moved to game server
 			const MessageID JoinGameServerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 1);
-			Result JoinGameServerCmd::ParseMessage(const MessageData* pIMsg)
+			Result JoinGameServerCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -116,15 +116,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameServerCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinGameServerCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result JoinGameServerCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinGameServerCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				JoinGameServerCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("AccID", parser.GetAccID());
@@ -133,18 +133,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameServerCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinGameServerCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result JoinGameServerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinGameServerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinGameServerCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinGameServerCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinGameServerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinGameServerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* JoinGameServerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
@@ -181,24 +181,24 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinGameServerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
-			Result JoinGameServerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinGameServerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				JoinGameServerCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::JoinGameServer, {0}:{1} , TransactionID:{2}, AccID:{3}, Ticket:{4}, LoginEntityUID:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetAccID(), parser.GetTicket(), parser.GetLoginEntityUID()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinGameServerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinGameServerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID JoinGameServerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 1);
-			Result JoinGameServerRes::ParseMessage(const MessageData* pIMsg)
+			Result JoinGameServerRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -214,15 +214,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameServerRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinGameServerRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result JoinGameServerRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinGameServerRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				JoinGameServerRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -234,18 +234,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameServerRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinGameServerRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result JoinGameServerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinGameServerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinGameServerRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinGameServerRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinGameServerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinGameServerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* JoinGameServerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
@@ -288,25 +288,25 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinGameServerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket )
 
-			Result JoinGameServerRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinGameServerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				JoinGameServerRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::JoinGameServer, {0}:{1} , TransactionID:{2}, Result:{3:X8}, NickName:{4,60}, GameUID:{5}, PartyUID:{6}, PartyLeaderID:{7}, MatchingTicket:{8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetNickName(), parser.GetGameUID(), parser.GetPartyUID(), parser.GetPartyLeaderID(), parser.GetMatchingTicket()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetNickName(), parser.GetGameUID(), parser.GetPartyUID(), parser.GetPartyLeaderID(), parser.GetMatchingTicket()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinGameServerRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinGameServerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: player complition statues
 			const MessageID GetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 2);
-			Result GetComplitionStateCmd::ParseMessage(const MessageData* pIMsg)
+			Result GetComplitionStateCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -315,32 +315,32 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetComplitionStateCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetComplitionStateCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetComplitionStateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetComplitionStateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetComplitionStateCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 
 				return hr;
 
-			}; // Result GetComplitionStateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetComplitionStateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetComplitionStateCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetComplitionStateCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
@@ -371,24 +371,24 @@ namespace SF
 				return hr;
 			}; // MessageData* GetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
-			Result GetComplitionStateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetComplitionStateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetComplitionStateCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetComplitionState, {0}:{1} , TransactionID:{2}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID()); 
+						prefix, pHeader->Length, parser.GetTransactionID()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetComplitionStateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetComplitionStateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID GetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 2);
-			Result GetComplitionStateRes::ParseMessage(const MessageData* pIMsg)
+			Result GetComplitionStateRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -400,15 +400,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetComplitionStateRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetComplitionStateRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetComplitionStateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetComplitionStateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetComplitionStateRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -416,18 +416,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetComplitionStateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetComplitionStateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetComplitionStateRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetComplitionStateRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
@@ -462,25 +462,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState )
 
-			Result GetComplitionStateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetComplitionStateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetComplitionStateRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetComplitionState, {0}:{1} , TransactionID:{2}, Result:{3:X8}, ComplitionState:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetComplitionState()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetComplitionState()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetComplitionStateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetComplitionStateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Player complition state
 			const MessageID SetComplitionStateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 3);
-			Result SetComplitionStateCmd::ParseMessage(const MessageData* pIMsg)
+			Result SetComplitionStateCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -491,33 +491,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetComplitionStateCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result SetComplitionStateCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result SetComplitionStateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SetComplitionStateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SetComplitionStateCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ComplitionState", parser.GetComplitionState());
 
 				return hr;
 
-			}; // Result SetComplitionStateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SetComplitionStateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SetComplitionStateCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SetComplitionStateCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SetComplitionStateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* SetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InComplitionState )
@@ -550,24 +550,24 @@ namespace SF
 				return hr;
 			}; // MessageData* SetComplitionStateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InComplitionState )
 
-			Result SetComplitionStateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SetComplitionStateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SetComplitionStateCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::SetComplitionState, {0}:{1} , TransactionID:{2}, ComplitionState:{3,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetComplitionState()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetComplitionState()); 
 				return ResultCode::SUCCESS;
-			}; // Result SetComplitionStateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SetComplitionStateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID SetComplitionStateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 3);
-			Result SetComplitionStateRes::ParseMessage(const MessageData* pIMsg)
+			Result SetComplitionStateRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -577,33 +577,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetComplitionStateRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result SetComplitionStateRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result SetComplitionStateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SetComplitionStateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SetComplitionStateRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result SetComplitionStateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SetComplitionStateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SetComplitionStateRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SetComplitionStateRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SetComplitionStateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* SetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -636,25 +636,25 @@ namespace SF
 				return hr;
 			}; // MessageData* SetComplitionStateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result SetComplitionStateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SetComplitionStateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SetComplitionStateRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::SetComplitionState, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result SetComplitionStateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SetComplitionStateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Register Google notification service ID, after this, the player will get notification from google. Only one notification ID can be active at a time
 			const MessageID RegisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 4);
-			Result RegisterGCMCmd::ParseMessage(const MessageData* pIMsg)
+			Result RegisterGCMCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -665,33 +665,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result RegisterGCMCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result RegisterGCMCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result RegisterGCMCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RegisterGCMCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RegisterGCMCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GCMRegisteredID", parser.GetGCMRegisteredID());
 
 				return hr;
 
-			}; // Result RegisterGCMCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RegisterGCMCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RegisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RegisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RegisterGCMCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RegisterGCMCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RegisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RegisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RegisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
@@ -724,24 +724,24 @@ namespace SF
 				return hr;
 			}; // MessageData* RegisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 
-			Result RegisterGCMCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RegisterGCMCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RegisterGCMCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::RegisterGCM, {0}:{1} , TransactionID:{2}, GCMRegisteredID:{3,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGCMRegisteredID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetGCMRegisteredID()); 
 				return ResultCode::SUCCESS;
-			}; // Result RegisterGCMCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RegisterGCMCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID RegisterGCMRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 4);
-			Result RegisterGCMRes::ParseMessage(const MessageData* pIMsg)
+			Result RegisterGCMRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -751,33 +751,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result RegisterGCMRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result RegisterGCMRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result RegisterGCMRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RegisterGCMRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RegisterGCMRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result RegisterGCMRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RegisterGCMRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RegisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RegisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RegisterGCMRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RegisterGCMRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RegisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RegisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RegisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -810,25 +810,25 @@ namespace SF
 				return hr;
 			}; // MessageData* RegisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result RegisterGCMRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RegisterGCMRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RegisterGCMRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::RegisterGCM, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result RegisterGCMRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RegisterGCMRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Unregister Google notification service ID
 			const MessageID UnregisterGCMCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 5);
-			Result UnregisterGCMCmd::ParseMessage(const MessageData* pIMsg)
+			Result UnregisterGCMCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -839,33 +839,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result UnregisterGCMCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result UnregisterGCMCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result UnregisterGCMCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result UnregisterGCMCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				UnregisterGCMCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GCMRegisteredID", parser.GetGCMRegisteredID());
 
 				return hr;
 
-			}; // Result UnregisterGCMCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result UnregisterGCMCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result UnregisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result UnregisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) UnregisterGCMCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) UnregisterGCMCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result UnregisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result UnregisterGCMCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* UnregisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
@@ -898,24 +898,24 @@ namespace SF
 				return hr;
 			}; // MessageData* UnregisterGCMCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID )
 
-			Result UnregisterGCMCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result UnregisterGCMCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				UnregisterGCMCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::UnregisterGCM, {0}:{1} , TransactionID:{2}, GCMRegisteredID:{3,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGCMRegisteredID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetGCMRegisteredID()); 
 				return ResultCode::SUCCESS;
-			}; // Result UnregisterGCMCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result UnregisterGCMCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID UnregisterGCMRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 5);
-			Result UnregisterGCMRes::ParseMessage(const MessageData* pIMsg)
+			Result UnregisterGCMRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -925,33 +925,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result UnregisterGCMRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result UnregisterGCMRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result UnregisterGCMRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result UnregisterGCMRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				UnregisterGCMRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result UnregisterGCMRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result UnregisterGCMRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result UnregisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result UnregisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) UnregisterGCMRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) UnregisterGCMRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result UnregisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result UnregisterGCMRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* UnregisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -984,25 +984,25 @@ namespace SF
 				return hr;
 			}; // MessageData* UnregisterGCMRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result UnregisterGCMRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result UnregisterGCMRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				UnregisterGCMRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::UnregisterGCM, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result UnregisterGCMRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result UnregisterGCMRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Invite friend
 			const MessageID InviteFriendCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 6);
-			Result InviteFriendCmd::ParseMessage(const MessageData* pIMsg)
+			Result InviteFriendCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1012,33 +1012,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result InviteFriendCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result InviteFriendCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result InviteFriendCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result InviteFriendCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				InviteFriendCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("FriendID", parser.GetFriendID());
 
 				return hr;
 
-			}; // Result InviteFriendCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result InviteFriendCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result InviteFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result InviteFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) InviteFriendCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) InviteFriendCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result InviteFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result InviteFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* InviteFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
@@ -1071,24 +1071,24 @@ namespace SF
 				return hr;
 			}; // MessageData* InviteFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
 
-			Result InviteFriendCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result InviteFriendCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				InviteFriendCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::InviteFriend, {0}:{1} , TransactionID:{2}, FriendID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetFriendID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetFriendID()); 
 				return ResultCode::SUCCESS;
-			}; // Result InviteFriendCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result InviteFriendCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID InviteFriendRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 6);
-			Result InviteFriendRes::ParseMessage(const MessageData* pIMsg)
+			Result InviteFriendRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1098,33 +1098,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result InviteFriendRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result InviteFriendRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result InviteFriendRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result InviteFriendRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				InviteFriendRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result InviteFriendRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result InviteFriendRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result InviteFriendRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result InviteFriendRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) InviteFriendRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) InviteFriendRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result InviteFriendRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result InviteFriendRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* InviteFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -1157,25 +1157,25 @@ namespace SF
 				return hr;
 			}; // MessageData* InviteFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result InviteFriendRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result InviteFriendRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				InviteFriendRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::InviteFriend, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result InviteFriendRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result InviteFriendRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Accept friend request
 			const MessageID AcceptFriendRequestCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 7);
-			Result AcceptFriendRequestCmd::ParseMessage(const MessageData* pIMsg)
+			Result AcceptFriendRequestCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1186,15 +1186,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptFriendRequestCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result AcceptFriendRequestCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result AcceptFriendRequestCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result AcceptFriendRequestCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				AcceptFriendRequestCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("InviterID", parser.GetInviterID());
@@ -1202,18 +1202,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptFriendRequestCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result AcceptFriendRequestCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result AcceptFriendRequestCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result AcceptFriendRequestCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) AcceptFriendRequestCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) AcceptFriendRequestCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result AcceptFriendRequestCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result AcceptFriendRequestCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* AcceptFriendRequestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId )
@@ -1248,24 +1248,24 @@ namespace SF
 				return hr;
 			}; // MessageData* AcceptFriendRequestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId )
 
-			Result AcceptFriendRequestCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result AcceptFriendRequestCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				AcceptFriendRequestCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::AcceptFriendRequest, {0}:{1} , TransactionID:{2}, InviterID:{3}, InviterPlatformId:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetInviterID(), parser.GetInviterPlatformId()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetInviterID(), parser.GetInviterPlatformId()); 
 				return ResultCode::SUCCESS;
-			}; // Result AcceptFriendRequestCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result AcceptFriendRequestCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID AcceptFriendRequestRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 7);
-			Result AcceptFriendRequestRes::ParseMessage(const MessageData* pIMsg)
+			Result AcceptFriendRequestRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1276,15 +1276,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptFriendRequestRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result AcceptFriendRequestRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result AcceptFriendRequestRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result AcceptFriendRequestRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				AcceptFriendRequestRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -1292,18 +1292,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptFriendRequestRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result AcceptFriendRequestRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result AcceptFriendRequestRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result AcceptFriendRequestRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) AcceptFriendRequestRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) AcceptFriendRequestRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result AcceptFriendRequestRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result AcceptFriendRequestRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* AcceptFriendRequestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
@@ -1338,25 +1338,25 @@ namespace SF
 				return hr;
 			}; // MessageData* AcceptFriendRequestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend )
 
-			Result AcceptFriendRequestRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result AcceptFriendRequestRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				AcceptFriendRequestRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::AcceptFriendRequest, {0}:{1} , TransactionID:{2}, Result:{3:X8}, NewFriend:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetNewFriend()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetNewFriend()); 
 				return ResultCode::SUCCESS;
-			}; // Result AcceptFriendRequestRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result AcceptFriendRequestRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Notification for friend request is accepted
 			const MessageID FriendRequestAcceptedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 8);
-			Result FriendRequestAcceptedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result FriendRequestAcceptedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1365,32 +1365,32 @@ namespace SF
 
 				return hr;
 
-			}; // Result FriendRequestAcceptedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result FriendRequestAcceptedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result FriendRequestAcceptedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FriendRequestAcceptedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FriendRequestAcceptedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("Accepter", "FriendInformation", parser.GetAccepter());
 
 				return hr;
 
-			}; // Result FriendRequestAcceptedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FriendRequestAcceptedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FriendRequestAcceptedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FriendRequestAcceptedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FriendRequestAcceptedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FriendRequestAcceptedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FriendRequestAcceptedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FriendRequestAcceptedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FriendRequestAcceptedS2CEvt::Create( IHeap& memHeap, const FriendInformation &InAccepter )
@@ -1421,25 +1421,25 @@ namespace SF
 				return hr;
 			}; // MessageData* FriendRequestAcceptedS2CEvt::Create( IHeap& memHeap, const FriendInformation &InAccepter )
 
-			Result FriendRequestAcceptedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FriendRequestAcceptedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FriendRequestAcceptedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FriendRequestAccepted, {0}:{1} , Accepter:{2}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetAccepter()); 
+						prefix, pHeader->Length, parser.GetAccepter()); 
 				return ResultCode::SUCCESS;
-			}; // Result FriendRequestAcceptedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FriendRequestAcceptedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Remove friden form the friend list
 			const MessageID RemoveFriendCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 9);
-			Result RemoveFriendCmd::ParseMessage(const MessageData* pIMsg)
+			Result RemoveFriendCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1449,33 +1449,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result RemoveFriendCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result RemoveFriendCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result RemoveFriendCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RemoveFriendCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RemoveFriendCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("FriendID", parser.GetFriendID());
 
 				return hr;
 
-			}; // Result RemoveFriendCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RemoveFriendCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RemoveFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RemoveFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RemoveFriendCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RemoveFriendCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RemoveFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RemoveFriendCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RemoveFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
@@ -1508,24 +1508,24 @@ namespace SF
 				return hr;
 			}; // MessageData* RemoveFriendCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID )
 
-			Result RemoveFriendCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RemoveFriendCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RemoveFriendCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::RemoveFriend, {0}:{1} , TransactionID:{2}, FriendID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetFriendID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetFriendID()); 
 				return ResultCode::SUCCESS;
-			}; // Result RemoveFriendCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RemoveFriendCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID RemoveFriendRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 9);
-			Result RemoveFriendRes::ParseMessage(const MessageData* pIMsg)
+			Result RemoveFriendRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1536,15 +1536,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result RemoveFriendRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result RemoveFriendRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result RemoveFriendRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RemoveFriendRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RemoveFriendRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -1552,18 +1552,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result RemoveFriendRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RemoveFriendRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RemoveFriendRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RemoveFriendRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RemoveFriendRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RemoveFriendRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RemoveFriendRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RemoveFriendRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RemoveFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
@@ -1598,25 +1598,25 @@ namespace SF
 				return hr;
 			}; // MessageData* RemoveFriendRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID )
 
-			Result RemoveFriendRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RemoveFriendRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RemoveFriendRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::RemoveFriend, {0}:{1} , TransactionID:{2}, Result:{3:X8}, FriendID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetFriendID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetFriendID()); 
 				return ResultCode::SUCCESS;
-			}; // Result RemoveFriendRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RemoveFriendRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Friend removed
 			const MessageID FriendRemovedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 10);
-			Result FriendRemovedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result FriendRemovedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1625,32 +1625,32 @@ namespace SF
 
 				return hr;
 
-			}; // Result FriendRemovedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result FriendRemovedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result FriendRemovedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FriendRemovedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FriendRemovedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("FriendID", parser.GetFriendID());
 
 				return hr;
 
-			}; // Result FriendRemovedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FriendRemovedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FriendRemovedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FriendRemovedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FriendRemovedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FriendRemovedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FriendRemovedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FriendRemovedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FriendRemovedS2CEvt::Create( IHeap& memHeap, const AccountID &InFriendID )
@@ -1681,25 +1681,25 @@ namespace SF
 				return hr;
 			}; // MessageData* FriendRemovedS2CEvt::Create( IHeap& memHeap, const AccountID &InFriendID )
 
-			Result FriendRemovedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FriendRemovedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FriendRemovedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FriendRemoved, {0}:{1} , FriendID:{2}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetFriendID()); 
+						prefix, pHeader->Length, parser.GetFriendID()); 
 				return ResultCode::SUCCESS;
-			}; // Result FriendRemovedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FriendRemovedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Get friend list
 			const MessageID GetFriendListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 11);
-			Result GetFriendListCmd::ParseMessage(const MessageData* pIMsg)
+			Result GetFriendListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1710,15 +1710,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetFriendListCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetFriendListCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetFriendListCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetFriendListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetFriendListCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("StartIndex", parser.GetStartIndex());
@@ -1726,18 +1726,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetFriendListCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetFriendListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetFriendListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetFriendListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetFriendListCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetFriendListCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetFriendListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetFriendListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetFriendListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
@@ -1772,24 +1772,24 @@ namespace SF
 				return hr;
 			}; // MessageData* GetFriendListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount )
 
-			Result GetFriendListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetFriendListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetFriendListCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetFriendList, {0}:{1} , TransactionID:{2}, StartIndex:{3}, Count:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetStartIndex(), parser.GetCount()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetStartIndex(), parser.GetCount()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetFriendListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetFriendListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID GetFriendListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 11);
-			Result GetFriendListRes::ParseMessage(const MessageData* pIMsg)
+			Result GetFriendListRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1806,15 +1806,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetFriendListRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetFriendListRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetFriendListRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetFriendListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetFriendListRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -1825,18 +1825,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetFriendListRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetFriendListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetFriendListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetFriendListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetFriendListRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetFriendListRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetFriendListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetFriendListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetFriendListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
@@ -1877,25 +1877,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GetFriendListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList )
 
-			Result GetFriendListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetFriendListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetFriendListRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetFriendList, {0}:{1} , TransactionID:{2}, Result:{3:X8}, MaxFriendSlot:{4}, TotalNumberOfFriends:{5}, StartIndex:{6}, FriendList:{7,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetMaxFriendSlot(), parser.GetTotalNumberOfFriends(), parser.GetStartIndex(), parser.GetFriendList()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetMaxFriendSlot(), parser.GetTotalNumberOfFriends(), parser.GetStartIndex(), parser.GetFriendList()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetFriendListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetFriendListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Query notification list
 			const MessageID GetNotificationListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 12);
-			Result GetNotificationListCmd::ParseMessage(const MessageData* pIMsg)
+			Result GetNotificationListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1904,32 +1904,32 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetNotificationListCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetNotificationListCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetNotificationListCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetNotificationListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetNotificationListCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 
 				return hr;
 
-			}; // Result GetNotificationListCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetNotificationListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetNotificationListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetNotificationListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetNotificationListCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetNotificationListCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetNotificationListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetNotificationListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetNotificationListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
@@ -1960,24 +1960,24 @@ namespace SF
 				return hr;
 			}; // MessageData* GetNotificationListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
-			Result GetNotificationListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetNotificationListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetNotificationListCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetNotificationList, {0}:{1} , TransactionID:{2}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID()); 
+						prefix, pHeader->Length, parser.GetTransactionID()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetNotificationListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetNotificationListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID GetNotificationListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 12);
-			Result GetNotificationListRes::ParseMessage(const MessageData* pIMsg)
+			Result GetNotificationListRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1987,33 +1987,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetNotificationListRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetNotificationListRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetNotificationListRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetNotificationListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetNotificationListRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result GetNotificationListRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetNotificationListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetNotificationListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetNotificationListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetNotificationListRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetNotificationListRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetNotificationListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetNotificationListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetNotificationListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -2046,25 +2046,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GetNotificationListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result GetNotificationListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetNotificationListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetNotificationListRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetNotificationList, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetNotificationListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetNotificationListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Delete notification
 			const MessageID DeleteNotificationCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 13);
-			Result DeleteNotificationCmd::ParseMessage(const MessageData* pIMsg)
+			Result DeleteNotificationCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2074,33 +2074,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteNotificationCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result DeleteNotificationCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result DeleteNotificationCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result DeleteNotificationCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				DeleteNotificationCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("NotificationID", parser.GetNotificationID());
 
 				return hr;
 
-			}; // Result DeleteNotificationCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result DeleteNotificationCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result DeleteNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result DeleteNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) DeleteNotificationCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) DeleteNotificationCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result DeleteNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result DeleteNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* DeleteNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
@@ -2133,24 +2133,24 @@ namespace SF
 				return hr;
 			}; // MessageData* DeleteNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
-			Result DeleteNotificationCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result DeleteNotificationCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				DeleteNotificationCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::DeleteNotification, {0}:{1} , TransactionID:{2}, NotificationID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetNotificationID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetNotificationID()); 
 				return ResultCode::SUCCESS;
-			}; // Result DeleteNotificationCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result DeleteNotificationCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID DeleteNotificationRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 13);
-			Result DeleteNotificationRes::ParseMessage(const MessageData* pIMsg)
+			Result DeleteNotificationRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2161,15 +2161,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteNotificationRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result DeleteNotificationRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result DeleteNotificationRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result DeleteNotificationRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				DeleteNotificationRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -2177,18 +2177,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteNotificationRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result DeleteNotificationRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result DeleteNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result DeleteNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) DeleteNotificationRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) DeleteNotificationRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result DeleteNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result DeleteNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* DeleteNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
@@ -2223,25 +2223,25 @@ namespace SF
 				return hr;
 			}; // MessageData* DeleteNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
-			Result DeleteNotificationRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result DeleteNotificationRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				DeleteNotificationRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::DeleteNotification, {0}:{1} , TransactionID:{2}, Result:{3:X8}, NotificationID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetNotificationID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetNotificationID()); 
 				return ResultCode::SUCCESS;
-			}; // Result DeleteNotificationRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result DeleteNotificationRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Set notification is read
 			const MessageID SetNotificationReadCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 14);
-			Result SetNotificationReadCmd::ParseMessage(const MessageData* pIMsg)
+			Result SetNotificationReadCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2251,33 +2251,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNotificationReadCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result SetNotificationReadCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result SetNotificationReadCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SetNotificationReadCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SetNotificationReadCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("NotificationID", parser.GetNotificationID());
 
 				return hr;
 
-			}; // Result SetNotificationReadCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SetNotificationReadCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SetNotificationReadCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SetNotificationReadCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SetNotificationReadCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SetNotificationReadCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SetNotificationReadCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SetNotificationReadCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* SetNotificationReadCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
@@ -2310,24 +2310,24 @@ namespace SF
 				return hr;
 			}; // MessageData* SetNotificationReadCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
-			Result SetNotificationReadCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SetNotificationReadCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SetNotificationReadCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::SetNotificationRead, {0}:{1} , TransactionID:{2}, NotificationID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetNotificationID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetNotificationID()); 
 				return ResultCode::SUCCESS;
-			}; // Result SetNotificationReadCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SetNotificationReadCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID SetNotificationReadRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 14);
-			Result SetNotificationReadRes::ParseMessage(const MessageData* pIMsg)
+			Result SetNotificationReadRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2338,15 +2338,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNotificationReadRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result SetNotificationReadRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result SetNotificationReadRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SetNotificationReadRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SetNotificationReadRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -2354,18 +2354,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNotificationReadRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SetNotificationReadRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SetNotificationReadRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SetNotificationReadRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SetNotificationReadRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SetNotificationReadRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SetNotificationReadRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SetNotificationReadRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* SetNotificationReadRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
@@ -2400,25 +2400,25 @@ namespace SF
 				return hr;
 			}; // MessageData* SetNotificationReadRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
-			Result SetNotificationReadRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SetNotificationReadRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SetNotificationReadRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::SetNotificationRead, {0}:{1} , TransactionID:{2}, Result:{3:X8}, NotificationID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetNotificationID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetNotificationID()); 
 				return ResultCode::SUCCESS;
-			}; // Result SetNotificationReadRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SetNotificationReadRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Accept notification
 			const MessageID AcceptNotificationCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 15);
-			Result AcceptNotificationCmd::ParseMessage(const MessageData* pIMsg)
+			Result AcceptNotificationCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2428,33 +2428,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptNotificationCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result AcceptNotificationCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result AcceptNotificationCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result AcceptNotificationCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				AcceptNotificationCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("NotificationID", parser.GetNotificationID());
 
 				return hr;
 
-			}; // Result AcceptNotificationCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result AcceptNotificationCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result AcceptNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result AcceptNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) AcceptNotificationCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) AcceptNotificationCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result AcceptNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result AcceptNotificationCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* AcceptNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
@@ -2487,24 +2487,24 @@ namespace SF
 				return hr;
 			}; // MessageData* AcceptNotificationCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID )
 
-			Result AcceptNotificationCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result AcceptNotificationCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				AcceptNotificationCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::AcceptNotification, {0}:{1} , TransactionID:{2}, NotificationID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetNotificationID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetNotificationID()); 
 				return ResultCode::SUCCESS;
-			}; // Result AcceptNotificationCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result AcceptNotificationCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID AcceptNotificationRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 15);
-			Result AcceptNotificationRes::ParseMessage(const MessageData* pIMsg)
+			Result AcceptNotificationRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2515,15 +2515,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptNotificationRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result AcceptNotificationRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result AcceptNotificationRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result AcceptNotificationRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				AcceptNotificationRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -2531,18 +2531,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result AcceptNotificationRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result AcceptNotificationRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result AcceptNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result AcceptNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) AcceptNotificationRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) AcceptNotificationRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result AcceptNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result AcceptNotificationRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* AcceptNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
@@ -2577,14 +2577,14 @@ namespace SF
 				return hr;
 			}; // MessageData* AcceptNotificationRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID )
 
-			Result AcceptNotificationRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result AcceptNotificationRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				AcceptNotificationRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::AcceptNotification, {0}:{1} , TransactionID:{2}, Result:{3:X8}, NotificationID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetNotificationID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetNotificationID()); 
 				return ResultCode::SUCCESS;
-			}; // Result AcceptNotificationRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result AcceptNotificationRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Notify new notification
 			const MessageID NotifyS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 16);
@@ -2598,14 +2598,14 @@ namespace SF
 				} // if (!m_ParametersHasParsed)
 				return m_Parameters;
 			} // const VariableTable& NotifyS2CEvt::GetParameters() const
-			Result NotifyS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result NotifyS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2621,15 +2621,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result NotifyS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result NotifyS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result NotifyS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result NotifyS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				NotifyS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("NotificationID", parser.GetNotificationID());
 				variableBuilder.SetVariable("NotificationType", parser.GetNotificationType());
@@ -2639,18 +2639,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result NotifyS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result NotifyS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result NotifyS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result NotifyS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) NotifyS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) NotifyS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result NotifyS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result NotifyS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 			{
@@ -2728,25 +2728,25 @@ namespace SF
 				return hr;
 			}; // MessageData* NotifyS2CEvt::Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp )
 
-			Result NotifyS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result NotifyS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				NotifyS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::Notify, {0}:{1} , NotificationID:{2}, NotificationType:{3}, Parameters:{4}, IsRead:{5}, TimeStamp:{6}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetNotificationID(), parser.GetNotificationType(), parser.GetParameters(), parser.GetIsRead(), parser.GetTimeStamp()); 
+						prefix, pHeader->Length, parser.GetNotificationID(), parser.GetNotificationType(), parser.GetParameters(), parser.GetIsRead(), parser.GetTimeStamp()); 
 				return ResultCode::SUCCESS;
-			}; // Result NotifyS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result NotifyS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: PlayerId Conversion
 			const MessageID FindPlayerByPlatformIdCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 17);
-			Result FindPlayerByPlatformIdCmd::ParseMessage(const MessageData* pIMsg)
+			Result FindPlayerByPlatformIdCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2756,33 +2756,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformIdCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindPlayerByPlatformIdCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindPlayerByPlatformIdCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindPlayerByPlatformIdCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindPlayerByPlatformIdCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PlatformPlayerId", "PlayerPlatformID", parser.GetPlatformPlayerId());
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformIdCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindPlayerByPlatformIdCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindPlayerByPlatformIdCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindPlayerByPlatformIdCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformIdCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformIdCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformIdCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindPlayerByPlatformIdCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindPlayerByPlatformIdCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
@@ -2815,24 +2815,24 @@ namespace SF
 				return hr;
 			}; // MessageData* FindPlayerByPlatformIdCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId )
 
-			Result FindPlayerByPlatformIdCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindPlayerByPlatformIdCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindPlayerByPlatformIdCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FindPlayerByPlatformId, {0}:{1} , TransactionID:{2}, PlatformPlayerId:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlatformPlayerId()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlatformPlayerId()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindPlayerByPlatformIdCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindPlayerByPlatformIdCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID FindPlayerByPlatformIdRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 17);
-			Result FindPlayerByPlatformIdRes::ParseMessage(const MessageData* pIMsg)
+			Result FindPlayerByPlatformIdRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2844,15 +2844,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformIdRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindPlayerByPlatformIdRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindPlayerByPlatformIdRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindPlayerByPlatformIdRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindPlayerByPlatformIdRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -2861,18 +2861,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformIdRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindPlayerByPlatformIdRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindPlayerByPlatformIdRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindPlayerByPlatformIdRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformIdRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformIdRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformIdRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindPlayerByPlatformIdRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindPlayerByPlatformIdRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
@@ -2909,25 +2909,25 @@ namespace SF
 				return hr;
 			}; // MessageData* FindPlayerByPlatformIdRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
 
-			Result FindPlayerByPlatformIdRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindPlayerByPlatformIdRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindPlayerByPlatformIdRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FindPlayerByPlatformId, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayerId:{4}, PlayerPlatformId:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerId(), parser.GetPlayerPlatformId()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerId(), parser.GetPlayerPlatformId()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindPlayerByPlatformIdRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindPlayerByPlatformIdRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: PlayerId conversion
 			const MessageID FindPlayerByCharacterNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 18);
-			Result FindPlayerByCharacterNameCmd::ParseMessage(const MessageData* pIMsg)
+			Result FindPlayerByCharacterNameCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2938,33 +2938,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByCharacterNameCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindPlayerByCharacterNameCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindPlayerByCharacterNameCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindPlayerByCharacterNameCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindPlayerByCharacterNameCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("CharacterName", parser.GetCharacterName());
 
 				return hr;
 
-			}; // Result FindPlayerByCharacterNameCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindPlayerByCharacterNameCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindPlayerByCharacterNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindPlayerByCharacterNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByCharacterNameCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByCharacterNameCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindPlayerByCharacterNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindPlayerByCharacterNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindPlayerByCharacterNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName )
@@ -2997,24 +2997,24 @@ namespace SF
 				return hr;
 			}; // MessageData* FindPlayerByCharacterNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName )
 
-			Result FindPlayerByCharacterNameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindPlayerByCharacterNameCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindPlayerByCharacterNameCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FindPlayerByCharacterName, {0}:{1} , TransactionID:{2}, CharacterName:{3,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetCharacterName()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetCharacterName()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindPlayerByCharacterNameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindPlayerByCharacterNameCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID FindPlayerByCharacterNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 18);
-			Result FindPlayerByCharacterNameRes::ParseMessage(const MessageData* pIMsg)
+			Result FindPlayerByCharacterNameRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3025,15 +3025,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByCharacterNameRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindPlayerByCharacterNameRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindPlayerByCharacterNameRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindPlayerByCharacterNameRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindPlayerByCharacterNameRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -3041,18 +3041,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByCharacterNameRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindPlayerByCharacterNameRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindPlayerByCharacterNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindPlayerByCharacterNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByCharacterNameRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByCharacterNameRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindPlayerByCharacterNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindPlayerByCharacterNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindPlayerByCharacterNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId )
@@ -3087,25 +3087,25 @@ namespace SF
 				return hr;
 			}; // MessageData* FindPlayerByCharacterNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId )
 
-			Result FindPlayerByCharacterNameRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindPlayerByCharacterNameRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindPlayerByCharacterNameRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FindPlayerByCharacterName, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayerId:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerId()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerId()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindPlayerByCharacterNameRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindPlayerByCharacterNameRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: PlayerId Conversion
 			const MessageID FindPlayerByPlatformUserNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 19);
-			Result FindPlayerByPlatformUserNameCmd::ParseMessage(const MessageData* pIMsg)
+			Result FindPlayerByPlatformUserNameCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3117,15 +3117,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformUserNameCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindPlayerByPlatformUserNameCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindPlayerByPlatformUserNameCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindPlayerByPlatformUserNameCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindPlayerByPlatformUserNameCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PlatformType", parser.GetPlatformType());
@@ -3133,18 +3133,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformUserNameCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindPlayerByPlatformUserNameCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindPlayerByPlatformUserNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindPlayerByPlatformUserNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformUserNameCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformUserNameCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformUserNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindPlayerByPlatformUserNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindPlayerByPlatformUserNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName )
@@ -3179,24 +3179,24 @@ namespace SF
 				return hr;
 			}; // MessageData* FindPlayerByPlatformUserNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName )
 
-			Result FindPlayerByPlatformUserNameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindPlayerByPlatformUserNameCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindPlayerByPlatformUserNameCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FindPlayerByPlatformUserName, {0}:{1} , TransactionID:{2}, PlatformType:{3}, PlatformUserName:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlatformType(), parser.GetPlatformUserName()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlatformType(), parser.GetPlatformUserName()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindPlayerByPlatformUserNameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindPlayerByPlatformUserNameCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID FindPlayerByPlatformUserNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 19);
-			Result FindPlayerByPlatformUserNameRes::ParseMessage(const MessageData* pIMsg)
+			Result FindPlayerByPlatformUserNameRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3208,15 +3208,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformUserNameRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindPlayerByPlatformUserNameRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindPlayerByPlatformUserNameRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindPlayerByPlatformUserNameRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindPlayerByPlatformUserNameRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -3225,18 +3225,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformUserNameRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindPlayerByPlatformUserNameRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindPlayerByPlatformUserNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindPlayerByPlatformUserNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformUserNameRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlatformUserNameRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindPlayerByPlatformUserNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindPlayerByPlatformUserNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindPlayerByPlatformUserNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
@@ -3273,25 +3273,25 @@ namespace SF
 				return hr;
 			}; // MessageData* FindPlayerByPlatformUserNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId )
 
-			Result FindPlayerByPlatformUserNameRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindPlayerByPlatformUserNameRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindPlayerByPlatformUserNameRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FindPlayerByPlatformUserName, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayerId:{4}, PlayerPlatformId:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerId(), parser.GetPlayerPlatformId()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerId(), parser.GetPlayerPlatformId()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindPlayerByPlatformUserNameRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindPlayerByPlatformUserNameRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Query playerID list
 			const MessageID FindPlayerByEMailCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 20);
-			Result FindPlayerByEMailCmd::ParseMessage(const MessageData* pIMsg)
+			Result FindPlayerByEMailCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3302,33 +3302,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByEMailCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindPlayerByEMailCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindPlayerByEMailCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindPlayerByEMailCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindPlayerByEMailCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PlayerEMail", parser.GetPlayerEMail());
 
 				return hr;
 
-			}; // Result FindPlayerByEMailCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindPlayerByEMailCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindPlayerByEMailCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindPlayerByEMailCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByEMailCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByEMailCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindPlayerByEMailCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindPlayerByEMailCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindPlayerByEMailCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InPlayerEMail )
@@ -3361,24 +3361,24 @@ namespace SF
 				return hr;
 			}; // MessageData* FindPlayerByEMailCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InPlayerEMail )
 
-			Result FindPlayerByEMailCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindPlayerByEMailCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindPlayerByEMailCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FindPlayerByEMail, {0}:{1} , TransactionID:{2}, PlayerEMail:{3,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayerEMail()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayerEMail()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindPlayerByEMailCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindPlayerByEMailCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID FindPlayerByEMailRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 20);
-			Result FindPlayerByEMailRes::ParseMessage(const MessageData* pIMsg)
+			Result FindPlayerByEMailRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3389,15 +3389,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByEMailRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindPlayerByEMailRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindPlayerByEMailRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindPlayerByEMailRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindPlayerByEMailRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -3405,18 +3405,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByEMailRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindPlayerByEMailRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindPlayerByEMailRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindPlayerByEMailRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByEMailRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByEMailRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindPlayerByEMailRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindPlayerByEMailRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindPlayerByEMailRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
@@ -3451,25 +3451,25 @@ namespace SF
 				return hr;
 			}; // MessageData* FindPlayerByEMailRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 
-			Result FindPlayerByEMailRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindPlayerByEMailRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindPlayerByEMailRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FindPlayerByEMail, {0}:{1} , TransactionID:{2}, Result:{3:X8}, Player:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayer()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayer()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindPlayerByEMailRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindPlayerByEMailRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Query playerID list
 			const MessageID FindPlayerByPlayerIDCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 21);
-			Result FindPlayerByPlayerIDCmd::ParseMessage(const MessageData* pIMsg)
+			Result FindPlayerByPlayerIDCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3479,33 +3479,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlayerIDCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindPlayerByPlayerIDCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindPlayerByPlayerIDCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindPlayerByPlayerIDCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindPlayerByPlayerIDCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 
 				return hr;
 
-			}; // Result FindPlayerByPlayerIDCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindPlayerByPlayerIDCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindPlayerByPlayerIDCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindPlayerByPlayerIDCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlayerIDCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlayerIDCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindPlayerByPlayerIDCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindPlayerByPlayerIDCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindPlayerByPlayerIDCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
@@ -3538,24 +3538,24 @@ namespace SF
 				return hr;
 			}; // MessageData* FindPlayerByPlayerIDCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 
-			Result FindPlayerByPlayerIDCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindPlayerByPlayerIDCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindPlayerByPlayerIDCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FindPlayerByPlayerID, {0}:{1} , TransactionID:{2}, PlayerID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayerID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindPlayerByPlayerIDCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindPlayerByPlayerIDCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID FindPlayerByPlayerIDRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 21);
-			Result FindPlayerByPlayerIDRes::ParseMessage(const MessageData* pIMsg)
+			Result FindPlayerByPlayerIDRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3566,15 +3566,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlayerIDRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindPlayerByPlayerIDRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindPlayerByPlayerIDRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindPlayerByPlayerIDRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindPlayerByPlayerIDRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -3582,18 +3582,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindPlayerByPlayerIDRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindPlayerByPlayerIDRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindPlayerByPlayerIDRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindPlayerByPlayerIDRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlayerIDRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindPlayerByPlayerIDRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindPlayerByPlayerIDRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindPlayerByPlayerIDRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindPlayerByPlayerIDRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
@@ -3628,25 +3628,25 @@ namespace SF
 				return hr;
 			}; // MessageData* FindPlayerByPlayerIDRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer )
 
-			Result FindPlayerByPlayerIDRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindPlayerByPlayerIDRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindPlayerByPlayerIDRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::FindPlayerByPlayerID, {0}:{1} , TransactionID:{2}, Result:{3:X8}, Player:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayer()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayer()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindPlayerByPlayerIDRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindPlayerByPlayerIDRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: *Request Player Status Update
 			const MessageID RequestPlayerStatusUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 22);
-			Result RequestPlayerStatusUpdateCmd::ParseMessage(const MessageData* pIMsg)
+			Result RequestPlayerStatusUpdateCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3659,33 +3659,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestPlayerStatusUpdateCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result RequestPlayerStatusUpdateCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result RequestPlayerStatusUpdateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RequestPlayerStatusUpdateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RequestPlayerStatusUpdateCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("TargetPlayerID", parser.GetTargetPlayerID());
 
 				return hr;
 
-			}; // Result RequestPlayerStatusUpdateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RequestPlayerStatusUpdateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RequestPlayerStatusUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RequestPlayerStatusUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RequestPlayerStatusUpdateCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RequestPlayerStatusUpdateCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RequestPlayerStatusUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RequestPlayerStatusUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RequestPlayerStatusUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
@@ -3718,24 +3718,24 @@ namespace SF
 				return hr;
 			}; // MessageData* RequestPlayerStatusUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID )
 
-			Result RequestPlayerStatusUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RequestPlayerStatusUpdateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RequestPlayerStatusUpdateCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::RequestPlayerStatusUpdate, {0}:{1} , TransactionID:{2}, TargetPlayerID:{3,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTargetPlayerID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTargetPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result RequestPlayerStatusUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RequestPlayerStatusUpdateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID RequestPlayerStatusUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 22);
-			Result RequestPlayerStatusUpdateRes::ParseMessage(const MessageData* pIMsg)
+			Result RequestPlayerStatusUpdateRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3745,33 +3745,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestPlayerStatusUpdateRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result RequestPlayerStatusUpdateRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result RequestPlayerStatusUpdateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RequestPlayerStatusUpdateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RequestPlayerStatusUpdateRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result RequestPlayerStatusUpdateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RequestPlayerStatusUpdateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RequestPlayerStatusUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RequestPlayerStatusUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RequestPlayerStatusUpdateRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RequestPlayerStatusUpdateRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RequestPlayerStatusUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RequestPlayerStatusUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RequestPlayerStatusUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -3804,25 +3804,25 @@ namespace SF
 				return hr;
 			}; // MessageData* RequestPlayerStatusUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result RequestPlayerStatusUpdateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RequestPlayerStatusUpdateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RequestPlayerStatusUpdateRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::RequestPlayerStatusUpdate, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result RequestPlayerStatusUpdateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RequestPlayerStatusUpdateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: *Notify Player Status Updated
 			const MessageID NotifyPlayerStatusUpdatedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 23);
-			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3833,15 +3833,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				NotifyPlayerStatusUpdatedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 				variableBuilder.SetVariable("LatestActiveTime", parser.GetLatestActiveTime());
@@ -3849,18 +3849,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) NotifyPlayerStatusUpdatedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) NotifyPlayerStatusUpdatedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result NotifyPlayerStatusUpdatedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* NotifyPlayerStatusUpdatedS2CEvt::Create( IHeap& memHeap, const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
@@ -3895,25 +3895,25 @@ namespace SF
 				return hr;
 			}; // MessageData* NotifyPlayerStatusUpdatedS2CEvt::Create( IHeap& memHeap, const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame )
 
-			Result NotifyPlayerStatusUpdatedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result NotifyPlayerStatusUpdatedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				NotifyPlayerStatusUpdatedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::NotifyPlayerStatusUpdated, {0}:{1} , PlayerID:{2}, LatestActiveTime:{3}, IsInGame:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayerID(), parser.GetLatestActiveTime(), parser.GetIsInGame()); 
+						prefix, pHeader->Length, parser.GetPlayerID(), parser.GetLatestActiveTime(), parser.GetIsInGame()); 
 				return ResultCode::SUCCESS;
-			}; // Result NotifyPlayerStatusUpdatedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result NotifyPlayerStatusUpdatedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Get Ranking list
 			const MessageID GetRankingListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 24);
-			Result GetRankingListCmd::ParseMessage(const MessageData* pIMsg)
+			Result GetRankingListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3925,15 +3925,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetRankingListCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetRankingListCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetRankingListCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetRankingListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetRankingListCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("RankingType", parser.GetRankingType());
@@ -3942,18 +3942,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetRankingListCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetRankingListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetRankingListCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetRankingListCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
@@ -3990,24 +3990,24 @@ namespace SF
 				return hr;
 			}; // MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 
-			Result GetRankingListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetRankingListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetRankingListCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetRankingList, {0}:{1} , TransactionID:{2}, RankingType:{3}, BaseRanking:{4}, Count:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetRankingType(), parser.GetBaseRanking(), parser.GetCount()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetRankingType(), parser.GetBaseRanking(), parser.GetCount()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetRankingListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetRankingListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID GetRankingListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 24);
-			Result GetRankingListRes::ParseMessage(const MessageData* pIMsg)
+			Result GetRankingListRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -4021,15 +4021,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetRankingListRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetRankingListRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetRankingListRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetRankingListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetRankingListRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -4037,18 +4037,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetRankingListRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetRankingListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetRankingListRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetRankingListRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
@@ -4083,25 +4083,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 
-			Result GetRankingListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetRankingListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetRankingListRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetRankingList, {0}:{1} , TransactionID:{2}, Result:{3:X8}, Ranking:{4,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetRanking()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetRanking()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetRankingListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetRankingListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Game user game play information
 			const MessageID GetUserGamePlayerInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 25);
-			Result GetUserGamePlayerInfoCmd::ParseMessage(const MessageData* pIMsg)
+			Result GetUserGamePlayerInfoCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -4110,32 +4110,32 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetUserGamePlayerInfoCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetUserGamePlayerInfoCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetUserGamePlayerInfoCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetUserGamePlayerInfoCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetUserGamePlayerInfoCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 
 				return hr;
 
-			}; // Result GetUserGamePlayerInfoCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetUserGamePlayerInfoCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetUserGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetUserGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetUserGamePlayerInfoCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetUserGamePlayerInfoCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetUserGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetUserGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetUserGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
@@ -4166,14 +4166,14 @@ namespace SF
 				return hr;
 			}; // MessageData* GetUserGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
-			Result GetUserGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetUserGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetUserGamePlayerInfoCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetUserGamePlayerInfo, {0}:{1} , TransactionID:{2}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID()); 
+						prefix, pHeader->Length, parser.GetTransactionID()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetUserGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetUserGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID GetUserGamePlayerInfoRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 25);
 			const VariableTable& GetUserGamePlayerInfoRes::GetAttributes() const
@@ -4186,14 +4186,14 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& GetUserGamePlayerInfoRes::GetAttributes() const
-			Result GetUserGamePlayerInfoRes::ParseMessage(const MessageData* pIMsg)
+			Result GetUserGamePlayerInfoRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -4207,15 +4207,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetUserGamePlayerInfoRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetUserGamePlayerInfoRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetUserGamePlayerInfoRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetUserGamePlayerInfoRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetUserGamePlayerInfoRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -4223,18 +4223,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetUserGamePlayerInfoRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetUserGamePlayerInfoRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetUserGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetUserGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetUserGamePlayerInfoRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetUserGamePlayerInfoRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetUserGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetUserGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes )
 			{
@@ -4304,25 +4304,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GetUserGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes )
 
-			Result GetUserGamePlayerInfoRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetUserGamePlayerInfoRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetUserGamePlayerInfoRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetUserGamePlayerInfo, {0}:{1} , TransactionID:{2}, Result:{3:X8}, Attributes:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetAttributes()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetAttributes()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetUserGamePlayerInfoRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetUserGamePlayerInfoRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Game game play information
 			const MessageID GetGamePlayerInfoCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 26);
-			Result GetGamePlayerInfoCmd::ParseMessage(const MessageData* pIMsg)
+			Result GetGamePlayerInfoCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -4332,33 +4332,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetGamePlayerInfoCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetGamePlayerInfoCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetGamePlayerInfoCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetGamePlayerInfoCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetGamePlayerInfoCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
 
 				return hr;
 
-			}; // Result GetGamePlayerInfoCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetGamePlayerInfoCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetGamePlayerInfoCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetGamePlayerInfoCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetGamePlayerInfoCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
@@ -4391,14 +4391,14 @@ namespace SF
 				return hr;
 			}; // MessageData* GetGamePlayerInfoCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID )
 
-			Result GetGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetGamePlayerInfoCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetGamePlayerInfo, {0}:{1} , TransactionID:{2}, PlayerID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayerID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetGamePlayerInfoCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID GetGamePlayerInfoRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 26);
 			const VariableTable& GetGamePlayerInfoRes::GetAttributes() const
@@ -4411,14 +4411,14 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& GetGamePlayerInfoRes::GetAttributes() const
-			Result GetGamePlayerInfoRes::ParseMessage(const MessageData* pIMsg)
+			Result GetGamePlayerInfoRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -4433,15 +4433,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetGamePlayerInfoRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetGamePlayerInfoRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetGamePlayerInfoRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetGamePlayerInfoRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetGamePlayerInfoRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -4450,18 +4450,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetGamePlayerInfoRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetGamePlayerInfoRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetGamePlayerInfoRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetGamePlayerInfoRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetGamePlayerInfoRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes )
 			{
@@ -4535,25 +4535,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GetGamePlayerInfoRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes )
 
-			Result GetGamePlayerInfoRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetGamePlayerInfoRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetGamePlayerInfoRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetGamePlayerInfo, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayerID:{4}, Attributes:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerID(), parser.GetAttributes()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerID(), parser.GetAttributes()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetGamePlayerInfoRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetGamePlayerInfoRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player level up event
 			const MessageID LevelUpS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 27);
-			Result LevelUpS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result LevelUpS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -4563,33 +4563,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result LevelUpS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result LevelUpS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result LevelUpS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result LevelUpS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				LevelUpS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("CurrentTotalExp", parser.GetCurrentTotalExp());
 				variableBuilder.SetVariable("CurrentLevel", parser.GetCurrentLevel());
 
 				return hr;
 
-			}; // Result LevelUpS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result LevelUpS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) LevelUpS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) LevelUpS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* LevelUpS2CEvt::Create( IHeap& memHeap, const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
@@ -4622,25 +4622,25 @@ namespace SF
 				return hr;
 			}; // MessageData* LevelUpS2CEvt::Create( IHeap& memHeap, const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel )
 
-			Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				LevelUpS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::LevelUp, {0}:{1} , CurrentTotalExp:{2}, CurrentLevel:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetCurrentTotalExp(), parser.GetCurrentLevel()); 
+						prefix, pHeader->Length, parser.GetCurrentTotalExp(), parser.GetCurrentLevel()); 
 				return ResultCode::SUCCESS;
-			}; // Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Change NickName
 			const MessageID SetNickNameCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 28);
-			Result SetNickNameCmd::ParseMessage(const MessageData* pIMsg)
+			Result SetNickNameCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -4652,15 +4652,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNickNameCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result SetNickNameCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result SetNickNameCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SetNickNameCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SetNickNameCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("NickName", parser.GetNickName());
@@ -4668,18 +4668,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNickNameCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SetNickNameCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SetNickNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SetNickNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SetNickNameCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SetNickNameCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SetNickNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SetNickNameCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* SetNickNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
@@ -4714,24 +4714,24 @@ namespace SF
 				return hr;
 			}; // MessageData* SetNickNameCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree )
 
-			Result SetNickNameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SetNickNameCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SetNickNameCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::SetNickName, {0}:{1} , TransactionID:{2}, NickName:{3,60}, IsCostFree:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetNickName(), parser.GetIsCostFree()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetNickName(), parser.GetIsCostFree()); 
 				return ResultCode::SUCCESS;
-			}; // Result SetNickNameCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SetNickNameCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID SetNickNameRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 28);
-			Result SetNickNameRes::ParseMessage(const MessageData* pIMsg)
+			Result SetNickNameRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -4743,15 +4743,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNickNameRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result SetNickNameRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result SetNickNameRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SetNickNameRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SetNickNameRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -4760,18 +4760,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result SetNickNameRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SetNickNameRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SetNickNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SetNickNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SetNickNameRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SetNickNameRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SetNickNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SetNickNameRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* SetNickNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
@@ -4808,25 +4808,25 @@ namespace SF
 				return hr;
 			}; // MessageData* SetNickNameRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
-			Result SetNickNameRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SetNickNameRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SetNickNameRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::SetNickName, {0}:{1} , TransactionID:{2}, Result:{3:X8}, TotalGem:{4}, TotalGameMoney:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetTotalGem(), parser.GetTotalGameMoney()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetTotalGem(), parser.GetTotalGameMoney()); 
 				return ResultCode::SUCCESS;
-			}; // Result SetNickNameRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SetNickNameRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Create Party
 			const MessageID CreatePartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 29);
-			Result CreatePartyCmd::ParseMessage(const MessageData* pIMsg)
+			Result CreatePartyCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -4835,32 +4835,32 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreatePartyCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result CreatePartyCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result CreatePartyCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CreatePartyCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CreatePartyCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 
 				return hr;
 
-			}; // Result CreatePartyCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CreatePartyCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CreatePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CreatePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CreatePartyCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CreatePartyCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CreatePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CreatePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* CreatePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
@@ -4891,24 +4891,24 @@ namespace SF
 				return hr;
 			}; // MessageData* CreatePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
-			Result CreatePartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CreatePartyCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CreatePartyCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::CreateParty, {0}:{1} , TransactionID:{2}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID()); 
+						prefix, pHeader->Length, parser.GetTransactionID()); 
 				return ResultCode::SUCCESS;
-			}; // Result CreatePartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CreatePartyCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID CreatePartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 29);
-			Result CreatePartyRes::ParseMessage(const MessageData* pIMsg)
+			Result CreatePartyRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -4919,15 +4919,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreatePartyRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result CreatePartyRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result CreatePartyRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CreatePartyRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CreatePartyRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -4935,18 +4935,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreatePartyRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CreatePartyRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CreatePartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CreatePartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CreatePartyRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CreatePartyRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CreatePartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CreatePartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* CreatePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
@@ -4981,25 +4981,25 @@ namespace SF
 				return hr;
 			}; // MessageData* CreatePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID )
 
-			Result CreatePartyRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CreatePartyRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CreatePartyRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::CreateParty, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PartyUID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPartyUID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPartyUID()); 
 				return ResultCode::SUCCESS;
-			}; // Result CreatePartyRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CreatePartyRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Join party
 			const MessageID JoinPartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 30);
-			Result JoinPartyCmd::ParseMessage(const MessageData* pIMsg)
+			Result JoinPartyCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5010,15 +5010,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinPartyCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinPartyCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result JoinPartyCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinPartyCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				JoinPartyCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PartyUID", parser.GetPartyUID());
@@ -5026,18 +5026,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinPartyCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinPartyCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result JoinPartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinPartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinPartyCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinPartyCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinPartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinPartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* JoinPartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
@@ -5072,24 +5072,24 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinPartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID )
 
-			Result JoinPartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinPartyCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				JoinPartyCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::JoinParty, {0}:{1} , TransactionID:{2}, PartyUID:{3}, InviterID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPartyUID(), parser.GetInviterID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPartyUID(), parser.GetInviterID()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinPartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinPartyCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID JoinPartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 30);
-			Result JoinPartyRes::ParseMessage(const MessageData* pIMsg)
+			Result JoinPartyRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5105,15 +5105,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinPartyRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinPartyRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result JoinPartyRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinPartyRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				JoinPartyRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -5123,18 +5123,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinPartyRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinPartyRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result JoinPartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinPartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinPartyRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinPartyRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinPartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinPartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* JoinPartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
@@ -5173,25 +5173,25 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinPartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData )
 
-			Result JoinPartyRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinPartyRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				JoinPartyRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::JoinParty, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PartyUID:{4}, PartyLeaderID:{5}, ChatHistoryData:{6,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPartyUID(), parser.GetPartyLeaderID(), parser.GetChatHistoryData()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPartyUID(), parser.GetPartyLeaderID(), parser.GetChatHistoryData()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinPartyRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinPartyRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player Joined event
 			const MessageID PartyPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 31);
-			Result PartyPlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result PartyPlayerJoinedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5201,33 +5201,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyPlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyPlayerJoinedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyPlayerJoinedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyPlayerJoinedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyPlayerJoinedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PartyUID", parser.GetPartyUID());
 				variableBuilder.SetVariable("JoinedPlayer", "PlayerInformation", parser.GetJoinedPlayer());
 
 				return hr;
 
-			}; // Result PartyPlayerJoinedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyPlayerJoinedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyPlayerJoinedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyPlayerJoinedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyPlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
@@ -5260,25 +5260,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyPlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer )
 
-			Result PartyPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyPlayerJoinedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyPlayerJoined, {0}:{1} , PartyUID:{2}, JoinedPlayer:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPartyUID(), parser.GetJoinedPlayer()); 
+						prefix, pHeader->Length, parser.GetPartyUID(), parser.GetJoinedPlayer()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Party leader changed event
 			const MessageID PartyLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 32);
-			Result PartyLeaderChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result PartyLeaderChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5288,33 +5288,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyLeaderChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyLeaderChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyLeaderChangedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyLeaderChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyLeaderChangedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PartyUID", parser.GetPartyUID());
 				variableBuilder.SetVariable("NewLeaderID", parser.GetNewLeaderID());
 
 				return hr;
 
-			}; // Result PartyLeaderChangedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyLeaderChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyLeaderChangedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyLeaderChangedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyLeaderChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InNewLeaderID )
@@ -5347,25 +5347,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyLeaderChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InNewLeaderID )
 
-			Result PartyLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyLeaderChangedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyLeaderChanged, {0}:{1} , PartyUID:{2}, NewLeaderID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPartyUID(), parser.GetNewLeaderID()); 
+						prefix, pHeader->Length, parser.GetPartyUID(), parser.GetNewLeaderID()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Leave party command
 			const MessageID LeavePartyCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 33);
-			Result LeavePartyCmd::ParseMessage(const MessageData* pIMsg)
+			Result LeavePartyCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5376,15 +5376,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeavePartyCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result LeavePartyCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result LeavePartyCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result LeavePartyCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				LeavePartyCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PartyUID", parser.GetPartyUID());
@@ -5392,18 +5392,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeavePartyCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result LeavePartyCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result LeavePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result LeavePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) LeavePartyCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) LeavePartyCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result LeavePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result LeavePartyCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* LeavePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
@@ -5438,24 +5438,24 @@ namespace SF
 				return hr;
 			}; // MessageData* LeavePartyCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID )
 
-			Result LeavePartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result LeavePartyCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				LeavePartyCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::LeaveParty, {0}:{1} , TransactionID:{2}, PartyUID:{3}, PlayerID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPartyUID(), parser.GetPlayerID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPartyUID(), parser.GetPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result LeavePartyCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result LeavePartyCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID LeavePartyRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 33);
-			Result LeavePartyRes::ParseMessage(const MessageData* pIMsg)
+			Result LeavePartyRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5465,33 +5465,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeavePartyRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result LeavePartyRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result LeavePartyRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result LeavePartyRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				LeavePartyRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result LeavePartyRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result LeavePartyRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result LeavePartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result LeavePartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) LeavePartyRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) LeavePartyRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result LeavePartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result LeavePartyRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* LeavePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -5524,25 +5524,25 @@ namespace SF
 				return hr;
 			}; // MessageData* LeavePartyRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result LeavePartyRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result LeavePartyRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				LeavePartyRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::LeaveParty, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result LeavePartyRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result LeavePartyRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Party Player left event
 			const MessageID PartyPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 34);
-			Result PartyPlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result PartyPlayerLeftS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5552,33 +5552,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyPlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyPlayerLeftS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyPlayerLeftS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyPlayerLeftS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyPlayerLeftS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PartyUID", parser.GetPartyUID());
 				variableBuilder.SetVariable("LeftPlayerID", parser.GetLeftPlayerID());
 
 				return hr;
 
-			}; // Result PartyPlayerLeftS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyPlayerLeftS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyPlayerLeftS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyPlayerLeftS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyPlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InLeftPlayerID )
@@ -5611,25 +5611,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyPlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InLeftPlayerID )
 
-			Result PartyPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyPlayerLeftS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyPlayerLeft, {0}:{1} , PartyUID:{2}, LeftPlayerID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPartyUID(), parser.GetLeftPlayerID()); 
+						prefix, pHeader->Length, parser.GetPartyUID(), parser.GetLeftPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Kick player from the party
 			const MessageID PartyKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 35);
-			Result PartyKickPlayerCmd::ParseMessage(const MessageData* pIMsg)
+			Result PartyKickPlayerCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5641,15 +5641,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyKickPlayerCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyKickPlayerCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyKickPlayerCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyKickPlayerCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyKickPlayerCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PartyUID", parser.GetPartyUID());
@@ -5658,18 +5658,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyKickPlayerCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyKickPlayerCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyKickPlayerCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyKickPlayerCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
@@ -5706,24 +5706,24 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 
-			Result PartyKickPlayerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyKickPlayerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyKickPlayerCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyKickPlayer, {0}:{1} , TransactionID:{2}, PartyUID:{3}, PlayerID:{4}, PlayerToKick:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPartyUID(), parser.GetPlayerID(), parser.GetPlayerToKick()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPartyUID(), parser.GetPlayerID(), parser.GetPlayerToKick()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyKickPlayerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyKickPlayerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID PartyKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 35);
-			Result PartyKickPlayerRes::ParseMessage(const MessageData* pIMsg)
+			Result PartyKickPlayerRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5733,33 +5733,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyKickPlayerRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyKickPlayerRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyKickPlayerRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyKickPlayerRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyKickPlayerRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result PartyKickPlayerRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyKickPlayerRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyKickPlayerRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyKickPlayerRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -5792,25 +5792,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result PartyKickPlayerRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyKickPlayerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyKickPlayerRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyKickPlayer, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyKickPlayerRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyKickPlayerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Party Player kicked message
 			const MessageID PartyPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 36);
-			Result PartyPlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result PartyPlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5820,33 +5820,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyPlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyPlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyPlayerKickedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyPlayerKickedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyPlayerKickedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PartyUID", parser.GetPartyUID());
 				variableBuilder.SetVariable("KickedPlayerID", parser.GetKickedPlayerID());
 
 				return hr;
 
-			}; // Result PartyPlayerKickedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyPlayerKickedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyPlayerKickedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyPlayerKickedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyPlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InKickedPlayerID )
@@ -5879,25 +5879,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyPlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InKickedPlayerID )
 
-			Result PartyPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyPlayerKickedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyPlayerKicked, {0}:{1} , PartyUID:{2}, KickedPlayerID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPartyUID(), parser.GetKickedPlayerID()); 
+						prefix, pHeader->Length, parser.GetPartyUID(), parser.GetKickedPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Invite a player to the party
 			const MessageID PartyInviteCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 37);
-			Result PartyInviteCmd::ParseMessage(const MessageData* pIMsg)
+			Result PartyInviteCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5907,33 +5907,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyInviteCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyInviteCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyInviteCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyInviteCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyInviteCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("InviteTargetID", parser.GetInviteTargetID());
 
 				return hr;
 
-			}; // Result PartyInviteCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyInviteCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyInviteCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyInviteCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyInviteCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyInviteCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyInviteCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyInviteCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyInviteCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
@@ -5966,24 +5966,24 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyInviteCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviteTargetID )
 
-			Result PartyInviteCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyInviteCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyInviteCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyInvite, {0}:{1} , TransactionID:{2}, InviteTargetID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetInviteTargetID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetInviteTargetID()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyInviteCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyInviteCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID PartyInviteRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 37);
-			Result PartyInviteRes::ParseMessage(const MessageData* pIMsg)
+			Result PartyInviteRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -5993,33 +5993,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyInviteRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyInviteRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyInviteRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyInviteRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyInviteRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result PartyInviteRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyInviteRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyInviteRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyInviteRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyInviteRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyInviteRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyInviteRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyInviteRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyInviteRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -6052,25 +6052,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyInviteRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result PartyInviteRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyInviteRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyInviteRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyInvite, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyInviteRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyInviteRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Party invite requested
 			const MessageID PartyInviteRequestedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 38);
-			Result PartyInviteRequestedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result PartyInviteRequestedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6082,15 +6082,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyInviteRequestedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyInviteRequestedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyInviteRequestedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyInviteRequestedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyInviteRequestedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("InviterID", parser.GetInviterID());
 				variableBuilder.SetVariable("InviterName", parser.GetInviterName());
@@ -6098,18 +6098,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyInviteRequestedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyInviteRequestedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyInviteRequestedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyInviteRequestedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyInviteRequestedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyInviteRequestedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyInviteRequestedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyInviteRequestedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyInviteRequestedS2CEvt::Create( IHeap& memHeap, const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID )
@@ -6144,25 +6144,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyInviteRequestedS2CEvt::Create( IHeap& memHeap, const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID )
 
-			Result PartyInviteRequestedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyInviteRequestedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyInviteRequestedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyInviteRequested, {0}:{1} , InviterID:{2}, InviterName:{3,60}, PartyToJoinUID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetInviterID(), parser.GetInviterName(), parser.GetPartyToJoinUID()); 
+						prefix, pHeader->Length, parser.GetInviterID(), parser.GetInviterName(), parser.GetPartyToJoinUID()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyInviteRequestedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyInviteRequestedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Send Party quick chat message
 			const MessageID PartyQuickChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 39);
-			Result PartyQuickChatMessageCmd::ParseMessage(const MessageData* pIMsg)
+			Result PartyQuickChatMessageCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6172,33 +6172,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyQuickChatMessageCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyQuickChatMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyQuickChatMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyQuickChatMessageCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("QuickChatID", parser.GetQuickChatID());
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyQuickChatMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyQuickChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyQuickChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyQuickChatMessageCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyQuickChatMessageCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyQuickChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyQuickChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
@@ -6231,24 +6231,24 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyQuickChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InQuickChatID )
 
-			Result PartyQuickChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyQuickChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyQuickChatMessageCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyQuickChatMessage, {0}:{1} , TransactionID:{2}, QuickChatID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetQuickChatID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetQuickChatID()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyQuickChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyQuickChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID PartyQuickChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 39);
-			Result PartyQuickChatMessageRes::ParseMessage(const MessageData* pIMsg)
+			Result PartyQuickChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6258,33 +6258,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyQuickChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyQuickChatMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyQuickChatMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyQuickChatMessageRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyQuickChatMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyQuickChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyQuickChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyQuickChatMessageRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyQuickChatMessageRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyQuickChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyQuickChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -6317,25 +6317,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyQuickChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result PartyQuickChatMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyQuickChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyQuickChatMessageRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyQuickChatMessage, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyQuickChatMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyQuickChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Party Chatting message event
 			const MessageID PartyQuickChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 40);
-			Result PartyQuickChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result PartyQuickChatMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6345,33 +6345,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyQuickChatMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyQuickChatMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyQuickChatMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyQuickChatMessageS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("SenderID", parser.GetSenderID());
 				variableBuilder.SetVariable("QuickChatID", parser.GetQuickChatID());
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyQuickChatMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyQuickChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyQuickChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyQuickChatMessageS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyQuickChatMessageS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyQuickChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyQuickChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyQuickChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const uint32_t &InQuickChatID )
@@ -6404,25 +6404,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyQuickChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const uint32_t &InQuickChatID )
 
-			Result PartyQuickChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyQuickChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyQuickChatMessageS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyQuickChatMessage, {0}:{1} , SenderID:{2}, QuickChatID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetSenderID(), parser.GetQuickChatID()); 
+						prefix, pHeader->Length, parser.GetSenderID(), parser.GetQuickChatID()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyQuickChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyQuickChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Party chatting
 			const MessageID PartyChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 41);
-			Result PartyChatMessageCmd::ParseMessage(const MessageData* pIMsg)
+			Result PartyChatMessageCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6433,33 +6433,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyChatMessageCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyChatMessageCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyChatMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyChatMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyChatMessageCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ChatMessage", parser.GetChatMessage());
 
 				return hr;
 
-			}; // Result PartyChatMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyChatMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyChatMessageCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyChatMessageCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage )
@@ -6492,24 +6492,24 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage )
 
-			Result PartyChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyChatMessageCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyChatMessage, {0}:{1} , TransactionID:{2}, ChatMessage:{3,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChatMessage()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID PartyChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 41);
-			Result PartyChatMessageRes::ParseMessage(const MessageData* pIMsg)
+			Result PartyChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6519,33 +6519,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyChatMessageRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyChatMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyChatMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyChatMessageRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result PartyChatMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyChatMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyChatMessageRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyChatMessageRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -6578,25 +6578,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result PartyChatMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyChatMessageRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyChatMessage, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyChatMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Party Chatting message event
 			const MessageID PartyChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 42);
-			Result PartyChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result PartyChatMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6609,15 +6609,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PartyChatMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PartyChatMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PartyChatMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PartyChatMessageS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("SenderID", parser.GetSenderID());
 				variableBuilder.SetVariable("SenderName", parser.GetSenderName());
@@ -6625,18 +6625,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result PartyChatMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PartyChatMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PartyChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PartyChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PartyChatMessageS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PartyChatMessageS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PartyChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PartyChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PartyChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
@@ -6671,25 +6671,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PartyChatMessageS2CEvt::Create( IHeap& memHeap, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage )
 
-			Result PartyChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PartyChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PartyChatMessageS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::PartyChatMessage, {0}:{1} , SenderID:{2}, SenderName:{3,60}, ChatMessage:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetSenderID(), parser.GetSenderName(), parser.GetChatMessage()); 
+						prefix, pHeader->Length, parser.GetSenderID(), parser.GetSenderName(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result PartyChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PartyChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Join to a game instance
 			const MessageID JoinGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 43);
-			Result JoinGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			Result JoinGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6699,33 +6699,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result JoinGameInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				JoinGameInstanceCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("InsUID", parser.GetInsUID());
 
 				return hr;
 
-			}; // Result JoinGameInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result JoinGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinGameInstanceCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinGameInstanceCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* JoinGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InInsUID )
@@ -6758,24 +6758,24 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InInsUID )
 
-			Result JoinGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				JoinGameInstanceCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::JoinGameInstance, {0}:{1} , TransactionID:{2}, InsUID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetInsUID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetInsUID()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID JoinGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 43);
-			Result JoinGameInstanceRes::ParseMessage(const MessageData* pIMsg)
+			Result JoinGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6788,15 +6788,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameInstanceRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result JoinGameInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				JoinGameInstanceRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -6805,18 +6805,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinGameInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result JoinGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinGameInstanceRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinGameInstanceRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress )
@@ -6853,25 +6853,25 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress )
 
-			Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				JoinGameInstanceRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::JoinGameInstance, {0}:{1} , TransactionID:{2}, Result:{3:X8}, InsUID:{4}, ServerPublicAddress:{5,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetInsUID(), parser.GetServerPublicAddress()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetInsUID(), parser.GetServerPublicAddress()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Leave game instance
 			const MessageID LeaveGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 44);
-			Result LeaveGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			Result LeaveGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6881,33 +6881,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result LeaveGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result LeaveGameInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result LeaveGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				LeaveGameInstanceCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("InsUID", parser.GetInsUID());
 
 				return hr;
 
-			}; // Result LeaveGameInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result LeaveGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result LeaveGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result LeaveGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) LeaveGameInstanceCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) LeaveGameInstanceCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result LeaveGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result LeaveGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* LeaveGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InInsUID )
@@ -6940,24 +6940,24 @@ namespace SF
 				return hr;
 			}; // MessageData* LeaveGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InInsUID )
 
-			Result LeaveGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result LeaveGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				LeaveGameInstanceCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::LeaveGameInstance, {0}:{1} , TransactionID:{2}, InsUID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetInsUID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetInsUID()); 
 				return ResultCode::SUCCESS;
-			}; // Result LeaveGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result LeaveGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID LeaveGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 44);
-			Result LeaveGameInstanceRes::ParseMessage(const MessageData* pIMsg)
+			Result LeaveGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -6967,33 +6967,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveGameInstanceRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result LeaveGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result LeaveGameInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result LeaveGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				LeaveGameInstanceRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result LeaveGameInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result LeaveGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result LeaveGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result LeaveGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) LeaveGameInstanceRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) LeaveGameInstanceRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result LeaveGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result LeaveGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* LeaveGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -7026,25 +7026,25 @@ namespace SF
 				return hr;
 			}; // MessageData* LeaveGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result LeaveGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result LeaveGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				LeaveGameInstanceRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::LeaveGameInstance, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result LeaveGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result LeaveGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Search game instance
 			const MessageID SearchGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 45);
-			Result SearchGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			Result SearchGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -7056,15 +7056,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result SearchGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result SearchGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result SearchGameInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SearchGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SearchGameInstanceCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("SearchKeyword", parser.GetSearchKeyword());
@@ -7072,18 +7072,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result SearchGameInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SearchGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SearchGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SearchGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SearchGameInstanceCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SearchGameInstanceCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SearchGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SearchGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* SearchGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
@@ -7118,24 +7118,24 @@ namespace SF
 				return hr;
 			}; // MessageData* SearchGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID )
 
-			Result SearchGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SearchGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SearchGameInstanceCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::SearchGameInstance, {0}:{1} , TransactionID:{2}, SearchKeyword:{3,60}, ZoneTableID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetSearchKeyword(), parser.GetZoneTableID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetSearchKeyword(), parser.GetZoneTableID()); 
 				return ResultCode::SUCCESS;
-			}; // Result SearchGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SearchGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID SearchGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 45);
-			Result SearchGameInstanceRes::ParseMessage(const MessageData* pIMsg)
+			Result SearchGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -7146,15 +7146,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result SearchGameInstanceRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result SearchGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result SearchGameInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SearchGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SearchGameInstanceRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -7162,18 +7162,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result SearchGameInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SearchGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SearchGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SearchGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SearchGameInstanceRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SearchGameInstanceRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SearchGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SearchGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
@@ -7208,25 +7208,25 @@ namespace SF
 				return hr;
 			}; // MessageData* SearchGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances )
 
-			Result SearchGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SearchGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SearchGameInstanceRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::SearchGameInstance, {0}:{1} , TransactionID:{2}, Result:{3:X8}, GameInstances:{4,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameInstances()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetGameInstances()); 
 				return ResultCode::SUCCESS;
-			}; // Result SearchGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SearchGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Search game instance
 			const MessageID GetCharacterDataInGameInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 46);
-			Result GetCharacterDataInGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			Result GetCharacterDataInGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -7237,15 +7237,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataInGameInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetCharacterDataInGameInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetCharacterDataInGameInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetCharacterDataInGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetCharacterDataInGameInstanceCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("GameInsUID", parser.GetGameInsUID());
@@ -7253,18 +7253,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataInGameInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetCharacterDataInGameInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetCharacterDataInGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetCharacterDataInGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataInGameInstanceCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataInGameInstanceCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetCharacterDataInGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetCharacterDataInGameInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetCharacterDataInGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
@@ -7299,14 +7299,14 @@ namespace SF
 				return hr;
 			}; // MessageData* GetCharacterDataInGameInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID )
 
-			Result GetCharacterDataInGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetCharacterDataInGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetCharacterDataInGameInstanceCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetCharacterDataInGameInstance, {0}:{1} , TransactionID:{2}, GameInsUID:{3}, PlayerID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetGameInsUID(), parser.GetPlayerID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetGameInsUID(), parser.GetPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetCharacterDataInGameInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetCharacterDataInGameInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID GetCharacterDataInGameInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 46);
 			const VariableTable& GetCharacterDataInGameInstanceRes::GetGameInstances() const
@@ -7319,14 +7319,14 @@ namespace SF
 				} // if (!m_GameInstancesHasParsed)
 				return m_GameInstances;
 			} // const VariableTable& GetCharacterDataInGameInstanceRes::GetGameInstances() const
-			Result GetCharacterDataInGameInstanceRes::ParseMessage(const MessageData* pIMsg)
+			Result GetCharacterDataInGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -7341,15 +7341,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataInGameInstanceRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetCharacterDataInGameInstanceRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetCharacterDataInGameInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetCharacterDataInGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetCharacterDataInGameInstanceRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -7358,18 +7358,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataInGameInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetCharacterDataInGameInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetCharacterDataInGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetCharacterDataInGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataInGameInstanceRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataInGameInstanceRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetCharacterDataInGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetCharacterDataInGameInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* GetCharacterDataInGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const Array<uint8_t>& InGameInstances )
 			{
@@ -7443,25 +7443,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GetCharacterDataInGameInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances )
 
-			Result GetCharacterDataInGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetCharacterDataInGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetCharacterDataInGameInstanceRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetCharacterDataInGameInstance, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayerID:{4}, GameInstances:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerID(), parser.GetGameInstances()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayerID(), parser.GetGameInstances()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetCharacterDataInGameInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetCharacterDataInGameInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Request Game match
 			const MessageID RequestGameMatchCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 47);
-			Result RequestGameMatchCmd::ParseMessage(const MessageData* pIMsg)
+			Result RequestGameMatchCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -7472,15 +7472,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestGameMatchCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result RequestGameMatchCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result RequestGameMatchCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RequestGameMatchCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RequestGameMatchCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("NumPlayer", parser.GetNumPlayer());
@@ -7488,18 +7488,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestGameMatchCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RequestGameMatchCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RequestGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RequestGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RequestGameMatchCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RequestGameMatchCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RequestGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RequestGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RequestGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
@@ -7534,24 +7534,24 @@ namespace SF
 				return hr;
 			}; // MessageData* RequestGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole )
 
-			Result RequestGameMatchCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RequestGameMatchCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RequestGameMatchCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::RequestGameMatch, {0}:{1} , TransactionID:{2}, NumPlayer:{3}, RequestRole:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetNumPlayer(), parser.GetRequestRole()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetNumPlayer(), parser.GetRequestRole()); 
 				return ResultCode::SUCCESS;
-			}; // Result RequestGameMatchCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RequestGameMatchCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID RequestGameMatchRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 47);
-			Result RequestGameMatchRes::ParseMessage(const MessageData* pIMsg)
+			Result RequestGameMatchRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -7563,15 +7563,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestGameMatchRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result RequestGameMatchRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result RequestGameMatchRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RequestGameMatchRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RequestGameMatchRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -7580,18 +7580,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestGameMatchRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RequestGameMatchRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RequestGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RequestGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RequestGameMatchRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RequestGameMatchRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RequestGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RequestGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RequestGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
@@ -7628,25 +7628,25 @@ namespace SF
 				return hr;
 			}; // MessageData* RequestGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
-			Result RequestGameMatchRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RequestGameMatchRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RequestGameMatchRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::RequestGameMatch, {0}:{1} , TransactionID:{2}, Result:{3:X8}, TotalGem:{4}, TotalGameMoney:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetTotalGem(), parser.GetTotalGameMoney()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetTotalGem(), parser.GetTotalGameMoney()); 
 				return ResultCode::SUCCESS;
-			}; // Result RequestGameMatchRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RequestGameMatchRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Game matched
 			const MessageID GameMatchedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 48);
-			Result GameMatchedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result GameMatchedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -7674,15 +7674,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameMatchedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result GameMatchedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result GameMatchedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GameMatchedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GameMatchedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("InsUID", parser.GetInsUID());
 				variableBuilder.SetVariable("TimeStamp", parser.GetTimeStamp());
@@ -7701,18 +7701,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameMatchedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GameMatchedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GameMatchedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GameMatchedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GameMatchedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GameMatchedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GameMatchedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GameMatchedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GameMatchedS2CEvt::Create( IHeap& memHeap, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
@@ -7769,25 +7769,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GameMatchedS2CEvt::Create( IHeap& memHeap, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney )
 
-			Result GameMatchedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GameMatchedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GameMatchedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GameMatched, {0}:{1} , InsUID:{2}, TimeStamp:{3}, GameState:{4}, Day:{5}, MaxPlayer:{6}, PlayerIndex:{7}, PlayerCharacter:{8}, Role:{9}, Dead:{10}, ChatHistoryData:{11,30}, GameLogData:{12,30}, Stamina:{13}, TotalGem:{14}, TotalGameMoney:{15}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetInsUID(), parser.GetTimeStamp(), (int)parser.GetGameState(), parser.GetDay(), parser.GetMaxPlayer(), parser.GetPlayerIndex(), parser.GetPlayerCharacter(), parser.GetRole(), parser.GetDead(), parser.GetChatHistoryData(), parser.GetGameLogData(), parser.GetStamina(), parser.GetTotalGem(), parser.GetTotalGameMoney()); 
+						prefix, pHeader->Length, parser.GetInsUID(), parser.GetTimeStamp(), (int)parser.GetGameState(), parser.GetDay(), parser.GetMaxPlayer(), parser.GetPlayerIndex(), parser.GetPlayerCharacter(), parser.GetRole(), parser.GetDead(), parser.GetChatHistoryData(), parser.GetGameLogData(), parser.GetStamina(), parser.GetTotalGem(), parser.GetTotalGameMoney()); 
 				return ResultCode::SUCCESS;
-			}; // Result GameMatchedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GameMatchedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Game match failed
 			const MessageID GameMatchFailedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 49);
-			Result GameMatchFailedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result GameMatchFailedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -7796,32 +7796,32 @@ namespace SF
 
 				return hr;
 
-			}; // Result GameMatchFailedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result GameMatchFailedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result GameMatchFailedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GameMatchFailedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GameMatchFailedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("FailedReason", parser.GetFailedReason());
 
 				return hr;
 
-			}; // Result GameMatchFailedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GameMatchFailedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GameMatchFailedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GameMatchFailedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GameMatchFailedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GameMatchFailedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GameMatchFailedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GameMatchFailedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GameMatchFailedS2CEvt::Create( IHeap& memHeap, const Result &InFailedReason )
@@ -7852,53 +7852,53 @@ namespace SF
 				return hr;
 			}; // MessageData* GameMatchFailedS2CEvt::Create( IHeap& memHeap, const Result &InFailedReason )
 
-			Result GameMatchFailedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GameMatchFailedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GameMatchFailedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GameMatchFailed, {0}:{1} , FailedReason:{2:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetFailedReason()); 
+						prefix, pHeader->Length, parser.GetFailedReason()); 
 				return ResultCode::SUCCESS;
-			}; // Result GameMatchFailedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GameMatchFailedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Game matching started
 			const MessageID GameMatchingStartedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 50);
-			Result GameMatchingStartedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result GameMatchingStartedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
 
 
 				return hr;
 
-			}; // Result GameMatchingStartedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result GameMatchingStartedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result GameMatchingStartedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GameMatchingStartedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GameMatchingStartedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 
 				return hr;
 
-			}; // Result GameMatchingStartedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GameMatchingStartedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GameMatchingStartedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GameMatchingStartedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GameMatchingStartedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GameMatchingStartedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GameMatchingStartedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GameMatchingStartedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GameMatchingStartedS2CEvt::Create( IHeap& memHeap )
@@ -7922,25 +7922,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GameMatchingStartedS2CEvt::Create( IHeap& memHeap )
 
-			Result GameMatchingStartedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GameMatchingStartedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GameMatchingStartedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GameMatchingStarted, {0}:{1} ",
-						prefix, pMsg->GetMessageHeader()->Length); 
+						prefix, pHeader->Length); 
 				return ResultCode::SUCCESS;
-			}; // Result GameMatchingStartedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GameMatchingStartedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Cancel Game match
 			const MessageID CancelGameMatchCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 51);
-			Result CancelGameMatchCmd::ParseMessage(const MessageData* pIMsg)
+			Result CancelGameMatchCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -7949,32 +7949,32 @@ namespace SF
 
 				return hr;
 
-			}; // Result CancelGameMatchCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result CancelGameMatchCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result CancelGameMatchCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CancelGameMatchCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CancelGameMatchCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 
 				return hr;
 
-			}; // Result CancelGameMatchCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CancelGameMatchCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CancelGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CancelGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CancelGameMatchCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CancelGameMatchCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CancelGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CancelGameMatchCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* CancelGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
@@ -8005,24 +8005,24 @@ namespace SF
 				return hr;
 			}; // MessageData* CancelGameMatchCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
-			Result CancelGameMatchCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CancelGameMatchCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CancelGameMatchCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::CancelGameMatch, {0}:{1} , TransactionID:{2}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID()); 
+						prefix, pHeader->Length, parser.GetTransactionID()); 
 				return ResultCode::SUCCESS;
-			}; // Result CancelGameMatchCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CancelGameMatchCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID CancelGameMatchRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 51);
-			Result CancelGameMatchRes::ParseMessage(const MessageData* pIMsg)
+			Result CancelGameMatchRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -8032,33 +8032,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result CancelGameMatchRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result CancelGameMatchRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result CancelGameMatchRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CancelGameMatchRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CancelGameMatchRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result CancelGameMatchRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CancelGameMatchRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CancelGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CancelGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CancelGameMatchRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CancelGameMatchRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CancelGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CancelGameMatchRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* CancelGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -8091,53 +8091,53 @@ namespace SF
 				return hr;
 			}; // MessageData* CancelGameMatchRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result CancelGameMatchRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CancelGameMatchRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CancelGameMatchRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::CancelGameMatch, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result CancelGameMatchRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CancelGameMatchRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: game matching canceled
 			const MessageID GameMatchingCanceledS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 52);
-			Result GameMatchingCanceledS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result GameMatchingCanceledS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
 
 
 				return hr;
 
-			}; // Result GameMatchingCanceledS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result GameMatchingCanceledS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result GameMatchingCanceledS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GameMatchingCanceledS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GameMatchingCanceledS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 
 				return hr;
 
-			}; // Result GameMatchingCanceledS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GameMatchingCanceledS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GameMatchingCanceledS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GameMatchingCanceledS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GameMatchingCanceledS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GameMatchingCanceledS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GameMatchingCanceledS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GameMatchingCanceledS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GameMatchingCanceledS2CEvt::Create( IHeap& memHeap )
@@ -8161,25 +8161,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GameMatchingCanceledS2CEvt::Create( IHeap& memHeap )
 
-			Result GameMatchingCanceledS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GameMatchingCanceledS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GameMatchingCanceledS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GameMatchingCanceled, {0}:{1} ",
-						prefix, pMsg->GetMessageHeader()->Length); 
+						prefix, pHeader->Length); 
 				return ResultCode::SUCCESS;
-			}; // Result GameMatchingCanceledS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GameMatchingCanceledS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Buy shop item prepare
 			const MessageID BuyShopItemPrepareCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 53);
-			Result BuyShopItemPrepareCmd::ParseMessage(const MessageData* pIMsg)
+			Result BuyShopItemPrepareCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -8189,33 +8189,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemPrepareCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result BuyShopItemPrepareCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result BuyShopItemPrepareCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result BuyShopItemPrepareCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				BuyShopItemPrepareCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ShopItemID", parser.GetShopItemID());
 
 				return hr;
 
-			}; // Result BuyShopItemPrepareCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result BuyShopItemPrepareCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result BuyShopItemPrepareCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result BuyShopItemPrepareCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemPrepareCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemPrepareCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result BuyShopItemPrepareCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result BuyShopItemPrepareCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* BuyShopItemPrepareCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID )
@@ -8248,24 +8248,24 @@ namespace SF
 				return hr;
 			}; // MessageData* BuyShopItemPrepareCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID )
 
-			Result BuyShopItemPrepareCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result BuyShopItemPrepareCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				BuyShopItemPrepareCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::BuyShopItemPrepare, {0}:{1} , TransactionID:{2}, ShopItemID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetShopItemID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetShopItemID()); 
 				return ResultCode::SUCCESS;
-			}; // Result BuyShopItemPrepareCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result BuyShopItemPrepareCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID BuyShopItemPrepareRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 53);
-			Result BuyShopItemPrepareRes::ParseMessage(const MessageData* pIMsg)
+			Result BuyShopItemPrepareRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -8278,15 +8278,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemPrepareRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result BuyShopItemPrepareRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result BuyShopItemPrepareRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result BuyShopItemPrepareRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				BuyShopItemPrepareRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -8295,18 +8295,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemPrepareRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result BuyShopItemPrepareRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result BuyShopItemPrepareRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result BuyShopItemPrepareRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemPrepareRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemPrepareRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result BuyShopItemPrepareRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result BuyShopItemPrepareRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* BuyShopItemPrepareRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
@@ -8343,25 +8343,25 @@ namespace SF
 				return hr;
 			}; // MessageData* BuyShopItemPrepareRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID )
 
-			Result BuyShopItemPrepareRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result BuyShopItemPrepareRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				BuyShopItemPrepareRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::BuyShopItemPrepare, {0}:{1} , TransactionID:{2}, Result:{3:X8}, ShopItemID:{4}, PurchaseID:{5,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetShopItemID(), parser.GetPurchaseID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetShopItemID(), parser.GetPurchaseID()); 
 				return ResultCode::SUCCESS;
-			}; // Result BuyShopItemPrepareRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result BuyShopItemPrepareRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Buy shop item
 			const MessageID BuyShopItemCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 54);
-			Result BuyShopItemCmd::ParseMessage(const MessageData* pIMsg)
+			Result BuyShopItemCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -8381,15 +8381,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result BuyShopItemCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result BuyShopItemCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result BuyShopItemCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				BuyShopItemCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ShopItemID", parser.GetShopItemID());
@@ -8400,18 +8400,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result BuyShopItemCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result BuyShopItemCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result BuyShopItemCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result BuyShopItemCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result BuyShopItemCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* BuyShopItemCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
@@ -8452,24 +8452,24 @@ namespace SF
 				return hr;
 			}; // MessageData* BuyShopItemCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken )
 
-			Result BuyShopItemCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result BuyShopItemCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				BuyShopItemCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::BuyShopItem, {0}:{1} , TransactionID:{2}, ShopItemID:{3}, Platform:{4,60}, PackageName:{5,60}, PurchaseTransactionID:{6,60}, PurchaseToken:{7,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetShopItemID(), parser.GetPlatform(), parser.GetPackageName(), parser.GetPurchaseTransactionID(), parser.GetPurchaseToken()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetShopItemID(), parser.GetPlatform(), parser.GetPackageName(), parser.GetPurchaseTransactionID(), parser.GetPurchaseToken()); 
 				return ResultCode::SUCCESS;
-			}; // Result BuyShopItemCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result BuyShopItemCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID BuyShopItemRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 54);
-			Result BuyShopItemRes::ParseMessage(const MessageData* pIMsg)
+			Result BuyShopItemRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -8480,15 +8480,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result BuyShopItemRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result BuyShopItemRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result BuyShopItemRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				BuyShopItemRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -8496,18 +8496,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result BuyShopItemRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result BuyShopItemRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result BuyShopItemRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result BuyShopItemRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) BuyShopItemRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result BuyShopItemRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result BuyShopItemRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* BuyShopItemRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
@@ -8542,25 +8542,25 @@ namespace SF
 				return hr;
 			}; // MessageData* BuyShopItemRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID )
 
-			Result BuyShopItemRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result BuyShopItemRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				BuyShopItemRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::BuyShopItem, {0}:{1} , TransactionID:{2}, Result:{3:X8}, ShopItemID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetShopItemID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetShopItemID()); 
 				return ResultCode::SUCCESS;
-			}; // Result BuyShopItemRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result BuyShopItemRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Create or Join Chat channel
 			const MessageID CreateOrJoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 55);
-			Result CreateOrJoinChatChannelCmd::ParseMessage(const MessageData* pIMsg)
+			Result CreateOrJoinChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -8573,15 +8573,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateOrJoinChatChannelCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result CreateOrJoinChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result CreateOrJoinChatChannelCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CreateOrJoinChatChannelCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CreateOrJoinChatChannelCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ChannelName", parser.GetChannelName());
@@ -8589,18 +8589,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateOrJoinChatChannelCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CreateOrJoinChatChannelCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CreateOrJoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CreateOrJoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CreateOrJoinChatChannelCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CreateOrJoinChatChannelCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CreateOrJoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CreateOrJoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* CreateOrJoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
@@ -8635,24 +8635,24 @@ namespace SF
 				return hr;
 			}; // MessageData* CreateOrJoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode )
 
-			Result CreateOrJoinChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CreateOrJoinChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CreateOrJoinChatChannelCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::CreateOrJoinChatChannel, {0}:{1} , TransactionID:{2}, ChannelName:{3,60}, Passcode:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChannelName(), parser.GetPasscode()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetChannelName(), parser.GetPasscode()); 
 				return ResultCode::SUCCESS;
-			}; // Result CreateOrJoinChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CreateOrJoinChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID CreateOrJoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 55);
-			Result CreateOrJoinChatChannelRes::ParseMessage(const MessageData* pIMsg)
+			Result CreateOrJoinChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -8664,15 +8664,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateOrJoinChatChannelRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result CreateOrJoinChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result CreateOrJoinChatChannelRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CreateOrJoinChatChannelRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CreateOrJoinChatChannelRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -8681,18 +8681,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateOrJoinChatChannelRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CreateOrJoinChatChannelRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CreateOrJoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CreateOrJoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CreateOrJoinChatChannelRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CreateOrJoinChatChannelRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CreateOrJoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CreateOrJoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
@@ -8729,25 +8729,25 @@ namespace SF
 				return hr;
 			}; // MessageData* CreateOrJoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 
-			Result CreateOrJoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CreateOrJoinChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CreateOrJoinChatChannelRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::CreateOrJoinChatChannel, {0}:{1} , TransactionID:{2}, Result:{3:X8}, ChatUID:{4}, ChannelLeaderID:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetChatUID(), parser.GetChannelLeaderID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetChatUID(), parser.GetChannelLeaderID()); 
 				return ResultCode::SUCCESS;
-			}; // Result CreateOrJoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CreateOrJoinChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Join
 			const MessageID JoinChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 56);
-			Result JoinChatChannelCmd::ParseMessage(const MessageData* pIMsg)
+			Result JoinChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -8760,15 +8760,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinChatChannelCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result JoinChatChannelCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinChatChannelCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				JoinChatChannelCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
@@ -8777,18 +8777,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinChatChannelCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinChatChannelCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result JoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinChatChannelCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinChatChannelCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
@@ -8825,24 +8825,24 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode )
 
-			Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				JoinChatChannelCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::JoinChatChannel, {0}:{1} , TransactionID:{2}, ChatUID:{3}, InviterID:{4}, Passcode:{5,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetInviterID(), parser.GetPasscode()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetInviterID(), parser.GetPasscode()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID JoinChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 56);
-			Result JoinChatChannelRes::ParseMessage(const MessageData* pIMsg)
+			Result JoinChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -8854,15 +8854,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinChatChannelRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result JoinChatChannelRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinChatChannelRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				JoinChatChannelRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -8871,18 +8871,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinChatChannelRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinChatChannelRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result JoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinChatChannelRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinChatChannelRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
@@ -8919,25 +8919,25 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID )
 
-			Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				JoinChatChannelRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::JoinChatChannel, {0}:{1} , TransactionID:{2}, Result:{3:X8}, ChatUID:{4}, ChannelLeaderID:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetChatUID(), parser.GetChannelLeaderID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetChatUID(), parser.GetChannelLeaderID()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player Joined event
 			const MessageID ChatChannelPlayerJoinedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 57);
-			Result ChatChannelPlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result ChatChannelPlayerJoinedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -8947,33 +8947,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelPlayerJoinedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ChatChannelPlayerJoinedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ChatChannelPlayerJoinedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ChatChannelPlayerJoinedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ChatChannelPlayerJoinedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
 				variableBuilder.SetVariable("JoinedPlayer", "PlayerInformation", parser.GetJoinedPlayer());
 
 				return hr;
 
-			}; // Result ChatChannelPlayerJoinedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ChatChannelPlayerJoinedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ChatChannelPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ChatChannelPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelPlayerJoinedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelPlayerJoinedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ChatChannelPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ChatChannelPlayerJoinedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ChatChannelPlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
@@ -9006,25 +9006,25 @@ namespace SF
 				return hr;
 			}; // MessageData* ChatChannelPlayerJoinedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer )
 
-			Result ChatChannelPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ChatChannelPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ChatChannelPlayerJoinedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::ChatChannelPlayerJoined, {0}:{1} , ChatUID:{2}, JoinedPlayer:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetChatUID(), parser.GetJoinedPlayer()); 
+						prefix, pHeader->Length, parser.GetChatUID(), parser.GetJoinedPlayer()); 
 				return ResultCode::SUCCESS;
-			}; // Result ChatChannelPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ChatChannelPlayerJoinedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel leader changed event
 			const MessageID ChatChannelLeaderChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 58);
-			Result ChatChannelLeaderChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result ChatChannelLeaderChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -9034,33 +9034,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelLeaderChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ChatChannelLeaderChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ChatChannelLeaderChangedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ChatChannelLeaderChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ChatChannelLeaderChangedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
 				variableBuilder.SetVariable("NewLeaderID", parser.GetNewLeaderID());
 
 				return hr;
 
-			}; // Result ChatChannelLeaderChangedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ChatChannelLeaderChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ChatChannelLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ChatChannelLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelLeaderChangedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelLeaderChangedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ChatChannelLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ChatChannelLeaderChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ChatChannelLeaderChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InNewLeaderID )
@@ -9093,25 +9093,25 @@ namespace SF
 				return hr;
 			}; // MessageData* ChatChannelLeaderChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InNewLeaderID )
 
-			Result ChatChannelLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ChatChannelLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ChatChannelLeaderChangedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::ChatChannelLeaderChanged, {0}:{1} , ChatUID:{2}, NewLeaderID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetChatUID(), parser.GetNewLeaderID()); 
+						prefix, pHeader->Length, parser.GetChatUID(), parser.GetNewLeaderID()); 
 				return ResultCode::SUCCESS;
-			}; // Result ChatChannelLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ChatChannelLeaderChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Leave ChatChannel command
 			const MessageID LeaveChatChannelCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
-			Result LeaveChatChannelCmd::ParseMessage(const MessageData* pIMsg)
+			Result LeaveChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -9122,15 +9122,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveChatChannelCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result LeaveChatChannelCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result LeaveChatChannelCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result LeaveChatChannelCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				LeaveChatChannelCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
@@ -9138,18 +9138,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveChatChannelCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result LeaveChatChannelCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result LeaveChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result LeaveChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) LeaveChatChannelCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) LeaveChatChannelCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result LeaveChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result LeaveChatChannelCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* LeaveChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
@@ -9184,24 +9184,24 @@ namespace SF
 				return hr;
 			}; // MessageData* LeaveChatChannelCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID )
 
-			Result LeaveChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result LeaveChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				LeaveChatChannelCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::LeaveChatChannel, {0}:{1} , TransactionID:{2}, ChatUID:{3}, PlayerID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetPlayerID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result LeaveChatChannelCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result LeaveChatChannelCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID LeaveChatChannelRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 59);
-			Result LeaveChatChannelRes::ParseMessage(const MessageData* pIMsg)
+			Result LeaveChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -9211,33 +9211,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result LeaveChatChannelRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result LeaveChatChannelRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result LeaveChatChannelRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result LeaveChatChannelRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				LeaveChatChannelRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result LeaveChatChannelRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result LeaveChatChannelRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result LeaveChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result LeaveChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) LeaveChatChannelRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) LeaveChatChannelRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result LeaveChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result LeaveChatChannelRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* LeaveChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -9270,25 +9270,25 @@ namespace SF
 				return hr;
 			}; // MessageData* LeaveChatChannelRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result LeaveChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result LeaveChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				LeaveChatChannelRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::LeaveChatChannel, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result LeaveChatChannelRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result LeaveChatChannelRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel Player left event
 			const MessageID ChatChannelPlayerLeftS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 60);
-			Result ChatChannelPlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result ChatChannelPlayerLeftS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -9298,33 +9298,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelPlayerLeftS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ChatChannelPlayerLeftS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ChatChannelPlayerLeftS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ChatChannelPlayerLeftS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ChatChannelPlayerLeftS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
 				variableBuilder.SetVariable("LeftPlayerID", parser.GetLeftPlayerID());
 
 				return hr;
 
-			}; // Result ChatChannelPlayerLeftS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ChatChannelPlayerLeftS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ChatChannelPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ChatChannelPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelPlayerLeftS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelPlayerLeftS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ChatChannelPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ChatChannelPlayerLeftS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ChatChannelPlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InLeftPlayerID )
@@ -9357,25 +9357,25 @@ namespace SF
 				return hr;
 			}; // MessageData* ChatChannelPlayerLeftS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InLeftPlayerID )
 
-			Result ChatChannelPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ChatChannelPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ChatChannelPlayerLeftS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::ChatChannelPlayerLeft, {0}:{1} , ChatUID:{2}, LeftPlayerID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetChatUID(), parser.GetLeftPlayerID()); 
+						prefix, pHeader->Length, parser.GetChatUID(), parser.GetLeftPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result ChatChannelPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ChatChannelPlayerLeftS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Kick player from the ChatChannel
 			const MessageID ChatChannelKickPlayerCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
-			Result ChatChannelKickPlayerCmd::ParseMessage(const MessageData* pIMsg)
+			Result ChatChannelKickPlayerCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -9387,15 +9387,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelKickPlayerCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result ChatChannelKickPlayerCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result ChatChannelKickPlayerCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ChatChannelKickPlayerCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ChatChannelKickPlayerCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
@@ -9404,18 +9404,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelKickPlayerCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ChatChannelKickPlayerCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ChatChannelKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ChatChannelKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelKickPlayerCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelKickPlayerCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ChatChannelKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ChatChannelKickPlayerCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ChatChannelKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
@@ -9452,24 +9452,24 @@ namespace SF
 				return hr;
 			}; // MessageData* ChatChannelKickPlayerCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick )
 
-			Result ChatChannelKickPlayerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ChatChannelKickPlayerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ChatChannelKickPlayerCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::ChatChannelKickPlayer, {0}:{1} , TransactionID:{2}, ChatUID:{3}, PlayerID:{4}, PlayerToKick:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetPlayerID(), parser.GetPlayerToKick()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetPlayerID(), parser.GetPlayerToKick()); 
 				return ResultCode::SUCCESS;
-			}; // Result ChatChannelKickPlayerCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ChatChannelKickPlayerCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID ChatChannelKickPlayerRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 61);
-			Result ChatChannelKickPlayerRes::ParseMessage(const MessageData* pIMsg)
+			Result ChatChannelKickPlayerRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -9479,33 +9479,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelKickPlayerRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result ChatChannelKickPlayerRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result ChatChannelKickPlayerRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ChatChannelKickPlayerRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ChatChannelKickPlayerRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result ChatChannelKickPlayerRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ChatChannelKickPlayerRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ChatChannelKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ChatChannelKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelKickPlayerRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelKickPlayerRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ChatChannelKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ChatChannelKickPlayerRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ChatChannelKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -9538,25 +9538,25 @@ namespace SF
 				return hr;
 			}; // MessageData* ChatChannelKickPlayerRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result ChatChannelKickPlayerRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ChatChannelKickPlayerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ChatChannelKickPlayerRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::ChatChannelKickPlayer, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result ChatChannelKickPlayerRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ChatChannelKickPlayerRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel Player kicked message
 			const MessageID ChatChannelPlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 62);
-			Result ChatChannelPlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result ChatChannelPlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -9566,33 +9566,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelPlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ChatChannelPlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ChatChannelPlayerKickedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ChatChannelPlayerKickedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ChatChannelPlayerKickedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
 				variableBuilder.SetVariable("KickedPlayerID", parser.GetKickedPlayerID());
 
 				return hr;
 
-			}; // Result ChatChannelPlayerKickedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ChatChannelPlayerKickedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ChatChannelPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ChatChannelPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelPlayerKickedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelPlayerKickedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ChatChannelPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ChatChannelPlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ChatChannelPlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
@@ -9625,14 +9625,14 @@ namespace SF
 				return hr;
 			}; // MessageData* ChatChannelPlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InKickedPlayerID )
 
-			Result ChatChannelPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ChatChannelPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ChatChannelPlayerKickedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::ChatChannelPlayerKicked, {0}:{1} , ChatUID:{2}, KickedPlayerID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetChatUID(), parser.GetKickedPlayerID()); 
+						prefix, pHeader->Length, parser.GetChatUID(), parser.GetKickedPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result ChatChannelPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ChatChannelPlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Chat channel sending chatting message
 			const MessageID ChatChannelChatMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
@@ -9646,14 +9646,14 @@ namespace SF
 				} // if (!m_ChatMetaDataHasParsed)
 				return m_ChatMetaData;
 			} // const VariableTable& ChatChannelChatMessageCmd::GetChatMetaData() const
-			Result ChatChannelChatMessageCmd::ParseMessage(const MessageData* pIMsg)
+			Result ChatChannelChatMessageCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -9669,15 +9669,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result ChatChannelChatMessageCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result ChatChannelChatMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ChatChannelChatMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ChatChannelChatMessageCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ChatUID", parser.GetChatUID());
@@ -9686,18 +9686,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ChatChannelChatMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ChatChannelChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ChatChannelChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelChatMessageCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelChatMessageCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ChatChannelChatMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
@@ -9771,24 +9771,24 @@ namespace SF
 				return hr;
 			}; // MessageData* ChatChannelChatMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ChatChannelChatMessageCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::ChatChannelChatMessage, {0}:{1} , TransactionID:{2}, ChatUID:{3}, ChatMetaData:{4}, ChatMessage:{5,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetChatMetaData(), parser.GetChatMessage()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetChatUID(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ChatChannelChatMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID ChatChannelChatMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 63);
-			Result ChatChannelChatMessageRes::ParseMessage(const MessageData* pIMsg)
+			Result ChatChannelChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -9798,33 +9798,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result ChatChannelChatMessageRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result ChatChannelChatMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ChatChannelChatMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ChatChannelChatMessageRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ChatChannelChatMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ChatChannelChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ChatChannelChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelChatMessageRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelChatMessageRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ChatChannelChatMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ChatChannelChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -9857,14 +9857,14 @@ namespace SF
 				return hr;
 			}; // MessageData* ChatChannelChatMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result ChatChannelChatMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ChatChannelChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ChatChannelChatMessageRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::ChatChannelChatMessage, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result ChatChannelChatMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ChatChannelChatMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: ChatChannel Chatting message event
 			const MessageID ChatChannelChatMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 64);
@@ -9878,14 +9878,14 @@ namespace SF
 				} // if (!m_ChatMetaDataHasParsed)
 				return m_ChatMetaData;
 			} // const VariableTable& ChatChannelChatMessageS2CEvt::GetChatMetaData() const
-			Result ChatChannelChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result ChatChannelChatMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -9900,15 +9900,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ChatChannelChatMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ChatChannelChatMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ChatChannelChatMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ChatChannelChatMessageS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("SenderID", parser.GetSenderID());
 				variableBuilder.SetVariableArray("ChatMetaData", "VariableTable", parser.GetChatMetaDataRaw());
@@ -9916,18 +9916,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ChatChannelChatMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ChatChannelChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ChatChannelChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelChatMessageS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ChatChannelChatMessageS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ChatChannelChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ChatChannelChatMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
@@ -9997,14 +9997,14 @@ namespace SF
 				return hr;
 			}; // MessageData* ChatChannelChatMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ChatChannelChatMessageS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::ChatChannelChatMessage, {0}:{1} , SenderID:{2}, ChatMetaData:{3}, ChatMessage:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetSenderID(), parser.GetChatMetaData(), parser.GetChatMessage()); 
+						prefix, pHeader->Length, parser.GetSenderID(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ChatChannelChatMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Whisper(tell) other player chatting
 			const MessageID WhisperMessageCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
@@ -10018,14 +10018,14 @@ namespace SF
 				} // if (!m_ChatMetaDataHasParsed)
 				return m_ChatMetaData;
 			} // const VariableTable& WhisperMessageCmd::GetChatMetaData() const
-			Result WhisperMessageCmd::ParseMessage(const MessageData* pIMsg)
+			Result WhisperMessageCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -10043,15 +10043,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result WhisperMessageCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result WhisperMessageCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result WhisperMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result WhisperMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				WhisperMessageCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("ReceiverID", parser.GetReceiverID());
@@ -10061,18 +10061,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result WhisperMessageCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result WhisperMessageCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result WhisperMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result WhisperMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result WhisperMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result WhisperMessageCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* WhisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
@@ -10150,24 +10150,24 @@ namespace SF
 				return hr;
 			}; // MessageData* WhisperMessageCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			Result WhisperMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result WhisperMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				WhisperMessageCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::WhisperMessage, {0}:{1} , TransactionID:{2}, ReceiverID:{3}, ReceiverName:{4,60}, ChatMetaData:{5}, ChatMessage:{6,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetReceiverID(), parser.GetReceiverName(), parser.GetChatMetaData(), parser.GetChatMessage()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetReceiverID(), parser.GetReceiverName(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result WhisperMessageCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result WhisperMessageCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID WhisperMessageRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 65);
-			Result WhisperMessageRes::ParseMessage(const MessageData* pIMsg)
+			Result WhisperMessageRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -10177,33 +10177,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result WhisperMessageRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result WhisperMessageRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result WhisperMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result WhisperMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				WhisperMessageRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result WhisperMessageRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result WhisperMessageRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result WhisperMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result WhisperMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result WhisperMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result WhisperMessageRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* WhisperMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -10236,14 +10236,14 @@ namespace SF
 				return hr;
 			}; // MessageData* WhisperMessageRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result WhisperMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result WhisperMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				WhisperMessageRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::WhisperMessage, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result WhisperMessageRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result WhisperMessageRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Other player whispered(tell) to me message event
 			const MessageID WhisperMessageS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 66);
@@ -10257,14 +10257,14 @@ namespace SF
 				} // if (!m_ChatMetaDataHasParsed)
 				return m_ChatMetaData;
 			} // const VariableTable& WhisperMessageS2CEvt::GetChatMetaData() const
-			Result WhisperMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result WhisperMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -10279,15 +10279,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result WhisperMessageS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result WhisperMessageS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result WhisperMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result WhisperMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				WhisperMessageS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("SenderID", parser.GetSenderID());
 				variableBuilder.SetVariableArray("ChatMetaData", "VariableTable", parser.GetChatMetaDataRaw());
@@ -10295,18 +10295,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result WhisperMessageS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result WhisperMessageS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result WhisperMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result WhisperMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) WhisperMessageS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result WhisperMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result WhisperMessageS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* WhisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
@@ -10376,14 +10376,14 @@ namespace SF
 				return hr;
 			}; // MessageData* WhisperMessageS2CEvt::Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			Result WhisperMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result WhisperMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				WhisperMessageS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::WhisperMessage, {0}:{1} , SenderID:{2}, ChatMetaData:{3}, ChatMessage:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetSenderID(), parser.GetChatMetaData(), parser.GetChatMessage()); 
+						prefix, pHeader->Length, parser.GetSenderID(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result WhisperMessageS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result WhisperMessageS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Create character
 			const MessageID CreateCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
@@ -10407,14 +10407,14 @@ namespace SF
 				} // if (!m_PrivateDataHasParsed)
 				return m_PrivateData;
 			} // const VariableTable& CreateCharacterCmd::GetPrivateData() const
-			Result CreateCharacterCmd::ParseMessage(const MessageData* pIMsg)
+			Result CreateCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -10433,15 +10433,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateCharacterCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result CreateCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result CreateCharacterCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CreateCharacterCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CreateCharacterCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("CharacterName", parser.GetCharacterName());
@@ -10450,18 +10450,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateCharacterCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CreateCharacterCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CreateCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CreateCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CreateCharacterCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CreateCharacterCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CreateCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CreateCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData )
 			{
@@ -10539,24 +10539,24 @@ namespace SF
 				return hr;
 			}; // MessageData* CreateCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData )
 
-			Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CreateCharacterCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::CreateCharacter, {0}:{1} , TransactionID:{2}, CharacterName:{3,60}, PublicData:{4}, PrivateData:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetCharacterName(), parser.GetPublicData(), parser.GetPrivateData()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetCharacterName(), parser.GetPublicData(), parser.GetPrivateData()); 
 				return ResultCode::SUCCESS;
-			}; // Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CreateCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID CreateCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 67);
-			Result CreateCharacterRes::ParseMessage(const MessageData* pIMsg)
+			Result CreateCharacterRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -10567,15 +10567,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateCharacterRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result CreateCharacterRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result CreateCharacterRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CreateCharacterRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CreateCharacterRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -10583,18 +10583,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateCharacterRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CreateCharacterRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CreateCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CreateCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CreateCharacterRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CreateCharacterRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CreateCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CreateCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* CreateCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
@@ -10629,25 +10629,25 @@ namespace SF
 				return hr;
 			}; // MessageData* CreateCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID )
 
-			Result CreateCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CreateCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CreateCharacterRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::CreateCharacter, {0}:{1} , TransactionID:{2}, Result:{3:X8}, CharacterID:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacterID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacterID()); 
 				return ResultCode::SUCCESS;
-			}; // Result CreateCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CreateCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Delete character
 			const MessageID DeleteCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
-			Result DeleteCharacterCmd::ParseMessage(const MessageData* pIMsg)
+			Result DeleteCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -10657,33 +10657,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteCharacterCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result DeleteCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result DeleteCharacterCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result DeleteCharacterCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				DeleteCharacterCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("CharacterID", parser.GetCharacterID());
 
 				return hr;
 
-			}; // Result DeleteCharacterCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result DeleteCharacterCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result DeleteCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result DeleteCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) DeleteCharacterCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) DeleteCharacterCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result DeleteCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result DeleteCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* DeleteCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
@@ -10716,24 +10716,24 @@ namespace SF
 				return hr;
 			}; // MessageData* DeleteCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 
-			Result DeleteCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result DeleteCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				DeleteCharacterCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::DeleteCharacter, {0}:{1} , TransactionID:{2}, CharacterID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetCharacterID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetCharacterID()); 
 				return ResultCode::SUCCESS;
-			}; // Result DeleteCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result DeleteCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID DeleteCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 68);
-			Result DeleteCharacterRes::ParseMessage(const MessageData* pIMsg)
+			Result DeleteCharacterRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -10743,33 +10743,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteCharacterRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result DeleteCharacterRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result DeleteCharacterRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result DeleteCharacterRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				DeleteCharacterRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result DeleteCharacterRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result DeleteCharacterRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result DeleteCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result DeleteCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) DeleteCharacterRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) DeleteCharacterRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result DeleteCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result DeleteCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* DeleteCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -10802,25 +10802,25 @@ namespace SF
 				return hr;
 			}; // MessageData* DeleteCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result DeleteCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result DeleteCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				DeleteCharacterRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::DeleteCharacter, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result DeleteCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result DeleteCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Get character list
 			const MessageID GetCharacterListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
-			Result GetCharacterListCmd::ParseMessage(const MessageData* pIMsg)
+			Result GetCharacterListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -10829,32 +10829,32 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterListCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetCharacterListCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetCharacterListCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetCharacterListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetCharacterListCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 
 				return hr;
 
-			}; // Result GetCharacterListCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetCharacterListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetCharacterListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetCharacterListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterListCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterListCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetCharacterListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetCharacterListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetCharacterListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
@@ -10885,24 +10885,24 @@ namespace SF
 				return hr;
 			}; // MessageData* GetCharacterListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
-			Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetCharacterListCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetCharacterList, {0}:{1} , TransactionID:{2}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID()); 
+						prefix, pHeader->Length, parser.GetTransactionID()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetCharacterListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID GetCharacterListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 69);
-			Result GetCharacterListRes::ParseMessage(const MessageData* pIMsg)
+			Result GetCharacterListRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -10913,15 +10913,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterListRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetCharacterListRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetCharacterListRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetCharacterListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetCharacterListRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -10929,18 +10929,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterListRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetCharacterListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterListRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterListRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetCharacterListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
@@ -10975,25 +10975,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GetCharacterListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters )
 
-			Result GetCharacterListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetCharacterListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetCharacterListRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetCharacterList, {0}:{1} , TransactionID:{2}, Result:{3:X8}, Characters:{4,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacters()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacters()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetCharacterListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetCharacterListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: 
 			const MessageID GetCharacterDataCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
-			Result GetCharacterDataCmd::ParseMessage(const MessageData* pIMsg)
+			Result GetCharacterDataCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -11003,33 +11003,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetCharacterDataCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetCharacterDataCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetCharacterDataCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetCharacterDataCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("CharacterID", parser.GetCharacterID());
 
 				return hr;
 
-			}; // Result GetCharacterDataCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetCharacterDataCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetCharacterDataCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetCharacterDataCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetCharacterDataCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetCharacterDataCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetCharacterDataCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
@@ -11062,14 +11062,14 @@ namespace SF
 				return hr;
 			}; // MessageData* GetCharacterDataCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 
-			Result GetCharacterDataCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetCharacterDataCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetCharacterDataCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetCharacterData, {0}:{1} , TransactionID:{2}, CharacterID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetCharacterID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetCharacterID()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetCharacterDataCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetCharacterDataCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID GetCharacterDataRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 70);
 			const VariableTable& GetCharacterDataRes::GetPrivateData() const
@@ -11092,14 +11092,14 @@ namespace SF
 				} // if (!m_EquipDataHasParsed)
 				return m_EquipData;
 			} // const VariableTable& GetCharacterDataRes::GetEquipData() const
-			Result GetCharacterDataRes::ParseMessage(const MessageData* pIMsg)
+			Result GetCharacterDataRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -11117,15 +11117,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetCharacterDataRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetCharacterDataRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetCharacterDataRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetCharacterDataRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -11134,18 +11134,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetCharacterDataRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetCharacterDataRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetCharacterDataRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetCharacterDataRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetCharacterDataRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetCharacterDataRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetCharacterDataRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InPrivateData, const Array<uint8_t>& InEquipData )
 			{
@@ -11223,25 +11223,25 @@ namespace SF
 				return hr;
 			}; // MessageData* GetCharacterDataRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData )
 
-			Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetCharacterDataRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::GetCharacterData, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PrivateData:{4}, EquipData:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPrivateData(), parser.GetEquipData()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPrivateData(), parser.GetEquipData()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetCharacterDataRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Select character
 			const MessageID SelectCharacterCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
-			Result SelectCharacterCmd::ParseMessage(const MessageData* pIMsg)
+			Result SelectCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -11251,33 +11251,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result SelectCharacterCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result SelectCharacterCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result SelectCharacterCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SelectCharacterCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SelectCharacterCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("CharacterID", parser.GetCharacterID());
 
 				return hr;
 
-			}; // Result SelectCharacterCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SelectCharacterCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SelectCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SelectCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SelectCharacterCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SelectCharacterCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SelectCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SelectCharacterCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* SelectCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
@@ -11310,14 +11310,14 @@ namespace SF
 				return hr;
 			}; // MessageData* SelectCharacterCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID )
 
-			Result SelectCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SelectCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SelectCharacterCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::SelectCharacter, {0}:{1} , TransactionID:{2}, CharacterID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetCharacterID()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetCharacterID()); 
 				return ResultCode::SUCCESS;
-			}; // Result SelectCharacterCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SelectCharacterCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID SelectCharacterRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 71);
 			const VariableTable& SelectCharacterRes::GetAttributes() const
@@ -11330,14 +11330,14 @@ namespace SF
 				} // if (!m_AttributesHasParsed)
 				return m_Attributes;
 			} // const VariableTable& SelectCharacterRes::GetAttributes() const
-			Result SelectCharacterRes::ParseMessage(const MessageData* pIMsg)
+			Result SelectCharacterRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -11352,15 +11352,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result SelectCharacterRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result SelectCharacterRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result SelectCharacterRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SelectCharacterRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SelectCharacterRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -11369,18 +11369,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result SelectCharacterRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SelectCharacterRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SelectCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SelectCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SelectCharacterRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SelectCharacterRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SelectCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SelectCharacterRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const Array<uint8_t>& InAttributes )
 			{
@@ -11454,25 +11454,25 @@ namespace SF
 				return hr;
 			}; // MessageData* SelectCharacterRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes )
 
-			Result SelectCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SelectCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SelectCharacterRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::SelectCharacter, {0}:{1} , TransactionID:{2}, Result:{3:X8}, CharacterID:{4}, Attributes:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacterID(), parser.GetAttributes()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetCharacterID(), parser.GetAttributes()); 
 				return ResultCode::SUCCESS;
-			}; // Result SelectCharacterRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SelectCharacterRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Request Server Notice. Sever will send ServerNoticeS2CEvt
 			const MessageID RequestServerNoticeUpdateCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
-			Result RequestServerNoticeUpdateCmd::ParseMessage(const MessageData* pIMsg)
+			Result RequestServerNoticeUpdateCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -11481,32 +11481,32 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestServerNoticeUpdateCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result RequestServerNoticeUpdateCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result RequestServerNoticeUpdateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RequestServerNoticeUpdateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RequestServerNoticeUpdateCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 
 				return hr;
 
-			}; // Result RequestServerNoticeUpdateCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RequestServerNoticeUpdateCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RequestServerNoticeUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RequestServerNoticeUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RequestServerNoticeUpdateCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RequestServerNoticeUpdateCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RequestServerNoticeUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RequestServerNoticeUpdateCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RequestServerNoticeUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
@@ -11537,24 +11537,24 @@ namespace SF
 				return hr;
 			}; // MessageData* RequestServerNoticeUpdateCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID )
 
-			Result RequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RequestServerNoticeUpdateCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::RequestServerNoticeUpdate, {0}:{1} , TransactionID:{2}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID()); 
+						prefix, pHeader->Length, parser.GetTransactionID()); 
 				return ResultCode::SUCCESS;
-			}; // Result RequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RequestServerNoticeUpdateCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID RequestServerNoticeUpdateRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 72);
-			Result RequestServerNoticeUpdateRes::ParseMessage(const MessageData* pIMsg)
+			Result RequestServerNoticeUpdateRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -11564,33 +11564,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result RequestServerNoticeUpdateRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result RequestServerNoticeUpdateRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result RequestServerNoticeUpdateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RequestServerNoticeUpdateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RequestServerNoticeUpdateRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result RequestServerNoticeUpdateRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RequestServerNoticeUpdateRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RequestServerNoticeUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RequestServerNoticeUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RequestServerNoticeUpdateRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RequestServerNoticeUpdateRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RequestServerNoticeUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RequestServerNoticeUpdateRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RequestServerNoticeUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -11623,25 +11623,25 @@ namespace SF
 				return hr;
 			}; // MessageData* RequestServerNoticeUpdateRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result RequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RequestServerNoticeUpdateRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::RequestServerNoticeUpdate, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result RequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RequestServerNoticeUpdateRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Server Notice updated event
 			const MessageID ServerNoticeS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 73);
-			Result ServerNoticeS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result ServerNoticeS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -11652,33 +11652,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result ServerNoticeS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ServerNoticeS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ServerNoticeS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ServerNoticeS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ServerNoticeS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("NoticeCategory", parser.GetNoticeCategory());
 				variableBuilder.SetVariable("ServerNoticeMessage", parser.GetServerNoticeMessage());
 
 				return hr;
 
-			}; // Result ServerNoticeS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ServerNoticeS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ServerNoticeS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ServerNoticeS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ServerNoticeS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ServerNoticeS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ServerNoticeS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ServerNoticeS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ServerNoticeS2CEvt::Create( IHeap& memHeap, const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
@@ -11711,14 +11711,14 @@ namespace SF
 				return hr;
 			}; // MessageData* ServerNoticeS2CEvt::Create( IHeap& memHeap, const int8_t &InNoticeCategory, const char* InServerNoticeMessage )
 
-			Result ServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ServerNoticeS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::ServerNotice, {0}:{1} , NoticeCategory:{2}, ServerNoticeMessage:{3,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetNoticeCategory(), parser.GetServerNoticeMessage()); 
+						prefix, pHeader->Length, parser.GetNoticeCategory(), parser.GetServerNoticeMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result ServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ServerNoticeS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: To call general functionality
 			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
@@ -11732,14 +11732,14 @@ namespace SF
 				} // if (!m_ParametersHasParsed)
 				return m_Parameters;
 			} // const VariableTable& CallFunctionCmd::GetParameters() const
-			Result CallFunctionCmd::ParseMessage(const MessageData* pIMsg)
+			Result CallFunctionCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -11753,15 +11753,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CallFunctionCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result CallFunctionCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result CallFunctionCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CallFunctionCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CallFunctionCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("FunctionName", parser.GetFunctionName());
@@ -11769,18 +11769,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CallFunctionCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CallFunctionCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CallFunctionCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CallFunctionCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters )
 			{
@@ -11850,14 +11850,14 @@ namespace SF
 				return hr;
 			}; // MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters )
 
-			Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CallFunctionCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CallFunctionCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::CallFunction, {0}:{1} , TransactionID:{2}, FunctionName:{3}, Parameters:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetFunctionName(), parser.GetParameters()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetFunctionName(), parser.GetParameters()); 
 				return ResultCode::SUCCESS;
-			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_GAME, 74);
 			const VariableTable& CallFunctionRes::GetResults() const
@@ -11870,14 +11870,14 @@ namespace SF
 				} // if (!m_ResultsHasParsed)
 				return m_Results;
 			} // const VariableTable& CallFunctionRes::GetResults() const
-			Result CallFunctionRes::ParseMessage(const MessageData* pIMsg)
+			Result CallFunctionRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -11891,15 +11891,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CallFunctionRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result CallFunctionRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result CallFunctionRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CallFunctionRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CallFunctionRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -11907,18 +11907,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CallFunctionRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CallFunctionRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CallFunctionRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CallFunctionRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CallFunctionRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CallFunctionRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CallFunctionRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CallFunctionRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* CallFunctionRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults )
 			{
@@ -11988,14 +11988,14 @@ namespace SF
 				return hr;
 			}; // MessageData* CallFunctionRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
 
-			Result CallFunctionRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CallFunctionRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CallFunctionRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "Game::CallFunction, {0}:{1} , TransactionID:{2}, Result:{3:X8}, Results:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetResults()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetResults()); 
 				return ResultCode::SUCCESS;
-			}; // Result CallFunctionRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CallFunctionRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 
 

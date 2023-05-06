@@ -27,14 +27,14 @@ namespace SF
 		{
  			// Cmd: Player Join request.
 			const MessageID JoinPlayInstanceCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 0);
-			Result JoinPlayInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			Result JoinPlayInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -47,15 +47,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinPlayInstanceCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinPlayInstanceCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result JoinPlayInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinPlayInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				JoinPlayInstanceCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
@@ -64,18 +64,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinPlayInstanceCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinPlayInstanceCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result JoinPlayInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinPlayInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinPlayInstanceCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinPlayInstanceCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinPlayInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinPlayInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* JoinPlayInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
@@ -112,14 +112,14 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinPlayInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 
-			Result JoinPlayInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinPlayInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				JoinPlayInstanceCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::JoinPlayInstance, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, PlayerIdentifier:{5,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetPlayerIdentifier()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetPlayerIdentifier()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinPlayInstanceCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinPlayInstanceCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID JoinPlayInstanceRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 0);
 			const VariableTable& JoinPlayInstanceRes::GetCharacterPrivateData() const
@@ -132,14 +132,14 @@ namespace SF
 				} // if (!m_CharacterPrivateDataHasParsed)
 				return m_CharacterPrivateData;
 			} // const VariableTable& JoinPlayInstanceRes::GetCharacterPrivateData() const
-			Result JoinPlayInstanceRes::ParseMessage(const MessageData* pIMsg)
+			Result JoinPlayInstanceRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -157,15 +157,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinPlayInstanceRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result JoinPlayInstanceRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result JoinPlayInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result JoinPlayInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				JoinPlayInstanceRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -177,18 +177,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result JoinPlayInstanceRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result JoinPlayInstanceRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result JoinPlayInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result JoinPlayInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) JoinPlayInstanceRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) JoinPlayInstanceRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result JoinPlayInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result JoinPlayInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement )
 			{
@@ -274,25 +274,25 @@ namespace SF
 				return hr;
 			}; // MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement )
 
-			Result JoinPlayInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result JoinPlayInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				JoinPlayInstanceRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::JoinPlayInstance, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, CharacterID:{6}, CharacterPrivateData:{7}, Movement:{8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetCharacterID(), parser.GetCharacterPrivateData(), parser.GetMovement()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetCharacterID(), parser.GetCharacterPrivateData(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
-			}; // Result JoinPlayInstanceRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result JoinPlayInstanceRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player kicked event. this event will be broadcasted when a player kicked.
 			const MessageID PlayerKickedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 1);
-			Result PlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result PlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -302,33 +302,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerKickedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PlayerKickedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PlayerKickedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PlayerKickedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PlayerKickedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("KickedPlayerID", parser.GetKickedPlayerID());
 
 				return hr;
 
-			}; // Result PlayerKickedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PlayerKickedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PlayerKickedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PlayerKickedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
@@ -361,25 +361,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
 
-			Result PlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PlayerKickedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::PlayerKicked, {0}:{1} , PlayInstanceUID:{2}, KickedPlayerID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetKickedPlayerID()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetKickedPlayerID()); 
 				return ResultCode::SUCCESS;
-			}; // Result PlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PlayerKickedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Play packet
 			const MessageID PlayPacketC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 2);
-			Result PlayPacketC2SEvt::ParseMessage(const MessageData* pIMsg)
+			Result PlayPacketC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -394,15 +394,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayPacketC2SEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PlayPacketC2SEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PlayPacketC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PlayPacketC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PlayPacketC2SEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("SenderEndpointID", parser.GetSenderEndpointID());
@@ -411,18 +411,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayPacketC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PlayPacketC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PlayPacketC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PlayPacketC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PlayPacketC2SEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PlayPacketC2SEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PlayPacketC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PlayPacketC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PlayPacketC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
@@ -459,14 +459,14 @@ namespace SF
 				return hr;
 			}; // MessageData* PlayPacketC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 
-			Result PlayPacketC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PlayPacketC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PlayPacketC2SEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::PlayPacket, {0}:{1} , PlayInstanceUID:{2}, SenderEndpointID:{3}, TargetEndpointMask:{4}, Payload:{5,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetSenderEndpointID(), parser.GetTargetEndpointMask(), parser.GetPayload()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetSenderEndpointID(), parser.GetTargetEndpointMask(), parser.GetPayload()); 
 				return ResultCode::SUCCESS;
-			}; // Result PlayPacketC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PlayPacketC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: New actor in get view
 			const MessageID NewActorInViewS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 3);
@@ -500,14 +500,14 @@ namespace SF
 				} // if (!m_StateValuesHasParsed)
 				return m_StateValues;
 			} // const VariableTable& NewActorInViewS2CEvt::GetStateValues() const
-			Result NewActorInViewS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result NewActorInViewS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -532,15 +532,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result NewActorInViewS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result NewActorInViewS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result NewActorInViewS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result NewActorInViewS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				NewActorInViewS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
@@ -553,18 +553,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result NewActorInViewS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result NewActorInViewS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result NewActorInViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result NewActorInViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) NewActorInViewS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) NewActorInViewS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result NewActorInViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result NewActorInViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* NewActorInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues )
 			{
@@ -662,25 +662,25 @@ namespace SF
 				return hr;
 			}; // MessageData* NewActorInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const VariableTable &InPublicData, const VariableTable &InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
 
-			Result NewActorInViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result NewActorInViewS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				NewActorInViewS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::NewActorInView, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, PlayerPlatformId:{4}, PublicData:{5}, EquipData:{6}, Movement:{7}, State:{8}, StateValues:{9}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetPlayerPlatformId(), parser.GetPublicData(), parser.GetEquipData(), parser.GetMovement(), parser.GetState(), parser.GetStateValues()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetPlayerPlatformId(), parser.GetPublicData(), parser.GetEquipData(), parser.GetMovement(), parser.GetState(), parser.GetStateValues()); 
 				return ResultCode::SUCCESS;
-			}; // Result NewActorInViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result NewActorInViewS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Remove actor from view
 			const MessageID RemoveActorFromViewS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 4);
-			Result RemoveActorFromViewS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result RemoveActorFromViewS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -690,33 +690,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result RemoveActorFromViewS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result RemoveActorFromViewS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result RemoveActorFromViewS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result RemoveActorFromViewS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				RemoveActorFromViewS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("ActorID", parser.GetActorID());
 
 				return hr;
 
-			}; // Result RemoveActorFromViewS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result RemoveActorFromViewS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result RemoveActorFromViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result RemoveActorFromViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) RemoveActorFromViewS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) RemoveActorFromViewS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result RemoveActorFromViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result RemoveActorFromViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* RemoveActorFromViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const uint32_t &InActorID )
@@ -749,25 +749,25 @@ namespace SF
 				return hr;
 			}; // MessageData* RemoveActorFromViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const uint32_t &InActorID )
 
-			Result RemoveActorFromViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result RemoveActorFromViewS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				RemoveActorFromViewS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::RemoveActorFromView, {0}:{1} , PlayInstanceUID:{2}, ActorID:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetActorID()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetActorID()); 
 				return ResultCode::SUCCESS;
-			}; // Result RemoveActorFromViewS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result RemoveActorFromViewS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Player Movement
 			const MessageID PlayerMovementC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 5);
-			Result PlayerMovementC2SEvt::ParseMessage(const MessageData* pIMsg)
+			Result PlayerMovementC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -778,15 +778,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerMovementC2SEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PlayerMovementC2SEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PlayerMovementC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PlayerMovementC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PlayerMovementC2SEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
@@ -794,18 +794,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerMovementC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PlayerMovementC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PlayerMovementC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PlayerMovementC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PlayerMovementC2SEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PlayerMovementC2SEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PlayerMovementC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PlayerMovementC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* PlayerMovementC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
@@ -840,25 +840,25 @@ namespace SF
 				return hr;
 			}; // MessageData* PlayerMovementC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 
-			Result PlayerMovementC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PlayerMovementC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PlayerMovementC2SEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug3, "PlayInstance::PlayerMovement, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, Movement:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMovement()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
-			}; // Result PlayerMovementC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PlayerMovementC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player Movement
 			const MessageID ActorMovementS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 6);
-			Result ActorMovementS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result ActorMovementS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -868,33 +868,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result ActorMovementS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ActorMovementS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ActorMovementS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ActorMovementS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ActorMovementS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("Movement", "ActorMovement", parser.GetMovement());
 
 				return hr;
 
-			}; // Result ActorMovementS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ActorMovementS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ActorMovementS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ActorMovementS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ActorMovementS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ActorMovementS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ActorMovementS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ActorMovementS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ActorMovementS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement )
@@ -927,25 +927,25 @@ namespace SF
 				return hr;
 			}; // MessageData* ActorMovementS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement )
 
-			Result ActorMovementS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ActorMovementS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ActorMovementS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug4, "PlayInstance::ActorMovement, {0}:{1} , PlayInstanceUID:{2}, Movement:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetMovement()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
-			}; // Result ActorMovementS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ActorMovementS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player Movement
 			const MessageID ActorMovementsS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 7);
-			Result ActorMovementsS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result ActorMovementsS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -958,33 +958,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result ActorMovementsS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ActorMovementsS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ActorMovementsS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ActorMovementsS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ActorMovementsS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariableArray("Movement", "ActorMovement", parser.GetMovement());
 
 				return hr;
 
-			}; // Result ActorMovementsS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ActorMovementsS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ActorMovementsS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ActorMovementsS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ActorMovementsS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ActorMovementsS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ActorMovementsS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ActorMovementsS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ActorMovementsS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement )
@@ -1017,14 +1017,14 @@ namespace SF
 				return hr;
 			}; // MessageData* ActorMovementsS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement )
 
-			Result ActorMovementsS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ActorMovementsS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ActorMovementsS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug4, "PlayInstance::ActorMovements, {0}:{1} , PlayInstanceUID:{2}, Movement:{3,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetMovement()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetMovement()); 
 				return ResultCode::SUCCESS;
-			}; // Result ActorMovementsS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ActorMovementsS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player state change
 			const MessageID PlayerStateChangedS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 8);
@@ -1038,14 +1038,14 @@ namespace SF
 				} // if (!m_StateValuesHasParsed)
 				return m_StateValues;
 			} // const VariableTable& PlayerStateChangedS2CEvt::GetStateValues() const
-			Result PlayerStateChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result PlayerStateChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1062,15 +1062,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerStateChangedS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result PlayerStateChangedS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result PlayerStateChangedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result PlayerStateChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				PlayerStateChangedS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
@@ -1081,18 +1081,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result PlayerStateChangedS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result PlayerStateChangedS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result PlayerStateChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result PlayerStateChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) PlayerStateChangedS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) PlayerStateChangedS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result PlayerStateChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result PlayerStateChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* PlayerStateChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const Array<uint8_t>& InStateValues )
 			{
@@ -1174,14 +1174,14 @@ namespace SF
 				return hr;
 			}; // MessageData* PlayerStateChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const VariableTable &InStateValues )
 
-			Result PlayerStateChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result PlayerStateChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				PlayerStateChangedS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::PlayerStateChanged, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, State:{4}, MoveFrame:{5}, Position:{6}, StateValues:{7}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetState(), parser.GetMoveFrame(), parser.GetPosition(), parser.GetStateValues()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetState(), parser.GetMoveFrame(), parser.GetPosition(), parser.GetStateValues()); 
 				return ResultCode::SUCCESS;
-			}; // Result PlayerStateChangedS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result PlayerStateChangedS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Repliable player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 			const MessageID ClientSyncReliableC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 9);
@@ -1195,14 +1195,14 @@ namespace SF
 				} // if (!m_SyncDataHasParsed)
 				return m_SyncData;
 			} // const VariableTable& ClientSyncReliableC2SEvt::GetSyncData() const
-			Result ClientSyncReliableC2SEvt::ParseMessage(const MessageData* pIMsg)
+			Result ClientSyncReliableC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1216,15 +1216,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result ClientSyncReliableC2SEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ClientSyncReliableC2SEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ClientSyncReliableC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ClientSyncReliableC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ClientSyncReliableC2SEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
@@ -1232,18 +1232,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result ClientSyncReliableC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ClientSyncReliableC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ClientSyncReliableC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ClientSyncReliableC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ClientSyncReliableC2SEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ClientSyncReliableC2SEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ClientSyncReliableC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ClientSyncReliableC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* ClientSyncReliableC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
 			{
@@ -1313,14 +1313,14 @@ namespace SF
 				return hr;
 			}; // MessageData* ClientSyncReliableC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
 
-			Result ClientSyncReliableC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ClientSyncReliableC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ClientSyncReliableC2SEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::ClientSyncReliable, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, SyncData:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetSyncData()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetSyncData()); 
 				return ResultCode::SUCCESS;
-			}; // Result ClientSyncReliableC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ClientSyncReliableC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Player Sync packet. We shares packet for C2S and S2C, meaning other clients will receive same packet
 			const MessageID ClientSyncC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 10);
@@ -1334,14 +1334,14 @@ namespace SF
 				} // if (!m_SyncDataHasParsed)
 				return m_SyncData;
 			} // const VariableTable& ClientSyncC2SEvt::GetSyncData() const
-			Result ClientSyncC2SEvt::ParseMessage(const MessageData* pIMsg)
+			Result ClientSyncC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1355,15 +1355,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result ClientSyncC2SEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ClientSyncC2SEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ClientSyncC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ClientSyncC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ClientSyncC2SEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
@@ -1371,18 +1371,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result ClientSyncC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ClientSyncC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ClientSyncC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ClientSyncC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ClientSyncC2SEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ClientSyncC2SEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ClientSyncC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ClientSyncC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* ClientSyncC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
 			{
@@ -1452,25 +1452,25 @@ namespace SF
 				return hr;
 			}; // MessageData* ClientSyncC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
 
-			Result ClientSyncC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ClientSyncC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ClientSyncC2SEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::ClientSync, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, SyncData:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetSyncData()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetSyncData()); 
 				return ResultCode::SUCCESS;
-			}; // Result ClientSyncC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ClientSyncC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Occupy map object
 			const MessageID OccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
-			Result OccupyMapObjectCmd::ParseMessage(const MessageData* pIMsg)
+			Result OccupyMapObjectCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1483,15 +1483,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result OccupyMapObjectCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result OccupyMapObjectCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result OccupyMapObjectCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result OccupyMapObjectCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				OccupyMapObjectCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
@@ -1501,18 +1501,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result OccupyMapObjectCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result OccupyMapObjectCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result OccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result OccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) OccupyMapObjectCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) OccupyMapObjectCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result OccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result OccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
@@ -1551,24 +1551,24 @@ namespace SF
 				return hr;
 			}; // MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
 
-			Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				OccupyMapObjectCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::OccupyMapObject, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MapObjectId:{5}, UsageId:{6}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId(), parser.GetUsageId()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId(), parser.GetUsageId()); 
 				return ResultCode::SUCCESS;
-			}; // Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result OccupyMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID OccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 11);
-			Result OccupyMapObjectRes::ParseMessage(const MessageData* pIMsg)
+			Result OccupyMapObjectRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1581,15 +1581,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result OccupyMapObjectRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result OccupyMapObjectRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result OccupyMapObjectRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result OccupyMapObjectRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				OccupyMapObjectRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -1599,18 +1599,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result OccupyMapObjectRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result OccupyMapObjectRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result OccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result OccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) OccupyMapObjectRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) OccupyMapObjectRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result OccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result OccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
@@ -1649,25 +1649,25 @@ namespace SF
 				return hr;
 			}; // MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 
-			Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				OccupyMapObjectRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::OccupyMapObject, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, MapObjectId:{6}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId()); 
 				return ResultCode::SUCCESS;
-			}; // Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result OccupyMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Unoccupy map object
 			const MessageID UnoccupyMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
-			Result UnoccupyMapObjectCmd::ParseMessage(const MessageData* pIMsg)
+			Result UnoccupyMapObjectCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1679,15 +1679,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result UnoccupyMapObjectCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result UnoccupyMapObjectCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result UnoccupyMapObjectCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result UnoccupyMapObjectCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				UnoccupyMapObjectCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
@@ -1696,18 +1696,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result UnoccupyMapObjectCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result UnoccupyMapObjectCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result UnoccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result UnoccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) UnoccupyMapObjectCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) UnoccupyMapObjectCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result UnoccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result UnoccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
@@ -1744,24 +1744,24 @@ namespace SF
 				return hr;
 			}; // MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 
-			Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				UnoccupyMapObjectCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::UnoccupyMapObject, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MapObjectId:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId()); 
 				return ResultCode::SUCCESS;
-			}; // Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result UnoccupyMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID UnoccupyMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 12);
-			Result UnoccupyMapObjectRes::ParseMessage(const MessageData* pIMsg)
+			Result UnoccupyMapObjectRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1774,15 +1774,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result UnoccupyMapObjectRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result UnoccupyMapObjectRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result UnoccupyMapObjectRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result UnoccupyMapObjectRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				UnoccupyMapObjectRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -1792,18 +1792,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result UnoccupyMapObjectRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result UnoccupyMapObjectRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result UnoccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result UnoccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) UnoccupyMapObjectRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) UnoccupyMapObjectRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result UnoccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result UnoccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
@@ -1842,14 +1842,14 @@ namespace SF
 				return hr;
 			}; // MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 
-			Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				UnoccupyMapObjectRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::UnoccupyMapObject, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, MapObjectId:{6}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId()); 
 				return ResultCode::SUCCESS;
-			}; // Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result UnoccupyMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Use map object
 			const MessageID UseMapObjectCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
@@ -1863,14 +1863,14 @@ namespace SF
 				} // if (!m_UseParametersHasParsed)
 				return m_UseParameters;
 			} // const VariableTable& UseMapObjectCmd::GetUseParameters() const
-			Result UseMapObjectCmd::ParseMessage(const MessageData* pIMsg)
+			Result UseMapObjectCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -1886,15 +1886,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result UseMapObjectCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result UseMapObjectCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result UseMapObjectCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result UseMapObjectCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				UseMapObjectCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
@@ -1904,18 +1904,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result UseMapObjectCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result UseMapObjectCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result UseMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result UseMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) UseMapObjectCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) UseMapObjectCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result UseMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result UseMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters )
 			{
@@ -1993,14 +1993,14 @@ namespace SF
 				return hr;
 			}; // MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
 
-			Result UseMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result UseMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				UseMapObjectCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::UseMapObject, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MapObjectId:{5}, UseParameters:{6}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId(), parser.GetUseParameters()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId(), parser.GetUseParameters()); 
 				return ResultCode::SUCCESS;
-			}; // Result UseMapObjectCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result UseMapObjectCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID UseMapObjectRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 13);
 			const VariableTable& UseMapObjectRes::GetResultAttributes() const
@@ -2013,14 +2013,14 @@ namespace SF
 				} // if (!m_ResultAttributesHasParsed)
 				return m_ResultAttributes;
 			} // const VariableTable& UseMapObjectRes::GetResultAttributes() const
-			Result UseMapObjectRes::ParseMessage(const MessageData* pIMsg)
+			Result UseMapObjectRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2037,15 +2037,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result UseMapObjectRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result UseMapObjectRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result UseMapObjectRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result UseMapObjectRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				UseMapObjectRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -2056,18 +2056,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result UseMapObjectRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result UseMapObjectRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result UseMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result UseMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) UseMapObjectRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) UseMapObjectRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result UseMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result UseMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InResultAttributes )
 			{
@@ -2149,14 +2149,14 @@ namespace SF
 				return hr;
 			}; // MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
 
-			Result UseMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result UseMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				UseMapObjectRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::UseMapObject, {0}:{1} , TransactionID:{2}, Result:{3:X8}, PlayInstanceUID:{4}, PlayerID:{5}, MapObjectId:{6}, ResultAttributes:{7}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId(), parser.GetResultAttributes()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMapObjectId(), parser.GetResultAttributes()); 
 				return ResultCode::SUCCESS;
-			}; // Result UseMapObjectRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result UseMapObjectRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Send zone chatting
 			const MessageID ZoneChatCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
@@ -2170,14 +2170,14 @@ namespace SF
 				} // if (!m_ChatMetaDataHasParsed)
 				return m_ChatMetaData;
 			} // const VariableTable& ZoneChatCmd::GetChatMetaData() const
-			Result ZoneChatCmd::ParseMessage(const MessageData* pIMsg)
+			Result ZoneChatCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2195,15 +2195,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result ZoneChatCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result ZoneChatCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result ZoneChatCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ZoneChatCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ZoneChatCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
@@ -2214,18 +2214,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result ZoneChatCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ZoneChatCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ZoneChatCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ZoneChatCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ZoneChatCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ZoneChatCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ZoneChatCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ZoneChatCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* ZoneChatCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
@@ -2307,24 +2307,24 @@ namespace SF
 				return hr;
 			}; // MessageData* ZoneChatCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			Result ZoneChatCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ZoneChatCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ZoneChatCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::ZoneChat, {0}:{1} , TransactionID:{2}, PlayInstanceUID:{3}, PlayerID:{4}, MessageType:{5}, ChatMetaData:{6}, ChatMessage:{7,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMessageType(), parser.GetChatMetaData(), parser.GetChatMessage()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetMessageType(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result ZoneChatCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ZoneChatCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID ZoneChatRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 14);
-			Result ZoneChatRes::ParseMessage(const MessageData* pIMsg)
+			Result ZoneChatRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2334,33 +2334,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result ZoneChatRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result ZoneChatRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result ZoneChatRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ZoneChatRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ZoneChatRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
 
 				return hr;
 
-			}; // Result ZoneChatRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ZoneChatRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ZoneChatRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ZoneChatRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ZoneChatRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ZoneChatRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ZoneChatRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ZoneChatRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* ZoneChatRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
@@ -2393,14 +2393,14 @@ namespace SF
 				return hr;
 			}; // MessageData* ZoneChatRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 
-			Result ZoneChatRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ZoneChatRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ZoneChatRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::ZoneChat, {0}:{1} , TransactionID:{2}, Result:{3:X8}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult()); 
 				return ResultCode::SUCCESS;
-			}; // Result ZoneChatRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ZoneChatRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Player state change
 			const MessageID ZoneChatS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 15);
@@ -2414,14 +2414,14 @@ namespace SF
 				} // if (!m_ChatMetaDataHasParsed)
 				return m_ChatMetaData;
 			} // const VariableTable& ZoneChatS2CEvt::GetChatMetaData() const
-			Result ZoneChatS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result ZoneChatS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2438,15 +2438,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result ZoneChatS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result ZoneChatS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result ZoneChatS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result ZoneChatS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				ZoneChatS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("SenderID", parser.GetSenderID());
@@ -2456,18 +2456,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result ZoneChatS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result ZoneChatS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result ZoneChatS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result ZoneChatS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) ZoneChatS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) ZoneChatS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result ZoneChatS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result ZoneChatS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* ZoneChatS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
@@ -2545,25 +2545,25 @@ namespace SF
 				return hr;
 			}; // MessageData* ZoneChatS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
 
-			Result ZoneChatS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result ZoneChatS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				ZoneChatS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::ZoneChat, {0}:{1} , PlayInstanceUID:{2}, SenderID:{3}, MessageType:{4}, ChatMetaData:{5}, ChatMessage:{6,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetSenderID(), parser.GetMessageType(), parser.GetChatMetaData(), parser.GetChatMessage()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetSenderID(), parser.GetMessageType(), parser.GetChatMetaData(), parser.GetChatMessage()); 
 				return ResultCode::SUCCESS;
-			}; // Result ZoneChatS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result ZoneChatS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Effect modifier initial sync
 			const MessageID LevelUpS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 16);
-			Result LevelUpS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result LevelUpS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2575,15 +2575,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result LevelUpS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result LevelUpS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result LevelUpS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result LevelUpS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				LevelUpS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
@@ -2592,18 +2592,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result LevelUpS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result LevelUpS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) LevelUpS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) LevelUpS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* LevelUpS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel )
@@ -2640,25 +2640,25 @@ namespace SF
 				return hr;
 			}; // MessageData* LevelUpS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel )
 
-			Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				LevelUpS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::LevelUp, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, CurrentExp:{4}, CurrentLevel:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetCurrentExp(), parser.GetCurrentLevel()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetCurrentExp(), parser.GetCurrentLevel()); 
 				return ResultCode::SUCCESS;
-			}; // Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result LevelUpS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Create stream instance
 			const MessageID CreateStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
-			Result CreateStreamCmd::ParseMessage(const MessageData* pIMsg)
+			Result CreateStreamCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2670,15 +2670,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateStreamCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result CreateStreamCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result CreateStreamCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CreateStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CreateStreamCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
@@ -2686,18 +2686,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateStreamCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CreateStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* CreateStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
@@ -2732,24 +2732,24 @@ namespace SF
 				return hr;
 			}; // MessageData* CreateStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 
-			Result CreateStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CreateStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CreateStreamCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::CreateStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
-			}; // Result CreateStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CreateStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID CreateStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 17);
-			Result CreateStreamRes::ParseMessage(const MessageData* pIMsg)
+			Result CreateStreamRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2761,15 +2761,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateStreamRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result CreateStreamRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result CreateStreamRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CreateStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CreateStreamRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -2777,18 +2777,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CreateStreamRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CreateStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CreateStreamRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* CreateStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
@@ -2823,25 +2823,25 @@ namespace SF
 				return hr;
 			}; // MessageData* CreateStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
 
-			Result CreateStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CreateStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CreateStreamRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::CreateStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
-			}; // Result CreateStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CreateStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Open stream instance
 			const MessageID FindStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
-			Result FindStreamCmd::ParseMessage(const MessageData* pIMsg)
+			Result FindStreamCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2853,15 +2853,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindStreamCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindStreamCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindStreamCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindStreamCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
@@ -2869,18 +2869,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindStreamCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindStreamCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindStreamCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
@@ -2915,24 +2915,24 @@ namespace SF
 				return hr;
 			}; // MessageData* FindStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 
-			Result FindStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindStreamCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::FindStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID FindStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 18);
-			Result FindStreamRes::ParseMessage(const MessageData* pIMsg)
+			Result FindStreamRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -2944,15 +2944,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindStreamRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result FindStreamRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result FindStreamRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result FindStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				FindStreamRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -2960,18 +2960,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result FindStreamRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result FindStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) FindStreamRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) FindStreamRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* FindStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
@@ -3006,25 +3006,25 @@ namespace SF
 				return hr;
 			}; // MessageData* FindStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
 
-			Result FindStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result FindStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				FindStreamRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::FindStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
-			}; // Result FindStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result FindStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Delete stream instance
 			const MessageID DeleteStreamCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 19);
-			Result DeleteStreamCmd::ParseMessage(const MessageData* pIMsg)
+			Result DeleteStreamCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3036,15 +3036,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteStreamCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result DeleteStreamCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result DeleteStreamCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result DeleteStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				DeleteStreamCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
@@ -3052,18 +3052,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteStreamCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result DeleteStreamCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* DeleteStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
@@ -3098,24 +3098,24 @@ namespace SF
 				return hr;
 			}; // MessageData* DeleteStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 
-			Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				DeleteStreamCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::DeleteStream, {0}:{1} , TransactionID:{2}, Ticket:{3}, StreamName:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
-			}; // Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result DeleteStreamCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID DeleteStreamRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 19);
-			Result DeleteStreamRes::ParseMessage(const MessageData* pIMsg)
+			Result DeleteStreamRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3127,15 +3127,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteStreamRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result DeleteStreamRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result DeleteStreamRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result DeleteStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				DeleteStreamRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -3143,18 +3143,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result DeleteStreamRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result DeleteStreamRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) DeleteStreamRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* DeleteStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
@@ -3189,25 +3189,25 @@ namespace SF
 				return hr;
 			}; // MessageData* DeleteStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
 
-			Result DeleteStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result DeleteStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				DeleteStreamRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::DeleteStream, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamName:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamName()); 
 				return ResultCode::SUCCESS;
-			}; // Result DeleteStreamRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result DeleteStreamRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: Get stream list
 			const MessageID GetStreamListCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 20);
-			Result GetStreamListCmd::ParseMessage(const MessageData* pIMsg)
+			Result GetStreamListCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3217,33 +3217,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetStreamListCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetStreamListCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetStreamListCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetStreamListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetStreamListCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Ticket", parser.GetTicket());
 
 				return hr;
 
-			}; // Result GetStreamListCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetStreamListCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetStreamListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetStreamListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetStreamListCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetStreamListCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetStreamListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetStreamListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetStreamListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket )
@@ -3276,24 +3276,24 @@ namespace SF
 				return hr;
 			}; // MessageData* GetStreamListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket )
 
-			Result GetStreamListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetStreamListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetStreamListCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::GetStreamList, {0}:{1} , TransactionID:{2}, Ticket:{3}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetTicket()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetTicket()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetStreamListCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetStreamListCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID GetStreamListRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 20);
-			Result GetStreamListRes::ParseMessage(const MessageData* pIMsg)
+			Result GetStreamListRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3304,15 +3304,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetStreamListRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result GetStreamListRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result GetStreamListRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result GetStreamListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				GetStreamListRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -3320,18 +3320,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result GetStreamListRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result GetStreamListRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result GetStreamListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result GetStreamListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) GetStreamListRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) GetStreamListRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result GetStreamListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result GetStreamListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* GetStreamListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
@@ -3366,14 +3366,14 @@ namespace SF
 				return hr;
 			}; // MessageData* GetStreamListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
 
-			Result GetStreamListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result GetStreamListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				GetStreamListRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::GetStreamList, {0}:{1} , TransactionID:{2}, Result:{3:X8}, StreamNames:{4,60}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamNames()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetStreamNames()); 
 				return ResultCode::SUCCESS;
-			}; // Result GetStreamListRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result GetStreamListRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// Cmd: To call general functionality
 			const MessageID CallFunctionCmd::MID = MessageID(MSGTYPE_COMMAND, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 21);
@@ -3387,14 +3387,14 @@ namespace SF
 				} // if (!m_ParametersHasParsed)
 				return m_Parameters;
 			} // const VariableTable& CallFunctionCmd::GetParameters() const
-			Result CallFunctionCmd::ParseMessage(const MessageData* pIMsg)
+			Result CallFunctionCmd::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3409,15 +3409,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CallFunctionCmd::ParseMessage(const MessageData* pIMsg)
+			}; // Result CallFunctionCmd::ParseMessage(const MessageHeader* pHeader)
 
-			Result CallFunctionCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CallFunctionCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CallFunctionCmd parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("FunctionName", parser.GetFunctionName());
@@ -3426,18 +3426,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CallFunctionCmd::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CallFunctionCmd::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CallFunctionCmd(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CallFunctionCmd(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters )
 			{
@@ -3511,14 +3511,14 @@ namespace SF
 				return hr;
 			}; // MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
 
-			Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CallFunctionCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CallFunctionCmd parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::CallFunction, {0}:{1} , TransactionID:{2}, FunctionName:{3}, PlayerID:{4}, Parameters:{5}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetFunctionName(), parser.GetPlayerID(), parser.GetParameters()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetFunctionName(), parser.GetPlayerID(), parser.GetParameters()); 
 				return ResultCode::SUCCESS;
-			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CallFunctionCmd::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			const MessageID CallFunctionRes::MID = MessageID(MSGTYPE_RESULT, MSGTYPE_RELIABLE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 21);
 			const VariableTable& CallFunctionRes::GetResults() const
@@ -3531,14 +3531,14 @@ namespace SF
 				} // if (!m_ResultsHasParsed)
 				return m_Results;
 			} // const VariableTable& CallFunctionRes::GetResults() const
-			Result CallFunctionRes::ParseMessage(const MessageData* pIMsg)
+			Result CallFunctionRes::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3552,15 +3552,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result CallFunctionRes::ParseMessage(const MessageData* pIMsg)
+			}; // Result CallFunctionRes::ParseMessage(const MessageHeader* pHeader)
 
-			Result CallFunctionRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result CallFunctionRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				CallFunctionRes parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("TransactionID", parser.GetTransactionID());
 				variableBuilder.SetVariable("Result", parser.GetResult());
@@ -3568,18 +3568,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result CallFunctionRes::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result CallFunctionRes::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result CallFunctionRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result CallFunctionRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) CallFunctionRes(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) CallFunctionRes(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result CallFunctionRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result CallFunctionRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 			MessageData* CallFunctionRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults )
 			{
@@ -3649,25 +3649,25 @@ namespace SF
 				return hr;
 			}; // MessageData* CallFunctionRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
 
-			Result CallFunctionRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result CallFunctionRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				CallFunctionRes parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug1, "PlayInstance::CallFunction, {0}:{1} , TransactionID:{2}, Result:{3:X8}, Results:{4}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetResults()); 
+						prefix, pHeader->Length, parser.GetTransactionID(), parser.GetResult(), parser.GetResults()); 
 				return ResultCode::SUCCESS;
-			}; // Result CallFunctionRes::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result CallFunctionRes::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// C2S: Send coded voice data to server
 			const MessageID SendVoiceDataC2SEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 22);
-			Result SendVoiceDataC2SEvt::ParseMessage(const MessageData* pIMsg)
+			Result SendVoiceDataC2SEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3681,15 +3681,15 @@ namespace SF
 
 				return hr;
 
-			}; // Result SendVoiceDataC2SEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result SendVoiceDataC2SEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result SendVoiceDataC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result SendVoiceDataC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				SendVoiceDataC2SEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("PlayInstanceUID", parser.GetPlayInstanceUID());
 				variableBuilder.SetVariable("PlayerID", parser.GetPlayerID());
@@ -3697,18 +3697,18 @@ namespace SF
 
 				return hr;
 
-			}; // Result SendVoiceDataC2SEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result SendVoiceDataC2SEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result SendVoiceDataC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result SendVoiceDataC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) SendVoiceDataC2SEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) SendVoiceDataC2SEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result SendVoiceDataC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result SendVoiceDataC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* SendVoiceDataC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
@@ -3743,25 +3743,25 @@ namespace SF
 				return hr;
 			}; // MessageData* SendVoiceDataC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
 
-			Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				SendVoiceDataC2SEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug6, "PlayInstance::SendVoiceData, {0}:{1} , PlayInstanceUID:{2}, PlayerID:{3}, VoiceData:{4,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetVoiceData()); 
+						prefix, pHeader->Length, parser.GetPlayInstanceUID(), parser.GetPlayerID(), parser.GetVoiceData()); 
 				return ResultCode::SUCCESS;
-			}; // Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result SendVoiceDataC2SEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 			// S2C: Voice data
 			const MessageID VoiceDataS2CEvt::MID = MessageID(MSGTYPE_EVENT, MSGTYPE_NONE, MSGTYPE_NONE, PROTOCOLID_PLAYINSTANCE, 23);
-			Result VoiceDataS2CEvt::ParseMessage(const MessageData* pIMsg)
+			Result VoiceDataS2CEvt::ParseMessage(const MessageHeader* pHeader)
 			{
  				ScopeContext hr;
 
 
-				protocolCheckPtr(pIMsg);
+				protocolCheckPtr(pHeader);
 
-				ArrayView<const uint8_t> bufferView(pIMsg->GetPayload());
+				ArrayView<const uint8_t> bufferView(pHeader->GetPayload());
 				InputMemoryStream inputStream(bufferView);
 				auto* input = inputStream.ToInputStream();
 				uint16_t ArrayLen = 0;(void)(ArrayLen);
@@ -3774,33 +3774,33 @@ namespace SF
 
 				return hr;
 
-			}; // Result VoiceDataS2CEvt::ParseMessage(const MessageData* pIMsg)
+			}; // Result VoiceDataS2CEvt::ParseMessage(const MessageHeader* pHeader)
 
-			Result VoiceDataS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			Result VoiceDataS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 			{
  				ScopeContext hr;
 
 
 				VoiceDataS2CEvt parser;
-				protocolCheck(parser.ParseMessage(*pIMsg));
+				protocolCheck(parser.ParseMessage(pHeader));
 
 				variableBuilder.SetVariable("ActorID", parser.GetActorID());
 				variableBuilder.SetVariable("VoiceData", parser.GetVoiceData());
 
 				return hr;
 
-			}; // Result VoiceDataS2CEvt::ParseMessageTo(const MessageDataPtr& pIMsg, IVariableMapBuilder& variableBuilder )
+			}; // Result VoiceDataS2CEvt::ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder )
 
-			Result VoiceDataS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			Result VoiceDataS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 			{
  				ScopeContext hr;
 
-				protocolCheckMem(pMessageBase = new(memHeap) VoiceDataS2CEvt(pIMsg));
+				protocolCheckMem(pMessageBase = new(memHeap) VoiceDataS2CEvt(pHeader));
 				protocolCheck(pMessageBase->ParseMsg());
 
 				return hr;
 
-			}; // Result VoiceDataS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageDataPtr& pIMsg, MessageBase* &pMessageBase )
+			}; // Result VoiceDataS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
 			MessageData* VoiceDataS2CEvt::Create( IHeap& memHeap, const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
@@ -3833,14 +3833,14 @@ namespace SF
 				return hr;
 			}; // MessageData* VoiceDataS2CEvt::Create( IHeap& memHeap, const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
 
-			Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 			{
  				VoiceDataS2CEvt parser;
-				parser.ParseMessage(*pMsg);
+				parser.ParseMessage(pHeader);
 				SFLog(Net, Debug6, "PlayInstance::VoiceData, {0}:{1} , ActorID:{2}, VoiceData:{3,30}",
-						prefix, pMsg->GetMessageHeader()->Length, parser.GetActorID(), parser.GetVoiceData()); 
+						prefix, pHeader->Length, parser.GetActorID(), parser.GetVoiceData()); 
 				return ResultCode::SUCCESS;
-			}; // Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageDataPtr& pMsg)
+			}; // Result VoiceDataS2CEvt::TraceOut(const char* prefix, const MessageHeader* pHeader)
 
 
 

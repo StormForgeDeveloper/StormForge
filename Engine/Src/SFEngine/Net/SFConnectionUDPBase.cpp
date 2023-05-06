@@ -655,7 +655,7 @@ namespace Net {
 			netCheck( ResultCode::IO_BADPACKET_TOOBIG );
 		}
 
-		Protocol::PrintDebugMessage( "Send", pMsg );
+		Protocol::PrintDebugMessage("Send", pMsgHeader);
 
 		if (!msgID.IDs.Reliability
 			&& m_SendGuaQueue.size() > Const::GUARANT_PENDING_MAX)

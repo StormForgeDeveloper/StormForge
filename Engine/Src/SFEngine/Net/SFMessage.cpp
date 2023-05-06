@@ -26,8 +26,103 @@
 template class SF::SharedPointerT<SF::MessageData>;
 
 
-namespace SF {
-	
+namespace SF
+{
+
+    Result MessageHeader::ValidateChecksum()
+    {
+        ArrayView<uint8_t> payload = GetPayload();
+
+        if (Length == 0)
+        {
+            Assert(0);
+            return ResultCode::FAIL;
+        }
+
+        // Nothing to check
+        if (payload.size() == 0)
+            return ResultCode::SUCCESS;
+
+        uint16_t ExpectedCrc32 = (uint16_t)Hasher_Crc32().Crc32(0, payload.data(), payload.size());
+        if (ExpectedCrc32 == 0) ExpectedCrc32 = ~ExpectedCrc32;
+
+        if (ExpectedCrc32 != Crc32)
+            return ResultCode::IO_INVALID_MESSAGE_CHECKSUM;
+
+        return ResultCode::SUCCESS;
+    }
+
+    Result MessageHeader::ValidateChecksumNDecrypt()
+    {
+
+        if (Length == 0)
+        {
+            return ResultCode::SUCCESS_FALSE;
+        }
+
+        ArrayView<uint8_t> payload = GetPayload();
+
+        // Nothing to check
+        if (payload.size() == 0)
+        {
+            return ResultCode::SUCCESS;
+        }
+
+        uint16_t ExpectedCrc32 = (uint16_t)Util::Crc32NDecrypt(payload.size(), payload.data());
+        if (ExpectedCrc32 == 0) ExpectedCrc32 = ~ExpectedCrc32;
+
+        if (ExpectedCrc32 != Crc32)
+            return ResultCode::IO_INVALID_MESSAGE_CHECKSUM;
+
+        return ResultCode::SUCCESS;
+    }
+
+    // Update checksum
+    void MessageHeader::UpdateChecksum()
+    {
+        ArrayView<uint8_t> payload = GetPayload();
+
+        if (Length == 0)
+        {
+            Assert(0);
+            return;
+        }
+
+        if (payload.size() == 0)
+        {
+            Crc32 = 0;
+            return;
+        }
+
+        Crc32 = Hasher_Crc32().Crc32(0, payload.data(), payload.size());
+        if (Crc32 == 0)
+            Crc32 = ~Crc32;
+    }
+
+    // Update checksum
+    void MessageHeader::UpdateChecksumNEncrypt()
+    {
+        ArrayView<uint8_t> payload = GetPayload();
+
+        if (Length == 0)
+        {
+            Assert(0);
+            return;
+        }
+
+        if (payload.size() == 0)
+        {
+            Crc32 = 0;
+            return;
+        }
+
+        Crc32 = Util::Crc32NEncrypt(payload.size(), payload.data());
+        if (Crc32 == 0)
+            Crc32 = ~Crc32;
+
+        assert(Crc32 != 0 || payload.size() == 0);
+    }
+
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -73,8 +168,6 @@ namespace SF {
 		return m_pMsgHeader ? m_pMsgHeader->Length : 0;
 	}
 
-
-
 	void MessageData::AssignSequence( uint sequence )
 	{
 		// sequence must not assigned twice
@@ -83,30 +176,6 @@ namespace SF {
 
 		GetMessageHeader()->msgID.SetSequence(sequence);
 	}
-
-	void MessageData::GetRouteInfo(RouteContext& routeContext, TransactionID& transID)
-	{
-        ArrayView<uint8_t> payload = GetPayload();
-
-		if (payload.size() < sizeof(RouteContext))
-		{
-			routeContext = {};
-			transID = TransactionID();
-			return;
-		}
-
-		auto pRouteContext = (RouteContext*)GetPayloadPtr();
-		routeContext = *pRouteContext;
-
-		if (payload.size() < (sizeof(RouteContext)+sizeof(TransactionID)))
-		{
-			transID = TransactionID();
-			return;
-		}
-
-		transID = *(TransactionID*)(pRouteContext+1);
-	}
-
 
 	void MessageData::ClearAssignedSequence()
 	{
@@ -148,7 +217,6 @@ namespace SF {
 		return pMsg;
 	}
 
-
 	MessageData* MessageData::Clone(IHeap& memoryManager)
 	{
 		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
@@ -160,124 +228,34 @@ namespace SF {
 		return pMessage;
 	}
 
-	// Update checksum
-	void MessageData::UpdateChecksum()
-	{
-        ArrayView<uint8_t> payload = GetPayload();
 
-		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
-		{
-			Assert(0);
-			return;
-		}
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    //
+    //
+    //
 
-		if(payload.size() == 0 )
-		{
-			m_pMsgHeader->Crc32 = 0;
-			return;
-		}
+    MessageBase::MessageBase(const MessageHeader* pHeader)
+        : m_pHeader(pHeader)
+    {
 
-		m_pMsgHeader->Crc32 = Hasher_Crc32().Crc32(0, payload.data(), payload.size());
-		if( m_pMsgHeader->Crc32 == 0 )
-			m_pMsgHeader->Crc32 = ~m_pMsgHeader->Crc32;
-	}
-	
-	// Update checksum
-	void MessageData::UpdateChecksumNEncrypt()
-	{
-        ArrayView<uint8_t> payload = GetPayload();
+    }
 
-		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
-		{
-			Assert(0);
-			return;
-		}
-
-		if(payload.size() == 0)
-		{
-			m_pMsgHeader->Crc32 = 0;
-			return;
-		}
-
-		if(m_bIsEncrypted)
-		{
-			// skip if the message is already encrypted
-			return;
-		}
-
-		m_pMsgHeader->Crc32 = Util::Crc32NEncrypt(payload.size(), payload.data());
-		if( m_pMsgHeader->Crc32 == 0 )
-			m_pMsgHeader->Crc32 = ~m_pMsgHeader->Crc32;
-
-		assert( m_pMsgHeader->Crc32 != 0 || payload.size() == 0);
-
-        m_bIsEncrypted = true;
-	}
-
-	Result MessageData::ValidateChecksum()
-	{
-        ArrayView<uint8_t> payload = GetPayload();
-
-		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
-		{
-			Assert(0);
-			return ResultCode::FAIL;
-		}
-
-		// Nothing to check
-		if(payload.size() == 0)
-			return ResultCode::SUCCESS;
-
-		uint16_t Crc32 = (uint16_t)Hasher_Crc32().Crc32(0, payload.data(), payload.size());
-		if( Crc32 == 0 ) Crc32 = ~Crc32;
-
-		if( Crc32 != m_pMsgHeader->Crc32 )
-			return ResultCode::IO_INVALID_MESSAGE_CHECKSUM;
-
-		return ResultCode::SUCCESS;
-	}
-	
-	Result MessageData::ValidateChecksumNDecrypt()
-	{
-        ArrayView<uint8_t> payload = GetPayload();
-
-		if( m_pMsgHeader == nullptr || m_pMsgHeader->Length == 0 )
-		{
-            m_bIsEncrypted = false;
-			return ResultCode::SUCCESS_FALSE;
-		}
-
-		if(!m_bIsEncrypted)
-		{
-			return ValidateChecksum();
-		}
-		
-		// Nothing to check
-		if(payload.size() == 0)
-		{
-            m_bIsEncrypted = false;
-			return ResultCode::SUCCESS;
-		}
-
-		uint16_t Crc32 = (uint16_t)Util::Crc32NDecrypt(payload.size(), payload.data());
-		if( Crc32 == 0 ) Crc32 = ~Crc32;
-
-        m_bIsEncrypted = false;
-
-		//Assert(m_pMsgHeader->Crc32 != 0);
-		if( Crc32 != m_pMsgHeader->Crc32 )
-			return ResultCode::IO_INVALID_MESSAGE_CHECKSUM;
-
-		return ResultCode::SUCCESS;
-	}
+    MessageBase::MessageBase(const SharedPointerT<MessageData>& pIMsg)
+        : m_pIMsg(pIMsg)
+        , m_pHeader(pIMsg->GetMessageHeader())
+    {
+    }
 
 	Result MessageBase::ParseMsg()
 	{ 
 		if(m_bHasParsed)
 			return m_hrParsing;
 
+        if (m_pHeader == nullptr)
+            return ResultCode::INVALID_POINTER;
+
 		m_bHasParsed = true;
-		m_hrParsing = ParseMessage(GetMessage());
+		m_hrParsing = ParseMessage(m_pHeader);
 
 		return m_hrParsing;
 	}

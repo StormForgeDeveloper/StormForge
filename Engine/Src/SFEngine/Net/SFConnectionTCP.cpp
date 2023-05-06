@@ -701,9 +701,9 @@ namespace Net {
 			netErr( ResultCode::IO_BADPACKET_TOOBIG );
 		}
 
-		Protocol::PrintDebugMessage( "Send", pMsg );
+		Protocol::PrintDebugMessage("Send", pMsgHeader);
 
-		if( !pMsg->GetMessageHeader()->msgID.IDs.Reliability
+		if( !pMsgHeader->msgID.IDs.Reliability
 			&& (m_lGuarantedSent - m_lGuarantedAck) > Const::GUARANT_PENDING_MAX)
 		{
 			// Drop if there are too many reliable packets

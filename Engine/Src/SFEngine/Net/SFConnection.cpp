@@ -603,7 +603,7 @@ namespace SF {
 			//assert(!msgID.IDs.Encrypted);
 
 			// 
-			Protocol::PrintDebugMessage("Recv", pMsg);
+			Protocol::PrintDebugMessage("Recv", pMsgHeader);
 
 			//Assert( MemoryPool::CheckMemoryHeader( *pMsg ) );
 			assert(pMsg->GetPayloadSize() == 0 // 0 crc for zero size packet

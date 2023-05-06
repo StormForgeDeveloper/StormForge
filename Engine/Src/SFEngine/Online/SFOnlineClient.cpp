@@ -767,7 +767,7 @@ namespace SF
 			[this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
 			{
 				Message::Game::SelectCharacterRes msg;
-				if (msg.ParseMessage(pMsgData.get()))
+				if (msg.ParseMessage(pMsgData->GetMessageHeader()))
 				{
 					m_CharacterId = msg.GetCharacterID();
 				}

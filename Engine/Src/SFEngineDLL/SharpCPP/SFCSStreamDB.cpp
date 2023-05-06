@@ -128,7 +128,7 @@ SFDLL_EXPORT int32_t StreamDBDirectory_NativePollMessage(intptr_t nativeHandle, 
 
 	// Fill parameters
 	VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
-	auto result = SF::Protocol::ParseMessage(pIMsg, builder);
+	auto result = SF::Protocol::ParseMessage(pIMsg->GetMessageHeader(), builder);
 	if (!result)
 		return result;
 

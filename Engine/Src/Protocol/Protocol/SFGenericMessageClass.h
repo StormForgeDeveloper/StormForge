@@ -40,7 +40,7 @@ namespace SF {
 
 			void OutputMessage(const char* Prefix);
 
-			virtual Result ParseMessage(const MessageData* pIMsg) override;
+			virtual Result ParseMessage(const MessageHeader* pHeader) override;
 
 		}; // class FailResultS2CEvt : public BR::Net::MessageBase
 
