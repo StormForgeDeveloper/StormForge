@@ -23,8 +23,6 @@
 namespace SF {
 
 
-
-
 	template<class KeyType, class ValueType>
 	struct ThreadSyncTraitNoneT
 	{

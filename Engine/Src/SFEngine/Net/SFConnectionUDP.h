@@ -143,6 +143,7 @@ namespace Net {
 		ConnectionStateAction_SendDisconnect m_SendDisconnect;
 
 		//ConnectionStateAction_SendSync m_ActSendSync;
+        Atomic<bool> m_bWriteIsReady;
 
 	public:
 		// Constructor
@@ -167,8 +168,7 @@ namespace Net {
 		// Reinitialize and set remote address
 		Result ReInitialize( const sockaddr_storage& socAddr );
 
-		// Update Send buffer Queue, TCP and UDP client connection
-		virtual Result UpdateSendBufferQueue() override;
+        virtual Result TickUpdate() override;
 	};
 
 

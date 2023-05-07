@@ -29,14 +29,8 @@
 #include "Net/SFNetToString.h"
 
 
-
-
-
 namespace SF {
 namespace Net {
-
-
-	
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -71,10 +65,10 @@ namespace Net {
 			{
 				netChkPtr(pIOBuffer);
 
-                const MobilePacketHeader* pPacketHeader = reinterpret_cast<const MobilePacketHeader*>(pIOBuffer->buffer);
+                const PacketHeader* pPacketHeader = reinterpret_cast<const PacketHeader*>(pIOBuffer->buffer);
                 const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(pPacketHeader + 1);
 
-				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize - sizeof(MobilePacketHeader), reinterpret_cast<const uint8_t*>(pHeader))))
+				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize - sizeof(PacketHeader), reinterpret_cast<const uint8_t*>(pHeader))))
 					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
 
 				m_Owner.PendingRecv();
@@ -148,11 +142,6 @@ namespace Net {
 	{
 		FreeCurrentHandler();
 		FlushFreedHandlers();
-
-		//m_BindAddr = bindAddr;
-
-		// Connect will allocate one
-		//NewIOHandler();
 	}
 
 	Result ConnectionMUDPClient::MyNetSocketIOManager::NewIOHandler()
@@ -212,7 +201,7 @@ namespace Net {
 
 			if (!m_PendingFree.Enqueue(m_ActiveAdapter))
 			{
-				Assert(false);
+				assert(false);
 				// ?
 			}
 
@@ -307,9 +296,6 @@ namespace Net {
 		FlushFreedHandlers();
 	}
 
-
-
-
 	// Constructor
 	ConnectionMUDPClient::ConnectionMUDPClient(IHeap& heap)
 		: ConnectionMUDP(heap, nullptr)
@@ -324,13 +310,16 @@ namespace Net {
 
 		AddStateAction(ConnectionState::CONNECTING, &m_TimeoutConnecting);
 		AddStateAction(ConnectionState::CONNECTING, &m_SendConnect);
-		AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
+        AddStateAction(ConnectionState::CONNECTED, &m_TimeoutHeartbeat);
 		AddStateAction(ConnectionState::CONNECTED, &m_SendHeartbeat);
 		
 		AddStateAction(ConnectionState::DISCONNECTING, &m_TimeoutDisconnecting);
 		AddStateAction(ConnectionState::DISCONNECTING, &m_SendDisconnect);
 
 		AddStateAction(ConnectionState::CONNECTED, &m_ActSendSync);
+
+        AddStateAction(ConnectionState::CONNECTING, &m_ValidateNetIO);
+        AddStateAction(ConnectionState::CONNECTED, &m_ValidateNetIO);
 
 		auto newCID = stm_CIDGen.fetch_add(1, std::memory_order_relaxed) + 1;
 		if(newCID == 0)
@@ -383,26 +372,6 @@ namespace Net {
 
 		m_ReliableSyncTime = Util::Time.GetTimeMs();
 
-
-		//socket = Service::NetSystem->Socket(local.PeerAddress.SocketFamily, SocketType::DataGram);
-		//if (socket == INVALID_SOCKET)
-		//{
-		//	SFLog(Net, Error, "Failed to Open Client Socket {0:X8}", GetLastNetSystemResult());
-		//	netErr(ResultCode::UNEXPECTED);
-		//}
-
-		//netChk(Service::NetSystem->SetupCommonSocketOptions(SocketType::DataGram, local.PeerAddress.SocketFamily, socket));
-
-		//bindAddr = (sockaddr_storage)local.PeerAddress;
-		////if (bind(socket, (sockaddr*)&bindAddr, sizeof(bindAddr)) == SOCKET_ERROR)
-  //      if (bind(socket, (sockaddr*)&bindAddr, (unsigned)local.PeerAddress.GetSockAddrSize()) == SOCKET_ERROR)
-		//{
-		//	SFLog(Net, Error, "Socket bind failed, UDP err={0:X8}", GetLastNetSystemResult());
-		//	netErr(ResultCode::UNEXPECTED);
-		//}
-		//local.PeerAddress = bindAddr;
-
-
 		netChk(InitConnection(local, remote));
 		SFLog(Net, Custom3, "Initialize connection CID:{0}, Addr:{1}", GetCID(), remote.PeerAddress);
 
@@ -452,26 +421,5 @@ namespace Net {
 	}
 
 
-	Result ConnectionMUDPClient::TickUpdate()
-	{
-		// Except some special state, we need to keep validate net io
-		switch (GetConnectionState())
-		{
-		case ConnectionState::NONE:
-		case ConnectionState::DISCONNECTING:
-		case ConnectionState::DISCONNECTED:
-		case ConnectionState::SLEEP:
-			break;
-		default:
-			m_NetIOAdapterManager.ValidateNetIOAdapter();
-		}
-
-		return super::TickUpdate();
-	}
-
-
-
 } // namespace Net
 } // namespace SF
-
-

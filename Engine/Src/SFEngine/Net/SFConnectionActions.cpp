@@ -15,7 +15,6 @@
 #include "ResultCode/SFResultCodeSystem.h"
 #include "ResultCode/SFResultCodeEngine.h"
 
-
 #include "Util/SFLog.h"
 #include "Util/SFUtility.h"
 #include "Util/SFTimeUtil.h"
@@ -311,10 +310,6 @@ namespace Net {
 			{
 				netCheck(hrTem);
 			}
-		}
-		else
-		{
-			pConnUDP->GetNetSyncMessageDelegates().Invoke((Connection*)pConnUDP);
 		}
 
 		return hr;
@@ -620,24 +615,14 @@ namespace Net {
 
 	Result ConnectionStateAction_SendSyncSvr::Run()
 	{
-		ScopeContext hr([this](Result hr) 
-			{
-				if (GetEventHandler() != nullptr)
-				{
-					GetEventHandler()->OnNetSyncMessage(GetConnection());
-				}
-				else
-				{
-					GetConnection()->GetNetSyncMessageDelegates().Invoke(GetConnection());
-				}
-			});
+		Result hr;
 
 		if (GetConnection()->GetSendBoost() <= 0)
 			return hr;
 
 		m_ReliableSyncTime = Util::Time.GetTimeMs();
 
-		auto& recvWindow = GetConnection()->GetRecvReliableWindow();
+		RecvMsgWindow& recvWindow = GetConnection()->GetRecvReliableWindow();
 
 		GetConnection()->DecSendBoost();
 
@@ -645,6 +630,27 @@ namespace Net {
 
 		return hr;
 	}
+
+
+    Result ConnectionStateAction_ValidateNetIOAdapter::Run()
+    {
+        Result hr;
+
+        ConnectionMUDPClient* pConnection = static_cast<ConnectionMUDPClient*>(GetConnection());
+
+        switch (GetConnectionState())
+        {
+        case ConnectionState::NONE:
+        case ConnectionState::DISCONNECTING:
+        case ConnectionState::DISCONNECTED:
+        case ConnectionState::SLEEP:
+            break;
+        default:
+            pConnection->GetNetIOAdapterManager().ValidateNetIOAdapter();
+        }
+
+        return hr;
+    }
 
 	Result ConnectionStateAction_SendReliableQueue::Run()
 	{
@@ -658,8 +664,8 @@ namespace Net {
 
 		//assert(ThisThread::GetThreadID() ==  GetConnection()->GetRunningThreadID());
 
-		auto& sendWindow = GetConnection()->GetSendReliableWindow();
-		auto& sendGuaQueue = GetConnection()->GetSendGuaQueue();
+        SendMsgWindow& sendWindow = GetConnection()->GetSendReliableWindow();
+        MsgQueue& sendGuaQueue = GetConnection()->GetSendGuaQueue();
 
 		// make sure all acked messages are handled
 		sendWindow.UpdateReleasedSequences();
@@ -698,7 +704,7 @@ namespace Net {
 			// don't bother network with might not be able to processed
 			if ((sendWindow.GetHeadSequence() - sendWindow.GetBaseSequence()) < GetConnection()->GetMaxGuarantedRetryAtOnce())
 			{
-				netCheck(GetConnection()->SendPending(pIMsg));
+				netCheck(GetConnection()->SendPending(pIMsg->GetMessageHeader()));
 			}
 			pIMsg = nullptr;
 		}
@@ -748,7 +754,9 @@ namespace Net {
 			if (Util::TimeSince(pMessageElement->ulTimeStamp) <= retryTimeout)
 				break;
 
-			uint totalGatheredSize = GetConnection()->GetGatheredBufferSize() + pMessageElement->pMsg->GetMessageSize();
+            const MessageHeader* pHeader = pMessageElement->pMsg->GetMessageHeader();
+
+			uint totalGatheredSize = GetConnection()->GetGatheredBufferSize() + pHeader->Length;
 			if (GetConnection()->GetGatheredBufferSize() > 0 && totalGatheredSize > Const::PACKET_GATHER_SIZE_MAX)
 			{
 				// too big to send
@@ -759,16 +767,15 @@ namespace Net {
 
 			SFLog(Net, Debug2, "SENDReliableRetry : CID:{0}, seq:{1}, msg:{2}, len:{3}",
 				GetCID(),
-				pMessageElement->pMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
-				pMessageElement->pMsg->GetMessageHeader()->msgID,
-				pMessageElement->pMsg->GetMessageHeader()->Length);
+				pHeader->msgID.IDSeq.Sequence,
+				pHeader->msgID,
+				pHeader->Length);
 
 			pMessageElement->ulTimeStamp = ulTimeCur;
 
 			// Creating new reference object will increase reference count of the message instance.
 			// And more importantly, SendPending is taking reference of the variable and clear it when it done sending
-			auto tempMsg = pMessageElement->pMsg;
-			GetConnection()->SendPending(tempMsg);
+			GetConnection()->SendPending(pHeader);
 			pMessageElement = nullptr;
 		}
 
@@ -777,6 +784,15 @@ namespace Net {
 
 		return hr;
 	}
+
+    Result ConnectionStateAction_FlushNet::Run()
+    {
+        Result hr;
+
+        GetConnection()->SendFlush();
+
+        return hr;
+    }
 
 } // namespace Net
 } // namespace SF

@@ -176,10 +176,6 @@ namespace Net {
 		virtual void OnConnectionEvent(Connection* pConn, const ConnectionEvent& evt) {}
 		virtual Result OnRecvMessage(Connection* pConn, SharedPointerT<MessageData>& pMsg) { return ResultCode::SUCCESS; }
 		virtual Result OnNetSyncMessage(Connection* pConn);
-
-		// Net send message
-		// [[Deprecated]]
-		virtual Result OnNetSendReadyMessage(Connection* pConn);
 	};
 
 

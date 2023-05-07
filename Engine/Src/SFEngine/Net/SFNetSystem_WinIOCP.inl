@@ -40,7 +40,7 @@ void IOBUFFER_WRITE::InitMsg(bool bIncludePacketHeader, SharedPointerT<MessageDa
 	pSendBuff = nullptr;
     if (bIncludePacketHeader)
     {
-        TransferredSize = pMsgs->GetMessageSize() + sizeof(MobilePacketHeader);
+        TransferredSize = pMsgs->GetMessageSize() + sizeof(PacketHeader);
         wsaBuff.len = TransferredSize;
         wsaBuff.buf = (char*)pMsgs->GetPacketHeader();
     }

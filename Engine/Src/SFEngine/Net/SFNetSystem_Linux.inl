@@ -10,15 +10,10 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 
-
-
-
 ////////////////////////////////////////////////////////////////////////////////
 //
 //	Overlapped I/O structures
 //
-
-
 
 // Initialize for IO
 void IOBUFFER_WRITE::InitForIO(SF_SOCKET sockWrite)
@@ -37,7 +32,7 @@ void IOBUFFER_WRITE::InitMsg(bool bIncludePacketHeader, SharedPointerT<MessageDa
 	pSendBuff = nullptr;
     if (bIncludePacketHeader)
     {
-        RawSendSize = pMsgs->GetMessageSize() + sizeof(MobilePacketHeader);
+        RawSendSize = pMsgs->GetMessageSize() + sizeof(PacketHeader);
         pRawSendBuffer = reinterpret_cast<uint8_t*>(pMsgs->GetPacketHeader());
     }
     else

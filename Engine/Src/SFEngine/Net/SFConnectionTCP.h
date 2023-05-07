@@ -96,6 +96,8 @@ namespace SF {
 			// Flag indicating whether TCP socket layer connection has been established.
 			bool m_IsTCPSocketConnectionEstablished;
 
+            Atomic<bool> m_bWriteIsReady;
+
 
 			ConnectionMessageAction_HandleAck m_HandleAck;
 			ConnectionMessageAction_HandleNack m_HandleNack;
@@ -158,7 +160,7 @@ namespace SF {
 
 
 			// Update Send buffer Queue, TCP and UDP client connection
-			virtual Result UpdateSendBufferQueue() override;
+			//virtual Result UpdateSendBufferQueue() override;
 
 			// Update net control, process connection heartbeat, ... etc
 			virtual Result TickUpdate() override;

@@ -46,7 +46,7 @@ namespace Net {
 		using super = EngineObject;
 		using ConnectionEventDeletates = EventDelegateList<Connection*, const ConnectionEvent&>;
 		using RecvMessageDelegates = EventDelegateList<Connection*, const SharedPointerT<MessageData>&>;
-		using NetSyncMessageDelegates = EventDelegateList<Connection*>;
+		//using NetSyncMessageDelegates = EventDelegateList<Connection*>;
 
 		enum class EventFireMode : uint8_t
 		{
@@ -286,7 +286,7 @@ namespace Net {
 
 		ConnectionEventDeletates& GetConnectionEventDelegates() { return m_ConnectionEventDelegates; }
 		RecvMessageDelegates& GetRecvMessageDelegates() { return m_RecvMessageDelegates; }
-		NetSyncMessageDelegates& GetNetSyncMessageDelegates() { return m_NetSyncMessageDelegates; }
+		//NetSyncMessageDelegates& GetNetSyncMessageDelegates() { return m_NetSyncMessageDelegates; }
 
 
 		void AddMessageDelegateUnique(uintptr_t context, uint32_t msgId, RecvMessageDelegates::CallableType&& func)
@@ -404,9 +404,9 @@ namespace Net {
 		virtual Result TickUpdate();
 
 		// Update send queue, Reliable UDP
-		virtual Result UpdateSendQueue() { return ResultCode::SUCCESS; }
+		//virtual Result UpdateSendQueue() { return ResultCode::SUCCESS; }
 		// Update Send buffer Queue, TCP and UDP client connection
-		virtual Result UpdateSendBufferQueue() = 0;
+		//virtual Result UpdateSendBufferQueue() = 0;
 
 
 	private:
@@ -419,7 +419,7 @@ namespace Net {
 		EventFireMode m_DelegateFireMode = EventFireMode::OnGameTick;
 
 		ConnectionEventDeletates m_ConnectionEventDelegates;
-		NetSyncMessageDelegates m_NetSyncMessageDelegates;
+		//NetSyncMessageDelegates m_NetSyncMessageDelegates;
 		RecvMessageDelegates m_RecvMessageDelegates;
 		// Received message handler map by msgId
 		DualSortedMap<uint32_t, RecvMessageDelegates*> m_RecvMessageDelegatesByMsgId;
@@ -451,14 +451,9 @@ namespace Net {
 		virtual Result Send(const SharedPointerT<MessageData>& messageData) override;
 	};
 
-
 }  // namespace Net
 
 	extern template class SharedPointerT <Net::Connection>;
 	extern template class WeakPointerT < Net::Connection >;
 
-
-}; // namespace SF
-
-
-
+} // namespace SF

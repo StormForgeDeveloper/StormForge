@@ -366,12 +366,27 @@ namespace Net {
 		return ResultCode::SUCCESS;
 	}
 
+    Result ConnectionUDPClient::TickUpdate()
+    {
+        Result hr;
+
+        netCheck(super::TickUpdate());
+
+        // tick update send queue
+        bool bWriteIsReady = m_bWriteIsReady.exchange(false, std::memory_order_consume);
+        if (bWriteIsReady) // if write ready is triggered this tick
+        {
+            m_NetIOAdapter.ProcessSendQueue();
+        }
+
+        return hr;
+    }
 
 	// Update Send buffer Queue, TCP and UDP client connection
-	Result ConnectionUDPClient::UpdateSendBufferQueue()
-	{
-		return m_NetIOAdapter.ProcessSendQueue();
-	}
+	//Result ConnectionUDPClient::UpdateSendBufferQueue()
+	//{
+	//	return m_NetIOAdapter.ProcessSendQueue();
+	//}
 
 
 } // namespace Net

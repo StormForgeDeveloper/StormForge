@@ -78,7 +78,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::HeartbeatC2SEvt::MID, __uiMessageSize ) );
@@ -160,7 +160,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InAccID)
 					+ SerializedSizeOf(InTicket)
@@ -261,7 +261,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InNickName)
@@ -356,7 +356,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
@@ -443,7 +443,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InComplitionState)
@@ -533,7 +533,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InComplitionState)
 				);
@@ -619,7 +619,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -707,7 +707,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGCMRegisteredID)
 				);
@@ -793,7 +793,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -881,7 +881,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGCMRegisteredID)
 				);
@@ -967,7 +967,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -1054,7 +1054,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFriendID)
 				);
@@ -1140,7 +1140,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -1229,7 +1229,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InInviterID)
 					+ SerializedSizeOf(InInviterPlatformId)
@@ -1319,7 +1319,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InNewFriend)
@@ -1406,7 +1406,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InAccepter)
 				);
 
@@ -1491,7 +1491,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFriendID)
 				);
@@ -1579,7 +1579,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InFriendID)
@@ -1666,7 +1666,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InFriendID)
 				);
 
@@ -1753,7 +1753,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InStartIndex)
 					+ SerializedSizeOf(InCount)
@@ -1852,7 +1852,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InMaxFriendSlot)
@@ -1945,7 +1945,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
@@ -2029,7 +2029,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -2116,7 +2116,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InNotificationID)
 				);
@@ -2204,7 +2204,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InNotificationID)
@@ -2293,7 +2293,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InNotificationID)
 				);
@@ -2381,7 +2381,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InNotificationID)
@@ -2470,7 +2470,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InNotificationID)
 				);
@@ -2558,7 +2558,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InNotificationID)
@@ -2666,7 +2666,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InNotificationID)
 					+ SerializedSizeOf(InNotificationType)
 					+ serializedSizeOfInParameters
@@ -2703,7 +2703,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InNotificationID)
 					+ SerializedSizeOf(InNotificationType)
 					+ sizeof(uint16_t)
@@ -2798,7 +2798,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlatformPlayerId)
 				);
@@ -2888,7 +2888,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayerId)
@@ -2980,7 +2980,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterName)
 				);
@@ -3068,7 +3068,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayerId)
@@ -3160,7 +3160,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlatformType)
 					+ SerializedSizeOf(InPlatformUserName)
@@ -3252,7 +3252,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayerId)
@@ -3344,7 +3344,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayerEMail)
 				);
@@ -3432,7 +3432,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayer)
@@ -3521,7 +3521,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayerID)
 				);
@@ -3609,7 +3609,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayer)
@@ -3701,7 +3701,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InTargetPlayerID)
 				);
@@ -3787,7 +3787,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -3876,7 +3876,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPlayerID)
 					+ SerializedSizeOf(InLatestActiveTime)
 					+ SerializedSizeOf(InIsInGame)
@@ -3969,7 +3969,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InRankingType)
 					+ SerializedSizeOf(InBaseRanking)
@@ -4064,7 +4064,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InRanking)
@@ -4151,7 +4151,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
@@ -4250,7 +4250,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ serializedSizeOfInAttributes
@@ -4283,7 +4283,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ sizeof(uint16_t)
@@ -4374,7 +4374,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPlayerID)
 				);
@@ -4477,7 +4477,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayerID)
@@ -4512,7 +4512,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayerID)
@@ -4605,7 +4605,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InCurrentTotalExp)
 					+ SerializedSizeOf(InCurrentLevel)
 				);
@@ -4695,7 +4695,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InNickName)
 					+ SerializedSizeOf(InIsCostFree)
@@ -4787,7 +4787,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InTotalGem)
@@ -4876,7 +4876,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
@@ -4962,7 +4962,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPartyUID)
@@ -5053,7 +5053,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InInviterID)
@@ -5150,7 +5150,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPartyUID)
@@ -5243,7 +5243,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InJoinedPlayer)
 				);
@@ -5330,7 +5330,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InNewLeaderID)
 				);
@@ -5419,7 +5419,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -5507,7 +5507,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -5594,7 +5594,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InLeftPlayerID)
 				);
@@ -5685,7 +5685,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -5775,7 +5775,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -5862,7 +5862,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InPartyUID)
 					+ SerializedSizeOf(InKickedPlayerID)
 				);
@@ -5949,7 +5949,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InInviteTargetID)
 				);
@@ -6035,7 +6035,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -6125,7 +6125,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InInviterID)
 					+ SerializedSizeOf(InInviterName)
 					+ SerializedSizeOf(InPartyToJoinUID)
@@ -6214,7 +6214,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InQuickChatID)
 				);
@@ -6300,7 +6300,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -6387,7 +6387,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InSenderID)
 					+ SerializedSizeOf(InQuickChatID)
 				);
@@ -6475,7 +6475,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InChatMessage)
 				);
@@ -6561,7 +6561,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -6652,7 +6652,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InSenderID)
 					+ SerializedSizeOf(InSenderName)
 					+ SerializedSizeOf(InChatMessage)
@@ -6741,7 +6741,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InInsUID)
 				);
@@ -6832,7 +6832,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InInsUID)
@@ -6923,7 +6923,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InInsUID)
 				);
@@ -7009,7 +7009,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -7099,7 +7099,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InSearchKeyword)
 					+ SerializedSizeOf(InZoneTableID)
@@ -7189,7 +7189,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InGameInstances)
@@ -7280,7 +7280,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InGameInsUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -7385,7 +7385,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInGameInstances = static_cast<uint16_t>(SerializedSizeOf(InGameInstances)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayerID)
@@ -7420,7 +7420,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInGameInstances = static_cast<uint16_t>(SerializedSizeOf(InGameInstances)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InPlayerID)
@@ -7515,7 +7515,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InNumPlayer)
 					+ SerializedSizeOf(InRequestRole)
@@ -7607,7 +7607,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InTotalGem)
@@ -7728,7 +7728,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InInsUID)
 					+ SerializedSizeOf(InTimeStamp)
 					+ SerializedSizeOf(InGameState)
@@ -7837,7 +7837,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InFailedReason)
 				);
 
@@ -7914,7 +7914,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameMatchingStartedS2CEvt::MID, __uiMessageSize ) );
@@ -7990,7 +7990,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
@@ -8074,7 +8074,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -8153,7 +8153,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 				);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, Game::GameMatchingCanceledS2CEvt::MID, __uiMessageSize ) );
@@ -8231,7 +8231,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InShopItemID)
 				);
@@ -8322,7 +8322,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InShopItemID)
@@ -8427,7 +8427,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InShopItemID)
 					+ SerializedSizeOf(InPlatform)
@@ -8523,7 +8523,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InShopItemID)
@@ -8616,7 +8616,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InChannelName)
 					+ SerializedSizeOf(InPasscode)
@@ -8708,7 +8708,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InChatUID)
@@ -8804,7 +8804,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InInviterID)
@@ -8898,7 +8898,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InChatUID)
@@ -8989,7 +8989,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InJoinedPlayer)
 				);
@@ -9076,7 +9076,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InNewLeaderID)
 				);
@@ -9165,7 +9165,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -9253,7 +9253,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -9340,7 +9340,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InLeftPlayerID)
 				);
@@ -9431,7 +9431,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InPlayerID)
@@ -9521,7 +9521,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -9608,7 +9608,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InChatUID)
 					+ SerializedSizeOf(InKickedPlayerID)
 				);
@@ -9713,7 +9713,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InChatUID)
 					+ serializedSizeOfInChatMetaData
@@ -9748,7 +9748,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InChatUID)
 					+ sizeof(uint16_t)
@@ -9840,7 +9840,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -9943,7 +9943,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InSenderID)
 					+ serializedSizeOfInChatMetaData
 					+ SerializedSizeOf(InChatMessage)
@@ -9976,7 +9976,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InSenderID)
 					+ sizeof(uint16_t)
 					+ serializedSizeOfInChatMetaData
@@ -10088,7 +10088,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InReceiverID)
 					+ SerializedSizeOf(InReceiverName)
@@ -10125,7 +10125,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InReceiverID)
 					+ SerializedSizeOf(InReceiverName)
@@ -10219,7 +10219,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -10322,7 +10322,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InSenderID)
 					+ serializedSizeOfInChatMetaData
 					+ SerializedSizeOf(InChatMessage)
@@ -10355,7 +10355,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InSenderID)
 					+ sizeof(uint16_t)
 					+ serializedSizeOfInChatMetaData
@@ -10478,7 +10478,7 @@ namespace SF
 
 				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
 				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterName)
 					+ serializedSizeOfInPublicData
@@ -10514,7 +10514,7 @@ namespace SF
 
 				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
 				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterName)
 					+ sizeof(uint16_t)
@@ -10610,7 +10610,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InCharacterID)
@@ -10699,7 +10699,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterID)
 				);
@@ -10785,7 +10785,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -10870,7 +10870,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
@@ -10956,7 +10956,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InCharacters)
@@ -11045,7 +11045,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterID)
 				);
@@ -11162,7 +11162,7 @@ namespace SF
 
 				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
 				uint16_t serializedSizeOfInEquipData = static_cast<uint16_t>(SerializedSizeOf(InEquipData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ serializedSizeOfInPrivateData
@@ -11198,7 +11198,7 @@ namespace SF
 
 				uint16_t serializedSizeOfInPrivateData = static_cast<uint16_t>(SerializedSizeOf(InPrivateData)); 
 				uint16_t serializedSizeOfInEquipData = static_cast<uint16_t>(SerializedSizeOf(InEquipData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ sizeof(uint16_t)
@@ -11293,7 +11293,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InCharacterID)
 				);
@@ -11396,7 +11396,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InCharacterID)
@@ -11431,7 +11431,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInAttributes = static_cast<uint16_t>(SerializedSizeOf(InAttributes)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ SerializedSizeOf(InCharacterID)
@@ -11522,7 +11522,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 				);
 
@@ -11606,7 +11606,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 				);
@@ -11694,7 +11694,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InNoticeCategory)
 					+ SerializedSizeOf(InServerNoticeMessage)
 				);
@@ -11796,7 +11796,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFunctionName)
 					+ serializedSizeOfInParameters
@@ -11829,7 +11829,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InFunctionName)
 					+ sizeof(uint16_t)
@@ -11934,7 +11934,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInResults = static_cast<uint16_t>(SerializedSizeOf(InResults)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ serializedSizeOfInResults
@@ -11967,7 +11967,7 @@ namespace SF
 				});
 
 				uint16_t serializedSizeOfInResults = static_cast<uint16_t>(SerializedSizeOf(InResults)); 
-				unsigned __uiMessageSize = (unsigned)(Message::MobileHeaderSize 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
 					+ SerializedSizeOf(InTransactionID)
 					+ SerializedSizeOf(InResult)
 					+ sizeof(uint16_t)

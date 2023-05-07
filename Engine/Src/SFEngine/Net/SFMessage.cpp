@@ -82,21 +82,18 @@ namespace SF
     {
         ArrayView<uint8_t> payload = GetPayload();
 
-        if (Length == 0)
-        {
-            Assert(0);
-            return;
-        }
-
-        if (payload.size() == 0)
+        if (Length == 0
+            || payload.size() == 0)
         {
             Crc32 = 0;
             return;
         }
-
-        Crc32 = Hasher_Crc32().Crc32(0, payload.data(), payload.size());
-        if (Crc32 == 0)
-            Crc32 = ~Crc32;
+        else
+        {
+            Crc32 = Hasher_Crc32().Crc32(0, payload.data(), payload.size());
+            if (Crc32 == 0)
+                Crc32 = ~Crc32;
+        }
     }
 
     // Update checksum
@@ -104,25 +101,31 @@ namespace SF
     {
         ArrayView<uint8_t> payload = GetPayload();
 
-        if (Length == 0)
-        {
-            Assert(0);
-            return;
-        }
-
-        if (payload.size() == 0)
+        if (Length == 0
+            || payload.size() == 0)
         {
             Crc32 = 0;
-            return;
         }
-
-        Crc32 = Util::Crc32NEncrypt(payload.size(), payload.data());
-        if (Crc32 == 0)
-            Crc32 = ~Crc32;
+        else
+        {
+            Crc32 = Util::Crc32NEncrypt(payload.size(), payload.data());
+            if (Crc32 == 0)
+                Crc32 = ~Crc32;
+        }
 
         assert(Crc32 != 0 || payload.size() == 0);
     }
 
+    MessageHeader* MessageHeader::Clone(IHeap& heap)
+    {
+        MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(heap.Alloc(Length));
+        if (pNewHeader)
+        {
+            memcpy(pNewHeader, this, Length);
+        }
+
+        return pNewHeader;
+    }
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -133,7 +136,7 @@ namespace SF
 		:m_bIsSequenceAssigned(false)
 	{
         // we haver reserved space for packet header
-        m_pPacketHeader = reinterpret_cast<MobilePacketHeader*>(this + 1);
+        m_pPacketHeader = reinterpret_cast<PacketHeader*>(this + 1);
         m_pPacketHeader->PeerId = 0;
 
         // actual header offset
@@ -189,7 +192,7 @@ namespace SF
 	MessageData* MessageData::NewMessage(IHeap& heap, uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData )
 	{
 		uint8_t *pBuffer = nullptr;
-		size_t szAllocate = sizeof(MobilePacketHeader) + sizeof(MessageData) + uiMsgBufSize;
+		size_t szAllocate = sizeof(PacketHeader) + sizeof(MessageData) + uiMsgBufSize;
 
 		if (uiMsgBufSize > MAX_MESSAGE_SIZE)
 		{

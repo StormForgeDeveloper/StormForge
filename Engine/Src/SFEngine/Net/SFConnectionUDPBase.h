@@ -46,12 +46,11 @@ namespace Net {
 		uint				m_uiMaxGuarantedRetryAtOnce;
 
 		// packet gathering buffer
-		uint				m_uiGatheredSize;
-		uint8_t*			m_pGatheringBuffer;
+        uint m_uiGatheredSize{};
+        uint8_t* m_pGatheringBuffer{};
 
-
-		// Recv guaranteed Message Queue, to enable MT enqueue
-		//MsgQueue			 m_RecvGuaQueue;
+        // Minimum gathered size for flush
+        uint m_uiMinGatherSizeForFlush = 0;
 
 		// subframe message
 		SharedPointerT<MessageData>		m_SubFrameMessage;
@@ -77,6 +76,7 @@ namespace Net {
 
 		ConnectionStateAction_SendReliableQueue m_ActSendReliableQueue;
 		ConnectionStateAction_SendReliableRetry m_ActSendReliableRetry;
+        ConnectionStateAction_FlushNet m_ActFlushNet;
 
 
 	protected:
@@ -118,7 +118,7 @@ namespace Net {
 
 		// gathering
 		virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0) override;
-		virtual Result SendPending(SharedPointerT<MessageData>& pMsg);
+		virtual Result SendPending(const MessageHeader* pHeader);
 		Result SendFlush();
 
 		// Prepare gathering buffer
@@ -158,11 +158,8 @@ namespace Net {
 		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) override;
 		virtual Result OnRecv(SharedPointerT<MessageData>& pMsg) override;
 
-		// Update Send buffer Queue, TCP and UDP client connection
-		virtual Result UpdateSendBufferQueue() override;
-
 		// We need this for event handling on server
-		virtual Result UpdateSendQueue() override;
+		//virtual Result UpdateSendQueue() override;
 
 	};
 

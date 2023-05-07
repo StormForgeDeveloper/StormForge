@@ -55,11 +55,7 @@ namespace Net {
 		// We are using send sync mask rather than per message
 		virtual Result SendReliableMessageAck(MessageID msgID) override { return ResultCode::SUCCESS; }
 
-
-	public:
-
-		// Update net control, process connection heartbeat, ... etc
-		virtual Result TickUpdate() override;
+        virtual Result TickUpdate() override;
 	};
 
 
@@ -187,6 +183,7 @@ namespace Net {
 
 		ConnectionStateAction_SendSync m_ActSendSync;
 
+        ConnectionStateAction_ValidateNetIOAdapter m_ValidateNetIO;
 
 		// Client side CID generator
 		static std::atomic<uint64_t> stm_CIDGen;
@@ -195,20 +192,16 @@ namespace Net {
 		// Constructor
 		ConnectionMUDPClient(IHeap& heap);
 		virtual ~ConnectionMUDPClient();
+
+        SF_FORCEINLINE MyNetSocketIOManager& GetNetIOAdapterManager() { return m_NetIOAdapterManager; }
+
 	protected:
 
-
 		virtual Result InitConnection(const PeerInfo &local, const PeerInfo &remote) override;
-
-
-		//virtual Result ProcSendReliable() override;
-
 
 		// Send packet buffer to connection with network device
 		//virtual Result SendBufferUDP(IOBUFFER_WRITE *pSendBuffer) override;
 		virtual Result EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer) override;
-
-
 
 	public:
 
@@ -227,11 +220,7 @@ namespace Net {
 
 		// Pending recv New one
 		Result PendingRecv();
-        
-		virtual Result TickUpdate() override;
 	};
-
 
 }  // namespace Net
 } // namespace SF
-

@@ -96,7 +96,6 @@ namespace SF {
 			, m_pEventHandler(nullptr)
 			, m_ConnectionEventDelegates(GetHeap())
 			, m_RecvMessageDelegates(GetHeap())
-			, m_NetSyncMessageDelegates(GetHeap())
 			, m_RecvMessageDelegatesByMsgId(GetHeap())
 			, m_IOHandler(ioHandler)
 			, m_RecvQueue(GetHeap())
@@ -214,16 +213,16 @@ namespace SF {
 
 		Result Connection::ProcConnectionStateAction()
 		{
-			auto state = GetConnectionState();
+			Net::ConnectionState state = GetConnectionState();
 			int iState = (int)state;
 			if (iState < 0 || iState >= (int)ConnectionState::Max)
 			{
-				Assert(false);
+				assert(false);
 				return ResultCode::SUCCESS;
 			}
 
-			auto& actionListForState = m_ActionsByState[(int)state];
-			for (auto& itAction : actionListForState)
+			Net::Connection::ConnectionActionArray& actionListForState = m_ActionsByState[(int)state];
+			for (Net::ConnectionAction* itAction : actionListForState)
 			{
 				itAction->Run();
 			}
@@ -599,14 +598,11 @@ namespace SF {
             MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 			auto msgID = pMsgHeader->msgID;
 
-			// All messages must be decrypted before came here
-			//assert(!msgID.IDs.Encrypted);
-
 			// 
 			Protocol::PrintDebugMessage("Recv", pMsgHeader);
 
 			//Assert( MemoryPool::CheckMemoryHeader( *pMsg ) );
-			assert(pMsg->GetPayloadSize() == 0 // 0 crc for zero size packet
+			assert(pMsgHeader->GetPayloadSize() == 0 // 0 crc for zero size packet
                 || pMsgHeader->Length > 1024 // Multiple sub framed message can't have crc value. each sub frame does
                 || pMsgHeader->Crc32 != 0); // Crc should have value
 
@@ -765,7 +761,7 @@ namespace SF {
 			MessageID msgIDTem;
 
 			hr = ProcConnectionStateAction();
-			if (!(hr))
+			if (!hr)
 			{
 				SFLog(Net, Info, "Process Connection state failed {0:X8}", hr);
 			}

@@ -152,7 +152,7 @@ namespace SF {
 #pragma pack(push, 4)
 
     // packet for mobile
-    struct MobilePacketHeader
+    struct PacketHeader
     {
         uint64_t PeerId;
     };
@@ -209,6 +209,9 @@ namespace SF {
 
         Result ValidateChecksum();
         Result ValidateChecksumNDecrypt();
+
+        // Make a clone of this message
+        MessageHeader* Clone(IHeap& heap);
     };
 
     static_assert((sizeof(uint32_t)*2) == sizeof(MessageHeader), "MessageHeader should fit in 8bytes");
@@ -266,7 +269,6 @@ namespace SF {
     namespace Message
     {
         static constexpr size_t HeaderSize = sizeof(MessageHeader);
-        static constexpr size_t MobileHeaderSize = sizeof(MessageHeader) + sizeof(uint64_t);
     } // Message
 } // SF
 

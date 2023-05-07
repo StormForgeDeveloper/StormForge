@@ -4,7 +4,6 @@
 set(SFENGINEDLL_LIB_FILES
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSActorMovement.cpp
   	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSConnection.cpp
-	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSConnectionGroup.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSEngine.Android.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSEngine.IOS.cpp
 	${SF_ENGINEDLL_PATH}/SharpCPP/SFCSEngine.Win.cpp

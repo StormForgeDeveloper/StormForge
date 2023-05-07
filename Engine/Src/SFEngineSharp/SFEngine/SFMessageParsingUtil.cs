@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -24,7 +24,7 @@ namespace SF
     {
 
 #if UNITY_STANDALONE
-        [AOT.MonoPInvokeCallback(typeof(SFConnectionGroup.SET_MESSAGE_FUNCTION))]
+        [AOT.MonoPInvokeCallback(typeof(SFConnection.SET_MESSAGE_FUNCTION))]
 #endif
         static internal void MessageParseSetEventCallback(SFConnection.EventTypes eventType, int result, SFConnection.ConnectionState state)
         {
@@ -35,7 +35,7 @@ namespace SF
         }
 
 #if UNITY_STANDALONE
-        [AOT.MonoPInvokeCallback(typeof(SFConnectionGroup.SET_MESSAGE_FUNCTION))]
+        [AOT.MonoPInvokeCallback(typeof(SFConnection.SET_MESSAGE_FUNCTION))]
 #endif
         static internal void MessageParseCreateCallback(UInt32 messageID)
         {
@@ -45,7 +45,7 @@ namespace SF
 
 
 #if UNITY_STANDALONE
-        [AOT.MonoPInvokeCallback(typeof(SFConnectionGroup.SET_FUNCTION))]
+        [AOT.MonoPInvokeCallback(typeof(SFConnection.SET_FUNCTION))]
 #endif
         static internal void MessageParseSetValue(string stringHash, string typeNameHash, IntPtr Value)
         {
@@ -149,7 +149,7 @@ namespace SF
 
 
 #if UNITY_STANDALONE
-        [AOT.MonoPInvokeCallback(typeof(SFConnectionGroup.SET_ARRAY_FUNCTION))]
+        [AOT.MonoPInvokeCallback(typeof(SFConnection.SET_ARRAY_FUNCTION))]
 #endif
         static internal void MessageParseSetArray(string stringHash, string typeNameHash, int arrayCount, IntPtr Value)
         {

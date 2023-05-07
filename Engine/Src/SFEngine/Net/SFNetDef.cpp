@@ -41,25 +41,10 @@ namespace SF {
 			return ResultCode::NOT_IMPLEMENTED;
 		};
 
-
-		// Net send message
-		Result IConnectionEventHandler::OnNetSendReadyMessage(Connection* pConn)
-		{
-			unused(pConn);
-			Assert(false);
-			return ResultCode::NOT_IMPLEMENTED;
-		};
-
-
-
 		////////////////////////////////////////////////////////////////////////////////
 		//
 		//	Network Interface
 		//
-
-
-
-
 
 	} // namespace Net
 

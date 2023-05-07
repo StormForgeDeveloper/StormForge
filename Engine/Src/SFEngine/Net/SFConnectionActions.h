@@ -206,6 +206,14 @@ namespace Net {
 		virtual Result Run() override;
 	};
 
+
+    class ConnectionStateAction_ValidateNetIOAdapter : public ConnectionActionMUDP
+    {
+    public:
+        virtual Result Run() override;
+    };
+
+
 	class ConnectionStateAction_SendReliableQueue : public ConnectionActionUDP
 	{
 	public:
@@ -217,6 +225,13 @@ namespace Net {
 	public:
 		virtual Result Run() override;
 	};
+
+    class ConnectionStateAction_FlushNet : public ConnectionActionUDP
+    {
+    public:
+        virtual Result Run() override;
+    };
+
 /*
 	class ConnectionStateAction_UpdateRecvReliable : public ConnectionActionMUDP
 	{

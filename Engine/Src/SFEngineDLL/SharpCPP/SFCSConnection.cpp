@@ -19,7 +19,6 @@
 #include "Object/SFObject.h"
 #include "Service/SFEngineService.h"
 #include "Net/SFConnectionMUDP.h"
-#include "Net/SFConnectionGroup.h"
 #include "Net/SFConnectionTCP.h"
 #include "Net/SFMessage.h"
 #include "Protocol/SFProtocol.h"
@@ -41,21 +40,6 @@ SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnection()
 {
 	auto pConnection = new(Service::NetSystem->GetHeap()) Net::ConnectionMUDPClient(Service::NetSystem->GetHeap());
 	SharedReferenceInc inc(pConnection);
-	return NativeObjectToIntptr(pConnection);
-}
-
-SFDLL_EXPORT intptr_t SFConnection_NativeCreateConnectionWithGroup(intptr_t groupNativeHandler)
-{
-	if (groupNativeHandler == 0)
-		return 0;
-
-	auto pGroup = SF::NativeToObject<Net::ConnectionGroup>(groupNativeHandler);
-
-	auto pConnection = new(Service::NetSystem->GetHeap()) Net::ConnectionMUDPClient(Service::NetSystem->GetHeap());
-	pConnection->SetEventHandler(pGroup);
-
-	SharedReferenceInc inc(pConnection);;
-
 	return NativeObjectToIntptr(pConnection);
 }
 

@@ -45,7 +45,6 @@ set(SUBNet_FILES
 	Net/SFConnection.h
 	Net/SFConnectionAction.h
 	Net/SFConnectionActions.h
-	Net/SFConnectionGroup.h
 	Net/SFConnectionManager.h
 	Net/SFConnectionManagerTask.h
 	Net/SFConnectionMUDP.h
@@ -53,7 +52,6 @@ set(SUBNet_FILES
 	Net/SFConnectionTCP.h
 	Net/SFConnectionUDP.h
 	Net/SFConnectionUDPBase.h
-	Net/SFLoopbackConnection.h
 	Net/SFMessage.h
 	Net/SFMessageWindow.h
 	Net/SFNetConst.h
@@ -80,7 +78,6 @@ set(SUBNet_FILES
 	Net/SFConnection.cpp
 	Net/SFConnectionAction.cpp
 	Net/SFConnectionActions.cpp
-	Net/SFConnectionGroup.cpp
 	Net/SFConnectionManager.cpp
 	Net/SFConnectionManagerTask.cpp
 	Net/SFConnectionMUDP.cpp
@@ -90,7 +87,6 @@ set(SUBNet_FILES
 	Net/SFConnectionTCP.cpp
 	Net/SFConnectionUDP.cpp
 	Net/SFConnectionUDPBase.cpp
-	Net/SFLoopbackConnection.cpp
 	Net/SFMessage.cpp
 	Net/SFMessageData.h
 	Net/SFMessageWindow.cpp

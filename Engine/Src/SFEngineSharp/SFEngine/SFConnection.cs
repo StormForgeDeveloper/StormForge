@@ -110,13 +110,6 @@ namespace SF
             m_MessageRouter = messageRouter;
         }
 
-        public SFConnection(SFConnectionGroup group, SFIMessageRouter messageRouter)
-        {
-            // Don't use constructor of SFObject, it will increase reference count of the object
-            NativeHandle = NativeCreateConnectionWithGroup(group.NativeHandle);
-            m_MessageRouter = messageRouter;
-        }
-
         public SFConnection(IntPtr nativeHandle, SFIMessageRouter messageRouter = null)
         {
             // Don't use constructor of SFObject, it will increase reference count of the object
@@ -260,9 +253,6 @@ namespace SF
 
         [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeCreateConnection", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateConnection();
-
-        [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeCreateConnectionWithGroup", CharSet = CharSet.Auto)]
-        static extern IntPtr NativeCreateConnectionWithGroup(IntPtr groupNativeHandle);
 
         [DllImport(NativeDllName, EntryPoint = "SFConnection_NativeCreateConnectionTCP", CharSet = CharSet.Auto)]
         static extern IntPtr NativeCreateConnectionTCP();

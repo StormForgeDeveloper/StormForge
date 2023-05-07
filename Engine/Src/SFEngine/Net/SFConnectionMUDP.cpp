@@ -62,6 +62,9 @@ namespace SF {
 			// limit server net retry maximum
 			SetMaxGuarantedRetry(Const::UDP_CLI_RETRY_ONETIME_MAX);
 			SetUsePeerIDMap(true);
+
+            m_bIncludePacketHeader = true;
+            m_uiMinGatherSizeForFlush = sizeof(PacketHeader);
 		}
 
 		ConnectionMUDP::~ConnectionMUDP()
@@ -105,14 +108,8 @@ namespace SF {
 
 			hr = super::TickUpdate();
 
-
-			SendFlush();
-
 			return hr;
 		}
 
-
-
 	} // namespace Net
 } // namespace SF
-

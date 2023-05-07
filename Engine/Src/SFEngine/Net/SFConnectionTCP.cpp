@@ -188,24 +188,8 @@ namespace Net {
 	Result ConnectionTCP::MyNetSocketIOAdapter::OnWriteReady()
 	{
 		Result hr;
-		if (GetEventHandler() != nullptr)
-		{
-			// This will only be happened on connection with server connection
-			auto hrRes = GetEventHandler()->OnNetSendReadyMessage(&m_Owner);
-			netCheck(hrRes);
-		}
-		// process directly
-		else
-		{
-			if (m_Owner.GetNetSyncMessageDelegates().size() > 0)
-			{
-				m_Owner.GetNetSyncMessageDelegates().Invoke(&m_Owner);
-			}
-			else
-			{
-				netCheck(ProcessSendQueue());
-			}
-		}
+
+        m_Owner.m_bWriteIsReady.store(true, std::memory_order_release);
 
 		return hr;
 	}
@@ -737,46 +721,55 @@ namespace Net {
 	}
 
 	// Update Send buffer Queue, TCP and UDP client connection
-	Result ConnectionTCP::UpdateSendBufferQueue()
-	{
-		return m_NetIOAdapter.ProcessSendQueue();
-	}
+	//Result ConnectionTCP::UpdateSendBufferQueue()
+	//{
+	//	return m_NetIOAdapter.ProcessSendQueue();
+	//}
 
 	// Update net control, process connection heartbeat, ... etc
 	Result ConnectionTCP::TickUpdate()
 	{
-		Result hr = ResultCode::SUCCESS;
+		Result hr;
 
-		if (GetConnectionState() != ConnectionState::DISCONNECTED)
+        netCheck(super::TickUpdate());
+
+        if (GetConnectionState() == ConnectionState::DISCONNECTED)
+            return hr;
+
+
+		if (!GetIsIORegistered())
 		{
-			if (!GetIsIORegistered())
-			{
-				SFLog(Net, Debug, "Close connection because it's kicked from net IO, CID:{0}", GetCID());
-				netCheck(CloseConnection("Kicked from IO system"));
-			}
-			else
-			{
-				// On client side, we need to check readable/writable status by calling connect again
-				if (m_IsClientConnection && !m_IsTCPSocketConnectionEstablished && GetConnectionState() == ConnectionState::CONNECTING)
-				{
-					m_IsTCPSocketConnectionEstablished = Connect() == ResultCode::SUCCESS;
-				}
+			SFLog(Net, Debug, "Close connection because it's kicked from net IO, CID:{0}", GetCID());
+			netCheck(CloseConnection("Kicked from IO system"));
+            return hr;
+		}
 
-				if (m_IsTCPSocketConnectionEstablished
-					&& GetMyNetIOAdapter().GetPendingRecvCount() == 0
-					&& GetNetIOHandler() != nullptr)
-				{
-					hr = GetNetIOHandler()->PendingRecv();
-					if (hr == ResultCode::IO_NOTCONN)
-					{
-						SFLog(Net, Info, "Connection not connected CID:{0}", GetCID());
-						CloseConnection("Can't recv if not connected");
-					}
-				}
+		// On client side, we need to check readable/writable status by calling connect again
+		if (m_IsClientConnection && !m_IsTCPSocketConnectionEstablished && GetConnectionState() == ConnectionState::CONNECTING)
+		{
+			m_IsTCPSocketConnectionEstablished = Connect() == ResultCode::SUCCESS;
+		}
+
+		if (m_IsTCPSocketConnectionEstablished
+			&& GetMyNetIOAdapter().GetPendingRecvCount() == 0
+			&& GetNetIOHandler() != nullptr)
+		{
+			hr = GetNetIOHandler()->PendingRecv();
+			if (hr == ResultCode::IO_NOTCONN)
+			{
+				SFLog(Net, Info, "Connection not connected CID:{0}", GetCID());
+				CloseConnection("Can't recv if not connected");
 			}
 		}
 
-		return super::TickUpdate();
+        // tick update send queue
+        bool bWriteIsReady = m_bWriteIsReady.exchange(false, std::memory_order_consume);
+        if (bWriteIsReady) // if write ready is triggered this tick
+        {
+            m_NetIOAdapter.ProcessSendQueue();
+        }
+
+        return hr;
 	}
 
 

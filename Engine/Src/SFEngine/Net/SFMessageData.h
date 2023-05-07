@@ -35,8 +35,8 @@ namespace SF {
 	{
 	private:
 
-        // Mobile packet header
-        MobilePacketHeader* m_pPacketHeader;
+        // Packet header
+        PacketHeader* m_pPacketHeader;
 
 		// Message Buffer Pointer
 		MessageHeader*			m_pMsgHeader;
@@ -52,8 +52,8 @@ namespace SF {
 	public:
 		virtual ~MessageData();
 
-        SF_FORCEINLINE MobilePacketHeader* GetPacketHeader() { return m_pPacketHeader; }
-        SF_FORCEINLINE const MobilePacketHeader* GetPacketHeader() const { return m_pPacketHeader; }
+        SF_FORCEINLINE PacketHeader* GetPacketHeader() { return m_pPacketHeader; }
+        SF_FORCEINLINE const PacketHeader* GetPacketHeader() const { return m_pPacketHeader; }
         SF_FORCEINLINE MessageHeader* GetMessageHeader() { return m_pMsgHeader; }
         SF_FORCEINLINE const MessageHeader* GetMessageHeader() const { return m_pMsgHeader; }
         uint8_t* GetMessageBuff(); // data include header
@@ -77,8 +77,6 @@ namespace SF {
         SF_FORCEINLINE bool IsEncrypted() const { return m_bIsEncrypted; }
 
 		// Parsing helper
-		//void GetRouteInfo(RouteContext& routeContext, TransactionID& transID);
-
 		void ClearAssignedSequence();
 		void AssignSequence(uint sequence);
 		inline bool GetIsSequenceAssigned() { return m_bIsSequenceAssigned; }
@@ -86,7 +84,8 @@ namespace SF {
 		// Initialize message buffer
 		static MessageData* NewMessage(IHeap& heap, uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData = nullptr);
 
-		virtual MessageData* Clone(IHeap& memoryManager);
+        // Make a clone this message
+		MessageData* Clone(IHeap& heap);
 
 
 		// Update checksum and encrypt

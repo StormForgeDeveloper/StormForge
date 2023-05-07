@@ -863,7 +863,7 @@ namespace ProtocolCompiler
             BuildCreatePreamble(parameters);
 
             string strSizeVarName = "__uiMessageSize";
-            string strMessageHeaderSize = Group.IsMobile ? "Message::MobileHeaderSize" : "Message::HeaderSize";
+            string strMessageHeaderSize = "Message::HeaderSize";
             MatchIndent(); OutStream.WriteLine(string.Format("unsigned {0} = (unsigned)({1} ", strSizeVarName, strMessageHeaderSize));
             if (parameters != null)
             {
