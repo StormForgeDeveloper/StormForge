@@ -171,12 +171,12 @@ SFDLL_EXPORT int32_t SFOnlineClient_NativeUpdateGameTick(intptr_t nativeHandle,
 		setEventFunc(evt.Components.EventType, evt.Components.hr, evt.Components.State);
 	};
 
-	auto messageHandler = [setMessageFunc, setValueFunc, setArrayValueFunc, onMessageReady](Net::Connection* pConn, const SharedPointerT<MessageData>& pMsgData)
+	auto messageHandler = [setMessageFunc, setValueFunc, setArrayValueFunc, onMessageReady](Net::Connection* pConn, const MessageHeader* pMsgData)
 	{
-		setMessageFunc(pMsgData->GetMessageHeader()->msgID.IDSeq.MsgID);
+		setMessageFunc(pMsgData->msgID.IDSeq.MsgID);
 
 		VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
-		SF::Protocol::ParseMessage(pMsgData->GetMessageHeader(), builder);
+		SF::Protocol::ParseMessage(pMsgData, builder);
 
 		onMessageReady();
 	};

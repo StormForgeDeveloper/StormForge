@@ -20,7 +20,7 @@
 #include "MemoryManager/SFMemoryPool.h"
 #include "Multithread/SFThread.h"
 #include "Container/SFCircularPageQueue.h"
-
+#include "Container/SFCircularBufferQueue.h"
 
 
 namespace SF {
@@ -113,9 +113,8 @@ namespace Net {
 		virtual ~MsgQueue();
 
 		// Clear queue element
-		void ClearQueue();
+        void Reset();
 	};
-
 
 	// Write buffer queue
 	class WriteBufferQueue : public CircularPageQueueAtomic<IOBUFFER_WRITE*>
@@ -128,8 +127,8 @@ namespace Net {
 		virtual ~WriteBufferQueue();
 
 		// Clear queue element
-		void ClearQueue();
-	};
+        void Reset();
+    };
 
 
 

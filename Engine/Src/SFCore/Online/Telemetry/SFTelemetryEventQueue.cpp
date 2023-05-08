@@ -65,58 +65,38 @@ namespace SF
 
 		auto allocationSize = eventDataBuffer.size() + sizeof(uint32_t);
 
-		auto eventItem = m_EventBufferQueue.AllocateWrite(allocationSize);
-		for (;!eventItem; eventItem = m_EventBufferQueue.AllocateWrite(allocationSize))
+        EventItemWritePtr newItemPtr = m_EventBufferQueue.AllocateWrite(allocationSize);
+		for (;!newItemPtr; newItemPtr = m_EventBufferQueue.AllocateWrite(allocationSize))
 		{
 			// drop old item first
 			MutexScopeLock ScopeReadLock(m_ReadLock);
 
 			// Free up existing segment if we don't have enough space for the new one
-			auto *pTail = m_EventBufferQueue.DequeueRead();
-			if (!pTail)
+            EventItemReadPtr itemPtr = m_EventBufferQueue.DequeueRead();
+			if (!itemPtr)
 			{
 				SFLog(Telemetry, Error, "TelemetryEventQueue::EnqueueEvent, Failed to free item");
 				return false;
 			}
-
-			m_EventBufferQueue.ReleaseRead(pTail);
 		}
 
-        auto* pCurDataPtr = (uint8_t*)eventItem->GetDataPtr();
+        auto* pCurDataPtr = (uint8_t*)newItemPtr.data();
         memcpy(pCurDataPtr, &eventId, sizeof(eventId)); pCurDataPtr += sizeof(eventId);
         memcpy(pCurDataPtr, eventDataBuffer.data(), eventDataBuffer.size());
 
-        std::atomic_thread_fence(MemoryOrder::memory_order_release);
-
-		m_EventBufferQueue.ReleaseWrite(eventItem);
+        newItemPtr.Reset();
 
 		return true;
 	}
 
 	TelemetryEventQueue::EventItem* TelemetryEventQueue::GetTailEvent()
 	{
-		auto eventItem = m_EventBufferQueue.PeekTail();
-
-        if (eventItem)
-        {
-            // Fence-fence synchronization: Acquire data changes before read
-            std::atomic_thread_fence(MemoryOrder::memory_order_acquire);
-        }
-
-		return eventItem;
+		return m_EventBufferQueue.PeekTail();
 	}
 
 	TelemetryEventQueue::EventItem* TelemetryEventQueue::GetNextEvent(EventItem* eventItem)
 	{
-		auto nextEventItem = m_EventBufferQueue.PeekNext(eventItem);
-
-        if (eventItem)
-        {
-            // Fence-fence synchronization: Acquire data changes before read
-            std::atomic_thread_fence(MemoryOrder::memory_order_acquire);
-        }
-
-		return nextEventItem;
+		return m_EventBufferQueue.PeekNext(eventItem);
 	}
 
 	bool TelemetryEventQueue::FreePostedEvents(uint32_t eventId)
@@ -124,17 +104,17 @@ namespace SF
 		{
 			MutexScopeLock scopeLock(GetReadLock());
 
-			auto eventItem = m_EventBufferQueue.DequeueRead();
+			EventItemReadPtr eventItem = m_EventBufferQueue.DequeueRead();
 			for (; eventItem; eventItem = m_EventBufferQueue.DequeueRead())
 			{
-				auto curEventId = *(uint32_t*)eventItem->GetDataPtr();
+				auto curEventId = *(uint32_t*)eventItem.data();
 				if (int32_t(curEventId - eventId) > 0)
 				{
-					m_EventBufferQueue.CancelRead(eventItem);
+                    eventItem.CancelRead();
 					break;
 				}
 
-				m_EventBufferQueue.ReleaseRead(eventItem);
+                eventItem.Reset();
 			}
 		}
 

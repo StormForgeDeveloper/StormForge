@@ -82,11 +82,6 @@ namespace Net {
 	TimeStampMS ConnectionActionBase::GetNetCtrlTryTime() { return GetConnection()->GetNetCtrlTryTime(); }
 	void ConnectionActionBase::UpdateNetCtrlTryTime() { GetConnection()->UpdateNetCtrlTryTime(); }
 
-	IConnectionEventHandler* ConnectionActionBase::GetEventHandler()
-	{
-		return m_pConnection->GetEventHandler();
-	}
-
 	ConnectionUDPBase* ConnectionActionUDP::GetConnection()
 	{
 		return static_cast<ConnectionUDPBase*>(ConnectionActionBase::GetConnection());

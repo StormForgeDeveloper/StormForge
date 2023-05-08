@@ -175,7 +175,7 @@ namespace SF {
 		// bit field termination
 		uint32_t					: 0;
 
-        SF_FORCEINLINE size_t GetHeaderSize() const { return sizeof(MessageHeader); }
+        constexpr size_t GetHeaderSize() const { return sizeof(MessageHeader); }
 
         SF_FORCEINLINE void SetIDNLen(uint id, uint msgLen)
         {

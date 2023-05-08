@@ -19,11 +19,8 @@
 #include "Container/SFCircularBufferQueue.h"
 #include "Resource/SFTextureFormat.h"
 
-
-
 namespace SF
 {
-
 
 	////////////////////////////////////////////////////////////////////
 	//
@@ -35,38 +32,31 @@ namespace SF
 	class DeviceResource;
 	class RenderCommand;
 
-
-
 	class IGraphicDevice
 	{
 	protected:
 
-		//// Render command queue
-		//CircularBuffer<20 * 1024 * 1024> m_RenderCommandQueue;
-
+		// Render command queue
+        using CommandQueue = StaticCircularBufferQueue<20 * 1024 * 1024>;
 
 	public:
 		IGraphicDevice() {}
 		virtual ~IGraphicDevice() {}
 
-		virtual StaticCircularBufferQueue<20 * 1024 * 1024>* GetRenderCommandQueue() { return nullptr; }
+		virtual CommandQueue* GetRenderCommandQueue() { return nullptr; }
 
 		virtual IHeap& GetHeap() { return GetSystemHeap(); }
 
 		// command memory manager, use same memory heap for now(TODO)
 		virtual IHeap& GetCommandHeap() { return GetSystemHeap(); }
 
-
 		virtual NativeWindow GetNativeWindow() { return NativeWindow(0); }
 		virtual int GetWidth() { return 0; }
 		virtual int GetHeight() { return 0; }
 
-
 		virtual void InitDisplay(NativeWindow pWindow) { unused(pWindow); }
 		virtual void DeinitDisplay() {}
 		virtual void OnResize() {}
-
-
 
 
 		///////////////////////////////////////////////////////////////////////////////////
@@ -90,14 +80,14 @@ namespace SF
 			if (pRenderCommandQueue == nullptr)
 				return nullptr;
 
-			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
-			auto pCmd = new(pBuffer->GetDataPtr()) CommandType();
-			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer->GetDataPtr());
+            CommandQueue::ItemWritePtr pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
+			auto pCmd = new(pBuffer.data()) CommandType();
+			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer.data());
 
 			TaskPtr pTask = new(GetHeap()) CommandNotificationTask;
 			pCmd->SetNotificationTask(pTask);
 
-			pRenderCommandQueue->ReleaseWrite(pBuffer);
+            pBuffer.Reset();
 			return std::forward<TaskPtr>(pTask);
 		}
 
@@ -109,14 +99,14 @@ namespace SF
 			if (pRenderCommandQueue == nullptr)
 				return nullptr;
 
-			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
-			auto pCmd = new(pBuffer->GetDataPtr()) CommandType(args...);
-			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer->GetDataPtr());
+            CommandQueue::ItemWritePtr pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
+			auto pCmd = new(pBuffer.data()) CommandType(args...);
+			assert((uintptr_t)pCmd == (uintptr_t)pBuffer.data());
 
 			TaskPtr pTask = new(GetHeap()) CommandNotificationTask;
 			pCmd->SetNotificationTask(pTask);
 
-			pRenderCommandQueue->ReleaseWrite(pBuffer);
+            pBuffer.Reset();
 			return std::forward<TaskPtr>(pTask);
 		}
 
@@ -128,10 +118,11 @@ namespace SF
 			if (pRenderCommandQueue == nullptr)
 				return ResultCode::SUCCESS_FALSE;
 
-			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
-			auto pCmd = new(pBuffer->GetDataPtr()) CommandType();
-			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer->GetDataPtr());
-			return pRenderCommandQueue->ReleaseWrite(pBuffer);
+			CommandQueue::ItemWritePtr pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
+			auto pCmd = new(pBuffer.data()) CommandType();
+			assert((uintptr_t)pCmd == (uintptr_t)pBuffer.data());
+            pBuffer.Reset();
+			return ResultCode::SUCCESS;
 		}
 
 		// request command with arg
@@ -142,27 +133,22 @@ namespace SF
 			if (pRenderCommandQueue == nullptr)
 				return ResultCode::SUCCESS_FALSE;
 
-			auto pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
-			auto pCmd = new(pBuffer->GetDataPtr()) CommandType(args...);
-			Assert((uintptr_t)pCmd == (uintptr_t)pBuffer->GetDataPtr());
+			CommandQueue::ItemWritePtr pBuffer = pRenderCommandQueue->AllocateWrite(sizeof(CommandType));
+			auto pCmd = new(pBuffer.data()) CommandType(args...);
+			assert((uintptr_t)pCmd == (uintptr_t)pBuffer.data());
 			unused(pCmd);
-			return pRenderCommandQueue->ReleaseWrite(pBuffer);
+            pBuffer.Reset();
+			return ResultCode::SUCCESS;
 		}
-
-
 
 		///////////////////////////////////////////////////////////////////////////////////
 		//
 		//	Resource handling
 		//
 
-
 		virtual DeviceTexture* CreateTexture(const TextureInitParameter& initParameters) { unused(initParameters);  return nullptr; }
 		virtual DeviceResource* CreateBuffer() { return nullptr; }
 
 	};
 
-	
-
-}; // namespace SF
-
+} // namespace SF

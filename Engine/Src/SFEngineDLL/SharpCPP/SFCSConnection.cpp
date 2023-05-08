@@ -149,17 +149,19 @@ SFDLL_EXPORT bool SFConnection_NativeDequeueMessage(intptr_t nativeHandle, SET_M
 	if (nativeHandle == 0)
 		return false;
 
-	auto pConnection = NativeToObject<Net::Connection>(nativeHandle);
+	Net::Connection* pConnection = NativeToObject<Net::Connection>(nativeHandle);
 
-	MessageDataPtr pIMsg;
-	if (!pConnection->GetRecvMessage(pIMsg))
-		return false;
+    Net::Connection::MessageItemReadPtr itemPtr = pConnection->GetRecvMessageQueue().DequeueRead();
+    if (!itemPtr)
+        return false;
 
-	setMessageFunc(pIMsg->GetMessageHeader()->msgID.IDSeq.MsgID);
+    const MessageHeader* pHeader = reinterpret_cast<const MessageHeader * >(itemPtr.data());
+
+	setMessageFunc(pHeader->msgID.IDSeq.MsgID);
 
 	// Fill parameters
 	VariableMapBuilderCS builder(setValueFunc, setArrayValueFunc);
-	if (!SF::Protocol::ParseMessage(pIMsg->GetMessageHeader(), builder))
+	if (!SF::Protocol::ParseMessage(pHeader, builder))
 		return false;
 
 	return true;

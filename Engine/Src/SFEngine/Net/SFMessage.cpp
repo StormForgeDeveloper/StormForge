@@ -188,6 +188,11 @@ namespace SF
 		GetMessageHeader()->msgID.IDSeq.Sequence = 0;
 	}
 
+    MessageData* MessageData::NewMessage(IHeap& heap, const MessageHeader* pHeader)
+    {
+        return NewMessage(heap, pHeader->msgID, pHeader->Length, reinterpret_cast<const uint8_t*>(pHeader));
+    }
+
 	// Initialize message buffer
 	MessageData* MessageData::NewMessage(IHeap& heap, uint32_t uiMsgID, uint uiMsgBufSize, const uint8_t* pData )
 	{

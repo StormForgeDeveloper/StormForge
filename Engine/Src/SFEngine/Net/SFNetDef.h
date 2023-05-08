@@ -70,7 +70,6 @@ namespace Net {
 
 	class INet;
 	class Connection;
-	class IConnectionEventHandler;
 
 
 
@@ -159,23 +158,6 @@ namespace Net {
 
 		bool operator == (const PeerInfo& op) const;
 		bool operator != (const PeerInfo& op) const;
-	};
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	IConnectionEventHandler Interface
-	//
-
-	// Deprecated, use delegate function
-	class IConnectionEventHandler
-	{
-	public:
-		virtual ~IConnectionEventHandler();
-
-		virtual void OnConnectionEvent(Connection* pConn, const ConnectionEvent& evt) {}
-		virtual Result OnRecvMessage(Connection* pConn, SharedPointerT<MessageData>& pMsg) { return ResultCode::SUCCESS; }
-		virtual Result OnNetSyncMessage(Connection* pConn);
 	};
 
 

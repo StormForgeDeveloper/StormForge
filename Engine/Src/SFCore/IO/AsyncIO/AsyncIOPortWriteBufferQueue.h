@@ -40,7 +40,7 @@ namespace SF {
 			virtual ~WriteBufferQueue();
 
 			// Clear queue element
-			void ClearQueue();
+			void Reset();
 		};
 
 

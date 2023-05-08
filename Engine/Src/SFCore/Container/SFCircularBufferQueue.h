@@ -45,12 +45,149 @@ namespace SF
 			uint32_t				DataSize;
 			uint32_t				NextPos;	// Next item position, offset from m_Buffer
 
-			void* GetDataPtr() { return this + 1; }
-			size_t GetDataSize() const { return DataSize; }
+			SF_FORCEINLINE void* GetDataPtr() { return this + 1; }
+            SF_FORCEINLINE static BufferItem* FromDataPtr(void* pData) { return pData != nullptr ? reinterpret_cast<BufferItem*>(pData) - 1 : nullptr; }
+            SF_FORCEINLINE size_t GetDataSize() const { return DataSize; }
 		};
 #pragma pack(pop)
 
 		using Item = BufferItem;
+
+
+        class ItemPtr
+        {
+        protected:
+            ItemPtr() {}
+            ItemPtr(CircularBufferQueue* pContainer, BufferItem* pItem)
+                : m_pContainer(pContainer)
+                , m_pItem(pItem)
+            {
+            }
+            ItemPtr(ItemPtr&& src)
+                : m_pContainer(src.m_pContainer)
+                , m_pItem(src.m_pItem)
+            {
+                src.m_pContainer = nullptr;
+                src.m_pItem = nullptr;
+            }
+            ~ItemPtr()
+            {
+            }
+        public:
+
+            SF_FORCEINLINE bool IsValid() const { return m_pContainer && m_pItem; }
+            SF_FORCEINLINE operator bool() const { return IsValid(); }
+            SF_FORCEINLINE void* data() const { return m_pItem ? m_pItem->GetDataPtr() : nullptr; }
+            SF_FORCEINLINE size_t GetDataSize() const { return m_pItem ? m_pItem->DataSize : 0; }
+            SF_FORCEINLINE const BufferItem* GetBufferItem() const { return m_pItem; }
+
+            ItemPtr& operator = (ItemPtr&& src)
+            {
+                assert(m_pContainer == nullptr);
+                assert(m_pItem == nullptr);
+                m_pContainer = src.m_pContainer;
+                m_pItem = src.m_pItem;
+                src.m_pContainer = nullptr;
+                src.m_pItem = nullptr;
+                return *this;
+            }
+
+        protected:
+            CircularBufferQueue* m_pContainer{};
+            BufferItem* m_pItem{};
+        };
+
+        // Write ptr wrapper
+        class ItemWritePtr : public ItemPtr
+        {
+        public:
+            ItemWritePtr() {}
+            ItemWritePtr(CircularBufferQueue* pContainer, BufferItem* pItem)
+                : ItemPtr(pContainer, pItem)
+            {
+            }
+            ItemWritePtr(ItemWritePtr&& src)
+                : ItemPtr(std::forward<ItemPtr>(src))
+            {
+            }
+            ~ItemWritePtr()
+            {
+                Reset();
+            }
+
+            using ItemPtr::IsValid;
+            using ItemPtr::data;
+            using ItemPtr::GetDataSize;
+            using ItemPtr::GetBufferItem;
+
+            void Reset()
+            {
+                if (m_pContainer && m_pItem)
+                {
+                    m_pContainer->ReleaseWrite(m_pItem);
+                    m_pContainer = nullptr;
+                    m_pItem = nullptr;
+                }
+            }
+
+            ItemWritePtr& operator = (ItemWritePtr&& src)
+            {
+                Reset();
+                *((ItemPtr*)this) = std::forward<ItemPtr>(src);
+                return *this;
+            }
+        };
+
+        // read ptr wrapper
+        class ItemReadPtr : public ItemPtr
+        {
+        public:
+            ItemReadPtr() {}
+            ItemReadPtr(CircularBufferQueue* pContainer, BufferItem* pItem)
+                : ItemPtr(pContainer, pItem)
+            {
+            }
+            ItemReadPtr(ItemReadPtr&& src)
+                : ItemPtr(std::forward<ItemPtr>(src))
+            {
+            }
+            ~ItemReadPtr()
+            {
+                Reset();
+            }
+
+            using ItemPtr::IsValid;
+            using ItemPtr::data;
+            using ItemPtr::GetDataSize;
+            using ItemPtr::GetBufferItem;
+
+            void Reset()
+            {
+                if (m_pContainer && m_pItem)
+                {
+                    m_pContainer->ReleaseRead(m_pItem);
+                    m_pContainer = nullptr;
+                    m_pItem = nullptr;
+                }
+            }
+
+            void CancelRead()
+            {
+                if (m_pContainer && m_pItem)
+                {
+                    m_pContainer->CancelRead(m_pItem);
+                    m_pContainer = nullptr;
+                    m_pItem = nullptr;
+                }
+            }
+
+            ItemReadPtr& operator = (ItemReadPtr&& src)
+            {
+                Reset();
+                *((ItemPtr*)this) = std::forward<ItemPtr>(src);
+                return *this;
+            }
+        };
 
 	private:
 
@@ -74,6 +211,7 @@ namespace SF
 		// Write position
 		std::atomic <BufferItem*> m_HeadPos;
 
+        std::atomic<uint> m_ItemCount;
 
 	public:
 
@@ -88,6 +226,7 @@ namespace SF
 
 		// Empty check
 		bool IsEmpty() const;
+        SF_FORCEINLINE uint GetItemCount() const { return m_ItemCount.load(std::memory_order_relaxed); }
 
 		size_t GetFreeSize() const;
 
@@ -105,12 +244,12 @@ namespace SF
 		BufferItem* GetTail() const { return m_TailPos.load(MemoryOrder::memory_order_acquire); }
 
 		// Reserve buffer. The pointer it returns is reserved for writing, after done writing, Call SetReadyForRead to mark the buffer is ready for read
-		BufferItem* AllocateWrite(size_t bufferSize);
+        ItemWritePtr AllocateWrite(size_t bufferSize);
 
 		// mark the buffer for read
 		Result ReleaseWrite(BufferItem* pBuffer);
 
-		BufferItem* DequeueRead();
+        ItemReadPtr DequeueRead();
 		void CancelRead(BufferItem* item);
 		Result ReleaseRead(BufferItem* pBuffer);
 
@@ -120,28 +259,29 @@ namespace SF
 		BufferItem* PeekNext(BufferItem* item);
 
 		// get buffer item size
-		size_t GetBufferItemSize(BufferItem* pBufferItem) const;
+		size_t GetBufferItemSize(const BufferItem* pBufferItem) const;
 
-		// Iterate readable items. the item passed to the functor will be freed
-		template<class FunctorT>
-		void ForeachReadableItems(FunctorT func)
-		{
-			BufferItem* pBufferItem = nullptr;
+        // TODO: make iterator
+		//// Iterate readable items. the item passed to the functor will be freed
+		//template<class FunctorT>
+		//void ForeachReadableItems(FunctorT func)
+		//{
+		//	BufferItem* pBufferItem = nullptr;
 
-			while (true)
-			{
-				pBufferItem = DequeueRead();
-				if (pBufferItem == nullptr)
-					return; // nothing left for now
+		//	while (true)
+		//	{
+		//		pBufferItem = DequeueRead();
+		//		if (pBufferItem == nullptr)
+		//			return; // nothing left for now
 
-				bool bRet = func(pBufferItem);
+		//		bool bRet = func(pBufferItem);
 
-				ReleaseRead(pBufferItem);
+		//		ReleaseRead(pBufferItem);
 
-				if (!bRet)
-					return;
-			}
-		}
+		//		if (!bRet)
+		//			return;
+		//	}
+		//}
 
 		bool CheckIntegrity() const;
 	};
@@ -155,7 +295,7 @@ namespace SF
 		uint8_t m_StaticBuffer[BufferSize];
 
 	public:
-		StaticCircularBufferQueue() : CircularBufferQueue(GetSystemHeap(), BufferSize, m_StaticBuffer) {}
+		StaticCircularBufferQueue(IHeap& overflowHeap = GetSystemHeap()) : CircularBufferQueue(overflowHeap, BufferSize, m_StaticBuffer) {}
 	};
 
 

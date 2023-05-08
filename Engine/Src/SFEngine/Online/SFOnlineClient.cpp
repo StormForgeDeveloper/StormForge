@@ -94,16 +94,16 @@ namespace SF
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Login::LoginRes::MID.GetMsgID(),
-				[this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+				[this](Net::Connection*, const MessageHeader* pHeader)
 				{
-					OnLoginRes(pMsgData);
+					OnLoginRes(pHeader);
 				});
 
             GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
                 Message::Login::LoginBySteamRes::MID.GetMsgID(),
-                [this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+                [this](Net::Connection*, const MessageHeader* pHeader)
                 {
-                    OnLoginRes(pMsgData);
+                    OnLoginRes(pHeader);
                 });
 
 
@@ -184,9 +184,9 @@ namespace SF
 
 		}
 
-		void OnLoginRes(const SharedPointerT<MessageData>& pMsgData)
+		void OnLoginRes(const MessageHeader* pHeader)
 		{
-			Message::Login::LoginRes packet(pMsgData);
+			Message::Login::LoginRes packet(pHeader);
 			auto result = packet.ParseMsg();
 			if (!result)
 			{
@@ -307,9 +307,9 @@ namespace SF
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Game::JoinGameServerRes::MID.GetMsgID(),
-				[this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+				[this](Net::Connection*, const MessageHeader* pHeader)
 				{
-					OnJoinGameServerRes(pMsgData);
+					OnJoinGameServerRes(pHeader);
 				});
 
 			GetConnection()->GetConnectionEventDelegates().AddDelegateUnique(uintptr_t(&m_Owner),
@@ -426,9 +426,9 @@ namespace SF
 		}
 
 
-		void OnJoinGameServerRes(const SharedPointerT<MessageData>& pMsgData)
+		void OnJoinGameServerRes(const MessageHeader* pHeader)
 		{
-			Message::Game::JoinGameServerRes packet(pMsgData);
+			Message::Game::JoinGameServerRes packet(pHeader);
 			auto result = packet.ParseMsg();
 			if (!result)
 			{
@@ -516,16 +516,16 @@ namespace SF
 
 			GetConnection()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::PlayInstance::JoinPlayInstanceRes::MID.GetMsgID(),
-				[this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+				[this](Net::Connection*, const MessageHeader* pHeader)
 				{
-					OnPlayInstanceJoinGameInstanceRes(pMsgData);
+					OnPlayInstanceJoinGameInstanceRes(pHeader);
 				});
 
 			m_Owner.GetConnectionGame()->AddMessageDelegateUnique(uintptr_t(this),
 				Message::Game::JoinGameInstanceRes::MID.GetMsgID(),
-				[this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+				[this](Net::Connection*, const MessageHeader* pHeader)
 				{
-					OnJoinGameInstanceRes(pMsgData);
+					OnJoinGameInstanceRes(pHeader);
 				});
 
 			m_Owner.RegisterPlayInstanceHandlers();
@@ -596,9 +596,9 @@ namespace SF
 			}
 		}
 
-		void OnJoinGameInstanceRes(const SharedPointerT<MessageData>& pMsgData)
+		void OnJoinGameInstanceRes(const MessageHeader* pHeader)
 		{
-			Message::Game::JoinGameInstanceRes packet(pMsgData);
+			Message::Game::JoinGameInstanceRes packet(pHeader);
 			auto result = packet.ParseMsg();
 			if (!result)
 			{
@@ -649,9 +649,9 @@ namespace SF
 			}
 		}
 
-		void OnPlayInstanceJoinGameInstanceRes(const SharedPointerT<MessageData>& pMsgData)
+		void OnPlayInstanceJoinGameInstanceRes(const MessageHeader* pHeader)
 		{
-			Message::PlayInstance::JoinPlayInstanceRes packet(pMsgData);
+			Message::PlayInstance::JoinPlayInstanceRes packet(pHeader);
 			auto result = packet.ParseMsg();
 			if (!result)
 			{
@@ -764,10 +764,10 @@ namespace SF
 
         m_Game->AddMessageDelegateUnique(uintptr_t(this),
 			Message::Game::SelectCharacterRes::MID.GetMsgID(),
-			[this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+			[this](Net::Connection*, const MessageHeader* pMsgData)
 			{
 				Message::Game::SelectCharacterRes msg;
-				if (msg.ParseMessage(pMsgData->GetMessageHeader()))
+				if (msg.ParseMessage(pMsgData))
 				{
 					m_CharacterId = msg.GetCharacterID();
 				}
@@ -776,7 +776,7 @@ namespace SF
 
         m_Game->AddMessageDelegateUnique(uintptr_t(this),
             Message::Game::LeaveGameInstanceRes::MID.GetMsgID(),
-            [this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+            [this](Net::Connection*, const MessageHeader* pMsgData)
             {
                  m_GameInstanceUID = 0;
                  switch (GetOnlineState())
@@ -807,35 +807,35 @@ namespace SF
 
         m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
             Message::PlayInstance::NewActorInViewS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+            [this](Net::Connection*, const MessageHeader* pMsgData)
             {
                 OnActorInView(pMsgData);
             });
 
         m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
             Message::PlayInstance::RemoveActorFromViewS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+            [this](Net::Connection*, const MessageHeader* pMsgData)
             {
                 OnActorOutofView(pMsgData);
             });
 
         m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
             Message::PlayInstance::ActorMovementS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+            [this](Net::Connection*, const MessageHeader* pMsgData)
             {
                 OnActorMovement(pMsgData);
             });
 
         m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
             Message::PlayInstance::ActorMovementsS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+            [this](Net::Connection*, const MessageHeader* pMsgData)
             {
                 OnActorMovements(pMsgData);
             });
 
         m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
             Message::PlayInstance::VoiceDataS2CEvt::MID.GetMsgID(),
-            [this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+            [this](Net::Connection*, const MessageHeader* pMsgData)
             {
                 OnVoiceData(pMsgData);
             });
@@ -844,7 +844,7 @@ namespace SF
 
 		m_GameInstance->AddMessageDelegateUnique(uintptr_t(this),
 			Message::PlayInstance::PlayerStateChangedS2CEvt::MID.GetMsgID(),
-			[this](Net::Connection*, const SharedPointerT<MessageData>& pMsgData)
+			[this](Net::Connection*, const MessageHeader* pMsgData)
 			{
 				OnPlayerStateChanged(pMsgData);
 			});
@@ -1125,7 +1125,7 @@ namespace SF
         return hr;
     }
 
-    void OnlineClient::OnActorInView(const MessageDataPtr& pMsgData)
+    void OnlineClient::OnActorInView(const MessageHeader* pMsgData)
     {
         Message::PlayInstance::NewActorInViewS2CEvt msg(pMsgData);
         if (!msg.ParseMsg())
@@ -1151,7 +1151,7 @@ namespace SF
         onlineActor->SetMovement(msg.GetMovement());
     }
 
-    void OnlineClient::OnActorOutofView(const MessageDataPtr& pMsgData)
+    void OnlineClient::OnActorOutofView(const MessageHeader* pMsgData)
     {
         Message::PlayInstance::RemoveActorFromViewS2CEvt msg(pMsgData);
         if (!msg.ParseMsg())
@@ -1174,7 +1174,7 @@ namespace SF
         }
     }
 
-    void OnlineClient::OnActorMovement(const MessageDataPtr& pMsgData)
+    void OnlineClient::OnActorMovement(const MessageHeader* pMsgData)
     {
         Message::PlayInstance::ActorMovementS2CEvt msg(pMsgData);
         if (!msg.ParseMsg())
@@ -1192,7 +1192,7 @@ namespace SF
         OnActorMovement(msg.GetMovement());
     }
 
-    void OnlineClient::OnActorMovements(const MessageDataPtr& pMsgData)
+    void OnlineClient::OnActorMovements(const MessageHeader* pMsgData)
     {
         Message::PlayInstance::ActorMovementsS2CEvt msg(pMsgData);
         if (!msg.ParseMsg())
@@ -1228,7 +1228,7 @@ namespace SF
         }
     }
 
-    void OnlineClient::OnVoiceData(const MessageDataPtr& pMsgData)
+    void OnlineClient::OnVoiceData(const MessageHeader* pMsgData)
     {
         Message::PlayInstance::VoiceDataS2CEvt msg(pMsgData);
         if (!msg.ParseMsg())
@@ -1244,7 +1244,7 @@ namespace SF
         }
     }
 
-	void OnlineClient::OnPlayerStateChanged(const MessageDataPtr& pMsgData)
+	void OnlineClient::OnPlayerStateChanged(const MessageHeader* pMsgData)
 	{
 		Message::PlayInstance::PlayerStateChangedS2CEvt msg(pMsgData);
 		if (!msg.ParseMsg())

@@ -34,10 +34,14 @@ namespace SF
 	
 	class GraphicDevice : public IGraphicDevice
 	{
+    public:
+
+        using CommandQueue = IGraphicDevice::CommandQueue;
+
 	private:
 
 		// Render command queue
-		StaticCircularBufferQueue<20 * 1024 * 1024> m_RenderCommandQueue;
+        CommandQueue m_RenderCommandQueue;
 
 		// Native window
 		NativeWindow m_NativeWindow;

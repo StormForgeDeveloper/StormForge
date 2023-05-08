@@ -74,7 +74,7 @@ namespace SF
             m_AudioThread.reset();
         }
 
-        m_Requests.ClearQueue();
+        m_Requests.Reset();
 
         if (m_Listener.IsValid())
         {

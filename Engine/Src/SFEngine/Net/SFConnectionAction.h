@@ -72,8 +72,6 @@ namespace Net {
 		TimeStampMS GetNetCtrlTryTime();
 		void UpdateNetCtrlTryTime();
 
-		IConnectionEventHandler* GetEventHandler();
-
 		Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0 = 0);
 
 		Result Disconnect(const char* reason);

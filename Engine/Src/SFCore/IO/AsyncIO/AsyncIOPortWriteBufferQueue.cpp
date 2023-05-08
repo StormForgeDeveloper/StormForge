@@ -38,11 +38,11 @@ namespace SF {
 
 		WriteBufferQueue::~WriteBufferQueue()
 		{
-			ClearQueue();
+            Reset();
 		}
 
 		// Clear queue element
-		void WriteBufferQueue::ClearQueue()
+		void WriteBufferQueue::Reset()
 		{
 			IOBUFFER_WRITE* data = nullptr;
 
@@ -51,7 +51,7 @@ namespace SF {
 				Util::SafeDelete(data);
 			}
 
-			super::ClearQueue();
+			super::Reset();
 		}
 
 

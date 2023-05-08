@@ -220,7 +220,8 @@ namespace SF {
 
 		// Clear queue and remove all enqueued items
 		// This operation is not thread safe
-		void ClearQueue();
+        [[deprecated]]void ClearQueue() { Reset(); }
+        void Reset();
 
 	};
 

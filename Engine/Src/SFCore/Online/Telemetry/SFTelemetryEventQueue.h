@@ -52,7 +52,9 @@ namespace SF
 		};
 	#pragma pack(pop)
 
-		using EventItem = CircularBufferQueue::BufferItem;
+        using EventItem = CircularBufferQueue::BufferItem;
+        using EventItemReadPtr = CircularBufferQueue::ItemReadPtr;
+        using EventItemWritePtr = CircularBufferQueue::ItemWritePtr;
 
 	public:
 

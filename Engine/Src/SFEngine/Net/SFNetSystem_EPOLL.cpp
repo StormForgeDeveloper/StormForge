@@ -307,7 +307,7 @@ namespace Net {
 
 	EPOLLSendWorker::~EPOLLSendWorker()
 	{
-		m_WriteQueue.ClearQueue();
+		m_WriteQueue.Reset();
 	}
 
 	void EPOLLSendWorker::Run()

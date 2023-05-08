@@ -19,34 +19,6 @@
 
 
 namespace SF {
-	namespace Net {
-
-
-
-
-		////////////////////////////////////////////////////////////////////////////////
-		//
-		//	IConnectionEventHandler Interface
-		//
-
-		IConnectionEventHandler::~IConnectionEventHandler()
-		{
-
-		}
-
-		Result IConnectionEventHandler::OnNetSyncMessage(Connection* pConn)
-		{
-			unused(pConn);
-			Assert(false);
-			return ResultCode::NOT_IMPLEMENTED;
-		};
-
-		////////////////////////////////////////////////////////////////////////////////
-		//
-		//	Network Interface
-		//
-
-	} // namespace Net
 
 
 	EndpointAddress& EndpointAddress::operator = (const EndpointAddress& src)

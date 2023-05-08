@@ -299,19 +299,6 @@ namespace Net {
 
 		netCheck(GetConnection()->SendSync(recvWindow.GetBaseSequence(), recvWindow.GetSyncMask()));
 
-		// poke send network only when there is something to send
-		// Actually send proc also handles recv window
-		if (GetEventHandler() != nullptr)
-		{
-			pConnUDP->SetSendBoost(Const::RELIABLE_SEND_BOOST);
-
-			hrTem = GetEventHandler()->OnNetSyncMessage(pConnUDP);
-			if (hrTem != ResultCode::NOT_IMPLEMENTED)
-			{
-				netCheck(hrTem);
-			}
-		}
-
 		return hr;
 	}
 

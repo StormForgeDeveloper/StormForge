@@ -53,7 +53,7 @@ namespace SF {
 		template <class DataType, class DataStorageType, class StorageAccessor>
 		CircularPageQueue<DataType,DataStorageType, StorageAccessor>::~CircularPageQueue(void)
 		{
-			ClearQueue();
+			Reset();
 			IHeap::Delete(m_CircularPages);
 			m_CircularPages = nullptr;
 
@@ -66,7 +66,7 @@ namespace SF {
 		template <class DataType, class DataStorageType, class StorageAccessor>
 		void CircularPageQueue<DataType, DataStorageType, StorageAccessor>::Dispose()
 		{
-			ClearQueue();
+			Reset();
 
 			IHeap::Delete(m_CircularPages);
 			m_CircularPages = nullptr;
@@ -436,7 +436,7 @@ namespace SF {
 		// Clear queue and remove all enqueued items
 		// This operation is not thread safe
 		template <class DataType, class DataStorageType, class StorageAccessor>
-		void CircularPageQueue<DataType,DataStorageType, StorageAccessor>::ClearQueue()
+		void CircularPageQueue<DataType,DataStorageType, StorageAccessor>::Reset()
 		{
 			MutexScopeLock lock(m_CircularBufferLock);
 			//SF::TicketScopeLockT<TicketLock> scopeLock(TicketLock::LockMode::Exclusive, m_CircularBufferLock);

@@ -238,7 +238,7 @@ namespace SF
         SFLog(Websocket, Debug2, "Send: data size:{0}", messageData.size());
 
 		auto pSendItem = pss->SendBuffer->AllocateWrite(MessageBufferPadding + messageData.size());
-		if (pSendItem == nullptr)
+		if (!pSendItem)
 		{
 			SFLog(Websocket, Error, "Send queue overflow: closing connection!");
 
@@ -247,9 +247,9 @@ namespace SF
 			return ResultCode::IO_NOBUFS;
 		}
 
-		memcpy((char*)pSendItem->GetDataPtr() + MessageBufferPadding, messageData.data(), messageData.size());
+		memcpy((char*)pSendItem.data() + MessageBufferPadding, messageData.data(), messageData.size());
 
-		pss->SendBuffer->ReleaseWrite(pSendItem);
+        pSendItem.Reset();
 
 		if (m_UseWriteEvent)
 		{
@@ -314,21 +314,21 @@ namespace SF
 
         MutexScopeLock lock(*pss->SendBufferLock);
 
-		auto SendBuffer = pss->SendBuffer;
-        auto pSendItem = SendBuffer->DequeueRead();
-        if (pSendItem == nullptr)
+        CircularBufferQueue* SendBuffer = pss->SendBuffer;
+        CircularBufferQueue::ItemReadPtr pSendItem = SendBuffer->DequeueRead();
+        if (!pSendItem)
             return 0; // nothing to send
 
         int flags = lws_write_ws_flags(LWS_WRITE_BINARY, 1, 1);
-        auto dataLen = int(pSendItem->DataSize - MessageBufferPadding);
+        auto dataLen = int(pSendItem.GetDataSize() - MessageBufferPadding);
 
         SFLog(Websocket, Debug4, "OnConnectionWritable: Sending data size:{0}", dataLen);
 
         // notice we allowed for LWS_PRE in the payload already
-        int m = lws_write(wsi, ((unsigned char*)pSendItem->GetDataPtr()) + MessageBufferPadding, dataLen, (enum lws_write_protocol)flags);
+        int m = lws_write(wsi, ((unsigned char*)pSendItem.data()) + MessageBufferPadding, dataLen, (enum lws_write_protocol)flags);
         if (m < dataLen)
         {
-            SendBuffer->CancelRead(pSendItem);
+            pSendItem.CancelRead();
             SFLog(Websocket, Error, "ERROR failed write. written:{0}, requested:{1}", m, dataLen);
 
             if (m_UseWriteEvent)
@@ -341,7 +341,7 @@ namespace SF
 
         SFLog(Websocket, Debug5, "{0}  wrote {1}: flags: 0x{2:x}", GetName(), m, flags);
 
-        SendBuffer->ReleaseRead(pSendItem);
+        pSendItem.Reset();
 
 		if (m_UseWriteEvent)
 		{

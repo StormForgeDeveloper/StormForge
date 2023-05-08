@@ -310,9 +310,20 @@ namespace SF
 		if (m_ConnectionDirectory == nullptr || m_ConnectionDirectory->GetConnectionState() == Net::ConnectionState::DISCONNECTED)
 			return ResultCode::NO_DATA_EXIST;
 
-		return m_ConnectionDirectory->GetRecvMessage(pIMsg);
-	}
 
+        Net::Connection::MessageItemReadPtr itemPtr = m_ConnectionDirectory->GetRecvMessageQueue().DequeueRead();
+        if (itemPtr)
+        {
+            // TODO: change PollMessage interface
+            const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(itemPtr.data());
+            pIMsg = MessageData::NewMessage(GetHeap(), pHeader->msgID, pHeader->Length, reinterpret_cast<const uint8_t*>(pHeader));
+            return ResultCode::SUCCESS;
+        }
+        else
+        {
+            return ResultCode::NO_DATA_EXIST;
+        }
+	}
 }
 
 #endif

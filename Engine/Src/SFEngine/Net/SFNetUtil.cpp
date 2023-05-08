@@ -817,11 +817,11 @@ namespace Net {
 
 	MsgQueue::~MsgQueue()
 	{
-		ClearQueue();
+		Reset();
 	}
 
 	// Clear queue element
-	void MsgQueue::ClearQueue()
+	void MsgQueue::Reset()
 	{
 		SharedPointerT<MessageData> data;
 
@@ -829,10 +829,8 @@ namespace Net {
 		{
 		}
 
-		super::ClearQueue();
+		super::Reset();
 	}
-
-
 
 
 	WriteBufferQueue::WriteBufferQueue(IHeap& memoryManager, uint uiNumElePerPage)
@@ -842,11 +840,11 @@ namespace Net {
 
 	WriteBufferQueue::~WriteBufferQueue()
 	{
-		ClearQueue();
+        Reset();
 	}
 
 	// Clear queue element
-	void WriteBufferQueue::ClearQueue()
+	void WriteBufferQueue::Reset()
 	{
 		IOBUFFER_WRITE* data = NULL;
 
@@ -855,7 +853,7 @@ namespace Net {
 			Util::SafeDelete(data);
 		}
 
-		super::ClearQueue();
+		super::Reset();
 	}
 
 

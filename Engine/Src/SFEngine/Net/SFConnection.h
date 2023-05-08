@@ -45,8 +45,14 @@ namespace Net {
 
 		using super = EngineObject;
 		using ConnectionEventDeletates = EventDelegateList<Connection*, const ConnectionEvent&>;
-		using RecvMessageDelegates = EventDelegateList<Connection*, const SharedPointerT<MessageData>&>;
-		//using NetSyncMessageDelegates = EventDelegateList<Connection*>;
+		using RecvMessageDelegates = EventDelegateList<Connection*, const MessageHeader*>;
+
+        // Received message buffer size
+        static constexpr size_t RecvMessageBufferSize = 512 * 1024;
+        using RecvMessageQueue = StaticCircularBufferQueue<RecvMessageBufferSize>;
+        using MessageItemReadPtr = RecvMessageQueue::ItemReadPtr;
+        using MessageItemWritePtr = RecvMessageQueue::ItemWritePtr;
+
 
 		enum class EventFireMode : uint8_t
 		{
@@ -54,18 +60,18 @@ namespace Net {
 			OnGameTick, // Fire event on game tick thread, Owner should call UpdateGameTick for event fire
 		};
 
-
 	private:
-
 
 		//////////////////////////////////////////////////////////////////////////
 		//
 		//	basic members implementations
 		//
 
+        // Local peer info
 		PeerInfo m_LocalInfo;
-		PeerInfo m_RemoteInfo;
 
+        // Remote peer info
+		PeerInfo m_RemoteInfo;
 
 		// Connection ID
 		uint64_t	m_CID;
@@ -79,13 +85,11 @@ namespace Net {
 		// Connection time
 		TimeStampMS	m_tConnectionTime;
 
-		IConnectionEventHandler *m_pEventHandler = nullptr;
-
-
+        // Socket IO
 		SocketIO* m_IOHandler = nullptr;
 
-		// Recv Message Queue
-		MsgQueue m_RecvQueue;
+        // message queue with static buffer
+        RecvMessageQueue m_RecvMessageQueue;
 
 		// Event queue
 		CircularPageQueueAtomic<uint64_t>	m_EventQueue;
@@ -118,8 +122,7 @@ namespace Net {
 	protected:
 
 		// Guaranteed sending wait queue
-		MsgQueue			m_SendGuaQueue;
-
+		MsgQueue m_SendGuaQueue;
 
 		// NetCtrl control time
 		TimeStampMS m_ulNetCtrlTime;
@@ -195,6 +198,7 @@ namespace Net {
 		void ClearCID();
 		void SetCID(uint64_t cid) { m_CID = cid; }
 
+        // Message endpoint
 		const SharedPointerT<MessageEndpoint>& GetMessageEndpoint() const;
 
 		// Get connection state
@@ -210,8 +214,8 @@ namespace Net {
 		// Get connection time
 		TimeStampMS GetConnectionTime();
 
+        // Is socket owner
 		bool GetIsSocketOwner() const { return m_IsSocketOwner; }
-
 
 		// Get socket handle
 		const SF_SOCKET GetSocket() const { return GetNetIOHandler() != nullptr ? GetNetIOHandler()->GetIOSocket() : INVALID_SOCKET; }
@@ -228,8 +232,9 @@ namespace Net {
 		void SetRemoteAddress(const sockaddr_storage& socAddr);
 
 		// Get Recv queue
-		MsgQueue& GetRecvQueue() { return m_RecvQueue; }
+        RecvMessageQueue& GetRecvMessageQueue() { return m_RecvMessageQueue; }
 
+        // Access to send guranteed queue
 		MsgQueue& GetSendGuaQueue() { return m_SendGuaQueue; }
 
 
@@ -269,12 +274,6 @@ namespace Net {
 		void UpdateNetCtrlTime();
 		void UpdateNetCtrlTryTime();
 
-		// Deprecated, use delegate function
-		IConnectionEventHandler* GetEventHandler();
-
-		// Connection event handler
-		void SetEventHandler(IConnectionEventHandler *pEventHandler) { m_pEventHandler = pEventHandler; }
-
 
 		//////////////////////////////////////////////////////////////////////////
 		//
@@ -286,7 +285,6 @@ namespace Net {
 
 		ConnectionEventDeletates& GetConnectionEventDelegates() { return m_ConnectionEventDelegates; }
 		RecvMessageDelegates& GetRecvMessageDelegates() { return m_RecvMessageDelegates; }
-		//NetSyncMessageDelegates& GetNetSyncMessageDelegates() { return m_NetSyncMessageDelegates; }
 
 
 		void AddMessageDelegateUnique(uintptr_t context, uint32_t msgId, RecvMessageDelegates::CallableType&& func)
@@ -376,38 +374,21 @@ namespace Net {
 		// Initialize connection
 		virtual Result InitConnection(const PeerInfo &local, const PeerInfo &remote);
 
-
-
 		// Send message to connected entity
 		virtual Result Send(const SharedPointerT<MessageData> &pMsg) = 0;
 
 		// Message count currently in recv queue
-		virtual uint32_t GetRecvMessageCount();
-
-		// Get received Message
-		virtual Result GetRecvMessage(SharedPointerT<MessageData> &pIMsg);
+        SF_FORCEINLINE uint32_t GetRecvMessageCount() const { return (uint32_t)m_RecvMessageQueue.GetItemCount(); }
 
 		// Update function on game tick. provide general implementation of connection tick update.
 		// this function will fire delegate events
 		virtual Result UpdateGameTick();
 
+        // Engine object tick function
 		Result OnTick(EngineTaskTick tick) override;
-
-
-
-		//////////////////////////////////////////////////////////////////////////////////////////////////////////////
-		//
-		//	Overridable
-		//
 
 		// Update net control, process connection heartbeat, ... etc
 		virtual Result TickUpdate();
-
-		// Update send queue, Reliable UDP
-		//virtual Result UpdateSendQueue() { return ResultCode::SUCCESS; }
-		// Update Send buffer Queue, TCP and UDP client connection
-		//virtual Result UpdateSendBufferQueue() = 0;
-
 
 	private:
 
@@ -419,7 +400,6 @@ namespace Net {
 		EventFireMode m_DelegateFireMode = EventFireMode::OnGameTick;
 
 		ConnectionEventDeletates m_ConnectionEventDelegates;
-		//NetSyncMessageDelegates m_NetSyncMessageDelegates;
 		RecvMessageDelegates m_RecvMessageDelegates;
 		// Received message handler map by msgId
 		DualSortedMap<uint32_t, RecvMessageDelegates*> m_RecvMessageDelegatesByMsgId;

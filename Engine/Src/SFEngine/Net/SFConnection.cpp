@@ -14,7 +14,6 @@
 #include "Util/SFUtility.h"
 #include "ResultCode/SFResultCodeEngine.h"
 #include "Multithread/SFThread.h"
-
 #include "Util/SFLog.h"
 #include "Util/SFTimeUtil.h"
 #include "Util/SFToString.h"
@@ -93,12 +92,10 @@ namespace SF {
 			, m_UData(0)
 			, m_ConnectionState(ConnectionState::DISCONNECTED)
 			, m_tConnectionTime(DurationMS(0))
-			, m_pEventHandler(nullptr)
 			, m_ConnectionEventDelegates(GetHeap())
 			, m_RecvMessageDelegates(GetHeap())
 			, m_RecvMessageDelegatesByMsgId(GetHeap())
 			, m_IOHandler(ioHandler)
-			, m_RecvQueue(GetHeap())
 			, m_EventQueue(GetHeap())
 			, m_ulHeartbeatTry(1000)
 			, m_ulConnectingTimeOut(Const::CONNECTION_TIMEOUT)
@@ -125,9 +122,9 @@ namespace SF {
 			SetTickGroup(EngineTaskTick::None);
 
 			// Not need with abstract class
-			m_RecvQueue.ClearQueue();
-			m_SendGuaQueue.ClearQueue();
-			m_EventQueue.ClearQueue();
+            m_RecvMessageQueue.Reset();
+			m_SendGuaQueue.Reset();
+			m_EventQueue.Reset();
 
 			// Release state tick action array
 			if (m_ActionsByState != nullptr)
@@ -163,9 +160,9 @@ namespace SF {
 		{
 			m_ConnectionState = ConnectionState::DISCONNECTED;
 			// Not need with abstract class
-			m_RecvQueue.ClearQueue();
-			m_SendGuaQueue.ClearQueue();
-			m_EventQueue.ClearQueue();
+            m_RecvMessageQueue.Reset();
+			m_SendGuaQueue.Reset();
+			m_EventQueue.Reset();
 
 			EngineObject::Dispose();
 		}
@@ -182,8 +179,8 @@ namespace SF {
 
 		Result Connection::ClearQueues()
 		{
-			m_RecvQueue.ClearQueue();
-			m_SendGuaQueue.ClearQueue();
+            m_RecvMessageQueue.Reset();
+            m_SendGuaQueue.Reset();
 
 			// When the queue is cleared these synchronization variables need to be cleared
 			m_usSeqNone = 0;
@@ -193,7 +190,7 @@ namespace SF {
 		// Request time sync, round trip time will be recorded
 		Result Connection::TimeSync()
 		{
-			auto reqTime = Util::Time.GetRawTimeMs();
+			TimeStampMS reqTime = Util::Time.GetRawTimeMs();
 			MessageID msgID;
 			msgID.ID = reqTime.time_since_epoch().count();
 			return SendNetCtrl(PACKET_NETCTRL_TIMESYNC, 0, msgID);
@@ -322,13 +319,6 @@ namespace SF {
 			m_sockAddrRemote = socAddr;
 		}
 
-
-		// Message count currently in recv queue
-		uint32_t Connection::GetRecvMessageCount()
-		{
-			return (uint32_t)m_RecvQueue.size();
-		}
-
 		// Called on connection result
 		void Connection::OnConnectionResult(Result hrConnect)
 		{
@@ -367,7 +357,7 @@ namespace SF {
 
 			m_usSeqNone = 0;
 
-			m_RecvQueue.ClearQueue();
+            m_RecvMessageQueue.Reset();
 
 			return ResultCode::SUCCESS;
 		}
@@ -421,11 +411,8 @@ namespace SF {
 		// Process network control message
 		Result Connection::ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrlBuffer)
 		{
-			//assert(ThisThread::GetThreadID() == GetRunningThreadID());
-
 			Result hr = ResultCode::SUCCESS;
 			ConnectionMessageAction* pAction = nullptr;
-            //const MsgNetCtrl& netCtrl = pNetCtrlBuffer->GetNetCtrl();
 			if (pNetCtrlBuffer->Header.Length < sizeof(MsgNetCtrl))
 			{
 				SFLog(Net, Info, "HackWarn : Invalid packet CID:{0}, Addr {1}", GetCID(), GetRemoteInfo().PeerAddress);
@@ -492,11 +479,7 @@ namespace SF {
 			if (m_MessageEndpoint == nullptr)
 				m_MessageEndpoint = new(GetHeap()) MessageEndpointConnection(this);
 
-			// event handler need to be reassigned after initconnection is called
-			// - No they should be kept, but it need to be tested
-			SetEventHandler(nullptr);
-
-			m_EventQueue.ClearQueue();
+			m_EventQueue.Reset();
 
 			Assert(local.PeerClass != NetClass::Unknown);
 			Assert(local.PeerClass == NetClass::Client || local.PeerID != 0);
@@ -551,7 +534,6 @@ namespace SF {
 			return hr;
 		}
 
-
 		// Close connection
 		Result Connection::CloseConnection(const char* reason)
 		{
@@ -578,7 +560,6 @@ namespace SF {
 			return hr;
 		}
 
-
 		void Connection::DisconnectNRelease(const char* reason)
 		{
 			SetTickGroup(EngineTaskTick::None);
@@ -586,7 +567,6 @@ namespace SF {
 			SharedPointerT<EngineTask> pTask = new(GetSystemHeap()) ConnectionTask_DisconnectNClose(this, reason);
 			pTask->Request();
 		}
-
 
 		Result Connection::OnRecv(SharedPointerT<MessageData>& pMsg)
 		{
@@ -596,7 +576,7 @@ namespace SF {
 				return hr;
 
             MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
-			auto msgID = pMsgHeader->msgID;
+			MessageID msgID = pMsgHeader->msgID;
 
 			// 
 			Protocol::PrintDebugMessage("Recv", pMsgHeader);
@@ -613,34 +593,26 @@ namespace SF {
                 netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
             }
 
-			if (GetEventHandler() == nullptr)
+			if (GetEventFireMode() == EventFireMode::Immediate)
 			{
-				if (GetEventFireMode() == EventFireMode::Immediate)
-				{
-					GetRecvMessageDelegates().Invoke(this, pMsg);
+				GetRecvMessageDelegates().Invoke(this, pMsgHeader);
 
-					if (pMsg != nullptr) // if it hasn't consumed yet, call next callback
-					{
-						RecvMessageDelegates* pMessageDelegate = nullptr;
-						m_RecvMessageDelegatesByMsgId.Find(pMsg->GetMessageHeader()->msgID.GetMsgID(), pMessageDelegate);
-						if (pMessageDelegate)
-							pMessageDelegate->Invoke(this, pMsg);
-					}
-				}
-				else
+				if (pMsg != nullptr) // if it hasn't consumed yet, call next callback
 				{
-					netCheck(GetRecvQueue().Enqueue(pMsg));
+					RecvMessageDelegates* pMessageDelegate = nullptr;
+					m_RecvMessageDelegatesByMsgId.Find(pMsgHeader->msgID.GetMsgID(), pMessageDelegate);
+					if (pMessageDelegate)
+						pMessageDelegate->Invoke(this, pMsgHeader);
 				}
 			}
-			else if (!(GetEventHandler()->OnRecvMessage(this, pMsg)))
+			else
 			{
-				SFLog(Net, Error, "Failed to route a message to recv msg:{0}", msgID);
-				netCheck(GetRecvQueue().Enqueue(std::forward<SharedPointerT<MessageData>>(pMsg)));
+                MessageItemWritePtr msgItemPtr = m_RecvMessageQueue.AllocateWrite(pMsgHeader->Length);
+                if (msgItemPtr.IsValid())
+                {
+                    memcpy(msgItemPtr.data(), pMsgHeader, pMsgHeader->Length);
+                }
 			}
-
-			pMsg = nullptr;
-
-			Assert(!(hr) || pMsg == nullptr);
 
 			return hr;
 		}
@@ -655,49 +627,16 @@ namespace SF {
 		// Add network event to queue
 		Result Connection::EnqueueConnectionEvent(const ConnectionEvent& evt)
 		{
-			if (GetEventHandler())
+			if (GetEventFireMode() == EventFireMode::Immediate)
 			{
-				GetEventHandler()->OnConnectionEvent(this, evt);
+				GetConnectionEventDelegates().Invoke(this, evt);
 			}
 			else
 			{
-				if (GetEventFireMode() == EventFireMode::Immediate)
-				{
-					GetConnectionEventDelegates().Invoke(this, evt);
-				}
-				else
-				{
-					return m_EventQueue.Enqueue(evt.Composited);
-				}
+				return m_EventQueue.Enqueue(evt.Composited);
 			}
 
 			return ResultCode::SUCCESS;
-		}
-
-
-		// Get received Message
-		Result Connection::GetRecvMessage(SharedPointerT<MessageData>& pIMsg)
-		{
-			ScopeContext hr;
-
-			pIMsg = nullptr;
-
-			if (!(GetRecvQueue().Dequeue(pIMsg)))
-			{
-				netCheck(ResultCode::FAIL);
-			}
-
-			{
-				MessageHeader* pMsgHeader = pIMsg->GetMessageHeader();
-				uint uiPolicy = pMsgHeader->msgID.IDs.Policy;
-				if (uiPolicy == 0
-					|| uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
-				{
-					netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
-				}
-			}
-
-			return hr;
 		}
 
 		Result Connection::UpdateGameTick()
@@ -705,18 +644,23 @@ namespace SF {
 			uint32_t messageCount = GetRecvMessageCount();
 			for (uint iMessage = 0; iMessage < messageCount; iMessage++)
 			{
-				MessageDataPtr pMsgData;
-				if (!GetRecvMessage(pMsgData))
-					continue;
+                MessageHeader* pHeader = nullptr;
+                MessageItemReadPtr itemPtr = m_RecvMessageQueue.DequeueRead();
+                if (!itemPtr)
+                {
+                    break;
+                }
+
+                pHeader = reinterpret_cast<MessageHeader*>(itemPtr.data());
 
 				RecvMessageDelegates* pMessageDelegate = nullptr;
-				m_RecvMessageDelegatesByMsgId.Find(pMsgData->GetMessageHeader()->msgID.GetMsgID(), pMessageDelegate);
+				m_RecvMessageDelegatesByMsgId.Find(pHeader->msgID.GetMsgID(), pMessageDelegate);
 				if (pMessageDelegate && pMessageDelegate->size() > 0)
 				{
-					pMessageDelegate->Invoke(this, pMsgData);
+					pMessageDelegate->Invoke(this, pHeader);
 				}
 
-				GetRecvMessageDelegates().Invoke(this, pMsgData);
+				GetRecvMessageDelegates().Invoke(this, pHeader);
 			}
 
 			auto eventCount = m_EventQueue.size();

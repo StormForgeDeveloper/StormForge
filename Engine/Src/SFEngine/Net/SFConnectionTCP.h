@@ -48,7 +48,6 @@ namespace SF {
 
 				ConnectionState GetConnectionState() { return m_Owner.GetConnectionState(); }
 				uint64_t GetCID() { return m_Owner.GetCID(); }
-				IConnectionEventHandler* GetEventHandler() { return m_Owner.GetEventHandler(); }
 
 				void CloseConnection(const char* reason) { m_Owner.CloseConnection(reason); }
 

@@ -117,11 +117,6 @@ inline TimeStampMS Connection::GetConnectionTime()
 	return m_tConnectionTime;
 }
 
-inline IConnectionEventHandler* Connection::GetEventHandler()
-{
-	return m_pEventHandler;
-}
-
 
 
 

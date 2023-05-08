@@ -69,7 +69,7 @@ namespace SF {
 		{
 		}
 
-		virtual ~SharedPointer()
+		~SharedPointer()
 		{
 			ReleaseReference();
 		}
@@ -156,7 +156,7 @@ namespace SF {
 
 	protected:
 
-		virtual void SetPointer(SharedObject* pObject)
+		void SetPointer(SharedObject* pObject)
 		{
 			ReleaseReference();
 
@@ -213,7 +213,7 @@ namespace SF {
 
 		SharedPointerT(WeakPointerT<ClassType>& src);
 
-		virtual ~SharedPointerT()
+		~SharedPointerT()
 		{
 		}
 
@@ -361,7 +361,7 @@ namespace SF {
 //#endif
 		}
 
-		virtual void SetPointer(SharedObject* pObject) override
+		void SetPointer(SharedObject* pObject)
 		{
 			if (!TypeCheck(pObject))
 				return;
@@ -436,7 +436,7 @@ namespace SF {
 		{
 		}
 
-		virtual ~SharedPointerAtomic()
+		~SharedPointerAtomic()
 		{
 			ReleaseReference();
 		}
@@ -607,7 +607,7 @@ namespace SF {
 
 	protected:
 
-		virtual void SetPointer(SharedObject* pObject)
+		void SetPointer(SharedObject* pObject)
 		{
 			ReleaseReference();
 
@@ -654,7 +654,7 @@ namespace SF {
 
 		SharedPointerAtomicT(WeakPointerT<ClassType>& src);
 
-		virtual ~SharedPointerAtomicT()
+		~SharedPointerAtomicT()
 		{
 		}
 
@@ -838,7 +838,7 @@ namespace SF {
 //#endif
 		}
 
-		virtual void SetPointer(SharedObject* pObject) override
+		void SetPointer(SharedObject* pObject)
 		{
 			if (!TypeCheck(pObject))
 				return;
@@ -900,7 +900,7 @@ namespace SF {
 			src.m_pObject = nullptr;
 		}
 
-		virtual ~WeakPointer()
+		~WeakPointer()
 		{
 			ReleaseReference();
 		}

@@ -1,4 +1,4 @@
-﻿////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////
 // 
 // CopyRight (c) Kyungkun Ko
 // 
@@ -49,8 +49,6 @@ namespace SF {
 			// Enable new connection?
 			bool m_IsEnableAccept = false;
 
-			IConnectionEventHandler* m_DefaultConnectionEventHandler = nullptr;
-
 			std::function<void(SharedPointerT<Connection>)> m_NewConnectionhandler;
 
 			SocketIO* m_SocketIO = nullptr;
@@ -72,9 +70,6 @@ namespace SF {
 
 			ServerNet(IHeap& heap, ServerID InServerID, NetClass localClass);
 			virtual ~ServerNet();
-
-			IConnectionEventHandler* GetDefaultConnectionEventHandler() { return m_DefaultConnectionEventHandler; }
-			void SetDefaultConnectionEventHandler(IConnectionEventHandler* value) { m_DefaultConnectionEventHandler = value; }
 
 			ServerID GetServerID() const { return m_ServerID; }
 			bool GetIsEnableAccept() const { return m_IsEnableAccept; }

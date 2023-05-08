@@ -63,14 +63,12 @@ namespace SF
 
 		while (true)
 		{
-			auto pBufferItem = m_RenderCommandQueue.DequeueRead();
-			if (pBufferItem == nullptr)
+            CommandQueue::ItemReadPtr pBufferItem = m_RenderCommandQueue.DequeueRead();
+			if (!pBufferItem)
 				break;
 
-			auto pCmd = (RenderCommand*)pBufferItem->GetDataPtr();
+			auto pCmd = reinterpret_cast<RenderCommand*>(pBufferItem.data());
 			pCmd->~RenderCommand();
-
-			m_RenderCommandQueue.ReleaseRead(pBufferItem);
 		}
 
 		m_RenderCommandQueue.Clear();
@@ -162,13 +160,13 @@ namespace SF
 	// Flush command queue for a frame
 	Result GraphicDevice::RunOneFrame(DurationMS waitingTimeOut)
 	{
-		auto timeStart = Util::Time.GetRawTimeMs();
+		TimeStampMS timeStart = Util::Time.GetRawTimeMs();
 
-		auto waitingFrameIndex = m_DrawingFrameIndex.load(std::memory_order_consume) + 2;
+		uint waitingFrameIndex = m_DrawingFrameIndex.load(std::memory_order_consume) + 2;
 		do {
 
-			auto pBufferItem = m_RenderCommandQueue.DequeueRead();
-			if (pBufferItem == nullptr)
+			CommandQueue::ItemReadPtr pBufferItem = m_RenderCommandQueue.DequeueRead();
+			if (!pBufferItem)
 			{
 				// No Command to wait
 				auto curFrameIndex = m_DrawingFrameIndex.load(std::memory_order_consume);
@@ -185,7 +183,7 @@ namespace SF
 			}
 			else
 			{
-				auto pCmd = (RenderCommand*)pBufferItem->GetDataPtr();
+				auto pCmd = reinterpret_cast<RenderCommand*>(pBufferItem.data());
 
 
 				auto pTask = pCmd->GetNotificationTask();
@@ -200,7 +198,7 @@ namespace SF
 					pCmd->RunCommand(this);
 				}
 
-				m_RenderCommandQueue.ReleaseRead(pBufferItem);
+                pBufferItem.Reset();
 
 				auto curFrameIndex = m_DrawingFrameIndex.load(std::memory_order_consume);
 				if (curFrameIndex >= waitingFrameIndex)

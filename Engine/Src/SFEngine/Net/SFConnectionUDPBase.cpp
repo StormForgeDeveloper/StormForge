@@ -100,24 +100,6 @@ namespace Net {
 		m_pWriteQueuesUDP = writeQueue;
 	}
 
-	//Result ConnectionUDPBase::UpdateSendQueue()
-	//{
-	//	Result hr;
-	//	if (GetConnectionState() == ConnectionState::DISCONNECTED)
-	//		return ResultCode::SUCCESS;
-
-	//	MutexScopeLock localLock(GetUpdateLock());
-
-	//	// Force update send
-	//	m_ActSendReliableQueue.Run();
-	//	m_ActSendReliableRetry.Run();
-
-	//	// Flush sync message asap
-	//	SendFlush();
-
-	//	return hr;
-	//}
-
 	// gathering
 	Result ConnectionUDPBase::SendPending( uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0)
 	{
@@ -157,10 +139,6 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 		IOBUFFER_WRITE *pSendBuffer = nullptr;
-
-		// Send Flush and PrepareGathering should be called on the same thread
-		//AssertRel(GetRunningThreadID() == ThisThread::GetThreadID());
-
 
 		Net::SocketIO* pIOHandler = GetNetIOHandler();
 		if (pIOHandler != nullptr)
@@ -705,18 +683,16 @@ namespace Net {
 		return hr;
 	}
 
-
 	// called when incoming message occur
 	Result ConnectionUDPBase::OnRecv(uint uiBuffSize, const uint8_t* pBuff)
 	{
 		Result hr = ResultCode::SUCCESS;
 		SharedPointerT<MessageData> pMsg;
-        const MessageHeader* pMsgHeader = reinterpret_cast<const MessageHeader*>(pBuff);
-
-		SFLog(Net, Debug4, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
 
 		if (uiBuffSize == 0)
 		{
+            SFLog(Net, Debug4, "UDP Recv ip:{0}, Zero size packet", GetRemoteInfo().PeerAddress);
+
 			IncZeroRecvCount();
 
 			if (GetZeroRecvCount() > (uint32_t)Const::CONNECTION_ZEROPACKET_MAX)
@@ -725,6 +701,20 @@ namespace Net {
 			}
 			return hr;
 		}
+
+        const PacketHeader* pPacketHeader{};
+        const MessageHeader* pMsgHeader{};
+        if (m_bIncludePacketHeader)
+        {
+            pPacketHeader = reinterpret_cast<const PacketHeader*>(pBuff);
+            pMsgHeader = reinterpret_cast<const MessageHeader*>(pPacketHeader + 1);
+        }
+        else
+        {
+            pMsgHeader = reinterpret_cast<const MessageHeader*>(pBuff);
+        }
+
+        SFLog(Net, Debug4, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
 
 		MutexScopeLock scopeLock(GetUpdateLock());
 
