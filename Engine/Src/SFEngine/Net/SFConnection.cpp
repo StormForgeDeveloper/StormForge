@@ -234,7 +234,6 @@ namespace SF {
             assert(pHeader->Length >= sizeof(MsgNetCtrlBuffer)); // the available buffer should be bigger than we need
             pHeader->msgID = uiCtrlCode;
             pHeader->msgID.SetSequence(uiSequence);
-            uint orgBufferSize = pHeader->Length;
             pHeader->Length = pHeader->GetHeaderSize();
 
             if (uiCtrlCode == PACKET_NETCTRL_SYNCRELIABLE)
@@ -266,8 +265,6 @@ namespace SF {
             }
 
             //SFLog(Net, Debug, "MakeNetCtrl {0}", pHeader->msgID, pHeader->Length);
-
-            assert(pHeader->Length <= orgBufferSize);
 
             return hr;
         }
