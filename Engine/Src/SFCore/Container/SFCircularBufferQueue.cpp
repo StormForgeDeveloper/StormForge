@@ -32,6 +32,7 @@ namespace SF
                 // It's not ready. let's return at this moment
                 return ResultCode::FAIL;
             case ItemState::Filled:
+                //assert(State == ItemState::Reading);
                 break;
             case ItemState::Reading:
                 // broken?
@@ -40,10 +41,11 @@ namespace SF
             case ItemState::Dummy:
                 // might be broken
                 // Let's silently flush dummy out
-                return ResultCode::FAIL;
+                return ResultCode::IO_TRY_AGAIN;
             }
         }
 
+        //assert(State == ItemState::Reading);
         return hr;
     }
 
@@ -242,7 +244,7 @@ namespace SF
 		if (pBuffer == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-        m_ItemCount++;
+        m_ItemCount.fetch_add(1, std::memory_order_relaxed);
 
         std::atomic_thread_fence(std::memory_order_release);
 
@@ -278,10 +280,27 @@ namespace SF
 		if (pTail == pHead) // queue is empty
 			return ItemReadPtr();
 
-        if (!pTail->AcquireRead())
+        Result hr = pTail->AcquireRead();
+        if (hr == ResultCode::IO_TRY_AGAIN)
+        {
+            ReleaseRead(pTail);
+            pTail = m_TailPos.load(std::memory_order_relaxed);
+            if (pTail == pHead) // queue is empty
+                return ItemReadPtr();
+
+            if (!pTail->AcquireRead())
+                return ItemReadPtr();
+
+            assert(pTail->State == ItemState::Reading);
+        }
+        else if (!hr)
+        {
             return ItemReadPtr();
+        }
 
         std::atomic_thread_fence(std::memory_order_acquire);
+
+        //assert(pTail->State == ItemState::Reading);
 
 		return ItemReadPtr(this, pTail);
 	}
@@ -311,8 +330,6 @@ namespace SF
 	{
 		if (pBuffer == nullptr)
 			return ResultCode::FAIL;
-
-        m_ItemCount--;
 
 		uintptr_t startPos = (uintptr_t)m_Buffer;
 		[[maybe_unused]] uintptr_t endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
@@ -344,7 +361,11 @@ namespace SF
             ItemState::Free,
             std::memory_order_release,
             std::memory_order_acquire);
-        if (!bExchanged)
+        if (bExchanged)
+        {
+            m_ItemCount.fetch_sub(1, std::memory_order_relaxed);
+        }
+        else
 		{
 			if (expected != expectedState && expected != ItemState::Dummy)
 			{

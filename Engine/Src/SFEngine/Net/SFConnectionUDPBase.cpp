@@ -282,7 +282,7 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionUDPBase::OnFrameSequenceMessage(const MessageHeader* pMsg, const std::function<void(SharedPointerT<MessageData>& pMsgData)>& action)
+	Result ConnectionUDPBase::OnFrameSequenceMessage(const MessageHeader* pMsg)
 	{
 		Result hr = ResultCode::SUCCESS;
 		if (pMsg == nullptr)
@@ -299,13 +299,9 @@ namespace Net {
 
 		if (pCurrentFrame->Offset == 0) // first frame
 		{
-			m_SubFrameMessage = nullptr;
+            m_SubFrameMessage.reset(reinterpret_cast<MessageHeader*>(GetSystemHeap().Alloc(pCurrentFrame->TotalSize)));
 
-			uint dummyID = PACKET_NETCTRL_SEQUENCE_FRAME;
-
-			netCheckPtr(m_SubFrameMessage = MessageData::NewMessage(GetHeap(), dummyID, pCurrentFrame->TotalSize));
-
-			memcpy(m_SubFrameMessage->GetMessageBuff(), dataPtr, pCurrentFrame->ChunkSize);
+			memcpy(m_SubFrameMessage->GetDataPtr(), dataPtr, pCurrentFrame->ChunkSize);
 		}
 		else
 		{
@@ -315,13 +311,13 @@ namespace Net {
 				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 
-			if (m_SubFrameMessage->GetMessageHeader()->Length != pCurrentFrame->TotalSize)
+			if (m_SubFrameMessage->Length != pCurrentFrame->TotalSize)
 			{
 				assert(false);
 				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 
-			memcpy(m_SubFrameMessage->GetMessageBuff() + pCurrentFrame->Offset, dataPtr, pCurrentFrame->ChunkSize);
+			memcpy(reinterpret_cast<uint8_t*>(m_SubFrameMessage->GetDataPtr()) + pCurrentFrame->Offset, dataPtr, pCurrentFrame->ChunkSize);
 		}
 
 		auto receivedSize = pCurrentFrame->Offset + pCurrentFrame->ChunkSize;
@@ -332,9 +328,8 @@ namespace Net {
 		else if (receivedSize == pCurrentFrame->TotalSize)
 		{
 			// done
-			//netCheck(m_SubFrameMessage->ValidateChecksumNDecrypt());
-			action(m_SubFrameMessage);
-			m_SubFrameMessage = nullptr;
+            super::OnRecv(m_SubFrameMessage.get());
+			m_SubFrameMessage.reset();
 		}
 
 		return hr;
@@ -550,7 +545,7 @@ namespace Net {
                 MessageHeader* pPopHeader = reinterpret_cast<MessageHeader*>(messageItemPtr.data());
 				if (pPopHeader->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
 				{
-					hr = OnFrameSequenceMessage(pHeader, [this](SharedPointerT<MessageData>& pMsgData) { super::OnRecv(pMsgData->GetMessageHeader()); });
+					hr = OnFrameSequenceMessage(pHeader);
 				}
 				else
 				{

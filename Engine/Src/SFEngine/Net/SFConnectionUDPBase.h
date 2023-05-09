@@ -54,7 +54,7 @@ namespace Net {
         uint m_uiMinGatherSizeForFlush = 0;
 
 		// subframe message
-		SharedPointerT<MessageData>		m_SubFrameMessage;
+		SFUniquePtr<MessageHeader>		m_SubFrameMessage;
 
 		// UDP send queue
 		WriteBufferQueue*			m_pWriteQueuesUDP;
@@ -129,7 +129,7 @@ namespace Net {
 
 		// frame sequence
 		Result SendFrameSequenceMessage(const SharedPointerT<MessageData>& pMsg);
-		Result OnFrameSequenceMessage(const MessageHeader* pMsg, const std::function<void(SharedPointerT<MessageData>& pMsgData)>& action);
+		Result OnFrameSequenceMessage(const MessageHeader* pMsg);
 
 		// Initialize connection
 		virtual Result InitConnection(const PeerInfo &local, const PeerInfo &remote) override;
