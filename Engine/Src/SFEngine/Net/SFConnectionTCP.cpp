@@ -462,7 +462,7 @@ namespace Net {
 
 
 	// called when incoming message occur
-	Result ConnectionTCP::OnRecv( uint uiBuffSize, const uint8_t* pBuff )
+	Result ConnectionTCP::OnRecv( uint uiBuffSize, uint8_t* pBuff )
 	{
 		Result hr = ResultCode::SUCCESS;
 		SharedPointerT<MessageData> pMsg;
@@ -510,9 +510,7 @@ namespace Net {
 					netCheck( ResultCode::UNEXPECTED );
 				}
 
-				netCheckMem( pMsg = MessageData::NewMessage(GetHeap(), pMsgHdr->msgID.ID, pMsgHdr->Length, pBuff ) );
-
-				hr = OnRecv( pMsg );
+				hr = OnRecv(pMsgHdr);
 				pMsg = nullptr;
 				netCheck( hr );
 
@@ -575,10 +573,7 @@ namespace Net {
 				pBuff += uiCopySize;
 				m_uiRecvTemUsed = 0;
 
-				netCheckMem( pMsg = MessageData::NewMessage(GetHeap(), pMsgHdr->msgID.ID, pMsgHdr->Length, m_bufRecvTem.data() ) );
-
-				hr = OnRecv( pMsg );
-				pMsg = nullptr;
+				hr = OnRecv(pMsgHdr);
 				netCheck( hr );
 			}
 
@@ -589,10 +584,9 @@ namespace Net {
 
 
 
-	Result ConnectionTCP::OnRecv(SharedPointerT<MessageData>& pMsg )
+	Result ConnectionTCP::OnRecv(MessageHeader* pMsgHeader)
 	{
 		Result hr = ResultCode::SUCCESS;
-		MessageHeader *pMsgHeader = pMsg->GetMessageHeader();
 
 		if( pMsgHeader->msgID.IDs.Type == MSGTYPE_NETCONTROL )
 		{
@@ -600,19 +594,15 @@ namespace Net {
 				GetRemoteInfo().PeerAddress, 
 				pMsgHeader->msgID, pMsgHeader->Length );
 
-			netCheck( ProcNetCtrl(reinterpret_cast<MsgNetCtrlBuffer*>(pMsgHeader)) );
+			netCheck( ProcNetCtrl(reinterpret_cast<const MsgNetCtrlBuffer*>(pMsgHeader)) );
 		}
 		else
 		{
-            pMsg->SetEncrypted(true);
-			netCheck( pMsg->ValidateChecksumNDecrypt() );
+            pMsgHeader->ValidateChecksumNDecrypt();
 
-			hr  = Connection::OnRecv( pMsg );
-			pMsg = nullptr;
+			hr  = Connection::OnRecv(pMsgHeader);
 			netCheck( hr );
 		}
-
-		pMsg = nullptr;
 
 		return hr;
 	}

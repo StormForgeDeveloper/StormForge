@@ -54,7 +54,7 @@ namespace Net {
 			virtual Result OnWriteReady() override;
 		};
 
-		using MessageHandlerFunc = std::function<Result(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff)>;
+		using MessageHandlerFunc = std::function<Result(const sockaddr_storage& remoteAddr, uint uiBuffSize, uint8_t* pBuff)>;
 
 	private:
 
@@ -90,7 +90,7 @@ namespace Net {
 		Result SendMsg(const sockaddr_storage& dest, size_t sendSize, uint8_t* pBuff);
 
 		// called when incoming message occur
-		Result OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff);
+		Result OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, uint8_t* pBuff);
 	};
 
 

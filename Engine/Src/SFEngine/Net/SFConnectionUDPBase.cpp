@@ -56,7 +56,6 @@ namespace Net {
 	// Constructor
 	ConnectionUDPBase::ConnectionUDPBase(IHeap& heap, SocketIO* ioHandler)
 		: Connection(heap, ioHandler)
-		, m_RecvReliableWindow(GetHeap())
 		, m_SendReliableWindow(GetHeap())
 		, m_uiMaxGuarantedRetryAtOnce(Const::UDP_SVR_RETRY_ONETIME_MAX)
 		, m_uiGatheredSize(0)
@@ -82,7 +81,7 @@ namespace Net {
 
 	ConnectionUDPBase::~ConnectionUDPBase()
 	{
-		m_RecvReliableWindow.ClearWindow();
+		m_RecvReliableWindow.Reset();
 		m_SendReliableWindow.ClearWindow();
 
 
@@ -283,13 +282,13 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionUDPBase::OnFrameSequenceMessage(SharedPointerT<MessageData>& pMsg, const std::function<void(SharedPointerT<MessageData>& pMsgData)>& action)
+	Result ConnectionUDPBase::OnFrameSequenceMessage(const MessageHeader* pMsg, const std::function<void(SharedPointerT<MessageData>& pMsgData)>& action)
 	{
 		Result hr = ResultCode::SUCCESS;
 		if (pMsg == nullptr)
 			return ResultCode::INVALID_POINTER;
 
-		auto pCurrentFrame = reinterpret_cast<MsgNetCtrlSequenceFrame*>(pMsg->GetPayloadPtr());
+		auto pCurrentFrame = reinterpret_cast<MsgNetCtrlSequenceFrame*>(pMsg->GetDataPtr());
 
 		const uint8_t* dataPtr = reinterpret_cast<const uint8_t*>(pCurrentFrame + 1);
 
@@ -379,7 +378,7 @@ namespace Net {
 	{
 		Connection::ClearQueues();
 
-		m_RecvReliableWindow.ClearWindow();
+		m_RecvReliableWindow.Reset();
 		m_SendReliableWindow.ClearWindow();
 
 		m_SubFrameMessage = nullptr;
@@ -511,16 +510,15 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionUDPBase::OnGuaranteedMessageRecv(SharedPointerT<MessageData>& pIMsg)
+	Result ConnectionUDPBase::OnGuaranteedMessageRecv(const MessageHeader* pHeader)
 	{
 		Result hr = ResultCode::SUCCESS;
 
-		auto pHeader = pIMsg->GetMessageHeader();
-		auto msgID = pHeader->msgID;
-		auto seq = pHeader->msgID.IDSeq.Sequence;
-		auto len = pHeader->Length;
+		MessageID msgID = pHeader->msgID;
+		uint seq = pHeader->msgID.IDSeq.Sequence;
+        uint len = pHeader->Length;
 
-		Result hrTem = m_RecvReliableWindow.AddMsg(pIMsg);
+		Result hrTem = m_RecvReliableWindow.AddMsg(pHeader);
 
 		SFLog(Net, Debug5, "RECVGuaAdd : CID:{0} msgId:{1}, seq:{2}, len:{3}, hr:{4}, Window base:{5}, msgCount:{6}, syncMask:{7}",
 			GetCID(), 
@@ -532,13 +530,11 @@ namespace Net {
 			// Added to msg window just send ACK
 			SendReliableMessageAck(msgID);
 
-			pIMsg = nullptr;
 			return hr;
 		}
 		else if (hrTem == Result(ResultCode::IO_INVALID_SEQUENCE) || hrTem == Result(ResultCode::IO_SEQUENCE_OVERFLOW))
 		{
 			// out of window, we are going to receive this message again
-			pIMsg = nullptr;
 			return hr;
 		}
 		else
@@ -548,29 +544,20 @@ namespace Net {
 			// Added to msg window just send ACK
 			SendReliableMessageAck(msgID);
 
-			pIMsg = nullptr;
-
-			SharedPointerT<MessageData> pPopMsg;
-			while (m_RecvReliableWindow.PopMsg(pPopMsg))
+            RecvMsgWindow2::MessageBuffer::ItemReadPtr messageItemPtr;
+			while (m_RecvReliableWindow.PopMsg(messageItemPtr))
 			{
-				if (pPopMsg->GetMessageHeader()->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
+                MessageHeader* pPopHeader = reinterpret_cast<MessageHeader*>(messageItemPtr.data());
+				if (pPopHeader->msgID.GetMsgID() == PACKET_NETCTRL_SEQUENCE_FRAME.GetMsgID())
 				{
-					hr = OnFrameSequenceMessage(pPopMsg, [this](SharedPointerT<MessageData>& pMsgData) { super::OnRecv(pMsgData); });
+					hr = OnFrameSequenceMessage(pHeader, [this](SharedPointerT<MessageData>& pMsgData) { super::OnRecv(pMsgData->GetMessageHeader()); });
 				}
 				else
 				{
-					hr = super::OnRecv(pPopMsg);
+					hr = super::OnRecv(pPopHeader);
 				}
 			}
-
-			//if (GetEventHandler() != nullptr)
-			//{
-			//	MessageDataPtr temp;
-			//	GetEventHandler()->OnRecvMessage(this, temp);
-			//}
 		}
-
-		pIMsg = nullptr;
 
 		return hr;
 	}
@@ -684,7 +671,7 @@ namespace Net {
 	}
 
 	// called when incoming message occur
-	Result ConnectionUDPBase::OnRecv(uint uiBuffSize, const uint8_t* pBuff)
+	Result ConnectionUDPBase::OnRecv(uint uiBuffSize, uint8_t* pBuff)
 	{
 		Result hr = ResultCode::SUCCESS;
 		SharedPointerT<MessageData> pMsg;
@@ -702,16 +689,16 @@ namespace Net {
 			return hr;
 		}
 
-        const PacketHeader* pPacketHeader{};
-        const MessageHeader* pMsgHeader{};
+        PacketHeader* pPacketHeader{};
+        MessageHeader* pMsgHeader{};
         if (m_bIncludePacketHeader)
         {
-            pPacketHeader = reinterpret_cast<const PacketHeader*>(pBuff);
-            pMsgHeader = reinterpret_cast<const MessageHeader*>(pPacketHeader + 1);
+            pPacketHeader = reinterpret_cast<PacketHeader*>(pBuff);
+            pMsgHeader = reinterpret_cast<MessageHeader*>(pPacketHeader + 1);
         }
         else
         {
-            pMsgHeader = reinterpret_cast<const MessageHeader*>(pBuff);
+            pMsgHeader = reinterpret_cast<MessageHeader*>(pBuff);
         }
 
         SFLog(Net, Debug4, "UDP Recv ip:{0}, msg:{1}, seq:{2}, len:{3}", GetRemoteInfo().PeerAddress, pMsgHeader->msgID, pMsgHeader->msgID.IDSeq.Sequence, uiBuffSize);
@@ -720,7 +707,7 @@ namespace Net {
 
 		while (uiBuffSize && GetConnectionState() != ConnectionState::DISCONNECTED)
 		{
-            pMsgHeader = reinterpret_cast<const MessageHeader*>(pBuff);
+            pMsgHeader = reinterpret_cast<MessageHeader*>(pBuff);
 			if (uiBuffSize < pMsgHeader->GetHeaderSize() || uiBuffSize < pMsgHeader->Length)
 			{
 				SFLog(Net, Error, "Unexpected packet buffer size:{0}, size in header:{1}", uiBuffSize, pMsgHeader->Length);
@@ -742,19 +729,21 @@ namespace Net {
 			{
 				if (GetConnectionState() == ConnectionState::CONNECTED)
 				{
-					netMem(pMsg = MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
+                    pMsgHeader->ValidateChecksumNDecrypt();
 
-                    pMsg->SetEncrypted(true);
-                    hr = pMsg->ValidateChecksumNDecrypt();
-                    if (!hr)
-                    {
-                        SFLog(Net, Debug, "Decryption&Checksum failure: CID:{0} msg:{1}",
-                            GetCID(),
-                            pMsgHeader->msgID);
-                        netCheck(hr);
-                    }
+					//netMem(pMsg = MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
 
-                    hr = OnRecv(pMsg);
+     //               pMsg->SetEncrypted(true);
+     //               hr = pMsg->ValidateChecksumNDecrypt();
+     //               if (!hr)
+     //               {
+     //                   SFLog(Net, Debug, "Decryption&Checksum failure: CID:{0} msg:{1}",
+     //                       GetCID(),
+     //                       pMsgHeader->msgID);
+     //                   netCheck(hr);
+     //               }
+
+                    hr = OnRecv(pMsgHeader);
 					netChk(hr);
 				}
 				else
@@ -783,7 +772,7 @@ namespace Net {
 	}
 
 
-	Result ConnectionUDPBase::OnRecv(SharedPointerT<MessageData>& pMsg)
+	Result ConnectionUDPBase::OnRecv(MessageHeader* pMsgHeader)
 	{
 		ScopeContext hr([this](Result hr)
 			{
@@ -792,7 +781,6 @@ namespace Net {
 					CloseConnection("OnRecv is failed");
 				}
 			});
-		MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 
 		if (GetConnectionState() != ConnectionState::CONNECTED)
 		{
@@ -803,17 +791,16 @@ namespace Net {
 		{
 			SFLog(Net, Debug5, "RECVGua    : CID:{0} msg:{1}, seq:{2}, len:{3}",
 				GetCID(),
-				pMsg->GetMessageHeader()->msgID,
-				pMsg->GetMessageHeader()->msgID.IDSeq.Sequence,
-				pMsg->GetMessageHeader()->Length);
+				pMsgHeader->msgID,
+				pMsgHeader->msgID.IDSeq.Sequence,
+				pMsgHeader->Length);
 
-			netCheck(OnGuaranteedMessageRecv(pMsg));
+			netCheck(OnGuaranteedMessageRecv(pMsgHeader));
 		}
 		else
 		{
-			netCheck(super::OnRecv(pMsg));
+			netCheck(super::OnRecv(pMsgHeader));
 		}
-		pMsg = nullptr;
 
 		return hr;
 	}
@@ -842,5 +829,3 @@ namespace Net {
 	
 } // namespace Net
 } // namespace SF
-
-

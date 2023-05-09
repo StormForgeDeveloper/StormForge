@@ -90,7 +90,7 @@ namespace Net {
 		Result SendMsg(const sockaddr_storage& dest, SharedPointerT<MessageData>& pMsg);
 
 		// called when incoming message occur
-		Result OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff);
+		Result OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, uint8_t* pBuff);
 	};
 
 

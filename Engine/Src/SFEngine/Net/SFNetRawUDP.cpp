@@ -329,7 +329,7 @@ namespace Net {
 
 
 	// called when incoming message occur
-	Result RawUDP::OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, const uint8_t* pBuff)
+	Result RawUDP::OnRecv(const sockaddr_storage& remoteAddr, uint uiBuffSize, uint8_t* pBuff)
 	{
 		Result hr;
 		SharedPointerT<MessageData> pMsg;

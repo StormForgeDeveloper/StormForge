@@ -361,9 +361,9 @@ namespace Net {
 		// Call Disconnect and Wait everything is ready to go away, and release itself
 		virtual void DisconnectNRelease(const char* reason);
 
-		// called when incoming message occur
-		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) = 0;
-		virtual Result OnRecv(SharedPointerT<MessageData>& pMsg);
+        // called when incoming message occur
+        virtual Result OnRecv(uint uiBuffSize, uint8_t* pBuff) = 0;
+		virtual Result OnRecv(MessageHeader* pMsg);
 
 
 		// Query connection event

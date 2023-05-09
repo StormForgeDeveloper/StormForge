@@ -151,8 +151,8 @@ namespace SF {
 
 
 			// called when incoming message occure
-			virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) override;
-			virtual Result OnRecv(SharedPointerT<MessageData>& pMsg) override;
+			virtual Result OnRecv(uint uiBuffSize, uint8_t* pBuff) override;
+			virtual Result OnRecv(MessageHeader* pMsg) override;
 
 			// Send message to connected entity
 			virtual Result Send(const SharedPointerT<MessageData>& pMsg) override;

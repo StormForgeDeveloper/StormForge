@@ -65,10 +65,10 @@ namespace Net {
 			{
 				netChkPtr(pIOBuffer);
 
-                const PacketHeader* pPacketHeader = reinterpret_cast<const PacketHeader*>(pIOBuffer->buffer);
-                const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(pPacketHeader + 1);
+                PacketHeader* pPacketHeader = reinterpret_cast<PacketHeader*>(pIOBuffer->buffer);
+                MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(pPacketHeader + 1);
 
-				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize - sizeof(PacketHeader), reinterpret_cast<const uint8_t*>(pHeader))))
+				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize - sizeof(PacketHeader), reinterpret_cast<uint8_t*>(pHeader))))
 					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
 
 				m_Owner.PendingRecv();

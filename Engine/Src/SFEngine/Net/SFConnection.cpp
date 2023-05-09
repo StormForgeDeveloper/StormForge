@@ -565,14 +565,13 @@ namespace SF {
 			pTask->Request();
 		}
 
-		Result Connection::OnRecv(SharedPointerT<MessageData>& pMsg)
+		Result Connection::OnRecv(MessageHeader* pMsgHeader)
 		{
 			ScopeContext hr;
 
-			if (pMsg == nullptr)
+			if (pMsgHeader == nullptr)
 				return hr;
 
-            MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 			MessageID msgID = pMsgHeader->msgID;
 
 			// 
@@ -584,7 +583,7 @@ namespace SF {
                 || pMsgHeader->Crc32 != 0); // Crc should have value
 
             uint uiPolicy = msgID.IDs.Policy;
-            if (uiPolicy == 0
+            if (uiPolicy == 0 // Net control
                 || uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
             {
                 netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
@@ -594,7 +593,7 @@ namespace SF {
 			{
 				GetRecvMessageDelegates().Invoke(this, pMsgHeader);
 
-				if (pMsg != nullptr) // if it hasn't consumed yet, call next callback
+				if (pMsgHeader != nullptr) // if it hasn't consumed yet, call next callback
 				{
 					RecvMessageDelegates* pMessageDelegate = nullptr;
 					m_RecvMessageDelegatesByMsgId.Find(pMsgHeader->msgID.GetMsgID(), pMessageDelegate);

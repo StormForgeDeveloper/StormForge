@@ -36,8 +36,9 @@ namespace Net {
 		using super = Connection;
 
 	protected:
-		// Receive Sorted messages
-		RecvMsgWindow		m_RecvReliableWindow;
+
+		// Receive guaranteed messages
+		RecvMsgWindow2		m_RecvReliableWindow;
 
 		// Send Guaranteed Messages
 		SendMsgWindow		m_SendReliableWindow;
@@ -92,7 +93,7 @@ namespace Net {
 
 		virtual Result ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrl) override;
 
-		Result OnGuaranteedMessageRecv(SharedPointerT<MessageData>& pMsg);
+		Result OnGuaranteedMessageRecv(const MessageHeader* pMsg);
 		virtual Result SendReliableMessageAck(MessageID msgID);
 
 	public:
@@ -113,7 +114,7 @@ namespace Net {
 
 
 		SendMsgWindow& GetSendReliableWindow() { return m_SendReliableWindow; }
-		RecvMsgWindow& GetRecvReliableWindow() { return m_RecvReliableWindow; }
+		RecvMsgWindow2& GetRecvReliableWindow() { return m_RecvReliableWindow; }
 
 
 		// gathering
@@ -128,7 +129,7 @@ namespace Net {
 
 		// frame sequence
 		Result SendFrameSequenceMessage(const SharedPointerT<MessageData>& pMsg);
-		Result OnFrameSequenceMessage(SharedPointerT<MessageData>& pMsg, const std::function<void(SharedPointerT<MessageData>& pMsgData)>& action);
+		Result OnFrameSequenceMessage(const MessageHeader* pMsg, const std::function<void(SharedPointerT<MessageData>& pMsgData)>& action);
 
 		// Initialize connection
 		virtual Result InitConnection(const PeerInfo &local, const PeerInfo &remote) override;
@@ -155,8 +156,8 @@ namespace Net {
 		virtual Result Send(const SharedPointerT<MessageData> &pMsg ) override;
 
 		// called when incoming message occur
-		virtual Result OnRecv(uint uiBuffSize, const uint8_t* pBuff) override;
-		virtual Result OnRecv(SharedPointerT<MessageData>& pMsg) override;
+		virtual Result OnRecv(uint uiBuffSize, uint8_t* pBuff) override;
+		virtual Result OnRecv(MessageHeader* pMsg) override;
 
 		// We need this for event handling on server
 		//virtual Result UpdateSendQueue() override;

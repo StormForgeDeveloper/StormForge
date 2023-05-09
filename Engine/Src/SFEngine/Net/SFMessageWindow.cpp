@@ -103,7 +103,7 @@ namespace Net {
 
 		// we already tested validity, just swap it
 		m_pMsgWnd[iPosIdx].pMsg.Swap(pIMsg);
-		auto messageCount = m_uiMsgCount.fetch_add(1, std::memory_order_release) + 1;
+		uint messageCount = m_uiMsgCount.fetch_add(1, std::memory_order_release) + 1;
 		unused(messageCount);
 
 		return hr;
@@ -198,7 +198,189 @@ namespace Net {
 		m_uiSyncMask.store(0, std::memory_order_release);
 	}
 	
-	
+
+
+    ////////////////////////////////////////////////////////////////////////////////
+    //
+    //	Recv message window
+    //
+
+    RecvMsgWindow2::RecvMsgWindow2()
+        : m_uiSyncMask(0)
+        , m_uiBaseSequence(0)
+        , m_uiMsgCount(0)
+    {
+        ResetWindowData();
+    }
+
+    RecvMsgWindow2::~RecvMsgWindow2()
+    {
+    }
+
+    void RecvMsgWindow2::ResetWindowData()
+    {
+        for (uint32_t iMsg = 0; iMsg < MessageWindow::MESSAGE_QUEUE_SIZE; iMsg++)
+        {
+            uint32_t expectedSeq = MessageSequence::Normalize(iMsg - MessageWindow::MESSAGE_QUEUE_SIZE); // using 16bit part only
+            m_pMsgWnd[iMsg].Sequence = expectedSeq;
+            m_pMsgWnd[iMsg].pMsgData = nullptr;
+        }
+    }
+
+    // Add message
+    Result RecvMsgWindow2::AddMsg(const MessageHeader* pHeader)
+    {
+        Result hr;
+
+        MessageSequence msgSeq = pHeader->msgID.IDSeq.Sequence;
+
+        // Base sequence should be locked until actual swap is happened
+        // There is a chance m_uiBaseSequence increase before the message is actually added if a message is added on different thread at the same time.
+        int diff = msgSeq - m_uiBaseSequence;
+        if (diff >= GetAcceptableSequenceRange())
+        {
+            return ResultCode::IO_SEQUENCE_OVERFLOW; // No room for new message
+        }
+
+        if (diff < 0)
+        {
+            return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
+        }
+
+        int iPosIdx = msgSeq % MessageWindow::MESSAGE_QUEUE_SIZE;
+
+        // We expect previous sequence is stored
+        uint32_t expectedStoredSeq = MessageSequence::Normalize(msgSeq.Sequence - MessageWindow::MESSAGE_QUEUE_SIZE); // using 11bit part only
+        bool bExchanged = m_pMsgWnd[iPosIdx].Sequence.compare_exchange_strong(expectedStoredSeq, msgSeq);
+        if (!bExchanged)
+        {
+            // Somebody already took the spot. let's drop it
+            if (MessageSequence::Difference(expectedStoredSeq, msgSeq) <= 0)
+            {
+                // newer message already took place
+                return ResultCode::SUCCESS_IO_PROCESSED_SEQUENCE;
+            }
+            else
+            {
+                // The sequence is way earlier. let's drop it
+                return ResultCode::IO_SEQUENCE_OVERFLOW;
+            }
+        }
+
+        // I have reserved the spot
+        m_uiSyncMask.fetch_or(((uint64_t)1) << iPosIdx, std::memory_order_relaxed);
+
+        MessageBuffer::ItemWritePtr itemPtr = m_MessageDataBuffer.AllocateWrite(pHeader->Length);
+        memcpy(itemPtr.data(), pHeader, pHeader->Length);
+
+        // we already tested validity, just swap it
+        assert(m_pMsgWnd[iPosIdx].pMsgData == nullptr);
+        MessageBuffer::BufferItem* pPrev = m_pMsgWnd[iPosIdx].pMsgData.exchange(itemPtr.GetBufferItem());
+        itemPtr.Reset();
+
+        // whichever left need to be released
+        if (pPrev != nullptr)
+        {
+            m_MessageDataBuffer.ForceReleaseRead(pPrev);
+        }
+
+        uint messageCount = m_uiMsgCount.fetch_add(1, std::memory_order_release) + 1;
+        unused(messageCount);
+
+        return hr;
+    }
+
+    // Non-thread safe
+    // Pop message and return it if can
+    Result RecvMsgWindow2::PopMsg(MessageBuffer::ItemReadPtr& messageData)
+    {
+        Result hr;
+        uint16_t baseSequence = m_uiBaseSequence.load(std::memory_order_acquire);
+        int iPosIdx = baseSequence % MessageWindow::MESSAGE_QUEUE_SIZE;
+
+        MessageBuffer::BufferItem* pMsgData = m_pMsgWnd[iPosIdx].pMsgData.exchange(nullptr);
+        if (pMsgData == nullptr)
+            return ResultCode::NO_DATA_EXIST;
+
+        if (!pMsgData->AcquireRead())
+            return ResultCode::UNEXPECTED;
+
+        messageData = MessageBuffer::ItemReadPtr(&m_MessageDataBuffer, pMsgData);
+        if (!messageData.IsValid())
+            return ResultCode::FAIL;
+
+        const MessageHeader* pHeader = reinterpret_cast<const MessageHeader*>(messageData.data());
+        // If the message is not the one with correct sequence, it is wrong and need to be dropped
+        if (MessageSequence::Difference(pHeader->msgID.IDSeq.Sequence, baseSequence) != 0)
+        {
+            messageData.Reset();
+            return ResultCode::FAIL;
+        }
+
+        auto prevSeq = m_uiBaseSequence.fetch_add(1, std::memory_order_release);// Message window clear can't cross base sequence change, and this will make sure the previous sync mask change is commited.
+        unused(prevSeq);
+
+        // Between previous exchange and sequence update, the message can be arrived again
+        // This will make sure the message is cleaned up
+        // Circular case will be prohibited in AddMsg
+        MessageBuffer::BufferItem* pBufferItem = m_pMsgWnd[iPosIdx].pMsgData.exchange(nullptr);
+        if (pBufferItem)
+        {
+            m_MessageDataBuffer.ForceReleaseRead(pBufferItem);
+        }
+
+        m_uiMsgCount.fetch_sub(1, std::memory_order_relaxed);
+
+        uint64_t messageMask = ((uint64_t)1) << iPosIdx;
+        m_uiSyncMask.fetch_and(~messageMask, std::memory_order_release);
+
+        return hr;
+
+    }
+
+
+    // Get SyncMask
+    uint64_t RecvMsgWindow2::GetSyncMask()
+    {
+        auto baseSeq = m_uiBaseSequence % MessageWindow::MESSAGE_QUEUE_SIZE;
+
+        uint64_t resultSyncMask = m_uiSyncMask.load(std::memory_order_acquire);
+        if (baseSeq != 0)
+        {
+            auto least = resultSyncMask >> baseSeq;
+            auto most = resultSyncMask << (MessageWindow::MESSAGE_QUEUE_SIZE - baseSeq + 1);
+            most >>= 1; // clear MSB
+            resultSyncMask = least | most;
+        }
+
+        //#ifdef DEBUG
+                //uint64_t uiSyncMask = 0;
+                //for (int uiIdx = 0, iSeq = baseSeq; uiIdx < GetAcceptableSequenceRange(); uiIdx++, iSeq++)
+                //{
+                //	int iPosIdx = iSeq % MESSAGE_QUEUE_SIZE;
+                //	if( m_pMsgWnd[ iPosIdx ].load(std::memory_order_relaxed) != nullptr )
+                //	{
+                //		uiSyncMask |= ((uint64_t)1)<<uiIdx;
+                //	}
+                //}
+                //AssertRel(resultSyncMask == uiSyncMask);
+        //#endif
+        return resultSyncMask;
+    }
+
+
+    // Clear window element
+    void RecvMsgWindow2::Reset()
+    {
+        ResetWindowData();
+
+        m_MessageDataBuffer.Reset();
+
+        m_uiBaseSequence.store(0, std::memory_order_release);
+        m_uiMsgCount.store(0, std::memory_order_release);
+        m_uiSyncMask.store(0, std::memory_order_release);
+    }
+
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Send message window

@@ -48,6 +48,8 @@ namespace SF
 			SF_FORCEINLINE void* GetDataPtr() { return this + 1; }
             SF_FORCEINLINE static BufferItem* FromDataPtr(void* pData) { return pData != nullptr ? reinterpret_cast<BufferItem*>(pData) - 1 : nullptr; }
             SF_FORCEINLINE size_t GetDataSize() const { return DataSize; }
+
+            Result AcquireRead();
 		};
 #pragma pack(pop)
 
@@ -79,7 +81,7 @@ namespace SF
             SF_FORCEINLINE operator bool() const { return IsValid(); }
             SF_FORCEINLINE void* data() const { return m_pItem ? m_pItem->GetDataPtr() : nullptr; }
             SF_FORCEINLINE size_t GetDataSize() const { return m_pItem ? m_pItem->DataSize : 0; }
-            SF_FORCEINLINE const BufferItem* GetBufferItem() const { return m_pItem; }
+            SF_FORCEINLINE BufferItem* GetBufferItem() const { return m_pItem; }
 
             ItemPtr& operator = (ItemPtr&& src)
             {
@@ -160,6 +162,7 @@ namespace SF
             using ItemPtr::data;
             using ItemPtr::GetDataSize;
             using ItemPtr::GetBufferItem;
+
 
             void Reset()
             {
@@ -251,7 +254,14 @@ namespace SF
 
         ItemReadPtr DequeueRead();
 		void CancelRead(BufferItem* item);
-		Result ReleaseRead(BufferItem* pBuffer);
+        Result ReleaseRead(BufferItem* pBuffer)
+        {
+            return ReleaseReadInternal(pBuffer, ItemState::Reading);
+        }
+        Result ForceReleaseRead(BufferItem* pBuffer)
+        {
+            return ReleaseReadInternal(pBuffer, ItemState::Filled);
+        }
 
 		// low level access. don't change state, just sneak peek tail item. 
 		// NOTE: NOT thread safe. caller should guarantee thread safety   
@@ -261,29 +271,10 @@ namespace SF
 		// get buffer item size
 		size_t GetBufferItemSize(const BufferItem* pBufferItem) const;
 
-        // TODO: make iterator
-		//// Iterate readable items. the item passed to the functor will be freed
-		//template<class FunctorT>
-		//void ForeachReadableItems(FunctorT func)
-		//{
-		//	BufferItem* pBufferItem = nullptr;
-
-		//	while (true)
-		//	{
-		//		pBufferItem = DequeueRead();
-		//		if (pBufferItem == nullptr)
-		//			return; // nothing left for now
-
-		//		bool bRet = func(pBufferItem);
-
-		//		ReleaseRead(pBufferItem);
-
-		//		if (!bRet)
-		//			return;
-		//	}
-		//}
-
 		bool CheckIntegrity() const;
+
+    private:
+        Result ReleaseReadInternal(BufferItem* pBuffer, ItemState expectedState = ItemState::Reading);
 	};
 
 

@@ -609,7 +609,7 @@ namespace Net {
 
 		m_ReliableSyncTime = Util::Time.GetTimeMs();
 
-		RecvMsgWindow& recvWindow = GetConnection()->GetRecvReliableWindow();
+		RecvMsgWindow2& recvWindow = GetConnection()->GetRecvReliableWindow();
 
 		GetConnection()->DecSendBoost();
 

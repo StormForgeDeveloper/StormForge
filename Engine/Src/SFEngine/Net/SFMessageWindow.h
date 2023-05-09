@@ -20,6 +20,7 @@
 #include "Multithread/SFSystemSynchronization.h"
 #include "Net/SFConnection.h"
 #include "Net/SFMessageData.h"
+#include "Container/SFCircularBufferQueue.h"
 
 
 namespace SF {
@@ -36,7 +37,7 @@ namespace Net {
 		static constexpr uint32_t MESSAGE_QUEUE_SIZE			= 128;
 		static constexpr uint32_t MESSAGE_ACCEPTABLE_SEQUENCE_RANGE			= MESSAGE_QUEUE_SIZE >> 1;
 		static constexpr uint32_t SYNC_MASK_BITS_MAX			= 64; // we uses 64bit mask bits for packet
-
+        static constexpr uint32_t RELIABLE_MESSAGE_BUFFER_SIZE = 512 * 1024;
 
 
 		enum class ItemState
@@ -107,7 +108,72 @@ namespace Net {
 		// Clear window element
 		void ClearWindow();
 	};
-	
+
+
+    class RecvMsgWindow2
+    {
+    public:
+
+        using MessageBuffer = StaticCircularBufferQueue<MessageWindow::RELIABLE_MESSAGE_BUFFER_SIZE>;
+
+#pragma pack(push,4)
+        struct MessageInfo
+        {
+            Atomic<MessageBuffer::BufferItem*> pMsgData{};
+            Atomic<uint32_t> Sequence{};
+        };
+#pragma pack(pop)
+
+
+        //using ItemState = MessageWindow::ItemState;
+
+    private:
+
+        // Circular buffer for message data
+        MessageBuffer m_MessageDataBuffer;
+
+        // Sync mask
+        Atomic<uint64_t> m_uiSyncMask;
+
+        // Base sequence value( sequence Head)
+        Atomic<uint16_t> m_uiBaseSequence;
+
+        // Message count in window
+        Atomic<uint32_t> m_uiMsgCount;
+
+        // Message data array
+        MessageInfo m_pMsgWnd[MessageWindow::MESSAGE_QUEUE_SIZE];
+
+    public:
+        // Constructor
+        RecvMsgWindow2();
+        ~RecvMsgWindow2();
+
+        // get window size
+        SF_FORCEINLINE int GetAcceptableSequenceRange() const { return MessageWindow::MESSAGE_ACCEPTABLE_SEQUENCE_RANGE; }
+
+        // get message count in window
+        SF_FORCEINLINE uint32_t GetMsgCount() { return m_uiMsgCount.load(std::memory_order_relaxed); }
+
+        // get message base sequence
+        SF_FORCEINLINE uint16_t GetBaseSequence() { return m_uiBaseSequence.load(std::memory_order_consume); }
+
+        // Add message
+        Result AddMsg(const MessageHeader* pHeader);
+
+        // Pop message and return it if can
+        Result PopMsg(MessageBuffer::ItemReadPtr& messageData);
+
+        // Get SyncMask
+        uint64_t GetSyncMask();
+
+        // Clear window element
+        void Reset();
+
+    private:
+        void ResetWindowData();
+    };
+
 	
 	////////////////////////////////////////////////////////////////////////////////
 	//

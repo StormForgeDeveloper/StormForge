@@ -16,6 +16,37 @@ namespace SF
 {
 
 
+    Result CircularBufferQueue::BufferItem::AcquireRead()
+    {
+        Result hr;
+
+        ItemState expectedState = ItemState::Filled;
+        bool bExchanged = State.compare_exchange_strong(expectedState, ItemState::Reading, std::memory_order_release, std::memory_order_acquire);
+        if (!bExchanged)
+        {
+            switch (expectedState)
+            {
+            case ItemState::Free:
+                return ResultCode::FAIL;
+            case ItemState::Reserved:
+                // It's not ready. let's return at this moment
+                return ResultCode::FAIL;
+            case ItemState::Filled:
+                break;
+            case ItemState::Reading:
+                // broken?
+                assert(false);
+                return ResultCode::FAIL;
+            case ItemState::Dummy:
+                // might be broken
+                // Let's silently flush dummy out
+                return ResultCode::FAIL;
+            }
+        }
+
+        return hr;
+    }
+
 	CircularBufferQueue::CircularBufferQueue(IHeap& heap, size_t bufferSize, uint8_t* externalBuffer)
 		: m_Heap(heap)
 	{
@@ -247,33 +278,8 @@ namespace SF
 		if (pTail == pHead) // queue is empty
 			return ItemReadPtr();
 
-        ItemState expectedState = ItemState::Filled;
-		while (!pTail->State.compare_exchange_weak(expectedState, ItemState::Reading, std::memory_order_release, std::memory_order_acquire))
-		{
-			switch (expectedState)
-			{
-			case ItemState::Free:
-				return ItemReadPtr();
-			case ItemState::Reserved:
-				// It's not ready. let's return at this moment
-				return ItemReadPtr();
-			case ItemState::Filled:
-				break;
-			case ItemState::Reading:
-				// broken?
-				assert(false);
-				return ItemReadPtr();
-			case ItemState::Dummy:
-				// might be broken
-				// Let's silently flush dummy out
-				ReleaseRead(pTail);
-				expectedState = ItemState::Filled;
-				pTail = m_TailPos.load(std::memory_order_relaxed);
-				if (pTail == pHead) // queue is empty
-					return ItemReadPtr();
-				break;
-			}
-		}
+        if (!pTail->AcquireRead())
+            return ItemReadPtr();
 
         std::atomic_thread_fence(std::memory_order_acquire);
 
@@ -301,7 +307,7 @@ namespace SF
 		}
 	}
 
-	Result CircularBufferQueue::ReleaseRead(BufferItem* pBuffer)
+	Result CircularBufferQueue::ReleaseReadInternal(BufferItem* pBuffer, ItemState expectedState)
 	{
 		if (pBuffer == nullptr)
 			return ResultCode::FAIL;
@@ -309,7 +315,7 @@ namespace SF
         m_ItemCount--;
 
 		uintptr_t startPos = (uintptr_t)m_Buffer;
-		[[maybe_unused]]auto endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
+		[[maybe_unused]] uintptr_t endPos = (uintptr_t)m_Buffer + (uintptr_t)m_BufferSize;
 
 		// for debug
 #if defined(_DEBUG) || defined(DEBUG)
@@ -319,7 +325,7 @@ namespace SF
 				memset(pBuffer + 1, 0xFF, endPos - (uintptr_t)(pBuffer + 1));
 			else
 			{
-				// Possible broken
+				// Possibly broken
 				assert(0);
 			}
 		}
@@ -333,15 +339,18 @@ namespace SF
         // TODO: this lock make below compare_exchange_weak useless. need to improve that
         MutexScopeLock ticketScope(m_HeadLock);
 
-        ItemState expectedState = ItemState::Reading;
-		while (!pBuffer->State.compare_exchange_weak(expectedState, ItemState::Free, std::memory_order_release, std::memory_order_acquire))
+        ItemState expected = expectedState;
+        bool bExchanged = pBuffer->State.compare_exchange_strong(expected,
+            ItemState::Free,
+            std::memory_order_release,
+            std::memory_order_acquire);
+        if (!bExchanged)
 		{
-			if (expectedState != ItemState::Reading && expectedState != ItemState::Dummy)
+			if (expected != expectedState && expected != ItemState::Dummy)
 			{
 				assert(false); // maybe broken?
 				return ResultCode::FAIL;
 			}
-
 		}
 
 		// And we have to take care of tail position, and this should be rigorously synchronous way
@@ -363,7 +372,6 @@ namespace SF
 
 		return ResultCode::SUCCESS;
 	}
-
 
 	CircularBufferQueue::BufferItem* CircularBufferQueue::PeekTail()
 	{

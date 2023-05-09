@@ -62,7 +62,7 @@ namespace Net {
 
 	ConnectionUDPServerPeer::~ConnectionUDPServerPeer()
 	{
-		m_RecvReliableWindow.ClearWindow();
+		m_RecvReliableWindow.Reset();
 		m_SendReliableWindow.ClearWindow();
 	}
 
@@ -74,7 +74,7 @@ namespace Net {
 
 		netChk(ConnectionUDP::InitSynchronization() );
 
-		m_RecvReliableWindow.ClearWindow();
+		m_RecvReliableWindow.Reset();
 		m_SendReliableWindow.ClearWindow();
 
 	Proc_End:
