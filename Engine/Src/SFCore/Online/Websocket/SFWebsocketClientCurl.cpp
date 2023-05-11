@@ -395,10 +395,9 @@ namespace SF
         m_TickThread.reset(pThread);
     }
 
-
-
     void WebsocketClientCurl::TryConnect()
     {
+        MutexScopeLock scopeLock(m_ContextLock);
         CURLcode result;
 
         m_Url.Format("{0}://{1}:{2}{3}", m_UseSSL ? "wss" : "ws", m_ServerAddress, m_Port, m_ServerPath);
@@ -461,6 +460,8 @@ namespace SF
 
     void WebsocketClientCurl::CloseConnection()
     {
+        MutexScopeLock scopeLock(m_ContextLock);
+
         m_ConnectionState = ConnectionState::Disconnected;
 
         m_ConnectedThisFrame = false;

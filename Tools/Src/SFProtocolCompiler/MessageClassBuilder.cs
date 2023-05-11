@@ -224,11 +224,8 @@ namespace ProtocolCompiler
 
         static Parameter[] GenerateParameterTypeInfoList = new Parameter[]
         {
-            //new Parameter() { Name = "PlayerID", TypeName = "uint64" },
             new Parameter() { Name = "TransactionID", TypeName = "TransactionID" },
             new Parameter() { Name = "RouteContext", TypeName = "RouteContext" },
-            //new Parameter() { Name = "RouteHopCount", TypeName = "uint32" },
-            //new Parameter() { Name = "Sender", TypeName = "uint64" },
         };
 
         bool HasInternalTypeOverride(Parameter[] parameters)
@@ -381,6 +378,12 @@ namespace ProtocolCompiler
 
             MatchIndent(); OutStream.WriteLine("static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);");
             NewLine();
+
+            MatchIndent(); OutStream.WriteLine("static size_t CalculateMessageSize( {0} );", ParamInString(parameters, bUseOriginalType: true));
+            if (bHasInternalTypeOverride)
+            {
+                MatchIndent(); OutStream.WriteLine("static size_t CalculateMessageSize( {0} );", ParamInString(parameters, bUseOriginalType: false));
+            }
 
             // Build function
             MatchIndent(); OutStream.WriteLine("static MessageData* Create( {0} );", BuilderParamString(parameters));
@@ -814,7 +817,7 @@ namespace ProtocolCompiler
             //CloseSection();
         }
 
-        void BuildCreatePreamble(Parameter[] parameters)
+        void CalculateMessageSizePreamble(Parameter[] parameters)
         {
             if (parameters == null)
                 return;
@@ -834,33 +837,17 @@ namespace ProtocolCompiler
             }
         }
 
-        // Build parser class implementation
-        void BuildCreateImpl(string Name, string typeName, Parameter[] parameters, bool bUseOriginalType = false)
+        void BuildCalculateMessageSizeImpl(string Name, string typeName, Parameter[] parameters, bool bUseOriginalType = false)
         {
             bool bHasInternalTypeOverride = HasInternalTypeOverride(parameters);
             if (!bUseOriginalType && !bHasInternalTypeOverride)
                 return;
 
-
             string strClassName = MsgClassName(Name, typeName);
-            bool bHasParameters = parameters != null && parameters.Length > 0;
-            OpenSection("MessageData*", strClassName + string.Format("::Create( {0} )", BuilderParamString(parameters, bUseOriginalType: bUseOriginalType)));
+            //bool bHasParameters = parameters != null && parameters.Length > 0;
+            OpenSection("size_t", strClassName + string.Format("::CalculateMessageSize( {0} )", ParamInString(parameters, bUseOriginalType: bUseOriginalType)));
 
-            MatchIndent(); OutStream.WriteLine("MessageData *pNewMsg = nullptr;");
-
-            OpenSection("ScopeContext", "hr([&pNewMsg](Result hr) -> MessageData*");
-            MatchIndent(); OutStream.WriteLine("if(!hr && pNewMsg != nullptr)");
-                OpenSection();
-                MatchIndent(); OutStream.WriteLine("IHeap::Delete(pNewMsg);");
-            MatchIndent(); OutStream.WriteLine("return nullptr;");
-            CloseSection();
-            MatchIndent(); OutStream.WriteLine("return pNewMsg;");
-            CloseSection("});");
-
-            NewLine();
-
-
-            BuildCreatePreamble(parameters);
+            CalculateMessageSizePreamble(parameters);
 
             string strSizeVarName = "__uiMessageSize";
             string strMessageHeaderSize = "Message::HeaderSize";
@@ -887,6 +874,71 @@ namespace ProtocolCompiler
 
             MatchIndent(); OutStream.WriteLine(");");
             NewLine();
+
+            MatchIndent(); OutStream.WriteLine($"return {strSizeVarName};");
+
+            CloseSection();
+        }
+
+        // Build parser class implementation
+        void BuildCreateImpl(string Name, string typeName, Parameter[] parameters, bool bUseOriginalType = false)
+        {
+            bool bHasInternalTypeOverride = HasInternalTypeOverride(parameters);
+            if (!bUseOriginalType && !bHasInternalTypeOverride)
+                return;
+
+            string strClassName = MsgClassName(Name, typeName);
+            bool bHasParameters = parameters != null && parameters.Length > 0;
+            OpenSection("MessageData*", strClassName + string.Format("::Create( {0} )", BuilderParamString(parameters, bUseOriginalType: bUseOriginalType)));
+
+            MatchIndent(); OutStream.WriteLine("MessageData *pNewMsg = nullptr;");
+
+            OpenSection("ScopeContext", "hr([&pNewMsg](Result hr) -> MessageData*");
+            MatchIndent(); OutStream.WriteLine("if(!hr && pNewMsg != nullptr)");
+                OpenSection();
+                MatchIndent(); OutStream.WriteLine("IHeap::Delete(pNewMsg);");
+            MatchIndent(); OutStream.WriteLine("return nullptr;");
+            CloseSection();
+            MatchIndent(); OutStream.WriteLine("return pNewMsg;");
+            CloseSection("});");
+
+            NewLine();
+
+            if (bUseOriginalType)
+            {
+                CalculateMessageSizePreamble(parameters);
+
+                string strSizeVarName = "__uiMessageSize";
+                string strMessageHeaderSize = "Message::HeaderSize";
+                MatchIndent(); OutStream.WriteLine(string.Format("unsigned {0} = (unsigned)({1} ", strSizeVarName, strMessageHeaderSize));
+                if (parameters != null)
+                {
+                    foreach (Parameter param in parameters)
+                    {
+                        if (!IsStrType(param) && !param.IsArray && IsVariableSizeType(param))
+                        {
+                            // Original type will use binary conversion, so has extra array length parameter
+                            if (bUseOriginalType)
+                            {
+                                MatchIndent(1); OutStream.WriteLine("+ sizeof({0})", ArrayLenType);
+                            }
+                            MatchIndent(1); OutStream.WriteLine("+ serializedSizeOf{0}", InParamName(param.Name));
+                        }
+                        else
+                        {
+                            MatchIndent(1); OutStream.WriteLine("+ SerializedSizeOf({0})", InParamName(param.Name));
+                        }
+                    }
+                }
+
+                MatchIndent(); OutStream.WriteLine(");");
+                NewLine();
+            }
+            else
+            {
+                MatchIndent(); OutStream.WriteLine($"uint __uiMessageSize = (uint)CalculateMessageSize({ParamArgument(parameters)});");
+                NewLine();
+            }
 
             MatchIndent(); OutStream.WriteLine("protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, {0}::{1}{2}::MID, __uiMessageSize ) );", Group.Name, Name, typeName);
 
@@ -950,6 +1002,8 @@ namespace ProtocolCompiler
                     BuildParserImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildParserToVariableBuilderImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildParserToMessageBaseImpl(msg.Name, "Cmd", newparams); NewLine();
+                    BuildCalculateMessageSizeImpl(msg.Name, "Cmd", newparams, bUseOriginalType: false); NewLine();
+                    BuildCalculateMessageSizeImpl(msg.Name, "Cmd", newparams, bUseOriginalType: true); NewLine();
                     BuildCreateImpl(msg.Name, "Cmd", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "Cmd", newparams, bUseOriginalType:true); NewLine();
                     //BuildOverrideRouteContextImpl(msg.Name, "Cmd", newparams); NewLine();
@@ -962,6 +1016,9 @@ namespace ProtocolCompiler
                     BuildParserImpl(msg.Name, "Res", newparams); NewLine();
                     BuildParserToVariableBuilderImpl(msg.Name, "Res", newparams); NewLine();
                     BuildParserToMessageBaseImpl(msg.Name, "Res", newparams); NewLine();
+                    BuildCalculateMessageSizeImpl(msg.Name, "Res", newparams, bUseOriginalType: false); NewLine();
+                    BuildCalculateMessageSizeImpl(msg.Name, "Res", newparams, bUseOriginalType: true); NewLine();
+
                     BuildCreateImpl(msg.Name, "Res", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "Res", newparams, bUseOriginalType: true); NewLine();
                     //BuildOverrideRouteContextImpl(msg.Name, "Res", newparams); NewLine();
@@ -980,6 +1037,8 @@ namespace ProtocolCompiler
                     BuildParserImpl(msg.Name, "C2SEvt", newparams); NewLine();
                     BuildParserToVariableBuilderImpl(msg.Name, "C2SEvt", newparams); NewLine();
                     BuildParserToMessageBaseImpl(msg.Name, "C2SEvt", newparams); NewLine();
+                    BuildCalculateMessageSizeImpl(msg.Name, "C2SEvt", newparams, bUseOriginalType: false); NewLine();
+                    BuildCalculateMessageSizeImpl(msg.Name, "C2SEvt", newparams, bUseOriginalType: true); NewLine();
                     BuildCreateImpl(msg.Name, "C2SEvt", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "C2SEvt", newparams, bUseOriginalType: true); NewLine();
                     //BuildOverrideRouteContextImpl(msg.Name, "C2SEvt", newparams); NewLine();
@@ -998,6 +1057,8 @@ namespace ProtocolCompiler
                     BuildParserImpl(msg.Name, "S2CEvt", newparams); NewLine();
                     BuildParserToVariableBuilderImpl(msg.Name, "S2CEvt", newparams); NewLine();
                     BuildParserToMessageBaseImpl(msg.Name, "S2CEvt", newparams); NewLine();
+                    BuildCalculateMessageSizeImpl(msg.Name, "S2CEvt", newparams, bUseOriginalType: false); NewLine();
+                    BuildCalculateMessageSizeImpl(msg.Name, "S2CEvt", newparams, bUseOriginalType: true); NewLine();
                     BuildCreateImpl(msg.Name, "S2CEvt", newparams); NewLine();
                     BuildCreateImpl(msg.Name, "S2CEvt", newparams, bUseOriginalType: true); NewLine();
                     //BuildOverrideRouteContextImpl(msg.Name, "S2CEvt", newparams); NewLine();

@@ -429,7 +429,8 @@ namespace Net {
 
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
 		virtual Result Send(const SharedPointerT<MessageData>& messageData) override;
-	};
+        virtual Result SendMessage(const MessageHeader* messageData) override;
+    };
 
 }  // namespace Net
 

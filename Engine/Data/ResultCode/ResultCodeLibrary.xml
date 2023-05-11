@@ -215,6 +215,7 @@
 	<ResultCodeItem Severity="Error" CodeName="INVALID_SCHEMA" Desc="Invalid schema data"/>
     <ResultCodeItem Severity="Error" CodeName="INVALID_TYPE" Desc="Invalid type"/>
 
+    <ResultCodeItem Severity="Error" CodeName="MAX_PACKET" Desc="Maximum packet"/>
 
 </ResultCodes>
 

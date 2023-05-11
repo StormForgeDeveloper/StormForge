@@ -51,7 +51,7 @@ namespace Net {
 		, m_GatheringBufferSize(gatheringBufferSize)
 		, m_RecvBufferSize(recvBufferSize)
 		, m_SendBufferSize(sendBufferSize)
-		, m_pGatheringBufferPool(nullptr)
+		//, m_pGatheringBufferPool(nullptr)
 		, m_Heap("Net", GetSystemHeap())
 		, m_NetIOSystem(nullptr)
 	{
@@ -76,7 +76,7 @@ namespace Net {
 		LibraryComponent::InitializeComponent();
 		
 		Service::NetSystem = this;
-		m_pGatheringBufferPool = MemoryPoolManager::GetMemoryPoolBySize(m_GatheringBufferSize);
+        //m_pGatheringBufferPool.reset(new MemoryPool(GetSystemHeap(), m_GatheringBufferSize));//MemoryPoolManager::GetMemoryPoolBySize(m_GatheringBufferSize);
 
 		if (m_NetIOSystem != nullptr) 
 			m_NetIOSystem->Initialize(m_NumThread);
@@ -90,7 +90,7 @@ namespace Net {
 		LibraryComponent::DeinitializeComponent();
 
 		Service::NetSystem = nullptr;
-		m_pGatheringBufferPool = nullptr;
+		//m_pGatheringBufferPool = nullptr;
 		
 		if (m_NetIOSystem != nullptr) 
 			m_NetIOSystem->Terminate();

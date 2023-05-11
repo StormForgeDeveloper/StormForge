@@ -107,6 +107,8 @@ namespace SF
 
         friend class WebsocketClientCurlImpl;
 
+        CriticalSection m_ContextLock;
+
         String m_ServerAddress;
         String m_ServerPath;
         int m_Port{};

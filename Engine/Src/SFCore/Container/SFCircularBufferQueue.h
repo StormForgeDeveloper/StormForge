@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 // 
-// CopyRight (c) 2018 Kyungkun Ko
+// CopyRight (c) Kyungkun Ko
 // 
 // Author : KyungKun Ko
 //
@@ -107,6 +107,7 @@ namespace SF
             ItemWritePtr(CircularBufferQueue* pContainer, BufferItem* pItem)
                 : ItemPtr(pContainer, pItem)
             {
+                assert(pItem == nullptr || pItem->State.load(std::memory_order_relaxed) == ItemState::Reserved);
             }
             ItemWritePtr(ItemWritePtr&& src)
                 : ItemPtr(std::forward<ItemPtr>(src))
@@ -148,6 +149,7 @@ namespace SF
             ItemReadPtr(CircularBufferQueue* pContainer, BufferItem* pItem)
                 : ItemPtr(pContainer, pItem)
             {
+                assert(pItem == nullptr || pItem->State.load(std::memory_order_relaxed) == ItemState::Reading);
             }
             ItemReadPtr(ItemReadPtr&& src)
                 : ItemPtr(std::forward<ItemPtr>(src))
@@ -219,7 +221,7 @@ namespace SF
 	public:
 
 		// Constructor/Destructor
-		CircularBufferQueue(IHeap& heap, size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);
+		CircularBufferQueue(IHeap& heap = GetSystemHeap(), size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);
 		~CircularBufferQueue();
 
 		void Initialize(size_t bufferSize = 2048, uint8_t* externalBuffer = nullptr);

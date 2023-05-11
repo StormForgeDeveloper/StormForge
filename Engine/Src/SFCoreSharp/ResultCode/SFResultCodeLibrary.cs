@@ -590,6 +590,9 @@ namespace SF {
 		// Invalid type 
 		public const int INVALID_TYPE =                                     unchecked((int)0xE70100BF); 
 
+		// Maximum packet 
+		public const int MAX_PACKET =                                       unchecked((int)0xE70100C0); 
+
 	}
 }
 

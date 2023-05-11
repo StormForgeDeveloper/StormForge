@@ -320,7 +320,7 @@ namespace Net {
 			memcpy(reinterpret_cast<uint8_t*>(m_SubFrameMessage->GetDataPtr()) + pCurrentFrame->Offset, dataPtr, pCurrentFrame->ChunkSize);
 		}
 
-		auto receivedSize = pCurrentFrame->Offset + pCurrentFrame->ChunkSize;
+		int receivedSize = pCurrentFrame->Offset + pCurrentFrame->ChunkSize;
 		if (receivedSize > pCurrentFrame->TotalSize)
 		{
 			netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);

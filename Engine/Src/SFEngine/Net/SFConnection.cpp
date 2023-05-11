@@ -78,6 +78,18 @@ namespace SF {
 			return ResultCode::INVALID_STATE;
 		}
 
+        Result MessageEndpointConnection::SendMessage(const MessageHeader* messageData)
+        {
+            auto pConnection = m_pConnection.AsSharedPtr<Connection>();
+            if (pConnection != nullptr)
+            {
+                // FIXME: fix send
+                return pConnection->Send(MessageData::NewMessage(GetSystemHeap(), messageData));
+            }
+
+            return ResultCode::INVALID_STATE;
+        }
+
 
 
 		////////////////////////////////////////////////////////////////////////////////
@@ -567,7 +579,7 @@ namespace SF {
 
 		Result Connection::OnRecv(MessageHeader* pMsgHeader)
 		{
-			ScopeContext hr;
+		    Result hr;
 
 			if (pMsgHeader == nullptr)
 				return hr;

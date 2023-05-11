@@ -79,6 +79,19 @@ namespace SF
 			}; // Result LoginCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t LoginCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameID)
+					+ SerializedSizeOf(InID)
+					+ SerializedSizeOf(InPassword)
+				);
+
+				return __uiMessageSize;
+			}; // size_t LoginCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
+
+
 			MessageData* LoginCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InID, const char* InPassword )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -179,6 +192,22 @@ namespace SF
 				return hr;
 
 			}; // Result LoginRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t LoginRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InGameServerPublicAddress)
+					+ SerializedSizeOf(InAccID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InLoginEntityUID)
+					+ SerializedSizeOf(InErrorReason)
+				);
+
+				return __uiMessageSize;
+			}; // size_t LoginRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 
 			MessageData* LoginRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
@@ -289,6 +318,21 @@ namespace SF
 			}; // Result LoginByFacebookCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t LoginByFacebookCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameID)
+					+ SerializedSizeOf(InUID)
+					+ SerializedSizeOf(InFaceBookName)
+					+ SerializedSizeOf(InEMail)
+					+ SerializedSizeOf(InFacebookToken)
+				);
+
+				return __uiMessageSize;
+			}; // size_t LoginByFacebookCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
+
+
 			MessageData* LoginByFacebookCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InUID, const char* InFaceBookName, const char* InEMail, const char* InFacebookToken )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -393,6 +437,22 @@ namespace SF
 				return hr;
 
 			}; // Result LoginByFacebookRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t LoginByFacebookRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InGameServerPublicAddress)
+					+ SerializedSizeOf(InAccID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InLoginEntityUID)
+					+ SerializedSizeOf(InErrorReason)
+				);
+
+				return __uiMessageSize;
+			}; // size_t LoginByFacebookRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 
 
 			MessageData* LoginByFacebookRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
@@ -500,6 +560,20 @@ namespace SF
 			}; // Result LoginBySteamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t LoginBySteamCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameID)
+					+ SerializedSizeOf(InSteamUserID)
+					+ SerializedSizeOf(InSteamUserName)
+					+ SerializedSizeOf(InSteamUserToken)
+				);
+
+				return __uiMessageSize;
+			}; // size_t LoginBySteamCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
+
+
 			MessageData* LoginBySteamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const uint64_t &InSteamUserID, const char* InSteamUserName, const char* InSteamUserToken )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -604,6 +678,22 @@ namespace SF
 			}; // Result LoginBySteamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t LoginBySteamRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InGameServerPublicAddress)
+					+ SerializedSizeOf(InAccID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InLoginEntityUID)
+					+ SerializedSizeOf(InErrorReason)
+				);
+
+				return __uiMessageSize;
+			}; // size_t LoginBySteamRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
+
+
 			MessageData* LoginBySteamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID, const char* InErrorReason )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -704,6 +794,18 @@ namespace SF
 			}; // Result CreateRandomUserCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t CreateRandomUserCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InGameID)
+					+ SerializedSizeOf(InCellPhone)
+				);
+
+				return __uiMessageSize;
+			}; // size_t CreateRandomUserCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
+
+
 			MessageData* CreateRandomUserCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InGameID, const char* InCellPhone )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -799,6 +901,21 @@ namespace SF
 				return hr;
 
 			}; // Result CreateRandomUserRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t CreateRandomUserRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InGameServerPublicAddress)
+					+ SerializedSizeOf(InAccID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InLoginEntityUID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t CreateRandomUserRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
 
 
 			MessageData* CreateRandomUserRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InGameServerPublicAddress, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID )
@@ -900,6 +1017,19 @@ namespace SF
 			}; // Result UpdateMyScoreCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t UpdateMyScoreCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InRankingScore)
+					+ SerializedSizeOf(InRankingType)
+					+ SerializedSizeOf(InCount)
+				);
+
+				return __uiMessageSize;
+			}; // size_t UpdateMyScoreCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
+
+
 			MessageData* UpdateMyScoreCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InRankingScore, const RankingType &InRankingType, const uint16_t &InCount )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -995,6 +1125,18 @@ namespace SF
 			}; // Result UpdateMyScoreRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t UpdateMyScoreRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InRanking)
+				);
+
+				return __uiMessageSize;
+			}; // size_t UpdateMyScoreRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+
+
 			MessageData* UpdateMyScoreRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1086,6 +1228,19 @@ namespace SF
 				return hr;
 
 			}; // Result GetRankingListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t GetRankingListCmd::CalculateMessageSize( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InRankingType)
+					+ SerializedSizeOf(InBaseRanking)
+					+ SerializedSizeOf(InCount)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetRankingListCmd::CalculateMessageSize( const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
 
 
 			MessageData* GetRankingListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const RankingType &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount )
@@ -1183,6 +1338,18 @@ namespace SF
 			}; // Result GetRankingListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t GetRankingListRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InRanking)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetRankingListRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
+
+
 			MessageData* GetRankingListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1273,6 +1440,17 @@ namespace SF
 				return hr;
 
 			}; // Result DataTestCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t DataTestCmd::CalculateMessageSize( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTestData)
+				);
+
+				return __uiMessageSize;
+			}; // size_t DataTestCmd::CalculateMessageSize( const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
 
 
 			MessageData* DataTestCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<uint8_t>& InTestData )
@@ -1366,6 +1544,18 @@ namespace SF
 			}; // Result DataTestRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t DataTestRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InTestData)
+				);
+
+				return __uiMessageSize;
+			}; // size_t DataTestRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
+
+
 			MessageData* DataTestRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InTestData )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1447,6 +1637,15 @@ namespace SF
 			}; // Result HeartbeatC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t HeartbeatC2SEvt::CalculateMessageSize(  )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+				);
+
+				return __uiMessageSize;
+			}; // size_t HeartbeatC2SEvt::CalculateMessageSize(  )
+
+
 			MessageData* HeartbeatC2SEvt::Create( IHeap& memHeap )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1524,6 +1723,17 @@ namespace SF
 				return hr;
 
 			}; // Result DebugPrintALLRankingCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t DebugPrintALLRankingCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InFileName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InFileName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t DebugPrintALLRankingCmd::CalculateMessageSize( const uint64_t &InTransactionID, const char* InFileName )
 
 
 			MessageData* DebugPrintALLRankingCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InFileName )
@@ -1610,6 +1820,17 @@ namespace SF
 				return hr;
 
 			}; // Result DebugPrintALLRankingRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t DebugPrintALLRankingRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				return __uiMessageSize;
+			}; // size_t DebugPrintALLRankingRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
 
 
 			MessageData* DebugPrintALLRankingRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )

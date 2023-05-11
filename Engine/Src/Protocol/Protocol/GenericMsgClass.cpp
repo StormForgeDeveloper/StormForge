@@ -73,6 +73,17 @@ namespace SF
 			}; // Result GenericFailureCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t GenericFailureCmd::CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InRouteContext)
+					+ SerializedSizeOf(InTransactionID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GenericFailureCmd::CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID )
+
+
 			MessageData* GenericFailureCmd::Create( IHeap& memHeap, const RouteContext &InRouteContext, const uint64_t &InTransactionID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -159,6 +170,18 @@ namespace SF
 				return hr;
 
 			}; // Result GenericFailureRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t GenericFailureRes::CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InRouteContext)
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GenericFailureRes::CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )
 
 
 			MessageData* GenericFailureRes::Create( IHeap& memHeap, const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult )

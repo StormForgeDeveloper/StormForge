@@ -77,7 +77,7 @@ namespace Net {
 		uint32_t m_RecvBufferSize;
 		uint32_t m_SendBufferSize;
 
-		MemoryPool* m_pGatheringBufferPool;
+		//UniquePtr<MemoryPool> m_pGatheringBufferPool;
 
 		// Network memory manager
 		Heap m_Heap;

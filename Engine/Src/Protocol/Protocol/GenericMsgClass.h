@@ -62,6 +62,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID );
 				static MessageData* Create( IHeap& memHeap, const RouteContext &InRouteContext, const uint64_t &InTransactionID );
 
 			}; // class GenericFailureCmd : public MessageBase
@@ -103,6 +104,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const RouteContext &InRouteContext, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class GenericFailureRes : public MessageBase

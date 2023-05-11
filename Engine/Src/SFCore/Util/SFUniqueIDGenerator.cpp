@@ -74,9 +74,4 @@ namespace SF {
 		m_CounterForID = 0;
 	}
 
-
-
-}; // namespace SF
-
-
-
+} // namespace SF

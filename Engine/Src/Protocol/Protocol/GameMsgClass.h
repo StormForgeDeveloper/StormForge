@@ -60,6 +60,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize(  );
 				static MessageData* Create( IHeap& memHeap );
 
 			}; // class HeartbeatC2SEvt : public MessageBase
@@ -105,6 +106,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InAccID, const AuthTicket &InTicket, const uint64_t &InLoginEntityUID );
 
 			}; // class JoinGameServerCmd : public MessageBase
@@ -155,6 +157,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InNickName, const uint64_t &InGameUID, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const MatchingQueueTicket &InMatchingTicket );
 
 			}; // class JoinGameServerRes : public MessageBase
@@ -194,6 +197,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class GetComplitionStateCmd : public MessageBase
@@ -236,6 +240,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InComplitionState );
 
 			}; // class GetComplitionStateRes : public MessageBase
@@ -277,6 +282,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InComplitionState );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InComplitionState );
 
 			}; // class SetComplitionStateCmd : public MessageBase
@@ -317,6 +323,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class SetComplitionStateRes : public MessageBase
@@ -358,6 +365,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InGCMRegisteredID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID );
 
 			}; // class RegisterGCMCmd : public MessageBase
@@ -398,6 +406,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class RegisterGCMRes : public MessageBase
@@ -439,6 +448,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InGCMRegisteredID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InGCMRegisteredID );
 
 			}; // class UnregisterGCMCmd : public MessageBase
@@ -479,6 +489,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class UnregisterGCMRes : public MessageBase
@@ -520,6 +531,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InFriendID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID );
 
 			}; // class InviteFriendCmd : public MessageBase
@@ -560,6 +572,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class InviteFriendRes : public MessageBase
@@ -603,6 +616,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviterID, const PlayerPlatformID &InInviterPlatformId );
 
 			}; // class AcceptFriendRequestCmd : public MessageBase
@@ -645,6 +659,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const FriendInformation &InNewFriend );
 
 			}; // class AcceptFriendRequestRes : public MessageBase
@@ -685,6 +700,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const FriendInformation &InAccepter );
 				static MessageData* Create( IHeap& memHeap, const FriendInformation &InAccepter );
 
 			}; // class FriendRequestAcceptedS2CEvt : public MessageBase
@@ -726,6 +742,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InFriendID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InFriendID );
 
 			}; // class RemoveFriendCmd : public MessageBase
@@ -768,6 +785,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InFriendID );
 
 			}; // class RemoveFriendRes : public MessageBase
@@ -808,6 +826,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const AccountID &InFriendID );
 				static MessageData* Create( IHeap& memHeap, const AccountID &InFriendID );
 
 			}; // class FriendRemovedS2CEvt : public MessageBase
@@ -851,6 +870,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint16_t &InStartIndex, const uint16_t &InCount );
 
 			}; // class GetFriendListCmd : public MessageBase
@@ -899,6 +919,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint16_t &InMaxFriendSlot, const uint16_t &InTotalNumberOfFriends, const uint16_t &InStartIndex, const Array<FriendInformation>& InFriendList );
 
 			}; // class GetFriendListRes : public MessageBase
@@ -938,6 +959,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class GetNotificationListCmd : public MessageBase
@@ -978,6 +1000,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class GetNotificationListRes : public MessageBase
@@ -1019,6 +1042,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 
 			}; // class DeleteNotificationCmd : public MessageBase
@@ -1061,6 +1085,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 
 			}; // class DeleteNotificationRes : public MessageBase
@@ -1102,6 +1127,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 
 			}; // class SetNotificationReadCmd : public MessageBase
@@ -1144,6 +1170,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 
 			}; // class SetNotificationReadRes : public MessageBase
@@ -1185,6 +1212,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InNotificationID );
 
 			}; // class AcceptNotificationCmd : public MessageBase
@@ -1227,6 +1255,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InNotificationID );
 
 			}; // class AcceptNotificationRes : public MessageBase
@@ -1278,6 +1307,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp );
+				static size_t CalculateMessageSize( const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp );
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const Array<uint8_t>& InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp );
 				static MessageData* Create( IHeap& memHeap, const uint32_t &InNotificationID, const StringCrc32 &InNotificationType, const VariableTable &InParameters, const uint8_t &InIsRead, const uint64_t &InTimeStamp );
 
@@ -1320,6 +1351,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerPlatformID &InPlatformPlayerId );
 
 			}; // class FindPlayerByPlatformIdCmd : public MessageBase
@@ -1364,6 +1396,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
 
 			}; // class FindPlayerByPlatformIdRes : public MessageBase
@@ -1405,6 +1438,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InCharacterName );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName );
 
 			}; // class FindPlayerByCharacterNameCmd : public MessageBase
@@ -1447,6 +1481,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId );
 
 			}; // class FindPlayerByCharacterNameRes : public MessageBase
@@ -1490,6 +1525,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InPlatformType, const char* InPlatformUserName );
 
 			}; // class FindPlayerByPlatformUserNameCmd : public MessageBase
@@ -1534,6 +1570,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerId, const PlayerPlatformID &InPlayerPlatformId );
 
 			}; // class FindPlayerByPlatformUserNameRes : public MessageBase
@@ -1575,6 +1612,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InPlayerEMail );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InPlayerEMail );
 
 			}; // class FindPlayerByEMailCmd : public MessageBase
@@ -1617,6 +1655,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
 
 			}; // class FindPlayerByEMailRes : public MessageBase
@@ -1658,6 +1697,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InPlayerID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID );
 
 			}; // class FindPlayerByPlayerIDCmd : public MessageBase
@@ -1700,6 +1740,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerInformation &InPlayer );
 
 			}; // class FindPlayerByPlayerIDRes : public MessageBase
@@ -1741,6 +1782,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Array<AccountID>& InTargetPlayerID );
 
 			}; // class RequestPlayerStatusUpdateCmd : public MessageBase
@@ -1781,6 +1823,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class RequestPlayerStatusUpdateRes : public MessageBase
@@ -1825,6 +1868,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame );
 				static MessageData* Create( IHeap& memHeap, const AccountID &InPlayerID, const uint32_t &InLatestActiveTime, const uint8_t &InIsInGame );
 
 			}; // class NotifyPlayerStatusUpdatedS2CEvt : public MessageBase
@@ -1870,6 +1914,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InRankingType, const uint8_t &InBaseRanking, const uint8_t &InCount );
 
 			}; // class GetRankingListCmd : public MessageBase
@@ -1912,6 +1957,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<TotalRankingPlayerInformation>& InRanking );
 
 			}; // class GetRankingListRes : public MessageBase
@@ -1951,6 +1997,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class GetUserGamePlayerInfoCmd : public MessageBase
@@ -1996,6 +2043,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InAttributes );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InAttributes );
 
@@ -2038,6 +2087,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InPlayerID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InPlayerID );
 
 			}; // class GetGamePlayerInfoCmd : public MessageBase
@@ -2085,6 +2135,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const Array<uint8_t>& InAttributes );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const AccountID &InPlayerID, const VariableTable &InAttributes );
 
@@ -2128,6 +2180,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InCurrentTotalExp, const uint32_t &InCurrentLevel );
 
 			}; // class LevelUpS2CEvt : public MessageBase
@@ -2171,6 +2224,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InNickName, const uint8_t &InIsCostFree );
 
 			}; // class SetNickNameCmd : public MessageBase
@@ -2215,6 +2269,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 
 			}; // class SetNickNameRes : public MessageBase
@@ -2254,6 +2309,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class CreatePartyCmd : public MessageBase
@@ -2296,6 +2352,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID );
 
 			}; // class CreatePartyRes : public MessageBase
@@ -2339,6 +2396,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InInviterID );
 
 			}; // class JoinPartyCmd : public MessageBase
@@ -2385,6 +2443,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPartyUID, const AccountID &InPartyLeaderID, const Array<uint8_t>& InChatHistoryData );
 
 			}; // class JoinPartyRes : public MessageBase
@@ -2427,6 +2486,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InPartyUID, const PlayerInformation &InJoinedPlayer );
 
 			}; // class PartyPlayerJoinedS2CEvt : public MessageBase
@@ -2469,6 +2529,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InPartyUID, const AccountID &InNewLeaderID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InNewLeaderID );
 
 			}; // class PartyLeaderChangedS2CEvt : public MessageBase
@@ -2512,6 +2573,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID );
 
 			}; // class LeavePartyCmd : public MessageBase
@@ -2552,6 +2614,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class LeavePartyRes : public MessageBase
@@ -2594,6 +2657,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InPartyUID, const AccountID &InLeftPlayerID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InLeftPlayerID );
 
 			}; // class PartyPlayerLeftS2CEvt : public MessageBase
@@ -2639,6 +2703,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPartyUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 
 			}; // class PartyKickPlayerCmd : public MessageBase
@@ -2679,6 +2744,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class PartyKickPlayerRes : public MessageBase
@@ -2721,6 +2787,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InPartyUID, const AccountID &InKickedPlayerID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InPartyUID, const AccountID &InKickedPlayerID );
 
 			}; // class PartyPlayerKickedS2CEvt : public MessageBase
@@ -2762,6 +2829,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const AccountID &InInviteTargetID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const AccountID &InInviteTargetID );
 
 			}; // class PartyInviteCmd : public MessageBase
@@ -2802,6 +2870,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class PartyInviteRes : public MessageBase
@@ -2846,6 +2915,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID );
 				static MessageData* Create( IHeap& memHeap, const AccountID &InInviterID, const char* InInviterName, const uint64_t &InPartyToJoinUID );
 
 			}; // class PartyInviteRequestedS2CEvt : public MessageBase
@@ -2887,6 +2957,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InQuickChatID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InQuickChatID );
 
 			}; // class PartyQuickChatMessageCmd : public MessageBase
@@ -2927,6 +2998,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class PartyQuickChatMessageRes : public MessageBase
@@ -2969,6 +3041,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const AccountID &InSenderID, const uint32_t &InQuickChatID );
 				static MessageData* Create( IHeap& memHeap, const AccountID &InSenderID, const uint32_t &InQuickChatID );
 
 			}; // class PartyQuickChatMessageS2CEvt : public MessageBase
@@ -3010,6 +3083,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChatMessage );
 
 			}; // class PartyChatMessageCmd : public MessageBase
@@ -3050,6 +3124,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class PartyChatMessageRes : public MessageBase
@@ -3094,6 +3169,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const AccountID &InSenderID, const char* InSenderName, const char* InChatMessage );
 
 			}; // class PartyChatMessageS2CEvt : public MessageBase
@@ -3135,6 +3211,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InInsUID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InInsUID );
 
 			}; // class JoinGameInstanceCmd : public MessageBase
@@ -3179,6 +3256,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InInsUID, const char* InServerPublicAddress );
 
 			}; // class JoinGameInstanceRes : public MessageBase
@@ -3220,6 +3298,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InInsUID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InInsUID );
 
 			}; // class LeaveGameInstanceCmd : public MessageBase
@@ -3260,6 +3339,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class LeaveGameInstanceRes : public MessageBase
@@ -3303,6 +3383,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InSearchKeyword, const uint32_t &InZoneTableID );
 
 			}; // class SearchGameInstanceCmd : public MessageBase
@@ -3345,6 +3426,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InGameInstances );
 
 			}; // class SearchGameInstanceRes : public MessageBase
@@ -3388,6 +3470,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InGameInsUID, const PlayerID &InPlayerID );
 
 			}; // class GetCharacterDataInGameInstanceCmd : public MessageBase
@@ -3435,6 +3518,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const Array<uint8_t>& InGameInstances );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const Array<uint8_t>& InGameInstances );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const PlayerID &InPlayerID, const VariableTable &InGameInstances );
 
@@ -3479,6 +3564,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint8_t &InNumPlayer, const uint8_t &InRequestRole );
 
 			}; // class RequestGameMatchCmd : public MessageBase
@@ -3523,6 +3609,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 
 			}; // class RequestGameMatchRes : public MessageBase
@@ -3589,6 +3676,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InInsUID, const uint32_t &InTimeStamp, const uint8_t &InGameState, const uint8_t &InDay, const uint8_t &InMaxPlayer, const uint8_t &InPlayerIndex, const uint8_t &InPlayerCharacter, const uint8_t &InRole, const uint8_t &InDead, const Array<uint8_t>& InChatHistoryData, const Array<uint8_t>& InGameLogData, const uint32_t &InStamina, const uint64_t &InTotalGem, const uint64_t &InTotalGameMoney );
 
 			}; // class GameMatchedS2CEvt : public MessageBase
@@ -3629,6 +3717,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const Result &InFailedReason );
 				static MessageData* Create( IHeap& memHeap, const Result &InFailedReason );
 
 			}; // class GameMatchFailedS2CEvt : public MessageBase
@@ -3667,6 +3756,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize(  );
 				static MessageData* Create( IHeap& memHeap );
 
 			}; // class GameMatchingStartedS2CEvt : public MessageBase
@@ -3706,6 +3796,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class CancelGameMatchCmd : public MessageBase
@@ -3746,6 +3837,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class CancelGameMatchRes : public MessageBase
@@ -3784,6 +3876,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize(  );
 				static MessageData* Create( IHeap& memHeap );
 
 			}; // class GameMatchingCanceledS2CEvt : public MessageBase
@@ -3825,6 +3918,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InShopItemID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID );
 
 			}; // class BuyShopItemPrepareCmd : public MessageBase
@@ -3869,6 +3963,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID, const char* InPurchaseID );
 
 			}; // class BuyShopItemPrepareRes : public MessageBase
@@ -3918,6 +4013,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InShopItemID, const char* InPlatform, const char* InPackageName, const char* InPurchaseTransactionID, const Array<uint8_t>& InPurchaseToken );
 
 			}; // class BuyShopItemCmd : public MessageBase
@@ -3960,6 +4056,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InShopItemID );
 
 			}; // class BuyShopItemRes : public MessageBase
@@ -4003,6 +4100,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InChannelName, const char* InPasscode );
 
 			}; // class CreateOrJoinChatChannelCmd : public MessageBase
@@ -4047,6 +4145,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
 
 			}; // class CreateOrJoinChatChannelRes : public MessageBase
@@ -4092,6 +4191,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InInviterID, const char* InPasscode );
 
 			}; // class JoinChatChannelCmd : public MessageBase
@@ -4136,6 +4236,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InChatUID, const PlayerID &InChannelLeaderID );
 
 			}; // class JoinChatChannelRes : public MessageBase
@@ -4178,6 +4279,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InChatUID, const PlayerInformation &InJoinedPlayer );
 
 			}; // class ChatChannelPlayerJoinedS2CEvt : public MessageBase
@@ -4220,6 +4322,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InChatUID, const AccountID &InNewLeaderID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InNewLeaderID );
 
 			}; // class ChatChannelLeaderChangedS2CEvt : public MessageBase
@@ -4263,6 +4366,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID );
 
 			}; // class LeaveChatChannelCmd : public MessageBase
@@ -4303,6 +4407,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class LeaveChatChannelRes : public MessageBase
@@ -4345,6 +4450,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InChatUID, const AccountID &InLeftPlayerID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InLeftPlayerID );
 
 			}; // class ChatChannelPlayerLeftS2CEvt : public MessageBase
@@ -4390,6 +4496,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const AccountID &InPlayerID, const AccountID &InPlayerToKick );
 
 			}; // class ChatChannelKickPlayerCmd : public MessageBase
@@ -4430,6 +4537,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class ChatChannelKickPlayerRes : public MessageBase
@@ -4472,6 +4580,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InChatUID, const AccountID &InKickedPlayerID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InChatUID, const AccountID &InKickedPlayerID );
 
 			}; // class ChatChannelPlayerKickedS2CEvt : public MessageBase
@@ -4520,6 +4629,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InChatUID, const VariableTable &InChatMetaData, const char* InChatMessage );
 
@@ -4561,6 +4672,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class ChatChannelChatMessageRes : public MessageBase
@@ -4608,6 +4720,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
+				static size_t CalculateMessageSize( const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
 
@@ -4659,6 +4773,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const PlayerID &InReceiverID, const char* InReceiverName, const VariableTable &InChatMetaData, const char* InChatMessage );
 
@@ -4700,6 +4816,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class WhisperMessageRes : public MessageBase
@@ -4747,6 +4864,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
+				static size_t CalculateMessageSize( const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const PlayerID &InSenderID, const Array<uint8_t>& InChatMetaData, const char* InChatMessage );
 				static MessageData* Create( IHeap& memHeap, const PlayerID &InSenderID, const VariableTable &InChatMetaData, const char* InChatMessage );
 
@@ -4799,6 +4918,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InPrivateData );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const char* InCharacterName, const VariableTable &InPublicData, const VariableTable &InPrivateData );
 
@@ -4842,6 +4963,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID );
 
 			}; // class CreateCharacterRes : public MessageBase
@@ -4883,6 +5005,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 
 			}; // class DeleteCharacterCmd : public MessageBase
@@ -4923,6 +5046,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class DeleteCharacterRes : public MessageBase
@@ -4962,6 +5086,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class GetCharacterListCmd : public MessageBase
@@ -5004,6 +5129,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<VariableTable>& InCharacters );
 
 			}; // class GetCharacterListRes : public MessageBase
@@ -5045,6 +5171,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 
 			}; // class GetCharacterDataCmd : public MessageBase
@@ -5095,6 +5222,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InPrivateData, const Array<uint8_t>& InEquipData );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InPrivateData, const Array<uint8_t>& InEquipData );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InPrivateData, const VariableTable &InEquipData );
 
@@ -5137,6 +5266,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint32_t &InCharacterID );
 
 			}; // class SelectCharacterCmd : public MessageBase
@@ -5184,6 +5314,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const Array<uint8_t>& InAttributes );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const Array<uint8_t>& InAttributes );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint32_t &InCharacterID, const VariableTable &InAttributes );
 
@@ -5224,6 +5356,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID );
 
 			}; // class RequestServerNoticeUpdateCmd : public MessageBase
@@ -5264,6 +5397,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult );
 
 			}; // class RequestServerNoticeUpdateRes : public MessageBase
@@ -5306,6 +5440,7 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const int8_t &InNoticeCategory, const char* InServerNoticeMessage );
 				static MessageData* Create( IHeap& memHeap, const int8_t &InNoticeCategory, const char* InServerNoticeMessage );
 
 			}; // class ServerNoticeS2CEvt : public MessageBase
@@ -5352,6 +5487,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const Array<uint8_t>& InParameters );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const VariableTable &InParameters );
 
@@ -5398,6 +5535,8 @@ namespace SF
 				static Result ParseMessageTo(const MessageHeader* pHeader, IVariableMapBuilder& variableBuilder );
 				static Result ParseMessageToMessageBase(IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMsgBase);
 
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults );
+				static size_t CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults );
 				static MessageData* Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults );
 

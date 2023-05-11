@@ -33,10 +33,11 @@ namespace SF {
 	//	Memory Pool
 	//
 
-
 	class MemoryPool : public IHeap
 	{
 	public:
+
+        using super = IHeap;
 
 		static constexpr int32_t  POOL_ITEM_MIN = 8;
 		static constexpr int32_t  POOL_ITEM_MAX = 512;
@@ -50,11 +51,6 @@ namespace SF {
 		struct MemoryPoolItem
 		{
 			StackPool::Item StackItem;
-
-			MemoryPoolItem()
-			{
-				memset(this, 0, sizeof(MemoryPoolItem));
-			}
 		};
 
 
@@ -75,12 +71,8 @@ namespace SF {
 
 	private:
 
-		// Get memory pool item pointer from data pointer
-		MemoryPoolItem* DataPtrToMemoryPoolItem(void* pPtr) { return (MemoryPoolItem*)((uint8_t*)pPtr + m_AllocSize); }
-		void* MemoryPoolItemToDataPtr(MemoryPoolItem* pPtr) { return ((uint8_t*)pPtr - m_AllocSize); }
-
-		//virtual MemBlockHdr* AllocInternal(size_t size, size_t alignment) override;
-		//virtual MemBlockHdr* ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment) override;
+        virtual MemBlockHdr* AllocInternal(size_t size, size_t alignment = SF_ALIGN_DOUBLE) override;
+		virtual MemBlockHdr* ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment) override;
 		virtual void FreeInternal(MemBlockHdr* ptr) override;
 
 		StackPool& PickFreeList()

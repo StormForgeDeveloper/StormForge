@@ -594,6 +594,9 @@ namespace SF {
 			// Invalid type 
 			constexpr Result 			INVALID_TYPE                                                       ((int32_t)0xE70100BFL);
 
+			// Maximum packet 
+			constexpr Result 			MAX_PACKET                                                         ((int32_t)0xE70100C0L);
+
 	void InitializeResultCodeSF();
 
 	}//namespace ResultCode 

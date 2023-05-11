@@ -78,6 +78,19 @@ namespace SF
 			}; // Result JoinPlayInstanceCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t JoinPlayInstanceCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InPlayerIdentifier)
+				);
+
+				return __uiMessageSize;
+			}; // size_t JoinPlayInstanceCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
+
+
 			MessageData* JoinPlayInstanceCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const char* InPlayerIdentifier )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -190,6 +203,39 @@ namespace SF
 
 			}; // Result JoinPlayInstanceRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t JoinPlayInstanceRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement )
+			{
+ 				uint16_t serializedSizeOfInCharacterPrivateData = static_cast<uint16_t>(SerializedSizeOf(InCharacterPrivateData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InCharacterID)
+					+ serializedSizeOfInCharacterPrivateData
+					+ SerializedSizeOf(InMovement)
+				);
+
+				return __uiMessageSize;
+			}; // size_t JoinPlayInstanceRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement )
+
+			size_t JoinPlayInstanceRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement )
+			{
+ 				uint16_t serializedSizeOfInCharacterPrivateData = static_cast<uint16_t>(SerializedSizeOf(InCharacterPrivateData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InCharacterID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInCharacterPrivateData
+					+ SerializedSizeOf(InMovement)
+				);
+
+				return __uiMessageSize;
+			}; // size_t JoinPlayInstanceRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const VariableTable &InCharacterPrivateData, const ActorMovement &InMovement )
+
 			MessageData* JoinPlayInstanceRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const CharacterID &InCharacterID, const Array<uint8_t>& InCharacterPrivateData, const ActorMovement &InMovement )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -203,16 +249,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInCharacterPrivateData = static_cast<uint16_t>(SerializedSizeOf(InCharacterPrivateData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InPlayerID)
-					+ SerializedSizeOf(InCharacterID)
-					+ serializedSizeOfInCharacterPrivateData
-					+ SerializedSizeOf(InMovement)
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InCharacterID, InCharacterPrivateData, InMovement);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::JoinPlayInstanceRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -331,6 +368,17 @@ namespace SF
 			}; // Result PlayerKickedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t PlayerKickedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InKickedPlayerID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t PlayerKickedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
+
+
 			MessageData* PlayerKickedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InKickedPlayerID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -423,6 +471,19 @@ namespace SF
 				return hr;
 
 			}; // Result PlayPacketC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t PlayPacketC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InSenderEndpointID)
+					+ SerializedSizeOf(InTargetEndpointMask)
+					+ SerializedSizeOf(InPayload)
+				);
+
+				return __uiMessageSize;
+			}; // size_t PlayPacketC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
 
 
 			MessageData* PlayPacketC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const uint32_t &InSenderEndpointID, const uint32_t &InTargetEndpointMask, const Array<uint8_t>& InPayload )
@@ -566,6 +627,47 @@ namespace SF
 
 			}; // Result NewActorInViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t NewActorInViewS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues )
+			{
+ 				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
+				uint16_t serializedSizeOfInEquipData = static_cast<uint16_t>(SerializedSizeOf(InEquipData)); 
+				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InPlayerPlatformId)
+					+ serializedSizeOfInPublicData
+					+ serializedSizeOfInEquipData
+					+ SerializedSizeOf(InMovement)
+					+ SerializedSizeOf(InState)
+					+ serializedSizeOfInStateValues
+				);
+
+				return __uiMessageSize;
+			}; // size_t NewActorInViewS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues )
+
+			size_t NewActorInViewS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const VariableTable &InPublicData, const VariableTable &InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
+			{
+ 				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
+				uint16_t serializedSizeOfInEquipData = static_cast<uint16_t>(SerializedSizeOf(InEquipData)); 
+				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InPlayerPlatformId)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInPublicData
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInEquipData
+					+ SerializedSizeOf(InMovement)
+					+ SerializedSizeOf(InState)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInStateValues
+				);
+
+				return __uiMessageSize;
+			}; // size_t NewActorInViewS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const VariableTable &InPublicData, const VariableTable &InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const VariableTable &InStateValues )
+
 			MessageData* NewActorInViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const PlayerPlatformID &InPlayerPlatformId, const Array<uint8_t>& InPublicData, const Array<uint8_t>& InEquipData, const ActorMovement &InMovement, const StringCrc32 &InState, const Array<uint8_t>& InStateValues )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -579,19 +681,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInPublicData = static_cast<uint16_t>(SerializedSizeOf(InPublicData)); 
-				uint16_t serializedSizeOfInEquipData = static_cast<uint16_t>(SerializedSizeOf(InEquipData)); 
-				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InPlayerID)
-					+ SerializedSizeOf(InPlayerPlatformId)
-					+ serializedSizeOfInPublicData
-					+ serializedSizeOfInEquipData
-					+ SerializedSizeOf(InMovement)
-					+ SerializedSizeOf(InState)
-					+ serializedSizeOfInStateValues
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InPlayerPlatformId, InPublicData, InEquipData, InMovement, InState, InStateValues);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::NewActorInViewS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -719,6 +809,17 @@ namespace SF
 			}; // Result RemoveActorFromViewS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t RemoveActorFromViewS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const uint32_t &InActorID )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InActorID)
+				);
+
+				return __uiMessageSize;
+			}; // size_t RemoveActorFromViewS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const uint32_t &InActorID )
+
+
 			MessageData* RemoveActorFromViewS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const uint32_t &InActorID )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -806,6 +907,18 @@ namespace SF
 				return hr;
 
 			}; // Result PlayerMovementC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t PlayerMovementC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMovement)
+				);
+
+				return __uiMessageSize;
+			}; // size_t PlayerMovementC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
 
 
 			MessageData* PlayerMovementC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const ActorMovement &InMovement )
@@ -897,6 +1010,17 @@ namespace SF
 			}; // Result ActorMovementS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t ActorMovementS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InMovement)
+				);
+
+				return __uiMessageSize;
+			}; // size_t ActorMovementS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement )
+
+
 			MessageData* ActorMovementS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const ActorMovement &InMovement )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -985,6 +1109,17 @@ namespace SF
 				return hr;
 
 			}; // Result ActorMovementsS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t ActorMovementsS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InMovement)
+				);
+
+				return __uiMessageSize;
+			}; // size_t ActorMovementsS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement )
 
 
 			MessageData* ActorMovementsS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const Array<ActorMovement>& InMovement )
@@ -1094,6 +1229,37 @@ namespace SF
 
 			}; // Result PlayerStateChangedS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t PlayerStateChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const Array<uint8_t>& InStateValues )
+			{
+ 				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InState)
+					+ SerializedSizeOf(InMoveFrame)
+					+ SerializedSizeOf(InPosition)
+					+ serializedSizeOfInStateValues
+				);
+
+				return __uiMessageSize;
+			}; // size_t PlayerStateChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const Array<uint8_t>& InStateValues )
+
+			size_t PlayerStateChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const VariableTable &InStateValues )
+			{
+ 				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InState)
+					+ SerializedSizeOf(InMoveFrame)
+					+ SerializedSizeOf(InPosition)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInStateValues
+				);
+
+				return __uiMessageSize;
+			}; // size_t PlayerStateChangedS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const VariableTable &InStateValues )
+
 			MessageData* PlayerStateChangedS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InState, const uint32_t &InMoveFrame, const Vector4 &InPosition, const Array<uint8_t>& InStateValues )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1107,15 +1273,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInStateValues = static_cast<uint16_t>(SerializedSizeOf(InStateValues)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InPlayerID)
-					+ SerializedSizeOf(InState)
-					+ SerializedSizeOf(InMoveFrame)
-					+ SerializedSizeOf(InPosition)
-					+ serializedSizeOfInStateValues
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InState, InMoveFrame, InPosition, InStateValues);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::PlayerStateChangedS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -1245,6 +1403,31 @@ namespace SF
 
 			}; // Result ClientSyncReliableC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t ClientSyncReliableC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
+			{
+ 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInSyncData
+				);
+
+				return __uiMessageSize;
+			}; // size_t ClientSyncReliableC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
+
+			size_t ClientSyncReliableC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
+			{
+ 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInSyncData
+				);
+
+				return __uiMessageSize;
+			}; // size_t ClientSyncReliableC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
+
 			MessageData* ClientSyncReliableC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1258,12 +1441,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InPlayerID)
-					+ serializedSizeOfInSyncData
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InSyncData);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncReliableC2SEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -1384,6 +1562,31 @@ namespace SF
 
 			}; // Result ClientSyncC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t ClientSyncC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
+			{
+ 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInSyncData
+				);
+
+				return __uiMessageSize;
+			}; // size_t ClientSyncC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
+
+			size_t ClientSyncC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
+			{
+ 				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInSyncData
+				);
+
+				return __uiMessageSize;
+			}; // size_t ClientSyncC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const VariableTable &InSyncData )
+
 			MessageData* ClientSyncC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InSyncData )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1397,12 +1600,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInSyncData = static_cast<uint16_t>(SerializedSizeOf(InSyncData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InPlayerID)
-					+ serializedSizeOfInSyncData
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InPlayerID, InSyncData);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ClientSyncC2SEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -1515,6 +1713,20 @@ namespace SF
 			}; // Result OccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t OccupyMapObjectCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMapObjectId)
+					+ SerializedSizeOf(InUsageId)
+				);
+
+				return __uiMessageSize;
+			}; // size_t OccupyMapObjectCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
+
+
 			MessageData* OccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId, const uint32_t &InUsageId )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1611,6 +1823,20 @@ namespace SF
 				return hr;
 
 			}; // Result OccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t OccupyMapObjectRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMapObjectId)
+				);
+
+				return __uiMessageSize;
+			}; // size_t OccupyMapObjectRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 
 
 			MessageData* OccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
@@ -1710,6 +1936,19 @@ namespace SF
 			}; // Result UnoccupyMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t UnoccupyMapObjectCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMapObjectId)
+				);
+
+				return __uiMessageSize;
+			}; // size_t UnoccupyMapObjectCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+
+
 			MessageData* UnoccupyMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1804,6 +2043,20 @@ namespace SF
 				return hr;
 
 			}; // Result UnoccupyMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t UnoccupyMapObjectRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMapObjectId)
+				);
+
+				return __uiMessageSize;
+			}; // size_t UnoccupyMapObjectRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
 
 
 			MessageData* UnoccupyMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const uint32_t &InMapObjectId )
@@ -1917,6 +2170,35 @@ namespace SF
 
 			}; // Result UseMapObjectCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t UseMapObjectCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters )
+			{
+ 				uint16_t serializedSizeOfInUseParameters = static_cast<uint16_t>(SerializedSizeOf(InUseParameters)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMapObjectId)
+					+ serializedSizeOfInUseParameters
+				);
+
+				return __uiMessageSize;
+			}; // size_t UseMapObjectCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters )
+
+			size_t UseMapObjectCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
+			{
+ 				uint16_t serializedSizeOfInUseParameters = static_cast<uint16_t>(SerializedSizeOf(InUseParameters)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMapObjectId)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInUseParameters
+				);
+
+				return __uiMessageSize;
+			}; // size_t UseMapObjectCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InUseParameters )
+
 			MessageData* UseMapObjectCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InUseParameters )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -1930,14 +2212,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInUseParameters = static_cast<uint16_t>(SerializedSizeOf(InUseParameters)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InPlayerID)
-					+ SerializedSizeOf(InMapObjectId)
-					+ serializedSizeOfInUseParameters
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InMapObjectId, InUseParameters);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UseMapObjectCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -2069,6 +2344,37 @@ namespace SF
 
 			}; // Result UseMapObjectRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t UseMapObjectRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InResultAttributes )
+			{
+ 				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMapObjectId)
+					+ serializedSizeOfInResultAttributes
+				);
+
+				return __uiMessageSize;
+			}; // size_t UseMapObjectRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InResultAttributes )
+
+			size_t UseMapObjectRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
+			{
+ 				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMapObjectId)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInResultAttributes
+				);
+
+				return __uiMessageSize;
+			}; // size_t UseMapObjectRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const VariableTable &InResultAttributes )
+
 			MessageData* UseMapObjectRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const StringCrc32 &InMapObjectId, const Array<uint8_t>& InResultAttributes )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2082,15 +2388,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInResultAttributes = static_cast<uint16_t>(SerializedSizeOf(InResultAttributes)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InPlayerID)
-					+ SerializedSizeOf(InMapObjectId)
-					+ serializedSizeOfInResultAttributes
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InPlayInstanceUID, InPlayerID, InMapObjectId, InResultAttributes);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::UseMapObjectRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -2227,6 +2525,37 @@ namespace SF
 
 			}; // Result ZoneChatCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t ZoneChatCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			{
+ 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMessageType)
+					+ serializedSizeOfInChatMetaData
+					+ SerializedSizeOf(InChatMessage)
+				);
+
+				return __uiMessageSize;
+			}; // size_t ZoneChatCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+
+			size_t ZoneChatCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
+			{
+ 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InMessageType)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInChatMetaData
+					+ SerializedSizeOf(InChatMessage)
+				);
+
+				return __uiMessageSize;
+			}; // size_t ZoneChatCmd::CalculateMessageSize( const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
+
 			MessageData* ZoneChatCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2240,15 +2569,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InPlayerID)
-					+ SerializedSizeOf(InMessageType)
-					+ serializedSizeOfInChatMetaData
-					+ SerializedSizeOf(InChatMessage)
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InPlayInstanceUID, InPlayerID, InMessageType, InChatMetaData, InChatMessage);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -2363,6 +2684,17 @@ namespace SF
 			}; // Result ZoneChatRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t ZoneChatRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+				);
+
+				return __uiMessageSize;
+			}; // size_t ZoneChatRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult )
+
+
 			MessageData* ZoneChatRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2469,6 +2801,35 @@ namespace SF
 
 			}; // Result ZoneChatS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t ZoneChatS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+			{
+ 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InSenderID)
+					+ SerializedSizeOf(InMessageType)
+					+ serializedSizeOfInChatMetaData
+					+ SerializedSizeOf(InChatMessage)
+				);
+
+				return __uiMessageSize;
+			}; // size_t ZoneChatS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
+
+			size_t ZoneChatS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
+			{
+ 				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InSenderID)
+					+ SerializedSizeOf(InMessageType)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInChatMetaData
+					+ SerializedSizeOf(InChatMessage)
+				);
+
+				return __uiMessageSize;
+			}; // size_t ZoneChatS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const VariableTable &InChatMetaData, const char* InChatMessage )
+
 			MessageData* ZoneChatS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InSenderID, const int8_t &InMessageType, const Array<uint8_t>& InChatMetaData, const char* InChatMessage )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2482,14 +2843,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInChatMetaData = static_cast<uint16_t>(SerializedSizeOf(InChatMetaData)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InPlayInstanceUID)
-					+ SerializedSizeOf(InSenderID)
-					+ SerializedSizeOf(InMessageType)
-					+ serializedSizeOfInChatMetaData
-					+ SerializedSizeOf(InChatMessage)
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InPlayInstanceUID, InSenderID, InMessageType, InChatMetaData, InChatMessage);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::ZoneChatS2CEvt::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -2606,6 +2960,19 @@ namespace SF
 			}; // Result LevelUpS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t LevelUpS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InCurrentExp)
+					+ SerializedSizeOf(InCurrentLevel)
+				);
+
+				return __uiMessageSize;
+			}; // size_t LevelUpS2CEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel )
+
+
 			MessageData* LevelUpS2CEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const int64_t &InCurrentExp, const int32_t &InCurrentLevel )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2700,6 +3067,18 @@ namespace SF
 			}; // Result CreateStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t CreateStreamCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t CreateStreamCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+
+
 			MessageData* CreateStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2789,6 +3168,18 @@ namespace SF
 				return hr;
 
 			}; // Result CreateStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t CreateStreamRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t CreateStreamRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
 
 
 			MessageData* CreateStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
@@ -2883,6 +3274,18 @@ namespace SF
 			}; // Result FindStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t FindStreamCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t FindStreamCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+
+
 			MessageData* FindStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -2972,6 +3375,18 @@ namespace SF
 				return hr;
 
 			}; // Result FindStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t FindStreamRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t FindStreamRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
 
 
 			MessageData* FindStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
@@ -3066,6 +3481,18 @@ namespace SF
 			}; // Result DeleteStreamCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t DeleteStreamCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t DeleteStreamCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
+
+
 			MessageData* DeleteStreamCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket, const char* InStreamName )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3157,6 +3584,18 @@ namespace SF
 			}; // Result DeleteStreamRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t DeleteStreamRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamName)
+				);
+
+				return __uiMessageSize;
+			}; // size_t DeleteStreamRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
+
+
 			MessageData* DeleteStreamRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const char* InStreamName )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3246,6 +3685,17 @@ namespace SF
 			}; // Result GetStreamListCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t GetStreamListCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InTicket)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetStreamListCmd::CalculateMessageSize( const uint64_t &InTransactionID, const AuthTicket &InTicket )
+
+
 			MessageData* GetStreamListCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const AuthTicket &InTicket )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3332,6 +3782,18 @@ namespace SF
 				return hr;
 
 			}; // Result GetStreamListRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t GetStreamListRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ SerializedSizeOf(InStreamNames)
+				);
+
+				return __uiMessageSize;
+			}; // size_t GetStreamListRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
 
 
 			MessageData* GetStreamListRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<const char*>& InStreamNames )
@@ -3439,6 +3901,33 @@ namespace SF
 
 			}; // Result CallFunctionCmd::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t CallFunctionCmd::CalculateMessageSize( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters )
+			{
+ 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InFunctionName)
+					+ SerializedSizeOf(InPlayerID)
+					+ serializedSizeOfInParameters
+				);
+
+				return __uiMessageSize;
+			}; // size_t CallFunctionCmd::CalculateMessageSize( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters )
+
+			size_t CallFunctionCmd::CalculateMessageSize( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
+			{
+ 				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InFunctionName)
+					+ SerializedSizeOf(InPlayerID)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInParameters
+				);
+
+				return __uiMessageSize;
+			}; // size_t CallFunctionCmd::CalculateMessageSize( const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const VariableTable &InParameters )
+
 			MessageData* CallFunctionCmd::Create( IHeap& memHeap, const uint64_t &InTransactionID, const StringCrc32 &InFunctionName, const PlayerID &InPlayerID, const Array<uint8_t>& InParameters )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3452,13 +3941,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInParameters = static_cast<uint16_t>(SerializedSizeOf(InParameters)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InFunctionName)
-					+ SerializedSizeOf(InPlayerID)
-					+ serializedSizeOfInParameters
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InFunctionName, InPlayerID, InParameters);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CallFunctionCmd::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -3581,6 +4064,31 @@ namespace SF
 
 			}; // Result CallFunctionRes::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
+			size_t CallFunctionRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults )
+			{
+ 				uint16_t serializedSizeOfInResults = static_cast<uint16_t>(SerializedSizeOf(InResults)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ serializedSizeOfInResults
+				);
+
+				return __uiMessageSize;
+			}; // size_t CallFunctionRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults )
+
+			size_t CallFunctionRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
+			{
+ 				uint16_t serializedSizeOfInResults = static_cast<uint16_t>(SerializedSizeOf(InResults)); 
+				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InTransactionID)
+					+ SerializedSizeOf(InResult)
+					+ sizeof(uint16_t)
+					+ serializedSizeOfInResults
+				);
+
+				return __uiMessageSize;
+			}; // size_t CallFunctionRes::CalculateMessageSize( const uint64_t &InTransactionID, const Result &InResult, const VariableTable &InResults )
+
 			MessageData* CallFunctionRes::Create( IHeap& memHeap, const uint64_t &InTransactionID, const Result &InResult, const Array<uint8_t>& InResults )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3594,12 +4102,7 @@ namespace SF
 					return pNewMsg;
 				});
 
-				uint16_t serializedSizeOfInResults = static_cast<uint16_t>(SerializedSizeOf(InResults)); 
-				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
-					+ SerializedSizeOf(InTransactionID)
-					+ SerializedSizeOf(InResult)
-					+ serializedSizeOfInResults
-				);
+				uint __uiMessageSize = (uint)CalculateMessageSize(InTransactionID, InResult, InResults);
 
 				protocolCheckMem( pNewMsg = MessageData::NewMessage( memHeap, PlayInstance::CallFunctionRes::MID, __uiMessageSize ) );
 				ArrayView<uint8_t> BufferView(pNewMsg->GetPayload());
@@ -3711,6 +4214,18 @@ namespace SF
 			}; // Result SendVoiceDataC2SEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
 
 
+			size_t SendVoiceDataC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InPlayInstanceUID)
+					+ SerializedSizeOf(InPlayerID)
+					+ SerializedSizeOf(InVoiceData)
+				);
+
+				return __uiMessageSize;
+			}; // size_t SendVoiceDataC2SEvt::CalculateMessageSize( const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
+
+
 			MessageData* SendVoiceDataC2SEvt::Create( IHeap& memHeap, const uint64_t &InPlayInstanceUID, const PlayerID &InPlayerID, const Array<uint8_t>& InVoiceData )
 			{
  				MessageData *pNewMsg = nullptr;
@@ -3801,6 +4316,17 @@ namespace SF
 				return hr;
 
 			}; // Result VoiceDataS2CEvt::ParseMessageToMessageBase( IHeap& memHeap, const MessageHeader* pHeader, MessageBase* &pMessageBase )
+
+
+			size_t VoiceDataS2CEvt::CalculateMessageSize( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
+			{
+ 				unsigned __uiMessageSize = (unsigned)(Message::HeaderSize 
+					+ SerializedSizeOf(InActorID)
+					+ SerializedSizeOf(InVoiceData)
+				);
+
+				return __uiMessageSize;
+			}; // size_t VoiceDataS2CEvt::CalculateMessageSize( const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )
 
 
 			MessageData* VoiceDataS2CEvt::Create( IHeap& memHeap, const uint32_t &InActorID, const Array<uint8_t>& InVoiceData )

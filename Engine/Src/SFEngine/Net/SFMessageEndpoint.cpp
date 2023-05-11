@@ -70,23 +70,33 @@ namespace SF {
 
 	Result MessageEndpointStreamDB::Send(const SharedPointerT<MessageData>& messageData)
 	{
-		if (m_TargetEndpoint == nullptr)
-			return ResultCode::NOT_INITIALIZED;
-
         if (!messageData.IsValid())
+        {
+            return ResultCode::INVALID_POINTER;
+        }
+
+        return SendMessage(messageData->GetMessageHeader());
+	}
+
+    Result MessageEndpointStreamDB::SendMessage(const MessageHeader* messageData)
+    {
+        if (m_TargetEndpoint == nullptr)
+            return ResultCode::NOT_INITIALIZED;
+
+        if (messageData == nullptr)
         {
             return ResultCode::INVALID_POINTER;
         }
 
 #if 0 // message logging
         DynamicArray<uint8_t> encodedBuffer;
-        Util::HEXEncode(messageData->GetMessageSize(), messageData->GetMessageBuff(), encodedBuffer);
+        Util::HEXEncode(messageData->Length, messageData, encodedBuffer);
         encodedBuffer.push_back('\0');
-        SFLog(System, Debug3, "ServerMessageConsumer:SendRaw: {0}, {1}", messageData->GetMessageSize(), (const char*)encodedBuffer.data());
+        SFLog(System, Debug3, "ServerMessageConsumer:SendRaw: {0}, {1}", messageData->Length, (const char*)encodedBuffer.data());
 #endif
 
-		return m_TargetEndpoint->SendRecord(ArrayView<const uint8_t>(messageData->GetMessageSize(), messageData->GetMessageBuff()));
-	}
+        return m_TargetEndpoint->SendRecord(ArrayView<const uint8_t>(messageData->Length, reinterpret_cast<const uint8_t*>(messageData)));
+    }
 
 } // namespace SF
 

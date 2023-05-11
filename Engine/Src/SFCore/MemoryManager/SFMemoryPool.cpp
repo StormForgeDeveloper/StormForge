@@ -46,7 +46,7 @@ namespace SF
 	// Constructor for singleton
 	MemoryPool::MemoryPool(IHeap& heap, size_t allocSize)
 		: IHeap("MemoryPool", &heap)
-		, m_AllocSize(allocSize)
+		, m_AllocSize(std::max(sizeof(MemoryPoolItem), allocSize))
 	{
 	}
 
@@ -67,101 +67,82 @@ namespace SF
 
 	}
 
-
-
-
 	void MemoryPool::Flush()
 	{
 		for (auto& itFreeList : m_FreeList)
 		{
-			auto pPoolItem = itFreeList.Pop();
+			StackPool::Item* pPoolItem = itFreeList.Pop();
 			while (pPoolItem != nullptr)
 			{
 				// Unmark used for memory pool
-				auto pMemPoolItem = ContainerPtrFromMember(MemoryPoolItem, StackItem, pPoolItem);
-				auto pDataPtr = MemoryPoolItemToDataPtr(pMemPoolItem);
-				auto pMemHdr = GetMemoryBlockHdr(pDataPtr);
-				assert(pMemHdr->Magic == MemBlockHdr::MEM_MAGIC);
+                MemoryPoolItem* pMemPoolItem = ContainerPtrFromMember(MemoryPoolItem, StackItem, pPoolItem);
+				MemBlockHdr* pMemBlock = reinterpret_cast<MemBlockHdr*>(pMemPoolItem) - 1;
+				assert(pMemBlock->Magic == MemBlockHdr::MEM_MAGIC);
 
-				FreeInternal(pMemHdr);
+				super::FreeInternal(pMemBlock);
 
 				pPoolItem = itFreeList.Pop();
 			}
 		}
 	}
 
-	//
-	//	// Allocate/Free
-	//	MemBlockHdr* MemoryPool::AllocInternal(size_t size, size_t alignment)
-	//	{
-	//		if (size != GetAllocSize())
-	//		{
-	//			Assert(false);
-	//			if (size > GetAllocSize())
-	//				return nullptr;
-	//		}
-	//		auto& freeList = PickFreeList();
-	//		MemoryPoolItem *pItem = reinterpret_cast<MemoryPoolItem*>(freeList.Pop());
-	//		if (pItem == nullptr)
-	//		{
-	//			// Allocate page if no free item
-	//			void *pAllocItem = m_Heap.Alloc(m_AllocSize);
-	//			if (pAllocItem == nullptr)
-	//				return nullptr;
-	//
-	//			// Mark used for memory pool
-	//			auto pMemHdr = m_Heap.GetMemoryBlockHdr(pAllocItem);
-	//			pMemHdr->pMemoryPool = this;
-	//
-	//			memset(pAllocItem, 0, MEMITEM_SIZE);
-	//			pItem = (MemoryPoolItem*)pAllocItem;
-	//			pItem->MemMagic = POOL_MEMMAGIC;
-	//		}
-	//		else
-	//		{
-	//			//bool isUsing = pItem->Using.load(std::memory_order_relaxed);
-	//			//AssertRel(isUsing == false);
-	//
-	//			if (pItem->MemMagic != POOL_MEMMAGIC)
-	//			{
-	//#if ENABLE_MEMORY_TRACE
-	//				pItem->StackTrace.PrintStackTrace(CurrentProcessID);
-	//#endif
-	//				// Trash invalid memory and try another alloc
-	//				return AllocInternal(typeName);
-	//			}
-	//		}
-	//
-	//		//pItem->Using.exchange(true, std::memory_order_release);
-	//
-	//		return pItem;
-	//	}
-	//
-	//	MemBlockHdr* MemoryPool::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment)
-	//	{
-	//		// Not support realloc
-	//		return nullptr;
-	//	}
+	// Allocate/Free
+    MemBlockHdr* MemoryPool::AllocInternal(size_t size, size_t alignment)
+	{
+        if (size > GetAllocSize())
+        {
+            Assert(false);
+            return nullptr;
+        }
+
+        MemBlockHdr* pMemBlock{};
+		StackPool& freeList = PickFreeList();
+		MemoryPoolItem *pItem = reinterpret_cast<MemoryPoolItem*>(freeList.Pop());
+		if (pItem == nullptr)
+		{
+			// Allocate page if no free item
+            pMemBlock = GetParent()->AllocInternal(m_AllocSize, alignment);
+			if (pMemBlock == nullptr)
+				return nullptr;
+
+			pItem = reinterpret_cast<MemoryPoolItem*>(pMemBlock->GetDataPtr());
+		}
+        else
+        {
+            pMemBlock = reinterpret_cast<MemBlockHdr*>(pItem) - 1;
+        }
+        memset(pItem, 0, sizeof(MemoryPoolItem));
+
+		return pMemBlock;
+	}
+
+	MemBlockHdr* MemoryPool::ReallocInternal(MemBlockHdr* ptr, size_t orgSize, size_t newSize, size_t alignment)
+	{
+		// Not support realloc
+		return nullptr;
+	}
 
 	void MemoryPool::FreeInternal(MemBlockHdr* pMemBlock)
 	{
-		auto& freeList = PickFreeList();
-		auto freeItemCount = freeList.size();
+		StackPool& freeList = PickFreeList();
+		size_t freeItemCount = freeList.size();
 		if (freeItemCount > POOL_ITEM_MAX)
 		{
-			FreeInternal(pMemBlock);
+			super::FreeInternal(pMemBlock);
 		}
 		else
 		{
-			MemoryPoolItem *pMemPoolItem = DataPtrToMemoryPoolItem(pMemBlock->GetDataPtr());
+			MemoryPoolItem *pMemPoolItem = reinterpret_cast<MemoryPoolItem*>(pMemBlock->GetDataPtr());
 			if (pMemPoolItem == nullptr)
 			{
 				return;
 			}
 
-			Assert(pMemPoolItem->StackItem.pNext == nullptr);
-			Assert(pMemBlock->Magic == MemBlockHdr::MEM_MAGIC);
-			freeList.Push(&pMemPoolItem->StackItem);
+            memset(pMemPoolItem, 0, sizeof(MemoryPoolItem));
+
+            Assert(pMemBlock->Magic == MemBlockHdr::MEM_MAGIC);
+
+            freeList.Push(&pMemPoolItem->StackItem);
 		}
 
 		m_AllocatedCount.fetch_sub(1, std::memory_order_relaxed);
@@ -170,36 +151,22 @@ namespace SF
 	// Allocate/Free
 	void* MemoryPool::Alloc(size_t size, size_t alignment)
 	{
-		auto pMemBlock = AllocInternal(GetAllocSize() + sizeof(MemoryPoolItem), SF_ALIGN_DOUBLE);
+		MemBlockHdr* pMemBlock = AllocInternal(GetAllocSize(), alignment);
 		if (pMemBlock == nullptr)
 			return nullptr;
 
-		pMemBlock->pHeap = this;
+        // redirect heap to me
+        pMemBlock->pHeap = this;
 
-		MemoryPoolItem *pMemItem = DataPtrToMemoryPoolItem(pMemBlock->GetDataPtr());
-		memset(pMemItem, 0, sizeof(MemoryPoolItem));
+		MemoryPoolItem *pMemItem = reinterpret_cast<MemoryPoolItem*>(pMemBlock->GetDataPtr());
 		if (pMemItem == nullptr)
 		{
 			return nullptr;
 		}
 
-		void* pPtr = pMemBlock->GetDataPtr();
-		AssertRel(((int64_t)pPtr & (SF_ALIGN_DOUBLE - 1)) == 0);
-	//#if ENABLE_MEMORY_TRACE
-		//Assert(pMemBlock->GetFooter()->ListNode.pPrev == nullptr);
-	//#endif  // ENABLE_MEMORY_TRACE
-
-		// TODO: capture callstack
-		{
-//#if ENABLE_MEMORY_TRACE
-//			// Refresh call stack
-//			pMemBlock->GetFooter()->StackTrace.CaptureCallStack(1);
-//#endif
-		}
-
 		m_AllocatedCount.fetch_add(1, std::memory_order_relaxed);
 
-		return pPtr;
+		return pMemItem + 1;
 	}
 
 	void* MemoryPool::Realloc(void* ptr, size_t newSize, size_t alignment)
@@ -207,22 +174,6 @@ namespace SF
 		unused(ptr, newSize, alignment);
 		return nullptr;
 	}
-
-
-	////////////////////////////////////////////////////////////////////////////////
-	//
-	//	Memory Pool manager
-	//
-
-
-
-	// Max memory size for pool
-	constexpr size_t MemoryPoolManager::MAX_MEMORYSIZE_SHIFT;
-	constexpr size_t MemoryPoolManager::MAX_MEMORYSIZE_POWEROF2;
-	// memory alignment size
-	constexpr size_t MemoryPoolManager::MAX_MEMORYPOOL_ALIGNMENT_SHIFT;
-	constexpr size_t MemoryPoolManager::MAX_MEMORYPOOL_ALIGNMENT;
-	constexpr size_t MemoryPoolManager::MAX_MEMORYPOOL_COUNT;
 
 
 
