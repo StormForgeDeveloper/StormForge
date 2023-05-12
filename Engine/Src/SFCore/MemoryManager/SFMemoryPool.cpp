@@ -27,13 +27,6 @@
 namespace SF
 {
 
-
-
-
-
-
-
-
 	////////////////////////////////////////////////////////////////////////////////
 	//
 	//	Memory Pool by size
@@ -106,6 +99,9 @@ namespace SF
 				return nullptr;
 
 			pItem = reinterpret_cast<MemoryPoolItem*>(pMemBlock->GetDataPtr());
+
+            // any stack operation should be flushed out
+            std::atomic_thread_fence(std::memory_order_release);
 		}
         else
         {
@@ -138,9 +134,13 @@ namespace SF
 				return;
 			}
 
+            // If the memory space has pending write it will mess up with stack operation. Flush them first
+            std::atomic_thread_fence(std::memory_order_acquire);
+
             memset(pMemPoolItem, 0, sizeof(MemoryPoolItem));
 
             Assert(pMemBlock->Magic == MemBlockHdr::MEM_MAGIC);
+
 
             freeList.Push(&pMemPoolItem->StackItem);
 		}
