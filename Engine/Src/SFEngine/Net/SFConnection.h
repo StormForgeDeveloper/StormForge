@@ -24,7 +24,8 @@
 #include "Net/SFNetSocket.h"
 #include "Delegate/SFEventDelegate.h"
 #include "Container/SFDualSortedMap.h"
-
+#include "Net/SFNetMessageCollection.h"
+#include "Net/SFNetPacketData.h"
 
 namespace SF {
 
@@ -154,7 +155,7 @@ namespace Net {
 		// Initialize packet synchronization
 		virtual Result InitSynchronization();
 
-		virtual Result SendRaw(const SharedPointerT<MessageData> &pMsg) = 0;
+		//virtual Result SendRaw(const SharedPointerT<MessageData> &pMsg) = 0;
 
 		void SetNetCtrlAction(NetCtrlIDs id, ConnectionMessageAction* action);
 
@@ -234,7 +235,7 @@ namespace Net {
 		// Get Recv queue
         RecvMessageQueue& GetRecvMessageQueue() { return m_RecvMessageQueue; }
 
-        // Access to send guranteed queue
+        // Access to send guaranteed queue
 		MsgQueue& GetSendGuaQueue() { return m_SendGuaQueue; }
 
 
@@ -336,12 +337,11 @@ namespace Net {
 
 		// Make NetCtrl packet and send
         virtual Result MakeNetCtrl(MessageHeader* pHeader, uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0 = 0);
-        virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0 = 0);
-		virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0 = 0) { return SendNetCtrl(uiCtrlCode, uiSequence, returnMsgID, parameter0); } // default direct send
+        virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0 = 0) = 0;
+        virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0 = 0) = 0;
 
 		// Clear Queue
 		virtual Result ClearQueues();
-
 
 		// Called on connection result
 		virtual void OnConnectionResult(Result hrConnect);
@@ -376,6 +376,8 @@ namespace Net {
 
 		// Send message to connected entity
 		virtual Result Send(const SharedPointerT<MessageData> &pMsg) = 0;
+        virtual Result SendMsg(const MessageHeader* pMsg) = 0;
+        virtual Result SendCollection(const MessageCollection* pCollection);
 
 		// Message count currently in recv queue
         SF_FORCEINLINE uint32_t GetRecvMessageCount() const { return (uint32_t)m_RecvMessageQueue.GetItemCount(); }
@@ -429,7 +431,7 @@ namespace Net {
 
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) override;
 		virtual Result Send(const SharedPointerT<MessageData>& messageData) override;
-        virtual Result SendMessage(const MessageHeader* messageData) override;
+        virtual Result SendMsg(const MessageHeader* messageData) override;
     };
 
 }  // namespace Net

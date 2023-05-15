@@ -131,7 +131,7 @@ namespace Net {
 		SockWrite = INVALID_SOCKET;
 		RawSendSize = 0;
 		pRawSendBuffer = nullptr;
-		pSendBuff = nullptr;
+		//pSendBuff = nullptr;
 	}
 
 	IOBUFFER_WRITE::~IOBUFFER_WRITE()
@@ -145,7 +145,6 @@ namespace Net {
 	IOBUFFER_READ::IOBUFFER_READ()
 	{
 		memset(this, 0, sizeof(IOBUFFER_READ));
-
 		iSockLen = sizeof(sockaddr_storage);
 	}
 
@@ -393,7 +392,7 @@ namespace Net {
 
 	Result NetSystem::Recv(SF_SOCKET sock, IOBUFFER_READ* pBuffer)
 	{
-		ssize_t recvSize = recv(sock, pBuffer->buffer, sizeof(pBuffer->buffer), MSG_DONTWAIT);
+		ssize_t recvSize = recv(sock, pBuffer->GetPayloadPtr(), IOBUFFER_READ::MaxPacketSize, MSG_DONTWAIT);
 		if (recvSize < 0)
 		{
 			return GetLastNetSystemResult();
@@ -412,7 +411,7 @@ namespace Net {
 	{
 		Assert(pBuffer->iSockLen == sizeof(pBuffer->NetAddr.From));
 
-		ssize_t recvSize = recvfrom(sock, pBuffer->buffer, sizeof(pBuffer->buffer), MSG_DONTWAIT,
+		ssize_t recvSize = recvfrom(sock, pBuffer->GetPayloadPtr(), IOBUFFER_READ::MaxPacketSize, MSG_DONTWAIT,
 			(sockaddr*)&pBuffer->NetAddr.From, &pBuffer->iSockLen);
 		if (recvSize < 0)
 		{

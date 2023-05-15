@@ -65,7 +65,7 @@ namespace Net {
 			{
 				netChkPtr(pIOBuffer);
 
-				if (!(hr = m_Owner.OnRecv(pIOBuffer->NetAddr.From, pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->buffer)))
+				if (!(hr = m_Owner.OnRecv(pIOBuffer->NetAddr.From, pIOBuffer->TransferredSize, pIOBuffer->GetPayloadPtr())))
 					SFLog(Net, Debug3, "Read IO failed with hr={0:X8}", hr);
 
 				PendingRecv(pIOBuffer);
@@ -270,59 +270,61 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
 
-		MessageID msgID = pMsg->GetMessageHeader()->msgID;
-		IOBUFFER_WRITE *pOverlapped = nullptr;
+        // FIXME: no more pMsg interface
+        assert(false);
+	//	MessageID msgID = pMsg->GetMessageHeader()->msgID;
+	//	IOBUFFER_WRITE *pOverlapped = nullptr;
 
-        constexpr bool bIncludePacketHeader = false;
-		netMem(pOverlapped = new(GetHeap()) IOBUFFER_WRITE);
-		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, bIncludePacketHeader, std::forward<SharedPointerT<MessageData>>(pMsg));
-		pMsg = nullptr;
+ //       constexpr bool bIncludePacketHeader = false;
+	//	netMem(pOverlapped = new(GetSystemHeap()) IOBUFFER_WRITE);
+	//	pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, bIncludePacketHeader, std::forward<SharedPointerT<MessageData>>(pMsg));
+	//	pMsg = nullptr;
 
-		if (NetSystem::IsProactorSystem())
-		{
-			netChk(m_NetIOAdapter.WriteBuffer(pOverlapped));
-		}
-		else
-		{
-			netChk(m_NetIOAdapter.EnqueueBuffer(pOverlapped));
-		}
+	//	if (NetSystem::IsProactorSystem())
+	//	{
+	//		netChk(m_NetIOAdapter.WriteBuffer(pOverlapped));
+	//	}
+	//	else
+	//	{
+	//		netChk(m_NetIOAdapter.EnqueueBuffer(pOverlapped));
+	//	}
 
-	Proc_End:
+	//Proc_End:
 
-		if (!hr)
-		{
-			if (pOverlapped)
-			{
-				pOverlapped->ClearBuffer();
-				pOverlapped->pMsgs = nullptr;
-				IHeap::Delete(pOverlapped);
-			}
-			else
-			{
-				pMsg = nullptr;
-			}
+	//	if (!hr)
+	//	{
+	//		if (pOverlapped)
+	//		{
+	//			pOverlapped->ClearBuffer();
+	//			pOverlapped->pMsgs = nullptr;
+	//			IHeap::Delete(pOverlapped);
+	//		}
+	//		else
+	//		{
+	//			pMsg = nullptr;
+	//		}
 
-			if (hr != Result(ResultCode::IO_IO_SEND_FAIL))
-			{
-				SFLog(Net, Error, "RawUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
-			}
-			else
-			{
-				SFLog(Net, Debug3, "RawUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
-				return ResultCode::SUCCESS;
-			}
-		}
-		else
-		{
-			if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
-			{
-				SFLog(Net, Debug3, "RawUDP SendCtrl dest:{0}, msg:{1}", dest, msgID);
-			}
-			else
-			{
-				SFLog(Net, Debug3, "RawUDP Send dest:{0}, msg:{1}", dest, msgID);
-			}
-		}
+	//		if (hr != Result(ResultCode::IO_IO_SEND_FAIL))
+	//		{
+	//			SFLog(Net, Error, "RawUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
+	//		}
+	//		else
+	//		{
+	//			SFLog(Net, Debug3, "RawUDP Send Failed, err:{1:X8}, hr:{2:X8}", hrErr, hr);
+	//			return ResultCode::SUCCESS;
+	//		}
+	//	}
+	//	else
+	//	{
+	//		if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
+	//		{
+	//			SFLog(Net, Debug3, "RawUDP SendCtrl dest:{0}, msg:{1}", dest, msgID);
+	//		}
+	//		else
+	//		{
+	//			SFLog(Net, Debug3, "RawUDP Send dest:{0}, msg:{1}", dest, msgID);
+	//		}
+	//	}
 
 		return hr;
 	}

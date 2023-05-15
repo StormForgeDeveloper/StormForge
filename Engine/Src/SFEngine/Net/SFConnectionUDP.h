@@ -65,7 +65,7 @@ namespace Net {
 
 	public:
 		// Constructor
-		ConnectionUDPServerPeer(IHeap& heap, SocketIO* ioHandler);
+		ConnectionUDPServerPeer(IHeap& heap, SocketIOUDP* ioHandler);
 		virtual ~ConnectionUDPServerPeer();
 
 
@@ -121,11 +121,12 @@ namespace Net {
 			// Send message to connection with network device
 			virtual Result WriteBuffer(IOBUFFER_WRITE *pSendBuffer) override;
 
-			// called when receiving TCP message
-			virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer) override;
-
 			virtual Result OnWriteReady() override;
-		};
+
+            // called on packet recv
+            virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ*& pIOBuffer) override;
+            //virtual Result OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer) override;
+        };
 
 	private:
 

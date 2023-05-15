@@ -35,7 +35,7 @@ namespace Net {
 	//
 	//	Overlapped I/O structures
 	//
-
+#pragma pack(push,4)
 	struct IOBUFFER
 	{
 		IOBUFFER_OPERATION Operation;
@@ -73,24 +73,48 @@ namespace Net {
 		uint8_t* pRawSendBuffer;
 
 		// Message pointer to send, when send message data
-		SharedPointerAtomicT<MessageData> pMsgs;
+		//SharedPointerAtomicT<MessageData> pMsgs;
 
 		// Message buffer pointer to send, when send buffer data
-		uint8_t *pSendBuff;
+		//uint8_t *pSendBuff;
 
 		// Constructor
 		IOBUFFER_WRITE();
 		~IOBUFFER_WRITE();
 
+        //void* operator new(size_t size) {
+        //    assert(size > (sizeof(IOBUFFER_WRITE) + sizeof(MessageHeader)));
+        //    return GetSystemHeap().Alloc(size);
+        //}
+        //void operator delete(void* pPtr)
+        //{
+        //    GetSystemHeap().Free(pPtr);
+        //}
+
+        //void* operator new(size_t size, std::align_val_t alignment, void* pPtr) {
+        //    return pPtr;
+        //}
+        //void operator delete(void* pPtr, std::align_val_t alignment, void* pPtr2)
+        //{
+        //}
+
+        //void* operator new(size_t size, void* pPtr) {
+        //    return pPtr;
+        //}
+        //void operator delete(void* pPtr, void* pPtr2)
+        //{
+        //}
+
 		// Initialize for IO
 		inline void InitForIO(SF_SOCKET sockWrite);
-		inline void InitMsg(bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg);
+		//inline void InitMsg(bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg);
 		inline void InitBuff(uint uiBuffSize, uint8_t* pBuff);
 
 		// Setup sending mode
-		inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg);
+		//inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg);
 		inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, uint uiBuffSize, uint8_t* pBuff);
-		inline void SetupSendTCP(SharedPointerT<MessageData>&& pMsg);
+        //inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to);
+		//inline void SetupSendTCP(SharedPointerT<MessageData>&& pMsg);
 		inline void SetupSendTCP(uint uiBuffSize, uint8_t* pBuff);
 
 	};
@@ -99,20 +123,35 @@ namespace Net {
 	// UDP/TCP read overlapped
 	struct IOBUFFER_READ : public IOBUFFER_RWBASE
 	{
-		// UDP Recv socket length
+        static constexpr size_t MaxPacketSize = Const::INTER_PACKET_SIZE_MAX;
+
+        // Recv connection ID for error check
+        uint64_t CID;
+
+        // UDP Recv socket length
 		socklen_t iSockLen;
 
-		// Recv connection ID for error check
-		uint64_t CID;
-
 		// Recv buffer
-		char buffer[Const::INTER_PACKET_SIZE_MAX];
+		//char buffer[Const::INTER_PACKET_SIZE_MAX];
 
 		std::atomic<bool> bIsPending;
 
 		// constructor
 		IOBUFFER_READ();
 		~IOBUFFER_READ();
+
+        void* operator new(size_t size) {
+            return GetSystemHeap().Alloc(size + MaxPacketSize);
+        }
+        void operator delete(void* pPtr)
+        {
+            GetSystemHeap().Free(pPtr);
+        }
+
+        SF_FORCEINLINE uint8_t* GetPayloadPtr() const
+        {
+            return const_cast<uint8_t*>(reinterpret_cast<const uint8_t*>(this + 1));
+        }
 
 		// Initialize for IO
 		inline void InitForIO();
@@ -142,7 +181,7 @@ namespace Net {
 		// Setup accept
 		inline void SetupAccept(SF_SOCKET sock);
 	};
-
+#pragma pack(pop)
 
 
 #include "SFNetSystem_Linux.inl"

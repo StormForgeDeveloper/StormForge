@@ -153,7 +153,7 @@ namespace Net {
 			while ((hrErr))
 			{
 				// Read
-                pReadBuffer = new(Service::NetSystem->GetHeap()) IOBUFFER_READ;
+                pReadBuffer = new IOBUFFER_READ;
 				hrErr = pCallBack->Recv(pReadBuffer);
 				hr = hrErr;
 				switch ((uint32_t)hrErr)

@@ -242,6 +242,14 @@ namespace SF
 		void Reset();
 		SF_FORCEINLINE void Clear() { Reset(); }
 
+        SF_FORCEINLINE bool IsManagedAddress(void* pPtr) const
+        {
+            return (
+                uintptr_t(pPtr) > uintptr_t(m_Buffer))
+                && (uintptr_t(pPtr) < (uintptr_t(m_Buffer) + m_BufferSize)
+                    );
+        }
+
 		// forcefully reset the position. This is useful when you handle external buffer manually save/load from file system.
 		bool ForceReset(int headOffset, int tailOffset);
 

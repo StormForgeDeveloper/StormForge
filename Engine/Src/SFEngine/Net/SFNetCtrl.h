@@ -67,6 +67,11 @@ namespace Net {
     // We use this only for possible biggest netctrl packet size check, and quick MsgNetCtrl access for ack
 	struct MsgNetCtrlBuffer
 	{
+        MsgNetCtrlBuffer()
+        {
+            Header.Length = sizeof(MsgNetCtrlBuffer);
+        }
+
         // header
         MessageHeader Header;
 

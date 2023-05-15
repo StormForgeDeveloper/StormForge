@@ -65,7 +65,7 @@ namespace Net {
 			{
 				netChkPtr(pIOBuffer);
 
-				if (!(hr = m_Owner.OnRecv(pIOBuffer->NetAddr.From, pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->buffer)))
+				if (!(hr = m_Owner.OnRecv(pIOBuffer->NetAddr.From, pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->GetPayloadPtr())))
 					SFLog(Net, Debug3, "Read IO failed with hr={0:X8}", hr);
 
 				PendingRecv(pIOBuffer);
@@ -271,7 +271,7 @@ namespace Net {
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
 		IOBUFFER_WRITE *pOverlapped = nullptr;
 
-		netMem(pOverlapped = new(GetHeap()) IOBUFFER_WRITE);
+		netMem(pOverlapped = new(GetSystemHeap()) IOBUFFER_WRITE);
 		pOverlapped->SetupSendUDP(m_NetIOAdapter.GetIOSocket(), dest, (uint)sendSize, pBuff);
 
 		if (NetSystem::IsProactorSystem())

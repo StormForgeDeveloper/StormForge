@@ -19,10 +19,12 @@
 #include "Net/SFNetSystem.h"
 #include "Net/SFConnection.h"
 #include "Net/SFMessageWindow.h"
+#include "Net/SFNetMessageCollection.h"
+#include "Net/SFNetPacketData.h"
+
 
 namespace SF {
 namespace Net {
-
 
 
 	////////////////////////////////////////////////////////////////////////////////
@@ -46,15 +48,15 @@ namespace Net {
 		// Maximum guaranteed retry at once
 		uint				m_uiMaxGuarantedRetryAtOnce;
 
-		// packet gathering buffer
-        uint m_uiGatheredSize{};
-        uint8_t* m_pGatheringBuffer{};
+        CriticalSection m_GatheringBufferLock;
+        // packet gathering buffer
+        SFUniquePtr<PacketData> m_GatheringBuffer;
 
         // Minimum gathered size for flush
         uint m_uiMinGatherSizeForFlush = 0;
 
 		// subframe message
-		SFUniquePtr<MessageHeader>		m_SubFrameMessage;
+		SFUniquePtr<MessageHeader> m_SubFrameCollectionBuffer;
 
 		// UDP send queue
 		WriteBufferQueue*			m_pWriteQueuesUDP;
@@ -89,8 +91,6 @@ namespace Net {
 		// Send packet buffer to connection with network device
 		virtual Result EnqueueBufferUDP(IOBUFFER_WRITE *pSendBuffer);
 
-		virtual Result SendRaw(const SharedPointerT<MessageData> &pMsg) override;
-
 		virtual Result ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrl) override;
 
 		Result OnGuaranteedMessageRecv(const MessageHeader* pMsg);
@@ -107,28 +107,25 @@ namespace Net {
 
 		void SetWriteQueueUDP(WriteBufferQueue* writeQueue);
 
-
 		// Set maximum guaranteed retry count
 		uint GetMaxGuarantedRetryAtOnce() { return m_uiMaxGuarantedRetryAtOnce; }
 		void SetMaxGuarantedRetry(uint uiMaxGuarantedRetry) { m_uiMaxGuarantedRetryAtOnce = uiMaxGuarantedRetry; }
 
-
 		SendMsgWindow& GetSendReliableWindow() { return m_SendReliableWindow; }
 		RecvMsgWindow2& GetRecvReliableWindow() { return m_RecvReliableWindow; }
 
-
 		// gathering
-		virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0) override;
-		virtual Result SendPending(const MessageHeader* pHeader);
+        virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0 = 0) override;
+		virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0 = 0) override;
 		Result SendFlush();
 
 		// Prepare gathering buffer
-		Result PrepareGatheringBuffer( uint uiRequiredSize );
-		uint GetGatheredBufferSize() { return m_uiGatheredSize; }
+        Result AllocSendBuffer();
+		Result PrepareGatheringBuffer(uint uiRequiredSize);
 
 
 		// frame sequence
-		Result SendFrameSequenceMessage(const SharedPointerT<MessageData>& pMsg);
+		Result SendFrameSequenceMessage(const MessageHeader* pMsg);
 		Result OnFrameSequenceMessage(const MessageHeader* pMsg);
 
 		// Initialize connection
@@ -147,13 +144,13 @@ namespace Net {
 		// @remote: remote information. Address should to be assigned
 		virtual Result Connect(PeerInfo local, const PeerInfo& remote) override { return ResultCode::NOT_IMPLEMENTED; }
 
-
 		// Disconnect connection
 		virtual Result Disconnect(const char* reason) override;
 
-
 		// Send message to connected entity
 		virtual Result Send(const SharedPointerT<MessageData> &pMsg ) override;
+        virtual Result SendMsg(const MessageHeader* pMsg) override;
+        Result SendRaw(const MessageHeader* pMsg);
 
 		// called when incoming message occur
 		virtual Result OnRecv(uint uiBuffSize, uint8_t* pBuff) override;
@@ -164,7 +161,5 @@ namespace Net {
 
 	};
 
-
 }  // namespace Net
 } // namespace SF
-

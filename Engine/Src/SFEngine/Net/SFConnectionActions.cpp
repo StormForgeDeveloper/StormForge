@@ -691,7 +691,7 @@ namespace Net {
 			// don't bother network with might not be able to processed
 			if ((sendWindow.GetHeadSequence() - sendWindow.GetBaseSequence()) < GetConnection()->GetMaxGuarantedRetryAtOnce())
 			{
-				netCheck(GetConnection()->SendPending(pIMsg->GetMessageHeader()));
+				netCheck(GetConnection()->SendRaw(pIMsg->GetMessageHeader()));
 			}
 			pIMsg = nullptr;
 		}
@@ -714,7 +714,6 @@ namespace Net {
 			GetConnection()->DecSendBoost();
 		}
 
-		//assert(ThisThread::GetThreadID() == GetRunningThreadID());
 		auto& sendWindow = GetConnection()->GetSendReliableWindow();
 
 		// Guaranteed retry
@@ -743,15 +742,6 @@ namespace Net {
 
             const MessageHeader* pHeader = pMessageElement->pMsg->GetMessageHeader();
 
-			uint totalGatheredSize = GetConnection()->GetGatheredBufferSize() + pHeader->Length;
-			if (GetConnection()->GetGatheredBufferSize() > 0 && totalGatheredSize > Const::PACKET_GATHER_SIZE_MAX)
-			{
-				// too big to send
-				// stop gathering here, and send
-				pMessageElement = nullptr;
-				break;
-			}
-
 			SFLog(Net, Debug2, "SENDReliableRetry : CID:{0}, seq:{1}, msg:{2}, len:{3}",
 				GetCID(),
 				pHeader->msgID.IDSeq.Sequence,
@@ -762,7 +752,7 @@ namespace Net {
 
 			// Creating new reference object will increase reference count of the message instance.
 			// And more importantly, SendPending is taking reference of the variable and clear it when it done sending
-			GetConnection()->SendPending(pHeader);
+			GetConnection()->SendRaw(pHeader);
 			pMessageElement = nullptr;
 		}
 

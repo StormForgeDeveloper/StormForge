@@ -75,10 +75,10 @@ namespace SF {
             return ResultCode::INVALID_POINTER;
         }
 
-        return SendMessage(messageData->GetMessageHeader());
+        return SendMsg(messageData->GetMessageHeader());
 	}
 
-    Result MessageEndpointStreamDB::SendMessage(const MessageHeader* messageData)
+    Result MessageEndpointStreamDB::SendMsg(const MessageHeader* messageData)
     {
         if (m_TargetEndpoint == nullptr)
             return ResultCode::NOT_INITIALIZED;

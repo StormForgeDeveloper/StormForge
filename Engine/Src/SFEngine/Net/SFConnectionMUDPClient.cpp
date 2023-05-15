@@ -65,7 +65,7 @@ namespace Net {
 			{
 				netChkPtr(pIOBuffer);
 
-                PacketHeader* pPacketHeader = reinterpret_cast<PacketHeader*>(pIOBuffer->buffer);
+                PacketHeader* pPacketHeader = reinterpret_cast<PacketHeader*>(pIOBuffer->GetPayloadPtr());
                 MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(pPacketHeader + 1);
 
 				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize - sizeof(PacketHeader), reinterpret_cast<uint8_t*>(pHeader))))
@@ -92,10 +92,13 @@ namespace Net {
 			Util::SafeDelete(pIOBuffer);
 		}
 
-
 		return hr;
-
 	}
+
+    Result ConnectionMUDPClient::MyNetSocketIOAdapter::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer)
+    {
+        return super::OnIOSendCompleted(hrRes, pIOBuffer);
+    }
 
 	Result ConnectionMUDPClient::MyNetSocketIOAdapter::OnWriteReady()
 	{

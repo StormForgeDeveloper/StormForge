@@ -39,6 +39,7 @@ namespace SF {
 			class MyNetSocketIOAdapter : public SocketIOTCP
 			{
 			private:
+                using super = SocketIOTCP;
 
 				ConnectionTCP& m_Owner;
 
@@ -62,18 +63,23 @@ namespace SF {
 				virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ*& pIOBuffer) override;
 
 				virtual Result OnWriteReady() override;
+                virtual Result OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer) override;
 
 			};
 
 
 		private:
 
+            // socket IO adapter
 			MyNetSocketIOAdapter m_NetIOAdapter;
 
+            // send buffer queue size
+            CircularBufferQueue m_SendBufferQueue;
 
-			// Guaranteed send/ack count
-			std::atomic<int32_t> m_lGuarantedSent;
-			std::atomic<int32_t> m_lGuarantedAck;
+            // TODO: refactor to traffic control unit
+			//// Guaranteed send/ack count
+			//std::atomic<int32_t> m_lGuarantedSent;
+			//std::atomic<int32_t> m_lGuarantedAck;
 
 
 			// Temporary incoming buffer for fragmented incoming packet buffer
@@ -81,9 +87,9 @@ namespace SF {
 			std::vector<uint8_t>	m_bufRecvTem;
 
 			// Recv overlapped buffer. recv 
-			IOBUFFER_READ m_RecvBuffer;
+			UniquePtr<IOBUFFER_READ> m_RecvBuffer;
 
-			WriteBufferQueue m_WriteBuffer;
+			//WriteBufferQueue m_WriteBuffer;
 
 		protected:
 			// Special net control packet count on the same connection state. ex)Connect packet
@@ -97,7 +103,6 @@ namespace SF {
 
             Atomic<bool> m_bWriteIsReady;
 
-
 			ConnectionMessageAction_HandleAck m_HandleAck;
 			ConnectionMessageAction_HandleNack m_HandleNack;
 			ConnectionMessageAction_HandleHeartbeat m_HandleHeartbeat;
@@ -107,11 +112,11 @@ namespace SF {
 
 		protected:
 
-			virtual Result SendRaw(const SharedPointerT<MessageData>& pMsg) override;
+			Result SendRaw(const MessageHeader* pMsgHeader);
 
 		public:
 			// Constructor
-			ConnectionTCP(IHeap& heap);
+			ConnectionTCP(IHeap& heap, size_t sendBufferSize = 256 * 1024);
 			virtual ~ConnectionTCP();
 
 
@@ -122,7 +127,7 @@ namespace SF {
 
 			bool GetIsIORegistered() const { return m_NetIOAdapter.GetIsIORegistered(); }
 
-			IOBUFFER_READ* GetRecvBuffer() { return &m_RecvBuffer; }
+			IOBUFFER_READ* GetRecvBuffer() { return m_RecvBuffer.get(); }
 
 			SockFamily GetSocketFamily() const { return GetLocalInfo().PeerAddress.SocketFamily; }
 
@@ -156,7 +161,10 @@ namespace SF {
 
 			// Send message to connected entity
 			virtual Result Send(const SharedPointerT<MessageData>& pMsg) override;
+            virtual Result SendMsg(const MessageHeader* pMsg) override;
 
+            virtual Result SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0) override;
+            virtual Result SendPending(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0) override { return SendNetCtrl(uiCtrlCode, uiSequence, returnMsgID, parameter0); }
 
 			// Update Send buffer Queue, TCP and UDP client connection
 			//virtual Result UpdateSendBufferQueue() override;

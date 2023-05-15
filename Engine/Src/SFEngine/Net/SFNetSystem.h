@@ -73,11 +73,11 @@ namespace Net {
 	private:
 
 		uint32_t m_NumThread;
-		uint32_t m_GatheringBufferSize;
+        uint32_t m_GatheringBufferSize{};
 		uint32_t m_RecvBufferSize;
 		uint32_t m_SendBufferSize;
 
-		//UniquePtr<MemoryPool> m_pGatheringBufferPool;
+		SharedPointerT<MemoryPool> m_pGatheringBufferPool;
 
 		// Network memory manager
 		Heap m_Heap;
@@ -117,6 +117,9 @@ namespace Net {
 		
 		virtual WriteBufferQueue* GetWriteBufferQueue() override;
 
+        virtual Net::IOBUFFER_WRITE* AllocateWriteBuffer() override;
+        virtual size_t GetWriteBufferSize() override { return m_GatheringBufferSize; }
+
 
 		///////////////////////////////////////////////////////////////////////////////
 		// Socket handling 
@@ -152,4 +155,18 @@ namespace Net {
 #include "Net/SFNetSystem_Linux.h"
 #endif
 
+namespace SF
+{
+    namespace Net
+    {
+        // This is type for reserving memory space, don't use it directly
+        union IOBUFFER_RW_STORAGE
+        {
+            IOBUFFER_RW_STORAGE() {}
+            ~IOBUFFER_RW_STORAGE() {}
 
+            IOBUFFER_WRITE WriteBuffer;
+            IOBUFFER_READ ReadBuffer;
+        };
+    }
+}

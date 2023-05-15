@@ -78,13 +78,12 @@ namespace SF {
 			return ResultCode::INVALID_STATE;
 		}
 
-        Result MessageEndpointConnection::SendMessage(const MessageHeader* messageData)
+        Result MessageEndpointConnection::SendMsg(const MessageHeader* messageData)
         {
             auto pConnection = m_pConnection.AsSharedPtr<Connection>();
             if (pConnection != nullptr)
             {
-                // FIXME: fix send
-                return pConnection->Send(MessageData::NewMessage(GetSystemHeap(), messageData));
+                return pConnection->SendMsg(messageData);
             }
 
             return ResultCode::INVALID_STATE;
@@ -281,39 +280,19 @@ namespace SF {
             return hr;
         }
 
-		// Make Ack packet and enqueue to SendNetCtrlqueue
-		Result Connection::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0)
-		{
-			Result hr = ResultCode::SUCCESS;
-			Result hrTem;
-			SharedPointerT<MessageData> pMsg;
+        Result Connection::SendCollection(const MessageCollection* pCollection)
+        {
+            Result hr;
 
-            netCheckMem(pMsg = MessageData::NewMessage(GetHeap(), uiCtrlCode, sizeof(MsgNetCtrlBuffer)));
+            netCheckPtr(pCollection);
 
-            MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(pMsg->GetMessageBuff());
+            for (auto itMsg = pCollection->begin(); itMsg; ++itMsg)
+            {
+                netCheck(SendMsg(itMsg));
+            }
 
-            netCheck(MakeNetCtrl(pHeader, uiCtrlCode, uiSequence, returnMsgID, parameter0));
-
-            pMsg->UpdateChecksum();
-
-			hrTem = SendRaw(pMsg);
-			if (!hrTem)
-			{
-				SFLog(Net, Debug4, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
-					GetCID(),
-					returnMsgID.ID,
-					uiSequence,
-					hrTem);
-
-				// ignore IO send fail except connection closed
-				if (hrTem == ((Result)ResultCode::IO_CONNECTION_CLOSED))
-				{
-					return hr;
-				}
-			}
-
-			return hr;
-		}
+            return hr;
+        }
 
 		void Connection::SetConnectionState(ConnectionState newState)
 		{

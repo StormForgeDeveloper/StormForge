@@ -20,47 +20,44 @@ void IOBUFFER_WRITE::InitForIO(SF_SOCKET sockWrite)
 {
 	//memset(this, 0, sizeof(IOBUFFER_WRITE));
 	SockWrite = sockWrite;
-	RawSendSize = 0;
-	pRawSendBuffer = nullptr;
-	pMsgs = nullptr;
-	pSendBuff = nullptr;
+	//RawSendSize = 0;
+	//pRawSendBuffer = nullptr;
+	//pMsgs = nullptr;
+	//pSendBuff = nullptr;
 }
 
-void IOBUFFER_WRITE::InitMsg(bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg)
-{
-	pMsgs = std::forward<SharedPointerT<MessageData>>(pMsg);
-	pSendBuff = nullptr;
-    if (bIncludePacketHeader)
-    {
-        RawSendSize = pMsgs->GetMessageSize() + sizeof(PacketHeader);
-        pRawSendBuffer = reinterpret_cast<uint8_t*>(pMsgs->GetPacketHeader());
-    }
-    else
-    {
-        RawSendSize = pMsgs->GetMessageSize();
-        pRawSendBuffer = pMsgs->GetMessageBuff();
-    }
-}
+//void IOBUFFER_WRITE::InitMsg(bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg)
+//{
+//	pMsgs = std::forward<SharedPointerT<MessageData>>(pMsg);
+//	pSendBuff = nullptr;
+//    if (bIncludePacketHeader)
+//    {
+//        RawSendSize = pMsgs->GetMessageSize() + sizeof(PacketHeader);
+//        pRawSendBuffer = reinterpret_cast<uint8_t*>(pMsgs->GetPacketHeader());
+//    }
+//    else
+//    {
+//        RawSendSize = pMsgs->GetMessageSize();
+//        pRawSendBuffer = pMsgs->GetMessageBuff();
+//    }
+//}
 
 void IOBUFFER_WRITE::InitBuff(uint uiBuffSize, uint8_t* pBuff)
 {
-	pMsgs = nullptr;
-	pSendBuff = pBuff;
-
 	RawSendSize = uiBuffSize;
 	pRawSendBuffer = pBuff;
 }
 
-void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg)
-{
-	InitForIO(sockWrite);
-
-	InitMsg(bIncludePacketHeader, std::forward<SharedPointerT<MessageData>>(pMsg));
-
-	NetAddr.To = to;
-
-	Operation = IOBUFFER_OPERATION::OP_UDPWRITE;
-}
+//void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg)
+//{
+//	InitForIO(sockWrite);
+//
+//	InitMsg(bIncludePacketHeader, std::forward<SharedPointerT<MessageData>>(pMsg));
+//
+//	NetAddr.To = to;
+//
+//	Operation = IOBUFFER_OPERATION::OP_UDPWRITE;
+//}
 
 void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, uint uiBuffSize, uint8_t* pBuff)
 {
@@ -73,14 +70,25 @@ void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& t
 	Operation = IOBUFFER_OPERATION::OP_UDPWRITE;
 }
 
-void IOBUFFER_WRITE::SetupSendTCP(SharedPointerT<MessageData>&& pMsg)
-{
-	InitForIO(0);
+//void IOBUFFER_WRITE::SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to)
+//{
+//    InitForIO(sockWrite);
+//
+//    assert(RawSendSize != 0 && pRawSendBuffer != nullptr);
+//
+//    NetAddr.To = to;
+//
+//    Operation = IOBUFFER_OPERATION::OP_UDPWRITE;
+//}
 
-	InitMsg(false, std::forward<SharedPointerT<MessageData>>(pMsg));
-
-	Operation = IOBUFFER_OPERATION::OP_TCPWRITE;
-}
+//void IOBUFFER_WRITE::SetupSendTCP(SharedPointerT<MessageData>&& pMsg)
+//{
+//	InitForIO(0);
+//
+//	InitMsg(false, std::forward<SharedPointerT<MessageData>>(pMsg));
+//
+//	Operation = IOBUFFER_OPERATION::OP_TCPWRITE;
+//}
 
 void IOBUFFER_WRITE::SetupSendTCP(uint uiBuffSize, uint8_t* pBuff)
 {
@@ -105,7 +113,7 @@ void IOBUFFER_READ::InitRecv(uint64_t iCID)
 {
 	InitForIO();
 #ifdef DEBUG
-	memset(buffer, 0xCE, sizeof(buffer));
+	memset(GetPayloadPtr(), 0xCE, Const::INTER_PACKET_SIZE_MAX);
 #endif
 	CID = iCID;
 }

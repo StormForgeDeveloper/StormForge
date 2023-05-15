@@ -58,8 +58,6 @@ namespace Net {
 		: Connection(heap, ioHandler)
 		, m_SendReliableWindow(GetHeap())
 		, m_uiMaxGuarantedRetryAtOnce(Const::UDP_SVR_RETRY_ONETIME_MAX)
-		, m_uiGatheredSize(0)
-		, m_pGatheringBuffer(nullptr)
 		, m_pWriteQueuesUDP(nullptr)
 	{
 		SetHeartbeatTry( Const::UDP_HEARTBEAT_TIME);
@@ -74,6 +72,8 @@ namespace Net {
 		SetNetCtrlAction(NetCtrlCode_Connect, &m_HandleConnect);
 		SetNetCtrlAction(NetCtrlCode_Disconnect, &m_HandleDisconnect);
 
+        AddStateAction(ConnectionState::CONNECTING, &m_ActFlushNet);
+        AddStateAction(ConnectionState::DISCONNECTING, &m_ActFlushNet);
 		AddStateAction(ConnectionState::CONNECTED, &m_ActSendReliableQueue);
 		AddStateAction(ConnectionState::CONNECTED, &m_ActSendReliableRetry);
         AddStateAction(ConnectionState::CONNECTED, &m_ActFlushNet);
@@ -84,12 +84,7 @@ namespace Net {
 		m_RecvReliableWindow.Reset();
 		m_SendReliableWindow.ClearWindow();
 
-
-		if(m_pGatheringBuffer != nullptr)
-			IHeap::Delete(m_pGatheringBuffer);
-		m_pGatheringBuffer = nullptr;
-
-		m_SubFrameMessage = nullptr;
+		m_SubFrameCollectionBuffer = nullptr;
 	}
 
 	void ConnectionUDPBase::SetWriteQueueUDP(WriteBufferQueue* writeQueue)
@@ -99,100 +94,92 @@ namespace Net {
 		m_pWriteQueuesUDP = writeQueue;
 	}
 
+    // Make Ack packet and enqueue to SendNetCtrlqueue
+    Result ConnectionUDPBase::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0)
+    {
+        return SendPending(uiCtrlCode, uiSequence, returnMsgID, parameter0);
+    }
+
 	// gathering
-	Result ConnectionUDPBase::SendPending( uint uiCtrlCode, uint uiSequence, MessageID msgID, uint64_t parameter0)
+	Result ConnectionUDPBase::SendPending( uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0)
 	{
-		Result hr = ResultCode::SUCCESS;
+		Result hr;
 
-		netCheck( PrepareGatheringBuffer(sizeof(MsgNetCtrlBuffer)) );
+        MsgNetCtrlBuffer netCtrlBuffer{};
+        netCheck(MakeNetCtrl(&netCtrlBuffer.Header, uiCtrlCode, uiSequence, returnMsgID, parameter0));
 
-        MessageHeader* pHeader = reinterpret_cast<MessageHeader*>(m_pGatheringBuffer + m_uiGatheredSize);
-        netCheck(MakeNetCtrl(pHeader, uiCtrlCode, uiSequence, msgID, parameter0));
+        {
+            MutexScopeLock scopeLock(m_GatheringBufferLock);
 
-		m_uiGatheredSize += pHeader->Length;
+            netCheck(PrepareGatheringBuffer(netCtrlBuffer.Header.Length));
 
-		return hr;
-	}
+            netCheckMem(m_GatheringBuffer->AddMessage(&netCtrlBuffer.Header));
+        }
 
-	Result ConnectionUDPBase::SendPending(const MessageHeader* pHeader)
-	{
-		Result hr = ResultCode::SUCCESS;
-
-		netCheckPtr(pHeader);
-
-		if(pHeader->Length > (uint)Const::INTER_PACKET_SIZE_MAX )
-		{
-			netCheck( ResultCode::IO_BADPACKET_TOOBIG );
-		}
-
-        netCheck(PrepareGatheringBuffer(pHeader->Length));
-
-		memcpy(m_pGatheringBuffer + m_uiGatheredSize, pHeader, pHeader->Length);
-
-		m_uiGatheredSize += pHeader->Length;
-
-		return hr;
+        return hr;
 	}
 
 	Result ConnectionUDPBase::SendFlush()
 	{
-		Result hr = ResultCode::SUCCESS;
-		IOBUFFER_WRITE *pSendBuffer = nullptr;
+        Net::SocketIO* pIOHandler = GetNetIOHandler();
+        ScopeContext hr([this, &pIOHandler](Result hr)
+            {
+                if (!hr && pIOHandler != nullptr)
+                    pIOHandler->DecPendingSendCount();
+            });
 
-		Net::SocketIO* pIOHandler = GetNetIOHandler();
+        MutexScopeLock scopeLock(m_GatheringBufferLock);
+
+        if (m_GatheringBuffer == nullptr)
+            return hr;
+
 		if (pIOHandler != nullptr)
-		{
+        {
 			if (pIOHandler->GetIsIORegistered() && GetConnectionState() != ConnectionState::DISCONNECTED
-				&& m_uiGatheredSize > m_uiMinGatherSizeForFlush
-                && m_pGatheringBuffer)
+				&& m_GatheringBuffer->Payload.size() > m_uiMinGatherSizeForFlush)
 			{
-				uint GatherSize = m_uiGatheredSize;
-				uint8_t* pGatherBuff = m_pGatheringBuffer;
-
-				m_uiGatheredSize = 0;
-				m_pGatheringBuffer = nullptr;
+                SFUniquePtr<PacketData> pSendBuffer(m_GatheringBuffer.release());
 
 				pIOHandler->IncPendingSendCount();
 
-				netMem(pSendBuffer = new(GetIOHeap()) IOBUFFER_WRITE);
-				pSendBuffer->SetupSendUDP(GetSocket(), GetRemoteSockAddr(), GatherSize, pGatherBuff);
+                pSendBuffer->SetupSendUDP(GetSocket(), GetRemoteSockAddr(),
+                    (uint)pSendBuffer->Payload.size(), pSendBuffer->Payload.data());
 
 				if (NetSystem::IsProactorSystem())
 				{
 					if (GetNetIOHandler() != nullptr)
 					{
-						netChk(GetNetIOHandler()->WriteBuffer(pSendBuffer));
+						netCheck(GetNetIOHandler()->WriteBuffer(pSendBuffer.get()));
 					}
 				}
 				else
 				{
-					netChk(EnqueueBufferUDP(pSendBuffer));
+					netCheck(EnqueueBufferUDP(pSendBuffer.get()));
 				}
 
-				pSendBuffer = nullptr;
+				pSendBuffer.release();
 			}
 
 		}
 
-	Proc_End:
-
-		if(!hr && pIOHandler != nullptr)
-			pIOHandler->DecPendingSendCount();
-
-		m_uiGatheredSize = 0;
-		if( m_pGatheringBuffer != nullptr )
-			IHeap::Delete(m_pGatheringBuffer);
-
-		if (pSendBuffer != nullptr)
-			IHeap::Delete(pSendBuffer);
-
-		m_pGatheringBuffer = nullptr;
-
 		return hr;
 	}
 
+    Result ConnectionUDPBase::AllocSendBuffer()
+    {
+        assert(m_GatheringBuffer == nullptr);
+        m_GatheringBuffer.reset(PacketData::NewPacketData());
+
+        if (m_bIncludePacketHeader)
+        {
+            m_GatheringBuffer->AddPacketHeader(GetLocalInfo().PeerID);
+        }
+
+        return ResultCode::SUCCESS;
+    }
+
 	// Prepare gathering buffer
-	Result ConnectionUDPBase::PrepareGatheringBuffer( uint uiRequiredSize )
+	Result ConnectionUDPBase::PrepareGatheringBuffer(uint uiRequiredSize)
 	{
 		Result hr = ResultCode::SUCCESS;
 
@@ -204,37 +191,31 @@ namespace Net {
 
 		//AssertRel(GetRunningThreadID() == ThisThread::GetThreadID());
 
-		if( (m_uiGatheredSize + uiRequiredSize) > (uint)Const::PACKET_GATHER_SIZE_MAX )
-		{
-			hr = SendFlush();
-			if (!hr) return hr;
-			Assert(m_uiGatheredSize == 0);
-		}
+        if (m_GatheringBuffer == nullptr)
+        {
+            netCheck(AllocSendBuffer());
+        }
 
-		if( m_pGatheringBuffer == nullptr )
-		{
-			m_pGatheringBuffer = new(GetIOHeap()) uint8_t[Const::PACKET_GATHER_SIZE_MAX];
-			if (m_pGatheringBuffer == nullptr)
-				return ResultCode::OUT_OF_MEMORY;
-
-            m_uiGatheredSize = 0;
-            if (m_bIncludePacketHeader)
+        if (!m_GatheringBuffer->CanAdd(uiRequiredSize))
+        {
+            SendFlush();
+            if (m_GatheringBuffer == nullptr) // we have exception case not flushing out
             {
-                reinterpret_cast<PacketHeader*>(m_pGatheringBuffer)->PeerId = GetLocalInfo().PeerID;
-                m_uiGatheredSize += sizeof(PacketHeader);
+                netCheck(AllocSendBuffer());
             }
-		}
+        }
 
-		return hr;
+        assert(m_GatheringBuffer && m_GatheringBuffer->CanAdd(uiRequiredSize));
+
+        return hr;
 	}
 
 	// frame sequence
-	Result ConnectionUDPBase::SendFrameSequenceMessage(const SharedPointerT<MessageData>& pMsg)
+	Result ConnectionUDPBase::SendFrameSequenceMessage(const MessageHeader* pSrcMsgHeader)
 	{
 		Result hr = ResultCode::SUCCESS;
 		TimeStampMS ulTimeCur = Util::Time.GetTimeMs();
-		auto pSrcMsgHeader = pMsg->GetMessageHeader();
-		auto remainSize = pSrcMsgHeader->Length;
+		uint32_t remainSize = pSrcMsgHeader->Length;
 		unsigned offset = 0;
 
 		assert(pSrcMsgHeader->msgID.IDSeq.Sequence == 0);
@@ -245,7 +226,7 @@ namespace Net {
 			pSrcMsgHeader->msgID,
 			pSrcMsgHeader->Length);
 
-		const uint8_t* pCurSrc = pMsg->GetMessageBuff();
+		const uint8_t* pCurSrc = reinterpret_cast<const uint8_t*>(pSrcMsgHeader);
 		for (uint iSequence = 0; remainSize > 0; iSequence++)
 		{
 			uint frameSize = Math::Min(remainSize, (uint)MAX_SUBFRAME_SIZE);
@@ -299,25 +280,26 @@ namespace Net {
 
 		if (pCurrentFrame->Offset == 0) // first frame
 		{
-            m_SubFrameMessage.reset(reinterpret_cast<MessageHeader*>(GetSystemHeap().Alloc(pCurrentFrame->TotalSize)));
+            m_SubFrameCollectionBuffer.reset(reinterpret_cast<MessageHeader*>(GetSystemHeap().Alloc(pCurrentFrame->TotalSize)));
 
-			memcpy(m_SubFrameMessage->GetDataPtr(), dataPtr, pCurrentFrame->ChunkSize);
+			memcpy(m_SubFrameCollectionBuffer->GetDataPtr(), dataPtr, pCurrentFrame->ChunkSize);
+            assert(m_SubFrameCollectionBuffer->Length != 0 && m_SubFrameCollectionBuffer->Length != 0xcdcd);
 		}
 		else
 		{
-			if (m_SubFrameMessage == nullptr)
+			if (m_SubFrameCollectionBuffer == nullptr)
 			{
-				assert(m_SubFrameMessage != nullptr);
+				assert(m_SubFrameCollectionBuffer != nullptr);
 				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 
-			if (m_SubFrameMessage->Length != pCurrentFrame->TotalSize)
+			if (m_SubFrameCollectionBuffer->Length != pCurrentFrame->TotalSize)
 			{
 				assert(false);
 				netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
 			}
 
-			memcpy(reinterpret_cast<uint8_t*>(m_SubFrameMessage->GetDataPtr()) + pCurrentFrame->Offset, dataPtr, pCurrentFrame->ChunkSize);
+			memcpy(reinterpret_cast<uint8_t*>(m_SubFrameCollectionBuffer->GetDataPtr()) + pCurrentFrame->Offset, dataPtr, pCurrentFrame->ChunkSize);
 		}
 
 		int receivedSize = pCurrentFrame->Offset + pCurrentFrame->ChunkSize;
@@ -328,8 +310,8 @@ namespace Net {
 		else if (receivedSize == pCurrentFrame->TotalSize)
 		{
 			// done
-            super::OnRecv(m_SubFrameMessage.get());
-			m_SubFrameMessage.reset();
+            super::OnRecv(m_SubFrameCollectionBuffer.get());
+			m_SubFrameCollectionBuffer.reset();
 		}
 
 		return hr;
@@ -340,7 +322,9 @@ namespace Net {
 	{
 		Result hr = ResultCode::SUCCESS;
 
-		m_uiGatheredSize = 0;
+        m_GatheringBuffer = nullptr;
+        //m_WriteItem.Reset();
+        //m_CircularWriteBuffer.Reset();
 
 		//m_RecvGuaQueue.ClearQueue();
 
@@ -348,7 +332,7 @@ namespace Net {
 
 		netCheck( ClearQueues() );
 
-		m_SubFrameMessage = nullptr;
+		m_SubFrameCollectionBuffer = nullptr;
 
 		return hr;
 	}
@@ -363,7 +347,7 @@ namespace Net {
 
 		hr = Connection::CloseConnection(reason);
 
-		m_SubFrameMessage = nullptr;
+		m_SubFrameCollectionBuffer = nullptr;
 
 		return hr;
 	}
@@ -376,7 +360,7 @@ namespace Net {
 		m_RecvReliableWindow.Reset();
 		m_SendReliableWindow.ClearWindow();
 
-		m_SubFrameMessage = nullptr;
+		m_SubFrameCollectionBuffer = nullptr;
 
 		return ResultCode::SUCCESS;
 	}
@@ -407,79 +391,10 @@ namespace Net {
 		return GetWriteQueueUDP()->Enqueue(pSendBuffer);
 	}
 
-	Result ConnectionUDPBase::SendRaw(const SharedPointerT<MessageData> &pMsg)
-	{
-		SFUniquePtr<IOBUFFER_WRITE> pSendBuffer;
-		auto pIOHandler = GetNetIOHandler();
-		if (pIOHandler == nullptr || !pIOHandler->GetIsIORegistered())
-			return ResultCode::SUCCESS_FALSE;
-
-		ScopeContext hr([this, &pIOHandler](Result hr)
-			{
-				if (!hr)
-					pIOHandler->DecPendingSendCount();
-			});
-
-
-		pIOHandler->IncPendingSendCount();
-
-		netCheckPtr(pMsg);
-
-        const MessageHeader* pHeader = pMsg->GetMessageHeader();
-
-        uint uiPolicy = pHeader->msgID.IDs.Policy;
-        if ((uiPolicy == 0 && pHeader->msgID.IDs.Type != 0)
-            || uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
-        {
-            netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
-        }
-
-        if (pHeader->msgID.IDs.Type != MSGTYPE_NETCONTROL && !pMsg->IsEncrypted())
-        {
-            netCheck(ResultCode::IO_INVALID_MESSAGE_ENCRYPTION);
-        }
-
-        //SFLog(Net, Info, "Send {0}, len:{1}", pHeader->msgID, pHeader->Length);
-
-		if (pMsg->GetPayloadSize() != 0 && pHeader->Crc32 == 0 && pHeader->msgID.IDs.Policy != PROTOCOLID_NONE)
-		{
-			Assert(pMsg->GetPayloadSize() == 0 || pHeader->Crc32 != 0 || pHeader->msgID.IDs.Policy == PROTOCOLID_NONE);
-			netCheck(ResultCode::FAIL);
-		}
-
-		pSendBuffer.reset(new(GetIOHeap()) IOBUFFER_WRITE);
-		netCheckMem(pSendBuffer);
-
-        if (m_bIncludePacketHeader)
-        {
-            pMsg->GetPacketHeader()->PeerId = GetLocalInfo().PeerID;
-        }
-
-		pSendBuffer->SetupSendUDP(GetSocket(), GetRemoteSockAddr(), m_bIncludePacketHeader, SharedPointerT<MessageData>(pMsg));
-
-		if (NetSystem::IsProactorSystem())
-		{
-			if (GetNetIOHandler() != nullptr)
-			{
-				netCheck(GetNetIOHandler()->WriteBuffer(pSendBuffer.get()));
-			}
-		}
-		else
-		{
-			netCheck(EnqueueBufferUDP(pSendBuffer.get()));
-		}
-
-		pSendBuffer.release();
-
-		return hr;
-	}
-
 	// Process network control message
 	Result ConnectionUDPBase::ProcNetCtrl(const MsgNetCtrlBuffer* pNetCtrl)
 	{
-		//assert(ThisThread::GetThreadID() == GetRunningThreadID());
-
-		Result hr = ResultCode::SUCCESS;
+		Result hr;
 		ConnectionMessageAction* pAction = nullptr;
 
 		if (pNetCtrl->Header.Length < (sizeof(MessageHeader) + sizeof(MsgNetCtrl)))
@@ -629,13 +544,13 @@ namespace Net {
 				msgID.IDSeq.Sequence,
 				uiMsgLen);
 
-			netCheck(SendRaw(pMsg));
+			netCheck(SendRaw(pMsg->GetMessageHeader()));
 		}
 		else
 		{
 			if( pMsg->GetIsSequenceAssigned() )
 			{
-				netCheck(SendRaw(pMsg));
+				netCheck(SendRaw(pMsg->GetMessageHeader()));
 			}
 			else
 			{
@@ -649,7 +564,7 @@ namespace Net {
 
 				if (pMsg->GetMessageSize() > (uint)Const::INTER_PACKET_SIZE_MAX)
 				{
-					netCheck(SendFrameSequenceMessage(pMsg));
+					netCheck(SendFrameSequenceMessage(pMsg->GetMessageHeader()));
 				}
 				else
 				{
@@ -664,6 +579,135 @@ namespace Net {
 
 		return hr;
 	}
+
+    Result ConnectionUDPBase::SendMsg(const MessageHeader* pMsgHeader)
+    {
+        MessageID msgID;
+        ScopeContext hr([this, &msgID](Result hr)
+            {
+                if (hr)
+                {
+                    if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
+                    {
+                        SFLog(Net, Debug6, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
+                    }
+                    else
+                    {
+                        SFLog(Net, Debug5, "TCP Send CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
+                    }
+                }
+
+            });
+        uint uiMsgLen{};
+
+        if (GetConnectionState() == ConnectionState::DISCONNECTED)
+            return ResultCode::SUCCESS_FALSE;
+
+        msgID = pMsgHeader->msgID;
+        uiMsgLen = pMsgHeader->Length;
+
+        if ((msgID.IDs.Type != MSGTYPE_NETCONTROL && GetConnectionState() == ConnectionState::DISCONNECTING)
+            || GetConnectionState() == ConnectionState::DISCONNECTED)
+        {
+            // Send fail by connection closed
+            return hr;
+        }
+
+        if (!msgID.IDs.Reliability && pMsgHeader->Length > (uint)Const::INTER_PACKET_SIZE_MAX)
+        {
+            SFLog(Net, Warning, "Too big packet: msg:{0}, seq:{1}, len:{2}",
+                msgID,
+                msgID.IDSeq.Sequence,
+                uiMsgLen);
+
+            netCheck(ResultCode::IO_BADPACKET_TOOBIG);
+        }
+
+        Protocol::PrintDebugMessage("Send", pMsgHeader);
+
+        if (!msgID.IDs.Reliability
+            && m_SendGuaQueue.size() > Const::GUARANT_PENDING_MAX)
+        {
+            // Drop if there is too many reliable packets are pending
+            netCheck(ResultCode::IO_SEND_FAIL);
+        }
+
+
+        if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
+        {
+            netCheck(SendRaw(pMsgHeader));
+        }
+        else
+        {
+            if (!msgID.IDs.Reliability)
+            {
+                SFLog(Net, Debug4, "SEND : msg:{0}, len:{1}",
+                    msgID,
+                    uiMsgLen);
+
+
+                {
+                    MutexScopeLock scopeLock(m_GatheringBufferLock);
+
+                    netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
+
+                    MessageHeader* pCopiedMessage = m_GatheringBuffer->AddMessage(pMsgHeader);// , NewSeqNone()));
+                    netCheckMem(pCopiedMessage);
+                    pCopiedMessage->msgID.SetSequence(NewSeqNone());
+                    pCopiedMessage->UpdateChecksumNEncrypt();
+                }
+            }
+            else
+            {
+                SFLog(Net, Debug6, "SENDGuaQueued : CID:{0}, msg:{1}, seq:{2}, len:{3}",
+                    GetCID(),
+                    msgID,
+                    msgID.IDSeq.Sequence,
+                    uiMsgLen);
+
+                AssertRel(pMsgHeader->msgID.IDSeq.Sequence == 0);
+
+                if (pMsgHeader->Length > (uint)Const::INTER_PACKET_SIZE_MAX)
+                {
+                    netCheck(SendFrameSequenceMessage(pMsgHeader));
+                }
+                else
+                {
+                    MessageDataPtr msgDataPtr = MessageData::NewMessage(GetSystemHeap(), pMsgHeader);
+                    msgDataPtr->UpdateChecksumNEncrypt();
+
+                    netCheck(m_SendGuaQueue.Enqueue(std::forward<MessageDataPtr>(msgDataPtr)));
+                }
+
+                SetSendBoost(Const::RELIABLE_SEND_BOOST);
+            }
+        }
+
+        return hr;
+    }
+
+
+    Result ConnectionUDPBase::SendRaw(const MessageHeader* pMsgHeader)
+    {
+        Result hr;
+
+        netCheckPtr(pMsgHeader);
+
+        if (pMsgHeader->Length > (uint)Const::INTER_PACKET_SIZE_MAX)
+        {
+            netCheck(ResultCode::IO_BADPACKET_TOOBIG);
+        }
+
+        {
+            MutexScopeLock scopeLock(m_GatheringBufferLock);
+
+            netCheck(PrepareGatheringBuffer(pMsgHeader->Length));
+
+            netCheckMem(m_GatheringBuffer->AddMessage(pMsgHeader));
+        }
+
+        return hr;
+    }
 
 	// called when incoming message occur
 	Result ConnectionUDPBase::OnRecv(uint uiBuffSize, uint8_t* pBuff)
@@ -724,19 +768,7 @@ namespace Net {
 			{
 				if (GetConnectionState() == ConnectionState::CONNECTED)
 				{
-                    pMsgHeader->ValidateChecksumNDecrypt();
-
-					//netMem(pMsg = MessageData::NewMessage(GetHeap(), pMsgHeader->msgID.ID, pMsgHeader->Length, pBuff));
-
-     //               pMsg->SetEncrypted(true);
-     //               hr = pMsg->ValidateChecksumNDecrypt();
-     //               if (!hr)
-     //               {
-     //                   SFLog(Net, Debug, "Decryption&Checksum failure: CID:{0} msg:{1}",
-     //                       GetCID(),
-     //                       pMsgHeader->msgID);
-     //                   netCheck(hr);
-     //               }
+                    netCheck(pMsgHeader->ValidateChecksumNDecrypt());
 
                     hr = OnRecv(pMsgHeader);
 					netChk(hr);

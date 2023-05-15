@@ -91,7 +91,8 @@ namespace SF {
 		virtual NetIOSystem& GetNetIOSystem() { return m_DefaultNetIOSystem; }
 
 		virtual Net::WriteBufferQueue* GetWriteBufferQueue() { return nullptr; }
-
+        virtual Net::IOBUFFER_WRITE* AllocateWriteBuffer() { return nullptr; }
+        virtual size_t GetWriteBufferSize() { return 0; }
 
 		///////////////////////////////////////////////////////////////////////////////
 		// Socket handling 

@@ -194,7 +194,7 @@ namespace Net {
 	public:
 		virtual bool IsSameEndpoint(const EndpointAddress& messageEndpoint) = 0;
 		virtual Result Send(const SharedPointerT<MessageData>& messageData) = 0;
-        virtual Result SendMessage(const MessageHeader* messageData) = 0;
+        virtual Result SendMsg(const MessageHeader* messageData) = 0;
 	};
 
     using MessageEndpointPtr = SharedPointerT<MessageEndpoint>;

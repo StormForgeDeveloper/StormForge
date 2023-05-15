@@ -94,7 +94,7 @@ namespace SF
 		if (pItem == nullptr)
 		{
 			// Allocate page if no free item
-            pMemBlock = GetParent()->AllocInternal(m_AllocSize, alignment);
+            pMemBlock = super::AllocInternal(m_AllocSize, alignment);
 			if (pMemBlock == nullptr)
 				return nullptr;
 

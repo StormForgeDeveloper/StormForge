@@ -329,7 +329,7 @@ namespace SF {
 			return false;
 		}
 
-		auto pHeap = pMemBlock->pHeap;
+		IHeap* pHeap = pMemBlock->pHeap;
 #if ENABLE_MEMORY_TRACE
 		if (pHeap != nullptr && !pHeap->GetIgnoreMemoryLeak())
 			pHeap->RemoveAllocatedList(pMemBlock);

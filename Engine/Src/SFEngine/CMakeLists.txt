@@ -104,6 +104,10 @@ set(SUBNet_FILES
 	Net/SFNetSystem_WinIOCP.cpp
 	Net/SFNetToString.cpp
 	Net/SFNetUtil.cpp
+	Net/SFNetMessageCollection.h
+	Net/SFNetMessageCollection.cpp
+	Net/SFNetPacketData.h
+	Net/SFNetPacketData.cpp
 	#Net/SFNetRelayNetwork.cpp
 	#Net/SFNetRelayNetwork.h
 	Component/SFConnectionManagerComponent.cpp

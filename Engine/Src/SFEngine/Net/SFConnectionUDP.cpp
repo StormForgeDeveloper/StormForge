@@ -52,7 +52,7 @@ namespace Net {
 
 
 	// Constructor
-	ConnectionUDPServerPeer::ConnectionUDPServerPeer(IHeap& heap, SocketIO* ioHandler)
+	ConnectionUDPServerPeer::ConnectionUDPServerPeer(IHeap& heap, SocketIOUDP* ioHandler)
 		: ConnectionUDP(heap, ioHandler)
 	{
 		// limit server net retry maximum
@@ -140,7 +140,7 @@ namespace Net {
 			{
 				netChkPtr(pIOBuffer);
 
-				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->buffer)))
+				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, pIOBuffer->GetPayloadPtr())))
 					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
 
 				m_Owner.PendingRecv();
@@ -168,6 +168,15 @@ namespace Net {
 		return hr;
 
 	}
+
+    //Result ConnectionUDPClient::MyNetSocketIOAdapter::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer)
+    //{
+    //    Result hr;
+
+    //    netCheck(super::OnIOSendCompleted(hrRes, pIOBuffer));
+
+    //    return hr;
+    //}
 
 	Result ConnectionUDPClient::MyNetSocketIOAdapter::OnWriteReady()
 	{
@@ -254,7 +263,7 @@ namespace Net {
 	Result ConnectionUDPClient::PendingRecv()
 	{
 		Result hr = ResultCode::SUCCESS, hrErr = ResultCode::SUCCESS;
-		SFUniquePtr<IOBUFFER_READ> pOver;
+		UniquePtr<IOBUFFER_READ> pOver;
 
 		if (!NetSystem::IsProactorSystem())
 			return ResultCode::SUCCESS;
@@ -264,7 +273,7 @@ namespace Net {
 
 		while(1)
 		{
-			pOver.reset(new(GetHeap()) IOBUFFER_READ);
+			pOver.reset(new IOBUFFER_READ);
 			hrErr = m_NetIOAdapter.PendingRecv(pOver.get());
 			switch ((uint32_t)hrErr)
 			{

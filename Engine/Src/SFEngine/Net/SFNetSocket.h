@@ -17,6 +17,7 @@
 #include "Net/SFNetConst.h"
 #include "Util/SFStrUtil.h"
 #include "Container/SFHashTable.h"
+#include "Container/SFCircularBufferQueue.h"
 #include "MemoryManager/SFMemoryPool.h"
 #include "Multithread/SFThread.h"
 #include "Net/SFNetUtil.h"
@@ -30,7 +31,7 @@ namespace SF {
 namespace Net {
 
 	class Connection;
-
+    struct PacketData;
 
 	////////////////////////////////////////////////////////////////////////////////
 	//
@@ -86,6 +87,7 @@ namespace Net {
 
 		// Is registered to IO sub system
 		std::atomic<IOStatus> m_IOStatus;
+
 
 		WriteBufferQueue* m_pWriteQueues{};
 
@@ -198,6 +200,8 @@ namespace Net {
 	class SocketIOUDP : public SocketIO
 	{
 	public:
+        using super = SocketIO;
+
 		SocketIOUDP(IHeap& heap);
 
 		virtual Result WriteBuffer(IOBUFFER_WRITE *pSendBuffer) override;
@@ -206,6 +210,10 @@ namespace Net {
 
 		// Recv handling for UDP socket
 		virtual Result Recv(IOBUFFER_READ* pIOBuffer) override;
+
+        //virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ*& pIOBuffer) override;
+        //virtual Result OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer) override;
+
 	};
 
 
@@ -219,6 +227,9 @@ namespace Net {
 	class SocketIOTCP : public SocketIO
 	{
 	public:
+        // This is going to be per connection buffer
+        static constexpr size_t SendBufferSize = 128 * 1024;
+
 		SocketIOTCP(IHeap& heap);
 
 		// Accept handling

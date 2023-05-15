@@ -98,10 +98,10 @@ namespace Net {
 	public:
         typedef ConnectionMUDP super;
 
-
 		class MyNetSocketIOAdapter : public SocketIOUDP
 		{
 		private:
+            using super = SocketIOUDP;
 
 			ConnectionMUDPClient &m_Owner;
 			Result m_LastResult;
@@ -115,11 +115,11 @@ namespace Net {
 			// Send message to connection with network device
 			virtual Result WriteBuffer(IOBUFFER_WRITE *pSendBuffer) override;
 
-			// called when receiving TCP message
-			virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ* &pIOBuffer) override;
-
 			virtual Result OnWriteReady() override;
-		};
+
+            virtual Result OnIORecvCompleted(Result hrRes, IOBUFFER_READ*& pIOBuffer) override;
+            virtual Result OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer) override;
+        };
 
 
 		class MyNetSocketIOManager

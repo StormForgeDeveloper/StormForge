@@ -51,7 +51,6 @@ namespace Net {
 		, m_GatheringBufferSize(gatheringBufferSize)
 		, m_RecvBufferSize(recvBufferSize)
 		, m_SendBufferSize(sendBufferSize)
-		//, m_pGatheringBufferPool(nullptr)
 		, m_Heap("Net", GetSystemHeap())
 		, m_NetIOSystem(nullptr)
 	{
@@ -76,7 +75,7 @@ namespace Net {
 		LibraryComponent::InitializeComponent();
 		
 		Service::NetSystem = this;
-        //m_pGatheringBufferPool.reset(new MemoryPool(GetSystemHeap(), m_GatheringBufferSize));//MemoryPoolManager::GetMemoryPoolBySize(m_GatheringBufferSize);
+        m_pGatheringBufferPool = new(GetSystemHeap()) MemoryPool(GetSystemHeap(), m_GatheringBufferSize);
 
 		if (m_NetIOSystem != nullptr) 
 			m_NetIOSystem->Initialize(m_NumThread);
@@ -97,6 +96,11 @@ namespace Net {
 
 	}
 
+    Net::IOBUFFER_WRITE* NetSystem::AllocateWriteBuffer()
+    {
+        IOBUFFER_WRITE* pWriteBuffer = new(*(IHeap*)m_pGatheringBufferPool.get()) IOBUFFER_WRITE;
+        return pWriteBuffer;
+    }
 
 } // namespace Net
 } // namespace SF

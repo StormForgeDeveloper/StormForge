@@ -116,7 +116,7 @@ namespace Net {
 
 	IOBUFFER_WRITE::IOBUFFER_WRITE()
 	{
-		pSendBuff = nullptr;
+		//pSendBuff = nullptr;
 		hEvent = WSA_INVALID_EVENT;
 	}
 

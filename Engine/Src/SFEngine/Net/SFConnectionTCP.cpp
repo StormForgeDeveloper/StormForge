@@ -144,7 +144,7 @@ namespace Net {
 			{
 				netChkPtr(pIOBuffer);
 
-				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->buffer)))
+				if (!(hr = m_Owner.OnRecv(pIOBuffer->TransferredSize, (uint8_t*)pIOBuffer->GetPayloadPtr())))
 					SFLog(Net, Debug3, "Read IO failed with CID {0}, hr={1:X8}", m_Owner.GetCID(), hr);
 			}
 			else
@@ -194,6 +194,22 @@ namespace Net {
 		return hr;
 	}
 
+    Result ConnectionTCP::MyNetSocketIOAdapter::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer)
+    {
+        if (m_Owner.m_SendBufferQueue.IsManagedAddress(pIOBuffer))
+        {
+            m_Owner.m_SendBufferQueue.ForceReleaseRead(CircularBufferQueue::BufferItem::FromDataPtr(pIOBuffer));
+            DecPendingSendCount();
+            return ResultCode::SUCCESS;
+        }
+        else
+        {
+            // This path shouldn't be taken
+            assert(false);
+            return super::OnIOSendCompleted(hrRes, pIOBuffer);
+        }
+    }
+
 
 	// Send message to connection with network device
 	Result ConnectionTCP::MyNetSocketIOAdapter::WriteBuffer(IOBUFFER_WRITE *pSendBuffer)
@@ -232,13 +248,14 @@ namespace Net {
 	//
 
 	// Constructor
-	ConnectionTCP::ConnectionTCP(IHeap& heap)
+	ConnectionTCP::ConnectionTCP(IHeap& heap, size_t sendBufferSize)
 		: Connection(heap, &m_NetIOAdapter)
 		, m_NetIOAdapter(*this)
-		, m_lGuarantedSent(0)
-		, m_lGuarantedAck(0)
+        , m_SendBufferQueue(heap, sendBufferSize)
+		//, m_lGuarantedSent(0)
+		//, m_lGuarantedAck(0)
 		, m_uiRecvTemUsed(0)
-		, m_WriteBuffer(GetHeap())
+		//, m_WriteBuffer(GetHeap())
 		, m_uiSendNetCtrlCount(0)
 		, m_IsClientConnection(false)
 		, m_IsTCPSocketConnectionEstablished(true)
@@ -313,8 +330,8 @@ namespace Net {
 	{
 		m_NetIOAdapter.CloseSocket();
 
-		m_lGuarantedSent = 0;
-		m_lGuarantedAck = 0;
+		//m_lGuarantedSent = 0;
+		//m_lGuarantedAck = 0;
 
 		m_NetIOAdapter.ResetPendingRecvCount();
 		m_NetIOAdapter.ResetPendingSendCount();
@@ -607,17 +624,43 @@ namespace Net {
 		return hr;
 	}
 
-	Result ConnectionTCP::SendRaw(const SharedPointerT<MessageData> &pMsg)
-	{
-		SFUniquePtr<IOBUFFER_WRITE> pSendBuffer;
-		ScopeContext hr;
+    Result ConnectionTCP::SendNetCtrl(uint uiCtrlCode, uint uiSequence, MessageID returnMsgID, uint64_t parameter0)
+    {
+        Result hr = ResultCode::SUCCESS;
+        Result hrTem;
 
-		if (!m_NetIOAdapter.GetIsIORegistered())
-			return ResultCode::SUCCESS_FALSE;
+        MsgNetCtrlBuffer netCtrlBuffer{};
+        MessageHeader* pHeader = &netCtrlBuffer.Header;
 
-		netCheckMem(pMsg);
+        netCheck(MakeNetCtrl(pHeader, uiCtrlCode, uiSequence, returnMsgID, parameter0));
 
-        MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
+        hrTem = SendRaw(pHeader);
+        if (!hrTem)
+        {
+            SFLog(Net, Debug4, "NetCtrl Send failed : CID:{0}, msg:{1:X8}, seq:{2}, hr={3:X8}",
+                GetCID(),
+                returnMsgID.ID,
+                uiSequence,
+                hrTem);
+
+            // ignore IO send fail except connection closed
+            if (hrTem == ((Result)ResultCode::IO_CONNECTION_CLOSED))
+            {
+                return hr;
+            }
+        }
+
+        return hr;
+    }
+
+    Result ConnectionTCP::SendRaw(const MessageHeader* pMsgHeader)
+    {
+        Result hr;
+
+        if (!m_NetIOAdapter.GetIsIORegistered())
+            return ResultCode::SUCCESS_FALSE;
+
+        netCheckMem(pMsgHeader);
         MessageID msgID = pMsgHeader->msgID;
 
         uint uiPolicy = msgID.IDs.Policy;
@@ -625,40 +668,81 @@ namespace Net {
             || uiPolicy >= PROTOCOLID_NETMAX) // invalid policy
         {
             netCheck(ResultCode::IO_BADPACKET_NOTEXPECTED);
-        } 
+        }
 
-		pSendBuffer.reset(new(GetIOHeap()) IOBUFFER_WRITE);
-		netCheckMem(pSendBuffer.get());
-		pSendBuffer->SetupSendTCP(SharedPointerT<MessageData>(pMsg));
+        CircularBufferQueue::ItemWritePtr itemWritePtr = m_SendBufferQueue.AllocateWrite(sizeof(IOBUFFER_WRITE) + pMsgHeader->Length);
+        if (!itemWritePtr)
+        {
+            if (pMsgHeader->msgID.IDs.Reliability)
+            {
+                SFLog(Net, Warning, "ConnectionTCP::SendRaw, Send buffer overflow");
+            }
+            return hr = ResultCode::IO_SEND_FAIL;
+        }
 
-		m_NetIOAdapter.IncPendingSendCount();
+        CircularBufferQueue::BufferItem* pSendBufferItem = itemWritePtr.GetBufferItem();
+        IOBUFFER_WRITE* pSendBuffer = new(itemWritePtr.data()) IOBUFFER_WRITE;
 
-		if (NetSystem::IsProactorSystem())
-		{
-			hr = m_NetIOAdapter.WriteBuffer(pSendBuffer.get());
-		}
-		else
-		{
-			hr = m_NetIOAdapter.EnqueueBuffer(pSendBuffer.get());
-			m_NetIOAdapter.ProcessSendQueue();
-		}
+        assert(pSendBuffer == itemWritePtr.data());
 
-		if (hr)
-			pSendBuffer.release();
-		else
-			m_NetIOAdapter.DecPendingSendCount();
+        MessageHeader* pNewHeader = reinterpret_cast<MessageHeader*>(pSendBuffer + 1);
+        memcpy(pNewHeader, pMsgHeader, pMsgHeader->Length);
+        if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
+        {
+            pNewHeader->UpdateChecksum();
+        }
+        else
+        {
+            pNewHeader->UpdateChecksumNEncrypt();
+        }
+        pSendBuffer->SetupSendTCP(pMsgHeader->Length, reinterpret_cast<uint8_t*>(pNewHeader));
 
-		return hr;
-	}
+        // Release before handover to buffer send
+        itemWritePtr.Reset();
+
+        m_NetIOAdapter.IncPendingSendCount();
+
+        if (NetSystem::IsProactorSystem())
+        {
+            hr = m_NetIOAdapter.WriteBuffer(pSendBuffer);
+        }
+        else
+        {
+            hr = m_NetIOAdapter.EnqueueBuffer(pSendBuffer);
+            m_NetIOAdapter.ProcessSendQueue();
+        }
+
+        if (!hr)
+        {
+            SFLog(Net, Warning, "ConnectionTCP::SendRaw, Send failure hr:{0}", hr);
+            m_SendBufferQueue.ForceReleaseRead(pSendBufferItem);
+            m_NetIOAdapter.DecPendingSendCount();
+        }
+
+        return hr;
+    }
 
 	// Send message to connected entity
 	Result ConnectionTCP::Send(const SharedPointerT<MessageData> &pMsg )
 	{
-		Result hr = ResultCode::SUCCESS;
 		MessageID msgID;
+        ScopeContext hr([this, &msgID](Result hr)
+            {
+                if (hr)
+                {
+                    if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
+                    {
+                        SFLog(Net, Debug6, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
+                    }
+                    else
+                    {
+                        SFLog(Net, Debug5, "TCP Send CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
+                    }
+                }
+            });
 
 		if (GetConnectionState() == ConnectionState::DISCONNECTED)
-			return ResultCode::IO_NOT_CONNECTED;
+			return hr = ResultCode::IO_NOT_CONNECTED;
 
 		MessageHeader* pMsgHeader = pMsg->GetMessageHeader();
 		msgID = pMsgHeader->msgID;
@@ -667,48 +751,85 @@ namespace Net {
 			|| GetConnectionState() == ConnectionState::DISCONNECTED)
 		{
 			// Send fail by connection closed
-			goto Proc_End;
+            return hr;
 		}
 
 		if( pMsg->GetMessageSize() > (uint)Const::INTER_PACKET_SIZE_MAX )
 		{
-			netErr( ResultCode::IO_BADPACKET_TOOBIG );
+			netCheck( ResultCode::IO_BADPACKET_TOOBIG );
 		}
 
 		Protocol::PrintDebugMessage("Send", pMsgHeader);
 
-		if( !pMsgHeader->msgID.IDs.Reliability
-			&& (m_lGuarantedSent - m_lGuarantedAck) > Const::GUARANT_PENDING_MAX)
-		{
-			// Drop if there are too many reliable packets
-			netErr( ResultCode::IO_SEND_FAIL );
-		}
+        // TODO: traffic control has been lost. fix it
+		//if( !pMsgHeader->msgID.IDs.Reliability
+		//	&& (m_lGuarantedSent - m_lGuarantedAck) > Const::GUARANT_PENDING_MAX)
+		//{
+		//	// Drop if there are too many reliable packets
+  //          netCheck( ResultCode::IO_SEND_FAIL );
+		//}
 
-		m_lGuarantedSent.fetch_add(1, std::memory_order_relaxed);
+		//m_lGuarantedSent.fetch_add(1, std::memory_order_relaxed);
 
-		pMsg->UpdateChecksumNEncrypt();
-
-		netChk(SendRaw(pMsg));
-
-	Proc_End:
-
-		if(!(hr))
-		{
-		}
-		else
-		{
-			if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
-			{
-				SFLog(Net, Debug6, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
-			}
-			else
-			{
-				SFLog(Net, Debug5, "TCP Send CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
-			}
-		}
+        netCheck(SendRaw(pMsg->GetMessageHeader()));
 
 		return hr;
 	}
+
+    Result ConnectionTCP::SendMsg(const MessageHeader* pMsgHeader)
+    {
+        MessageID msgID;
+
+        ScopeContext hr([this, &msgID](Result hr)
+            {
+                if (hr)
+                {
+                    if (msgID.IDs.Type == MSGTYPE_NETCONTROL)
+                    {
+                        SFLog(Net, Debug6, "TCP Ctrl CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
+                    }
+                    else
+                    {
+                        SFLog(Net, Debug5, "TCP Send CID:{2}, ip:{0}, msg:{1}", GetRemoteInfo().PeerAddress, msgID, GetCID());
+                    }
+                }
+
+            });
+
+        if (GetConnectionState() == ConnectionState::DISCONNECTED)
+            return hr = ResultCode::IO_NOT_CONNECTED;
+
+        msgID = pMsgHeader->msgID;
+
+        if ((pMsgHeader->msgID.IDs.Type != MSGTYPE_NETCONTROL && GetConnectionState() == ConnectionState::DISCONNECTING)
+            || GetConnectionState() == ConnectionState::DISCONNECTED)
+        {
+            // Send fail by connection closed
+            return hr;
+        }
+
+        if (pMsgHeader->Length > (uint)Const::INTER_PACKET_SIZE_MAX)
+        {
+            netCheck(ResultCode::IO_BADPACKET_TOOBIG);
+        }
+
+        Protocol::PrintDebugMessage("Send", pMsgHeader);
+
+        // TODO: fix me
+        //if (!pMsgHeader->msgID.IDs.Reliability
+        //    && (m_lGuarantedSent - m_lGuarantedAck) > Const::GUARANT_PENDING_MAX)
+        //{
+        //    // Drop if there are too many reliable packets
+        //    netCheck(ResultCode::IO_SEND_FAIL);
+        //}
+
+        //m_lGuarantedSent.fetch_add(1, std::memory_order_relaxed);
+
+
+        netCheck(SendRaw(pMsgHeader));
+
+        return hr;
+    }
 
 	// Update Send buffer Queue, TCP and UDP client connection
 	//Result ConnectionTCP::UpdateSendBufferQueue()
