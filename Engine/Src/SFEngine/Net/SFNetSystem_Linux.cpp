@@ -131,14 +131,11 @@ namespace Net {
 		SockWrite = INVALID_SOCKET;
 		RawSendSize = 0;
 		pRawSendBuffer = nullptr;
-		//pSendBuff = nullptr;
 	}
 
 	IOBUFFER_WRITE::~IOBUFFER_WRITE()
 	{
 		ClearBuffer();
-
-		//Util::SafeRelease(pMsgs);
 	}
 
 
@@ -456,13 +453,6 @@ namespace Net {
 
 		return ResultCode::SUCCESS;
 	}
-
-
-
-
-
-
-
 
 
 } // namespace Net

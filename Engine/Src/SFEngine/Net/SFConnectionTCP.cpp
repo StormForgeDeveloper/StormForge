@@ -32,10 +32,6 @@
 #include "Net/SFNetCtrl.h"
 
 
-
-
-
-
 // define if emulate packet loss
 //#ifdef _DEBUG
 //#define UDP_PACKETLOS_EMULATE
@@ -777,12 +773,6 @@ namespace Net {
 
         return hr;
     }
-
-	// Update Send buffer Queue, TCP and UDP client connection
-	//Result ConnectionTCP::UpdateSendBufferQueue()
-	//{
-	//	return m_NetIOAdapter.ProcessSendQueue();
-	//}
 
 	// Update net control, process connection heartbeat, ... etc
 	Result ConnectionTCP::TickUpdate()

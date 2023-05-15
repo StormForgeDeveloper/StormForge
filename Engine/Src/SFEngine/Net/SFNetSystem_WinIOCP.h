@@ -65,48 +65,16 @@ namespace Net {
 	// UDP/TCP write overlapped
 	struct IOBUFFER_WRITE : public IOBUFFER_RWBASE
 	{
-		// Message pointer to send
-		//SharedPointerAtomicT<MessageData> pMsgs;
-
-		// Message buffer pointer to send
-		//uint8_t *pSendBuff;
-
 		// Constructor
 		IOBUFFER_WRITE();
 		~IOBUFFER_WRITE();
 
-        //void* operator new(size_t size) {
-        //    return GetSystemHeap().Alloc(size);
-        //}
-        //void operator delete(void* pPtr)
-        //{
-        //    GetSystemHeap().Free(pPtr);
-        //}
-
-        //void* operator new(size_t size, std::align_val_t alignment, void* pPtr) {
-        //    return pPtr;
-        //}
-        //void operator delete(void* pPtr, std::align_val_t alignment, void* pPtr2)
-        //{
-        //}
-
-        //void* operator new(size_t size, void* pPtr) {
-        //    return pPtr;
-        //}
-        //void operator delete(void* pPtr, void* pPtr2)
-        //{
-        //}
-
 		// Initialize for IO
 		inline void InitForIO(SF_SOCKET sockWrite);
-		//inline void InitMsg(bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg );
 		inline void InitBuff(uint uiBuffSize, uint8_t* pBuff);
 
 		// Setup sending mode
-		//inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg );
 		inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, uint uiBuffSize, uint8_t* pBuff );
-        //inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to);
-		//inline void SetupSendTCP(SharedPointerT<MessageData>&& pMsg);
 		inline void SetupSendTCP(uint uiBuffSize, uint8_t* pBuff);
 	};
 
@@ -128,11 +96,6 @@ namespace Net {
 
         // Mark whether this buffer is in use
         std::atomic<bool> bIsPending;
-        //CallStackTrace PendingTrace;
-
-		// Recv buffer
-		//char buffer[Const::INTER_PACKET_SIZE_MAX];
-
 
 		// constructor
 		IOBUFFER_READ();
@@ -246,16 +209,6 @@ namespace Net {
 
 			virtual Result Initialize(uint netThreadCount) override;
 			virtual void Terminate() override;
-
-			//virtual Result MakeSocketNonBlocking(SF_SOCKET sfd) { return ResultCode::FAIL; }
-			//virtual Net::WriteBufferQueue* GetWriteBufferQueue() { return nullptr; }
-
-			//// Register the socket to KQUEUE
-			//virtual Result RegisterToNETIO(SocketType sockType, Net::SocketIO* cbInstance) { return ResultCode::FAIL; }
-			//virtual Result UnregisterFromNETIO(Net::SocketIO* cbInstance) { return ResultCode::FAIL; }
-
-			//virtual const char* EventFlagToString(int32_t bufferSize, char* stringBuffer, uint32_t eventFlags) { return ""; }
-
 		};
 
 

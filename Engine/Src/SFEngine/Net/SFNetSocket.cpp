@@ -380,29 +380,6 @@ namespace Net {
 		return hr;
 	}
 
-    //Result SocketIOUDP::OnIORecvCompleted(Result hrRes, IOBUFFER_READ*& pIOBuffer)
-    //{
-    //    Result hr;
-
-    //    netCheck(super::OnIORecvCompleted(hrRes, pIOBuffer));
-
-    //    //m_CircularWriteBuffer
-
-    //    return hr;
-    //}
-
-    //// called when send completed
-    //Result SocketIOUDP::OnIOSendCompleted(Result hrRes, IOBUFFER_WRITE* pIOBuffer)
-    //{
-    //    Result hr;
-
-    //    netCheck(super::OnIOSendCompleted(hrRes, pIOBuffer));
-
-    //    //netCheck(m_CircularWriteBuffer.ForceReleaseRead(CircularBufferQueue::BufferItem::FromDataPtr(pIOBuffer)));
-
-    //    return hr;
-    //}
-
 
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	//

@@ -72,38 +72,9 @@ namespace Net {
 		uint RawSendSize;
 		uint8_t* pRawSendBuffer;
 
-		// Message pointer to send, when send message data
-		//SharedPointerAtomicT<MessageData> pMsgs;
-
-		// Message buffer pointer to send, when send buffer data
-		//uint8_t *pSendBuff;
-
 		// Constructor
 		IOBUFFER_WRITE();
 		~IOBUFFER_WRITE();
-
-        //void* operator new(size_t size) {
-        //    assert(size > (sizeof(IOBUFFER_WRITE) + sizeof(MessageHeader)));
-        //    return GetSystemHeap().Alloc(size);
-        //}
-        //void operator delete(void* pPtr)
-        //{
-        //    GetSystemHeap().Free(pPtr);
-        //}
-
-        //void* operator new(size_t size, std::align_val_t alignment, void* pPtr) {
-        //    return pPtr;
-        //}
-        //void operator delete(void* pPtr, std::align_val_t alignment, void* pPtr2)
-        //{
-        //}
-
-        //void* operator new(size_t size, void* pPtr) {
-        //    return pPtr;
-        //}
-        //void operator delete(void* pPtr, void* pPtr2)
-        //{
-        //}
 
 		// Initialize for IO
 		inline void InitForIO(SF_SOCKET sockWrite);
@@ -111,10 +82,7 @@ namespace Net {
 		inline void InitBuff(uint uiBuffSize, uint8_t* pBuff);
 
 		// Setup sending mode
-		//inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, bool bIncludePacketHeader, SharedPointerT<MessageData>&& pMsg);
 		inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to, uint uiBuffSize, uint8_t* pBuff);
-        //inline void SetupSendUDP(SF_SOCKET sockWrite, const sockaddr_storage& to);
-		//inline void SetupSendTCP(SharedPointerT<MessageData>&& pMsg);
 		inline void SetupSendTCP(uint uiBuffSize, uint8_t* pBuff);
 
 	};
@@ -130,9 +98,6 @@ namespace Net {
 
         // UDP Recv socket length
 		socklen_t iSockLen;
-
-		// Recv buffer
-		//char buffer[Const::INTER_PACKET_SIZE_MAX];
 
 		std::atomic<bool> bIsPending;
 
@@ -188,6 +153,3 @@ namespace Net {
 
 } // namespace Net
 } // namespace SF
-
-
-
